@@ -452,13 +452,16 @@ namespace GW2EIParser.Parser
         {
             if (ag.InstID == 0)
             {
-                ag.InstID = instid;
+                ag.OverrideInstid(instid);
             }
             if (ag.FirstAware == 0)
             {
-                ag.FirstAware = logTime;
+                ag.OverrideAwareTimes(logTime, logTime);
             }
-            ag.LastAware = logTime;
+            else
+            {
+                ag.OverrideAwareTimes(ag.FirstAware, logTime);
+            }
         }
 
         private static void FindAgentMaster(long logTime, ushort masterInstid, ulong minionAgent, Dictionary<ulong, AgentItem> agLUT, List<AgentItem> allAgs)
@@ -470,7 +473,7 @@ namespace GW2EIParser.Parser
                 {
                     if (minion.FirstAware <= logTime && logTime <= minion.LastAware)
                     {
-                        minion.Master = master;
+                        minion.SetMaster(master);
                     }
                 }
             }
@@ -533,14 +536,13 @@ namespace GW2EIParser.Parser
                         {
                             continue;
                         }
-                        playerAgent.InstID = tst.DstInstid;
+                        playerAgent.OverrideInstid(tst.DstInstid);
                     }
                     else
                     {
-                        playerAgent.InstID = tst.SrcInstid;
+                        playerAgent.OverrideInstid(tst.SrcInstid);
                     }
-                    playerAgent.FirstAware = _logStartTime;
-                    playerAgent.LastAware = _logEndTime;
+                    playerAgent.OverrideAwareTimes(_logStartTime, _logEndTime);
                 }
                 bool skip = false;
                 var player = new Player(playerAgent, _fightData.Logic.Mode == FightLogic.ParseMode.Fractal);
@@ -573,10 +575,9 @@ namespace GW2EIParser.Parser
                                     c.OverrideSrcValues(agent, instid);
                                 }
                             }
-                            p.AgentItem.InstID = instid;
-                            p.AgentItem.Agent = agent;
-                            p.AgentItem.FirstAware = Math.Min(p.AgentItem.FirstAware, player.AgentItem.FirstAware);
-                            p.AgentItem.LastAware = Math.Max(p.AgentItem.LastAware, player.AgentItem.LastAware);
+                            p.AgentItem.OverrideInstid(instid);
+                            p.AgentItem.OverrideAwareTimes(Math.Min(p.AgentItem.FirstAware, player.AgentItem.FirstAware), Math.Max(p.AgentItem.LastAware, player.AgentItem.LastAware));
+                            p.AgentItem.OverrideAgent(agent);
                             _agentData.Refresh();
                             break;
                         }
@@ -617,8 +618,7 @@ namespace GW2EIParser.Parser
             }
             foreach (AgentItem a in _allAgentsList)
             {
-                a.FirstAware -= offset;
-                a.LastAware -= offset;
+                a.OverrideAwareTimes(a.FirstAware - offset, a.LastAware - offset);
             }
         }
 

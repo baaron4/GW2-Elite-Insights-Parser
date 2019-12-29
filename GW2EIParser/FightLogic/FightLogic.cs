@@ -91,11 +91,8 @@ namespace GW2EIParser.Logic
             {
                 AgentItem firstItem = agents.First();
                 var agentValues = new HashSet<ulong>(agents.Select(x => x.Agent));
-                var newTargetAgent = new AgentItem(firstItem)
-                {
-                    FirstAware = agents.Min(x => x.FirstAware),
-                    LastAware = agents.Max(x => x.LastAware)
-                };
+                var newTargetAgent = new AgentItem(firstItem);
+                newTargetAgent.OverrideAwareTimes(agents.Min(x => x.FirstAware), agents.Max(x => x.LastAware));
                 // get unique id for the fusion
                 ushort instID = 0;
                 var rnd = new Random();
@@ -103,7 +100,7 @@ namespace GW2EIParser.Logic
                 {
                     instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
                 }
-                newTargetAgent.InstID = instID;
+                newTargetAgent.OverrideInstid(instID);
                 agentData.OverrideID(id, newTargetAgent);
                 foreach (CombatItem c in combatItems)
                 {

@@ -35,13 +35,9 @@ namespace GW2EIParser.Parser.ParsedData
             {
                 instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
             }
-            var agent = new AgentItem(agentValue, name, prof, ID, type, toughness, healing, condition, concentration, hitboxWidth, hitboxHeight)
-            {
-                InstID = instID,
-                LastAware = end,
-                FirstAware = start,
-                Master = null
-            };
+            var agent = new AgentItem(agentValue, name, prof, ID, type, toughness, healing, condition, concentration, hitboxWidth, hitboxHeight);
+            agent.OverrideInstid(instID);
+            agent.OverrideAwareTimes(start, end);
             _allAgentsList.Add(agent);
             Refresh();
             return agent;

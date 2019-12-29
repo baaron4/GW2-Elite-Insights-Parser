@@ -13,14 +13,14 @@ namespace GW2EIParser.Parser.ParsedData
         public enum AgentType { NPC, Gadget, Player, EnemyPlayer }
 
         // Fields
-        public ulong Agent { get; set; }
+        public ulong Agent { get; protected set; }
         public ushort ID { get; }
         public string UniqueID { get; }
-        public AgentItem Master { get; set; }
-        public ushort InstID { get; set; }
+        public AgentItem Master { get; protected set; }
+        public ushort InstID { get; protected set; }
         public AgentType Type { get; protected set; } = AgentType.NPC;
-        public long FirstAware { get; set; }
-        public long LastAware { get; set; } = long.MaxValue;
+        public long FirstAware { get; protected set; }
+        public long LastAware { get; protected set; } = long.MaxValue;
         public string Name { get; } = "UNKNOWN";
         public string Prof { get; } = "UNKNOWN";
         public uint Toughness { get; }
@@ -88,6 +88,27 @@ namespace GW2EIParser.Parser.ParsedData
         public void OverrideType(AgentType type)
         {
             Type = type;
+        }
+
+        public void OverrideInstid(ushort instid)
+        {
+            InstID = instid;
+        }
+
+        public void OverrideAgent(ulong agent)
+        {
+            Agent = agent;
+        }
+
+        public void OverrideAwareTimes(long firstAware, long lastAware)
+        {
+            FirstAware = firstAware;
+            LastAware = lastAware;
+        }
+
+        public void SetMaster(AgentItem master )
+        {
+            Master = master;
         }
 
         private static void AddValueToStatusList(List<(long start, long end)> dead, List<(long start, long end)> down, List<(long start, long end)> dc, AbstractStatusEvent cur, AbstractStatusEvent next, long endTime, int index)

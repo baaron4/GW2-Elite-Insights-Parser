@@ -144,7 +144,7 @@ namespace GW2EIParser.Logic
                     {
                         _specialSplit = NPC.FirstAware;
                     }
-                    target.LastAware = NPC.LastAware;
+                    target.OverrideAwareTimes(target.FirstAware, NPC.LastAware);
                     // get unique id for the fusion
                     ushort instID = 0;
                     var rnd = new Random();
@@ -152,7 +152,7 @@ namespace GW2EIParser.Logic
                     {
                         instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
                     }
-                    target.InstID = instID;
+                    target.OverrideInstid(instID);
                     agentData.Refresh();
                     var agents = new HashSet<ulong>() { NPC.Agent, target.Agent };
                     // update combat data

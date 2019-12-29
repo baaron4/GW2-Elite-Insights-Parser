@@ -72,7 +72,7 @@ namespace GW2EIParser.Logic
             {
                 instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
             }
-            target.InstID = instID;
+            target.OverrideInstid(instID);
             agentData.Refresh();
             var allAgents = new HashSet<ulong>(gadgetAgents)
             {
@@ -257,7 +257,7 @@ namespace GW2EIParser.Logic
                 _specialSplit = (firstAware >= target.LastAware ? firstAware : target.LastAware);
                 SetUniqueID(target.AgentItem, gadgetAgents, agentData, combatData);
             }
-            target.AgentItem.LastAware = fightData.FightEnd;
+            target.AgentItem.OverrideAwareTimes(target.FirstAware, fightData.FightEnd);
             target.OverrideName("Deimos");
         }
 
