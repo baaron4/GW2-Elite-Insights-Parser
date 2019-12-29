@@ -6,7 +6,7 @@ namespace GW2EIParser.EIData
     {
         public object ConnectedTo { get; }
 
-        protected GenericAttachedDecorationSerializable(ParsedLog log, GenericAttachedDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
+        protected GenericAttachedDecorationSerializable(ParsedLog log, GenericAttachedDecoration decoration, CombatReplayMap map) : base(decoration)
         {
             ConnectedTo = decoration.ConnectedTo.GetConnectedTo(map, log);
         }

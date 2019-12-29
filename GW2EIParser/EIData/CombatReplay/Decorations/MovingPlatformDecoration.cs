@@ -26,7 +26,7 @@ namespace GW2EIParser.EIData
 
         public override GenericDecorationSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
-            return new MovingPlatformDecorationSerializable(log, this, map);
+            return new MovingPlatformDecorationSerializable(this, map);
         }
     }
 }

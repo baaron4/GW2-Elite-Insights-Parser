@@ -2,7 +2,7 @@
 {
     public abstract class AbstractMetaDataEvent
     {
-        public AbstractMetaDataEvent(CombatItem evtcItem)
+        protected AbstractMetaDataEvent(CombatItem evtcItem)
         {
         }
 

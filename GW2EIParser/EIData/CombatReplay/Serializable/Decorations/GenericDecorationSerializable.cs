@@ -8,7 +8,7 @@ namespace GW2EIParser.EIData
         public long Start { get; }
         public long End { get; }
 
-        protected GenericDecorationSerializable(ParsedLog log, GenericDecoration decoration, CombatReplayMap map)
+        protected GenericDecorationSerializable(GenericDecoration decoration)
         {
             Start = decoration.Lifespan.start;
             End = decoration.Lifespan.end;

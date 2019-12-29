@@ -20,7 +20,7 @@ namespace GW2EIParser.Controllers
             return UploadToDPSR(fi, "https://dps.report/uploadContent?generator=rh");
 
         }
-        private static string UploadRaidar(FileInfo fi)
+        private static string UploadRaidar(/*FileInfo fi*/)
         {
             //string fileName = fi.Name;
             //byte[] fileContents = File.ReadAllBytes(fi.FullName);
@@ -158,7 +158,7 @@ namespace GW2EIParser.Controllers
             if (Properties.Settings.Default.UploadToRaidar)
             {
                 row.BgWorker.UpdateProgress(row, " 45% - Uploading to Raidar...", 45);
-                RaidarTask = Task.Run(() => UploadRaidar(fInfo));
+                RaidarTask = Task.Run(() => UploadRaidar(/*fInfo*/));
                 if (RaidarTask != null)
                 {
                     uploadresult[2] = RaidarTask.Result;

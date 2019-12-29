@@ -6,7 +6,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
     {
         public SkillItem BuffSkill { get; private set; }
         public long BuffID => BuffSkill.ID;
-        private long _originalBuffID;
+        //private long _originalBuffID;
         public AgentItem By { get; protected set; }
         public AgentItem ByMinion { get; protected set; }
         public AgentItem To { get; protected set; }
@@ -25,7 +25,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         {
             if (BuffID != ProfHelper.NoBuff)
             {
-                _originalBuffID = BuffID;
+                //_originalBuffID = BuffID;
                 BuffSkill = skillData.Get(ProfHelper.NoBuff);
             }
         }

@@ -9,7 +9,7 @@
         public long SkillId => Skill.ID;
         public ParseEnum.IFF IFF { get; }
 
-        private int _damage;
+        //private int _damage;
         public int Damage { get; protected set; }
         public int ShieldDamage { get; protected set; }
         public bool IsOverNinety { get; }
@@ -41,7 +41,7 @@
 
         public void NegateDamage()
         {
-            _damage = Damage;
+            //_damage = Damage;
             Damage = 0;
         }
 

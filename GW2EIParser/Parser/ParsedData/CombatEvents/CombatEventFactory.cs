@@ -143,7 +143,6 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public static List<AbstractBuffEvent> CreateBuffEvents(List<CombatItem> buffEvents, AgentData agentData, SkillData skillData)
         {
             var res = new List<AbstractBuffEvent>();
-            var dict = new Dictionary<uint, SkillItem>();
             foreach (CombatItem c in buffEvents)
             {
                 switch (c.IsStateChange)

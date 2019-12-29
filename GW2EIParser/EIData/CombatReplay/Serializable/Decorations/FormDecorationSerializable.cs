@@ -2,7 +2,7 @@
 
 namespace GW2EIParser.EIData
 {
-    public abstract class FormDecorationSerializable : GenericDecorationSerializable
+    public abstract class FormDecorationSerializable : GenericAttachedDecorationSerializable
     {
         public bool Fill { get; }
         public int Growing { get; }

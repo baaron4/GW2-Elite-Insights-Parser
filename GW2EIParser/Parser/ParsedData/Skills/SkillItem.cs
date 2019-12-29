@@ -77,7 +77,7 @@ namespace GW2EIParser.Parser.ParsedData
             {31686, "https://wiki.guildwars2.com/images/4/4b/Overload_Air.png" },
         };
 
-        private HashSet<long> _nonCritable = new HashSet<long>
+        private readonly HashSet<long> _nonCritable = new HashSet<long>
                     {
                         9292,
                         5492,

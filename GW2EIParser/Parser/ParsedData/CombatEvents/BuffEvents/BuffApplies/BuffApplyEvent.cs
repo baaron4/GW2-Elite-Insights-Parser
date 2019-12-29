@@ -7,7 +7,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public bool Initial { get; }
         public int AppliedDuration { get; }
 
-        private uint _overstackDuration;
+        private readonly uint _overstackDuration;
         private readonly bool _addedActive;
 
         public BuffApplyEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)

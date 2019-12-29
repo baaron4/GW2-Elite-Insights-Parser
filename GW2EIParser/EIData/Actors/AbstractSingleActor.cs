@@ -250,7 +250,7 @@ namespace GW2EIParser.EIData
                         }
                         graphSegments.Add(segment);
                     }
-                    SetBuffStatusCleanseWasteData(log, simulator, boonid, updateCondiPresence);
+                    SetBuffStatusCleanseWasteData(log, simulator, boonid);
                     if (graphSegments.Count > 0)
                     {
                         graphSegments.Add(new BuffSegment(graphSegments.Last().End, dur, 0));
@@ -332,7 +332,7 @@ namespace GW2EIParser.EIData
             }
         }
 
-        private void SetBuffStatusCleanseWasteData(ParsedLog log, AbstractBuffSimulator simulator, long boonid, bool updateCondiPresence)
+        private void SetBuffStatusCleanseWasteData(ParsedLog log, AbstractBuffSimulator simulator, long boonid)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             var extraSimulations = new List<AbstractSimulationItem>(simulator.OverstackSimulationResult);
@@ -437,7 +437,7 @@ namespace GW2EIParser.EIData
             {
                 InitCombatReplay(log);
             }
-            (List<(long start, long end)> deads, List<(long start, long end)> downs, List<(long start, long end)> dcs) = GetStatus(log);
+            (List<(long start, long end)> deads, _ , List<(long start, long end)> dcs) = GetStatus(log);
             return CombatReplay.GetActivePositions(deads, dcs);
         }
 

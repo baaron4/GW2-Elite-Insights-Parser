@@ -52,7 +52,7 @@ namespace GW2EIParser.EIData
         public (double x, double y, double z, double angle, double opacity, int time)[] Positions { get; set; }
 
 
-        public MovingPlatformDecorationSerializable(ParsedLog log, MovingPlatformDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
+        public MovingPlatformDecorationSerializable(MovingPlatformDecoration decoration, CombatReplayMap map) : base(decoration)
         {
             Type = "MovingPlatform";
             Image = decoration.Image;
