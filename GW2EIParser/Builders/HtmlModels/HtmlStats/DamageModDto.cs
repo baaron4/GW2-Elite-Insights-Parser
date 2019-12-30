@@ -10,6 +10,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public string Icon { get; set; }
         public string Tooltip { get; set; }
         public bool NonMultiplier { get; set; }
+        public bool SkillBased { get; set; }
 
         public static void AssembleDamageModifiers(ICollection<DamageModifier> damageMods, Dictionary<string, DamageModDto> dict)
         {
@@ -22,7 +23,8 @@ namespace GW2EIParser.Builders.HtmlModels
                     Name = mod.Name,
                     Icon = mod.Icon,
                     Tooltip = mod.Tooltip,
-                    NonMultiplier = !mod.Multiplier
+                    NonMultiplier = !mod.Multiplier,
+                    SkillBased = mod.SkillBased
                 };
             }
         }

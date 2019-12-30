@@ -32,6 +32,7 @@ namespace GW2EIParser.EIData
         public ulong MinBuild { get; } = ulong.MaxValue;
         public ulong MaxBuild { get; } = ulong.MinValue;
         public bool Multiplier => GainComputer.Multiplier;
+        public bool SkillBased => GainComputer.SkillBased;
         public ModifierSource Src { get; }
         public string Icon { get; protected set; }
         public string Name { get; protected set; }
