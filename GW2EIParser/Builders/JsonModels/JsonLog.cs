@@ -76,6 +76,7 @@ namespace GW2EIParser.Builders.JsonModels
                 Icon = item.Icon;
                 Description = item.Tooltip;
                 NonMultiplier = !item.Multiplier;
+                SkillBased = item.SkillBased;
             }
 
             /// <summary>
@@ -95,6 +96,10 @@ namespace GW2EIParser.Builders.JsonModels
             /// If true then the correspond <see cref="JsonDamageModifierData.JsonDamageModifierItem.DamageGain"/> are damage done under the effect. One will have to deduce the gain manualy depending on your gear.
             /// </summary>
             public bool NonMultiplier { get; }
+            /// <summary>
+            /// True if the modifier is skill based
+            /// </summary>
+            public bool SkillBased { get; }
         }
 
         /// <summary>

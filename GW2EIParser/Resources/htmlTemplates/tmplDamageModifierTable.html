@@ -17,8 +17,8 @@
                     <img :src="row.player.icon" :alt="row.player.profession" class="icon"><span style="display:none">{{row.player.profession}}</span>
                 </td>
                 <td class="text-left">{{row.player.name}}</td>
-                <td v-for="(modifier, index) in modifiers" :data-original-title="getTooltip(row.data[index])">
-                    {{getCellValue(row.data[index])}}
+                <td v-for="(modifier, index) in modifiers" :data-original-title="getTooltip(row.data[index], modifier)">
+                    {{getCellValue(row.data[index], modifier)}}
                 </td>
             </tr>
         </tbody>
@@ -27,8 +27,8 @@
                 <td></td>
                 <td></td>
                 <td class="text-left">{{row.name}}</td>
-                <td v-for="(modifier, index) in modifiers" :data-original-title="getTooltip(row.data[index])">
-                    {{getCellValue(row.data[index])}}
+                <td v-for="(modifier, index) in modifiers" :data-original-title="getTooltip(row.data[index], modifier)">
+                    {{getCellValue(row.data[index], modifier)}}
                 </td>
             </tr>
         </tfoot>

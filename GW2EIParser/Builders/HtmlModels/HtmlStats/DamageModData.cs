@@ -23,7 +23,7 @@ namespace GW2EIParser.Builders.HtmlModels
                         data.HitCount,
                         data.TotalHitCount,
                         data.DamageGain,
-                        dMod.Multiplier ? data.TotalDamage : -1
+                        data.TotalDamage
                     });
                 }
                 else
@@ -33,7 +33,7 @@ namespace GW2EIParser.Builders.HtmlModels
                         0,
                         dMod.GetDamageLogs(player, log, null, phases[phaseIndex]).Count,
                         0,
-                        dMod.Multiplier ? dMod.GetTotalDamage(player, log, null, phaseIndex) : -1
+                        dMod.GetTotalDamage(player, log, null, phaseIndex)
                     });
                 }
             }
@@ -53,7 +53,7 @@ namespace GW2EIParser.Builders.HtmlModels
                             data.HitCount,
                             data.TotalHitCount,
                             data.DamageGain,
-                            dMod.Multiplier ? data.TotalDamage : -1
+                            data.TotalDamage
                         });
                     }
                     else
@@ -63,7 +63,7 @@ namespace GW2EIParser.Builders.HtmlModels
                             0,
                             dMod.GetDamageLogs(player, log, target, phases[phaseIndex]).Count,
                             0,
-                            dMod.Multiplier ? dMod.GetTotalDamage(player, log, target, phaseIndex) : -1
+                            dMod.GetTotalDamage(player, log, target, phaseIndex)
                         });
                     }
                 }
