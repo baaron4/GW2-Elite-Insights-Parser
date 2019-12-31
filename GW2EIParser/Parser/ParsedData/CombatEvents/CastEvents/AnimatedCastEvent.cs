@@ -7,12 +7,20 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         private readonly int _scaledActualDuration;
         //private readonly int _effectHappenedDuration;
 
+
+        private static double _upperLimit = Math.Log(1.5);
+        private static double _lowerLimit = -_upperLimit;
+        private static double _diffLimit = 2.0 * _upperLimit;
+
         private AnimatedCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData) : base(startItem, agentData, skillData)
         {
             ExpectedDuration = startItem.BuffDmg > 0 ? startItem.BuffDmg : startItem.Value;
+            if (startItem.IsActivation == ParseEnum.Activation.Quickness)
+            {
+                Acceleration = 1;
+            }
             //_effectHappenedDuration = startItem.Value;
         }
-
 
         public AnimatedCastEvent(CombatItem startItem, CombatItem endItem, AgentData agentData, SkillData skillData) : this(startItem, agentData, skillData)
         {
@@ -23,27 +31,25 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                 ExpectedDuration = 750;
                 ActualDuration = 750;
             }
+            double nonScaledToScaledRatio = 1.0;
+            if (_scaledActualDuration > 0)
+            {
+                nonScaledToScaledRatio = (double)_scaledActualDuration / ActualDuration;
+                Acceleration = GeneralHelper.Clamp(2.0 * ((Math.Log(nonScaledToScaledRatio) - _lowerLimit) / _diffLimit) - 1.0, -1.0, 1.0);
+            }
             switch (endItem.IsActivation)
             {
                 case ParseEnum.Activation.CancelCancel:
-                    Status = AnimationStatus.INTERRUPTED;
+                    Status = AnimationStatus.Iterrupted;
                     SavedDuration = -ActualDuration;
                     break;
                 case ParseEnum.Activation.Reset:
-                    Status = AnimationStatus.FULL;
+                    Status = AnimationStatus.Full;
                     break;
                 case ParseEnum.Activation.CancelFire:
-                    if (_scaledActualDuration > 0)
-                    {
-                        double ratio = (double)ActualDuration / _scaledActualDuration;
-                        int nonScaledExpectedDuration = (int)Math.Round(ExpectedDuration * ratio);
-                        SavedDuration = Math.Max(nonScaledExpectedDuration - ActualDuration, 0);
-                    } 
-                    else
-                    {
-                        SavedDuration = Math.Max(ExpectedDuration - ActualDuration, 0);
-                    }
-                    Status = AnimationStatus.REDUCED;
+                    int nonScaledExpectedDuration = (int)Math.Round(ExpectedDuration / nonScaledToScaledRatio);
+                    SavedDuration = Math.Max(nonScaledExpectedDuration - ActualDuration, 0);
+                    Status = AnimationStatus.Reduced;
                     break;
             }
         }

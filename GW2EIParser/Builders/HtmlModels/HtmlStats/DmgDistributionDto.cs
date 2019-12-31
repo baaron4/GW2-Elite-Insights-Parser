@@ -82,11 +82,11 @@ namespace GW2EIParser.Builders.HtmlModels
                 {
                     switch (cl.Status)
                     {
-                        case AbstractCastEvent.AnimationStatus.INTERRUPTED:
+                        case AbstractCastEvent.AnimationStatus.Iterrupted:
                             timeswasted += cl.SavedDuration;
                             break;
 
-                        case AbstractCastEvent.AnimationStatus.REDUCED:
+                        case AbstractCastEvent.AnimationStatus.Reduced:
                             timessaved += cl.SavedDuration;
                             break;
                     }

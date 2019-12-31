@@ -170,6 +170,23 @@ function getTargetCacheID(activetargets) {
     return id;
 }
 
+
+const quickColor = {
+    r: 220,
+    g: 20,
+    b: 220
+};
+const slowColor = {
+    r: 220,
+    g: 125,
+    b: 30
+};
+const normalColor = {
+    r: 125,
+    g: 125,
+    b: 125
+};
+
 function computeRotationData(rotationData, images, data) {
     if (rotationData) {
         var rotaTrace = {
@@ -191,7 +208,7 @@ function computeRotationData(rotationData, images, data) {
                 width: '5',
                 line: {
                     color: [],
-                    width: '0.5'
+                    width: '2.0'
                 }
             },
             showlegend: false
@@ -202,7 +219,7 @@ function computeRotationData(rotationData, images, data) {
             var skillId = item[1];
             var duration = item[2];
             var endType = item[3];
-            //var quick = item[4];
+            var quick = item[4];
             var skill = findSkill(false, skillId);
             var aa = false;
             var icon;
@@ -243,7 +260,11 @@ function computeRotationData(rotationData, images, data) {
             rotaTrace.text.push(name + ' at ' + x + 's for ' + duration + 'ms');
             rotaTrace.width.push(aa ? 0.5 : 1.0);
             rotaTrace.marker.color.push(fillColor);
-            rotaTrace.marker.line.color.push('rgb(125,125,125)');
+
+            var outlineR = quick > 0.0 ? quick * quickColor.r + (1.0 - quick) * normalColor.r : -quick * slowColor.r + (1.0 + quick) * normalColor.r;
+            var outlineG = quick > 0.0 ? quick * quickColor.g + (1.0 - quick) * normalColor.g : -quick * slowColor.r + (1.0 + quick) * normalColor.r;
+            var outlineB = quick > 0.0 ? quick * quickColor.b + (1.0 - quick) * normalColor.b : -quick * slowColor.r + (1.0 + quick) * normalColor.r;
+            rotaTrace.marker.line.color.push('rgb(' + outlineR + ',' + outlineG + ',' + outlineB +')');
         }
         data.push(rotaTrace);
         return 1;

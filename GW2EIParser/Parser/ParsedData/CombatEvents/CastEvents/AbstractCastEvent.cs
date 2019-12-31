@@ -3,20 +3,22 @@
     public abstract class AbstractCastEvent : AbstractTimeCombatEvent
     {
 
-        public enum AnimationStatus { UNKNOWN, REDUCED, INTERRUPTED, FULL};
+        public enum AnimationStatus { Unknown, Reduced, Iterrupted, Full};
 
         // start item
         public SkillItem Skill { get; protected set; }
         public long SkillId => Skill.ID;
         public AgentItem Caster { get; }
 
-        public AnimationStatus Status { get; protected set; } = AnimationStatus.UNKNOWN;
+        public AnimationStatus Status { get; protected set; } = AnimationStatus.Unknown;
         public int SavedDuration { get; protected set; }
 
 
         public int ExpectedDuration { get; protected set; }
 
         public int ActualDuration { get; protected set; }
+
+        public double Acceleration { get; protected set; } = 0;
 
         public AbstractCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData) : base(startItem.Time)
         {
