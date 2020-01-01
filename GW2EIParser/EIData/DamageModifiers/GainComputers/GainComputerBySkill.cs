@@ -5,6 +5,7 @@
         public GainComputerBySkill()
         {
             Multiplier = true;
+            SkillBased = true;
         }
 
         public override double ComputeGain(double gainPerStack, int stack)

@@ -32,6 +32,11 @@ namespace GW2EIParser
             NamingStrategy = new CamelCaseNamingStrategy()
         };
 
+        public static double Clamp(double value, double lowerLimit, double upperLimit)
+        {
+            return Math.Min(Math.Max(value, lowerLimit), upperLimit);
+        }
+
         public static void Add<K, T>(Dictionary<K, List<T>> dict, K key, T evt)
         {
             if (dict.TryGetValue(key, out List<T> list))

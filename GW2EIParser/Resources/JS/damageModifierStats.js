@@ -92,6 +92,7 @@ var compileDamageModifiers = function () {
     Vue.component("dmgmodifier-table-component", {
         props: ['phaseindex', 'id', 'playerindex', 'playerindices', 'activetargets', 'modifiers', 'modifiersdata', 'mode', 'sum'
         ],
+        mixins: [roundingComponent],
         template: `${tmplDamageModifierTable}`,
         data: function () {
             return {
@@ -100,6 +101,9 @@ var compileDamageModifiers = function () {
             };
         },
         computed: {
+            phase: function () {
+                return logData.phases[this.phaseindex];
+            },
             indicesToUse: function () {
                 var res = [];
                 if (this.playerindices !== null) {
@@ -243,28 +247,34 @@ var compileDamageModifiers = function () {
             }
         },
         methods: {
-            getTooltip: function (item) {
+            getTooltip: function (item, mod) {
                 if (item[2] === 0) {
                     return null;
                 }
                 var hits = item[0] + " out of " + item[1] + " hits";
+                var percent;
+                if (mod.skillBased) {
+                    percent = this.round3(1000.0 * item[1] / this.phase.duration) + " hits/s"; 
+                } else {
+                    percent = this.round3(100.0 * item[0] / item[1]) + " hit %";
+                }
                 var gain;
-                if (item[3] < 0) {
+                if (mod.nonMultiplier) {
                   gain = "Damage Done: ";         
                 } else {               
                   gain = "Pure Damage: ";
                 }
-                gain += Math.round(1000.0*item[2])/1000.0;
-                return hits + "<br>" + gain;   
+                gain += this.round3(item[2]);
+                return hits + "<br>" + percent + "<br>" + gain;   
             },
-            getCellValue: function (item) {
+            getCellValue: function (item, mod) {
                 if (item[2] === 0) {
                     return '-';
                 }
-                if (item[3] < 0) {
+                if (mod.nonMultiplier) {
                    return 'Tooltip';
                 }
-                var damageIncrease = Math.round(1000 * 100 * (item[3] / (item[3] - item[2]) - 1.0)) / 1000;
+                var damageIncrease = this.round3(100 * (item[3] / (item[3] - item[2]) - 1.0));
                 if (Math.abs(damageIncrease) < 1e-6 || isNaN(damageIncrease)) {
                     return "-";
                 }

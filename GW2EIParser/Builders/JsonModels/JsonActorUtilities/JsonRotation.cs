@@ -27,12 +27,18 @@ namespace GW2EIParser.Builders.JsonModels
             /// Gained time from the animation, could be negative, which means time was lost
             /// </summary>
             public int TimeGained { get; }
+            /// <summary>	
+            /// Value between -1 (100% slow) and 1 (100% quickness) \n
+            /// Prior arcdps activation update (nov 07 2019) this value can only be 0 or 1
+            /// </summary>	
+            public double UnderQuickness { get; set; }
 
             public JsonSkill(AbstractCastEvent cl)
             {
                 CastTime = (int)cl.Time;
                 Duration = cl.ActualDuration;
                 TimeGained = cl.SavedDuration;
+                UnderQuickness = cl.Acceleration;
             }
         }
 
