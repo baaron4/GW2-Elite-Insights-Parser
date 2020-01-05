@@ -31,7 +31,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// Value between -1 (100% slow) and 1 (100% quickness) \n
             /// Prior arcdps activation update (nov 07 2019) this value can only be 0 or 1
             /// </summary>	
-            public double Quickness { get; set; }
+            public double Quickness { get; }
 
             public JsonSkill(AbstractCastEvent cl)
             {
