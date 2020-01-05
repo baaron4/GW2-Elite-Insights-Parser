@@ -23,7 +23,7 @@ for the JavaScript code in this file
 */
 var NAVTREE =
 [
-  [ "Elite Insights JSON", "index.html", [
+  [ "Guild Wars 2 - Elite Insights", "index.html", [
     [ "Packages", "namespaces.html", [
       [ "Packages", "namespaces.html", "namespaces_dup" ]
     ] ],
@@ -32,8 +32,8 @@ var NAVTREE =
       [ "Class Index", "classes.html", null ],
       [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
-        [ "All", "functions.html", "functions_dup" ],
-        [ "Variables", "functions_vars.html", "functions_vars" ]
+        [ "All", "functions.html", null ],
+        [ "Properties", "functions_prop.html", null ]
       ] ]
     ] ],
     [ "Files", "files.html", [
@@ -44,8 +44,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"_json_actor_8cs_source.html",
-"class_luck_parser_1_1_builders_1_1_json_models_1_1_json_target.html"
+"_json_actor_8cs_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

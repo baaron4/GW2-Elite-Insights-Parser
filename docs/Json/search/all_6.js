@@ -1,10 +1,13 @@
 var searchData=
 [
-  ['generated',['Generated',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_target_buffs_1_1_json_target_buffs_data.html#a819fbc3e97ca4052ed9862dd95858f43',1,'LuckParser::Builders::JsonModels::JsonTargetBuffs::JsonTargetBuffsData']]],
-  ['generation',['Generation',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_buffs_generation_1_1_json_buffs_generation_data.html#a2a460275b70596b39c6aec96eca0c6e6',1,'LuckParser::Builders::JsonModels::JsonBuffsGeneration::JsonBuffsGenerationData']]],
-  ['glance',['Glance',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_damage_dist.html#a84de912d73f582fec597589bb1599bf1',1,'LuckParser::Builders::JsonModels::JsonDamageDist']]],
-  ['glancerate',['GlanceRate',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_stats.html#a707c3a8db815d2b3edd29b8d4012674d',1,'LuckParser::Builders::JsonModels::JsonStatistics::JsonStats']]],
-  ['group',['Group',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a7cabf09f064d4ba729c285fbd3acd152',1,'LuckParser::Builders::JsonModels::JsonPlayer']]],
-  ['groupbuffs',['GroupBuffs',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_player.html#ad2b5e06587eaa4df83a0312f46e1251e',1,'LuckParser::Builders::JsonModels::JsonPlayer']]],
-  ['groupbuffsactive',['GroupBuffsActive',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a4df5358368cd90bf8bf0dbd8c6f48f4c',1,'LuckParser::Builders::JsonModels::JsonPlayer']]]
+  ['builders',['Builders',['../namespace_g_w2_e_i_parser_1_1_builders.html',1,'GW2EIParser']]],
+  ['generated',['Generated',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_buffs_uptime_1_1_json_buffs_uptime_data.html#a131f731b10662e7a93867c8d8b8d1094',1,'GW2EIParser::Builders::JsonModels::JsonBuffsUptime::JsonBuffsUptimeData']]],
+  ['generation',['Generation',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#a4d373bc48e03acfe55cf3ae344f3c3c4',1,'GW2EIParser::Builders::JsonModels::JsonPlayerBuffsGeneration::JsonBuffsGenerationData']]],
+  ['glance',['Glance',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_dist.html#ae62f80e54afa18d5cd322286dfaa1be9',1,'GW2EIParser::Builders::JsonModels::JsonDamageDist']]],
+  ['glancerate',['GlanceRate',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html#a4b20068cb224f3bb6309dbef13b1d045',1,'GW2EIParser::Builders::JsonModels::JsonStatistics::JsonGameplayStats']]],
+  ['group',['Group',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#afd0e5b54df0ff0d6501c414a10c2dd71',1,'GW2EIParser::Builders::JsonModels::JsonPlayer']]],
+  ['groupbuffs',['GroupBuffs',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a7d3de60d7e28ad93b376cd91b405b0fc',1,'GW2EIParser::Builders::JsonModels::JsonPlayer']]],
+  ['groupbuffsactive',['GroupBuffsActive',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#af80c8339cf65c6462c68e24035887201',1,'GW2EIParser::Builders::JsonModels::JsonPlayer']]],
+  ['gw2eiparser',['GW2EIParser',['../namespace_g_w2_e_i_parser.html',1,'']]],
+  ['jsonmodels',['JsonModels',['../namespace_g_w2_e_i_parser_1_1_builders_1_1_json_models.html',1,'GW2EIParser::Builders']]]
 ];
