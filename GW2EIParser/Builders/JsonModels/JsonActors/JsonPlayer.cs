@@ -173,10 +173,16 @@ namespace GW2EIParser.Builders.JsonModels
                 for (int i = 0; i < phases.Count; i++)
                 {
                     PhaseData phase = phases[i];
-                    dpsGraphList[i] = player.Get1SDamageList(log, i, phase, target);
+                    if (log.ParserSettings.RawTimelineArrays)
+                    {
+                        dpsGraphList[i] = player.Get1SDamageList(log, i, phase, target);
+                    }
                     targetDamageDistList[i] = JsonDamageDist.BuildJsonDamageDistList(player.GetDamageLogs(target, log, phase).Where(x => !x.HasDowned).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
                 }
-                TargetDamage1S[j] = dpsGraphList;
+                if (log.ParserSettings.RawTimelineArrays)
+                {
+                    TargetDamage1S[j] = dpsGraphList;
+                }
                 TargetDamageDist[j] = targetDamageDistList;
                 DpsTargets[j] = player.GetDPSTarget(log, target).Select(x => new JsonDPS(x)).ToArray();
                 StatsTargets[j] = player.GetGameplayStats(log, target).Select(x => new JsonGameplayStats(x)).ToArray();
