@@ -31,8 +31,8 @@ namespace GW2EIParser.Logic
         public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             var attackTargets = combatData.Where(x => x.IsStateChange == ParseEnum.StateChange.AttackTarget).ToList();
-            long first = combatData.Count > 0 ? combatData.First().Time : 0;
-            long final = combatData.Count > 0 ? combatData.Last().Time : 0;
+            long first = fightData.FightStart;
+            long final = fightData.FightEnd;
             foreach (CombatItem at in attackTargets)
             {
                 AgentItem hand = agentData.GetAgent(at.DstAgent);
