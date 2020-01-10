@@ -9,11 +9,11 @@ namespace GW2EIParser.EIData
     {
         //public long allHealReceived;
         public int DownCount { get; set; }
-        public int DownDuration { get; set; }
+        public long DownDuration { get; set; }
         public int DeadCount { get; set; }
-        public int DeadDuration { get; set; }
+        public long DeadDuration { get; set; }
         public int DcCount { get; set; }
-        public int DcDuration { get; set; }
+        public long DcDuration { get; set; }
 
         public FinalDefensesAll(ParsedLog log, PhaseData phase, AbstractSingleActor actor) : base(log, phase, actor, null)
         {
@@ -28,9 +28,9 @@ namespace GW2EIParser.EIData
             DeadCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DeathId).Count(x => x.Actor == actor && x.Time >= start && x.Time <= end);
             DcCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DCId).Count(x => x.Actor == actor && x.Time >= start && x.Time <= end);
 
-            DownDuration = (int)down.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
-            DeadDuration = (int)dead.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
-            DcDuration = (int)dc.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
+            DownDuration = down.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
+            DeadDuration = dead.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
+            DcDuration = dc.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
         }
     }
 }

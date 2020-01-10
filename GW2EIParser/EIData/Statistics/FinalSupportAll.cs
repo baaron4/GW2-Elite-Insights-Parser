@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 
@@ -7,8 +8,8 @@ namespace GW2EIParser.EIData
     public class FinalSupportAll : FinalSupport
     {
         //public long allHeal;
-        public long Resurrects { get; set; }
-        public double ResurrectTime { get; set; }
+        public int Resurrects { get; set; }
+        public long ResurrectTime { get; set; }
 
         private static long[] GetReses(ParsedLog log, AbstractSingleActor actor, long start, long end)
         {
@@ -25,10 +26,10 @@ namespace GW2EIParser.EIData
             return reses;
         }
 
-        public FinalSupportAll(ParsedLog log, PhaseData phase, AbstractSingleActor actor) : base(log, phase, actor)
+        public FinalSupportAll(ParsedLog log, PhaseData phase, AbstractSingleActor actor) : base(log, phase, actor, null)
         {
             long[] resArray = GetReses(log, actor, phase.Start, phase.End);
-            Resurrects = resArray[0];
+            Resurrects = (int)resArray[0];
             ResurrectTime = resArray[1];
         }
 

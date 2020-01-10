@@ -69,12 +69,12 @@ namespace GW2EIParser.EIData
                     _playerSupport.Add(playerSup);
                     FinalSupportAll totals = GetSupport(log, phaseIndex);
                     playerSup.Resurrects = totals.Resurrects;
-                    playerSup.ResurrectTime = totals.ResurrectTime;
+                    playerSup.ResurrectTime = Math.Round(totals.ResurrectTime / 1000.0, GeneralHelper.TimeDigit);
                     FinalSupport self = GetSupport(log, this, phaseIndex);
                     foreach (Buff boon in log.Buffs.BuffsByNature[BuffNature.Boon])
                     {
                         // add everything from total
-                        if (totals.Removals.TryGetValue(boon.ID, out (long count, double time) item))
+                        if (totals.Removals.TryGetValue(boon.ID, out (int count, long time) item))
                         {
                             playerSup.BoonStrips += item.count;
                             playerSup.BoonStripsTime += item.time;
@@ -89,7 +89,7 @@ namespace GW2EIParser.EIData
                     foreach (Buff condition in log.Buffs.BuffsByNature[BuffNature.Condition])
                     {
                         // add everything from self
-                        if (self.Removals.TryGetValue(condition.ID, out (long count, double time) item))
+                        if (self.Removals.TryGetValue(condition.ID, out (int count, long time) item))
                         {
                             playerSup.CondiCleanseSelf += item.count;
                             playerSup.CondiCleanseTimeSelf += item.time;
@@ -109,6 +109,9 @@ namespace GW2EIParser.EIData
                             }
                         }
                     }
+                    playerSup.CondiCleanseTime = Math.Round(playerSup.CondiCleanseTime / 1000.0, GeneralHelper.TimeDigit);
+                    playerSup.CondiCleanseTimeSelf = Math.Round(playerSup.CondiCleanseTimeSelf / 1000.0, GeneralHelper.TimeDigit);
+                    playerSup.BoonStripsTime = Math.Round(playerSup.BoonStripsTime / 1000.0, GeneralHelper.TimeDigit);
                 }
             }
             return _playerSupport;

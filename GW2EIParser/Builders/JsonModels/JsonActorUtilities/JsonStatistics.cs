@@ -48,7 +48,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// <summary>
             /// Time passed in downstate
             /// </summary>
-            public int DownDuration { get; }
+            public long DownDuration { get; }
             /// <summary>
             /// Number of time died
             /// </summary>
@@ -56,7 +56,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// <summary>
             /// Time passed in dead state
             /// </summary>
-            public int DeadDuration { get; }
+            public long DeadDuration { get; }
             /// <summary>
             /// Number of time disconnected
             /// </summary>
@@ -64,7 +64,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// <summary>
             /// Time passed in disconnected state
             /// </summary>
-            public int DcDuration { get; }
+            public long DcDuration { get; }
 
             public JsonDefensesAll(FinalDefensesAll defenses)
             {
