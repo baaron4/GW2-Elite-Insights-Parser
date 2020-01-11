@@ -94,7 +94,7 @@ namespace GW2EIParser.Parser.ParsedData
         public bool AA => _apiSkill?.Slot == "Weapon_1" || _apiSkill?.Slot == "Downed_1";
         public string Name { get; private set; }
         public string Icon { get; private set; }
-        public bool CanCrit => _nonCritable.Contains(ID);
+        public bool CanCrit => !_nonCritable.Contains(ID);
         private WeaponDescriptor _weaponDescriptor;
         private readonly GW2APISkill _apiSkill;
 
