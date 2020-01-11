@@ -58,13 +58,13 @@ namespace GW2EIParser.Logic
         {
             if (start > 0)
             {
-                phases.Add(new PhaseData(start, fightDuration, "Dhuum Fight"));
+                phases.Add(new PhaseData(start, fightDuration, "Main Fight"));
             }
             AbstractCastEvent shield = castLogs.Find(x => x.SkillId == 47396);
             if (shield != null)
             {
                 long end = shield.Time;
-                phases.Add(new PhaseData(start, end, "Main Fight"));
+                phases.Add(new PhaseData(start, end, "Dhuum Fight"));
                 AbstractCastEvent firstDamage = castLogs.FirstOrDefault(x => x.SkillId == 47304 && x.Time >= end);
                 if (firstDamage != null)
                 {
@@ -133,9 +133,10 @@ namespace GW2EIParser.Logic
             }
             bool hasRitual = phases.Last().Name == "Ritual";
             PhaseData mainFightPhase = phases.Find(x => x.Name == "Main Fight");
+            PhaseData dhuumFight = phases.Find(x => x.Name == "Dhuum Fight");
             if (mainFightPhase != null)
             {
-                phases.AddRange(GetInBetweenSoulSplits(log, dhuum, mainFightPhase.Start, mainFightPhase.End, hasRitual));
+                phases.AddRange(GetInBetweenSoulSplits(log, dhuum, mainFightPhase.Start, dhuumFight != null ? dhuumFight.End: mainFightPhase.End, hasRitual));
             }
             for (int i = 1; i < phases.Count; i++)
             {
