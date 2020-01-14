@@ -56,16 +56,14 @@ namespace GW2EIParser.Logic
 
         private void ComputeFightPhases(List<PhaseData> phases, List<AbstractCastEvent> castLogs, long fightDuration, long start)
         {
-            if (start > 0)
-            {
-                phases.Add(new PhaseData(start, fightDuration, "Main Fight"));
-            }
             AbstractCastEvent shield = castLogs.Find(x => x.SkillId == 47396);
+            // Dhuum brought down to 10%
             if (shield != null)
             {
                 long end = shield.Time;
                 phases.Add(new PhaseData(start, end, "Dhuum Fight"));
                 AbstractCastEvent firstDamage = castLogs.FirstOrDefault(x => x.SkillId == 47304 && x.Time >= end);
+                // ritual started
                 if (firstDamage != null)
                 {
                     phases.Add(new PhaseData(firstDamage.Time, fightDuration, "Ritual" ));
@@ -85,12 +83,12 @@ namespace GW2EIParser.Logic
             var phases = new List<PhaseData>();
             long start = mainStart;
             long end = 0;
-            int i = 1;
+            int i = 0;
             foreach (AbstractCastEvent cl in cataCycle)
             {
-                AbstractCastEvent clDeathmark = gDeathmark[i - 1];
+                AbstractCastEvent clDeathmark = gDeathmark[i];
                 end = Math.Min(clDeathmark.Time, mainEnd);
-                phases.Add(new PhaseData(start, end, "Pre-Soulsplit " + i++));
+                phases.Add(new PhaseData(start, end, "Pre-Soulsplit " + ++i));
                 start = cl.Time + cl.ActualDuration;
             }
             phases.Add(new PhaseData(start, mainEnd, hasRitual ? "Pre-Ritual" : "Pre-Wipe"));
@@ -111,7 +109,7 @@ namespace GW2EIParser.Logic
             {
                 return phases;
             }
-            // Sometimes the preevent is not in the evtc
+            // Sometimes the pre event is not in the evtc
             List<AbstractCastEvent> castLogs = dhuum.GetCastLogs(log, 0, log.FightData.FightEnd);
             List<AbstractCastEvent> dhuumCast = dhuum.GetCastLogs(log, 0, 20000);
             if (dhuumCast.Count > 0)
@@ -124,19 +122,29 @@ namespace GW2EIParser.Logic
             {
                 // full fight contains the pre event
                 AbstractBuffEvent invulDhuum = log.CombatData.GetBuffData(762).FirstOrDefault(x => x is BuffRemoveManualEvent && x.To == dhuum.AgentItem && x.Time > 115000);
+                // pre event done
                 if (invulDhuum != null)
                 {
                     long end = invulDhuum.Time;
                     phases.Add(new PhaseData(0, end, "Pre Event"));
+                    phases.Add(new PhaseData(end + 1, fightDuration, "Main Fight"));
                     ComputeFightPhases(phases, castLogs, fightDuration, end + 1);
                 }
             }
             bool hasRitual = phases.Last().Name == "Ritual";
-            PhaseData mainFightPhase = phases.Find(x => x.Name == "Main Fight");
+            // present if not bugged and pre-event done
+            PhaseData mainFight = phases.Find(x => x.Name == "Main Fight");
+            // if present, Dhuum was at least at 10%
             PhaseData dhuumFight = phases.Find(x => x.Name == "Dhuum Fight");
-            if (mainFightPhase != null)
+            if (mainFight != null)
             {
-                phases.AddRange(GetInBetweenSoulSplits(log, dhuum, mainFightPhase.Start, dhuumFight != null ? dhuumFight.End: mainFightPhase.End, hasRitual));
+                // from pre event end to 10% or fight end if 10% not achieved
+                phases.AddRange(GetInBetweenSoulSplits(log, dhuum, mainFight.Start, dhuumFight != null ? dhuumFight.End: mainFight.End, hasRitual));
+            } 
+            else if (_isBugged)
+            {
+                // from start to 10% or fight end if 10% not achieved
+                phases.AddRange(GetInBetweenSoulSplits(log, dhuum, 0, dhuumFight != null ? dhuumFight.End : fightDuration, hasRitual));
             }
             for (int i = 1; i < phases.Count; i++)
             {
