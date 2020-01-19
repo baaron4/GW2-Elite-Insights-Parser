@@ -46,19 +46,7 @@ namespace GW2EIParser.Logic
         }
         public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            // Find target
-            AgentItem target = agentData.GetNPCsByID((ushort)ParseEnum.TargetIDS.Ensolyss).FirstOrDefault();
-            if (target == null)
-            {
-                throw new InvalidOperationException("Main target of the fight not found");
-            }
-            // enter combat
-            CombatItem invulLost = combatData.FirstOrDefault(x => x.DstAgent == target.Agent && x.IsStateChange == ParseEnum.StateChange.None && x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SkillID == 762);
-            if (invulLost != null && invulLost.Time - fightData.FightOffset < 5000)
-            {
-                fightData.OverrideOffset(invulLost.Time);
-            }
-            return fightData.FightOffset;
+            return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (ushort)ParseEnum.TargetIDS.Ensolyss, 762, 5000);
         }
 
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
