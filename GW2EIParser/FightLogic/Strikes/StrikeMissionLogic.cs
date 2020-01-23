@@ -13,6 +13,11 @@ namespace GW2EIParser.Logic
             Mode = ParseMode.Raid;
         }
 
+        protected virtual void SetSuccessByDeath(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, bool all)
+        {
+            SetSuccessByDeath(combatData, fightData, playerAgents, all, GenericTriggerID);
+        }
+
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             var strikeRewardIDs = new HashSet<ulong>
@@ -27,7 +32,7 @@ namespace GW2EIParser.Logic
             }
             else
             {
-                SetSuccessByDeath(combatData, fightData, playerAgents, true, GenericTriggerID);
+                SetSuccessByDeath(combatData, fightData, playerAgents, true);
             }
         }
 
