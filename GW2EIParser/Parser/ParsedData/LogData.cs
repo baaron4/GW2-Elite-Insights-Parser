@@ -9,6 +9,8 @@ namespace GW2EIParser.Parser.ParsedData
 
         // Fields
         public string BuildVersion { get; }
+        public string Language { get; }
+        public LanguageEvent.LanguageEnum LanguageID { get; }
         public ulong GW2Version { get; }
         public AgentItem PoV { get; private set; } = null;
         public string PoVName { get; private set; } = "N/A";
@@ -31,6 +33,11 @@ namespace GW2EIParser.Parser.ParsedData
             foreach (BuildEvent buildEvt in combatData.GetBuildEvents())
             {
                 GW2Version = buildEvt.Build;
+            }
+            foreach (LanguageEvent langEvt in combatData.GetLanguageEvents())
+            {
+                Language = langEvt.ToString();
+                LanguageID = langEvt.Language;
             }
             foreach (LogStartEvent logStr in combatData.GetLogStartEvents())
             {
