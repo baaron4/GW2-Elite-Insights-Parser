@@ -123,6 +123,10 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public string ArcVersion { get; }
         /// <summary>
+        /// GW2 build
+        /// </summary>
+        public ulong GW2Build { get; }
+        /// <summary>
         /// The player who recorded the fight
         /// </summary>
         public string RecordedBy { get; }
@@ -201,6 +205,7 @@ namespace GW2EIParser.Builders.JsonModels
             TimeEnd = log.LogData.LogEnd;
             Duration = log.FightData.DurationString;
             Success = log.FightData.Success;
+            GW2Build = log.LogData.GW2Version;
             UploadLinks = uploadLinks;
             //
             MechanicData mechanicData = log.MechanicData;
