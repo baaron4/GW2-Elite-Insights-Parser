@@ -125,9 +125,11 @@ namespace GW2EIParser.Logic
                             // or spawn -> 3 secs -> explosion -> 0.5 secs -> fade -> 0.5  secs-> next
                             int ticks = (int)Math.Min(Math.Ceiling(c.ActualDuration / 4000.0), 6);
                             int phaseIndex;
-                            for (phaseIndex = 1; phaseIndex < phases.Count; phaseIndex++)
+                            // get only phases where Gorseval is target (aka main phases)
+                            var gorsevalPhases = phases.Where(x => x.Targets.Contains(target)).ToList();
+                            for (phaseIndex = 1; phaseIndex < gorsevalPhases.Count; phaseIndex++)
                             {
-                                if (phases[phaseIndex].InInterval(start))
+                                if (gorsevalPhases[phaseIndex].InInterval(start))
                                 {
                                     break;
                                 }
@@ -150,7 +152,7 @@ namespace GW2EIParser.Logic
                                         full
                                     };
                                     break;
-                                case 3:
+                                case 2:
                                     patterns = new List<byte>
                                     {
                                         second | third | fourth,
@@ -161,7 +163,7 @@ namespace GW2EIParser.Logic
                                         full
                                     };
                                     break;
-                                case 5:
+                                case 3:
                                     patterns = new List<byte>
                                     {
                                         first | fourth | fifth,
