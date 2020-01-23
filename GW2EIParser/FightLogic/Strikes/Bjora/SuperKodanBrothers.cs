@@ -22,6 +22,11 @@ namespace GW2EIParser.Logic
             Icon = "https://i.imgur.com/lNXXbnC.png";
         }
 
+        protected override void SetSuccessByDeath(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, bool all)
+        {
+            SetSuccessByDeath(combatData, fightData, playerAgents, all, (ushort)ParseEnum.TargetIDS.ClawOfTheFallen, (ushort)ParseEnum.TargetIDS.VoiceOfTheFallen);
+        }
+
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
@@ -33,6 +38,7 @@ namespace GW2EIParser.Logic
             }
             phases[0].Targets.Add(voice);
             phases[0].Targets.Add(claw);
+            var fightEnd = log.FightData.FightEnd;
             if (!requirePhases)
             {
                 return phases;
@@ -51,14 +57,15 @@ namespace GW2EIParser.Logic
                 EnterCombatEvent enterCombat = log.CombatData.GetEnterCombatEvents(voiceAndClaw.AgentItem).FirstOrDefault();
                 if (enterCombat != null)
                 {
-                    var phase = new PhaseData(enterCombat.Time, voiceAndClaw.LastAware - 1, "Voice and Claw " + ++voiceAndClawCount);
+                    DeadEvent death = log.CombatData.GetDeadEvents(voiceAndClaw.AgentItem).FirstOrDefault();
+                    var phase = new PhaseData(enterCombat.Time, death != null ? death.Time : fightEnd, "Voice and Claw " + ++voiceAndClawCount);
                     phase.Targets.Add(voiceAndClaw);
                     phases.Add(phase);
-                    start = voiceAndClaw.LastAware;
+                    start = phase.End;
                 }
             }
             AbstractBuffEvent enrage = log.CombatData.GetBuffData(58619).FirstOrDefault(x => x is BuffApplyEvent);
-            if (enrage != null)
+            if (enrage != null && start < fightEnd)
             {
                 var phase = new PhaseData(enrage.Time, log.FightData.FightEnd, "Enrage");
                 phase.Targets.Add(claw.AgentItem == enrage.To ? claw : voice);
