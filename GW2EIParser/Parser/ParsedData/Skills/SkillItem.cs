@@ -152,7 +152,7 @@ namespace GW2EIParser.Parser.ParsedData
         {
             if (weapons.Length != 8)
             {
-                throw new InvalidOperationException("Invalid count in weapons array");
+                throw new InvalidOperationException("Error Encountered: Invalid count in weapons array");
             }
             int id = swapped == FirstLandSet ? 0 : swapped == SecondLandSet ? 2 : swapped == FirstWaterSet ? 4 : swapped == SecondWaterSet ? 6 : -1;
             if (_weaponDescriptor == null || id == -1 || !swapCheck)

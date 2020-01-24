@@ -835,14 +835,14 @@ namespace GW2EIParser.EIData
                         break;
                     case Logic.Unknown:
                     default:
-                        throw new InvalidOperationException("Cannot simulate unknown/custom buffs");
+                        throw new InvalidOperationException("Error Encountered: Cannot simulate unknown/custom buffs");
                 }
                 switch (Type)
                 {
                     case BuffType.Intensity: return new BuffSimulatorIntensity(Capacity, log, logicToUse);
                     case BuffType.Duration: return new BuffSimulatorDuration(Capacity, log, logicToUse);
                     case BuffType.Unknown:
-                    default: throw new InvalidOperationException("Cannot simulate typeless boons");
+                    default: throw new InvalidOperationException("Error Encountered: Cannot simulate typeless boons");
                 }
             }
             switch (Type)
@@ -850,7 +850,7 @@ namespace GW2EIParser.EIData
                 case BuffType.Intensity: return new BuffSimulatorIDIntensity(log);
                 case BuffType.Duration: return new BuffSimulatorIDDuration(log);
                 case BuffType.Unknown:
-                default: throw new InvalidOperationException("Cannot simulate typeless boons");
+                default: throw new InvalidOperationException("Error Encountered: Cannot simulate typeless boons");
             }
         }
 

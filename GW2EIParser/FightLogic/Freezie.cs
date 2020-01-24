@@ -22,7 +22,7 @@ namespace GW2EIParser.Logic
             NPC heartTarget = Targets.Find(x => x.ID == (ushort)FreeziesFrozenHeart);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Main target of the fight not found");
+                throw new InvalidOperationException("Error Encountered: Freezie not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)

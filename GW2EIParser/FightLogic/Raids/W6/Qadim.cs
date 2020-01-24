@@ -105,7 +105,7 @@ namespace GW2EIParser.Logic
             AgentItem target = agentData.GetNPCsByID((ushort)ParseEnum.TargetIDS.Qadim).FirstOrDefault();
             if (target == null)
             {
-                throw new InvalidOperationException("Main target of the fight not found");
+                throw new InvalidOperationException("Error Encountered: Qadim not found");
             }
             CombatItem startCast = combatData.FirstOrDefault(x => x.SkillID == 52496 && x.IsActivation.StartCasting());
             CombatItem sanityCheckCast = combatData.FirstOrDefault(x => (x.SkillID == 52528 || x.SkillID == 52333 || x.SkillID == 58814) && x.IsActivation.StartCasting());
@@ -131,7 +131,7 @@ namespace GW2EIParser.Logic
             NPC qadim = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Qadim);
             if (qadim == null)
             {
-                throw new InvalidOperationException("Qadim not found");
+                throw new InvalidOperationException("Error Encountered: Qadim not found");
             }
             phases[0].Targets.Add(qadim);
             if (!requirePhases)
@@ -435,7 +435,7 @@ namespace GW2EIParser.Logic
             NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Qadim);
             if (target == null)
             {
-                throw new InvalidOperationException("Target for CM detection not found");
+                throw new InvalidOperationException("Error Encountered: Qadim not found");
             }
             return (target.GetHealth(combatData) > 21e6) ? 1 : 0;
         }
