@@ -76,11 +76,11 @@ namespace GW2EIParser.Logic
                 {
                     if (enemyPlayerDicts.TryGetValue(c.SrcAgent, out AgentItem src))
                     {
-                        c.OverrideSrcValues(dummyAgent.Agent, dummyAgent.InstID);
+                        c.OverrideSrcAgent(dummyAgent.Agent);
                     }
                     if (enemyPlayerDicts.TryGetValue(c.DstAgent, out AgentItem dst))
                     {
-                        c.OverrideDstValues(dummyAgent.Agent, dummyAgent.InstID);
+                        c.OverrideDstAgent(dummyAgent.Agent);
                     }
                 }
             }

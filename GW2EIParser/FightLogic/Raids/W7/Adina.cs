@@ -69,11 +69,11 @@ namespace GW2EIParser.Logic
                         {
                             if (c.IsStateChange.SrcIsAgent() && c.SrcAgent == hand.Agent)
                             {
-                                c.OverrideSrcValues(extra.Agent, extra.InstID);
+                                c.OverrideSrcAgent(extra.Agent);
                             }
                             if (c.IsStateChange.DstIsAgent() && c.DstAgent == hand.Agent)
                             {
-                                c.OverrideDstValues(extra.Agent, extra.InstID);
+                                c.OverrideDstAgent(extra.Agent);
                             }
                         }
                     }
@@ -81,7 +81,7 @@ namespace GW2EIParser.Logic
                     {
                         var cExtra = new CombatItem(c);
                         cExtra.OverrideTime(extra.FirstAware);
-                        cExtra.OverrideSrcValues(extra.Agent, extra.InstID);
+                        cExtra.OverrideSrcAgent(extra.Agent);
                         combatData.Add(cExtra);
                     }
                 }
