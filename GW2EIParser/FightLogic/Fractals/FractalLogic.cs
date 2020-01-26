@@ -58,7 +58,7 @@ namespace GW2EIParser.Logic
             AgentItem target = agentData.GetNPCsByID(targetID).FirstOrDefault();
             if (target == null)
             {
-                throw new InvalidOperationException("Main target of the fight not found");
+                throw new InvalidOperationException("Error Encountered: Main target of the fight not found");
             }
             // enter combat
             CombatItem invulLost = combatData.FirstOrDefault(x => x.DstAgent == target.Agent && x.IsStateChange == ParseEnum.StateChange.None && x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SkillID == invulID);
