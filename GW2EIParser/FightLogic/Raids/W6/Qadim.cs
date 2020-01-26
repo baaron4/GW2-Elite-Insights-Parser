@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
@@ -111,7 +112,7 @@ namespace GW2EIParser.Logic
             CombatItem sanityCheckCast = combatData.FirstOrDefault(x => (x.SkillID == 52528 || x.SkillID == 52333 || x.SkillID == 58814) && x.IsActivation.StartCasting());
             if (startCast == null || sanityCheckCast == null)
             {
-                throw new Exceptions.TooShortException();
+                throw new InvalidDataException("Error Encountered: Incomplete Qadim log");
             }
             // sanity check
             if (sanityCheckCast.Time - startCast.Time > 0)
