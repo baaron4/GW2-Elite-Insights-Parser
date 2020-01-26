@@ -57,8 +57,7 @@ namespace GW2EIParser.Logic
                 EnterCombatEvent enterCombat = log.CombatData.GetEnterCombatEvents(voiceAndClaw.AgentItem).FirstOrDefault();
                 if (enterCombat != null)
                 {
-                    DeadEvent death = log.CombatData.GetDeadEvents(voiceAndClaw.AgentItem).FirstOrDefault();
-                    var phase = new PhaseData(enterCombat.Time, death != null ? death.Time : fightEnd, "Voice and Claw " + ++voiceAndClawCount);
+                    var phase = new PhaseData(enterCombat.Time, Math.Min(fightEnd, voiceAndClaw.LastAware), "Voice and Claw " + ++voiceAndClawCount);
                     phase.Targets.Add(voiceAndClaw);
                     phases.Add(phase);
                     start = phase.End;
