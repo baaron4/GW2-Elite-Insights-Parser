@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
+using GW2EIParser.Parser.ParsedData;
 using static GW2EIParser.Parser.ParseEnum.TrashIDS;
 
 namespace GW2EIParser.Logic
@@ -50,6 +51,11 @@ namespace GW2EIParser.Logic
                 BlueKnight,
                 TwistedHorror
             };
+        }
+
+        public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (ushort)ParseEnum.TargetIDS.MAMA, 762, 2000);
         }
     }
 }

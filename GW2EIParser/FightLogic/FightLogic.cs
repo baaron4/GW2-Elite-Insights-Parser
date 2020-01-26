@@ -149,6 +149,7 @@ namespace GW2EIParser.Logic
             var phases = new List<PhaseData>();
             long last = 0;
             List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, skillID, mainTarget, beginWithStart);
+            invuls.RemoveAll(x => x.Time < 0);
             for (int i = 0; i < invuls.Count; i++)
             {
                 AbstractBuffEvent c = invuls[i];
