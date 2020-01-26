@@ -112,13 +112,13 @@ namespace GW2EIParser
             {
                 if (!fInfo.Exists)
                 {
-                    throw new FileNotFoundException("File " + fInfo.FullName + " does not exist");
+                    throw new FileNotFoundException("Error Encountered: File " + fInfo.FullName + " does not exist");
                 }
                 var control = new ParsingController(new ParserSettings());
 
                 if (!HasFormat())
                 {
-                    throw new InvalidDataException("No output format has been selected");
+                    throw new InvalidDataException("Error Encountered: No output format has been selected");
                 }
 
                 if (IsSupportedFormat(fInfo.Name))
@@ -132,7 +132,7 @@ namespace GW2EIParser
                 else
                 {
                     row.BgWorker.UpdateProgress(row, "Not EVTC", 100);
-                    throw new InvalidDataException("Not EVTC");
+                    throw new InvalidDataException("Error Encountered: Not EVTC");
                 }
             }
             catch (Exception ex)
@@ -182,7 +182,7 @@ namespace GW2EIParser
 
             if (saveDirectory == null)
             {
-                throw new InvalidDataException("Save Directory not found");
+                throw new InvalidDataException("Error Encountered: Save Directory not found");
             }
 
             string result = log.FightData.Success ? "kill" : "fail";

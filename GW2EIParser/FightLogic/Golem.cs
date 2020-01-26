@@ -72,7 +72,7 @@ namespace GW2EIParser.Logic
             NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Main target of the fight not found");
+                throw new InvalidOperationException("Error Encountered: Golem not found");
             }
             AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => x.Damage > 0);
             long fightEndLogTime = fightData.FightEnd;

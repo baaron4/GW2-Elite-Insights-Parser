@@ -44,7 +44,7 @@ namespace GW2EIParser.Logic
             NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Gorseval);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Main target of the fight not found");
+                throw new InvalidOperationException("Error Encountered: Gorseval not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
@@ -109,6 +109,13 @@ namespace GW2EIParser.Logic
                     if (phases.Count > 1)
                     {
                         var rampage = cls.Where(x => x.SkillId == 31834).ToList();
+                        const byte first = 1 << 0;
+                        const byte second = 1 << 1;
+                        const byte third = 1 << 2;
+                        const byte fourth = 1 << 3;
+                        const byte fifth = 1 << 4;
+                        const byte full = 1 << 5;
+
                         Point3D pos = replay.PolledPositions.First();
                         foreach (AbstractCastEvent c in rampage)
                         {
@@ -118,9 +125,11 @@ namespace GW2EIParser.Logic
                             // or spawn -> 3 secs -> explosion -> 0.5 secs -> fade -> 0.5  secs-> next
                             int ticks = (int)Math.Min(Math.Ceiling(c.ActualDuration / 4000.0), 6);
                             int phaseIndex;
-                            for (phaseIndex = 1; phaseIndex < phases.Count; phaseIndex++)
+                            // get only phases where Gorseval is target (aka main phases)
+                            var gorsevalPhases = phases.Where(x => x.Targets.Contains(target)).ToList();
+                            for (phaseIndex = 1; phaseIndex < gorsevalPhases.Count; phaseIndex++)
                             {
-                                if (phases[phaseIndex].InInterval(start))
+                                if (gorsevalPhases[phaseIndex].InInterval(start))
                                 {
                                     break;
                                 }
@@ -129,44 +138,48 @@ namespace GW2EIParser.Logic
                             {
                                 break;
                             }
-                            List<string> patterns;
+                            List<byte> patterns;
                             switch (phaseIndex)
                             {
                                 case 1:
-                                    patterns = new List<string>
-                            {
-                                "2+3+5",
-                                "2+3+4",
-                                "1+4+5",
-                                "1+2+5",
-                                "1+3+5",
-                                "Full"
-                            };
+                                    patterns = new List<byte>
+                                    {
+                                        second | third | fifth,
+                                        second | third | fourth,
+                                        first | fourth | fifth,
+                                        first | second | fifth,
+                                        first | third | fifth,
+                                        full
+                                    };
+                                    break;
+                                case 2:
+                                    patterns = new List<byte>
+                                    {
+                                        second | third | fourth,
+                                        first | fourth | fifth,
+                                        first | third | fourth,
+                                        first | second | fifth,
+                                        first | second | third,
+                                        full
+                                    };
                                     break;
                                 case 3:
-                                    patterns = new List<string>
-                            {
-                                "2+3+4",
-                                "1+4+5",
-                                "1+3+4",
-                                "1+2+5",
-                                "1+2+3",
-                                "Full"
-                            };
-                                    break;
-                                case 5:
-                                    patterns = new List<string>
-                            {
-                                "1+4+5",
-                                "1+2+5",
-                                "2+3+5",
-                                "3+4+5",
-                                "3+4+5",
-                                "Full"
-                            };
+                                    patterns = new List<byte>
+                                    {
+                                        first | fourth | fifth,
+                                        first | second | fifth,
+                                        second | third | fifth,
+                                        third | fourth | fifth,
+                                        third | fourth | fifth,
+                                        full
+                                    };
                                     break;
                                 default:
-                                    throw new Exception("how the fuck");
+                                    // no reason to stop parsing because of CR, worst case, no rampage
+                                    patterns = new List<byte>();
+                                    ticks = 0;
+                                    break;
+                                    //throw new InvalidOperationException("Gorseval cast rampage during a split phase");
                             }
                             start += 2200;
                             for (int i = 0; i < ticks; i++)
@@ -174,33 +187,33 @@ namespace GW2EIParser.Logic
                                 int tickStart = start + 4000 * i;
                                 int explosion = tickStart + 3000;
                                 int tickEnd = tickStart + 3500;
-                                string pattern = patterns[i];
-                                if (pattern.Contains("1"))
+                                byte pattern = patterns[i];
+                                if ((pattern & first) > 0)
                                 {
                                     replay.Decorations.Add(new CircleDecoration(true, explosion, 360, (tickStart, tickEnd), "rgba(25,25,112, 0.2)", new PositionConnector(pos)));
                                     replay.Decorations.Add(new CircleDecoration(true, 0, 360, (tickStart, tickEnd), "rgba(25,25,112, 0.4)", new PositionConnector(pos)));
                                 }
-                                if (pattern.Contains("2"))
+                                if ((pattern & second) > 0)
                                 {
                                     replay.Decorations.Add(new DoughnutDecoration(true, explosion, 360, 720, (tickStart, tickEnd), "rgba(25,25,112, 0.2)", new PositionConnector(pos)));
                                     replay.Decorations.Add(new DoughnutDecoration(true, 0, 360, 720, (tickStart, tickEnd), "rgba(25,25,112, 0.4)", new PositionConnector(pos)));
                                 }
-                                if (pattern.Contains("3"))
+                                if ((pattern & third) > 0)
                                 {
                                     replay.Decorations.Add(new DoughnutDecoration(true, explosion, 720, 1080, (tickStart, tickEnd), "rgba(25,25,112, 0.2)", new PositionConnector(pos)));
                                     replay.Decorations.Add(new DoughnutDecoration(true, 0, 720, 1080, (tickStart, tickEnd), "rgba(25,25,112, 0.4)", new PositionConnector(pos)));
                                 }
-                                if (pattern.Contains("4"))
+                                if ((pattern & fourth) > 0)
                                 {
                                     replay.Decorations.Add(new DoughnutDecoration(true, explosion, 1080, 1440, (tickStart, tickEnd), "rgba(25,25,112, 0.2)", new PositionConnector(pos)));
                                     replay.Decorations.Add(new DoughnutDecoration(true, 0, 1080, 1440, (tickStart, tickEnd), "rgba(25,25,112, 0.4)", new PositionConnector(pos)));
                                 }
-                                if (pattern.Contains("5"))
+                                if ((pattern & fifth) > 0)
                                 {
                                     replay.Decorations.Add(new DoughnutDecoration(true, explosion, 1440, 1800, (tickStart, tickEnd), "rgba(25,25,112, 0.2)", new PositionConnector(pos)));
                                     replay.Decorations.Add(new DoughnutDecoration(true, 0, 1440, 1800, (tickStart, tickEnd), "rgba(25,25,112, 0.4)", new PositionConnector(pos)));
                                 }
-                                if (pattern.Contains("Full"))
+                                if ((pattern & full) > 0)
                                 {
                                     tickStart -= 1000;
                                     explosion -= 1000;

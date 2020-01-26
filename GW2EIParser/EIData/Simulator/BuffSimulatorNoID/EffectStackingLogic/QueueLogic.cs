@@ -16,7 +16,7 @@ namespace GW2EIParser.EIData
         {
             if (stacks.Count <= 1)
             {
-                throw new InvalidOperationException("Queue logic based must have a >1 capacity");
+                throw new InvalidOperationException("Error Encountered: Queue logic based must have a >1 capacity");
             }
             BuffStackItem first = stacks[0];
             stacks.RemoveAt(0);
