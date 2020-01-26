@@ -191,7 +191,7 @@ namespace GW2EIParser.Logic
             NPC nikare = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Nikare);
             if (nikare == null)
             {
-                throw new InvalidOperationException("Nikare not found");
+                throw new InvalidOperationException("Error Encountered: Nikare not found");
             }
             phases[0].Targets.Add(nikare);
             NPC kenut = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Kenut);
@@ -344,7 +344,7 @@ namespace GW2EIParser.Logic
             NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Nikare);
             if (target == null)
             {
-                throw new InvalidOperationException("Target for CM detection not found");
+                throw new InvalidOperationException("Error Encountered: Nikare not found");
             }
             return (target.GetHealth(combatData) > 18e6) ? 1 : 0; //Health of Nikare
         }

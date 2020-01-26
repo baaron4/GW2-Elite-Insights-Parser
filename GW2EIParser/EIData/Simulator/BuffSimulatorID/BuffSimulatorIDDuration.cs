@@ -15,7 +15,7 @@ namespace GW2EIParser.EIData
         public override void Activate(uint stackID)
         {
             BuffStackItem active = BuffStack.Find(x => x.StackID == stackID);
-            _activeStack = active ?? throw new InvalidOperationException("Activate has failed");
+            _activeStack = active ?? throw new InvalidOperationException("Error Encountered: Activate has failed");
         }
 
         public override void Add(long duration, AgentItem src, long start, uint stackID, bool addedActive, uint overstackDuration)

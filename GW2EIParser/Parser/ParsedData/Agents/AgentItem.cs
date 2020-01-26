@@ -176,7 +176,7 @@ namespace GW2EIParser.Parser.ParsedData
         {
             if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
             {
-                throw new InvalidOperationException("Buff id must be simulated");
+                throw new InvalidOperationException("Error Encountered: Buff id must be simulated");
             }
             AbstractSingleActor actor = log.FindActor(this, true);
             Dictionary<long, BuffsGraphModel> bgms = actor.GetBuffGraphs(log);

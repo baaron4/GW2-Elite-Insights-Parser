@@ -105,17 +105,17 @@ namespace GW2EIParser.Logic
             NPC berg = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Berg);
             if (berg == null)
             {
-                throw new InvalidOperationException("Berg not found");
+                throw new InvalidOperationException("Error Encountered: Berg not found");
             }
             NPC zane = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Zane);
             if (zane == null)
             {
-                throw new InvalidOperationException("Zane");
+                throw new InvalidOperationException("Error Encountered: Zane not found");
             }
             NPC narella = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Narella);
             if (narella == null)
             {
-                throw new InvalidOperationException("Narella");
+                throw new InvalidOperationException("Error Encountered: Narella not found");
             }
             phases[0].Targets.AddRange(Targets);
             if (!requirePhases)

@@ -72,7 +72,7 @@ namespace GW2EIParser.Logic
             NPC eye2 = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.EyeOfJudgement);
             if (eye2 == null || eye1 == null)
             {
-                throw new InvalidOperationException("Eyes not found");
+                throw new InvalidOperationException("Error Encountered: Eyes not found");
             }
             phases[0].Targets.Add(eye2);
             phases[0].Targets.Add(eye1);
@@ -85,7 +85,7 @@ namespace GW2EIParser.Logic
             NPC eye2 = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.EyeOfJudgement);
             if (eye2 == null || eye1 == null)
             {
-                throw new InvalidOperationException("Eyes not found");
+                throw new InvalidOperationException("Error Encountered: Eyes not found");
             }
             List<HealthUpdateEvent> eye1HPs = combatData.GetHealthUpdateEvents(eye1.AgentItem);
             List<HealthUpdateEvent> eye2HPs = combatData.GetHealthUpdateEvents(eye2.AgentItem);
