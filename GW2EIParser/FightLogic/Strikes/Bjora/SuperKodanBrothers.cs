@@ -43,28 +43,33 @@ namespace GW2EIParser.Logic
             {
                 return phases;
             }
-            long start = 0;
-            int voiceAndClawCount = 0;
-            phases.AddRange(GetPhasesByInvul(log, 762, claw, false, true));
-            for (int i = 1; i < phases.Count; i++)
+            //
+            List<PhaseData> unmergedPhases = GetPhasesByInvul(log, 762, claw, false, true);
+            for (int i = 0; i < unmergedPhases.Count; i++)
             {
-                phases[i].Name = "Phase " + i;
+                phases[i].Name = "Phase " + (i + 1);
                 phases[i].Targets.Add(claw);
                 phases[i].Targets.Add(voice);
             }
+            phases.AddRange(unmergedPhases);
+            //
+            int voiceAndClawCount = 0;
+            var offset = 1;
             foreach (NPC voiceAndClaw in Targets.Where(x => x.ID == (ushort)ParseEnum.TargetIDS.VoiceAndClaw)) 
             {
                 EnterCombatEvent enterCombat = log.CombatData.GetEnterCombatEvents(voiceAndClaw.AgentItem).FirstOrDefault();
+                PhaseData nextUnmergedPhase = unmergedPhases.Count > offset + 1 ? unmergedPhases[offset] : null;
                 if (enterCombat != null)
                 {
-                    var phase = new PhaseData(enterCombat.Time, Math.Min(fightEnd, voiceAndClaw.LastAware), "Voice and Claw " + ++voiceAndClawCount);
+                    var phase = new PhaseData(enterCombat.Time, nextUnmergedPhase != null ? nextUnmergedPhase.Start : Math.Min(fightEnd, voiceAndClaw.LastAware), "Voice and Claw " + ++voiceAndClawCount);
                     phase.Targets.Add(voiceAndClaw);
                     phases.Add(phase);
-                    start = phase.End;
+                    offset++;
                 }
             }
+            //
             AbstractBuffEvent enrage = log.CombatData.GetBuffData(58619).FirstOrDefault(x => x is BuffApplyEvent);
-            if (enrage != null && start < fightEnd)
+            if (enrage != null)
             {
                 var phase = new PhaseData(enrage.Time, log.FightData.FightEnd, "Enrage");
                 phase.Targets.Add(claw.AgentItem == enrage.To ? claw : voice);
