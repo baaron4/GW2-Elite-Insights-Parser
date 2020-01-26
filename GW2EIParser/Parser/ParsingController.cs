@@ -565,10 +565,7 @@ namespace GW2EIParser.Parser
                                     c.OverrideSrcAgent(agent);
                                 }
                             }
-                            foreach (AgentItem minion in _agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.Master == player.AgentItem))
-                            {
-                                minion.SetMaster(p.AgentItem);
-                            }
+                            _agentData.SwapMasters(player.AgentItem, p.AgentItem);
                             p.AgentItem.OverrideAwareTimes(Math.Min(p.AgentItem.FirstAware, player.AgentItem.FirstAware), Math.Max(p.AgentItem.LastAware, player.AgentItem.LastAware));
                             break;
                         }

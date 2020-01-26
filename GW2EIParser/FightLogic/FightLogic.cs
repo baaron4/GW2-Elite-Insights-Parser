@@ -93,10 +93,7 @@ namespace GW2EIParser.Logic
                 var agentValues = new HashSet<ulong>(agents.Select(x => x.Agent));
                 var newTargetAgent = new AgentItem(firstItem);
                 newTargetAgent.OverrideAwareTimes(agents.Min(x => x.FirstAware), agents.Max(x => x.LastAware));
-                foreach (AgentItem minion in agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.Master != null && agentValues.Contains(x.Master.Agent)))
-                {
-                    minion.SetMaster(firstItem);
-                }
+                agentData.SwapMasters(new HashSet<AgentItem>(agents), firstItem);
                 agentData.OverrideID(id, newTargetAgent);
                 foreach (CombatItem c in combatItems)
                 {

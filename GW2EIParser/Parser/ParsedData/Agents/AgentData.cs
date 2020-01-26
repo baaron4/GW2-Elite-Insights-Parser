@@ -122,5 +122,27 @@ namespace GW2EIParser.Parser.ParsedData
                 return new List<AgentItem>();
             }
         }
+
+        public void SwapMasters(HashSet<AgentItem> froms, AgentItem to)
+        {
+            foreach (AgentItem a in GetAgentByType(AgentItem.AgentType.NPC))
+            {
+                if (a.Master != null && froms.Contains(a.Master))
+                {
+                    a.SetMaster(to);
+                }
+            }
+        }
+
+        public void SwapMasters(AgentItem from, AgentItem to)
+        {
+            foreach (AgentItem a in GetAgentByType(AgentItem.AgentType.NPC))
+            {
+                if (a.Master != null && a.Master == from)
+                {
+                    a.SetMaster(to);
+                }
+            }
+        }
     }
 }

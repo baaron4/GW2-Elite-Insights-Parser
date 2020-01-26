@@ -145,10 +145,7 @@ namespace GW2EIParser.Logic
                         _specialSplit = NPC.FirstAware;
                     }
                     target.OverrideAwareTimes(target.FirstAware, NPC.LastAware);
-                    foreach (AgentItem minion in agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.Master == NPC))
-                    {
-                        minion.SetMaster(target);
-                    }
+                    agentData.SwapMasters(NPC, target);
                     var agents = new HashSet<ulong>() { NPC.Agent, target.Agent };
                     // update combat data
                     foreach (CombatItem c in combatData)
