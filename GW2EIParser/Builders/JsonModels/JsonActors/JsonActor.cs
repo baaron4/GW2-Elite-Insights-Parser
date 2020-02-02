@@ -43,6 +43,10 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public uint HitboxWidth { get; }
         /// <summary>
+        /// ID of the actor in the instance
+        /// </summary>
+        public ushort InstanceID { get; }
+        /// <summary>
         /// List of minions
         /// </summary>
         /// <seealso cref="JsonMinions"/>
@@ -117,6 +121,7 @@ namespace GW2EIParser.Builders.JsonModels
             Condition = actor.Condition;
             HitboxHeight = actor.HitboxHeight;
             HitboxWidth = actor.HitboxWidth;
+            InstanceID = actor.InstID;
             //
             DpsAll = actor.GetDPSAll(log).Select(x => new JsonDPS(x)).ToArray();
             StatsAll = actor.GetGameplayStats(log).Select(x => new JsonGameplayStatsAll(x)).ToArray();

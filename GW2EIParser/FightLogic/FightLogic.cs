@@ -149,6 +149,7 @@ namespace GW2EIParser.Logic
             var phases = new List<PhaseData>();
             long last = 0;
             List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, skillID, mainTarget, beginWithStart);
+            invuls.RemoveAll(x => x.Time < 0);
             for (int i = 0; i < invuls.Count; i++)
             {
                 AbstractBuffEvent c = invuls[i];
@@ -194,7 +195,7 @@ namespace GW2EIParser.Logic
             NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Main target of the fight not found");
+                throw new InvalidOperationException("Error Encountered: Main target of the fight not found");
             }
             phases[0].Targets.Add(mainTarget);
             return phases;

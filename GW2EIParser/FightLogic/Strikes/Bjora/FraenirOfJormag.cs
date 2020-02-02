@@ -40,7 +40,7 @@ namespace GW2EIParser.Logic
             NPC fraenir = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.FraenirOfJormag);
             if (fraenir == null)
             {
-                throw new InvalidOperationException("Main target of the fight not found");
+                throw new InvalidOperationException("Error Encountered: Fraenir of Jormag not found");
             }
             phases[0].Targets.Add(fraenir);
             NPC icebrood = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.IcebroodConstructFraenir);

@@ -77,7 +77,7 @@ namespace GW2EIParser.Logic
             NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.PeerlessQadim);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Main target of the fight not found");
+                throw new InvalidOperationException("Error Encountered: Peerless Qadim not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
@@ -296,7 +296,7 @@ namespace GW2EIParser.Logic
             NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.PeerlessQadim);
             if (target == null)
             {
-                throw new InvalidOperationException("Target for CM detection not found");
+                throw new InvalidOperationException("Error Encountered: Peerless Qadim not found");
             }
             return (target.GetHealth(combatData) > 48e6) ? 1 : 0;
         }

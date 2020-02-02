@@ -118,7 +118,7 @@ namespace GW2EIParser.EIData
                 timeCur = log.Time;
                 if (timeCur - timePrev < 0)
                 {
-                    throw new InvalidOperationException("Negative passed time in boon simulation");
+                    throw new InvalidOperationException("Error Encountered: Negative passed time in boon simulation");
                 }
                 Update(timeCur - timePrev);
                 log.UpdateSimulator(this);

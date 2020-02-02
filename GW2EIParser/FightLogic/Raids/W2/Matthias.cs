@@ -62,7 +62,7 @@ namespace GW2EIParser.Logic
             NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Matthias);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Main target of the fight not found");
+                throw new InvalidOperationException("Error Encountered: Matthias not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)

@@ -123,6 +123,18 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public string ArcVersion { get; }
         /// <summary>
+        /// GW2 build
+        /// </summary>
+        public ulong GW2Build { get; }
+        /// <summary>
+        /// Language with which the evtc was generated
+        /// </summary>
+        public string Language { get; }
+        /// <summary>
+        /// ID of the language
+        /// </summary>
+        public byte LanguageID { get; }
+        /// <summary>
         /// The player who recorded the fight
         /// </summary>
         public string RecordedBy { get; }
@@ -201,7 +213,10 @@ namespace GW2EIParser.Builders.JsonModels
             TimeEnd = log.LogData.LogEnd;
             Duration = log.FightData.DurationString;
             Success = log.FightData.Success;
+            GW2Build = log.LogData.GW2Version;
             UploadLinks = uploadLinks;
+            Language = log.LogData.Language;
+            LanguageID = (byte)log.LogData.LanguageID;
             //
             MechanicData mechanicData = log.MechanicData;
             var mechanicLogs = new List<MechanicEvent>();

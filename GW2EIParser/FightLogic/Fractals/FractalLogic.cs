@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIParser.EIData;
+using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 
@@ -27,7 +28,7 @@ namespace GW2EIParser.Logic
             NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Main target of the fight not found");
+                throw new InvalidOperationException("Error Encountered: Main target of the fight not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
@@ -49,6 +50,23 @@ namespace GW2EIParser.Logic
             {
                 GenericTriggerID
             };
+        }
+
+        protected static long GetFightOffsetByFirstInvulFilter(FightData fightData, AgentData agentData, List<CombatItem> combatData, ushort targetID, long invulID, long invulRemoveOffset)
+        {
+            // Find target
+            AgentItem target = agentData.GetNPCsByID(targetID).FirstOrDefault();
+            if (target == null)
+            {
+                throw new InvalidOperationException("Error Encountered: Main target of the fight not found");
+            }
+            // enter combat
+            CombatItem invulLost = combatData.FirstOrDefault(x => x.DstAgent == target.Agent && x.IsStateChange == ParseEnum.StateChange.None && x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SkillID == invulID);
+            if (invulLost != null && invulLost.Time - fightData.FightOffset < invulRemoveOffset)
+            {
+                fightData.OverrideOffset(invulLost.Time + 1);
+            }
+            return fightData.FightOffset;
         }
 
         protected static void SetSuccessByBuffCount(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, NPC target, long buffID, int count)
@@ -74,7 +92,7 @@ namespace GW2EIParser.Logic
             NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Main target of the fight not found");
+                throw new InvalidOperationException("Error Encountered: Main target of the fight not found");
             }
             RewardEvent reward = combatData.GetRewardEvents().LastOrDefault();
             AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.From.Master)));

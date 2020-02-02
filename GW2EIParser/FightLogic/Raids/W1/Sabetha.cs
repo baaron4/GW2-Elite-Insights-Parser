@@ -69,7 +69,7 @@ namespace GW2EIParser.Logic
             NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Sabetha);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Main target of the fight not found");
+                throw new InvalidOperationException("Error Encountered: Sabetha not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
@@ -103,7 +103,7 @@ namespace GW2EIParser.Logic
                             addTarget = Targets.Find(x => x.ID == (ushort)Kernan);
                             if (addTarget == null)
                             {
-                                throw new InvalidOperationException("Kernan not found when we should have been able to");
+                                break;
                             }
                             phase.Targets.Add(addTarget);
                             break;
@@ -111,7 +111,7 @@ namespace GW2EIParser.Logic
                             addTarget = Targets.Find(x => x.ID == (ushort)Knuckles);
                             if (addTarget == null)
                             {
-                                throw new InvalidOperationException("Knuckles not found when we should have been able to");
+                                break;
                             }
                             phase.Targets.Add(addTarget);
                             break;
@@ -119,7 +119,7 @@ namespace GW2EIParser.Logic
                             addTarget = Targets.Find(x => x.ID == (ushort)Karde);
                             if (addTarget == null)
                             {
-                                throw new InvalidOperationException("Karde not found when we should have been able to");
+                                break;
                             }
                             phase.Targets.Add(addTarget);
                             break;

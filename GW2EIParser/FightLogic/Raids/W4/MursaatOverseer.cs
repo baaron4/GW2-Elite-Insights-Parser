@@ -54,7 +54,7 @@ namespace GW2EIParser.Logic
             NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.MursaatOverseer);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Main target of the fight not found");
+                throw new InvalidOperationException("Error Encountered: Mursaat Overseer not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
@@ -135,7 +135,7 @@ namespace GW2EIParser.Logic
             NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.MursaatOverseer);
             if (target == null)
             {
-                throw new InvalidOperationException("Target for CM detection not found");
+                throw new InvalidOperationException("Error Encountered: Mursaat Overseer not found");
             }
             return (target.GetHealth(combatData) > 25e6) ? 1 : 0;
         }

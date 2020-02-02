@@ -24,7 +24,7 @@ namespace GW2EIParser.Logic
             new HitOnPlayerMechanic(47363, "Spinning Slash", new MechanicPlotlySetting("star-triangle-up-open","rgb(128,0,0)"), "Scythe","Spinning Slash (hit by Scythe)", "Scythe",0),
             new HitOnPlayerMechanic(48500, "Death Bloom", new MechanicPlotlySetting("octagon","rgb(255,140,0)"), "8Slice","Death Bloom (8 Slices)", "8 Slices",0),
             new PlayerBuffApplyMechanic(47434, "Fixated", new MechanicPlotlySetting("star","rgb(255,0,255)"), "Fixate","Fixated (Special Action Key)", "Fixated",0),
-            new PlayerBuffApplyMechanic(47414, "Necrosis", new MechanicPlotlySetting("star-open","rgb(255,0,255)"), "Necrosis","Necrosis (Tanking Debuff)", "Necrosis Debuff",0),
+            new PlayerBuffApplyMechanic(47414, "Necrosis", new MechanicPlotlySetting("star-open","rgb(255,0,255)"), "Necrosis","Necrosis (Tanking Debuff)", "Necrosis Debuff",50),
             new HitOnPlayerMechanic(48327, "Corrupt the Living", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Spin","Corrupt the Living (Torment+Poisen Spin)", "Torment+Poisen Spin",0),
             new HitOnPlayerMechanic(47756, "Wurm Spit", new MechanicPlotlySetting("diamond-open","rgb(0,128,128)"), "Spit","Wurm Spit", "Wurm Spit",0),
             new EnemyCastStartMechanic(48662, "Howling Death", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "CC","Howling Death (Breakbar)", "Breakbar",0),
@@ -65,7 +65,7 @@ namespace GW2EIParser.Logic
                 NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.SoullessHorror);
                 if (mainTarget == null)
                 {
-                    throw new InvalidOperationException("Main target of the fight not found");
+                    throw new InvalidOperationException("Error Encountered: Soulless Horror not found");
                 }
                 AbstractBuffEvent buffOnDeath = combatData.GetBuffData(895).Where(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent).LastOrDefault();
                 if (buffOnDeath != null)
@@ -75,6 +75,33 @@ namespace GW2EIParser.Logic
             }
         }
 
+        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
+        {
+            var res = new List<AbstractBuffEvent>();
+            var agentsToSort = new HashSet<AgentItem>();
+            if (buffsById.TryGetValue(47414, out List<AbstractBuffEvent> necrosisList))
+            {
+                foreach (AbstractBuffEvent be in necrosisList)
+                {
+                    if (be is AbstractBuffRemoveEvent abre)
+                    {
+                        // to make sure remove events are before applications
+                        abre.OverrideTime(abre.Time - 1);
+                        agentsToSort.Add(abre.To);
+                    }
+                }
+            }
+            if (necrosisList.Count > 0)
+            {
+                buffsById[47414].Sort((x, y) => x.Time.CompareTo(y.Time));
+            }
+            foreach (AgentItem a in agentsToSort)
+            {
+                buffsByDst[a].Sort((x, y) => x.Time.CompareTo(y.Time));
+            }
+            return res;
+        }
+
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             long fightDuration = log.FightData.FightEnd;
@@ -82,7 +109,7 @@ namespace GW2EIParser.Logic
             NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.SoullessHorror);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Main target of the fight not found");
+                throw new InvalidOperationException("Error Encountered: Soulless Horror not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
