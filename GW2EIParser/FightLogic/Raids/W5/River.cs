@@ -91,7 +91,7 @@ namespace GW2EIParser.Logic
                     riverOfSoul.OverrideAwareTimes(firstMovement.Time - GeneralHelper.ServerDelayConstant, riverOfSoul.LastAware);
                     foreach (CombatItem c in combatData)
                     {
-                        if (c.SrcAgent == riverOfSoul.Agent && (c.IsStateChange == ParseEnum.StateChange.Position || c.IsStateChange == ParseEnum.StateChange.Rotation))
+                        if (c.SrcAgent == riverOfSoul.Agent && (c.IsStateChange == ParseEnum.StateChange.Position || c.IsStateChange == ParseEnum.StateChange.Rotation) && c.Time <= riverOfSoul.FirstAware)
                         {
                             sortCombatList = true;
                             c.OverrideTime(riverOfSoul.FirstAware);
