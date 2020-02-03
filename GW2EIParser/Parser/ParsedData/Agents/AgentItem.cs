@@ -13,7 +13,7 @@ namespace GW2EIParser.Parser.ParsedData
         public enum AgentType { NPC, Gadget, Player, EnemyPlayer }
 
         // Fields
-        public ulong Agent { get; protected set; }
+        public ulong Agent { get; }
         public ushort ID { get; }
         public string UniqueID { get; }
         public AgentItem Master { get; protected set; }
@@ -63,6 +63,13 @@ namespace GW2EIParser.Parser.ParsedData
             }
         }
 
+        public AgentItem(ulong agent, string name, string prof, ushort id, ushort instid, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight, long firstAware, long lastAware): this(agent, name, prof, id, type, toughness, healing, condition, concentration, hbWidth, hbHeight)
+        {
+            InstID = instid;
+            FirstAware = firstAware;
+            LastAware = lastAware;
+        }
+
         public AgentItem(AgentItem other)
         {
             UniqueID = "ag" + AgentCount++;
@@ -93,11 +100,6 @@ namespace GW2EIParser.Parser.ParsedData
         public void OverrideInstid(ushort instid)
         {
             InstID = instid;
-        }
-
-        public void OverrideAgent(ulong agent)
-        {
-            Agent = agent;
         }
 
         public void OverrideAwareTimes(long firstAware, long lastAware)

@@ -86,7 +86,7 @@ namespace GW2EIParser.Logic
                                         ((c.IsBuff == 1 && c.BuffDmg >= 0 && c.Value == 0) ||
                                         (c.IsBuff == 0 && c.Value >= 0)) && c.DstInstid != 0 && c.IFF == ParseEnum.IFF.Foe)
                 {
-                    c.OverrideSrcValues(sword.Agent, sword.InstID, 0);
+                    c.OverrideSrcAgent(sword.Agent);
                 }
             }
         }

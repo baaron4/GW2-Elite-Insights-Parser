@@ -553,32 +553,20 @@ namespace GW2EIParser.Parser
                         if (p.Character == player.Character) // same character, can be fused
                         {
                             skip = true;
-                            var rnd = new Random();
-                            ulong agent = 0;
-                            while (_agentData.AgentValues.Contains(agent) || agent == 0)
-                            {
-                                agent = (ulong)rnd.Next(int.MaxValue / 2, int.MaxValue);
-                            }
-                            ushort instid = 0;
-                            while (_agentData.InstIDValues.Contains(instid) || instid == 0)
-                            {
-                                instid = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
-                            }
+                            ulong agent = p.Agent;
                             foreach (CombatItem c in _combatItems)
                             {
-                                if ((c.DstAgent == p.Agent || player.Agent == c.DstAgent) && c.IsStateChange.DstIsAgent())
+                                if (player.Agent == c.DstAgent && c.IsStateChange.DstIsAgent())
                                 {
-                                    c.OverrideDstValues(agent, instid);
+                                    c.OverrideDstAgent(agent);
                                 }
-                                if ((c.SrcAgent == p.Agent || player.Agent == c.SrcAgent) && c.IsStateChange.SrcIsAgent())
+                                if (player.Agent == c.SrcAgent && c.IsStateChange.SrcIsAgent())
                                 {
-                                    c.OverrideSrcValues(agent, instid);
+                                    c.OverrideSrcAgent(agent);
                                 }
                             }
-                            p.AgentItem.OverrideInstid(instid);
+                            _agentData.SwapMasters(player.AgentItem, p.AgentItem);
                             p.AgentItem.OverrideAwareTimes(Math.Min(p.AgentItem.FirstAware, player.AgentItem.FirstAware), Math.Max(p.AgentItem.LastAware, player.AgentItem.LastAware));
-                            p.AgentItem.OverrideAgent(agent);
-                            _agentData.Refresh();
                             break;
                         }
                         // different character in raid mode, discard it as it can't have any influence, otherwise add as a separate entity

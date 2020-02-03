@@ -9,10 +9,10 @@
         public int BuffDmg { get; }
         public uint OverstackValue { get; }
         public long SkillID { get; private set; }
-        public ushort SrcInstid { get; private set; }
-        public ushort DstInstid { get; private set; }
-        public ushort SrcMasterInstid { get; private set; }
-        public ushort DstMasterInstid { get; private set; }
+        public ushort SrcInstid { get; }
+        public ushort DstInstid { get; }
+        public ushort SrcMasterInstid { get; }
+        public ushort DstMasterInstid { get; }
         public ParseEnum.IFF IFF { get; }
         public byte IsBuff { get; }
         public byte Result { get; }
@@ -96,30 +96,14 @@
             this.Time = time;
         }
 
-        public void OverrideSrcValues(ulong agent, ushort instid)
+        public void OverrideSrcAgent(ulong agent)
         {
-            SrcInstid = instid;
             SrcAgent = agent;
         }
 
-        public void OverrideSrcValues(ulong agent, ushort instid, ushort masterInstid)
+        public void OverrideDstAgent(ulong agent)
         {
-            SrcInstid = instid;
-            SrcAgent = agent;
-            SrcMasterInstid = masterInstid;
-        }
-
-        public void OverrideDstValues(ulong agent, ushort instid)
-        {
-            DstInstid = instid;
             DstAgent = agent;
-        }
-
-        public void OverrideDstValues(ulong agent, ushort instid, ushort masterInstid)
-        {
-            DstInstid = instid;
-            DstAgent = agent;
-            DstMasterInstid = masterInstid;
         }
 
         public void OverrideValue(int value)

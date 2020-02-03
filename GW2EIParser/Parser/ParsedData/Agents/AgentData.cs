@@ -35,9 +35,7 @@ namespace GW2EIParser.Parser.ParsedData
             {
                 instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
             }
-            var agent = new AgentItem(agentValue, name, prof, ID, type, toughness, healing, condition, concentration, hitboxWidth, hitboxHeight);
-            agent.OverrideInstid(instID);
-            agent.OverrideAwareTimes(start, end);
+            var agent = new AgentItem(agentValue, name, prof, ID, instID, type, toughness, healing, condition, concentration, hitboxWidth, hitboxHeight, start, end);
             _allAgentsList.Add(agent);
             Refresh();
             return agent;
@@ -122,6 +120,28 @@ namespace GW2EIParser.Parser.ParsedData
             else
             {
                 return new List<AgentItem>();
+            }
+        }
+
+        public void SwapMasters(HashSet<AgentItem> froms, AgentItem to)
+        {
+            foreach (AgentItem a in GetAgentByType(AgentItem.AgentType.NPC))
+            {
+                if (a.Master != null && froms.Contains(a.Master))
+                {
+                    a.SetMaster(to);
+                }
+            }
+        }
+
+        public void SwapMasters(AgentItem from, AgentItem to)
+        {
+            foreach (AgentItem a in GetAgentByType(AgentItem.AgentType.NPC))
+            {
+                if (a.Master != null && a.Master == from)
+                {
+                    a.SetMaster(to);
+                }
             }
         }
     }

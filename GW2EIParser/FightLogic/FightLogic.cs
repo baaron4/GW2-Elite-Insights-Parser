@@ -93,24 +93,17 @@ namespace GW2EIParser.Logic
                 var agentValues = new HashSet<ulong>(agents.Select(x => x.Agent));
                 var newTargetAgent = new AgentItem(firstItem);
                 newTargetAgent.OverrideAwareTimes(agents.Min(x => x.FirstAware), agents.Max(x => x.LastAware));
-                // get unique id for the fusion
-                ushort instID = 0;
-                var rnd = new Random();
-                while (agentData.InstIDValues.Contains(instID) || instID == 0)
-                {
-                    instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
-                }
-                newTargetAgent.OverrideInstid(instID);
+                agentData.SwapMasters(new HashSet<AgentItem>(agents), firstItem);
                 agentData.OverrideID(id, newTargetAgent);
                 foreach (CombatItem c in combatItems)
                 {
                     if (agentValues.Contains(c.SrcAgent) && c.IsStateChange.SrcIsAgent())
                     {
-                        c.OverrideSrcValues(newTargetAgent.Agent, newTargetAgent.InstID);
+                        c.OverrideSrcAgent(newTargetAgent.Agent);
                     }
                     if (agentValues.Contains(c.DstAgent) && c.IsStateChange.DstIsAgent())
                     {
-                        c.OverrideDstValues(newTargetAgent.Agent, newTargetAgent.InstID);
+                        c.OverrideDstAgent(newTargetAgent.Agent);
                     }
                 }
             }

@@ -63,17 +63,8 @@ namespace GW2EIParser.Logic
             };
         }
 
-        private void SetUniqueID(AgentItem target, HashSet<ulong> gadgetAgents, AgentData agentData, List<CombatItem> combatData)
+        private void MergeWithGadgets(AgentItem target, HashSet<ulong> gadgetAgents, AgentData agentData, List<CombatItem> combatData)
         {
-            // get unique id for the fusion
-            ushort instID = 0;
-            var rnd = new Random();
-            while (agentData.InstIDValues.Contains(instID) || instID == 0)
-            {
-                instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
-            }
-            target.OverrideInstid(instID);
-            agentData.Refresh();
             var allAgents = new HashSet<ulong>(gadgetAgents)
             {
                 target.Agent
@@ -86,12 +77,12 @@ namespace GW2EIParser.Logic
                 }
                 if (allAgents.Contains(c.SrcAgent) && c.IsStateChange.SrcIsAgent())
                 {
-                    c.OverrideSrcValues(target.Agent, target.InstID);
+                    c.OverrideSrcAgent(target.Agent);
 
                 }
                 if (allAgents.Contains(c.DstAgent) && c.IsStateChange.DstIsAgent())
                 {
-                    c.OverrideDstValues(target.Agent, target.InstID);
+                    c.OverrideDstAgent(target.Agent);
                 }
             }
         }
@@ -255,7 +246,7 @@ namespace GW2EIParser.Logic
             if (gadgetAgents.Count > 0)
             {
                 _specialSplit = (firstAware >= target.LastAware ? firstAware : target.LastAware);
-                SetUniqueID(target.AgentItem, gadgetAgents, agentData, combatData);
+                MergeWithGadgets(target.AgentItem, gadgetAgents, agentData, combatData);
             }
             target.AgentItem.OverrideAwareTimes(target.FirstAware, fightData.FightEnd);
             target.OverrideName("Deimos");

@@ -145,26 +145,18 @@ namespace GW2EIParser.Logic
                         _specialSplit = NPC.FirstAware;
                     }
                     target.OverrideAwareTimes(target.FirstAware, NPC.LastAware);
-                    // get unique id for the fusion
-                    ushort instID = 0;
-                    var rnd = new Random();
-                    while (agentData.InstIDValues.Contains(instID) || instID == 0)
-                    {
-                        instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
-                    }
-                    target.OverrideInstid(instID);
-                    agentData.Refresh();
+                    agentData.SwapMasters(NPC, target);
                     var agents = new HashSet<ulong>() { NPC.Agent, target.Agent };
                     // update combat data
                     foreach (CombatItem c in combatData)
                     {
                         if (agents.Contains(c.SrcAgent) && c.IsStateChange.SrcIsAgent())
                         {
-                            c.OverrideSrcValues(target.Agent, target.InstID);
+                            c.OverrideSrcAgent(target.Agent);
                         }
                         if (agents.Contains(c.DstAgent) && c.IsStateChange.DstIsAgent())
                         {
-                            c.OverrideDstValues(target.Agent, target.InstID);
+                            c.OverrideDstAgent(target.Agent);
                         }
                     }
                     break;
