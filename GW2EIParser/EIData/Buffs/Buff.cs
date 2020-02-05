@@ -209,6 +209,11 @@ namespace GW2EIParser.EIData
 
         private static readonly List<Buff> _fightSpecific = new List<Buff>
         {
+                // Whisper of Jormalg
+                new Buff("Frigid Vortex", 59105, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Chains of Frost 1", 59100, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Chains of Frost 2", 59120, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Brain Freeze", 59073, BuffSource.Enemy, BuffType.Intensity, 6, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 // Voice and Claw            
                 new Buff("Enraged", 58619, BuffSource.Enemy, BuffType.Intensity, 5, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 // Fraenir of Jormag
@@ -591,6 +596,7 @@ namespace GW2EIParser.EIData
                 new Buff("Signet of Undeath (Shroud)",40583, BuffSource.Necromancer, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/9c/Signet_of_Undeath.png"),
                 //skills
                 new Buff("Spectral Walk",15083, BuffSource.Necromancer, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/33/Spectral_Walk.png"),
+                new Buff("Spectral Armor",10582, BuffSource.Necromancer, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d1/Spectral_Armor.png"),
                 new Buff("Infusing Terror", 30129, BuffSource.Necromancer, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/db/Infusing_Terror.png"),
                 new Buff("Locust Swarm", 10567, BuffSource.Necromancer, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/77/Locust_Swarm.png"),
                 //new Boon("Sand Cascade", 43759, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/1e/Sand_Cascade.png"),

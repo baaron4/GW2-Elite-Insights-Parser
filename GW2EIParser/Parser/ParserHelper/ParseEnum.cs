@@ -331,6 +331,16 @@ namespace GW2EIParser.Parser
             VigilRecruit = 22389,
             VigilTactician = 22420,
             AberrantWisp = 22538,
+            // Whisper of Jormal
+            WhisperEcho = 22561,
+            // to complete
+            DoppelgangerNecro = 22713,
+            DoppelgangerWarrior= 22640,
+            DoppelgangerGuardian1= 22635,
+            DoppelgangerGuardian2 = 22608,
+            DoppelgangerThief1 = 22656,
+            DoppelgangerThief2 = 22612,
+            DoppelgangerRevenant = 22610,
             // Freezie
             FreeziesFrozenHeart = 21328,
             // Fractals
@@ -423,6 +433,7 @@ namespace GW2EIParser.Parser
             FraenirOfJormag = 22492,
             IcebroodConstructFraenir = 22436,
             Boneskinner = 22521,
+            WhisperOfJormag = 22711,
             // Fract
             MAMA = 17021,
             Siax = 17028,
