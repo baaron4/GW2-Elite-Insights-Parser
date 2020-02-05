@@ -27,6 +27,15 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/thumb/e/e2/Icebrood_Construct.jpg/320px-Icebrood_Construct.jpg";
         }
 
+        protected override CombatReplayMap GetCombatMapInternal()
+        {
+            return new CombatReplayMap("https://i.imgur.com/sXvx6AL.png",
+                            (729, 581),
+                            (-32118, -11470, -28924, -8274),
+                            (-0, -0, 0, 0),
+                            (0, 0, 0, 0));
+        }
+
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);

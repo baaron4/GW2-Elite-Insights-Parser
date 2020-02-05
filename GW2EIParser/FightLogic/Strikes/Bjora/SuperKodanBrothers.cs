@@ -22,6 +22,15 @@ namespace GW2EIParser.Logic
             Icon = "https://i.imgur.com/lNXXbnC.png";
         }
 
+        protected override CombatReplayMap GetCombatMapInternal()
+        {
+            return new CombatReplayMap("https://i.imgur.com/kLjZ7eU.png",
+                            (905, 789),
+                            (-1013, -1600, 2221, 1416),
+                            (-0, -0, 0, 0),
+                            (0, 0, 0, 0));
+        }
+        
         protected override void SetSuccessByDeath(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, bool all)
         {
             SetSuccessByDeath(combatData, fightData, playerAgents, all, (ushort)ParseEnum.TargetIDS.ClawOfTheFallen, (ushort)ParseEnum.TargetIDS.VoiceOfTheFallen);
