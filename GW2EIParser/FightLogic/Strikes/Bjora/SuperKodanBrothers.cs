@@ -56,9 +56,9 @@ namespace GW2EIParser.Logic
             List<PhaseData> unmergedPhases = GetPhasesByInvul(log, 762, claw, false, true);
             for (int i = 0; i < unmergedPhases.Count; i++)
             {
-                phases[i].Name = "Phase " + (i + 1);
-                phases[i].Targets.Add(claw);
-                phases[i].Targets.Add(voice);
+                unmergedPhases[i].Name = "Phase " + (i + 1);
+                unmergedPhases[i].Targets.Add(claw);
+                unmergedPhases[i].Targets.Add(voice);
             }
             phases.AddRange(unmergedPhases);
             //
