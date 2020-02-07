@@ -11,6 +11,7 @@ namespace GW2EIParser.EIData
     {
         // Boons
         public HashSet<Buff> TrackedBuffs { get; } = new HashSet<Buff>();
+        private BuffDictionary _buffMap;
         protected Dictionary<long, BuffsGraphModel> BuffPoints { get; set; }
         private readonly List<BuffDistribution> _boonDistribution = new List<BuffDistribution>();
         private readonly List<Dictionary<long, long>> _buffPresence = new List<Dictionary<long, long>>();
@@ -166,10 +167,10 @@ namespace GW2EIParser.EIData
             return BuffPoints;
         }
 
-        protected BuffDictionary GetBuffMap(ParsedLog log)
+        public void ComputeBuffMap(ParsedLog log)
         {
             //
-            var buffMap = new BuffDictionary();
+            _buffMap = new BuffDictionary();
             // Fill in Boon Map
 #if DEBUG
             var test = log.CombatData.GetBuffDataByDst(AgentItem).Where(x => !log.Buffs.BuffsByIds.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
@@ -177,36 +178,44 @@ namespace GW2EIParser.EIData
             foreach (AbstractBuffEvent c in log.CombatData.GetBuffDataByDst(AgentItem))
             {
                 long boonId = c.BuffID;
-                if (!buffMap.ContainsKey(boonId))
+                if (!_buffMap.ContainsKey(boonId))
                 {
                     if (!log.Buffs.BuffsByIds.ContainsKey(boonId))
                     {
                         continue;
                     }
-                    buffMap.Add(log.Buffs.BuffsByIds[boonId]);
+                    _buffMap.Add(log.Buffs.BuffsByIds[boonId]);
                 }
                 if (!c.IsBuffSimulatorCompliant(log.FightData.FightEnd, log.CombatData.HasStackIDs))
                 {
                     continue;
                 }
-                List<AbstractBuffEvent> loglist = buffMap[boonId];
+                List<AbstractBuffEvent> loglist = _buffMap[boonId];
                 c.TryFindSrc(log);
                 loglist.Add(c);
             }
             // add buff remove all for each despawn events
             foreach (DespawnEvent dsp in log.CombatData.GetDespawnEvents(AgentItem))
             {
-                foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in buffMap)
+                foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in _buffMap)
                 {
                     pair.Value.Add(new BuffRemoveAllEvent(GeneralHelper.UnknownAgent, AgentItem, dsp.Time, int.MaxValue, log.SkillData.Get(pair.Key), BuffRemoveAllEvent.FullRemoval, int.MaxValue));
                 }
             }
-            buffMap.Sort();
-            foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in buffMap)
+            _buffMap.Sort();
+            foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in _buffMap)
             {
                 TrackedBuffs.Add(log.Buffs.BuffsByIds[pair.Key]);
             }
-            return buffMap;
+        }
+
+        protected BuffDictionary GetBuffMap(ParsedLog log)
+        {
+            if (_buffMap == null)
+            {
+                ComputeBuffMap(log);
+            }
+            return _buffMap;
         }
 
 
