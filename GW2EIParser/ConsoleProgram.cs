@@ -9,23 +9,9 @@ namespace GW2EIParser
     {
         public ConsoleProgram(IEnumerable<string> logFiles)
         {
-            if (Properties.Settings.Default.ParseOneAtATime)
+            foreach (string file in logFiles)
             {
-                foreach (string file in logFiles)
-                {
-                    ParseLog(file);
-                }
-            }
-            else
-            {
-                var tasks = new List<Task>();
-
-                foreach (string file in logFiles)
-                {
-                    tasks.Add(Task.Run(() => ParseLog(file)));
-                }
-
-                Task.WaitAll(tasks.ToArray());
+                ParseLog(file);
             }
         }
 

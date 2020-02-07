@@ -86,25 +86,16 @@ namespace GW2EIParser
             btnClear.Enabled = false;
             btnParse.Enabled = false;
             btnCancel.Enabled = true;
-            if (Properties.Settings.Default.ParseOneAtATime)
+            if (_anyRunning)
             {
-                if (_anyRunning)
-                {
-                    _logQueue.Enqueue(row);
-                    row.Status = "Queued";
-                    row.State = RowState.Pending;
-                    dgvFiles.Invalidate();
-                }
-                else
-                {
-                    _anyRunning = true;
-                    row.Run();
-                }
+                _logQueue.Enqueue(row);
+                row.Status = "Queued";
+                row.State = RowState.Pending;
+                dgvFiles.Invalidate();
             }
             else
             {
-                row.Status = "Waiting for a thread";
-                row.State = RowState.Pending;
+                _anyRunning = true;
                 row.Run();
             }
         }
@@ -114,10 +105,6 @@ namespace GW2EIParser
         /// </summary>
         private void RunNextWorker()
         {
-            if (Properties.Settings.Default.ParseOneAtATime)
-            {
-                _anyRunning = false;
-            }
             if (_logQueue.Count > 0)
             {
                 GridRow row = _logQueue.Dequeue();
