@@ -42,14 +42,14 @@
             this.chkOutputHtml = new System.Windows.Forms.CheckBox();
             this.chkOutputCsv = new System.Windows.Forms.CheckBox();
             this.chkPhaseParsing = new System.Windows.Forms.CheckBox();
-            this.chkOneAtATime = new System.Windows.Forms.CheckBox();
+            this.chkMultiThreaded = new System.Windows.Forms.CheckBox();
             this.chkCombatReplay = new System.Windows.Forms.CheckBox();
             this.UploadDPSReports_checkbox = new System.Windows.Forms.CheckBox();
             this.UploadDRRH_check = new System.Windows.Forms.CheckBox();
             this.UploadRaidar_check = new System.Windows.Forms.CheckBox();
             this.chkOutputJson = new System.Windows.Forms.CheckBox();
             this.chkIndentJSON = new System.Windows.Forms.CheckBox();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.multiThreadedTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.chkAnonymous = new System.Windows.Forms.CheckBox();
             this.chkDamageMods = new System.Windows.Forms.CheckBox();
             this.chkRawTimelineArrays = new System.Windows.Forms.CheckBox();
@@ -225,15 +225,15 @@
             // 
             // chkOneAtATime
             // 
-            this.chkOneAtATime.AutoSize = true;
-            this.chkOneAtATime.Location = new System.Drawing.Point(6, 19);
-            this.chkOneAtATime.Name = "chkOneAtATime";
-            this.chkOneAtATime.Size = new System.Drawing.Size(139, 17);
-            this.chkOneAtATime.TabIndex = 29;
-            this.chkOneAtATime.Text = "Parse logs one at a time";
-            this.toolTip1.SetToolTip(this.chkOneAtATime, "Slower parsing but less ressource hungry. Keep default value if unsure.");
-            this.chkOneAtATime.UseVisualStyleBackColor = true;
-            this.chkOneAtATime.CheckedChanged += new System.EventHandler(this.ChkOneAtATimeCheckedChanged);
+            this.chkMultiThreaded.AutoSize = true;
+            this.chkMultiThreaded.Location = new System.Drawing.Point(6, 19);
+            this.chkMultiThreaded.Name = "chkMultiThreaded";
+            this.chkMultiThreaded.Size = new System.Drawing.Size(139, 17);
+            this.chkMultiThreaded.TabIndex = 29;
+            this.chkMultiThreaded.Text = "Use multi threading on log processing";
+            this.multiThreadedTooltip.SetToolTip(this.chkMultiThreaded, "Keep default value if unsure.");
+            this.chkMultiThreaded.UseVisualStyleBackColor = true;
+            this.chkMultiThreaded.CheckedChanged += new System.EventHandler(this.ChkMultiThreadedCheckedChanged);
             // 
             // chkCombatReplay
             // 
@@ -305,7 +305,7 @@
             // 
             // toolTip1
             // 
-            this.toolTip1.ToolTipTitle = "Setting description";
+            this.multiThreadedTooltip.ToolTipTitle = "Setting description";
             // 
             // chkAnonymous
             // 
@@ -315,7 +315,7 @@
             this.chkAnonymous.Size = new System.Drawing.Size(118, 17);
             this.chkAnonymous.TabIndex = 20;
             this.chkAnonymous.Text = "Anonymous Players";
-            this.toolTip1.SetToolTip(this.chkAnonymous, "Replaces Players\' account names and character names by generic names");
+            this.multiThreadedTooltip.SetToolTip(this.chkAnonymous, "Replaces Players\' account names and character names by generic names");
             this.chkAnonymous.UseVisualStyleBackColor = true;
             this.chkAnonymous.CheckedChanged += new System.EventHandler(this.ChkAnonymous_CheckedChanged);
             // 
@@ -388,7 +388,7 @@
             // 
             // boxParsing
             // 
-            this.boxParsing.Controls.Add(this.chkOneAtATime);
+            this.boxParsing.Controls.Add(this.chkMultiThreaded);
             this.boxParsing.Controls.Add(this.chkAutoParse);
             this.boxParsing.Controls.Add(this.chkAutoAdd);
             this.boxParsing.Controls.Add(this.chkB_SkipFailedTries);
@@ -428,7 +428,7 @@
             this.chkB_SkipFailedTries.Name = "chkB_SkipFailedTries";
             this.chkB_SkipFailedTries.Size = new System.Drawing.Size(141, 17);
             this.chkB_SkipFailedTries.TabIndex = 38;
-            this.chkB_SkipFailedTries.Text = "Skip generating log if fail";
+            this.chkB_SkipFailedTries.Text = "Skip log generation if failed";
             this.chkB_SkipFailedTries.UseVisualStyleBackColor = true;
             this.chkB_SkipFailedTries.CheckedChanged += new System.EventHandler(this.ChkB_SkipFailedTries_CheckedChanged);
             // 
@@ -782,7 +782,7 @@
         private System.Windows.Forms.CheckBox chkOutputHtml;
         private System.Windows.Forms.CheckBox chkOutputCsv;
         private System.Windows.Forms.CheckBox chkPhaseParsing;
-        private System.Windows.Forms.CheckBox chkOneAtATime;
+        private System.Windows.Forms.CheckBox chkMultiThreaded;
         private System.Windows.Forms.CheckBox chkCombatReplay;
         private System.Windows.Forms.CheckBox UploadDPSReports_checkbox;
         private System.Windows.Forms.CheckBox UploadDRRH_check;
@@ -790,7 +790,7 @@
         private System.Windows.Forms.CheckBox chkOutputJson;
         private System.Windows.Forms.CheckBox chkIndentJSON;
         private System.Windows.Forms.CheckBox chkCompressRaw;
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolTip multiThreadedTooltip;
         private System.Windows.Forms.CheckBox chkHtmlExternalScripts;
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabGeneral;

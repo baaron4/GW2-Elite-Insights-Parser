@@ -22,7 +22,7 @@ namespace GW2EIParser.Parser
             ParseCombatReplay = Properties.Settings.Default.ParseCombatReplay;
             ComputeDamageModifiers = Properties.Settings.Default.ComputeDamageModifiers;
             RawTimelineArrays = Properties.Settings.Default.RawTimelineArrays;
-            MultiTasks = !Properties.Settings.Default.ParseOneAtATime;
+            MultiTasks = Properties.Settings.Default.MultiThreaded;
         }
     }
 }
