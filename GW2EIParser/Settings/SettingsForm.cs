@@ -68,7 +68,7 @@ namespace GW2EIParser.Setting
         private void SettingsFormLoad(object sender, EventArgs e)
         {
             SetValues();
-            multiThreadedTooltip.SetToolTip(chkHtmlExternalScripts, "Writes static css and js scripts in own files, which are shared between all logs. Log file size decreases, but the script files have to be kept along with the html.");
+            settingTooltip.SetToolTip(chkHtmlExternalScripts, "Writes static css and js scripts in own files, which are shared between all logs. Log file size decreases, but the script files have to be kept along with the html.");
         }
 
         private void DefaultOutputLocationCheckedChanged(object sender, EventArgs e)

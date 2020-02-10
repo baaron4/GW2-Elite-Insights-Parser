@@ -49,7 +49,7 @@
             this.UploadRaidar_check = new System.Windows.Forms.CheckBox();
             this.chkOutputJson = new System.Windows.Forms.CheckBox();
             this.chkIndentJSON = new System.Windows.Forms.CheckBox();
-            this.multiThreadedTooltip = new System.Windows.Forms.ToolTip(this.components);
+            this.settingTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.chkAnonymous = new System.Windows.Forms.CheckBox();
             this.chkDamageMods = new System.Windows.Forms.CheckBox();
             this.chkRawTimelineArrays = new System.Windows.Forms.CheckBox();
@@ -231,7 +231,7 @@
             this.chkMultiThreaded.Size = new System.Drawing.Size(139, 17);
             this.chkMultiThreaded.TabIndex = 29;
             this.chkMultiThreaded.Text = "Use multi threading on log processing";
-            this.multiThreadedTooltip.SetToolTip(this.chkMultiThreaded, "Keep default value if unsure.");
+            this.settingTooltip.SetToolTip(this.chkMultiThreaded, "Keep default value if unsure.");
             this.chkMultiThreaded.UseVisualStyleBackColor = true;
             this.chkMultiThreaded.CheckedChanged += new System.EventHandler(this.ChkMultiThreadedCheckedChanged);
             // 
@@ -305,7 +305,7 @@
             // 
             // toolTip1
             // 
-            this.multiThreadedTooltip.ToolTipTitle = "Setting description";
+            this.settingTooltip.ToolTipTitle = "Setting description";
             // 
             // chkAnonymous
             // 
@@ -315,7 +315,7 @@
             this.chkAnonymous.Size = new System.Drawing.Size(118, 17);
             this.chkAnonymous.TabIndex = 20;
             this.chkAnonymous.Text = "Anonymous Players";
-            this.multiThreadedTooltip.SetToolTip(this.chkAnonymous, "Replaces Players\' account names and character names by generic names");
+            this.settingTooltip.SetToolTip(this.chkAnonymous, "Replaces Players\' account names and character names by generic names");
             this.chkAnonymous.UseVisualStyleBackColor = true;
             this.chkAnonymous.CheckedChanged += new System.EventHandler(this.ChkAnonymous_CheckedChanged);
             // 
@@ -790,7 +790,7 @@
         private System.Windows.Forms.CheckBox chkOutputJson;
         private System.Windows.Forms.CheckBox chkIndentJSON;
         private System.Windows.Forms.CheckBox chkCompressRaw;
-        private System.Windows.Forms.ToolTip multiThreadedTooltip;
+        private System.Windows.Forms.ToolTip settingTooltip;
         private System.Windows.Forms.CheckBox chkHtmlExternalScripts;
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabGeneral;
