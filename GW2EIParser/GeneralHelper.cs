@@ -384,6 +384,7 @@ namespace GW2EIParser
                 case SurgingSoul:
                 case MazeMinotaur:
                 case Enervator:
+                case WhisperEcho:
                     return "https://i.imgur.com/k79t7ZA.png";
                 case HandOfErosion:
                 case HandOfEruption:

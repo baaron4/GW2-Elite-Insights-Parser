@@ -332,7 +332,7 @@ namespace GW2EIParser.Parser
             VigilTactician = 22420,
             AberrantWisp = 22538,
             // Whisper of Jormal
-            WhisperEcho = 22561,
+            WhisperEcho = 22628,
             // to complete
             DoppelgangerNecro = 22713,
             DoppelgangerWarrior= 22640,
