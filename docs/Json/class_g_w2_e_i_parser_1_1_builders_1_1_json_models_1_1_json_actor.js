@@ -11,6 +11,7 @@ var class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor =
     [ "Healing", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#aae207e1e5bcd0ac91157acd93e72a662", null ],
     [ "HitboxHeight", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a0caf8b3a39d145177d046e135002d9d1", null ],
     [ "HitboxWidth", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a38e3e2a7cf04126848759759550d7c8e", null ],
+    [ "InstanceID", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#ae215577794ffd3e246d6015e251427d5", null ],
     [ "Minions", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#acf3fa4941646a5563294271e15d418bb", null ],
     [ "Name", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a12064a3ce7d8a12a032abfd33e8e5637", null ],
     [ "Rotation", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#aea9d46723a7c661f76fe2fa5bf183784", null ],

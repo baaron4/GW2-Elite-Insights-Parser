@@ -32,19 +32,17 @@ var NAVTREE =
       [ "Class Index", "classes.html", null ],
       [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
-        [ "All", "functions.html", null ],
-        [ "Properties", "functions_prop.html", null ]
+        [ "All", "functions.html", "functions_dup" ],
+        [ "Properties", "functions_prop.html", "functions_prop" ]
       ] ]
-    ] ],
-    [ "Files", "files.html", [
-      [ "File List", "files.html", "files_dup" ]
     ] ]
   ] ]
 ];
 
 var NAVTREEINDEX =
 [
-"_json_actor_8cs_source.html"
+"annotated.html",
+"namespaces.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
