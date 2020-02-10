@@ -133,7 +133,6 @@ namespace GW2EIParser
             var rowData = e.Argument as GridRow;
             e.Result = rowData;
             _runningCount++;
-            _anyRunning = true;
             ProgramHelper.DoWork(rowData);
 
         }
