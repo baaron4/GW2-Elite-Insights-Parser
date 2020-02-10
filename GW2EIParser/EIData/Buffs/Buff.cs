@@ -213,8 +213,8 @@ namespace GW2EIParser.EIData
                 new Buff("Whisper Teleport Out", 59223, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 new Buff("Whisper Teleport Back", 59054, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 new Buff("Frigid Vortex", 59105, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
-                new Buff("Chains of Frost 1", 59100, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
-                new Buff("Chains of Frost 2", 59120, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Chains of Frost Active", 59100, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Chains of Frost Application", 59120, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 new Buff("Brain Freeze", 59073, BuffSource.Enemy, BuffType.Intensity, 6, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 // Voice and Claw            
                 new Buff("Enraged", 58619, BuffSource.Enemy, BuffType.Intensity, 5, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
