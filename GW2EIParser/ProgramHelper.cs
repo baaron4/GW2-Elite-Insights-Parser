@@ -5,8 +5,10 @@ using System.IO;
 using System.IO.Compression;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using GW2EIParser.Builders;
 using GW2EIParser.Controllers;
+using GW2EIParser.EIData;
 using GW2EIParser.Exceptions;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
@@ -167,6 +169,7 @@ namespace GW2EIParser
         {
             rowData.BgWorker.ThrowIfCanceled(rowData);
             rowData.BgWorker.UpdateProgress(rowData, "50% - Creating File(s)...", 50);
+
             //save location
             DirectoryInfo saveDirectory;
             if (Properties.Settings.Default.SaveAtOut || Properties.Settings.Default.OutLocation == null)
@@ -192,6 +195,26 @@ namespace GW2EIParser
             fName = $"{fName}{PoVClassTerm}_{log.FightData.Logic.Extension}{encounterLengthTerm}_{result}";
 
             rowData.BgWorker.ThrowIfCanceled(rowData);
+
+            // parallel stuff
+            if (log.ParserSettings.MultiTasks)
+            {
+                foreach (Player p in log.PlayerList)
+                {
+                    // that part can't be //
+                    p.ComputeBuffMap(log);
+                }
+                foreach (NPC npc in log.FightData.Logic.Targets)
+                {
+                    // that part can't be //
+                    npc.ComputeBuffMap(log);
+                }
+                var actors = new List<AbstractSingleActor>(log.PlayerList);
+                actors.AddRange(log.FightData.Logic.Targets);
+                Parallel.ForEach(actors, actor => actor.GetBuffGraphs(log));
+                //
+                Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
+            }
             if (Properties.Settings.Default.SaveOutHTML)
             {
                 string outputFile = Path.Combine(

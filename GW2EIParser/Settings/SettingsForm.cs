@@ -35,7 +35,7 @@ namespace GW2EIParser.Setting
             chkOutputHtml.Checked = Properties.Settings.Default.SaveOutHTML;
             chkOutputCsv.Checked = Properties.Settings.Default.SaveOutCSV;
             chkPhaseParsing.Checked = Properties.Settings.Default.ParsePhases;
-            chkOneAtATime.Checked = Properties.Settings.Default.ParseOneAtATime;
+            chkMultiThreaded.Checked = Properties.Settings.Default.MultiThreaded;
             radioThemeLight.Checked = Properties.Settings.Default.LightTheme;
             radioThemeDark.Checked = !Properties.Settings.Default.LightTheme;
             imgTheme.Image = Properties.Settings.Default.LightTheme ? Properties.Resources.theme_cosmo : Properties.Resources.theme_slate;
@@ -68,7 +68,7 @@ namespace GW2EIParser.Setting
         private void SettingsFormLoad(object sender, EventArgs e)
         {
             SetValues();
-            toolTip1.SetToolTip(chkHtmlExternalScripts, "Writes static css and js scripts in own files, which are shared between all logs. Log file size decreases, but the script files have to be kept along with the html.");
+            settingTooltip.SetToolTip(chkHtmlExternalScripts, "Writes static css and js scripts in own files, which are shared between all logs. Log file size decreases, but the script files have to be kept along with the html.");
         }
 
         private void DefaultOutputLocationCheckedChanged(object sender, EventArgs e)
@@ -130,9 +130,9 @@ namespace GW2EIParser.Setting
             Properties.Settings.Default.SaveOutCSV = chkOutputCsv.Checked;
         }
 
-        private void ChkOneAtATimeCheckedChanged(object sender, EventArgs e)
+        private void ChkMultiThreadedCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.ParseOneAtATime = chkOneAtATime.Checked;
+            Properties.Settings.Default.MultiThreaded = chkMultiThreaded.Checked;
         }
 
         private void PhaseParsingCheckedChanged(object sender, EventArgs e)

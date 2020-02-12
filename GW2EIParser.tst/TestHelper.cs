@@ -23,6 +23,7 @@ namespace GW2EIParser.tst
                 AnonymousPlayer = true;
                 ComputeDamageModifiers = true;
                 RawTimelineArrays = true;
+                MultiTasks = true;
             }
         }
 

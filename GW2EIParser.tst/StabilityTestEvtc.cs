@@ -35,7 +35,7 @@ namespace GW2EIParser.tst
             }
             catch (Exception ex)
             {
-                if (!(ex is TooShortException || ex is SkipException))
+                if (!(ex is TooShortException || ex is SkipException || ex is IncompleteLogException))
                 {
                     failed.Add(file);
                     messages.Add(ex.Message);

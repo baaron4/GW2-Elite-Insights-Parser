@@ -12,6 +12,7 @@ namespace GW2EIParser.Parser
         public bool ParseCombatReplay { get; protected set; }
         public bool ComputeDamageModifiers { get; protected set; }
         public bool RawTimelineArrays { get; protected set; }
+        public bool MultiTasks { get; protected set; }
 
         public ParserSettings()
         {
@@ -21,6 +22,7 @@ namespace GW2EIParser.Parser
             ParseCombatReplay = Properties.Settings.Default.ParseCombatReplay;
             ComputeDamageModifiers = Properties.Settings.Default.ComputeDamageModifiers;
             RawTimelineArrays = Properties.Settings.Default.RawTimelineArrays;
+            MultiTasks = Properties.Settings.Default.MultiThreaded;
         }
     }
 }
