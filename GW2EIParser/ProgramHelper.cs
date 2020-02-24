@@ -199,6 +199,7 @@ namespace GW2EIParser
             // parallel stuff
             if (log.ParserSettings.MultiTasks)
             {
+                log.FightData.GetPhases(log);
                 foreach (Player p in log.PlayerList)
                 {
                     // that part can't be //
@@ -214,6 +215,7 @@ namespace GW2EIParser
                 Parallel.ForEach(actors, actor => actor.GetBuffGraphs(log));
                 //
                 Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
+                Parallel.ForEach(log.PlayerList, player => player.GetBuffs(log, BuffEnum.Self));
             }
             if (Properties.Settings.Default.SaveOutHTML)
             {
