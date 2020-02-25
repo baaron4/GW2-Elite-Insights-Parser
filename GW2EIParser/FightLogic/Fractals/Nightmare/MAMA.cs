@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
@@ -40,6 +41,43 @@ namespace GW2EIParser.Logic
                             (1653, 4555, 5733, 7195),
                             (-6144, -6144, 9216, 9216),
                             (11804, 4414, 12444, 5054));
+        }
+
+        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
+        {
+            List<PhaseData> phases = GetInitialPhase(log);
+            NPC mama = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.MAMA);
+            if (mama == null)
+            {
+                throw new InvalidOperationException("Error Encountered: MAMA not found");
+            }
+            phases[0].Targets.Add(mama);
+            if (!requirePhases)
+            {
+                return phases;
+            }
+            phases.AddRange(GetPhasesByInvul(log, 762, mama, true, true));
+            string[] namesMAMA = new[] { "Phase 1", "Red Knight", "Phase 2", "Green Knight", "Phase 3", "Blue Knight", "Phase 4" };
+            for (int i = 1; i < phases.Count; i++)
+            {
+                PhaseData phase = phases[i];
+                phase.Name = namesMAMA[i - 1];
+                if (i == 2 || i == 4 || i == 6)
+                {
+                    var ids = new List<ushort>
+                    {
+                       (ushort) GreenKnight,
+                       (ushort) RedKnight,
+                       (ushort) BlueKnight,
+                    };
+                    AddTargetsToPhase(phase, ids, log);
+                }
+                else
+                {
+                    phase.Targets.Add(mama);
+                }
+            }
+            return phases;
         }
 
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
