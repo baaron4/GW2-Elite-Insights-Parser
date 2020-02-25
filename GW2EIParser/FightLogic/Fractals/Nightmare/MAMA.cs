@@ -45,7 +45,6 @@ namespace GW2EIParser.Logic
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
-            // generic method for fractals
             List<PhaseData> phases = GetInitialPhase(log);
             NPC mama = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.MAMA);
             if (mama == null)
