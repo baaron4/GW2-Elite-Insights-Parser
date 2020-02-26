@@ -344,7 +344,7 @@ namespace GW2EIParser.EIData
                 new Buff("Razorclaw's Rage",41016, BuffSource.Revenant, BuffType.Duration, 1, BuffNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/7/73/Razorclaw%27s_Rage.png"),
                 new Buff("Soulcleave's Summit",45026, BuffSource.Revenant, BuffType.Duration, 1, BuffNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png"),
                 //traits
-                new Buff("Vicious Lacerations",29395, BuffSource.Revenant, BuffType.Intensity, 3, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png"),
+                new Buff("Vicious Lacerations",29395, BuffSource.Revenant, BuffType.Intensity, 3, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", 0, 102321),
                 new Buff("Rising Momentum",51683, BuffSource.Revenant, BuffType.Intensity, 10, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8c/Rising_Momentum.png"),
                 new Buff("Assassin's Presence", 26854, BuffSource.Revenant, BuffType.Duration, 1, BuffNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/5/54/Assassin%27s_Presence.png"),
                 new Buff("Expose Defenses", 48894, BuffSource.Revenant, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/5c/Mutilate_Defenses.png"),
