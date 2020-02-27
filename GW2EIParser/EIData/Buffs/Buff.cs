@@ -473,6 +473,8 @@ namespace GW2EIParser.EIData
                 new Buff("Heat Therapy",40694, BuffSource.Engineer, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/34/Heat_Therapy.png"),
                 new Buff("Overheat", 40397, BuffSource.Engineer, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4b/Overheat.png"),
                 new Buff("Thermal Vision", 51389, BuffSource.Engineer, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8a/Skilled_Marksman.png"),
+                new Buff("Explosive Entrance",59592, BuffSource.Engineer, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/33/Explosive_Entrance.png", 102321, ulong.MaxValue),
+                new Buff("Explosive Temper",59592, BuffSource.Engineer, BuffType.Intensity, 10, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/c1/Explosive_Temper.png", 102321, ulong.MaxValue),
 
         };
 
