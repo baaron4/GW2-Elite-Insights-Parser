@@ -15,16 +15,12 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <AssemblyTitle>EliteInsights</AssemblyTitle>
     <OutputPath>..\GW2EI.bin\$(Configuration)\</OutputPath>
     <Product>EliteInsights</Product>
-    <Copyright>Copyright ©  2018</Copyright>
-    <AssemblyVersion>2.15.1.0</AssemblyVersion>
-    <FileVersion>2.15.1.0</FileVersion>
+    <Copyright>Copyright ©  2020</Copyright>
     <DocumentationFile />
     <Deterministic>false</Deterministic>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
