@@ -18,14 +18,14 @@ namespace GW2EIParser.EIData
         {
             if (buff.Type == BuffType.Duration)
             {
-                Uptime = Math.Round(100.0 * buffDistribution.GetUptime(buff.ID) / phaseDuration, GeneralHelper.BoonDigit);
+                Uptime = Math.Round(100.0 * buffDistribution.GetUptime(buff.ID) / phaseDuration, GeneralHelper.BuffDigit);
             }
             else if (buff.Type == BuffType.Intensity)
             {
-                Uptime = Math.Round((double)buffDistribution.GetUptime(buff.ID) / phaseDuration, GeneralHelper.BoonDigit);
+                Uptime = Math.Round((double)buffDistribution.GetUptime(buff.ID) / phaseDuration, GeneralHelper.BuffDigit);
                 if (buffPresence.TryGetValue(buff.ID, out long presenceValueBoon))
                 {
-                    Presence = Math.Round(100.0 * presenceValueBoon / phaseDuration, GeneralHelper.BoonDigit);
+                    Presence = Math.Round(100.0 * presenceValueBoon / phaseDuration, GeneralHelper.BuffDigit);
                 }
             }
         }

@@ -59,17 +59,17 @@ namespace GW2EIParser.EIData
             {
                 avgBoons += duration;
             }
-            AvgBoons = Math.Round(avgBoons / phase.DurationInMS, GeneralHelper.BoonDigit);
+            AvgBoons = Math.Round(avgBoons / phase.DurationInMS, GeneralHelper.BuffDigit);
             long activeDuration = phase.GetActorActiveDuration(actor, log);
-            AvgActiveBoons = activeDuration > 0 ? Math.Round(avgBoons / activeDuration, GeneralHelper.BoonDigit) : 0.0;
+            AvgActiveBoons = activeDuration > 0 ? Math.Round(avgBoons / activeDuration, GeneralHelper.BuffDigit) : 0.0;
 
             double avgCondis = 0;
             foreach (long duration in actor.GetBuffPresence(log, phaseIndex).Where(x => log.Buffs.BuffsByIds[x.Key].Nature == BuffNature.Condition).Select(x => x.Value))
             {
                 avgCondis += duration;
             }
-            AvgConditions = Math.Round(avgCondis / phase.DurationInMS, GeneralHelper.BoonDigit);
-            AvgActiveConditions = activeDuration > 0 ? Math.Round(avgCondis / activeDuration, GeneralHelper.BoonDigit) : 0.0;
+            AvgConditions = Math.Round(avgCondis / phase.DurationInMS, GeneralHelper.BuffDigit);
+            AvgActiveConditions = activeDuration > 0 ? Math.Round(avgCondis / activeDuration, GeneralHelper.BuffDigit) : 0.0;
 
             if (log.CombatData.HasMovementData && actor is Player)
             {

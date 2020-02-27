@@ -15,7 +15,7 @@ namespace GW2EIParser
     {
         public static int PollingRate = 150;
 
-        public static readonly int BoonDigit = 3;
+        public static readonly int BuffDigit = 2;
         public static readonly int TimeDigit = 3;
 
         public static readonly long ServerDelayConstant = 10;
