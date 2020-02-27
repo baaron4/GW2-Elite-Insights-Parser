@@ -442,7 +442,8 @@ namespace GW2EIParser.EIData
                 //new Boon("Force of Will",29485, BoonSource.Guardian, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff),//not sure if intensity
                 new Buff("Quickfire",45123, BuffSource.Guardian, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d6/Quickfire.png"),
                 new Buff("Symbolic Avenger",56890, BuffSource.Guardian, BuffType.Intensity, 5, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e5/Symbolic_Avenger.png", 97950, ulong.MaxValue),
-                new Buff("Inspiring Virtue",59592, BuffSource.Guardian, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8f/Virtuous_Solace.png", 102321, ulong.MaxValue),
+                new Buff("Inspiring Virtue",59592, BuffSource.Guardian, BuffType.Duration, 99, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8f/Virtuous_Solace.png", 102321, 102389),
+                new Buff("Inspiring Virtue",59592, BuffSource.Guardian, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8f/Virtuous_Solace.png", 102389, ulong.MaxValue),
         };
 
         private static readonly List<Buff> _engineer = new List<Buff>
