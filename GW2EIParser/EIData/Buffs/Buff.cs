@@ -171,13 +171,14 @@ namespace GW2EIParser.EIData
                 new Buff("Stun", 872, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.ForceOverride, "https://wiki.guildwars2.com/images/9/97/Stun.png"),
                 new Buff("Daze", 833, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.ForceOverride, "https://wiki.guildwars2.com/images/7/79/Daze.png"),
                 new Buff("Exposed", 48209, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.ForceOverride,"https://wiki.guildwars2.com/images/f/f4/Exposed_%28effect%29.png"),
+                new Buff("Unblockable",36781, BuffSource.Mixed, BuffType.Intensity, 99, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/f/f0/Unblockable_%28effect%29.png",102321 , ulong.MaxValue),
                 //Auras
-                new Buff("Chaos Aura", 10332, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/1/1b/Chaos_Armor.png"),
-                new Buff("Fire Aura", 5677, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/1/18/Fire_Shield.png"),
-                new Buff("Frost Aura", 5579, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/6/68/Frost_Aura.png"),
+                new Buff("Chaos Aura", 10332, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/ec/Chaos_Aura.png"),
+                new Buff("Fire Aura", 5677, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/c/ce/Fire_Aura.png"),
+                new Buff("Frost Aura", 5579, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/8/87/Frost_Aura_%28effect%29.png"),
                 new Buff("Light Aura", 25518, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/5/5a/Light_Aura.png"),
-                new Buff("Magnetic Aura", 5684, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/5a/Magnetic_Aura.png"),
-                new Buff("Shocking Aura", 5577, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/3/31/Shocking_Aura.png"),
+                new Buff("Magnetic Aura", 5684, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/0/0b/Magnetic_Aura_%28effect%29.png"),
+                new Buff("Shocking Aura", 5577, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/5/5d/Shocking_Aura_%28effect%29.png"),
                 new Buff("Dark Aura", 39978, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/ef/Dark_Aura.png", 96406, ulong.MaxValue),
                 //race
                 new Buff("Take Root", 12459, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/b/b2/Take_Root.png"),
@@ -344,7 +345,7 @@ namespace GW2EIParser.EIData
                 new Buff("Razorclaw's Rage",41016, BuffSource.Revenant, BuffType.Duration, 1, BuffNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/7/73/Razorclaw%27s_Rage.png"),
                 new Buff("Soulcleave's Summit",45026, BuffSource.Revenant, BuffType.Duration, 1, BuffNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png"),
                 //traits
-                new Buff("Vicious Lacerations",29395, BuffSource.Revenant, BuffType.Intensity, 3, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png"),
+                new Buff("Vicious Lacerations",29395, BuffSource.Revenant, BuffType.Intensity, 3, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", 0, 102321),
                 new Buff("Rising Momentum",51683, BuffSource.Revenant, BuffType.Intensity, 10, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8c/Rising_Momentum.png"),
                 new Buff("Assassin's Presence", 26854, BuffSource.Revenant, BuffType.Duration, 1, BuffNature.OffensiveBuffTable, Logic.Override, "https://wiki.guildwars2.com/images/5/54/Assassin%27s_Presence.png"),
                 new Buff("Expose Defenses", 48894, BuffSource.Revenant, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/5c/Mutilate_Defenses.png"),
@@ -441,6 +442,8 @@ namespace GW2EIParser.EIData
                 //new Boon("Force of Will",29485, BoonSource.Guardian, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff),//not sure if intensity
                 new Buff("Quickfire",45123, BuffSource.Guardian, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/d6/Quickfire.png"),
                 new Buff("Symbolic Avenger",56890, BuffSource.Guardian, BuffType.Intensity, 5, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e5/Symbolic_Avenger.png", 97950, ulong.MaxValue),
+                new Buff("Inspiring Virtue",59592, BuffSource.Guardian, BuffType.Duration, 99, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8f/Virtuous_Solace.png", 102321, 102389),
+                new Buff("Inspiring Virtue",59592, BuffSource.Guardian, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8f/Virtuous_Solace.png", 102389, ulong.MaxValue),
         };
 
         private static readonly List<Buff> _engineer = new List<Buff>
@@ -470,6 +473,8 @@ namespace GW2EIParser.EIData
                 new Buff("Heat Therapy",40694, BuffSource.Engineer, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/34/Heat_Therapy.png"),
                 new Buff("Overheat", 40397, BuffSource.Engineer, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4b/Overheat.png"),
                 new Buff("Thermal Vision", 51389, BuffSource.Engineer, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8a/Skilled_Marksman.png"),
+                new Buff("Explosive Entrance",59579, BuffSource.Engineer, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/33/Explosive_Entrance.png", 102321, ulong.MaxValue),
+                new Buff("Explosive Temper",59528, BuffSource.Engineer, BuffType.Intensity, 10, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/c/c1/Explosive_Temper.png", 102321, ulong.MaxValue),
 
         };
 
@@ -501,7 +506,7 @@ namespace GW2EIParser.EIData
                 //skills
                 new Buff("Attack of Opportunity",12574, BuffSource.Ranger, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/47/Moment_of_Clarity.png"),
                 new Buff("Call of the Wild",36781, BuffSource.Ranger, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8d/Call_of_the_Wild.png",0 , 97950),
-                new Buff("Call of the Wild",36781, BuffSource.Ranger, BuffType.Intensity, 3, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8d/Call_of_the_Wild.png",97950 , ulong.MaxValue),
+                new Buff("Call of the Wild",36781, BuffSource.Ranger, BuffType.Intensity, 3, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8d/Call_of_the_Wild.png",97950 , 102321),
                 new Buff("Strength of the Pack!",12554, BuffSource.Ranger, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/4b/%22Strength_of_the_Pack%21%22.png"),
                 new Buff("Sic 'Em!",33902, BuffSource.Ranger, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png"),
                 new Buff("Sharpening Stones",12536, BuffSource.Ranger, BuffType.Intensity, 10, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/af/Sharpening_Stone.png"),
