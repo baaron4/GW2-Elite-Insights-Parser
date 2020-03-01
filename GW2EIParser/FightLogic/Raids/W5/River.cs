@@ -84,7 +84,7 @@ namespace GW2EIParser.Logic
             bool sortCombatList = false;
             foreach (AgentItem riverOfSoul in riverOfSouls)
             {
-                CombatItem firstMovement = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Velocity && x.SrcAgent == riverOfSoul.Agent);
+                CombatItem firstMovement = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Velocity && x.SrcAgent == riverOfSoul.Agent && x.DstAgent != 0);
                 if (firstMovement != null)
                 {
                     // update start
