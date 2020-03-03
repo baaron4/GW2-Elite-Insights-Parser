@@ -405,7 +405,8 @@ namespace GW2EIParser.Parser
             // 64 bytes: each combat
             using (BinaryReader reader = CreateReader(stream))
             {
-                while (reader.BaseStream.Length != reader.BaseStream.Position)
+                long cbtItemCount = (reader.BaseStream.Length - reader.BaseStream.Position) / 64;
+                for (long i = 0; i < cbtItemCount; i++)
                 {
                     CombatItem combatItem = _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader);
                     if (!IsValid(combatItem))
@@ -421,6 +422,10 @@ namespace GW2EIParser.Parser
                         _logEndTime = combatItem.Time;
                     }
                     _combatItems.Add(combatItem);
+                    if (combatItem.IsStateChange == ParseEnum.StateChange.LogEnd)
+                    {
+                        break;
+                    }
                 }
             }
             if (!_combatItems.Any())
