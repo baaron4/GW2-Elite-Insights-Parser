@@ -550,7 +550,7 @@ namespace GW2EIParser.Parser
                     playerAgent.OverrideAwareTimes(_logStartTime, _logEndTime);
                 }
                 bool skip = false;
-                var player = new Player(playerAgent, _fightData.Logic.Mode == FightLogic.ParseMode.Fractal);
+                var player = new Player(playerAgent, _fightData.Logic.Mode == FightLogic.ParseMode.Fractal, false);
                 foreach (Player p in _playerList)
                 {
                     if (p.Account == player.Account)// same player
@@ -623,7 +623,7 @@ namespace GW2EIParser.Parser
             _fightData = new FightData(_id, _agentData, _logStartTime, _logEndTime);
             CompletePlayers();
             OffsetEvtcData();
-            _fightData.Logic.EIEvtcParse(_fightData, _agentData, _combatItems);
+            _fightData.Logic.EIEvtcParse(_fightData, _agentData, _combatItems, _playerList);
             if (!_fightData.Logic.Targets.Any())
             {
                 throw new InvalidDataException("Error Encountered: No Targets found");

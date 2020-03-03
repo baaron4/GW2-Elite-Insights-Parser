@@ -34,7 +34,7 @@ namespace GW2EIParser.EIData
         private string[] _weaponsArray;
 
         // Constructors
-        public Player(AgentItem agent, bool noSquad) : base(agent)
+        public Player(AgentItem agent, bool noSquad, bool fake) : base(agent)
         {
             string[] name = agent.Name.Split('\0');
             if (name.Length < 2)
@@ -47,7 +47,7 @@ namespace GW2EIParser.EIData
             }
             Account = name[1].TrimStart(':');
             Group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
-            IsFakeActor = Account == "Conjured Sword";
+            IsFakeActor = fake;
         }
 
         // Public methods

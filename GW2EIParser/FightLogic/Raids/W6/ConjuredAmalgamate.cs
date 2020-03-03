@@ -59,7 +59,7 @@ namespace GW2EIParser.Logic
             };
         }
 
-        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
             // make those into npcs
             List<AgentItem> cas = agentData.GetGadgetsByID((ushort)ParseEnum.TargetIDS.ConjuredAmalgamate);
@@ -79,7 +79,8 @@ namespace GW2EIParser.Logic
             }
             agentData.Refresh();
             ComputeFightTargets(agentData, combatData);
-            AgentItem sword = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.Player, "Conjured Sword\0:Conjured Sword\050", "Sword", 0);
+            AgentItem sword = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.Player, "Conjured Sword\0:Conjured Sword\051", "Sword", 0);
+            playerList.Add(new Player(sword, false, true));
             foreach (CombatItem c in combatData)
             {
                 if (c.SkillID == 52370 && c.IsStateChange == ParseEnum.StateChange.None && c.IsBuffRemove == ParseEnum.BuffRemove.None &&

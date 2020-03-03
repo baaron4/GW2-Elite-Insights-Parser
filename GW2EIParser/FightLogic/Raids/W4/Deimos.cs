@@ -208,7 +208,7 @@ namespace GW2EIParser.Logic
             return fightData.FightOffset;
         }
 
-        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
             ComputeFightTargets(agentData, combatData);
             // Find target
