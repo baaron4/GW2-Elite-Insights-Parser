@@ -8,7 +8,7 @@ namespace GW2EIParser.Logic
     public abstract class StrikeMissionLogic : FightLogic
     {
 
-        protected StrikeMissionLogic(ushort triggerID) : base(triggerID)
+        protected StrikeMissionLogic(int triggerID) : base(triggerID)
         {
             Mode = ParseMode.Raid;
         }
@@ -36,9 +36,9 @@ namespace GW2EIParser.Logic
             }
         }
 
-        protected override HashSet<ushort> GetUniqueTargetIDs()
+        protected override HashSet<int> GetUniqueTargetIDs()
         {
-            return new HashSet<ushort>
+            return new HashSet<int>
             {
                 GenericTriggerID
             };

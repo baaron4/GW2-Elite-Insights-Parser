@@ -11,7 +11,7 @@ namespace GW2EIParser.Logic
 {
     public class BanditTrio : RaidLogic
     {
-        public BanditTrio(ushort triggerID) : base(triggerID)
+        public BanditTrio(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
@@ -25,21 +25,21 @@ namespace GW2EIParser.Logic
             Icon = "https://i.imgur.com/UZZQUdf.png";
         }
 
-        protected override List<ushort> GetSuccessCheckIds()
+        protected override List<int> GetSuccessCheckIds()
         {
-            return new List<ushort>
+            return new List<int>
             {
-                (ushort)ParseEnum.TargetIDS.Narella
+                (int)ParseEnum.TargetIDS.Narella
             };
         }
 
-        protected override List<ushort> GetFightTargetsIDs()
+        protected override List<int> GetFightTargetsIDs()
         {
-            return new List<ushort>
+            return new List<int>
             {
-                (ushort)ParseEnum.TargetIDS.Berg,
-                (ushort)ParseEnum.TargetIDS.Zane,
-                (ushort)ParseEnum.TargetIDS.Narella
+                (int)ParseEnum.TargetIDS.Berg,
+                (int)ParseEnum.TargetIDS.Zane,
+                (int)ParseEnum.TargetIDS.Narella
             };
         }
 
@@ -57,7 +57,7 @@ namespace GW2EIParser.Logic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                List<AgentItem> prisoners = agentData.GetNPCsByID((ushort)Prisoner2);
+                List<AgentItem> prisoners = agentData.GetNPCsByID((int)Prisoner2);
                 var prisonerDeaths = new List<DeadEvent>();
                 foreach (AgentItem prisoner in prisoners)
                 {
@@ -65,7 +65,7 @@ namespace GW2EIParser.Logic
                 }
                 if (prisonerDeaths.Count == 0)
                 {
-                    SetSuccessByCombatExit(new HashSet<ushort>(GetSuccessCheckIds()), combatData, fightData, playerAgents);
+                    SetSuccessByCombatExit(new HashSet<int>(GetSuccessCheckIds()), combatData, fightData, playerAgents);
                 }
             }
         }
@@ -89,30 +89,30 @@ namespace GW2EIParser.Logic
             }
         }
 
-        protected override HashSet<ushort> GetUniqueTargetIDs()
+        protected override HashSet<int> GetUniqueTargetIDs()
         {
-            return new HashSet<ushort>
+            return new HashSet<int>
             {
-                (ushort)ParseEnum.TargetIDS.Berg,
-                (ushort)ParseEnum.TargetIDS.Zane,
-                (ushort)ParseEnum.TargetIDS.Narella
+                (int)ParseEnum.TargetIDS.Berg,
+                (int)ParseEnum.TargetIDS.Zane,
+                (int)ParseEnum.TargetIDS.Narella
             };
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC berg = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Berg);
+            NPC berg = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Berg);
             if (berg == null)
             {
                 throw new InvalidOperationException("Error Encountered: Berg not found");
             }
-            NPC zane = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Zane);
+            NPC zane = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Zane);
             if (zane == null)
             {
                 throw new InvalidOperationException("Error Encountered: Zane not found");
             }
-            NPC narella = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Narella);
+            NPC narella = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Narella);
             if (narella == null)
             {
                 throw new InvalidOperationException("Error Encountered: Narella not found");
@@ -166,9 +166,9 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
-                case (ushort)ParseEnum.TargetIDS.Berg:
+                case (int)ParseEnum.TargetIDS.Berg:
                     break;
-                case (ushort)ParseEnum.TargetIDS.Zane:
+                case (int)ParseEnum.TargetIDS.Zane:
                     var bulletHail = cls.Where(x => x.SkillId == 34383).ToList();
                     foreach (AbstractCastEvent c in bulletHail)
                     {
@@ -190,7 +190,7 @@ namespace GW2EIParser.Logic
                     }
                     break;
 
-                case (ushort)ParseEnum.TargetIDS.Narella:
+                case (int)ParseEnum.TargetIDS.Narella:
                     break;
                 default:
                     break;

@@ -11,7 +11,7 @@ namespace GW2EIParser.Logic
 {
     public class MursaatOverseer : RaidLogic
     {
-        public MursaatOverseer(ushort triggerID) : base(triggerID)
+        public MursaatOverseer(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
@@ -51,7 +51,7 @@ namespace GW2EIParser.Logic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.MursaatOverseer);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.MursaatOverseer);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Error Encountered: Mursaat Overseer not found");
@@ -98,7 +98,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
-                case (ushort)Jade:
+                case (int)Jade:
                     List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, 38155, target, true);
                     int shieldStart = 0;
                     int shieldRadius = 100;
@@ -132,7 +132,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.MursaatOverseer);
+            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.MursaatOverseer);
             if (target == null)
             {
                 throw new InvalidOperationException("Error Encountered: Mursaat Overseer not found");

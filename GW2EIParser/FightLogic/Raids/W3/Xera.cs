@@ -14,7 +14,7 @@ namespace GW2EIParser.Logic
 
         private long _specialSplit = 0;
 
-        public Xera(ushort triggerID) : base(triggerID)
+        public Xera(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -53,7 +53,7 @@ namespace GW2EIParser.Logic
 
         public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
         {
-            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Xera);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Xera);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Error Encountered: Xera not found");
@@ -72,7 +72,7 @@ namespace GW2EIParser.Logic
             long start = 0;
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Xera);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Xera);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Error Encountered: Xera not found");
@@ -108,7 +108,7 @@ namespace GW2EIParser.Logic
 
         public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem target = agentData.GetNPCsByID((ushort)ParseEnum.TargetIDS.Xera).FirstOrDefault();
+            AgentItem target = agentData.GetNPCsByID((int)ParseEnum.TargetIDS.Xera).FirstOrDefault();
             if (target == null)
             {
                 throw new InvalidOperationException("Error Encountered: Xera not found");
@@ -125,7 +125,7 @@ namespace GW2EIParser.Logic
         public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
             // find target
-            AgentItem target = agentData.GetNPCsByID((ushort)ParseEnum.TargetIDS.Xera).FirstOrDefault();
+            AgentItem target = agentData.GetNPCsByID((int)ParseEnum.TargetIDS.Xera).FirstOrDefault();
             if (target == null)
             {
                 throw new InvalidOperationException("Error Encountered: Xera not found");
@@ -187,7 +187,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
-                case (ushort)ParseEnum.TargetIDS.Xera:
+                case (int)ParseEnum.TargetIDS.Xera:
                     var summon = cls.Where(x => x.SkillId == 34887).ToList();
                     foreach (AbstractCastEvent c in summon)
                     {

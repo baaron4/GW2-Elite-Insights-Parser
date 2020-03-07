@@ -15,7 +15,7 @@ namespace GW2EIParser.Logic
         private short _reapersSeen;
         private int _greenStart;
 
-        public Dhuum(ushort triggerID) : base(triggerID)
+        public Dhuum(int triggerID) : base(triggerID)
         {
             _isBugged = false;
             _reapersSeen = -7;
@@ -99,7 +99,7 @@ namespace GW2EIParser.Logic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC dhuum = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
+            NPC dhuum = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Dhuum);
             if (dhuum == null)
             {
                 throw new InvalidOperationException("Error Encountered: Dhuum not found");
@@ -175,7 +175,7 @@ namespace GW2EIParser.Logic
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (ushort)ParseEnum.TargetIDS.Dhuum:
+                case (int)ParseEnum.TargetIDS.Dhuum:
                     var deathmark = cls.Where(x => x.SkillId == 48176).ToList();
                     AbstractCastEvent majorSplit = cls.Find(x => x.SkillId == 47396);
                     foreach (AbstractCastEvent c in deathmark)
@@ -231,19 +231,19 @@ namespace GW2EIParser.Logic
                         replay.Decorations.Add(new CircleDecoration(true, 0, 320, (start, end), "rgba(0, 180, 255, 0.2)", new AgentConnector(target)));
                     }
                     break;
-                case (ushort)DhuumDesmina:
+                case (int)DhuumDesmina:
                     break;
-                case (ushort)Echo:
+                case (int)Echo:
                     replay.Decorations.Add(new CircleDecoration(true, 0, 120, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     break;
-                case (ushort)Enforcer:
+                case (int)Enforcer:
                     break;
-                case (ushort)Messenger:
+                case (int)Messenger:
                     replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
                     break;
-                case (ushort)Deathling:
+                case (int)Deathling:
                     break;
-                case (ushort)UnderworldReaper:
+                case (int)UnderworldReaper:
                     // if not bugged and we assumed we are still on the reapers at the door, check if start is above 2 seconds (first reaper spawns around 10+ seconds). If yes, put _reapersSeen at 0 to start greens. 
                     if (!_isBugged && _reapersSeen < 0 && start > 2000)
                     {
@@ -305,7 +305,7 @@ namespace GW2EIParser.Logic
         {
             // spirit transform
             var spiritTransform = log.CombatData.GetBuffData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
-            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Dhuum);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Error Encountered: Dhuum not found");
@@ -390,7 +390,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
+            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Dhuum);
             if (target == null)
             {
                 throw new InvalidOperationException("Error Encountered: Dhuum not found");

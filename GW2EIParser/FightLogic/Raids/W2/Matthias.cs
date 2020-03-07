@@ -11,7 +11,7 @@ namespace GW2EIParser.Logic
 {
     public class Matthias : RaidLogic
     {
-        public Matthias(ushort triggerID) : base(triggerID)
+        public Matthias(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -59,7 +59,7 @@ namespace GW2EIParser.Logic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Matthias);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Matthias);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Error Encountered: Matthias not found");
@@ -132,7 +132,7 @@ namespace GW2EIParser.Logic
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (ushort)ParseEnum.TargetIDS.Matthias:
+                case (int)ParseEnum.TargetIDS.Matthias:
                     var humanShield = cls.Where(x => x.SkillId == 34468).ToList();
                     var humanShieldRemoval = log.CombatData.GetBuffRemoveAllData(34518).Select(x => (int)x.Time).Distinct().ToList();
                     for (int i = 0; i < humanShield.Count; i++)
@@ -187,17 +187,17 @@ namespace GW2EIParser.Logic
                         }
                     }
                     break;
-                case (ushort)Storm:
+                case (int)Storm:
                     replay.Decorations.Add(new CircleDecoration(false, 0, 260, (start, end), "rgba(0, 80, 255, 0.5)", new AgentConnector(target)));
                     break;
-                case (ushort)Spirit:
-                case (ushort)Spirit2:
+                case (int)Spirit:
+                case (int)Spirit2:
                     replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     break;
-                case (ushort)IcePatch:
+                case (int)IcePatch:
                     replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start, end), "rgba(0, 0, 255, 0.5)", new AgentConnector(target)));
                     break;
-                case (ushort)Tornado:
+                case (int)Tornado:
                     replay.Decorations.Add(new CircleDecoration(true, 0, 90, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     break;
                 default:

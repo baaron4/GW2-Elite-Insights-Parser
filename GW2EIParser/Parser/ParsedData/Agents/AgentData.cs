@@ -9,8 +9,8 @@ namespace GW2EIParser.Parser.ParsedData
         private readonly List<AgentItem> _allAgentsList;
         private Dictionary<ulong, AgentItem> _allAgentsByAgent;
         private Dictionary<ushort, List<AgentItem>> _allAgentsByInstID;
-        private Dictionary<ushort, List<AgentItem>> _allNPCsByID;
-        private Dictionary<ushort, List<AgentItem>> _allGadgetsByID;
+        private Dictionary<int, List<AgentItem>> _allNPCsByID;
+        private Dictionary<int, List<AgentItem>> _allGadgetsByID;
         private Dictionary<AgentItem.AgentType, List<AgentItem>> _allAgentsByType;
         private Dictionary<string, List<AgentItem>> _allAgentsByName;
         public HashSet<ulong> AgentValues => new HashSet<ulong>(_allAgentsList.Select(x => x.Agent));
@@ -22,7 +22,7 @@ namespace GW2EIParser.Parser.ParsedData
             Refresh();
         }
 
-        public AgentItem AddCustomAgent(long start, long end, AgentItem.AgentType type, string name, string prof, ushort ID, uint toughness = 0, uint healing = 0, uint condition = 0, uint concentration = 0, uint hitboxWidth = 0, uint hitboxHeight = 0)
+        public AgentItem AddCustomAgent(long start, long end, AgentItem.AgentType type, string name, string prof, int ID, uint toughness = 0, uint healing = 0, uint condition = 0, uint concentration = 0, uint hitboxWidth = 0, uint hitboxHeight = 0)
         {
             var rnd = new Random();
             ulong agentValue = 0;
@@ -53,7 +53,7 @@ namespace GW2EIParser.Parser.ParsedData
             return GeneralHelper.UnknownAgent;
         }
 
-        public List<AgentItem> GetNPCsByID(ushort id)
+        public List<AgentItem> GetNPCsByID(int id)
         {
             if (id != 0)
             {
@@ -65,7 +65,7 @@ namespace GW2EIParser.Parser.ParsedData
             return new List<AgentItem>();
         }
 
-        public List<AgentItem> GetGadgetsByID(ushort id)
+        public List<AgentItem> GetGadgetsByID(int id)
         {
             if (id != 0)
             {
@@ -94,7 +94,7 @@ namespace GW2EIParser.Parser.ParsedData
             return GeneralHelper.UnknownAgent;
         }
 
-        public void OverrideID(ushort ID, AgentItem agentItem)
+        public void OverrideID(int ID, AgentItem agentItem)
         {
             _allAgentsList.RemoveAll(x => x.ID == ID);
             _allAgentsList.Add(agentItem);

@@ -5,7 +5,7 @@ namespace GW2EIParser.Logic
 {
     public class Escort : RaidLogic
     {
-        public Escort(ushort triggerID) : base(triggerID)
+        public Escort(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {

@@ -24,9 +24,9 @@ namespace GW2EIParser.Logic
         public List<NPC> Targets { get; } = new List<NPC>();
 
         public bool Targetless { get; protected set; } = false;
-        protected ushort GenericTriggerID { get; }
+        protected int GenericTriggerID { get; }
 
-        protected FightLogic(ushort triggerID)
+        protected FightLogic(int triggerID)
         {
             GenericTriggerID = triggerID;
             MechanicList = new List<Mechanic>() {
@@ -66,9 +66,9 @@ namespace GW2EIParser.Logic
             return _map;
         }
 
-        protected virtual List<ushort> GetFightTargetsIDs()
+        protected virtual List<int> GetFightTargetsIDs()
         {
-            return new List<ushort>
+            return new List<int>
             {
                 GenericTriggerID
             };
@@ -84,7 +84,7 @@ namespace GW2EIParser.Logic
             return target.Character;
         }
 
-        private static void RegroupTargetsByID(ushort id, AgentData agentData, List<CombatItem> combatItems)
+        private static void RegroupTargetsByID(int id, AgentData agentData, List<CombatItem> combatItems)
         {
             List<AgentItem> agents = agentData.GetNPCsByID(id);
             if (agents.Count > 1)
@@ -109,16 +109,16 @@ namespace GW2EIParser.Logic
             }
         }
 
-        protected abstract HashSet<ushort> GetUniqueTargetIDs();
+        protected abstract HashSet<int> GetUniqueTargetIDs();
 
         protected virtual void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems)
         {
-            foreach (ushort id in GetUniqueTargetIDs())
+            foreach (int id in GetUniqueTargetIDs())
             {
                 RegroupTargetsByID(id, agentData, combatItems);
             }
-            List<ushort> ids = GetFightTargetsIDs();
-            foreach (ushort id in ids)
+            List<int> ids = GetFightTargetsIDs();
+            foreach (int id in ids)
             {
                 List<AgentItem> agents = agentData.GetNPCsByID(id);
                 foreach (AgentItem agentItem in agents)
@@ -194,7 +194,7 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected void AddTargetsToPhase(PhaseData phase, List<ushort> ids, ParsedLog log)
+        protected void AddTargetsToPhase(PhaseData phase, List<int> ids, ParsedLog log)
         {
             foreach (NPC target in Targets)
             {
@@ -253,9 +253,9 @@ namespace GW2EIParser.Logic
             return -1;
         }
 
-        protected void SetSuccessByDeath(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, bool all, ushort idFirst, params ushort[] ids)
+        protected void SetSuccessByDeath(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, bool all, int idFirst, params int[] ids)
         {
-            var idsToUse = new List<ushort>
+            var idsToUse = new List<int>
             {
                 idFirst
             };
@@ -263,11 +263,11 @@ namespace GW2EIParser.Logic
             SetSuccessByDeath(combatData, fightData, playerAgents, all, idsToUse);
         }
 
-        protected void SetSuccessByDeath(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, bool all, List<ushort> idsToUse)
+        protected void SetSuccessByDeath(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, bool all, List<int> idsToUse)
         {
             int success = 0;
             long maxTime = long.MinValue;
-            foreach (ushort id in idsToUse)
+            foreach (int id in idsToUse)
             {
                 NPC target = Targets.Find(x => x.ID == id);
                 if (target == null)
@@ -293,7 +293,7 @@ namespace GW2EIParser.Logic
             }
         }
 
-        protected void SetSuccessByCombatExit(HashSet<ushort> targetIds, CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
+        protected void SetSuccessByCombatExit(HashSet<int> targetIds, CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             var targets = Targets.Where(x => targetIds.Contains(x.ID)).ToList();
             SetSuccessByCombatExit(targets, combatData, fightData, playerAgents);

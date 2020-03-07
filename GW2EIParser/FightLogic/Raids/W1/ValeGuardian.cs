@@ -11,7 +11,7 @@ namespace GW2EIParser.Logic
 {
     public class ValeGuardian : RaidLogic
     {
-        public ValeGuardian(ushort triggerID) : base(triggerID)
+        public ValeGuardian(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -49,21 +49,21 @@ namespace GW2EIParser.Logic
                             (3456, 11012, 4736, 14212));
         }
 
-        protected override List<ushort> GetFightTargetsIDs()
+        protected override List<int> GetFightTargetsIDs()
         {
-            return new List<ushort>
+            return new List<int>
             {
-                (ushort)ParseEnum.TargetIDS.ValeGuardian,
-                (ushort)RedGuardian,
-                (ushort)BlueGuardian,
-                (ushort)GreenGuardian
+                (int)ParseEnum.TargetIDS.ValeGuardian,
+                (int)RedGuardian,
+                (int)BlueGuardian,
+                (int)GreenGuardian
             };
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.ValeGuardian);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.ValeGuardian);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Error Encountered: Vale Guardian not found");
@@ -82,11 +82,11 @@ namespace GW2EIParser.Logic
                 phase.Name = namesVG[i - 1];
                 if (i == 2 || i == 4)
                 {
-                    var ids = new List<ushort>
+                    var ids = new List<int>
                     {
-                       (ushort) BlueGuardian,
-                       (ushort) GreenGuardian,
-                       (ushort) RedGuardian
+                       (int) BlueGuardian,
+                       (int) GreenGuardian,
+                       (int) RedGuardian
                     };
                     AddTargetsToPhase(phase, ids, log);
                 }
@@ -112,7 +112,7 @@ namespace GW2EIParser.Logic
             var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
             switch (target.ID)
             {
-                case (ushort)ParseEnum.TargetIDS.ValeGuardian:
+                case (int)ParseEnum.TargetIDS.ValeGuardian:
                     var magicStorms = cls.Where(x => x.SkillId == 31419).ToList();
                     foreach (AbstractCastEvent c in magicStorms)
                     {
@@ -152,16 +152,16 @@ namespace GW2EIParser.Logic
                         replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0,255,0,0.2)", new PositionConnector(new Point3D(-4735.0f, -21407.0f, 0.0f, 0))));
                     }
                     break;
-                case (ushort)BlueGuardian:
+                case (int)BlueGuardian:
                     replay.Decorations.Add(new CircleDecoration(false, 0, 1500, lifespan, "rgba(0, 0, 255, 0.5)", new AgentConnector(target)));
                     break;
-                case (ushort)GreenGuardian:
+                case (int)GreenGuardian:
                     replay.Decorations.Add(new CircleDecoration(false, 0, 1500, lifespan, "rgba(0, 255, 0, 0.5)", new AgentConnector(target)));
                     break;
-                case (ushort)RedGuardian:
+                case (int)RedGuardian:
                     replay.Decorations.Add(new CircleDecoration(false, 0, 1500, lifespan, "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     break;
-                case (ushort)Seekers:
+                case (int)Seekers:
                     replay.Decorations.Add(new CircleDecoration(false, 0, 180, lifespan, "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     break;
                 default:

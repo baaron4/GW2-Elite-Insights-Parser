@@ -11,7 +11,7 @@ namespace GW2EIParser.Logic
 {
     public class Sabir : RaidLogic
     {
-        public Sabir(ushort triggerID) : base(triggerID)
+        public Sabir(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
@@ -51,7 +51,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Sabir);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Sabir);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Error Encountered: Sabir not found");
@@ -103,15 +103,15 @@ namespace GW2EIParser.Logic
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (ushort)BigKillerTornado:
+                case (int)BigKillerTornado:
                     replay.Decorations.Add(new CircleDecoration(true, 0, 420, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                     break;
-                case (ushort)SmallKillerTornado:
+                case (int)SmallKillerTornado:
                     replay.Decorations.Add(new CircleDecoration(true, 0, 120, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                     break;
-                case (ushort)SmallJumpyTornado:
-                case (ushort)ParalyzingWisp:
-                case (ushort)VoltaicWisp:
+                case (int)SmallJumpyTornado:
+                case (int)ParalyzingWisp:
+                case (int)VoltaicWisp:
                     break;
                 default:
                     break;
@@ -121,7 +121,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Sabir);
+            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Sabir);
             if (target == null)
             {
                 throw new InvalidOperationException("Error Encountered: Sabir not found");

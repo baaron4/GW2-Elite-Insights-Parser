@@ -11,14 +11,14 @@ namespace GW2EIParser.Logic
 
         protected FallBackMethod GenericFallBackMethod { get; set; } = FallBackMethod.Death;
 
-        protected RaidLogic(ushort triggerID) : base(triggerID)
+        protected RaidLogic(int triggerID) : base(triggerID)
         {
             Mode = ParseMode.Raid;
         }
 
-        protected virtual List<ushort> GetSuccessCheckIds()
+        protected virtual List<int> GetSuccessCheckIds()
         {
-            return new List<ushort>
+            return new List<int>
             {
                 GenericTriggerID
             };
@@ -47,7 +47,7 @@ namespace GW2EIParser.Logic
                         SetSuccessByDeath(combatData, fightData, playerAgents, true, GetSuccessCheckIds());
                         break;
                     case FallBackMethod.CombatExit:
-                        SetSuccessByCombatExit(new HashSet<ushort>(GetSuccessCheckIds()), combatData, fightData, playerAgents);
+                        SetSuccessByCombatExit(new HashSet<int>(GetSuccessCheckIds()), combatData, fightData, playerAgents);
                         break;
                     default:
                         break;
@@ -55,9 +55,9 @@ namespace GW2EIParser.Logic
             }
         }
 
-        protected override HashSet<ushort> GetUniqueTargetIDs()
+        protected override HashSet<int> GetUniqueTargetIDs()
         {
-            return new HashSet<ushort>
+            return new HashSet<int>
             {
                 GenericTriggerID
             };

@@ -11,7 +11,7 @@ namespace GW2EIParser.Logic
 {
     public class Samarog : RaidLogic
     {
-        public Samarog(ushort triggerID) : base(triggerID)
+        public Samarog(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -58,7 +58,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Samarog);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Samarog);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Error Encountered: Samarog not found");
@@ -77,10 +77,10 @@ namespace GW2EIParser.Logic
                 phase.Name = namesSam[i - 1];
                 if (i == 2 || i == 4)
                 {
-                    var ids = new List<ushort>
+                    var ids = new List<int>
                     {
-                       (ushort) Rigom,
-                       (ushort) Guldhem
+                       (int) Rigom,
+                       (int) Guldhem
                     };
                     AddTargetsToPhase(phase, ids, log);
                 }
@@ -92,13 +92,13 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ushort> GetFightTargetsIDs()
+        protected override List<int> GetFightTargetsIDs()
         {
-            return new List<ushort>
+            return new List<int>
             {
-                (ushort)ParseEnum.TargetIDS.Samarog,
-                (ushort)Rigom,
-                (ushort)Guldhem,
+                (int)ParseEnum.TargetIDS.Samarog,
+                (int)Rigom,
+                (int)Guldhem,
             };
         }
 
@@ -108,7 +108,7 @@ namespace GW2EIParser.Logic
             // TODO: facing information (shock wave)
             switch (target.ID)
             {
-                case (ushort)ParseEnum.TargetIDS.Samarog:
+                case (int)ParseEnum.TargetIDS.Samarog:
                     List<AbstractBuffEvent> brutalize = GetFilteredList(log.CombatData, 38226, target, true);
                     int brutStart = 0;
                     foreach (AbstractBuffEvent c in brutalize)
@@ -124,8 +124,8 @@ namespace GW2EIParser.Logic
                         }
                     }
                     break;
-                case (ushort)Rigom:
-                case (ushort)Guldhem:
+                case (int)Rigom:
+                case (int)Guldhem:
                     break;
                 default:
                     break;
@@ -176,7 +176,7 @@ namespace GW2EIParser.Logic
                 {
                     fixationGuldhemStart = (int)c.Time;
                     long logTime = c.Time;
-                    guldhem = Targets.FirstOrDefault(x => x.ID == (ushort)Guldhem && logTime >= x.FirstAware && logTime <= x.LastAware);
+                    guldhem = Targets.FirstOrDefault(x => x.ID == (int)Guldhem && logTime >= x.FirstAware && logTime <= x.LastAware);
                 }
                 else
                 {
@@ -197,7 +197,7 @@ namespace GW2EIParser.Logic
                 {
                     fixationRigomStart = (int)c.Time;
                     long logTime = c.Time;
-                    rigom = Targets.FirstOrDefault(x => x.ID == (ushort)Rigom && logTime >= x.FirstAware && logTime <= x.LastAware);
+                    rigom = Targets.FirstOrDefault(x => x.ID == (int)Rigom && logTime >= x.FirstAware && logTime <= x.LastAware);
                 }
                 else
                 {
@@ -212,7 +212,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Samarog);
+            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Samarog);
             if (target == null)
             {
                 throw new InvalidOperationException("Error Encountered: Samarog not found");

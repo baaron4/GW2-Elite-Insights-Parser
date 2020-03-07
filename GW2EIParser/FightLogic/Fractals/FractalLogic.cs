@@ -10,7 +10,7 @@ namespace GW2EIParser.Logic
 {
     public abstract class FractalLogic : FightLogic
     {
-        protected FractalLogic(ushort triggerID) : base(triggerID)
+        protected FractalLogic(int triggerID) : base(triggerID)
         {
             Mode = ParseMode.Fractal;
             MechanicList.AddRange(new List<Mechanic>
@@ -44,15 +44,15 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override HashSet<ushort> GetUniqueTargetIDs()
+        protected override HashSet<int> GetUniqueTargetIDs()
         {
-            return new HashSet<ushort>
+            return new HashSet<int>
             {
                 GenericTriggerID
             };
         }
 
-        protected static long GetFightOffsetByFirstInvulFilter(FightData fightData, AgentData agentData, List<CombatItem> combatData, ushort targetID, long invulID, long invulRemoveOffset)
+        protected static long GetFightOffsetByFirstInvulFilter(FightData fightData, AgentData agentData, List<CombatItem> combatData, int targetID, long invulID, long invulRemoveOffset)
         {
             // Find target
             AgentItem target = agentData.GetNPCsByID(targetID).FirstOrDefault();

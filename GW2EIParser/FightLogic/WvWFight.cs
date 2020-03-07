@@ -9,22 +9,22 @@ namespace GW2EIParser.Logic
 {
     public class WvWFight : FightLogic
     {
-        public WvWFight(ushort triggerID) : base(triggerID)
+        public WvWFight(int triggerID) : base(triggerID)
         {
             Extension = "wvw";
             Mode = ParseMode.WvW;
             Icon = "https://wiki.guildwars2.com/images/3/35/WvW_Rank_up.png";
         }
 
-        protected override HashSet<ushort> GetUniqueTargetIDs()
+        protected override HashSet<int> GetUniqueTargetIDs()
         {
-            return new HashSet<ushort>();
+            return new HashSet<int>();
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.WorldVersusWorld);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.WorldVersusWorld);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Error Encountered: Main target of the fight not found");
@@ -59,7 +59,7 @@ namespace GW2EIParser.Logic
 
         public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
-            AgentItem dummyAgent = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, "Enemy Players", "", (ushort)ParseEnum.TargetIDS.WorldVersusWorld);
+            AgentItem dummyAgent = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, "Enemy Players", "", (int)ParseEnum.TargetIDS.WorldVersusWorld);
             ComputeFightTargets(agentData, combatData);
             var aList = agentData.GetAgentByType(AgentItem.AgentType.EnemyPlayer).ToList();
             /*foreach (AgentItem a in aList)

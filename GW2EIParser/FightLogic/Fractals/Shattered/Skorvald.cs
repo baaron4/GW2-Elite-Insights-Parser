@@ -9,7 +9,7 @@ namespace GW2EIParser.Logic
 {
     public class Skorvald : FractalLogic
     {
-        public Skorvald(ushort triggerID) : base(triggerID)
+        public Skorvald(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -49,7 +49,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Skorvald);
+            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Skorvald);
             if (target == null)
             {
                 throw new InvalidOperationException("Error Encountered: Skorvald not found");

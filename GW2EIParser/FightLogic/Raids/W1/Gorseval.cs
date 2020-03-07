@@ -11,7 +11,7 @@ namespace GW2EIParser.Logic
 {
     public class Gorseval : RaidLogic
     {
-        public Gorseval(ushort triggerID) : base(triggerID)
+        public Gorseval(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -41,7 +41,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Gorseval);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Gorseval);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Error Encountered: Gorseval not found");
@@ -63,9 +63,9 @@ namespace GW2EIParser.Logic
                 }
                 else
                 {
-                    var ids = new List<ushort>
+                    var ids = new List<int>
                     {
-                       (ushort) ChargedSoul
+                       (int) ChargedSoul
                     };
                     AddTargetsToPhase(phase, ids, log);
                 }
@@ -73,12 +73,12 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ushort> GetFightTargetsIDs()
+        protected override List<int> GetFightTargetsIDs()
         {
-            return new List<ushort>
+            return new List<int>
             {
-                (ushort)ParseEnum.TargetIDS.Gorseval,
-                (ushort)ChargedSoul
+                (int)ParseEnum.TargetIDS.Gorseval,
+                (int)ChargedSoul
             };
         }
 
@@ -96,7 +96,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
-                case (ushort)ParseEnum.TargetIDS.Gorseval:
+                case (int)ParseEnum.TargetIDS.Gorseval:
                     var blooms = cls.Where(x => x.SkillId == 31616).ToList();
                     foreach (AbstractCastEvent c in blooms)
                     {
@@ -250,7 +250,7 @@ namespace GW2EIParser.Logic
                         }
                     }
                     break;
-                case (ushort)ChargedSoul:
+                case (int)ChargedSoul:
                     var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
                     replay.Decorations.Add(new CircleDecoration(false, 0, 220, lifespan, "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
                     break;

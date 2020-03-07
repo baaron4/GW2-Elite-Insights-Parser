@@ -11,7 +11,7 @@ namespace GW2EIParser.Logic
     public class EaterOfSouls : RaidLogic
     {
         // TODO - add CR icons/indicators (vomit, greens, etc) and some mechanics
-        public EaterOfSouls(ushort triggerID) : base(triggerID)
+        public EaterOfSouls(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -52,7 +52,7 @@ namespace GW2EIParser.Logic
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (ushort)ParseEnum.TargetIDS.SoulEater:
+                case (int)ParseEnum.TargetIDS.SoulEater:
                     var breakbar = cls.Where(x => x.SkillId == 48007).ToList();
                     foreach (AbstractCastEvent c in breakbar)
                     {
@@ -86,8 +86,8 @@ namespace GW2EIParser.Logic
                         replay.Decorations.Add(new CircleDecoration(true, end, 180, (start, end), "rgba(255, 180, 220, 0.7)", new AgentConnector(target)));
                     }
                     break;
-                case (ushort)GreenSpirit1:
-                case (ushort)GreenSpirit2:
+                case (int)GreenSpirit1:
+                case (int)GreenSpirit2:
                     var green = cls.Where(x => x.SkillId == 47153).ToList();
                     foreach (AbstractCastEvent c in green)
                     {
@@ -97,10 +97,10 @@ namespace GW2EIParser.Logic
                         replay.Decorations.Add(new CircleDecoration(true, gend, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(target)));
                     }
                     break;
-                case (ushort)SpiritHorde1:
-                case (ushort)SpiritHorde2:
-                case (ushort)SpiritHorde3:
-                case (ushort)OrbSpider:
+                case (int)SpiritHorde1:
+                case (int)SpiritHorde2:
+                case (int)SpiritHorde3:
+                case (int)OrbSpider:
                     break;
                 default:
                     break;
@@ -128,7 +128,7 @@ namespace GW2EIParser.Logic
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            SetSuccessByDeath(combatData, fightData, playerAgents, true, (ushort)ParseEnum.TargetIDS.SoulEater);
+            SetSuccessByDeath(combatData, fightData, playerAgents, true, (int)ParseEnum.TargetIDS.SoulEater);
         }
 
         public override string GetFightName()

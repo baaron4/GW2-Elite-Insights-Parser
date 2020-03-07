@@ -162,6 +162,17 @@ namespace GW2EIParser.Parser
             Unknown
         };
 
+        // Custom ids
+        private const int _twilightCastle = -1;
+        private const int _handOfErosion = -2;
+        private const int _handOfEruption = -3;
+        private const int _pyreGuardianProtect = -4;
+        private const int _pyreGuardianStab = -5;
+        private const int _pyreGuardianRetal = -6;
+
+
+        //
+
         public static IFF GetIFF(byte bt)
         {
             return bt < (byte)IFF.Unknown
@@ -169,7 +180,7 @@ namespace GW2EIParser.Parser
                 : IFF.Unknown;
         }
 
-        public enum TrashIDS : ushort
+        public enum TrashIDS : int
         {
             // VG
             Seekers = 15426,
@@ -301,6 +312,9 @@ namespace GW2EIParser.Parser
             FireElemental = 21221,
             FireImp = 21100,
             PyreGuardian = 21050,
+            PyreGuardianRetal = _pyreGuardianRetal,
+            PyreGuardianProtect = _pyreGuardianProtect,
+            PyreGuardianStab = _pyreGuardianStab,
             ReaperofFlesh = 21218,
             DestroyerTroll = 20944,
             IceElemental = 21049,
@@ -310,8 +324,8 @@ namespace GW2EIParser.Parser
             WyvernPatriarch = 21183,
             Zommoros = 20961, //21118 is probably the start and end NPC, not the one during the battle
             // Adina
-            HandOfErosion = 2,
-            HandOfEruption = 3,
+            HandOfErosion = _handOfErosion,
+            HandOfEruption = _handOfEruption,
             // Sabir
             ParalyzingWisp = 21955,
             VoltaicWisp = 21975,
@@ -383,15 +397,15 @@ namespace GW2EIParser.Parser
             //
             Unknown
         };
-        public static TrashIDS GetTrashIDS(ushort id)
+        public static TrashIDS GetTrashIDS(int id)
         {
             return Enum.IsDefined(typeof(TrashIDS), id) ? (TrashIDS)id : TrashIDS.Unknown;
         }
 
-        public enum TargetIDS : ushort
+        public enum TargetIDS : int
         {
             WorldVersusWorld = 1,
-            TwistedCastle = 4,
+            TwistedCastle = _twilightCastle,
             // Raid
             ValeGuardian = 15438,
             Gorseval = 15429,
@@ -450,7 +464,7 @@ namespace GW2EIParser.Parser
             //
             Unknown
         };
-        public static TargetIDS GetTargetIDS(ushort id)
+        public static TargetIDS GetTargetIDS(int id)
         {
             return Enum.IsDefined(typeof(TargetIDS), id) ? (TargetIDS)id : TargetIDS.Unknown;
         }

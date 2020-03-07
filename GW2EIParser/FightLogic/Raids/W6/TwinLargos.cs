@@ -10,7 +10,7 @@ namespace GW2EIParser.Logic
 {
     public class TwinLargos : RaidLogic
     {
-        public TwinLargos(ushort triggerID) : base(triggerID)
+        public TwinLargos(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -43,16 +43,16 @@ namespace GW2EIParser.Logic
                             (13440, 14336, 15360, 16256));
         }
 
-        protected override List<ushort> GetFightTargetsIDs()
+        protected override List<int> GetFightTargetsIDs()
         {
-            return new List<ushort>
+            return new List<int>
             {
-                (ushort)ParseEnum.TargetIDS.Kenut,
-                (ushort)ParseEnum.TargetIDS.Nikare
+                (int)ParseEnum.TargetIDS.Kenut,
+                (int)ParseEnum.TargetIDS.Nikare
             };
         }
 
-        protected override List<ushort> GetSuccessCheckIds()
+        protected override List<int> GetSuccessCheckIds()
         {
             return GetFightTargetsIDs();
         }
@@ -104,12 +104,12 @@ namespace GW2EIParser.Logic
             return targetPhases;
         }
 
-        protected override HashSet<ushort> GetUniqueTargetIDs()
+        protected override HashSet<int> GetUniqueTargetIDs()
         {
-            return new HashSet<ushort>
+            return new HashSet<int>
             {
-                (ushort)ParseEnum.TargetIDS.Kenut,
-                (ushort)ParseEnum.TargetIDS.Nikare
+                (int)ParseEnum.TargetIDS.Kenut,
+                (int)ParseEnum.TargetIDS.Nikare
             };
         }
 
@@ -188,13 +188,13 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC nikare = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Nikare);
+            NPC nikare = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Nikare);
             if (nikare == null)
             {
                 throw new InvalidOperationException("Error Encountered: Nikare not found");
             }
             phases[0].Targets.Add(nikare);
-            NPC kenut = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Kenut);
+            NPC kenut = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Kenut);
             if (kenut != null)
             {
                 phases[0].Targets.Add(kenut);
@@ -221,7 +221,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
-                case (ushort)ParseEnum.TargetIDS.Nikare:
+                case (int)ParseEnum.TargetIDS.Nikare:
                     //CC
                     var barrageN = cls.Where(x => x.SkillId == 51977).ToList();
                     foreach (AbstractCastEvent c in barrageN)
@@ -239,7 +239,7 @@ namespace GW2EIParser.Logic
                         replay.Decorations.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(255, 255, 0, 0.3)", new AgentConnector(target)));
                     }
                     break;
-                case (ushort)ParseEnum.TargetIDS.Kenut:
+                case (int)ParseEnum.TargetIDS.Kenut:
                     //CC
                     var barrageK = cls.Where(x => x.SkillId == 51977).ToList();
                     foreach (AbstractCastEvent c in barrageK)
@@ -341,7 +341,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Nikare);
+            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Nikare);
             if (target == null)
             {
                 throw new InvalidOperationException("Error Encountered: Nikare not found");

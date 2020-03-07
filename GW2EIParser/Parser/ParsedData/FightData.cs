@@ -9,7 +9,7 @@ namespace GW2EIParser.Parser.ParsedData
     {
         // Fields
         private List<PhaseData> _phases = new List<PhaseData>();
-        public ushort TriggerID { get; }
+        public int TriggerID { get; }
         public FightLogic Logic { get; }
         public long FightOffset { get; private set; }
         public long FightStart { get; } = 0;
@@ -32,7 +32,7 @@ namespace GW2EIParser.Parser.ParsedData
         private int _isCM = -1;
         public bool IsCM => _isCM == 1;
         // Constructors
-        public FightData(ushort id, AgentData agentData, long start, long end)
+        public FightData(int id, AgentData agentData, long start, long end)
         {
             FightOffset = start;
             FightEnd = end - start;
@@ -68,9 +68,9 @@ namespace GW2EIParser.Parser.ParsedData
                     break;
                 case ParseEnum.TargetIDS.Xera:
                     // some TC logs are registered as Xera
-                    if (agentData.GetNPCsByID((ushort)ParseEnum.TrashIDS.HauntingStatue).Count > 0)
+                    if (agentData.GetNPCsByID((int)ParseEnum.TrashIDS.HauntingStatue).Count > 0)
                     {
-                        Logic = new TwistedCastle((ushort)ParseEnum.TargetIDS.TwistedCastle);
+                        Logic = new TwistedCastle((int)ParseEnum.TargetIDS.TwistedCastle);
                         break;
                     }
                     Logic = new Xera(id);
@@ -105,10 +105,10 @@ namespace GW2EIParser.Parser.ParsedData
                     break;
                 case ParseEnum.TargetIDS.Dhuum:
                     // some eyes logs are registered as Dhuum
-                    if (agentData.GetNPCsByID((ushort)ParseEnum.TargetIDS.EyeOfFate).Count > 0 ||
-                        agentData.GetNPCsByID((ushort)ParseEnum.TargetIDS.EyeOfJudgement).Count > 0)
+                    if (agentData.GetNPCsByID((int)ParseEnum.TargetIDS.EyeOfFate).Count > 0 ||
+                        agentData.GetNPCsByID((int)ParseEnum.TargetIDS.EyeOfJudgement).Count > 0)
                     {
-                        TriggerID = (ushort)ParseEnum.TargetIDS.EyeOfFate;
+                        TriggerID = (int)ParseEnum.TargetIDS.EyeOfFate;
                         Logic = new DarkMaze(TriggerID);
                         break;
                     }
@@ -189,7 +189,7 @@ namespace GW2EIParser.Parser.ParsedData
                     switch (ParseEnum.GetTrashIDS(id))
                     {
                         case ParseEnum.TrashIDS.HauntingStatue:
-                            Logic = new TwistedCastle((ushort)ParseEnum.TargetIDS.TwistedCastle);
+                            Logic = new TwistedCastle((int)ParseEnum.TargetIDS.TwistedCastle);
                             break;
                         default:
                             // Unknown

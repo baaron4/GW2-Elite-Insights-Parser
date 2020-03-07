@@ -10,7 +10,7 @@ namespace GW2EIParser.Logic
 {
     public class Boneskinner : StrikeMissionLogic
     {
-        public Boneskinner(ushort triggerID) : base(triggerID)
+        public Boneskinner(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {

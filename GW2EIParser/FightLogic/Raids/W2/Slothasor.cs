@@ -11,7 +11,7 @@ namespace GW2EIParser.Logic
 {
     public class Slothasor : RaidLogic
     {
-        public Slothasor(ushort triggerID) : base(triggerID)
+        public Slothasor(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -58,7 +58,7 @@ namespace GW2EIParser.Logic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Slothasor);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Slothasor);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Error Encountered: Slothasor not found");
@@ -89,7 +89,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
-                case (ushort)ParseEnum.TargetIDS.Slothasor:
+                case (int)ParseEnum.TargetIDS.Slothasor:
                     var sleepy = cls.Where(x => x.SkillId == 34515).ToList();
                     foreach (AbstractCastEvent c in sleepy)
                     {

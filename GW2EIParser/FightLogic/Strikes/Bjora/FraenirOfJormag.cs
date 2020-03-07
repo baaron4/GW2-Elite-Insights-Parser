@@ -10,7 +10,7 @@ namespace GW2EIParser.Logic
 {
     public class FraenirOfJormag : StrikeMissionLogic
     {
-        public FraenirOfJormag(ushort triggerID) : base(triggerID)
+        public FraenirOfJormag(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -37,13 +37,13 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC fraenir = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.FraenirOfJormag);
+            NPC fraenir = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.FraenirOfJormag);
             if (fraenir == null)
             {
                 throw new InvalidOperationException("Error Encountered: Fraenir of Jormag not found");
             }
             phases[0].Targets.Add(fraenir);
-            NPC icebrood = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.IcebroodConstructFraenir);
+            NPC icebrood = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.IcebroodConstructFraenir);
             if (icebrood != null)
             {
                 phases[0].Targets.Add(icebrood);
@@ -108,12 +108,12 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ushort> GetFightTargetsIDs()
+        protected override List<int> GetFightTargetsIDs()
         {
-            return new List<ushort>
+            return new List<int>
             {
-                (ushort)ParseEnum.TargetIDS.FraenirOfJormag,
-                (ushort)ParseEnum.TargetIDS.IcebroodConstructFraenir,
+                (int)ParseEnum.TargetIDS.FraenirOfJormag,
+                (int)ParseEnum.TargetIDS.IcebroodConstructFraenir,
             };
         }
 

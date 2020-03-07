@@ -10,7 +10,7 @@ namespace GW2EIParser.Logic
 {
     public class SuperKodanBrothers : StrikeMissionLogic
     {
-        public SuperKodanBrothers(ushort triggerID) : base(triggerID)
+        public SuperKodanBrothers(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -33,14 +33,14 @@ namespace GW2EIParser.Logic
         
         protected override void SetSuccessByDeath(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, bool all)
         {
-            SetSuccessByDeath(combatData, fightData, playerAgents, all, (ushort)ParseEnum.TargetIDS.ClawOfTheFallen, (ushort)ParseEnum.TargetIDS.VoiceOfTheFallen);
+            SetSuccessByDeath(combatData, fightData, playerAgents, all, (int)ParseEnum.TargetIDS.ClawOfTheFallen, (int)ParseEnum.TargetIDS.VoiceOfTheFallen);
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC voice = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.ClawOfTheFallen);
-            NPC claw = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.VoiceOfTheFallen);
+            NPC voice = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.ClawOfTheFallen);
+            NPC claw = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.VoiceOfTheFallen);
             if (voice == null || claw == null)
             {
                 throw new InvalidOperationException("Error Encountered: Claw or Voice not found");
@@ -64,7 +64,7 @@ namespace GW2EIParser.Logic
             //
             int voiceAndClawCount = 0;
             var offset = 1;
-            foreach (NPC voiceAndClaw in Targets.Where(x => x.ID == (ushort)ParseEnum.TargetIDS.VoiceAndClaw)) 
+            foreach (NPC voiceAndClaw in Targets.Where(x => x.ID == (int)ParseEnum.TargetIDS.VoiceAndClaw)) 
             {
                 EnterCombatEvent enterCombat = log.CombatData.GetEnterCombatEvents(voiceAndClaw.AgentItem).FirstOrDefault();
                 PhaseData nextUnmergedPhase = unmergedPhases.Count > offset + 1 ? unmergedPhases[offset] : null;
@@ -93,22 +93,22 @@ namespace GW2EIParser.Logic
             return "Super Kodan Brothers";
         }
 
-        protected override HashSet<ushort> GetUniqueTargetIDs()
+        protected override HashSet<int> GetUniqueTargetIDs()
         {
-            return new HashSet<ushort>
+            return new HashSet<int>
             {
-                (ushort)ParseEnum.TargetIDS.ClawOfTheFallen,
-                (ushort)ParseEnum.TargetIDS.VoiceOfTheFallen,
+                (int)ParseEnum.TargetIDS.ClawOfTheFallen,
+                (int)ParseEnum.TargetIDS.VoiceOfTheFallen,
             };
         }
 
-        protected override List<ushort> GetFightTargetsIDs()
+        protected override List<int> GetFightTargetsIDs()
         {
-            return new List<ushort>
+            return new List<int>
             {
-                (ushort)ParseEnum.TargetIDS.VoiceOfTheFallen,
-                (ushort)ParseEnum.TargetIDS.ClawOfTheFallen,
-                (ushort)ParseEnum.TargetIDS.VoiceAndClaw,
+                (int)ParseEnum.TargetIDS.VoiceOfTheFallen,
+                (int)ParseEnum.TargetIDS.ClawOfTheFallen,
+                (int)ParseEnum.TargetIDS.VoiceAndClaw,
             };
         }
     }

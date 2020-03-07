@@ -11,7 +11,7 @@ namespace GW2EIParser.Logic
 {
     public class Sabetha : RaidLogic
     {
-        public Sabetha(ushort triggerID) : base(triggerID)
+        public Sabetha(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -66,7 +66,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Sabetha);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Sabetha);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Error Encountered: Sabetha not found");
@@ -85,11 +85,11 @@ namespace GW2EIParser.Logic
                 phase.Name = namesSab[i - 1];
                 if (i == 2 || i == 4 || i == 6)
                 {
-                    var ids = new List<ushort>
+                    var ids = new List<int>
                     {
-                       (ushort) Kernan,
-                       (ushort) Knuckles,
-                       (ushort) Karde,
+                       (int) Kernan,
+                       (int) Knuckles,
+                       (int) Karde,
                     };
                     AddTargetsToPhase(phase, ids, log);
                 }
@@ -100,7 +100,7 @@ namespace GW2EIParser.Logic
                     switch (i)
                     {
                         case 3:
-                            addTarget = Targets.Find(x => x.ID == (ushort)Kernan);
+                            addTarget = Targets.Find(x => x.ID == (int)Kernan);
                             if (addTarget == null)
                             {
                                 break;
@@ -108,7 +108,7 @@ namespace GW2EIParser.Logic
                             phase.Targets.Add(addTarget);
                             break;
                         case 5:
-                            addTarget = Targets.Find(x => x.ID == (ushort)Knuckles);
+                            addTarget = Targets.Find(x => x.ID == (int)Knuckles);
                             if (addTarget == null)
                             {
                                 break;
@@ -116,7 +116,7 @@ namespace GW2EIParser.Logic
                             phase.Targets.Add(addTarget);
                             break;
                         case 7:
-                            addTarget = Targets.Find(x => x.ID == (ushort)Karde);
+                            addTarget = Targets.Find(x => x.ID == (int)Karde);
                             if (addTarget == null)
                             {
                                 break;
@@ -129,14 +129,14 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ushort> GetFightTargetsIDs()
+        protected override List<int> GetFightTargetsIDs()
         {
-            return new List<ushort>
+            return new List<int>
             {
-                (ushort)ParseEnum.TargetIDS.Sabetha,
-                (ushort)Kernan,
-                (ushort)Knuckles,
-                (ushort)Karde,
+                (int)ParseEnum.TargetIDS.Sabetha,
+                (int)Kernan,
+                (int)Knuckles,
+                (int)Karde,
             };
         }
 
@@ -145,7 +145,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
-                case (ushort)ParseEnum.TargetIDS.Sabetha:
+                case (int)ParseEnum.TargetIDS.Sabetha:
                     var flameWall = cls.Where(x => x.SkillId == 31332).ToList();
                     foreach (AbstractCastEvent c in flameWall)
                     {
@@ -162,7 +162,7 @@ namespace GW2EIParser.Logic
                         }
                     }
                     break;
-                case (ushort)Kernan:
+                case (int)Kernan:
                     var bulletHail = cls.Where(x => x.SkillId == 31721).ToList();
                     foreach (AbstractCastEvent c in bulletHail)
                     {
@@ -183,14 +183,14 @@ namespace GW2EIParser.Logic
                         }
                     }
                     break;
-                case (ushort)Knuckles:
+                case (int)Knuckles:
                     var breakbar = cls.Where(x => x.SkillId == 31763).ToList();
                     foreach (AbstractCastEvent c in breakbar)
                     {
                         replay.Decorations.Add(new CircleDecoration(true, 0, 180, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
-                case (ushort)Karde:
+                case (int)Karde:
                     var flameBlast = cls.Where(x => x.SkillId == 31761).ToList();
                     foreach (AbstractCastEvent c in flameBlast)
                     {
@@ -248,14 +248,14 @@ namespace GW2EIParser.Logic
             }
         }
 
-        protected override HashSet<ushort> GetUniqueTargetIDs()
+        protected override HashSet<int> GetUniqueTargetIDs()
         {
-            return new HashSet<ushort>
+            return new HashSet<int>
             {
-                (ushort)ParseEnum.TargetIDS.Sabetha,
-                (ushort)Kernan,
-                (ushort)Karde,
-                (ushort)Knuckles,
+                (int)ParseEnum.TargetIDS.Sabetha,
+                (int)Kernan,
+                (int)Karde,
+                (int)Knuckles,
             };
         }
     }

@@ -14,7 +14,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         // Fields
         public ulong Agent { get; }
-        public ushort ID { get; }
+        public int ID { get; }
         public string UniqueID { get; }
         public AgentItem Master { get; protected set; }
         public ushort InstID { get; protected set; }
@@ -31,7 +31,7 @@ namespace GW2EIParser.Parser.ParsedData
         public uint HitboxHeight { get; }
 
         // Constructors
-        public AgentItem(ulong agent, string name, string prof, ushort id, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight)
+        public AgentItem(ulong agent, string name, string prof, int id, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight)
         {
             UniqueID = "ag" + AgentCount++;
             Agent = agent;
@@ -63,7 +63,7 @@ namespace GW2EIParser.Parser.ParsedData
             }
         }
 
-        public AgentItem(ulong agent, string name, string prof, ushort id, ushort instid, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight, long firstAware, long lastAware): this(agent, name, prof, id, type, toughness, healing, condition, concentration, hbWidth, hbHeight)
+        public AgentItem(ulong agent, string name, string prof, int id, ushort instid, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight, long firstAware, long lastAware): this(agent, name, prof, id, type, toughness, healing, condition, concentration, hbWidth, hbHeight)
         {
             InstID = instid;
             FirstAware = firstAware;

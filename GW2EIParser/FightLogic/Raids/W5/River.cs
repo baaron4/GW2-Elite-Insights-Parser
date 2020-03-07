@@ -11,7 +11,7 @@ namespace GW2EIParser.Logic
 {
     public class River : RaidLogic
     {
-        public River(ushort triggerID) : base(triggerID)
+        public River(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -51,7 +51,7 @@ namespace GW2EIParser.Logic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                NPC desmina = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Desmina);
+                NPC desmina = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Desmina);
                 if (desmina == null)
                 {
                     throw new InvalidOperationException("Error Encountered: Desmina not found");
@@ -60,7 +60,7 @@ namespace GW2EIParser.Logic
                 if (ooc != null)
                 {
                     long time = 0;
-                    foreach (NPC mob in TrashMobs.Where(x => x.ID == (ushort)SpiritHorde3))
+                    foreach (NPC mob in TrashMobs.Where(x => x.ID == (int)SpiritHorde3))
                     {
                         DespawnEvent dspwnHorde = combatData.GetDespawnEvents(mob.AgentItem).LastOrDefault();
                         if (dspwnHorde != null)
@@ -80,7 +80,7 @@ namespace GW2EIParser.Logic
         public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
             // The walls spawn at the start of the encounter, we fix it by overriding their first aware to the first velocity change event
-            List<AgentItem> riverOfSouls = agentData.GetNPCsByID((ushort)RiverOfSouls);
+            List<AgentItem> riverOfSouls = agentData.GetNPCsByID((int)RiverOfSouls);
             bool sortCombatList = false;
             foreach (AgentItem riverOfSoul in riverOfSouls)
             {
@@ -114,7 +114,7 @@ namespace GW2EIParser.Logic
 
         public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
-            NPC desmina = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Desmina);
+            NPC desmina = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Desmina);
             if (desmina == null)
             {
                 throw new InvalidOperationException("Error Encountered: Desmina not found");
@@ -123,7 +123,7 @@ namespace GW2EIParser.Logic
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (ushort)HollowedBomber:
+                case (int)HollowedBomber:
                     var bomberman = target.GetCastLogs(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == 48272).ToList();
                     foreach (AbstractCastEvent bomb in bomberman)
                     {
@@ -134,17 +134,17 @@ namespace GW2EIParser.Logic
                         replay.Decorations.Add(new CircleDecoration(true, expectedEnd, 480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(target)));
                     }
                     break;
-                case (ushort)RiverOfSouls:
+                case (int)RiverOfSouls:
                     if (replay.Rotations.Count > 0)
                     {
                         replay.Decorations.Add(new FacingRectangleDecoration((start, end), new AgentConnector(target), replay.PolledRotations, 160, 390, "rgba(255,100,0,0.5)"));
                     }
                     break;
-                case (ushort)Enervator:
+                case (int)Enervator:
                 // TODO Line actor between desmina and enervator. Missing skillID
-                case (ushort)SpiritHorde1:
-                case (ushort)SpiritHorde2:
-                case (ushort)SpiritHorde3:
+                case (int)SpiritHorde1:
+                case (int)SpiritHorde2:
+                case (int)SpiritHorde3:
                     break;
                 default:
                     break;

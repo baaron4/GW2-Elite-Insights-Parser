@@ -14,7 +14,7 @@ namespace GW2EIParser.Logic
 
         private long _specialSplit = 0;
 
-        public Deimos(ushort triggerID) : base(triggerID)
+        public Deimos(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -52,14 +52,14 @@ namespace GW2EIParser.Logic
                             (11774, 4480, 14078, 5376));
         }
 
-        protected override HashSet<ushort> GetUniqueTargetIDs()
+        protected override HashSet<int> GetUniqueTargetIDs()
         {
-            return new HashSet<ushort>
+            return new HashSet<int>
             {
-                (ushort)ParseEnum.TargetIDS.Deimos,
-                (ushort)Thief,
-                (ushort)Drunkard,
-                (ushort)Gambler,
+                (int)ParseEnum.TargetIDS.Deimos,
+                (int)Thief,
+                (int)Drunkard,
+                (int)Gambler,
             };
         }
 
@@ -89,7 +89,7 @@ namespace GW2EIParser.Logic
 
         public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
         {
-            NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Deimos);
+            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Deimos);
             if (target == null)
             {
                 throw new InvalidOperationException("Error Encountered: Deimos not found");
@@ -126,7 +126,7 @@ namespace GW2EIParser.Logic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success && _specialSplit > 0)
             {
-                NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Deimos);
+                NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Deimos);
                 if (target == null)
                 {
                     throw new InvalidOperationException("Error Encountered: Deimos not found");
@@ -202,7 +202,7 @@ namespace GW2EIParser.Logic
 
         public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            List<AgentItem> deimosAgents = agentData.GetNPCsByID((ushort)ParseEnum.TargetIDS.Deimos);
+            List<AgentItem> deimosAgents = agentData.GetNPCsByID((int)ParseEnum.TargetIDS.Deimos);
             long offset = fightData.FightOffset;
             foreach (AgentItem deimos in deimosAgents)
             {
@@ -222,7 +222,7 @@ namespace GW2EIParser.Logic
         {
             ComputeFightTargets(agentData, combatData);
             // Find target
-            NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Deimos);
+            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Deimos);
             if (target == null)
             {
                 throw new InvalidOperationException("Error Encountered: Deimos not found");
@@ -268,7 +268,7 @@ namespace GW2EIParser.Logic
             long end = 0;
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Deimos);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Deimos);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Error Encountered: Deimos not found");
@@ -306,9 +306,9 @@ namespace GW2EIParser.Logic
             }
             foreach (NPC tar in Targets)
             {
-                if (tar.ID == (ushort)Thief || tar.ID == (ushort)Drunkard || tar.ID == (ushort)Gambler)
+                if (tar.ID == (int)Thief || tar.ID == (int)Drunkard || tar.ID == (int)Gambler)
                 {
-                    string name = (tar.ID == (ushort)Thief ? "Thief" : (tar.ID == (ushort)Drunkard ? "Drunkard" : (tar.ID == (ushort)Gambler ? "Gambler" : "")));
+                    string name = (tar.ID == (int)Thief ? "Thief" : (tar.ID == (int)Drunkard ? "Drunkard" : (tar.ID == (int)Gambler ? "Gambler" : "")));
                     var tarPhase = new PhaseData(tar.FirstAware - 1000, Math.Min(tar.LastAware + 1000, fightDuration), name);
                     tarPhase.Targets.Add(tar);
                     tarPhase.OverrideTimes(log);
@@ -340,14 +340,14 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ushort> GetFightTargetsIDs()
+        protected override List<int> GetFightTargetsIDs()
         {
-            return new List<ushort>
+            return new List<int>
             {
-                (ushort)ParseEnum.TargetIDS.Deimos,
-                (ushort)Thief,
-                (ushort)Drunkard,
-                (ushort)Gambler
+                (int)ParseEnum.TargetIDS.Deimos,
+                (int)Thief,
+                (int)Drunkard,
+                (int)Gambler
             };
         }
 
@@ -373,7 +373,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
-                case (ushort)ParseEnum.TargetIDS.Deimos:
+                case (int)ParseEnum.TargetIDS.Deimos:
                     var mindCrush = cls.Where(x => x.SkillId == 37613).ToList();
                     foreach (AbstractCastEvent c in mindCrush)
                     {
@@ -425,21 +425,21 @@ namespace GW2EIParser.Logic
                         }
                     }
                     break;
-                case (ushort)Gambler:
-                case (ushort)Thief:
-                case (ushort)Drunkard:
+                case (int)Gambler:
+                case (int)Thief:
+                case (int)Drunkard:
                     break;
-                case (ushort)Saul:
-                case (ushort)GamblerClones:
-                case (ushort)GamblerReal:
-                case (ushort)Greed:
-                case (ushort)Pride:
-                case (ushort)Tear:
+                case (int)Saul:
+                case (int)GamblerClones:
+                case (int)GamblerReal:
+                case (int)Greed:
+                case (int)Pride:
+                case (int)Tear:
                     break;
-                case (ushort)Hands:
+                case (int)Hands:
                     replay.Decorations.Add(new CircleDecoration(true, 0, 90, (start, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
                     break;
-                case (ushort)Oil:
+                case (int)Oil:
                     int delayOil = 3000;
                     replay.Decorations.Add(new CircleDecoration(true, start + delayOil, 200, (start, start + delayOil), "rgba(255,100, 0, 0.5)", new AgentConnector(target)));
                     replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start + delayOil, end), "rgba(0, 0, 0, 0.5)", new AgentConnector(target)));
@@ -472,7 +472,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Deimos);
+            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Deimos);
             if (target == null)
             {
                 throw new InvalidOperationException("Error Encountered: Deimos not found");

@@ -18,7 +18,7 @@ namespace GW2EIParser.EIData
         public ulong Agent => AgentItem.Agent;
         public long LastAware => AgentItem.LastAware;
         public long FirstAware => AgentItem.FirstAware;
-        public ushort ID => AgentItem.ID;
+        public int ID => AgentItem.ID;
         public uint HitboxHeight => AgentItem.HitboxHeight;
         public uint HitboxWidth => AgentItem.HitboxWidth;
         public bool IsFakeActor { get; protected set; }

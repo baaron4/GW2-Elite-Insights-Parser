@@ -10,7 +10,7 @@ namespace GW2EIParser.Logic
 {
     public class Cairn : RaidLogic
     {
-        public Cairn(ushort triggerID) : base(triggerID)
+        public Cairn(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -64,7 +64,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
-                case (ushort)ParseEnum.TargetIDS.Cairn:
+                case (int)ParseEnum.TargetIDS.Cairn:
                     var swordSweep = cls.Where(x => x.SkillId == 37631).ToList();
                     foreach (AbstractCastEvent c in swordSweep)
                     {

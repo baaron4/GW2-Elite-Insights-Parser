@@ -10,7 +10,7 @@ namespace GW2EIParser.Logic
 {
     public class TwistedCastle : RaidLogic
     {
-        public TwistedCastle(ushort triggerID) : base(triggerID)
+        public TwistedCastle(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -38,7 +38,7 @@ namespace GW2EIParser.Logic
 
         public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
-            agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, "Twisted Castle", "", (ushort)ParseEnum.TargetIDS.TwistedCastle);
+            agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, "Twisted Castle", "", (int)ParseEnum.TargetIDS.TwistedCastle);
             ComputeFightTargets(agentData, combatData);
         }
 
@@ -55,7 +55,7 @@ namespace GW2EIParser.Logic
         {
             switch (npc.ID)
             {
-                case (ushort)ParseEnum.TrashIDS.HauntingStatue:
+                case (int)ParseEnum.TrashIDS.HauntingStatue:
                     var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
                     if (replay.Rotations.Any())
                     {

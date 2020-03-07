@@ -168,7 +168,7 @@ namespace GW2EIParser
             return "";
         }
 
-        public static string GetNPCIcon(ushort id)
+        public static string GetNPCIcon(int id)
         {
             switch (ParseEnum.GetTargetIDS(id))
             {

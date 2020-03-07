@@ -10,7 +10,7 @@ namespace GW2EIParser.Logic
     public class BrokenKing : RaidLogic
     {
         // TODO - add CR icons and some mechanics
-        public BrokenKing(ushort triggerID) : base(triggerID)
+        public BrokenKing(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -54,7 +54,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
-                case (ushort)ParseEnum.TargetIDS.BrokenKing:
+                case (int)ParseEnum.TargetIDS.BrokenKing:
                     var Cone = cls.Where(x => x.SkillId == 48066).ToList();
                     foreach (AbstractCastEvent c in Cone)
                     {
@@ -80,7 +80,7 @@ namespace GW2EIParser.Logic
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            SetSuccessByDeath(combatData, fightData, playerAgents, true, (ushort)ParseEnum.TargetIDS.BrokenKing);
+            SetSuccessByDeath(combatData, fightData, playerAgents, true, (int)ParseEnum.TargetIDS.BrokenKing);
         }
 
         public override string GetFightName()

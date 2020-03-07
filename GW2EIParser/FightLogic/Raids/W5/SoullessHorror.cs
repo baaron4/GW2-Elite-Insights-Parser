@@ -11,7 +11,7 @@ namespace GW2EIParser.Logic
 {
     public class SoullessHorror : RaidLogic
     {
-        public SoullessHorror(ushort triggerID) : base(triggerID)
+        public SoullessHorror(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -62,7 +62,7 @@ namespace GW2EIParser.Logic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.SoullessHorror);
+                NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.SoullessHorror);
                 if (mainTarget == null)
                 {
                     throw new InvalidOperationException("Error Encountered: Soulless Horror not found");
@@ -106,7 +106,7 @@ namespace GW2EIParser.Logic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.SoullessHorror);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.SoullessHorror);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Error Encountered: Soulless Horror not found");
@@ -142,7 +142,7 @@ namespace GW2EIParser.Logic
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (ushort)ParseEnum.TargetIDS.SoullessHorror:
+                case (int)ParseEnum.TargetIDS.SoullessHorror:
                     var howling = cls.Where(x => x.SkillId == 48662).ToList();
                     foreach (AbstractCastEvent c in howling)
                     {
@@ -214,17 +214,17 @@ namespace GW2EIParser.Logic
 
                     }
                     break;
-                case (ushort)Scythe:
+                case (int)Scythe:
                     replay.Decorations.Add(new CircleDecoration(true, 0, 80, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     break;
-                case (ushort)TormentedDead:
+                case (int)TormentedDead:
                     if (replay.Positions.Count == 0)
                     {
                         break;
                     }
                     replay.Decorations.Add(new CircleDecoration(true, 0, 400, (end, end + 60000), "rgba(255, 0, 0, 0.5)", new PositionConnector(replay.Positions.Last())));
                     break;
-                case (ushort)SurgingSoul:
+                case (int)SurgingSoul:
                     List<Point3D> positions = replay.Positions;
                     if (positions.Count < 2)
                     {
@@ -241,7 +241,7 @@ namespace GW2EIParser.Logic
                         break;
                     }
                     break;
-                case (ushort)FleshWurm:
+                case (int)FleshWurm:
                     break;
                 default:
                     break;

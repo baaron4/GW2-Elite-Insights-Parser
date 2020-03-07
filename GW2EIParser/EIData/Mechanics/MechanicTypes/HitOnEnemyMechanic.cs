@@ -24,10 +24,10 @@ namespace GW2EIParser.EIData
         {
         }
 
-        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<ushort, AbstractSingleActor> regroupedMobs)
+        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
         {
             CombatData combatData = log.CombatData;
-            IEnumerable<AgentItem> agents = log.AgentData.GetNPCsByID((ushort)SkillId);
+            IEnumerable<AgentItem> agents = log.AgentData.GetNPCsByID((int)SkillId);
             foreach (AgentItem a in agents)
             {
                 List<AbstractDamageEvent> combatitems = combatData.GetDamageTakenData(a);

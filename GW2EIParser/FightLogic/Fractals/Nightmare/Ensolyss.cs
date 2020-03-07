@@ -10,7 +10,7 @@ namespace GW2EIParser.Logic
 {
     public class Ensolyss : FractalLogic
     {
-        public Ensolyss(ushort triggerID) : base(triggerID)
+        public Ensolyss(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -46,7 +46,7 @@ namespace GW2EIParser.Logic
         }
         public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (ushort)ParseEnum.TargetIDS.Ensolyss, 762, 5000);
+            return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)ParseEnum.TargetIDS.Ensolyss, 762, 5000);
         }
 
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()

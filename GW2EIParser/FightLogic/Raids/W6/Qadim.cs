@@ -16,7 +16,7 @@ namespace GW2EIParser.Logic
     {
         private int _startOffset = 0;
 
-        public Qadim(ushort triggerID) : base(triggerID)
+        public Qadim(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -78,34 +78,34 @@ namespace GW2EIParser.Logic
         }
 
 
-        protected override List<ushort> GetFightTargetsIDs()
+        protected override List<int> GetFightTargetsIDs()
         {
-            return new List<ushort>
+            return new List<int>
             {
-                (ushort)ParseEnum.TargetIDS.Qadim,
-                (ushort)AncientInvokedHydra,
-                (ushort)WyvernMatriarch,
-                (ushort)WyvernPatriarch,
-                (ushort)ApocalypseBringer,
+                (int)ParseEnum.TargetIDS.Qadim,
+                (int)AncientInvokedHydra,
+                (int)WyvernMatriarch,
+                (int)WyvernPatriarch,
+                (int)ApocalypseBringer,
             };
         }
 
-        protected override HashSet<ushort> GetUniqueTargetIDs()
+        protected override HashSet<int> GetUniqueTargetIDs()
         {
-            return new HashSet<ushort>
+            return new HashSet<int>
             {
-                (ushort)ParseEnum.TargetIDS.Qadim,
-                (ushort)AncientInvokedHydra,
-                (ushort)ApocalypseBringer,
-                (ushort)WyvernMatriarch,
-                (ushort)WyvernPatriarch
+                (int)ParseEnum.TargetIDS.Qadim,
+                (int)AncientInvokedHydra,
+                (int)ApocalypseBringer,
+                (int)WyvernMatriarch,
+                (int)WyvernPatriarch
             };
         }
 
         public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // Find target
-            AgentItem target = agentData.GetNPCsByID((ushort)ParseEnum.TargetIDS.Qadim).FirstOrDefault();
+            AgentItem target = agentData.GetNPCsByID((int)ParseEnum.TargetIDS.Qadim).FirstOrDefault();
             if (target == null)
             {
                 throw new InvalidOperationException("Error Encountered: Qadim not found");
@@ -131,7 +131,7 @@ namespace GW2EIParser.Logic
             // If changing phase detection, combat replay platform timings may have to be updated.
 
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC qadim = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Qadim);
+            NPC qadim = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Qadim);
             if (qadim == null)
             {
                 throw new InvalidOperationException("Error Encountered: Qadim not found");
@@ -152,7 +152,7 @@ namespace GW2EIParser.Logic
                     case 2:
                     case 4:
                     case 6:
-                        var pyresFirstAware = log.AgentData.GetNPCsByID((ushort)PyreGuardian).Where(x => phase.InInterval(x.FirstAware)).Select(x => x.FirstAware).ToList();
+                        var pyresFirstAware = log.AgentData.GetNPCsByID((int)PyreGuardian).Where(x => phase.InInterval(x.FirstAware)).Select(x => x.FirstAware).ToList();
                         if (pyresFirstAware.Count > 0 && pyresFirstAware.Max() > phase.Start)
                         {
                             phase.OverrideStart(pyresFirstAware.Max());
@@ -160,12 +160,12 @@ namespace GW2EIParser.Logic
                         phase.Targets.Add(qadim);
                         break;
                     default:
-                        var ids = new List<ushort>
+                        var ids = new List<int>
                         {
-                           (ushort) WyvernMatriarch,
-                           (ushort) WyvernPatriarch,
-                           (ushort) AncientInvokedHydra,
-                           (ushort) ApocalypseBringer
+                           (int) WyvernMatriarch,
+                           (int) WyvernPatriarch,
+                           (int) AncientInvokedHydra,
+                           (int) ApocalypseBringer
                         };
                         AddTargetsToPhase(phase, ids, log);
                         break;
@@ -200,7 +200,7 @@ namespace GW2EIParser.Logic
             int ccRadius = 200;
             switch (target.ID)
             {
-                case (ushort)ParseEnum.TargetIDS.Qadim:
+                case (int)ParseEnum.TargetIDS.Qadim:
                     //CC
                     AddPlatformsToCombatReplay(target, log, replay);
                     var breakbar = cls.Where(x => x.SkillId == 51943).ToList();
@@ -237,7 +237,7 @@ namespace GW2EIParser.Logic
                         }
                     }
                     break;
-                case (ushort)AncientInvokedHydra:
+                case (int)AncientInvokedHydra:
                     //CC
                     var fieryMeteor = cls.Where(x => x.SkillId == 52941).ToList();
                     foreach (AbstractCastEvent c in fieryMeteor)
@@ -260,7 +260,7 @@ namespace GW2EIParser.Logic
                         }
                     }
                     break;
-                case (ushort)WyvernMatriarch:
+                case (int)WyvernMatriarch:
                     //Wing Buffet
                     var wingBuffet = cls.Where(x => x.SkillId == 52734).ToList();
                     foreach (AbstractCastEvent c in wingBuffet)
@@ -320,7 +320,7 @@ namespace GW2EIParser.Logic
                         }
                     }
                     break;
-                case (ushort)WyvernPatriarch:
+                case (int)WyvernPatriarch:
                     //CC
                     var patCC = cls.Where(x => x.SkillId == 53132).ToList();
                     foreach (AbstractCastEvent c in patCC)
@@ -369,7 +369,7 @@ namespace GW2EIParser.Logic
                         }
                     }
                     break;
-                case (ushort)ApocalypseBringer:
+                case (int)ApocalypseBringer:
                     var jumpShockwave = cls.Where(x => x.SkillId == 51923).ToList();
                     foreach (AbstractCastEvent c in jumpShockwave)
                     {
@@ -435,7 +435,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Qadim);
+            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Qadim);
             if (target == null)
             {
                 throw new InvalidOperationException("Error Encountered: Qadim not found");

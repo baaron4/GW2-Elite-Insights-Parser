@@ -8,7 +8,7 @@ namespace GW2EIParser.Logic
 {
     public class Siax : FractalLogic
     {
-        public Siax(ushort triggerID) : base(triggerID)
+        public Siax(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -46,7 +46,7 @@ namespace GW2EIParser.Logic
 
         public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (ushort)ParseEnum.TargetIDS.Siax, 762, 5000);
+            return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)ParseEnum.TargetIDS.Siax, 762, 5000);
         }
 
     }

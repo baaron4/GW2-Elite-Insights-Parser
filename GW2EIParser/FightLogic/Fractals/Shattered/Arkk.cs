@@ -10,7 +10,7 @@ namespace GW2EIParser.Logic
 {
     public class Arkk : FractalLogic
     {
-        public Arkk(ushort triggerID) : base(triggerID)
+        public Arkk(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -74,19 +74,19 @@ namespace GW2EIParser.Logic
             };
         }
 
-        protected override List<ushort> GetFightTargetsIDs()
+        protected override List<int> GetFightTargetsIDs()
         {
-            return new List<ushort>
+            return new List<int>
             {
-                (ushort)ParseEnum.TargetIDS.Arkk,
-                (ushort)Archdiviner,
-                (ushort)BrazenGladiator
+                (int)ParseEnum.TargetIDS.Arkk,
+                (int)Archdiviner,
+                (int)BrazenGladiator
             };
         }
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Arkk);
+            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Arkk);
             SetSuccessByBuffCount(combatData, fightData, playerAgents, target, 762, 10);
             // missing buff apply events fallback, some phases will be missing
             // removes should be present

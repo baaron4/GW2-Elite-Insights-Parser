@@ -9,7 +9,7 @@ namespace GW2EIParser.Logic
 {
     internal class Freezie : RaidLogic
     {
-        public Freezie(ushort triggerID) : base(triggerID)
+        public Freezie(int triggerID) : base(triggerID)
         {
             Extension = "freezie";
             Icon = "https://wiki.guildwars2.com/images/thumb/8/8b/Freezie.jpg/189px-Freezie.jpg";
@@ -18,8 +18,8 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Freezie);
-            NPC heartTarget = Targets.Find(x => x.ID == (ushort)FreeziesFrozenHeart);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Freezie);
+            NPC heartTarget = Targets.Find(x => x.ID == (int)FreeziesFrozenHeart);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Error Encountered: Freezie not found");
@@ -47,21 +47,21 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override HashSet<ushort> GetUniqueTargetIDs()
+        protected override HashSet<int> GetUniqueTargetIDs()
         {
-            return new HashSet<ushort>
+            return new HashSet<int>
             {
-                (ushort)ParseEnum.TargetIDS.Freezie,
-                (ushort)FreeziesFrozenHeart
+                (int)ParseEnum.TargetIDS.Freezie,
+                (int)FreeziesFrozenHeart
             };
         }
 
-        protected override List<ushort> GetFightTargetsIDs()
+        protected override List<int> GetFightTargetsIDs()
         {
-            return new List<ushort>
+            return new List<int>
             {
-                (ushort)ParseEnum.TargetIDS.Freezie,
-                (ushort)FreeziesFrozenHeart
+                (int)ParseEnum.TargetIDS.Freezie,
+                (int)FreeziesFrozenHeart
             };
         }
     }

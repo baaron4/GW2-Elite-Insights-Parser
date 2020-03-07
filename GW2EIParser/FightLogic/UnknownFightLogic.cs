@@ -8,20 +8,20 @@ namespace GW2EIParser.Logic
 {
     public class UnknownFightLogic : FightLogic
     {
-        public UnknownFightLogic(ushort triggerID) : base(triggerID)
+        public UnknownFightLogic(int triggerID) : base(triggerID)
         {
             Extension = "boss";
             Icon = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
         }
 
-        protected override HashSet<ushort> GetUniqueTargetIDs()
+        protected override HashSet<int> GetUniqueTargetIDs()
         {
-            return new HashSet<ushort>();
+            return new HashSet<int>();
         }
 
         protected override void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems)
         {
-            ushort id = GetFightTargetsIDs().First();
+            int id = GetFightTargetsIDs().First();
             AgentItem agentItem = agentData.GetNPCsByID(id).FirstOrDefault();
             // Trigger ID is not NPC
             if (agentItem == null)

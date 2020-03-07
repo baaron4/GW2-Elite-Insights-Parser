@@ -13,7 +13,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// Game ID of the target
         /// </summary>
-        public ushort Id { get; }
+        public int Id { get; }
         /// <summary>
         /// Total health of the target
         /// </summary>

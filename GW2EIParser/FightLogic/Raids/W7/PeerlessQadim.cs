@@ -11,7 +11,7 @@ namespace GW2EIParser.Logic
 {
     public class PeerlessQadim : RaidLogic
     {
-        public PeerlessQadim(ushort triggerID) : base(triggerID)
+        public PeerlessQadim(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
@@ -74,7 +74,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.PeerlessQadim);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.PeerlessQadim);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Error Encountered: Peerless Qadim not found");
@@ -151,7 +151,7 @@ namespace GW2EIParser.Logic
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (ushort)ParseEnum.TargetIDS.PeerlessQadim:
+                case (int)ParseEnum.TargetIDS.PeerlessQadim:
                     var cataCycle = cls.Where(x => x.SkillId == 56329).ToList();
 
                     foreach (AbstractCastEvent c in cataCycle)
@@ -165,7 +165,7 @@ namespace GW2EIParser.Logic
                         replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, (end, (int)log.FightData.FightEnd), "rgba(255, 220, 0, 0.5)", new PositionConnector(pylonPosition)));
                     }
                     break;
-                case (ushort)EntropicDistortion:
+                case (int)EntropicDistortion:
                     //sapping surge, red tether
                     List<AbstractBuffEvent> sappingSurge = GetFilteredList(log.CombatData, 56118, target, true);
                     int surgeStart = 0;
@@ -174,7 +174,7 @@ namespace GW2EIParser.Logic
                     {
                         if (c is BuffApplyEvent)
                         {
-                            NPC qadim = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.PeerlessQadim);
+                            NPC qadim = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.PeerlessQadim);
                             surgeStart = (int)c.Time;
                             source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By) ?? qadim;
                         }
@@ -188,14 +188,14 @@ namespace GW2EIParser.Logic
                         }
                     }
                     break;
-                case (ushort)BigKillerTornado:
+                case (int)BigKillerTornado:
                     replay.Decorations.Add(new CircleDecoration(true, 0, 450, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                     break;
-                case (ushort)Pylon1:
+                case (int)Pylon1:
                     break;
-                case (ushort)Pylon2:
+                case (int)Pylon2:
                     break;
-                case (ushort)EnergyOrb:
+                case (int)EnergyOrb:
                     break;
                 default:
                     break;
@@ -255,7 +255,7 @@ namespace GW2EIParser.Logic
             {
                 if (c is BuffApplyEvent)
                 {
-                    NPC qadim = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.PeerlessQadim);
+                    NPC qadim = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.PeerlessQadim);
                     surgeStart = (int)c.Time;
                     source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By) ?? qadim;
                 }
@@ -293,7 +293,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.PeerlessQadim);
+            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.PeerlessQadim);
             if (target == null)
             {
                 throw new InvalidOperationException("Error Encountered: Peerless Qadim not found");

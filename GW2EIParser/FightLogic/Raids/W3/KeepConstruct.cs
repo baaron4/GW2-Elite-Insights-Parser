@@ -11,7 +11,7 @@ namespace GW2EIParser.Logic
 {
     public class KeepConstruct : RaidLogic
     {
-        public KeepConstruct(ushort triggerID) : base(triggerID)
+        public KeepConstruct(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -74,7 +74,7 @@ namespace GW2EIParser.Logic
             long end = 0;
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.KeepConstruct);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.KeepConstruct);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Error Encountered: Keep Construct not found");
@@ -223,7 +223,7 @@ namespace GW2EIParser.Logic
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (ushort)ParseEnum.TargetIDS.KeepConstruct:
+                case (int)ParseEnum.TargetIDS.KeepConstruct:
 
                     List<AbstractBuffEvent> kcOrbCollect = GetFilteredList(log.CombatData, 35025, target, true);
                     int kcOrbStart = 0, kcOrbEnd = 0;
@@ -314,16 +314,16 @@ namespace GW2EIParser.Logic
                         }
                     }
                     // phantasms locations
-                    var phantasmsID = new HashSet<ushort>
+                    var phantasmsID = new HashSet<int>
                     {
-                        (ushort)Jessica,
-                        (ushort)Olson,
-                        (ushort)Engul,
-                        (ushort)Faerla,
-                        (ushort)Caulle,
-                        (ushort)Henley,
-                        (ushort)Galletta,
-                        (ushort)Ianim,
+                        (int)Jessica,
+                        (int)Olson,
+                        (int)Engul,
+                        (int)Faerla,
+                        (int)Caulle,
+                        (int)Henley,
+                        (int)Galletta,
+                        (int)Ianim,
                     };
                     foreach (NPC m in TrashMobs)
                     {
@@ -340,17 +340,17 @@ namespace GW2EIParser.Logic
                     }
                     break;
 
-                case (ushort)Core:
+                case (int)Core:
                     break;
-                case (ushort)Jessica:
-                case (ushort)Olson:
-                case (ushort)Engul:
-                case (ushort)Faerla:
-                case (ushort)Caulle:
-                case (ushort)Henley:
-                case (ushort)Galletta:
-                case (ushort)Ianim:
-                    NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.KeepConstruct);
+                case (int)Jessica:
+                case (int)Olson:
+                case (int)Engul:
+                case (int)Faerla:
+                case (int)Caulle:
+                case (int)Henley:
+                case (int)Galletta:
+                case (int)Ianim:
+                    NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.KeepConstruct);
                     if (mainTarget == null)
                     {
                         throw new InvalidOperationException("Error Encountered: Keep Construct not found");
@@ -358,16 +358,16 @@ namespace GW2EIParser.Logic
                     replay.Decorations.Add(new CircleDecoration(false, 0, 600, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     replay.Decorations.Add(new CircleDecoration(true, 0, 400, (start, end), "rgba(0, 125, 255, 0.5)", new AgentConnector(target)));
                     break;
-                case (ushort)GreenPhantasm:
+                case (int)GreenPhantasm:
                     int lifetime = 8000;
                     replay.Decorations.Add(new CircleDecoration(true, 0, 210, (start, start + lifetime), "rgba(0,255,0,0.2)", new AgentConnector(target)));
                     replay.Decorations.Add(new CircleDecoration(true, start + lifetime, 210, (start, start + lifetime), "rgba(0,255,0,0.3)", new AgentConnector(target)));
                     break;
-                case (ushort)RetrieverProjection:
-                case (ushort)InsidiousProjection:
-                case (ushort)UnstableLeyRift:
-                case (ushort)RadiantPhantasm:
-                case (ushort)CrimsonPhantasm:
+                case (int)RetrieverProjection:
+                case (int)InsidiousProjection:
+                case (int)UnstableLeyRift:
+                case (int)RadiantPhantasm:
+                case (int)CrimsonPhantasm:
                     break;
                 default:
                     break;

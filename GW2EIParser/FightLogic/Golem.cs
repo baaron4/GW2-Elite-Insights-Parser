@@ -10,7 +10,7 @@ namespace GW2EIParser.Logic
 {
     public class Golem : FightLogic
     {
-        public Golem(ushort id) : base(id)
+        public Golem(int id) : base(id)
         {
             Mode = ParseMode.Golem;
             switch (id)
@@ -89,9 +89,9 @@ namespace GW2EIParser.Logic
             fightData.SetSuccess(success, fightEndLogTime);
         }
 
-        protected override HashSet<ushort> GetUniqueTargetIDs()
+        protected override HashSet<int> GetUniqueTargetIDs()
         {
-            return new HashSet<ushort>
+            return new HashSet<int>
             {
                 GenericTriggerID
             };

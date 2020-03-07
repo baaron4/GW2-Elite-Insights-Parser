@@ -9,7 +9,7 @@ namespace GW2EIParser.Logic
 {
     public class MAMA : FractalLogic
     {
-        public MAMA(ushort triggerID) : base(triggerID)
+        public MAMA(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -46,7 +46,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mama = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.MAMA);
+            NPC mama = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.MAMA);
             if (mama == null)
             {
                 throw new InvalidOperationException("Error Encountered: MAMA not found");
@@ -64,11 +64,11 @@ namespace GW2EIParser.Logic
                 phase.Name = namesMAMA[i - 1];
                 if (i == 2 || i == 4 || i == 6)
                 {
-                    var ids = new List<ushort>
+                    var ids = new List<int>
                     {
-                       (ushort) GreenKnight,
-                       (ushort) RedKnight,
-                       (ushort) BlueKnight,
+                       (int) GreenKnight,
+                       (int) RedKnight,
+                       (int) BlueKnight,
                     };
                     AddTargetsToPhase(phase, ids, log);
                 }
@@ -93,7 +93,7 @@ namespace GW2EIParser.Logic
 
         public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (ushort)ParseEnum.TargetIDS.MAMA, 762, 2000);
+            return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)ParseEnum.TargetIDS.MAMA, 762, 2000);
         }
     }
 }

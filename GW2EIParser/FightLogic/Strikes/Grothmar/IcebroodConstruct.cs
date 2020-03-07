@@ -8,7 +8,7 @@ namespace GW2EIParser.Logic
 {
     public class IcebroodConstruct : StrikeMissionLogic
     {
-        public IcebroodConstruct(ushort triggerID) : base(triggerID)
+        public IcebroodConstruct(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -39,7 +39,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.IcebroodConstruct);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.IcebroodConstruct);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Error Encountered: Icebrood Construct not found");

@@ -11,7 +11,7 @@ namespace GW2EIParser.Logic
 {
     public class Adina : RaidLogic
     {
-        public Adina(ushort triggerID) : base(triggerID)
+        public Adina(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
@@ -42,7 +42,7 @@ namespace GW2EIParser.Logic
                 var attackOff = attackables.Where(x => x.DstAgent == 0 && x.Time >= first + 2000).Select(x => x.Time).ToList();
                 var posFacingHP = combatData.Where(x => x.SrcAgent == hand.Agent && x.Time >= hand.FirstAware && hand.LastAware >= x.Time && (x.IsStateChange == ParseEnum.StateChange.Position || x.IsStateChange == ParseEnum.StateChange.Rotation || x.IsStateChange == ParseEnum.StateChange.MaxHealthUpdate)).ToList();
                 CombatItem pos = posFacingHP.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position);
-                ushort id = (ushort)HandOfErosion;
+                int id = (int)HandOfErosion;
                 if (pos != null)
                 {
                     byte[] xy = BitConverter.GetBytes(pos.DstAgent);
@@ -51,7 +51,7 @@ namespace GW2EIParser.Logic
                     if ((Math.Abs(x - 15570.5) < 10 && Math.Abs(y + 693.117) < 10) ||
                             (Math.Abs(x - 14277.2) < 10 && Math.Abs(y + 2202.52) < 10))
                     {
-                        id = (ushort)HandOfEruption;
+                        id = (int)HandOfEruption;
                     }
                 }
                 for (int i = 0; i < attackOn.Count; i++)
@@ -90,20 +90,20 @@ namespace GW2EIParser.Logic
             ComputeFightTargets(agentData, combatData);
         }
 
-        protected override List<ushort> GetFightTargetsIDs()
+        protected override List<int> GetFightTargetsIDs()
         {
-            return new List<ushort>()
+            return new List<int>()
             {
-                (ushort)ParseEnum.TargetIDS.Adina,
-                (ushort)HandOfErosion,
-                (ushort)HandOfEruption
+                (int)ParseEnum.TargetIDS.Adina,
+                (int)HandOfErosion,
+                (int)HandOfEruption
             };
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Adina);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Adina);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Error Encountered: Adina not found");
@@ -142,7 +142,7 @@ namespace GW2EIParser.Logic
                 end = qQ.Time;
                 mainPhases.Add(new PhaseData(start, end, "Phase " + i ));
                 PhaseData split = phases[i];
-                AddTargetsToPhase(split, new List<ushort> { (ushort)HandOfErosion, (ushort)HandOfEruption }, log);
+                AddTargetsToPhase(split, new List<int> { (int)HandOfErosion, (int)HandOfEruption }, log);
                 start = split.End;
                 if (i == phases.Count - 1 && start != log.FightData.FightEnd)
                 {
@@ -178,7 +178,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Adina);
+            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Adina);
             if (target == null)
             {
                 throw new InvalidOperationException("Error Encountered: Adina not found");

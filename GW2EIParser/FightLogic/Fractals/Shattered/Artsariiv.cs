@@ -8,7 +8,7 @@ namespace GW2EIParser.Logic
 {
     public class Artsariiv : FractalLogic
     {
-        public Artsariiv(ushort triggerID) : base(triggerID)
+        public Artsariiv(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -49,7 +49,7 @@ namespace GW2EIParser.Logic
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            SetSuccessByBuffCount(combatData, fightData, playerAgents, Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Artsariiv), 762, 4);
+            SetSuccessByBuffCount(combatData, fightData, playerAgents, Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Artsariiv), 762, 4);
         }
     }
 }

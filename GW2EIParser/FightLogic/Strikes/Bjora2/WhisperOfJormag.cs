@@ -10,7 +10,7 @@ namespace GW2EIParser.Logic
 {
     public class WhisperOfJormag : StrikeMissionLogic
     {
-        public WhisperOfJormag(ushort triggerID) : base(triggerID)
+        public WhisperOfJormag(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -33,7 +33,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC woj = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.WhisperOfJormag);
+            NPC woj = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.WhisperOfJormag);
             if (woj == null)
             {
                 throw new InvalidOperationException("Error Encountered: Whisper of Jormag not found");
