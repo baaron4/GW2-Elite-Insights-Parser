@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
@@ -28,7 +29,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public bool HasStackIDs { get; } = false;
 
-        private void SpecialBuffParse(List<Player> players, SkillData skillData, FightData fightData)
+        private void EIBuffParse(List<Player> players, SkillData skillData, FightData fightData)
         {
             var toAdd = new List<AbstractBuffEvent>();
             foreach (Player p in players)
@@ -82,7 +83,7 @@ namespace GW2EIParser.Parser.ParsedData
             }
         }
 
-        private void SpecialDamageParse(SkillData skillData, FightData fightData)
+        private void EIDamageParse(SkillData skillData, FightData fightData)
         {
             var toAdd = new List<AbstractDamageEvent>();
             toAdd.AddRange(fightData.Logic.SpecialDamageEventProcess(_damageData, _damageTakenData, _damageDataById, skillData));
@@ -141,7 +142,7 @@ namespace GW2EIParser.Parser.ParsedData
                 _damageData[a].Sort((x, y) => x.Time.CompareTo(y.Time));
             }
         }
-        private void SpecialCastParse(List<Player> players, SkillData skillData)
+        private void EICastParse(List<Player> players, SkillData skillData)
         {
             var toAdd = new List<AnimatedCastEvent>();
             foreach (Player p in players)
@@ -191,11 +192,57 @@ namespace GW2EIParser.Parser.ParsedData
             }
         }
 
-        private void ExtraEvents(List<Player> players, SkillData skillData, FightData fightData)
+        private void EIStatusParse()
         {
-            SpecialBuffParse(players, skillData, fightData);
-            SpecialDamageParse(skillData, fightData);
-            SpecialCastParse(players, skillData);
+            foreach (KeyValuePair<AgentItem, List<AbstractDamageEvent>> pair in _damageTakenData)
+            {
+                bool setDeads = false;
+                if (!_statusEvents.DeadEvents.TryGetValue(pair.Key, out List<DeadEvent> agentDeaths))
+                {
+                    agentDeaths = new List<DeadEvent>();
+                    setDeads = true;
+                }
+                bool setDowns = false;
+                if (!_statusEvents.DownEvents.TryGetValue(pair.Key, out List<DownEvent> agentDowns))
+                {
+                    agentDowns = new List<DownEvent>();
+                    setDowns = true;
+                }
+                foreach (AbstractDamageEvent evt in pair.Value)
+                {
+                    if (evt.HasKilled)
+                    {
+                        if (!agentDeaths.Exists(x => Math.Abs(x.Time - evt.Time) < 500)) {
+                            agentDeaths.Add(new DeadEvent(pair.Key, evt.Time));
+                        }
+                    }
+                    if (evt.HasDowned)
+                    {
+                        if (!agentDowns.Exists(x => Math.Abs(x.Time - evt.Time) < 500))
+                        {
+                            agentDowns.Add(new DownEvent(pair.Key, evt.Time));
+                        }
+                    }
+                }
+                agentDowns.Sort((x,y) => x.Time.CompareTo(y.Time));
+                agentDeaths.Sort((x, y) => x.Time.CompareTo(y.Time));
+                if (setDeads && agentDeaths.Count > 0)
+                {
+                    _statusEvents.DeadEvents[pair.Key] = agentDeaths;
+                }
+                if (setDowns && agentDowns.Count > 0)
+                {
+                    _statusEvents.DownEvents[pair.Key] = agentDowns;
+                }
+            }
+        }
+
+        private void EIExtraEvents(List<Player> players, SkillData skillData, FightData fightData)
+        {
+            EIBuffParse(players, skillData, fightData);
+            EIDamageParse(skillData, fightData);
+            EICastParse(players, skillData);
+            EIStatusParse();
         }
 
         public CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players)
@@ -239,7 +286,7 @@ namespace GW2EIParser.Parser.ParsedData
             healing_received_data = allCombatItems.Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                             ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
                                                 (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
-            ExtraEvents(players, skillData, fightData);
+            EIExtraEvents(players, skillData, fightData);
             _buffRemoveAllData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffRemoveAllEvent>().ToList());
         }
 

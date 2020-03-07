@@ -7,5 +7,10 @@
 
         }
 
+        public DeadEvent(AgentItem src, long time) : base(src, time)
+        {
+
+        }
+
     }
 }

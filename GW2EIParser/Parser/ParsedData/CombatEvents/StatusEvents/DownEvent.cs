@@ -7,5 +7,10 @@
 
         }
 
+        public DownEvent(AgentItem src, long time) : base(src, time)
+        {
+
+        }
+
     }
 }

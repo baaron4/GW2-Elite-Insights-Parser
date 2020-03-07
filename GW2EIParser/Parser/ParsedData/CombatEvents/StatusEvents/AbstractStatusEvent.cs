@@ -9,5 +9,10 @@
             Src = agentData.GetAgent(evtcItem.SrcAgent);
         }
 
+        public AbstractStatusEvent(AgentItem src, long time) : base(time)
+        {
+            Src = src;
+        }
+
     }
 }
