@@ -138,15 +138,25 @@ namespace GW2EIParser.Logic
                 }
                 long specialSplitTime = _specialSplit;
                 AgentItem attackTarget = attackTargets.Last().AttackTarget;
+                // sanity check
+                TargetableEvent attackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => x.Targetable && x.Time > specialSplitTime - GeneralHelper.ServerDelayConstant);
+                if (attackableEvent == null)
+                {
+                    return;
+                }
+                TargetableEvent notAttackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => !x.Targetable && x.Time > attackableEvent.Time);
+                if (notAttackableEvent == null)
+                {
+                    return;
+                }
                 var playerExits = new List<ExitCombatEvent>();
                 foreach (AgentItem a in playerAgents)
                 {
                     playerExits.AddRange(combatData.GetExitCombatEvents(a));
                 }
-                ExitCombatEvent lastPlayerExit = playerExits.Count > 0 ? playerExits.MaxBy(x => x.Time) : null;
-                TargetableEvent notAttackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => !x.Targetable && x.Time > specialSplitTime);
+                ExitCombatEvent lastPlayerExit = playerExits.Count > 0 ? playerExits.MaxBy(x => x.Time) : null; 
                 AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.From.Master)));
-                if (notAttackableEvent != null && lastDamageTaken != null && lastPlayerExit != null)
+                if (lastDamageTaken != null && lastPlayerExit != null)
                 {
                     fightData.SetSuccess(lastPlayerExit.Time > notAttackableEvent.Time + 1000, lastDamageTaken.Time);
                 }
@@ -226,7 +236,7 @@ namespace GW2EIParser.Logic
                 invulApp.OverrideValue((int)(target.LastAware - invulApp.Time));
             }
             // Deimos gadgets
-            CombatItem targetable = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.Time > combatData.First().Time && x.DstAgent > 0);
+            CombatItem targetable = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.DstAgent > 0);
             var gadgetAgents = new HashSet<ulong>();
             long firstAware = AttackTargetSpecialParse(targetable, agentData, combatData, gadgetAgents);
             // legacy method

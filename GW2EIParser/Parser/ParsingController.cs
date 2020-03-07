@@ -604,10 +604,7 @@ namespace GW2EIParser.Parser
             // apply offset to everything
             foreach (CombatItem c in _combatItems)
             {
-                if (c.IsStateChange.HasTime())
-                {
-                    c.OverrideTime(c.Time - offset);
-                }
+                c.OverrideTime(c.Time - offset);
             }
             foreach (AgentItem a in _allAgentsList)
             {

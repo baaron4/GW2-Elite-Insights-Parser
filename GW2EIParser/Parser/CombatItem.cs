@@ -93,7 +93,10 @@
 
         public void OverrideTime(long time)
         {
-            this.Time = time;
+            if (IsStateChange.HasTime())
+            {
+                Time = time;
+            }
         }
 
         public void OverrideSrcAgent(ulong agent)
