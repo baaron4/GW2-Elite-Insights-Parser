@@ -24,7 +24,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public TargetDto(NPC target, ParsedLog log, bool cr, ActorDetailsDto details)
         {
             Name = target.Character;
-            Icon = GeneralHelper.GetNPCIcon(target.ID);
+            Icon = GeneralHelper.GetIcon(target);
             Health = target.GetHealth(log.CombatData);
             HbHeight = target.HitboxHeight;
             HbWidth = target.HitboxWidth;

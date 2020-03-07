@@ -12,7 +12,7 @@ namespace GW2EIParser.EIData
 
         protected AbstractSingleActorSerializable(AbstractSingleActor actor, ParsedLog log, CombatReplayMap map, CombatReplay replay, string type)
         {
-            Img = actor.Icon;
+            Img = GeneralHelper.GetIcon(actor);
             ID = actor.GetCombatReplayID(log);
             Positions = new List<double>();
             Type = type;

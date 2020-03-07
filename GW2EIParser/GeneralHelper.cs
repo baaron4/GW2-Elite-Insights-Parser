@@ -102,7 +102,7 @@ namespace GW2EIParser
             return res;
         }
 
-        public static string GetProfIcon(string prof)
+        private static string GetProfIcon(string prof)
         {
             switch (prof)
             {
@@ -168,7 +168,7 @@ namespace GW2EIParser
             return "";
         }
 
-        public static string GetNPCIcon(int id)
+        private static string GetNPCIcon(int id)
         {
             switch (ParseEnum.GetTargetIDS(id))
             {

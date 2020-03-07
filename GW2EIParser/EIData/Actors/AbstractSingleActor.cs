@@ -28,7 +28,6 @@ namespace GW2EIParser.EIData
         private Dictionary<long, Minions> _minions;
         // Replay
         protected CombatReplay CombatReplay { get; set; }
-        public string Icon { get; }
         // Statistics
         private List<FinalDPS> _dpsAll;
         private Dictionary<AbstractSingleActor, List<FinalDPS>> _dpsTarget;
@@ -41,7 +40,6 @@ namespace GW2EIParser.EIData
 
         protected AbstractSingleActor(AgentItem agent) : base(agent)
         {
-            Icon = GeneralHelper.GetIcon(this);
         }
 
         // Status
