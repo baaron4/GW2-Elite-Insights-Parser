@@ -45,9 +45,7 @@ namespace GW2EIParser.Logic
                 int id = (int)HandOfErosion;
                 if (pos != null)
                 {
-                    byte[] xy = BitConverter.GetBytes(pos.DstAgent);
-                    float x = BitConverter.ToSingle(xy, 0);
-                    float y = BitConverter.ToSingle(xy, 4);
+                    (float x, float y, _) = AbstractMovementEvent.UnpackMovementData(pos.DstAgent, 0);
                     if ((Math.Abs(x - 15570.5) < 10 && Math.Abs(y + 693.117) < 10) ||
                             (Math.Abs(x - 14277.2) < 10 && Math.Abs(y + 2202.52) < 10))
                     {

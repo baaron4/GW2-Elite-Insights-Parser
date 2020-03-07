@@ -7,7 +7,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
     {
         public AgentItem AgentItem { get; }
         private readonly ulong _dstAgent;
-        private readonly long _value;
+        private readonly int _value;
 
         public AbstractMovementEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem.Time)
         {
@@ -16,13 +16,20 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             _value = evtcItem.Value;
         }
 
-        public (float x, float y, float z) Unpack()
+        public static (float x, float y, float z) UnpackMovementData(ulong packedXY, int intZ)
         {
-            byte[] xy = BitConverter.GetBytes(_dstAgent);
-            float x = BitConverter.ToSingle(xy, 0);
-            float y = BitConverter.ToSingle(xy, 4);
+            byte[] xyBytes = BitConverter.GetBytes(packedXY);
+            byte[] zBytes = BitConverter.GetBytes(intZ);
+            float x = BitConverter.ToSingle(xyBytes, 0);
+            float y = BitConverter.ToSingle(xyBytes, 4);
+            float z = BitConverter.ToSingle(zBytes, 0);
 
-            return (x, y, _value);
+            return (x, y, z);
+        }
+
+        protected (float x, float y, float z) Unpack()
+        {
+            return UnpackMovementData(_dstAgent, _value);
         }
 
         public abstract void AddPoint3D(CombatReplay replay);
