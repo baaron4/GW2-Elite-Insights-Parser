@@ -89,6 +89,10 @@ namespace GW2EIParser.Logic
                        (int) RedGuardian
                     };
                     AddTargetsToPhase(phase, ids, log);
+                    foreach (NPC t in phase.Targets)
+                    {
+                        t.OverrideName(t.Character + " " + Math.Log(i, 2));
+                    }
                 }
                 else
                 {
