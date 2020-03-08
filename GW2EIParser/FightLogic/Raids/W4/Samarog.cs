@@ -82,7 +82,11 @@ namespace GW2EIParser.Logic
                        (int) Rigom,
                        (int) Guldhem
                     };
-                    AddTargetsToPhase(phase, ids, log);
+                    AddTargetsToPhase(phase, ids, log); 
+                    foreach (NPC t in phase.Targets)
+                    {
+                        t.OverrideName(t.Character + " " + Math.Log(i, 2));
+                    }
                 }
                 else
                 {
