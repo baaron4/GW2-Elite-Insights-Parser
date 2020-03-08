@@ -62,6 +62,9 @@ namespace GW2EIParser.Logic
             new HitOnPlayerMechanic(52281, "Swap", new MechanicPlotlySetting("circle-cross-open","rgb(170,0,170)"), "Port","Swap (Ported from below Legendary Creature to Qadim)", "Port to Qadim",0),
             new PlayerBuffApplyMechanic(52035, "Power of the Lamp", new MechanicPlotlySetting("triangle-up","rgb(100,150,255)",10), "Lamp","Power of the Lamp (Returned from the Lamp)", "Lamp Return",0),
             new KilledMechanic(21050, "Pyre Guardian", new MechanicPlotlySetting("bowtie","rgb(255,0,0)"), "Pyre.K","Pyre Killed", "Pyre Killed",0),
+            new KilledMechanic((int)PyreGuardianStab, "Stab Pyre Guardian", new MechanicPlotlySetting("bowtie","rgb(255,0,0)"), "Pyre.S.K","Stab Pyre Killed", "Stab Pyre Killed",0),
+            new KilledMechanic((int)PyreGuardianProtect, "Protect Pyre Guardian", new MechanicPlotlySetting("bowtie","rgb(255,125,0)"), "Pyre.P.K","Protect Pyre Killed", "Protect Pyre Killed",0),
+            new KilledMechanic((int)PyreGuardianRetal, "Retal Pyre Guardian", new MechanicPlotlySetting("bowtie","rgb(255,125,125)"), "Pyre.R.K","Retal Pyre Killed", "Retal Pyre Killed",0),
             });
             Extension = "qadim";
             Icon = "https://wiki.guildwars2.com/images/f/f2/Mini_Qadim.png";
@@ -100,6 +103,43 @@ namespace GW2EIParser.Logic
                 (int)WyvernMatriarch,
                 (int)WyvernPatriarch
             };
+        }
+
+        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        {
+            List<AgentItem> pyres = agentData.GetNPCsByID((int)PyreGuardian);
+            bool refresh = false;
+            foreach (AgentItem pyre in pyres)
+            {
+                CombatItem position = combatData.FirstOrDefault(x => x.SrcAgent == pyre.Agent && x.IsStateChange == ParseEnum.StateChange.Position);
+                if (position != null)
+                {
+                    (float x, float y, _) = AbstractMovementEvent.UnpackMovementData(position.DstAgent, 0);
+                    if ((Math.Abs(x + 8947) < 10 && Math.Abs(y - 14728) < 10) || (Math.Abs(x + 10834) < 10 && Math.Abs(y - 12477) < 10))
+                    {
+                        pyre.OverrideID((int)PyreGuardianProtect);
+                        refresh = true;
+                        pyre.OverrideName(pyre.Name.Insert(0, "Protect "));
+                    }
+                    else if ((Math.Abs(x + 4356) < 10 && Math.Abs(y - 12076) < 10) || (Math.Abs(x + 5889) < 10 && Math.Abs(y - 14723) < 10) ||(Math.Abs(x + 7851) < 10 && Math.Abs(y - 13550) < 10))
+                    {
+                        pyre.OverrideID((int)PyreGuardianStab);
+                        refresh = true;
+                        pyre.OverrideName(pyre.Name.Insert(0, "Stab "));
+                    }
+                    else if ((Math.Abs(x + 8951) < 10 && Math.Abs(y - 9429) < 10)|| (Math.Abs(x + 5716) < 10 && Math.Abs(y - 9325) < 10) || (Math.Abs(x + 7846) < 10 && Math.Abs(y - 10612) < 10))
+                    {
+                        pyre.OverrideID((int)PyreGuardianRetal);
+                        refresh = true;
+                        pyre.OverrideName(pyre.Name.Insert(0, "Retal "));
+                    }
+                }
+            }
+            if (refresh)
+            {
+                agentData.Refresh();
+            }
+            base.EIEvtcParse(fightData, agentData, combatData, playerList);
         }
 
         public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
@@ -152,7 +192,18 @@ namespace GW2EIParser.Logic
                     case 2:
                     case 4:
                     case 6:
-                        var pyresFirstAware = log.AgentData.GetNPCsByID((int)PyreGuardian).Where(x => phase.InInterval(x.FirstAware)).Select(x => x.FirstAware).ToList();
+                        var pyresFirstAware = new List<long>();
+                        var pyres = new List<int>
+                        {
+                            (int) PyreGuardian,
+                            (int) PyreGuardianProtect,
+                            (int) PyreGuardianStab,
+                            (int) PyreGuardianRetal,
+                        };
+                        foreach (int pyreId in pyres)
+                        {
+                            pyresFirstAware.AddRange(log.AgentData.GetNPCsByID(pyreId).Where(x => phase.InInterval(x.FirstAware)).Select(x => x.FirstAware));
+                        }
                         if (pyresFirstAware.Count > 0 && pyresFirstAware.Max() > phase.Start)
                         {
                             phase.OverrideStart(pyresFirstAware.Max());
@@ -187,6 +238,9 @@ namespace GW2EIParser.Logic
                 FireElemental,
                 FireImp,
                 PyreGuardian,
+                PyreGuardianProtect,
+                PyreGuardianRetal,
+                PyreGuardianStab,
                 ReaperofFlesh,
                 DestroyerTroll,
                 IceElemental,

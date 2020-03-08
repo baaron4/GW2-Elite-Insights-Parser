@@ -367,11 +367,11 @@ namespace GW2EIParser
                 case BigKillerTornado:
                     return "https://i.imgur.com/6zNPTUw.png";
                 case PyreGuardianRetal:
-                    return "https://i.imgur.com/zZ2QOQo.png";
+                    return "https://i.imgur.com/WC6LRkO.png";
                 case PyreGuardianStab:
-                    return "https://i.imgur.com/KRdVgGj.png";
+                    return "https://i.imgur.com/ISa0urR.png";
                 case PyreGuardianProtect:
-                    return "https://i.imgur.com/lmfcsFs.png";
+                    return "https://i.imgur.com/jLW7rpV.png";
                 case ReaperofFlesh:
                     return "https://i.imgur.com/Notctbt.png";
                 case Kernan:

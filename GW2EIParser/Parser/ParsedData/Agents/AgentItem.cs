@@ -14,14 +14,14 @@ namespace GW2EIParser.Parser.ParsedData
 
         // Fields
         public ulong Agent { get; }
-        public int ID { get; }
+        public int ID { get; protected set; }
         public string UniqueID { get; }
         public AgentItem Master { get; protected set; }
         public ushort InstID { get; protected set; }
         public AgentType Type { get; protected set; } = AgentType.NPC;
         public long FirstAware { get; protected set; }
         public long LastAware { get; protected set; } = long.MaxValue;
-        public string Name { get; } = "UNKNOWN";
+        public string Name { get; protected set; } = "UNKNOWN";
         public string Prof { get; } = "UNKNOWN";
         public uint Toughness { get; }
         public uint Healing { get; }
@@ -100,6 +100,16 @@ namespace GW2EIParser.Parser.ParsedData
         public void OverrideInstid(ushort instid)
         {
             InstID = instid;
+        }
+
+        public void OverrideID(int id)
+        {
+            ID = id;
+        }
+
+        public void OverrideName(string name)
+        {
+            Name = name;
         }
 
         public void OverrideAwareTimes(long firstAware, long lastAware)
