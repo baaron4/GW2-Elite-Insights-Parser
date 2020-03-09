@@ -743,9 +743,16 @@ namespace GW2EIParser.EIData
                 DamageLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
                 DamageLogsByDst = DamageLogs.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
-            if (target != null && DamageLogsByDst.TryGetValue(target.AgentItem, out List<AbstractDamageEvent> list))
+            if (target != null)
             {
-                return list.Where(x => x.Time >= start && x.Time <= end).ToList();
+                if (DamageLogsByDst.TryGetValue(target.AgentItem, out List<AbstractDamageEvent> list))
+                {
+                    return list.Where(x => x.Time >= start && x.Time <= end).ToList();
+                } 
+                else
+                {
+                    return new List<AbstractDamageEvent>();
+                }
             }
             return DamageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
@@ -758,11 +765,18 @@ namespace GW2EIParser.EIData
                 DamageTakenlogs.AddRange(log.CombatData.GetDamageTakenData(AgentItem));
                 DamageTakenLogsBySrc = DamageTakenlogs.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
-            if (target != null && DamageTakenLogsBySrc.TryGetValue(target.AgentItem, out List<AbstractDamageEvent> list))
+            if (target != null)
             {
-                long targetStart = target.FirstAware;
-                long targetEnd = target.LastAware;
-                return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd).ToList();
+                if (DamageTakenLogsBySrc.TryGetValue(target.AgentItem, out List<AbstractDamageEvent> list))
+                {
+                    long targetStart = target.FirstAware;
+                    long targetEnd = target.LastAware;
+                    return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd).ToList();
+                }
+                else
+                {
+                    return new List<AbstractDamageEvent>();
+                }
             }
             return DamageTakenlogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
