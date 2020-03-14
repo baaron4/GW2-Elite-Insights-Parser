@@ -32,7 +32,7 @@ namespace GW2EIParser.Parser.ParsedData
         private void EIBuffParse(List<Player> players, SkillData skillData, FightData fightData)
         {
             var toAdd = new List<AbstractBuffEvent>();
-            WarriorHelper.AttachMasterToBanners(players, _buffData);
+            WarriorHelper.AttachMasterToBanners(players, _buffData, _castDataById);
             foreach (Player p in players)
             {
                 if (p.Prof == "Weaver")

@@ -9,9 +9,9 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public BuffExtensionEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
-            if (By == GeneralHelper.UnknownAgent)
+            if (InternalBy == GeneralHelper.UnknownAgent)
             {
-                By = null;
+                InternalBy = null;
             }
             _oldValue = evtcItem.OverstackValue - evtcItem.Value;
             _durationChange = evtcItem.Value;
@@ -19,9 +19,9 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public override void TryFindSrc(ParsedLog log)
         {
-            if (By == null)
+            if (InternalBy == null)
             {
-                By = log.Buffs.TryFindSrc(To, Time, _durationChange, log, BuffID);
+                InternalBy = log.Buffs.TryFindSrc(To, Time, _durationChange, log, BuffID);
             }
         }
 

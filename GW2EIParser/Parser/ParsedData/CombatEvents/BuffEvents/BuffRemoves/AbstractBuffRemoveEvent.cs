@@ -7,24 +7,14 @@
         public AbstractBuffRemoveEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, skillData)
         {
             RemovedDuration = evtcItem.Value;
-            By = agentData.GetAgent(evtcItem.DstAgent);
-            if (By.Master != null)
-            {
-                ByMinion = By;
-                By = By.Master;
-            }
+            InternalBy = agentData.GetAgent(evtcItem.DstAgent);
             To = agentData.GetAgent(evtcItem.SrcAgent);
         }
 
         public AbstractBuffRemoveEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill) : base(buffSkill, time)
         {
             RemovedDuration = removedDuration;
-            By = by;
-            if (By.Master != null)
-            {
-                ByMinion = By;
-                By = By.Master;
-            }
+            InternalBy = by;
             To = to;
         }
 

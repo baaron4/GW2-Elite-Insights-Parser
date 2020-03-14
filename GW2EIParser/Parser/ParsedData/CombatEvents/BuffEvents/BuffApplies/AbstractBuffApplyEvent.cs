@@ -8,24 +8,14 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public AbstractBuffApplyEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, skillData)
         {
-            By = agentData.GetAgent(evtcItem.SrcAgent);
-            if (By.Master != null)
-            {
-                ByMinion = By;
-                By = By.Master;
-            }
+            InternalBy = agentData.GetAgent(evtcItem.SrcAgent);
             To = agentData.GetAgent(evtcItem.DstAgent);
             BuffInstance = evtcItem.Pad;
         }
 
         public AbstractBuffApplyEvent(AgentItem by, AgentItem to, long time, SkillItem buffSkill, uint id) : base(buffSkill, time)
         {
-            By = by;
-            if (By.Master != null)
-            {
-                ByMinion = By;
-                By = By.Master;
-            }
+            InternalBy = by;
             To = to;
             BuffInstance = id;
         }
