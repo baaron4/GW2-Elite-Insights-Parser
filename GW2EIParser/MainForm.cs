@@ -366,7 +366,7 @@ namespace GW2EIParser
 
         private void UpdateWatchDirectory()
         {
-            if (Properties.Settings.Default.AutoAdd)
+            if (Properties.Settings.Default.AutoAdd && Directory.Exists(Properties.Settings.Default.AutoAddPath))
             {
                 logFileWatcher.Path = Properties.Settings.Default.AutoAddPath;
                 labWatchingDir.Text = "Watching for log files in " + Properties.Settings.Default.AutoAddPath;
@@ -375,6 +375,7 @@ namespace GW2EIParser
             }
             else
             {
+                Properties.Settings.Default.AutoAdd = false;
                 labWatchingDir.Visible = false;
                 logFileWatcher.EnableRaisingEvents = false;
             }
