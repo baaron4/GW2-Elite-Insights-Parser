@@ -8,28 +8,35 @@ namespace GW2EIParser.EIData
     public class WarriorHelper : ProfHelper
     {
 
-        private static void AttachMasterToBanner(Dictionary<long, List<AbstractCastEvent>> castData, HashSet<AgentItem> banners, long id)
+        private static void AttachMasterToBanner(Dictionary<long, List<AbstractCastEvent>> castData, HashSet<AgentItem> banners, long id, long idUW)
         {
             var possibleCandidates = new HashSet<AgentItem>();
-            if (castData.TryGetValue(id, out List<AbstractCastEvent> bannerCast))
+            var bannerCast = new List<AbstractCastEvent>();
+            if (castData.TryGetValue(id, out List<AbstractCastEvent> list))
             {
-                foreach (AbstractCastEvent castEvent in bannerCast)
+                bannerCast.AddRange(list);
+            }
+            if (castData.TryGetValue(idUW, out list))
+            {
+                bannerCast.AddRange(list);
+            }
+            bannerCast.Sort((x, y) => x.Time.CompareTo(y.Time));
+            foreach (AbstractCastEvent castEvent in bannerCast)
+            {
+                long start = castEvent.Time;
+                long end = start + castEvent.ActualDuration;
+                possibleCandidates.Add(castEvent.Caster);
+                foreach (AgentItem banner in banners)
                 {
-                    long start = castEvent.Time;
-                    long end = start + castEvent.ActualDuration;
-                    possibleCandidates.Add(castEvent.Caster);
-                    foreach (AgentItem banner in banners)
+                    if (banner.FirstAware >= start && banner.FirstAware <= end + 1000)
                     {
-                        if (banner.FirstAware >= start && banner.FirstAware <= end + 1000)
+                        // more than one candidate, put to unknown and drop the search
+                        if (banner.Master != null && banner.Master != castEvent.Caster)
                         {
-                            // more than one candidate, put to unknown and drop the search
-                            if (banner.Master != null)
-                            {
-                                banner.SetMaster(GeneralHelper.UnknownAgent);
-                                break;
-                            }
-                            banner.SetMaster(castEvent.Caster);
+                            banner.SetMaster(GeneralHelper.UnknownAgent);
+                            break;
                         }
+                        banner.SetMaster(castEvent.Caster);
                     }
                 }
             }
@@ -42,7 +49,7 @@ namespace GW2EIParser.EIData
                         banner.SetMaster(possibleCandidates.First());
                     }
                 }
-            } 
+            }
         }
 
         private static HashSet<AgentItem> GetBannerAgents(Dictionary<long, List<AbstractBuffEvent>> buffData, long id)
@@ -74,12 +81,13 @@ namespace GW2EIParser.EIData
                 SetBannerMaster(disBanners, warrior.AgentItem);
                 SetBannerMaster(tacBanners, warrior.AgentItem);
                 SetBannerMaster(defBanners, warrior.AgentItem);
-            } else if (warriors.Count > 1)
+            }
+            else if (warriors.Count > 1)
             {
-                AttachMasterToBanner(castData, strBanners, 14405);
-                AttachMasterToBanner(castData, defBanners, 14528);
-                AttachMasterToBanner(castData, disBanners, 14407);
-                AttachMasterToBanner(castData, tacBanners, 14408);
+                AttachMasterToBanner(castData, strBanners, 14405, 14572);
+                AttachMasterToBanner(castData, defBanners, 14528, 14570);
+                AttachMasterToBanner(castData, disBanners, 14407, 14571);
+                AttachMasterToBanner(castData, tacBanners, 14408, 14573);
             }
         }
 
