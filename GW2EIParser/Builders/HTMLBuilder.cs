@@ -219,7 +219,7 @@ namespace GW2EIParser.Builders
                     for (int i = 0; i < _phases.Count; i++)
                     {
                         Dictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(_log, i, BuffEnum.Self);
-                        foreach (Buff boon in _statistics.PresentPersonalBuffs[player.InstID])
+                        foreach (Buff boon in _statistics.PresentPersonalBuffs[player])
                         {
                             if (boons.TryGetValue(boon.ID, out FinalPlayerBuffs uptime))
                             {

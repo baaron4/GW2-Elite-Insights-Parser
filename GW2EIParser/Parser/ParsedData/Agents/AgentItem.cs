@@ -97,7 +97,7 @@ namespace GW2EIParser.Parser.ParsedData
             Type = type;
         }
 
-        public void OverrideInstid(ushort instid)
+        public void SetInstid(ushort instid)
         {
             InstID = instid;
         }
@@ -173,6 +173,16 @@ namespace GW2EIParser.Parser.ParsedData
                 AbstractStatusEvent cur = status.Last();
                 AddValueToStatusList(dead, down, dc, cur, null, log.FightData.FightEnd, status.Count - 1);
             }
+        }
+
+        public AgentItem GetFinalMaster()
+        {
+            AgentItem cur = this;
+            while (cur.Master != null)
+            {
+                cur = cur.Master;
+            }
+            return cur;
         }
 
         /// <summary>

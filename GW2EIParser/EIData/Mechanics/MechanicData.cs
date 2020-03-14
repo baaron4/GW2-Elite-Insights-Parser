@@ -92,7 +92,7 @@ namespace GW2EIParser.EIData
                 {
                     foreach (AbstractActor p in _mechanicLogs[m].Where(x => phase.InInterval(x.Time)).Select(x => x.Actor).Distinct())
                     {
-                        if (toAdd.FirstOrDefault(x => x.InstID == p.InstID) == null)
+                        if (toAdd.FirstOrDefault(x => x.AgentItem == p.AgentItem) == null)
                         {
                             toAdd.Add(p);
                         }

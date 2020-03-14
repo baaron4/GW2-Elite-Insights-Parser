@@ -53,12 +53,12 @@ namespace GW2EIParser.EIData
             var remainingBuffsByIds = boons.BuffsByNature[BuffNature.GraphOnlyBuff].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
             foreach (Player player in players)
             {
-                PresentPersonalBuffs[player.InstID] = new HashSet<Buff>();
+                PresentPersonalBuffs[player] = new HashSet<Buff>();
                 foreach (AbstractBuffEvent item in combatData.GetBuffDataByDst(player.AgentItem))
                 {
                     if (item is BuffApplyEvent && item.To == player.AgentItem && remainingBuffsByIds.TryGetValue(item.BuffID, out Buff boon))
                     {
-                        PresentPersonalBuffs[player.InstID].Add(boon);
+                        PresentPersonalBuffs[player].Add(boon);
                     }
                 }
             }
@@ -70,7 +70,7 @@ namespace GW2EIParser.EIData
         public List<Buff> PresentConditions { get; } = new List<Buff>();//Used only for Condition tables
         public List<Buff> PresentOffbuffs { get; } = new List<Buff>();//Used only for Off Buff tables
         public List<Buff> PresentDefbuffs { get; } = new List<Buff>();//Used only for Def Buff tables
-        public Dictionary<ushort, HashSet<Buff>> PresentPersonalBuffs { get; } = new Dictionary<ushort, HashSet<Buff>>();
+        public Dictionary<Player, HashSet<Buff>> PresentPersonalBuffs { get; } = new Dictionary<Player, HashSet<Buff>>();
 
         //Positions for group
         private List<Point3D> _stackCenterPositions = null;

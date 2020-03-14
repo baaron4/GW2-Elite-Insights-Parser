@@ -398,7 +398,7 @@ namespace GW2EIParser.Builders
                         }
                         else if (boon.Type == Buff.BuffType.Intensity)
                         {
-                            WriteCell(value.ToString());
+                            WriteCell(value.Uptime.ToString());
                         }
 
                     }
