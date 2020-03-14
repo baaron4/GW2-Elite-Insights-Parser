@@ -52,11 +52,11 @@ namespace GW2EIParser.EIData
             }
         }
 
-        private static HashSet<AgentItem> GetBannerAgents(Dictionary<long, List<AbstractBuffEvent>> buffData, long id)
+        private static HashSet<AgentItem> GetBannerAgents(Dictionary<long, List<AbstractBuffEvent>> buffData, long id, HashSet<AgentItem> playerAgents)
         {
             if (buffData.TryGetValue(id, out List<AbstractBuffEvent> list))
             {
-                return new HashSet<AgentItem>(list.Where(x => x is BuffApplyEvent && x.By.Type == AgentItem.AgentType.Gadget).Select(x => x.By));
+                return new HashSet<AgentItem>(list.Where(x => x is BuffApplyEvent && x.By.Type == AgentItem.AgentType.Gadget && (playerAgents.Contains(x.To) || playerAgents.Contains(x.To.Master))).Select(x => x.By));
             }
             return new HashSet<AgentItem>();
         }
@@ -71,7 +71,11 @@ namespace GW2EIParser.EIData
 
         public static void AttachMasterToBanners(List<Player> players, Dictionary<long, List<AbstractBuffEvent>> buffData, Dictionary<long, List<AbstractCastEvent>> castData)
         {
-            HashSet<AgentItem> strBanners = GetBannerAgents(buffData, 14417), defBanners = GetBannerAgents(buffData, 14543), disBanners = GetBannerAgents(buffData, 14449), tacBanners = GetBannerAgents(buffData, 14450);
+            var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
+            HashSet<AgentItem> strBanners = GetBannerAgents(buffData, 14417, playerAgents), 
+                defBanners = GetBannerAgents(buffData, 14543, playerAgents), 
+                disBanners = GetBannerAgents(buffData, 14449, playerAgents), 
+                tacBanners = GetBannerAgents(buffData, 14450, playerAgents);
             var warriors = players.Where(x => x.Prof == "Warrior" || x.Prof == "Spellbreaker" || x.Prof == "Berserker").ToList();
             // if only one warrior, could only be that one
             if (warriors.Count == 1)
