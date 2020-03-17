@@ -249,9 +249,49 @@ var compileCombatReplay = function () {
     Vue.component("combat-replay-player-status-component", {
         props: ["playerindex", "time"],
         template: `${tmplCombatReplayPlayerStatus}`,
+        methods: {
+            getPercent: function (time) {
+                if (this.healths === null) {
+                    return 100;
+                }
+                var curTime = Math.floor(time / 1000);
+                var nextTime = curTime + 1;
+                var dur = Math.floor(this.phase.end - this.phase.start);
+                if (nextTime == dur + 1 && this.phase.needsLastPoint) {
+                    nextTime = this.phase.end - this.phase.start;
+                }
+                var data = this.healths;
+                var cur = data[curTime];
+                var next = data[curTime + 1];
+                if (typeof next !== "undefined") {
+                    res = cur + (time / 1000 - curTime) * (next - cur) / (nextTime - curTime);
+                } else {
+                    res = cur;
+                }
+                return res;
+            },
+            getGradient: function (time, status) {
+                var color = status === 0 ? 'black' : status === 1 ? 'red' : status === 2 ? 'grey' : 'green';
+                var template = 'linear-gradient(to right, $fill$, $middle$, $black$)';
+                var res = this.getPercent(time);
+                var fillPercent = color + " " + res + "%";
+                var blackPercent = "black " + (100 - res) + "%";
+                var middle = res + "%";
+                template = template.replace('$fill$', fillPercent);
+                template = template.replace('$black$', blackPercent);
+                template = template.replace('$middle$', middle);
+                return template;
+            }
+        },
         computed: {
+            phase: function () {
+                return logData.phases[0];
+            },
             player: function () {
                 return logData.players[this.playerindex];
+            },
+            healths: function () {
+                return graphData.phases[0].playersHealthForCR[this.playerindex];
             },
             status: function () {
                 var crPData = animator.playerData.get(this.player.combatReplayID);

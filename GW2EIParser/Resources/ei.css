@@ -75,7 +75,6 @@
 }
 
 .player-status {
-    background-color: green;
     color: #DDDDDD;
     width: 100px;
 }
@@ -93,18 +92,6 @@ h6.actor-shorten {
     white-space: nowrap;
     text-overflow: ellipsis;
     vertical-align: middle;
-}
-
-.player-status.dead {
-    background-color: black;
-}
-
-.player-status.down {
-    background-color: red;
-}
-
-.player-status.dc {
-    background-color: grey;
 }
 
 .squad-details {
