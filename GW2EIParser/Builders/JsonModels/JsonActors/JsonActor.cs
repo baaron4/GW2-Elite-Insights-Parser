@@ -2,6 +2,7 @@
 using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser.ParsedData;
+using GW2EIParser.Parser.ParsedData.CombatEvents;
 using static GW2EIParser.Builders.JsonModels.JsonStatistics;
 
 namespace GW2EIParser.Builders.JsonModels
@@ -108,6 +109,12 @@ namespace GW2EIParser.Builders.JsonModels
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight
         /// </summary>
         public List<int[]> BoonsStates { get; }
+        /// <summary>
+        /// Array of double[2] that represents the health status of the actor \n
+        /// Value[i][0] will be the time, value[i][1] will be health % \n
+        /// If i corresponds to the last element that means the health did not change for the remainder of the fight \n
+        /// </summary>
+        public List<double[]> HealthPercents { get; }
 
 
         protected JsonActor(AbstractSingleActor actor, ParsedLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
@@ -156,7 +163,12 @@ namespace GW2EIParser.Builders.JsonModels
                 BoonsStates = JsonBuffsUptime.GetBuffStates(actor.GetBuffGraphs(log)[ProfHelper.NumberOfBoonsID]);
                 ConditionsStates = JsonBuffsUptime.GetBuffStates(actor.GetBuffGraphs(log)[ProfHelper.NumberOfConditionsID]);
             }
-            //
+            // Health
+            List<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(actor.AgentItem);
+            if (log.ParserSettings.RawTimelineArrays)
+            {
+                HealthPercents = hpUpdates.Select(x => new double[2] { x.Time, x.HPPercent }).ToList();
+            }
         }
 
         protected static List<JsonDamageDist>[] BuildDamageDistData(AbstractSingleActor actor, NPC target, List<PhaseData> phases, ParsedLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)

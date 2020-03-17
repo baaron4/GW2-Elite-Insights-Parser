@@ -35,12 +35,6 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public int LastAware { get; }
         /// <summary>
-        /// Array of double[2] that represents the health status of the target \n
-        /// Value[i][0] will be the time, value[i][1] will be health % \n
-        /// If i corresponds to the last element that means the health did not change for the remainder of the fight \n
-        /// </summary>
-        public List<double[]> HealthPercents { get; }
-        /// <summary>
         /// List of buff status
         /// </summary>
         /// <seealso cref="JsonBuffsUptime"/>
@@ -51,12 +45,8 @@ namespace GW2EIParser.Builders.JsonModels
             List<PhaseData> phases = log.FightData.GetPhases(log);
             //
             Id = npc.ID;
-            TotalHealth = npc.GetHealth(log.CombatData);
             List<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(npc.AgentItem);
-            if (log.ParserSettings.RawTimelineArrays)
-            {
-                HealthPercents = hpUpdates.Select(x => new double[2] { x.Time, x.HPPercent }).ToList();
-            }
+            TotalHealth = npc.GetHealth(log.CombatData);
             FirstAware = (int)npc.FirstAware;
             LastAware = (int)npc.LastAware;
             double hpLeft = 0.0;
