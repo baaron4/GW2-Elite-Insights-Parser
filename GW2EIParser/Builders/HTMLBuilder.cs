@@ -1020,6 +1020,11 @@ namespace GW2EIParser.Builders
                     {
                         phaseData.TargetsHealthForCR.Add(target.Get1SHealthGraph(_log)[0]);
                     }
+                    phaseData.PlayersHealthForCR = new List<double[]>();
+                    foreach (Player p in _log.PlayerList)
+                    {
+                        phaseData.PlayersHealthForCR.Add(p.Get1SHealthGraph(_log)[0]);
+                    }
                 }
 
                 phaseChartData.Add(phaseData);
