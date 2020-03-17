@@ -251,7 +251,7 @@ var compileCombatReplay = function () {
         template: `${tmplCombatReplayPlayerStatus}`,
         methods: {
             getPercent: function (time) {
-                if (this.healths === null) {
+                if (!this.hasHealth) {
                     return 100;
                 }
                 var curTime = Math.floor(time / 1000);
@@ -298,6 +298,9 @@ var compileCombatReplay = function () {
                 var icon = crPData.getIcon(this.time);
                 return icon === deadIcon ? 0 : icon === downIcon ? 1 : icon === dcIcon ? 2 : 3;
             },
+            hasHealth: function () {
+                return this.healths !== null;
+            }
         }
     });
 

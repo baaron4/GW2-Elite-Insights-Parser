@@ -3,4 +3,7 @@
         <img :src="player.icon" :alt="player.profession" height="18" width="18">
         {{player.name}}
     </h6>
+    <p v-if="hasHealth" class="text-right cr-hp-display cr-hp-display-player">
+        {{(Math.round(100*getPercent(time))/100).toFixed(2)}} %
+    </p>
 </div>

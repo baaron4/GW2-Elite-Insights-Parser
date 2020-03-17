@@ -77,11 +77,27 @@
 .player-status {
     color: #DDDDDD;
     width: 100px;
+    height: 35px;
 }
 
 .target-status {
     color: #DDDDDD;
     width: 250px;
+    height: 35px;
+}
+
+.cr-hp-display {
+    font-size: 0.65rem;
+    position: relative;
+    top: -12px;
+    width: 45px;
+}
+
+.cr-hp-display-player {
+    left: 53%;
+}
+.cr-hp-display-target {
+    left: 82%;
 }
 
 h6.actor-shorten {
@@ -118,14 +134,6 @@ h6.actor-shorten {
     white-space: nowrap;
     text-overflow: ellipsis;
     vertical-align: middle;
-}
-
-.cr-hp-display {
-    font-size: 0.65rem;
-    position: relative;
-    top: -12px;
-    width: 40px;
-    left: 205px;
 }
 
 .theme-slate .player-data.active {
