@@ -1,4 +1,9 @@
-﻿namespace GW2EIParser.EIData
+﻿using System.Collections.Generic;
+using System.Linq;
+using GW2EIParser.Parser.ParsedData;
+using GW2EIParser.Parser.ParsedData.CombatEvents;
+
+namespace GW2EIParser.EIData
 {
     public abstract class ProfHelper
     {
@@ -25,5 +30,57 @@
         public const long WaterDual = 41166;
         public const long AirDual = 42264;
         public const long EarthDual = 44857;
+
+        protected static void AttachMasterToGadgetByCastData(Dictionary<long, List<AbstractCastEvent>> castData, HashSet<AgentItem> gadgets, long id, long idUW, long castEndThreshold)
+        {
+            var possibleCandidates = new HashSet<AgentItem>();
+            var gadgetSpawnCastData = new List<AbstractCastEvent>();
+            if (castData.TryGetValue(id, out List<AbstractCastEvent> list))
+            {
+                gadgetSpawnCastData.AddRange(list);
+            }
+            if (castData.TryGetValue(idUW, out list))
+            {
+                gadgetSpawnCastData.AddRange(list);
+            }
+            gadgetSpawnCastData.Sort((x, y) => x.Time.CompareTo(y.Time));
+            foreach (AbstractCastEvent castEvent in gadgetSpawnCastData)
+            {
+                long start = castEvent.Time;
+                long end = start + castEvent.ActualDuration;
+                possibleCandidates.Add(castEvent.Caster);
+                foreach (AgentItem gadget in gadgets)
+                {
+                    if (gadget.FirstAware >= start && gadget.FirstAware <= end + castEndThreshold)
+                    {
+                        // more than one candidate, put to unknown and drop the search
+                        if (gadget.Master != null && gadget.Master != castEvent.Caster)
+                        {
+                            gadget.SetMaster(GeneralHelper.UnknownAgent);
+                            break;
+                        }
+                        gadget.SetMaster(castEvent.Caster);
+                    }
+                }
+            }
+            if (possibleCandidates.Count == 1)
+            {
+                foreach (AgentItem gadget in gadgets)
+                {
+                    if (gadget.Master == null)
+                    {
+                        gadget.SetMaster(possibleCandidates.First());
+                    }
+                }
+            }
+        }
+
+        protected static void SetGadgetMaster(HashSet<AgentItem> gadgets, AgentItem master)
+        {
+            foreach (AgentItem gadget in gadgets)
+            {
+                gadget.SetMaster(master);
+            }
+        }
     }
 }
