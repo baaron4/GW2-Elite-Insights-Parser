@@ -452,6 +452,10 @@ namespace GW2EIParser
                 //    return "https://i.imgur.com/xV0OPWL.png";
                 case HauntingStatue:
                     return "https://i.imgur.com/7IQDyuK.png";
+                case GreenKnight:
+                case RedKnight:
+                case BlueKnight:
+                    return "https://i.imgur.com/lpBm4d6.png";
             }
             return "https://i.imgur.com/HuJHqRZ.png";
         }
