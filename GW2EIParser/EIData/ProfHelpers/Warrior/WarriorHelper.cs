@@ -62,10 +62,11 @@ namespace GW2EIParser.EIData
             }
             else if (warriors.Count > 1)
             {
-                AttachMasterToGadgetByCastData(castData, strBanners, 14405, 14572, 1000);
-                AttachMasterToGadgetByCastData(castData, defBanners, 14528, 14570, 1000);
-                AttachMasterToGadgetByCastData(castData, disBanners, 14407, 14571, 1000);
-                AttachMasterToGadgetByCastData(castData, tacBanners, 14408, 14573, 1000);
+                // land and under water cast ids
+                AttachMasterToGadgetByCastData(castData, strBanners, new List<long> { 14405, 14572 }, 1000);
+                AttachMasterToGadgetByCastData(castData, defBanners, new List<long> { 14528, 14570 }, 1000);
+                AttachMasterToGadgetByCastData(castData, disBanners, new List<long> { 14407, 14571 }, 1000);
+                AttachMasterToGadgetByCastData(castData, tacBanners, new List<long> { 14408, 14573 }, 1000);
                 //AttachMasterToBanner(castData, battleBanner, 14419, 14569);
             }
         }

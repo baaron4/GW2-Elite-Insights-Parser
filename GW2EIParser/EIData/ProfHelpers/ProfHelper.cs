@@ -31,17 +31,16 @@ namespace GW2EIParser.EIData
         public const long AirDual = 42264;
         public const long EarthDual = 44857;
 
-        protected static void AttachMasterToGadgetByCastData(Dictionary<long, List<AbstractCastEvent>> castData, HashSet<AgentItem> gadgets, long id, long idUW, long castEndThreshold)
+        protected static void AttachMasterToGadgetByCastData(Dictionary<long, List<AbstractCastEvent>> castData, HashSet<AgentItem> gadgets, List<long> ids, long castEndThreshold)
         {
             var possibleCandidates = new HashSet<AgentItem>();
             var gadgetSpawnCastData = new List<AbstractCastEvent>();
-            if (castData.TryGetValue(id, out List<AbstractCastEvent> list))
+            foreach (long id in ids)
             {
-                gadgetSpawnCastData.AddRange(list);
-            }
-            if (castData.TryGetValue(idUW, out list))
-            {
-                gadgetSpawnCastData.AddRange(list);
+                if (castData.TryGetValue(id, out List<AbstractCastEvent> list))
+                {
+                    gadgetSpawnCastData.AddRange(list);
+                }
             }
             gadgetSpawnCastData.Sort((x, y) => x.Time.CompareTo(y.Time));
             foreach (AbstractCastEvent castEvent in gadgetSpawnCastData)
