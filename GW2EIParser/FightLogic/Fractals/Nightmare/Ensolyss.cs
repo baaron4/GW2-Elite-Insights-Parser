@@ -46,7 +46,7 @@ namespace GW2EIParser.Logic
         }
         public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)ParseEnum.TargetIDS.Ensolyss, 762, 5000);
+            return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)ParseEnum.TargetIDS.Ensolyss, 762, 1500);
         }
 
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()

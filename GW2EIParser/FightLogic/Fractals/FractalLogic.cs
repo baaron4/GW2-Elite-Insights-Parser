@@ -52,7 +52,7 @@ namespace GW2EIParser.Logic
             };
         }
 
-        protected static long GetFightOffsetByFirstInvulFilter(FightData fightData, AgentData agentData, List<CombatItem> combatData, int targetID, long invulID, long invulRemoveOffset)
+        protected static long GetFightOffsetByFirstInvulFilter(FightData fightData, AgentData agentData, List<CombatItem> combatData, int targetID, long invulID, long invulGainOffset)
         {
             // Find target
             AgentItem target = agentData.GetNPCsByID(targetID).FirstOrDefault();
@@ -60,11 +60,16 @@ namespace GW2EIParser.Logic
             {
                 throw new InvalidOperationException("Error Encountered: Main target of the fight not found");
             }
-            // enter combat
-            CombatItem invulLost = combatData.FirstOrDefault(x => x.DstAgent == target.Agent && x.IsStateChange == ParseEnum.StateChange.None && x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SkillID == invulID);
-            if (invulLost != null && invulLost.Time - fightData.FightOffset < invulRemoveOffset)
+            CombatItem invulGain = combatData.FirstOrDefault(x => x.DstAgent == target.Agent && (x.IsStateChange == ParseEnum.StateChange.None || x.IsStateChange == ParseEnum.StateChange.BuffInitial) && x.IsBuffRemove == ParseEnum.BuffRemove.None && x.IsBuff > 0 && x.SkillID == invulID);
+            // check invul gain at the start of the fight (initial or with a small threshold)
+            if (invulGain != null && invulGain.Time - fightData.FightOffset < invulGainOffset)
             {
-                fightData.OverrideOffset(invulLost.Time + 1);
+                CombatItem invulLost = combatData.FirstOrDefault(x => x.Time >= invulGain.Time && x.SrcAgent == target.Agent && x.IsStateChange == ParseEnum.StateChange.None && x.IsBuffRemove == ParseEnum.BuffRemove.All && x.SkillID == invulID);
+                // check invul lost, add it as offset
+                if (invulLost != null)
+                {
+                    fightData.OverrideOffset(invulLost.Time + 1);
+                }
             }
             return fightData.FightOffset;
         }

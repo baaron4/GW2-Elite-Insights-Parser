@@ -58,6 +58,10 @@ namespace GW2EIParser.Logic
             }
             phases.AddRange(GetPhasesByInvul(log, 762, mama, true, true));
             string[] namesMAMA = new[] { "Phase 1", "Red Knight", "Phase 2", "Green Knight", "Phase 3", "Blue Knight", "Phase 4" };
+            if (phases.Count - 1 > namesMAMA.Length)
+            {
+                throw new InvalidOperationException("Error Encountered: too many phases on MAMA");
+            }
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
@@ -80,20 +84,28 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
+        protected override List<int> GetFightTargetsIDs()
+        {
+            return new List<int>
+            {
+                (int)ParseEnum.TargetIDS.MAMA,
+                (int)GreenKnight,
+                (int)RedKnight,
+                (int)BlueKnight
+            };
+        }
+
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
             return new List<ParseEnum.TrashIDS>
             {
-                GreenKnight,
-                RedKnight,
-                BlueKnight,
                 TwistedHorror
             };
         }
 
         public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)ParseEnum.TargetIDS.MAMA, 762, 2000);
+            return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)ParseEnum.TargetIDS.MAMA, 762, 1500);
         }
     }
 }
