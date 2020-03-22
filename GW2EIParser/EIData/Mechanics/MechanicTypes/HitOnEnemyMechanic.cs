@@ -37,7 +37,7 @@ namespace GW2EIParser.EIData
                     {
                         foreach (Player p in log.PlayerList)
                         {
-                            if (c.From == p.AgentItem || c.From.Master == p.AgentItem)
+                            if (c.From.GetFinalMaster() == p.AgentItem)
                             {
                                 mechanicLogs[this].Add(new MechanicEvent(c.Time, this, p));
                             }

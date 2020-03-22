@@ -15,7 +15,7 @@ namespace GW2EIParser.EIData
             {
                 if (ba.Time - cloakStart > 10)
                 {
-                    var dodgeLog = new AnimatedCastEvent(ba.Time, skillData.Get(SkillItem.MirageCloakDodgeId), 50, ba.To.Master ?? ba.To);
+                    var dodgeLog = new AnimatedCastEvent(ba.Time, skillData.Get(SkillItem.MirageCloakDodgeId), 50, ba.To.GetFinalMaster());
                     res.Add(dodgeLog);
                     cloakStart = ba.Time;
                 }

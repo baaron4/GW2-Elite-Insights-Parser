@@ -63,7 +63,7 @@ namespace GW2EIParser.EIData
             if (_minions == null)
             {
                 _minions = new Dictionary<long, Minions>();
-                var combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.Master == AgentItem).ToList();
+                var combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.GetFinalMaster() == AgentItem).ToList();
                 var auxMinions = new Dictionary<long, Minions>();
                 foreach (AgentItem agent in combatMinion)
                 {

@@ -24,7 +24,7 @@ namespace GW2EIParser.EIData
                             continue;
                         }
                         // discard removals done on actor's minion
-                        if (brae.To.Master != null && brae.To.Master == actor.AgentItem)
+                        if (brae.To.Master != null && brae.To.GetFinalMaster() == actor.AgentItem)
                         {
                             continue;
                         }
