@@ -53,12 +53,12 @@ namespace GW2EIParser.EIData
                     if (gadget.FirstAware >= start && gadget.FirstAware <= end + castEndThreshold)
                     {
                         // more than one candidate, put to unknown and drop the search
-                        if (gadget.Master != null && gadget.GetFinalMaster() != castEvent.Caster)
+                        if (gadget.Master != null && gadget.GetFinalMaster() != castEvent.Caster.GetFinalMaster())
                         {
                             gadget.SetMaster(GeneralHelper.UnknownAgent);
                             break;
                         }
-                        gadget.SetMaster(castEvent.Caster);
+                        gadget.SetMaster(castEvent.Caster.GetFinalMaster());
                     }
                 }
             }
@@ -68,7 +68,7 @@ namespace GW2EIParser.EIData
                 {
                     if (gadget.Master == null)
                     {
-                        gadget.SetMaster(possibleCandidates.First());
+                        gadget.SetMaster(possibleCandidates.First().GetFinalMaster());
                     }
                 }
             }

@@ -85,7 +85,7 @@ namespace GW2EIParser.EIData
                         _minions[pair.Value.AgentItem.UniqueID.GetHashCode()] = pair.Value;
                     }
                 }
-                // gadget, string base
+                // gadget, string based
                 var combatGadgetMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Master != null && x.GetFinalMaster() == AgentItem).ToList();
                 var auxGadgetMinions = new Dictionary<string, Minions>();
                 foreach (AgentItem agent in combatGadgetMinion)
