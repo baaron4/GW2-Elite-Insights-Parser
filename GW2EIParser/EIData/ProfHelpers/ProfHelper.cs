@@ -105,9 +105,9 @@ namespace GW2EIParser.EIData
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
             // Sylvari stuff
             HashSet<AgentItem> seedTurrets = GetOffensiveGadgetAgents(damageData, 12455, playerAgents);
-            HashSet<AgentItem> bindingRoots = GetOffensiveGadgetAgents(damageData, 12455, playerAgents);
+            HashSet<AgentItem> graspingWines = GetOffensiveGadgetAgents(damageData, 12455, playerAgents);
             AttachMasterToGadgetByCastData(castData, seedTurrets, new List<long> { 12456, 12457 }, 1000);
-            AttachMasterToGadgetByCastData(castData, bindingRoots, new List<long> { 12453 }, 1000);
+            AttachMasterToGadgetByCastData(castData, graspingWines, new List<long> { 12453 }, 1000);
         }
     }
 }
