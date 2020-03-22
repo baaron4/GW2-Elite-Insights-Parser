@@ -74,12 +74,40 @@ namespace GW2EIParser.EIData
             }
         }
 
+        protected static HashSet<AgentItem> GetOffensiveGadgetAgents(Dictionary<long, List<AbstractDamageEvent>> damageData, long id, HashSet<AgentItem> playerAgents)
+        {
+            var res = new HashSet<AgentItem>();
+            if (damageData.TryGetValue(id, out List<AbstractDamageEvent> list))
+            {
+                foreach (AbstractDamageEvent evt in list)
+                {
+                    if (!playerAgents.Contains(evt.To.GetFinalMaster()) && evt.From.Type == AgentItem.AgentType.Gadget && evt.From.Master == null)
+                    {
+                        res.Add(evt.From);
+                    }
+                }
+            }
+            return res;
+        }
+
         protected static void SetGadgetMaster(HashSet<AgentItem> gadgets, AgentItem master)
         {
             foreach (AgentItem gadget in gadgets)
             {
                 gadget.SetMaster(master);
             }
+        }
+
+        //
+
+        public static void AttachMasterToRacialGadgets(List<Player> players, Dictionary<long, List<AbstractDamageEvent>> damageData, Dictionary<long, List<AbstractCastEvent>> castData)
+        {
+            var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
+            // Sylvari stuff
+            HashSet<AgentItem> seedTurrets = GetOffensiveGadgetAgents(damageData, 12455, playerAgents);
+            HashSet<AgentItem> bindingRoots = GetOffensiveGadgetAgents(damageData, 12455, playerAgents);
+            AttachMasterToGadgetByCastData(castData, seedTurrets, new List<long> { 12456, 12457 }, 1000);
+            AttachMasterToGadgetByCastData(castData, bindingRoots, new List<long> { 12453 }, 1000);
         }
     }
 }

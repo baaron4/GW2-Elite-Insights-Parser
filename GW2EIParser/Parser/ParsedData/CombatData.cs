@@ -32,7 +32,6 @@ namespace GW2EIParser.Parser.ParsedData
         private void EIBuffParse(List<Player> players, SkillData skillData, FightData fightData)
         {
             var toAdd = new List<AbstractBuffEvent>();
-            WarriorHelper.AttachMasterToBanners(players, _buffData, _castDataById);
             foreach (Player p in players)
             {
                 if (p.Prof == "Weaver")
@@ -238,12 +237,16 @@ namespace GW2EIParser.Parser.ParsedData
             }
         }
 
-        private void EIExtraEvents(List<Player> players, SkillData skillData, FightData fightData)
+        private void EIExtraEventProcess(List<Player> players, SkillData skillData, FightData fightData)
         {
             EIBuffParse(players, skillData, fightData);
             EIDamageParse(skillData, fightData);
             EICastParse(players, skillData);
             EIStatusParse();
+            // master attachements
+            WarriorHelper.AttachMasterToWarriorBanners(players, _buffData, _castDataById);
+            EngineerHelper.AttachMasterToEngineerTurrets(players, _damageDataById, _castDataById);
+            ProfHelper.AttachMasterToRacialGadgets(players, _damageDataById, _castDataById);
         }
 
         public CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players)
@@ -287,7 +290,7 @@ namespace GW2EIParser.Parser.ParsedData
             healing_received_data = allCombatItems.Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                             ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
                                                 (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
-            EIExtraEvents(players, skillData, fightData);
+            EIExtraEventProcess(players, skillData, fightData);
             _buffRemoveAllData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffRemoveAllEvent>().ToList());
         }
 

@@ -12,7 +12,7 @@ namespace GW2EIParser.EIData
         {
             if (buffData.TryGetValue(id, out List<AbstractBuffEvent> list))
             {
-                return new HashSet<AgentItem>(list.Where(x => x is BuffApplyEvent && x.By.Type == AgentItem.AgentType.Gadget && playerAgents.Contains(x.To.GetFinalMaster())).Select(x => x.By));
+                return new HashSet<AgentItem>(list.Where(x => x is BuffApplyEvent && x.By.Type == AgentItem.AgentType.Gadget && x.By.Master == null && playerAgents.Contains(x.To.GetFinalMaster())).Select(x => x.By));
             }
             return new HashSet<AgentItem>();
         }
@@ -41,7 +41,7 @@ namespace GW2EIParser.EIData
             return new HashSet<AgentItem>();
         }*/
 
-        public static void AttachMasterToBanners(List<Player> players, Dictionary<long, List<AbstractBuffEvent>> buffData, Dictionary<long, List<AbstractCastEvent>> castData)
+        public static void AttachMasterToWarriorBanners(List<Player> players, Dictionary<long, List<AbstractBuffEvent>> buffData, Dictionary<long, List<AbstractCastEvent>> castData)
         {
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
             HashSet<AgentItem> strBanners = GetBannerAgents(buffData, 14417, playerAgents),
