@@ -28,6 +28,9 @@ namespace GW2EIParser.EIData
 
             HashSet<AgentItem> harpoonTurrets = GetOffensiveGadgetAgents(damageData, -1, playerAgents);
 
+            HashSet<AgentItem> healingTurrets = GetOffensiveGadgetAgents(damageData, 5958, playerAgents);
+            healingTurrets.RemoveWhere(x => thumperTurrets.Contains(x) || rocketTurrets.Contains(x) || netTurrets.Contains(x) || rifleTurrets.Contains(x) || flameTurrets.Contains(x));
+
             var engineers = players.Where(x => x.Prof == "Engineer" || x.Prof == "Scrapper" || x.Prof == "Holosmith").ToList();
             // if only one engineer, could only be that one
             if (engineers.Count == 1)
@@ -39,6 +42,7 @@ namespace GW2EIParser.EIData
                 SetGadgetMaster(rifleTurrets, engineer.AgentItem);
                 SetGadgetMaster(thumperTurrets, engineer.AgentItem);
                 SetGadgetMaster(harpoonTurrets, engineer.AgentItem);
+                SetGadgetMaster(healingTurrets, engineer.AgentItem);
             }
             else if (engineers.Count > 1)
             {
@@ -48,8 +52,7 @@ namespace GW2EIParser.EIData
                 AttachMasterToGadgetByCastData(castData, rocketTurrets, new List<long> { 5912, 22574, 6183 }, 1000);
                 AttachMasterToGadgetByCastData(castData, thumperTurrets, new List<long> { 5838 }, 1000);
                 AttachMasterToGadgetByCastData(castData, harpoonTurrets, new List<long> { 6093, 6183 }, 1000);
-                // healing turrets will be hard to detect
-                //AttachMasterToGadgetByCastData(castData, healingTurrets, new List<long> { 5857, 5868 }, 1000);
+                AttachMasterToGadgetByCastData(castData, healingTurrets, new List<long> { 5857, 5868 }, 1000);
             }
         }
 
