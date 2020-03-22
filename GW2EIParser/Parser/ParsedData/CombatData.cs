@@ -246,6 +246,7 @@ namespace GW2EIParser.Parser.ParsedData
             // master attachements
             WarriorHelper.AttachMasterToWarriorBanners(players, _buffData, _castDataById);
             EngineerHelper.AttachMasterToEngineerTurrets(players, _damageDataById, _castDataById);
+            RangerHelper.AttachMasterToRangerGadgets(players, _damageDataById, _castDataById);
             ProfHelper.AttachMasterToRacialGadgets(players, _damageDataById, _castDataById);
         }
 

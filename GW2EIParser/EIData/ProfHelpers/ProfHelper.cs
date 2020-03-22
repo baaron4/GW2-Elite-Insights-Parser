@@ -108,6 +108,7 @@ namespace GW2EIParser.EIData
             HashSet<AgentItem> graspingWines = GetOffensiveGadgetAgents(damageData, 1290, playerAgents);
             AttachMasterToGadgetByCastData(castData, seedTurrets, new List<long> { 12456, 12457 }, 1000);
             AttachMasterToGadgetByCastData(castData, graspingWines, new List<long> { 12453 }, 1000);
+            // melandru avatar works fine already
         }
     }
 }
