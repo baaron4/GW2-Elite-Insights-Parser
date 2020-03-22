@@ -63,8 +63,8 @@ namespace GW2EIParser.EIData
             if (_minions == null)
             {
                 _minions = new Dictionary<long, Minions>();
+                // npcs, species id based
                 var combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.Master != null && x.GetFinalMaster() == AgentItem).ToList();
-                combatMinion.AddRange(log.AgentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Master != null && x.GetFinalMaster() == AgentItem));
                 var auxMinions = new Dictionary<long, Minions>();
                 foreach (AgentItem agent in combatMinion)
                 {
@@ -82,7 +82,29 @@ namespace GW2EIParser.EIData
                 {
                     if (pair.Value.GetDamageLogs(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastLogs(log, 0, log.FightData.FightEnd).Count > 0)
                     {
-                        _minions[pair.Key] = pair.Value;
+                        _minions[pair.Value.AgentItem.UniqueID.GetHashCode()] = pair.Value;
+                    }
+                }
+                // gadget, string base
+                var combatGadgetMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Master != null && x.GetFinalMaster() == AgentItem).ToList();
+                var auxGadgetMinions = new Dictionary<string, Minions>();
+                foreach (AgentItem agent in combatGadgetMinion)
+                {
+                    string id = agent.Name;
+                    if (auxGadgetMinions.TryGetValue(id, out Minions values))
+                    {
+                        values.AddMinion(new NPC(agent));
+                    }
+                    else
+                    {
+                        auxGadgetMinions[id] = new Minions(this, new NPC(agent));
+                    }
+                }
+                foreach (KeyValuePair<string, Minions> pair in auxGadgetMinions)
+                {
+                    if (pair.Value.GetDamageLogs(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastLogs(log, 0, log.FightData.FightEnd).Count > 0)
+                    {
+                        _minions[pair.Value.AgentItem.UniqueID.GetHashCode()] = pair.Value;
                     }
                 }
             }

@@ -53,7 +53,7 @@ namespace GW2EIParser.EIData
                     if (gadget.FirstAware >= start && gadget.FirstAware <= end + castEndThreshold)
                     {
                         // more than one candidate, put to unknown and drop the search
-                        if (gadget.Master != null && gadget.Master != castEvent.Caster)
+                        if (gadget.Master != null && gadget.GetFinalMaster() != castEvent.Caster)
                         {
                             gadget.SetMaster(GeneralHelper.UnknownAgent);
                             break;
