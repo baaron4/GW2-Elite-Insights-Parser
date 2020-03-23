@@ -356,6 +356,7 @@ namespace GW2EIParser.EIData
                 new Buff("Soothing Bastion",34136, BuffSource.Revenant, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/0/04/Soothing_Bastion.png"),
                 new Buff("Kalla's Fervor",42883, BuffSource.Revenant, BuffType.Intensity, 5, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/9e/Kalla%27s_Fervor.png"),
                 new Buff("Improved Kalla's Fervor",45614, BuffSource.Revenant, BuffType.Intensity, 5, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/9e/Kalla%27s_Fervor.png"),
+                new Buff("Battle Scars", 26646, BuffSource.Revenant, BuffType.Intensity, 25, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/30/Thrill_of_Combat.png", 102321, ulong.MaxValue),
         };
 
         private static readonly List<Buff> _warrior = new List<Buff>
