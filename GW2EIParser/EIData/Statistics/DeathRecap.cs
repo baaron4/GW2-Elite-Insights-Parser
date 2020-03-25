@@ -16,12 +16,13 @@ namespace GW2EIParser.EIData
             public int Time { get; set; }
         }
 
-        public int DeathTime { get; set; }
-        public List<DeathRecapDamageItem> ToDown { get; set; }
-        public List<DeathRecapDamageItem> ToKill { get; set; }
+        public long DeathTime { get;}
+        public List<DeathRecapDamageItem> ToDown { get; }
+        public List<DeathRecapDamageItem> ToKill { get; }
 
         public DeathRecap(List<AbstractDamageEvent> damageLogs, DeadEvent dead, List<DownEvent> downs, long lastDeathTime)
         {
+            DeathTime = dead.Time;
             DownEvent downed = downs.LastOrDefault(x => x.Time <= dead.Time && x.Time >= lastDeathTime);
             if (downed != null)
             {

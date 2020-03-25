@@ -50,7 +50,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// Time of death
         /// </summary>
-        public int DeathTime { get; }
+        public long DeathTime { get; }
         /// <summary>
         /// List of damaging events to put into downstate
         /// </summary>
