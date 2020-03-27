@@ -707,8 +707,8 @@ namespace GW2EIParser.Builders
         {
             html = html.Replace("${bootstrapTheme}", !_light ? "slate" : "yeti");
 
-            html = html.Replace("${encounterStart}", _log.LogData.LogStart);
-            html = html.Replace("${encounterEnd}", _log.LogData.LogEnd);
+            html = html.Replace("${encounterStart}", _log.LogData.LogStartStd);
+            html = html.Replace("${encounterEnd}", _log.LogData.LogEndStd);
             html = html.Replace("${evtcVersion}", _log.LogData.BuildVersion);
             html = html.Replace("${gw2build}", _log.LogData.GW2Version.ToString());
             html = html.Replace("${fightID}", _log.FightData.TriggerID.ToString());

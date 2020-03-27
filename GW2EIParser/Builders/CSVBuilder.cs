@@ -67,8 +67,8 @@ namespace GW2EIParser.Builders
             WriteLine(new[] { "ARC Version", _log.LogData.BuildVersion });
             WriteLine(new[] { "Fight ID", _log.FightData.TriggerID.ToString() });
             WriteLine(new[] { "Recorded By", _log.LogData.PoVName });
-            WriteLine(new[] { "Time Start", _log.LogData.LogStart });
-            WriteLine(new[] { "Time End", _log.LogData.LogEnd });
+            WriteLine(new[] { "Time Start", _log.LogData.LogStartStd });
+            WriteLine(new[] { "Time End", _log.LogData.LogEndStd });
             if (_uploadResult.Any(x => x != null && x.Length > 0))
             {
                 WriteLine(new[] { "Links", _uploadResult[0], _uploadResult[1], _uploadResult[2] });

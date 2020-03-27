@@ -15,15 +15,16 @@ namespace GW2EIParser.Parser.ParsedData
         public AgentItem PoV { get; private set; } = null;
         public string PoVName { get; private set; } = "N/A";
         private readonly string _dateFormat = "yyyy-MM-dd HH:mm:ss zz";
-        public string LogStart { get; private set; }
-        public string LogEnd { get; private set; }
+        private readonly string _dateFormatStd = "yyyy-MM-dd HH:mm:ss zzz";
+        public string LogStart { get; private set; } = DefaultTimeValue;
+        public string LogEnd { get; private set; } = DefaultTimeValue;
+        public string LogStartStd { get; private set; } = DefaultTimeValue;
+        public string LogEndStd { get; private set; } = DefaultTimeValue;
 
         // Constructors
         public LogData(string buildVersion, CombatData combatData, long evtcLogDuration)
         {
             BuildVersion = buildVersion;
-            LogStart = DefaultTimeValue;
-            LogEnd = DefaultTimeValue;
             double unixStart = 0;
             double unixEnd = 0;
             foreach (PointOfViewEvent povEvt in combatData.GetPointOfViewEvents())
@@ -42,11 +43,13 @@ namespace GW2EIParser.Parser.ParsedData
             foreach (LogStartEvent logStr in combatData.GetLogStartEvents())
             {
                 SetLogStart(logStr.LocalUnixTimeStamp);
+                SetLogStartStd(logStr.LocalUnixTimeStamp);
                 unixStart = logStr.LocalUnixTimeStamp;
             }
             foreach (LogEndEvent logEnd in combatData.GetLogEndEvents())
             {
                 SetLogEnd(logEnd.LocalUnixTimeStamp);
+                SetLogEndStd(logEnd.LocalUnixTimeStamp);
                 unixEnd = logEnd.LocalUnixTimeStamp;
             }
             // log end event is missing, log start is present
@@ -54,12 +57,14 @@ namespace GW2EIParser.Parser.ParsedData
             {
                 double dur = Math.Round(evtcLogDuration / 1000.0, 3);
                 SetLogEnd(dur + unixStart);
+                SetLogEndStd(dur + unixStart);
             }
             // log start event is missing, log end is present
             if (LogEnd != DefaultTimeValue && LogStart == DefaultTimeValue)
             {
                 double dur = Math.Round(evtcLogDuration / 1000.0, 3);
                 SetLogStart(unixEnd - dur);
+                SetLogStartStd(unixEnd - dur);
             }
         }
 
@@ -84,6 +89,13 @@ namespace GW2EIParser.Parser.ParsedData
             return dtDateTime.ToString(_dateFormat);
         }
 
+        private string GetDateTimeStd(double unixSeconds)
+        {
+            var dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(unixSeconds).ToLocalTime();
+            return dtDateTime.ToString(_dateFormatStd);
+        }
+
         private void SetLogStart(double unixSeconds)
         {
             LogStart = GetDateTime(unixSeconds);
@@ -92,6 +104,16 @@ namespace GW2EIParser.Parser.ParsedData
         private void SetLogEnd(double unixSeconds)
         {
             LogEnd = GetDateTime(unixSeconds);
+        }
+
+        private void SetLogStartStd(double unixSeconds)
+        {
+            LogStartStd = GetDateTimeStd(unixSeconds);
+        }
+
+        private void SetLogEndStd(double unixSeconds)
+        {
+            LogEndStd = GetDateTimeStd(unixSeconds);
         }
     }
 }

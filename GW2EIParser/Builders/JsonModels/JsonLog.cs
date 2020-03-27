@@ -139,15 +139,28 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public string RecordedBy { get; }
         /// <summary>
+        /// DEPRECATED: use TimeStartStd instead \n
         /// The time at which the fight started in "yyyy-mm-dd hh:mm:ss zz" format \n
         /// The value will be <see cref="LogData.DefaultTimeValue"/> if the event does not exist
         /// </summary>
         public string TimeStart { get; }
         /// <summary>
+        /// DEPRECATED: use TimeEndStd instead \n
         /// The time at which the fight ended in "yyyy-mm-dd hh:mm:ss zz" format \n
         /// The value will be <see cref="LogData.DefaultTimeValue"/> if the event does not exist
         /// </summary>
         public string TimeEnd { get; }
+
+        /// <summary>
+        /// The time at which the fight started in "yyyy-mm-dd hh:mm:ss zzz" format \n
+        /// The value will be <see cref="LogData.DefaultTimeValue"/> if the event does not exist
+        /// </summary>
+        public string TimeStartStd { get; }
+        /// <summary>
+        /// The time at which the fight ended in "yyyy-mm-dd hh:mm:ss zzz" format \n
+        /// The value will be <see cref="LogData.DefaultTimeValue"/> if the event does not exist
+        /// </summary>
+        public string TimeEndStd { get; }
         /// <summary>
         /// The duration of the fight in "xh xm xs xms" format
         /// </summary>
@@ -211,6 +224,8 @@ namespace GW2EIParser.Builders.JsonModels
             RecordedBy = log.LogData.PoVName;
             TimeStart = log.LogData.LogStart;
             TimeEnd = log.LogData.LogEnd;
+            TimeStartStd = log.LogData.LogStartStd;
+            TimeEndStd = log.LogData.LogEndStd;
             Duration = log.FightData.DurationString;
             Success = log.FightData.Success;
             Gw2Build = log.LogData.GW2Version;
