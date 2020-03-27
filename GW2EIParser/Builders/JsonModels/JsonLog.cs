@@ -125,7 +125,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// GW2 build
         /// </summary>
-        public ulong GW2Build { get; }
+        public ulong Gw2Build { get; }
         /// <summary>
         /// Language with which the evtc was generated
         /// </summary>
@@ -213,7 +213,7 @@ namespace GW2EIParser.Builders.JsonModels
             TimeEnd = log.LogData.LogEnd;
             Duration = log.FightData.DurationString;
             Success = log.FightData.Success;
-            GW2Build = log.LogData.GW2Version;
+            Gw2Build = log.LogData.GW2Version;
             UploadLinks = uploadLinks;
             Language = log.LogData.Language;
             LanguageID = (byte)log.LogData.LanguageID;
