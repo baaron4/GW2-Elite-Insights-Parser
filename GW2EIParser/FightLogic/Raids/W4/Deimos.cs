@@ -71,9 +71,16 @@ namespace GW2EIParser.Logic
             };
             foreach (CombatItem c in combatData)
             {
-                if (gadgetAgents.Contains(c.SrcAgent) && c.IsStateChange == ParseEnum.StateChange.MaxHealthUpdate)
+                if (gadgetAgents.Contains(c.SrcAgent))
                 {
-                    continue;
+                    if (c.IsStateChange == ParseEnum.StateChange.MaxHealthUpdate)
+                    {
+                        continue;
+                    }
+                    if (c.IsStateChange == ParseEnum.StateChange.HealthUpdate && c.DstAgent > 1500)
+                    {
+                        continue;
+                    }
                 }
                 if (allAgents.Contains(c.SrcAgent) && c.IsStateChange.SrcIsAgent())
                 {
@@ -477,7 +484,12 @@ namespace GW2EIParser.Logic
             {
                 throw new InvalidOperationException("Error Encountered: Deimos not found");
             }
-            return (target.GetHealth(combatData) > 40e6) ? 1 : 0;
+            int res = (target.GetHealth(combatData) > 40e6) ? 1 : 0;
+            if (_specialSplit > 0)
+            {
+                target.SetManualHealth(res > 0 ? 42804900 : 37388210);
+            }
+            return res;
         }
     }
 }
