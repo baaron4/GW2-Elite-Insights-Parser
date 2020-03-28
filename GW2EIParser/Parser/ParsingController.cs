@@ -472,10 +472,10 @@ namespace GW2EIParser.Parser
         private void FindAgentMaster(long logTime, ushort masterInstid, ulong minionAgent)
         {
             AgentItem master = _agentData.GetAgentByInstID(masterInstid, logTime);
-            if (master != null)
+            if (master != GeneralHelper.UnknownAgent)
             {
                 AgentItem minion = _agentData.GetAgent(minionAgent);
-                if (minion != GeneralHelper.UnknownAgent) 
+                if (minion != GeneralHelper.UnknownAgent && minion.Master == null) 
                 {
                     if (minion.FirstAware <= logTime && logTime <= minion.LastAware)
                     {
