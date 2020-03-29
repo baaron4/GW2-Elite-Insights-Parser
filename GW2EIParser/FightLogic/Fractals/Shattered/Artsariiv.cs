@@ -47,6 +47,11 @@ namespace GW2EIParser.Logic
             };
         }
 
+        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            return 2;
+        }
+
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             SetSuccessByBuffCount(combatData, fightData, playerAgents, Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Artsariiv), 762, 4);

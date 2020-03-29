@@ -44,6 +44,11 @@ namespace GW2EIParser.Logic
             };
         }
 
+        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            return 2;
+        }
+
         public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)ParseEnum.TargetIDS.Siax, 762, 1500);

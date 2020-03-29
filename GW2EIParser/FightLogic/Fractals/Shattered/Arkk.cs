@@ -74,6 +74,11 @@ namespace GW2EIParser.Logic
             };
         }
 
+        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            return 2;
+        }
+
         protected override List<int> GetFightTargetsIDs()
         {
             return new List<int>

@@ -72,7 +72,8 @@ namespace GW2EIParser.Builders
                 var pChar = new PlayerChartDataDto()
                 {
                     Total = p.Get1SDamageList(_log, phaseIndex, phase, null),
-                    Targets = new List<List<int>>()
+                    Targets = new List<List<int>>(),
+                    Health = p.Get1SHealthGraph(_log)[phaseIndex]
                 };
                 foreach (NPC target in phase.Targets)
                 {
@@ -1019,11 +1020,6 @@ namespace GW2EIParser.Builders
                     foreach (NPC target in _log.FightData.Logic.Targets)
                     {
                         phaseData.TargetsHealthForCR.Add(target.Get1SHealthGraph(_log)[0]);
-                    }
-                    phaseData.PlayersHealthForCR = new List<double[]>();
-                    foreach (Player p in _log.PlayerList)
-                    {
-                        phaseData.PlayersHealthForCR.Add(p.Get1SHealthGraph(_log)[0]);
                     }
                 }
 

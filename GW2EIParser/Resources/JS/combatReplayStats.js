@@ -291,7 +291,7 @@ var compileCombatReplay = function () {
                 return logData.players[this.playerindex];
             },
             healths: function () {
-                return graphData.phases[0].playersHealthForCR[this.playerindex];
+                return graphData.phases[0].players[this.playerindex].health;
             },
             status: function () {
                 var crPData = animator.playerData.get(this.player.combatReplayID);
@@ -299,7 +299,7 @@ var compileCombatReplay = function () {
                 return icon === deadIcon ? 0 : icon === downIcon ? 1 : icon === dcIcon ? 2 : 3;
             },
             hasHealth: function () {
-                return this.healths !== null;
+                return !!this.healths;
             }
         }
     });

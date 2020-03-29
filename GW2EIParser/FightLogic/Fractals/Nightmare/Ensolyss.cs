@@ -49,6 +49,11 @@ namespace GW2EIParser.Logic
             return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)ParseEnum.TargetIDS.Ensolyss, 762, 1500);
         }
 
+        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            return 2;
+        }
+
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
             return new List<ParseEnum.TrashIDS>

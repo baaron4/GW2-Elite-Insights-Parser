@@ -30,7 +30,7 @@ namespace GW2EIParser.Parser.ParsedData
         public bool Success { get; private set; }
         public string Name => Logic.GetFightName() + (_isCM == 1 ? " CM" : "");
         private int _isCM = -1;
-        public bool IsCM => _isCM == 1;
+        public bool IsCM => _isCM >= 1;
         // Constructors
         public FightData(int id, AgentData agentData, long start, long end)
         {

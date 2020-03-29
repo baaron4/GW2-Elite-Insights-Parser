@@ -43,6 +43,11 @@ namespace GW2EIParser.Logic
                             (11804, 4414, 12444, 5054));
         }
 
+        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            return 2;
+        }
+
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);

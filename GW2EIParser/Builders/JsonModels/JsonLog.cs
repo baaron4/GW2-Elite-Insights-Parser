@@ -170,6 +170,10 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public bool Success { get; }
         /// <summary>
+        /// If the fight is in challenge mode
+        /// </summary>
+        public bool IsCM { get; }
+        /// <summary>
         /// The list of targets
         /// </summary>
         /// <seealso cref="JsonNPC"/>
@@ -232,6 +236,7 @@ namespace GW2EIParser.Builders.JsonModels
             UploadLinks = uploadLinks;
             Language = log.LogData.Language;
             LanguageID = (byte)log.LogData.LanguageID;
+            IsCM = log.FightData.IsCM;
             //
             MechanicData mechanicData = log.MechanicData;
             var mechanicLogs = new List<MechanicEvent>();
