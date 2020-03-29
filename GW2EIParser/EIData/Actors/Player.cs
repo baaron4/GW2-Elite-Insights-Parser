@@ -312,11 +312,12 @@ namespace GW2EIParser.EIData
             List<DeathRecap> res = _deathRecaps;
             List<DeadEvent> deads = log.CombatData.GetDeadEvents(AgentItem);
             List<DownEvent> downs = log.CombatData.GetDownEvents(AgentItem);
+            List<AliveEvent> ups = log.CombatData.GetAliveEvents(AgentItem);
             long lastDeathTime = 0;
             List<AbstractDamageEvent> damageLogs = GetDamageTakenLogs(null, log, 0, log.FightData.FightEnd);
             foreach (DeadEvent dead in deads)
             {
-                res.Add(new DeathRecap(damageLogs, dead, downs, lastDeathTime));
+                res.Add(new DeathRecap(damageLogs, dead, downs, ups, lastDeathTime));
                 lastDeathTime = dead.Time;
             }
         }

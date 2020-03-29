@@ -20,10 +20,19 @@ namespace GW2EIParser.EIData
         public List<DeathRecapDamageItem> ToDown { get; }
         public List<DeathRecapDamageItem> ToKill { get; }
 
-        public DeathRecap(List<AbstractDamageEvent> damageLogs, DeadEvent dead, List<DownEvent> downs, long lastDeathTime)
+        public DeathRecap(List<AbstractDamageEvent> damageLogs, DeadEvent dead, List<DownEvent> downs, List<AliveEvent> ups, long lastDeathTime)
         {
             DeathTime = dead.Time;
-            DownEvent downed = downs.LastOrDefault(x => x.Time <= dead.Time && x.Time >= lastDeathTime);
+            DownEvent downed;
+            AliveEvent upped = ups.LastOrDefault(x => x.Time <= dead.Time && x.Time >= lastDeathTime);
+            if (upped != null)
+            {
+                downed = downs.LastOrDefault(x => x.Time <= dead.Time && x.Time >= upped.Time);
+            } 
+            else
+            {
+                downed = downs.LastOrDefault(x => x.Time <= dead.Time && x.Time >= lastDeathTime);
+            }
             if (downed != null)
             {
                 var damageToDown = damageLogs.Where(x => x.Time <= downed.Time && (x.HasHit || x.HasDowned) && x.Time > lastDeathTime).ToList();
