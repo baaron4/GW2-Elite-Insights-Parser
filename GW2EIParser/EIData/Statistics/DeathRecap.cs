@@ -16,7 +16,7 @@ namespace GW2EIParser.EIData
             public int Time { get; set; }
         }
 
-        public long DeathTime { get;}
+        public long DeathTime { get; }
         public List<DeathRecapDamageItem> ToDown { get; }
         public List<DeathRecapDamageItem> ToKill { get; }
 
@@ -28,14 +28,14 @@ namespace GW2EIParser.EIData
             if (upped != null)
             {
                 downed = downs.LastOrDefault(x => x.Time <= dead.Time && x.Time >= upped.Time);
-            } 
+            }
             else
             {
                 downed = downs.LastOrDefault(x => x.Time <= dead.Time && x.Time >= lastDeathTime);
             }
             if (downed != null)
             {
-                var damageToDown = damageLogs.Where(x => x.Time <= downed.Time && x.Time > lastDeathTime && (x.HasHit || x.HasDowned)  && x.Damage > 0).ToList();
+                var damageToDown = damageLogs.Where(x => x.Time > lastDeathTime && x.Time <= downed.Time && (x.HasHit || x.HasDowned) && x.Damage > 0).ToList();
                 ToDown = damageToDown.Count > 0 ? new List<DeathRecapDamageItem>() : null;
                 int damage = 0;
                 for (int i = damageToDown.Count - 1; i >= 0; i--)
@@ -77,7 +77,7 @@ namespace GW2EIParser.EIData
             else
             {
                 ToDown = null;
-                var damageToKill = damageLogs.Where(x => x.Time < dead.Time && x.Time > lastDeathTime && (x.HasHit || x.HasDowned) && x.Damage > 0 ).ToList();
+                var damageToKill = damageLogs.Where(x => x.Time > lastDeathTime && x.Time <= dead.Time && (x.HasHit || x.HasDowned) && x.Damage > 0).ToList();
                 ToKill = damageToKill.Count > 0 ? new List<DeathRecapDamageItem>() : null;
                 int damage = 0;
                 for (int i = damageToKill.Count - 1; i >= 0; i--)
