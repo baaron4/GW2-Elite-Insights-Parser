@@ -395,7 +395,14 @@ namespace GW2EIParser
             await Task.Delay(3000).ConfigureAwait(false);
             if (File.Exists(path))
             {
-                AddLogFiles(new string[] { path });
+                if (dgvFiles.InvokeRequired)
+                {
+                    dgvFiles.Invoke(new Action(() => AddLogFiles(new string[] { path })));
+                }
+                else
+                {
+                    AddLogFiles(new string[] { path });
+                }
             }
         }
 
