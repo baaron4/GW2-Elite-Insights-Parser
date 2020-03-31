@@ -69,55 +69,63 @@ namespace GW2EIParser.Controllers
         {
             string fileName = fi.Name;
             byte[] fileContents = File.ReadAllBytes(fi.FullName);
-            var webService = new Uri(@URI);
-            var requestMessage = new HttpRequestMessage(HttpMethod.Post, webService);
-            requestMessage.Headers.ExpectContinue = false;
-
-            var multiPartContent = new MultipartFormDataContent("----MyGreatBoundary");
-            var byteArrayContent = new ByteArrayContent(fileContents);
-            byteArrayContent.Headers.Add("Content-Type", "application/octet-stream");
-            multiPartContent.Add(byteArrayContent, "file", fileName);
-            //multiPartContent.Add(new StringContent("generator=ei"), "gen", "ei");
-            requestMessage.Content = multiPartContent;
-
-            var httpClient = new HttpClient();
-            try
+            const int tentatives = 5;
+            string res = "Upload process failed";
+            for (int i = 0; i < tentatives; i++)
             {
-                Task<HttpResponseMessage> httpRequest = httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
-                HttpResponseMessage httpResponse = httpRequest.Result;
-                HttpStatusCode statusCode = httpResponse.StatusCode;
-                HttpContent responseContent = httpResponse.Content;
+                var webService = new Uri(@URI);
+                var requestMessage = new HttpRequestMessage(HttpMethod.Post, webService);
+                requestMessage.Headers.ExpectContinue = false;
 
-                if (responseContent != null)
+                var multiPartContent = new MultipartFormDataContent("----MyGreatBoundary");
+                var byteArrayContent = new ByteArrayContent(fileContents);
+                byteArrayContent.Headers.Add("Content-Type", "application/octet-stream");
+                multiPartContent.Add(byteArrayContent, "file", fileName);
+                //multiPartContent.Add(new StringContent("generator=ei"), "gen", "ei");
+                requestMessage.Content = multiPartContent;
+
+                var httpClient = new HttpClient();
+                try
                 {
-                    Task<string> stringContentsTask = responseContent.ReadAsStringAsync();
-                    string stringContents = stringContentsTask.Result;
-                    int first = stringContents.IndexOf('{');
-                    int length = stringContents.LastIndexOf('}') - first + 1;
-                    string JSONFormat = stringContents.Substring(first, length);
-                    DPSReportsResponseItem item = JsonConvert.DeserializeObject<DPSReportsResponseItem>(JSONFormat, new JsonSerializerSettings
+                    Task<HttpResponseMessage> httpRequest = httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
+                    HttpResponseMessage httpResponse = httpRequest.Result;
+                    HttpStatusCode statusCode = httpResponse.StatusCode;
+                    HttpContent responseContent = httpResponse.Content;
+
+                    if (responseContent != null)
                     {
-                        ContractResolver = new DefaultContractResolver()
+                        Task<string> stringContentsTask = responseContent.ReadAsStringAsync();
+                        string stringContents = stringContentsTask.Result;
+                        int first = stringContents.IndexOf('{');
+                        int length = stringContents.LastIndexOf('}') - first + 1;
+                        string JSONFormat = stringContents.Substring(first, length);
+                        DPSReportsResponseItem item = JsonConvert.DeserializeObject<DPSReportsResponseItem>(JSONFormat, new JsonSerializerSettings
                         {
-                            NamingStrategy = new CamelCaseNamingStrategy()
-                        }
-                    });
-                    string logLink = item.Permalink;
-                    return logLink;
+                            ContractResolver = new DefaultContractResolver()
+                            {
+                                NamingStrategy = new CamelCaseNamingStrategy()
+                            }
+                        });
+                        return item.Permalink;
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
-                // Console.WriteLine(ex.Message);
-            }
-            finally
-            {
-                byteArrayContent.Dispose();
-                httpClient.Dispose();
-                requestMessage.Dispose();
-            }
-            return "";
+                catch (Exception e)
+                {
+                    Exception finalException = e;
+                    while (finalException.InnerException != null)
+                    {
+                        finalException = finalException.InnerException;
+                    }
+                    res = finalException.Message;
+                }
+                finally
+                {
+                    byteArrayContent.Dispose();
+                    httpClient.Dispose();
+                    requestMessage.Dispose();
+                }
+            }        
+            return res;
         }
 
         public static string[] UploadOperation(GridRow row, FileInfo fInfo)
