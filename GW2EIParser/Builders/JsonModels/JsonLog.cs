@@ -125,7 +125,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// GW2 build
         /// </summary>
-        public ulong Gw2Build { get; }
+        public ulong GW2Build { get; }
         /// <summary>
         /// Language with which the evtc was generated
         /// </summary>
