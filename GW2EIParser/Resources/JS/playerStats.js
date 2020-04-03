@@ -94,7 +94,8 @@ var compilePlayerTab = function () {
                 layout: {},
                 dpsCache: new Map(),
                 dataCache: new Map(),
-                playerOffset: 0
+                playerOffset: 0,
+                graphOffset: 0
             };
         },
         watch: {
@@ -124,7 +125,11 @@ var compilePlayerTab = function () {
             var oldOffset = this.playerOffset;
             this.playerOffset += computeBuffData(this.player.details.boonGraph[this.phaseindex], this.data);
             var dpsY = oldOffset === this.playerOffset ? 'y2' : 'y3';
+            this.graphOffset = this.playerOffset;
             this.playerOffset += computeTargetHealthData(this.graph, logData.targets, this.phase, this.data, dpsY, this.phase.times);
+            if (this.healthGraph) {
+                this.playerOffset += computePlayerHealthData(this.healthGraph, this.data, dpsY, this.phase.times);
+            }
             this.data.push({
                 x: this.phase.times,
                 y: [],
@@ -176,6 +181,9 @@ var compilePlayerTab = function () {
             graph: function() {
                 return graphData.phases[this.phaseindex];
             },
+            healthGraph: function () {
+                return this.graph.players[this.playerindex].health;
+            },
             graphid: function () {
                 return "playergraph-" + this.playerindex + '-' + this.phaseindex;
             },
@@ -205,7 +213,7 @@ var compilePlayerTab = function () {
                     this.data[this.playerOffset + 2].y = data[2];
                 }
                 var offset = 3;
-                for (var i = this.playerOffset - this.graph.targets.length; i < this.playerOffset; i++) {
+                for (var i = this.graphOffset; i < this.playerOffset; i++) {
                     this.data[i].y = data[offset++];
                 }
                 return res;
@@ -248,6 +256,14 @@ var compilePlayerTab = function () {
                 res[offset++] = dpsData.playerDPS.cleave;
                 for (var i = 0; i < this.graph.targets.length; i++) {
                     var health = this.graph.targets[i].health;
+                    var hpPoints = [];
+                    for (var j = 0; j < health.length; j++) {
+                        hpPoints[j] = health[j] * dpsData.maxDPS / 100.0;
+                    }
+                    res[offset++] = hpPoints;
+                }
+                if (this.healthGraph) {
+                    var health = this.healthGraph;
                     var hpPoints = [];
                     for (var j = 0; j < health.length; j++) {
                         hpPoints[j] = health[j] * dpsData.maxDPS / 100.0;

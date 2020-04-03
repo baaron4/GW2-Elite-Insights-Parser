@@ -531,6 +531,31 @@ function computeTargetHealthData(graph, targets, phase, data, yaxis, times) {
     return graph.targets.length;
 }
 
+function computePlayerHealthData(healthGraph, data, yaxis, times) {
+    var health = healthGraph;
+    var hpTexts = [];
+    for (var j = 0; j < health.length; j++) {
+        hpTexts[j] = health[j] + "% hp - Player";
+    }
+    var res = {
+        x: times,
+        text: hpTexts,
+        mode: 'lines',
+        line: {
+            shape: 'spline',
+            dash: 'dashdot'
+        },
+        hoverinfo: 'text+x',
+        name: 'Player health',
+        visible: 'legendonly',
+    };
+    if (yaxis) {
+        res.yaxis = yaxis;
+    }
+    data.push(res);
+    return 1;
+}
+
 function computeBuffData(buffData, data) {
     if (buffData) {
         for (var i = 0; i < buffData.length; i++) {
