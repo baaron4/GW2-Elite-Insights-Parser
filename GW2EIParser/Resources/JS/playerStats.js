@@ -92,7 +92,6 @@ var compilePlayerTab = function () {
             return {
                 dpsmode: 0,
                 layout: {},
-                data: [],
                 dpsCache: new Map(),
                 dataCache: new Map(),
                 playerOffset: 0
@@ -120,6 +119,7 @@ var compilePlayerTab = function () {
         },
         created: function () {
             var images = [];
+            this.data = [];
             this.playerOffset += computeRotationData(this.player.details.rotation[this.phaseindex], images, this.data);
             var oldOffset = this.playerOffset;
             this.playerOffset += computeBuffData(this.player.details.boonGraph[this.phaseindex], this.data);
@@ -442,11 +442,6 @@ var compilePlayerTab = function () {
             player: function() {
                 return logData.players[this.playerindex];
             }
-        },
-        data: function () {
-            return {
-                graphdata: graphData
-            };
         },
         template: `${tmplPlayerTab}`,
     });

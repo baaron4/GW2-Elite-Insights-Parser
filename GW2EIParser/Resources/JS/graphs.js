@@ -23,7 +23,6 @@ var compileGraphs = function () {
             return {
                 dpsmode: 0,
                 layout: {},
-                data: [],
                 dpsCache: new Map(),
                 dataCache: new Map()
             };
@@ -70,6 +69,7 @@ var compileGraphs = function () {
             computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, textColor);
             // constant part of data
             // dps
+            this.data = [];
             var data = this.data;
             var player;
             for (i = 0; i < logData.players.length; i++) {

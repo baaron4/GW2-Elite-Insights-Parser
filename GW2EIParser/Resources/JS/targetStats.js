@@ -239,7 +239,6 @@ var compileTargetTab = function () {
             return {
                 dpsmode: 0,
                 layout: {},
-                data: [],
                 dpsCache: new Map(),
                 dataCache: new Map(),
                 targetOffset: 0
@@ -267,6 +266,7 @@ var compileTargetTab = function () {
         },
         created: function () {
             var images = [];
+            this.data = [];
             this.targetOffset += computeRotationData(this.target.details.rotation[this.phaseindex], images, this.data);
             var oldOffset = this.targetOffset;
             this.targetOffset += computeBuffData(this.target.details.boonGraph[this.phaseindex], this.data);
