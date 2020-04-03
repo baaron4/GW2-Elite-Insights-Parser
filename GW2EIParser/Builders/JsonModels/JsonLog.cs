@@ -232,7 +232,7 @@ namespace GW2EIParser.Builders.JsonModels
             TimeEndStd = log.LogData.LogEndStd;
             Duration = log.FightData.DurationString;
             Success = log.FightData.Success;
-            Gw2Build = log.LogData.GW2Version;
+            GW2Build = log.LogData.GW2Version;
             UploadLinks = uploadLinks;
             Language = log.LogData.Language;
             LanguageID = (byte)log.LogData.LanguageID;
