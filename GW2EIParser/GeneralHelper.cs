@@ -501,90 +501,115 @@ namespace GW2EIParser
                     return "https://wiki.guildwars2.com/images/5/5f/Crimson_Antique_Spire.png";
 
                 case "Color-Warrior": return "rgb(255,209,102)";
-                case "Color-Berserker": return "rgb(255,209,102)";
-                case "Color-Spellbreaker": return "rgb(255,209,102)";
-                case "Color-Guardian": return "rgb(114,193,217)";
-                case "Color-Dragonhunter": return "rgb(114,193,217)";
-                case "Color-Firebrand": return "rgb(114,193,217)";
-                case "Color-Revenant": return "rgb(209,110,90)";
-                case "Color-Herald": return "rgb(209,110,90)";
-                case "Color-Renegade": return "rgb(209,110,90)";
-                case "Color-Engineer": return "rgb(208,156,89)";
-                case "Color-Scrapper": return "rgb(208,156,89)";
-                case "Color-Holosmith": return "rgb(208,156,89)";
-                case "Color-Ranger": return "rgb(140,220,130)";
-                case "Color-Druid": return "rgb(140,220,130)";
-                case "Color-Soulbeast": return "rgb(140,220,130)";
-                case "Color-Thief": return "rgb(192,143,149)";
-                case "Color-Daredevil": return "rgb(192,143,149)";
-                case "Color-Deadeye": return "rgb(192,143,149)";
-                case "Color-Elementalist": return "rgb(246,138,135)";
-                case "Color-Tempest": return "rgb(246,138,135)";
-                case "Color-Weaver": return "rgb(246,138,135)";
-                case "Color-Mesmer": return "rgb(182,121,213)";
-                case "Color-Chronomancer": return "rgb(182,121,213)";
-                case "Color-Mirage": return "rgb(182,121,213)";
-                case "Color-Necromancer": return "rgb(82,167,111)";
-                case "Color-Reaper": return "rgb(82,167,111)";
-                case "Color-Scourge": return "rgb(82,167,111)";
-                case "Color-Boss": return "rgb(82,167,250)";
-
-                case "Color-Warrior-NonBoss": return "rgb(125,109,66)";
-                case "Color-Berserker-NonBoss": return "rgb(125,109,66)";
-                case "Color-Spellbreaker-NonBoss": return "rgb(125,109,66)";
-                case "Color-Guardian-NonBoss": return "rgb(62,101,113)";
-                case "Color-Dragonhunter-NonBoss": return "rgb(62,101,113)";
-                case "Color-Firebrand-NonBoss": return "rgb(62,101,113)";
-                case "Color-Revenant-NonBoss": return "rgb(110,60,50)";
-                case "Color-Herald-NonBoss": return "rgb(110,60,50)";
-                case "Color-Renegade-NonBoss": return "rgb(110,60,50)";
-                case "Color-Engineer-NonBoss": return "rgb(109,83,48)";
-                case "Color-Scrapper-NonBoss": return "rgb(109,83,48)";
-                case "Color-Holosmith-NonBoss": return "rgb(109,83,48)";
-                case "Color-Ranger-NonBoss": return "rgb(75,115,70)";
-                case "Color-Druid-NonBoss": return "rgb(75,115,70)";
-                case "Color-Soulbeast-NonBoss": return "rgb(75,115,70)";
-                case "Color-Thief-NonBoss": return "rgb(101,76,79)";
-                case "Color-Daredevil-NonBoss": return "rgb(101,76,79)";
-                case "Color-Deadeye-NonBoss": return "rgb(101,76,79)";
-                case "Color-Elementalist-NonBoss": return "rgb(127,74,72)";
-                case "Color-Tempest-NonBoss": return "rgb(127,74,72)";
-                case "Color-Weaver-NonBoss": return "rgb(127,74,72)";
-                case "Color-Mesmer-NonBoss": return "rgb(96,60,111)";
-                case "Color-Chronomancer-NonBoss": return "rgb(96,60,111)";
-                case "Color-Mirage-NonBoss": return "rgb(96,60,111)";
-                case "Color-Necromancer-NonBoss": return "rgb(46,88,60)";
-                case "Color-Reaper-NonBoss": return "rgb(46,88,60)";
-                case "Color-Scourge-NonBoss": return "rgb(46,88,60)";
-                case "Color-Boss-NonBoss": return "rgb(92,177,250)";
-
+                case "Color-Warrior-NonBoss": return "rgb(190,159,84)";
                 case "Color-Warrior-Total": return "rgb(125,109,66)";
+
+                case "Color-Berserker": return "rgb(255,209,102)";
+                case "Color-Berserker-NonBoss": return "rgb(190,159,84)";
                 case "Color-Berserker-Total": return "rgb(125,109,66)";
+
+                case "Color-Spellbreaker": return "rgb(255,209,102)";
+                case "Color-Spellbreaker-NonBoss": return "rgb(190,159,84)";
                 case "Color-Spellbreaker-Total": return "rgb(125,109,66)";
+
+                case "Color-Guardian": return "rgb(114,193,217)";
+                case "Color-Guardian-NonBoss": return "rgb(88,147,165)";
                 case "Color-Guardian-Total": return "rgb(62,101,113)";
+
+                case "Color-Dragonhunter": return "rgb(114,193,217)";
+                case "Color-Dragonhunter-NonBoss": return "rgb(88,147,165)";
                 case "Color-Dragonhunter-Total": return "rgb(62,101,113)";
+
+                case "Color-Firebrand": return "rgb(114,193,217)";
+                case "Color-Firebrand-NonBoss": return "rgb(88,147,165)";
                 case "Color-Firebrand-Total": return "rgb(62,101,113)";
+
+                case "Color-Revenant": return "rgb(209,110,90)";
+                case "Color-Revenant-NonBoss": return "rgb(159,85,70)";
                 case "Color-Revenant-Total": return "rgb(110,60,50)";
+
+                case "Color-Herald": return "rgb(209,110,90)";
+                case "Color-Herald-NonBoss": return "rgb(159,85,70)";
                 case "Color-Herald-Total": return "rgb(110,60,50)";
+
+                case "Color-Renegade": return "rgb(209,110,90)";
+                case "Color-Renegade-NonBoss": return "rgb(159,85,70)";
                 case "Color-Renegade-Total": return "rgb(110,60,50)";
+
+                case "Color-Engineer": return "rgb(208,156,89)";
+                case "Color-Engineer-NonBoss": return "rgb(158,119,68)";
                 case "Color-Engineer-Total": return "rgb(109,83,48)";
+
+                case "Color-Scrapper": return "rgb(208,156,89)";
+                case "Color-Scrapper-NonBoss": return "rgb(158,119,68)";
                 case "Color-Scrapper-Total": return "rgb(109,83,48)";
+
+                case "Color-Holosmith": return "rgb(208,156,89)";
+                case "Color-Holosmith-NonBoss": return "rgb(158,119,68)";
                 case "Color-Holosmith-Total": return "rgb(109,83,48)";
+
+                case "Color-Ranger": return "rgb(140,220,130)";
+                case "Color-Ranger-NonBoss": return "rgb(107,167,100)";
                 case "Color-Ranger-Total": return "rgb(75,115,70)";
+
+                case "Color-Druid": return "rgb(140,220,130)";
+                case "Color-Druid-NonBoss": return "rgb(107,167,100)";
                 case "Color-Druid-Total": return "rgb(75,115,70)";
+
+                case "Color-Soulbeast": return "rgb(140,220,130)";
+                case "Color-Soulbeast-NonBoss": return "rgb(107,167,100)";
                 case "Color-Soulbeast-Total": return "rgb(75,115,70)";
+
+                case "Color-Thief": return "rgb(192,143,149)";
+                case "Color-Thief-NonBoss": return "rgb(146,109,114)";
                 case "Color-Thief-Total": return "rgb(101,76,79)";
+
+                case "Color-Daredevil": return "rgb(192,143,149)";
+                case "Color-Daredevil-NonBoss": return "rgb(146,109,114)";
                 case "Color-Daredevil-Total": return "rgb(101,76,79)";
+
+                case "Color-Deadeye": return "rgb(192,143,149)";
+                case "Color-Deadeye-NonBoss": return "rgb(146,109,114)";
                 case "Color-Deadeye-Total": return "rgb(101,76,79)";
+
+                case "Color-Elementalist": return "rgb(246,138,135)";
+                case "Color-Elementalist-NonBoss": return "rgb(186,106,103)";
                 case "Color-Elementalist-Total": return "rgb(127,74,72)";
+
+                case "Color-Tempest": return "rgb(246,138,135)";
+                case "Color-Tempest-NonBoss": return "rgb(186,106,103)";
                 case "Color-Tempest-Total": return "rgb(127,74,72)";
+
+                case "Color-Weaver": return "rgb(246,138,135)";
+                case "Color-Weaver-NonBoss": return "rgb(186,106,103)";
                 case "Color-Weaver-Total": return "rgb(127,74,72)";
+
+                case "Color-Mesmer": return "rgb(182,121,213)";
+                case "Color-Mesmer-NonBoss": return "rgb(139,90,162)";
                 case "Color-Mesmer-Total": return "rgb(96,60,111)";
+
+                case "Color-Chronomancer": return "rgb(182,121,213)";
+                case "Color-Chronomancer-NonBoss": return "rgb(139,90,162)";
                 case "Color-Chronomancer-Total": return "rgb(96,60,111)";
+
+                case "Color-Mirage": return "rgb(182,121,213)";
+                case "Color-Mirage-NonBoss": return "rgb(139,90,162)";
                 case "Color-Mirage-Total": return "rgb(96,60,111)";
+
+                case "Color-Necromancer": return "rgb(82,167,111)";
+                case "Color-Necromancer-NonBoss": return "rgb(64,127,85)";
                 case "Color-Necromancer-Total": return "rgb(46,88,60)";
+
+                case "Color-Reaper": return "rgb(82,167,111)";
+                case "Color-Reaper-NonBoss": return "rgb(64,127,85)";
                 case "Color-Reaper-Total": return "rgb(46,88,60)";
+
+                case "Color-Scourge": return "rgb(82,167,111)";
+                case "Color-Scourge-NonBoss": return "rgb(64,127,85)";
                 case "Color-Scourge-Total": return "rgb(46,88,60)";
+
+                case "Color-Boss": return "rgb(82,167,250)";
+                case "Color-Boss-NonBoss": return "rgb(92,177,250)";
                 case "Color-Boss-Total": return "rgb(92,177,250)";
 
                 case "Crit":
