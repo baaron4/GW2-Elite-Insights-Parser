@@ -148,7 +148,7 @@ namespace GW2EIParser.EIData
                 new Buff("Immobile", 727, BuffSource.Mixed, BuffType.Duration, 3, BuffNature.Condition, Logic.Queue, "https://wiki.guildwars2.com/images/3/32/Immobile.png"),
                 new Buff("Slow", 26766, BuffSource.Mixed, BuffType.Duration, 9, BuffNature.Condition, Logic.Queue, "https://wiki.guildwars2.com/images/f/f5/Slow.png"),
                 new Buff("Weakness", 742, BuffSource.Mixed, BuffType.Duration, 5, BuffNature.Condition, Logic.Queue, "https://wiki.guildwars2.com/images/f/f9/Weakness.png"),
-                new Buff("Taunt", 27705, BuffSource.Mixed, BuffType.Duration, 5, BuffNature.Condition, Logic.Queue, "https://wiki.guildwars2.com/images/c/cc/Taunt.png"),
+                new Buff("Taunt", 27705, BuffSource.Mixed, BuffType.Duration, 25, BuffNature.Condition, Logic.Queue, "https://wiki.guildwars2.com/images/c/cc/Taunt.png"),
                 new Buff("Vulnerability", 738, BuffSource.Mixed, BuffType.Intensity, 25, BuffNature.Condition, Logic.Override, "https://wiki.guildwars2.com/images/a/af/Vulnerability.png"),
                 new Buff("Number of Conditions", ProfHelper.NumberOfConditionsID, BuffSource.Mixed, BuffType.Intensity, 0, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/38/Condition_Duration.png"),
         };
