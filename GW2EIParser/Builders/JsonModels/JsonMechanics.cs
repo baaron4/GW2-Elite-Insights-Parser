@@ -14,11 +14,11 @@ namespace GW2EIParser.Builders.JsonModels
         public class JsonMechanic
         {
             /// <summary>
-            /// Time a which the event happened
+            /// Time at which the event happened
             /// </summary>
             public long Time { get; }
             /// <summary>
-            /// The actor who was hit by the mechanic
+            /// The actor who is concerned by the mechanic
             /// </summary>
             public string Actor { get; }
 
@@ -38,35 +38,37 @@ namespace GW2EIParser.Builders.JsonModels
         /// Name of the mechanic
         /// </summary>
         public string Name { get; }
+        /// <summary>
+        /// Description of the mechanic
+        /// </summary>
+        public string Description { get; }
 
-        protected JsonMechanics(string name, List<JsonMechanic> data)
+        protected JsonMechanics(string name, string description, List<JsonMechanic> data)
         {
             Name = name;
+            Description = description;
             MechanicsData = data;
         }
 
         public static List<JsonMechanics> GetJsonMechanicsList(List<MechanicEvent> mechanicLogs)
         {
             var mechanics = new List<JsonMechanics>();
-            var dict = new Dictionary<string, List<JsonMechanic>>();
+            var dict = new Dictionary<string, (string desc, List<JsonMechanic> data)>();
             foreach (MechanicEvent ml in mechanicLogs)
             {
                 var mech = new JsonMechanic(ml);
-                if (dict.TryGetValue(ml.InGameName, out List<JsonMechanic> list))
+                if (dict.TryGetValue(ml.ShortName, out (string _, List<JsonMechanic> data) jsonMechData))
                 {
-                    list.Add(mech);
+                    jsonMechData.data.Add(mech);
                 }
                 else
                 {
-                    dict[ml.InGameName] = new List<JsonMechanic>()
-                        {
-                            mech
-                        };
+                    dict[ml.ShortName] = (ml.Description, new List<JsonMechanic> { mech});
                 }
             }
-            foreach (KeyValuePair<string, List<JsonMechanic>> pair in dict)
+            foreach (KeyValuePair<string, (string desc, List<JsonMechanic> data)> pair in dict)
             {
-                mechanics.Add(new JsonMechanics(pair.Key, pair.Value));
+                mechanics.Add(new JsonMechanics(pair.Key, pair.Value.desc, pair.Value.data));
             }
             return mechanics;
         }

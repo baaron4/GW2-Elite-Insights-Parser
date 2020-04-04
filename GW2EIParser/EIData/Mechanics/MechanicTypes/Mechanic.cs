@@ -47,7 +47,7 @@ namespace GW2EIParser.EIData
         public int InternalCooldown { get; }
         public MechanicPlotlySetting PlotlySetting { get; }
         public string Description { get; }
-        public string InGameName { get; }
+        private readonly string _inGameName;
         public string ShortName { get; }
         public string FullName { get; }
         public bool IsEnemyMechanic { get; protected set; }
@@ -78,7 +78,7 @@ namespace GW2EIParser.EIData
         /// <param name="internalCoolDown">grace period, in ms, during which getting hit by the mechanic does not count</param>
         protected Mechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown)
         {
-            InGameName = inGameName;
+            _inGameName = inGameName;
             SkillId = skillId;
             PlotlySetting = plotlySetting;
             ShortName = shortName;
