@@ -59,7 +59,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// Array of buff data \n
         /// Length == # of phases
         /// </summary>
-        /// <seealso cref="JsonPlayerBuffsData"/>
+        /// <seealso cref="JsonBuffsGenerationData"/>
         public List<JsonBuffsGenerationData> BuffData { get; set; }
     }
 }

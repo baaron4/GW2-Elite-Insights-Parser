@@ -38,8 +38,16 @@ namespace GW2EIParser.Builders.JsonModels
                 TotalDamage = extraData.TotalDamage;
             }
         }
-
+        /// <summary>
+        /// ID of the damage modifier \
+        /// </summary>
+        /// <seealso cref="JsonLog.DamageModMap"/>
         public int Id { get; }
+        /// <summary>
+        /// Array of damage modifier data \n
+        /// Length == # of phases
+        /// </summary>
+        /// <seealso cref="JsonDamageModifierItem"/>
         public List<JsonDamageModifierItem> DamageModifiers { get; }
 
 
