@@ -31,11 +31,11 @@ namespace GW2EIParser.EIData
         public const long AirDual = 42264;
         public const long EarthDual = 44857;
 
-        protected static void AttachMasterToGadgetByCastData(Dictionary<long, List<AbstractCastEvent>> castData, HashSet<AgentItem> gadgets, List<long> ids, long castEndThreshold)
+        protected static void AttachMasterToGadgetByCastData(Dictionary<long, List<AbstractCastEvent>> castData, HashSet<AgentItem> gadgets, List<long> castIDS, long castEndThreshold)
         {
             var possibleCandidates = new HashSet<AgentItem>();
             var gadgetSpawnCastData = new List<AbstractCastEvent>();
-            foreach (long id in ids)
+            foreach (long id in castIDS)
             {
                 if (castData.TryGetValue(id, out List<AbstractCastEvent> list))
                 {
@@ -74,10 +74,10 @@ namespace GW2EIParser.EIData
             }
         }
 
-        protected static HashSet<AgentItem> GetOffensiveGadgetAgents(Dictionary<long, List<AbstractDamageEvent>> damageData, long id, HashSet<AgentItem> playerAgents)
+        protected static HashSet<AgentItem> GetOffensiveGadgetAgents(Dictionary<long, List<AbstractDamageEvent>> damageData, long damageSkillID, HashSet<AgentItem> playerAgents)
         {
             var res = new HashSet<AgentItem>();
-            if (damageData.TryGetValue(id, out List<AbstractDamageEvent> list))
+            if (damageData.TryGetValue(damageSkillID, out List<AbstractDamageEvent> list))
             {
                 foreach (AbstractDamageEvent evt in list)
                 {
