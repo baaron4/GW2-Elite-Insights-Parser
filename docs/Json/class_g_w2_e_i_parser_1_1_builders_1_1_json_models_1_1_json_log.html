@@ -31,9 +31,9 @@
   <td id="projectlogo"><img alt="Logo" src="LI.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Guild Wars 2 - Elite Insights
-   &#160;<span id="projectnumber">2.21+</span>
+   &#160;<span id="projectnumber">2.22+</span>
    </div>
-   <div id="projectbrief">JSON output documentation</div>
+   <div id="projectbrief">JSON doc</div>
   </td>
  </tr>
  </tbody>
@@ -149,19 +149,32 @@ Properties</h2></td></tr>
 <tr class="memdesc:a8eddc9a53d1a90f9a4406a4398c18743"><td class="mdescLeft">&#160;</td><td class="mdescRight">The player who recorded the fight  <a href="#a8eddc9a53d1a90f9a4406a4398c18743">More...</a><br /></td></tr>
 <tr class="separator:a8eddc9a53d1a90f9a4406a4398c18743"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0dc3c6d7de263f95043965c526a22b7c"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a0dc3c6d7de263f95043965c526a22b7c">TimeStart</a><code> [get]</code></td></tr>
-<tr class="memdesc:a0dc3c6d7de263f95043965c526a22b7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The time at which the fight started in "yyyy-mm-dd hh:mm:ss zz" format <br />
+<tr class="memdesc:a0dc3c6d7de263f95043965c526a22b7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">DEPRECATED: use TimeStartStd instead <br />
+The time at which the fight started in "yyyy-mm-dd hh:mm:ss zz" format <br />
 The value will be LogData.DefaultTimeValue if the event does not exist  <a href="#a0dc3c6d7de263f95043965c526a22b7c">More...</a><br /></td></tr>
 <tr class="separator:a0dc3c6d7de263f95043965c526a22b7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2ccdf1b552572d70f62395cff4996a7"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#ab2ccdf1b552572d70f62395cff4996a7">TimeEnd</a><code> [get]</code></td></tr>
-<tr class="memdesc:ab2ccdf1b552572d70f62395cff4996a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The time at which the fight ended in "yyyy-mm-dd hh:mm:ss zz" format <br />
+<tr class="memdesc:ab2ccdf1b552572d70f62395cff4996a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">DEPRECATED: use TimeEndStd instead <br />
+The time at which the fight ended in "yyyy-mm-dd hh:mm:ss zz" format <br />
 The value will be LogData.DefaultTimeValue if the event does not exist  <a href="#ab2ccdf1b552572d70f62395cff4996a7">More...</a><br /></td></tr>
 <tr class="separator:ab2ccdf1b552572d70f62395cff4996a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7881a8e211d741036a80f38e1c2b64e"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#af7881a8e211d741036a80f38e1c2b64e">TimeStartStd</a><code> [get]</code></td></tr>
+<tr class="memdesc:af7881a8e211d741036a80f38e1c2b64e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The time at which the fight started in "yyyy-mm-dd hh:mm:ss zzz" format <br />
+The value will be LogData.DefaultTimeValue if the event does not exist  <a href="#af7881a8e211d741036a80f38e1c2b64e">More...</a><br /></td></tr>
+<tr class="separator:af7881a8e211d741036a80f38e1c2b64e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42e5c03012868f456915050dc91fcf6c"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a42e5c03012868f456915050dc91fcf6c">TimeEndStd</a><code> [get]</code></td></tr>
+<tr class="memdesc:a42e5c03012868f456915050dc91fcf6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The time at which the fight ended in "yyyy-mm-dd hh:mm:ss zzz" format <br />
+The value will be LogData.DefaultTimeValue if the event does not exist  <a href="#a42e5c03012868f456915050dc91fcf6c">More...</a><br /></td></tr>
+<tr class="separator:a42e5c03012868f456915050dc91fcf6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac02e1ef0dd2a2e72d26ba334beffeff"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#aac02e1ef0dd2a2e72d26ba334beffeff">Duration</a><code> [get]</code></td></tr>
 <tr class="memdesc:aac02e1ef0dd2a2e72d26ba334beffeff"><td class="mdescLeft">&#160;</td><td class="mdescRight">The duration of the fight in "xh xm xs xms" format  <a href="#aac02e1ef0dd2a2e72d26ba334beffeff">More...</a><br /></td></tr>
 <tr class="separator:aac02e1ef0dd2a2e72d26ba334beffeff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f890dbe58e421dda2f105571ec90f03"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a7f890dbe58e421dda2f105571ec90f03">Success</a><code> [get]</code></td></tr>
 <tr class="memdesc:a7f890dbe58e421dda2f105571ec90f03"><td class="mdescLeft">&#160;</td><td class="mdescRight">The success status of the fight  <a href="#a7f890dbe58e421dda2f105571ec90f03">More...</a><br /></td></tr>
 <tr class="separator:a7f890dbe58e421dda2f105571ec90f03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51d74ea845dab26d80599f43f1402ae8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a51d74ea845dab26d80599f43f1402ae8">IsCM</a><code> [get]</code></td></tr>
+<tr class="memdesc:a51d74ea845dab26d80599f43f1402ae8"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the fight is in challenge mode  <a href="#a51d74ea845dab26d80599f43f1402ae8">More...</a><br /></td></tr>
+<tr class="separator:a51d74ea845dab26d80599f43f1402ae8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65c6e1918fb9d7ed3cf0d6406a903556"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_n_p_c.html">JsonNPC</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a65c6e1918fb9d7ed3cf0d6406a903556">Targets</a><code> [get]</code></td></tr>
 <tr class="memdesc:a65c6e1918fb9d7ed3cf0d6406a903556"><td class="mdescLeft">&#160;</td><td class="mdescRight">The list of targets  <a href="#a65c6e1918fb9d7ed3cf0d6406a903556">More...</a><br /></td></tr>
 <tr class="separator:a65c6e1918fb9d7ed3cf0d6406a903556"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -192,6 +205,8 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The root of the JSON </p>
+
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00014">14</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
 </div><h2 class="groupheader">Property Documentation</h2>
 <a id="a71a5482c0d5d85428e465aab5f5ffa6f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a71a5482c0d5d85428e465aab5f5ffa6f">&#9670;&nbsp;</a></span>ArcVersion</h2>
@@ -214,6 +229,8 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 </div><div class="memdoc">
 
 <p>The used arcdps version </p>
+
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00124">124</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
 
 </div>
 </div>
@@ -240,6 +257,8 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 <p>Dictionary of buffs' description, the key is in "'b' + id" format </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log_1_1_buff_desc.html" title="Describs the buff item">BuffDesc</a></dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00209">209</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
+
 </div>
 </div>
 <a id="a22d15bd36972d0fcacc9c23adf3d0205"></a>
@@ -265,6 +284,8 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 <p>Dictionary of damage modifiers' description, the key is in "'d' + id" format </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log_1_1_damage_mod_desc.html" title="Describs the damage modifier item">DamageModDesc</a></dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00214">214</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
+
 </div>
 </div>
 <a id="aac02e1ef0dd2a2e72d26ba334beffeff"></a>
@@ -288,6 +309,8 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 </div><div class="memdoc">
 
 <p>The duration of the fight in "xh xm xs xms" format </p>
+
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00167">167</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
 
 </div>
 </div>
@@ -313,6 +336,8 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 
 <p>The used EI version </p>
 
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00108">108</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
+
 </div>
 </div>
 <a id="ac033d5cefa408e897951862f2d805602"></a>
@@ -336,6 +361,8 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 </div><div class="memdoc">
 
 <p>The icon of the fight </p>
+
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00120">120</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
 
 </div>
 </div>
@@ -361,6 +388,8 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 
 <p>The name of the fight </p>
 
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00116">116</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
+
 </div>
 </div>
 <a id="a6ebc2f1ad3346290bca5096456cb7481"></a>
@@ -384,6 +413,34 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 </div><div class="memdoc">
 
 <p>GW2 build </p>
+
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00128">128</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
+
+</div>
+</div>
+<a id="a51d74ea845dab26d80599f43f1402ae8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51d74ea845dab26d80599f43f1402ae8">&#9670;&nbsp;</a></span>IsCM</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool GW2EIParser.Builders.JsonModels.JsonLog.IsCM</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If the fight is in challenge mode </p>
+
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00175">175</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
 
 </div>
 </div>
@@ -409,6 +466,8 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 
 <p>Language with which the evtc was generated </p>
 
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00132">132</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
+
 </div>
 </div>
 <a id="a8080fc1b5ad9faed04d354fac4c85d7c"></a>
@@ -432,6 +491,8 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 </div><div class="memdoc">
 
 <p>ID of the language </p>
+
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00136">136</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
 
 </div>
 </div>
@@ -458,6 +519,8 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 <p>List of mechanics </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_mechanics.html" title="Class corresponding to mechanics">JsonMechanics</a></dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00195">195</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
+
 </div>
 </div>
 <a id="a065cece4f31d39c96b49e530a0bee236"></a>
@@ -481,6 +544,8 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 </div><div class="memdoc">
 
 <p>Dictionary of personal buffs. The key is the profession, the value is a list of buff ids </p>
+
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00218">218</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
 
 </div>
 </div>
@@ -507,6 +572,8 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 <p>The list of phases </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_phase.html" title="Class corresponding to a phase">JsonPhase</a></dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00190">190</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
+
 </div>
 </div>
 <a id="ad56ecfd603c8f18e303a681f27bc9f6d"></a>
@@ -532,6 +599,8 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 <p>The list of players </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html">JsonPlayer</a></dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00185">185</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
+
 </div>
 </div>
 <a id="a8eddc9a53d1a90f9a4406a4398c18743"></a>
@@ -555,6 +624,8 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 </div><div class="memdoc">
 
 <p>The player who recorded the fight </p>
+
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00140">140</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
 
 </div>
 </div>
@@ -581,6 +652,8 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 <p>Dictionary of skills' description, the key is in "'s' + id" format </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log_1_1_skill_desc.html" title="Describes the skill item">SkillDesc</a></dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00204">204</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
+
 </div>
 </div>
 <a id="a7f890dbe58e421dda2f105571ec90f03"></a>
@@ -604,6 +677,8 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 </div><div class="memdoc">
 
 <p>The success status of the fight </p>
+
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00171">171</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
 
 </div>
 </div>
@@ -630,6 +705,8 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 <p>The list of targets </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_n_p_c.html">JsonNPC</a></dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00180">180</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
+
 </div>
 </div>
 <a id="ab2ccdf1b552572d70f62395cff4996a7"></a>
@@ -652,8 +729,38 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 </table>
 </div><div class="memdoc">
 
-<p>The time at which the fight ended in "yyyy-mm-dd hh:mm:ss zz" format <br />
+<p>DEPRECATED: use TimeEndStd instead <br />
+The time at which the fight ended in "yyyy-mm-dd hh:mm:ss zz" format <br />
 The value will be LogData.DefaultTimeValue if the event does not exist </p>
+
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00152">152</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
+
+</div>
+</div>
+<a id="a42e5c03012868f456915050dc91fcf6c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42e5c03012868f456915050dc91fcf6c">&#9670;&nbsp;</a></span>TimeEndStd</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string GW2EIParser.Builders.JsonModels.JsonLog.TimeEndStd</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The time at which the fight ended in "yyyy-mm-dd hh:mm:ss zzz" format <br />
+The value will be LogData.DefaultTimeValue if the event does not exist </p>
+
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00163">163</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
 
 </div>
 </div>
@@ -677,8 +784,38 @@ The value will be LogData.DefaultTimeValue if the event does not exist </p>
 </table>
 </div><div class="memdoc">
 
-<p>The time at which the fight started in "yyyy-mm-dd hh:mm:ss zz" format <br />
+<p>DEPRECATED: use TimeStartStd instead <br />
+The time at which the fight started in "yyyy-mm-dd hh:mm:ss zz" format <br />
 The value will be LogData.DefaultTimeValue if the event does not exist </p>
+
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00146">146</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
+
+</div>
+</div>
+<a id="af7881a8e211d741036a80f38e1c2b64e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7881a8e211d741036a80f38e1c2b64e">&#9670;&nbsp;</a></span>TimeStartStd</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string GW2EIParser.Builders.JsonModels.JsonLog.TimeStartStd</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The time at which the fight started in "yyyy-mm-dd hh:mm:ss zzz" format <br />
+The value will be LogData.DefaultTimeValue if the event does not exist </p>
+
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00158">158</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
 
 </div>
 </div>
@@ -704,6 +841,8 @@ The value will be LogData.DefaultTimeValue if the event does not exist </p>
 
 <p>The id with which the log has been triggered </p>
 
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00112">112</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
+
 </div>
 </div>
 <a id="a423200e7228e64fe46c3d0bc811c4e44"></a>
@@ -728,10 +867,12 @@ The value will be LogData.DefaultTimeValue if the event does not exist </p>
 
 <p>Upload links to dps.reports/raidar </p>
 
+<p class="definition">Definition at line <a class="el" href="_json_log_8cs_source.html#l00199">199</a> of file <a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a>.</p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>E:/nosave/WP/GW2-Elite-Insights-Parser-Base/GW2EIParser/Builders/JsonModels/JsonLog.cs</li>
+<li><a class="el" href="_json_log_8cs_source.html">JsonLog.cs</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

@@ -35,14 +35,17 @@ var NAVTREE =
         [ "All", "functions.html", "functions_dup" ],
         [ "Properties", "functions_prop.html", "functions_prop" ]
       ] ]
+    ] ],
+    [ "Files", "files.html", [
+      [ "File List", "files.html", "files_dup" ]
     ] ]
   ] ]
 ];
 
 var NAVTREEINDEX =
 [
-"annotated.html",
-"namespaces.html"
+"_json_actor_8cs_source.html",
+"functions_prop_q.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

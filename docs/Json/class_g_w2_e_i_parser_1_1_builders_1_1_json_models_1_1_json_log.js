@@ -12,6 +12,7 @@ var class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log =
     [ "FightIcon", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#ac033d5cefa408e897951862f2d805602", null ],
     [ "FightName", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a5588839d04f4e2a0c38bcc56f0cf554b", null ],
     [ "GW2Build", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a6ebc2f1ad3346290bca5096456cb7481", null ],
+    [ "IsCM", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a51d74ea845dab26d80599f43f1402ae8", null ],
     [ "Language", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#af05e6d2e2c9438ebc956ab8bbf53540e", null ],
     [ "LanguageID", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a8080fc1b5ad9faed04d354fac4c85d7c", null ],
     [ "Mechanics", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a773dd75651bd7b744a3d1c5aad9fecef", null ],
@@ -23,7 +24,9 @@ var class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log =
     [ "Success", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a7f890dbe58e421dda2f105571ec90f03", null ],
     [ "Targets", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a65c6e1918fb9d7ed3cf0d6406a903556", null ],
     [ "TimeEnd", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#ab2ccdf1b552572d70f62395cff4996a7", null ],
+    [ "TimeEndStd", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a42e5c03012868f456915050dc91fcf6c", null ],
     [ "TimeStart", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a0dc3c6d7de263f95043965c526a22b7c", null ],
+    [ "TimeStartStd", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#af7881a8e211d741036a80f38e1c2b64e", null ],
     [ "TriggerID", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a78679872bf3772f68f07e8592f3459ff", null ],
     [ "UploadLinks", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a423200e7228e64fe46c3d0bc811c4e44", null ]
 ];

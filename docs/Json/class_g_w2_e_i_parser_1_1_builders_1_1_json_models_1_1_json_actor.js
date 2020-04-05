@@ -9,6 +9,7 @@ var class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor =
     [ "Defenses", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#afad32e60db8faa343e92e55880d35b4f", null ],
     [ "DpsAll", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a541fd54c8cfc2948055de12f81aac3b4", null ],
     [ "Healing", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#aae207e1e5bcd0ac91157acd93e72a662", null ],
+    [ "HealthPercents", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a455edac0af77e1e9a6945e2046047beb", null ],
     [ "HitboxHeight", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a0caf8b3a39d145177d046e135002d9d1", null ],
     [ "HitboxWidth", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a38e3e2a7cf04126848759759550d7c8e", null ],
     [ "InstanceID", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#ae215577794ffd3e246d6015e251427d5", null ],
