@@ -62,17 +62,12 @@ namespace GW2EIParser.Logic
                 return phases;
             }
             phases.AddRange(GetPhasesByInvul(log, 762, mama, true, true));
-            string[] namesMAMA = new[] { "Phase 1", "Red Knight", "Phase 2", "Green Knight", "Phase 3", "Blue Knight", "Phase 4" };
-            if (phases.Count - 1 > namesMAMA.Length)
-            {
-                throw new InvalidOperationException("Error Encountered: too many phases on MAMA");
-            }
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                phase.Name = namesMAMA[i - 1];
-                if (i == 2 || i == 4 || i == 6)
+                if (i%2 == 0)
                 {
+                    phase.Name = "Split " + (i) / 2;
                     var ids = new List<int>
                     {
                        (int) GreenKnight,
@@ -83,6 +78,7 @@ namespace GW2EIParser.Logic
                 }
                 else
                 {
+                    phase.Name = "Phase " + (i + 1) / 2;
                     phase.Targets.Add(mama);
                 }
             }

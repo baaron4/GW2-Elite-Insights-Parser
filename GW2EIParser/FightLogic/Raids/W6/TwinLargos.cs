@@ -63,7 +63,7 @@ namespace GW2EIParser.Logic
             return new List<AbstractDamageEvent>();
         }
 
-        private List<PhaseData> GetTargetPhases(ParsedLog log, NPC target, string[] names)
+        private List<PhaseData> GetTargetPhases(ParsedLog log, NPC target, string baseName)
         {
             long start = 0;
             long end = 0;
@@ -98,7 +98,7 @@ namespace GW2EIParser.Logic
             for (int i = 0; i < targetPhases.Count; i++)
             {
                 PhaseData phase = targetPhases[i];
-                phase.Name = names[i];
+                phase.Name = baseName + " P" + (i + 1);
                 phase.Targets.Add(target);
             }
             return targetPhases;
@@ -203,12 +203,12 @@ namespace GW2EIParser.Logic
             {
                 return phases;
             }
-            List<PhaseData> nikPhases = GetTargetPhases(log, nikare, new string[] { "Nikare P1", "Nikare P2", "Nikare P3" });
+            List<PhaseData> nikPhases = GetTargetPhases(log, nikare, "Nikare");
             FallBackPhases(nikare, nikPhases, log, true);
             phases.AddRange(nikPhases);
             if (kenut != null)
             {
-                List<PhaseData> kenPhases = GetTargetPhases(log, kenut, new string[] { "Kenut P1", "Kenut P2", "Kenut P3" });
+                List<PhaseData> kenPhases = GetTargetPhases(log, kenut, "Kenut");
                 FallBackPhases(kenut, kenPhases, log, false);
                 phases.AddRange(kenPhases);
             }

@@ -103,10 +103,9 @@ namespace GW2EIParser.Logic
                 phases.Add(new PhaseData(start, fightDuration));
                 start = fightDuration;
             }
-            string[] mainPhaseNames = { "100% - 66%", "66% - 33%", "33% - 0%" };
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].Name = mainPhaseNames[i - 1];
+                phases[i].Name = "Phase " + i;
                 phases[i].Targets.Add(mainTarget);
             }
             // add burn phases

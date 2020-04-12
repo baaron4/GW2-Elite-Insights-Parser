@@ -70,13 +70,12 @@ namespace GW2EIParser.Logic
             }
             // Determined check
             phases.AddRange(GetPhasesByInvul(log, 762, mainTarget, true, true));
-            string[] namesSam = new[] { "Phase 1", "Split 1", "Phase 2", "Split 2", "Phase 3" };
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                phase.Name = namesSam[i - 1];
-                if (i == 2 || i == 4)
+                if (i%2 == 0)
                 {
+                    phase.Name = "Split " + i/2;
                     var ids = new List<int>
                     {
                        (int) Rigom,
@@ -85,11 +84,12 @@ namespace GW2EIParser.Logic
                     AddTargetsToPhase(phase, ids, log); 
                     foreach (NPC t in phase.Targets)
                     {
-                        t.OverrideName(t.Character + " " + Math.Log(i, 2));
+                        t.OverrideName(t.Character + " " + i / 2);
                     }
                 }
                 else
                 {
+                    phase.Name = "Phase " + (i + 1) / 2;
                     phase.Targets.Add(mainTarget);
                 }
             }

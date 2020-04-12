@@ -121,13 +121,13 @@ namespace GW2EIParser.Logic
                         refresh = true;
                         pyre.OverrideName(pyre.Name.Insert(0, "Protect "));
                     }
-                    else if ((Math.Abs(x + 4356) < 10 && Math.Abs(y - 12076) < 10) || (Math.Abs(x + 5889) < 10 && Math.Abs(y - 14723) < 10) ||(Math.Abs(x + 7851) < 10 && Math.Abs(y - 13550) < 10))
+                    else if ((Math.Abs(x + 4356) < 10 && Math.Abs(y - 12076) < 10) || (Math.Abs(x + 5889) < 10 && Math.Abs(y - 14723) < 10) || (Math.Abs(x + 7851) < 10 && Math.Abs(y - 13550) < 10))
                     {
                         pyre.OverrideID((int)PyreGuardianStab);
                         refresh = true;
                         pyre.OverrideName(pyre.Name.Insert(0, "Stab "));
                     }
-                    else if ((Math.Abs(x + 8951) < 10 && Math.Abs(y - 9429) < 10)|| (Math.Abs(x + 5716) < 10 && Math.Abs(y - 9325) < 10) || (Math.Abs(x + 7846) < 10 && Math.Abs(y - 10612) < 10))
+                    else if ((Math.Abs(x + 8951) < 10 && Math.Abs(y - 9429) < 10) || (Math.Abs(x + 5716) < 10 && Math.Abs(y - 9325) < 10) || (Math.Abs(x + 7846) < 10 && Math.Abs(y - 10612) < 10))
                     {
                         pyre.OverrideID((int)PyreGuardianRetal);
                         refresh = true;
@@ -182,44 +182,61 @@ namespace GW2EIParser.Logic
                 return phases;
             }
             phases.AddRange(GetPhasesByInvul(log, 52329, qadim, true, false));
-            string[] names = { "Hydra", "Qadim P1", "Apocalypse", "Qadim P2", "Wyvern", "Qadim P3" };
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                phase.Name = names[i - 1];
-                switch (i)
+                if (i % 2 == 0)
                 {
-                    case 2:
-                    case 4:
-                    case 6:
-                        var pyresFirstAware = new List<long>();
-                        var pyres = new List<int>
+                    phase.Name = "Qadim P" + (i) / 2;
+                    var pyresFirstAware = new List<long>();
+                    var pyres = new List<int>
                         {
                             (int) PyreGuardian,
                             (int) PyreGuardianProtect,
                             (int) PyreGuardianStab,
                             (int) PyreGuardianRetal,
                         };
-                        foreach (int pyreId in pyres)
-                        {
-                            pyresFirstAware.AddRange(log.AgentData.GetNPCsByID(pyreId).Where(x => phase.InInterval(x.FirstAware)).Select(x => x.FirstAware));
-                        }
-                        if (pyresFirstAware.Count > 0 && pyresFirstAware.Max() > phase.Start)
-                        {
-                            phase.OverrideStart(pyresFirstAware.Max());
-                        }
-                        phase.Targets.Add(qadim);
-                        break;
-                    default:
-                        var ids = new List<int>
+                    foreach (int pyreId in pyres)
+                    {
+                        pyresFirstAware.AddRange(log.AgentData.GetNPCsByID(pyreId).Where(x => phase.InInterval(x.FirstAware)).Select(x => x.FirstAware));
+                    }
+                    if (pyresFirstAware.Count > 0 && pyresFirstAware.Max() > phase.Start)
+                    {
+                        phase.OverrideStart(pyresFirstAware.Max());
+                    }
+                    phase.Targets.Add(qadim);
+                }
+                else
+                {
+                    var ids = new List<int>
                         {
                            (int) WyvernMatriarch,
                            (int) WyvernPatriarch,
                            (int) AncientInvokedHydra,
                            (int) ApocalypseBringer
                         };
-                        AddTargetsToPhase(phase, ids, log);
-                        break;
+                    AddTargetsToPhase(phase, ids, log);
+                    var names = new List<string>();
+                    if (phase.Targets.Count == 1)
+                    {
+                        phase.Name = phase.Targets[0].Character;
+                    }
+                    else
+                    {
+                        foreach (NPC tar in phase.Targets)
+                        {
+                            names.AddRange(tar.Character.Split(' '));
+                        }
+                        var dict = names.GroupBy(x => x).ToDictionary(x => x.Key, x => names.Count(y => y == x.Key));
+                        if (dict.Count > 0)
+                        {
+                            phase.Name = dict.MaxBy(x => x.Value).Key;
+                        }
+                        else
+                        {
+                            phase.Name = "Split " + (i + 1) / 2;
+                        }
+                    }
                 }
             }
             phases.RemoveAll(x => x.Start >= x.End);

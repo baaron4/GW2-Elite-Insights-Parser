@@ -52,17 +52,17 @@ namespace GW2EIParser.Logic
                 return phases;
             }
             phases.AddRange(GetPhasesByInvul(log, 31877, mainTarget, true, true));
-            string[] namesGorse = new[] { "Phase 1", "Split 1", "Phase 2", "Split 2", "Phase 3" };
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                phase.Name = namesGorse[i - 1];
-                if (i == 1 || i == 3 || i == 5)
+                if (i%2 == 1)
                 {
+                    phase.Name = "Phase " + (i + 1) / 2;
                     phase.Targets.Add(mainTarget);
                 }
                 else
                 {
+                    phase.Name = "Split " + (i) / 2;
                     var ids = new List<int>
                     {
                        (int) ChargedSoul

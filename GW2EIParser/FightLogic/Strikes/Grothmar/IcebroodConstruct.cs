@@ -51,11 +51,10 @@ namespace GW2EIParser.Logic
             }
             // Invul check
             phases.AddRange(GetPhasesByInvul(log, 757, mainTarget, false, true));
-            string[] phaseNames = new[] { "Phase 1", "Phase 2" };
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                phase.Name = phaseNames[i - 1];
+                phase.Name = "Phase " + i;
                 phase.Targets.Add(mainTarget);
             }
             return phases;

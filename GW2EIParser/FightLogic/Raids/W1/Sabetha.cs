@@ -78,52 +78,25 @@ namespace GW2EIParser.Logic
             }
             // Invul check
             phases.AddRange(GetPhasesByInvul(log, 757, mainTarget, true, true));
-            string[] namesSab = new[] { "Phase 1", "Kernan", "Phase 2", "Knuckles", "Phase 3", "Karde", "Phase 4" };
-            for (int i = 1; i < phases.Count; i++)
-            {
-                PhaseData phase = phases[i];
-                phase.Name = namesSab[i - 1];
-                if (i == 2 || i == 4 || i == 6)
-                {
-                    var ids = new List<int>
+            var ids = new List<int>
                     {
                        (int) Kernan,
                        (int) Knuckles,
                        (int) Karde,
                     };
+            for (int i = 1; i < phases.Count; i++)
+            {
+                PhaseData phase = phases[i];
+                if (i%2 == 0)
+                {
+                    phase.Name = "Split " + (i) / 2;
                     AddTargetsToPhase(phase, ids, log);
                 }
                 else
                 {
+                    phase.Name = "Phase " + (i+1)/2;
                     phase.Targets.Add(mainTarget);
-                    NPC addTarget;
-                    switch (i)
-                    {
-                        case 3:
-                            addTarget = Targets.Find(x => x.ID == (int)Kernan);
-                            if (addTarget == null)
-                            {
-                                break;
-                            }
-                            phase.Targets.Add(addTarget);
-                            break;
-                        case 5:
-                            addTarget = Targets.Find(x => x.ID == (int)Knuckles);
-                            if (addTarget == null)
-                            {
-                                break;
-                            }
-                            phase.Targets.Add(addTarget);
-                            break;
-                        case 7:
-                            addTarget = Targets.Find(x => x.ID == (int)Karde);
-                            if (addTarget == null)
-                            {
-                                break;
-                            }
-                            phase.Targets.Add(addTarget);
-                            break;
-                    }
+                    AddTargetsToPhase(phase, ids, log);
                 }
             }
             return phases;

@@ -75,13 +75,12 @@ namespace GW2EIParser.Logic
             }
             // Invul check
             phases.AddRange(GetPhasesByInvul(log, 757, mainTarget, true, true));
-            string[] namesVG = new[] { "Phase 1", "Split 1", "Phase 2", "Split 2", "Phase 3" };
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                phase.Name = namesVG[i - 1];
-                if (i == 2 || i == 4)
+                if (i%2 == 0)
                 {
+                    phase.Name = "Split " + (i) / 2;
                     var ids = new List<int>
                     {
                        (int) BlueGuardian,
@@ -96,6 +95,7 @@ namespace GW2EIParser.Logic
                 }
                 else
                 {
+                    phase.Name = "Phase " + (i + 1) / 2;
                     phase.Targets.Add(mainTarget);
                 }
             }

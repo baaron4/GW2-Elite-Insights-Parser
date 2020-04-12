@@ -85,6 +85,7 @@ namespace GW2EIParser.Logic
                 }
                 var phase = new PhaseData(start, Math.Min(end, log.FightData.FightEnd));
                 phase.Targets.Add(target);
+                phase.Name = target.Character;
                 phases.Add(phase);
             }
         }
@@ -125,11 +126,6 @@ namespace GW2EIParser.Logic
             foreach (NPC target in Targets)
             {
                 SetPhasePerTarget(target, phases, log);
-            }
-            string[] phaseNames = { "Berg", "Zane", "Narella" };
-            for (int i = 1; i < phases.Count; i++)
-            {
-                phases[i].Name = phaseNames[i - 1];
             }
             return phases;
         }
