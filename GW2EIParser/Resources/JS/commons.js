@@ -57,7 +57,7 @@ var compileCommons = function () {
         template: '<div :id="id" class="d-flex flex-row justify-content-center"></div>',
         mounted: function () {
             var div = document.querySelector(this.queryID);
-            Plotly.react(div, this.data, this.layout, {showSendToCloud: true});
+            Plotly.react(div, this.data, this.layout, {showEditInChartStudio: true, plotlyServerURL: "https://chart-studio.plotly.com"});
             var _this = this;
             div.on('plotly_animated', function () {
                 Plotly.relayout(div, _this.layout);
