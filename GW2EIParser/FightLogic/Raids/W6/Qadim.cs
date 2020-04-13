@@ -216,25 +216,23 @@ namespace GW2EIParser.Logic
                            (int) ApocalypseBringer
                         };
                     AddTargetsToPhase(phase, ids, log);
-                    var names = new List<string>();
-                    if (phase.Targets.Count == 1)
+                    if (phase.Targets.Count > 0)
                     {
-                        phase.Name = phase.Targets[0].Character;
-                    }
-                    else
-                    {
-                        foreach (NPC tar in phase.Targets)
+                        NPC phaseTar = phase.Targets[0];
+                        switch(phaseTar.ID)
                         {
-                            names.AddRange(tar.Character.Split(' '));
-                        }
-                        var dict = names.GroupBy(x => x).ToDictionary(x => x.Key, x => names.Count(y => y == x.Key));
-                        if (dict.Count > 0)
-                        {
-                            phase.Name = dict.MaxBy(x => x.Value).Key;
-                        }
-                        else
-                        {
-                            phase.Name = "Split " + (i + 1) / 2;
+                            case (int)AncientInvokedHydra:
+                                phase.Name = "Hydra";
+                                break;
+                            case (int)ApocalypseBringer:
+                                phase.Name = "Apocalypse";
+                                break;
+                            case (int)WyvernPatriarch:
+                            case (int)WyvernMatriarch:
+                                phase.Name = "Wyvern";
+                                break;
+                            default:
+                                throw new InvalidOperationException("Error Encountered: Unknown phase target in Qadim");
                         }
                     }
                 }

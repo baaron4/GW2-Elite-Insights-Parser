@@ -89,8 +89,25 @@ namespace GW2EIParser.Logic
                 PhaseData phase = phases[i];
                 if (i%2 == 0)
                 {
-                    phase.Name = "Split " + (i) / 2;
                     AddTargetsToPhase(phase, ids, log);
+                    if (phase.Targets.Count > 0)
+                    {
+                        NPC phaseTar = phase.Targets[0];
+                        switch (phaseTar.ID)
+                        {
+                            case (int)Kernan:
+                                phase.Name = "Kernan";
+                                break;
+                            case (int)Knuckles:
+                                phase.Name = "Knuckles";
+                                break;
+                            case (int)Karde:
+                                phase.Name = "Karde";
+                                break;
+                            default:
+                                throw new InvalidOperationException("Error Encountered: Unknown phase target in Sabetha");
+                        }
+                    }
                 }
                 else
                 {

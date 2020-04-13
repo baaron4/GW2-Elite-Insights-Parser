@@ -67,7 +67,6 @@ namespace GW2EIParser.Logic
                 PhaseData phase = phases[i];
                 if (i%2 == 0)
                 {
-                    phase.Name = "Split " + (i) / 2;
                     var ids = new List<int>
                     {
                        (int) GreenKnight,
@@ -75,6 +74,24 @@ namespace GW2EIParser.Logic
                        (int) BlueKnight,
                     };
                     AddTargetsToPhase(phase, ids, log);
+                    if (phase.Targets.Count > 0)
+                    {
+                        NPC phaseTar = phase.Targets[0];
+                        switch (phaseTar.ID)
+                        {
+                            case (int)GreenKnight:
+                                phase.Name = "Green Knight";
+                                break;
+                            case (int)RedKnight:
+                                phase.Name = "Red Knight";
+                                break;
+                            case (int)BlueKnight:
+                                phase.Name = "Blue Knight";
+                                break;
+                            default:
+                                throw new InvalidOperationException("Error Encountered: Unknown phase target in MAMA");
+                        }
+                    }
                 }
                 else
                 {

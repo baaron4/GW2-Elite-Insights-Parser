@@ -85,7 +85,20 @@ namespace GW2EIParser.Logic
                 }
                 var phase = new PhaseData(start, Math.Min(end, log.FightData.FightEnd));
                 phase.Targets.Add(target);
-                phase.Name = target.Character;
+                switch (target.ID)
+                {
+                    case (int)ParseEnum.TargetIDS.Narella:
+                        phase.Name = "Narella";
+                        break;
+                    case (int)ParseEnum.TargetIDS.Berg:
+                        phase.Name = "Berg";
+                        break;
+                    case (int)ParseEnum.TargetIDS.Zane:
+                        phase.Name = "Zane";
+                        break;
+                    default:
+                        throw new InvalidOperationException("Error Encountered: Unknown target in Bandit Trio");
+                }
                 phases.Add(phase);
             }
         }
