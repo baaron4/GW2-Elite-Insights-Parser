@@ -131,50 +131,23 @@ namespace GW2EIParser.Controllers
         public static string[] UploadOperation(GridRow row, FileInfo fInfo)
         {
             //Upload Process
-            Task<string> DREITask = null;
-            Task<string> DRRHTask = null;
-            Task<string> RaidarTask = null;
             string[] uploadresult = new string[3] { "", "", "" };
             if (Properties.Settings.Default.UploadToDPSReports)
             {
                 row.BgWorker.UpdateProgress(row, " 45% - Uploading to DPSReports using EI...", 45);
-                DREITask = Task.Run(() => UploadDPSReportsEI(fInfo));
-                if (DREITask != null)
-                {
-                    uploadresult[0] = DREITask.Result;
-                }
-                else
-                {
-                    uploadresult[0] = "Failed to Define Upload Task";
-                }
+                uploadresult[0] = UploadDPSReportsEI(fInfo);
             }
             row.BgWorker.ThrowIfCanceled(row);
             if (Properties.Settings.Default.UploadToDPSReportsRH)
             {
                 row.BgWorker.UpdateProgress(row, " 45% - Uploading to DPSReports using RH...", 45);
-                DRRHTask = Task.Run(() => UploadDPSReportsRH(fInfo));
-                if (DRRHTask != null)
-                {
-                    uploadresult[1] = DRRHTask.Result;
-                }
-                else
-                {
-                    uploadresult[1] = "Failed to Define Upload Task";
-                }
+                uploadresult[1] = UploadDPSReportsRH(fInfo);
             }
             row.BgWorker.ThrowIfCanceled(row);
             if (Properties.Settings.Default.UploadToRaidar)
             {
                 row.BgWorker.UpdateProgress(row, " 45% - Uploading to Raidar...", 45);
-                RaidarTask = Task.Run(() => UploadRaidar(/*fInfo*/));
-                if (RaidarTask != null)
-                {
-                    uploadresult[2] = RaidarTask.Result;
-                }
-                else
-                {
-                    uploadresult[2] = "Failed to Define Upload Task";
-                }
+                uploadresult[2] = UploadRaidar(/*fInfo*/);
             }
             row.BgWorker.ThrowIfCanceled(row);
             return uploadresult;
