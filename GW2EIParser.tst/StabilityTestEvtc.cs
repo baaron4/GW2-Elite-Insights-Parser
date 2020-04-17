@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using GW2EIParser.Exceptions;
 using GW2EIParser.Parser.ParsedData;
 using Newtonsoft.Json;
@@ -14,7 +16,7 @@ namespace GW2EIParser.tst
     [TestFixture]
     public class StabilityTestEvtc
     {
-        private bool Loop(List<string> failed, List<string> messages, string file)
+        private bool Loop(BlockingCollection<string> failed, BlockingCollection<string> messages, string file)
         {
             try
             {
@@ -22,6 +24,8 @@ namespace GW2EIParser.tst
                 TestHelper.JsonString(log);
                 TestHelper.HtmlString(log);
                 TestHelper.CsvString(log);
+                log = null;
+                GC.Collect();
             }
             catch (CancellationException canc)
             {
@@ -46,7 +50,7 @@ namespace GW2EIParser.tst
             return true;
         }
 
-        private void GenerateCrashData(List<string> failed, List<string> messages, string type, bool copy)
+        private void GenerateCrashData(BlockingCollection<string> failed, BlockingCollection<string> messages, string type, bool copy)
         {
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "../../../EvtcLogs/Crashes/";
 
@@ -58,15 +62,17 @@ namespace GW2EIParser.tst
                 File.Delete(logName);
             }
 
+            var failedList = failed.ToList();
+            var messagesList = messages.ToList();
             var dict = new Dictionary<string, string>();
-            for (int i = 0; i < failed.Count; i++)
+            for (int i = 0; i < failedList.Count; i++)
             {
-                string evtcName = failed[i].Split('\\').Last();
+                string evtcName = failedList[i].Split('\\').Last();
                 if (copy)
                 {
-                    File.Copy(failed[i], testLocation + "Logs/" + evtcName, true);
+                    File.Copy(failedList[i], testLocation + "Logs/" + evtcName, true);
                 }
-                dict[evtcName] = messages[i];
+                dict[evtcName] = messagesList[i];
             }
 
             using (var fs = new FileStream(logName, FileMode.Create, FileAccess.Write))
@@ -99,13 +105,10 @@ namespace GW2EIParser.tst
 
             Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
 
-            var failed = new List<string>();
-            var messages = new List<string>();
+            var failed = new BlockingCollection<string>();
+            var messages = new BlockingCollection<string>();
             var toCheck = Directory.EnumerateFiles(testLocation, "*.evtc", SearchOption.AllDirectories).ToList();
-            foreach (string file in toCheck)
-            {
-                Loop(failed, messages, file);
-            }
+            Parallel.ForEach(toCheck, file => Loop(failed, messages, file));
 
             GenerateCrashData(failed, messages, "evtc", true);
 
@@ -118,13 +121,10 @@ namespace GW2EIParser.tst
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "../../../EvtcLogs/StabilityTest";
 
             Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
-            var failed = new List<string>();
-            var messages = new List<string>();
+            var failed = new BlockingCollection<string>();
+            var messages = new BlockingCollection<string>();
             var toCheck = Directory.EnumerateFiles(testLocation, "*.evtc.zip", SearchOption.AllDirectories).ToList();
-            foreach (string file in toCheck)
-            {
-                Loop(failed, messages, file);
-            }
+            Parallel.ForEach(toCheck, file => Loop(failed, messages, file));
 
             GenerateCrashData(failed, messages, "evtczip", true);
 
@@ -138,13 +138,10 @@ namespace GW2EIParser.tst
 
             Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
 
-            var failed = new List<string>();
-            var messages = new List<string>();
+            var failed = new BlockingCollection<string>();
+            var messages = new BlockingCollection<string>();
             var toCheck = Directory.EnumerateFiles(testLocation, "*.zevtc", SearchOption.AllDirectories).ToList();
-            foreach (string file in toCheck)
-            {
-                Loop(failed, messages, file);
-            }
+            Parallel.ForEach(toCheck, file => Loop(failed, messages, file));
 
             GenerateCrashData(failed, messages, "zevtc", true);
 
@@ -156,9 +153,9 @@ namespace GW2EIParser.tst
         {
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "../../../EvtcLogs/Crashes/Logs";
 
-            var failed = new List<string>();
+            var failed = new BlockingCollection<string>();
             int failedCount = 0;
-            var messages = new List<string>();
+            var messages = new BlockingCollection<string>();
             var toCheck = Directory.EnumerateFiles(testLocation, "*.zevtc", SearchOption.AllDirectories).ToList();
             foreach (string file in toCheck)
             {
@@ -169,8 +166,6 @@ namespace GW2EIParser.tst
             }
             GenerateCrashData(failed, messages, "zevtc_remaining", false);
             failedCount += failed.Count;
-            failed.Clear();
-            messages.Clear();
 
             toCheck = Directory.EnumerateFiles(testLocation, "*.evtc", SearchOption.AllDirectories).ToList();
             foreach (string file in toCheck)
@@ -182,8 +177,6 @@ namespace GW2EIParser.tst
             }
             GenerateCrashData(failed, messages, "evtc_remaining", false);
             failedCount += failed.Count;
-            failed.Clear();
-            messages.Clear();
 
             toCheck = Directory.EnumerateFiles(testLocation, "*.evtc.zip", SearchOption.AllDirectories).ToList();
             foreach (string file in toCheck)
@@ -195,8 +188,6 @@ namespace GW2EIParser.tst
             }
             GenerateCrashData(failed, messages, "evtczip_remaining", false);
             failedCount += failed.Count;
-            failed.Clear();
-            messages.Clear();
 
             Assert.IsTrue(failedCount == 0, "Check Crashes folder");
         }
