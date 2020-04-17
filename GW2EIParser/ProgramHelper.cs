@@ -310,6 +310,8 @@ namespace GW2EIParser
                 rowData.BgWorker.ThrowIfCanceled(rowData);
             }
             rowData.BgWorker.UpdateProgress(rowData, $"100% - Complete_{log.FightData.Logic.Extension}_{result}", 100);
+            log = null;
+            GC.Collect();
         }
 
     }
