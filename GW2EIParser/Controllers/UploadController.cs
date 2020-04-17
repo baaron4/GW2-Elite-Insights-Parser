@@ -134,22 +134,22 @@ namespace GW2EIParser.Controllers
             string[] uploadresult = new string[3] { "", "", "" };
             if (Properties.Settings.Default.UploadToDPSReports)
             {
-                row.BgWorker.UpdateProgress(row, " 45% - Uploading to DPSReports using EI...", 45);
+                row.UpdateProgress(" 45% - Uploading to DPSReports using EI...", 45);
                 uploadresult[0] = UploadDPSReportsEI(fInfo);
             }
-            row.BgWorker.ThrowIfCanceled(row);
+            row.ThrowIfCanceled();
             if (Properties.Settings.Default.UploadToDPSReportsRH)
             {
-                row.BgWorker.UpdateProgress(row, " 45% - Uploading to DPSReports using RH...", 45);
+                row.UpdateProgress(" 45% - Uploading to DPSReports using RH...", 45);
                 uploadresult[1] = UploadDPSReportsRH(fInfo);
             }
-            row.BgWorker.ThrowIfCanceled(row);
+            row.ThrowIfCanceled();
             if (Properties.Settings.Default.UploadToRaidar)
             {
-                row.BgWorker.UpdateProgress(row, " 45% - Uploading to Raidar...", 45);
+                row.UpdateProgress(" 45% - Uploading to Raidar...", 45);
                 uploadresult[2] = UploadRaidar(/*fInfo*/);
             }
-            row.BgWorker.ThrowIfCanceled(row);
+            row.ThrowIfCanceled();
             return uploadresult;
         }
 

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using GW2EIParser.Exceptions;
 
 namespace GW2EIParser
 {
@@ -67,9 +69,23 @@ namespace GW2EIParser
             BgWorker.CancelAsync();
         }
 
+        public void ThrowIfCanceled(string cancelStatus = "Canceled")
+        {
+            if (BgWorker != null && BgWorker.CancellationPending)
+            {
+                Status = cancelStatus;
+                throw new CancellationException(this);
+            }
+        }
+
         public void UpdateProgress(string status, int percent)
         {
-            BgWorker.UpdateProgress(this, status, percent);
+            Status = status;
+            if (BgWorker != null)
+            {
+                BgWorker.ReportProgress(percent, this);
+            }
+            Console.WriteLine($"{Location}: {status}" + Environment.NewLine);;
         }
     }
 }

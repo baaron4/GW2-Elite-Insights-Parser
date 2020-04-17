@@ -17,39 +17,9 @@ namespace GW2EIParser
 {
     public static class ProgramHelper
     {
-        /// <summary>
-        /// Reports a status update for a log, updating the background worker and the related row with the new status
-        /// </summary>
-        /// <param name="bg"></param>
-        /// <param name="row"></param>
-        /// <param name="status"></param>
-        /// <param name="percent"></param>
-        public static void UpdateProgress(this BackgroundWorker bg, GridRow row, string status, int percent)
-        {
-            row.Status = status;
-            bg.ReportProgress(percent, row);
-            Console.WriteLine($"{row.Location}: {status}" + Environment.NewLine);
-        }
-
         private static bool HasFormat()
         {
             return Properties.Settings.Default.SaveOutCSV || Properties.Settings.Default.SaveOutHTML || Properties.Settings.Default.SaveOutXML || Properties.Settings.Default.SaveOutJSON;
-        }
-
-        /// <summary>
-        /// Throws a <see cref="CancellationException"/> if the background worker has been cancelled
-        /// </summary>
-        /// <param name="bg"></param>
-        /// <param name="row"></param>
-        /// <param name="cancelStatus"></param>
-        public static void ThrowIfCanceled(this BackgroundWorker bg, GridRow row, string cancelStatus = "Canceled")
-        {
-            if (bg.CancellationPending)
-            {
-                row.Status = cancelStatus;
-                throw new CancellationException(row);
-
-            }
         }
 
         private static readonly HashSet<string> _compressedFiles = new HashSet<string>()
@@ -133,7 +103,7 @@ namespace GW2EIParser
                 }
                 else
                 {
-                    row.BgWorker.UpdateProgress(row, "Not EVTC", 100);
+                    row.UpdateProgress("Not EVTC", 100);
                     throw new InvalidDataException("Error Encountered: Not EVTC");
                 }
             }
@@ -167,8 +137,8 @@ namespace GW2EIParser
 
         private static void GenerateFiles(ParsedLog log, GridRow rowData, string[] uploadresult, FileInfo fInfo)
         {
-            rowData.BgWorker.ThrowIfCanceled(rowData);
-            rowData.BgWorker.UpdateProgress(rowData, "50% - Creating File(s)...", 50);
+            rowData.ThrowIfCanceled();
+            rowData.UpdateProgress("50% - Creating File(s)...", 50);
 
             //save location
             DirectoryInfo saveDirectory;
@@ -194,7 +164,7 @@ namespace GW2EIParser
             string fName = fInfo.Name.Split('.')[0];
             fName = $"{fName}{PoVClassTerm}_{log.FightData.Logic.Extension}{encounterLengthTerm}_{result}";
 
-            rowData.BgWorker.ThrowIfCanceled(rowData);
+            rowData.ThrowIfCanceled();
 
             // parallel stuff
             if (log.ParserSettings.MultiTasks)
@@ -231,7 +201,7 @@ namespace GW2EIParser
                     builder.CreateHTML(sw, saveDirectory.FullName);
                 }
             }
-            rowData.BgWorker.ThrowIfCanceled(rowData);
+            rowData.ThrowIfCanceled();
             if (Properties.Settings.Default.SaveOutCSV)
             {
                 string outputFile = Path.Combine(
@@ -248,7 +218,7 @@ namespace GW2EIParser
                     builder.CreateCSV();
                 }
             }
-            rowData.BgWorker.ThrowIfCanceled(rowData);
+            rowData.ThrowIfCanceled();
             if (Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML)
             {
                 var builder = new RawFormatBuilder(log, uploadresult);
@@ -279,7 +249,7 @@ namespace GW2EIParser
                         CompressFile(outputFile, msr);
                     }
                 }
-                rowData.BgWorker.ThrowIfCanceled(rowData);
+                rowData.ThrowIfCanceled();
                 if (Properties.Settings.Default.SaveOutXML)
                 {
                     string outputFile = Path.Combine(
@@ -307,9 +277,9 @@ namespace GW2EIParser
                         CompressFile(outputFile, msr);
                     }
                 }
-                rowData.BgWorker.ThrowIfCanceled(rowData);
+                rowData.ThrowIfCanceled();
             }
-            rowData.BgWorker.UpdateProgress(rowData, $"100% - Complete_{log.FightData.Logic.Extension}_{result}", 100);
+            rowData.UpdateProgress($"100% - Complete_{log.FightData.Logic.Extension}_{result}", 100);
             log = null;
             GC.Collect();
         }
