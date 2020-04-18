@@ -111,12 +111,7 @@ namespace GW2EIParser.Controllers
                 }
                 catch (Exception e)
                 {
-                    Exception finalException = e;
-                    while (finalException.InnerException != null)
-                    {
-                        finalException = finalException.InnerException;
-                    }
-                    res = finalException.Message;
+                    res = e.GetFinalException().Message;
                 }
                 finally
                 {
