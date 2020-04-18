@@ -14,8 +14,7 @@ namespace GW2EIParser
         ClearOnComplete = 5
     }
 
-
-    public class GridRow
+    public abstract class GridRow
     {
         /// <summary>
         /// Location of the file being parsed
@@ -34,10 +33,6 @@ namespace GW2EIParser
         /// </summary>
         public string ButtonText { get; set; }
         /// <summary>
-        /// BackgroundWorker processing the log
-        /// </summary>
-        public BackgroundWorker BgWorker { get; set; }
-        /// <summary>
         /// Row state
         /// </summary>
         public RowState State { get; set; }
@@ -53,39 +48,17 @@ namespace GW2EIParser
         /// <summary>
         /// Begins processing the log
         /// </summary>
-        public void Run()
-        {
-            ButtonText = "Cancel";
-            State = RowState.Parsing;
-            BgWorker.RunWorkerAsync(this);
-        }
+        public abstract void Run();
 
         /// <summary>
         /// Cancels the log's processing
         /// </summary>
-        public void Cancel()
-        {
-            State = RowState.Cancelling;
-            BgWorker.CancelAsync();
-        }
+        public abstract void Cancel();
 
-        public void ThrowIfCanceled(string cancelStatus = "Canceled")
-        {
-            if (BgWorker != null && BgWorker.CancellationPending)
-            {
-                Status = cancelStatus;
-                throw new CancellationException(this);
-            }
-        }
+        public abstract bool IsBusy();
 
-        public void UpdateProgress(string status, int percent)
-        {
-            Status = status;
-            if (BgWorker != null)
-            {
-                BgWorker.ReportProgress(percent, this);
-            }
-            Console.WriteLine($"{Location}: {status}" + Environment.NewLine);;
-        }
+        public abstract void ThrowIfCanceled(string cancelStatus = "Canceled");
+
+        public abstract void UpdateProgress(string status, int percent);
     }
 }

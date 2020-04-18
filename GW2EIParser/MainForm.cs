@@ -52,10 +52,7 @@ namespace GW2EIParser
 
                 _logsFiles.Add(file);
 
-                var gRow = new GridRow(file, "Ready to parse")
-                {
-                    BgWorker = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true }
-                };
+                var gRow = new FormRow(file, "Ready to parse");
                 gRow.BgWorker.DoWork += BgWorkerDoWork;
                 gRow.BgWorker.ProgressChanged += BgWorkerProgressChanged;
                 gRow.BgWorker.RunWorkerCompleted += BgWorkerCompleted;
@@ -217,7 +214,7 @@ namespace GW2EIParser
 
                 foreach (GridRow row in gridRowBindingSource)
                 {
-                    if (!row.BgWorker.IsBusy)
+                    if (!row.IsBusy())
                     {
                         QueueOrRunWorker(row);
                     }
@@ -244,7 +241,7 @@ namespace GW2EIParser
                     row.State = RowState.Ready;
                 }
 
-                if (row.BgWorker.IsBusy)
+                if (row.IsBusy())
                 {
                     row.Cancel();
                 }
@@ -288,7 +285,7 @@ namespace GW2EIParser
             for (int i = gridRowBindingSource.Count - 1; i >= 0; i--)
             {
                 var row = gridRowBindingSource[i] as GridRow;
-                if (row.BgWorker.IsBusy)
+                if (row.IsBusy())
                 {
                     row.Cancel();
                     row.State = RowState.ClearOnComplete;
