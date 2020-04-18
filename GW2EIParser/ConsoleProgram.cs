@@ -17,10 +17,10 @@ namespace GW2EIParser
 
         private void ParseLog(object logFile)
         {
-            var row = new ConsoleRow(logFile as string, "Ready to parse");
+            var operation = new ConsoleOperation(logFile as string, "Ready to parse");
             try
             {
-                row.Run();
+                operation.Run();
             }
             catch (CancellationException ex)
             {

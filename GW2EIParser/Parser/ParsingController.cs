@@ -38,12 +38,12 @@ namespace GW2EIParser.Parser
         /// <summary>
         /// Parses the given log
         /// </summary>
-        /// <param name="row">GridRow object bound to the UI</param>
+        /// <param name="operation">Operation object bound to the UI</param>
         /// <param name="evtc">The path to the log to parse</param>
         /// <returns>the ParsedLog</returns>
-        public ParsedLog ParseLog(GridRow row, string evtc)
+        public ParsedLog ParseLog(Operation operation, string evtc)
         {
-            row.UpdateProgress("10% - Reading Binary...", 10);
+            operation.UpdateProgress("10% - Reading Binary...", 10);
             using (var fs = new FileStream(evtc, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 if (ProgramHelper.IsCompressedFormat(evtc))
@@ -60,42 +60,42 @@ namespace GW2EIParser.Parser
                             {
                                 data.CopyTo(ms);
                                 ms.Position = 0;
-                                ParseLog(row, ms);
+                                ParseLog(operation, ms);
                             };
                         }
                     }
                 }
                 else
                 {
-                    ParseLog(row, fs);
+                    ParseLog(operation, fs);
                 }
             }
-            row.ThrowIfCanceled();
-            row.UpdateProgress("45% - Data parsed", 45);
+            operation.ThrowIfCanceled();
+            operation.UpdateProgress("45% - Data parsed", 45);
             return new ParsedLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _logEndTime - _logStartTime, _parserSettings);
         }
 
-        private void ParseLog(GridRow row, Stream stream)
+        private void ParseLog(Operation operation, Stream stream)
         {
-            row.ThrowIfCanceled();
-            row.UpdateProgress("15% - Parsing fight data...", 15);
+            operation.ThrowIfCanceled();
+            operation.UpdateProgress("15% - Parsing fight data...", 15);
             ParseFightData(stream);
-            row.ThrowIfCanceled();
-            row.UpdateProgress("20% - Parsing agent data...", 20);
+            operation.ThrowIfCanceled();
+            operation.UpdateProgress("20% - Parsing agent data...", 20);
             ParseAgentData(stream);
-            row.ThrowIfCanceled();
-            row.UpdateProgress("25% - Parsing skill data...", 25);
+            operation.ThrowIfCanceled();
+            operation.UpdateProgress("25% - Parsing skill data...", 25);
             ParseSkillData(stream);
-            row.ThrowIfCanceled();
-            row.UpdateProgress("30% - Parsing combat list...", 30);
+            operation.ThrowIfCanceled();
+            operation.UpdateProgress("30% - Parsing combat list...", 30);
             ParseCombatList(stream);
-            row.ThrowIfCanceled();
-            row.UpdateProgress("35% - Linking agents to combat list...", 35);
+            operation.ThrowIfCanceled();
+            operation.UpdateProgress("35% - Linking agents to combat list...", 35);
             CompleteAgents();
-            row.ThrowIfCanceled();
-            row.UpdateProgress("40% - Preparing data for log generation...", 40);
+            operation.ThrowIfCanceled();
+            operation.UpdateProgress("40% - Preparing data for log generation...", 40);
             PreProcessEvtcData();
-            row.ThrowIfCanceled();
+            operation.ThrowIfCanceled();
         }
 
         private static BinaryReader CreateReader(Stream stream)

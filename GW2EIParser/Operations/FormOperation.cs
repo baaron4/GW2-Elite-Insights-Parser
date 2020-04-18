@@ -4,11 +4,11 @@ using GW2EIParser.Exceptions;
 
 namespace GW2EIParser
 {
-    public class FormRow : GridRow
+    public class FormOperation : Operation
     {
         public BackgroundWorker BgWorker { get; }
 
-        public FormRow(string location, string status) : base(location, status)
+        public FormOperation(string location, string status) : base(location, status)
         {
             BgWorker = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
         }
@@ -19,7 +19,7 @@ namespace GW2EIParser
         public override void Run()
         {
             ButtonText = "Cancel";
-            State = RowState.Parsing;
+            State = OperationState.Parsing;
             BgWorker.RunWorkerAsync(this);
         }
 
@@ -28,7 +28,7 @@ namespace GW2EIParser
         /// </summary>
         public override void Cancel()
         {
-            State = RowState.Cancelling;
+            State = OperationState.Cancelling;
             BgWorker.CancelAsync();
         }
 

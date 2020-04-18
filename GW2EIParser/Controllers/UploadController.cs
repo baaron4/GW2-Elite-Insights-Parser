@@ -128,28 +128,28 @@ namespace GW2EIParser.Controllers
             return res;
         }
 
-        public static string[] UploadOperation(GridRow row, FileInfo fInfo)
+        public static string[] UploadOperation(Operation operation, FileInfo fInfo)
         {
             //Upload Process
             string[] uploadresult = new string[3] { "", "", "" };
             if (Properties.Settings.Default.UploadToDPSReports)
             {
-                row.UpdateProgress(" 45% - Uploading to DPSReports using EI...", 45);
+                operation.UpdateProgress(" 45% - Uploading to DPSReports using EI...", 45);
                 uploadresult[0] = UploadDPSReportsEI(fInfo);
             }
-            row.ThrowIfCanceled();
+            operation.ThrowIfCanceled();
             if (Properties.Settings.Default.UploadToDPSReportsRH)
             {
-                row.UpdateProgress(" 45% - Uploading to DPSReports using RH...", 45);
+                operation.UpdateProgress(" 45% - Uploading to DPSReports using RH...", 45);
                 uploadresult[1] = UploadDPSReportsRH(fInfo);
             }
-            row.ThrowIfCanceled();
+            operation.ThrowIfCanceled();
             if (Properties.Settings.Default.UploadToRaidar)
             {
-                row.UpdateProgress(" 45% - Uploading to Raidar...", 45);
+                operation.UpdateProgress(" 45% - Uploading to Raidar...", 45);
                 uploadresult[2] = UploadRaidar(/*fInfo*/);
             }
-            row.ThrowIfCanceled();
+            operation.ThrowIfCanceled();
             return uploadresult;
         }
 

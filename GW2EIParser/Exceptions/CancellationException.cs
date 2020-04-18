@@ -4,16 +4,16 @@ namespace GW2EIParser.Exceptions
 {
     public class CancellationException : Exception
     {
-        public GridRow Row { get; }
+        public Operation Operation { get; }
 
-        public CancellationException(GridRow row) : base("Operation aborted")
+        public CancellationException(Operation operation) : base("Operation aborted")
         {
-            Row = row;
+            Operation = operation;
         }
 
-        public CancellationException(GridRow row, Exception inner) : base("Operation aborted", inner)
+        public CancellationException(Operation operation, Exception inner) : base("Operation aborted", inner)
         {
-            Row = row;
+            Operation = operation;
         }
     }
 }

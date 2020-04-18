@@ -74,12 +74,12 @@ namespace GW2EIParser
             return false;
         }
 
-        public static void DoWork(GridRow row)
+        public static void DoWork(Operation operation)
         {
             System.Globalization.CultureInfo before = Thread.CurrentThread.CurrentCulture;
             Thread.CurrentThread.CurrentCulture =
                     new System.Globalization.CultureInfo("en-US");
-            var fInfo = new FileInfo(row.Location);
+            var fInfo = new FileInfo(operation.Location);
             try
             {
                 if (!fInfo.Exists)
@@ -96,20 +96,20 @@ namespace GW2EIParser
                 if (IsSupportedFormat(fInfo.Name))
                 {
                     //Process evtc here
-                    ParsedLog log = control.ParseLog(row, fInfo.FullName);
-                    string[] uploadresult = UploadController.UploadOperation(row, fInfo);
+                    ParsedLog log = control.ParseLog(operation, fInfo.FullName);
+                    string[] uploadresult = UploadController.UploadOperation(operation, fInfo);
                     //Creating File
-                    GenerateFiles(log, row, uploadresult, fInfo);
+                    GenerateFiles(log, operation, uploadresult, fInfo);
                 }
                 else
                 {
-                    row.UpdateProgress("Not EVTC", 100);
+                    operation.UpdateProgress("Not EVTC", 100);
                     throw new InvalidDataException("Error Encountered: Not EVTC");
                 }
             }
             catch (Exception ex)
             {
-                throw new CancellationException(row, ex);
+                throw new CancellationException(operation, ex);
             }
             finally
             {
@@ -135,7 +135,7 @@ namespace GW2EIParser
             }
         }
 
-        private static void GenerateFiles(ParsedLog log, GridRow rowData, string[] uploadresult, FileInfo fInfo)
+        private static void GenerateFiles(ParsedLog log, Operation rowData, string[] uploadresult, FileInfo fInfo)
         {
             rowData.ThrowIfCanceled();
             rowData.UpdateProgress("50% - Creating File(s)...", 50);

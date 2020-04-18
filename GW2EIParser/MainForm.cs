@@ -15,7 +15,7 @@ namespace GW2EIParser
         private readonly List<string> _logsFiles;
         private int _runningCount;
         private bool _anyRunning;
-        private readonly Queue<GridRow> _logQueue = new Queue<GridRow>();
+        private readonly Queue<Operation> _logQueue = new Queue<Operation>();
         private MainForm()
         {
             InitializeComponent();
@@ -52,16 +52,16 @@ namespace GW2EIParser
 
                 _logsFiles.Add(file);
 
-                var gRow = new FormRow(file, "Ready to parse");
-                gRow.BgWorker.DoWork += BgWorkerDoWork;
-                gRow.BgWorker.ProgressChanged += BgWorkerProgressChanged;
-                gRow.BgWorker.RunWorkerCompleted += BgWorkerCompleted;
+                var goperation = new FormOperation(file, "Ready to parse");
+                goperation.BgWorker.DoWork += BgWorkerDoWork;
+                goperation.BgWorker.ProgressChanged += BgWorkerProgressChanged;
+                goperation.BgWorker.RunWorkerCompleted += BgWorkerCompleted;
 
-                gridRowBindingSource.Add(gRow);
+                operatorBindingSource.Add(goperation);
 
                 if (Properties.Settings.Default.AutoParse)
                 {
-                    QueueOrRunWorker(gRow);
+                    QueueOrRunWorker(goperation);
                 }
             }
 
@@ -77,23 +77,23 @@ namespace GW2EIParser
         /// <summary>
         /// Queues a background worker. If the 'ParseOneAtATime' setting is false, workers are run asynchronously
         /// </summary>
-        /// <param name="row"></param>
-        private void QueueOrRunWorker(GridRow row)
+        /// <param name="operation"></param>
+        private void QueueOrRunWorker(Operation operation)
         {
             btnClear.Enabled = false;
             btnParse.Enabled = false;
             btnCancel.Enabled = true;
             if (_anyRunning)
             {
-                _logQueue.Enqueue(row);
-                row.Status = "Queued";
-                row.State = RowState.Pending;
+                _logQueue.Enqueue(operation);
+                operation.Status = "Queued";
+                operation.State = OperationState.Pending;
                 dgvFiles.Invalidate();
             }
             else
             {
                 _anyRunning = true;
-                row.Run();
+                operation.Run();
             }
         }
 
@@ -104,9 +104,9 @@ namespace GW2EIParser
         {
             if (_logQueue.Count > 0)
             {
-                GridRow row = _logQueue.Dequeue();
+                Operation operation = _logQueue.Dequeue();
                 _anyRunning = true;
-                row.Run();
+                operation.Run();
             }
             else
             {
@@ -127,10 +127,10 @@ namespace GW2EIParser
         /// <param name="e"></param>
         private void BgWorkerDoWork(object sender, DoWorkEventArgs e)
         {
-            var rowData = e.Argument as GridRow;
-            e.Result = rowData;
+            var operationData = e.Argument as Operation;
+            e.Result = operationData;
             _runningCount++;
-            ProgramHelper.DoWork(rowData);
+            ProgramHelper.DoWork(operationData);
 
         }
 
@@ -141,7 +141,7 @@ namespace GW2EIParser
         /// <param name="e"></param>
         private void BgWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            //Redraw rows
+            //Redraw operations
             dgvFiles.Invalidate();
         }
 
@@ -152,27 +152,27 @@ namespace GW2EIParser
         /// <param name="e"></param>
         private void BgWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            GridRow row;
+            Operation operation;
             _runningCount--;
             if (e.Cancelled || e.Error != null)
             {
                 if (e.Error is CancellationException)
                 {
-                    row = ((CancellationException)e.Error).Row;
+                    operation = ((CancellationException)e.Error).Operation;
                     if (e.Error.InnerException != null)
                     {
-                        row.Status = e.Error.InnerException.Message;
-                        Console.WriteLine(row.Status);
+                        operation.Status = e.Error.InnerException.Message;
+                        Console.WriteLine(operation.Status);
                     }
 
-                    if (row.State == RowState.ClearOnComplete)
+                    if (operation.State == OperationState.ClearOnComplete)
                     {
-                        gridRowBindingSource.Remove(row);
+                        operatorBindingSource.Remove(operation);
                     }
                     else
                     {
-                        row.State = RowState.Ready;
-                        row.ButtonText = "Parse";
+                        operation.State = OperationState.Ready;
+                        operation.ButtonText = "Parse";
                     }
                 }
                 else
@@ -182,15 +182,15 @@ namespace GW2EIParser
             }
             else
             {
-                row = (GridRow)e.Result;
-                if (row.State == RowState.ClearOnComplete)
+                operation = (Operation)e.Result;
+                if (operation.State == OperationState.ClearOnComplete)
                 {
-                    gridRowBindingSource.Remove(row);
+                    operatorBindingSource.Remove(operation);
                 }
                 else
                 {
-                    row.ButtonText = "Open";
-                    row.State = RowState.Complete;
+                    operation.ButtonText = "Open";
+                    operation.State = OperationState.Complete;
                 }
             }
             dgvFiles.Invalidate();
@@ -212,11 +212,11 @@ namespace GW2EIParser
                 btnParse.Enabled = false;
                 btnCancel.Enabled = true;
 
-                foreach (GridRow row in gridRowBindingSource)
+                foreach (Operation operation in operatorBindingSource)
                 {
-                    if (!row.IsBusy())
+                    if (!operation.IsBusy())
                     {
-                        QueueOrRunWorker(row);
+                        QueueOrRunWorker(operation);
                     }
                 }
             }
@@ -230,24 +230,24 @@ namespace GW2EIParser
         private void BtnCancelClick(object sender, EventArgs e)
         {
             //Clear queue so queued workers don't get started by any cancellations
-            var rows = new HashSet<GridRow>(_logQueue);
+            var operations = new HashSet<Operation>(_logQueue);
             _logQueue.Clear();
 
             //Cancel all workers
-            foreach (GridRow row in gridRowBindingSource)
+            foreach (Operation operation in operatorBindingSource)
             {
-                if (row.State == RowState.Pending)
+                if (operation.State == OperationState.Pending)
                 {
-                    row.State = RowState.Ready;
+                    operation.State = OperationState.Ready;
                 }
 
-                if (row.IsBusy())
+                if (operation.IsBusy())
                 {
-                    row.Cancel();
+                    operation.Cancel();
                 }
-                else if (rows.Contains(row))
+                else if (operations.Contains(operation))
                 {
-                    row.Status = "Ready to parse";
+                    operation.Status = "Ready to parse";
                 }
                 dgvFiles.Invalidate();
             }
@@ -282,17 +282,17 @@ namespace GW2EIParser
             _logQueue.Clear();
             _logsFiles.Clear();
 
-            for (int i = gridRowBindingSource.Count - 1; i >= 0; i--)
+            for (int i = operatorBindingSource.Count - 1; i >= 0; i--)
             {
-                var row = gridRowBindingSource[i] as GridRow;
-                if (row.IsBusy())
+                var operation = operatorBindingSource[i] as Operation;
+                if (operation.IsBusy())
                 {
-                    row.Cancel();
-                    row.State = RowState.ClearOnComplete;
+                    operation.Cancel();
+                    operation.State = OperationState.ClearOnComplete;
                 }
                 else
                 {
-                    gridRowBindingSource.RemoveAt(i);
+                    operatorBindingSource.RemoveAt(i);
                 }
             }
         }
@@ -327,22 +327,22 @@ namespace GW2EIParser
         {
             if (e.ColumnIndex == 2)
             {
-                var row = (GridRow)gridRowBindingSource[e.RowIndex];
+                var operation = (Operation)operatorBindingSource[e.RowIndex];
 
-                switch (row.State)
+                switch (operation.State)
                 {
-                    case RowState.Ready:
-                        QueueOrRunWorker(row);
+                    case OperationState.Ready:
+                        QueueOrRunWorker(operation);
                         btnCancel.Enabled = true;
                         break;
 
-                    case RowState.Parsing:
-                        row.Cancel();
+                    case OperationState.Parsing:
+                        operation.Cancel();
                         dgvFiles.Invalidate();
                         break;
 
-                    case RowState.Complete:
-                        string[] paths = row.LogLocation.Split(',');
+                    case OperationState.Complete:
+                        string[] paths = operation.LogLocation.Split(',');
                         foreach (string path in paths)
                         {
                             if (File.Exists(path) || Directory.Exists(path))

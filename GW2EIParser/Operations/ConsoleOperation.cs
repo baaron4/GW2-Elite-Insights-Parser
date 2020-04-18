@@ -4,10 +4,10 @@ using GW2EIParser.Exceptions;
 
 namespace GW2EIParser
 {
-    public class ConsoleRow : GridRow
+    public class ConsoleOperation : Operation
     {
 
-        public ConsoleRow(string location, string status) : base(location, status)
+        public ConsoleOperation(string location, string status) : base(location, status)
         {
             ButtonText = "";
         }
@@ -17,7 +17,7 @@ namespace GW2EIParser
         /// </summary>
         public override void Run()
         {
-            State = RowState.Parsing;
+            State = OperationState.Parsing;
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace GW2EIParser
         /// </summary>
         public override void Cancel()
         {
-            State = RowState.Cancelling;
+            State = OperationState.Cancelling;
         }
 
         public override bool IsBusy()

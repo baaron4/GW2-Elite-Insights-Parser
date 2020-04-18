@@ -4,7 +4,7 @@ using GW2EIParser.Exceptions;
 
 namespace GW2EIParser
 {
-    public enum RowState
+    public enum OperationState
     {
         Ready = 0,
         Parsing = 1,
@@ -14,7 +14,7 @@ namespace GW2EIParser
         ClearOnComplete = 5
     }
 
-    public abstract class GridRow
+    public abstract class Operation
     {
         /// <summary>
         /// Location of the file being parsed
@@ -33,16 +33,16 @@ namespace GW2EIParser
         /// </summary>
         public string ButtonText { get; set; }
         /// <summary>
-        /// Row state
+        /// Operation state
         /// </summary>
-        public RowState State { get; set; }
+        public OperationState State { get; set; }
 
-        public GridRow(string location, string status)
+        public Operation(string location, string status)
         {
             Location = location;
             Status = status;
             ButtonText = "Parse";
-            State = RowState.Ready;
+            State = OperationState.Ready;
         }
 
         /// <summary>

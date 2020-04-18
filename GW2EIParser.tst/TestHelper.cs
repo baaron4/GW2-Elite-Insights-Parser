@@ -31,16 +31,9 @@ namespace GW2EIParser.tst
         {
             var parser = new ParsingController(new TestParserSettings());
 
-            var row = new GridRow(location as string, "Ready to parse")
-            {
-                BgWorker = new System.ComponentModel.BackgroundWorker()
-                {
-                    WorkerReportsProgress = true
-                }
-            };
+            var operation = new ConsoleOperation(location as string, "Ready to parse");
 
-
-            var fInfo = new FileInfo(row.Location);
+            var fInfo = new FileInfo(operation.Location);
             if (!fInfo.Exists)
             {
                 throw new FileNotFoundException("Error Encountered: File does not exist", fInfo.FullName);
@@ -50,7 +43,7 @@ namespace GW2EIParser.tst
                 throw new InvalidDataException("Error Encountered: Not EVTC");
             }
 
-            return parser.ParseLog(row, fInfo.FullName);
+            return parser.ParseLog(operation, fInfo.FullName);
         }
 
         public static string JsonString(ParsedLog log)

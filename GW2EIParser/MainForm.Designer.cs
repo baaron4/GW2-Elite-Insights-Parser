@@ -44,10 +44,10 @@
             this.labWatchingDir = new System.Windows.Forms.Label();
             this.locationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.statusDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.gridRowBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.operatorBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.logFileWatcher)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridRowBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.operatorBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -123,7 +123,7 @@
             this.locationDataGridViewTextBoxColumn,
             this.statusDataGridViewTextBoxColumn,
             this.ButtonState});
-            this.dgvFiles.DataSource = this.gridRowBindingSource;
+            this.dgvFiles.DataSource = this.operatorBindingSource;
             this.dgvFiles.GridColor = System.Drawing.SystemColors.Control;
             this.dgvFiles.Location = new System.Drawing.Point(16, 46);
             this.dgvFiles.MultiSelect = false;
@@ -189,7 +189,7 @@
             // 
             // gridRowBindingSource
             // 
-            this.gridRowBindingSource.DataSource = typeof(GW2EIParser.GridRow);
+            this.operatorBindingSource.DataSource = typeof(GW2EIParser.Operation);
             // 
             // MainForm
             // 
@@ -211,7 +211,7 @@
             this.TransparencyKey = System.Drawing.Color.OrangeRed;
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.logFileWatcher)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridRowBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.operatorBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -225,7 +225,7 @@
         private System.Windows.Forms.Button btnSettings;
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.DataGridView dgvFiles;
-        private System.Windows.Forms.BindingSource gridRowBindingSource;
+        private System.Windows.Forms.BindingSource operatorBindingSource;
         private System.Windows.Forms.DataGridViewTextBoxColumn locationDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn statusDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewButtonColumn ButtonState;
