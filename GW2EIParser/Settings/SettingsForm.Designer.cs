@@ -50,6 +50,7 @@
             this.chkOutputJson = new System.Windows.Forms.CheckBox();
             this.chkIndentJSON = new System.Windows.Forms.CheckBox();
             this.settingTooltip = new System.Windows.Forms.ToolTip(this.components);
+            this.chkMultiLogs = new System.Windows.Forms.CheckBox();
             this.chkAnonymous = new System.Windows.Forms.CheckBox();
             this.chkDamageMods = new System.Windows.Forms.CheckBox();
             this.chkRawTimelineArrays = new System.Windows.Forms.CheckBox();
@@ -108,7 +109,7 @@
             // 
             this.lblSettingsInfoMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblSettingsInfoMsg.AutoSize = true;
-            this.lblSettingsInfoMsg.Location = new System.Drawing.Point(9, 292);
+            this.lblSettingsInfoMsg.Location = new System.Drawing.Point(9, 350);
             this.lblSettingsInfoMsg.Name = "lblSettingsInfoMsg";
             this.lblSettingsInfoMsg.Size = new System.Drawing.Size(251, 13);
             this.lblSettingsInfoMsg.TabIndex = 12;
@@ -223,12 +224,12 @@
             this.chkPhaseParsing.UseVisualStyleBackColor = true;
             this.chkPhaseParsing.CheckedChanged += new System.EventHandler(this.PhaseParsingCheckedChanged);
             // 
-            // chkOneAtATime
+            // chkMultiThreaded
             // 
             this.chkMultiThreaded.AutoSize = true;
             this.chkMultiThreaded.Location = new System.Drawing.Point(6, 19);
             this.chkMultiThreaded.Name = "chkMultiThreaded";
-            this.chkMultiThreaded.Size = new System.Drawing.Size(139, 17);
+            this.chkMultiThreaded.Size = new System.Drawing.Size(202, 17);
             this.chkMultiThreaded.TabIndex = 29;
             this.chkMultiThreaded.Text = "Use multi threading on log processing";
             this.settingTooltip.SetToolTip(this.chkMultiThreaded, "Keep default value if unsure.");
@@ -303,9 +304,21 @@
             this.chkIndentJSON.UseVisualStyleBackColor = true;
             this.chkIndentJSON.CheckedChanged += new System.EventHandler(this.ChkIndentJSONCheckedChanged);
             // 
-            // toolTip1
+            // settingTooltip
             // 
             this.settingTooltip.ToolTipTitle = "Setting description";
+            // 
+            // chkMultiLogs
+            // 
+            this.chkMultiLogs.AutoSize = true;
+            this.chkMultiLogs.Location = new System.Drawing.Point(6, 42);
+            this.chkMultiLogs.Name = "chkMultiLogs";
+            this.chkMultiLogs.Size = new System.Drawing.Size(194, 17);
+            this.chkMultiLogs.TabIndex = 20;
+            this.chkMultiLogs.Text = "Parse Multiple logs at the same time";
+            this.settingTooltip.SetToolTip(this.chkMultiLogs, "Keep default value if unsure.");
+            this.chkMultiLogs.UseVisualStyleBackColor = true;
+            this.chkMultiLogs.CheckedChanged += new System.EventHandler(this.ChkMultiLogs_CheckedChanged);
             // 
             // chkAnonymous
             // 
@@ -370,7 +383,7 @@
             this.tabControl.Multiline = true;
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(479, 277);
+            this.tabControl.Size = new System.Drawing.Size(479, 335);
             this.tabControl.TabIndex = 47;
             // 
             // tabGeneral
@@ -381,7 +394,7 @@
             this.tabGeneral.Location = new System.Drawing.Point(4, 22);
             this.tabGeneral.Name = "tabGeneral";
             this.tabGeneral.Padding = new System.Windows.Forms.Padding(3);
-            this.tabGeneral.Size = new System.Drawing.Size(471, 251);
+            this.tabGeneral.Size = new System.Drawing.Size(471, 309);
             this.tabGeneral.TabIndex = 0;
             this.tabGeneral.Text = "General";
             this.tabGeneral.UseVisualStyleBackColor = true;
@@ -389,12 +402,13 @@
             // boxParsing
             // 
             this.boxParsing.Controls.Add(this.chkMultiThreaded);
+            this.boxParsing.Controls.Add(this.chkMultiLogs);
             this.boxParsing.Controls.Add(this.chkAutoParse);
             this.boxParsing.Controls.Add(this.chkAutoAdd);
             this.boxParsing.Controls.Add(this.chkB_SkipFailedTries);
-            this.boxParsing.Location = new System.Drawing.Point(240, 18);
+            this.boxParsing.Location = new System.Drawing.Point(240, 8);
             this.boxParsing.Name = "boxParsing";
-            this.boxParsing.Size = new System.Drawing.Size(216, 108);
+            this.boxParsing.Size = new System.Drawing.Size(216, 160);
             this.boxParsing.TabIndex = 41;
             this.boxParsing.TabStop = false;
             this.boxParsing.Text = "Parsing";
@@ -402,7 +416,7 @@
             // chkAutoParse
             // 
             this.chkAutoParse.AutoSize = true;
-            this.chkAutoParse.Location = new System.Drawing.Point(6, 85);
+            this.chkAutoParse.Location = new System.Drawing.Point(6, 111);
             this.chkAutoParse.Name = "chkAutoParse";
             this.chkAutoParse.Size = new System.Drawing.Size(171, 17);
             this.chkAutoParse.TabIndex = 39;
@@ -413,7 +427,7 @@
             // chkAutoAdd
             // 
             this.chkAutoAdd.AutoSize = true;
-            this.chkAutoAdd.Location = new System.Drawing.Point(6, 65);
+            this.chkAutoAdd.Location = new System.Drawing.Point(6, 88);
             this.chkAutoAdd.Name = "chkAutoAdd";
             this.chkAutoAdd.Size = new System.Drawing.Size(154, 17);
             this.chkAutoAdd.TabIndex = 40;
@@ -424,9 +438,9 @@
             // chkB_SkipFailedTries
             // 
             this.chkB_SkipFailedTries.AutoSize = true;
-            this.chkB_SkipFailedTries.Location = new System.Drawing.Point(6, 42);
+            this.chkB_SkipFailedTries.Location = new System.Drawing.Point(6, 65);
             this.chkB_SkipFailedTries.Name = "chkB_SkipFailedTries";
-            this.chkB_SkipFailedTries.Size = new System.Drawing.Size(141, 17);
+            this.chkB_SkipFailedTries.Size = new System.Drawing.Size(153, 17);
             this.chkB_SkipFailedTries.TabIndex = 38;
             this.chkB_SkipFailedTries.Text = "Skip log generation if failed";
             this.chkB_SkipFailedTries.UseVisualStyleBackColor = true;
@@ -441,9 +455,9 @@
             this.groupOutput.Controls.Add(this.btnFolderSelect);
             this.groupOutput.Controls.Add(this.txtCustomSaveLoc);
             this.groupOutput.Controls.Add(this.lblCustomSaveLoc);
-            this.groupOutput.Location = new System.Drawing.Point(12, 132);
+            this.groupOutput.Location = new System.Drawing.Point(12, 174);
             this.groupOutput.Name = "groupOutput";
-            this.groupOutput.Size = new System.Drawing.Size(444, 123);
+            this.groupOutput.Size = new System.Drawing.Size(444, 129);
             this.groupOutput.TabIndex = 37;
             this.groupOutput.TabStop = false;
             this.groupOutput.Text = "Output";
@@ -475,9 +489,9 @@
             this.groupEncounter.Controls.Add(this.chkPhaseParsing);
             this.groupEncounter.Controls.Add(this.chkCombatReplay);
             this.groupEncounter.Controls.Add(this.chkDamageMods);
-            this.groupEncounter.Location = new System.Drawing.Point(12, 18);
+            this.groupEncounter.Location = new System.Drawing.Point(12, 8);
             this.groupEncounter.Name = "groupEncounter";
-            this.groupEncounter.Size = new System.Drawing.Size(216, 108);
+            this.groupEncounter.Size = new System.Drawing.Size(216, 160);
             this.groupEncounter.TabIndex = 36;
             this.groupEncounter.TabStop = false;
             this.groupEncounter.Text = "Encounter";
@@ -687,7 +701,7 @@
             // cmdClose
             // 
             this.cmdClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdClose.Location = new System.Drawing.Point(412, 312);
+            this.cmdClose.Location = new System.Drawing.Point(412, 370);
             this.cmdClose.Name = "cmdClose";
             this.cmdClose.Size = new System.Drawing.Size(84, 24);
             this.cmdClose.TabIndex = 48;
@@ -698,7 +712,7 @@
             // dumpButton
             // 
             this.dumpButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.dumpButton.Location = new System.Drawing.Point(322, 312);
+            this.dumpButton.Location = new System.Drawing.Point(322, 370);
             this.dumpButton.Name = "dumpButton";
             this.dumpButton.Size = new System.Drawing.Size(84, 24);
             this.dumpButton.TabIndex = 49;
@@ -709,7 +723,7 @@
             // loadButton
             // 
             this.loadButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.loadButton.Location = new System.Drawing.Point(232, 312);
+            this.loadButton.Location = new System.Drawing.Point(232, 370);
             this.loadButton.Name = "loadButton";
             this.loadButton.Size = new System.Drawing.Size(84, 24);
             this.loadButton.TabIndex = 50;
@@ -722,7 +736,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(503, 348);
+            this.ClientSize = new System.Drawing.Size(503, 406);
             this.Controls.Add(this.loadButton);
             this.Controls.Add(this.dumpButton);
             this.Controls.Add(this.cmdClose);
@@ -825,6 +839,7 @@
         private System.Windows.Forms.Button loadButton;
         private System.Windows.Forms.CheckBox chkAnonymous;
         private System.Windows.Forms.CheckBox chkDamageMods;
+        private System.Windows.Forms.CheckBox chkMultiLogs;
         private System.Windows.Forms.CheckBox chkRawTimelineArrays;
     }
 }
