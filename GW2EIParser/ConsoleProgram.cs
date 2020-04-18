@@ -9,10 +9,11 @@ namespace GW2EIParser
     {
         public ConsoleProgram(IEnumerable<string> logFiles)
         {
-            foreach (string file in logFiles)
+            var options = new ParallelOptions()
             {
-                ParseLog(file);
-            }
+                MaxDegreeOfParallelism = Properties.Settings.Default.ParseMultipleLogs ? -1 : 1
+            };
+            Parallel.ForEach(logFiles, options, file => ParseLog(file));
         }
 
         private void ParseLog(object logFile)
@@ -22,9 +23,9 @@ namespace GW2EIParser
             {
                 operation.Run();
             }
-            catch (CancellationException ex)
+            catch (ExceptionEncompass ex)
             {
-                Console.WriteLine(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+                Console.WriteLine(ex.GetFinalException().Message);
             }
             catch (Exception)
             {

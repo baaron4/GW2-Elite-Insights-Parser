@@ -18,6 +18,7 @@ namespace GW2EIParser
         public override void Run()
         {
             State = OperationState.Parsing;
+            ProgramHelper.DoWork(this);
         }
 
         /// <summary>
