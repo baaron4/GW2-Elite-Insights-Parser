@@ -109,7 +109,7 @@ namespace GW2EIParser
             }
             catch (Exception ex)
             {
-                throw new CancellationException(operation, ex);
+                throw new ExceptionEncompass(ex);
             }
             finally
             {

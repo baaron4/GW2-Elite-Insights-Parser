@@ -27,7 +27,7 @@ namespace GW2EIParser.tst
                 log = null;
                 GC.Collect();
             }
-            catch (CancellationException canc)
+            catch (ExceptionEncompass canc)
             {
                 if (canc.InnerException == null || !(canc.InnerException is TooShortException || canc.InnerException is SkipException))
                 {
