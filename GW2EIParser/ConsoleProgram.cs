@@ -25,13 +25,17 @@ namespace GW2EIParser
             }
             catch (ExceptionEncompass ex)
             {
-                Console.WriteLine(ex.GetFinalException().Message);
+                operation.UpdateProgress(ex.GetFinalException().Message);
             }
             catch (Exception)
             {
-                Console.WriteLine("Something terrible has happened");
+                operation.UpdateProgress("Error Encountered : Something terrible has happened");
             }
-
+            finally
+            {
+                operation.FinalizeStatus();
+                ProgramHelper.GenerateLogFile(operation);
+            }
         }
     }
 }

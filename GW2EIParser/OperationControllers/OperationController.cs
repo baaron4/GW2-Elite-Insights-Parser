@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
+using System.Linq;
 using GW2EIParser.Exceptions;
 
 namespace GW2EIParser
@@ -38,16 +41,39 @@ namespace GW2EIParser
         /// </summary>
         public OperationState State { get; protected set; }
 
+        protected List<string> StatusList { get; }
+
         public OperationController(string location, string status)
         {
             Location = location;
             Status = status;
             ButtonText = "Parse";
             State = OperationState.Ready;
+            StatusList = new List<string>();
         }
 
-        public abstract void ThrowIfCanceled();
+        public virtual void ThrowIfCanceled()
+        {
 
-        public abstract void UpdateProgress(string status, int percent);
+        }
+
+        public void WriteLogMessages(StreamWriter sw)
+        {
+            foreach (string str in StatusList)
+            {
+                sw.WriteLine(str);
+            }
+        }
+
+        public void UpdateProgress(string status)
+        {
+            StatusList.Add(status);
+        }
+
+        public void FinalizeStatus()
+        {
+            Status = StatusList.LastOrDefault() ?? "";
+            Console.WriteLine($"{Location}: {Status}" + Environment.NewLine);
+        }
     }
 }

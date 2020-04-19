@@ -43,7 +43,7 @@ namespace GW2EIParser.Parser
         /// <returns>the ParsedLog</returns>
         public ParsedLog ParseLog(OperationController operation, string evtc)
         {
-            operation.UpdateProgress("10% - Reading Binary...", 10);
+            operation.UpdateProgress("Reading Binary");
             using (var fs = new FileStream(evtc, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 if (ProgramHelper.IsCompressedFormat(evtc))
@@ -71,29 +71,29 @@ namespace GW2EIParser.Parser
                 }
             }
             operation.ThrowIfCanceled();
-            operation.UpdateProgress("45% - Data parsed", 45);
+            operation.UpdateProgress("Data parsed");
             return new ParsedLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _logEndTime - _logStartTime, _parserSettings);
         }
 
         private void ParseLog(OperationController operation, Stream stream)
         {
             operation.ThrowIfCanceled();
-            operation.UpdateProgress("15% - Parsing fight data...", 15);
+            operation.UpdateProgress("Parsing fight data");
             ParseFightData(stream);
             operation.ThrowIfCanceled();
-            operation.UpdateProgress("20% - Parsing agent data...", 20);
+            operation.UpdateProgress("Parsing agent data");
             ParseAgentData(stream);
             operation.ThrowIfCanceled();
-            operation.UpdateProgress("25% - Parsing skill data...", 25);
+            operation.UpdateProgress("Parsing skill data");
             ParseSkillData(stream);
             operation.ThrowIfCanceled();
-            operation.UpdateProgress("30% - Parsing combat list...", 30);
+            operation.UpdateProgress("Parsing combat list");
             ParseCombatList(stream);
             operation.ThrowIfCanceled();
-            operation.UpdateProgress("35% - Linking agents to combat list...", 35);
+            operation.UpdateProgress("Linking agents to combat list");
             CompleteAgents();
             operation.ThrowIfCanceled();
-            operation.UpdateProgress("40% - Preparing data for log generation...", 40);
+            operation.UpdateProgress("Preparing data for log generation");
             PreProcessEvtcData();
             operation.ThrowIfCanceled();
         }

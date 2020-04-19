@@ -40,7 +40,6 @@ namespace GW2EIParser
         {
             if (_task != null && _cancelTokenSource.IsCancellationRequested)
             {
-                Status = "Operation Aborted";
                 _cancelTokenSource.Token.ThrowIfCancellationRequested();
             }
         }
@@ -57,16 +56,11 @@ namespace GW2EIParser
             }
         }
 
-        public override void UpdateProgress(string status, int percent)
-        {
-            Status = status;
-            Console.WriteLine($"{Location}: {status}" + Environment.NewLine);
-            InvalidateDataView();
-        }
         public void ToRunState()
         {
             ButtonText = "Cancel";
             State = OperationState.Parsing;
+            Status = "Parsing";
             InvalidateDataView();
         }
 
@@ -104,6 +98,7 @@ namespace GW2EIParser
         {
             State = OperationState.Complete;
             ButtonText = "Open";
+            FinalizeStatus();
             InvalidateDataView();
         }
 
@@ -111,6 +106,7 @@ namespace GW2EIParser
         {
             State = OperationState.Ready;
             ButtonText = "Parse";
+            FinalizeStatus();
             InvalidateDataView();
         }
 

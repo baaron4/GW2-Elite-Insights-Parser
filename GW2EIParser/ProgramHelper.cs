@@ -103,7 +103,6 @@ namespace GW2EIParser
                 }
                 else
                 {
-                    operation.UpdateProgress("Not EVTC", 100);
                     throw new InvalidDataException("Error Encountered: Not EVTC");
                 }
             }
@@ -136,11 +135,8 @@ namespace GW2EIParser
             }
         }
 
-        private static void GenerateFiles(ParsedLog log, OperationController rowData, string[] uploadresult, FileInfo fInfo)
+        private static DirectoryInfo GetSaveDirectory(FileInfo fInfo)
         {
-            rowData.ThrowIfCanceled();
-            rowData.UpdateProgress("50% - Creating File(s)...", 50);
-
             //save location
             DirectoryInfo saveDirectory;
             if (Properties.Settings.Default.SaveAtOut || Properties.Settings.Default.OutLocation == null)
@@ -153,6 +149,43 @@ namespace GW2EIParser
                 //Customised save directory
                 saveDirectory = new DirectoryInfo(Properties.Settings.Default.OutLocation);
             }
+            return saveDirectory;
+        }
+
+        public static void GenerateLogFile(OperationController operation)
+        {
+            var fInfo = new FileInfo(operation.Location);
+
+            string fName = fInfo.Name.Split('.')[0];
+            if (!fInfo.Exists)
+            {
+                fInfo = new FileInfo(AppDomain.CurrentDomain.BaseDirectory);
+            }
+
+            DirectoryInfo saveDirectory = GetSaveDirectory(fInfo);
+
+            if (saveDirectory == null)
+            {
+                return;
+            }
+
+            string outputFile = Path.Combine(
+            saveDirectory.FullName,
+            $"{fName}.log"
+            );
+            using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
+            using (var sw = new StreamWriter(fs))
+            {
+                operation.WriteLogMessages(sw);
+            }
+        }
+
+        private static void GenerateFiles(ParsedLog log, OperationController operation, string[] uploadresult, FileInfo fInfo)
+        {
+            operation.ThrowIfCanceled();
+            operation.UpdateProgress("Creating File(s)");
+
+            DirectoryInfo saveDirectory = GetSaveDirectory(fInfo);
 
             if (saveDirectory == null)
             {
@@ -165,7 +198,7 @@ namespace GW2EIParser
             string fName = fInfo.Name.Split('.')[0];
             fName = $"{fName}{PoVClassTerm}_{log.FightData.Logic.Extension}{encounterLengthTerm}_{result}";
 
-            rowData.ThrowIfCanceled();
+            operation.ThrowIfCanceled();
 
             // parallel stuff
             if (log.ParserSettings.MultiTasks)
@@ -190,11 +223,12 @@ namespace GW2EIParser
             }
             if (Properties.Settings.Default.SaveOutHTML)
             {
+                operation.UpdateProgress("Creating HTML");
                 string outputFile = Path.Combine(
                 saveDirectory.FullName,
                 $"{fName}.html"
                 );
-                rowData.LogLocation = outputFile;
+                operation.LogLocation = outputFile;
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs))
                 {
@@ -202,16 +236,17 @@ namespace GW2EIParser
                     builder.CreateHTML(sw, saveDirectory.FullName);
                 }
             }
-            rowData.ThrowIfCanceled();
+            operation.ThrowIfCanceled();
             if (Properties.Settings.Default.SaveOutCSV)
             {
+                operation.UpdateProgress("Creating CSV");
                 string outputFile = Path.Combine(
                     saveDirectory.FullName,
                     $"{fName}.csv"
                 );
                 string splitString = "";
-                if (rowData.LogLocation != null) { splitString = ","; }
-                rowData.LogLocation += splitString + outputFile;
+                if (operation.LogLocation != null) { splitString = ","; }
+                operation.LogLocation += splitString + outputFile;
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                 {
@@ -219,19 +254,20 @@ namespace GW2EIParser
                     builder.CreateCSV();
                 }
             }
-            rowData.ThrowIfCanceled();
+            operation.ThrowIfCanceled();
             if (Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML)
             {
                 var builder = new RawFormatBuilder(log, uploadresult);
                 if (Properties.Settings.Default.SaveOutJSON)
                 {
+                    operation.UpdateProgress("Creating JSON");
                     string outputFile = Path.Combine(
                         saveDirectory.FullName,
                         $"{fName}.json"
                     );
                     string splitString = "";
-                    if (rowData.LogLocation != null) { splitString = ","; }
-                    rowData.LogLocation += splitString + saveDirectory.FullName;
+                    if (operation.LogLocation != null) { splitString = ","; }
+                    operation.LogLocation += splitString + saveDirectory.FullName;
                     Stream str;
                     if (Properties.Settings.Default.CompressRaw)
                     {
@@ -250,16 +286,17 @@ namespace GW2EIParser
                         CompressFile(outputFile, msr);
                     }
                 }
-                rowData.ThrowIfCanceled();
+                operation.ThrowIfCanceled();
                 if (Properties.Settings.Default.SaveOutXML)
                 {
+                    operation.UpdateProgress("Creating XML");
                     string outputFile = Path.Combine(
                         saveDirectory.FullName,
                         $"{fName}.xml"
                     );
                     string splitString = "";
-                    if (rowData.LogLocation != null) { splitString = ","; }
-                    rowData.LogLocation += splitString + saveDirectory.FullName;
+                    if (operation.LogLocation != null) { splitString = ","; }
+                    operation.LogLocation += splitString + saveDirectory.FullName;
                     Stream str;
                     if (Properties.Settings.Default.CompressRaw)
                     {
@@ -278,9 +315,9 @@ namespace GW2EIParser
                         CompressFile(outputFile, msr);
                     }
                 }
-                rowData.ThrowIfCanceled();
+                operation.ThrowIfCanceled();
             }
-            rowData.UpdateProgress($"100% - Complete_{log.FightData.Logic.Extension}_{result}", 100);
+            operation.UpdateProgress($"Completed parsing for {result}ed {log.FightData.Logic.Extension}");
         }
 
     }

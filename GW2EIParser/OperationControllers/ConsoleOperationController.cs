@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using GW2EIParser.Exceptions;
 
 namespace GW2EIParser
@@ -9,16 +10,6 @@ namespace GW2EIParser
 
         public ConsoleOperationController(string location, string status) : base(location, status)
         {
-        }
-
-        public override void ThrowIfCanceled()
-        {
-        }
-
-        public override void UpdateProgress(string status, int percent)
-        {
-            Status = status;
-            Console.WriteLine($"{Location}: {status}" + Environment.NewLine);;
         }
     }
 }
