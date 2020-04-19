@@ -113,6 +113,7 @@ namespace GW2EIParser
             }
             finally
             {
+                GC.Collect();
                 Thread.CurrentThread.CurrentCulture = before;
             }
         }
@@ -280,8 +281,6 @@ namespace GW2EIParser
                 rowData.ThrowIfCanceled();
             }
             rowData.UpdateProgress($"100% - Complete_{log.FightData.Logic.Extension}_{result}", 100);
-            log = null;
-            GC.Collect();
         }
 
     }

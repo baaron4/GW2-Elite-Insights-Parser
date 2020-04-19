@@ -1,56 +1,133 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using GW2EIParser.Exceptions;
 
 namespace GW2EIParser
 {
     public class FormOperation : Operation
     {
-        public BackgroundWorker BgWorker { get; }
 
-        public FormOperation(string location, string status) : base(location, status)
+        private CancellationTokenSource _cancelTokenSource;
+
+        private Task _task;
+
+        private readonly DataGridView _dgv;
+
+        public FormOperation(string location, string status, DataGridView dgv) : base(location, status)
         {
-            BgWorker = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
+            _dgv = dgv;
         }
 
-        /// <summary>
-        /// Begins processing the log
-        /// </summary>
-        public override void Run()
+        public void SetContext(CancellationTokenSource cancelTokenSource, Task task)
         {
-            ButtonText = "Cancel";
-            State = OperationState.Parsing;
-            BgWorker.RunWorkerAsync(this);
+            _cancelTokenSource = cancelTokenSource;
+            _task = task;
         }
 
-        /// <summary>
-        /// Cancels the log's processing
-        /// </summary>
-        public override void Cancel()
+        public bool IsBusy()
         {
-            State = OperationState.Cancelling;
-            BgWorker.CancelAsync();
-        }
-
-        public override bool IsBusy()
-        {
-            return BgWorker.IsBusy;
-        }
-
-        public override void ThrowIfCanceled(string cancelStatus = "Canceled")
-        {
-            if (BgWorker.CancellationPending)
+            if (_task != null)
             {
-                Status = cancelStatus;
-                throw new CancellationException(this);
+                return !_task.IsCompleted;
+            }
+            return false;
+        }
+
+        public override void ThrowIfCanceled()
+        {
+            if (_task != null && _cancelTokenSource.IsCancellationRequested)
+            {
+                Status = "Operation Aborted";
+                _cancelTokenSource.Token.ThrowIfCancellationRequested();
+            }
+        }
+
+        private void InvalidateDataView()
+        {
+            if (_dgv.InvokeRequired)
+            {
+                _dgv.Invoke(new Action(() => _dgv.Invalidate()));
+            }
+            else
+            {
+                _dgv.Invalidate();
             }
         }
 
         public override void UpdateProgress(string status, int percent)
         {
             Status = status;
-            BgWorker.ReportProgress(percent, this);
-            Console.WriteLine($"{Location}: {status}" + Environment.NewLine);;
+            Console.WriteLine($"{Location}: {status}" + Environment.NewLine);
+            InvalidateDataView();
+        }
+        public void ToRunState()
+        {
+            ButtonText = "Cancel";
+            State = OperationState.Parsing;
+            InvalidateDataView();
+        }
+
+        public void ToCancelState()
+        {
+            if (_task == null)
+            {
+                return;
+            }
+            State = OperationState.Cancelling;
+            ButtonText = "Cancelling";
+            _cancelTokenSource.Cancel();
+            InvalidateDataView();
+        }
+        public void ToRemovalFromQueueState()
+        {
+            ToCancelState();
+            Status = "Awaiting Removal from Queue";
+            InvalidateDataView();
+        }
+        public void ToCancelAndClearState()
+        {
+            ToCancelState();
+            State = OperationState.ClearOnCancel;
+        }
+        public void ToReadyState()
+        {
+            State = OperationState.Ready;
+            ButtonText = "Parse";
+            Status = "Ready To Parse";
+            InvalidateDataView();
+        }
+
+        public void ToCompleteState()
+        {
+            State = OperationState.Complete;
+            ButtonText = "Open";
+            InvalidateDataView();
+        }
+
+        public void ToUnCompleteState()
+        {
+            State = OperationState.Ready;
+            ButtonText = "Parse";
+            InvalidateDataView();
+        }
+
+        public void ToPendingState()
+        {
+            State = OperationState.Pending;
+            ButtonText = "Cancel";
+            Status = "Pending";
+            InvalidateDataView();
+        }
+
+        public void ToQueuedState()
+        {
+            State = OperationState.Queued;
+            ButtonText = "Cancel";
+            Status = "Queued";
+            InvalidateDataView();
         }
     }
 }

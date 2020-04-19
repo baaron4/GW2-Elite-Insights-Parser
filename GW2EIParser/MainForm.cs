@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using GW2EIParser.Exceptions;
@@ -13,9 +14,9 @@ namespace GW2EIParser
     {
         private readonly SettingsForm _settingsForm;
         private readonly List<string> _logsFiles;
-        private int _runningCount;
-        private bool _anyRunning;
-        private readonly Queue<Operation> _logQueue = new Queue<Operation>();
+        private int _runningCount = 0;
+        private bool _anyRunning => _runningCount > 0;
+        private readonly Queue<FormOperation> _logQueue = new Queue<FormOperation>();
         private MainForm()
         {
             InitializeComponent();
@@ -52,16 +53,12 @@ namespace GW2EIParser
 
                 _logsFiles.Add(file);
 
-                var goperation = new FormOperation(file, "Ready to parse");
-                goperation.BgWorker.DoWork += BgWorkerDoWork;
-                goperation.BgWorker.ProgressChanged += BgWorkerProgressChanged;
-                goperation.BgWorker.RunWorkerCompleted += BgWorkerCompleted;
-
-                operatorBindingSource.Add(goperation);
+                var operation = new FormOperation(file, "Ready to parse", dgvFiles);
+                operatorBindingSource.Add(operation);
 
                 if (Properties.Settings.Default.AutoParse)
                 {
-                    QueueOrRunWorker(goperation);
+                    QueueOrRunOperation(operation);
                 }
             }
 
@@ -74,127 +71,126 @@ namespace GW2EIParser
             btnSettings.Enabled = true;
         }
 
-        /// <summary>
-        /// Queues a background worker. If the 'ParseOneAtATime' setting is false, workers are run asynchronously
-        /// </summary>
-        /// <param name="operation"></param>
-        private void QueueOrRunWorker(Operation operation)
+        private void _RunOperation(FormOperation operation)
         {
-            btnClear.Enabled = false;
-            btnParse.Enabled = false;
-            btnCancel.Enabled = true;
-            if (_anyRunning)
-            {
-                _logQueue.Enqueue(operation);
-                operation.Status = "Queued";
-                operation.State = OperationState.Pending;
-                dgvFiles.Invalidate();
-            }
-            else
-            {
-                _anyRunning = true;
-                operation.Run();
-            }
-        }
-
-        /// <summary>
-        /// Runs the next background worker, if one is available
-        /// </summary>
-        private void RunNextWorker()
-        {
-            if (_logQueue.Count > 0)
-            {
-                Operation operation = _logQueue.Dequeue();
-                _anyRunning = true;
-                operation.Run();
-            }
-            else
-            {
-                if (_runningCount == 0)
-                {
-                    _anyRunning = false;
-                    btnParse.Enabled = true;
-                    btnClear.Enabled = true;
-                    btnCancel.Enabled = false;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Invoked when a BackgroundWorker begins working.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BgWorkerDoWork(object sender, DoWorkEventArgs e)
-        {
-            var operationData = e.Argument as Operation;
-            e.Result = operationData;
             _runningCount++;
-            ProgramHelper.DoWork(operationData);
-
-        }
-
-        /// <summary>
-        /// Invoked when a BackgroundWorker reports a change in progress
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BgWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            //Redraw operations
-            dgvFiles.Invalidate();
-        }
-
-        /// <summary>
-        /// Invoked when a BackgroundWorker completes its task
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BgWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            Operation operation;
-            _runningCount--;
-            if (e.Cancelled || e.Error != null)
+            operation.ToQueuedState();
+            var cancelTokenSource = new CancellationTokenSource();// Prepare task
+            Task task = Task.Run(() =>
             {
-                if (e.Error is CancellationException)
+                operation.ToRunState();
+                ProgramHelper.DoWork(operation);
+            }, cancelTokenSource.Token).ContinueWith(t =>
+            {
+                cancelTokenSource.Dispose();
+                _runningCount--;
+                // Exception management
+                if (t.IsFaulted)
                 {
-                    operation = ((CancellationException)e.Error).Operation;
-                    if (e.Error.InnerException != null)
+                    if (t.Exception != null)
                     {
-                        operation.Status = e.Error.InnerException.Message;
-                        Console.WriteLine(operation.Status);
-                    }
-
-                    if (operation.State == OperationState.ClearOnComplete)
-                    {
-                        operatorBindingSource.Remove(operation);
+                        if (t.Exception.InnerExceptions.Count > 1)
+                        {
+                            operation.UpdateProgress("Something terrible has happened", 100);
+                        }
+                        else
+                        {
+                            Exception ex = t.Exception.InnerExceptions[0];
+                            if (!(ex is ExceptionEncompass))
+                            {
+                                operation.UpdateProgress("Something terrible has happened", 100);
+                            }
+                            if (!(ex.InnerException is OperationCanceledException))
+                            {
+                                operation.UpdateProgress(ex.GetFinalException().Message, 100);
+                            } 
+                            else
+                            {
+                                operation.UpdateProgress("Operation Aborted", 100);
+                            }
+                        }
                     }
                     else
                     {
-                        operation.State = OperationState.Ready;
-                        operation.ButtonText = "Parse";
+                        operation.UpdateProgress("Something terrible has happened", 100);
                     }
                 }
-                else
-                {
-                    Console.WriteLine("Something terrible has happened");
-                }
-            }
-            else
-            {
-                operation = (Operation)e.Result;
-                if (operation.State == OperationState.ClearOnComplete)
+                if (operation.State == OperationState.ClearOnCancel)
                 {
                     operatorBindingSource.Remove(operation);
                 }
                 else
                 {
-                    operation.ButtonText = "Open";
-                    operation.State = OperationState.Complete;
+                    if (t.IsFaulted)
+                    {
+                        operation.ToUnCompleteState();
+                    }
+                    else if (t.IsCanceled)
+                    {
+                        operation.UpdateProgress("Operation Aborted", 100);
+                        operation.ToUnCompleteState();
+                    }
+                    else if (t.IsCompleted)
+                    {
+                        operation.ToCompleteState();
+                    }
+                    else
+                    {
+                        operation.UpdateProgress("Something terrible has happened", 100);
+                        operation.ToUnCompleteState();
+                    }
+                }
+                RunNextOperation();
+            }, TaskScheduler.FromCurrentSynchronizationContext());
+            operation.SetContext(cancelTokenSource, task);
+        }
+
+        /// <summary>
+        /// Queues an operation. If the 'MultipleLogs' setting is true, operations are run asynchronously
+        /// </summary>
+        /// <param name="operation"></param>
+        private void QueueOrRunOperation(FormOperation operation)
+        {
+            btnClear.Enabled = false;
+            btnParse.Enabled = false;
+            btnCancel.Enabled = true;
+            if (Properties.Settings.Default.ParseMultipleLogs)
+            {
+                _RunOperation(operation);
+            } 
+            else
+            {
+                if (_anyRunning)
+                {
+                    _logQueue.Enqueue(operation);
+                    operation.ToPendingState();
+                }
+                else
+                {
+                    _RunOperation(operation);
                 }
             }
-            dgvFiles.Invalidate();
-            RunNextWorker();
+            
+        }
+
+        /// <summary>
+        /// Runs the next operation, if one is available
+        /// </summary>
+        private void RunNextOperation()
+        {
+            if (_logQueue.Count > 0 && _runningCount == 0)
+            {
+                _RunOperation(_logQueue.Dequeue());
+            }
+            else
+            {
+                if (_runningCount == 0)
+                {
+                    btnParse.Enabled = true;
+                    btnClear.Enabled = true;
+                    btnCancel.Enabled = false;
+                }
+            }
         }
 
         /// <summary>
@@ -212,11 +208,11 @@ namespace GW2EIParser
                 btnParse.Enabled = false;
                 btnCancel.Enabled = true;
 
-                foreach (Operation operation in operatorBindingSource)
+                foreach (FormOperation operation in operatorBindingSource)
                 {
                     if (!operation.IsBusy())
                     {
-                        QueueOrRunWorker(operation);
+                        QueueOrRunOperation(operation);
                     }
                 }
             }
@@ -230,26 +226,20 @@ namespace GW2EIParser
         private void BtnCancelClick(object sender, EventArgs e)
         {
             //Clear queue so queued workers don't get started by any cancellations
-            var operations = new HashSet<Operation>(_logQueue);
+            var operations = new HashSet<FormOperation>(_logQueue);
             _logQueue.Clear();
 
             //Cancel all workers
-            foreach (Operation operation in operatorBindingSource)
+            foreach (FormOperation operation in operatorBindingSource)
             {
-                if (operation.State == OperationState.Pending)
-                {
-                    operation.State = OperationState.Ready;
-                }
-
                 if (operation.IsBusy())
                 {
-                    operation.Cancel();
+                    operation.ToCancelState();
                 }
                 else if (operations.Contains(operation))
                 {
-                    operation.Status = "Ready to parse";
+                    operation.ToReadyState();
                 }
-                dgvFiles.Invalidate();
             }
 
             btnClear.Enabled = true;
@@ -284,11 +274,10 @@ namespace GW2EIParser
 
             for (int i = operatorBindingSource.Count - 1; i >= 0; i--)
             {
-                var operation = operatorBindingSource[i] as Operation;
+                var operation = operatorBindingSource[i] as FormOperation;
                 if (operation.IsBusy())
                 {
-                    operation.Cancel();
-                    operation.State = OperationState.ClearOnComplete;
+                    operation.ToCancelAndClearState();
                 }
                 else
                 {
@@ -327,18 +316,31 @@ namespace GW2EIParser
         {
             if (e.ColumnIndex == 2)
             {
-                var operation = (Operation)operatorBindingSource[e.RowIndex];
+                var operation = (FormOperation)operatorBindingSource[e.RowIndex];
 
                 switch (operation.State)
                 {
                     case OperationState.Ready:
-                        QueueOrRunWorker(operation);
+                        QueueOrRunOperation(operation);
                         btnCancel.Enabled = true;
                         break;
 
                     case OperationState.Parsing:
-                        operation.Cancel();
-                        dgvFiles.Invalidate();
+                        operation.ToCancelState();
+                        break;
+
+                    case OperationState.Pending:
+                        var operations = new HashSet<FormOperation>(_logQueue);
+                        _logQueue.Clear();
+                        operations.Remove(operation);
+                        foreach (FormOperation op in operations)
+                        {
+                            _logQueue.Enqueue(op);
+                        }
+                        operation.ToReadyState();
+                        break;
+                    case OperationState.Queued:
+                        operation.ToRemovalFromQueueState();
                         break;
 
                     case OperationState.Complete:

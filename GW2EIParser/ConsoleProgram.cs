@@ -16,12 +16,12 @@ namespace GW2EIParser
             Parallel.ForEach(logFiles, options, file => ParseLog(file));
         }
 
-        private void ParseLog(object logFile)
+        private void ParseLog(string logFile)
         {
-            var operation = new ConsoleOperation(logFile as string, "Ready to parse");
+            var operation = new ConsoleOperation(logFile, "Ready to parse");
             try
             {
-                operation.Run();
+                ProgramHelper.DoWork(operation);
             }
             catch (ExceptionEncompass ex)
             {

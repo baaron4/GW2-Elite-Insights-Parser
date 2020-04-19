@@ -11,7 +11,8 @@ namespace GW2EIParser
         Cancelling = 2,
         Complete = 3,
         Pending = 4,
-        ClearOnComplete = 5
+        ClearOnCancel = 5,
+        Queued = 6,
     }
 
     public abstract class Operation
@@ -19,7 +20,7 @@ namespace GW2EIParser
         /// <summary>
         /// Location of the file being parsed
         /// </summary>
-        public string Location { get; set; }
+        public string Location { get; }
         /// <summary>
         /// Location of the generated log
         /// </summary>
@@ -27,15 +28,15 @@ namespace GW2EIParser
         /// <summary>
         /// Status of the parse operation
         /// </summary>
-        public string Status { get; set; }
+        public string Status { get; protected set; }
         /// <summary>
         /// State of the button
         /// </summary>
-        public string ButtonText { get; set; }
+        public string ButtonText { get; protected set; }
         /// <summary>
         /// Operation state
         /// </summary>
-        public OperationState State { get; set; }
+        public OperationState State { get; protected set; }
 
         public Operation(string location, string status)
         {
@@ -45,19 +46,7 @@ namespace GW2EIParser
             State = OperationState.Ready;
         }
 
-        /// <summary>
-        /// Begins processing the log
-        /// </summary>
-        public abstract void Run();
-
-        /// <summary>
-        /// Cancels the log's processing
-        /// </summary>
-        public abstract void Cancel();
-
-        public abstract bool IsBusy();
-
-        public abstract void ThrowIfCanceled(string cancelStatus = "Canceled");
+        public abstract void ThrowIfCanceled();
 
         public abstract void UpdateProgress(string status, int percent);
     }
