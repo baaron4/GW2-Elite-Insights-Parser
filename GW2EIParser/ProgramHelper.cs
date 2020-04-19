@@ -74,7 +74,7 @@ namespace GW2EIParser
             return false;
         }
 
-        public static void DoWork(Operation operation)
+        public static void DoWork(OperationController operation)
         {
             System.Globalization.CultureInfo before = Thread.CurrentThread.CurrentCulture;
             Thread.CurrentThread.CurrentCulture =
@@ -136,7 +136,7 @@ namespace GW2EIParser
             }
         }
 
-        private static void GenerateFiles(ParsedLog log, Operation rowData, string[] uploadresult, FileInfo fInfo)
+        private static void GenerateFiles(ParsedLog log, OperationController rowData, string[] uploadresult, FileInfo fInfo)
         {
             rowData.ThrowIfCanceled();
             rowData.UpdateProgress("50% - Creating File(s)...", 50);

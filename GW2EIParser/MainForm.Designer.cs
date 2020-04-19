@@ -189,7 +189,7 @@
             // 
             // gridRowBindingSource
             // 
-            this.operatorBindingSource.DataSource = typeof(GW2EIParser.FormOperation);
+            this.operatorBindingSource.DataSource = typeof(GW2EIParser.FormOperationController);
             // 
             // MainForm
             // 

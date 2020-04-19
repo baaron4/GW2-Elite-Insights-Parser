@@ -41,7 +41,7 @@ namespace GW2EIParser.Parser
         /// <param name="operation">Operation object bound to the UI</param>
         /// <param name="evtc">The path to the log to parse</param>
         /// <returns>the ParsedLog</returns>
-        public ParsedLog ParseLog(Operation operation, string evtc)
+        public ParsedLog ParseLog(OperationController operation, string evtc)
         {
             operation.UpdateProgress("10% - Reading Binary...", 10);
             using (var fs = new FileStream(evtc, FileMode.Open, FileAccess.Read, FileShare.Read))
@@ -75,7 +75,7 @@ namespace GW2EIParser.Parser
             return new ParsedLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _logEndTime - _logStartTime, _parserSettings);
         }
 
-        private void ParseLog(Operation operation, Stream stream)
+        private void ParseLog(OperationController operation, Stream stream)
         {
             operation.ThrowIfCanceled();
             operation.UpdateProgress("15% - Parsing fight data...", 15);

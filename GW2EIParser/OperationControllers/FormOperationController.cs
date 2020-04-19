@@ -7,7 +7,7 @@ using GW2EIParser.Exceptions;
 
 namespace GW2EIParser
 {
-    public class FormOperation : Operation
+    public class FormOperationController : OperationController
     {
 
         private CancellationTokenSource _cancelTokenSource;
@@ -16,7 +16,7 @@ namespace GW2EIParser
 
         private readonly DataGridView _dgv;
 
-        public FormOperation(string location, string status, DataGridView dgv) : base(location, status)
+        public FormOperationController(string location, string status, DataGridView dgv) : base(location, status)
         {
             _dgv = dgv;
         }

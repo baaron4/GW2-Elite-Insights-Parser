@@ -15,7 +15,7 @@ namespace GW2EIParser
         Queued = 6,
     }
 
-    public abstract class Operation
+    public abstract class OperationController
     {
         /// <summary>
         /// Location of the file being parsed
@@ -38,7 +38,7 @@ namespace GW2EIParser
         /// </summary>
         public OperationState State { get; protected set; }
 
-        public Operation(string location, string status)
+        public OperationController(string location, string status)
         {
             Location = location;
             Status = status;

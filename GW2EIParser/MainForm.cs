@@ -16,7 +16,7 @@ namespace GW2EIParser
         private readonly List<string> _logsFiles;
         private int _runningCount = 0;
         private bool _anyRunning => _runningCount > 0;
-        private readonly Queue<FormOperation> _logQueue = new Queue<FormOperation>();
+        private readonly Queue<FormOperationController> _logQueue = new Queue<FormOperationController>();
         private MainForm()
         {
             InitializeComponent();
@@ -53,7 +53,7 @@ namespace GW2EIParser
 
                 _logsFiles.Add(file);
 
-                var operation = new FormOperation(file, "Ready to parse", dgvFiles);
+                var operation = new FormOperationController(file, "Ready to parse", dgvFiles);
                 operatorBindingSource.Add(operation);
 
                 if (Properties.Settings.Default.AutoParse)
@@ -71,7 +71,7 @@ namespace GW2EIParser
             btnSettings.Enabled = true;
         }
 
-        private void _RunOperation(FormOperation operation)
+        private void _RunOperation(FormOperationController operation)
         {
             _runningCount++;
             operation.ToQueuedState();
@@ -149,7 +149,7 @@ namespace GW2EIParser
         /// Queues an operation. If the 'MultipleLogs' setting is true, operations are run asynchronously
         /// </summary>
         /// <param name="operation"></param>
-        private void QueueOrRunOperation(FormOperation operation)
+        private void QueueOrRunOperation(FormOperationController operation)
         {
             btnClear.Enabled = false;
             btnParse.Enabled = false;
@@ -208,7 +208,7 @@ namespace GW2EIParser
                 btnParse.Enabled = false;
                 btnCancel.Enabled = true;
 
-                foreach (FormOperation operation in operatorBindingSource)
+                foreach (FormOperationController operation in operatorBindingSource)
                 {
                     if (!operation.IsBusy())
                     {
@@ -226,11 +226,11 @@ namespace GW2EIParser
         private void BtnCancelClick(object sender, EventArgs e)
         {
             //Clear queue so queued workers don't get started by any cancellations
-            var operations = new HashSet<FormOperation>(_logQueue);
+            var operations = new HashSet<FormOperationController>(_logQueue);
             _logQueue.Clear();
 
             //Cancel all workers
-            foreach (FormOperation operation in operatorBindingSource)
+            foreach (FormOperationController operation in operatorBindingSource)
             {
                 if (operation.IsBusy())
                 {
@@ -274,7 +274,7 @@ namespace GW2EIParser
 
             for (int i = operatorBindingSource.Count - 1; i >= 0; i--)
             {
-                var operation = operatorBindingSource[i] as FormOperation;
+                var operation = operatorBindingSource[i] as FormOperationController;
                 if (operation.IsBusy())
                 {
                     operation.ToCancelAndClearState();
@@ -316,7 +316,7 @@ namespace GW2EIParser
         {
             if (e.ColumnIndex == 2)
             {
-                var operation = (FormOperation)operatorBindingSource[e.RowIndex];
+                var operation = (FormOperationController)operatorBindingSource[e.RowIndex];
 
                 switch (operation.State)
                 {
@@ -330,10 +330,10 @@ namespace GW2EIParser
                         break;
 
                     case OperationState.Pending:
-                        var operations = new HashSet<FormOperation>(_logQueue);
+                        var operations = new HashSet<FormOperationController>(_logQueue);
                         _logQueue.Clear();
                         operations.Remove(operation);
-                        foreach (FormOperation op in operations)
+                        foreach (FormOperationController op in operations)
                         {
                             _logQueue.Enqueue(op);
                         }

@@ -31,7 +31,7 @@ namespace GW2EIParser.tst
         {
             var parser = new ParsingController(new TestParserSettings());
 
-            var operation = new ConsoleOperation(location as string, "Ready to parse");
+            var operation = new ConsoleOperationController(location as string, "Ready to parse");
 
             var fInfo = new FileInfo(operation.Location);
             if (!fInfo.Exists)

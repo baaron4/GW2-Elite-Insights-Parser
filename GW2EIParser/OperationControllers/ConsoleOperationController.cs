@@ -4,10 +4,10 @@ using GW2EIParser.Exceptions;
 
 namespace GW2EIParser
 {
-    public class ConsoleOperation : Operation
+    public class ConsoleOperationController : OperationController
     {
 
-        public ConsoleOperation(string location, string status) : base(location, status)
+        public ConsoleOperationController(string location, string status) : base(location, status)
         {
         }
 

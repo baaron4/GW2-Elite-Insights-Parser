@@ -123,7 +123,7 @@ namespace GW2EIParser.Controllers
             return res;
         }
 
-        public static string[] UploadOperation(Operation operation, FileInfo fInfo)
+        public static string[] UploadOperation(OperationController operation, FileInfo fInfo)
         {
             //Upload Process
             string[] uploadresult = new string[3] { "", "", "" };
