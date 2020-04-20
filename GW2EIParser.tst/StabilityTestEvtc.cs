@@ -24,8 +24,6 @@ namespace GW2EIParser.tst
                 TestHelper.JsonString(log);
                 TestHelper.HtmlString(log);
                 TestHelper.CsvString(log);
-                log = null;
-                GC.Collect();
             }
             catch (ExceptionEncompass canc)
             {
@@ -46,6 +44,10 @@ namespace GW2EIParser.tst
                     return false;
                 }
                 return true;
+            }
+            finally
+            {
+                GC.Collect();
             }
             return true;
         }
