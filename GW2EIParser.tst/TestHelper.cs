@@ -12,7 +12,6 @@ namespace GW2EIParser.tst
 {
     public class TestHelper
     {
-
         private class TestParserSettings : ParserSettings
         {
             public TestParserSettings()
@@ -26,6 +25,20 @@ namespace GW2EIParser.tst
                 MultiTasks = true;
             }
         }
+
+        private class TestOperationController : OperationController
+        {
+            public TestOperationController() : base("", "")
+            {
+
+            }
+
+            public override void UpdateProgress(string status)
+            {
+            }
+        }
+
+        private static readonly TestOperationController _operation = new TestOperationController();
 
         public static ParsedLog ParseLog(string location)
         {
@@ -50,7 +63,7 @@ namespace GW2EIParser.tst
         {
             var ms = new MemoryStream();
             var sw = new StreamWriter(ms, GeneralHelper.NoBOMEncodingUTF8);
-            var builder = new RawFormatBuilder(log, null);
+            var builder = new RawFormatBuilder(log, null, _operation);
 
             builder.CreateJSON(sw, false);
             sw.Close();
@@ -64,7 +77,7 @@ namespace GW2EIParser.tst
             var sw = new StreamWriter(ms);
             var builder = new CSVBuilder(sw, ",", log, null);
 
-            builder.CreateCSV();
+            builder.CreateCSV(_operation);
             sw.Close();
 
             return sw.ToString();
@@ -76,7 +89,7 @@ namespace GW2EIParser.tst
             var sw = new StreamWriter(ms, GeneralHelper.NoBOMEncodingUTF8);
             var builder = new HTMLBuilder(log, null, false, false);
 
-            builder.CreateHTML(sw, null);
+            builder.CreateHTML(sw, null, _operation);
             sw.Close();
 
             return Encoding.UTF8.GetString(ms.ToArray());
@@ -84,7 +97,7 @@ namespace GW2EIParser.tst
 
         public static JsonLog JsonLog(ParsedLog log)
         {
-            var builder = new RawFormatBuilder(log, null);
+            var builder = new RawFormatBuilder(log, null, _operation);
             return builder.JsonLog;
         }
 

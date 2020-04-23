@@ -65,7 +65,7 @@ namespace GW2EIParser
             }
         }
 
-        public void UpdateProgress(string status)
+        public virtual void UpdateProgress(string status)
         {
             StatusList.Add(status);
         }

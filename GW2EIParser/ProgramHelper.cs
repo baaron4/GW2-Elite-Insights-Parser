@@ -203,6 +203,7 @@ namespace GW2EIParser
             // parallel stuff
             if (log.ParserSettings.MultiTasks)
             {
+                operation.UpdateProgress("Multi threading buff and damage mod computations");
                 log.FightData.GetPhases(log);
                 foreach (Player p in log.PlayerList)
                 {
@@ -233,8 +234,9 @@ namespace GW2EIParser
                 using (var sw = new StreamWriter(fs))
                 {
                     var builder = new HTMLBuilder(log, uploadresult, Properties.Settings.Default.LightTheme, Properties.Settings.Default.HtmlExternalScripts);
-                    builder.CreateHTML(sw, saveDirectory.FullName);
+                    builder.CreateHTML(sw, saveDirectory.FullName, operation);
                 }
+                operation.UpdateProgress("HTML created");
             }
             operation.ThrowIfCanceled();
             if (Properties.Settings.Default.SaveOutCSV)
@@ -251,13 +253,14 @@ namespace GW2EIParser
                 using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                 {
                     var builder = new CSVBuilder(sw, ",", log, uploadresult);
-                    builder.CreateCSV();
+                    builder.CreateCSV(operation);
                 }
+                operation.UpdateProgress("CSV created");
             }
             operation.ThrowIfCanceled();
             if (Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML)
             {
-                var builder = new RawFormatBuilder(log, uploadresult);
+                var builder = new RawFormatBuilder(log, uploadresult, operation);
                 if (Properties.Settings.Default.SaveOutJSON)
                 {
                     operation.UpdateProgress("Creating JSON");
@@ -284,7 +287,9 @@ namespace GW2EIParser
                     if (str is MemoryStream msr)
                     {
                         CompressFile(outputFile, msr);
+                        operation.UpdateProgress("JSON compressed");
                     }
+                    operation.UpdateProgress("JSON created");
                 }
                 operation.ThrowIfCanceled();
                 if (Properties.Settings.Default.SaveOutXML)
@@ -313,7 +318,9 @@ namespace GW2EIParser
                     if (str is MemoryStream msr)
                     {
                         CompressFile(outputFile, msr);
+                        operation.UpdateProgress("XML compressed");
                     }
+                    operation.UpdateProgress("XML created");
                 }
                 operation.ThrowIfCanceled();
             }
