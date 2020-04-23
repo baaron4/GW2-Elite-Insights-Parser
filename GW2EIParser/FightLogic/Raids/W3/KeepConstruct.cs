@@ -77,7 +77,7 @@ namespace GW2EIParser.Logic
             NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.KeepConstruct);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Error Encountered: Keep Construct not found");
+                throw new InvalidOperationException("Keep Construct not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
@@ -352,7 +352,7 @@ namespace GW2EIParser.Logic
                     NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.KeepConstruct);
                     if (mainTarget == null)
                     {
-                        throw new InvalidOperationException("Error Encountered: Keep Construct not found");
+                        throw new InvalidOperationException("Keep Construct not found");
                     }
                     replay.Decorations.Add(new CircleDecoration(false, 0, 600, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     replay.Decorations.Add(new CircleDecoration(true, 0, 400, (start, end), "rgba(0, 125, 255, 0.5)", new AgentConnector(target)));

@@ -66,7 +66,7 @@ namespace GW2EIParser.Logic
             NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.ValeGuardian);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Error Encountered: Vale Guardian not found");
+                throw new InvalidOperationException("Vale Guardian not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)

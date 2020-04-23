@@ -73,7 +73,7 @@ namespace GW2EIParser.EIData
             IEnumerable<long> inter = major.Intersect(minor);
             if (inter.Count() != 1)
             {
-                throw new InvalidOperationException("Error Encountered: Intersection incorrect in TranslateWeaverAttunement");
+                throw new InvalidOperationException("Intersection incorrect in TranslateWeaverAttunement");
             }
             return inter.First();
         }

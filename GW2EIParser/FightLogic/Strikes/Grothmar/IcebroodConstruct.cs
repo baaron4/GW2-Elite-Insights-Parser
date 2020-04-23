@@ -42,7 +42,7 @@ namespace GW2EIParser.Logic
             NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.IcebroodConstruct);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Error Encountered: Icebrood Construct not found");
+                throw new InvalidOperationException("Icebrood Construct not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)

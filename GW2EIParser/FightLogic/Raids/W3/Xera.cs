@@ -56,7 +56,7 @@ namespace GW2EIParser.Logic
             NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Xera);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Error Encountered: Xera not found");
+                throw new InvalidOperationException("Xera not found");
             }
             var res = new List<AbstractBuffEvent>();
             if (_specialSplit != 0)
@@ -75,7 +75,7 @@ namespace GW2EIParser.Logic
             NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Xera);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Error Encountered: Xera not found");
+                throw new InvalidOperationException("Xera not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
@@ -111,7 +111,7 @@ namespace GW2EIParser.Logic
             AgentItem target = agentData.GetNPCsByID((int)ParseEnum.TargetIDS.Xera).FirstOrDefault();
             if (target == null)
             {
-                throw new InvalidOperationException("Error Encountered: Xera not found");
+                throw new InvalidOperationException("Xera not found");
             }
             // enter combat
             CombatItem enterCombat = combatData.Find(x => x.SrcAgent == target.Agent && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
@@ -128,7 +128,7 @@ namespace GW2EIParser.Logic
             AgentItem target = agentData.GetNPCsByID((int)ParseEnum.TargetIDS.Xera).FirstOrDefault();
             if (target == null)
             {
-                throw new InvalidOperationException("Error Encountered: Xera not found");
+                throw new InvalidOperationException("Xera not found");
             }
             // find split
             foreach (AgentItem NPC in agentData.GetAgentByType(AgentItem.AgentType.NPC))

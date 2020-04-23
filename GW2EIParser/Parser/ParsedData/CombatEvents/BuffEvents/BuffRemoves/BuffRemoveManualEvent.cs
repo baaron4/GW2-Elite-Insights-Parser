@@ -23,7 +23,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         }
         public override int CompareTo(AbstractBuffEvent abe)
         {
-            throw new InvalidOperationException("Error Encountered: Manual removes can't be sorted");
+            throw new InvalidOperationException("Manual removes can't be sorted");
         }
     }
 }

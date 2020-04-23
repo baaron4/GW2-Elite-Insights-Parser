@@ -29,7 +29,7 @@ namespace GW2EIParser
             }
             catch (Exception)
             {
-                operation.UpdateProgress("Error Encountered : Something terrible has happened");
+                operation.UpdateProgress("Something terrible has happened");
             }
             finally
             {

@@ -347,7 +347,7 @@ namespace GW2EIParser.Controllers
                     return spec.Profession;
                 }
             }
-            throw new InvalidDataException("Error Encountered: Unknown profession");
+            throw new InvalidDataException("Unknown profession");
         }
 
         //----------------------------------------------------------------------------- TRAITS

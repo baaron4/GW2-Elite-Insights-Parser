@@ -69,7 +69,7 @@ namespace GW2EIParser.Logic
             NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Sabetha);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Error Encountered: Sabetha not found");
+                throw new InvalidOperationException("Sabetha not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
@@ -105,7 +105,7 @@ namespace GW2EIParser.Logic
                                 phase.Name = "Karde";
                                 break;
                             default:
-                                throw new InvalidOperationException("Error Encountered: Unknown phase target in Sabetha");
+                                throw new InvalidOperationException("Unknown phase target in Sabetha");
                         }
                     }
                 }

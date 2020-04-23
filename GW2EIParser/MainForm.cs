@@ -91,14 +91,14 @@ namespace GW2EIParser
                     {
                         if (t.Exception.InnerExceptions.Count > 1)
                         {
-                            operation.UpdateProgress("Error Encountered: Something terrible has happened");
+                            operation.UpdateProgress("Something terrible has happened");
                         }
                         else
                         {
                             Exception ex = t.Exception.InnerExceptions[0];
                             if (!(ex is ExceptionEncompass))
                             {
-                                operation.UpdateProgress("Error Encountered: Something terrible has happened");
+                                operation.UpdateProgress("Something terrible has happened");
                             }
                             if (!(ex.InnerException is OperationCanceledException))
                             {
@@ -112,7 +112,7 @@ namespace GW2EIParser
                     }
                     else
                     {
-                        operation.UpdateProgress("Error Encountered: Something terrible has happened");
+                        operation.UpdateProgress("Something terrible has happened");
                     }
                 }
                 if (operation.State == OperationState.ClearOnCancel)
@@ -136,7 +136,7 @@ namespace GW2EIParser
                     }
                     else
                     {
-                        operation.UpdateProgress("Error Encountered: Something terrible has happened");
+                        operation.UpdateProgress("Something terrible has happened");
                         operation.ToUnCompleteState();
                     }
                 }

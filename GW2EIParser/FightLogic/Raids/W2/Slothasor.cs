@@ -61,7 +61,7 @@ namespace GW2EIParser.Logic
             NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Slothasor);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Error Encountered: Slothasor not found");
+                throw new InvalidOperationException("Slothasor not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)

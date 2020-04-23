@@ -160,7 +160,7 @@ namespace GW2EIParser.Logic
                 NPC rightArm = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.CARightArm);
                 if (target == null)
                 {
-                    throw new InvalidOperationException("Error Encountered: Conjured Amalgamate not found");
+                    throw new InvalidOperationException("Conjured Amalgamate not found");
                 }
                 AgentItem zommoros = agentData.GetNPCsByID(21118).LastOrDefault();
                 if (zommoros == null)
@@ -215,7 +215,7 @@ namespace GW2EIParser.Logic
             NPC ca = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.ConjuredAmalgamate);
             if (ca == null)
             {
-                throw new InvalidOperationException("Error Encountered: Conjured Amalgamate not found");
+                throw new InvalidOperationException("Conjured Amalgamate not found");
             }
             phases[0].Targets.Add(ca);
             if (!requirePhases)
@@ -300,7 +300,7 @@ namespace GW2EIParser.Logic
             NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.ConjuredAmalgamate);
             if (target == null)
             {
-                throw new InvalidOperationException("Error Encountered: Conjured Amalgamate not found");
+                throw new InvalidOperationException("Conjured Amalgamate not found");
             }
             return combatData.GetBuffData(53075).Count > 0 ? 1 : 0;
         }

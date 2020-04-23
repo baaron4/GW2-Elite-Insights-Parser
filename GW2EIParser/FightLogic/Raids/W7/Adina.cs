@@ -104,7 +104,7 @@ namespace GW2EIParser.Logic
             NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Adina);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Error Encountered: Adina not found");
+                throw new InvalidOperationException("Adina not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
@@ -179,7 +179,7 @@ namespace GW2EIParser.Logic
             NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Adina);
             if (target == null)
             {
-                throw new InvalidOperationException("Error Encountered: Adina not found");
+                throw new InvalidOperationException("Adina not found");
             }
             return (target.GetHealth(combatData) > 23e6) ? 1 : 0;
         }

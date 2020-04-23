@@ -43,7 +43,7 @@ namespace GW2EIParser.Logic
             NPC claw = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.VoiceOfTheFallen);
             if (voice == null || claw == null)
             {
-                throw new InvalidOperationException("Error Encountered: Claw or Voice not found");
+                throw new InvalidOperationException("Claw or Voice not found");
             }
             phases[0].Targets.Add(voice);
             phases[0].Targets.Add(claw);

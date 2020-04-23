@@ -97,7 +97,7 @@ namespace GW2EIParser.Logic
                         phase.Name = "Zane";
                         break;
                     default:
-                        throw new InvalidOperationException("Error Encountered: Unknown target in Bandit Trio");
+                        throw new InvalidOperationException("Unknown target in Bandit Trio");
                 }
                 phases.Add(phase);
             }
@@ -119,17 +119,17 @@ namespace GW2EIParser.Logic
             NPC berg = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Berg);
             if (berg == null)
             {
-                throw new InvalidOperationException("Error Encountered: Berg not found");
+                throw new InvalidOperationException("Berg not found");
             }
             NPC zane = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Zane);
             if (zane == null)
             {
-                throw new InvalidOperationException("Error Encountered: Zane not found");
+                throw new InvalidOperationException("Zane not found");
             }
             NPC narella = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Narella);
             if (narella == null)
             {
-                throw new InvalidOperationException("Error Encountered: Narella not found");
+                throw new InvalidOperationException("Narella not found");
             }
             phases[0].Targets.AddRange(Targets);
             if (!requirePhases)

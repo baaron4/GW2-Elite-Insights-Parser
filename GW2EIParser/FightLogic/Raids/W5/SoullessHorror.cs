@@ -65,7 +65,7 @@ namespace GW2EIParser.Logic
                 NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.SoullessHorror);
                 if (mainTarget == null)
                 {
-                    throw new InvalidOperationException("Error Encountered: Soulless Horror not found");
+                    throw new InvalidOperationException("Soulless Horror not found");
                 }
                 AbstractBuffEvent buffOnDeath = combatData.GetBuffData(895).Where(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent).LastOrDefault();
                 if (buffOnDeath != null)
@@ -109,7 +109,7 @@ namespace GW2EIParser.Logic
             NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.SoullessHorror);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Error Encountered: Soulless Horror not found");
+                throw new InvalidOperationException("Soulless Horror not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)

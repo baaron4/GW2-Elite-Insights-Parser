@@ -29,7 +29,7 @@ namespace GW2EIParser.EIData
             BuffsByNature = currentBuffs.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => x.ToList());
             BuffsBySource = currentBuffs.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => x.ToList());
             BuffsByType = currentBuffs.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
-            _buffsByName = currentBuffs.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().Count > 1 ? throw new InvalidOperationException("Error Encountered: Same name present multiple times in buffs - " + x.First().Name) : x.First());
+            _buffsByName = currentBuffs.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().Count > 1 ? throw new InvalidOperationException("Same name present multiple times in buffs - " + x.First().Name) : x.First());
             BuffsByCapacity = currentBuffs.GroupBy(x => x.Capacity).ToDictionary(x => x.Key, x => x.ToList());
             _buffSourceFinder = GetBuffSourceFinder(build, new HashSet<long>(BuffsByNature[BuffNature.Boon].Select(x => x.ID)));
         }
@@ -40,7 +40,7 @@ namespace GW2EIParser.EIData
             {
                 return buff;
             }
-            throw new InvalidOperationException("Error Encountered: Buff " + name + " does not exist");
+            throw new InvalidOperationException("Buff " + name + " does not exist");
         }
 
         public AgentItem TryFindSrc(AgentItem dst, long time, long extension, ParsedLog log, long buffID)

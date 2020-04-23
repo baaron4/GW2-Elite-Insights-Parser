@@ -20,7 +20,7 @@ namespace GW2EIParser.EIData
             BuffStackItem toExtend = BuffStack.Find(x => x.StackID == stackID);
             if (toExtend == null)
             {
-                throw new InvalidOperationException("Error Encountered: Extend has failed");
+                throw new InvalidOperationException("Extend has failed");
             }
             toExtend.Extend(extension, src);
             //ExtendedSimulationResult.Add(new BuffCreationItem(src, extension, time, toExtend.ID));
@@ -43,7 +43,7 @@ namespace GW2EIParser.EIData
                         if (BuffStack.Count < removedStacks)
                         {
                             //removedStacks = BuffStack.Count;
-                            throw new InvalidOperationException("Error Encountered: Remove all failed");
+                            throw new InvalidOperationException("Remove all failed");
                         }
                         // buff cleanse all
                         for (int i = 0; i < removedStacks; i++)
@@ -67,12 +67,12 @@ namespace GW2EIParser.EIData
                     toRemove = BuffStack.Find(x => x.StackID == stackID);
                     break;
                 default:
-                    throw new InvalidOperationException("Error Encountered: Unknown remove type");
+                    throw new InvalidOperationException("Unknown remove type");
             }
             if (toRemove == null)
             {
                 //return;
-                throw new InvalidOperationException("Error Encountered: Remove has failed");
+                throw new InvalidOperationException("Remove has failed");
             }
             BuffStack.Remove(toRemove);
             // Removed due to override

@@ -61,7 +61,7 @@ namespace GW2EIParser.Logic
             NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Samarog);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Error Encountered: Samarog not found");
+                throw new InvalidOperationException("Samarog not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
@@ -219,7 +219,7 @@ namespace GW2EIParser.Logic
             NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Samarog);
             if (target == null)
             {
-                throw new InvalidOperationException("Error Encountered: Samarog not found");
+                throw new InvalidOperationException("Samarog not found");
             }
             return (target.GetHealth(combatData) > 30e6) ? 1 : 0;
         }

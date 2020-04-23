@@ -52,7 +52,7 @@ namespace GW2EIParser.Logic
             NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Skorvald);
             if (target == null)
             {
-                throw new InvalidOperationException("Error Encountered: Skorvald not found");
+                throw new InvalidOperationException("Skorvald not found");
             }
             return (target.GetHealth(combatData) == 5551340) ? 1 : 0;
         }

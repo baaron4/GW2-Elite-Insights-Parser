@@ -52,7 +52,7 @@ namespace GW2EIParser.Parser
                     {
                         if (arch.Entries.Count != 1)
                         {
-                            throw new InvalidDataException("Error Encountered: Invalid Archive");
+                            throw new InvalidDataException("Invalid Archive");
                         }
                         using (Stream data = arch.Entries[0].Open())
                         {
@@ -430,7 +430,7 @@ namespace GW2EIParser.Parser
             }
             if (!_combatItems.Any())
             {
-                throw new InvalidDataException("Error Encountered: No combat events found");
+                throw new InvalidDataException("No combat events found");
             }
         }
 
@@ -607,7 +607,7 @@ namespace GW2EIParser.Parser
             }
             if (_agentData.GetAgentByType(AgentItem.AgentType.Player).Count == 0)
             {
-                throw new InvalidDataException("Error Encountered: No players found");
+                throw new InvalidDataException("No players found");
             }
         }
 
@@ -634,7 +634,7 @@ namespace GW2EIParser.Parser
             _fightData.Logic.EIEvtcParse(_fightData, _agentData, _combatItems, _playerList);
             if (!_fightData.Logic.Targets.Any())
             {
-                throw new InvalidDataException("Error Encountered: No Targets found");
+                throw new InvalidDataException("No Targets found");
             }
         }
     }

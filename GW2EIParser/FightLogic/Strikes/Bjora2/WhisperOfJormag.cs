@@ -36,7 +36,7 @@ namespace GW2EIParser.Logic
             NPC woj = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.WhisperOfJormag);
             if (woj == null)
             {
-                throw new InvalidOperationException("Error Encountered: Whisper of Jormag not found");
+                throw new InvalidOperationException("Whisper of Jormag not found");
             }
             phases[0].Targets.Add(woj);
             if (!requirePhases)

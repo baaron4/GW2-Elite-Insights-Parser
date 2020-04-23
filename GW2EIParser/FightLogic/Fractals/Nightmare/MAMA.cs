@@ -54,7 +54,7 @@ namespace GW2EIParser.Logic
             NPC mama = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.MAMA);
             if (mama == null)
             {
-                throw new InvalidOperationException("Error Encountered: MAMA not found");
+                throw new InvalidOperationException("MAMA not found");
             }
             phases[0].Targets.Add(mama);
             if (!requirePhases)
@@ -89,7 +89,7 @@ namespace GW2EIParser.Logic
                                 phase.Name = "Blue Knight";
                                 break;
                             default:
-                                throw new InvalidOperationException("Error Encountered: Unknown phase target in MAMA");
+                                throw new InvalidOperationException("Unknown phase target in MAMA");
                         }
                     }
                 }

@@ -36,11 +36,11 @@ namespace GW2EIParser.tst
             var fInfo = new FileInfo(operation.Location);
             if (!fInfo.Exists)
             {
-                throw new FileNotFoundException("Error Encountered: File does not exist", fInfo.FullName);
+                throw new FileNotFoundException("File does not exist", fInfo.FullName);
             }
             if (!ProgramHelper.IsSupportedFormat(fInfo.Name))
             {
-                throw new InvalidDataException("Error Encountered: Not EVTC");
+                throw new InvalidDataException("Not EVTC");
             }
 
             return parser.ParseLog(operation, fInfo.FullName);

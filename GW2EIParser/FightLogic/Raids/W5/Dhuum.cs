@@ -102,7 +102,7 @@ namespace GW2EIParser.Logic
             NPC dhuum = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Dhuum);
             if (dhuum == null)
             {
-                throw new InvalidOperationException("Error Encountered: Dhuum not found");
+                throw new InvalidOperationException("Dhuum not found");
             }
             phases[0].Targets.Add(dhuum);
             if (!requirePhases)
@@ -308,7 +308,7 @@ namespace GW2EIParser.Logic
             NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Dhuum);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Error Encountered: Dhuum not found");
+                throw new InvalidOperationException("Dhuum not found");
             }
             foreach (AbstractBuffEvent c in spiritTransform)
             {
@@ -393,7 +393,7 @@ namespace GW2EIParser.Logic
             NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Dhuum);
             if (target == null)
             {
-                throw new InvalidOperationException("Error Encountered: Dhuum not found");
+                throw new InvalidOperationException("Dhuum not found");
             }
             return (target.GetHealth(combatData) > 35e6) ? 1 : 0;
         }

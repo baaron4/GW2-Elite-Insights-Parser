@@ -28,7 +28,7 @@ namespace GW2EIParser.Logic
             NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Error Encountered: Main target of the fight not found");
+                throw new InvalidOperationException("Main target of the fight not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
@@ -58,7 +58,7 @@ namespace GW2EIParser.Logic
             AgentItem target = agentData.GetNPCsByID(targetID).FirstOrDefault();
             if (target == null)
             {
-                throw new InvalidOperationException("Error Encountered: Main target of the fight not found");
+                throw new InvalidOperationException("Main target of the fight not found");
             }
             CombatItem invulGain = combatData.FirstOrDefault(x => x.DstAgent == target.Agent && (x.IsStateChange == ParseEnum.StateChange.None || x.IsStateChange == ParseEnum.StateChange.BuffInitial) && x.IsBuffRemove == ParseEnum.BuffRemove.None && x.IsBuff > 0 && x.SkillID == invulID);
             // check invul gain at the start of the fight (initial or with a small threshold)
@@ -97,7 +97,7 @@ namespace GW2EIParser.Logic
             NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Error Encountered: Main target of the fight not found");
+                throw new InvalidOperationException("Main target of the fight not found");
             }
             RewardEvent reward = combatData.GetRewardEvents().LastOrDefault();
             AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => (x.Damage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
