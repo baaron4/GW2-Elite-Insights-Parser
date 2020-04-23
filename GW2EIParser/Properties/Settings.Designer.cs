@@ -340,6 +340,21 @@ namespace GW2EIParser.Properties {
 
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ParseMultipleLogs
+        {
+            get
+            {
+                return ((bool)(this["ParseMultipleLogs"]));
+            }
+            set
+            {
+                this["ParseMultipleLogs"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool RawTimelineArrays
         {

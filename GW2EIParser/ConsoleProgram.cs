@@ -9,28 +9,33 @@ namespace GW2EIParser
     {
         public ConsoleProgram(IEnumerable<string> logFiles)
         {
-            foreach (string file in logFiles)
+            var options = new ParallelOptions()
             {
-                ParseLog(file);
-            }
+                MaxDegreeOfParallelism = Properties.Settings.Default.ParseMultipleLogs ? -1 : 1
+            };
+            Parallel.ForEach(logFiles, options, file => ParseLog(file));
         }
 
-        private void ParseLog(object logFile)
+        private void ParseLog(string logFile)
         {
-            var operation = new ConsoleOperation(logFile as string, "Ready to parse");
+            var operation = new ConsoleOperationController(logFile, "Ready to parse");
             try
             {
-                operation.Run();
+                ProgramHelper.DoWork(operation);
             }
-            catch (CancellationException ex)
+            catch (ExceptionEncompass ex)
             {
-                Console.WriteLine(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+                operation.UpdateProgress(ex.GetFinalException().Message);
             }
             catch (Exception)
             {
-                Console.WriteLine("Something terrible has happened");
+                operation.UpdateProgress("Error Encountered : Something terrible has happened");
             }
-
+            finally
+            {
+                operation.FinalizeStatus();
+                ProgramHelper.GenerateLogFile(operation);
+            }
         }
     }
 }

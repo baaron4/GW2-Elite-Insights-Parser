@@ -32,6 +32,16 @@ namespace GW2EIParser
             NamingStrategy = new CamelCaseNamingStrategy()
         };
 
+        public static Exception GetFinalException(this Exception ex)
+        {
+            Exception final = ex;
+            while (final.InnerException != null)
+            {
+                final = final.InnerException;
+            }
+            return final;
+        }
+
         public static double Clamp(double value, double lowerLimit, double upperLimit)
         {
             return Math.Min(Math.Max(value, lowerLimit), upperLimit);
