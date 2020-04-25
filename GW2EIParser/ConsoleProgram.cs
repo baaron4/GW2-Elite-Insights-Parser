@@ -22,18 +22,20 @@ namespace GW2EIParser
             try
             {
                 ProgramHelper.DoWork(operation);
+                operation.FinalizeStatus("Parsing Successful - ");
             }
             catch (ExceptionEncompass ex)
             {
                 operation.UpdateProgress(ex.GetFinalException().Message);
+                operation.FinalizeStatus("Parsing Failure - ");
             }
             catch (Exception)
             {
                 operation.UpdateProgress("Something terrible has happened");
+                operation.FinalizeStatus("Parsing Failure - ");
             }
             finally
             {
-                operation.FinalizeStatus();
                 ProgramHelper.GenerateLogFile(operation);
             }
         }

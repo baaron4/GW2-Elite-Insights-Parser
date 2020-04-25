@@ -70,10 +70,10 @@ namespace GW2EIParser
             StatusList.Add(status);
         }
 
-        public void FinalizeStatus()
+        public void FinalizeStatus(string prefix)
         {
             Status = StatusList.LastOrDefault() ?? "";
-            Console.WriteLine($"{Location}: {Status}" + Environment.NewLine);
+            Console.WriteLine(prefix + $"{Location}: {Status}" + Environment.NewLine);
         }
     }
 }

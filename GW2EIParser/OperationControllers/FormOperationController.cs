@@ -98,7 +98,7 @@ namespace GW2EIParser
         {
             State = OperationState.Complete;
             ButtonText = "Open";
-            FinalizeStatus();
+            FinalizeStatus("Parsing Successful - ");
             InvalidateDataView();
         }
 
@@ -106,7 +106,7 @@ namespace GW2EIParser
         {
             State = OperationState.Ready;
             ButtonText = "Parse";
-            FinalizeStatus();
+            FinalizeStatus("Parsing Failure - ");
             InvalidateDataView();
         }
 
