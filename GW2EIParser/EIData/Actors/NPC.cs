@@ -25,6 +25,19 @@ namespace GW2EIParser.EIData
             return _health;
         }
 
+
+
+        public override List<double[]> Get1SHealthGraph(ParsedLog log)
+        {
+            if (HealthUpdates.Count == 0)
+            {
+                List<PhaseData> phases = log.FightData.GetPhases(log);
+                List<HealthUpdateEvent> hpEvents = log.CombatData.GetHealthUpdateEvents(AgentItem);
+                Fill1SHPGraph(log, phases, hpEvents);
+            }
+            return HealthUpdates;
+        }
+
         public void OverrideName(string name)
         {
             Character = name;

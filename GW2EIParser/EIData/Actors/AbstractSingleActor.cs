@@ -21,7 +21,7 @@ namespace GW2EIParser.EIData
         private readonly Dictionary<int, List<int>> _damageList1S = new Dictionary<int, List<int>>();
         private readonly Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>> _selfDamageLogsPerPhasePerTarget = new Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>>();
         //status
-        private List<double[]> _healthUpdates { get; set; } = new List<double[]>();
+        protected List<double[]> HealthUpdates { get; } = new List<double[]>();
         private List<(long start, long end)> _deads;
         private List<(long start, long end)> _downs;
         private List<(long start, long end)> _dcs;
@@ -162,73 +162,60 @@ namespace GW2EIParser.EIData
             return dmgList;
         }
 
-        public List<double[]> Get1SHealthGraph(ParsedLog log)
+        protected void Fill1SHPGraph(ParsedLog log, List<PhaseData> phases, List<HealthUpdateEvent> hpEvents)
         {
-            if (_healthUpdates.Count == 0)
+            // fill the graph, full precision
+            var listFull = new List<double>();
+            for (int i = 0; i <= phases[0].DurationInMS; i++)
             {
-                List<PhaseData> phases = log.FightData.GetPhases(log);
-                // fill the graph, full precision
-                var listFull = new List<double>();
-                for (int i = 0; i <= phases[0].DurationInMS; i++)
+                listFull.Add(100.0);
+            }
+            int totalTime = 0;
+            double curHealth = 100.0; foreach (HealthUpdateEvent e in hpEvents)
+            {
+                int time = (int)e.Time;
+                if (time < 0)
                 {
-                    listFull.Add(100.0);
+                    continue;
                 }
-                int totalTime = 0;
-                double curHealth = 100.0;
-                List<HealthUpdateEvent> hpEvents = log.CombatData.GetHealthUpdateEvents(AgentItem);
-                if (hpEvents.Count == 0)
+                if (time > phases[0].DurationInMS)
                 {
-                    foreach (PhaseData phase in phases)
-                    {
-                        _healthUpdates.Add(null);
-                    }
-                    return _healthUpdates;
+                    break;
                 }
-                foreach (HealthUpdateEvent e in log.CombatData.GetHealthUpdateEvents(AgentItem))
-                {
-                    int time = (int)e.Time;
-                    if (time < 0)
-                    {
-                        continue;
-                    }
-                    if (time > phases[0].DurationInMS)
-                    {
-                        break;
-                    }
-                    for (; totalTime < time; totalTime++)
-                    {
-                        listFull[totalTime] = curHealth;
-                    }
-                    curHealth = e.HPPercent;
-                    listFull[time] = curHealth;
-                }
-                curHealth = hpEvents.Count > 0 ? hpEvents.Last().HPPercent : curHealth;
-                // fill
-                for (; totalTime <= phases[0].DurationInMS; totalTime++)
+                for (; totalTime < time; totalTime++)
                 {
                     listFull[totalTime] = curHealth;
                 }
-                foreach (PhaseData phase in phases)
-                {
-                    int seconds = (int)phase.DurationInS;
-                    bool needsLastPoint = seconds * 1000 != phase.DurationInMS;
-                    double[] hps = new double[seconds + (needsLastPoint ? +2 : 1)];
-                    int time = (int)phase.Start;
-                    int i;
-                    for (i = 0; i <= seconds; i++)
-                    {
-                        hps[i] = listFull[time];
-                        time += 1000;
-                    }
-                    if (needsLastPoint)
-                    {
-                        hps[i] = listFull[(int)phase.End];
-                    }
-                    _healthUpdates.Add(hps);
-                }
+                curHealth = e.HPPercent;
+                listFull[time] = curHealth;
             }
-            return _healthUpdates;
+            curHealth = hpEvents.Count > 0 ? hpEvents.Last().HPPercent : curHealth;
+            // fill
+            for (; totalTime <= phases[0].DurationInMS; totalTime++)
+            {
+                listFull[totalTime] = curHealth;
+            }
+            foreach (PhaseData phase in phases)
+            {
+                int seconds = (int)phase.DurationInS;
+                bool needsLastPoint = seconds * 1000 != phase.DurationInMS;
+                double[] hps = new double[seconds + (needsLastPoint ? +2 : 1)];
+                int time = (int)phase.Start;
+                int i;
+                for (i = 0; i <= seconds; i++)
+                {
+                    hps[i] = listFull[time];
+                    time += 1000;
+                }
+                if (needsLastPoint)
+                {
+                    hps[i] = listFull[(int)phase.End];
+                }
+                HealthUpdates.Add(hps);
+            }
         }
+
+        public abstract List<double[]> Get1SHealthGraph(ParsedLog log);
 
         // Buffs
         public BuffDistribution GetBuffDistribution(ParsedLog log, int phaseIndex)
