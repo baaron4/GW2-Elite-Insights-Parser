@@ -26,22 +26,42 @@ namespace GW2EIParser.Controllers
             }
             return;
         }
+        // INIT
+
+        public static void InitAPICache()
+        {
+            GetAPISkill(0);
+            //GetAPITrait(0);
+            GetAPISpec(0);
+        }
+
         //----------------------------------------------------------------------------- SKILLS
 
-        private class SkillList
+        private class APISkills
         {
-            public SkillList() { Items = new List<GW2APISkill>(); }
-            public List<GW2APISkill> Items { get; set; }
+            public APISkills() { 
+                Items = new Dictionary<long, GW2APISkill>(); 
+            }
+
+            public APISkills(List<GW2APISkill> skills)
+            {
+                Items = skills.ToDictionary(x => x.Id);
+            }
+
+            public Dictionary<long, GW2APISkill> Items { get; }
         }
 
-        private static SkillList _listOfSkills = new SkillList();
+        private static APISkills _apiSkills = new APISkills();
 
-        public static GW2APISkill GetSkill(long id)
+        public static GW2APISkill GetAPISkill(long id)
         {
-            GW2APISkill skill = GetSkillList().Items.FirstOrDefault(x => x.Id == id);
-            return skill;
+            if (GetAPISkills().Items.TryGetValue(id, out GW2APISkill skill))
+            {
+                return skill;
+            }
+            return null;
         }
-        private static List<GW2APISkill> GetListGW2APISkills()
+        private static List<GW2APISkill> GetGW2APISkills()
         {
             var skill_L = new List<GW2APISkill>();
             bool maxPageSizeReached = false;
@@ -72,15 +92,15 @@ namespace GW2EIParser.Controllers
 
             return skill_L;
         }
-        private static SkillList GetSkillList()
+        private static APISkills GetAPISkills()
         {
-            if (_listOfSkills.Items.Count == 0)
+            if (_apiSkills.Items.Count == 0)
             {
-                SetSkillList();
+                SetAPISkills();
             }
-            return _listOfSkills;
+            return _apiSkills;
         }
-        public static List<int> WriteSkillListToFile()
+        public static List<int> WriteAPISkillsToFile()
         {
             FileStream fcreate = File.Open(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/SkillList.json", FileMode.Create);
@@ -92,13 +112,13 @@ namespace GW2EIParser.Controllers
             //Get list from API
             GetAPIClient();
 
-            _listOfSkills = new SkillList();
+            var skillList = new List<GW2APISkill>();
             HttpResponseMessage response = APIClient.GetAsync(new Uri("/v2/skills", UriKind.Relative)).Result;
             var failedList = new List<int>();
             if (response.IsSuccessStatusCode)
             {
                 // Get Skill ID list           
-                _listOfSkills.Items.AddRange(GetListGW2APISkills());
+                skillList.AddRange(GetGW2APISkills());
                 var writer = new StreamWriter(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/SkillList.json");
                 var serializer = new JsonSerializer
@@ -108,16 +128,17 @@ namespace GW2EIParser.Controllers
                     DefaultValueHandling = DefaultValueHandling.Ignore,
                     ContractResolver = GeneralHelper.ContractResolver
                 };
-                serializer.Serialize(writer, _listOfSkills.Items);
+                serializer.Serialize(writer, skillList);
                 writer.Close();
 
             }
+            _apiSkills = new APISkills(skillList);
             return failedList;
         }
-        private static void SetSkillList()
+        private static void SetAPISkills()
         {
 
-            if (_listOfSkills.Items.Count == 0)
+            if (_apiSkills.Items.Count == 0)
             {
                 string path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
                 + "/Content/SkillList.json";
@@ -133,33 +154,39 @@ namespace GW2EIParser.Controllers
                             {
                                 ContractResolver = GeneralHelper.ContractResolver
                             };
-                            _listOfSkills.Items = (List<GW2APISkill>)serializer.Deserialize(reader, typeof(List<GW2APISkill>));
+                            var skillList = (List<GW2APISkill>)serializer.Deserialize(reader, typeof(List<GW2APISkill>));
+                            _apiSkills = new APISkills(skillList);
                             reader.Close();
                         }
                     }
-                }
-                if (_listOfSkills.Items.Count == 0)
-                {
-                    WriteSkillListToFile();
                 }
             }
             return;
         }
         //----------------------------------------------------------------------------- SPECS
-        private class SpecList
+        private class APISpecs
         {
-            public SpecList() { Items = new List<GW2APISpec>(); }
+            public APISpecs() { 
+                Items = new Dictionary<int, GW2APISpec>(); 
+            }
 
-            public List<GW2APISpec> Items { get; set; }
+            public APISpecs(List<GW2APISpec> specs)
+            {
+                Items = specs.ToDictionary(x => x.Id);
+            }
+
+            public Dictionary<int, GW2APISpec> Items { get; }
         }
 
-        private static SpecList _listofSpecs = new SpecList();
+        private static APISpecs _apiSpecs = new APISpecs();
 
-        public static GW2APISpec GetSpec(int id)
+        private static GW2APISpec GetAPISpec(int id)
         {
-            GW2APISpec spec = GetSpecList().Items.FirstOrDefault(x => x.Id == id);
-
-            return spec;
+            if (GetAPISpecs().Items.TryGetValue(id, out GW2APISpec spec))
+            {
+                return spec;
+            }
+            return null;
         }
         private static GW2APISpec GetGW2APISpec(string path)
         {
@@ -174,15 +201,15 @@ namespace GW2EIParser.Controllers
             return spec;
         }
 
-        private static SpecList GetSpecList()
+        private static APISpecs GetAPISpecs()
         {
-            if (_listofSpecs.Items.Count == 0)
+            if (_apiSpecs.Items.Count == 0)
             {
-                SetSpecList();
+                SetAPISpecs();
             }
-            return _listofSpecs;
+            return _apiSpecs;
         }
-        public static List<int> WriteSpecListToFile()
+        public static List<int> WriteAPISpecsToFile()
         {
             FileStream fcreate = File.Open(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/SpecList.json", FileMode.Create);
@@ -194,7 +221,7 @@ namespace GW2EIParser.Controllers
             //Get list from API
             GetAPIClient();
 
-            _listofSpecs = new SpecList();
+            var specList = new List<GW2APISpec>();
             HttpResponseMessage response = APIClient.GetAsync(new Uri("/v2/specializations", UriKind.Relative)).Result;
             int[] idArray;
             var failedList = new List<int>();
@@ -205,12 +232,11 @@ namespace GW2EIParser.Controllers
 
                 foreach (int id in idArray)
                 {
-                    var curSpec = new GW2APISpec();
-                    curSpec = GetGW2APISpec("/v2/specializations/" + id);
+                    GW2APISpec curSpec = GetGW2APISpec("/v2/specializations/" + id);
                     if (curSpec != null)
                     {
 
-                        _listofSpecs.Items.Add(curSpec);
+                        specList.Add(curSpec);
 
                     }
                     else
@@ -229,17 +255,18 @@ namespace GW2EIParser.Controllers
                     Formatting = Formatting.None,
                     ContractResolver = GeneralHelper.ContractResolver
                 };
-                serializer.Serialize(writer, _listofSpecs.Items);
+                serializer.Serialize(writer, specList);
                 writer.Close();
 
             }
+            _apiSpecs = new APISpecs(specList);
             return failedList;
         }
 
-        private static void SetSpecList()
+        private static void SetAPISpecs()
         {
 
-            if (_listofSpecs.Items.Count == 0)
+            if (_apiSpecs.Items.Count == 0)
             {
                 string path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
                 + "/Content/SpecList.json";
@@ -255,16 +282,12 @@ namespace GW2EIParser.Controllers
                             {
                                 ContractResolver = GeneralHelper.ContractResolver
                             };
-                            _listofSpecs.Items = (List<GW2APISpec>)serializer.Deserialize(reader, typeof(List<GW2APISpec>));
+                            var specList = (List<GW2APISpec>)serializer.Deserialize(reader, typeof(List<GW2APISpec>));
+                            _apiSpecs = new APISpecs(specList);
                             reader.Close();
                         }
                     }
                 }
-                if (_listofSpecs.Items.Count == 0)//if nothing in file or fail write new file
-                {
-                    WriteSpecListToFile();
-                }
-
             }
             return;
         }
@@ -337,7 +360,7 @@ namespace GW2EIParser.Controllers
             // new way
             else
             {
-                GW2APISpec spec = GetSpec((int)elite);
+                GW2APISpec spec = GetAPISpec((int)elite);
                 if (spec.Elite)
                 {
                     return spec.Name;
@@ -352,18 +375,29 @@ namespace GW2EIParser.Controllers
 
         //----------------------------------------------------------------------------- TRAITS
 
-        private class TraitList
+        private class APITraits
         {
-            public TraitList() { Items = new List<GW2APITrait>(); }
-            public List<GW2APITrait> Items { get; set; }
+            public APITraits() { 
+                Items = new Dictionary<long, GW2APITrait>(); 
+            }
+
+            public APITraits(List<GW2APITrait> traits)
+            {
+                Items = traits.ToDictionary(x => x.Id);
+            }
+
+            public Dictionary<long, GW2APITrait> Items { get;}
         }
 
-        private static TraitList _listOfTraits = new TraitList();
+        private static APITraits _apiTraits = new APITraits();
 
-        public static GW2APITrait GetTrait(long id)
+        public static GW2APITrait GetAPITrait(long id)
         {
-            GW2APITrait trait = GetTraitList().Items.FirstOrDefault(x => x.Id == id);
-            return trait;
+            if (GetAPITraits().Items.TryGetValue(id, out GW2APITrait trait))
+            {
+                return trait;
+            }
+            return null;
         }
         private static List<GW2APITrait> GetListGW2APITraits()
         {
@@ -396,15 +430,15 @@ namespace GW2EIParser.Controllers
 
             return trait_L;
         }
-        private static TraitList GetTraitList()
+        private static APITraits GetAPITraits()
         {
-            if (_listOfTraits.Items.Count == 0)
+            if (_apiTraits.Items.Count == 0)
             {
-                SetTraitList();
+                SetAPITraits();
             }
-            return _listOfTraits;
+            return _apiTraits;
         }
-        public static List<int> WriteTraitListToFile()
+        public static List<int> WriteAPITraitsToFile()
         {
             FileStream fcreate = File.Open(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/TraitList.json", FileMode.Create);
@@ -416,13 +450,13 @@ namespace GW2EIParser.Controllers
             //Get list from API
             GetAPIClient();
 
-            _listOfTraits = new TraitList();
+            var traitList = new List<GW2APITrait>();
             HttpResponseMessage response = APIClient.GetAsync(new Uri("/v2/traits", UriKind.Relative)).Result;
             var failedList = new List<int>();
             if (response.IsSuccessStatusCode)
             {
                 // Get Skill ID list           
-                _listOfTraits.Items.AddRange(GetListGW2APITraits());
+                traitList.AddRange(GetListGW2APITraits());
                 var writer = new StreamWriter(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/TraitList.json");
                 var serializer = new JsonSerializer
@@ -432,16 +466,17 @@ namespace GW2EIParser.Controllers
                     DefaultValueHandling = DefaultValueHandling.Ignore,
                     ContractResolver = GeneralHelper.ContractResolver
                 };
-                serializer.Serialize(writer, _listOfTraits.Items);
+                serializer.Serialize(writer, traitList);
                 writer.Close();
 
             }
+            _apiTraits = new APITraits(traitList);
             return failedList;
         }
-        private static void SetTraitList()
+        private static void SetAPITraits()
         {
 
-            if (_listOfTraits.Items.Count == 0)
+            if (_apiTraits.Items.Count == 0)
             {
                 string path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
                 + "/Content/TraitList.json";
@@ -457,14 +492,11 @@ namespace GW2EIParser.Controllers
                             {
                                 ContractResolver = GeneralHelper.ContractResolver
                             };
-                            _listOfTraits.Items = (List<GW2APITrait>)serializer.Deserialize(reader, typeof(List<GW2APITrait>));
+                            var traitList = (List<GW2APITrait>)serializer.Deserialize(reader, typeof(List<GW2APITrait>));
+                            _apiTraits = new APITraits(traitList);
                             reader.Close();
                         }
                     }
-                }
-                if (_listOfTraits.Items.Count == 0)
-                {
-                    WriteTraitListToFile();
                 }
             }
             return;

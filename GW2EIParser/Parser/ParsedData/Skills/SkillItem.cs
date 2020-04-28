@@ -104,7 +104,7 @@ namespace GW2EIParser.Parser.ParsedData
         {
             this.ID = ID;
             Name = name.Replace("\0", "");
-            _apiSkill = GW2APIController.GetSkill(ID);
+            _apiSkill = GW2APIController.GetAPISkill(ID);
             CompleteItem();
         }
 

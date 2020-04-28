@@ -102,21 +102,21 @@ namespace GW2EIParser.Setting
         private void ResetSkillListClick(object sender, EventArgs e)
         {
             //Update skill list
-            GW2APIController.WriteSkillListToFile();
+            GW2APIController.WriteAPISkillsToFile();
             MessageBox.Show("Skill List has been redone");
         }
 
         private void ResetTraitListClick(object sender, EventArgs e)
         {
             //Update skill list
-            GW2APIController.WriteTraitListToFile();
+            GW2APIController.WriteAPITraitsToFile();
             MessageBox.Show("Trait List has been redone");
         }
 
         private void ResetSpecListClick(object sender, EventArgs e)
         {
             //Update skill list
-            GW2APIController.WriteSpecListToFile();
+            GW2APIController.WriteAPISpecsToFile();
             MessageBox.Show("Spec List has been redone");
         }
 
