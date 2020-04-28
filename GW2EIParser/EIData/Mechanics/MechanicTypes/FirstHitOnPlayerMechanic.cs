@@ -10,11 +10,11 @@ namespace GW2EIParser.EIData
     {
         protected override bool Keep(AbstractDamageEvent c, ParsedLog log)
         {
-            if (GetFirstHit(c.From, log) != c)
+            if (!base.Keep(c, log) || GetFirstHit(c.From, log) != c)
             {
                 return false;
             }
-            return base.Keep(c, log);
+            return true;
         }
 
         private readonly Dictionary<AgentItem, AbstractDamageEvent> _firstHits = new Dictionary<AgentItem, AbstractDamageEvent>();
@@ -39,7 +39,7 @@ namespace GW2EIParser.EIData
         {
             if (!_firstHits.TryGetValue(src, out AbstractDamageEvent evt))
             {
-                AbstractDamageEvent res = log.CombatData.GetDamageData(src).Where(x => x.SkillId == SkillId).FirstOrDefault();
+                AbstractDamageEvent res = log.CombatData.GetDamageData(src).Where(x => x.SkillId == SkillId && x.To.Type == AgentItem.AgentType.Player && base.Keep(x, log)).FirstOrDefault();
                 _firstHits[src] = res;
                 return res;
             }
