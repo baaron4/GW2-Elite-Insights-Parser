@@ -832,7 +832,7 @@ namespace GW2EIParser.EIData
                 new Buff("Writ of Studied Speed", 33005, BuffSource.Item, BuffType.Duration, 1, BuffNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/d/d1/Recipe_sheet_fine_boots.png"),
                 new Buff("Writ of Masterful Speed", 33040, BuffSource.Item, BuffType.Duration, 1, BuffNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/8/8e/Recipe_sheet_masterwork_boots.png"),
                 new Buff("Potion Of Karka Toughness", 18704, BuffSource.Item, BuffType.Duration, 1, BuffNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/f/fb/Powerful_Potion_of_Inquest_Slaying.png"),
-                new Buff("Skale Venom", 972, BuffSource.Item, BuffType.Duration, 1, BuffNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/9/96/Skale_Venom_%28consumable%29.png"),
+                new Buff("Skale Venom (Consumable)", 972, BuffSource.Item, BuffType.Duration, 1, BuffNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/9/96/Skale_Venom_%28consumable%29.png"),
                 new Buff("Swift Moa Feather", 23239, BuffSource.Item, BuffType.Duration, 1, BuffNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/f/f0/Swift_Moa_Feather.png"),
                 // Slaying Potions
                 new Buff("Powerful Potion of Flame Legion Slaying",9925, BuffSource.Item, BuffType.Duration, 1, BuffNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/e/e2/Powerful_Potion_of_Flame_Legion_Slaying.png"),
