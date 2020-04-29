@@ -328,7 +328,9 @@ var compilePlayerTab = function () {
         data: function () {
             return {
                 autoattack: true,
-                small: false
+                small: false,
+                smallAA: true,
+                hideInterruptedAA: false,
             };
         },
         computed: {
@@ -339,6 +341,18 @@ var compilePlayerTab = function () {
         methods: {
             getSkill: function (id) {
                 return findSkill(false, id);
+            },
+            showSkill: function (rota) {
+                var aa = this.getSkill(rota[1]).aa;
+                if (aa) {
+                    if (!this.autoattack) {
+                        return false;
+                    }
+                    if (this.hideInterruptedAA && rota[3] === 2) {
+                        return false;
+                    }
+                }
+                return true;
             }
         }
     });
