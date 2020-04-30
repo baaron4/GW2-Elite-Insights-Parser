@@ -169,6 +169,7 @@ namespace GW2EIParser.Parser
         private const int _pyreGuardianProtect = -4;
         private const int _pyreGuardianStab = -5;
         private const int _pyreGuardianRetal = -6;
+        private const int _qadimLamp = -7;
 
 
         //
@@ -322,6 +323,7 @@ namespace GW2EIParser.Parser
             ApocalypseBringer = 21073,
             WyvernMatriarch = 20997,
             WyvernPatriarch = 21183,
+            QadimLamp = _qadimLamp,
             Zommoros = 20961, //21118 is probably the start and end NPC, not the one during the battle
             // Adina
             HandOfErosion = _handOfErosion,

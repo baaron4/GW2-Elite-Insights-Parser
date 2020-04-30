@@ -131,8 +131,7 @@ namespace GW2EIParser.Logic
             //aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
             foreach (AgentItem a in aList)
             {
-                var mob = new NPC(a);
-                TrashMobs.Add(mob);
+                TrashMobs.Add(new NPC(a));
             }
         }
 
