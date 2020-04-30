@@ -139,7 +139,7 @@ namespace GW2EIParser.Logic
             {
                 agentData.Refresh();
             }
-            base.EIEvtcParse(fightData, agentData, combatData, playerList);
+            ComputeFightTargets(agentData, combatData);
         }
 
         public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
