@@ -376,6 +376,8 @@ namespace GW2EIParser
                 case SmallKillerTornado:
                 case BigKillerTornado:
                     return "https://i.imgur.com/6zNPTUw.png";
+                case QadimLamp:
+                    return "https://i.imgur.com/89Kjv0N.png";
                 case PyreGuardianRetal:
                     return "https://i.imgur.com/WC6LRkO.png";
                 case PyreGuardianStab:

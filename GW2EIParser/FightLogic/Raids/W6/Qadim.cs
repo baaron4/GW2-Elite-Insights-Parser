@@ -90,6 +90,7 @@ namespace GW2EIParser.Logic
                 (int)WyvernMatriarch,
                 (int)WyvernPatriarch,
                 (int)ApocalypseBringer,
+                (int)QadimLamp,
             };
         }
 
@@ -108,7 +109,15 @@ namespace GW2EIParser.Logic
         public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
             List<AgentItem> pyres = agentData.GetNPCsByID((int)PyreGuardian);
-            bool refresh = false;
+            // Lamps
+            var lampAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ParseEnum.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202).ToList();
+            foreach (AgentItem lamp in lampAgents)
+            {
+                lamp.OverrideType(AgentItem.AgentType.NPC);
+                lamp.OverrideID((int)QadimLamp);
+            }
+            bool refresh = lampAgents.Count > 0;
+            // Pyres
             foreach (AgentItem pyre in pyres)
             {
                 CombatItem position = combatData.FirstOrDefault(x => x.SrcAgent == pyre.Agent && x.IsStateChange == ParseEnum.StateChange.Position);
@@ -213,7 +222,8 @@ namespace GW2EIParser.Logic
                            (int) WyvernMatriarch,
                            (int) WyvernPatriarch,
                            (int) AncientInvokedHydra,
-                           (int) ApocalypseBringer
+                           (int) ApocalypseBringer,
+                           (int) QadimLamp
                         };
                     AddTargetsToPhase(phase, ids, log);
                     if (phase.Targets.Count > 0)
