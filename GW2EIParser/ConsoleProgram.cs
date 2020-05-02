@@ -9,11 +9,17 @@ namespace GW2EIParser
     {
         public ConsoleProgram(IEnumerable<string> logFiles)
         {
-            var options = new ParallelOptions()
+            if (Properties.Settings.Default.ParseMultipleLogs)
             {
-                MaxDegreeOfParallelism = Properties.Settings.Default.ParseMultipleLogs ? -1 : 1
-            };
-            Parallel.ForEach(logFiles, options, file => ParseLog(file));
+                Parallel.ForEach(logFiles, file => ParseLog(file));
+            }
+            else
+            {
+                foreach (string file in logFiles)
+                {
+                    ParseLog(file);
+                }
+            }
         }
 
         private void ParseLog(string logFile)

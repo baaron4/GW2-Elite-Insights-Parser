@@ -30,9 +30,9 @@ namespace GW2EIParser.Controllers
 
         public static void InitAPICache()
         {
-            GetAPISkill(0);
-            //GetAPITrait(0);
-            GetAPISpec(0);
+            SetAPISkills();
+            //SetAPITraits();
+            SetAPISpecs();
         }
 
         //----------------------------------------------------------------------------- SKILLS
