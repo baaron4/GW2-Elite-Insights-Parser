@@ -86,7 +86,7 @@
             this.btnPopulate.TabIndex = 10;
             this.btnPopulate.Text = "Populate from directory";
             this.btnPopulate.UseVisualStyleBackColor = true;
-            this.btnPopulate.Click += new System.EventHandler(this.BtnPopulateFromWatchDirectory);
+            this.btnPopulate.Click += new System.EventHandler(this.BtnPopulateFromDirectory);
             // 
             // btnCancel
             // 

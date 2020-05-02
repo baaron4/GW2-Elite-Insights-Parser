@@ -27,7 +27,6 @@ namespace GW2EIParser
             _logsFiles = new List<string>();
             btnCancel.Enabled = false;
             btnParse.Enabled = false;
-            btnPopulate.Enabled = false;
             UpdateWatchDirectory();
             _settingsForm = new SettingsForm();
             _settingsForm.SettingsClosedEvent += EnableSettingsWatcher;
@@ -105,7 +104,7 @@ namespace GW2EIParser
                             if (!(ex.InnerException is OperationCanceledException))
                             {
                                 operation.UpdateProgress(ex.GetFinalException().Message);
-                            } 
+                            }
                             else
                             {
                                 operation.UpdateProgress("Operation Aborted");
@@ -160,7 +159,7 @@ namespace GW2EIParser
             if (Properties.Settings.Default.ParseMultipleLogs)
             {
                 _RunOperation(operation);
-            } 
+            }
             else
             {
                 if (_anyRunning)
@@ -173,7 +172,7 @@ namespace GW2EIParser
                     _RunOperation(operation);
                 }
             }
-            
+
         }
 
         /// <summary>
@@ -366,14 +365,25 @@ namespace GW2EIParser
             UpdateWatchDirectory();
         }
 
-        private void BtnPopulateFromWatchDirectory(object sender, EventArgs e)
+        private void BtnPopulateFromDirectory(object sender, EventArgs e)
         {
-            if (Properties.Settings.Default.AutoAdd && Directory.Exists(Properties.Settings.Default.AutoAddPath))
+            string path = null;
+            using (var fbd = new FolderBrowserDialog())
+            {
+                fbd.ShowNewFolderButton = false;
+                DialogResult result = fbd.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    path = fbd.SelectedPath;
+                }
+            }
+            if (path != null)
             {
                 var toAdd = new List<string>();
                 foreach (string format in ProgramHelper.GetSupportedFormats())
                 {
-                    toAdd.AddRange(Directory.EnumerateFiles(Properties.Settings.Default.AutoAddPath, "*" + format, SearchOption.AllDirectories));
+                    toAdd.AddRange(Directory.EnumerateFiles(path, "*" + format, SearchOption.AllDirectories));
                 }
                 AddLogFiles(toAdd);
             }
@@ -387,14 +397,12 @@ namespace GW2EIParser
                 labWatchingDir.Text = "Watching for log files in " + Properties.Settings.Default.AutoAddPath;
                 logFileWatcher.EnableRaisingEvents = true;
                 labWatchingDir.Visible = true;
-                btnPopulate.Enabled = true;
             }
             else
             {
                 Properties.Settings.Default.AutoAdd = false;
                 labWatchingDir.Visible = false;
                 logFileWatcher.EnableRaisingEvents = false;
-                btnPopulate.Enabled = false;
             }
         }
 
