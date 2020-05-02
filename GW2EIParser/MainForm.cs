@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -26,6 +27,7 @@ namespace GW2EIParser
             _logsFiles = new List<string>();
             btnCancel.Enabled = false;
             btnParse.Enabled = false;
+            btnPopulate.Enabled = false;
             UpdateWatchDirectory();
             _settingsForm = new SettingsForm();
             _settingsForm.SettingsClosedEvent += EnableSettingsWatcher;
@@ -364,6 +366,19 @@ namespace GW2EIParser
             UpdateWatchDirectory();
         }
 
+        private void BtnPopulateFromWatchDirectory(object sender, EventArgs e)
+        {
+            if (Properties.Settings.Default.AutoAdd && Directory.Exists(Properties.Settings.Default.AutoAddPath))
+            {
+                var toAdd = new List<string>();
+                foreach (string format in ProgramHelper.GetSupportedFormats())
+                {
+                    toAdd.AddRange(Directory.EnumerateFiles(Properties.Settings.Default.AutoAddPath, "*" + format, SearchOption.AllDirectories));
+                }
+                AddLogFiles(toAdd);
+            }
+        }
+
         private void UpdateWatchDirectory()
         {
             if (Properties.Settings.Default.AutoAdd && Directory.Exists(Properties.Settings.Default.AutoAddPath))
@@ -372,12 +387,14 @@ namespace GW2EIParser
                 labWatchingDir.Text = "Watching for log files in " + Properties.Settings.Default.AutoAddPath;
                 logFileWatcher.EnableRaisingEvents = true;
                 labWatchingDir.Visible = true;
+                btnPopulate.Enabled = true;
             }
             else
             {
                 Properties.Settings.Default.AutoAdd = false;
                 labWatchingDir.Visible = false;
                 logFileWatcher.EnableRaisingEvents = false;
+                btnPopulate.Enabled = false;
             }
         }
 

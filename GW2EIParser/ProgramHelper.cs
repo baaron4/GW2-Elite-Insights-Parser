@@ -50,6 +50,11 @@ namespace GW2EIParser
             return false;
         }
 
+        public static List<string> GetSupportedFormats()
+        {
+            return new List<string>(_supportedFiles);
+        }
+
         public static bool IsSupportedFormat(string fileName)
         {
             foreach (string format in _supportedFiles)

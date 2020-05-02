@@ -34,20 +34,21 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.lblHeader = new System.Windows.Forms.Label();
             this.btnParse = new System.Windows.Forms.Button();
+            this.btnPopulate = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.dgvFiles = new System.Windows.Forms.DataGridView();
+            this.locationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.statusDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ButtonState = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.operatorBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.logFileWatcher = new System.IO.FileSystemWatcher();
             this.VersionLabel = new System.Windows.Forms.Label();
             this.labWatchingDir = new System.Windows.Forms.Label();
-            this.locationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.statusDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.operatorBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.logFileWatcher)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.operatorBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.logFileWatcher)).BeginInit();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -75,6 +76,17 @@
             this.btnParse.Text = "Parse All";
             this.btnParse.UseVisualStyleBackColor = true;
             this.btnParse.Click += new System.EventHandler(this.BtnParseClick);
+            // 
+            // btnPopulate
+            // 
+            this.btnPopulate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnPopulate.Location = new System.Drawing.Point(97, 331);
+            this.btnPopulate.Name = "btnPopulate";
+            this.btnPopulate.Size = new System.Drawing.Size(154, 23);
+            this.btnPopulate.TabIndex = 10;
+            this.btnPopulate.Text = "Populate from directory";
+            this.btnPopulate.UseVisualStyleBackColor = true;
+            this.btnPopulate.Click += new System.EventHandler(this.BtnPopulateFromWatchDirectory);
             // 
             // btnCancel
             // 
@@ -135,12 +147,32 @@
             this.dgvFiles.DragDrop += new System.Windows.Forms.DragEventHandler(this.DgvFilesDragDrop);
             this.dgvFiles.DragEnter += new System.Windows.Forms.DragEventHandler(this.DgvFilesDragEnter);
             // 
+            // locationDataGridViewTextBoxColumn
+            // 
+            this.locationDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.locationDataGridViewTextBoxColumn.DataPropertyName = "Location";
+            this.locationDataGridViewTextBoxColumn.HeaderText = "Location";
+            this.locationDataGridViewTextBoxColumn.Name = "locationDataGridViewTextBoxColumn";
+            this.locationDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // statusDataGridViewTextBoxColumn
+            // 
+            this.statusDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.statusDataGridViewTextBoxColumn.DataPropertyName = "Status";
+            this.statusDataGridViewTextBoxColumn.HeaderText = "Status";
+            this.statusDataGridViewTextBoxColumn.Name = "statusDataGridViewTextBoxColumn";
+            this.statusDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
             // ButtonState
             // 
             this.ButtonState.DataPropertyName = "ButtonText";
             this.ButtonState.HeaderText = "";
             this.ButtonState.Name = "ButtonState";
             this.ButtonState.ReadOnly = true;
+            // 
+            // operatorBindingSource
+            // 
+            this.operatorBindingSource.DataSource = typeof(GW2EIParser.FormOperationController);
             // 
             // logFileWatcher
             // 
@@ -171,26 +203,6 @@
             this.labWatchingDir.TabIndex = 18;
             this.labWatchingDir.Text = "Watching log dir";
             // 
-            // locationDataGridViewTextBoxColumn
-            // 
-            this.locationDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.locationDataGridViewTextBoxColumn.DataPropertyName = "Location";
-            this.locationDataGridViewTextBoxColumn.HeaderText = "Location";
-            this.locationDataGridViewTextBoxColumn.Name = "locationDataGridViewTextBoxColumn";
-            this.locationDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // statusDataGridViewTextBoxColumn
-            // 
-            this.statusDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.statusDataGridViewTextBoxColumn.DataPropertyName = "Status";
-            this.statusDataGridViewTextBoxColumn.HeaderText = "Status";
-            this.statusDataGridViewTextBoxColumn.Name = "statusDataGridViewTextBoxColumn";
-            this.statusDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // gridRowBindingSource
-            // 
-            this.operatorBindingSource.DataSource = typeof(GW2EIParser.FormOperationController);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -204,14 +216,15 @@
             this.Controls.Add(this.btnSettings);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnParse);
+            this.Controls.Add(this.btnPopulate);
             this.Controls.Add(this.lblHeader);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "GW2 Elite Insights Parser";
             this.TransparencyKey = System.Drawing.Color.OrangeRed;
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.logFileWatcher)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.operatorBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.logFileWatcher)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -221,6 +234,7 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Label lblHeader;
         private System.Windows.Forms.Button btnParse;
+        private System.Windows.Forms.Button btnPopulate;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnSettings;
         private System.Windows.Forms.Button btnClear;
