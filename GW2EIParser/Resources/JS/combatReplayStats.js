@@ -208,7 +208,7 @@ var compileCombatReplay = function () {
                     defs: [],
                     boons: [],
                     conditions: [],
-                    enemies: [],
+                    fightSpecifics: [],
                     others: [],
                     consumables: []
                 };
@@ -219,8 +219,8 @@ var compileCombatReplay = function () {
                     var buff = findSkill(true, id);
                     if (buff.consumable) {
                         arrayToFill = res.consumables;
-                    } else if (buff.enemy) {
-                        arrayToFill = res.enemies;
+                    } else if (buff.fightSpecific) {
+                        arrayToFill = res.fightSpecifics;
                     } else if (this.boons.has(id)) {
                         arrayToFill = res.boons;
                     } else if (this.offs.has(id)) {

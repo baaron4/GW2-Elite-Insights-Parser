@@ -1082,6 +1082,15 @@ namespace GW2EIParser.Builders
                     _usedDamageMods.Add(dMod);
                 }
             }
+            foreach (DamageModifier dMod in _log.DamageModifiers.DamageModifiersPerSource[GeneralHelper.Source.FightSpecific])
+            {
+                if (allDamageMods.Contains(dMod.Name))
+                {
+                    commonDamageModifiers.Add(dMod);
+                    logData.DmgModifiersCommon.Add(dMod.Name.GetHashCode());
+                    _usedDamageMods.Add(dMod);
+                }
+            }
             var itemDamageModifiers = new List<DamageModifier>();
             foreach (DamageModifier dMod in _log.DamageModifiers.DamageModifiersPerSource[GeneralHelper.Source.Item])
             {

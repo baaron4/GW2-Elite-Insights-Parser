@@ -130,21 +130,25 @@ namespace GW2EIParser.EIData
             new BuffDamageModifierTarget(ProfHelper.NumberOfBoonsID, "Spellbreaker Rune", "7% on boonless target",  DamageSource.NoPets, 7.0, DamageType.Power, DamageType.Power, GeneralHelper.Source.Item, ByAbsence, "https://wiki.guildwars2.com/images/1/1a/Superior_Rune_of_the_Spellbreaker.png"),
             new BuffDamageModifierTarget(722, "Ice Rune", "7% on chilled target",  DamageSource.NoPets, 7.0, DamageType.Power, DamageType.Power, GeneralHelper.Source.Item, ByPresence, "https://wiki.guildwars2.com/images/7/78/Superior_Rune_of_the_Ice.png"),
             new BuffDamageModifier(725, "Rage Rune", "5% under fury",  DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, GeneralHelper.Source.Item, ByPresence, "https://wiki.guildwars2.com/images/9/9e/Superior_Rune_of_Rage.png", null),
+            new BuffDamageModifier(32473, "Fractal Offensive", "3% per stack", DamageSource.NoPets, 3.0, DamageType.All, DamageType.All, GeneralHelper.Source.Item, ByStack, "https://wiki.guildwars2.com/images/thumb/8/8d/Mist_Offensive_Potion.png/40px-Mist_Offensive_Potion.png"),
         };
         private static readonly List<DamageModifier> _commonDamageModifiers = new List<DamageModifier>
         {
             new BuffDamageModifierTarget(738, "Vulnerability", "1% per Stack", DamageSource.All, 1.0, DamageType.All, DamageType.All, GeneralHelper.Source.Common, ByStack, "https://wiki.guildwars2.com/images/a/af/Vulnerability.png"),
             new BuffDamageModifier(50421, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.All, GeneralHelper.Source.Common, ByPresenceNonMulti, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png", 88541, ulong.MaxValue),
-            new BuffDamageModifier(56123, "Violent Currents", "5%", DamageSource.NoPets, 5.0, DamageType.All, DamageType.All, GeneralHelper.Source.Common, ByStack, "https://wiki.guildwars2.com/images/0/06/Violent_Currents.png"),
             new DamageLogDamageModifier("Soulcleave's Summit", "per hit (no ICD)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, GeneralHelper.Source.Common,"https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png", (x => x.SkillId == 45026), BySkill),
             new DamageLogDamageModifier("One Wolf Pack", "per hit (max. once every 0.25s)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, GeneralHelper.Source.Common, "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png", (x => x.SkillId == 42145), BySkill),
-            new BuffDamageModifierTarget(38224,"Unnatural Signet", "100%", DamageSource.All, 100.0, DamageType.All, DamageType.All, GeneralHelper.Source.Common, ByPresence, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png"),
-            new BuffDamageModifierTarget(35096, "Compromised", "75% per stack", DamageSource.All, 75.0, DamageType.All, DamageType.All, GeneralHelper.Source.Common, ByStack, "https://wiki.guildwars2.com/images/4/48/Compromised.png"),
-            new BuffDamageModifierTarget(56582, "Erratic Energy", "5% per stack", DamageSource.All, 5.0, DamageType.All, DamageType.All, GeneralHelper.Source.Common, ByStack, "https://wiki.guildwars2.com/images/0/06/Values_Mastery.png"),
-            new BuffDamageModifierTarget(53030, "Fractured - Enemy", "10% per stack", DamageSource.All, 10.0, DamageType.All, DamageType.All, GeneralHelper.Source.Common, ByStack, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-            new BuffDamageModifier(34422, "Blood Fueled", "10% per stack", DamageSource.NoPets, 10.0, DamageType.All, DamageType.All, GeneralHelper.Source.Common, ByStack, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-            new BuffDamageModifier(34428, "Blood Fueled Abo", "10% per stack", DamageSource.NoPets, 10.0, DamageType.All, DamageType.All, GeneralHelper.Source.Common, ByStack, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-            new BuffDamageModifier(32473, "Fractal Offensive", "3% per stack", DamageSource.NoPets, 3.0, DamageType.All, DamageType.All, GeneralHelper.Source.Common, ByStack, "https://wiki.guildwars2.com/images/thumb/8/8d/Mist_Offensive_Potion.png/40px-Mist_Offensive_Potion.png"),
+        };
+
+        private static readonly List<DamageModifier> _fightSpecificDamageModifiers = new List<DamageModifier>
+        {
+            new BuffDamageModifier(56123, "Violent Currents", "5%", DamageSource.NoPets, 5.0, DamageType.All, DamageType.All, GeneralHelper.Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/0/06/Violent_Currents.png"),
+            new BuffDamageModifierTarget(38224,"Unnatural Signet", "100%", DamageSource.All, 100.0, DamageType.All, DamageType.All, GeneralHelper.Source.FightSpecific, ByPresence, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png"),
+            new BuffDamageModifierTarget(35096, "Compromised", "75% per stack", DamageSource.All, 75.0, DamageType.All, DamageType.All, GeneralHelper.Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/4/48/Compromised.png"),
+            new BuffDamageModifierTarget(56582, "Erratic Energy", "5% per stack", DamageSource.All, 5.0, DamageType.All, DamageType.All, GeneralHelper.Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/0/06/Values_Mastery.png"),
+            new BuffDamageModifierTarget(53030, "Fractured - Enemy", "10% per stack", DamageSource.All, 10.0, DamageType.All, DamageType.All, GeneralHelper.Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+            new BuffDamageModifier(34422, "Blood Fueled", "10% per stack", DamageSource.NoPets, 10.0, DamageType.All, DamageType.All, GeneralHelper.Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+            new BuffDamageModifier(34428, "Blood Fueled Abo", "10% per stack", DamageSource.NoPets, 10.0, DamageType.All, DamageType.All, GeneralHelper.Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
         };
         private static readonly List<DamageModifier> _revenantDamageModifiers = new List<DamageModifier>
         {
@@ -271,6 +275,7 @@ namespace GW2EIParser.EIData
         {
             _itemDamageModifiers,
             _commonDamageModifiers,
+            _fightSpecificDamageModifiers,
             _revenantDamageModifiers,
             _warriorDamageModifiers,
             _guardianDamageModifiers,

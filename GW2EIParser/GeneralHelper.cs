@@ -74,7 +74,7 @@ namespace GW2EIParser
             Thief, Daredevil, Deadeye,
             Ranger, Druid, Soulbeast,
             Engineer, Scrapper, Holosmith,
-            Enemy,
+            FightSpecific,
             Unknown
         };
 

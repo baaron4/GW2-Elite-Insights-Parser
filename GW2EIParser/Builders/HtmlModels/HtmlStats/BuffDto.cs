@@ -10,7 +10,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public string Icon { get; set; }
         public bool Stacking { get; set; }
         public bool Consumable { get; set; }
-        public bool Enemy { get; set; }
+        public bool FightSpecific { get; set; }
 
         public static void AssembleBoons(ICollection<Buff> boons, Dictionary<string, BuffDto> dict)
         {
@@ -23,7 +23,7 @@ namespace GW2EIParser.Builders.HtmlModels
                     Icon = boon.Link,
                     Stacking = (boon.Type == Buff.BuffType.Intensity),
                     Consumable = (boon.Nature == Buff.BuffNature.Consumable),
-                    Enemy = (boon.Source == GeneralHelper.Source.Enemy)
+                    FightSpecific = (boon.Source == GeneralHelper.Source.FightSpecific)
                 };
             }
         }

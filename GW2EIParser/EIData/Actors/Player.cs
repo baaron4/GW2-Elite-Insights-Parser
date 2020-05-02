@@ -312,6 +312,7 @@ namespace GW2EIParser.EIData
             }
             var damageMods = new List<DamageModifier>(log.DamageModifiers.DamageModifiersPerSource[GeneralHelper.Source.Item]);
             damageMods.AddRange(log.DamageModifiers.DamageModifiersPerSource[GeneralHelper.Source.Common]);
+            damageMods.AddRange(log.DamageModifiers.DamageModifiersPerSource[GeneralHelper.Source.FightSpecific]);
             damageMods.AddRange(log.DamageModifiers.GetModifiersPerProf(Prof));
             foreach (DamageModifier mod in damageMods)
             {
