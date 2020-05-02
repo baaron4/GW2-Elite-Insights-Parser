@@ -250,6 +250,7 @@ namespace GW2EIParser.Builders.JsonModels
         private static List<JsonBuffsUptime> GetPlayerJsonBuffsUptime(Player player, List<Dictionary<long, FinalPlayerBuffs>> buffs, List<Dictionary<long, FinalBuffsDictionary>> buffsDictionary, ParsedLog log, Dictionary<string, JsonLog.BuffDesc> buffDesc, Dictionary<string, HashSet<long>> personalBuffs)
         {
             var res = new List<JsonBuffsUptime>();
+            var profEnums = new HashSet<GeneralHelper.Source>(GeneralHelper.ProfToEnum(player.Prof));
             List<PhaseData> phases = log.FightData.GetPhases(log);
             foreach (KeyValuePair<long, FinalPlayerBuffs> pair in buffs[0])
             {
@@ -260,7 +261,7 @@ namespace GW2EIParser.Builders.JsonModels
                     var value = new JsonBuffsUptimeData(buffs[i][pair.Key], buffsDictionary[i][pair.Key]);
                     data.Add(value);
                 }
-                if (buff.Nature == Buff.BuffNature.GraphOnlyBuff && buff.Source == Buff.ProfToEnum(player.Prof))
+                if (buff.Nature == Buff.BuffNature.GraphOnlyBuff && profEnums.Contains(buff.Source))
                 {
                     if (player.GetBuffDistribution(log, 0).GetUptime(pair.Key) > 0)
                     {

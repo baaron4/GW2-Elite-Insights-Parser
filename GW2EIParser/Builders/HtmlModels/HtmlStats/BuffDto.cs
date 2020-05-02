@@ -23,7 +23,7 @@ namespace GW2EIParser.Builders.HtmlModels
                     Icon = boon.Link,
                     Stacking = (boon.Type == Buff.BuffType.Intensity),
                     Consumable = (boon.Nature == Buff.BuffNature.Consumable),
-                    Enemy = (boon.Source == Buff.BuffSource.Enemy)
+                    Enemy = (boon.Source == GeneralHelper.Source.Enemy)
                 };
             }
         }

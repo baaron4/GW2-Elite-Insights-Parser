@@ -11,7 +11,7 @@ namespace GW2EIParser.EIData
 
         public Dictionary<long, Buff> BuffsByIds { get; }
         public Dictionary<BuffNature, List<Buff>> BuffsByNature { get; }
-        public Dictionary<BuffSource, List<Buff>> BuffsBySource { get; }
+        public Dictionary<GeneralHelper.Source, List<Buff>> BuffsBySource { get; }
         public Dictionary<BuffType, List<Buff>> BuffsByType { get; }
         private readonly Dictionary<string, Buff> _buffsByName;
         public Dictionary<int, List<Buff>> BuffsByCapacity { get; }
@@ -49,13 +49,18 @@ namespace GW2EIParser.EIData
         }
 
         // Non shareable buffs
-        private List<Buff> GetRemainingBuffsList(BuffSource source)
+        private List<Buff> GetRemainingBuffsList(GeneralHelper.Source source)
         {
             return BuffsBySource[source].Where(x => x.Nature == BuffNature.GraphOnlyBuff).ToList();
         }
         public List<Buff> GetRemainingBuffsList(string source)
         {
-            return GetRemainingBuffsList(ProfToEnum(source));
+            var result = new List<Buff>();
+            foreach (GeneralHelper.Source src in GeneralHelper.ProfToEnum(source))
+            {
+                result.AddRange(GetRemainingBuffsList(src));
+            }
+            return result;
         }
     }
 }

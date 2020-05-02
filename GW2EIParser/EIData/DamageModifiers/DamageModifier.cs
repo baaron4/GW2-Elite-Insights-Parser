@@ -138,8 +138,6 @@ namespace GW2EIParser.EIData
             new BuffDamageModifier(56123, "Violent Currents", "5%", DamageSource.NoPets, 5.0, DamageType.All, DamageType.All, GeneralHelper.Source.Common, ByStack, "https://wiki.guildwars2.com/images/0/06/Violent_Currents.png"),
             new DamageLogDamageModifier("Soulcleave's Summit", "per hit (no ICD)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, GeneralHelper.Source.Common,"https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png", (x => x.SkillId == 45026), BySkill),
             new DamageLogDamageModifier("One Wolf Pack", "per hit (max. once every 0.25s)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, GeneralHelper.Source.Common, "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png", (x => x.SkillId == 42145), BySkill),
-            //new DamageLogDamageModifier(Boon.GetBoonByName("Static Charge"), 0, DamageSource.NoPets, DamageType.Power, DamageType.All, GeneralHelper.Source.CommonBuff, ByPresence),
-            //new BuffDamageModifier(Boon.GetBoonByName("Glyph of Empowerment"), DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, GeneralHelper.Source.All, ByPresence),
             new BuffDamageModifierTarget(38224,"Unnatural Signet", "100%", DamageSource.All, 100.0, DamageType.All, DamageType.All, GeneralHelper.Source.Common, ByPresence, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png"),
             new BuffDamageModifierTarget(35096, "Compromised", "75% per stack", DamageSource.All, 75.0, DamageType.All, DamageType.All, GeneralHelper.Source.Common, ByStack, "https://wiki.guildwars2.com/images/4/48/Compromised.png"),
             new BuffDamageModifierTarget(56582, "Erratic Energy", "5% per stack", DamageSource.All, 5.0, DamageType.All, DamageType.All, GeneralHelper.Source.Common, ByStack, "https://wiki.guildwars2.com/images/0/06/Values_Mastery.png"),
@@ -176,8 +174,6 @@ namespace GW2EIParser.EIData
             new BuffDamageModifier(42539, "Berserker's Power", "7% per stack", DamageSource.NoPets, 7.0, DamageType.Power, DamageType.All, GeneralHelper.Source.Warrior, ByStack, "https://wiki.guildwars2.com/images/6/6f/Berserker%27s_Power.png"),
             new BuffDamageModifierTarget(ProfHelper.NumberOfBoonsID, "Destruction of the Empowered", "3% per target boon", DamageSource.NoPets, 3.0, DamageType.Power, DamageType.All, GeneralHelper.Source.Warrior, ByStack, "https://wiki.guildwars2.com/images/5/5c/Destruction_of_the_Empowered.png"),
             new BuffDamageModifierTarget(new long[] {721, 727, 722}, "Leg Specialist", "7% to movement-impaired foes", DamageSource.NoPets, 7.0, DamageType.Power, DamageType.All, GeneralHelper.Source.Warrior, ByPresence, "https://wiki.guildwars2.com/images/9/9e/Leg_Specialist.png", 99526, ulong.MaxValue)
-            //new BuffDamageModifierTarget(Boon.GetBoonByName("Number of Boons"), "100.0, DamageType.Power, DamageType.Power, GeneralHelper.Source.Warrior, ByAbsence, "https://wiki.guildwars2.com/images/7/76/Pure_Strike_%28trait%29.png", x => x.Result == ParseEnum.Result.Crit), // Could use a different logic, like a dual gain per stack
-            // TO TRACK Berserker's Power
 
         };
         private static readonly List<DamageModifier> _guardianDamageModifiers = new List<DamageModifier>
