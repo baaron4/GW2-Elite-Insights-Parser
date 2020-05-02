@@ -1073,7 +1073,7 @@ namespace GW2EIParser.Builders
                 allDamageMods.UnionWith(p.GetPresentDamageModifier(_log));
             }
             var commonDamageModifiers = new List<DamageModifier>();
-            foreach (DamageModifier dMod in _log.DamageModifiers.DamageModifiersPerSource[DamageModifier.ModifierSource.Common])
+            foreach (DamageModifier dMod in _log.DamageModifiers.DamageModifiersPerSource[GeneralHelper.Source.Common])
             {
                 if (allDamageMods.Contains(dMod.Name))
                 {
@@ -1083,7 +1083,7 @@ namespace GW2EIParser.Builders
                 }
             }
             var itemDamageModifiers = new List<DamageModifier>();
-            foreach (DamageModifier dMod in _log.DamageModifiers.DamageModifiersPerSource[DamageModifier.ModifierSource.Item])
+            foreach (DamageModifier dMod in _log.DamageModifiers.DamageModifiersPerSource[GeneralHelper.Source.Item])
             {
                 if (allDamageMods.Contains(dMod.Name))
                 {

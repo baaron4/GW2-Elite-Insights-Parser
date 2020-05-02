@@ -310,8 +310,8 @@ namespace GW2EIParser.EIData
             {
                 return;
             }
-            var damageMods = new List<DamageModifier>(log.DamageModifiers.DamageModifiersPerSource[DamageModifier.ModifierSource.Item]);
-            damageMods.AddRange(log.DamageModifiers.DamageModifiersPerSource[DamageModifier.ModifierSource.Common]);
+            var damageMods = new List<DamageModifier>(log.DamageModifiers.DamageModifiersPerSource[GeneralHelper.Source.Item]);
+            damageMods.AddRange(log.DamageModifiers.DamageModifiersPerSource[GeneralHelper.Source.Common]);
             damageMods.AddRange(log.DamageModifiers.GetModifiersPerProf(Prof));
             foreach (DamageModifier mod in damageMods)
             {

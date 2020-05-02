@@ -61,6 +61,85 @@ namespace GW2EIParser
                 };
             }
         }
+        public enum Source
+        {
+            Common,
+            Item,
+            Necromancer, Reaper, Scourge,
+            Elementalist, Tempest, Weaver,
+            Mesmer, Chronomancer, Mirage,
+            Warrior, Berserker, Spellbreaker,
+            Revenant, Herald, Renegade,
+            Guardian, Dragonhunter, Firebrand,
+            Thief, Daredevil, Deadeye,
+            Ranger, Druid, Soulbeast,
+            Engineer, Scrapper, Holosmith,
+            Enemy,
+            Unknown
+        };
+
+        public static List<Source> ProfToEnum(string prof)
+        {
+            switch (prof)
+            {
+                case "Druid":
+                    return new List<Source> { Source.Ranger, Source.Druid };
+                case "Soulbeast":
+                    return new List<Source> { Source.Ranger, Source.Soulbeast };
+                case "Ranger":
+                    return new List<Source> { Source.Ranger };
+                case "Scrapper":
+                    return new List<Source> { Source.Engineer, Source.Scrapper };
+                case "Holosmith":
+                    return new List<Source> { Source.Engineer, Source.Holosmith };
+                case "Engineer":
+                    return new List<Source> { Source.Engineer };
+                case "Daredevil":
+                    return new List<Source> { Source.Thief, Source.Daredevil };
+                case "Deadeye":
+                    return new List<Source> { Source.Thief, Source.Deadeye };
+                case "Thief":
+                    return new List<Source> { Source.Thief };
+                case "Weaver":
+                    return new List<Source> { Source.Elementalist, Source.Weaver };
+                case "Tempest":
+                    return new List<Source> { Source.Elementalist, Source.Tempest };
+                case "Elementalist":
+                    return new List<Source> { Source.Elementalist };
+                case "Mirage":
+                    return new List<Source> { Source.Mesmer, Source.Mirage };
+                case "Chronomancer":
+                    return new List<Source> { Source.Mesmer, Source.Chronomancer };
+                case "Mesmer":
+                    return new List<Source> { Source.Mesmer };
+                case "Scourge":
+                    return new List<Source> { Source.Necromancer, Source.Scourge };
+                case "Reaper":
+                    return new List<Source> { Source.Necromancer, Source.Reaper };
+                case "Necromancer":
+                    return new List<Source> { Source.Necromancer };
+                case "Spellbreaker":
+                    return new List<Source> { Source.Warrior, Source.Spellbreaker };
+                case "Berserker":
+                    return new List<Source> { Source.Warrior, Source.Berserker };
+                case "Warrior":
+                    return new List<Source> { Source.Warrior };
+                case "Firebrand":
+                    return new List<Source> { Source.Guardian, Source.Firebrand };
+                case "Dragonhunter":
+                    return new List<Source> { Source.Guardian, Source.Dragonhunter };
+                case "Guardian":
+                    return new List<Source> { Source.Guardian };
+                case "Renegade":
+                    return new List<Source> { Source.Revenant, Source.Renegade };
+                case "Herald":
+                    return new List<Source> { Source.Revenant, Source.Herald };
+                case "Revenant":
+                    return new List<Source> { Source.Revenant };
+            }
+            return new List<Source> { Source.Unknown };
+        }
+
 
         public static string UppercaseFirst(string s)
         {
