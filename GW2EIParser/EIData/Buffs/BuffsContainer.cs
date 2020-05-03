@@ -49,16 +49,15 @@ namespace GW2EIParser.EIData
         }
 
         // Non shareable buffs
-        private List<Buff> GetRemainingBuffsList(GeneralHelper.Source source)
-        {
-            return BuffsBySource[source].Where(x => x.Nature == BuffNature.GraphOnlyBuff).ToList();
-        }
         public List<Buff> GetRemainingBuffsList(string source)
         {
             var result = new List<Buff>();
             foreach (GeneralHelper.Source src in GeneralHelper.ProfToEnum(source))
             {
-                result.AddRange(GetRemainingBuffsList(src));
+                if (BuffsBySource.TryGetValue(src, out List<Buff> list))
+                {
+                    result.AddRange(list.Where(x => x.Nature == BuffNature.GraphOnlyBuff));
+                }
             }
             return result;
         }
