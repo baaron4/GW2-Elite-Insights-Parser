@@ -23,8 +23,8 @@ namespace GW2EIParser.Parser.ParsedData
         public long LastAware { get; protected set; } = long.MaxValue;
         public string Name { get; protected set; } = "UNKNOWN";
         public string Prof { get; } = "UNKNOWN";
-        public uint Toughness { get; }
-        public uint Healing { get; }
+        public uint Toughness { get; protected set; }
+        public uint Healing { get;}
         public uint Condition { get; }
         public uint Concentration { get; }
         public uint HitboxWidth { get; }
@@ -110,6 +110,11 @@ namespace GW2EIParser.Parser.ParsedData
         public void OverrideName(string name)
         {
             Name = name;
+        }
+
+        public void OverrideToughness(uint toughness)
+        {
+            Toughness = toughness;
         }
 
         public void OverrideAwareTimes(long firstAware, long lastAware)

@@ -563,6 +563,15 @@ namespace GW2EIParser.Parser
             {
                 _agentData.Refresh();
             }
+            uint minToughness = _playerList.Min(x => x.Toughness);
+            if (minToughness > 0)
+            {
+                uint maxToughness = _playerList.Max(x => x.Toughness);
+                foreach(Player p in _playerList)
+                {
+                    p.AgentItem.OverrideToughness((uint)Math.Round(10.0 * (p.AgentItem.Toughness - minToughness) / Math.Max(1.0, maxToughness - minToughness)));
+                }
+            }
         }
 
         private void CompleteAgents()
