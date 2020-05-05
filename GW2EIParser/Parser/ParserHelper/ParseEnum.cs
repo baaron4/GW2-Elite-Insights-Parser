@@ -128,8 +128,8 @@ namespace GW2EIParser.Parser
                 ? (StateChange)bt
                 : StateChange.Unknown;
         }
-
-        public enum Attribute : byte
+        // Buff Formula
+        public enum BuffAttribute : byte
         {
             None = 0,
             Power = 1,
@@ -150,6 +150,43 @@ namespace GW2EIParser.Parser
             Physrec = 16,
             CondRec = 17,
             AttackSpeed = 18
+        }
+
+        public enum BuffPartialAttribute : byte
+        {
+            None = 0,
+            Power = 14,
+            PowerWBanner = 15,
+            Precision = 16,
+            PrecisionWBanner = 17,
+            Toughness = 18,
+            ToughnessWBanner = 19,
+            Vitality = 19,
+            VitalityWBanner = 21,
+            Ferocity = 10,
+            FerocityWBanner = 11,
+            Healing = 12,
+            HealingWBanner = 13,
+            Condition = 6,
+            ConditionWBanner = 7,
+            Concentration = 4,
+            ConcentrationHerald = 5,
+            Expertise = 8,
+            Expertise2 = 9, // ?
+            AgonyRes = 1
+        }
+
+        public enum BuffCategory : byte
+        {
+            Boon = 0,
+            Any = 1,
+            Condition = 2,
+            Food = 4,
+            Upgrade = 6,
+            Boost = 8,
+            Trait = 11,
+            Enhancement = 13,
+            Stance = 16
         }
 
         // Friend of for
