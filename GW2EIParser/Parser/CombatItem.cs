@@ -1,4 +1,7 @@
-﻿namespace GW2EIParser.Parser
+﻿using System;
+using System.Collections.Generic;
+
+namespace GW2EIParser.Parser
 {
     public class CombatItem
     {
@@ -97,6 +100,12 @@
             {
                 Time = time;
             }
+        }
+
+
+        public byte[] BreakPad()
+        {
+            return BitConverter.GetBytes(Pad);
         }
 
         public void OverrideSrcAgent(ulong agent)
