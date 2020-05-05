@@ -154,7 +154,6 @@ namespace GW2EIParser.Parser
 
         public enum BuffPartialAttribute : byte
         {
-            None = 0,
             Power = 14,
             PowerWBanner = 15,
             Precision = 16,
@@ -187,6 +186,10 @@ namespace GW2EIParser.Parser
             Trait = 11,
             Enhancement = 13,
             Stance = 16
+        }
+        public static BuffCategory GetBuffCategory(byte bt)
+        {
+            return (BuffCategory)bt;
         }
 
         // Friend of for
