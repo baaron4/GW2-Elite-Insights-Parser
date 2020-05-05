@@ -70,32 +70,24 @@ namespace GW2EIParser.Parser
                     ParseLog(operation, fs);
                 }
             }
-            operation.ThrowIfCanceled();
             operation.UpdateProgress("Data parsed");
             return new ParsedLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _logEndTime - _logStartTime, _parserSettings, operation);
         }
 
         private void ParseLog(OperationController operation, Stream stream)
         {
-            operation.ThrowIfCanceled();
             operation.UpdateProgress("Parsing fight data");
-            ParseFightData(stream);
-            operation.ThrowIfCanceled();
+            ParseFightData(stream, operation);
             operation.UpdateProgress("Parsing agent data");
-            ParseAgentData(stream);
-            operation.ThrowIfCanceled();
+            ParseAgentData(stream, operation);
             operation.UpdateProgress("Parsing skill data");
-            ParseSkillData(stream);
-            operation.ThrowIfCanceled();
+            ParseSkillData(stream, operation);
             operation.UpdateProgress("Parsing combat list");
-            ParseCombatList(stream);
-            operation.ThrowIfCanceled();
+            ParseCombatList(stream, operation);
             operation.UpdateProgress("Linking agents to combat list");
             CompleteAgents();
-            operation.ThrowIfCanceled();
             operation.UpdateProgress("Preparing data for log generation");
             PreProcessEvtcData();
-            operation.ThrowIfCanceled();
         }
 
         private static BinaryReader CreateReader(Stream stream)
@@ -124,18 +116,21 @@ namespace GW2EIParser.Parser
         /// <summary>
         /// Parses fight related data
         /// </summary>
-        private void ParseFightData(Stream stream)
+        private void ParseFightData(Stream stream, OperationController operation)
         {
             using (BinaryReader reader = CreateReader(stream))
             {
                 // 12 bytes: arc build version
                 _buildVersion = ParseHelper.GetString(stream, 12);
+                operation.UpdateProgress("ArcDPS Build " + _buildVersion);
 
                 // 1 byte: skip
                 _revision = reader.ReadByte();
+                operation.UpdateProgress("ArcDPS Combat Item Revision " + _revision);
 
                 // 2 bytes: fight instance ID
                 _id = reader.ReadUInt16();
+                operation.UpdateProgress("Fight Instance " + _id);
                 // 1 byte: position
                 ParseHelper.SafeSkip(stream, 1);
             }
@@ -144,14 +139,15 @@ namespace GW2EIParser.Parser
         /// <summary>
         /// Parses agent related data
         /// </summary>
-        private void ParseAgentData(Stream stream)
+        private void ParseAgentData(Stream stream, OperationController operation)
         {
             using (BinaryReader reader = CreateReader(stream))
             {            // 4 bytes: player count
-                int playerCount = reader.ReadInt32();
+                int agentCount = reader.ReadInt32();
 
+                operation.UpdateProgress("Agent Count " + agentCount);
                 // 96 bytes: each player
-                for (int i = 0; i < playerCount; i++)
+                for (int i = 0; i < agentCount; i++)
                 {
                     // 8 bytes: agent
                     ulong agent = reader.ReadUInt64();
@@ -219,12 +215,13 @@ namespace GW2EIParser.Parser
         /// <summary>
         /// Parses skill related data
         /// </summary>
-        private void ParseSkillData(Stream stream)
+        private void ParseSkillData(Stream stream, OperationController operation)
         {
             using (BinaryReader reader = CreateReader(stream))
             {
                 // 4 bytes: player count
                 uint skillCount = reader.ReadUInt32();
+                operation.UpdateProgress("Skill Count " + skillCount);
                 //TempData["Debug"] += "Skill Count:" + skill_count.ToString();
                 // 68 bytes: each skill
                 for (int i = 0; i < skillCount; i++)
@@ -400,12 +397,13 @@ namespace GW2EIParser.Parser
         /// <summary>
         /// Parses combat related data
         /// </summary>
-        private void ParseCombatList(Stream stream)
+        private void ParseCombatList(Stream stream, OperationController operation)
         {
             // 64 bytes: each combat
             using (BinaryReader reader = CreateReader(stream))
             {
                 long cbtItemCount = (reader.BaseStream.Length - reader.BaseStream.Position) / 64;
+                operation.UpdateProgress("Combat Event Count " + cbtItemCount);
                 for (long i = 0; i < cbtItemCount; i++)
                 {
                     CombatItem combatItem = _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader);

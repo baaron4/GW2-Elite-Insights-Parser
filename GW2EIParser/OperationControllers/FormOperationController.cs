@@ -36,7 +36,7 @@ namespace GW2EIParser
             return false;
         }
 
-        public override void ThrowIfCanceled()
+        protected override void ThrowIfCanceled()
         {
             if (_task != null && _cancelTokenSource.IsCancellationRequested)
             {

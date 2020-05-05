@@ -187,7 +187,6 @@ namespace GW2EIParser
 
         private static void GenerateFiles(ParsedLog log, OperationController operation, string[] uploadresult, FileInfo fInfo)
         {
-            operation.ThrowIfCanceled();
             operation.UpdateProgress("Creating File(s)");
 
             DirectoryInfo saveDirectory = GetSaveDirectory(fInfo);
@@ -202,8 +201,6 @@ namespace GW2EIParser
             string PoVClassTerm = Properties.Settings.Default.AddPoVProf ? "_" + log.LogData.PoV.Prof.ToLower() : "";
             string fName = fInfo.Name.Split('.')[0];
             fName = $"{fName}{PoVClassTerm}_{log.FightData.Logic.Extension}{encounterLengthTerm}_{result}";
-
-            operation.ThrowIfCanceled();
 
             // parallel stuff
             if (log.ParserSettings.MultiTasks)
@@ -243,7 +240,6 @@ namespace GW2EIParser
                 }
                 operation.UpdateProgress("HTML created");
             }
-            operation.ThrowIfCanceled();
             if (Properties.Settings.Default.SaveOutCSV)
             {
                 operation.UpdateProgress("Creating CSV");
@@ -262,7 +258,6 @@ namespace GW2EIParser
                 }
                 operation.UpdateProgress("CSV created");
             }
-            operation.ThrowIfCanceled();
             if (Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML)
             {
                 var builder = new RawFormatBuilder(log, uploadresult);
@@ -296,7 +291,6 @@ namespace GW2EIParser
                     }
                     operation.UpdateProgress("JSON created");
                 }
-                operation.ThrowIfCanceled();
                 if (Properties.Settings.Default.SaveOutXML)
                 {
                     operation.UpdateProgress("Creating XML");
@@ -327,7 +321,6 @@ namespace GW2EIParser
                     }
                     operation.UpdateProgress("XML created");
                 }
-                operation.ThrowIfCanceled();
             }
             operation.UpdateProgress($"Completed parsing for {result}ed {log.FightData.Logic.Extension}");
         }
