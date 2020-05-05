@@ -65,25 +65,7 @@ namespace GW2EIParser.Parser.ParsedData
             FightData.SetCM(CombatData, AgentData, FightData);
             //
             _operation.UpdateProgress("Creating Buff Container");
-            Buffs = new BuffsContainer(LogData.GW2Version);
-#if DEBUG
-            var seenUnknowns = new HashSet<byte>();
-            foreach (Buff buff in Buffs.AllBuffs)
-            {
-                CombatEvents.BuffDataEvent buffDataEvt = CombatData.GetBuffDataEvent(buff.ID);
-                if (buffDataEvt != null)
-                {
-                    foreach (BuffFormula formula in buffDataEvt.FormulaList)
-                    {
-                        if (formula.Attr1 == ParseEnum.BuffAttribute.Unknown && !seenUnknowns.Contains(formula.DebugAttr1))
-                        {
-                            seenUnknowns.Add(formula.DebugAttr1);
-                            operation.UpdateProgress("Unknown Formula " + formula.DebugAttr1 + " for " + buff.ID + " " + buff.Name);
-                        }
-                    }
-                }
-            }
-#endif
+            Buffs = new BuffsContainer(LogData.GW2Version, CombatData, operation);
             _operation.UpdateProgress("Creating Damage Modifier Container");
             DamageModifiers = new DamageModifiersContainer(LogData.GW2Version);
             _operation.UpdateProgress("Creating Mechanic Data");

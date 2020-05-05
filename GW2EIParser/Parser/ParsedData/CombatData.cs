@@ -468,6 +468,15 @@ namespace GW2EIParser.Parser.ParsedData
             return null;
         }
 
+        public List<BuffDataEvent> GetBuffDataEvent(ParseEnum.BuffCategory category)
+        {
+            if (_metaDataEvents.BuffDataEventsByCategory.TryGetValue(category, out List<BuffDataEvent> evts))
+            {
+                return evts;
+            }
+            return new List<BuffDataEvent>();
+        }
+
         public List<AbstractBuffEvent> GetBuffData(long key)
         {
             if (_buffData.TryGetValue(key, out List<AbstractBuffEvent> res))

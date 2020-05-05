@@ -131,10 +131,33 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                         if (metaDataEvents.BuffDataEvents.TryGetValue(c.SkillID, out BuffDataEvent buffDataEvent))
                         {
                             buffDataEvent.CompleteBuffDataEvent(c);
+                            if (c.IsStateChange == ParseEnum.StateChange.BuffInfo)
+                            {
+                                if (metaDataEvents.BuffDataEventsByCategory.TryGetValue(buffDataEvent.Category, out List<BuffDataEvent> bdEvtList))
+                                {
+                                    bdEvtList.Add(buffDataEvent);
+                                }
+                                else
+                                {
+                                    metaDataEvents.BuffDataEventsByCategory[buffDataEvent.Category] = new List<BuffDataEvent> { buffDataEvent };
+                                }
+                            }
                         } 
                         else
                         {
-                            metaDataEvents.BuffDataEvents[c.SkillID] = new BuffDataEvent(c);
+                            var bDEvt = new BuffDataEvent(c);
+                            metaDataEvents.BuffDataEvents[c.SkillID] = bDEvt;
+                            if (c.IsStateChange == ParseEnum.StateChange.BuffInfo)
+                            {
+                                if (metaDataEvents.BuffDataEventsByCategory.TryGetValue(bDEvt.Category, out List<BuffDataEvent> bdEvtList))
+                                {
+                                    bdEvtList.Add(bDEvt);
+                                }
+                                else
+                                {
+                                    metaDataEvents.BuffDataEventsByCategory[bDEvt.Category] = new List<BuffDataEvent> { bDEvt };
+                                }
+                            }
                         }
                         break;
                 }

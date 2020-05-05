@@ -14,5 +14,6 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public List<PointOfViewEvent> PointOfViewEvents { get; } = new List<PointOfViewEvent>();
         public Dictionary<AgentItem, List<GuildEvent>> GuildEvents { get; } = new Dictionary<AgentItem, List<GuildEvent>>();
         public Dictionary<long, BuffDataEvent> BuffDataEvents { get; } = new Dictionary<long, BuffDataEvent>();
+        public Dictionary<ParseEnum.BuffCategory, List<BuffDataEvent>> BuffDataEventsByCategory { get; } = new Dictionary<ParseEnum.BuffCategory, List<BuffDataEvent>>();
     }
 }
