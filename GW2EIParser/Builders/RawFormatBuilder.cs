@@ -15,9 +15,9 @@ namespace GW2EIParser.Builders
 
         //
 
-        public RawFormatBuilder(ParsedLog log, string[] uploadLinks, OperationController operation)
+        public RawFormatBuilder(ParsedLog log, string[] uploadLinks)
         {
-            JsonLog = new JsonLog(log, uploadLinks, operation);
+            JsonLog = new JsonLog(log, uploadLinks);
         }
 
         public void CreateJSON(StreamWriter sw, bool indent)

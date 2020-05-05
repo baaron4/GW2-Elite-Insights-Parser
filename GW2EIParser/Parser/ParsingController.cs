@@ -72,7 +72,7 @@ namespace GW2EIParser.Parser
             }
             operation.ThrowIfCanceled();
             operation.UpdateProgress("Data parsed");
-            return new ParsedLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _logEndTime - _logStartTime, _parserSettings);
+            return new ParsedLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _logEndTime - _logStartTime, _parserSettings, operation);
         }
 
         private void ParseLog(OperationController operation, Stream stream)

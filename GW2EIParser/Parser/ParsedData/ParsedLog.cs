@@ -25,17 +25,20 @@ namespace GW2EIParser.Parser.ParsedData
         public MechanicData MechanicData { get; }
         public GeneralStatistics Statistics { get; }
 
+        private readonly OperationController _operation;
+
 
         private Dictionary<AgentItem, AbstractSingleActor> _agentToActorDictionary;
 
         public ParsedLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData,
-                List<CombatItem> combatItems, List<Player> playerList, long evtcLogDuration, ParserSettings parserSettings)
+                List<CombatItem> combatItems, List<Player> playerList, long evtcLogDuration, ParserSettings parserSettings, OperationController operation)
         {
             FightData = fightData;
             AgentData = agentData;
             SkillData = skillData;
             PlayerList = playerList;
             ParserSettings = parserSettings;
+            _operation = operation;
             //
             PlayerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
             PlayerAgents = new HashSet<AgentItem>(playerList.Select(x => x.AgentItem));
@@ -48,6 +51,16 @@ namespace GW2EIParser.Parser.ParsedData
             DamageModifiers = new DamageModifiersContainer(LogData.GW2Version);
             MechanicData = FightData.Logic.GetMechanicData();
             Statistics = new GeneralStatistics(CombatData, PlayerList, Buffs);
+        }
+
+        public void UpdateProgress(string status)
+        {
+            _operation.UpdateProgress(status);
+        }
+
+        public void ThrowIfCanceled()
+        {
+            _operation.ThrowIfCanceled();
         }
 
         private void UpdateFightData()
