@@ -459,6 +459,15 @@ namespace GW2EIParser.Parser.ParsedData
             return _metaDataEvents.ShardEvents;
         }
 
+        public BuffDataEvent GetBuffDataEvent(long buffID)
+        {
+            if (_metaDataEvents.BuffDataEvents.TryGetValue(buffID, out BuffDataEvent evt))
+            {
+                return evt;
+            }
+            return null;
+        }
+
         public List<AbstractBuffEvent> GetBuffData(long key)
         {
             if (_buffData.TryGetValue(key, out List<AbstractBuffEvent> res))
