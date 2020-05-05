@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GW2EIParser.Builders.HtmlModels;
 
 namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
@@ -12,5 +13,6 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public List<ShardEvent> ShardEvents { get; } = new List<ShardEvent>();
         public List<PointOfViewEvent> PointOfViewEvents { get; } = new List<PointOfViewEvent>();
         public Dictionary<AgentItem, List<GuildEvent>> GuildEvents { get; } = new Dictionary<AgentItem, List<GuildEvent>>();
+        public Dictionary<long, BuffDataEvent> BuffDataEvents { get; } = new Dictionary<long, BuffDataEvent>();
     }
 }
