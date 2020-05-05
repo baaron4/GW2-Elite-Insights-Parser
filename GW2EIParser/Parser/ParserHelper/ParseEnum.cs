@@ -144,35 +144,41 @@ namespace GW2EIParser.Parser
             Armor = 10,
             Agony = 11,
             StatInc = 12,
-            FaltInc = 13,
+            FlatInc = 13,
             PhysInc = 14,
             CondInc = 15,
-            Physrec = 16,
+            PhysRec = 16,
             CondRec = 17,
-            AttackSpeed = 18
+            AttackSpeed = 18,
+            //
+            /*ConditionDurationIncrease = 24,
+            RetaliationDamageOutput = 25,
+            CriticalChance = 26,
+            PowerDamageToHP = 34,
+            ConditionDamageToHP = 35,
+            GlancingBlow = 47,
+            ConditionSkillActivationFormula = 52,
+            ConditionDamageFormula = 54,
+            ConditionMovementActivationFormula = 55,
+            EnduranceRegeneration = 61,
+            IncomingHealingEffectiveness = 65,
+            OutgoingHealingEffectivenessFlatInc = 68,
+            OutgoingHealingEffectivenessConvInc = 70,
+            RegenerationHealingOutput = 71,
+            ExperienceFromKills = 76,
+            GoldFind = 77,
+            MovementSpeed = 78,
+            KarmaBonus = 87,
+            SkillCooldown = 96,
+            MagicFind = 92,
+            ExperienceFromAll = 100,
+            WXP = 112,*/
+            //
+            Unknown
         }
-
-        public enum BuffPartialAttribute : byte
+        public static BuffAttribute GetBuffAttribute(byte bt)
         {
-            Power = 14,
-            PowerWBanner = 15,
-            Precision = 16,
-            PrecisionWBanner = 17,
-            Toughness = 18,
-            ToughnessWBanner = 19,
-            Vitality = 19,
-            VitalityWBanner = 21,
-            Ferocity = 10,
-            FerocityWBanner = 11,
-            Healing = 12,
-            HealingWBanner = 13,
-            Condition = 6,
-            ConditionWBanner = 7,
-            Concentration = 4,
-            ConcentrationHerald = 5,
-            Expertise = 8,
-            Expertise2 = 9, // ?
-            AgonyRes = 1
+            return Enum.IsDefined(typeof(BuffAttribute), bt) ? (BuffAttribute)bt : BuffAttribute.Unknown;
         }
 
         public enum BuffCategory : byte
@@ -185,11 +191,12 @@ namespace GW2EIParser.Parser
             Boost = 8,
             Trait = 11,
             Enhancement = 13,
-            Stance = 16
+            Stance = 16,
+            Unknown
         }
         public static BuffCategory GetBuffCategory(byte bt)
         {
-            return (BuffCategory)bt;
+            return Enum.IsDefined(typeof(BuffCategory), bt) ? (BuffCategory)bt : BuffCategory.Unknown;
         }
 
         // Friend of for
