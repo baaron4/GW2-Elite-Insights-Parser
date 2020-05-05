@@ -11,7 +11,7 @@ namespace GW2EIParser.Parser
         public int Value { get; private set; }
         public int BuffDmg { get; }
         public uint OverstackValue { get; }
-        public long SkillID { get; private set; }
+        public uint SkillID { get; private set; }
         public ushort SrcInstid { get; }
         public ushort DstInstid { get; }
         public ushort SrcMasterInstid { get; }
@@ -33,7 +33,7 @@ namespace GW2EIParser.Parser
 
         // Constructor
         public CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
-               long skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid,
+               uint skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid,
                ushort dstMasterInstid, ParseEnum.IFF iff, byte isBuff,
                byte result, ParseEnum.Activation isActivation,
                ParseEnum.BuffRemove isBuffRemove, byte isNinety, byte isFifty, byte isMoving,

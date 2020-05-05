@@ -252,7 +252,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players)
         {
-            _skillIds = new HashSet<long>(allCombatItems.Select(x => x.SkillID));
+            _skillIds = new HashSet<long>(allCombatItems.Select(x => (long)x.SkillID));
             IEnumerable<CombatItem> noStateActiBuffRem = allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.None && x.IsActivation == ParseEnum.Activation.None && x.IsBuffRemove == ParseEnum.BuffRemove.None);
             // movement events
             _movementData = CombatEventFactory.CreateMovementEvents(allCombatItems.Where(x =>
