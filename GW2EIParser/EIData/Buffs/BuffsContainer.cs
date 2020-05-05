@@ -8,7 +8,7 @@ namespace GW2EIParser.EIData
 {
     public class BuffsContainer
     {
-        private readonly List<Buff> _currentBuffs;
+        public List<Buff> AllBuffs { get; }
         public Dictionary<long, Buff> BuffsByIds { get; private set; }
         public Dictionary<BuffNature, List<Buff>> BuffsByNature { get; private set; }
         public Dictionary<GeneralHelper.Source, List<Buff>> BuffsBySource { get; private set; }
@@ -23,28 +23,28 @@ namespace GW2EIParser.EIData
         public BuffsContainer(ulong build)
         {
             _build = build;
-            _currentBuffs = new List<Buff>();
-            foreach (List<Buff> buffs in AllBuffs)
+            AllBuffs = new List<Buff>();
+            foreach (List<Buff> buffs in Buff.AllBuffs)
             {
-                _currentBuffs.AddRange(buffs.Where(x => x.MaxBuild > build && build >= x.MinBuild));
+                AllBuffs.AddRange(buffs.Where(x => x.MaxBuild > build && build >= x.MinBuild));
             }
             Refresh();
         }
 
         public void AddCustomSimulatedBuff(List<Buff> buffs)
         {
-            _currentBuffs.AddRange(buffs);
+            AllBuffs.AddRange(buffs);
             Refresh();
         }
 
         private void Refresh()
         {
-            BuffsByIds = _currentBuffs.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.First());
-            BuffsByNature = _currentBuffs.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => x.ToList());
-            BuffsBySource = _currentBuffs.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => x.ToList());
-            BuffsByType = _currentBuffs.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
-            _buffsByName = _currentBuffs.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().Count > 1 ? throw new InvalidOperationException("Same name present multiple times in buffs - " + x.First().Name) : x.First());
-            BuffsByCapacity = _currentBuffs.GroupBy(x => x.Capacity).ToDictionary(x => x.Key, x => x.ToList());
+            BuffsByIds = AllBuffs.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.First());
+            BuffsByNature = AllBuffs.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => x.ToList());
+            BuffsBySource = AllBuffs.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => x.ToList());
+            BuffsByType = AllBuffs.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
+            _buffsByName = AllBuffs.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().Count > 1 ? throw new InvalidOperationException("Same name present multiple times in buffs - " + x.First().Name) : x.First());
+            BuffsByCapacity = AllBuffs.GroupBy(x => x.Capacity).ToDictionary(x => x.Key, x => x.ToList());
             _buffSourceFinder = GetBuffSourceFinder(_build, new HashSet<long>(BuffsByNature[BuffNature.Boon].Select(x => x.ID)));
         }
 
