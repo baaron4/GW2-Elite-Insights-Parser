@@ -43,9 +43,13 @@ namespace GW2EIParser.Parser.ParsedData
             //
             PlayerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
             PlayerAgents = new HashSet<AgentItem>(playerList.Select(x => x.AgentItem));
+            _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Combat Events");
             CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList);
+            _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Log Meta Data");
             LogData = new LogData(buildVersion, CombatData, evtcLogDuration);
+            _operation.UpdateProgressWithCancellationCheck("GW2 Build " + LogData.GW2Version);
             //
+            _operation.UpdateProgressWithCancellationCheck("Checking Success");
             FightData.Logic.CheckSuccess(CombatData, AgentData, FightData, PlayerAgents);
             if (FightData.FightEnd <= 2200)
             {
@@ -55,11 +59,16 @@ namespace GW2EIParser.Parser.ParsedData
             {
                 throw new SkipException();
             }
+            _operation.UpdateProgressWithCancellationCheck("Checking CM");
             FightData.SetCM(CombatData, AgentData, FightData);
             //
+            _operation.UpdateProgressWithCancellationCheck("Creating Buff Container");
             Buffs = new BuffsContainer(LogData.GW2Version);
+            _operation.UpdateProgressWithCancellationCheck("Creating Damage Modifier Container");
             DamageModifiers = new DamageModifiersContainer(LogData.GW2Version);
+            _operation.UpdateProgressWithCancellationCheck("Creating Mechanic Data");
             MechanicData = FightData.Logic.GetMechanicData();
+            _operation.UpdateProgressWithCancellationCheck("Creating General Statistics Container");
             Statistics = new GeneralStatistics(CombatData, PlayerList, Buffs);
         }
 
@@ -84,6 +93,7 @@ namespace GW2EIParser.Parser.ParsedData
         {
             if (_agentToActorDictionary == null)
             {
+                _operation.UpdateProgressWithCancellationCheck("Initializing Actor dictionary");
                 _agentToActorDictionary = new Dictionary<AgentItem, AbstractSingleActor>();
                 foreach (Player p in PlayerList)
                 {
