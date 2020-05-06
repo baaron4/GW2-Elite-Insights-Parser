@@ -33,7 +33,7 @@ namespace GW2EIParser.tst
 
             }
 
-            public override void UpdateProgress(string status)
+            public override void UpdateProgressWithCancellationCheck(string status)
             {
             }
         }

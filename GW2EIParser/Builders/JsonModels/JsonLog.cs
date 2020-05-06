@@ -220,7 +220,7 @@ namespace GW2EIParser.Builders.JsonModels
         public JsonLog(ParsedLog log, string[] uploadLinks)
         {
             //
-            log.UpdateProgress("Raw Format: Building Meta Data");
+            log.UpdateProgressWithCancellationCheck("Raw Format: Building Meta Data");
             TriggerID = log.FightData.TriggerID;
             FightName = log.FightData.Name;
             FightIcon = log.FightData.Logic.Icon;
@@ -239,7 +239,7 @@ namespace GW2EIParser.Builders.JsonModels
             LanguageID = (byte)log.LogData.LanguageID;
             IsCM = log.FightData.IsCM;
             //
-            log.UpdateProgress("Raw Format: Building Mechanics");
+            log.UpdateProgressWithCancellationCheck("Raw Format: Building Mechanics");
             MechanicData mechanicData = log.MechanicData;
             var mechanicLogs = new List<MechanicEvent>();
             foreach (List<MechanicEvent> mLog in mechanicData.GetAllMechanics(log))
@@ -251,13 +251,13 @@ namespace GW2EIParser.Builders.JsonModels
                 Mechanics = GetJsonMechanicsList(mechanicLogs);
             }
             //
-            log.UpdateProgress("Raw Format: Building Phases");
+            log.UpdateProgressWithCancellationCheck("Raw Format: Building Phases");
             Phases = log.FightData.GetPhases(log).Select(x => new JsonPhase(x, log)).ToList();
             //
-            log.UpdateProgress("Raw Format: Building Targets");
+            log.UpdateProgressWithCancellationCheck("Raw Format: Building Targets");
             Targets = log.FightData.Logic.Targets.Select(x => new JsonNPC(x, log, SkillMap, BuffMap)).ToList();
             //
-            log.UpdateProgress("Raw Format: Building Players");
+            log.UpdateProgressWithCancellationCheck("Raw Format: Building Players");
             Players = log.PlayerList.Select(x => new JsonPlayer(x, log, SkillMap, BuffMap, DamageModMap, PersonalBuffs)).ToList();
         }
 

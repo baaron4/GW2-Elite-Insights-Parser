@@ -45,13 +45,13 @@ namespace GW2EIParser.Parser.ParsedData
             //
             PlayerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
             PlayerAgents = new HashSet<AgentItem>(playerList.Select(x => x.AgentItem));
-            _operation.UpdateProgress("Creating GW2EI Combat Events");
+            _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Combat Events");
             CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList);
-            _operation.UpdateProgress("Creating GW2EI Log Meta Data");
+            _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Log Meta Data");
             LogData = new LogData(buildVersion, CombatData, evtcLogDuration);
-            _operation.UpdateProgress("GW2 Build " + LogData.GW2Version);
+            _operation.UpdateProgressWithCancellationCheck("GW2 Build " + LogData.GW2Version);
             //
-            _operation.UpdateProgress("Checking Success");
+            _operation.UpdateProgressWithCancellationCheck("Checking Success");
             FightData.Logic.CheckSuccess(CombatData, AgentData, FightData, PlayerAgents);
             if (FightData.FightEnd <= 2200)
             {
@@ -61,22 +61,22 @@ namespace GW2EIParser.Parser.ParsedData
             {
                 throw new SkipException();
             }
-            _operation.UpdateProgress("Checking CM");
+            _operation.UpdateProgressWithCancellationCheck("Checking CM");
             FightData.SetCM(CombatData, AgentData, FightData);
             //
-            _operation.UpdateProgress("Creating Buff Container");
+            _operation.UpdateProgressWithCancellationCheck("Creating Buff Container");
             Buffs = new BuffsContainer(LogData.GW2Version, CombatData, operation);
-            _operation.UpdateProgress("Creating Damage Modifier Container");
+            _operation.UpdateProgressWithCancellationCheck("Creating Damage Modifier Container");
             DamageModifiers = new DamageModifiersContainer(LogData.GW2Version);
-            _operation.UpdateProgress("Creating Mechanic Data");
+            _operation.UpdateProgressWithCancellationCheck("Creating Mechanic Data");
             MechanicData = FightData.Logic.GetMechanicData();
-            _operation.UpdateProgress("Creating General Statistics Container");
+            _operation.UpdateProgressWithCancellationCheck("Creating General Statistics Container");
             Statistics = new GeneralStatistics(CombatData, PlayerList, Buffs);
         }
 
-        public void UpdateProgress(string status)
+        public void UpdateProgressWithCancellationCheck(string status)
         {
-            _operation.UpdateProgress(status);
+            _operation.UpdateProgressWithCancellationCheck(status);
         }
 
         private void AddToDictionary(AbstractSingleActor actor)
@@ -95,7 +95,7 @@ namespace GW2EIParser.Parser.ParsedData
         {
             if (_agentToActorDictionary == null)
             {
-                _operation.UpdateProgress("Initializing Actor dictionary");
+                _operation.UpdateProgressWithCancellationCheck("Initializing Actor dictionary");
                 _agentToActorDictionary = new Dictionary<AgentItem, AbstractSingleActor>();
                 foreach (Player p in PlayerList)
                 {

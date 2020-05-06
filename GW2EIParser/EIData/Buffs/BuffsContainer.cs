@@ -44,7 +44,7 @@ namespace GW2EIParser.EIData
                     {
                         if (formula.Attr1 == ParseEnum.BuffAttribute.Unknown)
                         {
-                            operation.UpdateProgress("Unknown Formula 1 " + formula.ByteAttr1 + " for " + buff.ID + " " + buff.Name + " " + formula.Param1 + " " + formula.Param2 + " " + formula.Param3 + " " + formula.Type + " " + formula.TraitSelf + " " + formula.TraitSrc);
+                            operation.UpdateProgressWithCancellationCheck("Unknown Formula 1 " + formula.ByteAttr1 + " for " + buff.ID + " " + buff.Name + " " + formula.Param1 + " " + formula.Param2 + " " + formula.Param3 + " " + formula.Type + " " + formula.TraitSelf + " " + formula.TraitSrc);
                         }
                     }
                 }

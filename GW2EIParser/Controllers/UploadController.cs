@@ -129,21 +129,21 @@ namespace GW2EIParser.Controllers
             string[] uploadresult = new string[3] { "", "", "" };
             if (Properties.Settings.Default.UploadToDPSReports)
             {
-                operation.UpdateProgress("Uploading to DPSReports using EI");
+                operation.UpdateProgressWithCancellationCheck("Uploading to DPSReports using EI");
                 uploadresult[0] = UploadDPSReportsEI(fInfo);
-                operation.UpdateProgress("DPSReports using EI: " + uploadresult[0]);
+                operation.UpdateProgressWithCancellationCheck("DPSReports using EI: " + uploadresult[0]);
             }
             if (Properties.Settings.Default.UploadToDPSReportsRH)
             {
-                operation.UpdateProgress("Uploading to DPSReports using RH");
+                operation.UpdateProgressWithCancellationCheck("Uploading to DPSReports using RH");
                 uploadresult[1] = UploadDPSReportsRH(fInfo);
-                operation.UpdateProgress("DPSReports using RH: " + uploadresult[1]);
+                operation.UpdateProgressWithCancellationCheck("DPSReports using RH: " + uploadresult[1]);
             }
             if (Properties.Settings.Default.UploadToRaidar)
             {
-                operation.UpdateProgress("Uploading to Raidar");
+                operation.UpdateProgressWithCancellationCheck("Uploading to Raidar");
                 uploadresult[2] = UploadRaidar(/*fInfo*/);
-                operation.UpdateProgress("Raidar: " + uploadresult[2]);
+                operation.UpdateProgressWithCancellationCheck("Raidar: " + uploadresult[2]);
             }
             return uploadresult;
         }
