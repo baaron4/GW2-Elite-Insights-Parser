@@ -43,7 +43,7 @@ namespace GW2EIParser.Parser
         /// <returns>the ParsedLog</returns>
         public ParsedLog ParseLog(OperationController operation, string evtc)
         {
-            operation.UpdateProgress("Reading Binary");
+            operation.UpdateProgressWithCancellationCheck("Reading Binary");
             using (var fs = new FileStream(evtc, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 if (ProgramHelper.IsCompressedFormat(evtc))
@@ -70,32 +70,24 @@ namespace GW2EIParser.Parser
                     ParseLog(operation, fs);
                 }
             }
-            operation.ThrowIfCanceled();
-            operation.UpdateProgress("Data parsed");
-            return new ParsedLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _logEndTime - _logStartTime, _parserSettings);
+            operation.UpdateProgressWithCancellationCheck("Data parsed");
+            return new ParsedLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _logEndTime - _logStartTime, _parserSettings, operation);
         }
 
         private void ParseLog(OperationController operation, Stream stream)
         {
-            operation.ThrowIfCanceled();
-            operation.UpdateProgress("Parsing fight data");
+            operation.UpdateProgressWithCancellationCheck("Parsing fight data");
             ParseFightData(stream);
-            operation.ThrowIfCanceled();
-            operation.UpdateProgress("Parsing agent data");
+            operation.UpdateProgressWithCancellationCheck("Parsing agent data");
             ParseAgentData(stream);
-            operation.ThrowIfCanceled();
-            operation.UpdateProgress("Parsing skill data");
+            operation.UpdateProgressWithCancellationCheck("Parsing skill data");
             ParseSkillData(stream);
-            operation.ThrowIfCanceled();
-            operation.UpdateProgress("Parsing combat list");
+            operation.UpdateProgressWithCancellationCheck("Parsing combat list");
             ParseCombatList(stream);
-            operation.ThrowIfCanceled();
-            operation.UpdateProgress("Linking agents to combat list");
+            operation.UpdateProgressWithCancellationCheck("Linking agents to combat list");
             CompleteAgents();
-            operation.ThrowIfCanceled();
-            operation.UpdateProgress("Preparing data for log generation");
+            operation.UpdateProgressWithCancellationCheck("Preparing data for log generation");
             PreProcessEvtcData();
-            operation.ThrowIfCanceled();
         }
 
         private static BinaryReader CreateReader(Stream stream)

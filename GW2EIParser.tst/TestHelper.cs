@@ -33,7 +33,7 @@ namespace GW2EIParser.tst
 
             }
 
-            public override void UpdateProgress(string status)
+            public override void UpdateProgressWithCancellationCheck(string status)
             {
             }
         }
@@ -63,7 +63,7 @@ namespace GW2EIParser.tst
         {
             var ms = new MemoryStream();
             var sw = new StreamWriter(ms, GeneralHelper.NoBOMEncodingUTF8);
-            var builder = new RawFormatBuilder(log, null, _operation);
+            var builder = new RawFormatBuilder(log, null);
 
             builder.CreateJSON(sw, false);
             sw.Close();
@@ -77,7 +77,7 @@ namespace GW2EIParser.tst
             var sw = new StreamWriter(ms);
             var builder = new CSVBuilder(sw, ",", log, null);
 
-            builder.CreateCSV(_operation);
+            builder.CreateCSV();
             sw.Close();
 
             return sw.ToString();
@@ -89,7 +89,7 @@ namespace GW2EIParser.tst
             var sw = new StreamWriter(ms, GeneralHelper.NoBOMEncodingUTF8);
             var builder = new HTMLBuilder(log, null, false, false);
 
-            builder.CreateHTML(sw, null, _operation);
+            builder.CreateHTML(sw, null);
             sw.Close();
 
             return Encoding.UTF8.GetString(ms.ToArray());
@@ -97,7 +97,7 @@ namespace GW2EIParser.tst
 
         public static JsonLog JsonLog(ParsedLog log)
         {
-            var builder = new RawFormatBuilder(log, null, _operation);
+            var builder = new RawFormatBuilder(log, null);
             return builder.JsonLog;
         }
 

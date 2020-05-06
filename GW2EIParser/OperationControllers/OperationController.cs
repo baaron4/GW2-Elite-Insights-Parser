@@ -52,7 +52,7 @@ namespace GW2EIParser
             StatusList = new List<string>();
         }
 
-        public virtual void ThrowIfCanceled()
+        protected virtual void ThrowIfCanceled()
         {
 
         }
@@ -65,9 +65,14 @@ namespace GW2EIParser
             }
         }
 
-        public virtual void UpdateProgress(string status)
+        public virtual void UpdateProgressWithCancellationCheck(string status)
         {
             StatusList.Add(status);
+            ThrowIfCanceled();
+        }
+        public void UpdateProgress(string status)
+        {
+            StatusList.Add(status); StatusList.Add(status);
         }
 
         public void FinalizeStatus(string prefix)

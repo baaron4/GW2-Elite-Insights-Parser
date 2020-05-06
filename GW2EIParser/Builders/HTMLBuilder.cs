@@ -734,30 +734,30 @@ namespace GW2EIParser.Builders
             return html;
         }
 
-        public void CreateHTML(StreamWriter sw, string path, OperationController operation)
+        public void CreateHTML(StreamWriter sw, string path)
         {
             string html = Properties.Resources.template_html;
-            operation.UpdateProgress("HTML: replacing global variables");
+            _log.UpdateProgressWithCancellationCheck("HTML: replacing global variables");
             html = ReplaceVariables(html);
 
-            operation.UpdateProgress("HTML: building CSS");
+            _log.UpdateProgressWithCancellationCheck("HTML: building CSS");
             html = html.Replace("<!--${Css}-->", BuildCss(path));
-            operation.UpdateProgress("HTML: building JS");
+            _log.UpdateProgressWithCancellationCheck("HTML: building JS");
             html = html.Replace("<!--${Js}-->", BuildEIJs(path));
-            operation.UpdateProgress("HTML: building Combat Replay link");
+            _log.UpdateProgressWithCancellationCheck("HTML: building Combat Replay link");
             html = html.Replace("<!--${JsCRLink}-->", BuildCRLinkJs(path));
 
-            html = html.Replace("'${logDataJson}'", BuildLogData(operation));
+            html = html.Replace("'${logDataJson}'", BuildLogData());
 #if DEBUG
             html = html.Replace("<!--${Vue}-->", "<script src=\"https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js\"></script>");
 #else
             html = html.Replace("<!--${Vue}-->", "<script src=\"https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.min.js\"></script>");
 #endif
 
-            operation.UpdateProgress("HTML: building Graph Data");
+            _log.UpdateProgressWithCancellationCheck("HTML: building Graph Data");
             html = html.Replace("'${graphDataJson}'", BuildGraphJson());
 
-            operation.UpdateProgress("HTML: building Combat Replay JS");
+            _log.UpdateProgressWithCancellationCheck("HTML: building Combat Replay JS");
             html = html.Replace("<!--${CombatReplayScript}-->", BuildCombatReplayScript(path));
             sw.Write(html);
             return;
@@ -1035,27 +1035,27 @@ namespace GW2EIParser.Builders
             return ToJson(chartData);
         }
 
-        private string BuildLogData(OperationController operation)
+        private string BuildLogData()
         {
-            operation.UpdateProgress("HTML: building Log Data");
+            _log.UpdateProgressWithCancellationCheck("HTML: building Log Data");
             var logData = new LogDataDto();
             if (_cr)
             {
                 logData.CrData = new CombatReplayDto(_log);
             }
-            operation.UpdateProgress("HTML: building Players");
+            _log.UpdateProgressWithCancellationCheck("HTML: building Players");
             foreach (Player player in _log.PlayerList)
             {
                 logData.Players.Add(new PlayerDto(player, _log, _cr, BuildPlayerData(player)));
             }
 
-            operation.UpdateProgress("HTML: building Enemies");
+            _log.UpdateProgressWithCancellationCheck("HTML: building Enemies");
             foreach (AbstractActor enemy in _log.MechanicData.GetEnemyList(_log, 0))
             {
                 logData.Enemies.Add(new EnemyDto() { Name = enemy.Character });
             }
 
-            operation.UpdateProgress("HTML: building Targets");
+            _log.UpdateProgressWithCancellationCheck("HTML: building Targets");
             foreach (NPC target in _log.FightData.Logic.Targets)
             {
                 var targetDto = new TargetDto(target, _log, _cr, BuildTargetData(target));
@@ -1064,7 +1064,7 @@ namespace GW2EIParser.Builders
                 logData.Targets.Add(targetDto);
             }
             //
-            operation.UpdateProgress("HTML: building Skill/Buff dictionaries");
+            _log.UpdateProgressWithCancellationCheck("HTML: building Skill/Buff dictionaries");
             Dictionary<string, List<Buff>> persBuffDict = BuildPersonalBoonData(logData.PersBuffs);
             Dictionary<string, List<DamageModifier>> persDamageModDict = BuildPersonalDamageModData(logData.DmgModifiersPers);
             var allDamageMods = new HashSet<string>();
@@ -1122,7 +1122,7 @@ namespace GW2EIParser.Builders
                 _usedBoons[boon.ID] = boon;
             }
             //
-            operation.UpdateProgress("HTML: building Phases");
+            _log.UpdateProgressWithCancellationCheck("HTML: building Phases");
             for (int i = 0; i < _phases.Count; i++)
             {
                 PhaseData phaseData = _phases[i];
@@ -1187,7 +1187,7 @@ namespace GW2EIParser.Builders
                 logData.Phases.Add(phaseDto);
             }
             //
-            operation.UpdateProgress("HTML: building Meta Data");
+            _log.UpdateProgressWithCancellationCheck("HTML: building Meta Data");
             logData.EncounterDuration = _log.FightData.DurationString;
             logData.Success = _log.FightData.Success;
             logData.Wvw = _log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;

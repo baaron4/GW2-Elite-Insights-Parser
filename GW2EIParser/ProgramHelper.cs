@@ -187,8 +187,7 @@ namespace GW2EIParser
 
         private static void GenerateFiles(ParsedLog log, OperationController operation, string[] uploadresult, FileInfo fInfo)
         {
-            operation.ThrowIfCanceled();
-            operation.UpdateProgress("Creating File(s)");
+            operation.UpdateProgressWithCancellationCheck("Creating File(s)");
 
             DirectoryInfo saveDirectory = GetSaveDirectory(fInfo);
 
@@ -203,12 +202,10 @@ namespace GW2EIParser
             string fName = fInfo.Name.Split('.')[0];
             fName = $"{fName}{PoVClassTerm}_{log.FightData.Logic.Extension}{encounterLengthTerm}_{result}";
 
-            operation.ThrowIfCanceled();
-
             // parallel stuff
             if (log.ParserSettings.MultiTasks)
             {
-                operation.UpdateProgress("Multi threading buff and damage mod computations");
+                operation.UpdateProgressWithCancellationCheck("Multi threading buff and damage mod computations");
                 log.FightData.GetPhases(log);
                 foreach (Player p in log.PlayerList)
                 {
@@ -229,7 +226,7 @@ namespace GW2EIParser
             }
             if (Properties.Settings.Default.SaveOutHTML)
             {
-                operation.UpdateProgress("Creating HTML");
+                operation.UpdateProgressWithCancellationCheck("Creating HTML");
                 string outputFile = Path.Combine(
                 saveDirectory.FullName,
                 $"{fName}.html"
@@ -239,14 +236,13 @@ namespace GW2EIParser
                 using (var sw = new StreamWriter(fs))
                 {
                     var builder = new HTMLBuilder(log, uploadresult, Properties.Settings.Default.LightTheme, Properties.Settings.Default.HtmlExternalScripts);
-                    builder.CreateHTML(sw, saveDirectory.FullName, operation);
+                    builder.CreateHTML(sw, saveDirectory.FullName);
                 }
-                operation.UpdateProgress("HTML created");
+                operation.UpdateProgressWithCancellationCheck("HTML created");
             }
-            operation.ThrowIfCanceled();
             if (Properties.Settings.Default.SaveOutCSV)
             {
-                operation.UpdateProgress("Creating CSV");
+                operation.UpdateProgressWithCancellationCheck("Creating CSV");
                 string outputFile = Path.Combine(
                     saveDirectory.FullName,
                     $"{fName}.csv"
@@ -258,17 +254,16 @@ namespace GW2EIParser
                 using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                 {
                     var builder = new CSVBuilder(sw, ",", log, uploadresult);
-                    builder.CreateCSV(operation);
+                    builder.CreateCSV();
                 }
-                operation.UpdateProgress("CSV created");
+                operation.UpdateProgressWithCancellationCheck("CSV created");
             }
-            operation.ThrowIfCanceled();
             if (Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML)
             {
-                var builder = new RawFormatBuilder(log, uploadresult, operation);
+                var builder = new RawFormatBuilder(log, uploadresult);
                 if (Properties.Settings.Default.SaveOutJSON)
                 {
-                    operation.UpdateProgress("Creating JSON");
+                    operation.UpdateProgressWithCancellationCheck("Creating JSON");
                     string outputFile = Path.Combine(
                         saveDirectory.FullName,
                         $"{fName}.json"
@@ -292,14 +287,13 @@ namespace GW2EIParser
                     if (str is MemoryStream msr)
                     {
                         CompressFile(outputFile, msr);
-                        operation.UpdateProgress("JSON compressed");
+                        operation.UpdateProgressWithCancellationCheck("JSON compressed");
                     }
-                    operation.UpdateProgress("JSON created");
+                    operation.UpdateProgressWithCancellationCheck("JSON created");
                 }
-                operation.ThrowIfCanceled();
                 if (Properties.Settings.Default.SaveOutXML)
                 {
-                    operation.UpdateProgress("Creating XML");
+                    operation.UpdateProgressWithCancellationCheck("Creating XML");
                     string outputFile = Path.Combine(
                         saveDirectory.FullName,
                         $"{fName}.xml"
@@ -323,13 +317,12 @@ namespace GW2EIParser
                     if (str is MemoryStream msr)
                     {
                         CompressFile(outputFile, msr);
-                        operation.UpdateProgress("XML compressed");
+                        operation.UpdateProgressWithCancellationCheck("XML compressed");
                     }
-                    operation.UpdateProgress("XML created");
+                    operation.UpdateProgressWithCancellationCheck("XML created");
                 }
-                operation.ThrowIfCanceled();
             }
-            operation.UpdateProgress($"Completed parsing for {result}ed {log.FightData.Logic.Extension}");
+            operation.UpdateProgressWithCancellationCheck($"Completed parsing for {result}ed {log.FightData.Logic.Extension}");
         }
 
     }

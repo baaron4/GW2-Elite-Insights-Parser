@@ -32,12 +32,12 @@ namespace GW2EIParser
             }
             catch (ExceptionEncompass ex)
             {
-                operation.UpdateProgress(ex.GetFinalException().Message);
+                operation.UpdateProgressWithCancellationCheck(ex.GetFinalException().Message);
                 operation.FinalizeStatus("Parsing Failure - ");
             }
             catch (Exception)
             {
-                operation.UpdateProgress("Something terrible has happened");
+                operation.UpdateProgressWithCancellationCheck("Something terrible has happened");
                 operation.FinalizeStatus("Parsing Failure - ");
             }
             finally

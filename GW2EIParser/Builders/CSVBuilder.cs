@@ -60,10 +60,10 @@ namespace GW2EIParser.Builders
             NewLine();
         }
         //Creating CSV---------------------------------------------------------------------------------
-        public void CreateCSV(OperationController operation)
+        public void CreateCSV()
         {
             //header
-            operation.UpdateProgress("CSV: Building Meta Data");
+            _log.UpdateProgressWithCancellationCheck("CSV: Building Meta Data");
             WriteLine(new[] { "Elite Insights Version", Application.ProductVersion });
             WriteLine(new[] { "ARC Version", _log.LogData.BuildVersion });
             WriteLine(new[] { "Fight ID", _log.FightData.TriggerID.ToString() });
@@ -94,27 +94,27 @@ namespace GW2EIParser.Builders
             WriteLine(new[] { "Duration", _log.FightData.DurationString });
 
             //DPSStats
-            operation.UpdateProgress("CSV: Building DPS Data");
+            _log.UpdateProgressWithCancellationCheck("CSV: Building DPS Data");
             CreateDPSTable(0);
 
             //DMGStatsBoss
-            operation.UpdateProgress("CSV: Building Boss Damage Data");
+            _log.UpdateProgressWithCancellationCheck("CSV: Building Boss Damage Data");
             CreateBossDMGStatsTable(0);
 
             //DMGStats All
-            operation.UpdateProgress("CSV: Building Damage Data");
+            _log.UpdateProgressWithCancellationCheck("CSV: Building Damage Data");
             CreateDmgStatsTable(0);
 
             //Defensive Stats
-            operation.UpdateProgress("CSV: Building Defense Data");
+            _log.UpdateProgressWithCancellationCheck("CSV: Building Defense Data");
             CreateDefTable(0);
 
             //Support Stats
-            operation.UpdateProgress("CSV: Building Support Data");
+            _log.UpdateProgressWithCancellationCheck("CSV: Building Support Data");
             CreateSupTable(0);
 
             // boons
-            operation.UpdateProgress("CSV: Building Boon Data");
+            _log.UpdateProgressWithCancellationCheck("CSV: Building Boon Data");
             CreateUptimeTable(_statistics.PresentBoons, 0);
 
             //boonGenSelf
@@ -130,7 +130,7 @@ namespace GW2EIParser.Builders
             CreateGenSquadTable(_statistics.PresentBoons, 0);
 
             //Offensive Buffs stats
-            operation.UpdateProgress("CSV: Building Offensive Buff Data");
+            _log.UpdateProgressWithCancellationCheck("CSV: Building Offensive Buff Data");
             // boons
             CreateUptimeTable(_statistics.PresentOffbuffs, 0);
 
@@ -147,7 +147,7 @@ namespace GW2EIParser.Builders
             CreateGenSquadTable(_statistics.PresentOffbuffs, 0);
 
             //Defensive Buffs stats
-            operation.UpdateProgress("CSV: Building Defensive Buff Data");
+            _log.UpdateProgressWithCancellationCheck("CSV: Building Defensive Buff Data");
             // boons
             CreateUptimeTable(_statistics.PresentDefbuffs, 0);
 
@@ -164,19 +164,19 @@ namespace GW2EIParser.Builders
             CreateGenSquadTable(_statistics.PresentDefbuffs, 0);
 
             //Mechanics
-            operation.UpdateProgress("CSV: Building Mechanics Data");
+            _log.UpdateProgressWithCancellationCheck("CSV: Building Mechanics Data");
             CreateMechanicTable(0);
 
             //Mech List
             CreateMechList();
 
             //Condi Uptime
-            operation.UpdateProgress("CSV: Building Boss Condition Data");
+            _log.UpdateProgressWithCancellationCheck("CSV: Building Boss Condition Data");
             CreateBossCondiUptime(0);
             //Condi Gen
             CreateCondiGen(0);
             //Boss boons
-            operation.UpdateProgress("CSV: Building Boss Boon Data");
+            _log.UpdateProgressWithCancellationCheck("CSV: Building Boss Boon Data");
             CreateBossBoonUptime(0);
         }
         private void CreateDPSTable(int phaseIndex)
