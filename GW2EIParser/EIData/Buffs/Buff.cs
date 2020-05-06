@@ -147,6 +147,8 @@ namespace GW2EIParser.EIData
                 new Buff("Charrzooka",43503, GeneralHelper.Source.Common, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/1/17/Charrzooka.png"),
                 // Fractals 
                 new Buff("Rigorous Certainty", 33652, GeneralHelper.Source.Common, BuffType.Duration, 1, BuffNature.DefensiveBuffTable, Logic.ForceOverride,"https://wiki.guildwars2.com/images/6/60/Desert_Carapace.png"),
+                //
+                new Buff("Guild Item Research", 33833, GeneralHelper.Source.Common, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.ForceOverride,"https://wiki.guildwars2.com/images/c/c6/Guild_Magic_Find_Banner_Boost.png"),
         };
 
         private static readonly List<Buff> _gear = new List<Buff>
