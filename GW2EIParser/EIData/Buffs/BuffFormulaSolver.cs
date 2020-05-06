@@ -10,7 +10,7 @@ using static GW2EIParser.Parser.ParsedData.CombatEvents.BuffDataEvent;
 
 namespace GW2EIParser.EIData
 {
-    public class BuffFormulaSolver
+    public static class BuffFormulaSolver
     {
         private const int AnyPositive = int.MinValue;
         private const int AnyNegative = int.MaxValue;
@@ -98,11 +98,9 @@ namespace GW2EIParser.EIData
             { new BuffFormulaDescriptor(AnyPositive, 0, 0, 4, AnyPositive, 0, ParseEnum.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 30449 },
         };
 
-        private readonly Dictionary<byte, ParseEnum.BuffAttribute> _solved;
-
-        public BuffFormulaSolver(CombatData combatData, Dictionary<long, Buff> buffsByID)
+        public static void SolveBuffFormula(CombatData combatData, Dictionary<long, Buff> buffsByID)
         {
-            _solved = new Dictionary<byte, ParseEnum.BuffAttribute>();
+            var solved = new Dictionary<byte, ParseEnum.BuffAttribute>();
             foreach (KeyValuePair<BuffFormulaDescriptor, long> pair in _recognizer)
             {
                 if (buffsByID.TryGetValue(pair.Value, out Buff buff))
@@ -112,13 +110,13 @@ namespace GW2EIParser.EIData
                     {
                         foreach (BuffFormula formula in buffDataEvent.FormulaList)
                         {
-                            pair.Key.Match(formula, _solved);
+                            pair.Key.Match(formula, solved);
                         }
                     }
                 }
             }
 #if DEBUG
-            if (_solved.Values.Distinct().Count() != _solved.Values.Count)
+            if (solved.Values.Distinct().Count() != solved.Values.Count)
             {
                 throw new InvalidDataException("Bad data in solved buff formula");
             }
@@ -128,7 +126,7 @@ namespace GW2EIParser.EIData
                 BuffDataEvent buffDataEvent = combatData.GetBuffDataEvent(key);
                 if (buffDataEvent != null)
                 {
-                    buffDataEvent.AdjustUnknownFormulaAttributes(_solved);
+                    buffDataEvent.AdjustUnknownFormulaAttributes(solved);
                 }
             }
         }

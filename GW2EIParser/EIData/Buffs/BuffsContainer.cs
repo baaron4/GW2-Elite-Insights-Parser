@@ -32,7 +32,7 @@ namespace GW2EIParser.EIData
             // var buffIDs = new HashSet<long>(currentBuffs.Select(x => x.ID));
             //
             BuffsByIds = currentBuffs.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.First());
-            var buffFormulaSolver = new BuffFormulaSolver(combatData, BuffsByIds);
+            BuffFormulaSolver.SolveBuffFormula(combatData, BuffsByIds);
 #if DEBUG
             foreach (Buff buff in currentBuffs)
             {
