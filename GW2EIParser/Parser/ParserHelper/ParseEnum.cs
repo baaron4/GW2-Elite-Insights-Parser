@@ -129,7 +129,7 @@ namespace GW2EIParser.Parser
                 : StateChange.Unknown;
         }
         // Buff Formula
-        public enum BuffAttribute : byte
+        public enum BuffAttribute : short
         {
             None = 0,
             Power = 1,
@@ -150,6 +150,8 @@ namespace GW2EIParser.Parser
             PhysRec = 16,
             CondRec = 17,
             AttackSpeed = 18,
+            //
+            Unknown,
             //
             /*ConditionDurationIncrease = 24,
             RetaliationDamageOutput = 25,
@@ -173,10 +175,30 @@ namespace GW2EIParser.Parser
             MagicFind = 92,
             ExperienceFromAll = 100,
             WXP = 112,*/
-            //
-            Unknown
+            ConditionDurationIncrease = -1,
+            BuffPowerDamageFormula = -2,
+            CriticalChance = -3,
+            PowerDamageToHP = -4,
+            ConditionDamageToHP = -5,
+            GlancingBlow = -6,
+            ConditionSkillActivationFormula = -7,
+            ConditionDamageFormula = -8,
+            ConditionMovementActivationFormula = -9,
+            EnduranceRegeneration = -10,
+            IncomingHealingEffectiveness = -11,
+            OutgoingHealingEffectivenessFlatInc = -12,
+            OutgoingHealingEffectivenessConvInc = -13,
+            HealingOutputFormula = -14,
+            ExperienceFromKills = -15,
+            GoldFind = -16,
+            MovementSpeed = -17,
+            KarmaBonus = -18,
+            SkillCooldown = -19,
+            MagicFind = -20,
+            ExperienceFromAll = -21,
+            WXP = -22,
         }
-        public static BuffAttribute GetBuffAttribute(byte bt)
+        public static BuffAttribute GetBuffAttribute(short bt)
         {
             return Enum.IsDefined(typeof(BuffAttribute), bt) ? (BuffAttribute)bt : BuffAttribute.Unknown;
         }

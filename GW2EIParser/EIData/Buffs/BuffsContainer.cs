@@ -30,10 +30,11 @@ namespace GW2EIParser.EIData
             {
                 _allBuffs.AddRange(buffs.Where(x => x.MaxBuild > build && build >= x.MinBuild));
             }
-            BuffsByNature = _allBuffs.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => x.ToList());
+            BuffsByIds = _allBuffs.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.First());
+            _buffsByName = _allBuffs.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().Count > 1 ? throw new InvalidOperationException("Same name present multiple times in buffs - " + x.First().Name) : x.First());
             // TODO: add unknown consumables here if any
+            var buffFormulaSolver = new BuffFormulaSolver(combatData, BuffsByIds);
 #if DEBUG
-            var seenUnknowns = new HashSet<byte>();
             foreach (Buff buff in _allBuffs)
             {
                 BuffDataEvent buffDataEvt = combatData.GetBuffDataEvent(buff.ID);
@@ -41,21 +42,19 @@ namespace GW2EIParser.EIData
                 {
                     foreach (BuffDataEvent.BuffFormula formula in buffDataEvt.FormulaList)
                     {
-                        if (formula.Attr1 == ParseEnum.BuffAttribute.Unknown && !seenUnknowns.Contains(formula.DebugAttr1))
+                        if (formula.Attr1 == ParseEnum.BuffAttribute.Unknown)
                         {
-                            seenUnknowns.Add(formula.DebugAttr1);
-                            operation.UpdateProgress("Unknown Formula " + formula.DebugAttr1 + " for " + buff.ID + " " + buff.Name);
+                            operation.UpdateProgress("Unknown Formula 1 " + formula.ByteAttr1 + " for " + buff.ID + " " + buff.Name + " " + formula.Param1 + " " + formula.Param2 + " " + formula.Param3 + " " + formula.Type + " " + formula.TraitSelf + " " + formula.TraitSrc);
                         }
                     }
                 }
             }
 #endif
-            _buffsByName = _allBuffs.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().Count > 1 ? throw new InvalidOperationException("Same name present multiple times in buffs - " + x.First().Name) : x.First());
+            BuffsByNature = _allBuffs.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => x.ToList());
             _buffSourceFinder = GetBuffSourceFinder(_build, new HashSet<long>(BuffsByNature[BuffNature.Boon].Select(x => x.ID)));
             BuffsByCapacity = _allBuffs.GroupBy(x => x.Capacity).ToDictionary(x => x.Key, x => x.ToList());
             BuffsByType = _allBuffs.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
             BuffsBySource = _allBuffs.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => x.ToList());
-            BuffsByIds = _allBuffs.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.First());
         }
 
         public Buff GetBuffByName(string name)

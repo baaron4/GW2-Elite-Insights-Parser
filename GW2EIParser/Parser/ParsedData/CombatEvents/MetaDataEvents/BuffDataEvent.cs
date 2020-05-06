@@ -23,15 +23,12 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         {
             public int Type { get; }
 
-            public ParseEnum.BuffAttribute Attr1 { get; }
+            public ParseEnum.BuffAttribute Attr1 { get; private set; }
 
-            public ParseEnum.BuffAttribute Attr2 { get; }
+            public ParseEnum.BuffAttribute Attr2 { get; private set; }
+            public byte ByteAttr1 { get; }
 
-#if DEBUG
-            public byte DebugAttr1 { get; }
-
-            public byte DebugAttr2 { get; }
-#endif
+            public byte ByteAttr2 { get; }
 
             public float Param1 { get; }
 
@@ -86,17 +83,27 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                 Buffer.BlockCopy(formulaBytes, 0, formulaFloats, 0, formulaBytes.Length);
                 //
                 Type = (int)formulaFloats[0];
-#if DEBUG
-                DebugAttr1 = (byte)formulaFloats[1];
-                DebugAttr2 = (byte)formulaFloats[2];
-#endif
-                Attr1 = ParseEnum.GetBuffAttribute((byte) formulaFloats[1]);
-                Attr2 = ParseEnum.GetBuffAttribute((byte)formulaFloats[2]);
+                ByteAttr1 = (byte)formulaFloats[1];
+                ByteAttr2 = (byte)formulaFloats[2];
+                Attr1 = ParseEnum.GetBuffAttribute(ByteAttr1);
+                Attr2 = ParseEnum.GetBuffAttribute(ByteAttr2);
                 Param1 = formulaFloats[3];
                 Param2 = formulaFloats[4];
                 Param3 = formulaFloats[5];
                 TraitSrc = (int)formulaFloats[6];
                 TraitSelf = (int)formulaFloats[7];
+            }
+
+            public void AdjustUnknownFormulaAttributes(Dictionary<byte, ParseEnum.BuffAttribute> solved)
+            {
+                if (Attr1 == ParseEnum.BuffAttribute.Unknown && solved.TryGetValue(ByteAttr1, out ParseEnum.BuffAttribute solvedAttr))
+                {
+                    Attr1 = solvedAttr;
+                }
+                if (Attr2 == ParseEnum.BuffAttribute.Unknown && solved.TryGetValue(ByteAttr2, out solvedAttr))
+                {
+                    Attr2 = solvedAttr;
+                }
             }
         }
         public List<BuffFormula> FormulaList { get; } = new List<BuffFormula>();
@@ -149,15 +156,16 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             ProbablyResistance = pads[1] > 0;
         }
 
+        public void AdjustUnknownFormulaAttributes(Dictionary<byte, ParseEnum.BuffAttribute> solved)
+        {
+            foreach (BuffFormula formula in FormulaList)
+            {
+                formula.AdjustUnknownFormulaAttributes(solved);
+            }
+        }
+
         private void BuildFromBuffFormula(CombatItem evtcItem)
         {
-            var formula = new BuffFormula(evtcItem);
-#if !DEBUG
-            if (formula.Attr1 == ParseEnum.BuffAttribute.Unknown || formula.Attr2 == ParseEnum.BuffAttribute.Unknown)
-            {
-                return;
-            }
-#endif
             FormulaList.Add(new BuffFormula(evtcItem));
         }
 
