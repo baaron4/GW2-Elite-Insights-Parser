@@ -322,7 +322,7 @@ namespace GW2EIParser
                     operation.UpdateProgressWithCancellationCheck("XML created");
                 }
             }
-            operation.UpdateProgressWithCancellationCheck($"Completed parsing for {result}ed {log.FightData.Logic.Extension}");
+            operation.UpdateProgress($"Completed parsing for {result}ed {log.FightData.Logic.Extension}");
         }
 
     }
