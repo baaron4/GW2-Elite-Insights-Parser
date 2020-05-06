@@ -1,4 +1,6 @@
-﻿namespace GW2EIParser.Parser
+﻿using System;
+
+namespace GW2EIParser.Parser
 {
     public class CombatItem
     {
@@ -8,7 +10,7 @@
         public int Value { get; private set; }
         public int BuffDmg { get; }
         public uint OverstackValue { get; }
-        public long SkillID { get; private set; }
+        public uint SkillID { get; private set; }
         public ushort SrcInstid { get; }
         public ushort DstInstid { get; }
         public ushort SrcMasterInstid { get; }
@@ -27,10 +29,14 @@
         public byte IsOffcycle { get; }
 
         public uint Pad { get; }
+        public byte Pad1 { get; }
+        public byte Pad2 { get; }
+        public byte Pad3 { get; }
+        public byte Pad4 { get; }
 
         // Constructor
         public CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
-               long skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid,
+               uint skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid,
                ushort dstMasterInstid, ParseEnum.IFF iff, byte isBuff,
                byte result, ParseEnum.Activation isActivation,
                ParseEnum.BuffRemove isBuffRemove, byte isNinety, byte isFifty, byte isMoving,
@@ -60,6 +66,12 @@
             IsShields = isShields;
             IsOffcycle = isOffcycle;
             Pad = pad;
+            // break pad
+            var pads = BitConverter.GetBytes(Pad);
+            Pad1 = pads[0];
+            Pad2 = pads[1];
+            Pad3 = pads[2];
+            Pad4 = pads[3];
         }
 
         public CombatItem(CombatItem c)
@@ -88,6 +100,10 @@
             IsShields = c.IsShields;
             IsOffcycle = c.IsOffcycle;
             Pad = c.Pad;
+            Pad1 = c.Pad1;
+            Pad2 = c.Pad2;
+            Pad3 = c.Pad3;
+            Pad4 = c.Pad4;
         }
 
 
