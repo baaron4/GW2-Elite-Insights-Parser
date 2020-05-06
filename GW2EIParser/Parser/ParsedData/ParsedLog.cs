@@ -3,9 +3,6 @@ using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Exceptions;
 using GW2EIParser.Logic;
-#if DEBUG
-using static GW2EIParser.Parser.ParsedData.CombatEvents.BuffDataEvent;
-#endif
 
 namespace GW2EIParser.Parser.ParsedData
 {

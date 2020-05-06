@@ -10,7 +10,6 @@ namespace GW2EIParser.EIData
 {
     public class BuffsContainer
     {
-        private List<Buff> _allBuffs;
         public Dictionary<long, Buff> BuffsByIds { get; }
         public Dictionary<BuffNature, List<Buff>> BuffsByNature { get; }
         public Dictionary<GeneralHelper.Source, List<Buff>> BuffsBySource { get; }
@@ -20,22 +19,22 @@ namespace GW2EIParser.EIData
 
         private readonly BuffSourceFinder _buffSourceFinder;
 
-        private readonly ulong _build;
 
         public BuffsContainer(ulong build, CombatData combatData, OperationController operation)
         {
-            _build = build;
-            _allBuffs = new List<Buff>();
+            var currentBuffs = new List<Buff>();
             foreach (List<Buff> buffs in AllBuffs)
             {
-                _allBuffs.AddRange(buffs.Where(x => x.MaxBuild > build && build >= x.MinBuild));
+                currentBuffs.AddRange(buffs.Where(x => x.MaxBuild > build && build >= x.MinBuild));
             }
-            BuffsByIds = _allBuffs.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.First());
-            _buffsByName = _allBuffs.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().Count > 1 ? throw new InvalidOperationException("Same name present multiple times in buffs - " + x.First().Name) : x.First());
+            _buffsByName = currentBuffs.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().Count > 1 ? throw new InvalidOperationException("Same name present multiple times in buffs - " + x.First().Name) : x.First());
             // TODO: add unknown consumables here if any
+            // var buffIDs = new HashSet<long>(currentBuffs.Select(x => x.ID));
+            //
+            BuffsByIds = currentBuffs.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.First());
             var buffFormulaSolver = new BuffFormulaSolver(combatData, BuffsByIds);
 #if DEBUG
-            foreach (Buff buff in _allBuffs)
+            foreach (Buff buff in currentBuffs)
             {
                 BuffDataEvent buffDataEvt = combatData.GetBuffDataEvent(buff.ID);
                 if (buffDataEvt != null)
@@ -50,11 +49,12 @@ namespace GW2EIParser.EIData
                 }
             }
 #endif
-            BuffsByNature = _allBuffs.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => x.ToList());
-            _buffSourceFinder = GetBuffSourceFinder(_build, new HashSet<long>(BuffsByNature[BuffNature.Boon].Select(x => x.ID)));
-            BuffsByCapacity = _allBuffs.GroupBy(x => x.Capacity).ToDictionary(x => x.Key, x => x.ToList());
-            BuffsByType = _allBuffs.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
-            BuffsBySource = _allBuffs.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => x.ToList());
+            BuffsByNature = currentBuffs.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => x.ToList());
+            BuffsByCapacity = currentBuffs.GroupBy(x => x.Capacity).ToDictionary(x => x.Key, x => x.ToList());
+            BuffsByType = currentBuffs.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
+            BuffsBySource = currentBuffs.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => x.ToList());
+            //
+            _buffSourceFinder = GetBuffSourceFinder(build, new HashSet<long>(BuffsByNature[BuffNature.Boon].Select(x => x.ID)));
         }
 
         public Buff GetBuffByName(string name)

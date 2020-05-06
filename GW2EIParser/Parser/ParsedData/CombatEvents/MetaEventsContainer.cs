@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using GW2EIParser.Builders.HtmlModels;
 
 namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {

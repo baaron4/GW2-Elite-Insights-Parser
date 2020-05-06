@@ -151,9 +151,8 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             ProbablyInvert = evtcItem.IsShields > 0;
             Category = ParseEnum.GetBuffCategory(evtcItem.IsOffcycle);
             MaxStacks = evtcItem.SrcMasterInstid;
-            byte[] pads = evtcItem.BreakPad();
-            StackingType = pads[0];
-            ProbablyResistance = pads[1] > 0;
+            StackingType = evtcItem.Pad1;
+            ProbablyResistance = evtcItem.Pad2 > 0;
         }
 
         public void AdjustUnknownFormulaAttributes(Dictionary<byte, ParseEnum.BuffAttribute> solved)

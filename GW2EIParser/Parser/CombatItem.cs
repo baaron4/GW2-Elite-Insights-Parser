@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace GW2EIParser.Parser
 {
@@ -30,6 +29,10 @@ namespace GW2EIParser.Parser
         public byte IsOffcycle { get; }
 
         public uint Pad { get; }
+        public byte Pad1 { get; }
+        public byte Pad2 { get; }
+        public byte Pad3 { get; }
+        public byte Pad4 { get; }
 
         // Constructor
         public CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
@@ -63,6 +66,12 @@ namespace GW2EIParser.Parser
             IsShields = isShields;
             IsOffcycle = isOffcycle;
             Pad = pad;
+            // break pad
+            var pads = BitConverter.GetBytes(Pad);
+            Pad1 = pads[0];
+            Pad2 = pads[1];
+            Pad3 = pads[2];
+            Pad4 = pads[3];
         }
 
         public CombatItem(CombatItem c)
@@ -91,6 +100,10 @@ namespace GW2EIParser.Parser
             IsShields = c.IsShields;
             IsOffcycle = c.IsOffcycle;
             Pad = c.Pad;
+            Pad1 = c.Pad1;
+            Pad2 = c.Pad2;
+            Pad3 = c.Pad3;
+            Pad4 = c.Pad4;
         }
 
 
@@ -100,12 +113,6 @@ namespace GW2EIParser.Parser
             {
                 Time = time;
             }
-        }
-
-
-        public byte[] BreakPad()
-        {
-            return BitConverter.GetBytes(Pad);
         }
 
         public void OverrideSrcAgent(ulong agent)
