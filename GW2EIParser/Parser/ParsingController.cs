@@ -603,11 +603,11 @@ namespace GW2EIParser.Parser
 
             foreach (CombatItem c in _combatItems)
             {
-                if (c.SrcMasterInstid != 0)
+                if (c.IsStateChange.SrcIsAgent() && c.SrcMasterInstid != 0)
                 {
                     FindAgentMaster(c.Time, c.SrcMasterInstid, c.SrcAgent);
                 }
-                if (c.DstMasterInstid != 0)
+                if (c.IsStateChange.DstIsAgent() && c.DstMasterInstid != 0)
                 {
                     FindAgentMaster(c.Time, c.DstMasterInstid, c.DstAgent);
                 }
