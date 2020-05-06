@@ -72,7 +72,7 @@ namespace GW2EIParser
         }
         public void UpdateProgress(string status)
         {
-            StatusList.Add(status);
+            StatusList.Add(status); StatusList.Add(status);
         }
 
         public void FinalizeStatus(string prefix)

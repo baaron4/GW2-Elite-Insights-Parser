@@ -30,7 +30,6 @@ namespace GW2EIParser.Parser.ParsedData
 
         private readonly OperationController _operation;
 
-
         private Dictionary<AgentItem, AbstractSingleActor> _agentToActorDictionary;
 
         public ParsedLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData,
