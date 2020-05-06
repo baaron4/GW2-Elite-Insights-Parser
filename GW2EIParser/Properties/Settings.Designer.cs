@@ -310,7 +310,22 @@ namespace GW2EIParser.Properties {
                 this["Anonymous"] = value;
             }
         }
-        
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SaveOutTrace
+        {
+            get
+            {
+                return ((bool)(this["SaveOutTrace"]));
+            }
+            set
+            {
+                this["SaveOutTrace"] = value;
+            }
+        }
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]

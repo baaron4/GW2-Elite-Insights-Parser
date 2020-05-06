@@ -92,28 +92,28 @@ namespace GW2EIParser
                     {
                         if (t.Exception.InnerExceptions.Count > 1)
                         {
-                            operation.UpdateProgressWithCancellationCheck("Something terrible has happened");
+                            operation.UpdateProgress("Something terrible has happened");
                         }
                         else
                         {
                             Exception ex = t.Exception.InnerExceptions[0];
                             if (!(ex is ExceptionEncompass))
                             {
-                                operation.UpdateProgressWithCancellationCheck("Something terrible has happened");
+                                operation.UpdateProgress("Something terrible has happened");
                             }
                             if (!(ex.InnerException is OperationCanceledException))
                             {
-                                operation.UpdateProgressWithCancellationCheck(ex.GetFinalException().Message);
+                                operation.UpdateProgress(ex.GetFinalException().Message);
                             }
                             else
                             {
-                                operation.UpdateProgressWithCancellationCheck("Operation Aborted");
+                                operation.UpdateProgress("Operation Aborted");
                             }
                         }
                     }
                     else
                     {
-                        operation.UpdateProgressWithCancellationCheck("Something terrible has happened");
+                        operation.UpdateProgress("Something terrible has happened");
                     }
                 }
                 if (operation.State == OperationState.ClearOnCancel)
@@ -128,7 +128,7 @@ namespace GW2EIParser
                     }
                     else if (t.IsCanceled)
                     {
-                        operation.UpdateProgressWithCancellationCheck("Operation Aborted");
+                        operation.UpdateProgress("Operation Aborted");
                         operation.ToUnCompleteState();
                     }
                     else if (t.IsCompleted)
@@ -137,7 +137,7 @@ namespace GW2EIParser
                     }
                     else
                     {
-                        operation.UpdateProgressWithCancellationCheck("Something terrible has happened");
+                        operation.UpdateProgress("Something terrible has happened");
                         operation.ToUnCompleteState();
                     }
                 }

@@ -67,12 +67,12 @@ namespace GW2EIParser
 
         public virtual void UpdateProgressWithCancellationCheck(string status)
         {
-            StatusList.Add(status);
+            UpdateProgress(status);
             ThrowIfCanceled();
         }
         public void UpdateProgress(string status)
         {
-            StatusList.Add(status); StatusList.Add(status);
+            StatusList.Add(status);
         }
 
         public void FinalizeStatus(string prefix)

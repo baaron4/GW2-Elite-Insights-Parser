@@ -159,29 +159,32 @@ namespace GW2EIParser
 
         public static void GenerateLogFile(OperationController operation)
         {
-            var fInfo = new FileInfo(operation.Location);
-
-            string fName = fInfo.Name.Split('.')[0];
-            if (!fInfo.Exists)
+            if (Properties.Settings.Default.SaveOutTrace)
             {
-                fInfo = new FileInfo(AppDomain.CurrentDomain.BaseDirectory);
-            }
+                var fInfo = new FileInfo(operation.Location);
 
-            DirectoryInfo saveDirectory = GetSaveDirectory(fInfo);
+                string fName = fInfo.Name.Split('.')[0];
+                if (!fInfo.Exists)
+                {
+                    fInfo = new FileInfo(AppDomain.CurrentDomain.BaseDirectory);
+                }
 
-            if (saveDirectory == null)
-            {
-                return;
-            }
+                DirectoryInfo saveDirectory = GetSaveDirectory(fInfo);
 
-            string outputFile = Path.Combine(
-            saveDirectory.FullName,
-            $"{fName}.log"
-            );
-            using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
-            using (var sw = new StreamWriter(fs))
-            {
-                operation.WriteLogMessages(sw);
+                if (saveDirectory == null)
+                {
+                    return;
+                }
+
+                string outputFile = Path.Combine(
+                saveDirectory.FullName,
+                $"{fName}.log"
+                );
+                using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
+                using (var sw = new StreamWriter(fs))
+                {
+                    operation.WriteLogMessages(sw);
+                }
             }
         }
 

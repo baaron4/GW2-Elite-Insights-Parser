@@ -54,6 +54,7 @@ namespace GW2EIParser.Setting
             chkCompressRaw.Checked = Properties.Settings.Default.CompressRaw;
             chkAddDuration.Checked = Properties.Settings.Default.AddDuration;
             chkAnonymous.Checked = Properties.Settings.Default.Anonymous;
+            chkSaveOutTrace.Checked = Properties.Settings.Default.SaveOutTrace;
             chkDamageMods.Checked = Properties.Settings.Default.ComputeDamageModifiers;
             chkMultiLogs.Checked = Properties.Settings.Default.ParseMultipleLogs;
             chkRawTimelineArrays.Checked = Properties.Settings.Default.RawTimelineArrays;
@@ -307,6 +308,11 @@ namespace GW2EIParser.Setting
         private void ChkAnonymous_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.Anonymous = chkAnonymous.Checked;
+        }
+
+        private void ChkSaveOutTrace_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.SaveOutTrace = chkSaveOutTrace.Checked;
         }
 
         private void ChkComputeDamageMods_CheckedChanged(object sender, EventArgs e)

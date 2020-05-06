@@ -52,6 +52,7 @@
             this.settingTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.chkMultiLogs = new System.Windows.Forms.CheckBox();
             this.chkAnonymous = new System.Windows.Forms.CheckBox();
+            this.chkSaveOutTrace = new System.Windows.Forms.CheckBox();
             this.chkDamageMods = new System.Windows.Forms.CheckBox();
             this.chkRawTimelineArrays = new System.Windows.Forms.CheckBox();
             this.chkHtmlExternalScripts = new System.Windows.Forms.CheckBox();
@@ -332,6 +333,17 @@
             this.chkAnonymous.UseVisualStyleBackColor = true;
             this.chkAnonymous.CheckedChanged += new System.EventHandler(this.ChkAnonymous_CheckedChanged);
             // 
+            // chkSaveOutTrace
+            // 
+            this.chkSaveOutTrace.AutoSize = true;
+            this.chkSaveOutTrace.Location = new System.Drawing.Point(6, 134);
+            this.chkSaveOutTrace.Name = "chkSaveOutTrace";
+            this.chkSaveOutTrace.Size = new System.Drawing.Size(87, 17);
+            this.chkSaveOutTrace.TabIndex = 40;
+            this.chkSaveOutTrace.Text = "Save Traces";
+            this.chkSaveOutTrace.UseVisualStyleBackColor = true;
+            this.chkSaveOutTrace.CheckedChanged += new System.EventHandler(this.ChkSaveOutTrace_CheckedChanged);
+            // 
             // chkDamageMods
             // 
             this.chkDamageMods.AutoSize = true;
@@ -404,6 +416,7 @@
             this.boxParsing.Controls.Add(this.chkMultiThreaded);
             this.boxParsing.Controls.Add(this.chkMultiLogs);
             this.boxParsing.Controls.Add(this.chkAutoParse);
+            this.boxParsing.Controls.Add(this.chkSaveOutTrace);
             this.boxParsing.Controls.Add(this.chkAutoAdd);
             this.boxParsing.Controls.Add(this.chkB_SkipFailedTries);
             this.boxParsing.Location = new System.Drawing.Point(240, 8);
@@ -504,7 +517,7 @@
             this.tabHTML.Location = new System.Drawing.Point(4, 22);
             this.tabHTML.Name = "tabHTML";
             this.tabHTML.Padding = new System.Windows.Forms.Padding(3);
-            this.tabHTML.Size = new System.Drawing.Size(471, 251);
+            this.tabHTML.Size = new System.Drawing.Size(471, 309);
             this.tabHTML.TabIndex = 1;
             this.tabHTML.Text = "HTML";
             this.tabHTML.UseVisualStyleBackColor = true;
@@ -565,7 +578,7 @@
             this.tabCSV.Controls.Add(this.chkOutputCsv);
             this.tabCSV.Location = new System.Drawing.Point(4, 22);
             this.tabCSV.Name = "tabCSV";
-            this.tabCSV.Size = new System.Drawing.Size(471, 251);
+            this.tabCSV.Size = new System.Drawing.Size(471, 309);
             this.tabCSV.TabIndex = 2;
             this.tabCSV.Text = "CSV";
             this.tabCSV.UseVisualStyleBackColor = true;
@@ -579,7 +592,7 @@
             this.tabRaw.Controls.Add(this.groupRawSettings);
             this.tabRaw.Location = new System.Drawing.Point(4, 22);
             this.tabRaw.Name = "tabRaw";
-            this.tabRaw.Size = new System.Drawing.Size(471, 251);
+            this.tabRaw.Size = new System.Drawing.Size(471, 309);
             this.tabRaw.TabIndex = 3;
             this.tabRaw.Text = "Raw formats";
             this.tabRaw.UseVisualStyleBackColor = true;
@@ -651,7 +664,7 @@
             this.tabUpload.Controls.Add(this.UploadRaidar_check);
             this.tabUpload.Location = new System.Drawing.Point(4, 22);
             this.tabUpload.Name = "tabUpload";
-            this.tabUpload.Size = new System.Drawing.Size(471, 251);
+            this.tabUpload.Size = new System.Drawing.Size(471, 309);
             this.tabUpload.TabIndex = 4;
             this.tabUpload.Text = "Upload";
             this.tabUpload.UseVisualStyleBackColor = true;
@@ -666,7 +679,7 @@
             this.tabAPI.Controls.Add(this.btnResetSkillList);
             this.tabAPI.Location = new System.Drawing.Point(4, 22);
             this.tabAPI.Name = "tabAPI";
-            this.tabAPI.Size = new System.Drawing.Size(471, 251);
+            this.tabAPI.Size = new System.Drawing.Size(471, 309);
             this.tabAPI.TabIndex = 5;
             this.tabAPI.Text = "Maintenance";
             this.tabAPI.UseVisualStyleBackColor = true;
@@ -838,6 +851,7 @@
         private System.Windows.Forms.Button dumpButton;
         private System.Windows.Forms.Button loadButton;
         private System.Windows.Forms.CheckBox chkAnonymous;
+        private System.Windows.Forms.CheckBox chkSaveOutTrace;
         private System.Windows.Forms.CheckBox chkDamageMods;
         private System.Windows.Forms.CheckBox chkMultiLogs;
         private System.Windows.Forms.CheckBox chkRawTimelineArrays;
