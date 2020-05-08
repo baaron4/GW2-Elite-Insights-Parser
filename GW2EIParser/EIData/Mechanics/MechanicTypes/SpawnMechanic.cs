@@ -26,6 +26,10 @@ namespace GW2EIParser.EIData
                 if (!regroupedMobs.TryGetValue(a.ID, out AbstractSingleActor amp))
                 {
                     amp = log.FindActor(a, false);
+                    if (amp == null)
+                    {
+                        continue;
+                    }
                     regroupedMobs.Add(amp.ID, amp);
                 }
                 mechanicLogs[this].Add(new MechanicEvent(a.FirstAware, this, amp));

@@ -35,6 +35,10 @@ namespace GW2EIParser.EIData
                     if (!regroupedMobs.TryGetValue(ba.To.ID, out amp))
                     {
                         amp = log.FindActor(ba.To, false);
+                        if (amp == null)
+                        {
+                            continue;
+                        }
                         regroupedMobs.Add(amp.ID, amp);
                     }
                 }
