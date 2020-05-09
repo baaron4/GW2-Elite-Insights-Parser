@@ -209,6 +209,10 @@ namespace GW2EIParser
             if (log.ParserSettings.MultiTasks)
             {
                 operation.UpdateProgressWithCancellationCheck("Multi threading buff and damage mod computations");
+                if (log.CombatData.HasMovementData)
+                {
+                    Parallel.ForEach(log.PlayerList, player => player.GetCombatReplayID(log));
+                }
                 log.FightData.GetPhases(log);
                 var actors = new List<AbstractSingleActor>(log.PlayerList);
                 actors.AddRange(log.FightData.Logic.Targets);
@@ -222,6 +226,16 @@ namespace GW2EIParser
                 Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
                 // once simulation is done, computing buff stats is thread safe
                 Parallel.ForEach(log.PlayerList, player => player.GetBuffs(log, BuffEnum.Self));
+                //
+                if (log.CanCombatReplay)
+                {
+                    actors.AddRange(log.FightData.Logic.TrashMobs);
+                    // init all positions
+                    Parallel.ForEach(actors, actor => actor.GetCombatReplayID(log));
+                    // init decorations
+                    Parallel.ForEach(actors, actor => actor.GetCombatReplayActors(log));
+                }
+
             }
             if (Properties.Settings.Default.SaveOutHTML)
             {
