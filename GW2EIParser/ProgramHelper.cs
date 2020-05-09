@@ -232,8 +232,6 @@ namespace GW2EIParser
                     actors.AddRange(log.FightData.Logic.TrashMobs);
                     // init all positions
                     Parallel.ForEach(actors, actor => actor.GetCombatReplayID(log));
-                    // init decorations
-                    Parallel.ForEach(actors, actor => actor.GetCombatReplayActors(log));
                 }
 
             }
