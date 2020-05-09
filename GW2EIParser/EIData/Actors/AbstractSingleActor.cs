@@ -558,7 +558,10 @@ namespace GW2EIParser.EIData
             if (CombatReplay.NoActors)
             {
                 CombatReplay.NoActors = false;
-                InitAdditionalCombatReplayData(log);
+                if (!IsFakeActor)
+                {
+                    InitAdditionalCombatReplayData(log);
+                }
             }
             return CombatReplay.Decorations;
         }
