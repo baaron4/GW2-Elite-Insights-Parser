@@ -20,12 +20,15 @@ namespace GW2EIParser.Builders
         private readonly string _delimiter;
         private readonly string[] _uploadResult;
 
+        private readonly List<Player> _noFakePlayers;
+
         public CSVBuilder(StreamWriter sw, string delimiter, ParsedLog log, string[] uploadresult)
         {
             _log = log;
             _sw = sw;
             _delimiter = delimiter;
             _phases = log.FightData.GetPhases(log);
+            _noFakePlayers = log.PlayerList.Where(x => !x.IsFakeActor).ToList();
 
             _statistics = log.Statistics;
 
@@ -243,12 +246,8 @@ namespace GW2EIParser.Builders
                 "Total Hits",
                 "Hits to Interupt","Hits Invulned","Time wasted","Time saved","Weapon Swaps"});
             int count = 0;
-            foreach (Player player in _log.PlayerList)
+            foreach (Player player in _noFakePlayers)
             {
-                if (player.IsFakeActor)
-                {
-                    continue;
-                }
                 FinalGameplayStatsAll stats = player.GetGameplayStats(_log, phaseIndex);
                 FinalGameplayStats statsBoss = player.GetGameplayStats(_log, phaseIndex, _legacyTarget);
                 Dictionary<string, List<DamageModifierStat>> damageMods = player.GetDamageModifierStats(_log, _legacyTarget);
@@ -293,12 +292,8 @@ namespace GW2EIParser.Builders
                 "Total Hits",
                 "Hits to Interupt","Hits Invulned","Time wasted","Time saved","Weapon Swaps"});
             int count = 0;
-            foreach (Player player in _log.PlayerList)
+            foreach (Player player in _noFakePlayers)
             {
-                if (player.IsFakeActor)
-                {
-                    continue;
-                }
                 FinalGameplayStatsAll stats = player.GetGameplayStats(_log, phaseIndex);
                 Dictionary<string, List<DamageModifierStat>> damageMods = player.GetDamageModifierStats(_log, null);
                 var scholar = new DamageModifierStat(0, 0, 0, 0);
@@ -335,12 +330,8 @@ namespace GW2EIParser.Builders
             WriteLine(new[] { "Sub Group", "Profession", "Name" ,
                 "DMG Taken","DMG Barrier","Blocked","Invulned","Evaded","Dodges" });
             int count = 0;
-            foreach (Player player in _log.PlayerList)
+            foreach (Player player in _noFakePlayers)
             {
-                if (player.IsFakeActor)
-                {
-                    continue;
-                }
                 FinalDefenses defenses = player.GetDefenses(_log, phaseIndex);
 
                 WriteLine(new[] { player.Group.ToString(), player.Prof, player.Character,
@@ -359,12 +350,8 @@ namespace GW2EIParser.Builders
             WriteLine(new[] { "Sub Group", "Profession", "Name" ,
                 "Condi Cleanse","Condi Cleanse time", "Condi Cleanse Self","Condi Cleanse time self", "Boon Strips","Boon Strips time","Resurrects","Time Resurecting" });
             int count = 0;
-            foreach (Player player in _log.PlayerList)
+            foreach (Player player in _noFakePlayers)
             {
-                if (player.IsFakeActor)
-                {
-                    continue;
-                }
                 FinalPlayerSupport support = player.GetPlayerSupport(_log, phaseIndex);
 
                 WriteLine(new[] { player.Group.ToString(), player.Prof, player.Character,
@@ -390,12 +377,8 @@ namespace GW2EIParser.Builders
             NewLine();
 
             int count = 0;
-            foreach (Player player in _log.PlayerList)
+            foreach (Player player in _noFakePlayers)
             {
-                if (player.IsFakeActor)
-                {
-                    continue;
-                }
                 Dictionary<long, FinalPlayerBuffs> uptimes = player.GetBuffs(_log, phaseIndex, BuffEnum.Self);
 
                 WriteCell(player.Character);
@@ -440,12 +423,8 @@ namespace GW2EIParser.Builders
             NewLine();
 
             int count = 0;
-            foreach (Player player in _log.PlayerList)
+            foreach (Player player in _noFakePlayers)
             {
-                if (player.IsFakeActor)
-                {
-                    continue;
-                }
                 Dictionary<long, FinalPlayerBuffs> uptimes = player.GetBuffs(_log, phaseIndex, BuffEnum.Self);
 
                 WriteCell(player.Character);
@@ -493,12 +472,8 @@ namespace GW2EIParser.Builders
             NewLine();
 
             int count = 0;
-            foreach (Player player in _log.PlayerList)
+            foreach (Player player in _noFakePlayers)
             {
-                if (player.IsFakeActor)
-                {
-                    continue;
-                }
                 Dictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(_log, phaseIndex, BuffEnum.Group);
 
                 WriteCell(player.Character);
@@ -547,12 +522,8 @@ namespace GW2EIParser.Builders
             NewLine();
 
             int count = 0;
-            foreach (Player player in _log.PlayerList)
+            foreach (Player player in _noFakePlayers)
             {
-                if (player.IsFakeActor)
-                {
-                    continue;
-                }
                 Dictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(_log, phaseIndex, BuffEnum.OffGroup);
 
                 WriteCell(player.Character);
@@ -601,12 +572,8 @@ namespace GW2EIParser.Builders
             NewLine();
 
             int count = 0;
-            foreach (Player player in _log.PlayerList)
+            foreach (Player player in _noFakePlayers)
             {
-                if (player.IsFakeActor)
-                {
-                    continue;
-                }
                 Dictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(_log, phaseIndex, BuffEnum.Squad);
                 WriteCell(player.Character);
                 foreach (Buff boon in listToUse)
@@ -809,12 +776,8 @@ namespace GW2EIParser.Builders
                 WriteCell(boon.Name + " Overstack");
             }
             NewLine();
-            foreach (Player player in _log.PlayerList)
+            foreach (Player player in _noFakePlayers)
             {
-                if (player.IsFakeActor)
-                {
-                    continue;
-                }
                 WriteCell(player.Character);
                 foreach (Buff boon in _statistics.PresentConditions)
                 {
