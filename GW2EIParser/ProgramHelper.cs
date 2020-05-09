@@ -210,21 +210,17 @@ namespace GW2EIParser
             {
                 operation.UpdateProgressWithCancellationCheck("Multi threading buff and damage mod computations");
                 log.FightData.GetPhases(log);
-                foreach (Player p in log.PlayerList)
-                {
-                    // that part can't be //
-                    p.ComputeBuffMap(log);
-                }
-                foreach (NPC npc in log.FightData.Logic.Targets)
-                {
-                    // that part can't be //
-                    npc.ComputeBuffMap(log);
-                }
                 var actors = new List<AbstractSingleActor>(log.PlayerList);
                 actors.AddRange(log.FightData.Logic.Targets);
+                foreach (AbstractSingleActor actor in actors)
+                {
+                    // that part can't be //
+                    actor.ComputeBuffMap(log);
+                }
                 Parallel.ForEach(actors, actor => actor.GetBuffGraphs(log));
                 //
                 Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
+                // once simulation is done, computing buff stats is thread safe
                 Parallel.ForEach(log.PlayerList, player => player.GetBuffs(log, BuffEnum.Self));
             }
             if (Properties.Settings.Default.SaveOutHTML)
