@@ -546,10 +546,10 @@ namespace GW2EIParser.EIData
 
         public List<GenericDecoration> GetCombatReplayActors(ParsedLog log)
         {
-            if (!log.CanCombatReplay || IsFakeActor)
+            if (!log.CanCombatReplay)
             {
                 // no combat replay support on fight
-                return null;
+                return new List<GenericDecoration>();
             }
             if (CombatReplay == null)
             {

@@ -43,7 +43,7 @@ namespace GW2EIParser.Builders.HtmlModels
             IsConjure = (player.IsFakeActor);
             BuildWeaponSets(player, log);
             Details = details;
-            if (cr && !IsConjure)
+            if (cr)
             {
                 CombatReplayID = player.GetCombatReplayID(log);
             }

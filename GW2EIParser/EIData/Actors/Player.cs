@@ -426,10 +426,6 @@ namespace GW2EIParser.EIData
 
         protected override void InitAdditionalCombatReplayData(ParsedLog log)
         {
-            if (IsFakeActor)
-            {
-                return;
-            }
             // Fight related stuff
             log.FightData.Logic.ComputePlayerCombatReplayActors(this, log, CombatReplay);
             if (CombatReplay.Rotations.Any())
@@ -451,12 +447,12 @@ namespace GW2EIParser.EIData
 
         protected override void InitCombatReplay(ParsedLog log)
         {
-            if (!log.CombatData.HasMovementData || IsFakeActor)
+            CombatReplay = new CombatReplay();
+            if (!log.CombatData.HasMovementData)
             {
                 // no combat replay support on fight
                 return;
             }
-            CombatReplay = new CombatReplay();
             SetMovements(log);
             CombatReplay.PollingRate(log.FightData.FightEnd, true);
         }
