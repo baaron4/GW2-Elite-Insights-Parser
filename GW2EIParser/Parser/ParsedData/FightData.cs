@@ -70,6 +70,7 @@ namespace GW2EIParser.Parser.ParsedData
                     // some TC logs are registered as Xera
                     if (agentData.GetNPCsByID((int)ParseEnum.TrashIDS.HauntingStatue).Count > 0)
                     {
+                        TriggerID = (int)ParseEnum.TrashIDS.HauntingStatue;
                         Logic = new TwistedCastle((int)ParseEnum.TargetIDS.TwistedCastle);
                         break;
                     }
