@@ -17,18 +17,18 @@ namespace GW2EIParser.EIData
         private class BuffFormulaDescriptor
         {
             private readonly int _type;
-            private readonly float _param1;
-            private readonly float _param2;
-            private readonly float _param3;
+            private readonly float _constantOffset;
+            private readonly float _levelOffset;
+            private readonly float _variable;
             private readonly int _traitSrc;
             private readonly int _traitSelf;
             private readonly ParseEnum.BuffAttribute _result;
 
-            public BuffFormulaDescriptor(float param1, float param2, float param3, int type, int traitSelf, int traitSrc, ParseEnum.BuffAttribute result)
+            public BuffFormulaDescriptor(float constantOffset, float levelOffset, float variable, int type, int traitSelf, int traitSrc, ParseEnum.BuffAttribute result)
             {
-                _param1 = param1;
-                _param2 = param2;
-                _param3 = param3;
+                _constantOffset = constantOffset;
+                _levelOffset = levelOffset;
+                _variable = variable;
                 _type = type;
                 _traitSrc = traitSrc;
                 _traitSelf = traitSelf;
@@ -39,11 +39,11 @@ namespace GW2EIParser.EIData
             {
                 if (formula.Attr1 == ParseEnum.BuffAttribute.Unknown && !toFill.ContainsKey(formula.ByteAttr1))
                 {
-                    if (formula.Param1 == _param1 || (formula.Param1 > 0 && _param1 == AnyPositive) || (formula.Param1 < 0 && _param1 == AnyNegative))
+                    if (formula.ConstantOffset == _constantOffset || (formula.ConstantOffset > 0 && _constantOffset == AnyPositive) || (formula.ConstantOffset < 0 && _constantOffset == AnyNegative))
                     {
-                        if (formula.Param2 == _param2 || (formula.Param2 > 0 && _param2 == AnyPositive) || (formula.Param2 < 0 && _param2 == AnyNegative))
+                        if (formula.LevelOffset == _levelOffset || (formula.LevelOffset > 0 && _levelOffset == AnyPositive) || (formula.LevelOffset < 0 && _levelOffset == AnyNegative))
                         {
-                            if (formula.Param3 == _param3 || (formula.Param3 > 0 && _param3 == AnyPositive) || (formula.Param3 < 0 && _param3 == AnyNegative))
+                            if (formula.Variable == _variable || (formula.Variable > 0 && _variable == AnyPositive) || (formula.Variable < 0 && _variable == AnyNegative))
                             {
                                 if (formula.Type == _type || (formula.Type > 0 && _type == AnyPositive) || (formula.Type < 0 && _type == AnyNegative))
                                 {
@@ -68,7 +68,7 @@ namespace GW2EIParser.EIData
             // ConditionDurationIncrease
             {new BuffFormulaDescriptor(AnyPositive, 0, 0, 4, AnyPositive, 0, ParseEnum.BuffAttribute.ConditionDurationIncrease), 725 },
             // SkillCooldown
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 4, 0, 0, ParseEnum.BuffAttribute.SkillCooldown), 30328 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 4, 0, 0, ParseEnum.BuffAttribute.SkillCooldownReduction), 30328 },
             // HealingOutputFormula
             {new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 5, 0, 0, ParseEnum.BuffAttribute.HealingOutputFormula), 718 },
             // EnduranceRegeneration

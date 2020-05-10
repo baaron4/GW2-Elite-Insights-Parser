@@ -72,6 +72,11 @@ namespace GW2EIParser.EIData
             _logic = Logic.Unknown;
         }
 
+        public static Buff CreateCustomConsumable(string name, long id, string link, int capacity)
+        {
+            return new Buff(name, id, GeneralHelper.Source.Item, BuffType.Intensity, capacity, BuffNature.Consumable, Logic.Override, link);
+        }
+
         private static readonly List<Buff> _boons = new List<Buff>
         {
                 new Buff("Might", 740, GeneralHelper.Source.Common, BuffType.Intensity, 25, BuffNature.Boon, Logic.Override, "https://wiki.guildwars2.com/images/7/7c/Might.png"),

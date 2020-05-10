@@ -29,21 +29,35 @@ namespace GW2EIParser.EIData
             }
             _buffsByName = currentBuffs.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().Count > 1 ? throw new InvalidOperationException("Same name present multiple times in buffs - " + x.First().Name) : x.First());
             // TODO: add unknown consumables here if any
-            // var buffIDs = new HashSet<long>(currentBuffs.Select(x => x.ID));
+            var buffIDs = new HashSet<long>(currentBuffs.Select(x => x.ID));
+            var foodAndUtility = new List<BuffInfoEvent>(combatData.GetBuffInfoEvent(ParseEnum.BuffCategory.Enhancement));
+            foodAndUtility.AddRange(combatData.GetBuffInfoEvent(ParseEnum.BuffCategory.Food));
+            foreach (BuffInfoEvent buffInfoEvent in foodAndUtility)
+            {
+                if (!buffIDs.Contains(buffInfoEvent.BuffID))
+                {
+                    string name = buffInfoEvent.Category == ParseEnum.BuffCategory.Enhancement ? "Utility" : "Food";
+                    string link = buffInfoEvent.Category == ParseEnum.BuffCategory.Enhancement ? "https://wiki.guildwars2.com/images/2/23/Nourishment_utility.png" : "https://wiki.guildwars2.com/images/c/ca/Nourishment_food.png";
+#if DEBUG
+                    operation.UpdateProgressWithCancellationCheck("Unknown " + name + " " + buffInfoEvent.BuffID);
+#endif
+                    currentBuffs.Add(CreateCustomConsumable(name, buffInfoEvent.BuffID, link, buffInfoEvent.MaxStacks));
+                }
+            }
             //
             BuffsByIds = currentBuffs.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.First());
             BuffFormulaSolver.SolveBuffFormula(combatData, BuffsByIds);
 #if DEBUG
             foreach (Buff buff in currentBuffs)
             {
-                BuffDataEvent buffDataEvt = combatData.GetBuffDataEvent(buff.ID);
-                if (buffDataEvt != null)
+                BuffInfoEvent buffInfoEvt = combatData.GetBuffInfoEvent(buff.ID);
+                if (buffInfoEvt != null)
                 {
-                    foreach (BuffDataEvent.BuffFormula formula in buffDataEvt.FormulaList)
+                    foreach (BuffInfoEvent.BuffFormula formula in buffInfoEvt.FormulaList)
                     {
                         if (formula.Attr1 == ParseEnum.BuffAttribute.Unknown)
                         {
-                            operation.UpdateProgressWithCancellationCheck("Unknown Formula 1 " + formula.ByteAttr1 + " for " + buff.ID + " " + buff.Name + " " + formula.Param1 + " " + formula.Param2 + " " + formula.Param3 + " " + formula.Type + " " + formula.TraitSelf + " " + formula.TraitSrc);
+                            operation.UpdateProgressWithCancellationCheck(formula.GetDescription(true, BuffsByIds));
                         }
                     }
                 }

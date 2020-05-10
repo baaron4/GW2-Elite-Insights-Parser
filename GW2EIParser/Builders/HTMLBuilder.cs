@@ -1200,7 +1200,7 @@ namespace GW2EIParser.Builders
             //
             SkillDto.AssembleSkills(_usedSkills.Values, logData.SkillMap);
             DamageModDto.AssembleDamageModifiers(_usedDamageMods, logData.DamageModMap);
-            BuffDto.AssembleBoons(_usedBoons.Values, logData.BuffMap, _log.CombatData);
+            BuffDto.AssembleBoons(_usedBoons.Values, logData.BuffMap, _log);
             MechanicDto.BuildMechanics(_log.MechanicData.GetPresentMechanics(_log, 0), logData.MechanicMap);
             return ToJson(logData);
         }

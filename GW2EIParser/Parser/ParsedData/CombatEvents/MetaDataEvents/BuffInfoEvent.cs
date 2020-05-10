@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using GW2EIParser.EIData;
 
 namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
@@ -30,11 +31,11 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
             public byte ByteAttr2 { get; }
 
-            public float Param1 { get; }
+            public float ConstantOffset { get; }
 
-            public float Param2 { get; }
+            public float LevelOffset { get; }
 
-            public float Param3 { get; }
+            public float Variable { get; }
 
             public int TraitSrc { get; }
 
@@ -45,6 +46,8 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             public bool Player { get; }
 
             public bool Break { get; }
+
+            private string _solvedDescription = null;
 
             public BuffFormula(CombatItem evtcItem)
             {
@@ -87,9 +90,9 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                 ByteAttr2 = (byte)formulaFloats[2];
                 Attr1 = ParseEnum.GetBuffAttribute(ByteAttr1);
                 Attr2 = ParseEnum.GetBuffAttribute(ByteAttr2);
-                Param1 = formulaFloats[3];
-                Param2 = formulaFloats[4];
-                Param3 = formulaFloats[5];
+                ConstantOffset = formulaFloats[3];
+                LevelOffset = formulaFloats[4];
+                Variable = formulaFloats[5];
                 TraitSrc = (int)formulaFloats[6];
                 TraitSelf = (int)formulaFloats[7];
             }
@@ -106,14 +109,57 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                 }
             }
 
-            public override string ToString()
+            public string GetDescription(bool authorizeUnknowns, Dictionary<long, Buff> buffsByIds)
             {
-                var res = "";
-                if (Attr1 != ParseEnum.BuffAttribute.Unknown && Attr2 != ParseEnum.BuffAttribute.Unknown)
+                if (_solvedDescription != null)
                 {
-
+                    return _solvedDescription;
                 }
-                return res;
+                _solvedDescription = "";
+                if (authorizeUnknowns || (Attr1 != ParseEnum.BuffAttribute.Unknown && Attr2 != ParseEnum.BuffAttribute.Unknown))
+                {
+                    if (Attr1 == ParseEnum.BuffAttribute.None)
+                    {
+                        return _solvedDescription;
+                    }
+                    var stat1 = Enum.GetName(typeof(ParseEnum.BuffAttribute), Attr1);
+                    if (Attr1 == ParseEnum.BuffAttribute.Unknown)
+                    {
+                        stat1 += " " + ByteAttr1;
+                    }
+                    var stat2 = Enum.GetName(typeof(ParseEnum.BuffAttribute), Attr2);
+                    if (Attr2 == ParseEnum.BuffAttribute.Unknown)
+                    {
+                        stat2 += " " + ByteAttr2;
+                    }
+                    _solvedDescription += stat1;
+                    if (Attr2 != ParseEnum.BuffAttribute.None)
+                    {
+                        _solvedDescription += " from " + stat2;
+                    }
+                    _solvedDescription += ": ";
+                    double totalOffset = Math.Round(80 * LevelOffset + ConstantOffset, 4);
+                    bool addParanthesis = totalOffset != 0 && Variable != 0;
+                    if (addParanthesis)
+                    {
+                        _solvedDescription += "(";
+                    }
+                    bool prefix = false;
+                    if (Variable != 0)
+                    {
+                        _solvedDescription += Variable + " * Stat";
+                        prefix = true;
+                    }
+                    if (totalOffset != 0)
+                    {
+                        _solvedDescription += (Math.Sign(totalOffset) < 0 ? " -" : " +")+ (prefix ? " " : "") + Math.Abs(totalOffset);
+                    }
+                    if (addParanthesis)
+                    {
+                        _solvedDescription += ")";
+                    }
+                }
+                return _solvedDescription;
             }
 
         }
@@ -166,6 +212,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public void AdjustUnknownFormulaAttributes(Dictionary<byte, ParseEnum.BuffAttribute> solved)
         {
+            FormulaList.Sort((x, y) => (x.TraitSelf + x.TraitSrc).CompareTo(y.TraitSrc + y.TraitSelf));
             foreach (BuffFormula formula in FormulaList)
             {
                 formula.AdjustUnknownFormulaAttributes(solved);
