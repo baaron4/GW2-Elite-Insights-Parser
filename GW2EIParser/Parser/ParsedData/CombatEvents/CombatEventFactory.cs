@@ -128,34 +128,34 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                         break;
                     case ParseEnum.StateChange.BuffInfo:
                     case ParseEnum.StateChange.BuffFormula:
-                        if (metaDataEvents.BuffDataEvents.TryGetValue(c.SkillID, out BuffDataEvent buffDataEvent))
+                        if (metaDataEvents.BuffInfoEvents.TryGetValue(c.SkillID, out BuffInfoEvent buffInfoEvent))
                         {
-                            buffDataEvent.CompleteBuffDataEvent(c);
+                            buffInfoEvent.CompleteBuffDataEvent(c);
                             if (c.IsStateChange == ParseEnum.StateChange.BuffInfo)
                             {
-                                if (metaDataEvents.BuffDataEventsByCategory.TryGetValue(buffDataEvent.Category, out List<BuffDataEvent> bdEvtList))
+                                if (metaDataEvents.BuffInfoEventsByCategory.TryGetValue(buffInfoEvent.Category, out List<BuffInfoEvent> bdEvtList))
                                 {
-                                    bdEvtList.Add(buffDataEvent);
+                                    bdEvtList.Add(buffInfoEvent);
                                 }
                                 else
                                 {
-                                    metaDataEvents.BuffDataEventsByCategory[buffDataEvent.Category] = new List<BuffDataEvent> { buffDataEvent };
+                                    metaDataEvents.BuffInfoEventsByCategory[buffInfoEvent.Category] = new List<BuffInfoEvent> { buffInfoEvent };
                                 }
                             }
                         } 
                         else
                         {
-                            var bDEvt = new BuffDataEvent(c);
-                            metaDataEvents.BuffDataEvents[c.SkillID] = bDEvt;
+                            var bIEvt = new BuffInfoEvent(c);
+                            metaDataEvents.BuffInfoEvents[c.SkillID] = bIEvt;
                             if (c.IsStateChange == ParseEnum.StateChange.BuffInfo)
                             {
-                                if (metaDataEvents.BuffDataEventsByCategory.TryGetValue(bDEvt.Category, out List<BuffDataEvent> bdEvtList))
+                                if (metaDataEvents.BuffInfoEventsByCategory.TryGetValue(bIEvt.Category, out List<BuffInfoEvent> biEvtList))
                                 {
-                                    bdEvtList.Add(bDEvt);
+                                    biEvtList.Add(bIEvt);
                                 }
                                 else
                                 {
-                                    metaDataEvents.BuffDataEventsByCategory[bDEvt.Category] = new List<BuffDataEvent> { bDEvt };
+                                    metaDataEvents.BuffInfoEventsByCategory[bIEvt.Category] = new List<BuffInfoEvent> { bIEvt };
                                 }
                             }
                         }

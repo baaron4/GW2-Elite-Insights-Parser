@@ -36,11 +36,11 @@ namespace GW2EIParser.Parser.ParsedData
             {
                 if (p.Prof == "Weaver")
                 {
-                    toAdd = WeaverHelper.TransformWeaverAttunements(GetBuffDataByDst(p.AgentItem), p.AgentItem, skillData);
+                    toAdd = WeaverHelper.TransformWeaverAttunements(GetBuffData(p.AgentItem), p.AgentItem, skillData);
                 }
                 if (p.Prof == "Elementalist" || p.Prof == "Tempest")
                 {
-                    ElementalistHelper.RemoveDualBuffs(GetBuffDataByDst(p.AgentItem), skillData);
+                    ElementalistHelper.RemoveDualBuffs(GetBuffData(p.AgentItem), skillData);
                 }
             }
             toAdd.AddRange(fightData.Logic.SpecialBuffEventProcess(_buffDataByDst, _buffData, skillData));
@@ -459,22 +459,22 @@ namespace GW2EIParser.Parser.ParsedData
             return _metaDataEvents.ShardEvents;
         }
 
-        public BuffDataEvent GetBuffDataEvent(long buffID)
+        public BuffInfoEvent GetBuffInfoEvent(long buffID)
         {
-            if (_metaDataEvents.BuffDataEvents.TryGetValue(buffID, out BuffDataEvent evt))
+            if (_metaDataEvents.BuffInfoEvents.TryGetValue(buffID, out BuffInfoEvent evt))
             {
                 return evt;
             }
             return null;
         }
 
-        public List<BuffDataEvent> GetBuffDataEvent(ParseEnum.BuffCategory category)
+        public List<BuffInfoEvent> GetBuffInfoEvent(ParseEnum.BuffCategory category)
         {
-            if (_metaDataEvents.BuffDataEventsByCategory.TryGetValue(category, out List<BuffDataEvent> evts))
+            if (_metaDataEvents.BuffInfoEventsByCategory.TryGetValue(category, out List<BuffInfoEvent> evts))
             {
                 return evts;
             }
-            return new List<BuffDataEvent>();
+            return new List<BuffInfoEvent>();
         }
 
         public List<AbstractBuffEvent> GetBuffData(long key)
@@ -495,7 +495,7 @@ namespace GW2EIParser.Parser.ParsedData
             return new List<BuffRemoveAllEvent>(); ;
         }
 
-        public List<AbstractBuffEvent> GetBuffDataByDst(AgentItem key)
+        public List<AbstractBuffEvent> GetBuffData(AgentItem key)
         {
             if (_buffDataByDst.TryGetValue(key, out List<AbstractBuffEvent> res))
             {
@@ -514,7 +514,7 @@ namespace GW2EIParser.Parser.ParsedData
             return new List<AbstractDamageEvent>(); ;
         }
 
-        public List<AbstractDamageEvent> GetDamageDataById(long key)
+        public List<AbstractDamageEvent> GetDamageData(long key)
         {
             if (_damageDataById.TryGetValue(key, out List<AbstractDamageEvent> res))
             {
@@ -542,7 +542,7 @@ namespace GW2EIParser.Parser.ParsedData
         }
 
 
-        public List<AbstractCastEvent> GetCastDataById(long key)
+        public List<AbstractCastEvent> GetCastData(long key)
         {
             if (_castDataById.TryGetValue(key, out List<AbstractCastEvent> res))
             {

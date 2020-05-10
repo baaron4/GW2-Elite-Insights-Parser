@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
-    public class BuffDataEvent : AbstractMetaDataEvent
+    public class BuffInfoEvent : AbstractMetaDataEvent
     {
         public long BuffID { get; }
 
@@ -105,12 +105,21 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                     Attr2 = solvedAttr;
                 }
             }
+
+            public override string ToString()
+            {
+                var res = "";
+                if (Attr1 != ParseEnum.BuffAttribute.Unknown && Attr2 != ParseEnum.BuffAttribute.Unknown)
+                {
+
+                }
+                return res;
+            }
+
         }
         public List<BuffFormula> FormulaList { get; } = new List<BuffFormula>();
 
-        private string _description = null;
-
-        public BuffDataEvent(CombatItem evtcItem) : base(evtcItem)
+        public BuffInfoEvent(CombatItem evtcItem) : base(evtcItem)
         {
             switch(evtcItem.IsStateChange)
             {
@@ -166,16 +175,6 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         private void BuildFromBuffFormula(CombatItem evtcItem)
         {
             FormulaList.Add(new BuffFormula(evtcItem));
-        }
-
-
-        public string GetDescription()
-        {
-            if (_description == null)
-            {
-                _description = "";
-            }
-            return _description;
         }
 
     }

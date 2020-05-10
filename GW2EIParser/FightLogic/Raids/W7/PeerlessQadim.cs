@@ -102,7 +102,7 @@ namespace GW2EIParser.Logic
                     phaseEnds.Add(magmaDrop.Time);
                 }
             }
-            List<AbstractCastEvent> pushes = log.CombatData.GetCastDataById(56405);
+            List<AbstractCastEvent> pushes = log.CombatData.GetCastData(56405);
             if (pushes.Count > 0)
             {
                 AbstractCastEvent push = pushes[0];
@@ -118,10 +118,10 @@ namespace GW2EIParser.Logic
                 }
             }
             // rush to pylon
-            phaseEnds.AddRange(log.CombatData.GetCastDataById(56616).Select(x => x.Time).ToList());
+            phaseEnds.AddRange(log.CombatData.GetCastData(56616).Select(x => x.Time).ToList());
             phaseEnds.Add(log.FightData.FightEnd);
             // tp to middle after pylon destruction
-            phaseStarts.AddRange(log.CombatData.GetCastDataById(56375).Select(x => x.Time + x.ActualDuration));
+            phaseStarts.AddRange(log.CombatData.GetCastData(56375).Select(x => x.Time + x.ActualDuration));
             if (phaseEnds.Count < phaseStarts.Count)
             {
                 return phases;

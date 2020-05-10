@@ -28,7 +28,7 @@ namespace GW2EIParser.EIData
 
         public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
         {
-            foreach (AbstractCastEvent c in log.CombatData.GetCastDataById(SkillId))
+            foreach (AbstractCastEvent c in log.CombatData.GetCastData(SkillId))
             {
                 AbstractSingleActor amp = null;
                 if (Keep(c, log))

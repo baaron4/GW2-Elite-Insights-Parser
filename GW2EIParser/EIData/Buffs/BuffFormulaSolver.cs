@@ -6,7 +6,7 @@ using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 using static GW2EIParser.EIData.Buff;
-using static GW2EIParser.Parser.ParsedData.CombatEvents.BuffDataEvent;
+using static GW2EIParser.Parser.ParsedData.CombatEvents.BuffInfoEvent;
 
 namespace GW2EIParser.EIData
 {
@@ -105,10 +105,10 @@ namespace GW2EIParser.EIData
             {
                 if (buffsByID.TryGetValue(pair.Value, out Buff buff))
                 {
-                    BuffDataEvent buffDataEvent = combatData.GetBuffDataEvent(buff.ID);
-                    if (buffDataEvent != null)
+                    BuffInfoEvent buffInfoEvent = combatData.GetBuffInfoEvent(buff.ID);
+                    if (buffInfoEvent != null)
                     {
-                        foreach (BuffFormula formula in buffDataEvent.FormulaList)
+                        foreach (BuffFormula formula in buffInfoEvent.FormulaList)
                         {
                             pair.Key.Match(formula, solved);
                         }
@@ -123,10 +123,10 @@ namespace GW2EIParser.EIData
 #endif
             foreach (long key in buffsByID.Keys)
             {
-                BuffDataEvent buffDataEvent = combatData.GetBuffDataEvent(key);
-                if (buffDataEvent != null)
+                BuffInfoEvent buffInfoEvent = combatData.GetBuffInfoEvent(key);
+                if (buffInfoEvent != null)
                 {
-                    buffDataEvent.AdjustUnknownFormulaAttributes(solved);
+                    buffInfoEvent.AdjustUnknownFormulaAttributes(solved);
                 }
             }
         }
