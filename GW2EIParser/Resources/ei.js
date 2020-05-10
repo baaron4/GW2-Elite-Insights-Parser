@@ -36,10 +36,10 @@ var mainLoad = function () {
         logData.targets[i].dpsGraphCache = new Map();
     }
     for (i = 0; i < logData.players.length; i++) {
-        simpleLogData.players.push({
-            active: false
-        });
         var playerData = logData.players[i];
+        simpleLogData.players.push({
+            active: !!playerData.isPoV
+        });
         playerData.dpsGraphCache = new Map();
         playerData.icon = urls[playerData.profession];
         playerData.id = i;
