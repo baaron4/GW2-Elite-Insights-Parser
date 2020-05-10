@@ -13,7 +13,7 @@ namespace GW2EIParser.EIData
 
         public override object GetConnectedTo(CombatReplayMap map, ParsedLog log)
         {
-            return _agent.GetCombatReplayID(log);
+            return _agent.CombatReplayID;
         }
     }
 }

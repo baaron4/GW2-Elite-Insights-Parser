@@ -9,13 +9,13 @@ namespace GW2EIParser.Parser.ParsedData
     public class AgentItem
     {
 
-        private static ulong AgentCount = 0;
+        private static int AgentCount = 0;
         public enum AgentType { NPC, Gadget, Player, EnemyPlayer }
 
         // Fields
         public ulong Agent { get; }
         public int ID { get; protected set; }
-        public string UniqueID { get; }
+        public int UniqueID { get; }
         public AgentItem Master { get; protected set; }
         public ushort InstID { get; protected set; }
         public AgentType Type { get; protected set; } = AgentType.NPC;
@@ -33,7 +33,7 @@ namespace GW2EIParser.Parser.ParsedData
         // Constructors
         public AgentItem(ulong agent, string name, string prof, int id, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight)
         {
-            UniqueID = "ag" + AgentCount++;
+            UniqueID = AgentCount++;
             Agent = agent;
             Name = name;
             Prof = prof;
@@ -72,7 +72,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public AgentItem(AgentItem other)
         {
-            UniqueID = "ag" + AgentCount++;
+            UniqueID = AgentCount++;
             Agent = other.Agent;
             Name = other.Name;
             Prof = other.Prof;

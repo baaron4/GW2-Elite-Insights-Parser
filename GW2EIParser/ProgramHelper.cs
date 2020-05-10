@@ -209,31 +209,31 @@ namespace GW2EIParser
             if (log.ParserSettings.MultiTasks)
             {
                 operation.UpdateProgressWithCancellationCheck("Multi threading buff and damage mod computations");
-                if (log.CombatData.HasMovementData)
-                {
-                    Parallel.ForEach(log.PlayerList, player => player.GetCombatReplayID(log));
-                }
-                log.FightData.GetPhases(log);
-                var actors = new List<AbstractSingleActor>(log.PlayerList);
-                actors.AddRange(log.FightData.Logic.Targets);
-                foreach (AbstractSingleActor actor in actors)
+                var playersAndTargets = new List<AbstractSingleActor>(log.PlayerList);
+                playersAndTargets.AddRange(log.FightData.Logic.Targets);
+                foreach (AbstractSingleActor actor in playersAndTargets)
                 {
                     // that part can't be //
                     actor.ComputeBuffMap(log);
                 }
-                Parallel.ForEach(actors, actor => actor.GetBuffGraphs(log));
+                if (log.CanCombatReplay)
+                {
+                    var playersAndTargetsAndMobs = new List<AbstractSingleActor>(log.FightData.Logic.TrashMobs);
+                    playersAndTargetsAndMobs.AddRange(playersAndTargets);
+                    // init all positions
+                    Parallel.ForEach(playersAndTargetsAndMobs, actor => actor.GetCombatReplayPolledPositions(log));
+                } 
+                else if (log.CombatData.HasMovementData)
+                {
+                    Parallel.ForEach(log.PlayerList, player => player.GetCombatReplayPolledPositions(log));
+                }
+                log.FightData.GetPhases(log);
+                Parallel.ForEach(playersAndTargets, actor => actor.GetBuffGraphs(log));
                 //
                 Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
                 // once simulation is done, computing buff stats is thread safe
                 Parallel.ForEach(log.PlayerList, player => player.GetBuffs(log, BuffEnum.Self));
-                //
-                if (log.CanCombatReplay)
-                {
-                    actors.AddRange(log.FightData.Logic.TrashMobs);
-                    // init all positions
-                    Parallel.ForEach(actors, actor => actor.GetCombatReplayID(log));
-                }
-
+                Parallel.ForEach(log.FightData.Logic.Targets, target => target.GetBuffs(log));
             }
             if (Properties.Settings.Default.SaveOutHTML)
             {
