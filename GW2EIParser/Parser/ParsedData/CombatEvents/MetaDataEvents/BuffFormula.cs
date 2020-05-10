@@ -111,9 +111,13 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             }
         }
 
-        private static string GetPercent(ParseEnum.BuffAttribute attribute)
+        private static string GetPercent(ParseEnum.BuffAttribute attribute1, ParseEnum.BuffAttribute attribute2)
         {
-            switch (attribute)
+            if (attribute2 != Unknown && attribute2 != None)
+            {
+                return "%";
+            }
+            switch (attribute1)
             {
                 case PhysInc:
                 case CondInc:
@@ -291,7 +295,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                 {
                     _solvedDescription += ")";
                 }
-                _solvedDescription += GetPercent(Attr1);
+                _solvedDescription += GetPercent(Attr1, Attr2);
             }
             return _solvedDescription;
         }
