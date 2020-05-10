@@ -53,7 +53,7 @@ namespace GW2EIParser.EIData
                 BuffInfoEvent buffInfoEvt = combatData.GetBuffInfoEvent(buff.ID);
                 if (buffInfoEvt != null)
                 {
-                    foreach (BuffInfoEvent.BuffFormula formula in buffInfoEvt.FormulaList)
+                    foreach (BuffFormula formula in buffInfoEvt.FormulaList)
                     {
                         if (formula.Attr1 == ParseEnum.BuffAttribute.Unknown)
                         {

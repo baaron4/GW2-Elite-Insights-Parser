@@ -28,7 +28,7 @@ namespace GW2EIParser.Builders.HtmlModels
             if (buffInfoEvent != null)
             {
                 var descriptions = new List<string>();
-                foreach (BuffInfoEvent.BuffFormula formula in buffInfoEvent.FormulaList)
+                foreach (BuffFormula formula in buffInfoEvent.FormulaList)
                 {
                     if (formula.TraitSelf > 0 || formula.TraitSrc > 0)
                     {
