@@ -77,7 +77,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         private void BuildFromBuffFormula(CombatItem evtcItem)
         {
-            FormulaList.Add(new BuffFormula(evtcItem));
+            FormulaList.Add(new BuffFormula(evtcItem, this));
         }
 
     }

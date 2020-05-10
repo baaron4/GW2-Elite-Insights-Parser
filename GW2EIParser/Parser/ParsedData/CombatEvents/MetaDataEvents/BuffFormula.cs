@@ -181,10 +181,13 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         private string _solvedDescription = null;
 
-        private int _level => (Type == 12 ? 6400 : 80);
+        private readonly BuffInfoEvent _buffInfoEvent;
 
-        public BuffFormula(CombatItem evtcItem)
+        private int _level => (_buffInfoEvent.Category == ParseEnum.BuffCategory.Food || _buffInfoEvent.Category == ParseEnum.BuffCategory.Enhancement) ? 0 : (Type == 12 ? 6400 : 80);
+
+        public BuffFormula(CombatItem evtcItem, BuffInfoEvent buffInfoEvent)
         {
+            _buffInfoEvent = buffInfoEvent;
             NPC = evtcItem.IsFlanking == 0;
             Player = evtcItem.IsShields == 0;
             Break = evtcItem.IsOffcycle > 0;
