@@ -1059,8 +1059,6 @@ namespace GW2EIParser.Builders
             foreach (NPC target in _log.FightData.Logic.Targets)
             {
                 var targetDto = new TargetDto(target, _log, _cr, BuildTargetData(target));
-
-
                 logData.Targets.Add(targetDto);
             }
             //

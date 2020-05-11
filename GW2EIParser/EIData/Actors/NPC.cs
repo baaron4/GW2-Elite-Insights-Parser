@@ -122,12 +122,12 @@ namespace GW2EIParser.EIData
 
         protected override void InitCombatReplay(ParsedLog log)
         {
+            CombatReplay = new CombatReplay();
             if (!log.CombatData.HasMovementData)
             {
                 // no combat replay support on fight
                 return;
             }
-            CombatReplay = new CombatReplay();
             SetMovements(log);
             CombatReplay.PollingRate(log.FightData.FightEnd, log.FightData.GetMainTargets(log).Contains(this));
             TrimCombatReplay(log);

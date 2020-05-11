@@ -159,29 +159,32 @@ namespace GW2EIParser
 
         public static void GenerateLogFile(OperationController operation)
         {
-            var fInfo = new FileInfo(operation.Location);
-
-            string fName = fInfo.Name.Split('.')[0];
-            if (!fInfo.Exists)
+            if (Properties.Settings.Default.SaveOutTrace)
             {
-                fInfo = new FileInfo(AppDomain.CurrentDomain.BaseDirectory);
-            }
+                var fInfo = new FileInfo(operation.Location);
 
-            DirectoryInfo saveDirectory = GetSaveDirectory(fInfo);
+                string fName = fInfo.Name.Split('.')[0];
+                if (!fInfo.Exists)
+                {
+                    fInfo = new FileInfo(AppDomain.CurrentDomain.BaseDirectory);
+                }
 
-            if (saveDirectory == null)
-            {
-                return;
-            }
+                DirectoryInfo saveDirectory = GetSaveDirectory(fInfo);
 
-            string outputFile = Path.Combine(
-            saveDirectory.FullName,
-            $"{fName}.log"
-            );
-            using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
-            using (var sw = new StreamWriter(fs))
-            {
-                operation.WriteLogMessages(sw);
+                if (saveDirectory == null)
+                {
+                    return;
+                }
+
+                string outputFile = Path.Combine(
+                saveDirectory.FullName,
+                $"{fName}.log"
+                );
+                using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
+                using (var sw = new StreamWriter(fs))
+                {
+                    operation.WriteLogMessages(sw);
+                }
             }
         }
 
@@ -206,23 +209,31 @@ namespace GW2EIParser
             if (log.ParserSettings.MultiTasks)
             {
                 operation.UpdateProgressWithCancellationCheck("Multi threading buff and damage mod computations");
+                var playersAndTargets = new List<AbstractSingleActor>(log.PlayerList);
+                playersAndTargets.AddRange(log.FightData.Logic.Targets);
+                foreach (AbstractSingleActor actor in playersAndTargets)
+                {
+                    // that part can't be //
+                    actor.ComputeBuffMap(log);
+                }
+                if (log.CanCombatReplay)
+                {
+                    var playersAndTargetsAndMobs = new List<AbstractSingleActor>(log.FightData.Logic.TrashMobs);
+                    playersAndTargetsAndMobs.AddRange(playersAndTargets);
+                    // init all positions
+                    Parallel.ForEach(playersAndTargetsAndMobs, actor => actor.GetCombatReplayPolledPositions(log));
+                } 
+                else if (log.CombatData.HasMovementData)
+                {
+                    Parallel.ForEach(log.PlayerList, player => player.GetCombatReplayPolledPositions(log));
+                }
                 log.FightData.GetPhases(log);
-                foreach (Player p in log.PlayerList)
-                {
-                    // that part can't be //
-                    p.ComputeBuffMap(log);
-                }
-                foreach (NPC npc in log.FightData.Logic.Targets)
-                {
-                    // that part can't be //
-                    npc.ComputeBuffMap(log);
-                }
-                var actors = new List<AbstractSingleActor>(log.PlayerList);
-                actors.AddRange(log.FightData.Logic.Targets);
-                Parallel.ForEach(actors, actor => actor.GetBuffGraphs(log));
+                Parallel.ForEach(playersAndTargets, actor => actor.GetBuffGraphs(log));
                 //
                 Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
+                // once simulation is done, computing buff stats is thread safe
                 Parallel.ForEach(log.PlayerList, player => player.GetBuffs(log, BuffEnum.Self));
+                Parallel.ForEach(log.FightData.Logic.Targets, target => target.GetBuffs(log));
             }
             if (Properties.Settings.Default.SaveOutHTML)
             {

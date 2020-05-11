@@ -119,6 +119,8 @@ namespace GW2EIParser.Parser
             BuffFormula = 31,
             SkillInfo = 32,
             SkillTiming = 33,
+            BreakbarState = 34,
+            BreakbarPercent = 35,
             Unknown
         };
 
@@ -580,7 +582,8 @@ namespace GW2EIParser.Parser
                 || state == ParseEnum.StateChange.Velocity || state == ParseEnum.StateChange.Rotation
                 || state == ParseEnum.StateChange.TeamChange || state == ParseEnum.StateChange.AttackTarget
                 || state == ParseEnum.StateChange.Targetable || state == ParseEnum.StateChange.StackActive
-                || state == ParseEnum.StateChange.StackReset;
+                || state == ParseEnum.StateChange.StackReset || state == ParseEnum.StateChange.BreakbarState 
+                || state == ParseEnum.StateChange.BreakbarPercent;
         }
 
         public static bool DstIsAgent(this ParseEnum.StateChange state)
@@ -600,7 +603,8 @@ namespace GW2EIParser.Parser
                 || state == ParseEnum.StateChange.Rotation || state == ParseEnum.StateChange.TeamChange
                 || state == ParseEnum.StateChange.AttackTarget || state == ParseEnum.StateChange.Targetable
                 || state == ParseEnum.StateChange.StackActive || state == ParseEnum.StateChange.StackReset
-                || state == ParseEnum.StateChange.Reward;
+                || state == ParseEnum.StateChange.Reward || state == ParseEnum.StateChange.BreakbarState 
+                || state == ParseEnum.StateChange.BreakbarPercent;
         }
     }
 

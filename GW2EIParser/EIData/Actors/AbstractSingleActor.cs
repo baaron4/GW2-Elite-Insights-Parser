@@ -9,6 +9,7 @@ namespace GW2EIParser.EIData
 {
     public abstract class AbstractSingleActor : AbstractActor
     {
+        public int CombatReplayID => AgentItem.UniqueID;
         // Boons
         public HashSet<Buff> TrackedBuffs { get; } = new HashSet<Buff>();
         private BuffDictionary _buffMap;
@@ -82,7 +83,7 @@ namespace GW2EIParser.EIData
                 {
                     if (pair.Value.GetDamageLogs(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastLogs(log, 0, log.FightData.FightEnd).Count > 0)
                     {
-                        _minions[pair.Value.AgentItem.UniqueID.GetHashCode()] = pair.Value;
+                        _minions[pair.Value.AgentItem.UniqueID] = pair.Value;
                     }
                 }
                 // gadget, string based
@@ -104,7 +105,7 @@ namespace GW2EIParser.EIData
                 {
                     if (pair.Value.GetDamageLogs(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastLogs(log, 0, log.FightData.FightEnd).Count > 0)
                     {
-                        _minions[pair.Value.AgentItem.UniqueID.GetHashCode()] = pair.Value;
+                        _minions[pair.Value.AgentItem.UniqueID] = pair.Value;
                     }
                 }
             }
@@ -302,7 +303,13 @@ namespace GW2EIParser.EIData
             var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[ProfHelper.NumberOfConditionsID]);
             var boonIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Boon].Select(x => x.ID));
             var condiIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Condition].Select(x => x.ID));
-            InitBuffStatusData(log);
+            // Init status
+            List<PhaseData> phases = log.FightData.GetPhases(log);
+            for (int i = 0; i < phases.Count; i++)
+            {
+                _boonDistribution.Add(new BuffDistribution());
+                _buffPresence.Add(new Dictionary<long, long>());
+            }
             foreach (Buff buff in TrackedBuffs)
             {
                 long boonid = buff.ID;
@@ -320,7 +327,14 @@ namespace GW2EIParser.EIData
                     var graphSegments = new List<BuffSegment>();
                     foreach (BuffSimulationItem simul in simulator.GenerationSimulation)
                     {
-                        SetBuffStatusGenerationData(log, simul, boonid);
+                        // Generation
+                        for (int i = 0; i < phases.Count; i++)
+                        {
+                            PhaseData phase = phases[i];
+                            Add(_buffPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
+                            simul.SetBuffDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
+                        }
+                        // Graph
                         BuffSegment segment = simul.ToSegment();
                         if (graphSegments.Count == 0)
                         {
@@ -332,7 +346,18 @@ namespace GW2EIParser.EIData
                         }
                         graphSegments.Add(segment);
                     }
-                    SetBuffStatusCleanseWasteData(log, simulator, boonid);
+                    // Cleanse and Wastes
+                    var extraSimulations = new List<AbstractSimulationItem>(simulator.OverstackSimulationResult);
+                    extraSimulations.AddRange(simulator.WasteSimulationResult);
+                    foreach (AbstractSimulationItem simul in extraSimulations)
+                    {
+                        for (int i = 0; i < phases.Count; i++)
+                        {
+                            PhaseData phase = phases[i];
+                            simul.SetBuffDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
+                        }
+                    }
+                    // Graph object creation
                     if (graphSegments.Count > 0)
                     {
                         graphSegments.Add(new BuffSegment(graphSegments.Last().End, dur, 0));
@@ -403,43 +428,6 @@ namespace GW2EIParser.EIData
             BuffPoints[ProfHelper.NumberOfBoonsID] = boonPresenceGraph;
             BuffPoints[ProfHelper.NumberOfConditionsID] = condiPresenceGraph;
         }
-
-        private void InitBuffStatusData(ParsedLog log)
-        {
-            List<PhaseData> phases = log.FightData.GetPhases(log);
-            for (int i = 0; i < phases.Count; i++)
-            {
-                _boonDistribution.Add(new BuffDistribution());
-                _buffPresence.Add(new Dictionary<long, long>());
-            }
-        }
-
-        private void SetBuffStatusCleanseWasteData(ParsedLog log, AbstractBuffSimulator simulator, long boonid)
-        {
-            List<PhaseData> phases = log.FightData.GetPhases(log);
-            var extraSimulations = new List<AbstractSimulationItem>(simulator.OverstackSimulationResult);
-            extraSimulations.AddRange(simulator.WasteSimulationResult);
-            foreach (AbstractSimulationItem simul in extraSimulations)
-            {
-                for (int i = 0; i < phases.Count; i++)
-                {
-                    PhaseData phase = phases[i];
-                    simul.SetBuffDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
-                }
-            }
-        }
-
-        private void SetBuffStatusGenerationData(ParsedLog log, BuffSimulationItem simul, long boonid)
-        {
-            List<PhaseData> phases = log.FightData.GetPhases(log);
-            for (int i = 0; i < phases.Count; i++)
-            {
-                PhaseData phase = phases[i];
-                Add(_buffPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
-                simul.SetBuffDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
-            }
-        }
-
 
         public Dictionary<long, FinalBuffsDictionary> GetBuffsDictionary(ParsedLog log, int phaseIndex)
         {
@@ -546,10 +534,10 @@ namespace GW2EIParser.EIData
 
         public List<GenericDecoration> GetCombatReplayActors(ParsedLog log)
         {
-            if (!log.CanCombatReplay || IsFakeActor)
+            if (!log.CanCombatReplay)
             {
                 // no combat replay support on fight
-                return null;
+                return new List<GenericDecoration>();
             }
             if (CombatReplay == null)
             {
@@ -558,19 +546,12 @@ namespace GW2EIParser.EIData
             if (CombatReplay.NoActors)
             {
                 CombatReplay.NoActors = false;
-                InitAdditionalCombatReplayData(log);
+                if (!IsFakeActor)
+                {
+                    InitAdditionalCombatReplayData(log);
+                }
             }
             return CombatReplay.Decorations;
-        }
-
-
-        public int GetCombatReplayID(ParsedLog log)
-        {
-            if (CombatReplay == null)
-            {
-                InitCombatReplay(log);
-            }
-            return AgentItem.UniqueID.GetHashCode();
         }
         protected abstract void InitAdditionalCombatReplayData(ParsedLog log);
 
