@@ -346,8 +346,7 @@ namespace GW2EIParser
                         break;
 
                     case OperationState.Complete:
-                        string[] paths = operation.LogLocation.Split(',');
-                        foreach (string path in paths)
+                        foreach (string path in operation.GeneratedFiles)
                         {
                             if (File.Exists(path) || Directory.Exists(path))
                             {

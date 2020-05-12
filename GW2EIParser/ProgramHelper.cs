@@ -180,6 +180,7 @@ namespace GW2EIParser
                 saveDirectory.FullName,
                 $"{fName}.log"
                 );
+                operation.GeneratedFiles.Add(outputFile);
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs))
                 {
@@ -242,7 +243,7 @@ namespace GW2EIParser
                 saveDirectory.FullName,
                 $"{fName}.html"
                 );
-                operation.LogLocation = outputFile;
+                operation.GeneratedFiles.Add(outputFile);
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs))
                 {
@@ -258,9 +259,7 @@ namespace GW2EIParser
                     saveDirectory.FullName,
                     $"{fName}.csv"
                 );
-                string splitString = "";
-                if (operation.LogLocation != null) { splitString = ","; }
-                operation.LogLocation += splitString + outputFile;
+                operation.GeneratedFiles.Add(outputFile);
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                 {
@@ -279,9 +278,7 @@ namespace GW2EIParser
                         saveDirectory.FullName,
                         $"{fName}.json"
                     );
-                    string splitString = "";
-                    if (operation.LogLocation != null) { splitString = ","; }
-                    operation.LogLocation += splitString + saveDirectory.FullName;
+                    operation.GeneratedFiles.Add(outputFile);
                     Stream str;
                     if (Properties.Settings.Default.CompressRaw)
                     {
@@ -309,9 +306,7 @@ namespace GW2EIParser
                         saveDirectory.FullName,
                         $"{fName}.xml"
                     );
-                    string splitString = "";
-                    if (operation.LogLocation != null) { splitString = ","; }
-                    operation.LogLocation += splitString + saveDirectory.FullName;
+                    operation.GeneratedFiles.Add(outputFile);
                     Stream str;
                     if (Properties.Settings.Default.CompressRaw)
                     {
