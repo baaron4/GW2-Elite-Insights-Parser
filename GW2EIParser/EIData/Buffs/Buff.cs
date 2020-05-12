@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GW2EIParser.Parser.ParsedData;
+using GW2EIParser.Parser.ParsedData.CombatEvents;
 
 namespace GW2EIParser.EIData
 {
@@ -19,7 +20,7 @@ namespace GW2EIParser.EIData
         public BuffType Type { get; }
         public ulong MaxBuild { get; } = ulong.MaxValue;
         public ulong MinBuild { get; } = ulong.MinValue;
-        public int Capacity { get; }
+        public int Capacity { get; private set; }
         public string Link { get; }
         private readonly Logic _logic;
 
@@ -937,6 +938,15 @@ namespace GW2EIParser.EIData
                 case BuffType.Duration: return new BuffSimulatorIDDuration(log);
                 case BuffType.Unknown:
                 default: throw new InvalidOperationException("Cannot simulate typeless boons");
+            }
+        }
+
+        public void AdjustBuff(BuffInfoEvent buffInfoEvent)
+        {
+            if (buffInfoEvent.BuffID == ID)
+            {
+                // Capacity must be at least 1 for EI simulator, is basically the equivalent of EI's ForceOverride
+                Capacity = Math.Max((int)buffInfoEvent.MaxStacks, 1);
             }
         }
 

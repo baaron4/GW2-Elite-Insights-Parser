@@ -66,7 +66,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             ProbablyResistance = evtcItem.Pad2 > 0;
         }
 
-        public void AdjustUnknownFormulaAttributes(Dictionary<byte, ParseEnum.BuffAttribute> solved)
+        public void AdjustBuffInfo(Dictionary<byte, ParseEnum.BuffAttribute> solved)
         {
             FormulaList.Sort((x, y) => (x.TraitSelf + x.TraitSrc).CompareTo(y.TraitSrc + y.TraitSelf));
             foreach (BuffFormula formula in FormulaList)

@@ -8,9 +8,9 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         //private readonly int _effectHappenedDuration;
 
 
-        private static double _upperLimit = Math.Log(1.5);
-        private static double _lowerLimit = -_upperLimit;
-        private static double _diffLimit = 2.0 * _upperLimit;
+        private static double _upperLimit = Math.Log(4.0/3.0);
+        private static double _lowerLimit = Math.Log(0.5);
+        private static double _diffLimit = _upperLimit - _lowerLimit;
 
         private AnimatedCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData) : base(startItem, agentData, skillData)
         {

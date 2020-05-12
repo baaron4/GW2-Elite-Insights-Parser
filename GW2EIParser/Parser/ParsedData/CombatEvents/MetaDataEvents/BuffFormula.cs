@@ -153,19 +153,6 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                     return "";
             }
         }
-
-        private static bool IsValid(byte formulaMode, FightLogic.ParseMode logMode)
-        {
-            switch (logMode)
-            {
-                case FightLogic.ParseMode.WvW:
-                    return formulaMode == 2;
-                case FightLogic.ParseMode.sPvP:
-                    return formulaMode == 3;
-                default:
-                    return formulaMode == 4 || formulaMode == 0;
-            }
-        }
         // Effect type
         public int Type { get; }
         // Effect attributes
@@ -184,8 +171,6 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         private bool _npc { get; }
         private bool _player { get; }
         private bool _break { get; }
-        private byte _flag { get; }
-        private byte _mode { get; }
         // Extra number
         private byte _extraNumberState { get; }
         private uint _extraNumber { get; }
@@ -262,12 +247,8 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             }
         }
 
-        public string GetDescription(bool authorizeUnknowns, Dictionary<long, Buff> buffsByIds, FightLogic.ParseMode logMode)
+        public string GetDescription(bool authorizeUnknowns, Dictionary<long, Buff> buffsByIds)
         {
-            if (!IsValid(_mode, logMode))
-            {
-                return "";
-            }
             if (_solvedDescription != null)
             {
                 return _solvedDescription;

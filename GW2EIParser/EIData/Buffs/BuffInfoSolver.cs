@@ -10,7 +10,7 @@ using static GW2EIParser.Parser.ParsedData.CombatEvents.BuffInfoEvent;
 
 namespace GW2EIParser.EIData
 {
-    public static class BuffFormulaSolver
+    public static class BuffInfoSolver
     {
         private const int AnyPositive = int.MinValue;
         private const int AnyNegative = int.MaxValue;
@@ -98,7 +98,7 @@ namespace GW2EIParser.EIData
             { new BuffFormulaDescriptor(AnyPositive, 0, 0, 4, AnyPositive, 0, ParseEnum.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 30449 },
         };
 
-        public static void SolveBuffFormula(CombatData combatData, Dictionary<long, Buff> buffsByID)
+        public static void AdjustBuffs(CombatData combatData, Dictionary<long, Buff> buffsByID)
         {
             var solved = new Dictionary<byte, ParseEnum.BuffAttribute>();
             foreach (KeyValuePair<BuffFormulaDescriptor, long> pair in _recognizer)
@@ -121,12 +121,13 @@ namespace GW2EIParser.EIData
                 throw new InvalidDataException("Bad data in solved buff formula");
             }
 #endif
-            foreach (long key in buffsByID.Keys)
+            foreach (KeyValuePair<long, Buff> pair in buffsByID)
             {
-                BuffInfoEvent buffInfoEvent = combatData.GetBuffInfoEvent(key);
+                BuffInfoEvent buffInfoEvent = combatData.GetBuffInfoEvent(pair.Key);
                 if (buffInfoEvent != null)
                 {
-                    buffInfoEvent.AdjustUnknownFormulaAttributes(solved);
+                    pair.Value.AdjustBuff(buffInfoEvent);
+                    buffInfoEvent.AdjustBuffInfo(solved);
                 }
             }
         }
