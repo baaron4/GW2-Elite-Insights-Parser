@@ -11,7 +11,7 @@ namespace GW2EIParser.Logic
     public abstract class FightLogic
     {
 
-        public enum ParseMode { Raid, Fractal, Golem, WvW, Unknown };
+        public enum ParseMode { Instanced10, Instanced5, Benchmark, WvW, sPvP, Unknown };
 
         private CombatReplayMap _map;
         protected List<Mechanic> MechanicList { get; }//Resurrects (start), Resurrect

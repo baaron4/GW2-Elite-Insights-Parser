@@ -13,7 +13,7 @@ namespace GW2EIParser.Logic
 
         protected RaidLogic(int triggerID) : base(triggerID)
         {
-            Mode = ParseMode.Raid;
+            Mode = ParseMode.Instanced10;
         }
 
         protected virtual List<int> GetSuccessCheckIds()

@@ -15,7 +15,7 @@ namespace GW2EIParser.Parser.ParsedData
         public CombatData CombatData { get; }
         public List<Player> PlayerList { get; }
         public HashSet<AgentItem> PlayerAgents { get; }
-        public bool IsBenchmarkMode => FightData.Logic.Mode == FightLogic.ParseMode.Golem;
+        public bool IsBenchmarkMode => FightData.Logic.Mode == FightLogic.ParseMode.Benchmark;
         public Dictionary<string, List<Player>> PlayerListBySpec { get; }
         public DamageModifiersContainer DamageModifiers { get; }
         public BuffsContainer Buffs { get; }

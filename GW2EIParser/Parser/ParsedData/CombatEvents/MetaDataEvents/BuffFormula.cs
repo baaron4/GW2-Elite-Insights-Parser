@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GW2EIParser.EIData;
+using GW2EIParser.Logic;
 using static GW2EIParser.Parser.ParseEnum.BuffAttribute;
 
 namespace GW2EIParser.Parser.ParsedData.CombatEvents
@@ -9,7 +10,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
     {
         private static string GetAttributeString(ParseEnum.BuffAttribute attribute)
         {
-            switch(attribute)
+            switch (attribute)
             {
                 case Power:
                     return "Power";
@@ -153,31 +154,44 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             }
         }
 
-
+        private static bool IsValid(byte formulaMode, FightLogic.ParseMode logMode)
+        {
+            switch (logMode)
+            {
+                case FightLogic.ParseMode.WvW:
+                    return formulaMode == 2;
+                case FightLogic.ParseMode.sPvP:
+                    return formulaMode == 3;
+                default:
+                    return formulaMode == 4 || formulaMode == 0;
+            }
+        }
+        // Effect type
         public int Type { get; }
-
-        public ParseEnum.BuffAttribute Attr1 { get; private set; }
-
-        public ParseEnum.BuffAttribute Attr2 { get; private set; }
+        // Effect attributes
         public byte ByteAttr1 { get; }
-
+        public ParseEnum.BuffAttribute Attr1 { get; private set; }
         public byte ByteAttr2 { get; }
-
+        public ParseEnum.BuffAttribute Attr2 { get; private set; }
+        // Effect parameters
         public float ConstantOffset { get; }
-
         public float LevelOffset { get; }
-
         public float Variable { get; }
-
+        // Effect Condition
         public int TraitSrc { get; }
-
         public int TraitSelf { get; }
-
-        public bool NPC { get; }
-
-        public bool Player { get; }
-
-        public bool Break { get; }
+        // Meta data
+        private bool _npc { get; }
+        private bool _player { get; }
+        private bool _break { get; }
+        private byte _flag { get; }
+        private byte _mode { get; }
+        // Extra number
+        private byte _extraNumberState { get; }
+        private uint _extraNumber { get; }
+        private bool _isExtraNumberBuffID => _extraNumberState == 2;
+        private bool _isExtraNumberNone => _extraNumberState == 0;
+        private bool _isExtraNumberSomething => _extraNumberState == 1;
 
         private string _solvedDescription = null;
 
@@ -188,9 +202,9 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public BuffFormula(CombatItem evtcItem, BuffInfoEvent buffInfoEvent)
         {
             _buffInfoEvent = buffInfoEvent;
-            NPC = evtcItem.IsFlanking == 0;
-            Player = evtcItem.IsShields == 0;
-            Break = evtcItem.IsOffcycle > 0;
+            _npc = evtcItem.IsFlanking == 0;
+            _player = evtcItem.IsShields == 0;
+            _break = evtcItem.IsOffcycle > 0;
             byte[] formulaBytes = new byte[8 * sizeof(float)];
             int offset = 0;
             // 2 
@@ -232,6 +246,8 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             Variable = formulaFloats[5];
             TraitSrc = (int)formulaFloats[6];
             TraitSelf = (int)formulaFloats[7];
+            _extraNumber = evtcItem.OverstackValue;
+            _extraNumberState = evtcItem.Pad1;
         }
 
         public void AdjustUnknownFormulaAttributes(Dictionary<byte, ParseEnum.BuffAttribute> solved)
@@ -246,8 +262,12 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             }
         }
 
-        public string GetDescription(bool authorizeUnknowns, Dictionary<long, Buff> buffsByIds)
+        public string GetDescription(bool authorizeUnknowns, Dictionary<long, Buff> buffsByIds, FightLogic.ParseMode logMode)
         {
+            if (!IsValid(_mode, logMode))
+            {
+                return "";
+            }
             if (_solvedDescription != null)
             {
                 return _solvedDescription;
@@ -266,6 +286,13 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                 if (Attr1 == Unknown)
                 {
                     stat1 += " " + ByteAttr1;
+                }
+                if (_isExtraNumberBuffID)
+                {
+                    if (buffsByIds.TryGetValue(_extraNumber, out Buff buff))
+                    {
+                        stat1 += " (" + buff.Name + ")";
+                    }
                 }
                 var stat2 = GetAttributeString(Attr2);
                 if (Attr2 == Unknown)
