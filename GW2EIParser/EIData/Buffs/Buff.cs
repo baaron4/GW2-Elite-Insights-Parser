@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 using static GW2EIParser.Parser.ParseEnum;
@@ -125,14 +126,22 @@ namespace GW2EIParser.EIData
                         break;
                     case BuffType.Unknown:
                     default:
+#if DEBUG
+                        throw new InvalidDataException("Buffs can not be typless");
+#else
                         return null;
+#endif
                 }
                 switch (Stack)
                 {
                     case BuffStack.Intensity: return new BuffSimulatorIntensity(Capacity, log, logicToUse);
                     case BuffStack.Duration: return new BuffSimulatorDuration(Capacity, log, logicToUse);
                     case BuffStack.Unknown:
+#if DEBUG
+                        throw new InvalidDataException("Buffs can not be stackless");
+#else
                         return null;
+#endif
                 }
             }
             switch (Stack)
@@ -143,7 +152,11 @@ namespace GW2EIParser.EIData
                     return new BuffSimulatorIDDuration(log);
                 case BuffStack.Unknown:
                 default:
+#if DEBUG
+                    throw new InvalidDataException("Buffs can not be stackless");
+#else
                     return null;
+#endif
             }
         }
 
