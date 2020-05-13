@@ -14,7 +14,8 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public ParseEnum.BuffCategory Category { get; private set; }
 
-        public byte StackingType { get; private set; }
+        public byte StackingTypeByte { get; private set; }
+        public ParseEnum.BuffType StackingType { get; private set; }
 
         public bool ProbablyResistance { get; private set; }
 
@@ -62,7 +63,8 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             ProbablyInvert = evtcItem.IsShields > 0;
             Category = ParseEnum.GetBuffCategory(evtcItem.IsOffcycle);
             MaxStacks = evtcItem.SrcMasterInstid;
-            StackingType = evtcItem.Pad1;
+            StackingTypeByte = evtcItem.Pad1;
+            StackingType = ParseEnum.GetBuffType(StackingTypeByte);
             ProbablyResistance = evtcItem.Pad2 > 0;
         }
 

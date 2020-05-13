@@ -131,6 +131,21 @@ namespace GW2EIParser.Parser
                 : StateChange.Unknown;
         }
         // Buff Formula
+
+        public enum BuffType : short
+        {
+            StackingConditionalLoss = 0,
+            Queue = 1,
+            Regeneration = 2,
+            Stacking = 3,
+            Force = 4,
+            Unknown = -1,
+        };
+        public static BuffType GetBuffType(short bt)
+        {
+            return Enum.IsDefined(typeof(BuffType), bt) ? (BuffType)bt : BuffType.Unknown;
+        }
+
         public enum BuffAttribute : short
         {
             None = 0,
@@ -153,7 +168,7 @@ namespace GW2EIParser.Parser
             CondRec = 17,
             AttackSpeed = 18,
             //
-            Unknown,
+            Unknown = short.MinValue,
             //
             /*ConditionDurationIncrease = 24,
             RetaliationDamageOutput = 25,

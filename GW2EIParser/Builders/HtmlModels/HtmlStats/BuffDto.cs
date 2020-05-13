@@ -21,7 +21,7 @@ namespace GW2EIParser.Builders.HtmlModels
             Id = buff.ID;
             Name = buff.Name;
             Icon = buff.Link;
-            Stacking = (buff.Type == Buff.BuffType.Intensity);
+            Stacking = (buff.Stack == Buff.BuffStack.Intensity);
             Consumable = (buff.Nature == Buff.BuffNature.Consumable);
             FightSpecific = (buff.Source == GeneralHelper.Source.FightSpecific);
             BuffInfoEvent buffInfoEvent = log.CombatData.GetBuffInfoEvent(buff.ID);

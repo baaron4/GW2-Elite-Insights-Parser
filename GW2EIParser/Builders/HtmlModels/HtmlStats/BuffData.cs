@@ -19,7 +19,7 @@ namespace GW2EIParser.Builders.HtmlModels
                 if (boons.TryGetValue(boon.ID, out FinalPlayerBuffs uptime))
                 {
                     boonVals.Add(uptime.Uptime);
-                    if (boon.Type == Buff.BuffType.Intensity && uptime.Presence > 0)
+                    if (boon.Stack == Buff.BuffStack.Intensity && uptime.Presence > 0)
                     {
                         boonVals.Add(uptime.Presence);
                     }
@@ -38,7 +38,7 @@ namespace GW2EIParser.Builders.HtmlModels
                 if (boons.TryGetValue(boon.ID, out FinalBuffs uptime))
                 {
                     boonVals.Add(uptime.Uptime);
-                    if (boon.Type == Buff.BuffType.Intensity && uptime.Presence > 0)
+                    if (boon.Stack == Buff.BuffStack.Intensity && uptime.Presence > 0)
                     {
                         boonVals.Add(uptime.Presence);
                     }
@@ -116,7 +116,7 @@ namespace GW2EIParser.Builders.HtmlModels
                 if (boons.TryGetValue(boon.ID, out FinalPlayerBuffs uptime))
                 {
                     boonVals.Add(uptime.Uptime);
-                    if (boon.Type == Buff.BuffType.Intensity && uptime.Presence > 0)
+                    if (boon.Stack == Buff.BuffStack.Intensity && uptime.Presence > 0)
                     {
                         boonVals.Add(uptime.Presence);
                     }

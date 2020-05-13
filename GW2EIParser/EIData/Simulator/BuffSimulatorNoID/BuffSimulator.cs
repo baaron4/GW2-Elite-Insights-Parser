@@ -13,7 +13,7 @@ namespace GW2EIParser.EIData
         // Constructor
         protected BuffSimulator(int capacity, ParsedLog log, StackingLogic logic) : base(log)
         {
-            Capacity = capacity;
+            Capacity = Math.Max(capacity, 1);
             _logic = logic;
         }
 

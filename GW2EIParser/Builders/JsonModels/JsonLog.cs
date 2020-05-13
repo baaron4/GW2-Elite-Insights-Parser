@@ -48,7 +48,7 @@ namespace GW2EIParser.Builders.JsonModels
             {
                 Name = item.Name;
                 Icon = item.Link;
-                Stacking = item.Type == Buff.BuffType.Intensity;
+                Stacking = item.Stack == Buff.BuffStack.Intensity;
             }
 
             /// <summary>
