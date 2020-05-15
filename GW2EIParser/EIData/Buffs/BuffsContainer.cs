@@ -869,7 +869,7 @@ namespace GW2EIParser.EIData
                     {
                         if (formula.Attr1 == BuffAttribute.Unknown)
                         {
-                            operation.UpdateProgressWithCancellationCheck("Unknown Formula for " + buffInfoEvt.BuffID + ": " + formula.GetDescription(true, BuffsByIds));
+                            operation.UpdateProgressWithCancellationCheck("Unknown Formula for " + buff.Name + ": " + formula.GetDescription(true, BuffsByIds));
                         }
                     }
                 }
