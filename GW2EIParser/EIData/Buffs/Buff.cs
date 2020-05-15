@@ -49,6 +49,9 @@ namespace GW2EIParser.EIData
                 }
             }
         }
+
+        public BuffInfoEvent BuffInfo { get; private set; }
+
         public ulong MaxBuild { get; } = ulong.MaxValue;
         public ulong MinBuild { get; } = ulong.MinValue;
         public int Capacity { get; private set; }
@@ -104,6 +107,25 @@ namespace GW2EIParser.EIData
         {
             return new Buff(name + " " + id, id, GeneralHelper.Source.Item, BuffStackType.Queue, capacity, BuffNature.Consumable, link);
         }
+
+        public void AttachBuffInfoEvent(BuffInfoEvent buffInfoEvent, OperationController operation)
+        {
+            if (buffInfoEvent.BuffID != ID)
+            {
+                return;
+            }
+            BuffInfo = buffInfoEvent;
+            if (Capacity != buffInfoEvent.MaxStacks)
+            {
+                operation.UpdateProgressWithCancellationCheck("Adjusted capacity for " + Name + " from " + Capacity + " to " + buffInfoEvent.MaxStacks);
+                if (buffInfoEvent.StackingType != _stackType)
+                {
+                    //_stackType = buffInfoEvent.StackingType; // might be unreliable due to its absence on some logs
+                    operation.UpdateProgressWithCancellationCheck("Incoherent stack type for " + Name + ": is " + _stackType + " but expected " + buffInfoEvent.StackingType);
+                }
+                Capacity = buffInfoEvent.MaxStacks;
+            }
+        }
         public AbstractBuffSimulator CreateSimulator(ParsedLog log)
         {
             if (!log.CombatData.HasStackIDs)
@@ -145,20 +167,6 @@ namespace GW2EIParser.EIData
                 case BuffType.Unknown:
                 default:
                     throw new InvalidDataException("Buffs can not be stackless");
-            }
-        }
-
-        public void AdjustBuff(BuffInfoEvent buffInfoEvent, OperationController operation)
-        {
-            if (buffInfoEvent.BuffID == ID && Capacity != buffInfoEvent.MaxStacks)
-            {
-                operation.UpdateProgressWithCancellationCheck("Adjusted capacity for " + Name + " from " + Capacity + " to " + buffInfoEvent.MaxStacks);
-                if (buffInfoEvent.StackingType != _stackType)
-                {
-                    //_stackType = buffInfoEvent.StackingType; // might be unreliable due to its absence on some logs
-                    operation.UpdateProgressWithCancellationCheck("Incoherent stack type for " + Name + ": is " + _stackType + " but expected " + buffInfoEvent.StackingType);
-                }
-                Capacity = buffInfoEvent.MaxStacks;
             }
         }
 

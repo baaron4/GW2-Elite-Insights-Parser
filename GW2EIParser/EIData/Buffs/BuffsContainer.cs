@@ -843,16 +843,16 @@ namespace GW2EIParser.EIData
                 currentBuffs.AddRange(buffs.Where(x => x.MaxBuild > build && build >= x.MinBuild));
             }
             _buffsByName = currentBuffs.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().Count > 1 ? throw new InvalidOperationException("Same name present multiple times in buffs - " + x.First().Name) : x.First());
-            // TODO: add unknown consumables here if any
+            // Unknown consumables
             var buffIDs = new HashSet<long>(currentBuffs.Select(x => x.ID));
-            var foodAndUtility = new List<BuffInfoEvent>(combatData.GetBuffInfoEvent(ParseEnum.BuffCategory.Enhancement));
-            foodAndUtility.AddRange(combatData.GetBuffInfoEvent(ParseEnum.BuffCategory.Food));
+            var foodAndUtility = new List<BuffInfoEvent>(combatData.GetBuffInfoEvent(BuffCategory.Enhancement));
+            foodAndUtility.AddRange(combatData.GetBuffInfoEvent(BuffCategory.Food));
             foreach (BuffInfoEvent buffInfoEvent in foodAndUtility)
             {
                 if (!buffIDs.Contains(buffInfoEvent.BuffID))
                 {
-                    string name = buffInfoEvent.Category == ParseEnum.BuffCategory.Enhancement ? "Utility" : "Food";
-                    string link = buffInfoEvent.Category == ParseEnum.BuffCategory.Enhancement ? "https://wiki.guildwars2.com/images/2/23/Nourishment_utility.png" : "https://wiki.guildwars2.com/images/c/ca/Nourishment_food.png";
+                    string name = buffInfoEvent.Category == BuffCategory.Enhancement ? "Utility" : "Food";
+                    string link = buffInfoEvent.Category == BuffCategory.Enhancement ? "https://wiki.guildwars2.com/images/2/23/Nourishment_utility.png" : "https://wiki.guildwars2.com/images/c/ca/Nourishment_food.png";
                     operation.UpdateProgressWithCancellationCheck("Unknown " + name + " " + buffInfoEvent.BuffID);
                     currentBuffs.Add(CreateCustomConsumable(name, buffInfoEvent.BuffID, link, buffInfoEvent.MaxStacks));
                 }
@@ -862,12 +862,12 @@ namespace GW2EIParser.EIData
             BuffInfoSolver.AdjustBuffs(combatData, BuffsByIds, operation);
             foreach (Buff buff in currentBuffs)
             {
-                BuffInfoEvent buffInfoEvt = combatData.GetBuffInfoEvent(buff.ID);
+                BuffInfoEvent buffInfoEvt = buff.BuffInfo;
                 if (buffInfoEvt != null)
                 {
                     foreach (BuffFormula formula in buffInfoEvt.FormulaList)
                     {
-                        if (formula.Attr1 == ParseEnum.BuffAttribute.Unknown)
+                        if (formula.Attr1 == BuffAttribute.Unknown)
                         {
                             operation.UpdateProgressWithCancellationCheck("Unknown Formula for " + buffInfoEvt.BuffID + ": " + formula.GetDescription(true, BuffsByIds));
                         }

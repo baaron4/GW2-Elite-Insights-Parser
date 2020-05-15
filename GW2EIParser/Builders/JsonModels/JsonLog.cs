@@ -49,7 +49,7 @@ namespace GW2EIParser.Builders.JsonModels
                 Name = item.Name;
                 Icon = item.Link;
                 Stacking = item.Type == Buff.BuffType.Intensity;
-                BuffInfoEvent buffInfoEvent = log.CombatData.GetBuffInfoEvent(item.ID);
+                BuffInfoEvent buffInfoEvent = item.BuffInfo;
                 if (buffInfoEvent != null)
                 {
                     Descriptions = new List<string>(){
