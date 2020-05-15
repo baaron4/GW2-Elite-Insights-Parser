@@ -812,9 +812,7 @@ namespace GW2EIParser.EIData
         public Dictionary<long, Buff> BuffsByIds { get; }
         public Dictionary<BuffNature, List<Buff>> BuffsByNature { get; }
         public Dictionary<GeneralHelper.Source, List<Buff>> BuffsBySource { get; }
-#if DEBUG
         private readonly Dictionary<string, Buff> _buffsByName;
-#endif
 
         private readonly BuffSourceFinder _buffSourceFinder;
 
@@ -844,9 +842,7 @@ namespace GW2EIParser.EIData
             {
                 currentBuffs.AddRange(buffs.Where(x => x.MaxBuild > build && build >= x.MinBuild));
             }
-#if DEBUG
             _buffsByName = currentBuffs.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().Count > 1 ? throw new InvalidOperationException("Same name present multiple times in buffs - " + x.First().Name) : x.First());
-#endif
             // TODO: add unknown consumables here if any
             var buffIDs = new HashSet<long>(currentBuffs.Select(x => x.ID));
             var foodAndUtility = new List<BuffInfoEvent>(combatData.GetBuffInfoEvent(ParseEnum.BuffCategory.Enhancement));
@@ -857,16 +853,13 @@ namespace GW2EIParser.EIData
                 {
                     string name = buffInfoEvent.Category == ParseEnum.BuffCategory.Enhancement ? "Utility" : "Food";
                     string link = buffInfoEvent.Category == ParseEnum.BuffCategory.Enhancement ? "https://wiki.guildwars2.com/images/2/23/Nourishment_utility.png" : "https://wiki.guildwars2.com/images/c/ca/Nourishment_food.png";
-#if DEBUG
                     operation.UpdateProgressWithCancellationCheck("Unknown " + name + " " + buffInfoEvent.BuffID);
-#endif
                     currentBuffs.Add(CreateCustomConsumable(name, buffInfoEvent.BuffID, link, buffInfoEvent.MaxStacks));
                 }
             }
             //
             BuffsByIds = currentBuffs.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.First());
             BuffInfoSolver.AdjustBuffs(combatData, BuffsByIds);
-#if DEBUG
             foreach (Buff buff in currentBuffs)
             {
                 BuffInfoEvent buffInfoEvt = combatData.GetBuffInfoEvent(buff.ID);
@@ -876,19 +869,17 @@ namespace GW2EIParser.EIData
                     {
                         if (formula.Attr1 == ParseEnum.BuffAttribute.Unknown)
                         {
-                            operation.UpdateProgressWithCancellationCheck(formula.GetDescription(true, BuffsByIds));
+                            operation.UpdateProgressWithCancellationCheck("Unknown Formula for " + buffInfoEvt.BuffID + ": " + formula.GetDescription(true, BuffsByIds));
                         }
                     }
                 }
             }
-#endif
             BuffsByNature = currentBuffs.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => x.ToList());
             BuffsBySource = currentBuffs.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => x.ToList());
             //
             _buffSourceFinder = GetBuffSourceFinder(build, new HashSet<long>(BuffsByNature[BuffNature.Boon].Select(x => x.ID)));
         }
 
-#if DEBUG
         public Buff GetBuffByName(string name)
         {
             if (_buffsByName.TryGetValue(name, out Buff buff))
@@ -897,7 +888,6 @@ namespace GW2EIParser.EIData
             }
             throw new InvalidOperationException("Buff " + name + " does not exist");
         }
-#endif
 
         public AgentItem TryFindSrc(AgentItem dst, long time, long extension, ParsedLog log, long buffID)
         {

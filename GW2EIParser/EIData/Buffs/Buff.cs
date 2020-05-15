@@ -148,18 +148,16 @@ namespace GW2EIParser.EIData
             }
         }
 
-        public void AdjustBuff(BuffInfoEvent buffInfoEvent)
+        public void AdjustBuff(BuffInfoEvent buffInfoEvent, OperationController operation)
         {
             if (buffInfoEvent.BuffID == ID && Capacity != buffInfoEvent.MaxStacks)
             {
-#if DEBUG
-                int a = 0;
+                operation.UpdateProgressWithCancellationCheck("Adjusted capacity for " + Name + " from " + Capacity + " to " + buffInfoEvent.MaxStacks);
                 if (buffInfoEvent.StackingType != _stackType)
                 {
-                    int b = 0;
+                    //_stackType = buffInfoEvent.StackingType; // might be unreliable due to its absence on some logs
+                    operation.UpdateProgressWithCancellationCheck("Incoherent stack type for " + Name + ": is " + _stackType + " but expected " + buffInfoEvent.StackingType);
                 }
-#endif
-                //_stackType = buffInfoEvent.StackingType; // might be unreliable due to its absence on some logs
                 Capacity = buffInfoEvent.MaxStacks;
             }
         }

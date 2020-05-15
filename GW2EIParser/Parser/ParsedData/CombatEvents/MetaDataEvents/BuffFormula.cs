@@ -249,65 +249,63 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public string GetDescription(bool authorizeUnknowns, Dictionary<long, Buff> buffsByIds)
         {
+            if (!authorizeUnknowns && (Attr1 == Unknown || Attr2 == Unknown))
+            {
+                return "";
+            }
             if (_solvedDescription != null)
             {
                 return _solvedDescription;
             }
             _solvedDescription = "";
-            if (authorizeUnknowns || (Attr1 != Unknown && Attr2 != Unknown))
+            if (Attr1 == None)
             {
-#if DEBUG
-                _solvedDescription = Type + " ";
-#endif
-                if (Attr1 == None)
-                {
-                    return _solvedDescription;
-                }
-                var stat1 = GetAttributeString(Attr1);
-                if (Attr1 == Unknown)
-                {
-                    stat1 += " " + ByteAttr1;
-                }
-                if (_isExtraNumberBuffID)
-                {
-                    if (buffsByIds.TryGetValue(_extraNumber, out Buff buff))
-                    {
-                        stat1 += " (" + buff.Name + ")";
-                    }
-                }
-                var stat2 = GetAttributeString(Attr2);
-                if (Attr2 == Unknown)
-                {
-                    stat2 += " " + ByteAttr2;
-                }
-                _solvedDescription += stat1;
-                if (Attr2 != None)
-                {
-                    _solvedDescription += " from " + stat2;
-                }
-                _solvedDescription += ": ";
-                double totalOffset = Math.Round(_level * LevelOffset + ConstantOffset, 4);
-                bool addParenthesis = totalOffset != 0 && Variable != 0;
-                if (addParenthesis)
-                {
-                    _solvedDescription += "(";
-                }
-                bool prefix = false;
-                if (Variable != 0)
-                {
-                    _solvedDescription += Variable + " * " + GetVariableStat(Attr1);
-                    prefix = true;
-                }
-                if (totalOffset != 0)
-                {
-                    _solvedDescription += (Math.Sign(totalOffset) < 0 ? " -" : " +") + (prefix ? " " : "") + Math.Abs(totalOffset);
-                }
-                if (addParenthesis)
-                {
-                    _solvedDescription += ")";
-                }
-                _solvedDescription += GetPercent(Attr1, Attr2);
+                return _solvedDescription;
             }
+            var stat1 = GetAttributeString(Attr1);
+            if (Attr1 == Unknown)
+            {
+                stat1 += " " + ByteAttr1;
+            }
+            if (_isExtraNumberBuffID)
+            {
+                if (buffsByIds.TryGetValue(_extraNumber, out Buff buff))
+                {
+                    stat1 += " (" + buff.Name + ")";
+                }
+            }
+            var stat2 = GetAttributeString(Attr2);
+            if (Attr2 == Unknown)
+            {
+                stat2 += " " + ByteAttr2;
+            }
+            _solvedDescription += stat1;
+            if (Attr2 != None)
+            {
+                _solvedDescription += " from " + stat2;
+            }
+            _solvedDescription += ": ";
+            double totalOffset = Math.Round(_level * LevelOffset + ConstantOffset, 4);
+            bool addParenthesis = totalOffset != 0 && Variable != 0;
+            if (addParenthesis)
+            {
+                _solvedDescription += "(";
+            }
+            bool prefix = false;
+            if (Variable != 0)
+            {
+                _solvedDescription += Variable + " * " + GetVariableStat(Attr1);
+                prefix = true;
+            }
+            if (totalOffset != 0)
+            {
+                _solvedDescription += (Math.Sign(totalOffset) < 0 ? " -" : " +") + (prefix ? " " : "") + Math.Abs(totalOffset);
+            }
+            if (addParenthesis)
+            {
+                _solvedDescription += ")";
+            }
+            _solvedDescription += GetPercent(Attr1, Attr2);
             return _solvedDescription;
         }
     }

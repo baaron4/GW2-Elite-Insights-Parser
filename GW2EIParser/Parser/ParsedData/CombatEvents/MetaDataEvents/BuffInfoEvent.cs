@@ -71,6 +71,10 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public void AdjustBuffInfo(Dictionary<byte, ParseEnum.BuffAttribute> solved)
         {
             FormulaList.Sort((x, y) => (x.TraitSelf + x.TraitSrc).CompareTo(y.TraitSrc + y.TraitSelf));
+            if (solved.Count == 0)
+            {
+                return;
+            }
             foreach (BuffFormula formula in FormulaList)
             {
                 formula.AdjustUnknownFormulaAttributes(solved);

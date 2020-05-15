@@ -98,7 +98,7 @@ namespace GW2EIParser.EIData
             { new BuffFormulaDescriptor(AnyPositive, 0, 0, 4, AnyPositive, 0, ParseEnum.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 30449 },
         };
 
-        public static void AdjustBuffs(CombatData combatData, Dictionary<long, Buff> buffsByID)
+        public static void AdjustBuffs(CombatData combatData, Dictionary<long, Buff> buffsByID, OperationController operation)
         {
             var solved = new Dictionary<byte, ParseEnum.BuffAttribute>();
             foreach (KeyValuePair<BuffFormulaDescriptor, long> pair in _recognizer)
@@ -115,12 +115,11 @@ namespace GW2EIParser.EIData
                     }
                 }
             }
-#if DEBUG
             if (solved.Values.Distinct().Count() != solved.Values.Count)
             {
-                throw new InvalidDataException("Bad data in solved buff formula");
+                operation.UpdateProgressWithCancellationCheck("Incoherent Data in Buff Info Solver, no formula attribute adjustement will be done");
+                solved.Clear();
             }
-#endif
             foreach (KeyValuePair<long, Buff> pair in buffsByID)
             {
                 BuffInfoEvent buffInfoEvent = combatData.GetBuffInfoEvent(pair.Key);
