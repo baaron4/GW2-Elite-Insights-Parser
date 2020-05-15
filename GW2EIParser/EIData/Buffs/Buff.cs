@@ -20,7 +20,7 @@ namespace GW2EIParser.EIData
             Unknow 
         };
 
-        public enum BuffStack
+        public enum BuffType
         {
             Duration = 0,
             Intensity = 1,
@@ -32,20 +32,20 @@ namespace GW2EIParser.EIData
         public long ID { get; }
         public BuffNature Nature { get; }
         public GeneralHelper.Source Source { get; }
-        private BuffType _type { get; set; }
-        public BuffStack Stack {    
+        private BuffStackType _stackType { get; set; }
+        public BuffType Type {    
             get {
-                switch (_type)
+                switch (_stackType)
                 {
-                    case BuffType.Queue:
-                    case BuffType.Regeneration:
-                    case BuffType.Force:
-                        return BuffStack.Duration;
-                    case BuffType.Stacking:
-                    case BuffType.StackingConditionalLoss:
-                        return BuffStack.Intensity;
+                    case BuffStackType.Queue:
+                    case BuffStackType.Regeneration:
+                    case BuffStackType.Force:
+                        return BuffType.Duration;
+                    case BuffStackType.Stacking:
+                    case BuffStackType.StackingConditionalLoss:
+                        return BuffType.Intensity;
                     default:
-                        return BuffStack.Unknown;
+                        return BuffType.Unknown;
                 }
             }
         }
@@ -58,34 +58,34 @@ namespace GW2EIParser.EIData
         /// Buff constructor
         /// </summary>
         /// <param name="name">The name of the boon</param>
-        /// <param name="id">The id of the boon</param>
-        /// <param name="source">Source of the boon <see cref="GeneralHelper.Source"/></param>
-        /// <param name="type">Type of the boon (duration or intensity) <see cref="BuffType"/></param>
-        /// <param name="capacity">Maximun amount of boon in the queue (duration) or stack (intensity)</param>
-        /// <param name="nature">Nature of the boon, dictates in which category the boon will appear <see cref="BuffNature"/></param>
+        /// <param name="id">The id of the buff</param>
+        /// <param name="source">Source of the buff <see cref="GeneralHelper.Source"/></param>
+        /// <param name="type">Stack Type of the buff<see cref="BuffStackType"/></param>
+        /// <param name="capacity">Maximun amount of buff in stack</param>
+        /// <param name="nature">Nature of the buff, dictates in which category the buff will appear <see cref="BuffNature"/></param>
         /// <param name="link">URL to the icon of the buff</param>
-        public Buff(string name, long id, GeneralHelper.Source source, BuffType type, int capacity, BuffNature nature, string link)
+        public Buff(string name, long id, GeneralHelper.Source source, BuffStackType type, int capacity, BuffNature nature, string link)
         {
             Name = name;
             ID = id;
             Source = source;
-            _type = type;
+            _stackType = type;
             Capacity = capacity;
             Nature = nature;
             Link = link;
         }
 
-        public Buff(string name, long id, GeneralHelper.Source source, BuffNature nature, string link) : this(name, id, source, BuffType.Force, 1, nature, link)
+        public Buff(string name, long id, GeneralHelper.Source source, BuffNature nature, string link) : this(name, id, source, BuffStackType.Force, 1, nature, link)
         {
         }
 
-        public Buff(string name, long id, GeneralHelper.Source source, BuffType type, int capacity, BuffNature nature, string link, ulong minBuild, ulong maxBuild) : this(name, id, source, type, capacity, nature, link)
+        public Buff(string name, long id, GeneralHelper.Source source, BuffStackType type, int capacity, BuffNature nature, string link, ulong minBuild, ulong maxBuild) : this(name, id, source, type, capacity, nature, link)
         {
             MaxBuild = maxBuild;
             MinBuild = minBuild;
         }
 
-        public Buff(string name, long id, GeneralHelper.Source source, BuffNature nature, string link, ulong minBuild, ulong maxBuild) : this(name, id, source, BuffType.Force, 1, nature, link, minBuild, maxBuild)
+        public Buff(string name, long id, GeneralHelper.Source source, BuffNature nature, string link, ulong minBuild, ulong maxBuild) : this(name, id, source, BuffStackType.Force, 1, nature, link, minBuild, maxBuild)
         {
         }
 
@@ -94,7 +94,7 @@ namespace GW2EIParser.EIData
             Name = name;
             ID = id;
             Source = GeneralHelper.Source.Unknown;
-            _type = BuffType.Unknown;
+            _stackType = BuffStackType.Unknown;
             Capacity = 1;
             Nature = BuffNature.Unknow;
             Link = link;
@@ -102,29 +102,29 @@ namespace GW2EIParser.EIData
 
         public static Buff CreateCustomConsumable(string name, long id, string link, int capacity)
         {
-            return new Buff(name + " " + id, id, GeneralHelper.Source.Item, BuffType.Queue, capacity, BuffNature.Consumable, link);
+            return new Buff(name + " " + id, id, GeneralHelper.Source.Item, BuffStackType.Queue, capacity, BuffNature.Consumable, link);
         }
         public AbstractBuffSimulator CreateSimulator(ParsedLog log)
         {
             if (!log.CombatData.HasStackIDs)
             {
                 StackingLogic logicToUse;
-                switch (_type)
+                switch (_stackType)
                 {
-                    case BuffType.Queue:
+                    case BuffStackType.Queue:
                         logicToUse = new QueueLogic();
                         break;
-                    case BuffType.Regeneration:
+                    case BuffStackType.Regeneration:
                         logicToUse = new HealingLogic();
                         break;
-                    case BuffType.Force:
+                    case BuffStackType.Force:
                         logicToUse = new ForceOverrideLogic();
                         break;
-                    case BuffType.Stacking:
-                    case BuffType.StackingConditionalLoss:
+                    case BuffStackType.Stacking:
+                    case BuffStackType.StackingConditionalLoss:
                         logicToUse = new OverrideLogic();
                         break;
-                    case BuffType.Unknown:
+                    case BuffStackType.Unknown:
                     default:
 #if DEBUG
                         throw new InvalidDataException("Buffs can not be typless");
@@ -132,11 +132,11 @@ namespace GW2EIParser.EIData
                         return null;
 #endif
                 }
-                switch (Stack)
+                switch (Type)
                 {
-                    case BuffStack.Intensity: return new BuffSimulatorIntensity(Capacity, log, logicToUse);
-                    case BuffStack.Duration: return new BuffSimulatorDuration(Capacity, log, logicToUse);
-                    case BuffStack.Unknown:
+                    case BuffType.Intensity: return new BuffSimulatorIntensity(Capacity, log, logicToUse);
+                    case BuffType.Duration: return new BuffSimulatorDuration(Capacity, log, logicToUse);
+                    case BuffType.Unknown:
 #if DEBUG
                         throw new InvalidDataException("Buffs can not be stackless");
 #else
@@ -144,13 +144,13 @@ namespace GW2EIParser.EIData
 #endif
                 }
             }
-            switch (Stack)
+            switch (Type)
             {
-                case BuffStack.Intensity: 
+                case BuffType.Intensity: 
                     return new BuffSimulatorIDIntensity(log);
-                case BuffStack.Duration: 
+                case BuffType.Duration: 
                     return new BuffSimulatorIDDuration(log);
-                case BuffStack.Unknown:
+                case BuffType.Unknown:
                 default:
 #if DEBUG
                     throw new InvalidDataException("Buffs can not be stackless");
@@ -166,12 +166,12 @@ namespace GW2EIParser.EIData
             {
 #if DEBUG
                 int a = 0;
-                if (buffInfoEvent.StackingType != _type)
+                if (buffInfoEvent.StackingType != _stackType)
                 {
                     int b = 0;
                 }
 #endif
-                _type = buffInfoEvent.StackingType;
+                //_stackType = buffInfoEvent.StackingType; // might be unreliable due to its absence on some logs
                 Capacity = buffInfoEvent.MaxStacks;
             }
         }

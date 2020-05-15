@@ -387,11 +387,11 @@ namespace GW2EIParser.Builders
                 {
                     if (uptimes.TryGetValue(boon.ID, out FinalPlayerBuffs value))
                     {
-                        if (boon.Stack == Buff.BuffStack.Duration)
+                        if (boon.Type == Buff.BuffType.Duration)
                         {
                             WriteCell(value.Uptime + "%");
                         }
-                        else if (boon.Stack == Buff.BuffStack.Intensity)
+                        else if (boon.Type == Buff.BuffType.Intensity)
                         {
                             WriteCell(value.Uptime.ToString());
                         }
@@ -436,12 +436,12 @@ namespace GW2EIParser.Builders
                     {
                         if (uptime.Generation > 0 || uptime.Overstack > 0)
                         {
-                            if (boon.Stack == Buff.BuffStack.Duration)
+                            if (boon.Type == Buff.BuffType.Duration)
                             {
                                 rate = uptime.Generation.ToString() + "%";
                                 overstack = uptime.Overstack.ToString() + "%";
                             }
-                            else if (boon.Stack == Buff.BuffStack.Intensity)
+                            else if (boon.Type == Buff.BuffType.Intensity)
                             {
                                 rate = uptime.Generation.ToString();
                                 overstack = uptime.Overstack.ToString();
@@ -485,12 +485,12 @@ namespace GW2EIParser.Builders
                     {
                         if (uptime.Generation > 0 || uptime.Overstack > 0)
                         {
-                            if (boon.Stack == Buff.BuffStack.Duration)
+                            if (boon.Type == Buff.BuffType.Duration)
                             {
                                 rate = uptime.Generation.ToString() + "%";
                                 overstack = uptime.Overstack.ToString() + "%";
                             }
-                            else if (boon.Stack == Buff.BuffStack.Intensity)
+                            else if (boon.Type == Buff.BuffType.Intensity)
                             {
                                 rate = uptime.Generation.ToString();
                                 overstack = uptime.Overstack.ToString();
@@ -535,12 +535,12 @@ namespace GW2EIParser.Builders
                     {
                         if (uptime.Generation > 0 || uptime.Overstack > 0)
                         {
-                            if (boon.Stack == Buff.BuffStack.Duration)
+                            if (boon.Type == Buff.BuffType.Duration)
                             {
                                 rate = uptime.Generation.ToString() + "%";
                                 overstack = uptime.Overstack.ToString() + "%";
                             }
-                            else if (boon.Stack == Buff.BuffStack.Intensity)
+                            else if (boon.Type == Buff.BuffType.Intensity)
                             {
                                 rate = uptime.Generation.ToString();
                                 overstack = uptime.Overstack.ToString();
@@ -584,12 +584,12 @@ namespace GW2EIParser.Builders
                     {
                         if (uptime.Generation > 0 || uptime.Overstack > 0)
                         {
-                            if (boon.Stack == Buff.BuffStack.Duration)
+                            if (boon.Type == Buff.BuffType.Duration)
                             {
                                 rate = uptime.Generation.ToString() + "%";
                                 overstack = uptime.Overstack.ToString() + "%";
                             }
-                            else if (boon.Stack == Buff.BuffStack.Intensity)
+                            else if (boon.Type == Buff.BuffType.Intensity)
                             {
                                 rate = uptime.Generation.ToString();
                                 overstack = uptime.Overstack.ToString();
@@ -702,7 +702,7 @@ namespace GW2EIParser.Builders
             {
                 if (conditions.TryGetValue(boon.ID, out FinalBuffs uptime))
                 {
-                    if (boon.Stack == Buff.BuffStack.Duration)
+                    if (boon.Type == Buff.BuffType.Duration)
                     {
                         WriteCell(uptime.Uptime.ToString() + "%");
                     }
@@ -742,7 +742,7 @@ namespace GW2EIParser.Builders
             {
                 if (conditions.TryGetValue(boon.ID, out FinalBuffs uptime))
                 {
-                    if (boon.Stack == Buff.BuffStack.Duration)
+                    if (boon.Type == Buff.BuffType.Duration)
                     {
                         WriteCell(uptime.Uptime.ToString() + "%");
                     }
@@ -783,7 +783,7 @@ namespace GW2EIParser.Builders
                 {
                     if (conditions.TryGetValue(boon.ID, out FinalBuffsDictionary uptime) && uptime.Generated.ContainsKey(player))
                     {
-                        if (boon.Stack == Buff.BuffStack.Duration)
+                        if (boon.Type == Buff.BuffType.Duration)
                         {
                             WriteCell(conditions[boon.ID].Generated[player].ToString() + "%");
                             WriteCell(conditions[boon.ID].Overstacked[player].ToString() + "%");

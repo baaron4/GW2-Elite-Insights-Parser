@@ -132,18 +132,18 @@ namespace GW2EIParser.Parser
         }
         // Buff Formula
 
-        public enum BuffType : short
+        public enum BuffStackType : short
         {
-            StackingConditionalLoss = 0,
+            StackingConditionalLoss = 0, // the same thing as Stacking
             Queue = 1,
             Regeneration = 2,
             Stacking = 3,
             Force = 4,
             Unknown = -1,
         };
-        public static BuffType GetBuffType(short bt)
+        public static BuffStackType GetBuffStackType(short bt)
         {
-            return Enum.IsDefined(typeof(BuffType), bt) ? (BuffType)bt : BuffType.Unknown;
+            return Enum.IsDefined(typeof(BuffStackType), bt) ? (BuffStackType)bt : BuffStackType.Unknown;
         }
 
         public enum BuffAttribute : short

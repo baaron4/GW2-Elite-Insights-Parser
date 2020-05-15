@@ -103,7 +103,7 @@ namespace GW2EIParser.EIData
                         var uptimeActive = new FinalPlayerBuffs();
                         final[boon.ID] = uptime;
                         finalActive[boon.ID] = uptimeActive;
-                        if (boon.Stack == BuffStack.Duration)
+                        if (boon.Type == BuffType.Duration)
                         {
                             uptime.Generation = Math.Round(100.0 * totalGeneration / playerList.Count, GeneralHelper.BuffDigit);
                             uptime.Overstack = Math.Round(100.0 * (totalOverstack + totalGeneration) / playerList.Count, GeneralHelper.BuffDigit);
@@ -122,7 +122,7 @@ namespace GW2EIParser.EIData
                                 uptimeActive.Extended = Math.Round(100.0 * (totalActiveExtended) / activePlayerCount, GeneralHelper.BuffDigit);
                             }
                         }
-                        else if (boon.Stack == BuffStack.Intensity)
+                        else if (boon.Type == BuffType.Intensity)
                         {
                             uptime.Generation = Math.Round(totalGeneration / playerList.Count, GeneralHelper.BuffDigit);
                             uptime.Overstack = Math.Round((totalOverstack + totalGeneration) / playerList.Count, GeneralHelper.BuffDigit);
@@ -202,7 +202,7 @@ namespace GW2EIParser.EIData
                         double unknownExtensionValue = selfBoons.GetUnknownExtension(boon.ID, player.AgentItem);
                         double extensionValue = selfBoons.GetExtension(boon.ID, player.AgentItem);
                         double extendedValue = selfBoons.GetExtended(boon.ID, player.AgentItem);
-                        if (boon.Stack == BuffStack.Duration)
+                        if (boon.Type == BuffType.Duration)
                         {
                             uptime.Uptime = Math.Round(100.0 * uptimeValue / phaseDuration, GeneralHelper.BuffDigit);
                             uptime.Generation = Math.Round(100.0 * generationValue / phaseDuration, GeneralHelper.BuffDigit);
@@ -223,7 +223,7 @@ namespace GW2EIParser.EIData
                                 uptimeActive.Extended = Math.Round(100.0 * extendedValue / playerActiveDuration, GeneralHelper.BuffDigit);
                             }
                         }
-                        else if (boon.Stack == BuffStack.Intensity)
+                        else if (boon.Type == BuffType.Intensity)
                         {
                             uptime.Uptime = Math.Round(uptimeValue / phaseDuration, GeneralHelper.BuffDigit);
                             uptime.Generation = Math.Round(generationValue / phaseDuration, GeneralHelper.BuffDigit);
