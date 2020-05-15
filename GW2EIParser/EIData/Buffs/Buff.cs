@@ -105,7 +105,7 @@ namespace GW2EIParser.EIData
 
         public static Buff CreateCustomConsumable(string name, long id, string link, int capacity)
         {
-            return new Buff(name + " " + id, id, GeneralHelper.Source.Item, BuffStackType.Queue, capacity, BuffNature.Consumable, link);
+            return new Buff(name + " " + id, id, GeneralHelper.Source.Item, capacity > 1 ? BuffStackType.Stacking : BuffStackType.Force, capacity, BuffNature.Consumable, link);
         }
 
         public void AttachBuffInfoEvent(BuffInfoEvent buffInfoEvent, OperationController operation)
