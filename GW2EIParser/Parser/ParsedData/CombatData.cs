@@ -495,6 +495,11 @@ namespace GW2EIParser.Parser.ParsedData
             return new List<BuffRemoveAllEvent>(); ;
         }
 
+        /// <summary>
+        /// Returns list of buff events applied on agent
+        /// </summary>
+        /// <param name="key"></param> Agent
+        /// <returns></returns>
         public List<AbstractBuffEvent> GetBuffData(AgentItem key)
         {
             if (_buffDataByDst.TryGetValue(key, out List<AbstractBuffEvent> res))
@@ -504,7 +509,11 @@ namespace GW2EIParser.Parser.ParsedData
             return new List<AbstractBuffEvent>(); ;
         }
 
-
+        /// <summary>
+        /// Returns list of damage events done by agent
+        /// </summary>
+        /// <param name="key"></param> Agent
+        /// <returns></returns>
         public List<AbstractDamageEvent> GetDamageData(AgentItem key)
         {
             if (_damageData.TryGetValue(key, out List<AbstractDamageEvent> res))
@@ -514,6 +523,11 @@ namespace GW2EIParser.Parser.ParsedData
             return new List<AbstractDamageEvent>(); ;
         }
 
+        /// <summary>
+        /// Returns list of damage events applied by a skill
+        /// </summary>
+        /// <param name="key"></param> Id of the skill
+        /// <returns></returns>
         public List<AbstractDamageEvent> GetDamageData(long key)
         {
             if (_damageDataById.TryGetValue(key, out List<AbstractDamageEvent> res))
@@ -523,6 +537,11 @@ namespace GW2EIParser.Parser.ParsedData
             return new List<AbstractDamageEvent>(); ;
         }
 
+        /// <summary>
+        /// Returns list of animated cast events done by Agent
+        /// </summary>
+        /// <param name="key"></param> Agent
+        /// <returns></returns>
         public List<AnimatedCastEvent> GetAnimatedCastData(AgentItem key)
         {
             if (_animatedCastData.TryGetValue(key, out List<AnimatedCastEvent> res))
@@ -532,6 +551,11 @@ namespace GW2EIParser.Parser.ParsedData
             return new List<AnimatedCastEvent>(); ;
         }
 
+        /// <summary>
+        /// Returns list of weapon swap events done by Agent
+        /// </summary>
+        /// <param name="key"></param> Agent
+        /// <returns></returns>
         public List<WeaponSwapEvent> GetWeaponSwapData(AgentItem key)
         {
             if (_weaponSwapData.TryGetValue(key, out List<WeaponSwapEvent> res))
@@ -541,7 +565,11 @@ namespace GW2EIParser.Parser.ParsedData
             return new List<WeaponSwapEvent>(); ;
         }
 
-
+        /// <summary>
+        /// Returns list of cast events from skill
+        /// </summary>
+        /// <param name="key"></param> ID of the skill
+        /// <returns></returns>
         public List<AbstractCastEvent> GetCastData(long key)
         {
             if (_castDataById.TryGetValue(key, out List<AbstractCastEvent> res))
@@ -551,6 +579,11 @@ namespace GW2EIParser.Parser.ParsedData
             return new List<AbstractCastEvent>(); ;
         }
 
+        /// <summary>
+        /// Returns list of damage taken events by Agent
+        /// </summary>
+        /// <param name="key"></param> Agent
+        /// <returns></returns>
         public List<AbstractDamageEvent> GetDamageTakenData(AgentItem key)
         {
             if (_damageTakenData.TryGetValue(key, out List<AbstractDamageEvent> res))

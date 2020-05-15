@@ -25,9 +25,9 @@ namespace GW2EIParser
         /// </summary>
         public string Location { get; }
         /// <summary>
-        /// Location of the generated log
+        /// Location of the generated files
         /// </summary>
-        public string LogLocation { get; set; }
+        public List<string> GeneratedFiles { get; }
         /// <summary>
         /// Status of the parse operation
         /// </summary>
@@ -50,6 +50,7 @@ namespace GW2EIParser
             ButtonText = "Parse";
             State = OperationState.Ready;
             StatusList = new List<string>();
+            GeneratedFiles = new List<string>();
         }
 
         protected virtual void ThrowIfCanceled()
@@ -78,6 +79,10 @@ namespace GW2EIParser
         public void FinalizeStatus(string prefix)
         {
             Status = StatusList.LastOrDefault() ?? "";
+            foreach (string generatedFile in GeneratedFiles)
+            {
+                Console.WriteLine(prefix +"Generated" +$": {generatedFile}" + Environment.NewLine);
+            }
             Console.WriteLine(prefix + $"{Location}: {Status}" + Environment.NewLine);
         }
     }
