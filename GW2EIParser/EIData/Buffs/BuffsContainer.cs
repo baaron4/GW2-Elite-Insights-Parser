@@ -859,7 +859,7 @@ namespace GW2EIParser.EIData
             }
             //
             BuffsByIds = currentBuffs.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.First());
-            BuffInfoSolver.AdjustBuffs(combatData, BuffsByIds);
+            BuffInfoSolver.AdjustBuffs(combatData, BuffsByIds, operation);
             foreach (Buff buff in currentBuffs)
             {
                 BuffInfoEvent buffInfoEvt = combatData.GetBuffInfoEvent(buff.ID);

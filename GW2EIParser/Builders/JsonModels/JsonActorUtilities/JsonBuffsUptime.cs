@@ -96,7 +96,7 @@ namespace GW2EIParser.Builders.JsonModels
             BuffData = buffData;
             if (!buffDesc.ContainsKey("b" + buffID))
             {
-                buffDesc["b" + buffID] = new JsonLog.BuffDesc(log.Buffs.BuffsByIds[buffID]);
+                buffDesc["b" + buffID] = new JsonLog.BuffDesc(log.Buffs.BuffsByIds[buffID], log);
             }
             if (log.ParserSettings.RawTimelineArrays)
             {
