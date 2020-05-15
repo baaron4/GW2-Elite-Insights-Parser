@@ -27,7 +27,9 @@ namespace GW2EIParser.Builders.HtmlModels
             BuffInfoEvent buffInfoEvent = log.CombatData.GetBuffInfoEvent(buff.ID);
             if (buffInfoEvent != null)
             {
-                var descriptions = new List<string>();
+                var descriptions = new List<string>() { 
+                    "Max Stack(s) " + buff.Capacity
+                };
                 foreach (BuffFormula formula in buffInfoEvent.FormulaList)
                 {
                     if (formula.TraitSelf > 0 || formula.TraitSrc > 0)
@@ -40,13 +42,10 @@ namespace GW2EIParser.Builders.HtmlModels
                         descriptions.Add(desc);
                     }
                 }
-                if (descriptions.Count > 0)
+                Description = "";
+                foreach (string desc in descriptions)
                 {
-                    Description = "";
-                    foreach (string desc in descriptions)
-                    {
-                        Description += desc + "<br>";
-                    }
+                    Description += desc + "<br>";
                 }
             }
         }

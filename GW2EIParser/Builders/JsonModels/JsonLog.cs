@@ -52,7 +52,9 @@ namespace GW2EIParser.Builders.JsonModels
                 BuffInfoEvent buffInfoEvent = log.CombatData.GetBuffInfoEvent(item.ID);
                 if (buffInfoEvent != null)
                 {
-                    Descriptions = new List<string>();
+                    Descriptions = new List<string>(){
+                        "Max Stack(s) " + item.Capacity
+                    };
                     foreach (BuffFormula formula in buffInfoEvent.FormulaList)
                     {
                         if (formula.TraitSelf > 0 || formula.TraitSrc > 0)
@@ -64,10 +66,6 @@ namespace GW2EIParser.Builders.JsonModels
                         {
                             Descriptions.Add(desc);
                         }
-                    }
-                    if (Descriptions.Count == 0)
-                    {
-                        Descriptions = null;
                     }
                 }
             }
