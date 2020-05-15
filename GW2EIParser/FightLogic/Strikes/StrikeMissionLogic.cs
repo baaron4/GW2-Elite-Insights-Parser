@@ -10,7 +10,7 @@ namespace GW2EIParser.Logic
 
         protected StrikeMissionLogic(int triggerID) : base(triggerID)
         {
-            Mode = ParseMode.Raid;
+            Mode = ParseMode.Instanced10;
         }
 
         protected virtual void SetSuccessByDeath(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, bool all)

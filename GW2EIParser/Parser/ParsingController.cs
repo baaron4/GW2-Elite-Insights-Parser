@@ -522,7 +522,7 @@ namespace GW2EIParser.Parser
                     playerAgent.OverrideAwareTimes(_logStartTime, _logEndTime);
                 }
                 bool skip = false;
-                var player = new Player(playerAgent, _fightData.Logic.Mode == FightLogic.ParseMode.Fractal, false);
+                var player = new Player(playerAgent, _fightData.Logic.Mode == FightLogic.ParseMode.Instanced5, false);
                 foreach (Player p in _playerList)
                 {
                     if (p.Account == player.Account)// same player
@@ -547,7 +547,7 @@ namespace GW2EIParser.Parser
                             break;
                         }
                         // different character in raid mode, discard it as it can't have any influence, otherwise add as a separate entity
-                        else if (_fightData.Logic.Mode == FightLogic.ParseMode.Raid)
+                        else if (_fightData.Logic.Mode == FightLogic.ParseMode.Instanced10)
                         {
                             skip = true;
                             break;

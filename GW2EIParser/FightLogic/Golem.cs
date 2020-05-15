@@ -12,7 +12,7 @@ namespace GW2EIParser.Logic
     {
         public Golem(int id) : base(id)
         {
-            Mode = ParseMode.Golem;
+            Mode = ParseMode.Benchmark;
             switch (id)
             {
                 case 16202:

@@ -256,7 +256,7 @@ namespace GW2EIParser.EIData
 #if DEBUG
                 var test = log.CombatData.GetBuffDataByDst(AgentItem).Where(x => !log.Buffs.BuffsByIds.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
 #endif
-                foreach (AbstractBuffEvent c in log.CombatData.GetBuffDataByDst(AgentItem))
+                foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(AgentItem))
                 {
                     long boonId = c.BuffID;
                     if (!_buffMap.ContainsKey(boonId))

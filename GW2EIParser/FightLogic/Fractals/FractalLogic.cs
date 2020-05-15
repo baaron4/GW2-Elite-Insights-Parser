@@ -12,7 +12,7 @@ namespace GW2EIParser.Logic
     {
         protected FractalLogic(int triggerID) : base(triggerID)
         {
-            Mode = ParseMode.Fractal;
+            Mode = ParseMode.Instanced5;
             MechanicList.AddRange(new List<Mechanic>
             {
             new PlayerBuffApplyMechanic(37695, "Flux Bomb", new MechanicPlotlySetting("circle","rgb(150,0,255)",10), "Flux","Flux Bomb application", "Flux Bomb",0),
