@@ -32,7 +32,7 @@ namespace GW2EIParser.EIData
         public long ID { get; }
         public BuffNature Nature { get; }
         public GeneralHelper.Source Source { get; }
-        private BuffStackType _stackType { get; set; }
+        private BuffStackType _stackType { get; }
         public BuffType Type {    
             get {
                 switch (_stackType)
@@ -126,22 +126,14 @@ namespace GW2EIParser.EIData
                         break;
                     case BuffStackType.Unknown:
                     default:
-#if DEBUG
                         throw new InvalidDataException("Buffs can not be typless");
-#else
-                        return null;
-#endif
                 }
                 switch (Type)
                 {
                     case BuffType.Intensity: return new BuffSimulatorIntensity(Capacity, log, logicToUse);
                     case BuffType.Duration: return new BuffSimulatorDuration(Capacity, log, logicToUse);
                     case BuffType.Unknown:
-#if DEBUG
                         throw new InvalidDataException("Buffs can not be stackless");
-#else
-                        return null;
-#endif
                 }
             }
             switch (Type)
@@ -152,11 +144,7 @@ namespace GW2EIParser.EIData
                     return new BuffSimulatorIDDuration(log);
                 case BuffType.Unknown:
                 default:
-#if DEBUG
                     throw new InvalidDataException("Buffs can not be stackless");
-#else
-                    return null;
-#endif
             }
         }
 
