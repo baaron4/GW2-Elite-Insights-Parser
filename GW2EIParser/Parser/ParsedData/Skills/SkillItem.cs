@@ -82,8 +82,12 @@ namespace GW2EIParser.Parser.ParsedData
                         9292,
                         5492,
                         13014,
-                        30770,
-                        52370
+                        30770, // Pulmonary Impact
+                        52370,
+                        31686, // Lightning Jolt
+                        56883, // Sunspot
+                        56885, // Earthen Blast
+                        29604, // Chilling Nova
                     };
 
         private const string DefaultIcon = "https://render.guildwars2.com/file/1D55D34FB4EE20B1962E315245E40CA5E1042D0E/62248.png";
