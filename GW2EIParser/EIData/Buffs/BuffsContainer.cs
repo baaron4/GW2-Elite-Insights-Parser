@@ -312,7 +312,7 @@ namespace GW2EIParser.EIData
                 new Buff("Shield of Wrath",9123, GeneralHelper.Source.Guardian, BuffStackType.Stacking, 3, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/bc/Shield_of_Wrath.png"),
                 //signets
                 new Buff("Signet of Resolve",9220, GeneralHelper.Source.Guardian, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/75/Signet_of_Resolve.png"),
-                new Buff("Signet of Resolve (Shared)", 46554, GeneralHelper.Source.Guardian, BuffStackType.Stacking, 99, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/7/75/Signet_of_Resolve.png"),
+                new Buff("Signet of Resolve (Shared)", 46554, GeneralHelper.Source.Guardian, BuffStackType.Stacking, 25, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/7/75/Signet_of_Resolve.png"),
                 new Buff("Bane Signet",9092, GeneralHelper.Source.Guardian, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/56/Bane_Signet.png"),
                 new Buff("Bane Signet (PI)",9240, GeneralHelper.Source.Guardian, BuffStackType.Stacking, 25, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/5/56/Bane_Signet.png"),
                 new Buff("Signet of Judgment",9156, GeneralHelper.Source.Guardian, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/fe/Signet_of_Judgment.png"),
