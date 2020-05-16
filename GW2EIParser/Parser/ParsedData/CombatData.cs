@@ -459,6 +459,24 @@ namespace GW2EIParser.Parser.ParsedData
             return _metaDataEvents.ShardEvents;
         }
 
+        public BuffInfoEvent GetBuffInfoEvent(long buffID)
+        {
+            if (_metaDataEvents.BuffInfoEvents.TryGetValue(buffID, out BuffInfoEvent evt))
+            {
+                return evt;
+            }
+            return null;
+        }
+
+        public List<BuffInfoEvent> GetBuffInfoEvent(ParseEnum.BuffCategory category)
+        {
+            if (_metaDataEvents.BuffInfoEventsByCategory.TryGetValue(category, out List<BuffInfoEvent> evts))
+            {
+                return evts;
+            }
+            return new List<BuffInfoEvent>();
+        }
+
         public List<AbstractBuffEvent> GetBuffData(long key)
         {
             if (_buffData.TryGetValue(key, out List<AbstractBuffEvent> res))

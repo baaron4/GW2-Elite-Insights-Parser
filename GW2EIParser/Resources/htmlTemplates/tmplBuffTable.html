@@ -6,7 +6,7 @@
                 <th>Sub</th>
                 <th></th>
                 <th>Name</th>
-                <th v-for="buff in buffs" :data-original-title="buff.name">
+                <th v-for="buff in buffs" :data-original-title="buff.name + (buff.description ? '<br> ' + buff.description : '')">
                     <img :src="buff.icon" :alt="buff.name" class="icon icon-hover">
                 </th>
             </tr>

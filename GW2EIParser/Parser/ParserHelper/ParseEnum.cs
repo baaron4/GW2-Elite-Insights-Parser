@@ -130,8 +130,23 @@ namespace GW2EIParser.Parser
                 ? (StateChange)bt
                 : StateChange.Unknown;
         }
+        // Buff Formula
 
-        public enum Attribute : byte
+        public enum BuffStackType : short
+        {
+            StackingConditionalLoss = 0, // the same thing as Stacking
+            Queue = 1,
+            Regeneration = 2,
+            Stacking = 3,
+            Force = 4,
+            Unknown = -1,
+        };
+        public static BuffStackType GetBuffStackType(short bt)
+        {
+            return Enum.IsDefined(typeof(BuffStackType), bt) ? (BuffStackType)bt : BuffStackType.Unknown;
+        }
+
+        public enum BuffAttribute : short
         {
             None = 0,
             Power = 1,
@@ -146,12 +161,81 @@ namespace GW2EIParser.Parser
             Armor = 10,
             Agony = 11,
             StatInc = 12,
-            FaltInc = 13,
+            FlatInc = 13,
             PhysInc = 14,
             CondInc = 15,
-            Physrec = 16,
+            PhysRec = 16,
             CondRec = 17,
-            AttackSpeed = 18
+            AttackSpeed = 18,
+            //
+            Unknown = short.MinValue,
+            //
+            /*ConditionDurationIncrease = 24,
+            RetaliationDamageOutput = 25,
+            CriticalChance = 26,
+            PowerDamageToHP = 34,
+            ConditionDamageToHP = 35,
+            GlancingBlow = 47,
+            ConditionSkillActivationFormula = 52,
+            ConditionDamageFormula = 54,
+            ConditionMovementActivationFormula = 55,
+            EnduranceRegeneration = 61,
+            IncomingHealingEffectiveness = 65,
+            OutgoingHealingEffectivenessFlatInc = 68,
+            OutgoingHealingEffectivenessConvInc = 70,
+            RegenerationHealingOutput = 71,
+            ExperienceFromKills = 76,
+            GoldFind = 77,
+            MovementSpeed = 78,
+            KarmaBonus = 87,
+            SkillCooldown = 96,
+            MagicFind = 92,
+            ExperienceFromAll = 100,
+            WXP = 112,*/
+            ConditionDurationIncrease = -1,
+            BuffPowerDamageFormula = -2,
+            CriticalChance = -3,
+            PowerDamageToHP = -4,
+            ConditionDamageToHP = -5,
+            GlancingBlow = -6,
+            ConditionSkillActivationFormula = -7,
+            ConditionDamageFormula = -8,
+            ConditionMovementActivationFormula = -9,
+            EnduranceRegeneration = -10,
+            IncomingHealingEffectiveness = -11,
+            OutgoingHealingEffectivenessFlatInc = -12,
+            OutgoingHealingEffectivenessConvInc = -13,
+            HealingOutputFormula = -14,
+            ExperienceFromKills = -15,
+            GoldFind = -16,
+            MovementSpeed = -17,
+            KarmaBonus = -18,
+            SkillCooldownReduction = -19,
+            MagicFind = -20,
+            ExperienceFromAll = -21,
+            WXP = -22,
+        }
+        public static BuffAttribute GetBuffAttribute(short bt)
+        {
+            return Enum.IsDefined(typeof(BuffAttribute), bt) ? (BuffAttribute)bt : BuffAttribute.Unknown;
+        }
+
+        public enum BuffCategory : byte
+        {
+            Boon = 0,
+            Any = 1,
+            Condition = 2,
+            Food = 4,
+            Upgrade = 6,
+            Boost = 8,
+            Trait = 11,
+            Enhancement = 13,
+            Stance = 16,
+            Unknown
+        }
+        public static BuffCategory GetBuffCategory(byte bt)
+        {
+            return Enum.IsDefined(typeof(BuffCategory), bt) ? (BuffCategory)bt : BuffCategory.Unknown;
         }
 
         // Friend of for

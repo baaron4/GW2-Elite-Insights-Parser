@@ -209,7 +209,8 @@ namespace GW2EIParser
             // parallel stuff
             if (log.ParserSettings.MultiTasks)
             {
-                operation.UpdateProgressWithCancellationCheck("Multi threading buff and damage mod computations");
+                log.FightData.GetPhases(log);
+                operation.UpdateProgressWithCancellationCheck("Multi threading");
                 var playersAndTargets = new List<AbstractSingleActor>(log.PlayerList);
                 playersAndTargets.AddRange(log.FightData.Logic.Targets);
                 foreach (AbstractSingleActor actor in playersAndTargets)
@@ -228,7 +229,6 @@ namespace GW2EIParser
                 {
                     Parallel.ForEach(log.PlayerList, player => player.GetCombatReplayPolledPositions(log));
                 }
-                log.FightData.GetPhases(log);
                 Parallel.ForEach(playersAndTargets, actor => actor.GetBuffGraphs(log));
                 //
                 Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));

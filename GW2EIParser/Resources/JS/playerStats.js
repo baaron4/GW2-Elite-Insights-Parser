@@ -307,6 +307,7 @@ var compilePlayerTab = function () {
                         var skill = findSkill(true, foodData.id);
                         foodData.name = skill.name;
                         foodData.icon = skill.icon;
+                        foodData.description = skill.description;
                     }
                     if (foodData.time >= this.phase.start && foodData.time <= this.phase.end) {
                         if (foodData.time === 0) {

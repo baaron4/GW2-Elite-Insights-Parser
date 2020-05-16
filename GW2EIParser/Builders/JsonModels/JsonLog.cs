@@ -44,11 +44,30 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public class BuffDesc
         {
-            public BuffDesc(Buff item)
+            public BuffDesc(Buff item, ParsedLog log)
             {
                 Name = item.Name;
                 Icon = item.Link;
                 Stacking = item.Type == Buff.BuffType.Intensity;
+                BuffInfoEvent buffInfoEvent = item.BuffInfo;
+                if (buffInfoEvent != null)
+                {
+                    Descriptions = new List<string>(){
+                        "Max Stack(s) " + item.Capacity
+                    };
+                    foreach (BuffFormula formula in buffInfoEvent.FormulaList)
+                    {
+                        if (formula.TraitSelf > 0 || formula.TraitSrc > 0)
+                        {
+                            continue;
+                        }
+                        var desc = formula.GetDescription(false, log.Buffs.BuffsByIds);
+                        if (desc.Length > 0)
+                        {
+                            Descriptions.Add(desc);
+                        }
+                    }
+                }
             }
 
             /// <summary>
@@ -63,6 +82,10 @@ namespace GW2EIParser.Builders.JsonModels
             /// True if the buff is stacking
             /// </summary>
             public bool Stacking { get; }
+            /// <summary>
+            /// Descriptions of the buffs (no traits)
+            /// </summary>
+            public List<string> Descriptions { get; }
         }
 
         /// <summary>

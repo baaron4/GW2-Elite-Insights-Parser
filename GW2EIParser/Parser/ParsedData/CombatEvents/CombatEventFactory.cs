@@ -126,6 +126,30 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                         var gEvt = new GuildEvent(c, agentData);
                         GeneralHelper.Add(metaDataEvents.GuildEvents, gEvt.Src, gEvt);
                         break;
+                    case ParseEnum.StateChange.BuffInfo:
+                    case ParseEnum.StateChange.BuffFormula:
+                        BuffInfoEvent buffInfoEvent;
+                        if (metaDataEvents.BuffInfoEvents.TryGetValue(c.SkillID, out buffInfoEvent))
+                        {
+                            buffInfoEvent.CompleteBuffDataEvent(c);
+                        } 
+                        else
+                        {
+                            buffInfoEvent = new BuffInfoEvent(c);
+                            metaDataEvents.BuffInfoEvents[c.SkillID] = buffInfoEvent;
+                        }
+                        if (c.IsStateChange == ParseEnum.StateChange.BuffInfo)
+                        {
+                            if (metaDataEvents.BuffInfoEventsByCategory.TryGetValue(buffInfoEvent.Category, out List<BuffInfoEvent> bdEvtList))
+                            {
+                                bdEvtList.Add(buffInfoEvent);
+                            }
+                            else
+                            {
+                                metaDataEvents.BuffInfoEventsByCategory[buffInfoEvent.Category] = new List<BuffInfoEvent> { buffInfoEvent };
+                            }
+                        }
+                        break;
                 }
             }
         }

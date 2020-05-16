@@ -64,13 +64,13 @@ namespace GW2EIParser.Builders.JsonModels
                 {
                     if (log.Buffs.BuffsByIds.TryGetValue(id, out Buff buff))
                     {
-                        buffDesc["b" + id] = new JsonLog.BuffDesc(buff);
+                        buffDesc["b" + id] = new JsonLog.BuffDesc(buff, log);
                     }
                     else
                     {
                         SkillItem skill = list.First().Skill;
                         var auxBoon = new Buff(skill.Name, id, skill.Icon);
-                        buffDesc["b" + id] = new JsonLog.BuffDesc(auxBoon);
+                        buffDesc["b" + id] = new JsonLog.BuffDesc(auxBoon, log);
                     }
                 }
             }

@@ -25,9 +25,7 @@ namespace GW2EIParser.Parser.ParsedData
         public MechanicData MechanicData { get; }
         public GeneralStatistics Statistics { get; }
 
-
         private readonly OperationController _operation;
-
 
         private Dictionary<AgentItem, AbstractSingleActor> _agentToActorDictionary;
 
@@ -63,7 +61,7 @@ namespace GW2EIParser.Parser.ParsedData
             FightData.SetCM(CombatData, AgentData, FightData);
             //
             _operation.UpdateProgressWithCancellationCheck("Creating Buff Container");
-            Buffs = new BuffsContainer(LogData.GW2Version);
+            Buffs = new BuffsContainer(LogData.GW2Version, CombatData, operation);
             _operation.UpdateProgressWithCancellationCheck("Creating Damage Modifier Container");
             DamageModifiers = new DamageModifiersContainer(LogData.GW2Version);
             _operation.UpdateProgressWithCancellationCheck("Creating Mechanic Data");

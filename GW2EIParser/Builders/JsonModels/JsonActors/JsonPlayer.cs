@@ -199,7 +199,7 @@ namespace GW2EIParser.Builders.JsonModels
                 {
                     if (!buffDesc.ContainsKey("b" + food.Buff.ID))
                     {
-                        buffDesc["b" + food.Buff.ID] = new JsonLog.BuffDesc(food.Buff);
+                        buffDesc["b" + food.Buff.ID] = new JsonLog.BuffDesc(food.Buff, log);
                     }
                     Consumables.Add(new JsonConsumable(food));
                 }
@@ -224,7 +224,7 @@ namespace GW2EIParser.Builders.JsonModels
                 Buff buff = log.Buffs.BuffsByIds[pair.Key];
                 if (!buffDesc.ContainsKey("b" + pair.Key))
                 {
-                    buffDesc["b" + pair.Key] = new JsonLog.BuffDesc(buff);
+                    buffDesc["b" + pair.Key] = new JsonLog.BuffDesc(buff, log);
                 }
                 var data = new List<JsonBuffsGenerationData>();
                 for (int i = 0; i < phases.Count; i++)
