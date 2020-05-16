@@ -308,11 +308,11 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             _solvedDescription += GetPercent(Attr1, Attr2);
             if (_npc && !_player)
             {
-                _solvedDescription += " on NPCs";
+                _solvedDescription += ", on NPCs";
             }
             if (!_npc && _player)
             {
-                _solvedDescription += " on Players";
+                _solvedDescription += ", on Players";
             }
             return _solvedDescription;
         }
