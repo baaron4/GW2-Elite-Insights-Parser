@@ -42,12 +42,20 @@ namespace GW2EIParser.Parser.ParsedData
             }
             foreach (LogStartEvent logStr in combatData.GetLogStartEvents())
             {
+                if (logStr.ServerUnixTimeStamp == 0 || logStr.LocalUnixTimeStamp == 0)
+                {
+                    continue;
+                }
                 SetLogStart(logStr.LocalUnixTimeStamp);
                 SetLogStartStd(logStr.LocalUnixTimeStamp);
                 unixStart = logStr.LocalUnixTimeStamp;
             }
             foreach (LogEndEvent logEnd in combatData.GetLogEndEvents())
             {
+                if (logEnd.ServerUnixTimeStamp == 0 || logEnd.LocalUnixTimeStamp == 0)
+                {
+                    continue;
+                }
                 SetLogEnd(logEnd.LocalUnixTimeStamp);
                 SetLogEndStd(logEnd.LocalUnixTimeStamp);
                 unixEnd = logEnd.LocalUnixTimeStamp;
