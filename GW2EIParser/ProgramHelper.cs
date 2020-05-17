@@ -122,12 +122,13 @@ namespace GW2EIParser
             }
         }
 
-        private static void CompressFile(string file, MemoryStream str)
+        private static void CompressFile(string file, MemoryStream str, OperationController operation)
         {
             // Create the compressed file.
             byte[] data = str.ToArray();
+            string outputFile = file + ".gz";
             using (FileStream outFile =
-                        File.Create(file + ".gz"))
+                        File.Create(outputFile))
             {
                 using (var Compress =
                     new GZipStream(outFile,
@@ -138,6 +139,7 @@ namespace GW2EIParser
                     Compress.Write(data, 0, data.Length);
                 }
             }
+            operation.GeneratedFiles.Add(outputFile);
         }
 
         private static DirectoryInfo GetSaveDirectory(FileInfo fInfo)
@@ -181,6 +183,7 @@ namespace GW2EIParser
                 $"{fName}.log"
                 );
                 operation.GeneratedFiles.Add(outputFile);
+                operation.PathsToOpen.Add(saveDirectory.FullName);
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs))
                 {
@@ -244,6 +247,7 @@ namespace GW2EIParser
                 $"{fName}.html"
                 );
                 operation.GeneratedFiles.Add(outputFile);
+                operation.PathsToOpen.Add(outputFile);
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs))
                 {
@@ -260,6 +264,7 @@ namespace GW2EIParser
                     $"{fName}.csv"
                 );
                 operation.GeneratedFiles.Add(outputFile);
+                operation.PathsToOpen.Add(outputFile);
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                 {
@@ -278,7 +283,7 @@ namespace GW2EIParser
                         saveDirectory.FullName,
                         $"{fName}.json"
                     );
-                    operation.GeneratedFiles.Add(outputFile);
+                    operation.PathsToOpen.Add(saveDirectory.FullName);
                     Stream str;
                     if (Properties.Settings.Default.CompressRaw)
                     {
@@ -294,8 +299,12 @@ namespace GW2EIParser
                     }
                     if (str is MemoryStream msr)
                     {
-                        CompressFile(outputFile, msr);
+                        CompressFile(outputFile, msr, operation);
                         operation.UpdateProgressWithCancellationCheck("JSON compressed");
+                    }
+                    else
+                    {
+                        operation.GeneratedFiles.Add(outputFile);
                     }
                     operation.UpdateProgressWithCancellationCheck("JSON created");
                 }
@@ -306,7 +315,7 @@ namespace GW2EIParser
                         saveDirectory.FullName,
                         $"{fName}.xml"
                     );
-                    operation.GeneratedFiles.Add(outputFile);
+                    operation.PathsToOpen.Add(saveDirectory.FullName);
                     Stream str;
                     if (Properties.Settings.Default.CompressRaw)
                     {
@@ -322,8 +331,12 @@ namespace GW2EIParser
                     }
                     if (str is MemoryStream msr)
                     {
-                        CompressFile(outputFile, msr);
+                        CompressFile(outputFile, msr, operation);
                         operation.UpdateProgressWithCancellationCheck("XML compressed");
+                    } 
+                    else
+                    {
+                        operation.GeneratedFiles.Add(outputFile);
                     }
                     operation.UpdateProgressWithCancellationCheck("XML created");
                 }

@@ -29,6 +29,10 @@ namespace GW2EIParser
         /// </summary>
         public List<string> GeneratedFiles { get; }
         /// <summary>
+        /// Files/directories to open when open button is clicked
+        /// </summary>
+        public HashSet<string> PathsToOpen { get; }
+        /// <summary>
         /// Status of the parse operation
         /// </summary>
         public string Status { get; protected set; }
@@ -51,6 +55,7 @@ namespace GW2EIParser
             State = OperationState.Ready;
             StatusList = new List<string>();
             GeneratedFiles = new List<string>();
+            PathsToOpen = new HashSet<string>();
         }
 
         protected virtual void ThrowIfCanceled()
@@ -81,7 +86,7 @@ namespace GW2EIParser
             Status = StatusList.LastOrDefault() ?? "";
             foreach (string generatedFile in GeneratedFiles)
             {
-                Console.WriteLine(prefix +"Generated" +$": {generatedFile}" + Environment.NewLine);
+                Console.WriteLine("Generated" +$": {generatedFile}" + Environment.NewLine);
             }
             Console.WriteLine(prefix + $"{Location}: {Status}" + Environment.NewLine);
         }

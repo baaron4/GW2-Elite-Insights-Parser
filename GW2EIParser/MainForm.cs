@@ -346,7 +346,7 @@ namespace GW2EIParser
                         break;
 
                     case OperationState.Complete:
-                        foreach (string path in operation.GeneratedFiles)
+                        foreach (string path in operation.PathsToOpen)
                         {
                             if (File.Exists(path) || Directory.Exists(path))
                             {
