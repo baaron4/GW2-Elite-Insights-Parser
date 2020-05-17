@@ -4,10 +4,12 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser.ParsedData;
 using static GW2EIParser.Builders.JsonModels.JsonBuffsUptime;
 using static GW2EIParser.Builders.JsonModels.JsonPlayerBuffsGeneration;
-using static GW2EIParser.Builders.JsonModels.JsonStatistics;
 
 namespace GW2EIParser.Builders.JsonModels
 {
+    /// <summary>
+    /// Class representing a player
+    /// </summary>
     public class JsonPlayer : JsonActor
     {
         /// <summary>
@@ -34,8 +36,8 @@ namespace GW2EIParser.Builders.JsonModels
         /// Array of Total DPS stats \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
         /// </summary>
-        /// <seealso cref="JsonDPS"/>
-        public JsonDPS[][] DpsTargets { get; }
+        /// <seealso cref="JsonStatistics.JsonDPS"/>
+        public JsonStatistics.JsonDPS[][] DpsTargets { get; }
         /// <summary>
         /// Array of int representing 1S damage points \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
@@ -55,14 +57,14 @@ namespace GW2EIParser.Builders.JsonModels
         /// Stats against targets  \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
         /// </summary>
-        /// <seealso cref="JsonGameplayStats"/>
-        public JsonGameplayStats[][] StatsTargets { get; }
+        /// <seealso cref="JsonStatistics.JsonGameplayStats"/>
+        public JsonStatistics.JsonGameplayStats[][] StatsTargets { get; }
         /// <summary>
         /// Support stats \n
         /// Length == # of phases
         /// </summary>
-        /// <seealso cref="JsonPlayerSupport"/>
-        public JsonPlayerSupport[] Support { get; }
+        /// <seealso cref="JsonStatistics.JsonPlayerSupport"/>
+        public JsonStatistics.JsonPlayerSupport[] Support { get; }
         /// <summary>
         /// Damage modifiers against all
         /// </summary>
@@ -151,10 +153,10 @@ namespace GW2EIParser.Builders.JsonModels
             Profession = player.Prof;
             ActiveTimes = phases.Select(x => x.GetActorActiveDuration(player, log)).ToList();
             //
-            Support = player.GetPlayerSupport(log).Select(x => new JsonPlayerSupport(x)).ToArray();
+            Support = player.GetPlayerSupport(log).Select(x => new JsonStatistics.JsonPlayerSupport(x)).ToArray();
             TargetDamage1S = new List<int>[log.FightData.Logic.Targets.Count][];
-            DpsTargets = new JsonDPS[log.FightData.Logic.Targets.Count][];
-            StatsTargets = new JsonGameplayStats[log.FightData.Logic.Targets.Count][];
+            DpsTargets = new JsonStatistics.JsonDPS[log.FightData.Logic.Targets.Count][];
+            StatsTargets = new JsonStatistics.JsonGameplayStats[log.FightData.Logic.Targets.Count][];
             TargetDamageDist = new List<JsonDamageDist>[log.FightData.Logic.Targets.Count][];
             for (int j = 0; j < log.FightData.Logic.Targets.Count; j++)
             {
@@ -175,8 +177,8 @@ namespace GW2EIParser.Builders.JsonModels
                     TargetDamage1S[j] = dpsGraphList;
                 }
                 TargetDamageDist[j] = targetDamageDistList;
-                DpsTargets[j] = player.GetDPSTarget(log, target).Select(x => new JsonDPS(x)).ToArray();
-                StatsTargets[j] = player.GetGameplayStats(log, target).Select(x => new JsonGameplayStats(x)).ToArray();
+                DpsTargets[j] = player.GetDPSTarget(log, target).Select(x => new JsonStatistics.JsonDPS(x)).ToArray();
+                StatsTargets[j] = player.GetGameplayStats(log, target).Select(x => new JsonStatistics.JsonGameplayStats(x)).ToArray();
             }
             //
             BuffUptimes = GetPlayerJsonBuffsUptime(player, player.GetBuffs(log, BuffEnum.Self), player.GetBuffsDictionary(log), log, buffDesc, personalBuffs);

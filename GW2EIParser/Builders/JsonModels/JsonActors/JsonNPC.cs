@@ -8,6 +8,9 @@ using static GW2EIParser.Builders.JsonModels.JsonBuffsUptime;
 
 namespace GW2EIParser.Builders.JsonModels
 {
+    /// <summary>
+    /// Class representing an NPC
+    /// </summary>
     public class JsonNPC : JsonActor
     {
         /// <summary>

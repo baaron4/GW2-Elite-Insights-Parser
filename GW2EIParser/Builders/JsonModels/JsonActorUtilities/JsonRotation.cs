@@ -6,7 +6,7 @@ using GW2EIParser.Parser.ParsedData.CombatEvents;
 namespace GW2EIParser.Builders.JsonModels
 {
     /// <summary>
-    /// Class corresponding to a skill
+    /// Class corresponding to a rotation
     /// </summary>
     public class JsonRotation
     {

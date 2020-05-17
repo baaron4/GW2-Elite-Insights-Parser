@@ -3,12 +3,11 @@ using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Builders.JsonModels.JsonStatistics;
 
 namespace GW2EIParser.Builders.JsonModels
 {
     /// <summary>
-    /// Base class for Players and Targets
+    /// Base class for Players and NPCs
     /// </summary>
     /// <seealso cref="JsonPlayer"/> 
     /// <seealso cref="JsonNPC"/>
@@ -58,19 +57,19 @@ namespace GW2EIParser.Builders.JsonModels
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonDPS"/>
-        public JsonDPS[] DpsAll { get; }
+        public JsonStatistics.JsonDPS[] DpsAll { get; }
         /// <summary>
         /// Stats against all  \n
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonGameplayStatsAll"/>
-        public JsonGameplayStatsAll[] StatsAll { get; }
+        public JsonStatistics.JsonGameplayStatsAll[] StatsAll { get; }
         /// <summary>
         /// Defensive stats \n
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonDefensesAll"/>
-        public JsonDefensesAll[] Defenses { get; }
+        public JsonStatistics.JsonDefensesAll[] Defenses { get; }
         /// <summary>
         /// Total Damage distribution array \n
         /// Length == # of phases
@@ -130,9 +129,9 @@ namespace GW2EIParser.Builders.JsonModels
             HitboxWidth = actor.HitboxWidth;
             InstanceID = actor.InstID;
             //
-            DpsAll = actor.GetDPSAll(log).Select(x => new JsonDPS(x)).ToArray();
-            StatsAll = actor.GetGameplayStats(log).Select(x => new JsonGameplayStatsAll(x)).ToArray();
-            Defenses = actor.GetDefenses(log).Select(x => new JsonDefensesAll(x)).ToArray();
+            DpsAll = actor.GetDPSAll(log).Select(x => new JsonStatistics.JsonDPS(x)).ToArray();
+            StatsAll = actor.GetGameplayStats(log).Select(x => new JsonStatistics.JsonGameplayStatsAll(x)).ToArray();
+            Defenses = actor.GetDefenses(log).Select(x => new JsonStatistics.JsonDefensesAll(x)).ToArray();
             //
             Dictionary<long, Minions> minionsList = actor.GetMinions(log);
             if (minionsList.Values.Any())

@@ -5,6 +5,9 @@ using GW2EIParser.Parser.ParsedData;
 
 namespace GW2EIParser.Builders.JsonModels
 {
+    /// <summary>
+    /// Class representing damage modifier data
+    /// </summary>
     public class JsonDamageModifierData
     {
         /// <summary>

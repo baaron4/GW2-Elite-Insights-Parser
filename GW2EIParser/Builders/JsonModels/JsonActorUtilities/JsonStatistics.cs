@@ -2,6 +2,9 @@
 
 namespace GW2EIParser.Builders.JsonModels
 {
+    /// <summary>
+    /// Class representing general statistics
+    /// </summary>
     public static class JsonStatistics
     {
         /// <summary>
@@ -227,6 +230,9 @@ namespace GW2EIParser.Builders.JsonModels
             }
         }
 
+        /// <summary>
+        /// Gameplay stats
+        /// </summary>
         public class JsonGameplayStatsAll : JsonGameplayStats
         {
             /// <summary>
