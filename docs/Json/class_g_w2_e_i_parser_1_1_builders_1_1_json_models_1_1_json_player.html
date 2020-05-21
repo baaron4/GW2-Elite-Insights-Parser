@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="LI.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Guild Wars 2 - Elite Insights
-   &#160;<span id="projectnumber">2.22+</span>
+   &#160;<span id="projectnumber">2.24+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -89,29 +89,25 @@ $(document).ready(function(){initNavTree('class_g_w2_e_i_parser_1_1_builders_1_1
 
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#properties">Properties</a> &#124;
 <a href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">GW2EIParser.Builders.JsonModels.JsonPlayer Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Class representing a player  
+ <a href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#details">More...</a></p>
 <div class="dynheader">
 Inheritance diagram for GW2EIParser.Builders.JsonModels.JsonPlayer:</div>
 <div class="dyncontent">
  <div class="center">
   <img src="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.png" usemap="#GW2EIParser.Builders.JsonModels.JsonPlayer_map" alt=""/>
   <map id="GW2EIParser.Builders.JsonModels.JsonPlayer_map" name="GW2EIParser.Builders.JsonModels.JsonPlayer_map">
-<area href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html" title="Base class for Players and Targets" alt="GW2EIParser.Builders.JsonModels.JsonActor" shape="rect" coords="0,0,278,24"/>
+<area href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html" title="Base class for Players and NPCs" alt="GW2EIParser.Builders.JsonModels.JsonActor" shape="rect" coords="0,0,278,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:a3c742ab861c907e9a8b2f3d3038b3b51"><td class="memItemLeft" align="right" valign="top"><a id="a3c742ab861c907e9a8b2f3d3038b3b51"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>JsonPlayer</b> (Player player, ParsedLog log, Dictionary&lt; string, <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log_1_1_skill_desc.html">JsonLog.SkillDesc</a> &gt; skillDesc, Dictionary&lt; string, <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log_1_1_buff_desc.html">JsonLog.BuffDesc</a> &gt; buffDesc, Dictionary&lt; string, <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log_1_1_damage_mod_desc.html">JsonLog.DamageModDesc</a> &gt; damageModDesc, Dictionary&lt; string, HashSet&lt; long &gt;&gt; personalBuffs)</td></tr>
-<tr class="separator:a3c742ab861c907e9a8b2f3d3038b3b51"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="properties"></a>
 Properties</h2></td></tr>
 <tr class="memitem:a51c02c637c3f36277ab9d8b690c4fcaa"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a51c02c637c3f36277ab9d8b690c4fcaa">Account</a><code> [get]</code></td></tr>
@@ -130,10 +126,10 @@ Properties</h2></td></tr>
 When unknown, 'Unknown' value will appear <br />
 If 2 handed weapon even indices will have "2Hand" as value  <a href="#a99961fe54256d72ba66c99a248c58673">More...</a><br /></td></tr>
 <tr class="separator:a99961fe54256d72ba66c99a248c58673"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a20934b9faaa52bc1dd484580b74fd9bd"><td class="memItemLeft" align="right" valign="top">JsonDPS [][]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a20934b9faaa52bc1dd484580b74fd9bd">DpsTargets</a><code> [get]</code></td></tr>
-<tr class="memdesc:a20934b9faaa52bc1dd484580b74fd9bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of Total DPS stats <br />
-Length == # of targets and the length of each sub array is equal to # of phases  <a href="#a20934b9faaa52bc1dd484580b74fd9bd">More...</a><br /></td></tr>
-<tr class="separator:a20934b9faaa52bc1dd484580b74fd9bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a531e473d9a988748b6f9b813abb2d4fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_d_p_s.html">JsonStatistics.JsonDPS</a> [][]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a531e473d9a988748b6f9b813abb2d4fc">DpsTargets</a><code> [get]</code></td></tr>
+<tr class="memdesc:a531e473d9a988748b6f9b813abb2d4fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of Total DPS stats <br />
+Length == # of targets and the length of each sub array is equal to # of phases  <a href="#a531e473d9a988748b6f9b813abb2d4fc">More...</a><br /></td></tr>
+<tr class="separator:a531e473d9a988748b6f9b813abb2d4fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad2db2183e92d6ecbaefe0d45dfe977c0"><td class="memItemLeft" align="right" valign="top">List&lt; int &gt; [][]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#ad2db2183e92d6ecbaefe0d45dfe977c0">TargetDamage1S</a><code> [get]</code></td></tr>
 <tr class="memdesc:ad2db2183e92d6ecbaefe0d45dfe977c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int representing 1S damage points <br />
 Length == # of targets and the length of each sub array is equal to # of phases  <a href="#ad2db2183e92d6ecbaefe0d45dfe977c0">More...</a><br /></td></tr>
@@ -142,14 +138,14 @@ Length == # of targets and the length of each sub array is equal to # of phases 
 <tr class="memdesc:a1412310093cab666ed99274f8e503a86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Per Target Damage distribution array <br />
 Length == # of targets and the length of each sub array is equal to # of phases  <a href="#a1412310093cab666ed99274f8e503a86">More...</a><br /></td></tr>
 <tr class="separator:a1412310093cab666ed99274f8e503a86"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a302b5713d33bfe1dbed4473fca801c10"><td class="memItemLeft" align="right" valign="top">JsonGameplayStats [][]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a302b5713d33bfe1dbed4473fca801c10">StatsTargets</a><code> [get]</code></td></tr>
-<tr class="memdesc:a302b5713d33bfe1dbed4473fca801c10"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stats against targets <br />
-Length == # of targets and the length of each sub array is equal to # of phases  <a href="#a302b5713d33bfe1dbed4473fca801c10">More...</a><br /></td></tr>
-<tr class="separator:a302b5713d33bfe1dbed4473fca801c10"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa0bff67a67b8db39405a13dd63bcb4e1"><td class="memItemLeft" align="right" valign="top">JsonPlayerSupport []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#aa0bff67a67b8db39405a13dd63bcb4e1">Support</a><code> [get]</code></td></tr>
-<tr class="memdesc:aa0bff67a67b8db39405a13dd63bcb4e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Support stats <br />
-Length == # of phases  <a href="#aa0bff67a67b8db39405a13dd63bcb4e1">More...</a><br /></td></tr>
-<tr class="separator:aa0bff67a67b8db39405a13dd63bcb4e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d49be01d99f4edfe8867be76ba02090"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html">JsonStatistics.JsonGameplayStats</a> [][]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a1d49be01d99f4edfe8867be76ba02090">StatsTargets</a><code> [get]</code></td></tr>
+<tr class="memdesc:a1d49be01d99f4edfe8867be76ba02090"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stats against targets <br />
+Length == # of targets and the length of each sub array is equal to # of phases  <a href="#a1d49be01d99f4edfe8867be76ba02090">More...</a><br /></td></tr>
+<tr class="separator:a1d49be01d99f4edfe8867be76ba02090"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad12bf6606575f5ca68436bb15303f965"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_player_support.html">JsonStatistics.JsonPlayerSupport</a> []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#ad12bf6606575f5ca68436bb15303f965">Support</a><code> [get]</code></td></tr>
+<tr class="memdesc:ad12bf6606575f5ca68436bb15303f965"><td class="mdescLeft">&#160;</td><td class="mdescRight">Support stats <br />
+Length == # of phases  <a href="#ad12bf6606575f5ca68436bb15303f965">More...</a><br /></td></tr>
+<tr class="separator:ad12bf6606575f5ca68436bb15303f965"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8a02df888eb101d2e9a3a3d57853ffe"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_modifier_data.html">JsonDamageModifierData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#ab8a02df888eb101d2e9a3a3d57853ffe">DamageModifiers</a><code> [get]</code></td></tr>
 <tr class="memdesc:ab8a02df888eb101d2e9a3a3d57853ffe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Damage modifiers against all  <a href="#ab8a02df888eb101d2e9a3a3d57853ffe">More...</a><br /></td></tr>
 <tr class="separator:ab8a02df888eb101d2e9a3a3d57853ffe"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -231,18 +227,18 @@ Length == number of phases  <a href="#a44e9b0881f80695fdc08f8119ea75364">More...
 <tr class="memitem:acf3fa4941646a5563294271e15d418bb inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_minions.html">JsonMinions</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#acf3fa4941646a5563294271e15d418bb">Minions</a><code> [get]</code></td></tr>
 <tr class="memdesc:acf3fa4941646a5563294271e15d418bb inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of minions  <a href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#acf3fa4941646a5563294271e15d418bb">More...</a><br /></td></tr>
 <tr class="separator:acf3fa4941646a5563294271e15d418bb inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a541fd54c8cfc2948055de12f81aac3b4 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">JsonDPS []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a541fd54c8cfc2948055de12f81aac3b4">DpsAll</a><code> [get]</code></td></tr>
-<tr class="memdesc:a541fd54c8cfc2948055de12f81aac3b4 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of Total DPS stats <br />
-Length == # of phases  <a href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a541fd54c8cfc2948055de12f81aac3b4">More...</a><br /></td></tr>
-<tr class="separator:a541fd54c8cfc2948055de12f81aac3b4 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a633395ec3acde3e4f4317fadb7844da5 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">JsonGameplayStatsAll []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a633395ec3acde3e4f4317fadb7844da5">StatsAll</a><code> [get]</code></td></tr>
-<tr class="memdesc:a633395ec3acde3e4f4317fadb7844da5 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stats against all <br />
-Length == # of phases  <a href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a633395ec3acde3e4f4317fadb7844da5">More...</a><br /></td></tr>
-<tr class="separator:a633395ec3acde3e4f4317fadb7844da5 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afad32e60db8faa343e92e55880d35b4f inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">JsonDefensesAll []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#afad32e60db8faa343e92e55880d35b4f">Defenses</a><code> [get]</code></td></tr>
-<tr class="memdesc:afad32e60db8faa343e92e55880d35b4f inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defensive stats <br />
-Length == # of phases  <a href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#afad32e60db8faa343e92e55880d35b4f">More...</a><br /></td></tr>
-<tr class="separator:afad32e60db8faa343e92e55880d35b4f inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e20512bec1787f409aeb663fd6b6469 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_d_p_s.html">JsonStatistics.JsonDPS</a> []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a2e20512bec1787f409aeb663fd6b6469">DpsAll</a><code> [get]</code></td></tr>
+<tr class="memdesc:a2e20512bec1787f409aeb663fd6b6469 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of Total DPS stats <br />
+Length == # of phases  <a href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a2e20512bec1787f409aeb663fd6b6469">More...</a><br /></td></tr>
+<tr class="separator:a2e20512bec1787f409aeb663fd6b6469 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a624f6de02624f0612e197d6146a566f4 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats_all.html">JsonStatistics.JsonGameplayStatsAll</a> []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a624f6de02624f0612e197d6146a566f4">StatsAll</a><code> [get]</code></td></tr>
+<tr class="memdesc:a624f6de02624f0612e197d6146a566f4 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stats against all <br />
+Length == # of phases  <a href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a624f6de02624f0612e197d6146a566f4">More...</a><br /></td></tr>
+<tr class="separator:a624f6de02624f0612e197d6146a566f4 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac801debf6414210b75119a15d7059bae inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_defenses_all.html">JsonStatistics.JsonDefensesAll</a> []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#ac801debf6414210b75119a15d7059bae">Defenses</a><code> [get]</code></td></tr>
+<tr class="memdesc:ac801debf6414210b75119a15d7059bae inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defensive stats <br />
+Length == # of phases  <a href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#ac801debf6414210b75119a15d7059bae">More...</a><br /></td></tr>
+<tr class="separator:ac801debf6414210b75119a15d7059bae inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af327f342dbb7042fc6286ef6e63defa1 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_dist.html">JsonDamageDist</a> &gt; []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#af327f342dbb7042fc6286ef6e63defa1">TotalDamageDist</a><code> [get]</code></td></tr>
 <tr class="memdesc:af327f342dbb7042fc6286ef6e63defa1 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Total Damage distribution array <br />
 Length == # of phases  <a href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#af327f342dbb7042fc6286ef6e63defa1">More...</a><br /></td></tr>
@@ -274,24 +270,11 @@ Value[i][0] will be the time, value[i][1] will be health % <br />
 If i corresponds to the last element that means the health did not change for the remainder of the fight <br />
  <a href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a455edac0af77e1e9a6945e2046047beb">More...</a><br /></td></tr>
 <tr class="separator:a455edac0af77e1e9a6945e2046047beb inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_methods_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html">GW2EIParser.Builders.JsonModels.JsonActor</a></td></tr>
-<tr class="memitem:a07d75e689c375ef448a44a3b6a97b82c inherit pro_methods_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top"><a id="a07d75e689c375ef448a44a3b6a97b82c"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>JsonActor</b> (AbstractSingleActor actor, ParsedLog log, Dictionary&lt; string, <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log_1_1_skill_desc.html">JsonLog.SkillDesc</a> &gt; skillDesc, Dictionary&lt; string, <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log_1_1_buff_desc.html">JsonLog.BuffDesc</a> &gt; buffDesc)</td></tr>
-<tr class="separator:a07d75e689c375ef448a44a3b6a97b82c inherit pro_methods_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_static_methods_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td colspan="2" onclick="javascript:toggleInherit('pro_static_methods_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor')"><img src="closed.png" alt="-"/>&#160;Static Protected Member Functions inherited from <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html">GW2EIParser.Builders.JsonModels.JsonActor</a></td></tr>
-<tr class="memitem:a019a216b47f3134c292f85f932d08a1c inherit pro_static_methods_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top"><a id="a019a216b47f3134c292f85f932d08a1c"></a>
-static List&lt; <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_dist.html">JsonDamageDist</a> &gt; []&#160;</td><td class="memItemRight" valign="bottom"><b>BuildDamageDistData</b> (AbstractSingleActor actor, NPC target, List&lt; PhaseData &gt; phases, ParsedLog log, Dictionary&lt; string, <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log_1_1_skill_desc.html">JsonLog.SkillDesc</a> &gt; skillDesc, Dictionary&lt; string, <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log_1_1_buff_desc.html">JsonLog.BuffDesc</a> &gt; buffDesc)</td></tr>
-<tr class="separator:a019a216b47f3134c292f85f932d08a1c inherit pro_static_methods_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d03602596dc7439e9a7f3afc152369f inherit pro_static_methods_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top"><a id="a4d03602596dc7439e9a7f3afc152369f"></a>
-static List&lt; <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_dist.html">JsonDamageDist</a> &gt; []&#160;</td><td class="memItemRight" valign="bottom"><b>BuildDamageTakenDistData</b> (AbstractSingleActor actor, NPC target, List&lt; PhaseData &gt; phases, ParsedLog log, Dictionary&lt; string, <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log_1_1_skill_desc.html">JsonLog.SkillDesc</a> &gt; skillDesc, Dictionary&lt; string, <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log_1_1_buff_desc.html">JsonLog.BuffDesc</a> &gt; buffDesc)</td></tr>
-<tr class="separator:a4d03602596dc7439e9a7f3afc152369f inherit pro_static_methods_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00011">11</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
+<div class="textblock"><p>Class representing a player </p>
+
+<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00013">13</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
 </div><h2 class="groupheader">Property Documentation</h2>
 <a id="a51c02c637c3f36277ab9d8b690c4fcaa"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a51c02c637c3f36277ab9d8b690c4fcaa">&#9670;&nbsp;</a></span>Account</h2>
@@ -315,7 +298,7 @@ static List&lt; <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_
 
 <p>Account name of the player </p>
 
-<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00016">16</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00018">18</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
 
 </div>
 </div>
@@ -342,7 +325,7 @@ static List&lt; <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_
 <p>List of time during which the player was active (not dead and not dc) <br />
 Length == number of phases </p>
 
-<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00141">141</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00143">143</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
 
 </div>
 </div>
@@ -369,7 +352,7 @@ Length == number of phases </p>
 <p>List of buff status </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_buffs_uptime.html" title="Class representing buff on targets">JsonBuffsUptime</a></dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00081">81</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00083">83</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
 
 </div>
 </div>
@@ -396,7 +379,7 @@ Length == number of phases </p>
 <p>List of buff status on active time </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_buffs_uptime.html" title="Class representing buff on targets">JsonBuffsUptime</a></dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00107">107</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00109">109</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
 
 </div>
 </div>
@@ -423,7 +406,7 @@ Length == number of phases </p>
 <p>List of used consumables </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_consumable.html" title="Class representing consumables">JsonConsumable</a></dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00136">136</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00138">138</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
 
 </div>
 </div>
@@ -448,9 +431,9 @@ Length == number of phases </p>
 </div><div class="memdoc">
 
 <p>Damage modifiers against all </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_modifier_data.html">JsonDamageModifierData</a></dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_modifier_data.html" title="Class representing damage modifier data">JsonDamageModifierData</a></dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00070">70</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00072">72</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
 
 </div>
 </div>
@@ -476,9 +459,9 @@ Length == number of phases </p>
 
 <p>Damage modifiers against targets <br />
 Length == # of targets </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_modifier_data.html">JsonDamageModifierData</a></dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_modifier_data.html" title="Class representing damage modifier data">JsonDamageModifierData</a></dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00076">76</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00078">78</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
 
 </div>
 </div>
@@ -506,12 +489,12 @@ Length == # of targets </p>
 Length == number of death </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_death_recap.html" title="Class corresponding to a death recap">JsonDeathRecap</a></dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00131">131</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00133">133</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
 
 </div>
 </div>
-<a id="a20934b9faaa52bc1dd484580b74fd9bd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a20934b9faaa52bc1dd484580b74fd9bd">&#9670;&nbsp;</a></span>DpsTargets</h2>
+<a id="a531e473d9a988748b6f9b813abb2d4fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a531e473d9a988748b6f9b813abb2d4fc">&#9670;&nbsp;</a></span>DpsTargets</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -520,7 +503,7 @@ Length == number of death </p>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">JsonDPS [][] GW2EIParser.Builders.JsonModels.JsonPlayer.DpsTargets</td>
+          <td class="memname"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_d_p_s.html">JsonStatistics.JsonDPS</a> [][] GW2EIParser.Builders.JsonModels.JsonPlayer.DpsTargets</td>
         </tr>
       </table>
   </td>
@@ -532,9 +515,9 @@ Length == number of death </p>
 
 <p>Array of Total DPS stats <br />
 Length == # of targets and the length of each sub array is equal to # of phases </p>
-<dl class="section see"><dt>See also</dt><dd>JsonDPS</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_d_p_s.html" title="DPS stats">JsonStatistics.JsonDPS</a></dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00038">38</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00040">40</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
 
 </div>
 </div>
@@ -560,7 +543,7 @@ Length == # of targets and the length of each sub array is equal to # of phases 
 
 <p>Group of the player </p>
 
-<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00020">20</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00022">22</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
 
 </div>
 </div>
@@ -587,7 +570,7 @@ Length == # of targets and the length of each sub array is equal to # of phases 
 <p>List of buff status on group generation </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player_buffs_generation.html" title="Class representing buffs generation by player actors">JsonPlayerBuffsGeneration</a></dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00092">92</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00094">94</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
 
 </div>
 </div>
@@ -614,7 +597,7 @@ Length == # of targets and the length of each sub array is equal to # of phases 
 <p>List of buff status on off group generation </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player_buffs_generation.html" title="Class representing buffs generation by player actors">JsonPlayerBuffsGeneration</a></dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00097">97</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00099">99</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
 
 </div>
 </div>
@@ -640,7 +623,7 @@ Length == # of targets and the length of each sub array is equal to # of phases 
 
 <p>Profession of the player </p>
 
-<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00024">24</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00026">26</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
 
 </div>
 </div>
@@ -668,7 +651,7 @@ Length == # of targets and the length of each sub array is equal to # of phases 
 Key is "'b' + id" </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_buffs_uptime.html" title="Class representing buff on targets">JsonBuffsUptime</a></dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00087">87</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00089">89</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
 
 </div>
 </div>
@@ -695,7 +678,7 @@ Key is "'b' + id" </p>
 <p>List of buff status on self generation on active time </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_buffs_uptime.html" title="Class representing buff on targets">JsonBuffsUptime</a></dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00112">112</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00114">114</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
 
 </div>
 </div>
@@ -722,7 +705,7 @@ Key is "'b' + id" </p>
 <p>List of buff status on squad generation </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player_buffs_generation.html" title="Class representing buffs generation by player actors">JsonPlayerBuffsGeneration</a></dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00102">102</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00104">104</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
 
 </div>
 </div>
@@ -749,12 +732,12 @@ Key is "'b' + id" </p>
 <p>List of buff status on squad generation on active time </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player_buffs_generation.html" title="Class representing buffs generation by player actors">JsonPlayerBuffsGeneration</a></dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00125">125</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00127">127</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
 
 </div>
 </div>
-<a id="a302b5713d33bfe1dbed4473fca801c10"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a302b5713d33bfe1dbed4473fca801c10">&#9670;&nbsp;</a></span>StatsTargets</h2>
+<a id="a1d49be01d99f4edfe8867be76ba02090"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d49be01d99f4edfe8867be76ba02090">&#9670;&nbsp;</a></span>StatsTargets</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -763,7 +746,7 @@ Key is "'b' + id" </p>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">JsonGameplayStats [][] GW2EIParser.Builders.JsonModels.JsonPlayer.StatsTargets</td>
+          <td class="memname"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html">JsonStatistics.JsonGameplayStats</a> [][] GW2EIParser.Builders.JsonModels.JsonPlayer.StatsTargets</td>
         </tr>
       </table>
   </td>
@@ -775,14 +758,14 @@ Key is "'b' + id" </p>
 
 <p>Stats against targets <br />
 Length == # of targets and the length of each sub array is equal to # of phases </p>
-<dl class="section see"><dt>See also</dt><dd>JsonGameplayStats</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html" title="Gameplay stats">JsonStatistics.JsonGameplayStats</a></dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00059">59</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00061">61</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
 
 </div>
 </div>
-<a id="aa0bff67a67b8db39405a13dd63bcb4e1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa0bff67a67b8db39405a13dd63bcb4e1">&#9670;&nbsp;</a></span>Support</h2>
+<a id="ad12bf6606575f5ca68436bb15303f965"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad12bf6606575f5ca68436bb15303f965">&#9670;&nbsp;</a></span>Support</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -791,7 +774,7 @@ Length == # of targets and the length of each sub array is equal to # of phases 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">JsonPlayerSupport [] GW2EIParser.Builders.JsonModels.JsonPlayer.Support</td>
+          <td class="memname"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_player_support.html">JsonStatistics.JsonPlayerSupport</a> [] GW2EIParser.Builders.JsonModels.JsonPlayer.Support</td>
         </tr>
       </table>
   </td>
@@ -803,9 +786,9 @@ Length == # of targets and the length of each sub array is equal to # of phases 
 
 <p>Support stats <br />
 Length == # of phases </p>
-<dl class="section see"><dt>See also</dt><dd>JsonPlayerSupport</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_player_support.html" title="Support stats">JsonStatistics.JsonPlayerSupport</a></dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00065">65</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00067">67</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
 
 </div>
 </div>
@@ -834,7 +817,7 @@ Length == # of targets and the length of each sub array is equal to # of phases 
 <p>If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point <br />
 ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250] </p>
 
-<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00047">47</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00049">49</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
 
 </div>
 </div>
@@ -862,7 +845,7 @@ ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,152
 Length == # of targets and the length of each sub array is equal to # of phases </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_dist.html" title="Class corresponding a damage distribution">JsonDamageDist</a></dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00053">53</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00055">55</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
 
 </div>
 </div>
@@ -892,7 +875,7 @@ Length == # of targets and the length of each sub array is equal to # of phases 
 When unknown, 'Unknown' value will appear <br />
 If 2 handed weapon even indices will have "2Hand" as value </p>
 
-<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00032">32</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_json_player_8cs_source.html#l00034">34</a> of file <a class="el" href="_json_player_8cs_source.html">JsonPlayer.cs</a>.</p>
 
 </div>
 </div>

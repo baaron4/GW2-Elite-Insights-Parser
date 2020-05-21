@@ -1,6 +1,5 @@
 var class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_buffs_uptime_1_1_json_buffs_uptime_data =
 [
-    [ "JsonBuffsUptimeData", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_buffs_uptime_1_1_json_buffs_uptime_data.html#a784ab2a36c6c2566f7339e32fbc848ca", null ],
     [ "ByExtension", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_buffs_uptime_1_1_json_buffs_uptime_data.html#a5619f7aba2c1886a4d08fbfe9033dbba", null ],
     [ "Extended", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_buffs_uptime_1_1_json_buffs_uptime_data.html#a43d67f92e7f253c7ddd77a5086cddfde", null ],
     [ "Generated", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_buffs_uptime_1_1_json_buffs_uptime_data.html#a131f731b10662e7a93867c8d8b8d1094", null ],

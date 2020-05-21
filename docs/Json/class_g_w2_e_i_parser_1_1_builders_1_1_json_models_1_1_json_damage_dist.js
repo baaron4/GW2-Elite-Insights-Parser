@@ -1,6 +1,5 @@
 var class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_dist =
 [
-    [ "JsonDamageDist", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_dist.html#a9faa3370ab25d3e2fd4b31893bef15ce", null ],
     [ "Crit", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_dist.html#af5f1afa2c53c76e4f6caccd23e419a81", null ],
     [ "Flank", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_dist.html#a348dd55c9db1db7eac95f9a21c349c67", null ],
     [ "Glance", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_dist.html#ae62f80e54afa18d5cd322286dfaa1be9", null ],

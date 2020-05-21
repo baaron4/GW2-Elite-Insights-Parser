@@ -3,7 +3,6 @@ var class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log =
     [ "BuffDesc", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log_1_1_buff_desc.html", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log_1_1_buff_desc" ],
     [ "DamageModDesc", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log_1_1_damage_mod_desc.html", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log_1_1_damage_mod_desc" ],
     [ "SkillDesc", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log_1_1_skill_desc.html", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log_1_1_skill_desc" ],
-    [ "JsonLog", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#aae411a2f28806b55d2e3a5c21a92005f", null ],
     [ "ArcVersion", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a71a5482c0d5d85428e465aab5f5ffa6f", null ],
     [ "BuffMap", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#afe16c886aa0df412dd734c932460524e", null ],
     [ "DamageModMap", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a22d15bd36972d0fcacc9c23adf3d0205", null ],

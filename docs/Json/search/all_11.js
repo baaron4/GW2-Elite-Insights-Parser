@@ -16,10 +16,10 @@ var searchData=
   ['stacking',['Stacking',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log_1_1_buff_desc.html#af5fe7eb0fa13bfb4ac877a1f0019af2e',1,'GW2EIParser::Builders::JsonModels::JsonLog::BuffDesc']]],
   ['start',['Start',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_phase.html#a8a16876402c5615bf74db9aed07963f2',1,'GW2EIParser::Builders::JsonModels::JsonPhase']]],
   ['states',['States',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_buffs_uptime.html#afdd917fc41f5b76398051881bb407d78',1,'GW2EIParser::Builders::JsonModels::JsonBuffsUptime']]],
-  ['statsall',['StatsAll',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a633395ec3acde3e4f4317fadb7844da5',1,'GW2EIParser::Builders::JsonModels::JsonActor']]],
-  ['statstargets',['StatsTargets',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a302b5713d33bfe1dbed4473fca801c10',1,'GW2EIParser::Builders::JsonModels::JsonPlayer']]],
+  ['statsall',['StatsAll',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a624f6de02624f0612e197d6146a566f4',1,'GW2EIParser::Builders::JsonModels::JsonActor']]],
+  ['statstargets',['StatsTargets',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a1d49be01d99f4edfe8867be76ba02090',1,'GW2EIParser::Builders::JsonModels::JsonPlayer']]],
   ['subphases',['SubPhases',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_phase.html#ab603f8da0ad4434f743c7fb6c2681a9a',1,'GW2EIParser::Builders::JsonModels::JsonPhase']]],
   ['success',['Success',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a7f890dbe58e421dda2f105571ec90f03',1,'GW2EIParser::Builders::JsonModels::JsonLog']]],
-  ['support',['Support',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#aa0bff67a67b8db39405a13dd63bcb4e1',1,'GW2EIParser::Builders::JsonModels::JsonPlayer']]],
+  ['support',['Support',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#ad12bf6606575f5ca68436bb15303f965',1,'GW2EIParser::Builders::JsonModels::JsonPlayer']]],
   ['swapcount',['SwapCount',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats_all.html#af235a35d30fe5006f4a25202a2646062',1,'GW2EIParser::Builders::JsonModels::JsonStatistics::JsonGameplayStatsAll']]]
 ];

@@ -29,5 +29,6 @@ var hierarchy =
     [ "GW2EIParser.Builders.JsonModels.JsonStatistics.JsonPlayerSupport", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_player_support.html", null ],
     [ "GW2EIParser.Builders.JsonModels.JsonRotation", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_rotation.html", null ],
     [ "GW2EIParser.Builders.JsonModels.JsonRotation.JsonSkill", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_rotation_1_1_json_skill.html", null ],
+    [ "GW2EIParser.Builders.JsonModels.JsonStatistics", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics.html", null ],
     [ "GW2EIParser.Builders.JsonModels.JsonLog.SkillDesc", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log_1_1_skill_desc.html", null ]
 ];

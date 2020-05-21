@@ -1,6 +1,5 @@
 var class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player =
 [
-    [ "JsonPlayer", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a3c742ab861c907e9a8b2f3d3038b3b51", null ],
     [ "Account", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a51c02c637c3f36277ab9d8b690c4fcaa", null ],
     [ "ActiveTimes", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a44e9b0881f80695fdc08f8119ea75364", null ],
     [ "BuffUptimes", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a50bdecab25b9c75c3158d9c9d47bd4e1", null ],
@@ -9,7 +8,7 @@ var class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player =
     [ "DamageModifiers", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#ab8a02df888eb101d2e9a3a3d57853ffe", null ],
     [ "DamageModifiersTarget", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a37b322494e62d02e326e19283ceb3cea", null ],
     [ "DeathRecap", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a8ae4cf2bbb3a4ea15cfa4d7fc76d296c", null ],
-    [ "DpsTargets", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a20934b9faaa52bc1dd484580b74fd9bd", null ],
+    [ "DpsTargets", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a531e473d9a988748b6f9b813abb2d4fc", null ],
     [ "Group", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#afd0e5b54df0ff0d6501c414a10c2dd71", null ],
     [ "GroupBuffs", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a7d3de60d7e28ad93b376cd91b405b0fc", null ],
     [ "GroupBuffsActive", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#af80c8339cf65c6462c68e24035887201", null ],
@@ -20,8 +19,8 @@ var class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player =
     [ "SelfBuffsActive", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a7990d810c178edc6a6c27462ef009f7f", null ],
     [ "SquadBuffs", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#ab3056a76374c613401d08cfc57c9da75", null ],
     [ "SquadBuffsActive", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a335700a8da187f7f6b9c643f474026ba", null ],
-    [ "StatsTargets", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a302b5713d33bfe1dbed4473fca801c10", null ],
-    [ "Support", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#aa0bff67a67b8db39405a13dd63bcb4e1", null ],
+    [ "StatsTargets", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a1d49be01d99f4edfe8867be76ba02090", null ],
+    [ "Support", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#ad12bf6606575f5ca68436bb15303f965", null ],
     [ "TargetDamage1S", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#ad2db2183e92d6ecbaefe0d45dfe977c0", null ],
     [ "TargetDamageDist", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a1412310093cab666ed99274f8e503a86", null ],
     [ "Weapons", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a99961fe54256d72ba66c99a248c58673", null ]

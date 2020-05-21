@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="LI.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Guild Wars 2 - Elite Insights
-   &#160;<span id="projectnumber">2.22+</span>
+   &#160;<span id="projectnumber">2.24+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -90,35 +90,21 @@ $(document).ready(function(){initNavTree('class_g_w2_e_i_parser_1_1_builders_1_1
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#properties">Properties</a> &#124;
 <a href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_modifier_data-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">GW2EIParser.Builders.JsonModels.JsonDamageModifierData Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Class representing damage modifier data  
+ <a href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_modifier_data.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_modifier_data_1_1_json_damage_modifier_item.html">JsonDamageModifierItem</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class corresponding to a buff based damage modifier  <a href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_modifier_data_1_1_json_damage_modifier_item.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a367ce9ae8ec0f6b1ec81b37e1fce77c5"><td class="memItemLeft" align="right" valign="top"><a id="a367ce9ae8ec0f6b1ec81b37e1fce77c5"></a>
-static List&lt; <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_modifier_data.html">JsonDamageModifierData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>GetDamageModifiers</b> (Dictionary&lt; string, List&lt; DamageModifierStat &gt;&gt; damageModDict, ParsedLog log, Dictionary&lt; string, <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log_1_1_damage_mod_desc.html">JsonLog.DamageModDesc</a> &gt; damageModDesc)</td></tr>
-<tr class="separator:a367ce9ae8ec0f6b1ec81b37e1fce77c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac615148ffae76847fd34cafad28b1554"><td class="memItemLeft" align="right" valign="top"><a id="ac615148ffae76847fd34cafad28b1554"></a>
-static List&lt; <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_modifier_data.html">JsonDamageModifierData</a> &gt; []&#160;</td><td class="memItemRight" valign="bottom"><b>GetDamageModifiersTarget</b> (Player player, ParsedLog log, Dictionary&lt; string, <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log_1_1_damage_mod_desc.html">JsonLog.DamageModDesc</a> &gt; damageModDesc)</td></tr>
-<tr class="separator:ac615148ffae76847fd34cafad28b1554"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:a2b717eb0830543c9d5f907ce5d3a6389"><td class="memItemLeft" align="right" valign="top"><a id="a2b717eb0830543c9d5f907ce5d3a6389"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>JsonDamageModifierData</b> (int ID, List&lt; <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_modifier_data_1_1_json_damage_modifier_item.html">JsonDamageModifierItem</a> &gt; data)</td></tr>
-<tr class="separator:a2b717eb0830543c9d5f907ce5d3a6389"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="properties"></a>
 Properties</h2></td></tr>
@@ -131,8 +117,9 @@ Length == # of phases  <a href="#a01c5976de0db91e18e4e801263f990da">More...</a><
 <tr class="separator:a01c5976de0db91e18e4e801263f990da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="_json_damage_modifier_data_8cs_source.html#l00008">8</a> of file <a class="el" href="_json_damage_modifier_data_8cs_source.html">JsonDamageModifierData.cs</a>.</p>
+<div class="textblock"><p>Class representing damage modifier data </p>
+
+<p class="definition">Definition at line <a class="el" href="_json_damage_modifier_data_8cs_source.html#l00011">11</a> of file <a class="el" href="_json_damage_modifier_data_8cs_source.html">JsonDamageModifierData.cs</a>.</p>
 </div><h2 class="groupheader">Property Documentation</h2>
 <a id="a01c5976de0db91e18e4e801263f990da"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a01c5976de0db91e18e4e801263f990da">&#9670;&nbsp;</a></span>DamageModifiers</h2>
@@ -158,7 +145,7 @@ Length == # of phases  <a href="#a01c5976de0db91e18e4e801263f990da">More...</a><
 Length == # of phases </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_modifier_data_1_1_json_damage_modifier_item.html" title="Class corresponding to a buff based damage modifier">JsonDamageModifierItem</a></dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_json_damage_modifier_data_8cs_source.html#l00051">51</a> of file <a class="el" href="_json_damage_modifier_data_8cs_source.html">JsonDamageModifierData.cs</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_json_damage_modifier_data_8cs_source.html#l00054">54</a> of file <a class="el" href="_json_damage_modifier_data_8cs_source.html">JsonDamageModifierData.cs</a>.</p>
 
 </div>
 </div>
@@ -185,7 +172,7 @@ Length == # of phases </p>
 <p>ID of the damage modifier \ </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a22d15bd36972d0fcacc9c23adf3d0205" title="Dictionary of damage modifiers&#39; description, the key is in &quot;&#39;d&#39; + id&quot; format">JsonLog.DamageModMap</a></dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_json_damage_modifier_data_8cs_source.html#l00045">45</a> of file <a class="el" href="_json_damage_modifier_data_8cs_source.html">JsonDamageModifierData.cs</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_json_damage_modifier_data_8cs_source.html#l00048">48</a> of file <a class="el" href="_json_damage_modifier_data_8cs_source.html">JsonDamageModifierData.cs</a>.</p>
 
 </div>
 </div>

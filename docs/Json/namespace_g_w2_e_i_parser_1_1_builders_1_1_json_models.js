@@ -13,5 +13,12 @@ var namespace_g_w2_e_i_parser_1_1_builders_1_1_json_models =
     [ "JsonPhase", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_phase.html", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_phase" ],
     [ "JsonPlayer", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player" ],
     [ "JsonPlayerBuffsGeneration", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player_buffs_generation.html", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player_buffs_generation" ],
-    [ "JsonRotation", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_rotation.html", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_rotation" ]
+    [ "JsonRotation", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_rotation.html", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_rotation" ],
+    [ "JsonStatistics", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics.html", [
+      [ "JsonDefensesAll", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_defenses_all.html", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_defenses_all" ],
+      [ "JsonDPS", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_d_p_s.html", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_d_p_s" ],
+      [ "JsonGameplayStats", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats" ],
+      [ "JsonGameplayStatsAll", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats_all.html", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats_all" ],
+      [ "JsonPlayerSupport", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_player_support.html", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_player_support" ]
+    ] ]
 ];

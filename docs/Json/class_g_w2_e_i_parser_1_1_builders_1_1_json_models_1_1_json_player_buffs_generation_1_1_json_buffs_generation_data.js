@@ -1,6 +1,5 @@
 var class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data =
 [
-    [ "JsonBuffsGenerationData", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#a8912d3a6b24c1d393916d2533caf7120", null ],
     [ "ByExtension", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#a9cd00e3bb899a51ca11cd0e93096864e", null ],
     [ "Extended", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#a9b29bdbcbed002ad5533edc0d6ea9d5b", null ],
     [ "Generation", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#a4d373bc48e03acfe55cf3ae344f3c3c4", null ],

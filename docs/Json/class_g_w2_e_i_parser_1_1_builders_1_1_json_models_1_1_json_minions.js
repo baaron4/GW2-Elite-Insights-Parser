@@ -1,6 +1,5 @@
 var class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_minions =
 [
-    [ "JsonMinions", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_minions.html#adc897825fa2f894cfcd201c5624198f9", null ],
     [ "Name", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_minions.html#acd17f3d444e75cd5b9efb71533823fdf", null ],
     [ "Rotation", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_minions.html#a1bc744376cfa5e3b7552104ae46b2abf", null ],
     [ "TargetDamageDist", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_minions.html#ad07dbf2f7d63d86425f3aadc989c09b9", null ],

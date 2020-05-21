@@ -24,5 +24,6 @@ var searchData=
   ['jsonplayerbuffsgeneration',['JsonPlayerBuffsGeneration',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player_buffs_generation.html',1,'GW2EIParser::Builders::JsonModels']]],
   ['jsonplayersupport',['JsonPlayerSupport',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_player_support.html',1,'GW2EIParser::Builders::JsonModels::JsonStatistics']]],
   ['jsonrotation',['JsonRotation',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_rotation.html',1,'GW2EIParser::Builders::JsonModels']]],
-  ['jsonskill',['JsonSkill',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_rotation_1_1_json_skill.html',1,'GW2EIParser::Builders::JsonModels::JsonRotation']]]
+  ['jsonskill',['JsonSkill',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_rotation_1_1_json_skill.html',1,'GW2EIParser::Builders::JsonModels::JsonRotation']]],
+  ['jsonstatistics',['JsonStatistics',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics.html',1,'GW2EIParser::Builders::JsonModels']]]
 ];
