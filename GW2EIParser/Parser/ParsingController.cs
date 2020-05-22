@@ -421,10 +421,6 @@ namespace GW2EIParser.Parser
                         _logEndTime = combatItem.Time;
                     }
                     _combatItems.Add(combatItem);
-                    if (combatItem.IsStateChange == ParseEnum.StateChange.LogEnd)
-                    {
-                        break;
-                    }
                 }
             }
             if (!_combatItems.Any())

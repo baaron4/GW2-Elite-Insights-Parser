@@ -392,9 +392,9 @@ namespace GW2EIParser.Parser.ParsedData
             return new List<MaxHealthUpdateEvent>();
         }
 
-        public List<PointOfViewEvent> GetPointOfViewEvents()
+        public PointOfViewEvent GetPointOfViewEvent()
         {
-            return _metaDataEvents.PointOfViewEvents;
+            return _metaDataEvents.PointOfViewEvent;
         }
 
         public List<SpawnEvent> GetSpawnEvents(AgentItem key)
@@ -424,24 +424,24 @@ namespace GW2EIParser.Parser.ParsedData
             return new List<TeamChangeEvent>();
         }
 
-        public List<BuildEvent> GetBuildEvents()
+        public BuildEvent GetBuildEvent()
         {
-            return _metaDataEvents.BuildEvents;
+            return _metaDataEvents.BuildEvent;
         }
 
-        public List<LanguageEvent> GetLanguageEvents()
+        public LanguageEvent GetLanguageEvent()
         {
-            return _metaDataEvents.LanguageEvents;
+            return _metaDataEvents.LanguageEvent;
         }
 
-        public List<LogStartEvent> GetLogStartEvents()
+        public LogStartEvent GetLogStartEvent()
         {
-            return _metaDataEvents.LogStartEvents;
+            return _metaDataEvents.LogStartEvent;
         }
 
-        public List<LogEndEvent> GetLogEndEvents()
+        public LogEndEvent GetLogEndEvent()
         {
-            return _metaDataEvents.LogEndEvents;
+            return _metaDataEvents.LogEndEvent;
         }
 
         public List<MapIDEvent> GetMapIDEvents()

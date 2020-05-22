@@ -83,23 +83,43 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                         GeneralHelper.Add(statusEvents.HealthUpdateEvents, healthEvt.Src, healthEvt);
                         break;
                     case ParseEnum.StateChange.LogStart:
-                        metaDataEvents.LogStartEvents.Add(new LogStartEvent(c));
+                        if (c.Value == 0 || c.BuffDmg == 0)
+                        {
+                            continue;
+                        }
+                        metaDataEvents.LogStartEvent = new LogStartEvent(c);
                         break;
                     case ParseEnum.StateChange.LogEnd:
-                        metaDataEvents.LogEndEvents.Add(new LogEndEvent(c));
+                        if (c.Value == 0 || c.BuffDmg == 0)
+                        {
+                            continue;
+                        }
+                        metaDataEvents.LogEndEvent = new LogEndEvent(c);
                         break;
                     case ParseEnum.StateChange.MaxHealthUpdate:
                         var maxHealthEvt = new MaxHealthUpdateEvent(c, agentData);
                         GeneralHelper.Add(statusEvents.MaxHealthUpdateEvents, maxHealthEvt.Src, maxHealthEvt);
                         break;
                     case ParseEnum.StateChange.PointOfView:
-                        metaDataEvents.PointOfViewEvents.Add(new PointOfViewEvent(c, agentData));
+                        if (c.SrcAgent == 0)
+                        {
+                            continue;
+                        }
+                        metaDataEvents.PointOfViewEvent = new PointOfViewEvent(c, agentData);
                         break;
                     case ParseEnum.StateChange.Language:
-                        metaDataEvents.LanguageEvents.Add(new LanguageEvent(c));
+                        if (c.SrcAgent == 0)
+                        {
+                            continue;
+                        }
+                        metaDataEvents.LanguageEvent = new LanguageEvent(c);
                         break;
                     case ParseEnum.StateChange.GWBuild:
-                        metaDataEvents.BuildEvents.Add(new BuildEvent(c));
+                        if (c.SrcAgent == 0)
+                        {
+                            continue;
+                        }
+                        metaDataEvents.BuildEvent = new BuildEvent(c);
                         break;
                     case ParseEnum.StateChange.ShardId:
                         metaDataEvents.ShardEvents.Add(new ShardEvent(c));

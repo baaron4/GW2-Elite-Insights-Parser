@@ -44,7 +44,7 @@ namespace GW2EIParser.Parser.ParsedData
             _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Combat Events");
             CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList);
             _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Log Meta Data");
-            LogData = new LogData(buildVersion, CombatData, evtcLogDuration);
+            LogData = new LogData(buildVersion, CombatData, evtcLogDuration, playerList);
             _operation.UpdateProgressWithCancellationCheck("GW2 Build " + LogData.GW2Version);
             //
             _operation.UpdateProgressWithCancellationCheck("Checking Success");

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using GW2EIParser.EIData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 
 namespace GW2EIParser.Parser.ParsedData
@@ -22,40 +24,42 @@ namespace GW2EIParser.Parser.ParsedData
         public string LogEndStd { get; private set; } = DefaultTimeValue;
 
         // Constructors
-        public LogData(string buildVersion, CombatData combatData, long evtcLogDuration)
+        public LogData(string buildVersion, CombatData combatData, long evtcLogDuration, List<Player> playerList)
         {
             BuildVersion = buildVersion;
             double unixStart = 0;
             double unixEnd = 0;
-            foreach (PointOfViewEvent povEvt in combatData.GetPointOfViewEvents())
+            //
+            PointOfViewEvent povEvt = combatData.GetPointOfViewEvent();
+            if (povEvt != null)
             {
-                SetPOV(povEvt.PoV);
+                SetPOV(povEvt.PoV, playerList);
             }
-            foreach (BuildEvent buildEvt in combatData.GetBuildEvents())
+            //
+            BuildEvent buildEvt = combatData.GetBuildEvent();
+            if (buildEvt != null)
             {
                 GW2Version = buildEvt.Build;
             }
-            foreach (LanguageEvent langEvt in combatData.GetLanguageEvents())
+            //
+            LanguageEvent langEvt = combatData.GetLanguageEvent();
+            if (langEvt != null)
             {
                 Language = langEvt.ToString();
                 LanguageID = langEvt.Language;
             }
-            foreach (LogStartEvent logStr in combatData.GetLogStartEvents())
+            //
+            LogStartEvent logStr = combatData.GetLogStartEvent();
+            if (logStr != null)
             {
-                if (logStr.ServerUnixTimeStamp == 0 || logStr.LocalUnixTimeStamp == 0)
-                {
-                    continue;
-                }
                 SetLogStart(logStr.LocalUnixTimeStamp);
                 SetLogStartStd(logStr.LocalUnixTimeStamp);
                 unixStart = logStr.LocalUnixTimeStamp;
             }
-            foreach (LogEndEvent logEnd in combatData.GetLogEndEvents())
+            //
+            LogEndEvent logEnd = combatData.GetLogEndEvent();
+            if (logEnd != null)
             {
-                if (logEnd.ServerUnixTimeStamp == 0 || logEnd.LocalUnixTimeStamp == 0)
-                {
-                    continue;
-                }
                 SetLogEnd(logEnd.LocalUnixTimeStamp);
                 SetLogEndStd(logEnd.LocalUnixTimeStamp);
                 unixEnd = logEnd.LocalUnixTimeStamp;
@@ -77,16 +81,13 @@ namespace GW2EIParser.Parser.ParsedData
         }
 
         // Setters
-        private void SetPOV(AgentItem pov)
+        private void SetPOV(AgentItem pov, List<Player> playerList)
         {
             PoV = pov;
-            try
+            Player povPlayer = playerList.Find(x => x.AgentItem == pov);
+            if (povPlayer != null)
             {
-                PoVName = pov.Name.Substring(0, pov.Name.LastIndexOf('\0')).Split(':')[0].TrimEnd('\u0000');
-            }
-            catch (Exception)
-            {
-                PoVName = pov.Name;
+                PoVName = povPlayer.Character;
             }
         }
 
