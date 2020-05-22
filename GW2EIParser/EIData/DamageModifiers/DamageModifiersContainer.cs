@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using GW2EIParser.Logic;
 using static GW2EIParser.EIData.DamageModifier;
 
 namespace GW2EIParser.EIData
@@ -11,12 +12,12 @@ namespace GW2EIParser.EIData
 
         public Dictionary<string, DamageModifier> DamageModifiersByName { get; }
 
-        public DamageModifiersContainer(ulong build)
+        public DamageModifiersContainer(ulong build, FightLogic.ParseMode mode)
         {
             var currentDamageMods = new List<DamageModifier>();
             foreach (List<DamageModifier> boons in AllDamageModifiers)
             {
-                currentDamageMods.AddRange(boons.Where(x => x.MaxBuild > build && build >= x.MinBuild));
+                currentDamageMods.AddRange(boons.Where(x => x.MaxBuild > build && build >= x.MinBuild && x.Keep(mode)));
             }
             DamageModifiersPerSource = currentDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
             DamageModifiersByName = currentDamageMods.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().First());

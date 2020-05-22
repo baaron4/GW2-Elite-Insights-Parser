@@ -196,6 +196,10 @@ namespace GW2EIParser.Parser.ParsedData
         {
             foreach (KeyValuePair<AgentItem, List<AbstractDamageEvent>> pair in _damageTakenData)
             {
+                if (pair.Key.ID == (int)ParseEnum.TargetIDS.WorldVersusWorld)
+                {
+                    continue;
+                }
                 bool setDeads = false;
                 if (!_statusEvents.DeadEvents.TryGetValue(pair.Key, out List<DeadEvent> agentDeaths))
                 {

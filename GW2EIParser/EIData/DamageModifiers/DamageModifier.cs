@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using GW2EIParser.Logic;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 
@@ -7,6 +9,8 @@ namespace GW2EIParser.EIData
 {
     public abstract class DamageModifier
     {
+
+        public enum DamageModifierMode { PvE, sPvP, WvW, All, sPvPWvW };
         public enum DamageType { All, Power, Condition };
         public enum DamageSource { All, NoPets };
 
@@ -24,9 +28,11 @@ namespace GW2EIParser.EIData
         public string Name { get; protected set; }
         public string Tooltip { get; protected set; }
         public delegate bool DamageLogChecker(AbstractDamageEvent dl);
+
+        protected DamageModifierMode Mode { get; set; } = DamageModifierMode.All;
         protected DamageLogChecker DLChecker { get; set; }
 
-        protected DamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, GeneralHelper.Source src, string icon, GainComputer gainComputer, DamageLogChecker dlChecker, ulong minBuild, ulong maxBuild)
+        protected DamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, GeneralHelper.Source src, string icon, GainComputer gainComputer, DamageLogChecker dlChecker, ulong minBuild, ulong maxBuild, DamageModifierMode mode = DamageModifierMode.All)
         {
             Tooltip = tooltip;
             Name = name;
@@ -40,6 +46,7 @@ namespace GW2EIParser.EIData
             DLChecker = dlChecker;
             MaxBuild = maxBuild;
             MinBuild = minBuild;
+            Mode = mode;
             switch (_dmgSrc)
             {
                 case DamageSource.All:
@@ -77,6 +84,31 @@ namespace GW2EIParser.EIData
             {
                 Tooltip += "<br>Non multiplier";
             }
+        }
+
+        public bool Keep(FightLogic.ParseMode mode)
+        {
+            if (Mode == DamageModifierMode.All)
+            {
+                if (mode == FightLogic.ParseMode.WvW)
+                {
+                    return !(this is BuffDamageModifierTarget);
+                }
+                return true;
+            }
+            switch(mode)
+            {
+                case FightLogic.ParseMode.Unknown:
+                case FightLogic.ParseMode.Instanced5:
+                case FightLogic.ParseMode.Instanced10:
+                case FightLogic.ParseMode.Benchmark:
+                    return Mode == DamageModifierMode.PvE;
+                case FightLogic.ParseMode.WvW:
+                    return !(this is BuffDamageModifierTarget) && (Mode == DamageModifierMode.WvW || Mode == DamageModifierMode.sPvPWvW);
+                case FightLogic.ParseMode.sPvP:
+                    return Mode == DamageModifierMode.sPvP || Mode == DamageModifierMode.sPvPWvW;
+            }
+            return false;
         }
 
         public int GetTotalDamage(Player p, ParsedLog log, NPC t, int phaseIndex)
