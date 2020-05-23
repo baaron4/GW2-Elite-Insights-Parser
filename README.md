@@ -88,7 +88,7 @@ Note it may take some time for each file to parse and they will not be ready to 
 
 -__AutoAddPath__: the path to listen to for automatic additions.
 
--__AutoParse__: if true, every added 
+-__AutoParse__: if true, every added log file will be automatically processed.
 
 ### Encounter Settings
 
@@ -122,7 +122,7 @@ Note it may take some time for each file to parse and they will not be ready to 
 
 -__CompressRaw__: if true, xml and json logs will be compressed.
 
--__RawTimelineArrays__: if true, xml and json logs will not contain graph related data.
+-__RawTimelineArrays__: if true, xml and json logs will contain graph related data.
 
 ### Upload Settings
 
