@@ -114,7 +114,7 @@ namespace GW2EIParser.Logic
                 throw new InvalidOperationException("Xera not found");
             }
             // enter combat
-            CombatItem enterCombat = combatData.Find(x => x.SrcAgent == target.Agent && x.IsStateChangeEnum == ParseEnum.StateChange.EnterCombat);
+            CombatItem enterCombat = combatData.Find(x => x.SrcAgent == target.Agent && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
             if (enterCombat != null)
             {
                 fightData.OverrideOffset(enterCombat.Time);
@@ -135,7 +135,7 @@ namespace GW2EIParser.Logic
             {
                 if (NPC.ID == 16286)
                 {
-                    CombatItem move = combatData.FirstOrDefault(x => x.IsStateChangeEnum == ParseEnum.StateChange.Position && x.SrcAgent == NPC.Agent && x.Time >= NPC.FirstAware + 500);
+                    CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position && x.SrcAgent == NPC.Agent && x.Time >= NPC.FirstAware + 500);
                     if (move != null)
                     {
                         _specialSplit = move.Time;
@@ -150,11 +150,11 @@ namespace GW2EIParser.Logic
                     // update combat data
                     foreach (CombatItem c in combatData)
                     {
-                        if (agents.Contains(c.SrcAgent) && c.IsStateChangeEnum.SrcIsAgent())
+                        if (agents.Contains(c.SrcAgent) && c.IsStateChange.SrcIsAgent())
                         {
                             c.OverrideSrcAgent(target.Agent);
                         }
-                        if (agents.Contains(c.DstAgent) && c.IsStateChangeEnum.DstIsAgent())
+                        if (agents.Contains(c.DstAgent) && c.IsStateChange.DstIsAgent())
                         {
                             c.OverrideDstAgent(target.Agent);
                         }

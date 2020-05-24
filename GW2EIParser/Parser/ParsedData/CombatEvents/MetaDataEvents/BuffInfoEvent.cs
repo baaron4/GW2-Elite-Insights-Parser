@@ -24,7 +24,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public BuffInfoEvent(CombatItem evtcItem) : base(evtcItem)
         {
-            switch(evtcItem.IsStateChangeEnum)
+            switch(evtcItem.IsStateChange)
             {
                 case ParseEnum.StateChange.BuffFormula:
                     BuildFromBuffFormula(evtcItem);
@@ -44,7 +44,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             {
                 throw new InvalidOperationException("Non matching buff id in BuffDataEvent complete method");
             }
-            switch (evtcItem.IsStateChangeEnum)
+            switch (evtcItem.IsStateChange)
             {
                 case ParseEnum.StateChange.BuffFormula:
                     BuildFromBuffFormula(evtcItem);

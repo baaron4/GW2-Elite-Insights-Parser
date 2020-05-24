@@ -60,11 +60,11 @@ namespace GW2EIParser.Logic
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
-            CombatItem invulGain = combatData.FirstOrDefault(x => x.DstAgent == target.Agent && (x.IsStateChangeEnum == ParseEnum.StateChange.None || x.IsStateChangeEnum == ParseEnum.StateChange.BuffInitial) && x.IsBuffRemoveEnum == ParseEnum.BuffRemove.None && x.IsBuff > 0 && x.SkillID == invulID);
+            CombatItem invulGain = combatData.FirstOrDefault(x => x.DstAgent == target.Agent && (x.IsStateChange == ParseEnum.StateChange.None || x.IsStateChange == ParseEnum.StateChange.BuffInitial) && x.IsBuffRemove == ParseEnum.BuffRemove.None && x.IsBuff > 0 && x.SkillID == invulID);
             // check invul gain at the start of the fight (initial or with a small threshold)
             if (invulGain != null && invulGain.Time - fightData.FightOffset < invulGainOffset)
             {
-                CombatItem invulLost = combatData.FirstOrDefault(x => x.Time >= invulGain.Time && x.SrcAgent == target.Agent && x.IsStateChangeEnum == ParseEnum.StateChange.None && x.IsBuffRemoveEnum == ParseEnum.BuffRemove.All && x.SkillID == invulID);
+                CombatItem invulLost = combatData.FirstOrDefault(x => x.Time >= invulGain.Time && x.SrcAgent == target.Agent && x.IsStateChange == ParseEnum.StateChange.None && x.IsBuffRemove == ParseEnum.BuffRemove.All && x.SkillID == invulID);
                 // check invul lost, add it as offset
                 if (invulLost != null)
                 {

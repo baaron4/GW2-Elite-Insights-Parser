@@ -40,11 +40,11 @@ namespace GW2EIParser.Logic
 
         public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            CombatItem pov = combatData.FirstOrDefault(x => x.IsStateChangeEnum == ParseEnum.StateChange.PointOfView);
+            CombatItem pov = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.PointOfView);
             if (pov != null)
             {
                 // to make sure that the logging starts when the PoV starts attacking (in case there is a slave with them)
-                CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcAgent == pov.SrcAgent && x.IsStateChangeEnum == ParseEnum.StateChange.EnterCombat);
+                CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcAgent == pov.SrcAgent && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
                 if (enterCombat != null)
                 {
                     fightData.OverrideOffset(enterCombat.Time);
@@ -59,7 +59,7 @@ namespace GW2EIParser.Logic
             foreach (CombatItem c in combatData)
             {
                 // redirect all attacks to the main golem
-                if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsStateChangeEnum == ParseEnum.StateChange.None && c.IFFEnum == ParseEnum.IFF.Foe && c.IsActivationEnum == ParseEnum.Activation.None && c.IsBuffRemoveEnum == ParseEnum.BuffRemove.None)
+                if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsStateChange == ParseEnum.StateChange.None && c.IFF == ParseEnum.IFF.Foe && c.IsActivation == ParseEnum.Activation.None && c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
                     c.OverrideDstAgent(target.Agent);
                 }

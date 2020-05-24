@@ -83,9 +83,9 @@ namespace GW2EIParser.Logic
             playerList.Add(new Player(sword, false, true));
             foreach (CombatItem c in combatData)
             {
-                if (c.SkillID == 52370 && c.IsStateChangeEnum == ParseEnum.StateChange.None && c.IsBuffRemoveEnum == ParseEnum.BuffRemove.None &&
+                if (c.SkillID == 52370 && c.IsStateChange == ParseEnum.StateChange.None && c.IsBuffRemove == ParseEnum.BuffRemove.None &&
                                         ((c.IsBuff == 1 && c.BuffDmg >= 0 && c.Value == 0) ||
-                                        (c.IsBuff == 0 && c.Value >= 0)) && c.DstInstid != 0 && c.IFFEnum == ParseEnum.IFF.Foe)
+                                        (c.IsBuff == 0 && c.Value >= 0)) && c.DstInstid != 0 && c.IFF == ParseEnum.IFF.Foe)
                 {
                     c.OverrideSrcAgent(sword.Agent);
                 }

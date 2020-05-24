@@ -412,7 +412,7 @@ namespace GW2EIParser.Parser
                     {
                         continue;
                     }
-                    if (combatItem.IsStateChangeEnum.HasTime())
+                    if (combatItem.IsStateChange.HasTime())
                     {
                         if (_logStartTime == 0)
                         {
@@ -445,17 +445,17 @@ namespace GW2EIParser.Parser
         /// <returns>true if the combat item is valid</returns>
         private static bool IsValid(CombatItem combatItem)
         {
-            if (combatItem.IsStateChangeEnum == ParseEnum.StateChange.HealthUpdate && combatItem.DstAgent > 20000)
+            if (combatItem.IsStateChange == ParseEnum.StateChange.HealthUpdate && combatItem.DstAgent > 20000)
             {
                 // DstAgent should be target health % times 100, values higher than 10000 are unlikely. 
                 // If it is more than 200% health ignore this record
                 return false;
             }
-            if (combatItem.SrcInstid == 0 && combatItem.DstAgent == 0 && combatItem.SrcAgent == 0 && combatItem.DstInstid == 0 && combatItem.IFFEnum == ParseEnum.IFF.Unknown)
+            if (combatItem.SrcInstid == 0 && combatItem.DstAgent == 0 && combatItem.SrcAgent == 0 && combatItem.DstInstid == 0 && combatItem.IFF == ParseEnum.IFF.Unknown)
             {
                 return false;
             }
-            return combatItem.IsStateChangeEnum != ParseEnum.StateChange.Unknown;
+            return combatItem.IsStateChange != ParseEnum.StateChange.Unknown;
         }
         private static void UpdateAgentData(AgentItem ag, long logTime, ushort instid)
         {
@@ -529,11 +529,11 @@ namespace GW2EIParser.Parser
                             ulong agent = p.Agent;
                             foreach (CombatItem c in _combatItems)
                             {
-                                if (player.Agent == c.DstAgent && c.IsStateChangeEnum.DstIsAgent())
+                                if (player.Agent == c.DstAgent && c.IsStateChange.DstIsAgent())
                                 {
                                     c.OverrideDstAgent(agent);
                                 }
-                                if (player.Agent == c.SrcAgent && c.IsStateChangeEnum.SrcIsAgent())
+                                if (player.Agent == c.SrcAgent && c.IsStateChange.SrcIsAgent())
                                 {
                                     c.OverrideSrcAgent(agent);
                                 }
@@ -585,14 +585,14 @@ namespace GW2EIParser.Parser
             // Set Agent instid, firstAware and lastAware
             foreach (CombatItem c in _combatItems)
             {
-                if (c.IsStateChangeEnum.SrcIsAgent())
+                if (c.IsStateChange.SrcIsAgent())
                 {
                     if (agentsLookup.TryGetValue(c.SrcAgent, out AgentItem agent))
                     {
                         UpdateAgentData(agent, c.Time, c.SrcInstid);
                     }
                 }
-                if (c.IsStateChangeEnum.DstIsAgent())
+                if (c.IsStateChange.DstIsAgent())
                 {
                     if (agentsLookup.TryGetValue(c.DstAgent, out AgentItem agent))
                     {
@@ -609,11 +609,11 @@ namespace GW2EIParser.Parser
 
             foreach (CombatItem c in _combatItems)
             {
-                if (c.IsStateChangeEnum.SrcIsAgent() && c.SrcMasterInstid != 0)
+                if (c.IsStateChange.SrcIsAgent() && c.SrcMasterInstid != 0)
                 {
                     FindAgentMaster(c.Time, c.SrcMasterInstid, c.SrcAgent);
                 }
-                if (c.IsStateChangeEnum.DstIsAgent() && c.DstMasterInstid != 0)
+                if (c.IsStateChange.DstIsAgent() && c.DstMasterInstid != 0)
                 {
                     FindAgentMaster(c.Time, c.DstMasterInstid, c.DstAgent);
                 }

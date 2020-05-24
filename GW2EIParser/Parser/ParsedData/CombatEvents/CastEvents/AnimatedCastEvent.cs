@@ -15,7 +15,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         private AnimatedCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData) : base(startItem, agentData, skillData)
         {
             ExpectedDuration = startItem.BuffDmg > 0 ? startItem.BuffDmg : startItem.Value;
-            if (startItem.IsActivationEnum == ParseEnum.Activation.Quickness)
+            if (startItem.IsActivation == ParseEnum.Activation.Quickness)
             {
                 Acceleration = 1;
             }
@@ -37,7 +37,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                 nonScaledToScaledRatio = (double)_scaledActualDuration / ActualDuration;
                 Acceleration = GeneralHelper.Clamp(2.0 * ((Math.Log(nonScaledToScaledRatio) - _lowerLimit) / _diffLimit) - 1.0, -1.0, 1.0);
             }
-            switch (endItem.IsActivationEnum)
+            switch (endItem.IsActivation)
             {
                 case ParseEnum.Activation.CancelCancel:
                     Status = AnimationStatus.Iterrupted;
