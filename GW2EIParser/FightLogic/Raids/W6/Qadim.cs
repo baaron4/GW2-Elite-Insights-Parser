@@ -110,7 +110,7 @@ namespace GW2EIParser.Logic
         {
             List<AgentItem> pyres = agentData.GetNPCsByID((int)PyreGuardian);
             // Lamps
-            var lampAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ParseEnum.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202).ToList();
+            var lampAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChangeEnum == ParseEnum.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202).ToList();
             foreach (AgentItem lamp in lampAgents)
             {
                 lamp.OverrideType(AgentItem.AgentType.NPC);
@@ -120,7 +120,7 @@ namespace GW2EIParser.Logic
             // Pyres
             foreach (AgentItem pyre in pyres)
             {
-                CombatItem position = combatData.FirstOrDefault(x => x.SrcAgent == pyre.Agent && x.IsStateChange == ParseEnum.StateChange.Position);
+                CombatItem position = combatData.FirstOrDefault(x => x.SrcAgent == pyre.Agent && x.IsStateChangeEnum == ParseEnum.StateChange.Position);
                 if (position != null)
                 {
                     (float x, float y, _) = AbstractMovementEvent.UnpackMovementData(position.DstAgent, 0);
@@ -159,8 +159,8 @@ namespace GW2EIParser.Logic
             {
                 throw new InvalidOperationException("Qadim not found");
             }
-            CombatItem startCast = combatData.FirstOrDefault(x => x.SkillID == 52496 && x.IsActivation.StartCasting());
-            CombatItem sanityCheckCast = combatData.FirstOrDefault(x => (x.SkillID == 52528 || x.SkillID == 52333 || x.SkillID == 58814) && x.IsActivation.StartCasting());
+            CombatItem startCast = combatData.FirstOrDefault(x => x.SkillID == 52496 && x.IsActivationEnum.StartCasting());
+            CombatItem sanityCheckCast = combatData.FirstOrDefault(x => (x.SkillID == 52528 || x.SkillID == 52333 || x.SkillID == 58814) && x.IsActivationEnum.StartCasting());
             if (startCast == null || sanityCheckCast == null)
             {
                 throw new IncompleteLogException();

@@ -53,7 +53,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             {
                 bytes[offset++] = bt;
             }
-            foreach (byte bt in BitConverter.GetBytes((byte)evtcItem.IFF))
+            foreach (byte bt in BitConverter.GetBytes((byte)evtcItem.IFFEnum))
             {
                 bytes[offset++] = bt;
             }
@@ -61,7 +61,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             {
                 bytes[offset++] = bt;
             }
-            foreach (byte bt in BitConverter.GetBytes((byte)evtcItem.IFF))
+            foreach (byte bt in BitConverter.GetBytes((byte)evtcItem.IFFEnum))
             {
                 bytes[offset++] = bt;
             }
@@ -73,11 +73,11 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             {
                 bytes[offset++] = bt;
             }
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.IsActivationByte))
+            foreach (byte bt in BitConverter.GetBytes(evtcItem.IsActivation))
             {
                 bytes[offset++] = bt;
             }
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.IsBuffRemoveByte))
+            foreach (byte bt in BitConverter.GetBytes(evtcItem.IsBuffRemove))
             {
                 bytes[offset++] = bt;
             }
@@ -93,7 +93,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             {
                 bytes[offset++] = bt;
             }
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.IsStateChangeByte))
+            foreach (byte bt in BitConverter.GetBytes(evtcItem.IsStateChange))
             {
                 bytes[offset++] = bt;
             }

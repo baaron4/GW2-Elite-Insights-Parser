@@ -84,14 +84,14 @@ namespace GW2EIParser.Logic
             bool sortCombatList = false;
             foreach (AgentItem riverOfSoul in riverOfSouls)
             {
-                CombatItem firstMovement = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Velocity && x.SrcAgent == riverOfSoul.Agent && x.DstAgent != 0);
+                CombatItem firstMovement = combatData.FirstOrDefault(x => x.IsStateChangeEnum == ParseEnum.StateChange.Velocity && x.SrcAgent == riverOfSoul.Agent && x.DstAgent != 0);
                 if (firstMovement != null)
                 {
                     // update start
                     riverOfSoul.OverrideAwareTimes(firstMovement.Time - GeneralHelper.ServerDelayConstant, riverOfSoul.LastAware);
                     foreach (CombatItem c in combatData)
                     {
-                        if (c.SrcAgent == riverOfSoul.Agent && (c.IsStateChange == ParseEnum.StateChange.Position || c.IsStateChange == ParseEnum.StateChange.Rotation) && c.Time <= riverOfSoul.FirstAware)
+                        if (c.SrcAgent == riverOfSoul.Agent && (c.IsStateChangeEnum == ParseEnum.StateChange.Position || c.IsStateChangeEnum == ParseEnum.StateChange.Rotation) && c.Time <= riverOfSoul.FirstAware)
                         {
                             sortCombatList = true;
                             c.OverrideTime(riverOfSoul.FirstAware);

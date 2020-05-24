@@ -12,7 +12,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             foreach (CombatItem c in movementEvents)
             {
                 AbstractMovementEvent evt = null;
-                switch (c.IsStateChange)
+                switch (c.IsStateChangeEnum)
                 {
                     case ParseEnum.StateChange.Velocity:
                         evt = new VelocityEvent(c, agentData);
@@ -48,7 +48,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         {
             foreach (CombatItem c in stateChangeEvents)
             {
-                switch (c.IsStateChange)
+                switch (c.IsStateChangeEnum)
                 {
                     case ParseEnum.StateChange.EnterCombat:
                         var enterCombatEvt = new EnterCombatEvent(c, agentData);
@@ -158,7 +158,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                             buffInfoEvent = new BuffInfoEvent(c);
                             metaDataEvents.BuffInfoEvents[c.SkillID] = buffInfoEvent;
                         }
-                        if (c.IsStateChange == ParseEnum.StateChange.BuffInfo)
+                        if (c.IsStateChangeEnum == ParseEnum.StateChange.BuffInfo)
                         {
                             if (metaDataEvents.BuffInfoEventsByCategory.TryGetValue(buffInfoEvent.Category, out List<BuffInfoEvent> bdEvtList))
                             {
@@ -192,7 +192,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             var res = new List<AbstractBuffEvent>();
             foreach (CombatItem c in buffEvents)
             {
-                switch (c.IsStateChange)
+                switch (c.IsStateChangeEnum)
                 {
                     case ParseEnum.StateChange.StackActive:
                         res.Add(new BuffStackActiveEvent(c, agentData, skillData));
@@ -201,7 +201,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                         res.Add(new BuffStackResetEvent(c, agentData, skillData));
                         break;
                     default:
-                        switch (c.IsBuffRemove)
+                        switch (c.IsBuffRemoveEnum)
                         {
                             case ParseEnum.BuffRemove.None:
                                 if (c.IsOffcycle > 0)
@@ -238,7 +238,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                 CombatItem startItem = null;
                 foreach (CombatItem c in pair.Value)
                 {
-                    if (c.IsActivation.StartCasting())
+                    if (c.IsActivationEnum.StartCasting())
                     {
                         // missing end
                         if (startItem != null)

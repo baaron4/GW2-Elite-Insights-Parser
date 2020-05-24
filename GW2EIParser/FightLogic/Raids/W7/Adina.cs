@@ -30,18 +30,18 @@ namespace GW2EIParser.Logic
 
         public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
-            var attackTargets = combatData.Where(x => x.IsStateChange == ParseEnum.StateChange.AttackTarget).ToList();
+            var attackTargets = combatData.Where(x => x.IsStateChangeEnum == ParseEnum.StateChange.AttackTarget).ToList();
             long first = fightData.FightStart;
             long final = fightData.FightEnd;
             foreach (CombatItem at in attackTargets)
             {
                 AgentItem hand = agentData.GetAgent(at.DstAgent);
                 AgentItem atAgent = agentData.GetAgent(at.SrcAgent);
-                var attackables = combatData.Where(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.SrcAgent == atAgent.Agent && x.Time <= atAgent.LastAware && x.Time >= atAgent.FirstAware).ToList();
+                var attackables = combatData.Where(x => x.IsStateChangeEnum == ParseEnum.StateChange.Targetable && x.SrcAgent == atAgent.Agent && x.Time <= atAgent.LastAware && x.Time >= atAgent.FirstAware).ToList();
                 var attackOn = attackables.Where(x => x.DstAgent == 1 && x.Time >= first + 2000).Select(x => x.Time).ToList();
                 var attackOff = attackables.Where(x => x.DstAgent == 0 && x.Time >= first + 2000).Select(x => x.Time).ToList();
-                var posFacingHP = combatData.Where(x => x.SrcAgent == hand.Agent && x.Time >= hand.FirstAware && hand.LastAware >= x.Time && (x.IsStateChange == ParseEnum.StateChange.Position || x.IsStateChange == ParseEnum.StateChange.Rotation || x.IsStateChange == ParseEnum.StateChange.MaxHealthUpdate)).ToList();
-                CombatItem pos = posFacingHP.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position);
+                var posFacingHP = combatData.Where(x => x.SrcAgent == hand.Agent && x.Time >= hand.FirstAware && hand.LastAware >= x.Time && (x.IsStateChangeEnum == ParseEnum.StateChange.Position || x.IsStateChangeEnum == ParseEnum.StateChange.Rotation || x.IsStateChangeEnum == ParseEnum.StateChange.MaxHealthUpdate)).ToList();
+                CombatItem pos = posFacingHP.FirstOrDefault(x => x.IsStateChangeEnum == ParseEnum.StateChange.Position);
                 int id = (int)HandOfErosion;
                 if (pos != null)
                 {
@@ -65,11 +65,11 @@ namespace GW2EIParser.Logic
                     {
                         if (c.Time >= extra.FirstAware && c.Time <= extra.LastAware)
                         {
-                            if (c.IsStateChange.SrcIsAgent() && c.SrcAgent == hand.Agent)
+                            if (c.IsStateChangeEnum.SrcIsAgent() && c.SrcAgent == hand.Agent)
                             {
                                 c.OverrideSrcAgent(extra.Agent);
                             }
-                            if (c.IsStateChange.DstIsAgent() && c.DstAgent == hand.Agent)
+                            if (c.IsStateChangeEnum.DstIsAgent() && c.DstAgent == hand.Agent)
                             {
                                 c.OverrideDstAgent(extra.Agent);
                             }

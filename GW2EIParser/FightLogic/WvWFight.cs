@@ -69,9 +69,9 @@ namespace GW2EIParser.Logic
             var enemyPlayerDicts = aList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList().First());
             foreach (CombatItem c in combatData)
             {
-                if (c.IsStateChange == ParseEnum.StateChange.None &&
-                    c.IsActivation == ParseEnum.Activation.None &&
-                    c.IsBuffRemove == ParseEnum.BuffRemove.None &&
+                if (c.IsStateChangeEnum == ParseEnum.StateChange.None &&
+                    c.IsActivationEnum == ParseEnum.Activation.None &&
+                    c.IsBuffRemoveEnum == ParseEnum.BuffRemove.None &&
                     ((c.IsBuff != 0 && c.Value == 0) || (c.IsBuff == 0)))
                 {
                     if (enemyPlayerDicts.TryGetValue(c.SrcAgent, out AgentItem src))

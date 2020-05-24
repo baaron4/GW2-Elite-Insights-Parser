@@ -36,7 +36,7 @@
             AgainstUnderFifty = evtcItem.IsFifty > 0;
             IsMoving = evtcItem.IsMoving > 0;
             IsFlanking = evtcItem.IsFlanking > 0;
-            IFF = evtcItem.IFF;
+            IFF = evtcItem.IFFEnum;
         }
 
         public void NegateDamage()

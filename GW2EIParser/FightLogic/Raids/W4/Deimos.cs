@@ -82,21 +82,21 @@ namespace GW2EIParser.Logic
             {
                 if (gadgetAgents.Contains(c.SrcAgent))
                 {
-                    if (c.IsStateChange == ParseEnum.StateChange.MaxHealthUpdate)
+                    if (c.IsStateChangeEnum == ParseEnum.StateChange.MaxHealthUpdate)
                     {
                         continue;
                     }
-                    if (c.IsStateChange == ParseEnum.StateChange.HealthUpdate && c.DstAgent > 1500)
+                    if (c.IsStateChangeEnum == ParseEnum.StateChange.HealthUpdate && c.DstAgent > 1500)
                     {
                         continue;
                     }
                 }
-                if (allAgents.Contains(c.SrcAgent) && c.IsStateChange.SrcIsAgent())
+                if (allAgents.Contains(c.SrcAgent) && c.IsStateChangeEnum.SrcIsAgent())
                 {
                     c.OverrideSrcAgent(target.Agent);
 
                 }
-                if (allAgents.Contains(c.DstAgent) && c.IsStateChange.DstIsAgent())
+                if (allAgents.Contains(c.DstAgent) && c.IsStateChangeEnum.DstIsAgent())
                 {
                     c.OverrideDstAgent(target.Agent);
                 }
@@ -194,7 +194,7 @@ namespace GW2EIParser.Logic
                     string[] names = targetAgent.Name.Split('-');
                     if (ushort.TryParse(names[2], out ushort masterInstid))
                     {
-                        CombatItem structDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && x.IFF == ParseEnum.IFF.Foe && x.DstInstid == masterInstid && x.IsStateChange == ParseEnum.StateChange.None && x.IsBuffRemove == ParseEnum.BuffRemove.None &&
+                        CombatItem structDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && x.IFFEnum == ParseEnum.IFF.Foe && x.DstInstid == masterInstid && x.IsStateChangeEnum == ParseEnum.StateChange.None && x.IsBuffRemoveEnum == ParseEnum.BuffRemove.None &&
                                 ((x.IsBuff == 1 && x.BuffDmg >= 0 && x.Value == 0) ||
                                 (x.IsBuff == 0 && x.Value >= 0)));
                         if (structDeimosDamageEvent != null)
@@ -223,7 +223,7 @@ namespace GW2EIParser.Logic
             foreach (AgentItem deimos in deimosAgents)
             {
                 // enter combat
-                CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcAgent == deimos.Agent && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
+                CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcAgent == deimos.Agent && x.IsStateChangeEnum == ParseEnum.StateChange.EnterCombat);
                 if (enterCombat != null)
                 {
                     offset = Math.Max(offset, enterCombat.Time);
@@ -244,15 +244,15 @@ namespace GW2EIParser.Logic
                 throw new InvalidOperationException("Deimos not found");
             }
             // Remove deimos despawn events as they are useless and mess with combat replay
-            combatData.RemoveAll(x => x.IsStateChange == ParseEnum.StateChange.Despawn && x.SrcAgent == target.Agent);
+            combatData.RemoveAll(x => x.IsStateChangeEnum == ParseEnum.StateChange.Despawn && x.SrcAgent == target.Agent);
             // invul correction
-            CombatItem invulApp = combatData.FirstOrDefault(x => x.DstAgent == target.Agent && x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0 && x.SkillID == 762 && x.IsStateChange == ParseEnum.StateChange.None);
+            CombatItem invulApp = combatData.FirstOrDefault(x => x.DstAgent == target.Agent && x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0 && x.SkillID == 762 && x.IsStateChangeEnum == ParseEnum.StateChange.None);
             if (invulApp != null)
             {
                 invulApp.OverrideValue((int)(target.LastAware - invulApp.Time));
             }
             // Deimos gadgets
-            CombatItem targetable = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.DstAgent > 0);
+            CombatItem targetable = combatData.LastOrDefault(x => x.IsStateChangeEnum == ParseEnum.StateChange.Targetable && x.DstAgent > 0);
             var gadgetAgents = new HashSet<ulong>();
             long firstAware = AttackTargetSpecialParse(targetable, agentData, combatData, gadgetAgents);
             // legacy method

@@ -15,19 +15,19 @@ namespace GW2EIParser.Parser
         public ushort DstInstid { get; }
         public ushort SrcMasterInstid { get; }
         public ushort DstMasterInstid { get; }
-        public byte IFFByte { get; }
-        public ParseEnum.IFF IFF { get; }
+        public byte IFF { get; }
+        public ParseEnum.IFF IFFEnum { get; }
         public byte IsBuff { get; }
         public byte Result { get; }
-        public byte IsActivationByte { get; }
-        public ParseEnum.Activation IsActivation { get; }
-        public byte IsBuffRemoveByte { get; }
-        public ParseEnum.BuffRemove IsBuffRemove { get; }
+        public byte IsActivation { get; }
+        public ParseEnum.Activation IsActivationEnum { get; }
+        public byte IsBuffRemove { get; }
+        public ParseEnum.BuffRemove IsBuffRemoveEnum { get; }
         public byte IsNinety { get; }
         public byte IsFifty { get; }
         public byte IsMoving { get; }
-        public byte IsStateChangeByte { get; }
-        public ParseEnum.StateChange IsStateChange { get; }
+        public byte IsStateChange { get; }
+        public ParseEnum.StateChange IsStateChangeEnum { get; }
         public byte IsFlanking { get; }
         public byte IsShields { get; }
         public byte IsOffcycle { get; }
@@ -57,19 +57,19 @@ namespace GW2EIParser.Parser
             DstInstid = dstInstid;
             SrcMasterInstid = srcMasterInstid;
             DstMasterInstid = dstMasterInstid;
-            IFFByte = iff;
-            IFF = ParseEnum.GetIFF(iff);
+            IFF = iff;
+            IFFEnum = ParseEnum.GetIFF(iff);
             IsBuff = isBuff;
             Result = result;
-            IsActivationByte = isActivation;
-            IsActivation = ParseEnum.GetActivation(isActivation);
-            IsBuffRemoveByte = isBuffRemove;
-            IsBuffRemove = ParseEnum.GetBuffRemove(isBuffRemove);
+            IsActivation = isActivation;
+            IsActivationEnum = ParseEnum.GetActivation(isActivation);
+            IsBuffRemove = isBuffRemove;
+            IsBuffRemoveEnum = ParseEnum.GetBuffRemove(isBuffRemove);
             IsNinety = isNinety;
             IsFifty = isFifty;
             IsMoving = isMoving;
-            IsStateChangeByte = isStateChange;
-            IsStateChange = ParseEnum.GetStateChange(isStateChange);
+            IsStateChange = isStateChange;
+            IsStateChangeEnum = ParseEnum.GetStateChange(isStateChange);
             IsFlanking = isFlanking;
             IsShields = isShields;
             IsOffcycle = isOffcycle;
@@ -95,19 +95,19 @@ namespace GW2EIParser.Parser
             DstInstid = c.DstInstid;
             SrcMasterInstid = c.SrcMasterInstid;
             DstMasterInstid = c.DstMasterInstid;
-            IFFByte = c.IFFByte;
             IFF = c.IFF;
+            IFFEnum = c.IFFEnum;
             IsBuff = c.IsBuff;
             Result = c.Result;
-            IsActivationByte = c.IsActivationByte;
             IsActivation = c.IsActivation;
-            IsBuffRemoveByte = c.IsBuffRemoveByte;
+            IsActivationEnum = c.IsActivationEnum;
             IsBuffRemove = c.IsBuffRemove;
+            IsBuffRemoveEnum = c.IsBuffRemoveEnum;
             IsNinety = c.IsNinety;
             IsFifty = c.IsFifty;
             IsMoving = c.IsMoving;
-            IsStateChangeByte = c.IsStateChangeByte;
             IsStateChange = c.IsStateChange;
+            IsStateChangeEnum = c.IsStateChangeEnum;
             IsFlanking = c.IsFlanking;
             IsShields = c.IsShields;
             IsOffcycle = c.IsOffcycle;
@@ -121,7 +121,7 @@ namespace GW2EIParser.Parser
 
         public void OverrideTime(long time)
         {
-            if (IsStateChange.HasTime())
+            if (IsStateChangeEnum.HasTime())
             {
                 Time = time;
             }

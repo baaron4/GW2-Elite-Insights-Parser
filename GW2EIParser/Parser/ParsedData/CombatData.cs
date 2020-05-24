@@ -257,27 +257,27 @@ namespace GW2EIParser.Parser.ParsedData
         public CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players)
         {
             _skillIds = new HashSet<long>(allCombatItems.Select(x => (long)x.SkillID));
-            IEnumerable<CombatItem> noStateActiBuffRem = allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.None && x.IsActivation == ParseEnum.Activation.None && x.IsBuffRemove == ParseEnum.BuffRemove.None);
+            IEnumerable<CombatItem> noStateActiBuffRem = allCombatItems.Where(x => x.IsStateChangeEnum == ParseEnum.StateChange.None && x.IsActivationEnum == ParseEnum.Activation.None && x.IsBuffRemoveEnum == ParseEnum.BuffRemove.None);
             // movement events
             _movementData = CombatEventFactory.CreateMovementEvents(allCombatItems.Where(x =>
-                       x.IsStateChange == ParseEnum.StateChange.Position ||
-                       x.IsStateChange == ParseEnum.StateChange.Velocity ||
-                       x.IsStateChange == ParseEnum.StateChange.Rotation).ToList(), agentData);
+                       x.IsStateChangeEnum == ParseEnum.StateChange.Position ||
+                       x.IsStateChangeEnum == ParseEnum.StateChange.Velocity ||
+                       x.IsStateChangeEnum == ParseEnum.StateChange.Rotation).ToList(), agentData);
             HasMovementData = _movementData.Count > 1;
             // state change events
             CombatEventFactory.CreateStateChangeEvents(allCombatItems, _metaDataEvents, _statusEvents, _rewardEvents, agentData);
             // activation events
-            List<AnimatedCastEvent> animatedCastData = CombatEventFactory.CreateCastEvents(allCombatItems.Where(x => x.IsActivation != ParseEnum.Activation.None).ToList(), agentData, skillData);
-            List<WeaponSwapEvent> wepSwaps = CombatEventFactory.CreateWeaponSwapEvents(allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.WeaponSwap).ToList(), agentData, skillData);
+            List<AnimatedCastEvent> animatedCastData = CombatEventFactory.CreateCastEvents(allCombatItems.Where(x => x.IsActivationEnum != ParseEnum.Activation.None).ToList(), agentData, skillData);
+            List<WeaponSwapEvent> wepSwaps = CombatEventFactory.CreateWeaponSwapEvents(allCombatItems.Where(x => x.IsStateChangeEnum == ParseEnum.StateChange.WeaponSwap).ToList(), agentData, skillData);
             _weaponSwapData = wepSwaps.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
             _animatedCastData = animatedCastData.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
             var allCastEvents = new List<AbstractCastEvent>(animatedCastData);
             allCastEvents.AddRange(wepSwaps);
             _castDataById = allCastEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             // buff remove event
-            var buffCombatEvents = allCombatItems.Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.None && x.IsBuff != 0).ToList();
+            var buffCombatEvents = allCombatItems.Where(x => x.IsBuffRemoveEnum != ParseEnum.BuffRemove.None && x.IsBuff != 0).ToList();
             buffCombatEvents.AddRange(noStateActiBuffRem.Where(x => x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0));
-            buffCombatEvents.AddRange(allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.BuffInitial));
+            buffCombatEvents.AddRange(allCombatItems.Where(x => x.IsStateChangeEnum == ParseEnum.StateChange.BuffInitial));
             buffCombatEvents.Sort((x, y) => x.Time.CompareTo(y.Time));
             List<AbstractBuffEvent> buffEvents = CombatEventFactory.CreateBuffEvents(buffCombatEvents, agentData, skillData);
             _buffDataByDst = buffEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
