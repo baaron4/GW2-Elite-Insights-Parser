@@ -170,6 +170,9 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                             }
                         }
                         break;
+                    case ParseEnum.StateChange.Error:
+                        metaDataEvents.ErrorEvents.Add(new ErrorEvent(c));
+                        break;
                 }
             }
         }

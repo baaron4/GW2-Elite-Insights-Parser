@@ -15,14 +15,18 @@ namespace GW2EIParser.Parser
         public ushort DstInstid { get; }
         public ushort SrcMasterInstid { get; }
         public ushort DstMasterInstid { get; }
+        public byte IFFByte { get; }
         public ParseEnum.IFF IFF { get; }
         public byte IsBuff { get; }
         public byte Result { get; }
+        public byte IsActivationByte { get; }
         public ParseEnum.Activation IsActivation { get; }
+        public byte IsBuffRemoveByte { get; }
         public ParseEnum.BuffRemove IsBuffRemove { get; }
         public byte IsNinety { get; }
         public byte IsFifty { get; }
         public byte IsMoving { get; }
+        public byte IsStateChangeByte { get; }
         public ParseEnum.StateChange IsStateChange { get; }
         public byte IsFlanking { get; }
         public byte IsShields { get; }
@@ -37,10 +41,10 @@ namespace GW2EIParser.Parser
         // Constructor
         public CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
                uint skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid,
-               ushort dstMasterInstid, ParseEnum.IFF iff, byte isBuff,
-               byte result, ParseEnum.Activation isActivation,
-               ParseEnum.BuffRemove isBuffRemove, byte isNinety, byte isFifty, byte isMoving,
-               ParseEnum.StateChange isStateChange, byte isFlanking, byte isShields, byte isOffcycle, uint pad)
+               ushort dstMasterInstid, byte iff, byte isBuff,
+               byte result, byte isActivation,
+               byte isBuffRemove, byte isNinety, byte isFifty, byte isMoving,
+               byte isStateChange, byte isFlanking, byte isShields, byte isOffcycle, uint pad)
         {
             this.Time = time;
             SrcAgent = srcAgent;
@@ -53,15 +57,19 @@ namespace GW2EIParser.Parser
             DstInstid = dstInstid;
             SrcMasterInstid = srcMasterInstid;
             DstMasterInstid = dstMasterInstid;
-            IFF = iff;
+            IFFByte = iff;
+            IFF = ParseEnum.GetIFF(iff);
             IsBuff = isBuff;
             Result = result;
-            IsActivation = isActivation;
-            IsBuffRemove = isBuffRemove;
+            IsActivationByte = isActivation;
+            IsActivation = ParseEnum.GetActivation(isActivation);
+            IsBuffRemoveByte = isBuffRemove;
+            IsBuffRemove = ParseEnum.GetBuffRemove(isBuffRemove);
             IsNinety = isNinety;
             IsFifty = isFifty;
             IsMoving = isMoving;
-            IsStateChange = isStateChange;
+            IsStateChangeByte = isStateChange;
+            IsStateChange = ParseEnum.GetStateChange(isStateChange);
             IsFlanking = isFlanking;
             IsShields = isShields;
             IsOffcycle = isOffcycle;
@@ -87,14 +95,18 @@ namespace GW2EIParser.Parser
             DstInstid = c.DstInstid;
             SrcMasterInstid = c.SrcMasterInstid;
             DstMasterInstid = c.DstMasterInstid;
+            IFFByte = c.IFFByte;
             IFF = c.IFF;
             IsBuff = c.IsBuff;
             Result = c.Result;
+            IsActivationByte = c.IsActivationByte;
             IsActivation = c.IsActivation;
+            IsBuffRemoveByte = c.IsBuffRemoveByte;
             IsBuffRemove = c.IsBuffRemove;
             IsNinety = c.IsNinety;
             IsFifty = c.IsFifty;
             IsMoving = c.IsMoving;
+            IsStateChangeByte = c.IsStateChangeByte;
             IsStateChange = c.IsStateChange;
             IsFlanking = c.IsFlanking;
             IsShields = c.IsShields;

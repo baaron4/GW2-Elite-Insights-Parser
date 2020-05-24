@@ -458,6 +458,11 @@ namespace GW2EIParser.Parser.ParsedData
             return _rewardEvents;
         }
 
+        public List<ErrorEvent> GetErrorEvents()
+        {
+            return _metaDataEvents.ErrorEvents;
+        }
+
         public List<ShardEvent> GetShardEvents()
         {
             return _metaDataEvents.ShardEvents;

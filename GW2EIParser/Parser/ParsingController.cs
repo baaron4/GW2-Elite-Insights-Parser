@@ -274,7 +274,7 @@ namespace GW2EIParser.Parser
             ParseHelper.SafeSkip(reader.BaseStream, 9);
 
             // 1 byte: iff
-            ParseEnum.IFF iff = ParseEnum.GetIFF(reader.ReadByte());
+            byte iff = reader.ReadByte();
 
             // 1 byte: buff
             byte buff = reader.ReadByte();
@@ -283,10 +283,10 @@ namespace GW2EIParser.Parser
             byte result = reader.ReadByte();
 
             // 1 byte: is_activation
-            ParseEnum.Activation isActivation = ParseEnum.GetActivation(reader.ReadByte());
+            byte isActivation = reader.ReadByte();
 
             // 1 byte: is_buffremove
-            ParseEnum.BuffRemove isBuffRemove = ParseEnum.GetBuffRemove(reader.ReadByte());
+            byte isBuffRemove = reader.ReadByte();
 
             // 1 byte: is_ninety
             byte isNinety = reader.ReadByte();
@@ -298,7 +298,7 @@ namespace GW2EIParser.Parser
             byte isMoving = reader.ReadByte();
 
             // 1 byte: is_statechange
-            ParseEnum.StateChange isStateChange = ParseEnum.GetStateChange(reader.ReadByte());
+            byte isStateChange = reader.ReadByte();
 
             // 1 byte: is_flanking
             byte isFlanking = reader.ReadByte();
@@ -352,7 +352,7 @@ namespace GW2EIParser.Parser
             ushort dstmasterInstid = reader.ReadUInt16();
 
             // 1 byte: iff
-            ParseEnum.IFF iff = ParseEnum.GetIFF(reader.ReadByte());
+            byte iff = reader.ReadByte();
 
             // 1 byte: buff
             byte buff = reader.ReadByte();
@@ -361,10 +361,10 @@ namespace GW2EIParser.Parser
             byte result = reader.ReadByte();
 
             // 1 byte: is_activation
-            ParseEnum.Activation isActivation = ParseEnum.GetActivation(reader.ReadByte());
+            byte isActivation = reader.ReadByte();
 
             // 1 byte: is_buffremove
-            ParseEnum.BuffRemove isBuffRemove = ParseEnum.GetBuffRemove(reader.ReadByte());
+            byte isBuffRemove = reader.ReadByte();
 
             // 1 byte: is_ninety
             byte isNinety = reader.ReadByte();
@@ -376,7 +376,7 @@ namespace GW2EIParser.Parser
             byte isMoving = reader.ReadByte();
 
             // 1 byte: is_statechange
-            ParseEnum.StateChange isStateChange = ParseEnum.GetStateChange(reader.ReadByte());
+            byte isStateChange = reader.ReadByte();
 
             // 1 byte: is_flanking
             byte isFlanking = reader.ReadByte();

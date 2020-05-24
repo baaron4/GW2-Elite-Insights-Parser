@@ -121,6 +121,7 @@ namespace GW2EIParser.Parser
             SkillTiming = 33,
             BreakbarState = 34,
             BreakbarPercent = 35,
+            Error = 36,
             Unknown
         };
 
