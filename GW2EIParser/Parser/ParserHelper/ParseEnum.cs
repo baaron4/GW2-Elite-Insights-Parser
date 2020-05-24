@@ -19,9 +19,7 @@ namespace GW2EIParser.Parser
 
         public static Activation GetActivation(byte bt)
         {
-            return bt < (byte)Activation.Unknown
-                ? (Activation)bt
-                : Activation.Unknown;
+            return Enum.IsDefined(typeof(Activation), bt) ? (Activation)bt : Activation.Unknown;
         }
 
         // Buff remove
@@ -30,14 +28,14 @@ namespace GW2EIParser.Parser
             None = 0,
             All = 1,
             Single = 2,
-            Manual = 3
+            Manual = 3,
+
+            Unknown
         };
 
         public static BuffRemove GetBuffRemove(byte bt)
         {
-            return bt <= 3
-                ? (BuffRemove)bt
-                : BuffRemove.None;
+            return Enum.IsDefined(typeof(BuffRemove), bt) ? (BuffRemove)bt : BuffRemove.Unknown;
         }
 
         // Result
@@ -60,9 +58,7 @@ namespace GW2EIParser.Parser
 
         public static PhysicalResult GetPhysicalResult(byte bt)
         {
-            return bt < (byte)PhysicalResult.Unknown
-                ? (PhysicalResult)bt
-                : PhysicalResult.Unknown;
+            return Enum.IsDefined(typeof(PhysicalResult), bt) ? (PhysicalResult)bt : PhysicalResult.Unknown;
         }
 
         public enum ConditionResult : byte
@@ -77,9 +73,7 @@ namespace GW2EIParser.Parser
         };
         public static ConditionResult GetConditionResult(byte bt)
         {
-            return bt < (byte)ConditionResult.Unknown
-                ? (ConditionResult)bt
-                : ConditionResult.Unknown;
+            return Enum.IsDefined(typeof(ConditionResult), bt) ? (ConditionResult)bt : ConditionResult.Unknown;
         }
 
         // State Change    
@@ -127,9 +121,7 @@ namespace GW2EIParser.Parser
 
         public static StateChange GetStateChange(byte bt)
         {
-            return bt < (byte)StateChange.Unknown
-                ? (StateChange)bt
-                : StateChange.Unknown;
+            return Enum.IsDefined(typeof(StateChange), bt) ? (StateChange)bt : StateChange.Unknown;
         }
         // Buff Formula
 
@@ -249,6 +241,11 @@ namespace GW2EIParser.Parser
             Unknown
         };
 
+        public static IFF GetIFF(byte bt)
+        {
+            return Enum.IsDefined(typeof(IFF), bt) ? (IFF)bt : IFF.Unknown;
+        }
+
         // Custom ids
         private const int _twilightCastle = -1;
         private const int _handOfErosion = -2;
@@ -260,13 +257,6 @@ namespace GW2EIParser.Parser
 
 
         //
-
-        public static IFF GetIFF(byte bt)
-        {
-            return bt < (byte)IFF.Unknown
-                ? (IFF)bt
-                : IFF.Unknown;
-        }
 
         public enum TrashIDS : int
         {
