@@ -621,9 +621,9 @@ namespace GW2EIParser.Parser
             return activation == ParseEnum.Activation.Normal || activation == ParseEnum.Activation.Quickness;
         }
 
-        public static bool NoInterruptEndCasting(this ParseEnum.Activation activation)
+        public static bool EndCasting(this ParseEnum.Activation activation)
         {
-            return activation == ParseEnum.Activation.CancelFire || activation == ParseEnum.Activation.Reset;
+            return activation == ParseEnum.Activation.CancelFire || activation == ParseEnum.Activation.Reset || activation == ParseEnum.Activation.CancelCancel;
         }
     }
 }

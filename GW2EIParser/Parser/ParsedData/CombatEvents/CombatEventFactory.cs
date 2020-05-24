@@ -247,7 +247,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                         }
                         startItem = c;
                     }
-                    else
+                    else if (c.IsActivation.EndCasting())
                     {
                         if (startItem != null && startItem.SkillID == c.SkillID)
                         {
