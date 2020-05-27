@@ -297,6 +297,8 @@ namespace GW2EIParser.Parser.ParsedData
                                                 (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
             EIExtraEventProcess(players, skillData, fightData);
             _buffRemoveAllData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffRemoveAllEvent>().ToList());
+            //
+            skillData.CombineWithSkillInfo(this);
         }
 
         // getters
@@ -484,6 +486,15 @@ namespace GW2EIParser.Parser.ParsedData
                 return evts;
             }
             return new List<BuffInfoEvent>();
+        }
+
+        public SkillInfoEvent GetSkillInfoEvent(long skillID)
+        {
+            if (_metaDataEvents.SkillInfoEvents.TryGetValue(skillID, out SkillInfoEvent evt))
+            {
+                return evt;
+            }
+            return null;
         }
 
         public List<AbstractBuffEvent> GetBuffData(long key)

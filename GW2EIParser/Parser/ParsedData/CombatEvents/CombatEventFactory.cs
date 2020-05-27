@@ -148,8 +148,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                         break;
                     case ParseEnum.StateChange.BuffInfo:
                     case ParseEnum.StateChange.BuffFormula:
-                        BuffInfoEvent buffInfoEvent;
-                        if (metaDataEvents.BuffInfoEvents.TryGetValue(c.SkillID, out buffInfoEvent))
+                        if (metaDataEvents.BuffInfoEvents.TryGetValue(c.SkillID, out BuffInfoEvent buffInfoEvent))
                         {
                             buffInfoEvent.CompleteBuffInfoEvent(c);
                         } 
@@ -168,6 +167,18 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                             {
                                 metaDataEvents.BuffInfoEventsByCategory[buffInfoEvent.Category] = new List<BuffInfoEvent> { buffInfoEvent };
                             }
+                        }
+                        break;
+                    case ParseEnum.StateChange.SkillInfo:
+                    case ParseEnum.StateChange.SkillTiming:
+                        if (metaDataEvents.SkillInfoEvents.TryGetValue(c.SkillID, out SkillInfoEvent skillInfoEvent))
+                        {
+                            skillInfoEvent.CompleteSkillInfoEvent(c);
+                        }
+                        else
+                        {
+                            skillInfoEvent = new SkillInfoEvent(c);
+                            metaDataEvents.SkillInfoEvents[c.SkillID] = skillInfoEvent;
                         }
                         break;
                     case ParseEnum.StateChange.Error:
