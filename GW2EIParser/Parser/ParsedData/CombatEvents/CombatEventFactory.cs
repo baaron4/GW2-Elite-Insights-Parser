@@ -151,7 +151,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                         BuffInfoEvent buffInfoEvent;
                         if (metaDataEvents.BuffInfoEvents.TryGetValue(c.SkillID, out buffInfoEvent))
                         {
-                            buffInfoEvent.CompleteBuffDataEvent(c);
+                            buffInfoEvent.CompleteBuffInfoEvent(c);
                         } 
                         else
                         {

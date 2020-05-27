@@ -24,21 +24,11 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public BuffInfoEvent(CombatItem evtcItem) : base(evtcItem)
         {
-            switch(evtcItem.IsStateChange)
-            {
-                case ParseEnum.StateChange.BuffFormula:
-                    BuildFromBuffFormula(evtcItem);
-                    break;
-                case ParseEnum.StateChange.BuffInfo:
-                    BuildFromBuffInfo(evtcItem);
-                    break;
-                default:
-                    throw new InvalidOperationException("Invalid combat event in BuffDataEvent constructor");
-            }
             BuffID = evtcItem.SkillID;
+            CompleteBuffInfoEvent(evtcItem);
         }
 
-        public void CompleteBuffDataEvent(CombatItem evtcItem)
+        public void CompleteBuffInfoEvent(CombatItem evtcItem)
         {
             if (evtcItem.SkillID != BuffID)
             {
