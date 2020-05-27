@@ -108,7 +108,7 @@ namespace GW2EIParser.EIData
                     BuffInfoEvent buffInfoEvent = combatData.GetBuffInfoEvent(buff.ID);
                     if (buffInfoEvent != null)
                     {
-                        foreach (BuffFormula formula in buffInfoEvent.FormulaList)
+                        foreach (BuffFormula formula in buffInfoEvent.Formulas)
                         {
                             pair.Key.Match(formula, solved);
                         }

@@ -865,7 +865,7 @@ namespace GW2EIParser.EIData
                 BuffInfoEvent buffInfoEvt = buff.BuffInfo;
                 if (buffInfoEvt != null)
                 {
-                    foreach (BuffFormula formula in buffInfoEvt.FormulaList)
+                    foreach (BuffFormula formula in buffInfoEvt.Formulas)
                     {
                         if (formula.Attr1 == BuffAttribute.Unknown)
                         {

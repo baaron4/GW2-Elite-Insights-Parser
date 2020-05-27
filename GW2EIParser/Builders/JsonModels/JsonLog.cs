@@ -55,7 +55,7 @@ namespace GW2EIParser.Builders.JsonModels
                     Descriptions = new List<string>(){
                         "Max Stack(s) " + item.Capacity
                     };
-                    foreach (BuffFormula formula in buffInfoEvent.FormulaList)
+                    foreach (BuffFormula formula in buffInfoEvent.Formulas)
                     {
                         if (formula.TraitSelf > 0 || formula.TraitSrc > 0)
                         {
