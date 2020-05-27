@@ -16,6 +16,8 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public float TooltipTime { get; protected set; }
 
+        public List<SkillTiming> SkillTimings { get; } = new List<SkillTiming>();
+
         public SkillInfoEvent(CombatItem evtcItem) : base(evtcItem)
         {
             SkillID = evtcItem.SkillID;
@@ -65,6 +67,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         private void BuildFromSkillTiming(CombatItem evtcItem)
         {
+            SkillTimings.Add(new SkillTiming(evtcItem));
         }
 
     }
