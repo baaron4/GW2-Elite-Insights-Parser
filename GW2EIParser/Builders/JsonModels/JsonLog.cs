@@ -239,6 +239,10 @@ namespace GW2EIParser.Builders.JsonModels
         /// Dictionary of personal buffs. The key is the profession, the value is a list of buff ids
         /// </summary>
         public Dictionary<string, HashSet<long>> PersonalBuffs { get; } = new Dictionary<string, HashSet<long>>();
+        /// <summary>
+        /// List of error messages given by ArcDPS
+        /// </summary>
+        public List<string> LogErrors { get; }
 
         public JsonLog(ParsedLog log, string[] uploadLinks)
         {
@@ -282,6 +286,11 @@ namespace GW2EIParser.Builders.JsonModels
             //
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Players");
             Players = log.PlayerList.Select(x => new JsonPlayer(x, log, SkillMap, BuffMap, DamageModMap, PersonalBuffs)).ToList();
+            //
+            if (log.LogData.LogErrors.Count > 0)
+            {
+                LogErrors = new List<string>(log.LogData.LogErrors);
+            }
         }
 
     }

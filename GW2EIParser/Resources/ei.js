@@ -130,6 +130,9 @@ var mainLoad = function () {
                     }
                 }
                 return res;
+            },
+            errorMessages: function () {
+                return logData.logErrors;
             }
         },
         mounted() {

@@ -7,7 +7,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public string Message { get; }
         public ErrorEvent(CombatItem evtcItem) : base(evtcItem)
         {
-            byte[] bytes = new byte[32 * 1]; // 32 of sizeof(char), char as in C not C#
+            byte[] bytes = new byte[32 * 1]; // 32 * sizeof(char), char as in C not C#
             int offset = 0;
             // 8 bytes
             foreach (byte bt in BitConverter.GetBytes(evtcItem.Time))

@@ -23,6 +23,8 @@ namespace GW2EIParser.Parser.ParsedData
         public string LogStartStd { get; private set; } = DefaultTimeValue;
         public string LogEndStd { get; private set; } = DefaultTimeValue;
 
+        public List<string> LogErrors { get; } = new List<string>();
+
         // Constructors
         public LogData(string buildVersion, CombatData combatData, long evtcLogDuration, List<Player> playerList)
         {
@@ -77,6 +79,11 @@ namespace GW2EIParser.Parser.ParsedData
                 double dur = Math.Round(evtcLogDuration / 1000.0, 3);
                 SetLogStart(unixEnd - dur);
                 SetLogStartStd(unixEnd - dur);
+            }
+            //
+            foreach (ErrorEvent evt in combatData.GetErrorEvents())
+            {
+                LogErrors.Add(evt.Message);
             }
         }
 

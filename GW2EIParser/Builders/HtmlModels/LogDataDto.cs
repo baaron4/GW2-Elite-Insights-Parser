@@ -30,5 +30,6 @@ namespace GW2EIParser.Builders.HtmlModels
         public bool LightTheme { get; set; }
         public bool NoMechanics { get; set; }
         public bool SingleGroup { get; set; }
+        public List<string> LogErrors { get; set; }
     }
 }
