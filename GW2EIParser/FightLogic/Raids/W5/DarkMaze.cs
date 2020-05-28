@@ -28,7 +28,7 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/thumb/a/a7/Eye_of_Fate.jpg/188px-Eye_of_Fate.jpg";
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/3muXEM7.png",
                             (1052, 1301),
@@ -132,7 +132,7 @@ namespace GW2EIParser.Logic
             }
         }
 
-        public override string GetFightName()
+        public override string GetLogicName(ParsedLog log)
         {
             return "Statue of Darkness";
         }

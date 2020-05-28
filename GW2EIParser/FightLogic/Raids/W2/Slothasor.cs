@@ -34,7 +34,7 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/e/ed/Mini_Slubling.png";
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/PaKMZ8Z.png",
                             (1688, 2581),

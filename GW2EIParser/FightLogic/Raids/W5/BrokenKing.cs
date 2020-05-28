@@ -23,7 +23,7 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/3/37/Mini_Broken_King.png";
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/JRPskkX.png",
                             (999, 890),
@@ -83,7 +83,7 @@ namespace GW2EIParser.Logic
             SetSuccessByDeath(combatData, fightData, playerAgents, true, (int)ParseEnum.TargetIDS.BrokenKing);
         }
 
-        public override string GetFightName()
+        public override string GetLogicName(ParsedLog log)
         {
             return "Statue of Ice";
         }

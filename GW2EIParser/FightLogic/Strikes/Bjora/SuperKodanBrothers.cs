@@ -22,7 +22,7 @@ namespace GW2EIParser.Logic
             Icon = "https://i.imgur.com/lNXXbnC.png";
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/kLjZ7eU.png",
                             (905, 789),
@@ -88,7 +88,7 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        public override string GetFightName()
+        public override string GetLogicName(ParsedLog log)
         {
             return "Super Kodan Brothers";
         }

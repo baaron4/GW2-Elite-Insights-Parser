@@ -38,7 +38,7 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/c/c1/Skorvald_the_Shattered.jpg";
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/PO3aoJD.png",
                             (1759, 1783),
@@ -47,14 +47,14 @@ namespace GW2EIParser.Logic
                             (11204, 4414, 13252, 6462));
         }
 
-        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Skorvald);
             if (target == null)
             {
                 throw new InvalidOperationException("Skorvald not found");
             }
-            return (target.GetHealth(combatData) == 5551340) ? 1 : 0;
+            return (target.GetHealth(combatData) == 5551340) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
         }
 
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()

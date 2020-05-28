@@ -59,7 +59,7 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png";
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/RZbs21b.png",
                             (1099, 1114),

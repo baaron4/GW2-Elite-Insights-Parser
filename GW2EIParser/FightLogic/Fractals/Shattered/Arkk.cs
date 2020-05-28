@@ -50,7 +50,7 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/5/5f/Arkk.jpg";
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/BIybWJe.png",
                             (914, 914),
@@ -74,9 +74,9 @@ namespace GW2EIParser.Logic
             };
         }
 
-        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return 2;
+            return FightData.CMStatus.CMnoName;
         }
 
         protected override List<int> GetFightTargetsIDs()

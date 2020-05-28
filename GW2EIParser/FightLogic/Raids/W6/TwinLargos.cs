@@ -34,7 +34,7 @@ namespace GW2EIParser.Logic
             Icon = "https://i.imgur.com/6O5MT7v.png";
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/JOoJRXM.png",
                             (3205, 4191),
@@ -334,19 +334,19 @@ namespace GW2EIParser.Logic
             }
         }
 
-        public override string GetFightName()
+        public override string GetLogicName(ParsedLog log)
         {
             return "Twin Largos";
         }
 
-        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Nikare);
             if (target == null)
             {
                 throw new InvalidOperationException("Nikare not found");
             }
-            return (target.GetHealth(combatData) > 18e6) ? 1 : 0; //Health of Nikare
+            return (target.GetHealth(combatData) > 18e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM; //Health of Nikare
         }
     }
 }

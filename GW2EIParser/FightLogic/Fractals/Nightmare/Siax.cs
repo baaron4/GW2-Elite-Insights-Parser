@@ -27,7 +27,7 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/d/dc/Siax_the_Corrupted.jpg";
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/UzaQHW9.png",
                             (476, 548),
@@ -44,9 +44,9 @@ namespace GW2EIParser.Logic
             };
         }
 
-        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return 2;
+            return FightData.CMStatus.CMnoName;
         }
 
         public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)

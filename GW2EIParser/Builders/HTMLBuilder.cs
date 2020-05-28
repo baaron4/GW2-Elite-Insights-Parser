@@ -1190,7 +1190,7 @@ namespace GW2EIParser.Builders
             logData.Success = _log.FightData.Success;
             logData.Wvw = _log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;
             logData.Targetless = _log.FightData.Logic.Targetless;
-            logData.FightName = _log.FightData.Name;
+            logData.FightName = _log.FightData.GetFightName(_log);
             logData.FightIcon = _log.FightData.Logic.Icon;
             logData.LightTheme = _light;
             logData.SingleGroup = _log.PlayerList.Where(x => !x.IsFakeActor).Select(x => x.Group).Distinct().Count() == 1;

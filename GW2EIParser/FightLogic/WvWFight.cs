@@ -47,7 +47,7 @@ namespace GW2EIParser.Logic
             }*/
             return phases;
         }
-        public override string GetFightName()
+        public override string GetLogicName(ParsedLog log)
         {
             return "World vs World";
         }

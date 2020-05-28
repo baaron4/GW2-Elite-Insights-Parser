@@ -52,7 +52,7 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/e/e0/Mini_Ragged_White_Mantle_Figurehead.png";
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/GCwOVVE.png",
                             (4400, 5753),
@@ -486,14 +486,14 @@ namespace GW2EIParser.Logic
             }
         }
 
-        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Deimos);
             if (target == null)
             {
                 throw new InvalidOperationException("Deimos not found");
             }
-            int res = (target.GetHealth(combatData) > 40e6) ? 1 : 0;
+            FightData.CMStatus res = (target.GetHealth(combatData) > 40e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
             if (_specialSplit > 0)
             {
                 target.SetManualHealth(res > 0 ? 42804900 : 37388210);

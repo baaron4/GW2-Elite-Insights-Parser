@@ -51,7 +51,7 @@ namespace GW2EIParser.Logic
             return new MechanicData(MechanicList);
         }
 
-        protected virtual CombatReplayMap GetCombatMapInternal()
+        protected virtual CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("", (800, 800), (0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0));
         }
@@ -60,7 +60,7 @@ namespace GW2EIParser.Logic
         {
             if (_map == null)
             {
-                _map = GetCombatMapInternal();
+                _map = GetCombatMapInternal(log);
                 _map.ComputeBoundingBox(log);
             }
             return _map;
@@ -74,7 +74,7 @@ namespace GW2EIParser.Logic
             };
         }
 
-        public virtual string GetFightName()
+        public virtual string GetLogicName(ParsedLog log)
         {
             NPC target = Targets.Find(x => x.ID == GenericTriggerID);
             if (target == null)
@@ -247,9 +247,9 @@ namespace GW2EIParser.Logic
             return new List<ParseEnum.TrashIDS>();
         }
 
-        public virtual int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        public virtual FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return -1;
+            return FightData.CMStatus.NoCM;
         }
 
         protected void SetSuccessByDeath(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, bool all, int idFirst, params int[] ids)

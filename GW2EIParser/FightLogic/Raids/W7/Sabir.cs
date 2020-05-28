@@ -88,7 +88,7 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/zs9yPuG.png",
                             (4365, 3972),
@@ -119,14 +119,14 @@ namespace GW2EIParser.Logic
             }
         }
 
-        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Sabir);
             if (target == null)
             {
                 throw new InvalidOperationException("Sabir not found");
             }
-            return (target.GetHealth(combatData) > 32e6) ? 1 : 0;
+            return (target.GetHealth(combatData) > 32e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
         }
     }
 }

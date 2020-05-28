@@ -46,7 +46,7 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/f/f0/Mini_Samarog.png";
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/o2DHN29.png",
                             (1221, 1171),
@@ -214,14 +214,14 @@ namespace GW2EIParser.Logic
             }
         }
 
-        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Samarog);
             if (target == null)
             {
                 throw new InvalidOperationException("Samarog not found");
             }
-            return (target.GetHealth(combatData) > 30e6) ? 1 : 0;
+            return (target.GetHealth(combatData) > 30e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
         }
     }
 }

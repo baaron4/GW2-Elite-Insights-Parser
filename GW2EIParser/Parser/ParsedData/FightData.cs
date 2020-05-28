@@ -28,9 +28,11 @@ namespace GW2EIParser.Parser.ParsedData
             }
         }
         public bool Success { get; private set; }
-        public string Name => Logic.GetFightName() + (_isCM == 1 ? " CM" : "");
-        private int _isCM = -1;
-        public bool IsCM => _isCM >= 1;
+
+        public enum CMStatus { NotSet, CM, NoCM, CMnoName }
+
+        private CMStatus _isCM = CMStatus.NotSet;
+        public bool IsCM => _isCM == CMStatus.CMnoName || _isCM == CMStatus.CM;
         // Constructors
         public FightData(int id, AgentData agentData, long start, long end)
         {
@@ -201,6 +203,10 @@ namespace GW2EIParser.Parser.ParsedData
             }
         }
 
+        public string GetFightName(ParsedLog log)
+        {
+            return Logic.GetLogicName(log) + (_isCM == CMStatus.CM ? " CM" : "");
+        }
         public List<PhaseData> GetPhases(ParsedLog log)
         {
 
@@ -225,7 +231,7 @@ namespace GW2EIParser.Parser.ParsedData
         // Setters
         public void SetCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            if (_isCM == -1)
+            if (_isCM == CMStatus.NotSet)
             {
                 _isCM = Logic.IsCM(combatData, agentData, fightData);
             }

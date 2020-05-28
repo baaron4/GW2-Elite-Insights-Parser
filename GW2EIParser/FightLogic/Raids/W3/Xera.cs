@@ -42,7 +42,7 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/4/4b/Mini_Xera.png";
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/BoHwwY6.png",
                             (7112, 6377),

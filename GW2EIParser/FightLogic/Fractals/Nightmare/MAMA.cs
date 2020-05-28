@@ -34,7 +34,7 @@ namespace GW2EIParser.Logic
             Icon = "http://dulfy.net/wp-content/uploads/2016/11/gw2-nightmare-fractal-teaser.jpg";
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/lFGNKuf.png",
                             (664, 407),
@@ -43,9 +43,9 @@ namespace GW2EIParser.Logic
                             (11804, 4414, 12444, 5054));
         }
 
-        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return 2;
+            return FightData.CMStatus.CMnoName;
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)

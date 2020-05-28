@@ -26,7 +26,7 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/4wmuc8B.png",
                             (914, 914),
@@ -47,9 +47,9 @@ namespace GW2EIParser.Logic
             };
         }
 
-        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return 2;
+            return FightData.CMStatus.CMnoName;
         }
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
