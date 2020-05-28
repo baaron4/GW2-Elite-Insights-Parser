@@ -81,7 +81,9 @@ namespace GW2EIParser.EIData
             {
                 foreach (AbstractDamageEvent evt in list)
                 {
-                    if (!playerAgents.Contains(evt.To.GetFinalMaster()) && evt.From.Type == AgentItem.AgentType.Gadget && evt.From.Master == null)
+                    // dst must no be a gadget nor a friendly player
+                    // src must be a masterless gadget
+                    if (!playerAgents.Contains(evt.To.GetFinalMaster()) && evt.To.Type != AgentItem.AgentType.Gadget && evt.From.Type == AgentItem.AgentType.Gadget && evt.From.Master == null)
                     {
                         res.Add(evt.From);
                     }
