@@ -23,6 +23,8 @@ namespace GW2EIParser.Parser.ParsedData
         public string LogStartStd { get; private set; } = DefaultTimeValue;
         public string LogEndStd { get; private set; } = DefaultTimeValue;
 
+        public List<string> LogErrors { get; } = new List<string>();
+
         // Constructors
         public LogData(string buildVersion, CombatData combatData, long evtcLogDuration, List<Player> playerList, OperationController operation)
         {
@@ -85,6 +87,12 @@ namespace GW2EIParser.Parser.ParsedData
             }
             operation.UpdateProgressWithCancellationCheck("Log Start " + LogStartStd);
             operation.UpdateProgressWithCancellationCheck("Log End " + LogEndStd);
+            //
+            foreach (ErrorEvent evt in combatData.GetErrorEvents())
+            {
+                operation.UpdateProgressWithCancellationCheck("Error " + evt.Message);
+                LogErrors.Add(evt.Message);
+            }
         }
 
         // Setters

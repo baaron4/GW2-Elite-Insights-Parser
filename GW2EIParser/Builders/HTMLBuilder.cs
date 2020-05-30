@@ -1195,6 +1195,10 @@ namespace GW2EIParser.Builders
             logData.LightTheme = _light;
             logData.SingleGroup = _log.PlayerList.Where(x => !x.IsFakeActor).Select(x => x.Group).Distinct().Count() == 1;
             logData.NoMechanics = _log.FightData.Logic.HasNoFightSpecificMechanics;
+            if (_log.LogData.LogErrors.Count > 0)
+            {
+                logData.LogErrors = new List<string>(_log.LogData.LogErrors);
+            }
             //
             SkillDto.AssembleSkills(_usedSkills.Values, logData.SkillMap);
             DamageModDto.AssembleDamageModifiers(_usedDamageMods, logData.DamageModMap);
