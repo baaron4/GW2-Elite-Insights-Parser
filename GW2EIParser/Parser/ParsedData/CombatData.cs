@@ -241,20 +241,28 @@ namespace GW2EIParser.Parser.ParsedData
             }
         }
 
-        private void EIExtraEventProcess(List<Player> players, SkillData skillData, FightData fightData)
+        private void EIExtraEventProcess(List<Player> players, SkillData skillData, FightData fightData, OperationController operation)
         {
+            operation.UpdateProgressWithCancellationCheck("Creating Custom Buff Events");
             EIBuffParse(players, skillData, fightData);
+            operation.UpdateProgressWithCancellationCheck("Creating Custom Damage Events");
             EIDamageParse(skillData, fightData);
+            operation.UpdateProgressWithCancellationCheck("Creating Custom Cast Events");
             EICastParse(players, skillData);
+            operation.UpdateProgressWithCancellationCheck("Creating Custom Status Events");
             EIStatusParse();
             // master attachements
+            operation.UpdateProgressWithCancellationCheck("Attaching Banners to Warriors");
             WarriorHelper.AttachMasterToWarriorBanners(players, _buffData, _castDataById);
+            operation.UpdateProgressWithCancellationCheck("Attaching Turrets to Engineers");
             EngineerHelper.AttachMasterToEngineerTurrets(players, _damageDataById, _castDataById);
+            operation.UpdateProgressWithCancellationCheck("Attaching Ranger Gadgets to Rangers");
             RangerHelper.AttachMasterToRangerGadgets(players, _damageDataById, _castDataById);
+            operation.UpdateProgressWithCancellationCheck("Attaching Racial Gadgets to Players");
             ProfHelper.AttachMasterToRacialGadgets(players, _damageDataById, _castDataById);
         }
 
-        public CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players)
+        public CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players, OperationController operation)
         {
             _skillIds = new HashSet<long>(allCombatItems.Select(x => (long)x.SkillID));
             IEnumerable<CombatItem> noStateActiBuffRem = allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.None && x.IsActivation == ParseEnum.Activation.None && x.IsBuffRemove == ParseEnum.BuffRemove.None);
@@ -265,10 +273,14 @@ namespace GW2EIParser.Parser.ParsedData
                        x.IsStateChange == ParseEnum.StateChange.Rotation).ToList(), agentData);
             HasMovementData = _movementData.Count > 1;
             // state change events
+            operation.UpdateProgressWithCancellationCheck("Creatint status and metadata events");
             CombatEventFactory.CreateStateChangeEvents(allCombatItems, _metaDataEvents, _statusEvents, _rewardEvents, agentData);
+            operation.UpdateProgressWithCancellationCheck("Combining SkillInfo with SkillData");
             skillData.CombineWithSkillInfo(_metaDataEvents.SkillInfoEvents);
             // activation events
+            operation.UpdateProgressWithCancellationCheck("Creating Cast Events");
             List<AnimatedCastEvent> animatedCastData = CombatEventFactory.CreateCastEvents(allCombatItems.Where(x => x.IsActivation != ParseEnum.Activation.None).ToList(), agentData, skillData);
+            operation.UpdateProgressWithCancellationCheck("Creating Weapon Swap Events");
             List<WeaponSwapEvent> wepSwaps = CombatEventFactory.CreateWeaponSwapEvents(allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.WeaponSwap).ToList(), agentData, skillData);
             _weaponSwapData = wepSwaps.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
             _animatedCastData = animatedCastData.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
@@ -280,10 +292,12 @@ namespace GW2EIParser.Parser.ParsedData
             buffCombatEvents.AddRange(noStateActiBuffRem.Where(x => x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0));
             buffCombatEvents.AddRange(allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.BuffInitial));
             buffCombatEvents.Sort((x, y) => x.Time.CompareTo(y.Time));
+            operation.UpdateProgressWithCancellationCheck("Creating Buff Events");
             List<AbstractBuffEvent> buffEvents = CombatEventFactory.CreateBuffEvents(buffCombatEvents, agentData, skillData);
             _buffDataByDst = buffEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             _buffData = buffEvents.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
             // damage events
+            operation.UpdateProgressWithCancellationCheck("Creating Damage Events");
             List<AbstractDamageEvent> damageData = CombatEventFactory.CreateDamageEvents(noStateActiBuffRem.Where(x => (x.IsBuff != 0 && x.Value == 0) || (x.IsBuff == 0)).ToList(), agentData, skillData);
             _damageData = damageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             _damageTakenData = damageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
@@ -296,7 +310,7 @@ namespace GW2EIParser.Parser.ParsedData
             healing_received_data = allCombatItems.Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                             ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
                                                 (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
-            EIExtraEventProcess(players, skillData, fightData);
+            EIExtraEventProcess(players, skillData, fightData, operation);
             _buffRemoveAllData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffRemoveAllEvent>().ToList());
         }
 
