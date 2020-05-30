@@ -30,12 +30,11 @@ namespace GW2EIParser.Parser.ParsedData
             }
         }
 
-        public void CombineWithSkillInfo(CombatData combatData)
+        public void CombineWithSkillInfo(Dictionary<long, SkillInfoEvent> skillInfoEvents)
         {
             foreach (KeyValuePair<long, SkillItem> pair in _skills)
             {
-                SkillInfoEvent skillInfoEvent = combatData.GetSkillInfoEvent(pair.Key);
-                if (skillInfoEvent != null)
+                if (skillInfoEvents.TryGetValue(pair.Key, out SkillInfoEvent skillInfoEvent))
                 {
                     pair.Value.AttachSkillInfoEvent(skillInfoEvent);
                 }

@@ -68,8 +68,6 @@ namespace GW2EIParser.Parser.ParsedData
             MechanicData = FightData.Logic.GetMechanicData();
             _operation.UpdateProgressWithCancellationCheck("Creating General Statistics Container");
             Statistics = new GeneralStatistics(CombatData, PlayerList, Buffs);
-            _operation.UpdateProgressWithCancellationCheck("Combining SkillInfo with SkillData");
-            SkillData.CombineWithSkillInfo(CombatData);
         }
 
         public void UpdateProgressWithCancellationCheck(string status)

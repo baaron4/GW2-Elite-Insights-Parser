@@ -266,6 +266,7 @@ namespace GW2EIParser.Parser.ParsedData
             HasMovementData = _movementData.Count > 1;
             // state change events
             CombatEventFactory.CreateStateChangeEvents(allCombatItems, _metaDataEvents, _statusEvents, _rewardEvents, agentData);
+            skillData.CombineWithSkillInfo(_metaDataEvents.SkillInfoEvents);
             // activation events
             List<AnimatedCastEvent> animatedCastData = CombatEventFactory.CreateCastEvents(allCombatItems.Where(x => x.IsActivation != ParseEnum.Activation.None).ToList(), agentData, skillData);
             List<WeaponSwapEvent> wepSwaps = CombatEventFactory.CreateWeaponSwapEvents(allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.WeaponSwap).ToList(), agentData, skillData);
