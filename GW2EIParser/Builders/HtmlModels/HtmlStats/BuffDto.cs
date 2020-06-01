@@ -30,7 +30,7 @@ namespace GW2EIParser.Builders.HtmlModels
                 var descriptions = new List<string>() { 
                     "Max Stack(s) " + buff.Capacity
                 };
-                foreach (BuffFormula formula in buffInfoEvent.FormulaList)
+                foreach (BuffFormula formula in buffInfoEvent.Formulas)
                 {
                     if (formula.TraitSelf > 0 || formula.TraitSrc > 0)
                     {

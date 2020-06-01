@@ -14,6 +14,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public Dictionary<AgentItem, List<GuildEvent>> GuildEvents { get; } = new Dictionary<AgentItem, List<GuildEvent>>();
         public Dictionary<long, BuffInfoEvent> BuffInfoEvents { get; } = new Dictionary<long, BuffInfoEvent>();
         public Dictionary<ParseEnum.BuffCategory, List<BuffInfoEvent>> BuffInfoEventsByCategory { get; } = new Dictionary<ParseEnum.BuffCategory, List<BuffInfoEvent>>();
+        public Dictionary<long, SkillInfoEvent> SkillInfoEvents { get; } = new Dictionary<long, SkillInfoEvent>();
         public List<ErrorEvent> ErrorEvents { get; } = new List<ErrorEvent>();
     }
 }

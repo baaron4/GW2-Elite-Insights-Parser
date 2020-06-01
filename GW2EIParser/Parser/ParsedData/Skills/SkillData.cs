@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GW2EIParser.Parser.ParsedData.CombatEvents;
 
 namespace GW2EIParser.Parser.ParsedData
 {
@@ -28,5 +29,17 @@ namespace GW2EIParser.Parser.ParsedData
                 _skills.Add(skillItem.ID, skillItem);
             }
         }
+
+        public void CombineWithSkillInfo(Dictionary<long, SkillInfoEvent> skillInfoEvents)
+        {
+            foreach (KeyValuePair<long, SkillItem> pair in _skills)
+            {
+                if (skillInfoEvents.TryGetValue(pair.Key, out SkillInfoEvent skillInfoEvent))
+                {
+                    pair.Value.AttachSkillInfoEvent(skillInfoEvent);
+                }
+            }
+        }
+
     }
 }

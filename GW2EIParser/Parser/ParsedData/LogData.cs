@@ -10,10 +10,10 @@ namespace GW2EIParser.Parser.ParsedData
         public static readonly string DefaultTimeValue = "MISSING";
 
         // Fields
-        public string BuildVersion { get; }
-        public string Language { get; }
+        public string BuildVersion { get; } = "N/A";
+        public string Language { get; } = "N/A";
         public LanguageEvent.LanguageEnum LanguageID { get; }
-        public ulong GW2Version { get; }
+        public ulong GW2Version { get; } = 0;
         public AgentItem PoV { get; private set; } = null;
         public string PoVName { get; private set; } = "N/A";
         private readonly string _dateFormat = "yyyy-MM-dd HH:mm:ss zz";
@@ -26,7 +26,7 @@ namespace GW2EIParser.Parser.ParsedData
         public List<string> LogErrors { get; } = new List<string>();
 
         // Constructors
-        public LogData(string buildVersion, CombatData combatData, long evtcLogDuration, List<Player> playerList)
+        public LogData(string buildVersion, CombatData combatData, long evtcLogDuration, List<Player> playerList, OperationController operation)
         {
             BuildVersion = buildVersion;
             double unixStart = 0;
@@ -37,12 +37,14 @@ namespace GW2EIParser.Parser.ParsedData
             {
                 SetPOV(povEvt.PoV, playerList);
             }
+            operation.UpdateProgressWithCancellationCheck("PoV " + PoVName);
             //
             BuildEvent buildEvt = combatData.GetBuildEvent();
             if (buildEvt != null)
             {
                 GW2Version = buildEvt.Build;
             }
+            operation.UpdateProgressWithCancellationCheck("GW2 Build " + GW2Version);
             //
             LanguageEvent langEvt = combatData.GetLanguageEvent();
             if (langEvt != null)
@@ -50,6 +52,7 @@ namespace GW2EIParser.Parser.ParsedData
                 Language = langEvt.ToString();
                 LanguageID = langEvt.Language;
             }
+            operation.UpdateProgressWithCancellationCheck("Language " + Language);
             //
             LogStartEvent logStr = combatData.GetLogStartEvent();
             if (logStr != null)
@@ -69,6 +72,7 @@ namespace GW2EIParser.Parser.ParsedData
             // log end event is missing, log start is present
             if (LogEnd == DefaultTimeValue && LogStart != DefaultTimeValue)
             {
+                operation.UpdateProgressWithCancellationCheck("Missing Log End Event");
                 double dur = Math.Round(evtcLogDuration / 1000.0, 3);
                 SetLogEnd(dur + unixStart);
                 SetLogEndStd(dur + unixStart);
@@ -76,13 +80,17 @@ namespace GW2EIParser.Parser.ParsedData
             // log start event is missing, log end is present
             if (LogEnd != DefaultTimeValue && LogStart == DefaultTimeValue)
             {
+                operation.UpdateProgressWithCancellationCheck("Missing Log Start Event");
                 double dur = Math.Round(evtcLogDuration / 1000.0, 3);
                 SetLogStart(unixEnd - dur);
                 SetLogStartStd(unixEnd - dur);
             }
+            operation.UpdateProgressWithCancellationCheck("Log Start " + LogStartStd);
+            operation.UpdateProgressWithCancellationCheck("Log End " + LogEndStd);
             //
             foreach (ErrorEvent evt in combatData.GetErrorEvents())
             {
+                operation.UpdateProgressWithCancellationCheck("Error " + evt.Message);
                 LogErrors.Add(evt.Message);
             }
         }

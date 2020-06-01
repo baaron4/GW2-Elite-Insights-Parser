@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIParser.Controllers;
 using GW2EIParser.Controllers.GW2API;
+using GW2EIParser.Parser.ParsedData.CombatEvents;
 
 namespace GW2EIParser.Parser.ParsedData
 {
@@ -94,13 +95,14 @@ namespace GW2EIParser.Parser.ParsedData
 
         // Fields
         public long ID { get; private set; }
-        public int Range { get; private set; } = 0;
+        //public int Range { get; private set; } = 0;
         public bool AA => _apiSkill?.Slot == "Weapon_1" || _apiSkill?.Slot == "Downed_1";
         public string Name { get; private set; }
         public string Icon { get; private set; }
         public bool CanCrit => !_nonCritable.Contains(ID);
         private WeaponDescriptor _weaponDescriptor;
         private readonly GW2APISkill _apiSkill;
+        private SkillInfoEvent _skillInfo { get; set; }
 
         // Constructor
 
@@ -184,6 +186,14 @@ namespace GW2EIParser.Parser.ParsedData
             return true;
         }
 
+        public void AttachSkillInfoEvent(SkillInfoEvent skillInfo)
+        {
+            if (ID == skillInfo.SkillID)
+            {
+                _skillInfo = skillInfo;
+            }
+        }
+
         private void CompleteItem()
         {
             if (_apiSkill == null && _overrideNames.TryGetValue(ID, out string name))
@@ -193,7 +203,7 @@ namespace GW2EIParser.Parser.ParsedData
             else if (_apiSkill != null)
             {
                 Name = _apiSkill.Name;
-                if (_apiSkill.Facts != null)
+                /*if (_apiSkill.Facts != null)
                 {
                     foreach (GW2APIFact fact in _apiSkill.Facts)
                     {
@@ -202,7 +212,7 @@ namespace GW2EIParser.Parser.ParsedData
                             Range = Convert.ToInt32(fact.Value);
                         }
                     }
-                }
+                }*/
             }
             if (_apiSkill == null && _overrideIcons.TryGetValue(ID, out string icon))
             {

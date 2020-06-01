@@ -20,25 +20,15 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public bool ProbablyResistance { get; private set; }
 
         public ushort MaxStacks { get; private set; }
-        public List<BuffFormula> FormulaList { get; } = new List<BuffFormula>();
+        public List<BuffFormula> Formulas { get; } = new List<BuffFormula>();
 
         public BuffInfoEvent(CombatItem evtcItem) : base(evtcItem)
         {
-            switch(evtcItem.IsStateChange)
-            {
-                case ParseEnum.StateChange.BuffFormula:
-                    BuildFromBuffFormula(evtcItem);
-                    break;
-                case ParseEnum.StateChange.BuffInfo:
-                    BuildFromBuffInfo(evtcItem);
-                    break;
-                default:
-                    throw new InvalidOperationException("Invalid combat event in BuffDataEvent constructor");
-            }
             BuffID = evtcItem.SkillID;
+            CompleteBuffInfoEvent(evtcItem);
         }
 
-        public void CompleteBuffDataEvent(CombatItem evtcItem)
+        public void CompleteBuffInfoEvent(CombatItem evtcItem)
         {
             if (evtcItem.SkillID != BuffID)
             {
@@ -70,12 +60,12 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public void AdjustBuffInfo(Dictionary<byte, ParseEnum.BuffAttribute> solved)
         {
-            FormulaList.Sort((x, y) => (x.TraitSelf + x.TraitSrc).CompareTo(y.TraitSrc + y.TraitSelf));
+            Formulas.Sort((x, y) => (x.TraitSelf + x.TraitSrc).CompareTo(y.TraitSrc + y.TraitSelf));
             if (solved.Count == 0)
             {
                 return;
             }
-            foreach (BuffFormula formula in FormulaList)
+            foreach (BuffFormula formula in Formulas)
             {
                 formula.AdjustUnknownFormulaAttributes(solved);
             }
@@ -83,7 +73,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         private void BuildFromBuffFormula(CombatItem evtcItem)
         {
-            FormulaList.Add(new BuffFormula(evtcItem, this));
+            Formulas.Add(new BuffFormula(evtcItem, this));
         }
 
     }
