@@ -108,10 +108,6 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                         metaDataEvents.PointOfViewEvent = new PointOfViewEvent(c, agentData);
                         break;
                     case ParseEnum.StateChange.Language:
-                        if (c.SrcAgent == 0)
-                        {
-                            continue;
-                        }
                         metaDataEvents.LanguageEvent = new LanguageEvent(c);
                         break;
                     case ParseEnum.StateChange.GWBuild:
