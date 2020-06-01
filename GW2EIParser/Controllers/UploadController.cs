@@ -11,13 +11,13 @@ namespace GW2EIParser.Controllers
 {
     public static class UploadController
     {
-        private static string UploadDPSReportsEI(FileInfo fi)
+        private static string UploadDPSReportsEI(FileInfo fi, OperationController operation)
         {
-            return UploadToDPSR(fi, "https://dps.report/uploadContent?generator=ei");
+            return UploadToDPSR(fi, "https://dps.report/uploadContent?generator=ei", operation);
         }
-        private static string UploadDPSReportsRH(FileInfo fi)
+        private static string UploadDPSReportsRH(FileInfo fi, OperationController operation)
         {
-            return UploadToDPSR(fi, "https://dps.report/uploadContent?generator=rh");
+            return UploadToDPSR(fi, "https://dps.report/uploadContent?generator=rh", operation);
 
         }
         private static string UploadRaidar(/*FileInfo fi*/)
@@ -65,7 +65,7 @@ namespace GW2EIParser.Controllers
         {
             public string Permalink { get; set; }
         }
-        private static string UploadToDPSR(FileInfo fi, string URI)
+        private static string UploadToDPSR(FileInfo fi, string URI, OperationController operation)
         {
             string fileName = fi.Name;
             byte[] fileContents = File.ReadAllBytes(fi.FullName);
@@ -73,6 +73,7 @@ namespace GW2EIParser.Controllers
             string res = "Upload process failed";
             for (int i = 0; i < tentatives; i++)
             {
+                operation.UpdateProgressWithCancellationCheck("Upload tentative");
                 var webService = new Uri(@URI);
                 var requestMessage = new HttpRequestMessage(HttpMethod.Post, webService);
                 requestMessage.Headers.ExpectContinue = false;
@@ -94,6 +95,7 @@ namespace GW2EIParser.Controllers
 
                     if (responseContent != null)
                     {
+                        operation.UpdateProgressWithCancellationCheck("Upload tentative successful");
                         Task<string> stringContentsTask = responseContent.ReadAsStringAsync();
                         string stringContents = stringContentsTask.Result;
                         int first = stringContents.IndexOf('{');
@@ -112,6 +114,7 @@ namespace GW2EIParser.Controllers
                 catch (Exception e)
                 {
                     res = e.GetFinalException().Message;
+                    operation.UpdateProgressWithCancellationCheck("Upload tentative failed: " + res);
                 }
                 finally
                 {
@@ -130,13 +133,13 @@ namespace GW2EIParser.Controllers
             if (Properties.Settings.Default.UploadToDPSReports)
             {
                 operation.UpdateProgressWithCancellationCheck("Uploading to DPSReports using EI");
-                uploadresult[0] = UploadDPSReportsEI(fInfo);
+                uploadresult[0] = UploadDPSReportsEI(fInfo, operation);
                 operation.UpdateProgressWithCancellationCheck("DPSReports using EI: " + uploadresult[0]);
             }
             if (Properties.Settings.Default.UploadToDPSReportsRH)
             {
                 operation.UpdateProgressWithCancellationCheck("Uploading to DPSReports using RH");
-                uploadresult[1] = UploadDPSReportsRH(fInfo);
+                uploadresult[1] = UploadDPSReportsRH(fInfo, operation);
                 operation.UpdateProgressWithCancellationCheck("DPSReports using RH: " + uploadresult[1]);
             }
             if (Properties.Settings.Default.UploadToRaidar)
