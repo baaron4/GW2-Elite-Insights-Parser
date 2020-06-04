@@ -154,6 +154,9 @@ namespace GW2EIParser.Parser.ParsedData
                 case ParseEnum.TargetIDS.WhisperOfJormag:
                     Logic = new WhisperOfJormag(id);
                     break;
+                case ParseEnum.TargetIDS.VariniaStormsounder:
+                    Logic = new ColdWar(id);
+                    break;
                 //
                 case ParseEnum.TargetIDS.MAMA:
                     Logic = new MAMA(id);
