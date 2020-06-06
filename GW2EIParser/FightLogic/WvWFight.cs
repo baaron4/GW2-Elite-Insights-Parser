@@ -63,10 +63,10 @@ namespace GW2EIParser.Logic
                     return new CombatReplayMap("https://i.imgur.com/7DnLZ7G.png", (3100,3250),(-36864, -36864, 36864, 36864), (-36864, -36864, 36864, 36864), (8958, 12798, 12030, 15870));
                 // Green Alpine
                 case 95:
-                    return new CombatReplayMap("https://i.imgur.com/dzVtqlI.png", (3500, 3700), (-30720, -43008, 30720, 43008), (-30720, -43008, 30720, 43008), (5630, 11518, 8190, 15102));
+                    return new CombatReplayMap("https://i.imgur.com/s4wMYgZ.png", (2492, 3574), (-30720, -43008, 30720, 43008), (-30720, -43008, 30720, 43008), (5630, 11518, 8190, 15102));
                 // Blue Alpine
                 case 96:
-                    return new CombatReplayMap("https://i.imgur.com/dzVtqlI.png", (3500, 3700), (-30720, -43008, 30720, 43008), (-30720, -43008, 30720, 43008), (12798, 10878, 15358, 14462));
+                    return new CombatReplayMap("https://i.imgur.com/s4wMYgZ.png", (2492, 3574), (-30720, -43008, 30720, 43008), (-30720, -43008, 30720, 43008), (12798, 10878, 15358, 14462));
                 // Red Desert
                 case 1099:
                     return new CombatReplayMap("https://i.imgur.com/IbXfEwV.jpg", (3200, 3200), (-36864, -36864, 36864, 36864), (-36864, -36864, 36864, 36864), (9214, 8958, 12286, 12030));
