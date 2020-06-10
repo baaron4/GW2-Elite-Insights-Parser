@@ -13,6 +13,7 @@ namespace GW2EIParser.EIData
     {
         // Fields
         public string Account { get; protected set; }
+        public bool HasCommanderTag => AgentItem.HasCommanderTag;
         public int Group { get; }
 
         private List<Consumable> _consumeList;

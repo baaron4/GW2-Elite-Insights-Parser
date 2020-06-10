@@ -116,6 +116,7 @@ namespace GW2EIParser.Parser
             BreakbarState = 34,
             BreakbarPercent = 35,
             Error = 36,
+            Tag = 37,
             Unknown
         };
 

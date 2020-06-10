@@ -16,6 +16,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public Dictionary<AgentItem, List<SpawnEvent>> SpawnEvents { get; } = new Dictionary<AgentItem, List<SpawnEvent>>();
         public Dictionary<AgentItem, List<TargetableEvent>> TargetableEvents { get; } = new Dictionary<AgentItem, List<TargetableEvent>>();
         public Dictionary<AgentItem, List<TeamChangeEvent>> TeamChangeEvents { get; } = new Dictionary<AgentItem, List<TeamChangeEvent>>();
+        //public Dictionary<AgentItem, List<TagEvent>> TagEvents { get; } = new Dictionary<AgentItem, List<TagEvent>>();
 
     }
 }

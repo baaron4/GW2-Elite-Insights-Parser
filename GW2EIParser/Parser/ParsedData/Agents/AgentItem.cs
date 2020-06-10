@@ -30,6 +30,8 @@ namespace GW2EIParser.Parser.ParsedData
         public uint HitboxWidth { get; }
         public uint HitboxHeight { get; }
 
+        public bool HasCommanderTag { get; protected set; }
+
         // Constructors
         public AgentItem(ulong agent, string name, string prof, int id, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight)
         {
@@ -86,6 +88,7 @@ namespace GW2EIParser.Parser.ParsedData
             HitboxHeight = other.HitboxHeight;
             InstID = other.InstID;
             Master = other.Master;
+            HasCommanderTag = other.HasCommanderTag;
         }
 
         public AgentItem()
@@ -126,6 +129,11 @@ namespace GW2EIParser.Parser.ParsedData
         public void SetMaster(AgentItem master )
         {
             Master = master;
+        }
+
+        public void SetCommanderTag(TagEvent tagEvt)
+        {
+            HasCommanderTag = tagEvt.TagID != 0;
         }
 
         private static void AddValueToStatusList(List<(long start, long end)> dead, List<(long start, long end)> down, List<(long start, long end)> dc, AbstractStatusEvent cur, AbstractStatusEvent next, long endTime, int index)
