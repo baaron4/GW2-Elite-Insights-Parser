@@ -15,6 +15,7 @@ namespace GW2EIParser.EIData
         public int Saved { get; set; }
         public double TimeSaved { get; set; }
         public double StackDist { get; set; }
+        public double DistToCom { get; set; }
 
         // boons
         public double AvgBoons { get; set; }
@@ -24,6 +25,31 @@ namespace GW2EIParser.EIData
 
         // Counts
         public int SwapCount { get; set; }
+
+        private static double GetDistanceToTarget(Player player, ParsedLog log, PhaseData phase, List<Point3D> reference)
+        {
+            var positions = player.GetCombatReplayPolledPositions(log).Where(x => x.Time >= phase.Start && x.Time <= phase.End).ToList();
+            int offset = player.GetCombatReplayPolledPositions(log).Count(x => x.Time < phase.Start);
+            if (positions.Count > 1 && reference.Count > 0)
+            {
+                var distances = new List<float>();
+                for (int time = 0; time < positions.Count; time++)
+                {
+
+                    float deltaX = positions[time].X - reference[time + offset].X;
+                    float deltaY = positions[time].Y - reference[time + offset].Y;
+                    //float deltaZ = positions[time].Z - StackCenterPositions[time].Z;
+
+
+                    distances.Add((float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY));
+                }
+                return distances.Sum() / distances.Count;
+            }
+            else
+            {
+                return -1;
+            }
+        }
 
         public FinalGameplayStatsAll(ParsedLog log, PhaseData phase, AbstractSingleActor actor) : base(log, phase, actor, null)
         {
@@ -71,30 +97,10 @@ namespace GW2EIParser.EIData
             AvgConditions = Math.Round(avgCondis / phase.DurationInMS, GeneralHelper.BuffDigit);
             AvgActiveConditions = activeDuration > 0 ? Math.Round(avgCondis / activeDuration, GeneralHelper.BuffDigit) : 0.0;
 
-            if (log.CombatData.HasMovementData && actor is Player)
+            if (log.CombatData.HasMovementData && actor is Player player)
             {
-                var positions = actor.GetCombatReplayPolledPositions(log).Where(x => x.Time >= phase.Start && x.Time <= phase.End).ToList();
-                List<Point3D> stackCenterPositions = log.Statistics.GetStackCenterPositions(log);
-                int offset = actor.GetCombatReplayPolledPositions(log).Count(x => x.Time < phase.Start);
-                if (positions.Count > 1)
-                {
-                    var distances = new List<float>();
-                    for (int time = 0; time < positions.Count; time++)
-                    {
-
-                        float deltaX = positions[time].X - stackCenterPositions[time + offset].X;
-                        float deltaY = positions[time].Y - stackCenterPositions[time + offset].Y;
-                        //float deltaZ = positions[time].Z - StackCenterPositions[time].Z;
-
-
-                        distances.Add((float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY));
-                    }
-                    StackDist = distances.Sum() / distances.Count;
-                }
-                else
-                {
-                    StackDist = -1;
-                }
+                StackDist = GetDistanceToTarget(player, log, phase, log.Statistics.GetStackCenterPositions(log));
+                DistToCom = GetDistanceToTarget(player, log, phase, log.Statistics.GetStackCommanderPositions(log));
             }
         }
     }

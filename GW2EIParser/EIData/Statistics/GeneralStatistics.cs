@@ -74,6 +74,7 @@ namespace GW2EIParser.EIData
 
         //Positions for group
         private List<Point3D> _stackCenterPositions = null;
+        private List<Point3D> _stackCommanderPositions = null;
 
         public List<Point3D> GetStackCenterPositions(ParsedLog log)
         {
@@ -82,6 +83,15 @@ namespace GW2EIParser.EIData
                 SetStackCenterPositions(log);
             }
             return _stackCenterPositions;
+        }
+
+        public List<Point3D> GetStackCommanderPositions(ParsedLog log)
+        {
+            if (_stackCommanderPositions == null)
+            {
+                SetStackCommanderPositions(log);
+            }
+            return _stackCommanderPositions;
         }
 
         private void SetStackCenterPositions(ParsedLog log)
@@ -126,5 +136,15 @@ namespace GW2EIParser.EIData
                 }
             }
         }
+        private void SetStackCommanderPositions(ParsedLog log)
+        {
+            _stackCommanderPositions = new List<Point3D>();
+            Player commander = log.PlayerList.FirstOrDefault(x => x.HasCommanderTag);
+            if (log.CombatData.HasMovementData && commander != null)
+            {
+                _stackCommanderPositions = new List<Point3D>(commander.GetCombatReplayPolledPositions(log));
+            }
+        }
+
     }
 }
