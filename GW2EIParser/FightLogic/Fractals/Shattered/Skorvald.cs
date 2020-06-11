@@ -7,7 +7,7 @@ using static GW2EIParser.Parser.ParseEnum.TrashIDS;
 
 namespace GW2EIParser.Logic
 {
-    public class Skorvald : FractalLogic
+    public class Skorvald : ShatteredFractal
     {
         public Skorvald(int triggerID) : base(triggerID)
         {

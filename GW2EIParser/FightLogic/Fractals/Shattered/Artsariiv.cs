@@ -6,7 +6,7 @@ using static GW2EIParser.Parser.ParseEnum.TrashIDS;
 
 namespace GW2EIParser.Logic
 {
-    public class Artsariiv : FractalLogic
+    public class Artsariiv : ShatteredFractal
     {
         public Artsariiv(int triggerID) : base(triggerID)
         {

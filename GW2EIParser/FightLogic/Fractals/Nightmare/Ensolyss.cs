@@ -8,7 +8,7 @@ using static GW2EIParser.Parser.ParseEnum.TrashIDS;
 
 namespace GW2EIParser.Logic
 {
-    public class Ensolyss : FractalLogic
+    public class Ensolyss : NightmareFractal
     {
         public Ensolyss(int triggerID) : base(triggerID)
         {

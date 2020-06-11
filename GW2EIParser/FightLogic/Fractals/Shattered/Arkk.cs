@@ -8,7 +8,7 @@ using static GW2EIParser.Parser.ParseEnum.TrashIDS;
 
 namespace GW2EIParser.Logic
 {
-    public class Arkk : FractalLogic
+    public class Arkk : ShatteredFractal
     {
         public Arkk(int triggerID) : base(triggerID)
         {

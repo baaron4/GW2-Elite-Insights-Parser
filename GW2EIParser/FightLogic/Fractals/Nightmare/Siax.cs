@@ -6,7 +6,7 @@ using static GW2EIParser.Parser.ParseEnum.TrashIDS;
 
 namespace GW2EIParser.Logic
 {
-    public class Siax : FractalLogic
+    public class Siax : NightmareFractal
     {
         public Siax(int triggerID) : base(triggerID)
         {

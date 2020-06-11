@@ -7,7 +7,7 @@ using static GW2EIParser.Parser.ParseEnum.TrashIDS;
 
 namespace GW2EIParser.Logic
 {
-    public class MAMA : FractalLogic
+    public class MAMA : NightmareFractal
     {
         public MAMA(int triggerID) : base(triggerID)
         {
