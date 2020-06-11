@@ -485,7 +485,7 @@ class Animator {
             ctx.font = fontSize + "px Comic Sans MS";
             ctx.fillStyle = "red";
             ctx.textAlign = "center";
-            ctx.fillText((50 / (this.inch * this.scale)).toFixed(1) + " inches", resolutionMultiplier * 95, resolutionMultiplier * 60);
+            ctx.fillText((50 / (this.inch * this.scale)).toFixed(1) + " units", resolutionMultiplier * 95, resolutionMultiplier * 60);
             ctx.restore();
             //ctx.globalCompositeOperation = 'normal';
         }
