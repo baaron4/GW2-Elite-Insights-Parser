@@ -460,7 +460,7 @@ class Animator {
             ctx.setTransform(1, 0, 0, 1, 0, 0);
             // draw scale
             ctx.lineWidth = 3 * resolutionMultiplier;
-            ctx.strokeStyle = "red";
+            ctx.strokeStyle = "#CC2200";
             var pos = resolutionMultiplier * 70;
             var width = resolutionMultiplier * 50;
             var height = resolutionMultiplier * 6;
@@ -469,7 +469,7 @@ class Animator {
             ctx.moveTo(pos, pos);
             ctx.lineTo(pos + width, pos);
             ctx.stroke();
-            ctx.lineWidth = resolutionMultiplier;
+            ctx.lineWidth = 2*resolutionMultiplier;
             // right border
             ctx.beginPath();
             ctx.moveTo(pos - resolutionMultiplier, pos + height);
@@ -482,8 +482,8 @@ class Animator {
             ctx.stroke();
             // text
             var fontSize = 13 * resolutionMultiplier;
-            ctx.font = fontSize + "px Comic Sans MS";
-            ctx.fillStyle = "red";
+            ctx.font = "bold " + fontSize + "px Comic Sans MS";
+            ctx.fillStyle = "#CC2200";
             ctx.textAlign = "center";
             ctx.fillText((50 / (this.inch * this.scale)).toFixed(1) + " units", resolutionMultiplier * 95, resolutionMultiplier * 60);
             ctx.restore();
