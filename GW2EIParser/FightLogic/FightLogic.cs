@@ -292,12 +292,6 @@ namespace GW2EIParser.Logic
             }
         }
 
-        protected void SetSuccessByCombatExit(HashSet<int> targetIds, CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
-        {
-            var targets = Targets.Where(x => targetIds.Contains(x.ID)).ToList();
-            SetSuccessByCombatExit(targets, combatData, fightData, playerAgents);
-        }
-
         protected static void SetSuccessByCombatExit(List<NPC> targets, CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             if (targets.Count == 0)

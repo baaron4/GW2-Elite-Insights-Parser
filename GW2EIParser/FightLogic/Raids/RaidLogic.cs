@@ -24,6 +24,12 @@ namespace GW2EIParser.Logic
             };
         }
 
+        protected void SetSuccessByCombatExit(HashSet<int> targetIds, CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
+        {
+            var targets = Targets.Where(x => targetIds.Contains(x.ID)).ToList();
+            SetSuccessByCombatExit(targets, combatData, fightData, playerAgents);
+        }
+
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             var raidRewardsTypes = new HashSet<int>
