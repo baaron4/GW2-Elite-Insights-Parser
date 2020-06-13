@@ -6,7 +6,7 @@
             <label v-for="player in group.players"
                    @click="selectActor(player.combatReplayID);"
                    class="btn btn-small ply-btn" :class="{'active': selectedplayerid === player.combatReplayID, 'btn-dark': !light, 'btn-light': light}" :title="player.name">
-                <img v-if="player.isCommander" src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png" alt="commander" class="icon" data-original-title="commander">
+                <img v-if="player.isCommander" src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png" alt="Commander" class="icon">
                 <img :src="player.icon" :alt="player.profession" class="icon">
                 {{ player.name }}
             </label>
