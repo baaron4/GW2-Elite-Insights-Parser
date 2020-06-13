@@ -24,6 +24,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public string EncounterDuration { get; set; }
         public bool Success { get; set; }
         public bool Wvw { get; set; }
+        public bool HasCommander { get; set; }
         public bool Targetless { get; set; }
         public string FightName { get; set; }
         public string FightIcon { get; set; }

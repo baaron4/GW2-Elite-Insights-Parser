@@ -1046,6 +1046,7 @@ namespace GW2EIParser.Builders
             _log.UpdateProgressWithCancellationCheck("HTML: building Players");
             foreach (Player player in _log.PlayerList)
             {
+                logData.HasCommander = logData.HasCommander || player.HasCommanderTag;
                 logData.Players.Add(new PlayerDto(player, _log, _cr, BuildPlayerData(player)));
             }
 

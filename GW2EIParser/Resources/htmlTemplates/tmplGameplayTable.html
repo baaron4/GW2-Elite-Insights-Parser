@@ -56,7 +56,7 @@
                     <img src="https://wiki.guildwars2.com/images/e/ef/Commander_arrow_marker.png" alt="Stack Center"
                          data-original-title="Average Distance to the center of the squad" class="icon icon-hover">
                 </th>
-                <th>
+                <th v-if="hasCommander">
                     <img src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png" alt="Stack Commander"
                          data-original-title="Average Distance to the commander" class="icon icon-hover">
                 </th>
@@ -86,7 +86,7 @@
                 <td :data-original-title="row.commons[3] + ' cancels <br>' + round2(100.0 * row.commons[2] / phase.durationS) + '% of the phase'">{{row.commons[2]}}</td>
                 <td>{{row.commons[4]}}</td>
                 <td>{{row.commons[5]}}</td>
-                <td>{{row.commons[6]}}</td>
+                <td v-if="hasCommander">{{row.commons[6]}}</td>
             </tr>
         </tbody>
         <tfoot>
@@ -111,7 +111,7 @@
                 <td :data-original-title="row.commons[3] + ' cancels'">{{round3(row.commons[2])}}</td>
                 <td>{{row.commons[4]}}</td>
                 <td>{{round2(row.commons[5] / row.count)}}</td>
-                <td>{{round2(row.commons[6] / row.count)}}</td>
+                <td v-if="hasCommander">{{round2(row.commons[6] / row.count)}}</td>
             </tr>
         </tfoot>
     </table>
