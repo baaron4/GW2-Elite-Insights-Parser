@@ -15,6 +15,8 @@ namespace GW2EIParser.Builders.HtmlModels
         public uint Heal { get; set; }
 
         public bool IsPoV { get; set; }
+
+        public bool IsCommander { get; set; }
         public List<string> L1Set { get; } = new List<string>();
         public List<string> L2Set { get; } = new List<string>();
         public List<string> A1Set { get; } = new List<string>();
@@ -33,6 +35,7 @@ namespace GW2EIParser.Builders.HtmlModels
             Conc = player.Concentration;
             Heal = player.Healing;
             IsPoV = log.LogData.PoV == player.AgentItem;
+            IsCommander = player.HasCommanderTag;
             ColTarget = GeneralHelper.GetLink("Color-" + player.Prof);
             ColCleave = GeneralHelper.GetLink("Color-" + player.Prof + "-NonBoss");
             ColTotal = GeneralHelper.GetLink("Color-" + player.Prof + "-Total");
