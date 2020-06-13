@@ -5,6 +5,7 @@
             <tr v-for="group in groups">
                 <td v-for="player in group" class="player-cell" :class="{active: player.id === playerindex}" @click="select(player.id)">
                     <div>
+                        <img v-if="player.isCommander" src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png" alt="commander" class="icon" data-original-title="commander">
                         <img :src="player.icon" :alt="player.profession" class="icon" :data-original-title="player.profession">
                         <img v-if="player.condi > 0" src="https://wiki.guildwars2.com/images/5/54/Condition_Damage.png"
                              alt="Condition Damage" class="icon" :data-original-title="'Condition Damage: ' + player.condi">
