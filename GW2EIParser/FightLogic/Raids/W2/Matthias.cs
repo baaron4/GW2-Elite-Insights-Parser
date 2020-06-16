@@ -46,7 +46,7 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/5/5d/Mini_Matthias_Abomination.png";
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/3X0YveK.png",
                             (880, 880),

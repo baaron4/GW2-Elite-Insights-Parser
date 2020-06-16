@@ -54,7 +54,7 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/5/54/Mini_Sabetha.png";
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/FwpMbYf.png",
                             (2790, 2763),

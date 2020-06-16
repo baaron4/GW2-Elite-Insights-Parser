@@ -21,6 +21,10 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public int Group { get; }
         /// <summary>
+        /// Indicates if a player has a commander tag
+        /// </summary>
+        public bool HasCommanderTag { get; }
+        /// <summary>
         /// Profession of the player
         /// </summary>
         public string Profession { get; }
@@ -152,6 +156,7 @@ namespace GW2EIParser.Builders.JsonModels
             Group = player.Group;
             Profession = player.Prof;
             ActiveTimes = phases.Select(x => x.GetActorActiveDuration(player, log)).ToList();
+            HasCommanderTag = player.HasCommanderTag;
             //
             Support = player.GetPlayerSupport(log).Select(x => new JsonStatistics.JsonPlayerSupport(x)).ToArray();
             TargetDamage1S = new List<int>[log.FightData.Logic.Targets.Count][];

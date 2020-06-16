@@ -23,7 +23,7 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/thumb/2/24/Eater_of_Souls_%28Hall_of_Chains%29.jpg/194px-Eater_of_Souls_%28Hall_of_Chains%29.jpg";
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/Owo34RS.png",
                             (710, 709),
@@ -131,7 +131,7 @@ namespace GW2EIParser.Logic
             SetSuccessByDeath(combatData, fightData, playerAgents, true, (int)ParseEnum.TargetIDS.SoulEater);
         }
 
-        public override string GetFightName()
+        public override string GetLogicName(ParsedLog log)
         {
             return "Statue of Death";
         }

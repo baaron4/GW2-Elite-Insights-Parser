@@ -249,7 +249,7 @@ namespace GW2EIParser.Builders.JsonModels
             //
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Meta Data");
             TriggerID = log.FightData.TriggerID;
-            FightName = log.FightData.Name;
+            FightName = log.FightData.GetFightName(log);
             FightIcon = log.FightData.Logic.Icon;
             EliteInsightsVersion = Application.ProductVersion;
             ArcVersion = log.LogData.BuildVersion;

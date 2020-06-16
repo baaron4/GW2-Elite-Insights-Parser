@@ -9,6 +9,7 @@ namespace GW2EIParser.Logic
 {
     public class WvWFight : FightLogic
     {
+        private const string DefaultName = "World vs World";
         public WvWFight(int triggerID) : base(triggerID)
         {
             Extension = "wvw";
@@ -47,9 +48,54 @@ namespace GW2EIParser.Logic
             }*/
             return phases;
         }
-        public override string GetFightName()
+
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
-            return "World vs World";
+            Parser.ParsedData.CombatEvents.MapIDEvent mapID = log.CombatData.GetMapIDEvents().LastOrDefault();
+            if (mapID == null)
+            {
+                return base.GetCombatMapInternal(log);
+            }
+            switch (mapID.MapID)
+            {
+                // EB
+                case 38:
+                    return new CombatReplayMap("https://i.imgur.com/7DnLZ7G.png", (3100,3250),(-36864, -36864, 36864, 36864), (-36864, -36864, 36864, 36864), (8958, 12798, 12030, 15870));
+                // Green Alpine
+                case 95:
+                    return new CombatReplayMap("https://i.imgur.com/s4wMYgZ.png", (2492, 3574), (-30720, -43008, 30720, 43008), (-30720, -43008, 30720, 43008), (5630, 11518, 8190, 15102));
+                // Blue Alpine
+                case 96:
+                    return new CombatReplayMap("https://i.imgur.com/s4wMYgZ.png", (2492, 3574), (-30720, -43008, 30720, 43008), (-30720, -43008, 30720, 43008), (12798, 10878, 15358, 14462));
+                // Red Desert
+                case 1099:
+                    return new CombatReplayMap("https://i.imgur.com/IbXfEwV.jpg", (3200, 3200), (-36864, -36864, 36864, 36864), (-36864, -36864, 36864, 36864), (9214, 8958, 12286, 12030));
+            }
+            return base.GetCombatMapInternal(log);
+        }
+        public override string GetLogicName(ParsedLog log)
+        {
+            Parser.ParsedData.CombatEvents.MapIDEvent mapID = log.CombatData.GetMapIDEvents().LastOrDefault();
+            if (mapID == null)
+            {
+                return DefaultName;
+            }
+            switch(mapID.MapID)
+            {
+                case 38:
+                    return "Eternal Battlegrounds";
+                case 95:
+                    return "Green Alpine Borderlands";
+                case 96:
+                    return "Blue Alpine Borderlands";
+                case 1099:
+                    return "Red Desert Borderlands";
+                case 899:
+                    return "Obsidian Sanctum";
+                case 968:
+                    return "Edge of the Mists";
+            }
+            return DefaultName;
         }
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)

@@ -27,7 +27,7 @@ namespace GW2EIParser.Logic
             Icon = "https://i.imgur.com/meYwQmA.png";
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/kLjZ7eU.png",
                             (905, 789),

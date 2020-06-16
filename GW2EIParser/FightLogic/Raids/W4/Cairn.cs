@@ -50,7 +50,7 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/b/b8/Mini_Cairn_the_Indomitable.png";
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/NlpsLZa.png",
                             (607, 607),
@@ -114,12 +114,12 @@ namespace GW2EIParser.Logic
             }
         }
 
-        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return combatData.GetSkills().Contains(38098) ? 1 : 0;
+            return combatData.GetSkills().Contains(38098) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
         }
 
-        public override string GetFightName()
+        public override string GetLogicName(ParsedLog log)
         {
             return "Cairn";
         }

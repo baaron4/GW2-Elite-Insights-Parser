@@ -40,7 +40,7 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/W7MocGz.png",
                             (889, 889),

@@ -13,6 +13,7 @@ namespace GW2EIParser.EIData
     {
         // Fields
         public string Account { get; protected set; }
+        public bool HasCommanderTag => AgentItem.HasCommanderTag;
         public int Group { get; }
 
         private List<Consumable> _consumeList;
@@ -306,13 +307,23 @@ namespace GW2EIParser.EIData
             _damageModifiersTargets = new Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>>();
             _presentDamageModifiers = new HashSet<string>();
             // If conjured sword, targetless or WvW, stop
-            if (!log.ParserSettings.ComputeDamageModifiers || IsFakeActor || log.FightData.Logic.Targetless || log.FightData.Logic.Mode == FightLogic.ParseMode.WvW)
+            if (!log.ParserSettings.ComputeDamageModifiers || IsFakeActor || log.FightData.Logic.Targetless)
             {
                 return;
             }
-            var damageMods = new List<DamageModifier>(log.DamageModifiers.DamageModifiersPerSource[GeneralHelper.Source.Item]);
-            damageMods.AddRange(log.DamageModifiers.DamageModifiersPerSource[GeneralHelper.Source.Common]);
-            damageMods.AddRange(log.DamageModifiers.DamageModifiersPerSource[GeneralHelper.Source.FightSpecific]);
+            var damageMods = new List<DamageModifier>();
+            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(GeneralHelper.Source.Item, out List<DamageModifier> list))
+            {
+                damageMods.AddRange(list);
+            }
+            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(GeneralHelper.Source.Common, out list))
+            {
+                damageMods.AddRange(list);
+            }
+            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(GeneralHelper.Source.FightSpecific, out list))
+            {
+                damageMods.AddRange(list);
+            }
             damageMods.AddRange(log.DamageModifiers.GetModifiersPerProf(Prof));
             foreach (DamageModifier mod in damageMods)
             {

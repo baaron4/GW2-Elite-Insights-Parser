@@ -36,7 +36,7 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/5/57/Champion_Toxic_Hybrid.jpg";
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/kjelZ4t.png",
                             (366, 366),
@@ -49,9 +49,9 @@ namespace GW2EIParser.Logic
             return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)ParseEnum.TargetIDS.Ensolyss, 762, 1500);
         }
 
-        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return 2;
+            return FightData.CMStatus.CMnoName;
         }
 
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()

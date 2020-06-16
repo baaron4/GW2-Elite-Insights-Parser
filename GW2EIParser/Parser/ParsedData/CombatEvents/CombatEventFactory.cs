@@ -180,6 +180,11 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                     case ParseEnum.StateChange.Error:
                         metaDataEvents.ErrorEvents.Add(new ErrorEvent(c));
                         break;
+                    case ParseEnum.StateChange.Tag:
+                        // Getting ready in case this becomes an actual state event
+                        _ = new TagEvent(c, agentData);
+                        //GeneralHelper.Add(metaDataEvents.TagEvents, tagEvt.Src, tagEvt);
+                        break;
                 }
             }
         }

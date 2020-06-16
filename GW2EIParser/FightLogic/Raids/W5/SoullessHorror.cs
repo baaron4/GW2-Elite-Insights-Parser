@@ -37,7 +37,7 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/d/d4/Mini_Desmina.png";
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/A45pVJy.png",
                             (3657, 3657),
@@ -249,7 +249,7 @@ namespace GW2EIParser.Logic
 
         }
 
-        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             var necrosis = combatData.GetBuffData(47414).Where(x => x is BuffApplyEvent).ToList();
             if (necrosis.Count == 0)
@@ -279,7 +279,7 @@ namespace GW2EIParser.Logic
                     minDiff = timeDiff;
                 }
             }
-            return (minDiff < 11000) ? 1 : 0;
+            return (minDiff < 11000) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
         }
     }
 }

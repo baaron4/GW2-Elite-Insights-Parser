@@ -235,6 +235,7 @@ var compileGeneralStats = function () {
             return {
                 targetless: logData.targetless,
                 mode: logData.targetless ? 0 : 1,
+                hasCommander: logData.hasCommander,
                 cache: new Map(),
                 cacheTarget: new Map()
             };

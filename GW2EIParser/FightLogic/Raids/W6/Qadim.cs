@@ -71,7 +71,7 @@ namespace GW2EIParser.Logic
             GenericFallBackMethod = FallBackMethod.CombatExit;
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/gHq0j79.png",
                             (3903, 3878),
@@ -512,14 +512,14 @@ namespace GW2EIParser.Logic
             }
         }
 
-        public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Qadim);
             if (target == null)
             {
                 throw new InvalidOperationException("Qadim not found");
             }
-            return (target.GetHealth(combatData) > 21e6) ? 1 : 0;
+            return (target.GetHealth(combatData) > 21e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
         }
 
         private void AddPlatformsToCombatReplay(NPC target, ParsedLog log, CombatReplay replay)

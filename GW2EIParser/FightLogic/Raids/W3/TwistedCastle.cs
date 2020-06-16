@@ -27,7 +27,7 @@ namespace GW2EIParser.Logic
             Icon = "https://i.imgur.com/xpQnu35.png";
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/2RkzdmL.png",
                             (1353, 1748),
@@ -69,7 +69,7 @@ namespace GW2EIParser.Logic
             }
         }
 
-        public override string GetFightName()
+        public override string GetLogicName(ParsedLog log)
         {
             return "Twisted Castle";
         }

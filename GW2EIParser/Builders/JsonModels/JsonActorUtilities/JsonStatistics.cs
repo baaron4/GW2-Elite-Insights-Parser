@@ -256,6 +256,10 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public double StackDist { get; }
             /// <summary>
+            /// Distance to the commander of the squad. Only when a player with commander tag is present
+            /// </summary>
+            public double DistToCom { get; }
+            /// <summary>
             /// Average amount of boons
             /// </summary>
             public double AvgBoons { get; }
@@ -283,6 +287,7 @@ namespace GW2EIParser.Builders.JsonModels
                 Saved = stats.Saved;
                 TimeSaved = stats.TimeSaved;
                 StackDist = stats.StackDist;
+                DistToCom = stats.DistToCom;
                 AvgBoons = stats.AvgBoons;
                 AvgActiveBoons = stats.AvgActiveBoons;
                 AvgConditions = stats.AvgConditions;

@@ -1046,6 +1046,7 @@ namespace GW2EIParser.Builders
             _log.UpdateProgressWithCancellationCheck("HTML: building Players");
             foreach (Player player in _log.PlayerList)
             {
+                logData.HasCommander = logData.HasCommander || player.HasCommanderTag;
                 logData.Players.Add(new PlayerDto(player, _log, _cr, BuildPlayerData(player)));
             }
 
@@ -1071,32 +1072,41 @@ namespace GW2EIParser.Builders
                 allDamageMods.UnionWith(p.GetPresentDamageModifier(_log));
             }
             var commonDamageModifiers = new List<DamageModifier>();
-            foreach (DamageModifier dMod in _log.DamageModifiers.DamageModifiersPerSource[GeneralHelper.Source.Common])
+            if (_log.DamageModifiers.DamageModifiersPerSource.TryGetValue(GeneralHelper.Source.Common, out List<DamageModifier> list))
             {
-                if (allDamageMods.Contains(dMod.Name))
+                foreach (DamageModifier dMod in list)
                 {
-                    commonDamageModifiers.Add(dMod);
-                    logData.DmgModifiersCommon.Add(dMod.Name.GetHashCode());
-                    _usedDamageMods.Add(dMod);
+                    if (allDamageMods.Contains(dMod.Name))
+                    {
+                        commonDamageModifiers.Add(dMod);
+                        logData.DmgModifiersCommon.Add(dMod.Name.GetHashCode());
+                        _usedDamageMods.Add(dMod);
+                    }
                 }
             }
-            foreach (DamageModifier dMod in _log.DamageModifiers.DamageModifiersPerSource[GeneralHelper.Source.FightSpecific])
+            if (_log.DamageModifiers.DamageModifiersPerSource.TryGetValue(GeneralHelper.Source.FightSpecific,out list))
             {
-                if (allDamageMods.Contains(dMod.Name))
+                foreach (DamageModifier dMod in list)
                 {
-                    commonDamageModifiers.Add(dMod);
-                    logData.DmgModifiersCommon.Add(dMod.Name.GetHashCode());
-                    _usedDamageMods.Add(dMod);
+                    if (allDamageMods.Contains(dMod.Name))
+                    {
+                        commonDamageModifiers.Add(dMod);
+                        logData.DmgModifiersCommon.Add(dMod.Name.GetHashCode());
+                        _usedDamageMods.Add(dMod);
+                    }
                 }
             }
             var itemDamageModifiers = new List<DamageModifier>();
-            foreach (DamageModifier dMod in _log.DamageModifiers.DamageModifiersPerSource[GeneralHelper.Source.Item])
+            if (_log.DamageModifiers.DamageModifiersPerSource.TryGetValue(GeneralHelper.Source.Item, out list))
             {
-                if (allDamageMods.Contains(dMod.Name))
+                foreach (DamageModifier dMod in list)
                 {
-                    itemDamageModifiers.Add(dMod);
-                    logData.DmgModifiersItem.Add(dMod.Name.GetHashCode());
-                    _usedDamageMods.Add(dMod);
+                    if (allDamageMods.Contains(dMod.Name))
+                    {
+                        itemDamageModifiers.Add(dMod);
+                        logData.DmgModifiersItem.Add(dMod.Name.GetHashCode());
+                        _usedDamageMods.Add(dMod);
+                    }
                 }
             }
             foreach (Buff boon in _statistics.PresentBoons)
@@ -1190,7 +1200,7 @@ namespace GW2EIParser.Builders
             logData.Success = _log.FightData.Success;
             logData.Wvw = _log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;
             logData.Targetless = _log.FightData.Logic.Targetless;
-            logData.FightName = _log.FightData.Name;
+            logData.FightName = _log.FightData.GetFightName(_log);
             logData.FightIcon = _log.FightData.Logic.Icon;
             logData.LightTheme = _light;
             logData.SingleGroup = _log.PlayerList.Where(x => !x.IsFakeActor).Select(x => x.Group).Distinct().Count() == 1;

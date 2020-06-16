@@ -27,7 +27,7 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/thumb/e/e2/Icebrood_Construct.jpg/320px-Icebrood_Construct.jpg";
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/sXvx6AL.png",
                             (729, 581),

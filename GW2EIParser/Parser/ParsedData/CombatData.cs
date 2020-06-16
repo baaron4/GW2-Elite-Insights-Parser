@@ -434,6 +434,15 @@ namespace GW2EIParser.Parser.ParsedData
             return new List<TargetableEvent>();
         }
 
+        /*public List<TagEvent> GetTagEvents(AgentItem key)
+        {
+            if (_statusEvents.TagEvents.TryGetValue(key, out List<TagEvent> list))
+            {
+                return list;
+            }
+            return new List<TagEvent>();
+        }*/
+
         public List<TeamChangeEvent> GetTeamChangeEvents(AgentItem key)
         {
             if (_statusEvents.TeamChangeEvents.TryGetValue(key, out List<TeamChangeEvent> list))

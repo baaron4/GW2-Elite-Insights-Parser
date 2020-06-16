@@ -43,7 +43,7 @@ namespace GW2EIParser.Logic
             };
         }
 
-        protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/cVuaOc5.png",
                             (2494, 2277),
@@ -165,7 +165,7 @@ namespace GW2EIParser.Logic
             };
         }
 
-        public override string GetFightName()
+        public override string GetLogicName(ParsedLog log)
         {
             return "Bandit Trio";
         }

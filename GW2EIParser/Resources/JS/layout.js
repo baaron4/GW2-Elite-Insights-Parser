@@ -115,7 +115,7 @@ var compileLayout = function () {
     buffs.layout = buffLayout;
     layout.addTab(buffs);
     // damage modifiers
-    if (!logData.targetless && !logData.wvw) {
+    if (!logData.targetless) {
         var damageModifiers = new Tab("Damage Modifiers", {
             dataType: DataTypes.dmgModifiersTable
         });

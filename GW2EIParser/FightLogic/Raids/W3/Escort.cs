@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GW2EIParser.EIData;
+using GW2EIParser.Parser.ParsedData;
 
 namespace GW2EIParser.Logic
 {
@@ -25,7 +26,7 @@ namespace GW2EIParser.Logic
                             (1920, 12160, 2944, 14464));
         }*/
 
-        public override string GetFightName()
+        public override string GetLogicName(ParsedLog log)
         {
             return "Escort";
         }
