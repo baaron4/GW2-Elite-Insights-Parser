@@ -1,5 +1,8 @@
 var NAVTREEINDEX1 =
 {
+"class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_player_support.html":[1,0,0,0,0,14,4],
+"class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_player_support.html#a27c76313129610f6ababa52668f69954":[1,0,0,0,0,14,4,1],
+"class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_player_support.html#a7ba02199a205739061cd30117f07ee53":[1,0,0,0,0,14,4,6],
 "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_player_support.html#aa55c6cea90dbc44e8bef7beb7e6401c6":[1,0,0,0,0,14,4,2],
 "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_player_support.html#aac233193987fa7b9cc671cf5bd5c2521":[1,0,0,0,0,14,4,0],
 "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_player_support.html#ab17de9719564e259961372dfab757733":[1,0,0,0,0,14,4,7],
@@ -8,8 +11,8 @@ var NAVTREEINDEX1 =
 "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_player_support.html#afcaf3a0a11567d7de6347af010153fda":[1,0,0,0,0,14,4,4],
 "classes.html":[1,1],
 "files.html":[2,0],
-"functions.html":[1,3,0,0],
 "functions.html":[1,3,0],
+"functions.html":[1,3,0,0],
 "functions_b.html":[1,3,0,1],
 "functions_c.html":[1,3,0,2],
 "functions_d.html":[1,3,0,3],
@@ -23,8 +26,8 @@ var NAVTREEINDEX1 =
 "functions_n.html":[1,3,0,11],
 "functions_o.html":[1,3,0,12],
 "functions_p.html":[1,3,0,13],
-"functions_prop.html":[1,3,1,0],
 "functions_prop.html":[1,3,1],
+"functions_prop.html":[1,3,1,0],
 "functions_prop_b.html":[1,3,1,1],
 "functions_prop_c.html":[1,3,1,2],
 "functions_prop_d.html":[1,3,1,3],
@@ -56,8 +59,8 @@ var NAVTREEINDEX1 =
 "namespace_g_w2_e_i_parser.html":[0,0,0],
 "namespace_g_w2_e_i_parser_1_1_builders.html":[0,0,0,0],
 "namespace_g_w2_e_i_parser_1_1_builders.html":[1,0,0,0],
-"namespace_g_w2_e_i_parser_1_1_builders_1_1_json_models.html":[0,0,0,0,0],
 "namespace_g_w2_e_i_parser_1_1_builders_1_1_json_models.html":[1,0,0,0,0],
+"namespace_g_w2_e_i_parser_1_1_builders_1_1_json_models.html":[0,0,0,0,0],
 "namespaces.html":[0,0],
 "pages.html":[]
 };

@@ -12,6 +12,7 @@ var class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player =
     [ "Group", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#afd0e5b54df0ff0d6501c414a10c2dd71", null ],
     [ "GroupBuffs", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a7d3de60d7e28ad93b376cd91b405b0fc", null ],
     [ "GroupBuffsActive", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#af80c8339cf65c6462c68e24035887201", null ],
+    [ "HasCommanderTag", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#adc728e68ec28ce685974f8c3287ced85", null ],
     [ "OffGroupBuffs", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a650c5a87672690c4e1b984f507e587f9", null ],
     [ "OffGroupBuffsActive", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a586d0ba9dae2bdd8c5d32a77766bd7d7", null ],
     [ "Profession", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a29a87654fd5ef9b46c236f49c9b33576", null ],

@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['hascommandertag',['HasCommanderTag',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#adc728e68ec28ce685974f8c3287ced85',1,'GW2EIParser::Builders::JsonModels::JsonPlayer']]],
   ['healing',['Healing',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#aae207e1e5bcd0ac91157acd93e72a662',1,'GW2EIParser::Builders::JsonModels::JsonActor']]],
   ['healthpercentburned',['HealthPercentBurned',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_n_p_c.html#a320e031b98365ca8461cedc7406ff6d4',1,'GW2EIParser::Builders::JsonModels::JsonNPC']]],
   ['healthpercents',['HealthPercents',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a455edac0af77e1e9a6945e2046047beb',1,'GW2EIParser::Builders::JsonModels::JsonActor']]],
