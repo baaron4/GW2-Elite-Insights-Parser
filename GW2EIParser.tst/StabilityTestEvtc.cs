@@ -10,6 +10,7 @@ using GW2EIParser.Parser.ParsedData;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 
 namespace GW2EIParser.tst
 {
@@ -104,7 +105,10 @@ namespace GW2EIParser.tst
         public void TestEvtc()
         {
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "../../../EvtcLogs/StabilityTest";
-
+            if (!Directory.Exists(testLocation))
+            {
+                Directory.CreateDirectory(testLocation);
+            }
             Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
 
             var failed = new BlockingCollection<string>();
@@ -121,7 +125,10 @@ namespace GW2EIParser.tst
         public void TestEvtcZip()
         {
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "../../../EvtcLogs/StabilityTest";
-
+            if (!Directory.Exists(testLocation))
+            {
+                Directory.CreateDirectory(testLocation);
+            }
             Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
             var failed = new BlockingCollection<string>();
             var messages = new BlockingCollection<string>();
@@ -137,7 +144,10 @@ namespace GW2EIParser.tst
         public void TestZevtc()
         {
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "../../../EvtcLogs/StabilityTest";
-
+            if (!Directory.Exists(testLocation))
+            {
+                Directory.CreateDirectory(testLocation);
+            }
             Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
 
             var failed = new BlockingCollection<string>();
@@ -154,7 +164,10 @@ namespace GW2EIParser.tst
         public void TestCrashed()
         {
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "../../../EvtcLogs/Crashes/Logs";
-
+            if (!Directory.Exists(testLocation))
+            {
+                Directory.CreateDirectory(testLocation);
+            }
             var failed = new BlockingCollection<string>();
             int failedCount = 0;
             var messages = new BlockingCollection<string>();
