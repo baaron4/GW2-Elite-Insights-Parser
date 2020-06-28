@@ -540,7 +540,7 @@ namespace GW2EIParser.Parser
             IcebroodConstructFraenir = 22436,
             Boneskinner = 22521,
             WhisperOfJormag = 22711,
-            VariniaStormsounder = 22836, // TODO - get id
+            VariniaStormsounder = 22836,
             // Fract
             MAMA = 17021,
             Siax = 17028,
