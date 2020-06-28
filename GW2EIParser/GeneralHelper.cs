@@ -484,6 +484,8 @@ namespace GW2EIParser
                 case MazeMinotaur:
                 case Enervator:
                 case WhisperEcho:
+                case CharrTank:
+                case PropagandaBallon:
                     return "https://i.imgur.com/k79t7ZA.png";
                 case HandOfErosion:
                 case HandOfEruption:
