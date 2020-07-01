@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
@@ -93,6 +94,43 @@ namespace GW2EIParser.EIData
                 CastLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
             }
             return CastLogs.Where(x => x.Time >= start && x.Time + x.ActualDuration <= end).ToList();
+        }
+
+        public List<List<Segment>> GetLifeSpanSegments(ParsedLog log)
+        {
+            var minionsSegments = new List<List<Segment>>();
+            var fightDur = log.FightData.FightEnd;
+            foreach (NPC minion in MinionList)
+            {
+                (List<(long start, long end)> deads, List<(long start, long end)> downs, List<(long start, long end)> dcs) = minion.GetStatus(log);
+                var minionSegments = new List<Segment>();
+                var off = new List<(long start, long end)>();
+                off.AddRange(deads);
+                off.AddRange(downs);
+                off.AddRange(dcs);
+                off.Sort((x, y) => x.start.CompareTo(y.start));
+                if (off.Any())
+                {
+                    long presenceStart = 0;
+                    foreach ((long start, long end) in off)
+                    {
+                        minionSegments.Add(new Segment(presenceStart, start, 1));
+                        minionSegments.Add(new Segment(start, end, 0));
+                        presenceStart = end;
+                    }
+                    minionSegments.Add(new Segment(presenceStart, fightDur, 1));
+                } 
+                else
+                {
+                    long start = Math.Max(minion.FirstAware, 0);
+                    long end = Math.Min(minion.LastAware, fightDur);
+                    minionSegments.Add(new Segment(0, start, 0));
+                    minionSegments.Add(new Segment(start, end, 1));
+                    minionSegments.Add(new Segment(end, fightDur, 0));
+                }
+                minionsSegments.Add(minionSegments);
+            }
+            return minionsSegments;
         }
     }
 }
