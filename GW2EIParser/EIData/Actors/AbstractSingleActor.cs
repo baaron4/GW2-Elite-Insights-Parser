@@ -370,58 +370,7 @@ namespace GW2EIParser.EIData
                     BuffPoints[boonid] = new BuffsGraphModel(buff, graphSegments);
                     if (updateBoonPresence || updateCondiPresence)
                     {
-                        List<BuffSegment> segmentsToFill = updateBoonPresence ? boonPresenceGraph.BuffChart : condiPresenceGraph.BuffChart;
-                        bool firstPass = segmentsToFill.Count == 0;
-                        foreach (BuffSegment seg in BuffPoints[boonid].BuffChart)
-                        {
-                            long start = seg.Start;
-                            long end = seg.End;
-                            int value = seg.Value > 0 ? 1 : 0;
-                            if (firstPass)
-                            {
-                                segmentsToFill.Add(new BuffSegment(start, end, value));
-                            }
-                            else
-                            {
-                                for (int i = 0; i < segmentsToFill.Count; i++)
-                                {
-                                    BuffSegment curSeg = segmentsToFill[i];
-                                    long curEnd = curSeg.End;
-                                    long curStart = curSeg.Start;
-                                    int curVal = curSeg.Value;
-                                    if (curStart > end)
-                                    {
-                                        break;
-                                    }
-                                    if (curEnd < start)
-                                    {
-                                        continue;
-                                    }
-                                    if (end <= curEnd)
-                                    {
-                                        curSeg.End = start;
-                                        segmentsToFill.Insert(i + 1, new BuffSegment(start, end, curVal + value));
-                                        segmentsToFill.Insert(i + 2, new BuffSegment(end, curEnd, curVal));
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        curSeg.End = start;
-                                        segmentsToFill.Insert(i + 1, new BuffSegment(start, curEnd, curVal + value));
-                                        start = curEnd;
-                                        i++;
-                                    }
-                                }
-                            }
-                        }
-                        if (updateBoonPresence)
-                        {
-                            boonPresenceGraph.FuseSegments();
-                        }
-                        else
-                        {
-                            condiPresenceGraph.FuseSegments();
-                        }
+                        BuffsGraphModel.MergePresenceInto(BuffPoints[boonid], updateBoonPresence ? boonPresenceGraph : condiPresenceGraph);
                     }
 
                 }

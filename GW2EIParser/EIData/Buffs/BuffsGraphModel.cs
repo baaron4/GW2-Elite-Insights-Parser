@@ -47,6 +47,9 @@ namespace GW2EIParser.EIData
             return count > 0;
         }
 
+        /// <summary>
+        /// Fuse consecutive segments with same value
+        /// </summary>
         public void FuseSegments()
         {
             var newChart = new List<BuffSegment>();
@@ -76,6 +79,62 @@ namespace GW2EIParser.EIData
                 }
             }
             BuffChart = newChart;
+        }
+
+        /// <summary>
+        /// This method will integrate the graph from "from" to "to"
+        /// It is going to add +1 to "to" when "from" has a value > 0
+        /// </summary>
+        /// <param name="from"></param> 
+        /// <param name="to"></param>
+        public static void MergePresenceInto(BuffsGraphModel from, BuffsGraphModel to)
+        {
+            List<BuffSegment> segmentsToFill = to.BuffChart;
+            bool firstPass = segmentsToFill.Count == 0;
+            foreach (BuffSegment seg in from.BuffChart)
+            {
+                long start = seg.Start;
+                long end = seg.End;
+                int presence = seg.Value > 0 ? 1 : 0;
+                if (firstPass)
+                {
+                    segmentsToFill.Add(new BuffSegment(start, end, presence));
+                }
+                else
+                {
+                    for (int i = 0; i < segmentsToFill.Count; i++)
+                    {
+                        BuffSegment curSeg = segmentsToFill[i];
+                        long curEnd = curSeg.End;
+                        long curStart = curSeg.Start;
+                        int curVal = curSeg.Value;
+                        if (curStart > end)
+                        {
+                            break;
+                        }
+                        if (curEnd < start)
+                        {
+                            continue;
+                        }
+                        if (end <= curEnd)
+                        {
+                            curSeg.End = start;
+                            segmentsToFill.Insert(i + 1, new BuffSegment(start, end, curVal + presence));
+                            segmentsToFill.Insert(i + 2, new BuffSegment(end, curEnd, curVal));
+                            break;
+                        }
+                        else
+                        {
+                            curSeg.End = start;
+                            segmentsToFill.Insert(i + 1, new BuffSegment(start, curEnd, curVal + presence));
+                            start = curEnd;
+                            i++;
+                        }
+                    }
+                }
+            }
+            // Merge consecutive segments with same value, otherwise expect exponential growth
+            to.FuseSegments();
         }
 
     }
