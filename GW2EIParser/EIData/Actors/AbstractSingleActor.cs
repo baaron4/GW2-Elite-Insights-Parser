@@ -370,7 +370,7 @@ namespace GW2EIParser.EIData
                     BuffPoints[boonid] = new BuffsGraphModel(buff, graphSegments);
                     if (updateBoonPresence || updateCondiPresence)
                     {
-                        BuffsGraphModel.MergePresenceInto(BuffPoints[boonid], updateBoonPresence ? boonPresenceGraph : condiPresenceGraph);
+                        (updateBoonPresence? boonPresenceGraph : condiPresenceGraph).MergePresenceInto(BuffPoints[boonid].BuffChart);
                     }
 
                 }

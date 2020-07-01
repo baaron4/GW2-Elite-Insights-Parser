@@ -82,16 +82,16 @@ namespace GW2EIParser.EIData
         }
 
         /// <summary>
-        /// This method will integrate the graph from "from" to "to"
+        /// This method will integrate the graph "from" to "to"
         /// It is going to add +1 to "to" when "from" has a value > 0
         /// </summary>
         /// <param name="from"></param> 
         /// <param name="to"></param>
-        public static void MergePresenceInto(BuffsGraphModel from, BuffsGraphModel to)
+        public void MergePresenceInto(List<BuffSegment> from)
         {
-            List<BuffSegment> segmentsToFill = to.BuffChart;
+            List<BuffSegment> segmentsToFill = BuffChart;
             bool firstPass = segmentsToFill.Count == 0;
-            foreach (BuffSegment seg in from.BuffChart)
+            foreach (BuffSegment seg in from)
             {
                 long start = seg.Start;
                 long end = seg.End;
@@ -134,7 +134,7 @@ namespace GW2EIParser.EIData
                 }
             }
             // Merge consecutive segments with same value, otherwise expect exponential growth
-            to.FuseSegments();
+            FuseSegments();
         }
 
     }
