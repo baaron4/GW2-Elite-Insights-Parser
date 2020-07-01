@@ -300,6 +300,7 @@ namespace GW2EIParser.EIData
             long dur = log.FightData.FightEnd;
             int fightDuration = (int)(dur) / 1000;
             var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[ProfHelper.NumberOfBoonsID]);
+            var activeCombatMinionsGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[ProfHelper.NumberOfActiveCombatMinions]);
             var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[ProfHelper.NumberOfConditionsID]);
             var boonIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Boon].Select(x => x.ID));
             var condiIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Condition].Select(x => x.ID));
