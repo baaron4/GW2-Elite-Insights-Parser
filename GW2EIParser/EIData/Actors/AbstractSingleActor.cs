@@ -81,7 +81,7 @@ namespace GW2EIParser.EIData
                 }
                 foreach (KeyValuePair<long, Minions> pair in auxMinions)
                 {
-                    if (pair.Value.GetDamageLogs(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastLogs(log, 0, log.FightData.FightEnd).Count > 0)
+                    if (pair.Value.GetDamageLogs(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastLogs(log, 0, log.FightData.FightEnd).Any(x => x.SkillId != SkillItem.WeaponSwapId))
                     {
                         _minions[pair.Value.AgentItem.UniqueID] = pair.Value;
                     }
@@ -103,7 +103,7 @@ namespace GW2EIParser.EIData
                 }
                 foreach (KeyValuePair<string, Minions> pair in auxGadgetMinions)
                 {
-                    if (pair.Value.GetDamageLogs(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastLogs(log, 0, log.FightData.FightEnd).Count > 0)
+                    if (pair.Value.GetDamageLogs(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastLogs(log, 0, log.FightData.FightEnd).Any(x => x.SkillId != SkillItem.WeaponSwapId))
                     {
                         _minions[pair.Value.AgentItem.UniqueID] = pair.Value;
                     }
