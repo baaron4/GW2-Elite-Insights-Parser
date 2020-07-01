@@ -377,6 +377,17 @@ namespace GW2EIParser.EIData
             }
             BuffPoints[ProfHelper.NumberOfBoonsID] = boonPresenceGraph;
             BuffPoints[ProfHelper.NumberOfConditionsID] = condiPresenceGraph;
+            foreach(Minions minions in GetMinions(log).Values)
+            {
+                foreach(List<Segment> minionsSegments in minions.GetLifeSpanSegments(log))
+                {
+                    activeCombatMinionsGraph.MergePresenceInto(minionsSegments);
+                }
+            }
+            if (activeCombatMinionsGraph.BuffChart.Any())
+            {
+                BuffPoints[ProfHelper.NumberOfActiveCombatMinions] = activeCombatMinionsGraph;
+            }
         }
 
         public Dictionary<long, FinalBuffsDictionary> GetBuffsDictionary(ParsedLog log, int phaseIndex)
