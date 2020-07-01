@@ -325,7 +325,7 @@ namespace GW2EIParser.EIData
                     simulator.Trim(dur);
                     bool updateBoonPresence = boonIds.Contains(boonid);
                     bool updateCondiPresence = condiIds.Contains(boonid);
-                    var graphSegments = new List<BuffSegment>();
+                    var graphSegments = new List<Segment>();
                     foreach (BuffSimulationItem simul in simulator.GenerationSimulation)
                     {
                         // Generation
@@ -336,14 +336,14 @@ namespace GW2EIParser.EIData
                             simul.SetBuffDistributionItem(_buffDistribution[i], phase.Start, phase.End, boonid, log);
                         }
                         // Graph
-                        BuffSegment segment = simul.ToSegment();
+                        var segment = simul.ToSegment();
                         if (graphSegments.Count == 0)
                         {
-                            graphSegments.Add(new BuffSegment(0, segment.Start, 0));
+                            graphSegments.Add(new Segment(0, segment.Start, 0));
                         }
                         else if (graphSegments.Last().End != segment.Start)
                         {
-                            graphSegments.Add(new BuffSegment(graphSegments.Last().End, segment.Start, 0));
+                            graphSegments.Add(new Segment(graphSegments.Last().End, segment.Start, 0));
                         }
                         graphSegments.Add(segment);
                     }
@@ -361,11 +361,11 @@ namespace GW2EIParser.EIData
                     // Graph object creation
                     if (graphSegments.Count > 0)
                     {
-                        graphSegments.Add(new BuffSegment(graphSegments.Last().End, dur, 0));
+                        graphSegments.Add(new Segment(graphSegments.Last().End, dur, 0));
                     }
                     else
                     {
-                        graphSegments.Add(new BuffSegment(0, dur, 0));
+                        graphSegments.Add(new Segment(0, dur, 0));
                     }
                     BuffPoints[boonid] = new BuffsGraphModel(buff, graphSegments);
                     if (updateBoonPresence || updateCondiPresence)

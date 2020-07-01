@@ -6,14 +6,14 @@ namespace GW2EIParser.EIData
     public class BuffsGraphModel
     {
         public Buff Buff { get; }
-        public List<BuffSegment> BuffChart { get; private set; } = new List<BuffSegment>();
+        public List<Segment> BuffChart { get; private set; } = new List<Segment>();
 
         // Constructor
         public BuffsGraphModel(Buff buff)
         {
             Buff = buff;
         }
-        public BuffsGraphModel(Buff buff, List<BuffSegment> buffChartWithSource)
+        public BuffsGraphModel(Buff buff, List<Segment> buffChartWithSource)
         {
             Buff = buff;
             BuffChart = buffChartWithSource;
@@ -24,7 +24,7 @@ namespace GW2EIParser.EIData
         {
             for (int i = BuffChart.Count - 1; i >= 0; i--)
             {
-                BuffSegment seg = BuffChart[i];
+                Segment seg = BuffChart[i];
                 if (seg.Start <= time && time <= seg.End)
                 {
                     return seg.Value;
@@ -37,7 +37,7 @@ namespace GW2EIParser.EIData
         public bool IsPresent(long time, long window)
         {
             int count = 0;
-            foreach (BuffSegment seg in BuffChart)
+            foreach (Segment seg in BuffChart)
             {
                 if (seg.Intersect(time - window, time + window))
                 {
@@ -52,9 +52,9 @@ namespace GW2EIParser.EIData
         /// </summary>
         public void FuseSegments()
         {
-            var newChart = new List<BuffSegment>();
-            BuffSegment last = null;
-            foreach (BuffSegment seg in BuffChart)
+            var newChart = new List<Segment>();
+            Segment last = null;
+            foreach (Segment seg in BuffChart)
             {
                 if (seg.Start == seg.End)
                 {
@@ -62,7 +62,7 @@ namespace GW2EIParser.EIData
                 }
                 if (last == null)
                 {
-                    newChart.Add(new BuffSegment(seg));
+                    newChart.Add(new Segment(seg));
                     last = newChart.Last();
                 }
                 else
@@ -73,7 +73,7 @@ namespace GW2EIParser.EIData
                     }
                     else
                     {
-                        newChart.Add(new BuffSegment(seg));
+                        newChart.Add(new Segment(seg));
                         last = newChart.Last();
                     }
                 }
@@ -87,24 +87,24 @@ namespace GW2EIParser.EIData
         /// </summary>
         /// <param name="from"></param> 
         /// <param name="to"></param>
-        public void MergePresenceInto(List<BuffSegment> from)
+        public void MergePresenceInto(List<Segment> from)
         {
-            List<BuffSegment> segmentsToFill = BuffChart;
+            List<Segment> segmentsToFill = BuffChart;
             bool firstPass = segmentsToFill.Count == 0;
-            foreach (BuffSegment seg in from)
+            foreach (Segment seg in from)
             {
                 long start = seg.Start;
                 long end = seg.End;
                 int presence = seg.Value > 0 ? 1 : 0;
                 if (firstPass)
                 {
-                    segmentsToFill.Add(new BuffSegment(start, end, presence));
+                    segmentsToFill.Add(new Segment(start, end, presence));
                 }
                 else
                 {
                     for (int i = 0; i < segmentsToFill.Count; i++)
                     {
-                        BuffSegment curSeg = segmentsToFill[i];
+                        Segment curSeg = segmentsToFill[i];
                         long curEnd = curSeg.End;
                         long curStart = curSeg.Start;
                         int curVal = curSeg.Value;
@@ -119,14 +119,14 @@ namespace GW2EIParser.EIData
                         if (end <= curEnd)
                         {
                             curSeg.End = start;
-                            segmentsToFill.Insert(i + 1, new BuffSegment(start, end, curVal + presence));
-                            segmentsToFill.Insert(i + 2, new BuffSegment(end, curEnd, curVal));
+                            segmentsToFill.Insert(i + 1, new Segment(start, end, curVal + presence));
+                            segmentsToFill.Insert(i + 2, new Segment(end, curEnd, curVal));
                             break;
                         }
                         else
                         {
                             curSeg.End = start;
-                            segmentsToFill.Insert(i + 1, new BuffSegment(start, curEnd, curVal + presence));
+                            segmentsToFill.Insert(i + 1, new Segment(start, curEnd, curVal + presence));
                             start = curEnd;
                             i++;
                         }

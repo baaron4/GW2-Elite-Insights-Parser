@@ -28,9 +28,9 @@ namespace GW2EIParser.EIData
             return 0;
         }
 
-        public BuffSegment ToSegment()
+        public Segment ToSegment()
         {
-            return new BuffSegment(Start, End, GetStack());
+            return new Segment(Start, End, GetStack());
         }
 
         public abstract void OverrideEnd(long end);
