@@ -14,7 +14,7 @@ namespace GW2EIParser.EIData
         public HashSet<Buff> TrackedBuffs { get; } = new HashSet<Buff>();
         private BuffDictionary _buffMap;
         protected Dictionary<long, BuffsGraphModel> BuffPoints { get; set; }
-        private readonly List<BuffDistribution> _boonDistribution = new List<BuffDistribution>();
+        private readonly List<BuffDistribution> _buffDistribution = new List<BuffDistribution>();
         private readonly List<Dictionary<long, long>> _buffPresence = new List<Dictionary<long, long>>();
         private List<Dictionary<long, FinalBuffsDictionary>> _buffsDictionary;
         private List<Dictionary<long, FinalBuffsDictionary>> _buffsActiveDictionary;
@@ -225,7 +225,7 @@ namespace GW2EIParser.EIData
             {
                 SetBuffStatus(log);
             }
-            return _boonDistribution[phaseIndex];
+            return _buffDistribution[phaseIndex];
         }
 
         public Dictionary<long, long> GetBuffPresence(ParsedLog log, int phaseIndex)
@@ -308,7 +308,7 @@ namespace GW2EIParser.EIData
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int i = 0; i < phases.Count; i++)
             {
-                _boonDistribution.Add(new BuffDistribution());
+                _buffDistribution.Add(new BuffDistribution());
                 _buffPresence.Add(new Dictionary<long, long>());
             }
             foreach (Buff buff in TrackedBuffs)
@@ -333,7 +333,7 @@ namespace GW2EIParser.EIData
                         {
                             PhaseData phase = phases[i];
                             Add(_buffPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
-                            simul.SetBuffDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
+                            simul.SetBuffDistributionItem(_buffDistribution[i], phase.Start, phase.End, boonid, log);
                         }
                         // Graph
                         BuffSegment segment = simul.ToSegment();
@@ -355,7 +355,7 @@ namespace GW2EIParser.EIData
                         for (int i = 0; i < phases.Count; i++)
                         {
                             PhaseData phase = phases[i];
-                            simul.SetBuffDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
+                            simul.SetBuffDistributionItem(_buffDistribution[i], phase.Start, phase.End, boonid, log);
                         }
                     }
                     // Graph object creation
