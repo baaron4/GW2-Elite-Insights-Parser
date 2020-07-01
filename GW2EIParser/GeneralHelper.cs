@@ -338,6 +338,8 @@ namespace GW2EIParser
                     return "https://i.imgur.com/7HPdKDQ.png";
                 case ParseEnum.TargetIDS.WhisperOfJormag:
                     return "https://i.imgur.com/lu9ZLVq.png";
+                case ParseEnum.TargetIDS.VariniaStormsounder:
+                    return "https://i.imgur.com/2o8TtiM.png";
                 case ParseEnum.TargetIDS.MAMA:
                     return "https://i.imgur.com/1h7HOII.png";
                 case ParseEnum.TargetIDS.Siax:
@@ -482,6 +484,8 @@ namespace GW2EIParser
                 case MazeMinotaur:
                 case Enervator:
                 case WhisperEcho:
+                case CharrTank:
+                case PropagandaBallon:
                     return "https://i.imgur.com/k79t7ZA.png";
                 case HandOfErosion:
                 case HandOfEruption:

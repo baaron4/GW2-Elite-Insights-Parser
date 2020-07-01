@@ -427,6 +427,19 @@ namespace GW2EIParser.Parser
             AberrantWisp = 22538,
             // Whisper of Jormal
             WhisperEcho = 22628,
+            // Cold War
+            PropagandaBallon = 23093,
+            DominionBladestorm = 23102,
+            DominionStalker = 22882,
+            DominionSpy1 = 22833,
+            DominionSpy2 = 22856,
+            DominionAxeFiend = 22938,
+            DominionEffigy = 22897,
+            FrostLegionCrusher = 23005,
+            FrostLegionMusketeer = 22870,
+            BloodLegionBlademaster = 22993,
+            CharrTank = 22953,
+            SonsOfSvanirHighShaman = 22283,
             // to complete
             DoppelgangerNecro = 22713,
             DoppelgangerWarrior= 22640,
@@ -528,6 +541,7 @@ namespace GW2EIParser.Parser
             IcebroodConstructFraenir = 22436,
             Boneskinner = 22521,
             WhisperOfJormag = 22711,
+            VariniaStormsounder = 22836,
             // Fract
             MAMA = 17021,
             Siax = 17028,
