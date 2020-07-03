@@ -102,6 +102,22 @@ namespace GW2EIParser.Logic
             }
         }
 
+        public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            AgentItem target = agentData.GetNPCsByID((int)ParseEnum.TargetIDS.Cairn).FirstOrDefault();
+            if (target == null)
+            {
+                throw new InvalidOperationException("Cairn not found");
+            }
+            // spawn protection loss
+            CombatItem spawnProtectionLoss = combatData.Find(x => x.IsBuffRemove == ParseEnum.BuffRemove.All && x.IsBuff != 0 && x.SrcAgent == target.Agent && x.SkillID == 34113);
+            if (spawnProtectionLoss != null)
+            {
+                fightData.OverrideOffset(spawnProtectionLoss.Time);
+            }
+            return fightData.FightOffset;
+        }
+
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // shared agony
