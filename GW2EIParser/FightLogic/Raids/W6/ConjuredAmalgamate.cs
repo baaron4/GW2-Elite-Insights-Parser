@@ -95,6 +95,15 @@ namespace GW2EIParser.Logic
                 }
             }
         }
+        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
+        {
+            var res = new List<AbstractBuffEvent>();
+            // Greatsword Power
+            AdjustTimeRefreshBuff(buffsByDst, buffsById, 52667);
+            // Conjured Shield
+            AdjustTimeRefreshBuff(buffsByDst, buffsById, 52754);
+            return res;
+        }
 
         protected override HashSet<int> GetUniqueTargetIDs()
         {
