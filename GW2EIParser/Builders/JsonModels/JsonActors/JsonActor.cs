@@ -168,7 +168,7 @@ namespace GW2EIParser.Builders.JsonModels
                 Dictionary<long, BuffsGraphModel> buffGraphs = actor.GetBuffGraphs(log);
                 BoonsStates = JsonBuffsUptime.GetBuffStates(buffGraphs[ProfHelper.NumberOfBoonsID]);
                 ConditionsStates = JsonBuffsUptime.GetBuffStates(buffGraphs[ProfHelper.NumberOfConditionsID]);
-                if (buffGraphs.TryGetValue(ProfHelper.NumberOfConditionsID, out BuffsGraphModel states))
+                if (buffGraphs.TryGetValue(ProfHelper.NumberOfActiveCombatMinions, out BuffsGraphModel states))
                 {
                     ActiveCombatMinions = JsonBuffsUptime.GetBuffStates(states);
                 }
