@@ -109,6 +109,12 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public List<int[]> BoonsStates { get; }
         /// <summary>
+        /// Array of int[2] that represents the number of active combat minions \n
+        /// Value[i][0] will be the time, value[i][1] will be the number of active combat minions present from value[i][0] to value[i+1][0] \n
+        /// If i corresponds to the last element that means the status did not change for the remainder of the fight
+        /// </summary>
+        public List<int[]> ActiveCombatMinions { get; }
+        /// <summary>
         /// Array of double[2] that represents the health status of the actor \n
         /// Value[i][0] will be the time, value[i][1] will be health % \n
         /// If i corresponds to the last element that means the health did not change for the remainder of the fight \n
@@ -159,8 +165,13 @@ namespace GW2EIParser.Builders.JsonModels
             //
             if (log.ParserSettings.RawTimelineArrays)
             {
-                BoonsStates = JsonBuffsUptime.GetBuffStates(actor.GetBuffGraphs(log)[ProfHelper.NumberOfBoonsID]);
-                ConditionsStates = JsonBuffsUptime.GetBuffStates(actor.GetBuffGraphs(log)[ProfHelper.NumberOfConditionsID]);
+                Dictionary<long, BuffsGraphModel> buffGraphs = actor.GetBuffGraphs(log);
+                BoonsStates = JsonBuffsUptime.GetBuffStates(buffGraphs[ProfHelper.NumberOfBoonsID]);
+                ConditionsStates = JsonBuffsUptime.GetBuffStates(buffGraphs[ProfHelper.NumberOfConditionsID]);
+                if (buffGraphs.TryGetValue(ProfHelper.NumberOfConditionsID, out BuffsGraphModel states))
+                {
+                    ActiveCombatMinions = JsonBuffsUptime.GetBuffStates(states);
+                }
             }
             // Health
             List<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(actor.AgentItem);
