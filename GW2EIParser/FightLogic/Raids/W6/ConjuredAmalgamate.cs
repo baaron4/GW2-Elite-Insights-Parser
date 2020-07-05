@@ -23,8 +23,12 @@ namespace GW2EIParser.Logic
             new HitOnPlayerMechanic(52161, "Ruptured Ground", new MechanicPlotlySetting("square-open","rgb(0,255,255)"), "Ground","Ruptured Ground (Relics after Junk Wall)", "Ruptured Ground",0, (de,log) => de.Damage > 0),
             new HitOnPlayerMechanic(52656, "Tremor", new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Tremor","Tremor (Field adjacent to Arm Slam)", "Near Arm Slam",0, (de,log) => de.Damage > 0),
             new HitOnPlayerMechanic(52150, "Junk Torrent", new MechanicPlotlySetting("square-open","rgb(255,0,0)"), "Wall","Junk Torrent (Moving Wall)", "Junk Torrent (Wall)",0, (de,log) => de.Damage > 0),
-            new PlayerCastStartMechanic(52325, "Conjured Greatsword", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Sword","Conjured Greatsword (Special action sword)", "Sword",0),
-            new PlayerCastStartMechanic(52780, "Conjured Protection", new MechanicPlotlySetting("square","rgb(0,255,0)"), "Shield","Conjured Protection (Special action shield)", "Shield",0),
+            new PlayerCastStartMechanic(52325, "Conjured Slash", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Sword.Cst","Conjured Slash (Special action sword)", "Sword Cast",0),
+            new PlayerCastStartMechanic(52780, "Conjured Protection", new MechanicPlotlySetting("square","rgb(0,255,0)"), "Shield.Cst","Conjured Protection (Special action shield)", "Shield Cast",0),
+            new PlayerBuffApplyMechanic(52667, "Greatsword Power", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "Sword.C","Collected Sword", "Sword Collect",50),
+            new PlayerBuffApplyMechanic(52754, "Conjured Shield", new MechanicPlotlySetting("diamond-tall","rgb(0,255,0)"), "Shield.C","Collected Shield", "Shield Collect",50),
+            new EnemyBuffApplyMechanic(52074, "Augmented Power", new MechanicPlotlySetting("asterisk-open","rgb(255,0,0)"), "Augmented Power","Augmented Power", "Augmented Power",50),
+            new EnemyBuffApplyMechanic(53003, "Shielded", new MechanicPlotlySetting("asterisk-open","rgb(0,255,0)"), "Shielded","Shielded", "Shielded",50),
             });
             Extension = "ca";
             GenericFallBackMethod = FallBackMethod.None;
@@ -90,6 +94,15 @@ namespace GW2EIParser.Logic
                     c.OverrideSrcAgent(sword.Agent);
                 }
             }
+        }
+        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
+        {
+            var res = new List<AbstractBuffEvent>();
+            // Greatsword Power
+            AdjustTimeRefreshBuff(buffsByDst, buffsById, 52667);
+            // Conjured Shield
+            AdjustTimeRefreshBuff(buffsByDst, buffsById, 52754);
+            return res;
         }
 
         protected override HashSet<int> GetUniqueTargetIDs()

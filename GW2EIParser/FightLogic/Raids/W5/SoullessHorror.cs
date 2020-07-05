@@ -78,27 +78,8 @@ namespace GW2EIParser.Logic
         public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
         {
             var res = new List<AbstractBuffEvent>();
-            if (buffsById.TryGetValue(47414, out List<AbstractBuffEvent> necrosisList))
-            {
-                var agentsToSort = new HashSet<AgentItem>();
-                foreach (AbstractBuffEvent be in necrosisList)
-                {
-                    if (be is AbstractBuffRemoveEvent abre)
-                    {
-                        // to make sure remove events are before applications
-                        abre.OverrideTime(abre.Time - 1);
-                        agentsToSort.Add(abre.To);
-                    }
-                }
-                if (necrosisList.Count > 0)
-                {
-                    buffsById[47414].Sort((x, y) => x.Time.CompareTo(y.Time));
-                }
-                foreach (AgentItem a in agentsToSort)
-                {
-                    buffsByDst[a].Sort((x, y) => x.Time.CompareTo(y.Time));
-                }
-            }
+            // Necrosis adjust
+            AdjustTimeRefreshBuff(buffsByDst, buffsById, 47414);
             return res;
         }
 

@@ -54,7 +54,8 @@ namespace GW2EIParser.Parser.ParsedData
             // Keep Construct
             {35048, "Magic Blast Charge" },
             // CA
-            {52325, "Conjured Greatsword" },
+            {52325, "Conjured Slash" },
+            {52780, "Conjured Protection" },
             // Sabir
             {56349, "Regenerative Breakbar" },
             // P.Qadim
@@ -76,6 +77,8 @@ namespace GW2EIParser.Parser.ParsedData
             {49063, "https://wiki.guildwars2.com/images/3/3d/Detonate_Plasma.png"},
             {49123, "https://wiki.guildwars2.com/images/d/dd/Unstable_Artifact.png"},
             {31686, "https://wiki.guildwars2.com/images/4/4b/Overload_Air.png" },
+            {52325, "https://wiki.guildwars2.com/images/5/59/Conjured_Slash.png" },
+            {52780, "https://wiki.guildwars2.com/images/0/02/Conjured_Protection.png" },
         };
 
         private readonly HashSet<long> _nonCritable = new HashSet<long>
