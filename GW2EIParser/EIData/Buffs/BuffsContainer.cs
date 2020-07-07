@@ -51,6 +51,7 @@ namespace GW2EIParser.EIData
         private readonly List<Buff> _commons = new List<Buff>
         {
                 new Buff("Downed", 770, GeneralHelper.Source.Common, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/dd/Downed.png"),
+                new Buff("Exhaustion", 46842, GeneralHelper.Source.Common, BuffStackType.Queue, 3, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/88/Exhaustion.png"),
                 new Buff("Stealth", 13017, GeneralHelper.Source.Common, BuffStackType.Queue, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
                 new Buff("Hide in Shadows", 10269, GeneralHelper.Source.Common, BuffStackType.Queue, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
                 new Buff("Revealed", 890, GeneralHelper.Source.Common, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/db/Revealed.png"),
@@ -140,6 +141,10 @@ namespace GW2EIParser.EIData
                 // Gorseval
                 new Buff("Spirited Fusion",31722, GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/eb/Spirited_Fusion.png"),
                 new Buff("Protective Shadow", 31877, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/87/Protective_Shadow.png"),
+                new Buff("Vivid Echo", 31548, GeneralHelper.Source.FightSpecific, BuffStackType.Queue, 5, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/4f/Vivid_Echo.png"),
+                new Buff("Spectral Darkness", 31498, GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/a/a8/Spectral_Darkness.png"),
+                // Sabetha    
+                new Buff("Shell-Shocked", 34108, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/3/39/Shell-Shocked.png"),
                 // Matthias
                 new Buff("Blood Shield Abo",34376, GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 18, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
                 new Buff("Blood Shield",34518, GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 18, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
@@ -486,6 +491,7 @@ namespace GW2EIParser.EIData
                 new Buff("Unhindered Combatant", 32931, GeneralHelper.Source.Daredevil, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a1/Unhindered_Combatant.png"),
                 new Buff("Bounding Dodger", 33162, GeneralHelper.Source.Daredevil, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/30/Bounding_Dodger.png"),
                 new Buff("Weakening Strikes", 34081, GeneralHelper.Source.Daredevil, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/7c/Weakening_Strikes.png", 96406, ulong.MaxValue),
+                new Buff("Deadeye's Gaze", 46333, GeneralHelper.Source.Deadeye, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Deadeye%27s_Mark.png"),
 
         };
 
@@ -618,6 +624,13 @@ namespace GW2EIParser.EIData
                 new Buff("Obsidian Flesh",5667, GeneralHelper.Source.Elementalist, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/c1/Obsidian_Flesh.png"),
                 new Buff("Grinding Stones",51658, GeneralHelper.Source.Elementalist, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/3d/Grinding_Stones.png"),
                 new Buff("Static Charge",31487, GeneralHelper.Source.Elementalist, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/4/4b/Overload_Air.png"),
+                new Buff("Weave Self",42951, GeneralHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/2a/Weave_Self.png"),
+                new Buff("Woven Air",43038, GeneralHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/bc/Woven_Air.png"),
+                new Buff("Woven Fire",45110, GeneralHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b1/Woven_Fire.png"),
+                new Buff("Woven Earth",45662, GeneralHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/7a/Woven_Earth.png"),
+                new Buff("Woven Water",43499, GeneralHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a6/Woven_Water.png"),
+                new Buff("Perfect Weave",45267, GeneralHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/2a/Weave_Self.png"),
+                new Buff("Molten Armor",43586, GeneralHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/71/Lava_Skin.png"),
                 //traits
                 new Buff("Harmonious Conduit",31353, GeneralHelper.Source.Tempest, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b3/Harmonious_Conduit.png", 0, 99526),
                 new Buff("Transcendent Tempest",31353, GeneralHelper.Source.Tempest, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/ac/Transcendent_Tempest_%28effect%29.png", 99526, ulong.MaxValue),
