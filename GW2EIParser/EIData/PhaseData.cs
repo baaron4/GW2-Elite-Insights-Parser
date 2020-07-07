@@ -62,18 +62,31 @@ namespace GW2EIParser.EIData
         {
             if (Targets.Count > 0)
             {
-                Start = Math.Max(Start, Targets.Min(x => x.FirstAware));
                 long end = long.MinValue;
+                long start = long.MaxValue;
                 foreach (NPC target in Targets)
                 {
+                    long startTime = target.FirstAware;
+                    SpawnEvent spawned = log.CombatData.GetSpawnEvents(target.AgentItem).FirstOrDefault();
+                    if (spawned != null)
+                    {
+                        startTime = spawned.Time;
+                    }
+                    EnterCombatEvent enterCombat = log.CombatData.GetEnterCombatEvents(target.AgentItem).FirstOrDefault();
+                    if (enterCombat != null)
+                    {
+                        startTime = enterCombat.Time;
+                    }
                     long deadTime = target.LastAware;
                     DeadEvent died = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault();
                     if (died != null)
                     {
                         deadTime = died.Time;
                     }
+                    start = Math.Min(start, startTime);
                     end = Math.Max(end, deadTime);
                 }
+                Start = Math.Max(Math.Max(Start, start), 0);
                 End = Math.Min(Math.Min(End, end), log.FightData.FightEnd);
             }
             DurationInM = (End - Start) / 60000;
