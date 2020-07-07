@@ -170,6 +170,12 @@ namespace GW2EIParser.EIData
                 new Buff("Narcolepsy", 34467, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 // VG
                 new Buff("Blue Pylon Power", 31413, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6e/Blue_Pylon_Power.png"),
+                new Buff("Pylon Attunement: Red", 31695, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/9/94/Pylon_Attunement-_Red.png"),
+                new Buff("Pylon Attunement: Blue", 31317, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6e/Blue_Pylon_Power.png"),
+                new Buff("Pylon Attunement: Green", 31852, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/a/aa/Pylon_Attunement-_Green.png"),
+                new Buff("Unstable Pylon: Red", 31539, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/3/36/Unstable_Pylon_%28Red%29.png"),
+                new Buff("Unstable Pylon: Blue", 31884, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/c/c3/Unstable_Pylon_%28Blue%29.png"),
+                new Buff("Unstable Pylon: Green", 31828, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/9/9d/Unstable_Pylon_%28Green%29.png"),
                 new Buff("Unbreakable", 34979, GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 2, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/56/Xera%27s_Embrace.png"),
                 // Trio
                 new Buff("Not the Bees!", 34434, GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/0/08/Throw_Jar.png"),
@@ -314,6 +320,10 @@ namespace GW2EIParser.EIData
                 new Buff("Eternal Oasis",44871, GeneralHelper.Source.Firebrand, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/5/5f/Epilogue-_Eternal_Oasis.png"),
                 new Buff("Unbroken Lines",43194, GeneralHelper.Source.Firebrand, BuffStackType.Stacking, 3, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/d/d8/Epilogue-_Unbroken_Lines.png"),
                 new Buff("Shield of Wrath",9123, GeneralHelper.Source.Guardian, BuffStackType.Stacking, 3, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/bc/Shield_of_Wrath.png"),
+                new Buff("Binding Blade (Self)",9225, GeneralHelper.Source.Guardian, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/de/Binding_Blade.png"),
+                new Buff("Binding Blade",9148, GeneralHelper.Source.Guardian, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/de/Binding_Blade.png"),
+                new Buff("Justice",30232, GeneralHelper.Source.Dragonhunter, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b0/Spear_of_Light.png"),
+                new Buff("Shield of Courage (Active)", 29906, GeneralHelper.Source.Dragonhunter, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/63/Shield_of_Courage.png"),
                 //signets
                 new Buff("Signet of Resolve",9220, GeneralHelper.Source.Guardian, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/75/Signet_of_Resolve.png"),
                 new Buff("Signet of Resolve (Shared)", 46554, GeneralHelper.Source.Guardian, BuffStackType.Stacking, 25, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/7/75/Signet_of_Resolve.png"),
@@ -510,6 +520,7 @@ namespace GW2EIParser.EIData
                 new Buff("Death's Carapace",30845, GeneralHelper.Source.Necromancer, BuffStackType.Stacking, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/58/Death%27s_Carapace.png", 99526, ulong.MaxValue),
                 new Buff("Flesh of the Master",13810, GeneralHelper.Source.Necromancer, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e9/Flesh_of_the_Master.png", 0, 99526),
                 new Buff("Vampiric Aura", 30285, GeneralHelper.Source.Necromancer, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/d/da/Vampiric_Presence.png"),
+                new Buff("Vampiric Strikes", 30398, GeneralHelper.Source.Necromancer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/da/Vampiric_Presence.png"),
                 new Buff("Last Rites",29726, GeneralHelper.Source.Necromancer, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/1/1a/Last_Rites_%28effect%29.png"),
                 new Buff("Sadistic Searing",43626, GeneralHelper.Source.Scourge, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/dd/Sadistic_Searing.png"),
                 new Buff("Soul Barbs",53489, GeneralHelper.Source.Necromancer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/bd/Soul_Barbs.png"),
