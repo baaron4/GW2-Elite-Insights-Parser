@@ -20,7 +20,7 @@ namespace GW2EIParser.EIData
             var dead = new List<(long start, long end)>();
             var down = new List<(long start, long end)>();
             var dc = new List<(long start, long end)>();
-            actor.AgentItem.GetAgentStatus(dead, down, dc, log);
+            (dead, down, dc) = actor.GetStatus(log);
             long start = phase.Start;
             long end = phase.End;
 
