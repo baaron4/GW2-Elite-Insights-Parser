@@ -10,6 +10,7 @@ namespace GW2EIParser.EIData
 
         public const long NumberOfConditionsID = -3;
         public const long NumberOfBoonsID = -2;
+        public const long NumberOfActiveCombatMinions= -17;
         public const long NoBuff = -4;
 
         // Weaver attunements

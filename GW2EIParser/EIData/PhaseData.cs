@@ -86,7 +86,7 @@ namespace GW2EIParser.EIData
             var dead = new List<(long start, long end)>();
             var down = new List<(long start, long end)>();
             var dc = new List<(long start, long end)>();
-            p.AgentItem.GetAgentStatus(dead, down, dc, log);
+            (dead, down, dc) = p.GetStatus(log);
             return DurationInMS -
                 dead.Sum(x =>
                 {

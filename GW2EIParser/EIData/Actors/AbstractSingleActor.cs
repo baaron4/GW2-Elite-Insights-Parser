@@ -14,7 +14,7 @@ namespace GW2EIParser.EIData
         public HashSet<Buff> TrackedBuffs { get; } = new HashSet<Buff>();
         private BuffDictionary _buffMap;
         protected Dictionary<long, BuffsGraphModel> BuffPoints { get; set; }
-        private readonly List<BuffDistribution> _boonDistribution = new List<BuffDistribution>();
+        private readonly List<BuffDistribution> _buffDistribution = new List<BuffDistribution>();
         private readonly List<Dictionary<long, long>> _buffPresence = new List<Dictionary<long, long>>();
         private List<Dictionary<long, FinalBuffsDictionary>> _buffsDictionary;
         private List<Dictionary<long, FinalBuffsDictionary>> _buffsActiveDictionary;
@@ -81,7 +81,7 @@ namespace GW2EIParser.EIData
                 }
                 foreach (KeyValuePair<long, Minions> pair in auxMinions)
                 {
-                    if (pair.Value.GetDamageLogs(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastLogs(log, 0, log.FightData.FightEnd).Count > 0)
+                    if (pair.Value.GetDamageLogs(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastLogs(log, 0, log.FightData.FightEnd).Any(x => x.SkillId != SkillItem.WeaponSwapId))
                     {
                         _minions[pair.Value.AgentItem.UniqueID] = pair.Value;
                     }
@@ -103,7 +103,7 @@ namespace GW2EIParser.EIData
                 }
                 foreach (KeyValuePair<string, Minions> pair in auxGadgetMinions)
                 {
-                    if (pair.Value.GetDamageLogs(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastLogs(log, 0, log.FightData.FightEnd).Count > 0)
+                    if (pair.Value.GetDamageLogs(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastLogs(log, 0, log.FightData.FightEnd).Any(x => x.SkillId != SkillItem.WeaponSwapId))
                     {
                         _minions[pair.Value.AgentItem.UniqueID] = pair.Value;
                     }
@@ -225,7 +225,7 @@ namespace GW2EIParser.EIData
             {
                 SetBuffStatus(log);
             }
-            return _boonDistribution[phaseIndex];
+            return _buffDistribution[phaseIndex];
         }
 
         public Dictionary<long, long> GetBuffPresence(ParsedLog log, int phaseIndex)
@@ -300,6 +300,7 @@ namespace GW2EIParser.EIData
             long dur = log.FightData.FightEnd;
             int fightDuration = (int)(dur) / 1000;
             var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[ProfHelper.NumberOfBoonsID]);
+            var activeCombatMinionsGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[ProfHelper.NumberOfActiveCombatMinions]);
             var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[ProfHelper.NumberOfConditionsID]);
             var boonIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Boon].Select(x => x.ID));
             var condiIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Condition].Select(x => x.ID));
@@ -307,7 +308,7 @@ namespace GW2EIParser.EIData
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int i = 0; i < phases.Count; i++)
             {
-                _boonDistribution.Add(new BuffDistribution());
+                _buffDistribution.Add(new BuffDistribution());
                 _buffPresence.Add(new Dictionary<long, long>());
             }
             foreach (Buff buff in TrackedBuffs)
@@ -324,7 +325,7 @@ namespace GW2EIParser.EIData
                     simulator.Trim(dur);
                     bool updateBoonPresence = boonIds.Contains(boonid);
                     bool updateCondiPresence = condiIds.Contains(boonid);
-                    var graphSegments = new List<BuffSegment>();
+                    var graphSegments = new List<Segment>();
                     foreach (BuffSimulationItem simul in simulator.GenerationSimulation)
                     {
                         // Generation
@@ -332,17 +333,17 @@ namespace GW2EIParser.EIData
                         {
                             PhaseData phase = phases[i];
                             Add(_buffPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
-                            simul.SetBuffDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
+                            simul.SetBuffDistributionItem(_buffDistribution[i], phase.Start, phase.End, boonid, log);
                         }
                         // Graph
-                        BuffSegment segment = simul.ToSegment();
+                        var segment = simul.ToSegment();
                         if (graphSegments.Count == 0)
                         {
-                            graphSegments.Add(new BuffSegment(0, segment.Start, 0));
+                            graphSegments.Add(new Segment(0, segment.Start, 0));
                         }
                         else if (graphSegments.Last().End != segment.Start)
                         {
-                            graphSegments.Add(new BuffSegment(graphSegments.Last().End, segment.Start, 0));
+                            graphSegments.Add(new Segment(graphSegments.Last().End, segment.Start, 0));
                         }
                         graphSegments.Add(segment);
                     }
@@ -354,79 +355,39 @@ namespace GW2EIParser.EIData
                         for (int i = 0; i < phases.Count; i++)
                         {
                             PhaseData phase = phases[i];
-                            simul.SetBuffDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
+                            simul.SetBuffDistributionItem(_buffDistribution[i], phase.Start, phase.End, boonid, log);
                         }
                     }
                     // Graph object creation
                     if (graphSegments.Count > 0)
                     {
-                        graphSegments.Add(new BuffSegment(graphSegments.Last().End, dur, 0));
+                        graphSegments.Add(new Segment(graphSegments.Last().End, dur, 0));
                     }
                     else
                     {
-                        graphSegments.Add(new BuffSegment(0, dur, 0));
+                        graphSegments.Add(new Segment(0, dur, 0));
                     }
                     BuffPoints[boonid] = new BuffsGraphModel(buff, graphSegments);
                     if (updateBoonPresence || updateCondiPresence)
                     {
-                        List<BuffSegment> segmentsToFill = updateBoonPresence ? boonPresenceGraph.BuffChart : condiPresenceGraph.BuffChart;
-                        bool firstPass = segmentsToFill.Count == 0;
-                        foreach (BuffSegment seg in BuffPoints[boonid].BuffChart)
-                        {
-                            long start = seg.Start;
-                            long end = seg.End;
-                            int value = seg.Value > 0 ? 1 : 0;
-                            if (firstPass)
-                            {
-                                segmentsToFill.Add(new BuffSegment(start, end, value));
-                            }
-                            else
-                            {
-                                for (int i = 0; i < segmentsToFill.Count; i++)
-                                {
-                                    BuffSegment curSeg = segmentsToFill[i];
-                                    long curEnd = curSeg.End;
-                                    long curStart = curSeg.Start;
-                                    int curVal = curSeg.Value;
-                                    if (curStart > end)
-                                    {
-                                        break;
-                                    }
-                                    if (curEnd < start)
-                                    {
-                                        continue;
-                                    }
-                                    if (end <= curEnd)
-                                    {
-                                        curSeg.End = start;
-                                        segmentsToFill.Insert(i + 1, new BuffSegment(start, end, curVal + value));
-                                        segmentsToFill.Insert(i + 2, new BuffSegment(end, curEnd, curVal));
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        curSeg.End = start;
-                                        segmentsToFill.Insert(i + 1, new BuffSegment(start, curEnd, curVal + value));
-                                        start = curEnd;
-                                        i++;
-                                    }
-                                }
-                            }
-                        }
-                        if (updateBoonPresence)
-                        {
-                            boonPresenceGraph.FuseSegments();
-                        }
-                        else
-                        {
-                            condiPresenceGraph.FuseSegments();
-                        }
+                        (updateBoonPresence? boonPresenceGraph : condiPresenceGraph).MergePresenceInto(BuffPoints[boonid].BuffChart);
                     }
 
                 }
             }
             BuffPoints[ProfHelper.NumberOfBoonsID] = boonPresenceGraph;
             BuffPoints[ProfHelper.NumberOfConditionsID] = condiPresenceGraph;
+            foreach(Minions minions in GetMinions(log).Values)
+            {
+                foreach(List<Segment> minionsSegments in minions.GetLifeSpanSegments(log))
+                {
+                    activeCombatMinionsGraph.MergePresenceInto(minionsSegments);
+                }
+            }
+            if (activeCombatMinionsGraph.BuffChart.Any())
+            {
+                BuffPoints[ProfHelper.NumberOfActiveCombatMinions] = activeCombatMinionsGraph;
+            }
         }
 
         public Dictionary<long, FinalBuffsDictionary> GetBuffsDictionary(ParsedLog log, int phaseIndex)

@@ -50,6 +50,7 @@ namespace GW2EIParser.EIData
 
         private readonly List<Buff> _commons = new List<Buff>
         {
+                new Buff("Number of Active Combat Minions", ProfHelper.NumberOfActiveCombatMinions, GeneralHelper.Source.Common, BuffStackType.Stacking, 0, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/ad/Superior_Rune_of_the_Ranger.png"),
                 new Buff("Downed", 770, GeneralHelper.Source.Common, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/dd/Downed.png"),
                 new Buff("Stealth", 13017, GeneralHelper.Source.Common, BuffStackType.Queue, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
                 new Buff("Hide in Shadows", 10269, GeneralHelper.Source.Common, BuffStackType.Queue, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
