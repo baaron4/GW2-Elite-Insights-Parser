@@ -135,6 +135,38 @@ namespace GW2EIParser.Logic
             }
         }
 
+        protected static List<PhaseData> GetPhasesByHealthPercent(ParsedLog log, NPC mainTarget, List<double> thresholds)
+        {
+            var phases = new List<PhaseData>();
+            if (thresholds.Count == 0)
+            {
+                return phases;
+            }
+            long fightDuration = log.FightData.FightEnd;
+            long start = 0;
+            double offset = 100.0 / thresholds.Count;
+            List<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem);
+            for (int i = 0; i < thresholds.Count; i++)
+            {
+                HealthUpdateEvent evt = hpUpdates.FirstOrDefault(x => x.HPPercent <= thresholds[i]);
+                if (evt == null)
+                {
+                    break;
+                }
+                var phase = new PhaseData(start, Math.Min(evt.Time, fightDuration), (offset + thresholds[i]) + "% - " + thresholds[i] + "%");
+                phase.Targets.Add(mainTarget);
+                phases.Add(phase);
+                start = Math.Max(evt.Time, 0);
+            }
+            if (phases.Count > 0 && phases.Count < thresholds.Count)
+            {
+                var lastPhase = new PhaseData(start, fightDuration, (offset + thresholds[phases.Count]) + "% -" + thresholds[phases.Count] + "%");
+                lastPhase.Targets.Add(mainTarget);
+                phases.Add(lastPhase);
+            }
+            return phases;
+        }
+
         protected static List<PhaseData> GetPhasesByInvul(ParsedLog log, long skillID, NPC mainTarget, bool addSkipPhases, bool beginWithStart)
         {
             long fightDuration = log.FightData.FightEnd;
@@ -177,7 +209,10 @@ namespace GW2EIParser.Logic
         {
             var phases = new List<PhaseData>();
             long fightDuration = log.FightData.FightEnd;
-            phases.Add(new PhaseData(0, fightDuration, "Full Fight"));
+            phases.Add(new PhaseData(0, fightDuration, "Full Fight")
+            {
+                CanBeSubPhase = false
+            });
             return phases;
         }
 

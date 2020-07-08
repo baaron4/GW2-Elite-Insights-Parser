@@ -49,7 +49,6 @@ namespace GW2EIParser.Logic
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
-            long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
             NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.MursaatOverseer);
             if (mainTarget == null)
@@ -61,34 +60,7 @@ namespace GW2EIParser.Logic
             {
                 return phases;
             }
-            var limit = new List<int>()
-            {
-                75,
-                50,
-                25,
-                0
-            };
-            long start = 0;
-            int i = 0;
-            List<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem);
-            for (i = 0; i < limit.Count; i++)
-            {
-                HealthUpdateEvent evt = hpUpdates.FirstOrDefault(x => x.HPPercent <= limit[i]);
-                if (evt == null)
-                {
-                    break;
-                }
-                var phase = new PhaseData(start, Math.Min(evt.Time, fightDuration), (25 + limit[i]) + "% - " + limit[i] + "%");
-                phase.Targets.Add(mainTarget);
-                phases.Add(phase);
-                start = evt.Time;
-            }
-            if (i < 4)
-            {
-                var lastPhase = new PhaseData(start, fightDuration, (25 + limit[i]) + "% -" + limit[i] + "%");
-                lastPhase.Targets.Add(mainTarget);
-                phases.Add(lastPhase);
-            }
+            phases.AddRange(GetPhasesByHealthPercent(log, mainTarget, new List<double> { 75, 50, 25, 0 }));
             return phases;
         }
 

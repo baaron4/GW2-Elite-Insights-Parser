@@ -67,6 +67,46 @@ namespace GW2EIParser.Logic
             ComputeFightTargets(agentData, combatData);
         }
 
+        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
+        {
+            List<PhaseData> phases = GetInitialPhase(log);
+            NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
+            if (mainTarget == null)
+            {
+                throw new InvalidOperationException("Golem not found");
+            }
+            phases[0].Name = "Final Number";
+            phases[0].Targets.Add(mainTarget);
+            if (!requirePhases)
+            {
+                return phases;
+            }
+            List<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem);
+            if (hpUpdates.Count > 0)
+            {
+                long fightDuration = log.FightData.FightEnd;
+                var thresholds = new List<double> { 80, 60, 40, 20, 0 };
+                var numberNames = new string[] { "First Number", "Second Number", "Third Number", "Fourth Number" };
+                // Fifth number would the equivalent of full fight phase
+                for (int j = 0; j < thresholds.Count - 1; j++)
+                {
+                    HealthUpdateEvent hpUpdate = hpUpdates.FirstOrDefault(x => x.HPPercent <= thresholds[j]);
+                    if (hpUpdate != null)
+                    {
+                        var phase = new PhaseData(0, hpUpdate.Time, numberNames[j])
+                        {
+                            CanBeSubPhase = false
+                        };
+                        phase.Targets.Add(mainTarget);
+                        phases.Add(phase);
+                    }
+                }
+                phases.AddRange(GetPhasesByHealthPercent(log, mainTarget, thresholds));
+            }
+            
+            return phases;
+        }
+
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
