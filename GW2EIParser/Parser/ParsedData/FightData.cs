@@ -224,11 +224,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public List<NPC> GetMainTargets(ParsedLog log)
         {
-            if (_phases.Count == 0)
-            {
-                _phases = log.FightData.Logic.GetPhases(log, log.ParserSettings.ParsePhases);
-            }
-            return _phases[0].Targets;
+            return GetPhases(log)[0].Targets;
         }
 
         // Setters
