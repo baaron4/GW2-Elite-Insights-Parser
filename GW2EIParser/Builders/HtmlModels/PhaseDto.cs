@@ -100,7 +100,7 @@ namespace GW2EIParser.Builders.HtmlModels
             {
                 PhaseData curPhase = phases[j];
                 if (curPhase.Start < phaseData.Start || curPhase.End > phaseData.End ||
-                    (curPhase.Start == phaseData.Start && curPhase.End == phaseData.End))
+                    (curPhase.Start == phaseData.Start && curPhase.End == phaseData.End) || !curPhase.CanBeSubPhase)
                 {
                     continue;
                 }
@@ -125,7 +125,7 @@ namespace GW2EIParser.Builders.HtmlModels
                 {
                     Start = start / 1000.0,
                     End = end / 1000.0,
-                    Label = curPhase.Name,
+                    Label = curPhase.DrawLabel ? curPhase.Name : null,
                     Highlight = curPhase.DrawArea
                 };
                 MarkupAreas.Add(phaseArea);

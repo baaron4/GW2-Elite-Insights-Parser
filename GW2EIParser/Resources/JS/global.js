@@ -300,23 +300,26 @@ function computePhaseMarkups(shapes, annotations, phase, linecolor) {
         for (var i = 0; i < phase.markupAreas.length; i++) {
             var area = phase.markupAreas[i];
             var setting = computePhaseMarkupSettings(area, phase.markupAreas, annotations);
-            annotations.push({
-                x: setting.x,
-                y: setting.y,
-                xref: 'x',
-                yref: 'paper',
-                xanchor: 'center',
-                yanchor: 'bottom',
-                text: area.label + '<br>' + '(' + Math.round(1000 * (area.end - area.start)) / 1000 + ' s)',
-                font: {
-                    color: '#ffffff'
-                },
-                showarrow: false,
-                bordercolor: '#A0A0A0',
-                borderwidth: 2,
-                bgcolor: setting.textbg,
-                opacity: 0.8
-            });
+            if (area.label) {
+                annotations.push({
+                    x: setting.x,
+                    y: setting.y,
+                    xref: 'x',
+                    yref: 'paper',
+                    xanchor: 'center',
+                    yanchor: 'bottom',
+                    text: area.label + '<br>' + '(' + Math.round(1000 * (area.end - area.start)) / 1000 + ' s)',
+                    font: {
+                        color: '#ffffff'
+                    },
+                    showarrow: false,
+                    bordercolor: '#A0A0A0',
+                    borderwidth: 2,
+                    bgcolor: setting.textbg,
+                    opacity: 0.8
+                });
+            }
+            
             if (area.highlight) {
                 shapes.push({
                     type: 'rect',

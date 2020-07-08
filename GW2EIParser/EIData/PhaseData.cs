@@ -17,6 +17,8 @@ namespace GW2EIParser.EIData
         public bool DrawStart { get; set; } = true;
         public bool DrawEnd { get; set; } = true;
         public bool DrawArea { get; set; } = true;
+        public bool DrawLabel { get; set; } = true;
+        public bool CanBeSubPhase { get; set; } = true;
         public List<NPC> Targets { get; } = new List<NPC>();
 
         public PhaseData(long start, long end)
