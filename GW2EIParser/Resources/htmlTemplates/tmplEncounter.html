@@ -2,7 +2,12 @@
     <h3 class="card-header text-center">{{ encounter.name }}</h3>
     <div class="card-body container">
         <div class="d-flex flex-row justify-content-center align-items-center">
-            <img class="mr-3 icon-xl" :src="encounter.icon" :alt="encounter.name">
+            <div class="d-flex flex-column mr-3 justify-content-center">
+                <div v-if="fractalInstabilities" class="d-flex flex-row justify-content-center">
+                    <img v-for="fractalInstability in fractalInstabilities" :data-original-title="fractalInstability.name + (fractalInstability.description ? '<br> ' + fractalInstability.description : '')" :src="fractalInstability.icon" class="icon icon-hover" />
+                </div>
+                <img class="icon-xl" :src="encounter.icon" :alt="encounter.name">
+            </div>
             <div class="ml-3 d-flex flex-column justify-content-center">
                 <div class="mb-2" v-for="target in encounter.targets">
                     <div v-if="encounter.targets.length > 1" class="small" style="text-align:center;">
@@ -22,4 +27,3 @@
             </div>
         </div>
     </div>
-</div>

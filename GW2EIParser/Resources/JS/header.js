@@ -34,7 +34,17 @@ var compileHeader = function () {
             },
             resultStatus: function () {
                 return logData.success ? {text:'Success', class: ["text-success"]} : { text: 'Failure', class: ["text-warning"] };
-            }
+            },
+            fractalInstabilities: function() {
+                if (logData.fractalInstabilities.length == 0) {
+                    return null;
+                }
+                var res = [];
+                for (var i = 0; i < logData.fractalInstabilities.length; i++) {
+                    res.push(findSkill(true, logData.fractalInstabilities[i]));
+                }
+                return res;
+            },
         }
     });
 
