@@ -11,6 +11,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public List<long> Boons { get; } = new List<long>();
         public List<long> OffBuffs { get; } = new List<long>();
         public List<long> DefBuffs { get; } = new List<long>();
+        public List<long> FractalInstabilities { get; } = new List<long>();
         public List<long> DmgModifiersItem { get; } = new List<long>();
         public List<long> DmgModifiersCommon { get; } = new List<long>();
         public Dictionary<string, List<long>> DmgModifiersPers { get; } = new Dictionary<string, List<long>>();

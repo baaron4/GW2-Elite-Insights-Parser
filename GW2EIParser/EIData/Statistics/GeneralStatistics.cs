@@ -49,6 +49,14 @@ namespace GW2EIParser.EIData
 
             }
 
+            foreach (Buff boon in boons.BuffsBySource[GeneralHelper.Source.FractalInstability])
+            {
+                if (skillIDs.Contains(boon.ID))
+                {
+                    PresentFractalInstabilities.Add(boon);
+                }
+            }
+
             // All class specific boons
             var remainingBuffsByIds = boons.BuffsByNature[BuffNature.GraphOnlyBuff].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
             foreach (Player player in players)
@@ -70,6 +78,7 @@ namespace GW2EIParser.EIData
         public List<Buff> PresentConditions { get; } = new List<Buff>();//Used only for Condition tables
         public List<Buff> PresentOffbuffs { get; } = new List<Buff>();//Used only for Off Buff tables
         public List<Buff> PresentDefbuffs { get; } = new List<Buff>();//Used only for Def Buff tables
+        public List<Buff> PresentFractalInstabilities { get; } = new List<Buff>();
         public Dictionary<Player, HashSet<Buff>> PresentPersonalBuffs { get; } = new Dictionary<Player, HashSet<Buff>>();
 
         //Positions for group

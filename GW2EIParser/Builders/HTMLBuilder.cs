@@ -1129,6 +1129,11 @@ namespace GW2EIParser.Builders
                 logData.DefBuffs.Add(boon.ID);
                 _usedBoons[boon.ID] = boon;
             }
+            foreach (Buff boon in _statistics.PresentFractalInstabilities)
+            {
+                logData.FractalInstabilities.Add(boon.ID);
+                _usedBoons[boon.ID] = boon;
+            }
             //
             _log.UpdateProgressWithCancellationCheck("HTML: building Phases");
             for (int i = 0; i < _phases.Count; i++)
