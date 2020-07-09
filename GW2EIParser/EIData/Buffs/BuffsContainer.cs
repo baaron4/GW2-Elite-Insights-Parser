@@ -108,8 +108,31 @@ namespace GW2EIParser.EIData
                 new Buff("Sigil of the Stars", 46953, GeneralHelper.Source.Item, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/dc/Superior_Sigil_of_the_Stars.png"),
         };
 
+        private readonly List<Buff> _fractalInstabilities = new List<Buff>()
+        {
+            new Buff("Mistlock Instability: Adrenaline Rush", -1, GeneralHelper.Source.FractalInstability, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/72/Mistlock_Instability_Adrenaline_Rush.png"),
+            new Buff("Mistlock Instability: Afflicted", -1, GeneralHelper.Source.FractalInstability, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/3f/Mistlock_Instability_Afflicted.png"),
+            new Buff("Mistlock Instability: Boon Overload", -1, GeneralHelper.Source.FractalInstability, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d7/Mistlock_Instability_Boon_Overload.png"),
+            new Buff("Mistlock Instability: Flux Bomb", -1, GeneralHelper.Source.FractalInstability, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/3f/Mistlock_Instability_Flux_Bomb.png"),
+            new Buff("Mistlock Instability: Fractal Vindicators", -1, GeneralHelper.Source.FractalInstability, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/48/Mistlock_Instability_Fractal_Vindicators.png"),
+            new Buff("Mistlock Instability: Frailty", 54477, GeneralHelper.Source.FractalInstability, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d6/Mistlock_Instability_Frailty.png"),
+            new Buff("Mistlock Instability: Hamstrung", -1, GeneralHelper.Source.FractalInstability, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/99/Mistlock_Instability_Hamstrung.png"),
+            new Buff("Mistlock Instability: Last Laugh", 22293, GeneralHelper.Source.FractalInstability, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/58/Mistlock_Instability_Last_Laugh.png"),
+            new Buff("Mistlock Instability: Mists Convergence", -1, GeneralHelper.Source.FractalInstability, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/95/Mistlock_Instability_Mists_Convergence.png"),
+            new Buff("Mistlock Instability: No Pain, No Gain", -1, GeneralHelper.Source.FractalInstability, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/c3/Mistlock_Instability_No_Pain%2C_No_Gain.png"),
+            new Buff("Mistlock Instability: Outflanked", 54084, GeneralHelper.Source.FractalInstability, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/0/0c/Mistlock_Instability_Outflanked.png"),
+            new Buff("Mistlock Instability: Social Awkwardness", -1, GeneralHelper.Source.FractalInstability, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d2/Mistlock_Instability_Social_Awkwardness.png"),
+            new Buff("Mistlock Instability: Stick Together", -1, GeneralHelper.Source.FractalInstability, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/59/Mistlock_Instability_Stick_Together.png"),
+            new Buff("Mistlock Instability: Sugar Rush", -1, GeneralHelper.Source.FractalInstability, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/4c/Mistlock_Instability_Sugar_Rush.png"),
+            new Buff("Mistlock Instability: Toxic Trail", -1, GeneralHelper.Source.FractalInstability, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/df/Mistlock_Instability_Toxic_Trail.png"),
+            new Buff("Mistlock Instability: Vengeance", 46865, GeneralHelper.Source.FractalInstability, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/c6/Mistlock_Instability_Vengeance.png"),
+            new Buff("Mistlock Instability: We Bleed Fire", 54719, GeneralHelper.Source.FractalInstability, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/24/Mistlock_Instability_We_Bleed_Fire.png"),
+        };
+
         private readonly List<Buff> _fightSpecific = new List<Buff>
         {
+                new Buff("Spectral Agony", 38077, GeneralHelper.Source.FightSpecific,BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/70/Spectral_Agony.png" ),
+                new Buff("Agony", 15773, GeneralHelper.Source.FightSpecific,BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/be/Agony.png" ),
                 // Whisper of Jormalg
                 new Buff("Whisper Teleport Out", 59223, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 new Buff("Whisper Teleport Back", 59054, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
@@ -857,6 +880,7 @@ namespace GW2EIParser.EIData
                 _gear,
                 _consumables,
                 _fightSpecific,
+                _fractalInstabilities,
                 _revenant,
                 _warrior,
                 _guardian,

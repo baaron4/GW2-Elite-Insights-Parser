@@ -75,6 +75,7 @@ namespace GW2EIParser
             Ranger, Druid, Soulbeast,
             Engineer, Scrapper, Holosmith,
             FightSpecific,
+            FractalInstability,
             Unknown
         };
 
