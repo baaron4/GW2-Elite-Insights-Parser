@@ -518,7 +518,7 @@ namespace GW2EIParser.Parser
                     playerAgent.OverrideAwareTimes(_logStartTime, _logEndTime);
                 }
                 bool skip = false;
-                var player = new Player(playerAgent, _fightData.Logic.Mode == FightLogic.ParseMode.Instanced5, false);
+                var player = new Player(playerAgent, _fightData.Logic.Mode == FightLogic.ParseMode.Instanced5 || _fightData.Logic.Mode == FightLogic.ParseMode.Unknown || _fightData.Logic.Mode == FightLogic.ParseMode.sPvP, false);
                 foreach (Player p in _playerList)
                 {
                     if (p.Account == player.Account)// same player
