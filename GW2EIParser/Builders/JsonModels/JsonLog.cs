@@ -238,7 +238,13 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// Dictionary of personal buffs. The key is the profession, the value is a list of buff ids
         /// </summary>
+        /// <seealso cref="BuffMap"/>
         public Dictionary<string, HashSet<long>> PersonalBuffs { get; } = new Dictionary<string, HashSet<long>>();
+        /// <summary>
+        /// List of present fractal instabilities, the values are buff ids
+        /// </summary>
+        /// <seealso cref="BuffMap"/>
+        public List<long> PresentFractalInstabilities { get; }
         /// <summary>
         /// List of error messages given by ArcDPS
         /// </summary>
@@ -265,6 +271,18 @@ namespace GW2EIParser.Builders.JsonModels
             Language = log.LogData.Language;
             LanguageID = (byte)log.LogData.LanguageID;
             IsCM = log.FightData.IsCM;
+            if (log.Statistics.PresentFractalInstabilities.Any())
+            {
+                PresentFractalInstabilities = new List<long>();
+                foreach(Buff fractalInstab in log.Statistics.PresentFractalInstabilities)
+                {
+                    PresentFractalInstabilities.Add(fractalInstab.ID);
+                    if (!BuffMap.ContainsKey("b" + fractalInstab.ID))
+                    {
+                        BuffMap["b" + fractalInstab.ID] = new BuffDesc(fractalInstab, log);
+                    }
+                }
+            }
             //
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Mechanics");
             MechanicData mechanicData = log.MechanicData;
