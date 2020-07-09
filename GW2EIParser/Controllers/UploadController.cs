@@ -13,11 +13,11 @@ namespace GW2EIParser.Controllers
     {
         private static string UploadDPSReportsEI(FileInfo fi, OperationController operation)
         {
-            return UploadToDPSR(fi, "https://dps.report/uploadContent?generator=ei", operation);
+            return UploadToDPSR(fi, "https://dps.report/uploadContent?json=1&generator=ei", operation);
         }
         private static string UploadDPSReportsRH(FileInfo fi, OperationController operation)
         {
-            return UploadToDPSR(fi, "https://dps.report/uploadContent?generator=rh", operation);
+            return UploadToDPSR(fi, "https://dps.report/uploadContent?json=1&generator=rh", operation);
 
         }
         private static string UploadRaidar(/*FileInfo fi*/)
@@ -64,6 +64,7 @@ namespace GW2EIParser.Controllers
         private class DPSReportsResponseItem
         {
             public string Permalink { get; set; }
+            public string Error { get; set; }
         }
         private static string UploadToDPSR(FileInfo fi, string URI, OperationController operation)
         {
@@ -93,21 +94,27 @@ namespace GW2EIParser.Controllers
                     HttpStatusCode statusCode = httpResponse.StatusCode;
                     HttpContent responseContent = httpResponse.Content;
 
+                    if (statusCode != HttpStatusCode.OK)
+                    {
+                        throw new HttpRequestException(statusCode.ToString());
+                    }
+
                     if (responseContent != null)
                     {
-                        operation.UpdateProgressWithCancellationCheck("Upload tentative successful");
                         Task<string> stringContentsTask = responseContent.ReadAsStringAsync();
                         string stringContents = stringContentsTask.Result;
-                        int first = stringContents.IndexOf('{');
-                        int length = stringContents.LastIndexOf('}') - first + 1;
-                        string JSONFormat = stringContents.Substring(first, length);
-                        DPSReportsResponseItem item = JsonConvert.DeserializeObject<DPSReportsResponseItem>(JSONFormat, new JsonSerializerSettings
+                        DPSReportsResponseItem item = JsonConvert.DeserializeObject<DPSReportsResponseItem>(stringContents, new JsonSerializerSettings
                         {
                             ContractResolver = new DefaultContractResolver()
                             {
                                 NamingStrategy = new CamelCaseNamingStrategy()
                             }
                         });
+                        if (item.Error != null)
+                        {
+                            throw new InvalidOperationException(item.Error);
+                        }
+                        operation.UpdateProgressWithCancellationCheck("Upload tentative successful");
                         return item.Permalink;
                     }
                 }
