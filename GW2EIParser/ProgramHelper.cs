@@ -341,6 +341,11 @@ namespace GW2EIParser
                     operation.UpdateProgressWithCancellationCheck("XML created");
                 }
             }
+
+            if (!Properties.Settings.Default.ParseMultipleLogs)
+            {
+                WebhookController.SendMessage(log, uploadresult);
+            }
             operation.UpdateProgress($"Completed parsing for {result}ed {log.FightData.Logic.Extension}");
         }
 
