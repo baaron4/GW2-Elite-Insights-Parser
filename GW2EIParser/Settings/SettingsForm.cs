@@ -27,6 +27,20 @@ namespace GW2EIParser.Setting
             }
         }
 
+        public void ConditionalSettingDisable(bool busy)
+        {
+            if (busy)
+            {
+                chkMultiThreaded.Enabled = false;
+                chkMultiLogs.Enabled = false;
+            }
+            else
+            {
+                chkMultiThreaded.Enabled = true;
+                chkMultiLogs.Enabled = true;
+            }
+        }
+
         private void SetValues()
         {
 
@@ -64,13 +78,12 @@ namespace GW2EIParser.Setting
             panelHtml.Enabled = Properties.Settings.Default.SaveOutHTML;
             panelJson.Enabled = Properties.Settings.Default.SaveOutJSON;
             panelXML.Enabled = Properties.Settings.Default.SaveOutXML;
-            groupRawSettings.Enabled = Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML;
+            groupRawSettings.Enabled = Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML;        
         }
 
         private void SettingsFormLoad(object sender, EventArgs e)
         {
             SetValues();
-            settingTooltip.SetToolTip(chkHtmlExternalScripts, "Writes static css and js scripts in own files, which are shared between all logs. Log file size decreases, but the script files have to be kept along with the html.");
         }
 
         private void DefaultOutputLocationCheckedChanged(object sender, EventArgs e)

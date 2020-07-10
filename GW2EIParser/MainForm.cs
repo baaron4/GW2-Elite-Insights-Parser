@@ -75,6 +75,7 @@ namespace GW2EIParser
         private void _RunOperation(FormOperationController operation)
         {
             _runningCount++;
+            _settingsForm.ConditionalSettingDisable(_anyRunning);
             operation.ToQueuedState();
             var cancelTokenSource = new CancellationTokenSource();// Prepare task
             Task task = Task.Run(() =>
@@ -186,11 +187,12 @@ namespace GW2EIParser
             }
             else
             {
-                if (_runningCount == 0)
+                if (!_anyRunning)
                 {
                     btnParse.Enabled = true;
                     btnClear.Enabled = true;
                     btnCancel.Enabled = false;
+                    _settingsForm.ConditionalSettingDisable(_anyRunning);
                 }
             }
         }

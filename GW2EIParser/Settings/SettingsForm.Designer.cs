@@ -378,6 +378,7 @@
             this.chkHtmlExternalScripts.Text = "External Scripts";
             this.chkHtmlExternalScripts.UseVisualStyleBackColor = true;
             this.chkHtmlExternalScripts.CheckedChanged += new System.EventHandler(this.ChkHtmlExternalScripts_CheckedChanged);
+            this.settingTooltip.SetToolTip(this.chkHtmlExternalScripts, "Writes static css and js scripts in own files, which are shared between all logs. Log file size decreases, but the script files have to be kept along with the html.");
             // 
             // tabControl
             // 
@@ -761,7 +762,7 @@
             this.Name = "SettingsForm";
             this.Text = "Parse settings";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SettingsFormFormClosing);
-            this.Load += new System.EventHandler(this.SettingsFormLoad);
+            this.VisibleChanged += new System.EventHandler(this.SettingsFormLoad);
             this.tabControl.ResumeLayout(false);
             this.tabGeneral.ResumeLayout(false);
             this.boxParsing.ResumeLayout(false);
