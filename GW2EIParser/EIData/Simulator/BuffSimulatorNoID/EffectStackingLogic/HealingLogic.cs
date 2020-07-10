@@ -15,7 +15,7 @@ namespace GW2EIParser.EIData
                 return stack.SeedSrc.Healing;
             }
 
-            public int Compare(BuffStackItem x, BuffStackItem y)
+            public static int Compare(BuffStackItem x, BuffStackItem y)
             {
                 return -GetHealing(x).CompareTo(GetHealing(y));
             }
@@ -23,8 +23,7 @@ namespace GW2EIParser.EIData
 
         public override void Sort(ParsedLog log, List<BuffStackItem> stacks)
         {
-            var comparator = new CompareHealing();
-            stacks.Sort(comparator.Compare);
+            stacks.Sort(CompareHealing.Compare);
         }
     }
 }

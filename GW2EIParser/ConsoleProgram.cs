@@ -22,7 +22,7 @@ namespace GW2EIParser
             }
         }
 
-        private void ParseLog(string logFile)
+        private static void ParseLog(string logFile)
         {
             var operation = new ConsoleOperationController(logFile, "Ready to parse");
             try

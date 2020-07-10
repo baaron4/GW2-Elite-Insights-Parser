@@ -26,7 +26,7 @@ namespace GW2EIParser.Builders.HtmlModels
         }
 
 
-        private List<object> GetCombatReplayActors(ParsedLog log, CombatReplayMap map)
+        private static List<object> GetCombatReplayActors(ParsedLog log, CombatReplayMap map)
         {
             var actors = new List<object>();
             foreach (Player p in log.PlayerList)
