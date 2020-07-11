@@ -28,7 +28,7 @@ namespace GW2EIParser.Controllers
                 builder.AddField("Instabilities", String.Join("\n",log.Statistics.PresentFractalInstabilities.Select(x => x.Name)));
             }
             //
-            var playerByGroup = log.PlayerList.Where(x => !x.IsFakeActor).GroupBy(x => x.Group).ToDictionary(x => x.Key, x => x.ToList());
+            /*var playerByGroup = log.PlayerList.Where(x => !x.IsFakeActor).GroupBy(x => x.Group).ToDictionary(x => x.Key, x => x.ToList());
             var hasGroups = playerByGroup.Count > 1;
             foreach (KeyValuePair<int, List<Player>> pair in playerByGroup)
             {
@@ -38,7 +38,7 @@ namespace GW2EIParser.Controllers
                     groupField.Add(p.Character + " - " + p.Prof);
                 }
                 builder.AddField(hasGroups ? "Group " + pair.Key : "Party Composition", String.Join("\n", groupField));
-            }
+            }*/
             //
             builder.AddField("Game Data", "ARC: " + log.LogData.BuildVersion + " | " + "GW2 Build: " + log.LogData.GW2Version);
             //

@@ -293,7 +293,7 @@
             this.UploadWebhook_check.Size = new System.Drawing.Size(175, 17);
             this.UploadWebhook_check.TabIndex = 45;
             this.UploadWebhook_check.Text = "Send Embed to Discord webhook";
-            this.settingTooltip.SetToolTip(this.UploadWebhook_check, "Disabled with Multiple Parse Logs");
+            this.settingTooltip.SetToolTip(this.UploadWebhook_check, "Disabled with Multiple Parse Logs and when npt uploading to dps.reports");
             this.UploadWebhook_check.UseVisualStyleBackColor = true;
             this.UploadWebhook_check.CheckedChanged += new System.EventHandler(this.UploadWebhook_check_CheckedChanged);
             // 

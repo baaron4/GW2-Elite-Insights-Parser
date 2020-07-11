@@ -48,8 +48,8 @@ namespace GW2EIParser.Setting
             panelXML.Enabled = Properties.Settings.Default.SaveOutXML;
             groupRawSettings.Enabled = Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML;
 
-            UploadtxtWebhookUrl.Enabled = !Properties.Settings.Default.ParseMultipleLogs && Properties.Settings.Default.SendEmbedToWebhook;
-            UploadWebhook_check.Enabled = !Properties.Settings.Default.ParseMultipleLogs;
+            UploadtxtWebhookUrl.Enabled = Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.ParseMultipleLogs && Properties.Settings.Default.SendEmbedToWebhook;
+            UploadWebhook_check.Enabled = Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.ParseMultipleLogs;
         }
 
         private void SetValues()
