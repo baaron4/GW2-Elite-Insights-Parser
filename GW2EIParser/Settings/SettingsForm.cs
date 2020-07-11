@@ -48,8 +48,7 @@ namespace GW2EIParser.Setting
             panelXML.Enabled = Properties.Settings.Default.SaveOutXML;
             groupRawSettings.Enabled = Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML;
 
-            UploadtxtWebhookUrl.Enabled = Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.ParseMultipleLogs && Properties.Settings.Default.SendEmbedToWebhook;
-            UploadWebhook_check.Enabled = Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.ParseMultipleLogs;
+            groupWebhookSettings.Enabled = Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.ParseMultipleLogs;
         }
 
         private void SetValues()
@@ -109,18 +108,14 @@ namespace GW2EIParser.Setting
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
                 {
-                    //string[] files = Directory.GetFiles(fbd.SelectedPath);
-
-                    // System.Windows.Forms.MessageBox.Show("Files found: " + files.Length.ToString(), "Message");
                     txtCustomSaveLoc.Text = fbd.SelectedPath;
-                    Properties.Settings.Default.OutLocation = fbd.SelectedPath;
                 }
             }
         }
 
         private void CustomSaveLocationTextChanged(object sender, EventArgs e)
         {
-
+            Properties.Settings.Default.OutLocation = txtCustomSaveLoc.Text;
         }
 
         private void WebhookURLChanged(object sender, EventArgs e)
@@ -178,6 +173,7 @@ namespace GW2EIParser.Setting
         private void UploadDPSReports_checkbox_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.UploadToDPSReports = UploadDPSReports_checkbox.Checked;
+            SetUIEnable();
         }
 
         private void UploadRaidar_check_CheckedChanged(object sender, EventArgs e)

@@ -54,10 +54,10 @@
             this.settingTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.chkMultiLogs = new System.Windows.Forms.CheckBox();
             this.chkAnonymous = new System.Windows.Forms.CheckBox();
+            this.chkHtmlExternalScripts = new System.Windows.Forms.CheckBox();
             this.chkSaveOutTrace = new System.Windows.Forms.CheckBox();
             this.chkDamageMods = new System.Windows.Forms.CheckBox();
             this.chkRawTimelineArrays = new System.Windows.Forms.CheckBox();
-            this.chkHtmlExternalScripts = new System.Windows.Forms.CheckBox();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabGeneral = new System.Windows.Forms.TabPage();
             this.boxParsing = new System.Windows.Forms.GroupBox();
@@ -83,6 +83,7 @@
             this.groupRawSettings = new System.Windows.Forms.GroupBox();
             this.chkCompressRaw = new System.Windows.Forms.CheckBox();
             this.tabUpload = new System.Windows.Forms.TabPage();
+            this.groupWebhookSettings = new System.Windows.Forms.GroupBox();
             this.tabAPI = new System.Windows.Forms.TabPage();
             this.resetSkillLabel = new System.Windows.Forms.Label();
             this.resetTraitLabel = new System.Windows.Forms.Label();
@@ -105,6 +106,7 @@
             this.panelJson.SuspendLayout();
             this.groupRawSettings.SuspendLayout();
             this.tabUpload.SuspendLayout();
+            this.groupWebhookSettings.SuspendLayout();
             this.tabAPI.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -133,7 +135,6 @@
             // 
             // txtCustomSaveLoc
             // 
-            this.txtCustomSaveLoc.Enabled = false;
             this.txtCustomSaveLoc.Location = new System.Drawing.Point(12, 72);
             this.txtCustomSaveLoc.Name = "txtCustomSaveLoc";
             this.txtCustomSaveLoc.Size = new System.Drawing.Size(370, 20);
@@ -288,9 +289,9 @@
             // UploadWebhook_check
             // 
             this.UploadWebhook_check.AutoSize = true;
-            this.UploadWebhook_check.Location = new System.Drawing.Point(12, 84);
+            this.UploadWebhook_check.Location = new System.Drawing.Point(12, 19);
             this.UploadWebhook_check.Name = "UploadWebhook_check";
-            this.UploadWebhook_check.Size = new System.Drawing.Size(175, 17);
+            this.UploadWebhook_check.Size = new System.Drawing.Size(185, 17);
             this.UploadWebhook_check.TabIndex = 45;
             this.UploadWebhook_check.Text = "Send Embed to Discord webhook";
             this.settingTooltip.SetToolTip(this.UploadWebhook_check, "Disabled with Multiple Parse Logs and when npt uploading to dps.reports");
@@ -299,8 +300,7 @@
             // 
             // UploadtxtWebhookUrl
             // 
-            this.UploadtxtWebhookUrl.Enabled = false;
-            this.UploadtxtWebhookUrl.Location = new System.Drawing.Point(12, 106);
+            this.UploadtxtWebhookUrl.Location = new System.Drawing.Point(12, 42);
             this.UploadtxtWebhookUrl.Name = "UploadtxtWebhookUrl";
             this.UploadtxtWebhookUrl.Size = new System.Drawing.Size(370, 20);
             this.UploadtxtWebhookUrl.TabIndex = 15;
@@ -357,6 +357,20 @@
             this.chkAnonymous.UseVisualStyleBackColor = true;
             this.chkAnonymous.CheckedChanged += new System.EventHandler(this.ChkAnonymous_CheckedChanged);
             // 
+            // chkHtmlExternalScripts
+            // 
+            this.chkHtmlExternalScripts.AutoSize = true;
+            this.chkHtmlExternalScripts.Location = new System.Drawing.Point(12, 12);
+            this.chkHtmlExternalScripts.Name = "chkHtmlExternalScripts";
+            this.chkHtmlExternalScripts.Size = new System.Drawing.Size(99, 17);
+            this.chkHtmlExternalScripts.TabIndex = 46;
+            this.chkHtmlExternalScripts.Text = "External Scripts";
+            this.settingTooltip.SetToolTip(this.chkHtmlExternalScripts, "Writes static css and js scripts in own files, which are shared between all logs." +
+        " Log file size decreases, but the script files have to be kept along with the ht" +
+        "ml.");
+            this.chkHtmlExternalScripts.UseVisualStyleBackColor = true;
+            this.chkHtmlExternalScripts.CheckedChanged += new System.EventHandler(this.ChkHtmlExternalScripts_CheckedChanged);
+            // 
             // chkSaveOutTrace
             // 
             this.chkSaveOutTrace.AutoSize = true;
@@ -391,18 +405,6 @@
             this.chkRawTimelineArrays.Text = "Add Timeline Arrays";
             this.chkRawTimelineArrays.UseVisualStyleBackColor = true;
             this.chkRawTimelineArrays.CheckedChanged += new System.EventHandler(this.ChkRawTimelineArrays_CheckedChanged);
-            // 
-            // chkHtmlExternalScripts
-            // 
-            this.chkHtmlExternalScripts.AutoSize = true;
-            this.chkHtmlExternalScripts.Location = new System.Drawing.Point(12, 12);
-            this.chkHtmlExternalScripts.Name = "chkHtmlExternalScripts";
-            this.chkHtmlExternalScripts.Size = new System.Drawing.Size(99, 17);
-            this.chkHtmlExternalScripts.TabIndex = 46;
-            this.chkHtmlExternalScripts.Text = "External Scripts";
-            this.chkHtmlExternalScripts.UseVisualStyleBackColor = true;
-            this.chkHtmlExternalScripts.CheckedChanged += new System.EventHandler(this.ChkHtmlExternalScripts_CheckedChanged);
-            this.settingTooltip.SetToolTip(this.chkHtmlExternalScripts, "Writes static css and js scripts in own files, which are shared between all logs. Log file size decreases, but the script files have to be kept along with the html.");
             // 
             // tabControl
             // 
@@ -687,14 +689,24 @@
             this.tabUpload.Controls.Add(this.UploadDPSReports_checkbox);
             this.tabUpload.Controls.Add(this.UploadDRRH_check);
             this.tabUpload.Controls.Add(this.UploadRaidar_check);
-            this.tabUpload.Controls.Add(this.UploadWebhook_check);
-            this.tabUpload.Controls.Add(this.UploadtxtWebhookUrl);
+            this.tabUpload.Controls.Add(this.groupWebhookSettings);
             this.tabUpload.Location = new System.Drawing.Point(4, 22);
             this.tabUpload.Name = "tabUpload";
             this.tabUpload.Size = new System.Drawing.Size(471, 309);
             this.tabUpload.TabIndex = 4;
             this.tabUpload.Text = "Upload";
             this.tabUpload.UseVisualStyleBackColor = true;
+            // 
+            // groupWebhookSettings
+            // 
+            this.groupWebhookSettings.Controls.Add(this.UploadtxtWebhookUrl);
+            this.groupWebhookSettings.Controls.Add(this.UploadWebhook_check);
+            this.groupWebhookSettings.Location = new System.Drawing.Point(17, 87);
+            this.groupWebhookSettings.Name = "groupWebhookSettings";
+            this.groupWebhookSettings.Size = new System.Drawing.Size(404, 92);
+            this.groupWebhookSettings.TabIndex = 45;
+            this.groupWebhookSettings.TabStop = false;
+            this.groupWebhookSettings.Text = "Webhook Settings";
             // 
             // tabAPI
             // 
@@ -816,6 +828,8 @@
             this.groupRawSettings.PerformLayout();
             this.tabUpload.ResumeLayout(false);
             this.tabUpload.PerformLayout();
+            this.groupWebhookSettings.ResumeLayout(false);
+            this.groupWebhookSettings.PerformLayout();
             this.tabAPI.ResumeLayout(false);
             this.tabAPI.PerformLayout();
             this.ResumeLayout(false);
@@ -841,6 +855,7 @@
         private System.Windows.Forms.CheckBox UploadDPSReports_checkbox;
         private System.Windows.Forms.CheckBox UploadDRRH_check;
         private System.Windows.Forms.CheckBox UploadRaidar_check;
+        private System.Windows.Forms.GroupBox groupWebhookSettings;
         private System.Windows.Forms.CheckBox UploadWebhook_check;
         private System.Windows.Forms.TextBox UploadtxtWebhookUrl;
         private System.Windows.Forms.CheckBox chkOutputJson;
