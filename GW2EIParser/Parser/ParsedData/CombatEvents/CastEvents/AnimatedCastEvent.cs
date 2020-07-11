@@ -30,6 +30,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             {
                 ExpectedDuration = 750;
                 ActualDuration = 750;
+                _scaledActualDuration = 0;
             }
             double nonScaledToScaledRatio = 1.0;
             if (_scaledActualDuration > 0)
