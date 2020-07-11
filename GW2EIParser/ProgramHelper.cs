@@ -342,7 +342,7 @@ namespace GW2EIParser
                 }
             }
 
-            if (!Properties.Settings.Default.ParseMultipleLogs)
+            if (Properties.Settings.Default.SendEmbedToWebhook && !Properties.Settings.Default.ParseMultipleLogs)
             {
                 WebhookController.SendMessage(log, uploadresult);
             }

@@ -382,5 +382,35 @@ namespace GW2EIParser.Properties {
                 this["RawTimelineArrays"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string WebhookURL
+        {
+            get
+            {
+                return ((string)(this["WebhookURL"]));
+            }
+            set
+            {
+                this["WebhookURL"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SendEmbedToWebhook
+        {
+            get
+            {
+                return ((bool)(this["SendEmbedToWebhook"]));
+            }
+            set
+            {
+                this["SendEmbedToWebhook"] = value;
+            }
+        }
     }
 }

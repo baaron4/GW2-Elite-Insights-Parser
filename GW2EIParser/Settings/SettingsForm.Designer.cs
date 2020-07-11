@@ -47,6 +47,8 @@
             this.UploadDPSReports_checkbox = new System.Windows.Forms.CheckBox();
             this.UploadDRRH_check = new System.Windows.Forms.CheckBox();
             this.UploadRaidar_check = new System.Windows.Forms.CheckBox();
+            this.UploadWebhook_check = new System.Windows.Forms.CheckBox();
+            this.UploadtxtWebhookUrl = new System.Windows.Forms.TextBox();
             this.chkOutputJson = new System.Windows.Forms.CheckBox();
             this.chkIndentJSON = new System.Windows.Forms.CheckBox();
             this.settingTooltip = new System.Windows.Forms.ToolTip(this.components);
@@ -282,6 +284,28 @@
             this.UploadRaidar_check.Text = "Upload to Raidar (Not Working)";
             this.UploadRaidar_check.UseVisualStyleBackColor = true;
             this.UploadRaidar_check.CheckedChanged += new System.EventHandler(this.UploadRaidar_check_CheckedChanged);
+            // 
+            // UploadWebhook_check
+            // 
+            this.UploadWebhook_check.AutoSize = true;
+            this.UploadWebhook_check.Location = new System.Drawing.Point(12, 84);
+            this.UploadWebhook_check.Name = "UploadWebhook_check";
+            this.UploadWebhook_check.Size = new System.Drawing.Size(175, 17);
+            this.UploadWebhook_check.TabIndex = 45;
+            this.UploadWebhook_check.Text = "Send Embed to Discord webhook";
+            this.settingTooltip.SetToolTip(this.UploadWebhook_check, "Disabled with Multiple Parse Logs");
+            this.UploadWebhook_check.UseVisualStyleBackColor = true;
+            this.UploadWebhook_check.CheckedChanged += new System.EventHandler(this.UploadWebhook_check_CheckedChanged);
+            // 
+            // UploadtxtWebhookUrl
+            // 
+            this.UploadtxtWebhookUrl.Enabled = false;
+            this.UploadtxtWebhookUrl.Location = new System.Drawing.Point(12, 106);
+            this.UploadtxtWebhookUrl.Name = "UploadtxtWebhookUrl";
+            this.UploadtxtWebhookUrl.Size = new System.Drawing.Size(370, 20);
+            this.UploadtxtWebhookUrl.TabIndex = 15;
+            this.UploadtxtWebhookUrl.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.UploadtxtWebhookUrl.TextChanged += new System.EventHandler(this.WebhookURLChanged);
             // 
             // chkOutputJson
             // 
@@ -663,6 +687,8 @@
             this.tabUpload.Controls.Add(this.UploadDPSReports_checkbox);
             this.tabUpload.Controls.Add(this.UploadDRRH_check);
             this.tabUpload.Controls.Add(this.UploadRaidar_check);
+            this.tabUpload.Controls.Add(this.UploadWebhook_check);
+            this.tabUpload.Controls.Add(this.UploadtxtWebhookUrl);
             this.tabUpload.Location = new System.Drawing.Point(4, 22);
             this.tabUpload.Name = "tabUpload";
             this.tabUpload.Size = new System.Drawing.Size(471, 309);
@@ -815,6 +841,8 @@
         private System.Windows.Forms.CheckBox UploadDPSReports_checkbox;
         private System.Windows.Forms.CheckBox UploadDRRH_check;
         private System.Windows.Forms.CheckBox UploadRaidar_check;
+        private System.Windows.Forms.CheckBox UploadWebhook_check;
+        private System.Windows.Forms.TextBox UploadtxtWebhookUrl;
         private System.Windows.Forms.CheckBox chkOutputJson;
         private System.Windows.Forms.CheckBox chkIndentJSON;
         private System.Windows.Forms.CheckBox chkCompressRaw;

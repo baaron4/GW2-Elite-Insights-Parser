@@ -41,6 +41,17 @@ namespace GW2EIParser.Setting
             }
         }
 
+        private void SetUIEnable()
+        {
+            panelHtml.Enabled = Properties.Settings.Default.SaveOutHTML;
+            panelJson.Enabled = Properties.Settings.Default.SaveOutJSON;
+            panelXML.Enabled = Properties.Settings.Default.SaveOutXML;
+            groupRawSettings.Enabled = Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML;
+
+            UploadtxtWebhookUrl.Enabled = !Properties.Settings.Default.ParseMultipleLogs && Properties.Settings.Default.SendEmbedToWebhook;
+            UploadWebhook_check.Enabled = !Properties.Settings.Default.ParseMultipleLogs;
+        }
+
         private void SetValues()
         {
 
@@ -61,6 +72,8 @@ namespace GW2EIParser.Setting
             UploadDPSReports_checkbox.Checked = Properties.Settings.Default.UploadToDPSReports;
             UploadDRRH_check.Checked = Properties.Settings.Default.UploadToDPSReportsRH;
             UploadRaidar_check.Checked = Properties.Settings.Default.UploadToRaidar;
+            UploadWebhook_check.Checked = Properties.Settings.Default.SendEmbedToWebhook;
+            UploadtxtWebhookUrl.Text = Properties.Settings.Default.WebhookURL;
             chkB_SkipFailedTries.Checked = Properties.Settings.Default.SkipFailedTries;
             chkAutoAdd.Checked = Properties.Settings.Default.AutoAdd;
             chkAutoParse.Checked = Properties.Settings.Default.AutoParse;
@@ -75,10 +88,7 @@ namespace GW2EIParser.Setting
 
             chkHtmlExternalScripts.Checked = Properties.Settings.Default.HtmlExternalScripts;
 
-            panelHtml.Enabled = Properties.Settings.Default.SaveOutHTML;
-            panelJson.Enabled = Properties.Settings.Default.SaveOutJSON;
-            panelXML.Enabled = Properties.Settings.Default.SaveOutXML;
-            groupRawSettings.Enabled = Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML;        
+            SetUIEnable();
         }
 
         private void SettingsFormLoad(object sender, EventArgs e)
@@ -111,6 +121,11 @@ namespace GW2EIParser.Setting
         private void CustomSaveLocationTextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void WebhookURLChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.WebhookURL = UploadtxtWebhookUrl.Text;
         }
 
         private void ResetSkillListClick(object sender, EventArgs e)
@@ -170,6 +185,12 @@ namespace GW2EIParser.Setting
             Properties.Settings.Default.UploadToRaidar = UploadRaidar_check.Checked;
         }
 
+        private void UploadWebhook_check_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.SendEmbedToWebhook = UploadWebhook_check.Checked;
+            SetUIEnable();
+        }
+
         private void UploadDRRH_check_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.UploadToDPSReportsRH = UploadDRRH_check.Checked;
@@ -182,15 +203,13 @@ namespace GW2EIParser.Setting
         private void OutputJSONCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SaveOutJSON = chkOutputJson.Checked;
-            panelJson.Enabled = Properties.Settings.Default.SaveOutJSON;
-            groupRawSettings.Enabled = Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML;
+            SetUIEnable();
         }
 
         private void OutputXMLCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SaveOutXML = chkOutputXml.Checked;
-            panelXML.Enabled = Properties.Settings.Default.SaveOutXML;
-            groupRawSettings.Enabled = Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML;
+            SetUIEnable();
         }
 
         private void ChkIndentJSONCheckedChanged(object sender, EventArgs e)
@@ -336,6 +355,7 @@ namespace GW2EIParser.Setting
         private void ChkMultiLogs_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ParseMultipleLogs = chkMultiLogs.Checked;
+            SetUIEnable();
         }
 
         private void ChkRawTimelineArrays_CheckedChanged(object sender, EventArgs e)

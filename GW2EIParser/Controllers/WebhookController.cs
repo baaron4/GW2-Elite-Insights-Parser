@@ -23,6 +23,11 @@ namespace GW2EIParser.Controllers
             //
             builder.AddField("Encouter Duration", log.FightData.DurationString);
             //
+            if (log.Statistics.PresentFractalInstabilities.Any())
+            {
+                builder.AddField("Instabilities", String.Join("\n",log.Statistics.PresentFractalInstabilities.Select(x => x.Name)));
+            }
+            //
             var playerByGroup = log.PlayerList.Where(x => !x.IsFakeActor).GroupBy(x => x.Group).ToDictionary(x => x.Key, x => x.ToList());
             var hasGroups = playerByGroup.Count > 1;
             foreach (KeyValuePair<int, List<Player>> pair in playerByGroup)
@@ -51,24 +56,28 @@ namespace GW2EIParser.Controllers
 
         public static void SendMessage(ParsedLog log, string[] uploadresult)
         {
-            try
+            if (Properties.Settings.Default.WebhookURL != null && Properties.Settings.Default.WebhookURL.Length > 0)
             {
-                // TODO: add webhook options
-                var client = new DiscordWebhookClient("");
                 try
                 {
-                    _ = client.SendMessageAsync(embeds: new[] { GetEmbed(log, uploadresult) }).Result;
-                    log.UpdateProgressWithCancellationCheck("Sent Embed");
+                    // TODO: add webhook options
+                    var client = new DiscordWebhookClient(Properties.Settings.Default.WebhookURL);
+                    try
+                    {
+                        _ = client.SendMessageAsync(embeds: new[] { GetEmbed(log, uploadresult) }).Result;
+                        log.UpdateProgressWithCancellationCheck("Sent Embed");
+                    }
+                    finally
+                    {
+                        client.Dispose();
+                    }
                 }
-                finally
+                catch (Exception e)
                 {
-                    client.Dispose();
+                    log.UpdateProgressWithCancellationCheck("Couldn't send embed: " + e.GetFinalException().Message);
                 }
             }
-            catch (Exception e)
-            {
-                log.UpdateProgressWithCancellationCheck("Couldn't send embed: " + e.GetFinalException().Message);
-            }
+            
         }
 
     }
