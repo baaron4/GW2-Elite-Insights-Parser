@@ -21,7 +21,7 @@ namespace GW2EIParser.Controllers
             var builder = new EmbedBuilder();
             builder.WithThumbnailUrl(log.FightData.Logic.Icon);
             //
-            builder.AddField("Encouter Duration", log.FightData.DurationString);
+            builder.AddField("Encounter Duration", log.FightData.DurationString);
             //
             if (log.Statistics.PresentFractalInstabilities.Any())
             {
@@ -60,7 +60,6 @@ namespace GW2EIParser.Controllers
             {
                 try
                 {
-                    // TODO: add webhook options
                     var client = new DiscordWebhookClient(Properties.Settings.Default.WebhookURL);
                     try
                     {
