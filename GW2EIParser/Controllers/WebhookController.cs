@@ -58,12 +58,24 @@ namespace GW2EIParser.Controllers
         {
             if (Properties.Settings.Default.WebhookURL != null && Properties.Settings.Default.WebhookURL.Length > 0)
             {
+                if (!uploadresult[0].Contains("https"))
+                {
+                    log.UpdateProgressWithCancellationCheck("Nothing to send to Webhook");
+                    return;
+                }
                 try
                 {
                     var client = new DiscordWebhookClient(Properties.Settings.Default.WebhookURL);
                     try
                     {
-                        _ = client.SendMessageAsync(embeds: new[] { GetEmbed(log, uploadresult) }).Result;
+                        if (Properties.Settings.Default.SendSimpleMessageToWebhook)
+                        {
+                            _ = client.SendMessageAsync(text: uploadresult[0]).Result;
+                        } 
+                        else
+                        {
+                            _ = client.SendMessageAsync(embeds: new[] { GetEmbed(log, uploadresult) }).Result;
+                        }
                         log.UpdateProgressWithCancellationCheck("Sent Embed");
                     }
                     finally

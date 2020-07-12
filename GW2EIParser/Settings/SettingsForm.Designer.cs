@@ -48,10 +48,12 @@
             this.UploadDRRH_check = new System.Windows.Forms.CheckBox();
             this.UploadRaidar_check = new System.Windows.Forms.CheckBox();
             this.UploadWebhook_check = new System.Windows.Forms.CheckBox();
+            this.UploadSimpleMessageWebhook_check = new System.Windows.Forms.CheckBox();
             this.UploadtxtWebhookUrl = new System.Windows.Forms.TextBox();
             this.chkOutputJson = new System.Windows.Forms.CheckBox();
             this.chkIndentJSON = new System.Windows.Forms.CheckBox();
             this.settingTooltip = new System.Windows.Forms.ToolTip(this.components);
+            this.groupWebhookSettings = new System.Windows.Forms.GroupBox();
             this.chkMultiLogs = new System.Windows.Forms.CheckBox();
             this.chkAnonymous = new System.Windows.Forms.CheckBox();
             this.chkHtmlExternalScripts = new System.Windows.Forms.CheckBox();
@@ -83,7 +85,6 @@
             this.groupRawSettings = new System.Windows.Forms.GroupBox();
             this.chkCompressRaw = new System.Windows.Forms.CheckBox();
             this.tabUpload = new System.Windows.Forms.TabPage();
-            this.groupWebhookSettings = new System.Windows.Forms.GroupBox();
             this.tabAPI = new System.Windows.Forms.TabPage();
             this.resetSkillLabel = new System.Windows.Forms.Label();
             this.resetTraitLabel = new System.Windows.Forms.Label();
@@ -91,6 +92,7 @@
             this.cmdClose = new System.Windows.Forms.Button();
             this.dumpButton = new System.Windows.Forms.Button();
             this.loadButton = new System.Windows.Forms.Button();
+            this.groupWebhookSettings.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.tabGeneral.SuspendLayout();
             this.boxParsing.SuspendLayout();
@@ -106,7 +108,6 @@
             this.panelJson.SuspendLayout();
             this.groupRawSettings.SuspendLayout();
             this.tabUpload.SuspendLayout();
-            this.groupWebhookSettings.SuspendLayout();
             this.tabAPI.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -289,14 +290,24 @@
             // UploadWebhook_check
             // 
             this.UploadWebhook_check.AutoSize = true;
-            this.UploadWebhook_check.Location = new System.Drawing.Point(12, 19);
+            this.UploadWebhook_check.Location = new System.Drawing.Point(12, 20);
             this.UploadWebhook_check.Name = "UploadWebhook_check";
             this.UploadWebhook_check.Size = new System.Drawing.Size(185, 17);
             this.UploadWebhook_check.TabIndex = 45;
             this.UploadWebhook_check.Text = "Send Embed to Discord webhook";
-            this.settingTooltip.SetToolTip(this.UploadWebhook_check, "Disabled with Multiple Parse Logs and when npt uploading to dps.reports");
             this.UploadWebhook_check.UseVisualStyleBackColor = true;
             this.UploadWebhook_check.CheckedChanged += new System.EventHandler(this.UploadWebhook_check_CheckedChanged);
+            // 
+            // UploadSimpleMessageWebhook_check
+            // 
+            this.UploadSimpleMessageWebhook_check.AutoSize = true;
+            this.UploadSimpleMessageWebhook_check.Location = new System.Drawing.Point(12, 68);
+            this.UploadSimpleMessageWebhook_check.Name = "UploadSimpleUploadSimpleMessageWebhook_checkWebhook_check";
+            this.UploadSimpleMessageWebhook_check.Size = new System.Drawing.Size(92, 17);
+            this.UploadSimpleMessageWebhook_check.TabIndex = 45;
+            this.UploadSimpleMessageWebhook_check.Text = "Send link only";
+            this.UploadSimpleMessageWebhook_check.UseVisualStyleBackColor = true;
+            this.UploadSimpleMessageWebhook_check.CheckedChanged += new System.EventHandler(this.UploadSimpleMessageWebhook_check_CheckedChanged);
             // 
             // UploadtxtWebhookUrl
             // 
@@ -332,6 +343,19 @@
             // settingTooltip
             // 
             this.settingTooltip.ToolTipTitle = "Setting description";
+            // 
+            // groupWebhookSettings
+            // 
+            this.groupWebhookSettings.Controls.Add(this.UploadtxtWebhookUrl);
+            this.groupWebhookSettings.Controls.Add(this.UploadWebhook_check);
+            this.groupWebhookSettings.Controls.Add(this.UploadSimpleMessageWebhook_check);
+            this.groupWebhookSettings.Location = new System.Drawing.Point(17, 87);
+            this.groupWebhookSettings.Name = "groupWebhookSettings";
+            this.groupWebhookSettings.Size = new System.Drawing.Size(404, 92);
+            this.groupWebhookSettings.TabIndex = 45;
+            this.groupWebhookSettings.TabStop = false;
+            this.groupWebhookSettings.Text = "Webhook Settings";
+            this.settingTooltip.SetToolTip(this.groupWebhookSettings, "Disabled with Multiple Parse Logs and when not uploading to dps.reports");
             // 
             // chkMultiLogs
             // 
@@ -697,17 +721,6 @@
             this.tabUpload.Text = "Upload";
             this.tabUpload.UseVisualStyleBackColor = true;
             // 
-            // groupWebhookSettings
-            // 
-            this.groupWebhookSettings.Controls.Add(this.UploadtxtWebhookUrl);
-            this.groupWebhookSettings.Controls.Add(this.UploadWebhook_check);
-            this.groupWebhookSettings.Location = new System.Drawing.Point(17, 87);
-            this.groupWebhookSettings.Name = "groupWebhookSettings";
-            this.groupWebhookSettings.Size = new System.Drawing.Size(404, 92);
-            this.groupWebhookSettings.TabIndex = 45;
-            this.groupWebhookSettings.TabStop = false;
-            this.groupWebhookSettings.Text = "Webhook Settings";
-            // 
             // tabAPI
             // 
             this.tabAPI.Controls.Add(this.resetSkillLabel);
@@ -801,6 +814,8 @@
             this.Text = "Parse settings";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SettingsFormFormClosing);
             this.VisibleChanged += new System.EventHandler(this.SettingsFormLoad);
+            this.groupWebhookSettings.ResumeLayout(false);
+            this.groupWebhookSettings.PerformLayout();
             this.tabControl.ResumeLayout(false);
             this.tabGeneral.ResumeLayout(false);
             this.boxParsing.ResumeLayout(false);
@@ -828,8 +843,6 @@
             this.groupRawSettings.PerformLayout();
             this.tabUpload.ResumeLayout(false);
             this.tabUpload.PerformLayout();
-            this.groupWebhookSettings.ResumeLayout(false);
-            this.groupWebhookSettings.PerformLayout();
             this.tabAPI.ResumeLayout(false);
             this.tabAPI.PerformLayout();
             this.ResumeLayout(false);
@@ -857,6 +870,7 @@
         private System.Windows.Forms.CheckBox UploadRaidar_check;
         private System.Windows.Forms.GroupBox groupWebhookSettings;
         private System.Windows.Forms.CheckBox UploadWebhook_check;
+        private System.Windows.Forms.CheckBox UploadSimpleMessageWebhook_check;
         private System.Windows.Forms.TextBox UploadtxtWebhookUrl;
         private System.Windows.Forms.CheckBox chkOutputJson;
         private System.Windows.Forms.CheckBox chkIndentJSON;

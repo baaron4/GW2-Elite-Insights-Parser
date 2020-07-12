@@ -72,6 +72,7 @@ namespace GW2EIParser.Setting
             UploadDRRH_check.Checked = Properties.Settings.Default.UploadToDPSReportsRH;
             UploadRaidar_check.Checked = Properties.Settings.Default.UploadToRaidar;
             UploadWebhook_check.Checked = Properties.Settings.Default.SendEmbedToWebhook;
+            UploadSimpleMessageWebhook_check.Checked = Properties.Settings.Default.SendSimpleMessageToWebhook;
             UploadtxtWebhookUrl.Text = Properties.Settings.Default.WebhookURL;
             chkB_SkipFailedTries.Checked = Properties.Settings.Default.SkipFailedTries;
             chkAutoAdd.Checked = Properties.Settings.Default.AutoAdd;
@@ -184,7 +185,11 @@ namespace GW2EIParser.Setting
         private void UploadWebhook_check_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SendEmbedToWebhook = UploadWebhook_check.Checked;
-            SetUIEnable();
+        }
+
+        private void UploadSimpleMessageWebhook_check_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.SendSimpleMessageToWebhook = UploadSimpleMessageWebhook_check.Checked;
         }
 
         private void UploadDRRH_check_CheckedChanged(object sender, EventArgs e)
