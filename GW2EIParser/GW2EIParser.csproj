@@ -2,8 +2,8 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <AssemblyName>GuildWars2EliteInsights</AssemblyName>
-    <!--<TargetFramework>net472</TargetFramework>-->
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
+    <!--<TargetFramework>netcoreapp3.1</TargetFramework>-->
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <Install>true</Install>
