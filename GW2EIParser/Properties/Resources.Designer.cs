@@ -569,8 +569,8 @@ namespace GW2EIParser.Properties {
         ///                &lt;th&gt;Sub&lt;/th&gt;
         ///                &lt;th&gt;&lt;/th&gt;
         ///                &lt;th&gt;Name&lt;/th&gt;
-        ///                &lt;th v-for=&quot;buff in buffs&quot; :data-original-title=&quot;buff.name&quot;&gt;
-        ///                    &lt;img :src=&quot;buff.icon&quot; :alt=&quot;buff.name&quot; c [rest of string was truncated]&quot;;.
+        ///                &lt;th v-for=&quot;buff in buffs&quot; :data-original-title=&quot;buff.name + (buff.description ? &apos;&lt;br&gt; &apos; + buff.description : &apos;&apos;)&quot;&gt;
+        ///      [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplBuffTable {
             get {
@@ -579,15 +579,14 @@ namespace GW2EIParser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-column justify-content-end&quot; :style=&quot;{&apos;height&apos;: enemy ? &apos;80px&apos; : &apos;100px&apos;}&quot;&gt;
-        ///    &lt;div v-if=&quot;data.enemies.length &gt; 0&quot; class=&quot;d-flex&quot;&gt;
-        ///        &lt;div v-for=&quot;enemy in data.enemies&quot; class=&quot;boon-container&quot;&gt;
-        ///            &lt;img :src=&quot;enemy.buff.icon&quot; :title=&quot;enemy.buff.name&quot; :alt=&quot;enemy.buff.name&quot; class=&quot;icon-s&quot; /&gt;
-        ///            &lt;div v-if=&quot;enemy.state &gt; 1&quot; class=&quot;boon-number&quot;&gt;{{enemy.state}}&lt;/div&gt;
+        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex flex-column justify-content-end&quot; :style=&quot;{&apos;height&apos;: enemy ? &apos;80px&apos; : &apos;105px&apos;}&quot;&gt;
+        ///    &lt;div v-if=&quot;data.fightSpecifics.length &gt; 0&quot; class=&quot;d-flex&quot;&gt;
+        ///        &lt;div v-for=&quot;fightSpecific in data.fightSpecifics&quot; class=&quot;boon-container&quot;&gt;
+        ///            &lt;img :src=&quot;fightSpecific.buff.icon&quot; :title=&quot;fightSpecific.buff.name&quot; :alt=&quot;fightSpecific.buff.name&quot; class=&quot;icon-s&quot; /&gt;
+        ///            &lt;div v-if=&quot;fightSpecific.state &gt; 1&quot; class=&quot;boon-number&quot;&gt;{{fightSpecific.state}}&lt;/div&gt;
         ///        &lt;/div&gt;
         ///    &lt;/div&gt;
-        ///    &lt;div v-if=&quot;data.others.length &gt; 0&quot; class=&quot;d-flex&quot;&gt;
-        ///        &lt;div  [rest of string was truncated]&quot;;.
+        ///    &lt;di [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayActorBuffStats {
             get {
@@ -719,11 +718,14 @@ namespace GW2EIParser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div class=&quot;player-status&quot; :class=&quot;{dead: status === 0, down: status === 1, dc: status === 2}&quot;&gt;
+        ///   Looks up a localized string similar to &lt;div class=&quot;player-status&quot; :style=&quot;{&apos;background&apos;: getGradient(time, status)}&quot;&gt;
         ///    &lt;h6 class=&quot;actor-shorten text-center&quot; :title=&quot;player.name&quot;&gt;
         ///        &lt;img :src=&quot;player.icon&quot; :alt=&quot;player.profession&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;
         ///        {{player.name}}
         ///    &lt;/h6&gt;
+        ///    &lt;p v-if=&quot;hasHealth&quot; class=&quot;text-right cr-hp-display cr-hp-display-player&quot;&gt;
+        ///        {{(Math.round(100*getPercent(time))/100).toFixed(2)}} %
+        ///    &lt;/p&gt;
         ///&lt;/div&gt;.
         /// </summary>
         internal static string tmplCombatReplayPlayerStatus {
@@ -798,7 +800,7 @@ namespace GW2EIParser.Properties {
         ///        &lt;img :src=&quot;target.icon&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;
         ///        {{target.name}}
         ///    &lt;/h6&gt;
-        ///    &lt;p class=&quot;text-right cr-hp-display&quot;&gt;
+        ///    &lt;p class=&quot;text-right cr-hp-display cr-hp-display-target&quot;&gt;
         ///        {{(Math.round(100*getPercent(time))/100).toFixed(2)}} %
         ///    &lt;/p&gt;
         ///&lt;/div&gt;.
@@ -1036,10 +1038,9 @@ namespace GW2EIParser.Properties {
         ///    &lt;h3 class=&quot;card-header text-center&quot;&gt;{{ encounter.name }}&lt;/h3&gt;
         ///    &lt;div class=&quot;card-body container&quot;&gt;
         ///        &lt;div class=&quot;d-flex flex-row justify-content-center align-items-center&quot;&gt;
-        ///            &lt;img class=&quot;mr-3 icon-xl&quot; :src=&quot;encounter.icon&quot; :alt=&quot;encounter.name&quot;&gt;
-        ///            &lt;div class=&quot;ml-3 d-flex flex-column justify-content-center&quot;&gt;
-        ///                &lt;div class=&quot;mb-2&quot; v-for=&quot;target in encounter.targets&quot;&gt;
-        ///                    &lt;div v-if=&quot;encounter.targets.length &gt; 1&quot; class=&quot;small&quot; style=&quot;text-a [rest of string was truncated]&quot;;.
+        ///            &lt;div class=&quot;d-flex flex-column mr-3 justify-content-center&quot;&gt;
+        ///                &lt;div v-if=&quot;fractalInstabilities&quot; class=&quot;d-flex flex-row justify-content-center&quot;&gt;
+        ///                    &lt;img v-for=&quot;fractalInstability in fractalInstabilities&quot; :data-original-title=&quot;fractalInstability.name + (fractalInstability.de [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplEncounter {
             get {
@@ -1053,16 +1054,14 @@ namespace GW2EIParser.Properties {
         ///        Started with:
         ///        &lt;ul&gt;
         ///            &lt;li v-for=&quot;initial in data.start&quot;&gt;
-        ///                {{initial.name}} &lt;img class=&quot;icon&quot; :alt=&quot;initial.name&quot; :src=&quot;initial.icon&quot;&gt;
+        ///                {{initial.name}} &lt;img class=&quot;icon&quot; :alt=&quot;initial.name&quot; :data-original-title=&quot;initial.description&quot; :src=&quot;initial.icon&quot;&gt;
         ///                {{initial.stack &gt; 1 ? &quot;(&quot;+initial.stack+&quot;)&quot; : &quot;&quot;}} ({{initial.duration}}
         ///                seconds remaining)
         ///            &lt;/li&gt;
         ///        &lt;/ul&gt;
         ///    &lt;/div&gt;
         ///    &lt;div v-if=&quot;data.refreshed.length&quot;&gt;
-        ///        In phase consumable updates:
-        ///        &lt;ul&gt;
-        ///            &lt;l [rest of string was truncated]&quot;;.
+        ///        In phase consum [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplFood {
             get {
@@ -1194,7 +1193,7 @@ namespace GW2EIParser.Properties {
         ///            &lt;tr v-for=&quot;group in groups&quot;&gt;
         ///                &lt;td v-for=&quot;player in group&quot; class=&quot;player-cell&quot; :class=&quot;{active: player.id === playerindex}&quot; @click=&quot;select(player.id)&quot;&gt;
         ///                    &lt;div&gt;
-        ///                        &lt;img :src=&quot;player.icon&quot; :alt=&quot;player.profession&quot; class=&quot;icon&quot; :data-original-title=&quot;player.p [rest of string was truncated]&quot;;.
+        ///                        &lt;img v-if=&quot;player.isCommander&quot; src=&quot;https://wiki.guildwars2.com/images/5/54/Commander_tag_%2 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayers {
             get {
@@ -1257,11 +1256,15 @@ namespace GW2EIParser.Properties {
         ///   Looks up a localized string similar to &lt;div class=&quot;card&quot;&gt;
         ///    &lt;div class=&quot;card-body container&quot;&gt;
         ///        &lt;p&gt;&lt;u&gt;Fill&lt;/u&gt;&lt;/p&gt;
-        ///        &lt;span style=&quot;padding: 2px; background-color:#0000FF; border-style:solid; border-width: 1px; border-color:#000000; color:#FFFFFF&quot;&gt;Hit
-        ///            without aftercast&lt;/span&gt;
-        ///        &lt;span style=&quot;padding: 2px; background-color:#00FF00; border-style:solid; border-width: 1px; border-color:#000000; color:#000000&quot;&gt;Hit
-        ///            with full aftercast&lt;/span&gt;
-        ///        &lt;span style=&quot;padding: 2px; background-color:#FF0000; bo [rest of string was truncated]&quot;;.
+        ///        &lt;span style=&quot;padding: 2px; background-color:#0000FF; border-style:solid; border-width: 1px; border-color:#000000; color:#FFFFFF&quot;&gt;
+        ///            Hit
+        ///            without aftercast
+        ///        &lt;/span&gt;
+        ///        &lt;span style=&quot;padding: 2px; background-color:#00FF00; border-style:solid; border-width: 1px; border-color:#000000; color:#000000&quot;&gt;
+        ///            Hit
+        ///            with full aftercast
+        ///        &lt;/span&gt;
+        ///        &lt;span s [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplRotationLegend {
             get {
@@ -1272,16 +1275,14 @@ namespace GW2EIParser.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;div&gt;
         ///    &lt;div class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;
-        ///        &lt;ul class=&quot;nav nav-pills&quot;&gt;
+        ///        &lt;ul class=&quot;nav nav-pills mr-2&quot;&gt;
         ///            &lt;li class=&quot;nav-item&quot;&gt;
         ///                &lt;a class=&quot;nav-link&quot; @click=&quot;autoattack = !autoattack&quot; :class=&quot;{active: autoattack}&quot;&gt;Show auto attacks&lt;/a&gt;
         ///            &lt;/li&gt;
         ///            &lt;li class=&quot;nav-item&quot;&gt;
-        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;small = !small&quot; :class=&quot;{active: small}&quot;&gt;Small icons&lt;/a&gt;
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;hideInterruptedAA = !hideInterruptedAA&quot; :class=&quot;{active: hideInterruptedAA}&quot;&gt;Hide interrupted auto attacks&lt;/a&gt;
         ///            &lt;/li&gt;
-        ///        &lt;/ul&gt;
-        ///    &lt;/div&gt;
-        ///    &lt;span class=&quot;rot-skill&quot; v-for=&quot;rota i [rest of string was truncated]&quot;;.
+        ///        &lt; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplSimpleRotation {
             get {

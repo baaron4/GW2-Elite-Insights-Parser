@@ -480,7 +480,6 @@ namespace GW2EIParser.Parser
             TemporalAnomaly2 = 17720,
             Archdiviner = 17893,
             Fanatic = 11282,
-            SolarBloom2 = 17732,
             BrazenGladiator = 17730,
             BLIGHT = 16437,
             PLINK = 16325,

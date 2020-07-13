@@ -54,7 +54,7 @@ namespace GW2EIParser.Logic
                             (19072, 15484, 20992, 16508));
         }
 
-        private void ComputeFightPhases(List<PhaseData> phases, List<AbstractCastEvent> castLogs, long fightDuration, long start)
+        private static void ComputeFightPhases(List<PhaseData> phases, List<AbstractCastEvent> castLogs, long fightDuration, long start)
         {
             AbstractCastEvent shield = castLogs.Find(x => x.SkillId == 47396);
             // Dhuum brought down to 10%
@@ -71,7 +71,7 @@ namespace GW2EIParser.Logic
             }
         }
 
-        private List<PhaseData> GetInBetweenSoulSplits(ParsedLog log, NPC dhuum, long mainStart, long mainEnd, bool hasRitual)
+        private static List<PhaseData> GetInBetweenSoulSplits(ParsedLog log, NPC dhuum, long mainStart, long mainEnd, bool hasRitual)
         {
             List<AbstractCastEvent> cls = dhuum.GetCastLogs(log, 0, log.FightData.FightEnd);
             var cataCycle = cls.Where(x => x.SkillId == 48398).ToList();

@@ -205,7 +205,7 @@ namespace GW2EIParser.Logic
             }
         }
 
-        private List<long> GetTargetableTimes(ParsedLog log, NPC target)
+        private static List<long> GetTargetableTimes(ParsedLog log, NPC target)
         {
             var attackTargetsAgents = log.CombatData.GetAttackTargetEvents(target.AgentItem).Take(2).ToList(); // 3rd one is weird
             var attackTargets = new List<AgentItem>();

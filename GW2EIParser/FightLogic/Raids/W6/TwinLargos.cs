@@ -63,7 +63,7 @@ namespace GW2EIParser.Logic
             return new List<AbstractDamageEvent>();
         }
 
-        private List<PhaseData> GetTargetPhases(ParsedLog log, NPC target, string baseName)
+        private static List<PhaseData> GetTargetPhases(ParsedLog log, NPC target, string baseName)
         {
             long start = 0;
             long end = 0;
@@ -113,7 +113,7 @@ namespace GW2EIParser.Logic
             };
         }
 
-        private void FallBackPhases(NPC target, List<PhaseData> phases, ParsedLog log, bool firstPhaseAt0)
+        private static void FallBackPhases(NPC target, List<PhaseData> phases, ParsedLog log, bool firstPhaseAt0)
         {
             HashSet<AgentItem> pAgents = log.PlayerAgents;
             // clean Nikare related bugs

@@ -72,7 +72,7 @@ namespace GW2EIParser.Logic
             };
         }
 
-        private void MergeWithGadgets(AgentItem target, HashSet<ulong> gadgetAgents, AgentData agentData, List<CombatItem> combatData)
+        private static void MergeWithGadgets(AgentItem target, HashSet<ulong> gadgetAgents, AgentData agentData, List<CombatItem> combatData)
         {
             var allAgents = new HashSet<ulong>(gadgetAgents)
             {
@@ -179,7 +179,7 @@ namespace GW2EIParser.Logic
             }
         }
 
-        private long AttackTargetSpecialParse(CombatItem targetable, AgentData agentData, List<CombatItem> combatData, HashSet<ulong> gadgetAgents)
+        private static long AttackTargetSpecialParse(CombatItem targetable, AgentData agentData, List<CombatItem> combatData, HashSet<ulong> gadgetAgents)
         {
             if (targetable == null)
             {

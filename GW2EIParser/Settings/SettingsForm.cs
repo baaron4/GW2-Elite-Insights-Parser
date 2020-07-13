@@ -27,6 +27,22 @@ namespace GW2EIParser.Setting
             }
         }
 
+        public void ConditionalSettingDisable(bool busy)
+        {
+            chkMultiThreaded.Enabled = !busy;
+            chkMultiLogs.Enabled = !busy;
+        }
+
+        private void SetUIEnable()
+        {
+            panelHtml.Enabled = Properties.Settings.Default.SaveOutHTML;
+            panelJson.Enabled = Properties.Settings.Default.SaveOutJSON;
+            panelXML.Enabled = Properties.Settings.Default.SaveOutXML;
+            groupRawSettings.Enabled = Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML;
+
+            groupWebhookSettings.Enabled = Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.ParseMultipleLogs;
+        }
+
         private void SetValues()
         {
 
@@ -47,6 +63,9 @@ namespace GW2EIParser.Setting
             UploadDPSReports_checkbox.Checked = Properties.Settings.Default.UploadToDPSReports;
             UploadDRRH_check.Checked = Properties.Settings.Default.UploadToDPSReportsRH;
             UploadRaidar_check.Checked = Properties.Settings.Default.UploadToRaidar;
+            UploadWebhook_check.Checked = Properties.Settings.Default.SendEmbedToWebhook;
+            UploadSimpleMessageWebhook_check.Checked = Properties.Settings.Default.SendSimpleMessageToWebhook;
+            UploadtxtWebhookUrl.Text = Properties.Settings.Default.WebhookURL;
             chkB_SkipFailedTries.Checked = Properties.Settings.Default.SkipFailedTries;
             chkAutoAdd.Checked = Properties.Settings.Default.AutoAdd;
             chkAutoParse.Checked = Properties.Settings.Default.AutoParse;
@@ -61,16 +80,12 @@ namespace GW2EIParser.Setting
 
             chkHtmlExternalScripts.Checked = Properties.Settings.Default.HtmlExternalScripts;
 
-            panelHtml.Enabled = Properties.Settings.Default.SaveOutHTML;
-            panelJson.Enabled = Properties.Settings.Default.SaveOutJSON;
-            panelXML.Enabled = Properties.Settings.Default.SaveOutXML;
-            groupRawSettings.Enabled = Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML;
+            SetUIEnable();
         }
 
         private void SettingsFormLoad(object sender, EventArgs e)
         {
             SetValues();
-            settingTooltip.SetToolTip(chkHtmlExternalScripts, "Writes static css and js scripts in own files, which are shared between all logs. Log file size decreases, but the script files have to be kept along with the html.");
         }
 
         private void DefaultOutputLocationCheckedChanged(object sender, EventArgs e)
@@ -86,18 +101,19 @@ namespace GW2EIParser.Setting
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
                 {
-                    //string[] files = Directory.GetFiles(fbd.SelectedPath);
-
-                    // System.Windows.Forms.MessageBox.Show("Files found: " + files.Length.ToString(), "Message");
                     txtCustomSaveLoc.Text = fbd.SelectedPath;
-                    Properties.Settings.Default.OutLocation = fbd.SelectedPath;
                 }
             }
         }
 
         private void CustomSaveLocationTextChanged(object sender, EventArgs e)
         {
+            Properties.Settings.Default.OutLocation = txtCustomSaveLoc.Text;
+        }
 
+        private void WebhookURLChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.WebhookURL = UploadtxtWebhookUrl.Text;
         }
 
         private void ResetSkillListClick(object sender, EventArgs e)
@@ -150,11 +166,22 @@ namespace GW2EIParser.Setting
         private void UploadDPSReports_checkbox_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.UploadToDPSReports = UploadDPSReports_checkbox.Checked;
+            SetUIEnable();
         }
 
         private void UploadRaidar_check_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.UploadToRaidar = UploadRaidar_check.Checked;
+        }
+
+        private void UploadWebhook_check_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.SendEmbedToWebhook = UploadWebhook_check.Checked;
+        }
+
+        private void UploadSimpleMessageWebhook_check_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.SendSimpleMessageToWebhook = UploadSimpleMessageWebhook_check.Checked;
         }
 
         private void UploadDRRH_check_CheckedChanged(object sender, EventArgs e)
@@ -169,15 +196,13 @@ namespace GW2EIParser.Setting
         private void OutputJSONCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SaveOutJSON = chkOutputJson.Checked;
-            panelJson.Enabled = Properties.Settings.Default.SaveOutJSON;
-            groupRawSettings.Enabled = Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML;
+            SetUIEnable();
         }
 
         private void OutputXMLCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SaveOutXML = chkOutputXml.Checked;
-            panelXML.Enabled = Properties.Settings.Default.SaveOutXML;
-            groupRawSettings.Enabled = Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML;
+            SetUIEnable();
         }
 
         private void ChkIndentJSONCheckedChanged(object sender, EventArgs e)
@@ -323,6 +348,7 @@ namespace GW2EIParser.Setting
         private void ChkMultiLogs_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ParseMultipleLogs = chkMultiLogs.Checked;
+            SetUIEnable();
         }
 
         private void ChkRawTimelineArrays_CheckedChanged(object sender, EventArgs e)

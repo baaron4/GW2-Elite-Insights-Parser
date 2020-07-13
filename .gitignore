@@ -263,6 +263,9 @@ __pycache__/
 # VS Code
 .vscode
 
+#Output
+/GW2EI.bin
+
 # Stability test logs
 /GW2EIParser.tst/EvtcLogs/StabilityTest/**/*.evtc
 /GW2EIParser.tst/EvtcLogs/StabilityTest/**/*.zevtc

@@ -66,7 +66,7 @@ namespace GW2EIParser.Logic
                 TemporalAnomaly2,
                 BLIGHT,
                 Fanatic,
-                SolarBloom2,
+                SolarBloom,
                 PLINK,
                 DOC,
                 CHOP,

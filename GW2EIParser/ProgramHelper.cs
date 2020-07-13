@@ -84,9 +84,9 @@ namespace GW2EIParser
             System.Globalization.CultureInfo before = Thread.CurrentThread.CurrentCulture;
             Thread.CurrentThread.CurrentCulture =
                     new System.Globalization.CultureInfo("en-US");
-            var fInfo = new FileInfo(operation.Location);
             try
             {
+                var fInfo = new FileInfo(operation.Location);
                 if (!fInfo.Exists)
                 {
                     throw new FileNotFoundException("File " + fInfo.FullName + " does not exist");
@@ -150,10 +150,17 @@ namespace GW2EIParser
             {
                 //Default save directory
                 saveDirectory = fInfo.Directory;
+                if (!saveDirectory.Exists)
+                {
+                    throw new InvalidOperationException("Save directory does not exist");
+                }
             }
             else
             {
-                //Customised save directory
+                if(!Directory.Exists(Properties.Settings.Default.OutLocation))
+                {
+                    throw new InvalidOperationException("Save directory does not exist");
+                }
                 saveDirectory = new DirectoryInfo(Properties.Settings.Default.OutLocation);
             }
             return saveDirectory;
@@ -172,11 +179,6 @@ namespace GW2EIParser
                 }
 
                 DirectoryInfo saveDirectory = GetSaveDirectory(fInfo);
-
-                if (saveDirectory == null)
-                {
-                    return;
-                }
 
                 string outputFile = Path.Combine(
                 saveDirectory.FullName,
@@ -197,11 +199,6 @@ namespace GW2EIParser
             operation.UpdateProgressWithCancellationCheck("Creating File(s)");
 
             DirectoryInfo saveDirectory = GetSaveDirectory(fInfo);
-
-            if (saveDirectory == null)
-            {
-                throw new InvalidDataException("Save Directory not found");
-            }
 
             string result = log.FightData.Success ? "kill" : "fail";
             string encounterLengthTerm = Properties.Settings.Default.AddDuration ? "_" + (log.FightData.FightEnd / 1000).ToString() + "s" : "";
@@ -340,6 +337,11 @@ namespace GW2EIParser
                     }
                     operation.UpdateProgressWithCancellationCheck("XML created");
                 }
+            }
+
+            if (Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.ParseMultipleLogs)
+            {
+                WebhookController.SendMessage(log, uploadresult);
             }
             operation.UpdateProgress($"Completed parsing for {result}ed {log.FightData.Logic.Extension}");
         }
