@@ -29,16 +29,8 @@ namespace GW2EIParser.Setting
 
         public void ConditionalSettingDisable(bool busy)
         {
-            if (busy)
-            {
-                chkMultiThreaded.Enabled = false;
-                chkMultiLogs.Enabled = false;
-            }
-            else
-            {
-                chkMultiThreaded.Enabled = true;
-                chkMultiLogs.Enabled = true;
-            }
+            chkMultiThreaded.Enabled = !busy;
+            chkMultiLogs.Enabled = !busy;
         }
 
         private void SetUIEnable()
