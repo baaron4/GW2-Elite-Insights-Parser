@@ -518,7 +518,7 @@ namespace GW2EIParser.Parser
                     playerAgent.OverrideAwareTimes(_logStartTime, _logEndTime);
                 }
                 bool skip = false;
-                var player = new Player(playerAgent, _fightData.Logic.Mode == FightLogic.ParseMode.Instanced5 || _fightData.Logic.Mode == FightLogic.ParseMode.Unknown || _fightData.Logic.Mode == FightLogic.ParseMode.sPvP, false);
+                var player = new Player(playerAgent, _fightData.Logic.Mode == FightLogic.ParseMode.Instanced5 || _fightData.Logic.Mode == FightLogic.ParseMode.sPvP, false);
                 foreach (Player p in _playerList)
                 {
                     if (p.Account == player.Account)// same player
@@ -563,6 +563,10 @@ namespace GW2EIParser.Parser
                 }
             }
             _playerList = _playerList.OrderBy(a => a.Group).ToList();
+            if (_playerList.Exists(x => x.Group == 0))
+            {
+                _playerList.ForEach(x => x.MakeSquadless());
+            }
             if (refresh)
             {
                 _agentData.Refresh();
