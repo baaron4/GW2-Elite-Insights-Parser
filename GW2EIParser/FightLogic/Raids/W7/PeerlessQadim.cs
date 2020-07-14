@@ -106,7 +106,7 @@ namespace GW2EIParser.Logic
             if (pushes.Count > 0)
             {
                 AbstractCastEvent push = pushes[0];
-                phaseStarts.Add(push.Time + push.ActualDuration);
+                phaseStarts.Add(push.EndTime);
                 foreach (long magmaDrop in phaseEnds)
                 {
                     push = pushes.FirstOrDefault(x => x.Time >= magmaDrop);
@@ -114,14 +114,14 @@ namespace GW2EIParser.Logic
                     {
                         break;
                     }
-                    phaseStarts.Add(push.Time + push.ActualDuration);
+                    phaseStarts.Add(push.EndTime);
                 }
             }
             // rush to pylon
             phaseEnds.AddRange(log.CombatData.GetCastData(56616).Select(x => x.Time).ToList());
             phaseEnds.Add(log.FightData.FightEnd);
             // tp to middle after pylon destruction
-            phaseStarts.AddRange(log.CombatData.GetCastData(56375).Select(x => x.Time + x.ActualDuration));
+            phaseStarts.AddRange(log.CombatData.GetCastData(56375).Select(x => x.EndTime));
             if (phaseEnds.Count < phaseStarts.Count)
             {
                 return phases;
@@ -158,7 +158,7 @@ namespace GW2EIParser.Logic
                     {
                         int magmaRadius = 850;
                         start = (int)c.Time;
-                        end = start + c.ActualDuration;
+                        end = (int)c.EndTime;
                         Point3D pylonPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= end);
                         replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, (start, end), "rgba(255, 220, 50, 0.15)", new PositionConnector(pylonPosition)));
                         replay.Decorations.Add(new CircleDecoration(true, end, magmaRadius, (start, end), "rgba(255, 220, 50, 0.25)", new PositionConnector(pylonPosition)));

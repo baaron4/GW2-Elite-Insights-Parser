@@ -104,7 +104,7 @@ namespace GW2EIParser.Logic
             {
                 var phase = new PhaseData(start, Math.Min(c.Time, fightDuration), "Pre-Breakbar " + i++);
                 phase.Targets.Add(mainTarget);
-                start = c.Time + c.ActualDuration;
+                start = c.EndTime;
                 phases.Add(phase);
             }
             if (fightDuration - start > 3000)
@@ -128,7 +128,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in howling)
                     {
                         start = (int)c.Time;
-                        end = start + c.ActualDuration;
+                        end = (int)c.EndTime;
                         replay.Decorations.Add(new CircleDecoration(true, start + c.ExpectedDuration, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
@@ -150,7 +150,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in deathBloom)
                     {
                         start = (int)c.Time;
-                        end = start + c.ActualDuration;
+                        end = (int)c.EndTime;
                         Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
                         if (facing == null)
                         {
@@ -167,7 +167,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in quad1)
                     {
                         start = (int)c.Time;
-                        end = start + c.ActualDuration;
+                        end = (int)c.EndTime;
                         Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
                         if (facing == null)
                         {
@@ -182,7 +182,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in quad2)
                     {
                         start = (int)c.Time;
-                        end = start + c.ActualDuration;
+                        end = (int)c.EndTime;
                         Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
                         if (facing == null)
                         {

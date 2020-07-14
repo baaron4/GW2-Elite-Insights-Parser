@@ -243,7 +243,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in towerDrop)
                     {
                         start = (int)c.Time;
-                        end = start + c.ActualDuration;
+                        end = (int)c.EndTime;
                         int skillCast = end - 1000;
                         Point3D next = replay.PolledPositions.FirstOrDefault(x => x.Time >= end);
                         Point3D prev = replay.PolledPositions.LastOrDefault(x => x.Time <= end);

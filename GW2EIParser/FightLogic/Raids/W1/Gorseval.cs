@@ -101,7 +101,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in blooms)
                     {
                         int start = (int)c.Time;
-                        int end = start + c.ActualDuration;
+                        int end = (int)c.EndTime;
                         replay.Decorations.Add(new CircleDecoration(true, c.ExpectedDuration + start, 600, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(false, 0, 600, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
                     }
@@ -120,7 +120,7 @@ namespace GW2EIParser.Logic
                         foreach (AbstractCastEvent c in rampage)
                         {
                             int start = (int)c.Time;
-                            int end = start + c.ActualDuration;
+                            int end = (int)c.EndTime;
                             replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 125, 255, 0.3)", new AgentConnector(target)));
                             // or spawn -> 3 secs -> explosion -> 0.5 secs -> fade -> 0.5  secs-> next
                             int ticks = (int)Math.Min(Math.Ceiling(c.ActualDuration / 4000.0), 6);
@@ -230,7 +230,7 @@ namespace GW2EIParser.Logic
                         int start = (int)c.Time;
                         int impactPoint = 1185;
                         int impactTime = start + impactPoint;
-                        int end = Math.Min(start + c.ActualDuration, impactTime);
+                        int end = Math.Min((int)c.EndTime, impactTime);
                         int radius = 320;
                         replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, radius, (impactTime, impactTime + 100), "rgba(255, 0, 0, 0.4)", new AgentConnector(target)));
