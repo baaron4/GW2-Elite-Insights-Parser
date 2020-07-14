@@ -68,32 +68,32 @@ namespace GW2EIParser.EIData
             return DamageTakenlogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
+        private void InitCastLogs(ParsedLog log)
+        {
+            CastLogs = new List<AbstractCastEvent>();
+            foreach (NPC minion in MinionList)
+            {
+                CastLogs.AddRange(minion.GetCastLogs(log, 0, log.FightData.FightEnd));
+            }
+            CastLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
+        }
+
         public override List<AbstractCastEvent> GetCastLogs(ParsedLog log, long start, long end)
         {
             if (CastLogs == null)
             {
-                CastLogs = new List<AbstractCastEvent>();
-                foreach (NPC minion in MinionList)
-                {
-                    CastLogs.AddRange(minion.GetCastLogs(log, 0, log.FightData.FightEnd));
-                }
-                CastLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
+                InitCastLogs(log);
             }
             return CastLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public override List<AbstractCastEvent> GetCastLogsActDur(ParsedLog log, long start, long end)
+        public override List<AbstractCastEvent> GetIntersectingCastLogs(ParsedLog log, long start, long end)
         {
             if (CastLogs == null)
             {
-                CastLogs = new List<AbstractCastEvent>();
-                foreach (NPC minion in MinionList)
-                {
-                    CastLogs.AddRange(minion.GetCastLogs(log, 0, log.FightData.FightEnd));
-                }
-                CastLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
+                InitCastLogs(log);
             }
-            return CastLogs.Where(x => x.Time >= start && x.Time + x.ActualDuration <= end).ToList();
+            return CastLogs.Where(x => KeepIntersectingCastLog(x, start, end)).ToList();
         }
 
         public List<List<Segment>> GetLifeSpanSegments(ParsedLog log)

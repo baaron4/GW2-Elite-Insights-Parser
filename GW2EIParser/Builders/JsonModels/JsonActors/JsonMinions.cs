@@ -105,7 +105,7 @@ namespace GW2EIParser.Builders.JsonModels
                 TotalTargetDamage = totalTargetDamage;
             }
             //
-            var skillByID = minions.GetCastLogs(log, 0, log.FightData.FightEnd).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
+            var skillByID = minions.GetIntersectingCastLogs(log, 0, log.FightData.FightEnd).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             if (skillByID.Any())
             {
                 Rotation = JsonRotation.BuildJsonRotationList(skillByID, skillDesc);

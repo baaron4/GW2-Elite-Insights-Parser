@@ -18,6 +18,8 @@
 
         public int ActualDuration { get; protected set; }
 
+        public long EndTime => Time + ActualDuration;
+
         public double Acceleration { get; protected set; } = 0;
 
         public AbstractCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData) : base(startItem.Time)

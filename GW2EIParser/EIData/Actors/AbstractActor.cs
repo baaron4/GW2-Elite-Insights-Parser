@@ -60,8 +60,15 @@ namespace GW2EIParser.EIData
 
         // Cast logs
         public abstract List<AbstractCastEvent> GetCastLogs(ParsedLog log, long start, long end);
-        public abstract List<AbstractCastEvent> GetCastLogsActDur(ParsedLog log, long start, long end);
+        public abstract List<AbstractCastEvent> GetIntersectingCastLogs(ParsedLog log, long start, long end);
         // privates
+
+        protected static bool KeepIntersectingCastLog(AbstractCastEvent evt, long start, long end)
+        {
+            return (evt.Time >= start && evt.Time <= end) || // start inside
+                (evt.EndTime >= start && evt.EndTime <= end) || // end inside
+                (evt.Time <= start && evt.EndTime >= end); // start before, end after
+        }
 
         protected static void Add<T>(Dictionary<T, long> dictionary, T key, long value)
         {
