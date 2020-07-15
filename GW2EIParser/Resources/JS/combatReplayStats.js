@@ -58,7 +58,19 @@ var compileCombatReplay = function () {
             }
         },
         mounted() {
-            initTable("#combat-replay-dps-table", 2, "desc");
+            var pageScrollPos;
+            var divID = '#combat-replay-dps-table_wrapper > div.dataTables_scroll > div.dataTables_scrollBody';
+            initTable("#combat-replay-dps-table", 2, "desc", null, {
+                "scrollY": "310px",
+                "autoWidth": false,
+                "lengthChange": false,
+                "preDrawCallback": function (settings) {
+                    pageScrollPos = $(divID).scrollTop();
+                },
+                "drawCallback": function (settings) {
+                    $(divID).scrollTop(pageScrollPos);
+                }
+            });
         },
         updated() {
             updateTable("#combat-replay-dps-table");

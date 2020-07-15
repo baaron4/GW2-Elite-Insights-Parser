@@ -597,7 +597,7 @@ function computeBuffData(buffData, data) {
     return 0;
 }
 
-var initTable = function (id, cell, order, orderCallBack) {
+var initTable = function (id, cell, order, orderCallBack, extraData) {
     var table = $(id);
     if (!table.length) {
         return;
@@ -621,11 +621,15 @@ var initTable = function (id, cell, order, orderCallBack) {
         });
         lazyTableObserver.observe(lazyTable);
     } else {*/
-    table.DataTable({
+    var data = {
         order: [
             [cell, order]
         ]
-    });
+    };
+    if (extraData) {
+        Object.assign(data, extraData);
+    }
+    table.DataTable(data);
     if (orderCallBack) {
         table.DataTable().on('order.dt', orderCallBack);
     }
