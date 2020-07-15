@@ -26,12 +26,6 @@
     margin-left: auto;
 }
 
-.ei-header-big {
-    min-width: 1900px;
-    margin-right: auto;
-    margin-left: auto;
-}
-
 .ei-container {
     max-width: 60%;
     min-width: 1000px;
@@ -39,20 +33,18 @@
     margin-left: auto;
 }
 
-.ei-container-big {
-    min-width: 1900px;
-    margin-right: auto;
-    margin-left: auto;
+.buff-display {
+    height: 110px;
 }
 
-.boon-container {
+.buff-container {
     position: relative;
     text-align: center;
     height: 18px;
     margin-right: 0.05em;
 }
 
-.boon-number {
+.buff-number {
     position: absolute;
     pointer-events: none;
     font-size: 0.5em;
@@ -77,7 +69,7 @@
 
 .player-status {
     color: #DDDDDD;
-    width: 100px;
+    width: 130px;
     height: 35px;
 }
 
@@ -117,7 +109,7 @@ h6.actor-shorten {
 }
 
 .squad-details {
-    width: 590px;
+    width: 450px;
 }
 
 .range-btn {
@@ -524,12 +516,18 @@ canvas {
     z-index: 1
 }
 
+.animation-control {
+    transform:translate(0,-55px);
+    z-index:3;
+}
+
 #combat-replay-mechanics-list-container {
     max-height: 650px;
     overflow-y: auto;
 }
 
 .combat-actor-status-container {
+    min-height: 350px;
     max-height: 650px;
     overflow-y: auto;
 }

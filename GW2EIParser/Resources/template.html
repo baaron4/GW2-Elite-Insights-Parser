@@ -58,7 +58,7 @@
         </div>
     </div>
     <div v-cloak id="content">
-        <div class="d-flex flex-row justify-content-center align-items-center mt-2" :class="{'ei-header': !mode, 'ei-header-big': mode}">
+        <div class="d-flex flex-row justify-content-center align-items-center mt-2 ei-header">
             <div v-if="!!errorMessages" class="d-flex flex-column justify-content-center align-items-center">
                 <img v-for="message in errorMessages" class="mb-1 icon" src="https://i.imgur.com/k3tdKEQ.png" :data-original-title="message" />
             </div>
@@ -88,11 +88,13 @@
                 </div>
             </div>
         </div>
-        <keep-alive>
-            <main-view-component v-if="mode === 0" :key="'main-view'" :light="light"></main-view-component>
-            <combat-replay-ui-component v-if="mode === 1" :mode="mode" :key="'combat-replay'" :light="light"></combat-replay-ui-component>
-        </keep-alive>
-        <div class="footer" :class="{'ei-header': !mode, 'ei-header-big': mode}">
+        <div class="ei-container">
+            <keep-alive>
+                <main-view-component v-if="mode === 0" :key="'main-view'" :light="light"></main-view-component>
+                <combat-replay-ui-component v-if="mode === 1" :mode="mode" :key="'combat-replay'" :light="light"></combat-replay-ui-component>
+            </keep-alive>
+        </div>
+        <div class="footer ei-header">
             <div>Time Start: ${encounterStart} | Time End: ${encounterEnd}</div>
             <div>ARC: ${evtcVersion} | GW2 Build: ${gw2build} | Fight ID: ${fightID} | EI Version: ${eiVersion}</div>
             <div class="mb-2">File recorded by: ${recordedBy}</div>
