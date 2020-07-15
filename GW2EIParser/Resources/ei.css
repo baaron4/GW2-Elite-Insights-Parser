@@ -108,6 +108,10 @@
     transform: scale(0.65,0.65) !important;
 }
 
+.player-status-rotation {
+    height: 48px;
+}
+
 .player-status {
     color: #DDDDDD;
     width: 130px;
@@ -559,17 +563,16 @@ canvas {
 }
 
 .animation-control {
-    transform: translate(0,-60px);
+    transform: translate(0,-65px);
     z-index: 3;
 }
 
 combat-replay-mechanics-list-container {
-    max-height: 750px;
+    height: 700px;
 }
 
 .combat-actor-status-container {
-    min-height: 350px;
-    max-height: 750px;
+    height: 700px;
     transform: translate(-42px,0);
 }
 

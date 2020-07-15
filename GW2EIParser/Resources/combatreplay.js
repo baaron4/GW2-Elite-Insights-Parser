@@ -17,7 +17,7 @@ facingIcon.onload = function () {
     animateCanvas(-1);
 };
 
-const resolutionMultiplier = 1.5*window.devicePixelRatio;
+const resolutionMultiplier = window.devicePixelRatio;
 
 var animator = null;
 
@@ -91,6 +91,7 @@ class Animator {
         this.mainCanvas.height *= resolutionMultiplier;
         this.mainContext = this.mainCanvas.getContext('2d');
         this.mainContext.imageSmoothingEnabled = true;
+        this.mainContext.imageSmoothingQuality = 'high';
         // bg canvas
         this.bgCanvas = document.getElementById('bg-canvas');
         this.bgCanvas.style.width = this.bgCanvas.width + "px";
@@ -99,6 +100,7 @@ class Animator {
         this.bgCanvas.height *= resolutionMultiplier;
         this.bgContext = this.bgCanvas.getContext('2d');
         this.bgContext.imageSmoothingEnabled = true;
+        this.bgContext.imageSmoothingQuality = 'high';
         // manipulation
         this.lastX = this.mainCanvas.width / 2;
         this.lastY = this.mainCanvas.height / 2;
