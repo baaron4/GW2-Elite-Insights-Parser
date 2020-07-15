@@ -88,7 +88,7 @@
                 </div>
             </div>
         </div>
-        <div id="main" :key="main" v-show="mode === 0" class="ei-container">
+        <div id="main" :key="'main'" v-show="mode === 0" class="ei-container">
             <div class="d-flex flex-row justify-content-center mt-2" id="phase-nav">
                 <phase-component :phases="logdata.phases"></phase-component>
             </div>
