@@ -17,7 +17,7 @@ facingIcon.onload = function () {
     animateCanvas(-1);
 };
 
-const resolutionMultiplier = window.devicePixelRatio;
+const resolutionMultiplier = 1.5*window.devicePixelRatio;
 
 var animator = null;
 

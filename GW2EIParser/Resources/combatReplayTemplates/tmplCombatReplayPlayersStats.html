@@ -7,7 +7,7 @@
             <a class="nav-link" :class="{active: rotation}" @click="rotation = !rotation">Show Rotation</a>
         </li>
     </ul>
-    <div class="d-flex flex-column combat-actor-status-container">
+    <div class="d-flex flex-column combat-actor-status-container scrollable-y">
         <div v-for="(group,id) in groups" v-if="group" class="d-flex flex-row align-items-center ml-2 mt-2">
             <h5 class="text-center mt-2">Group {{id}}</h5>
             <div class="d-flex flex-row flex-wrap align-items-center ml-1 mr-1" style="width:280px;border: 2px solid #888;">
