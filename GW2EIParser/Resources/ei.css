@@ -524,8 +524,21 @@ canvas {
 }
 
 #combat-replay-mechanics-list-container {
-    max-height: 800px;
+    max-height: 650px;
     overflow-y: scroll;
+}
+
+.theme-yeti #combat-replay-mechanics-list-container > table > thead > tr > th {
+    background-color: #fff !important;
+}
+
+.theme-slate #combat-replay-mechanics-list-container > table > thead > tr > th {
+    background-color: #272B30 !important;
+}
+
+#combat-replay-mechanics-list-container > table > thead > tr > th {
+    position: sticky !important;
+    top: 0 !important;
 }
 
 .combat-replay-mechanics-list-row {
