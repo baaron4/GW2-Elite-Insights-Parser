@@ -567,13 +567,12 @@ canvas {
     z-index: 3;
 }
 
-combat-replay-mechanics-list-container {
+.combat-replay-mechanics-list-container {
     height: 700px;
 }
 
 .combat-actor-status-container {
     height: 700px;
-    transform: translate(-42px,0);
 }
 
 .theme-yeti #combat-replay-mechanics-list-container > table > thead > tr > th {
