@@ -455,7 +455,7 @@ var compileCombatReplay = function () {
     });
 
     Vue.component("combat-replay-player-stats-component", {
-        props: ["playerindex", "time"],
+        props: ["playerindex", "time", "buffs", "rotation"],
         template: `${tmplCombatReplayPlayerStats}`
     });
 
@@ -510,6 +510,12 @@ var compileCombatReplay = function () {
     Vue.component("combat-replay-players-stats-component", {
         props: ["time", "selectedplayer", "selectedplayerid"],
         template: `${tmplCombatReplayPlayersStats}`,
+        data: function () {
+            return {
+                buffs: false,
+                rotation: false
+            };
+        },
         computed: {
             selectedplayerindex: function () {
                 if (this.selectedplayer) {

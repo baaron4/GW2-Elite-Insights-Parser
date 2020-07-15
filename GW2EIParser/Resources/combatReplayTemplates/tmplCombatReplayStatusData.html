@@ -4,7 +4,7 @@
             <a class="nav-link" :class="{active: details}" @click="details = !details">Details Window <img class="mb-1 icon" src="https://i.imgur.com/k3tdKEQ.png" data-original-title="Slight performance hit" /> </a>
         </li>
     </ul>
-    <ul class="nav nav-pills d-flex flex-row justify-content-center mb-1" v-if="details">
+    <ul class="nav nav-pills d-flex flex-row justify-content-center mb-1 scale85" v-if="details">
         <li class="nav-item">
             <a class="nav-link" :class="{active: mode === 0}" @click="mode = 0">Players</a>
         </li>
