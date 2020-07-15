@@ -675,12 +675,12 @@ namespace GW2EIParser.Properties {
         /// <summary>
         ///   Looks up a localized string similar to 
         ///&lt;div class=&quot;d-flex flex-row flex-wrap justify-content-center align-items-start mb-2&quot;&gt;
-        ///    &lt;div class=&quot;d-flex flex-row justify-content-center align-items-center&quot;&gt;
-        ///        &lt;div v-for=&quot;group in groups&quot; class=&quot;d-flex flex-column justify-content-center align-items-center mt-1 ml-2 mr-2&quot;&gt;
-        ///            &lt;h3&gt;Group {{group.id}}&lt;/h3&gt;
-        ///            &lt;label v-for=&quot;player in group.players&quot;
-        ///                   @click=&quot;selectActor(player.combatReplayID);&quot;
-        ///                   class=&quot;btn btn-small ply-btn&quot; :class=&quot;{&apos;active [rest of string was truncated]&quot;;.
+        ///    &lt;div class=&quot;d-flex flex-column&quot;&gt;
+        ///        &lt;div v-for=&quot;group in groups&quot; class=&quot;d-flex flex-row align-items-center mt-2&quot; style=&quot;width:450px;&quot;&gt;
+        ///            &lt;h5 class=&quot;mt-2&quot;&gt;Group {{group.id}}&lt;/h5&gt;
+        ///            &lt;div class=&quot;d-flex flex-row flex-wrap align-items-center ml-1&quot; style=&quot;max-width:370px;&quot;&gt;
+        ///                &lt;span v-for=&quot;player in group.players&quot;
+        ///                       @click=&quot;selectActor(player.combatReplayID); [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayPlayerSelect {
             get {
@@ -812,12 +812,12 @@ namespace GW2EIParser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex mt-2 align-items-center&quot;&gt;
+        ///   Looks up a localized string similar to &lt;div class=&quot;d-flex mt-2 align-items-center ei-container-big&quot;&gt;
         ///    &lt;div class=&quot;d-flex flex-column align-items-center mr-2&quot; style=&quot;margin-left: auto;&quot;&gt;
         ///        &lt;combat-replay-damage-data-component :time=&quot;animationStatus.time&quot;
         ///            :selectedplayer=&quot;animationStatus.selectedPlayer&quot; :selectedplayerid=&quot;animationStatus.selectedPlayerID&quot;&gt;
         ///        &lt;/combat-replay-damage-data-component&gt;
-        ///        &lt;combat-replay-player-select-component :selectedplayerid=&quot;animationStatus.selectedPlayerID&quot; :light=&quot;light&quot;&gt;&lt;/combat-replay-player- [rest of string was truncated]&quot;;.
+        ///        &lt;combat-replay-player-select-component :selectedplayerid=&quot;animationStatus.selectedPlayerID&quot; :light=&quot;light&quot;&gt;&lt;/comb [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayUI {
             get {
@@ -1132,6 +1132,22 @@ namespace GW2EIParser.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;ei-container&quot;&gt;
+        ///    &lt;div class=&quot;d-flex flex-row justify-content-center mt-2&quot; id=&quot;phase-nav&quot;&gt;
+        ///        &lt;phase-component :phases=&quot;logdata.phases&quot;&gt;&lt;/phase-component&gt;
+        ///    &lt;/div&gt;
+        ///    &lt;div class=&quot;d-flex flex-row justify-content-center mb-3 mt-3&quot; id=&quot;actors&quot;&gt;
+        ///        &lt;div v-show=&quot;dataType !== datatypes.targetTab&quot; :class=&quot;{&apos;d-flex&apos;:dataType !== datatypes.targetTab}&quot;
+        ///             class=&quot;flex-row justify-content-center align-items-center flex-wrap mr-5&quot;&gt;
+        ///            &lt;target-component :targets=&quot;logdat [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplMainView {
+            get {
+                return ResourceManager.GetString("tmplMainView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;div&gt;
         ///    &lt;table v-if=&quot;playerMechHeader.length &gt; 0&quot; class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; id=&quot;playermechs&quot;&gt;
         ///        &lt;thead&gt;
@@ -1211,7 +1227,8 @@ namespace GW2EIParser.Properties {
         ///                    Damage
         ///                    Distribution
         ///                &lt;/a&gt;
-        ///            &lt;/li&gt;        /// [rest of string was truncated]&quot;;.
+        ///            &lt;/li&gt;
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayerStats {
             get {

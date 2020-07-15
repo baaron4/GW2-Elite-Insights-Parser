@@ -837,6 +837,7 @@ namespace GW2EIParser.Builders
                 {"${tmplRotationLegend}",Properties.Resources.tmplRotationLegend },
                 {"${tmplTargetTabGraph}",Properties.Resources.tmplTargetTabGraph },
                 {"${tmplTargetData}",Properties.Resources.tmplTargetData },
+                {"${tmplMainView}",Properties.Resources.tmplMainView },
             };
             foreach (KeyValuePair<string, string> entry in templates)
             {
