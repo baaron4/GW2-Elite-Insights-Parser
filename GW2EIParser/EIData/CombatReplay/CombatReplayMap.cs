@@ -38,7 +38,7 @@ namespace GW2EIParser.EIData
         public (int width, int height) GetPixelMapSize()
         {
             double ratio = (double)_size.width / _size.height;
-            const int pixelSize = 950;
+            const int pixelSize = 750;
             if (ratio > 1.0)
             {
                 return (pixelSize, (int)Math.Round(pixelSize / ratio));
