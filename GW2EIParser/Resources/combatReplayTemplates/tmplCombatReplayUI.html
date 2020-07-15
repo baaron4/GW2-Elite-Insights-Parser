@@ -1,5 +1,5 @@
 <div class="d-flex mt-2 justify-content-center">
-    <div class="d-flex flex-column align-items-center mr-2" style="margin-left: auto;">
+    <div class="d-flex flex-column align-items-center mr-2" style="margin-left: auto; min-width:450px;">
         <combat-replay-damage-data-component :time="animationStatus.time"
             :selectedplayer="animationStatus.selectedPlayer" :selectedplayerid="animationStatus.selectedPlayerID">
         </combat-replay-damage-data-component>
@@ -7,7 +7,7 @@
         <combat-replay-range-select-component :light="light"></combat-replay-range-select-component>
     </div>
     <combat-replay-animation-control-component :light="light" :animated="animationStatus.animated"></combat-replay-animation-control-component>
-    <div class="d-flex flex-column align-items-center ml-2" style="margin-right: auto;">
+    <div class="d-flex flex-column align-items-center ml-2" style="margin-right: auto;min-width:450px;">
         <combat-replay-status-data-component :time="animationStatus.time"
             :selectedplayer="animationStatus.selectedPlayer" :selectedplayerid="animationStatus.selectedPlayerID">
         </combat-replay-status-data-component>

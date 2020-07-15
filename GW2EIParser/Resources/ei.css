@@ -522,13 +522,13 @@ canvas {
 }
 
 #combat-replay-mechanics-list-container {
-    max-height: 650px;
+    max-height: 750px;
     overflow-y: auto;
 }
 
-.player-actor-status-container {
+.combat-actor-status-container {
     min-height: 350px;
-    max-height: 650px;
+    max-height: 750px;
     overflow-y: auto;
     transform:translate(-42px,0);
 }
