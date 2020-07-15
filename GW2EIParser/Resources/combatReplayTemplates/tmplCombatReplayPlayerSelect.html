@@ -1,15 +1,17 @@
 
 <div class="d-flex flex-row flex-wrap justify-content-center align-items-start mb-2">
-    <div class="d-flex flex-row justify-content-center align-items-center">
-        <div v-for="group in groups" class="d-flex flex-column justify-content-center align-items-center mt-1 ml-2 mr-2">
-            <h3>Group {{group.id}}</h3>
-            <label v-for="player in group.players"
-                   @click="selectActor(player.combatReplayID);"
-                   class="btn btn-small ply-btn" :class="{'active': selectedplayerid === player.combatReplayID, 'btn-dark': !light, 'btn-light': light}" :title="player.name">
-                <img v-if="player.isCommander" src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png" alt="Commander" class="icon">
-                <img :src="player.icon" :alt="player.profession" class="icon">
-                {{ player.name }}
-            </label>
+    <div class="d-flex flex-column">
+        <div v-for="group in groups" class="d-flex flex-row align-items-center mt-2" style="width:450px;">
+            <h5 class="mt-2">Group {{group.id}}</h5>
+            <div class="d-flex flex-row flex-wrap align-items-center ml-1" style="max-width:370px;">
+                <span v-for="player in group.players"
+                       @click="selectActor(player.combatReplayID);"
+                       class="btn btn-small ply-btn" :class="{'active': selectedplayerid === player.combatReplayID, 'btn-dark': !light, 'btn-light': light}" :title="player.name">
+                    <img v-if="player.isCommander" src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png" alt="Commander" class="icon">
+                    <img :src="player.icon" :alt="player.profession" class="icon">
+                    {{ player.name }}
+                </span>
+            </div>
         </div>
     </div>
 </div>
