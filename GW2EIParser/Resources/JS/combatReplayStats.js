@@ -551,7 +551,6 @@ var compileCombatReplay = function () {
         data: function() {
             return {
                 targetless: logData.targetless,
-                details: false,
                 mode: 0
             };
         }

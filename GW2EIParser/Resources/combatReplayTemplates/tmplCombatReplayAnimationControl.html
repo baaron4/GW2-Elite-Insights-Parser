@@ -6,14 +6,13 @@
     <div class="animation-control">
         <div class="d-flex justify-content-center">
             <div @click="toggleAnimate();"
-                 class="btn btn-ssmall" :class="{'btn-dark': !light, 'btn-light': light}" style="width: 50px;">{{animated ? "Pause" : "Play"}}</div>
-            <div @click="restartAnimate();" class="btn btn-ssmall" :class="{'btn-dark': !light, 'btn-light': light}">
+                 class="btn btn-small" :class="{'btn-dark': !light, 'btn-light': light}" style="width: 50px;">{{animated ? "Pause" : "Play"}}</div>
+            <div @click="restartAnimate();" class="btn btn-small" :class="{'btn-dark': !light, 'btn-light': light}">
                 Restart
             </div>
             <div @click="toggleBackwards();"
-                 class="btn btn-ssmall" :class="{'active': backwards, 'btn-dark': !light, 'btn-light': light}">Backwards</div>
+                 class="btn btn-small" :class="{'active': backwards, 'btn-dark': !light, 'btn-light': light}">Backwards</div>
         </div>
-        <div>
             <ul class="d-flex flex-row flex-wrap justify-content-center">
                 <li class="btn btn-ssmall" :class="{'active': backwards, 'btn-dark': !light, 'btn-light': light}"
                     v-for="phase in phases" @click="updateTime(phase.start * 1000)"
@@ -21,7 +20,6 @@
                     {{phase.name}}
                 </li>
             </ul>
-        </div>
         <div class="d-flex justify-content-center slidecontainer">
             <input style="min-width: 400px;" @input="updateTime($event.target.value)" type="range" min="0"
                    :max="maxTime" value="0" class="slider" id="timeRange">

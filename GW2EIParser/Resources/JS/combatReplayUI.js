@@ -14,8 +14,11 @@ var compileCombatReplayUI = function () {
                 }
             };
         },
-        mounted() {
+        created() {
             animator = new Animator(logData.crData, this.animationStatus);
+        },
+        mounted() {
+            animator.attachDOM();
         },
         activated() {
             if (this.animationStatus.animated && animator != null) {

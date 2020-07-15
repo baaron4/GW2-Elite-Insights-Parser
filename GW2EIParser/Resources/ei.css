@@ -26,7 +26,13 @@
     margin-left: auto;
 }
 
-.ei-container {
+.ei-container-big {
+    min-width: 1900px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.ei-container-small {
     max-width: 60%;
     min-width: 1000px;
     margin-right: auto;
@@ -517,7 +523,7 @@ canvas {
 }
 
 .animation-control {
-    transform:translate(0,-55px);
+    transform:translate(0,-65px);
     z-index:3;
 }
 
