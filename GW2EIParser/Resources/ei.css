@@ -526,10 +526,11 @@ canvas {
     overflow-y: auto;
 }
 
-.combat-actor-status-container {
+.player-actor-status-container {
     min-height: 350px;
     max-height: 650px;
     overflow-y: auto;
+    transform:translate(-42px,0);
 }
 
 .theme-yeti #combat-replay-mechanics-list-container > table > thead > tr > th {
