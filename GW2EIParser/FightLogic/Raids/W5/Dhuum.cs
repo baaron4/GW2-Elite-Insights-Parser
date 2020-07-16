@@ -127,7 +127,7 @@ namespace GW2EIParser.Logic
                 {
                     long end = invulDhuum.Time;
                     phases.Add(new PhaseData(0, end, "Pre Event"));
-                    phases.Add(new PhaseData(end + 1, fightDuration, "Main Fight"));
+                    phases.Add(new PhaseData(end + 1, fightDuration, "Main Fight") { CanBeSubPhase = false });
                     ComputeFightPhases(phases, castLogs, fightDuration, end + 1);
                 }
             }
