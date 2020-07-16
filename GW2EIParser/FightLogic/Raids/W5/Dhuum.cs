@@ -138,6 +138,7 @@ namespace GW2EIParser.Logic
             PhaseData dhuumFight = phases.Find(x => x.Name == "Dhuum Fight");
             if (mainFight != null)
             {
+                mainFight.CanBeSubPhase = dhuumFight == null;
                 // from pre event end to 10% or fight end if 10% not achieved
                 phases.AddRange(GetInBetweenSoulSplits(log, dhuum, mainFight.Start, dhuumFight != null ? dhuumFight.End: mainFight.End, hasRitual));
             } 
