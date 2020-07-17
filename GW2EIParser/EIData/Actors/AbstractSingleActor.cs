@@ -528,13 +528,13 @@ namespace GW2EIParser.EIData
             return CastLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
 
         }
-        public override List<AbstractCastEvent> GetCastLogsActDur(ParsedLog log, long start, long end)
+        public override List<AbstractCastEvent> GetIntersectingCastLogs(ParsedLog log, long start, long end)
         {
             if (CastLogs == null)
             {
                 SetCastLogs(log);
             }
-            return CastLogs.Where(x => x.Time >= start && x.Time + x.ActualDuration <= end).ToList();
+            return CastLogs.Where(x => KeepIntersectingCastLog(x, start, end)).ToList();
 
         }
         protected void SetCastLogs(ParsedLog log)

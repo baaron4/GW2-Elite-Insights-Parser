@@ -14,7 +14,7 @@ namespace GW2EIParser.EIData
         // Fields
         public string Account { get; protected set; }
         public bool HasCommanderTag => AgentItem.HasCommanderTag;
-        public int Group { get; }
+        public int Group { get; private set; }
 
         private List<Consumable> _consumeList;
         private List<DeathRecap> _deathRecaps;
@@ -49,6 +49,11 @@ namespace GW2EIParser.EIData
             Account = name[1].TrimStart(':');
             Group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
             IsFakeActor = fake;
+        }
+
+        public void MakeSquadless()
+        {
+            Group = 1;
         }
 
         // Public methods

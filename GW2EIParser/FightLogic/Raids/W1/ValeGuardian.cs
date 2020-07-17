@@ -121,7 +121,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in magicStorms)
                     {
                         int start = (int)c.Time;
-                        int end = start + c.ActualDuration;
+                        int end = (int)c.EndTime;
                         replay.Decorations.Add(new CircleDecoration(true, start + c.ExpectedDuration, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }

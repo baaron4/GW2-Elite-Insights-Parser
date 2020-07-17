@@ -286,14 +286,14 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in breakbar)
                     {
                         int radius = ccRadius;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, ccRadius, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Riposte
                     var riposte = cls.Where(x => x.SkillId == 52265).ToList();
                     foreach (AbstractCastEvent c in riposte)
                     {
                         int radius = 2200;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, ((int)c.Time, (int)c.EndTime), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     }
                     //Big Hit
                     var maceShockwave = cls.Where(x => x.SkillId == 52310).ToList();
@@ -322,7 +322,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in fieryMeteor)
                     {
                         int radius = ccRadius;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, ccRadius, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     var eleBreath = cls.Where(x => x.SkillId == 52520).ToList();
                     foreach (AbstractCastEvent c in eleBreath)
@@ -405,7 +405,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in patCC)
                     {
                         int radius = ccRadius;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, ccRadius, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Breath
                     var patBreath = cls.Where(x => x.SkillId == 52726).ToList();
@@ -482,7 +482,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in summon)
                     {
                         int radius = ccRadius;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, ccRadius, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Pizza
                     var forceWave = cls.Where(x => x.SkillId == 51759).ToList();

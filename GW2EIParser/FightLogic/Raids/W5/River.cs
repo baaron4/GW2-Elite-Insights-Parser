@@ -128,7 +128,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent bomb in bomberman)
                     {
                         int startCast = (int)bomb.Time;
-                        int endCast = startCast + bomb.ActualDuration;
+                        int endCast = (int)bomb.EndTime;
                         int expectedEnd = Math.Max(startCast + bomb.ExpectedDuration, endCast);
                         replay.Decorations.Add(new CircleDecoration(true, 0, 480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, expectedEnd, 480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(target)));

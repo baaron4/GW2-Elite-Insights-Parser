@@ -66,12 +66,12 @@ namespace GW2EIParser.Logic
             long start = 0, end = 0;
             for (int i = 0; i < wallopingWinds.Count; i++)
             {
-                AbstractCastEvent wW = wallopingWinds[i];
-                end = wW.Time;
+                AbstractCastEvent wallopinbWind = wallopingWinds[i];
+                end = wallopinbWind.Time;
                 var phase = new PhaseData(start, end, "Phase " + (i + 1));
                 phase.Targets.Add(mainTarget);
                 phases.Add(phase);
-                AbstractCastEvent nextAttack = cls.FirstOrDefault(x => x.Time >= end + wW.ActualDuration && (x.SkillId == 56620 || x.SkillId == 56629 || x.SkillId == 56307));
+                AbstractCastEvent nextAttack = cls.FirstOrDefault(x => x.Time >= wallopinbWind.EndTime && (x.SkillId == 56620 || x.SkillId == 56629 || x.SkillId == 56307));
                 if (nextAttack == null)
                 {
                     break;

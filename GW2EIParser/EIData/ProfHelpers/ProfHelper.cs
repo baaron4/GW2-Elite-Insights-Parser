@@ -47,7 +47,7 @@ namespace GW2EIParser.EIData
             foreach (AbstractCastEvent castEvent in gadgetSpawnCastData)
             {
                 long start = castEvent.Time;
-                long end = start + castEvent.ActualDuration;
+                long end = castEvent.EndTime;
                 possibleCandidates.Add(castEvent.Caster);
                 foreach (AgentItem gadget in gadgets)
                 {

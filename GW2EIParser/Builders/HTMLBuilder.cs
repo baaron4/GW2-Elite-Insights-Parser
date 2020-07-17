@@ -362,7 +362,7 @@ namespace GW2EIParser.Builders
             var list = new List<object[]>();
 
             PhaseData phase = _phases[phaseIndex];
-            List<AbstractCastEvent> casting = p.GetCastLogsActDur(_log, phase.Start, phase.End);
+            List<AbstractCastEvent> casting = p.GetIntersectingCastLogs(_log, phase.Start, phase.End);
             foreach (AbstractCastEvent cl in casting)
             {
                 if (!_usedSkills.ContainsKey(cl.SkillId))

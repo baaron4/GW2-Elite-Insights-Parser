@@ -89,7 +89,7 @@ namespace GW2EIParser.Logic
                 AbstractCastEvent clDeathmark = gDeathmark[i];
                 end = Math.Min(clDeathmark.Time, mainEnd);
                 phases.Add(new PhaseData(start, end, "Pre-Soulsplit " + ++i));
-                start = cl.Time + cl.ActualDuration;
+                start = cl.EndTime;
             }
             phases.Add(new PhaseData(start, mainEnd, hasRitual ? "Pre-Ritual" : "Pre-Wipe"));
             return phases;
@@ -127,7 +127,7 @@ namespace GW2EIParser.Logic
                 {
                     long end = invulDhuum.Time;
                     phases.Add(new PhaseData(0, end, "Pre Event"));
-                    phases.Add(new PhaseData(end + 1, fightDuration, "Main Fight"));
+                    phases.Add(new PhaseData(end + 1, fightDuration, "Main Fight") { CanBeSubPhase = false });
                     ComputeFightPhases(phases, castLogs, fightDuration, end + 1);
                 }
             }
@@ -138,6 +138,7 @@ namespace GW2EIParser.Logic
             PhaseData dhuumFight = phases.Find(x => x.Name == "Dhuum Fight");
             if (mainFight != null)
             {
+                mainFight.CanBeSubPhase = dhuumFight == null;
                 // from pre event end to 10% or fight end if 10% not achieved
                 phases.AddRange(GetInBetweenSoulSplits(log, dhuum, mainFight.Start, dhuumFight != null ? dhuumFight.End: mainFight.End, hasRitual));
             } 
@@ -207,7 +208,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in cataCycle)
                     {
                         start = (int)c.Time;
-                        end = start + c.ActualDuration;
+                        end = (int)c.EndTime;
                         replay.Decorations.Add(new CircleDecoration(true, end, 300, (start, end), "rgba(255, 150, 0, 0.7)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
                     }
@@ -215,7 +216,7 @@ namespace GW2EIParser.Logic
                     foreach (AbstractCastEvent c in slash)
                     {
                         start = (int)c.Time;
-                        end = start + c.ActualDuration;
+                        end = (int)c.EndTime;
                         Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
                         if (facing == null)
                         {
