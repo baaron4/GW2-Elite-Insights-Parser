@@ -168,6 +168,7 @@
     <None Include="Resources\htmlTemplates\tmplDamageTable.html" />
     <None Include="Resources\htmlTemplates\tmplDamageModifierStats.html" />
     <None Include="Resources\htmlTemplates\tmplDamageModifierPersStats.html" />
+    <None Include="Resources\htmlTemplates\tmplMainView.html" />
     <Content Include="Resources\htmlTemplates\tmplDamageTaken.html" />
     <Content Include="Resources\htmlTemplates\tmplTargetData.html" />
     <Content Include="Resources\JS\combatReplayUI.js" />

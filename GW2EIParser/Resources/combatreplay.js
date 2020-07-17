@@ -48,27 +48,7 @@ class Animator {
         this.needBGUpdate = false;
         this.prevBGImage = null;
         this.animation = null;
-        this.timeSlider = document.getElementById('timeRange');
-        this.timeSliderDisplay = document.getElementById('timeRangeDisplay');
-        // main canvas
-        this.mainCanvas = document.getElementById('main-canvas');
-        this.mainCanvas.style.width = this.mainCanvas.width + "px";
-        this.mainCanvas.style.height = this.mainCanvas.height + "px";
-        this.mainCanvas.width *= resolutionMultiplier;
-        this.mainCanvas.height *= resolutionMultiplier;
-        this.mainContext = this.mainCanvas.getContext('2d');
-        this.mainContext.imageSmoothingEnabled = true;
-        // bg canvas
-        this.bgCanvas = document.getElementById('bg-canvas');
-        this.bgCanvas.style.width = this.bgCanvas.width + "px";
-        this.bgCanvas.style.height = this.bgCanvas.height + "px";
-        this.bgCanvas.width *= resolutionMultiplier;
-        this.bgCanvas.height *= resolutionMultiplier;
-        this.bgContext = this.bgCanvas.getContext('2d');
-        this.bgContext.imageSmoothingEnabled = true;
         // manipulation
-        this.lastX = this.mainCanvas.width / 2;
-        this.lastY = this.mainCanvas.height / 2;
         this.dragStart = null;
         this.dragged = false;
         this.scale = 1.0;
@@ -91,22 +71,49 @@ class Animator {
                     });
                 }
             }
-            if (options.actors) this.initActors(options.actors);
+            if (options.actors) this._initActors(options.actors);
             downIcon.src = "https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png";
             dcIcon.src = "https://wiki.guildwars2.com/images/f/f5/Talk_end_option_tango.png";
             deadIcon.src = "https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png";
             facingIcon.src = "https://i.imgur.com/tZTmTRn.png";
         }
-        //
-        this.trackTransforms(this.mainContext);
-        this.trackTransforms(this.bgContext);
-        this.mainContext.scale(resolutionMultiplier, resolutionMultiplier);
-        this.bgContext.scale(resolutionMultiplier, resolutionMultiplier);
-        this.initMouseEvents();
-        this.initTouchEvents();
     }
 
-    initActors(actors) {
+    attachDOM() {
+        // animation
+        this.timeSlider = document.getElementById('timeRange');
+        this.timeSliderDisplay = document.getElementById('timeRangeDisplay');
+        // main canvas
+        this.mainCanvas = document.getElementById('main-canvas');
+        this.mainCanvas.style.width = this.mainCanvas.width + "px";
+        this.mainCanvas.style.height = this.mainCanvas.height + "px";
+        this.mainCanvas.width *= resolutionMultiplier;
+        this.mainCanvas.height *= resolutionMultiplier;
+        this.mainContext = this.mainCanvas.getContext('2d');
+        this.mainContext.imageSmoothingEnabled = true;
+        this.mainContext.imageSmoothingQuality = 'high';
+        // bg canvas
+        this.bgCanvas = document.getElementById('bg-canvas');
+        this.bgCanvas.style.width = this.bgCanvas.width + "px";
+        this.bgCanvas.style.height = this.bgCanvas.height + "px";
+        this.bgCanvas.width *= resolutionMultiplier;
+        this.bgCanvas.height *= resolutionMultiplier;
+        this.bgContext = this.bgCanvas.getContext('2d');
+        this.bgContext.imageSmoothingEnabled = true;
+        this.bgContext.imageSmoothingQuality = 'high';
+        // manipulation
+        this.lastX = this.mainCanvas.width / 2;
+        this.lastY = this.mainCanvas.height / 2;
+        //
+        this._trackTransforms(this.mainContext);
+        this._trackTransforms(this.bgContext);
+        this.mainContext.scale(resolutionMultiplier, resolutionMultiplier);
+        this.bgContext.scale(resolutionMultiplier, resolutionMultiplier);
+        this._initMouseEvents();
+        this._initTouchEvents();
+    }
+
+    _initActors(actors) {
         this.playerData.clear();
         this.targetData.clear();
         this.trashMobData.clear();
@@ -245,7 +252,7 @@ class Animator {
         }
     }
 
-    initMouseEvents() {
+    _initMouseEvents() {
         var _this = this;
         var canvas = this.mainCanvas;
         var ctx = this.mainContext;
@@ -315,7 +322,7 @@ class Animator {
         canvas.addEventListener('mousewheel', zoom, false);
     }
 
-    initTouchEvents() {
+    _initTouchEvents() {
         // todo
     }
 
@@ -351,7 +358,7 @@ class Animator {
     }
 
     // https://codepen.io/anon/pen/KrExzG
-    trackTransforms(ctx) {
+    _trackTransforms(ctx) {
         var svg = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
         var xform = svg.createSVGMatrix();
         ctx.getTransform = function () {
@@ -540,6 +547,9 @@ class Animator {
     }
 
     draw() {
+        if (!this.mainCanvas) {
+            return;
+        }
         //
         this._drawBGCanvas();
         this._drawMainCanvas();

@@ -59,31 +59,16 @@ var mainLoad = function () {
         compileCombatReplay();
         compileCombatReplayUI();
     }
-    new Vue({
-        el: "#content",
-        data: {
-            logdata: simpleLogData,
-            layout: layout,
-            datatypes: DataTypes,
-            light: typeof (window.theme) !== "undefined" ? (window.theme === 'yeti') : logData.lightTheme,
-            mode: 0,
-            cr: !!logData.crData,
-			buffMode: 0
-        },
-        methods: {
-            switchTheme: function (state) {
-                if (state === this.light) {
-                    return;
-                }
-                var style = this.light ? 'yeti' : 'slate';
-                this.light = state;
-                var newStyle = this.light ? 'yeti' : 'slate';
-                document.body.classList.remove("theme-" + style);
-                document.body.classList.add("theme-" + newStyle);
-                if (storeTheme) storeTheme(newStyle);
-                var theme = document.getElementById('theme');
-                theme.href = themes[newStyle];
-            }
+    Vue.component("main-view-component", {
+        props: ['light'],
+        template: `${tmplMainView}`,
+        data: function () {
+            return {
+                datatypes: DataTypes,
+                logdata: simpleLogData,
+                layout: layout,
+                buffMode: 0
+            };
         },
         computed: {
             activePhase: function () {
@@ -131,6 +116,31 @@ var mainLoad = function () {
                 }
                 return res;
             },
+        }
+    });
+    new Vue({
+        el: "#content",
+        data: {
+            light: typeof (window.theme) !== "undefined" ? (window.theme === 'yeti') : logData.lightTheme,
+            mode: 0,
+            cr: !!logData.crData
+        },
+        methods: {
+            switchTheme: function (state) {
+                if (state === this.light) {
+                    return;
+                }
+                var style = this.light ? 'yeti' : 'slate';
+                this.light = state;
+                var newStyle = this.light ? 'yeti' : 'slate';
+                document.body.classList.remove("theme-" + style);
+                document.body.classList.add("theme-" + newStyle);
+                if (storeTheme) storeTheme(newStyle);
+                var theme = document.getElementById('theme');
+                theme.href = themes[newStyle];
+            }
+        },
+        computed: {
             errorMessages: function () {
                 return logData.logErrors;
             }

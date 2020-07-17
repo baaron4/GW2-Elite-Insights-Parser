@@ -1,10 +1,5 @@
-<div class="d-flex flex-column justify-content-center" style="min-width: 200px;">
+<div class="d-flex flex-column justify-content-center">
     <ul class="nav nav-pills d-flex flex-row justify-content-center mb-1">
-        <li class="nav-item">
-            <a class="nav-link" :class="{active: details}" @click="details = !details">Details Window <img class="mb-1 icon" src="https://i.imgur.com/k3tdKEQ.png" data-original-title="Slight performance hit" /> </a>
-        </li>
-    </ul>
-    <ul class="nav nav-pills d-flex flex-row justify-content-center mb-1" v-if="details">
         <li class="nav-item">
             <a class="nav-link" :class="{active: mode === 0}" @click="mode = 0">Players</a>
         </li>
@@ -15,7 +10,7 @@
             <a class="nav-link" :class="{active: mode === 2}" @click="mode = 2">Mechanics</a>
         </li>
     </ul>
-    <div class="squad-details" v-if="details">
+    <div class="squad-details">
         <keep-alive>
             <combat-replay-players-stats-component v-if="mode === 0" :key="'players-cr-details'" :time="time" :selectedplayer="selectedplayer" :selectedplayerid="selectedplayerid"></combat-replay-players-stats-component>
             <combat-replay-targets-stats-component v-if="mode === 1" :key="'targets-cr-details'" :time="time"></combat-replay-targets-stats-component>

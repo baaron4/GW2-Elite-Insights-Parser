@@ -14,21 +14,20 @@ var compileCombatReplayUI = function () {
                 }
             };
         },
-        mounted() {
+        created() {
             animator = new Animator(logData.crData, this.animationStatus);
         },
-        watch: {
-            mode: {
-                handler: function () {
-                    if (this.animationStatus.animated && animator != null) {
-                        if (this.mode === 1) {
-                            animator.startAnimate(false);
-                        } else {
-                            animator.stopAnimate(false);
-                        }
-                    }
-                },
-                deep: true
+        mounted() {
+            animator.attachDOM();
+        },
+        activated() {
+            if (this.animationStatus.animated && animator != null) {
+                animator.startAnimate(false);
+            }
+        },
+        deactivated() {
+            if (this.animationStatus.animated && animator != null) {
+                animator.stopAnimate(false);
             }
         },
     });
