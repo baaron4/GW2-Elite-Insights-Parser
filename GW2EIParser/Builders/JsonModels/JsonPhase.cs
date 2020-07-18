@@ -47,7 +47,7 @@ namespace GW2EIParser.Builders.JsonModels
             {
                 PhaseData curPhase = phases[j];
                 if (curPhase.Start < Start || curPhase.End > End ||
-                     (curPhase.Start == Start && curPhase.End == End))
+                     (curPhase.Start == Start && curPhase.End == End) || !curPhase.CanBeSubPhase)
                 {
                     continue;
                 }
