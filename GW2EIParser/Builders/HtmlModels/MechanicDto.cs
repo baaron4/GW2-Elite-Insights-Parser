@@ -15,7 +15,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public bool EnemyMech { get; set; }
         public bool PlayerMech { get; set; }
 
-        public static List<int[]> GetMechanicData(HashSet<Mechanic> presMech, ParsedLog log, AbstractActor actor, PhaseData phase)
+        private static List<int[]> GetMechanicData(HashSet<Mechanic> presMech, ParsedLog log, AbstractActor actor, PhaseData phase)
         {
             var res = new List<int[]>();
 
@@ -54,6 +54,31 @@ namespace GW2EIParser.Builders.HtmlModels
                 };
                 mechsDtos.Add(dto);
             }
+        }
+
+        public static List<List<int[]>> BuildPlayerMechanicData(ParsedLog log, int phaseIndex)
+        {
+            var list = new List<List<int[]>>();
+            HashSet<Mechanic> presMech = log.MechanicData.GetPresentPlayerMechs(log, 0);
+            PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
+
+            foreach (Player p in log.PlayerList)
+            {
+                list.Add(MechanicDto.GetMechanicData(presMech, log, p, phase));
+            }
+            return list;
+        }
+
+        public static List<List<int[]>> BuildEnemyMechanicData(ParsedLog log, int phaseIndex)
+        {
+            var list = new List<List<int[]>>();
+            HashSet<Mechanic> presMech = log.MechanicData.GetPresentEnemyMechs(log, 0);
+            PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
+            foreach (AbstractActor enemy in log.MechanicData.GetEnemyList(log, 0))
+            {
+                list.Add(GetMechanicData(presMech, log, enemy, phase));
+            }
+            return list;
         }
     }
 }

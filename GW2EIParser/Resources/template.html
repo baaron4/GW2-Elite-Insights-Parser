@@ -62,9 +62,7 @@
             <div v-if="!!errorMessages" class="d-flex flex-column justify-content-center align-items-center">
                 <img v-for="message in errorMessages" class="mb-1 icon" src="https://i.imgur.com/k3tdKEQ.png" :data-original-title="message" />
             </div>
-            <div class="card fight-summary" style="min-width: 350px;">
-                <encounter-component></encounter-component>
-            </div>
+            <encounter-component></encounter-component>
             <div class="d-flex flex-column justify-content-center align-items-center ml-5">
                 <div class="d-flex flex-row justify-content-center align-items-center mt-2 mb-2">
                     <ul class="nav nav-pills" style="pointer-events:auto;">
