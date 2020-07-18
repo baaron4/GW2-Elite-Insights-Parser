@@ -452,6 +452,24 @@ namespace GW2EIParser.Parser.ParsedData
             return new List<TeamChangeEvent>();
         }
 
+        public List<BreakbarStateEvent> GetBreakbarStateEvents(AgentItem key)
+        {
+            if (_statusEvents.BreakbarStateEvents.TryGetValue(key, out List<BreakbarStateEvent> list))
+            {
+                return list;
+            }
+            return new List<BreakbarStateEvent>();
+        }
+
+        public List<BreakbarPercentEvent> GetBreakbarPercentEvents(AgentItem key)
+        {
+            if (_statusEvents.BreakbarPercentEvents.TryGetValue(key, out List<BreakbarPercentEvent> list))
+            {
+                return list;
+            }
+            return new List<BreakbarPercentEvent>();
+        }
+
         public BuildEvent GetBuildEvent()
         {
             return _metaDataEvents.BuildEvent;
