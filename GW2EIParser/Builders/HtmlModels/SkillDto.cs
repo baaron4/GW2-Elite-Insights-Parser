@@ -26,6 +26,18 @@ namespace GW2EIParser.Builders.HtmlModels
             }
         }
 
+        private static object[] GetSkillData(AbstractCastEvent cl, long phaseStart)
+        {
+            object[] rotEntry = new object[5];
+            double start = (cl.Time - phaseStart) / 1000.0;
+            rotEntry[0] = start;
+            rotEntry[1] = cl.SkillId;
+            rotEntry[2] = cl.ActualDuration;
+            rotEntry[3] = (int)cl.Status;
+            rotEntry[4] = cl.Acceleration;
+            return rotEntry;
+        }
+
         public static List<object[]> BuildRotationData(ParsedLog log, AbstractActor p, int phaseIndex, Dictionary<long, SkillItem> usedSkills)
         {
             var list = new List<object[]>();
@@ -39,7 +51,7 @@ namespace GW2EIParser.Builders.HtmlModels
                     usedSkills.Add(cl.SkillId, cl.Skill);
                 }
 
-                list.Add(ActorDetailsDto.GetSkillData(cl, phase.Start));
+                list.Add(GetSkillData(cl, phase.Start));
             }
             return list;
         }
