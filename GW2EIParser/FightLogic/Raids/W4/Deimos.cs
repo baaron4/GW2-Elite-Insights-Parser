@@ -352,7 +352,6 @@ namespace GW2EIParser.Logic
                     phases.Add(burstPhase);
                 }
             }
-            phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             return phases;
         }
 

@@ -212,7 +212,6 @@ namespace GW2EIParser.Logic
                 FallBackPhases(kenut, kenPhases, log, false);
                 phases.AddRange(kenPhases);
             }
-            phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             return phases;
         }
 

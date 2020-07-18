@@ -216,6 +216,17 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
+        public List<PhaseData> GetBreakbarPhases(ParsedLog log, bool requirePhases)
+        {
+            if (!requirePhases)
+            {
+                return new List<PhaseData>();
+            }
+            var breakbarPhase = new List<PhaseData>();
+
+            return breakbarPhase;
+        }
+
         public virtual List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);

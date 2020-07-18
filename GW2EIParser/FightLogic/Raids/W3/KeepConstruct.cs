@@ -189,7 +189,6 @@ namespace GW2EIParser.Logic
                 }
             }
             phases.AddRange(leftOverPhases);
-            phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             return phases;
         }
 

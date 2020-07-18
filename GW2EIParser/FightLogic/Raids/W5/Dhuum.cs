@@ -151,7 +151,6 @@ namespace GW2EIParser.Logic
             {
                 phases[i].Targets.Add(dhuum);
             }
-            phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             return phases;
         }
 
