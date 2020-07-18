@@ -209,140 +209,12 @@ namespace GW2EIParser.Builders
             return damageModBySpecs;
         }
         
-        private List<object[]> BuildDMGDistBodyData(List<AbstractCastEvent> casting, List<AbstractDamageEvent> damageLogs)
-        {
-            var list = new List<object[]>();
-            var castLogsBySkill = casting.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
-            var damageLogsBySkill = damageLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
-            var conditionsById = _statistics.PresentConditions.ToDictionary(x => x.ID);
-            foreach (KeyValuePair<SkillItem, List<AbstractDamageEvent>> entry in damageLogsBySkill)
-            {
-                list.Add(DmgDistributionDto.GetDMGDtoItem(entry, castLogsBySkill, _usedSkills, _usedBuffs, _log.Buffs));
-            }
-            // non damaging
-            foreach (KeyValuePair<SkillItem, List<AbstractCastEvent>> entry in castLogsBySkill)
-            {
-                if (damageLogsBySkill.ContainsKey(entry.Key))
-                {
-                    continue;
-                }
-
-                if (!_usedSkills.ContainsKey(entry.Key.ID))
-                {
-                    _usedSkills.Add(entry.Key.ID, entry.Key);
-                }
-
-                int casts = entry.Value.Count;
-                int timeswasted = 0, timessaved = 0;
-                foreach (AbstractCastEvent cl in entry.Value)
-                {
-                    if (cl.SavedDuration < 0)
-                    {
-                        timeswasted += cl.SavedDuration;
-                    } 
-                    else
-                    {
-                        timessaved += cl.SavedDuration;
-                    }
-                }
-
-                object[] skillData = { false, entry.Key.ID, 0, -1, 0, casts,
-                    0, 0, 0, 0, -timeswasted / 1000.0, timessaved / 1000.0, 0 };
-                list.Add(skillData);
-            }
-            return list;
-        }
-
-        private DmgDistributionDto BuildDMGDistDataInternal(FinalDPS dps, AbstractSingleActor p, NPC target, int phaseIndex)
-        {
-            var dto = new DmgDistributionDto();
-            PhaseData phase = _phases[phaseIndex];
-            List<AbstractCastEvent> casting = p.GetCastLogs(_log, phase.Start, phase.End);
-            List<AbstractDamageEvent> damageLogs = p.GetJustPlayerDamageLogs(target, _log, phase);
-            dto.TotalDamage = dps.Damage;
-            dto.ContributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
-            dto.ContributedShieldDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.ShieldDamage) : 0;
-            dto.Distribution = BuildDMGDistBodyData(casting, damageLogs);
-
-            return dto;
-        }
-
-        /// <summary>
-        /// Creates the damage distribution table for a given player
-        /// </summary>
-        /// <param name="sw"></param>
-        /// <param name="p"></param>
-        /// <param name="phaseIndex"></param>
-        private DmgDistributionDto BuildPlayerDMGDistData(Player p, NPC target, int phaseIndex)
-        {
-            FinalDPS dps = p.GetDPSTarget(_log, phaseIndex, target);
-            return BuildDMGDistDataInternal(dps, p, target, phaseIndex);
-        }
-
-        /// <summary>
-        /// Creates the damage distribution table for a target
-        /// </summary>
-        private DmgDistributionDto BuildTargetDMGDistData(NPC target, int phaseIndex)
-        {
-            FinalDPS dps = target.GetDPSAll(_log, phaseIndex);
-            return BuildDMGDistDataInternal(dps, target, null, phaseIndex);
-        }
-
-        private DmgDistributionDto BuildDMGDistDataMinionsInternal(FinalDPS dps, Minions minions, NPC target, int phaseIndex)
-        {
-            var dto = new DmgDistributionDto();
-            PhaseData phase = _phases[phaseIndex];
-            List<AbstractCastEvent> casting = minions.GetCastLogs(_log, phase.Start, phase.End);
-            List<AbstractDamageEvent> damageLogs = minions.GetDamageLogs(target, _log, phase);
-            dto.ContributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
-            dto.ContributedShieldDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.ShieldDamage) : 0;
-            dto.TotalDamage = dps.Damage;
-            dto.Distribution = BuildDMGDistBodyData(casting, damageLogs);
-            return dto;
-        }
-
-        /// <summary>
-        /// Creates the damage distribution table for a given minion
-        /// </summary>
-        private DmgDistributionDto BuildPlayerMinionDMGDistData(Player p, Minions minions, NPC target, int phaseIndex)
-        {
-            FinalDPS dps = p.GetDPSTarget(_log, phaseIndex, target);
-
-            return BuildDMGDistDataMinionsInternal(dps, minions, target, phaseIndex);
-        }
-
-        /// <summary>
-        /// Creates the damage distribution table for a given boss minion
-        /// </summary>
-        private DmgDistributionDto BuildTargetMinionDMGDistData(NPC target, Minions minions, int phaseIndex)
-        {
-            FinalDPS dps = target.GetDPSAll(_log, phaseIndex);
-            return BuildDMGDistDataMinionsInternal(dps, minions, null, phaseIndex);
-        }
-
         /// <summary>
         /// Create the damage taken distribution table for a given player
         /// </summary>
         /// <param name="p"></param>
         /// <param name="phaseIndex"></param>
-        private DmgDistributionDto BuildDMGTakenDistData(AbstractSingleActor p, int phaseIndex)
-        {
-            var dto = new DmgDistributionDto
-            {
-                Distribution = new List<object[]>()
-            };
-            PhaseData phase = _phases[phaseIndex];
-            List<AbstractDamageEvent> damageLogs = p.GetDamageTakenLogs(null, _log, phase.Start, phase.End);
-            var damageLogsBySkill = damageLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
-            dto.ContributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.Damage) : 0;
-            dto.ContributedShieldDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.ShieldDamage) : 0;
-            var conditionsById = _statistics.PresentConditions.ToDictionary(x => x.ID);
-            foreach (KeyValuePair<SkillItem, List<AbstractDamageEvent>> entry in damageLogsBySkill)
-            {
-                dto.Distribution.Add(DmgDistributionDto.GetDMGDtoItem(entry, null, _usedSkills, _usedBuffs, _log.Buffs));
-            }
-            return dto;
-        }
+        
 
         private string ReplaceVariables(string html)
         {
@@ -867,14 +739,14 @@ namespace GW2EIParser.Builders
             for (int i = 0; i < _phases.Count; i++)
             {
                 dto.Rotation.Add(SkillDto.BuildRotationData(_log, player, i, _usedSkills));
-                dto.DmgDistributions.Add(BuildPlayerDMGDistData(player, null, i));
+                dto.DmgDistributions.Add(DmgDistributionDto.BuildPlayerDMGDistData(_log, player, null, i, _usedSkills, _usedBuffs));
                 var dmgTargetsDto = new List<DmgDistributionDto>();
                 foreach (NPC target in _phases[i].Targets)
                 {
-                    dmgTargetsDto.Add(BuildPlayerDMGDistData(player, target, i));
+                    dmgTargetsDto.Add(DmgDistributionDto.BuildPlayerDMGDistData(_log, player, target, i, _usedSkills, _usedBuffs));
                 }
                 dto.DmgDistributionsTargets.Add(dmgTargetsDto);
-                dto.DmgDistributionsTaken.Add(BuildDMGTakenDistData(player, i));
+                dto.DmgDistributionsTaken.Add(DmgDistributionDto.BuildDMGTakenDistData(_log, player, i, _usedSkills, _usedBuffs));
                 dto.BoonGraph.Add(BuffChartDataDto.BuildBoonGraphData(_log, player, i, _usedBuffs));
             }
             foreach (KeyValuePair<long, Minions> pair in player.GetMinions(_log))
@@ -897,10 +769,10 @@ namespace GW2EIParser.Builders
                 var dmgTargetsDto = new List<DmgDistributionDto>();
                 foreach (NPC target in _phases[i].Targets)
                 {
-                    dmgTargetsDto.Add(BuildPlayerMinionDMGDistData(player, minion, target, i));
+                    dmgTargetsDto.Add(DmgDistributionDto.BuildPlayerMinionDMGDistData(_log, player, minion, target, i, _usedSkills, _usedBuffs));
                 }
                 dto.DmgDistributionsTargets.Add(dmgTargetsDto);
-                dto.DmgDistributions.Add(BuildPlayerMinionDMGDistData(player, minion, null, i));
+                dto.DmgDistributions.Add(DmgDistributionDto.BuildPlayerMinionDMGDistData(_log, player, minion, null, i, _usedSkills, _usedBuffs));
             }
             return dto;
         }
@@ -918,8 +790,8 @@ namespace GW2EIParser.Builders
             {
                 if (_phases[i].Targets.Contains(target) || (i == 0 && _cr))
                 {
-                    dto.DmgDistributions.Add(BuildTargetDMGDistData(target, i));
-                    dto.DmgDistributionsTaken.Add(BuildDMGTakenDistData(target, i));
+                    dto.DmgDistributions.Add(DmgDistributionDto.BuildTargetDMGDistData(_log, target, i, _usedSkills, _usedBuffs));
+                    dto.DmgDistributionsTaken.Add(DmgDistributionDto.BuildDMGTakenDistData(_log, target, i, _usedSkills, _usedBuffs));
                     dto.Rotation.Add(SkillDto.BuildRotationData(_log, target, i, _usedSkills));
                     dto.BoonGraph.Add(BuffChartDataDto.BuildBoonGraphData(_log, target, i, _usedBuffs));
                 }
@@ -950,7 +822,7 @@ namespace GW2EIParser.Builders
             {
                 if (_phases[i].Targets.Contains(target) || (i == 0 && _cr))
                 {
-                    dto.DmgDistributions.Add(BuildTargetMinionDMGDistData(target, minion, i));
+                    dto.DmgDistributions.Add(DmgDistributionDto.BuildTargetMinionDMGDistData(_log, target, minion, i, _usedSkills, _usedBuffs));
                 }
                 else
                 {
