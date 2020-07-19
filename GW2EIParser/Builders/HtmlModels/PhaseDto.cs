@@ -144,7 +144,7 @@ namespace GW2EIParser.Builders.HtmlModels
 
         // helper methods
 
-        public static List<object> GetDMGStatData(FinalGameplayStatsAll stats)
+        private static List<object> GetDMGStatData(FinalGameplayStatsAll stats)
         {
             List<object> data = GetDMGTargetStatData(stats);
             data.AddRange(new List<object>
@@ -163,7 +163,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return data;
         }
 
-        public static List<object> GetDMGTargetStatData(FinalGameplayStats stats)
+        private static List<object> GetDMGTargetStatData(FinalGameplayStats stats)
         {
             var data = new List<object>
                 {
@@ -183,7 +183,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return data;
         }
 
-        public static List<object> GetDPSStatData(FinalDPS dpsAll)
+        private static List<object> GetDPSStatData(FinalDPS dpsAll)
         {
             var data = new List<object>
                 {
@@ -194,7 +194,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return data;
         }
 
-        public static List<object> GetSupportStatData(FinalPlayerSupport support)
+        private static List<object> GetSupportStatData(FinalPlayerSupport support)
         {
             var data = new List<object>()
                 {
@@ -210,7 +210,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return data;
         }
 
-        public static List<object> GetDefenseStatData(FinalDefensesAll defenses, PhaseData phase)
+        private static List<object> GetDefenseStatData(FinalDefensesAll defenses, PhaseData phase)
         {
             var data = new List<object>
                 {
@@ -247,6 +247,91 @@ namespace GW2EIParser.Builders.HtmlModels
                 data.Add("100% Alive");
             }
             return data;
+        }
+        public static List<List<object>> BuildDPSData(ParsedLog log, int phaseIndex)
+        {
+            var list = new List<List<object>>(log.PlayerList.Count);
+            foreach (Player player in log.PlayerList)
+            {
+                FinalDPS dpsAll = player.GetDPSAll(log, phaseIndex);
+                list.Add(PhaseDto.GetDPSStatData(dpsAll));
+            }
+            return list;
+        }
+
+        public static List<List<List<object>>> BuildDPSTargetsData(ParsedLog log, int phaseIndex)
+        {
+            var list = new List<List<List<object>>>(log.PlayerList.Count);
+            PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
+
+            foreach (Player player in log.PlayerList)
+            {
+                var playerData = new List<List<object>>();
+
+                foreach (NPC target in phase.Targets)
+                {
+                    playerData.Add(PhaseDto.GetDPSStatData(player.GetDPSTarget(log, phaseIndex, target)));
+                }
+                list.Add(playerData);
+            }
+            return list;
+        }
+
+        public static List<List<object>> BuildDMGStatsData(ParsedLog log, int phaseIndex)
+        {
+            var list = new List<List<object>>();
+            foreach (Player player in log.PlayerList)
+            {
+                FinalGameplayStatsAll stats = player.GetGameplayStats(log, phaseIndex);
+                list.Add(PhaseDto.GetDMGStatData(stats));
+            }
+            return list;
+        }
+
+        public static List<List<List<object>>> BuildDMGStatsTargetsData(ParsedLog log, int phaseIndex)
+        {
+            var list = new List<List<List<object>>>();
+
+            PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
+
+            foreach (Player player in log.PlayerList)
+            {
+                var playerData = new List<List<object>>();
+                foreach (NPC target in phase.Targets)
+                {
+                    FinalGameplayStats statsTarget = player.GetGameplayStats(log, phaseIndex, target);
+                    playerData.Add(PhaseDto.GetDMGTargetStatData(statsTarget));
+                }
+                list.Add(playerData);
+            }
+            return list;
+        }
+
+        public static List<List<object>> BuildDefenseData(ParsedLog log, int phaseIndex)
+        {
+            var list = new List<List<object>>();
+
+            PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
+
+            foreach (Player player in log.PlayerList)
+            {
+                FinalDefensesAll defenses = player.GetDefenses(log, phaseIndex);
+                list.Add(PhaseDto.GetDefenseStatData(defenses, phase));
+            }
+
+            return list;
+        }
+
+        public static List<List<object>> BuildSupportData(ParsedLog log, int phaseIndex)
+        {
+            var list = new List<List<object>>();
+
+            foreach (Player player in log.PlayerList)
+            {
+                FinalPlayerSupport support = player.GetPlayerSupport(log, phaseIndex);
+                list.Add(PhaseDto.GetSupportStatData(support));
+            }
+            return list;
         }
     }
 }
