@@ -42,6 +42,12 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         /// <seealso cref="JsonBuffsUptime"/>
         public List<JsonBuffsUptime> Buffs { get; protected set; }
+        /// <summary>
+        /// Array of double[2] that represents the breakbar percent of the actor \n
+        /// Value[i][0] will be the time, value[i][1] will be breakbar % \n
+        /// If i corresponds to the last element that means the breakbar did not change for the remainder of the fight \n
+        /// </summary>
+        public List<double[]> BreakbarPercents { get; }
 
         public JsonNPC(NPC npc, ParsedLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc) : base(npc, log, skillDesc, buffDesc)
         {
@@ -68,6 +74,12 @@ namespace GW2EIParser.Builders.JsonModels
             FinalHealth = (int)Math.Round(TotalHealth * hpLeft / 100.0);
             //
             Buffs = GetNPCJsonBuffsUptime(npc, npc.GetBuffs(log), npc.GetBuffsDictionary(log), log, buffDesc);
+            // Breakbar
+            List<BreakbarPercentEvent> breakbarPercentUpdates = log.CombatData.GetBreakbarPercentEvents(npc.AgentItem);
+            if (log.ParserSettings.RawTimelineArrays)
+            {
+                BreakbarPercents = breakbarPercentUpdates.Select(x => new double[2] { x.Time, x.BreakbarPercent }).ToList();
+            }
         }
 
         private static List<JsonBuffsUptime> GetNPCJsonBuffsUptime(NPC npc, List<Dictionary<long, FinalBuffs>> buffs, List<Dictionary<long, FinalBuffsDictionary>> buffsDictionary, ParsedLog log, Dictionary<string, JsonLog.BuffDesc> buffDesc)
