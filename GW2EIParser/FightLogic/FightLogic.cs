@@ -216,7 +216,7 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        public List<PhaseData> GetBreakbarPhases(ParsedLog log, bool requirePhases)
+        /*public List<PhaseData> GetBreakbarPhases(ParsedLog log, bool requirePhases)
         {
             if (!requirePhases)
             {
@@ -224,12 +224,12 @@ namespace GW2EIParser.Logic
             }
             var breakbarPhases = new List<PhaseData>();
             int i = 0;
-            /*foreach (NPC target in Targets)
+            foreach (NPC target in Targets)
             {
                 List<BreakbarStateEvent> breakbarStateEvents = log.CombatData.GetBreakbarStateEvents(target.AgentItem);
                 List<BreakbarPercentEvent> breakbarPercentEvents = log.CombatData.GetBreakbarPercentEvents(target.AgentItem);
                 var breakbarActiveEvents = breakbarStateEvents.Where(x => x.State == ParseEnum.BreakbarState.Active).ToList();
-                var breakbarImmununeEvents = breakbarStateEvents.Where(x => x.State == ParseEnum.BreakbarState.Immune).ToList();
+                var breakbarImmununeEvents = breakbarStateEvents.Where(x => x.State != ParseEnum.BreakbarState.Active).ToList();
                 foreach (BreakbarStateEvent active in breakbarActiveEvents)
                 {
                     long start = Math.Max(active.Time - 500, 0);
@@ -243,9 +243,9 @@ namespace GW2EIParser.Logic
                     phase.Targets.Add(target);
                     breakbarPhases.Add(phase);
                 }
-            }*/
+            }
             return breakbarPhases;
-        }
+        }*/
 
         public virtual List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {

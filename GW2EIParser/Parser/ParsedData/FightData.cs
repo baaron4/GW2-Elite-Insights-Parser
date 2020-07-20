@@ -216,7 +216,7 @@ namespace GW2EIParser.Parser.ParsedData
             if (_phases.Count == 0)
             {
                 _phases = Logic.GetPhases(log, log.ParserSettings.ParsePhases);
-                _phases.AddRange(Logic.GetBreakbarPhases(log, log.ParserSettings.ParsePhases));
+                //_phases.AddRange(Logic.GetBreakbarPhases(log, log.ParserSettings.ParsePhases));
                 _phases.RemoveAll(x => x.Targets.Count == 0);
                 _phases.RemoveAll(x => x.DurationInMS < GeneralHelper.PhaseTimeLimit);
                 _phases.Sort((x, y) => x.Start.CompareTo(y.Start));
