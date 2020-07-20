@@ -256,7 +256,7 @@ function computeRotationData(rotationData, images, data, phase) {
             else if (endType == 3) fillColor = 'rgb(40,220,40)';
             else fillColor = 'rgb(220,220,0)';
 
-            rotaTrace.x.push(clampedWidth);
+            rotaTrace.x.push(clampedWidth - 0.001);
             rotaTrace.base.push(clampedX);
             rotaTrace.y.push(1.2);
             rotaTrace.text.push(name + ' at ' + x + 's for ' + duration + 'ms');
