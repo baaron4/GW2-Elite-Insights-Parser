@@ -272,17 +272,18 @@ var compileTargetTab = function () {
             this.targetOffset += computeBuffData(this.target.details.boonGraph[this.phaseindex], this.data);
             var dpsY = oldOffset === this.targetOffset ? 'y2' : 'y3';
             {
-                var health = this.graph.targets[this.phaseTargetIndex].health;
+                var health = this.graph.targets[this.phaseTargetIndex].healthStates;
                 var hpTexts = [];
+                var times = [];
                 for (var j = 0; j < health.length; j++) {
-                    hpTexts[j] = health[j] + "% hp";
+                    hpTexts[j] = health[j][1] + "% hp";
+                    times[j] = health[j][0];
                 }
                 var res = {
-                    x: this.phase.times,
+                    x: times,
                     text: hpTexts,
                     mode: 'lines',
                     line: {
-                        shape: 'spline',
                         dash: 'dashdot'
                     },
                     hoverinfo: 'text+x',
@@ -375,10 +376,10 @@ var compileTargetTab = function () {
                 var res = [];
                 res[0] = dpsData.dps;
                 {
-                    var health = this.graph.targets[this.phaseTargetIndex].health;
+                    var health = this.graph.targets[this.phaseTargetIndex].healthStates;
                     var hpPoints = [];
                     for (var j = 0; j < health.length; j++) {
-                        hpPoints[j] = health[j] * dpsData.maxDPS / 100.0;
+                        hpPoints[j] = health[j][1] * dpsData.maxDPS / 100.0;
                     }
                     res[1] = hpPoints;
                 }

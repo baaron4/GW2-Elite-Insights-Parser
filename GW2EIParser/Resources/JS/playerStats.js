@@ -126,9 +126,9 @@ var compilePlayerTab = function () {
             this.playerOffset += computeBuffData(this.player.details.boonGraph[this.phaseindex], this.data);
             var dpsY = oldOffset === this.playerOffset ? 'y2' : 'y3';
             this.graphOffset = this.playerOffset;
-            this.playerOffset += computeTargetHealthData(this.graph, logData.targets, this.phase, this.data, dpsY, this.phase.times);
+            this.playerOffset += computeTargetHealthData(this.graph, logData.targets, this.phase, this.data, dpsY);
             if (this.healthGraph) {
-                this.playerOffset += computePlayerHealthData(this.healthGraph, this.data, dpsY, this.phase.times);
+                this.playerOffset += computePlayerHealthData(this.healthGraph, this.data, dpsY);
             }
             this.data.push({
                 x: this.phase.times,
@@ -182,7 +182,7 @@ var compilePlayerTab = function () {
                 return graphData.phases[this.phaseindex];
             },
             healthGraph: function () {
-                return this.graph.players[this.playerindex].health;
+                return this.graph.players[this.playerindex].healthStates;
             },
             graphid: function () {
                 return "playergraph-" + this.playerindex + '-' + this.phaseindex;
@@ -255,10 +255,10 @@ var compilePlayerTab = function () {
                 res[offset++] = dpsData.playerDPS.target;
                 res[offset++] = dpsData.playerDPS.cleave;
                 for (var i = 0; i < this.graph.targets.length; i++) {
-                    var health = this.graph.targets[i].health;
+                    var health = this.graph.targets[i].healthStates;
                     var hpPoints = [];
                     for (var j = 0; j < health.length; j++) {
-                        hpPoints[j] = health[j] * dpsData.maxDPS / 100.0;
+                        hpPoints[j] = health[j][1] * dpsData.maxDPS / 100.0;
                     }
                     res[offset++] = hpPoints;
                 }
@@ -266,7 +266,7 @@ var compilePlayerTab = function () {
                     var health = this.healthGraph;
                     var hpPoints = [];
                     for (var j = 0; j < health.length; j++) {
-                        hpPoints[j] = health[j] * dpsData.maxDPS / 100.0;
+                        hpPoints[j] = health[j][1] * dpsData.maxDPS / 100.0;
                     }
                     res[offset++] = hpPoints;
                 }

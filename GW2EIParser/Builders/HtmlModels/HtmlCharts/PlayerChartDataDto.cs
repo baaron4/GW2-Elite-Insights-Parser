@@ -8,7 +8,7 @@ namespace GW2EIParser.Builders.HtmlModels
     {
         public List<List<int>> Targets { get; set; }
         public List<int> Total { get; set; }
-        public double[] Health { get; set; }
+        public List<object[]> HealthStates { get; set; }
 
         public static List<PlayerChartDataDto> BuildPlayersGraphData(ParsedLog log, int phaseIndex)
         {
@@ -21,7 +21,7 @@ namespace GW2EIParser.Builders.HtmlModels
                 {
                     Total = p.Get1SDamageList(log, phaseIndex, phase, null),
                     Targets = new List<List<int>>(),
-                    Health = p.Get1SHealthGraph(log)[phaseIndex]
+                    HealthStates = ChartDataDto.BuildHealthGraphStates(log, p, log.FightData.GetPhases(log)[phaseIndex], true)
                 };
                 foreach (NPC target in phase.Targets)
                 {

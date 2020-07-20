@@ -46,6 +46,7 @@ var compileGraphs = function () {
                     xrangeslider: {}
                 },
                 hovermode: 'compare',
+                hoverdistance: 1900,
                 legend: {
                     orientation: 'h',
                     font: {
@@ -103,7 +104,7 @@ var compileGraphs = function () {
                 name: 'All Player Dps'
             });
             // targets health
-            computeTargetHealthData(this.graph, logData.targets, this.phase, this.data, null, this.phase.times);
+            computeTargetHealthData(this.graph, logData.targets, this.phase, this.data, null);
             // mechanics
             for (i = 0; i < graphData.mechanics.length; i++) {
                 var mech = graphData.mechanics[i];
@@ -285,10 +286,10 @@ var compileGraphs = function () {
                 var maxDPS = (this.mode === 0 ? dpsData.maxDPS.total : (this.mode === 1 ? dpsData.maxDPS.target : dpsData.maxDPS.cleave));
                 var hps = [];
                 for (i = 0; i < this.graph.targets.length; i++) {
-                    var health = this.graph.targets[i].health;
+                    var health = this.graph.targets[i].healthStates;
                     var hpPoints = [];
                     for (j = 0; j < health.length; j++) {
-                        hpPoints[j] = health[j] * maxDPS / 100.0;
+                        hpPoints[j] = health[j][1] * maxDPS / 100.0;
                     }
                     hps[i] = hpPoints;
                     res[offset++] = hpPoints;

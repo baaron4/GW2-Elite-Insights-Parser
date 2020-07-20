@@ -458,6 +458,25 @@ function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, c
     return res;
 }
 
+function findState(states, timeS, start, end) {
+    // when the array exists, it covers from 0 to fightEnd by construction
+    var id = Math.floor((end + start) / 2);
+    if (id === start || id === end) {
+        return states[id][1];
+    }
+    var item = states[id];
+    var itemN = states[id + 1];
+    var x = item[0];
+    var xN = itemN[0];
+    if (timeS < x) {
+        return findState(states, timeS, start, id);
+    } else if (timeS > xN) {
+        return findState(states, timeS, id, end);
+    } else {
+        return item[1];
+    }
+}
+
 function getActorGraphLayout(images, color) {
     return {
         barmode: 'stack',
@@ -474,7 +493,7 @@ function getActorGraphLayout(images, color) {
             traceorder: 'reversed'
         },
         hovermode: 'compare',
-        hoverdistance: 1100,
+        hoverdistance: 1900,
         yaxis2: {
             title: 'Buffs',
             domain: [0.11, 0.6],
@@ -509,20 +528,21 @@ function getActorGraphLayout(images, color) {
     };
 }
 
-function computeTargetHealthData(graph, targets, phase, data, yaxis, times) {
+function computeTargetHealthData(graph, targets, phase, data, yaxis) {
     for (var i = 0; i < graph.targets.length; i++) {
-        var health = graph.targets[i].health;
+        var health = graph.targets[i].healthStates;
         var hpTexts = [];
+        var times = [];
         var target = targets[phase.targets[i]];
         for (var j = 0; j < health.length; j++) {
-            hpTexts[j] = health[j] + "% hp - " + target.name ;
+            hpTexts[j] = health[j][1] + "% hp - " + target.name ;
+            times[j] = health[j][0];
         }
         var res = {
             x: times,
             text: hpTexts,
             mode: 'lines',
             line: {
-                shape: 'spline',
                 dash: 'dashdot'
             },
             hoverinfo: 'text+x',
@@ -536,18 +556,19 @@ function computeTargetHealthData(graph, targets, phase, data, yaxis, times) {
     return graph.targets.length;
 }
 
-function computePlayerHealthData(healthGraph, data, yaxis, times) {
+function computePlayerHealthData(healthGraph, data, yaxis) {
     var health = healthGraph;
     var hpTexts = [];
+    var times = [];
     for (var j = 0; j < health.length; j++) {
-        hpTexts[j] = health[j] + "% hp - Player";
+        hpTexts[j] = health[j][1] + "% hp - Player";
+        times[j] = health[j][0];
     }
     var res = {
         x: times,
         text: hpTexts,
         mode: 'lines',
         line: {
-            shape: 'spline',
             dash: 'dashdot'
         },
         hoverinfo: 'text+x',

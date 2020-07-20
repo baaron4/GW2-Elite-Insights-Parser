@@ -27,7 +27,7 @@ namespace GW2EIParser.EIData
                 Segment seg = BuffChart[i];
                 if (seg.Start <= time && time <= seg.End)
                 {
-                    return seg.Value;
+                    return (int)seg.Value;
                 }
             }
             return 0;
@@ -41,7 +41,7 @@ namespace GW2EIParser.EIData
             {
                 if (seg.Intersect(time - window, time + window))
                 {
-                    count += seg.Value;
+                    count += (int)seg.Value;
                 }
             }
             return count > 0;
@@ -52,33 +52,7 @@ namespace GW2EIParser.EIData
         /// </summary>
         public void FuseSegments()
         {
-            var newChart = new List<Segment>();
-            Segment last = null;
-            foreach (Segment seg in BuffChart)
-            {
-                if (seg.Start == seg.End)
-                {
-                    continue;
-                }
-                if (last == null)
-                {
-                    newChart.Add(new Segment(seg));
-                    last = newChart.Last();
-                }
-                else
-                {
-                    if (seg.Value == last.Value)
-                    {
-                        last.End = seg.End;
-                    }
-                    else
-                    {
-                        newChart.Add(new Segment(seg));
-                        last = newChart.Last();
-                    }
-                }
-            }
-            BuffChart = newChart;
+            BuffChart = Segment.FuseSegments(BuffChart);
         }
 
         /// <summary>
@@ -107,7 +81,7 @@ namespace GW2EIParser.EIData
                         Segment curSeg = segmentsToFill[i];
                         long curEnd = curSeg.End;
                         long curStart = curSeg.Start;
-                        int curVal = curSeg.Value;
+                        int curVal = (int)curSeg.Value;
                         if (curStart > end)
                         {
                             break;

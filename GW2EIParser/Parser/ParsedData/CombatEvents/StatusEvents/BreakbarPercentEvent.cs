@@ -2,7 +2,7 @@
 
 namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
-    public class BreakbarPercentEvent : AbstractStatusEvent
+    public class BreakbarPercentEvent : AbstractStatusEvent, Stateable
     {
         public float BreakbarPercent { get; }
 
@@ -18,5 +18,9 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             BreakbarPercent = BitConverter.ToSingle(bytes, 0);
         }
 
+        public (long start, double value) ToState()
+        {
+            return (Time, BreakbarPercent);
+        }
     }
 }
