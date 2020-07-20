@@ -4,7 +4,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
     public class BreakbarPercentEvent : AbstractStatusEvent, Stateable
     {
-        public float BreakbarPercent { get; }
+        public double BreakbarPercent { get; }
 
         public BreakbarPercentEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
@@ -15,7 +15,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             {
                 bytes[offset++] = bt;
             }
-            BreakbarPercent = BitConverter.ToSingle(bytes, 0);
+            BreakbarPercent = Math.Round(100.0 * BitConverter.ToSingle(bytes, 0), 2 );
         }
 
         public (long start, double value) ToState()

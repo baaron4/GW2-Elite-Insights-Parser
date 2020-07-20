@@ -62,7 +62,7 @@ namespace GW2EIParser.EIData
         {
             if (_healthUpdates == null)
             {
-                _healthUpdates = Segment.FromStates(log.CombatData.GetHealthUpdateEvents(AgentItem).Select(x => ( x.Time, x.HPPercent)).ToList(), 0, log.FightData.FightEnd);
+                _healthUpdates = Segment.FromStates(log.CombatData.GetHealthUpdateEvents(AgentItem).Select(x => x.ToState()).ToList(), 0, log.FightData.FightEnd);
             }
             return _healthUpdates;
         }

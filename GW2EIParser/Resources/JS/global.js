@@ -543,7 +543,8 @@ function computeTargetHealthData(graph, targets, phase, data, yaxis) {
             text: hpTexts,
             mode: 'lines',
             line: {
-                dash: 'dashdot'
+                dash: 'dashdot',
+                shape: 'hv'
             },
             hoverinfo: 'text+x',
             name: target.name + ' health',
@@ -569,7 +570,8 @@ function computePlayerHealthData(healthGraph, data, yaxis) {
         text: hpTexts,
         mode: 'lines',
         line: {
-            dash: 'dashdot'
+            dash: 'dashdot',
+            shape: 'hv'
         },
         hoverinfo: 'text+x',
         name: 'Player health',
@@ -596,19 +598,13 @@ function computeBuffData(buffData, data) {
                 visible: boonItem.visible ? null : 'legendonly',
                 line: {
                     color: boonItem.color,
-                    shape: 'linear'
+                    shape: 'hv'
                 },
                 hoverinfo: 'text+x',
                 fill: 'tozeroy',
                 name: boon.name.substring(0,20)
             };
-            line.x.push(boonItem.states[0][0]);
-            line.y.push(boonItem.states[0][1]);
-            line.text.push(boon.name + ': ' + boonItem.states[0][1]);
-            for (var p = 1; p < boonItem.states.length; p++) {
-                line.x.push(boonItem.states[p][0]-0.001);
-                line.y.push(boonItem.states[p-1][1]);
-                line.text.push(boon.name + ': ' + boonItem.states[p-1][1]);
+            for (var p = 0; p < boonItem.states.length; p++) {
                 line.x.push(boonItem.states[p][0]);
                 line.y.push(boonItem.states[p][1]);
                 line.text.push(boon.name + ': ' + boonItem.states[p][1]);
