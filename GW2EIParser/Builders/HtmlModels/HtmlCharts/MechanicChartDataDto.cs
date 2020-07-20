@@ -14,7 +14,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public List<List<List<object>>> Points { get; set; }
         public bool Visible { get; set; }
 
-        public static List<List<object>> GetMechanicChartPoints(List<MechanicEvent> mechanicLogs, PhaseData phase, ParsedLog log, bool enemyMechanic)
+        private static List<List<object>> GetMechanicChartPoints(List<MechanicEvent> mechanicLogs, PhaseData phase, ParsedLog log, bool enemyMechanic)
         {
             var res = new List<List<object>>();
             if (!enemyMechanic)
@@ -57,6 +57,35 @@ namespace GW2EIParser.Builders.HtmlModels
                 }
             }
             return res;
+        }
+
+        private static List<List<List<object>>> BuildMechanicGraphPointData(ParsedLog log, List<MechanicEvent> mechanicLogs, bool enemyMechanic)
+        {
+            var list = new List<List<List<object>>>();
+            foreach (PhaseData phase in log.FightData.GetPhases(log))
+            {
+                list.Add(GetMechanicChartPoints(mechanicLogs, phase, log, enemyMechanic));
+            }
+            return list;
+        }
+
+        public static List<MechanicChartDataDto> BuildMechanicsChartData(ParsedLog log)
+        {
+            var mechanicsChart = new List<MechanicChartDataDto>();
+            foreach (Mechanic mech in log.MechanicData.GetPresentMechanics(log, 0))
+            {
+                List<MechanicEvent> mechanicLogs = log.MechanicData.GetMechanicLogs(log, mech);
+                var dto = new MechanicChartDataDto
+                {
+                    Color = mech.PlotlySetting.Color,
+                    Symbol = mech.PlotlySetting.Symbol,
+                    Size = mech.PlotlySetting.Size,
+                    Visible = (mech.SkillId == SkillItem.DeathId || mech.SkillId == SkillItem.DownId),
+                    Points = BuildMechanicGraphPointData(log, mechanicLogs, mech.IsEnemyMechanic)
+                };
+                mechanicsChart.Add(dto);
+            }
+            return mechanicsChart;
         }
     }
 }

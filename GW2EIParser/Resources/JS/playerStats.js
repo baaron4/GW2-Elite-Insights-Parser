@@ -121,7 +121,7 @@ var compilePlayerTab = function () {
         created: function () {
             var images = [];
             this.data = [];
-            this.playerOffset += computeRotationData(this.player.details.rotation[this.phaseindex], images, this.data);
+            this.playerOffset += computeRotationData(this.player.details.rotation[this.phaseindex], images, this.data, this.phase);
             var oldOffset = this.playerOffset;
             this.playerOffset += computeBuffData(this.player.details.boonGraph[this.phaseindex], this.data);
             var dpsY = oldOffset === this.playerOffset ? 'y2' : 'y3';
