@@ -139,7 +139,7 @@ var compilePlayerTab = function () {
                     color: this.player.colTotal,
                 },
                 yaxis: dpsY,
-                hoverinfo: 'name+y+x',
+                hoverinfo: 'name+y',
                 name: 'Total DPS'
             });
             if (!logData.targetless) {        
@@ -152,7 +152,7 @@ var compilePlayerTab = function () {
                         color: this.player.colTarget,
                     },
                     yaxis: dpsY,
-                    hoverinfo: 'name+y+x',
+                    hoverinfo: 'name+y',
                     name: 'Target DPS'
                 });
                 this.data.push({
@@ -164,7 +164,7 @@ var compilePlayerTab = function () {
                         color: this.player.colCleave,
                     },
                     yaxis: dpsY,
-                    hoverinfo: 'name+y+x',
+                    hoverinfo: 'name+y',
                     name: 'Cleave DPS'
                 });
             }

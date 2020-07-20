@@ -492,8 +492,8 @@ function getActorGraphLayout(images, color) {
         legend: {
             traceorder: 'reversed'
         },
-        hovermode: 'compare',
-        hoverdistance: 1900,
+        hovermode: 'x',
+        hoverdistance: 1100,
         yaxis2: {
             title: 'Buffs',
             domain: [0.11, 0.6],
@@ -546,7 +546,7 @@ function computeTargetHealthData(graph, targets, phase, data, yaxis) {
                 dash: 'dashdot',
                 shape: 'hv'
             },
-            hoverinfo: 'text+x',
+            hoverinfo: 'text',
             name: target.name + ' health',
         };
         if (yaxis) {
@@ -573,7 +573,7 @@ function computePlayerHealthData(healthGraph, data, yaxis) {
             dash: 'dashdot',
             shape: 'hv'
         },
-        hoverinfo: 'text+x',
+        hoverinfo: 'text',
         name: 'Player health',
         visible: 'legendonly',
     };
@@ -600,7 +600,7 @@ function computeBuffData(buffData, data) {
                     color: boonItem.color,
                     shape: 'hv'
                 },
-                hoverinfo: 'text+x',
+                hoverinfo: 'text',
                 fill: 'tozeroy',
                 name: boon.name.substring(0,20)
             };

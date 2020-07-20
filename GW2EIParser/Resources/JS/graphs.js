@@ -45,8 +45,8 @@ var compileGraphs = function () {
                     gridcolor: textColor,
                     xrangeslider: {}
                 },
-                hovermode: 'compare',
-                hoverdistance: 1900,
+                hovermode: 'x',
+                hoverdistance: 1100,
                 legend: {
                     orientation: 'h',
                     font: {
@@ -89,7 +89,7 @@ var compileGraphs = function () {
                         width: i === this.playerindex ? 5 : 2
                     },
                     text: pText,
-                    hoverinfo: 'y+text+x',
+                    hoverinfo: 'y+text',
                     name: player.name + ' DPS',
                 });
             }
@@ -99,7 +99,7 @@ var compileGraphs = function () {
                 line: {
                     shape: 'spline'
                 },
-                hoverinfo: 'name+y+x',
+                hoverinfo: 'name+y',
                 visible: 'legendonly',
                 name: 'All Player Dps'
             });
@@ -121,7 +121,7 @@ var compileGraphs = function () {
                     },
                     text: [],
                     name: mechData.name,
-                    hoverinfo: 'text+x'
+                    hoverinfo: 'text'
                 };
                 var time, pts, k;
                 if (mechData.enemyMech) {
