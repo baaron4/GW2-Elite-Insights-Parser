@@ -28,6 +28,18 @@ namespace GW2EIParser.Builders.HtmlModels
             ).ToList();
             return Segment.ToObjectList(subSegments, phase.Start, phase.End);
         }
+        public static List<object[]> BuildBreakbarPercentStates(ParsedLog log, NPC npc, PhaseData phase)
+        {
+            List<Segment> segments = npc.GetBreakbarPercentUpdates(log);
+            if (!segments.Any())
+            {
+                return null;
+            }
+            var res = new List<object[]>();
+            var subSegments = segments.Where(x => x.End >= phase.Start && x.Start <= phase.End
+            ).ToList();
+            return Segment.ToObjectList(subSegments, phase.Start, phase.End);
+        }
 
         public static ChartDataDto BuildChartData(ParsedLog log)
         {
@@ -47,9 +59,11 @@ namespace GW2EIParser.Builders.HtmlModels
                 if (i == 0)
                 {
                     phaseData.TargetsHealthStatesForCR = new List<List<object[]>>();
+                    phaseData.TargetsBreakbarPercentStatesForCR = new List<List<object[]>>();
                     foreach (NPC target in log.FightData.Logic.Targets)
                     {
                         phaseData.TargetsHealthStatesForCR.Add(BuildHealthGraphStates(log, target, phases[0], false));
+                        phaseData.TargetsBreakbarPercentStatesForCR.Add(BuildBreakbarPercentStates(log, target, phases[0]));
                     }
                 }
 

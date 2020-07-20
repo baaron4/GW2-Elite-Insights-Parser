@@ -286,6 +286,12 @@ var compileCombatReplay = function () {
         props: ["targetindex", "time"],
         template: `${tmplCombatReplayTargetStatus}`,
         methods: {
+            getBreakbarPercent: function (time) {
+                if(!this.hasBreakbarPercent) {
+                    return 100.0;
+                }
+                return findState(this.breakbarPercent, time/1000.0, 0, this.breakbarPercent.length - 1);
+            },
             getPercent: function (time) {
                 return findState(this.healths, time/1000.0, 0, this.healths.length - 1);
             },
@@ -299,6 +305,17 @@ var compileCombatReplay = function () {
                 template = template.replace('$black$', blackPercent);
                 template = template.replace('$middle$', middle);
                 return template;
+            },
+            getBreakbarGradient: function (time) {
+                var template = 'linear-gradient(to right, $turquoise$, $middle$, $black$)';
+                var res = this.getBreakbarPercent(time);
+                var turquoisePercent = "#20B2AA " + res + "%";
+                var blackPercent = "black " + (100 - res) + "%";
+                var middle = res + "%";
+                template = template.replace('$turquoise$', turquoisePercent);
+                template = template.replace('$black$', blackPercent);
+                template = template.replace('$middle$', middle);
+                return template;
             }
         },
         computed: {
@@ -307,6 +324,12 @@ var compileCombatReplay = function () {
             },
             healths: function () {
                 return graphData.phases[0].targetsHealthStatesForCR[this.targetindex];
+            },
+            breakbarPercent: function () {
+                return graphData.phases[0].targetsBreakbarPercentStatesForCR[this.targetindex];
+            },
+            hasBreakbarPercent: function () {
+                return !!this.breakbarPercent;
             },
             target: function () {
                 return logData.targets[this.targetindex];
