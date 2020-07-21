@@ -16,6 +16,9 @@ namespace GW2EIParser.Builders
 {
     public class HTMLBuilder
     {
+
+        private static string _eiJS;
+
         private readonly string _scriptVersion;
         private readonly int _scriptVersionRev;
 
@@ -45,101 +48,6 @@ namespace GW2EIParser.Builders
             _cr = _log.CanCombatReplay;
             _light = lightTheme;
             _externalScripts = externalScript;
-        }
-        
-        /// <summary>
-        /// Create the damage taken distribution table for a given player
-        /// </summary>
-        /// <param name="p"></param>
-        /// <param name="phaseIndex"></param>
-        
-
-        private string ReplaceVariables(string html)
-        {
-            html = html.Replace("${bootstrapTheme}", !_light ? "slate" : "yeti");
-
-            html = html.Replace("${encounterStart}", _log.LogData.LogStartStd);
-            html = html.Replace("${encounterEnd}", _log.LogData.LogEndStd);
-            html = html.Replace("${evtcVersion}", _log.LogData.BuildVersion);
-            html = html.Replace("${gw2build}", _log.LogData.GW2Version.ToString());
-            html = html.Replace("${fightID}", _log.FightData.TriggerID.ToString());
-            html = html.Replace("${eiVersion}", Application.ProductVersion);
-            html = html.Replace("${recordedBy}", _log.LogData.PoVName);
-
-            string uploadString = "";
-            if (_uploadLink[0].Length > 0)
-            {
-                uploadString += "<p>DPS Reports Link (EI): <a href=\"" + _uploadLink[0] + "\">" + _uploadLink[0] + "</a></p>";
-            }
-            if (_uploadLink[1].Length > 0)
-            {
-                uploadString += "<p>DPS Reports Link (RH): <a href=\"" + _uploadLink[1] + "\">" + _uploadLink[1] + "</a></p>";
-            }
-            if (_uploadLink[2].Length > 0)
-            {
-                uploadString += "<p>Raidar Link: <a href=\"" + _uploadLink[2] + "\">" + _uploadLink[2] + "</a></p>";
-            }
-            html = html.Replace("<!--${UploadLinks}-->", uploadString);
-
-            return html;
-        }
-
-        public void CreateHTML(StreamWriter sw, string path)
-        {
-            string html = Properties.Resources.template_html;
-            _log.UpdateProgressWithCancellationCheck("HTML: replacing global variables");
-            html = ReplaceVariables(html);
-
-            _log.UpdateProgressWithCancellationCheck("HTML: building CSS");
-            html = html.Replace("<!--${Css}-->", BuildCss(path));
-            _log.UpdateProgressWithCancellationCheck("HTML: building JS");
-            html = html.Replace("<!--${Js}-->", BuildEIJs(path));
-            _log.UpdateProgressWithCancellationCheck("HTML: building Combat Replay JS");
-            html = html.Replace("<!--${CombatReplayScript}-->", BuildCombatReplayScript(path));
-
-            html = html.Replace("'${logDataJson}'", ToJson(LogDataDto.BuildLogData(_log, _usedSkills, _usedBuffs, _usedDamageMods, _cr, _light)));
-#if DEBUG2
-            html = html.Replace("<!--${Vue}-->", "<script src=\"https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js\"></script>");
-#else
-            html = html.Replace("<!--${Vue}-->", "<script src=\"https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.min.js\"></script>");
-#endif
-
-            _log.UpdateProgressWithCancellationCheck("HTML: building Graph Data");
-            html = html.Replace("'${graphDataJson}'", ToJson(ChartDataDto.BuildChartData(_log)));
-
-            sw.Write(html);
-            return;
-        }
-
-        private string BuildCombatReplayScript(string path)
-        {
-            if (!_cr)
-            {
-                return "";
-            }
-            string scriptContent = Properties.Resources.combatreplay_js;
-            if (_externalScripts && path != null)
-            {
-                string jsFileName = "EliteInsights-CR-" + _scriptVersion + ".js";
-                string jsPath = Path.Combine(path, jsFileName);
-                try
-                {
-                    using (var fs = new FileStream(jsPath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
-                    {
-                        scriptWriter.Write(scriptContent);
-                    }
-                }
-                catch (IOException)
-                {
-                }
-                string content = "<script src=\"./" + jsFileName + "?version=" + _scriptVersionRev + "\"></script>\n";
-                return content;
-            }
-            else
-            {
-                return "<script>\r\n" + scriptContent + "\r\n</script>";
-            }
         }
 
         private static string PrepareTemplate(string template)
@@ -196,7 +104,7 @@ namespace GW2EIParser.Builders
                 Properties.Resources.tmplMainView,
             };
             var res = new List<string>();
-            foreach( string template in templates)
+            foreach (string template in templates)
             {
                 res.Add(PrepareTemplate(template));
             }
@@ -232,6 +140,115 @@ namespace GW2EIParser.Builders
             return res;
         }
 
+        public static void InitScripts()
+        {
+            var orderedScripts = new List<string>()
+            {
+                Properties.Resources.globalJS,
+                Properties.Resources.mixinsJS,
+                Properties.Resources.functionsJS,
+                Properties.Resources.ei_js
+            };
+            string scriptContent = orderedScripts[0];
+            for (int i = 1; i < orderedScripts.Count; i++)
+            {
+                scriptContent += orderedScripts[i];
+            }
+            List<string> templates = BuildTemplates();
+            templates.AddRange(BuildCRTemplates());
+            _eiJS = scriptContent.Replace("TEMPLATE_COMPILE", string.Join("\n", templates));
+        }
+
+        /// <summary>
+        /// Create the damage taken distribution table for a given player
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="phaseIndex"></param>
+
+
+        private string ReplaceVariables(string html)
+        {
+            html = html.Replace("${bootstrapTheme}", !_light ? "slate" : "yeti");
+
+            html = html.Replace("${encounterStart}", _log.LogData.LogStartStd);
+            html = html.Replace("${encounterEnd}", _log.LogData.LogEndStd);
+            html = html.Replace("${evtcVersion}", _log.LogData.BuildVersion);
+            html = html.Replace("${gw2build}", _log.LogData.GW2Version.ToString());
+            html = html.Replace("${fightID}", _log.FightData.TriggerID.ToString());
+            html = html.Replace("${eiVersion}", Application.ProductVersion);
+            html = html.Replace("${recordedBy}", _log.LogData.PoVName);
+
+            string uploadString = "";
+            if (_uploadLink[0].Length > 0)
+            {
+                uploadString += "<p>DPS Reports Link (EI): <a href=\"" + _uploadLink[0] + "\">" + _uploadLink[0] + "</a></p>";
+            }
+            if (_uploadLink[1].Length > 0)
+            {
+                uploadString += "<p>DPS Reports Link (RH): <a href=\"" + _uploadLink[1] + "\">" + _uploadLink[1] + "</a></p>";
+            }
+            if (_uploadLink[2].Length > 0)
+            {
+                uploadString += "<p>Raidar Link: <a href=\"" + _uploadLink[2] + "\">" + _uploadLink[2] + "</a></p>";
+            }
+            html = html.Replace("<!--${UploadLinks}-->", uploadString);
+
+            return html;
+        }
+
+        public void CreateHTML(StreamWriter sw, string path)
+        {
+            string html = Properties.Resources.template_html;
+            _log.UpdateProgressWithCancellationCheck("HTML: replacing global variables");
+            html = ReplaceVariables(html);
+
+            _log.UpdateProgressWithCancellationCheck("HTML: building CSS");
+            html = html.Replace("<!--${Css}-->", BuildCss(path));
+            _log.UpdateProgressWithCancellationCheck("HTML: building JS");
+            html = html.Replace("<!--${Js}-->", BuildEIJs(path));
+            _log.UpdateProgressWithCancellationCheck("HTML: building Combat Replay JS");
+            html = html.Replace("<!--${CombatReplayJS}-->", BuildCombatReplayJS(path));
+
+            html = html.Replace("'${logDataJson}'", ToJson(LogDataDto.BuildLogData(_log, _usedSkills, _usedBuffs, _usedDamageMods, _cr, _light)));
+
+            _log.UpdateProgressWithCancellationCheck("HTML: building Graph Data");
+            html = html.Replace("'${graphDataJson}'", ToJson(ChartDataDto.BuildChartData(_log)));
+
+            sw.Write(html);
+            return;
+        }
+
+        private string BuildCombatReplayJS(string path)
+        {
+            if (!_cr)
+            {
+                return "";
+            }
+            string scriptContent = Properties.Resources.combatreplay_js;
+            if (_externalScripts && path != null)
+            {
+                string jsFileName = "EliteInsights-CR-" + _scriptVersion + ".js";
+                string jsPath = Path.Combine(path, jsFileName);
+                try
+                {
+                    using (var fs = new FileStream(jsPath, FileMode.Create, FileAccess.Write))
+                    using (var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
+                    {
+                        scriptWriter.Write(scriptContent);
+                    }
+                }
+                catch (IOException)
+                {
+                }
+                string content = "<script src=\"./" + jsFileName + "?version=" + _scriptVersionRev + "\"></script>\n";
+                return content;
+            }
+            else
+            {
+                return "<script>\r\n" + scriptContent + "\r\n</script>";
+            }
+        }
+
         private string BuildCss(string path)
         {
             string scriptContent = Properties.Resources.ei_css;
@@ -261,24 +278,7 @@ namespace GW2EIParser.Builders
 
         private string BuildEIJs(string path)
         {
-            var orderedScripts = new List<string>()
-            {
-                Properties.Resources.globalJS,
-                Properties.Resources.mixinsJS,
-                Properties.Resources.functionsJS,
-                Properties.Resources.ei_js
-            };
-            string scriptContent = orderedScripts[0];
-            for (int i = 1; i < orderedScripts.Count; i++)
-            {
-                scriptContent += orderedScripts[i];
-            }
-            List<string> templates = BuildTemplates();
-            if (_cr)
-            {
-                templates.AddRange(BuildCRTemplates());
-            }
-            scriptContent = scriptContent.Replace("TEMPLATE_COMPILE", string.Join("\n", templates));
+            string scriptContent = _eiJS;
 
             if (_externalScripts && path != null)
             {

@@ -157,7 +157,7 @@ namespace GW2EIParser
             }
             else
             {
-                if(!Directory.Exists(Properties.Settings.Default.OutLocation))
+                if (!Directory.Exists(Properties.Settings.Default.OutLocation))
                 {
                     throw new InvalidOperationException("Save directory does not exist");
                 }
@@ -224,7 +224,7 @@ namespace GW2EIParser
                     playersAndTargetsAndMobs.AddRange(playersAndTargets);
                     // init all positions
                     Parallel.ForEach(playersAndTargetsAndMobs, actor => actor.GetCombatReplayPolledPositions(log));
-                } 
+                }
                 else if (log.CombatData.HasMovementData)
                 {
                     Parallel.ForEach(log.PlayerList, player => player.GetCombatReplayPolledPositions(log));
@@ -330,7 +330,7 @@ namespace GW2EIParser
                     {
                         CompressFile(outputFile, msr, operation);
                         operation.UpdateProgressWithCancellationCheck("XML compressed");
-                    } 
+                    }
                     else
                     {
                         operation.GeneratedFiles.Add(outputFile);

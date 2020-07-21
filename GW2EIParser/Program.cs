@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using GW2EIParser.Builders;
 using GW2EIParser.Controllers;
 
 namespace GW2EIParser
@@ -133,6 +134,7 @@ namespace GW2EIParser
                 }
 
             }
+            HTMLBuilder.InitScripts();
             GW2APIController.InitAPICache();
             if (uiMode)
             {
