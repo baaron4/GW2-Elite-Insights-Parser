@@ -1,80 +1,155 @@
-<div>
-    <div v-if="actor !== null">
-        <div v-if="isminion">
-            {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of its master's total
-            {{istarget ? 'Target' :''}} dps
+<template>
+    <div>
+        <div v-if="actor !== null">
+            <div v-if="isminion">
+                {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of its master's total
+                {{istarget ? 'Target' :''}} dps
+            </div>
+            <div v-else>
+                {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of its total {{istarget ?
+                'Target' :''}} dps
+            </div>
         </div>
-        <div v-else>
-            {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of its total {{istarget ?
-            'Target' :''}} dps
-        </div>
+        <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
+            <thead>
+                <tr>
+                    <th class="text-left">Skill</th>
+                    <th></th>
+                    <th>Damage</th>
+                    <th data-original-title="Damage against barrier. Not necessarily included in total damage">B.Damage
+                    </th>
+                    <th>Min</th>
+                    <th>Avg</th>
+                    <th>Max</th>
+                    <th>Casts</th>
+                    <th>Hits</th>
+                    <th>Hits per Cast</th>
+                    <th>Crit</th>
+                    <th>Flank</th>
+                    <th>Glance</th>
+                    <th>Wasted</th>
+                    <th>Saved</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="row in dmgdist.distribution" :class="{condi: getSkill(row[0], row[1]).condi}">
+                    <td class="text-left" :data-original-title="getSkill(row[0], row[1]).id">
+                        <img :src="getSkill(row[0], row[1]).icon" class="icon icon-hover"> {{getSkill(row[0],
+                        row[1]).name}}
+                    </td>
+                    <td>{{ round3(100*row[2]/dmgdist.contributedDamage) }}%</td>
+                    <td :data-original-title="round2(row[2]/phase.durationS) +' dps'">{{ row[2] }}</td>
+                    <td :data-original-title="round2(row[12]/phase.durationS) +' dps'">{{ row[12] }}</td>
+                    <td>{{ Math.max(row[3],0) }}</td>
+                    <td>{{ round(row[2]/row[6]) }}</td>
+                    <td>{{ row[4] }}</td>
+                    <td>{{ !getSkill(row[0], row[1]).condi && row[5] ? row[5] : ''}}</td>
+                    <td>{{ row[6] }}</td>
+                    <td>{{(!getSkill(row[0], row[1]).condi && row[6] && row[5]) ? round2(row[6]/row[5]) : ''}}</td>
+                    <td
+                        :data-original-title="(!getSkill(row[0], row[1]).condi && row[6]) ? row[7] +' out of ' + row[6] + ' hits': false">
+                        {{(!getSkill(row[0], row[1]).condi && row[6]) ? round2(row[7]*100/row[6]) + '%' : ''}}
+                    </td>
+                    <td
+                        :data-original-title="(!getSkill(row[0], row[1]).condi && row[6]) ? row[8] +' out of ' + row[6] + ' hits': false">
+                        {{(!getSkill(row[0], row[1]).condi && row[6]) ? round2(row[8]*100/row[6]) + '%' : ''}}
+                    </td>
+                    <td
+                        :data-original-title="(!getSkill(row[0], row[1]).condi && row[6]) ? row[9] +' out of ' + row[6] + ' hits': false">
+                        {{(!getSkill(row[0], row[1]).condi && row[6]) ? round2(row[9]*100/row[6]) + '%' : ''}}
+                    </td>
+                    <td
+                        :data-original-title="row[10] ? round2(100.0 * row[10]/phase.durationS) + '% of the phase' : false">
+                        {{ row[10] ? row[10] + 's' : ''}}</td>
+                    <td
+                        :data-original-title="row[11] ? round2(100.0 * row[11]/phase.durationS) + '% of the phase' : false">
+                        {{ row[11] ? row[11] + 's' : ''}}</td>
+                </tr>
+            </tbody>
+            <tfoot class="text-dark">
+                <tr>
+                    <td class="text-left">Total</td>
+                    <td></td>
+                    <td
+                        :data-original-title="Math.round((dmgdist.contributedDamage ? dmgdist.contributedDamage : 0)/phase.durationS) +' dps'">
+                        {{dmgdist.contributedDamage ? dmgdist.contributedDamage : 0}}</td>
+                    <td
+                        :data-original-title="Math.round((dmgdist.contributedShieldDamage ? dmgdist.contributedShieldDamage : 0)/phase.durationS) +' dps'">
+                        {{dmgdist.contributedShieldDamage ? dmgdist.contributedShieldDamage : 0}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
     </div>
-    <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
-        <thead>
-            <tr>
-                <th class="text-left">Skill</th>
-                <th></th>
-                <th>Damage</th>
-                <th data-original-title="Damage against barrier. Not necessarily included in total damage">B.Damage</th>
-                <th>Min</th>
-                <th>Avg</th>
-                <th>Max</th>
-                <th>Casts</th>
-                <th>Hits</th>
-                <th>Hits per Cast</th>
-                <th>Crit</th>
-                <th>Flank</th>
-                <th>Glance</th>
-                <th>Wasted</th>
-                <th>Saved</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="row in dmgdist.distribution" :class="{condi: getSkill(row[0], row[1]).condi}">
-                <td class="text-left" :data-original-title="getSkill(row[0], row[1]).id">
-                    <img :src="getSkill(row[0], row[1]).icon" class="icon icon-hover"> {{getSkill(row[0],
-                    row[1]).name}}
-                </td>
-                <td>{{ round3(100*row[2]/dmgdist.contributedDamage) }}%</td>
-                <td :data-original-title="round2(row[2]/phase.durationS) +' dps'">{{ row[2] }}</td>
-                <td :data-original-title="round2(row[12]/phase.durationS) +' dps'">{{ row[12] }}</td>
-                <td>{{ Math.max(row[3],0) }}</td>
-                <td>{{ round(row[2]/row[6]) }}</td>
-                <td>{{ row[4] }}</td>
-                <td>{{ !getSkill(row[0], row[1]).condi && row[5] ? row[5] : ''}}</td>
-                <td>{{ row[6] }}</td>
-                <td>{{(!getSkill(row[0], row[1]).condi && row[6] && row[5]) ? round2(row[6]/row[5]) : ''}}</td>
-                <td :data-original-title="(!getSkill(row[0], row[1]).condi && row[6]) ? row[7] +' out of ' + row[6] + ' hits': false">
-                    {{(!getSkill(row[0], row[1]).condi && row[6]) ? round2(row[7]*100/row[6]) + '%' : ''}}
-                </td>
-                <td :data-original-title="(!getSkill(row[0], row[1]).condi && row[6]) ? row[8] +' out of ' + row[6] + ' hits': false">
-                    {{(!getSkill(row[0], row[1]).condi && row[6]) ? round2(row[8]*100/row[6]) + '%' : ''}}
-                </td>
-                <td :data-original-title="(!getSkill(row[0], row[1]).condi && row[6]) ? row[9] +' out of ' + row[6] + ' hits': false">
-                    {{(!getSkill(row[0], row[1]).condi && row[6]) ? round2(row[9]*100/row[6]) + '%' : ''}}
-                </td>
-                <td :data-original-title="row[10] ? round2(100.0 * row[10]/phase.durationS) + '% of the phase' : false">{{ row[10] ? row[10] + 's' : ''}}</td>
-                <td :data-original-title="row[11] ? round2(100.0 * row[11]/phase.durationS) + '% of the phase' : false">{{ row[11] ? row[11] + 's' : ''}}</td>
-            </tr>
-        </tbody>
-        <tfoot class="text-dark">
-            <tr>
-                <td class="text-left">Total</td>
-                <td></td>
-                <td :data-original-title="Math.round((dmgdist.contributedDamage ? dmgdist.contributedDamage : 0)/phase.durationS) +' dps'">{{dmgdist.contributedDamage ? dmgdist.contributedDamage : 0}}</td>
-                <td :data-original-title="Math.round((dmgdist.contributedShieldDamage ? dmgdist.contributedShieldDamage : 0)/phase.durationS) +' dps'">{{dmgdist.contributedShieldDamage ? dmgdist.contributedShieldDamage : 0}}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </tfoot>
-    </table>
-</div>
+</template>
+
+<script>
+    Vue.component("damagedist-table-component", {
+        props: ["dmgdist", "tableid", "actor", "isminion", "istarget", "phaseindex"],
+        template: `${template}`,
+        data: function () {
+            return {
+                sortdata: {
+                    order: "desc",
+                    index: 2
+                }
+            };
+        },
+        mixins: [roundingComponent],
+        mounted() {
+            var _this = this;
+            initTable(
+                "#" + this.tableid,
+                this.sortdata.index,
+                this.sortdata.order,
+                function () {
+                    var order = $("#" + _this.tableid)
+                        .DataTable()
+                        .order();
+                    _this.sortdata.order = order[0][1];
+                    _this.sortdata.index = order[0][0];
+                }
+            );
+        },
+        beforeUpdate() {
+            $("#" + this.tableid)
+                .DataTable()
+                .destroy();
+        },
+        updated() {
+            var _this = this;
+            initTable(
+                "#" + this.tableid,
+                this.sortdata.index,
+                this.sortdata.order,
+                function () {
+                    var order = $("#" + _this.tableid)
+                        .DataTable()
+                        .order();
+                    _this.sortdata.order = order[0][1];
+                    _this.sortdata.index = order[0][0];
+                }
+            );
+        },
+        methods: {
+            getSkill: function (isBoon, id) {
+                return findSkill(isBoon, id);
+            }
+        },
+        computed: {
+            phase: function () {
+                return logData.phases[this.phaseindex];
+            }
+        }
+    });
+</script>

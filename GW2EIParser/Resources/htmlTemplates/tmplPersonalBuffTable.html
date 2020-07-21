@@ -1,14 +1,95 @@
-<div>
-    <ul class="nav nav-pills d-flex flex-row justify-content-center mt-1 mb-1 scale85">
-        <li v-for="base in bases" class="nav-item">
-            <a class="nav-link" @click="mode = base" :class="{active: mode === base}">{{ base }}</a>
-        </li>
-    </ul>
-    <div v-for="(spec, id) in orderedSpecs" class="mt-1 mb-1">
-        <div v-show="specToBase[spec.name] === mode">
-            <h3 class="text-center">{{ spec.name }}</h3>
-            <buff-table-component :target="null" :condition="false" :generation="false" :id="'persbuffs-stats-table' + '_' + spec.name"
-                :buffs="buffs[id]" :playerdata="data[id]" :sums="[]" :playerindex="playerindex"></buff-table-component>
+<template>
+    <div>
+        <ul class="nav nav-pills d-flex flex-row justify-content-center mt-1 mb-1 scale85">
+            <li v-for="base in bases" class="nav-item">
+                <a class="nav-link" @click="mode = base" :class="{active: mode === base}">{{ base }}</a>
+            </li>
+        </ul>
+        <div v-for="(spec, id) in orderedSpecs" class="mt-1 mb-1">
+            <div v-show="specToBase[spec.name] === mode">
+                <h3 class="text-center">{{ spec.name }}</h3>
+                <buff-table-component :target="null" :condition="false" :generation="false" :id="'persbuffs-stats-table' + '_' + spec.name"
+                    :buffs="buffs[id]" :playerdata="data[id]" :sums="[]" :playerindex="playerindex"></buff-table-component>
+            </div>
         </div>
     </div>
-</div>
+</template>
+
+<script>
+    Vue.component("personal-buff-table-component", {
+        props: ['phaseindex', 'playerindex', 'active'],
+        template: `${template}`,
+        data: function () {
+            return {
+                bases: [],
+                mode: "Warrior",
+                cache: new Map(),
+                specToBase: specToBase
+            };
+        },
+        computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
+            orderedSpecs: function () {
+                var res = [];
+                var aux = new Set();
+                for (var i = 0; i < specs.length; i++) {
+                    var spec = specs[i];
+                    var pBySpec = [];
+                    for (var j = 0; j < logData.players.length; j++) {
+                        if (logData.players[j].profession === spec && logData.phases[0].persBuffStats[j].data.length > 0) {
+                            pBySpec.push(j);
+                        }
+                    }
+                    if (pBySpec.length) {
+                        aux.add(specToBase[spec]);
+                        res.push({
+                            ids: pBySpec,
+                            name: spec
+                        });
+                    }
+                }
+                this.bases = [];
+                var _this = this;
+                aux.forEach(function (value, value2, set) {
+                    _this.bases.push(value);
+                });
+                this.mode = this.bases[0];
+                return res;
+            },
+            data: function () {
+				var id = this.phaseindex + '-' + this.active;
+                if (this.cache.has(id)) {
+                    return this.cache.get(id);
+                }
+                var res = [];
+                for (var i = 0; i < this.orderedSpecs.length; i++) {
+                    var spec = this.orderedSpecs[i];
+                    var dataBySpec = [];
+                    for (var j = 0; j < spec.ids.length; j++) {
+                        dataBySpec.push({
+                            player: logData.players[spec.ids[j]],
+                            data: this.active ? this.phase.persBuffActiveStats[spec.ids[j]] : this.phase.persBuffStats[spec.ids[j]]
+                        });
+                    }
+                    res.push(dataBySpec);
+                }
+                this.cache.set(id, res);
+                return res;
+            },
+            buffs: function () {
+                var res = [];
+                for (var i = 0; i < this.orderedSpecs.length; i++) {
+                    var spec = this.orderedSpecs[i];
+                    var data = [];
+                    for (var j = 0; j < logData.persBuffs[spec.name].length; j++) {
+                        data.push(findSkill(true, logData.persBuffs[spec.name][j]));
+                    }
+                    res.push(data);
+                }
+                return res;
+            }
+        }
+    });
+</script>

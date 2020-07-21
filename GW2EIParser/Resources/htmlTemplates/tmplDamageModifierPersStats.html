@@ -1,16 +1,78 @@
-<div>
-    <ul class="nav nav-pills d-flex flex-row justify-content-center mt-1 mb-1 scale85">
-        <li v-for="base in bases" class="nav-item">
-            <a class="nav-link" @click="specmode = base" :class="{active: specmode === base}">{{ base }}</a>
-        </li>
-    </ul>
+<template>
     <div>
-        <div v-for="(spec, index) in orderedSpecs" class="mt-1 mb-1">
-            <div v-show="specToBase[spec.name] === specmode">
-                <h3 class="text-center">{{ spec.name }}</h3>
-                <dmgmodifier-table-component :phaseindex="phaseindex" :playerindex="playerindex" :activetargets="activetargets"
-                                             :mode="mode" :id="'damage-modifier-pers-table-'+spec.name" :modifiers="personalModifiers[index]" :playerindices="spec.ids" :modifiersdata="phase.dmgModifiersPers" :sum="false"></dmgmodifier-table-component>
+        <ul class="nav nav-pills d-flex flex-row justify-content-center mt-1 mb-1 scale85">
+            <li v-for="base in bases" class="nav-item">
+                <a class="nav-link" @click="specmode = base" :class="{active: specmode === base}">{{ base }}</a>
+            </li>
+        </ul>
+        <div>
+            <div v-for="(spec, index) in orderedSpecs" class="mt-1 mb-1">
+                <div v-show="specToBase[spec.name] === specmode">
+                    <h3 class="text-center">{{ spec.name }}</h3>
+                    <dmgmodifier-table-component :phaseindex="phaseindex" :playerindex="playerindex"
+                        :activetargets="activetargets" :mode="mode" :id="'damage-modifier-pers-table-'+spec.name"
+                        :modifiers="personalModifiers[index]" :playerindices="spec.ids"
+                        :modifiersdata="phase.dmgModifiersPers" :sum="false"></dmgmodifier-table-component>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</template>
+
+<script>
+    Vue.component("dmgmodifier-persstats-component", {
+        props: ['phaseindex', 'playerindex', 'activetargets', 'mode'],
+        template: `${template}`,
+        data: function () {
+            return {
+                bases: [],
+                specmode: "Warrior",
+                specToBase: specToBase
+            };
+        },
+        computed: {
+            phase: function () {
+                return logData.phases[this.phaseindex];
+            },
+            orderedSpecs: function () {
+                var res = [];
+                var aux = new Set();
+                for (var i = 0; i < specs.length; i++) {
+                    var spec = specs[i];
+                    var pBySpec = [];
+                    for (var j = 0; j < logData.players.length; j++) {
+                        if (logData.players[j].profession === spec && logData.phases[0].dmgModifiersPers[j].data.length > 0) {
+                            pBySpec.push(j);
+                        }
+                    }
+                    if (pBySpec.length) {
+                        aux.add(specToBase[spec]);
+                        res.push({
+                            ids: pBySpec,
+                            name: spec
+                        });
+                    }
+                }
+                this.bases = [];
+                var _this = this;
+                aux.forEach(function (value, value2, set) {
+                    _this.bases.push(value);
+                });
+                this.specmode = this.bases[0];
+                return res;
+            },
+            personalModifiers: function () {
+                var res = [];
+                for (var i = 0; i < this.orderedSpecs.length; i++) {
+                    var spec = this.orderedSpecs[i];
+                    var data = [];
+                    for (var j = 0; j < logData.dmgModifiersPers[spec.name].length; j++) {
+                        data.push(logData.damageModMap['d' + logData.dmgModifiersPers[spec.name][j]]);
+                    }
+                    res.push(data);
+                }
+                return res;
+            }
+        }
+    });
+</script>

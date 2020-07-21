@@ -1,5 +1,6 @@
-<div>
-    <div v-if="recaps">
+<template>
+    <div>
+        <div v-if="recaps">
             <div v-for="index in phaseRecaps">
                 <h3 v-if="phaseRecaps.length > 1" class="text-center">
                     Death #{{index + 1}}
@@ -32,13 +33,121 @@
                         dying afterwards
                     </div>
                 </div>
-                <graph-component :id="'deathrecap-' + playerindex + '-' + index" :layout="data.layout" :data="[data.data[index]]"></graph-component>
+                <graph-component :id="'deathrecap-' + playerindex + '-' + index" :layout="data.layout"
+                    :data="[data.data[index]]"></graph-component>
             </div>
-            <div v-show="phaseRecaps === null || phaseRecaps.length === 0">                
+            <div v-show="phaseRecaps === null || phaseRecaps.length === 0">
                 <h3 class="text-center">Player has never died during this phase</h3>
             </div>
+        </div>
+        <div v-else>
+            <h3 class="text-center">Player has never died</h3>
+        </div>
     </div>
-    <div v-else>
-        <h3 class="text-center">Player has never died</h3>
-    </div>
-</div>
+</template>
+
+<script>
+    Vue.component("deathrecap-component", {
+        props: ["playerindex", "phaseindex"],
+        template: `${template}`,
+        mixins: [roundingComponent],
+        computed: {
+            phase: function () {
+                return logData.phases[this.phaseindex];
+            },
+            recaps: function () {
+                return logData.players[this.playerindex].details.deathRecap;
+            },
+            data: function () {
+                if (!this.recaps) {
+                    return null;
+                }
+                var res = {
+                    totalSeconds: {
+                        down: [],
+                        kill: []
+                    },
+                    totalDamage: {
+                        down: [],
+                        kill: []
+                    },
+                    data: [],
+                    layout: {}
+                };
+                for (var i = 0; i < this.recaps.length; i++) {
+                    var recap = this.recaps[i];
+                    var data = {
+                        y: [],
+                        x: [],
+                        type: 'bar',
+                        text: [],
+                        hoverinfo: 'y+text',
+                        marker: {
+                            color: []
+                        }
+                    };
+                    var j, totalSec, totalDamage;
+                    if (recap.toDown) {
+                        totalSec = (recap.toDown[0][0] - recap.toDown[recap.toDown.length - 1][0]) / 1000;
+                        totalDamage = 0;
+                        for (j = recap.toDown.length - 1; j >= 0; j--) {
+                            totalDamage += recap.toDown[j][2];
+                            data.x.push(this.round3(recap.toDown[j][0] / 1000 - this.phase.start));
+                            data.y.push(recap.toDown[j][2]);
+                            data.text.push(recap.toDown[j][3] + ' - ' + findSkill(recap.toDown[j][4], recap.toDown[j][1]).name);
+                            data.marker.color.push('rgb(0,255,0,1)');
+                        }
+                        res.totalSeconds.down[i] = totalSec;
+                        res.totalDamage.down[i] = totalDamage;
+                    }
+                    if (recap.toKill) {
+                        totalSec = (recap.toKill[0][0] - recap.toKill[recap.toKill.length - 1][0]) / 1000;
+                        totalDamage = 0;
+                        for (j = recap.toKill.length - 1; j >= 0; j--) {
+                            totalDamage += recap.toKill[j][2];
+                            data.x.push(this.round3(recap.toKill[j][0] / 1000 - this.phase.start));
+                            data.y.push(recap.toKill[j][2]);
+                            data.text.push(recap.toKill[j][3] + ' - ' + findSkill(recap.toKill[j][4], recap.toKill[j][1]).name);
+                            data.marker.color.push(recap.toDown ? 'rgb(255,0,0,1)' : 'rgb(0,255,0,1)');
+                        }
+                        res.totalSeconds.kill[i] = totalSec;
+                        res.totalDamage.kill[i] = totalDamage;
+                    }
+                    res.data.push(data);
+                }
+                res.layout = {
+                    title: 'Damage Taken',
+                    font: {
+                        color: '#ffffff'
+                    },
+                    width: 1100,
+                    paper_bgcolor: 'rgba(0,0,0,0)',
+                    plot_bgcolor: 'rgba(0,0,0,0)',
+                    showlegend: false,
+                    bargap: 0.05,
+                    yaxis: {
+                        title: 'Damage'
+                    },
+                    xaxis: {
+                        title: 'Time(seconds)',
+                        type: 'category'
+                    }
+                };
+                return res;
+            },
+            phaseRecaps: function () {
+                if (!this.recaps) {
+                    return null;
+                }
+                var res = [];
+                for (var i = 0; i < this.recaps.length; i++) {
+                    var time = this.recaps[i].time / 1000.0;
+                    if (this.phase.start <= time && this.phase.end >= time) {
+                        res.push(i);
+                    }
+                }
+                return res;
+            }
+        }
+    });
+</script>

@@ -1,20 +1,40 @@
-<div>
-    <div v-if="!targetless">
-        <ul class="nav nav-tabs">
-            <li>
-                <a class="nav-link" :class="{active: mode === 0}" @click="mode = 0">Total</a>
-            </li>
-            <li>
-                <a class="nav-link" :class="{active: mode === 1}" @click="mode = 1">Target</a>
-            </li>
-            <li>
-                <a class="nav-link" :class="{active: mode === 2}" @click="mode = 2">Cleave</a>
-            </li>
-        </ul>
+<template>
+    <div>
+        <div v-if="!targetless">
+            <ul class="nav nav-tabs">
+                <li>
+                    <a class="nav-link" :class="{active: mode === 0}" @click="mode = 0">Total</a>
+                </li>
+                <li>
+                    <a class="nav-link" :class="{active: mode === 1}" @click="mode = 1">Target</a>
+                </li>
+                <li>
+                    <a class="nav-link" :class="{active: mode === 2}" @click="mode = 2">Cleave</a>
+                </li>
+            </ul>
+        </div>
+        <keep-alive>
+            <dps-graph-component v-for="(phase, id) in phases" :key="id" v-if="id === phaseindex"
+                :activetargets="activetargets" :mode="mode" :phaseindex="id" :playerindex="playerindex" :light="light">
+            </dps-graph-component>
+        </keep-alive>
     </div>
-    <keep-alive>
-        <dps-graph-component v-for="(phase, id) in phases" :key="id" v-if="id === phaseindex"
-            :activetargets="activetargets" :mode="mode" :phaseindex="id" :playerindex="playerindex" :light="light">
-        </dps-graph-component>
-    </keep-alive>
-</div>
+</template>
+
+<script>
+    Vue.component("graph-stats-component", {
+        props: ["activetargets", "phaseindex", 'playerindex', 'light'],
+        template: `${template}`,
+        data: function () {
+            return {
+                targetless: logData.targetless,
+                mode: logData.targetless ? 0 : 1,
+            };
+        },
+        computed: {
+            phases: function() {
+                return logData.phases;
+            }
+        }
+    });
+</script>

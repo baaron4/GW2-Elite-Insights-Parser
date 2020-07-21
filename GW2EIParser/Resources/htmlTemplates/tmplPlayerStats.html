@@ -1,6 +1,7 @@
-<div>
-    
-        <h3 v-for="player in players" :key="player.id" v-if="!player.isConjure" v-show="player.id === activeplayer" class="text-center mt-2"><img :alt="player.profession" class="icon" :src="player.icon">{{player.name}}</h3>
+<template>
+    <div>
+        <h3 v-for="player in players" :key="player.id" v-if="!player.isConjure" v-show="player.id === activeplayer"
+            class="text-center mt-2"><img :alt="player.profession" class="icon" :src="player.icon">{{player.name}}</h3>
         <ul class="nav nav-tabs" v-show="activeplayer > -1">
             <li>
                 <a class="nav-link" :class="{active: tabmode === 0}" @click="tabmode = 0">
@@ -22,7 +23,8 @@
                     Simple
                     Rotation
                 </a>
-            </li><li>
+            </li>
+            <li>
                 <a class="nav-link" :class="{active: tabmode === 4}" @click="tabmode = 4">
                     Consumables
                 </a>
@@ -34,12 +36,38 @@
                 </a>
             </li>
         </ul>
-    <keep-alive>
-        <player-tab-component v-for="player in players" :key="player.id" v-if="player.id === activeplayer && !player.isConjure"
-            :playerindex="player.id" :tabmode="tabmode"
-            :phaseindex="phaseindex" :activetargets="activetargets" :light="light"></player-tab-component>
-    </keep-alive>
-    <div v-if="activeplayer === -1">
-        <h3 class="text-center">No player selected</h3>
+        <keep-alive>
+            <player-tab-component v-for="player in players" :key="player.id"
+                v-if="player.id === activeplayer && !player.isConjure" :playerindex="player.id" :tabmode="tabmode"
+                :phaseindex="phaseindex" :activetargets="activetargets" :light="light"></player-tab-component>
+        </keep-alive>
+        <div v-if="activeplayer === -1">
+            <h3 class="text-center">No player selected</h3>
+        </div>
     </div>
-</div>
+</template>
+
+<script>
+    Vue.component("player-stats-component", {
+        props: ["phaseindex", 'activetargets', 'activeplayer', 'light'],
+        template: `${template}`,
+        data: function () {
+            return {
+                tabmode: 0
+            };
+        },
+        computed: {
+            players: function () {
+                return logData.players;
+            },
+            hasDeaths: function () {
+                for (var i = 0; i < this.players.length; i++) {
+                    if (!!this.players[i].details.deathRecap) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+    });
+</script>

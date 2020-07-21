@@ -1,42 +1,129 @@
-<div class="d-flex flex-column justify-content-end buff-display">
-    <div v-if="data.fightSpecifics.length > 0" class="d-flex">
-        <div v-for="fightSpecific in data.fightSpecifics" class="buff-container">
-            <img :src="fightSpecific.buff.icon" :title="fightSpecific.buff.name" :alt="fightSpecific.buff.name" class="icon-s" />
-            <div v-if="fightSpecific.state > 1" class="buff-number">{{fightSpecific.state}}</div>
+<template>
+    <div class="d-flex flex-column justify-content-end buff-display">
+        <div v-if="data.fightSpecifics.length > 0" class="d-flex">
+            <div v-for="fightSpecific in data.fightSpecifics" class="buff-container">
+                <img :src="fightSpecific.buff.icon" :title="fightSpecific.buff.name" :alt="fightSpecific.buff.name" class="icon-s" />
+                <div v-if="fightSpecific.state > 1" class="buff-number">{{fightSpecific.state}}</div>
+            </div>
+        </div>
+        <div v-if="data.others.length > 0" class="d-flex">
+            <div v-for="other in data.others" class="buff-container">
+                <img :src="other.buff.icon" :title="other.buff.name" :alt="other.buff.name" class="icon-s" />
+                <div v-if="other.state > 1" class="buff-number">{{other.state}}</div>
+            </div>
+        </div>
+        <div v-if="data.conditions.length > 0" class="d-flex">
+            <div v-for="condition in data.conditions" class="buff-container">
+                <img :src="condition.buff.icon" :title="condition.buff.name" :alt="condition.buff.name" class="icon-s" />
+                <div v-if="condition.state > 1" class="buff-number">{{condition.state}}</div>
+            </div>
+        </div>
+        <div v-if="(data.offs.length > 0 || data.defs.length > 0)" class="d-flex">
+            <div v-for="off in data.offs" class="buff-container">
+                <img :src="off.buff.icon" :title="off.buff.name" :alt="off.buff.name" class="icon-s" />
+                <div v-if="off.state > 1" class="buff-number">{{off.state}}</div>
+            </div>
+            <div v-for="def in data.defs" class="buff-container">
+                <img :src="def.buff.icon" :title="def.buff.name" :alt="def.buff.name" class="icon-s" />
+                <div v-if="def.state > 1" class="buff-number">{{def.state}}</div>
+            </div>
+        </div>
+        <div v-if="data.boons.length > 0" class="d-flex">
+            <div v-for="boon in data.boons" class="buff-container">
+                <img :src="boon.buff.icon" :title="boon.buff.name" :alt="boon.buff.name" class="icon-s" />
+                <div v-if="boon.state > 1" class="buff-number">{{boon.state}}</div>
+            </div>
+        </div>
+        <div v-if="data.consumables.length > 0" class="d-flex">
+            <div v-for="consumable in data.consumables" class="buff-container">
+                <img :src="consumable.buff.icon" :title="consumable.buff.name" :alt="consumable.buff.name" class="icon-s" />
+                <div v-if="consumable.state > 1" class="buff-number">{{consumable.state}}</div>
+            </div>
         </div>
     </div>
-    <div v-if="data.others.length > 0" class="d-flex">
-        <div v-for="other in data.others" class="buff-container">
-            <img :src="other.buff.icon" :title="other.buff.name" :alt="other.buff.name" class="icon-s" />
-            <div v-if="other.state > 1" class="buff-number">{{other.state}}</div>
-        </div>
-    </div>
-    <div v-if="data.conditions.length > 0" class="d-flex">
-        <div v-for="condition in data.conditions" class="buff-container">
-            <img :src="condition.buff.icon" :title="condition.buff.name" :alt="condition.buff.name" class="icon-s" />
-            <div v-if="condition.state > 1" class="buff-number">{{condition.state}}</div>
-        </div>
-    </div>
-    <div v-if="(data.offs.length > 0 || data.defs.length > 0)" class="d-flex">
-        <div v-for="off in data.offs" class="buff-container">
-            <img :src="off.buff.icon" :title="off.buff.name" :alt="off.buff.name" class="icon-s" />
-            <div v-if="off.state > 1" class="buff-number">{{off.state}}</div>
-        </div>
-        <div v-for="def in data.defs" class="buff-container">
-            <img :src="def.buff.icon" :title="def.buff.name" :alt="def.buff.name" class="icon-s" />
-            <div v-if="def.state > 1" class="buff-number">{{def.state}}</div>
-        </div>
-    </div>
-    <div v-if="data.boons.length > 0" class="d-flex">
-        <div v-for="boon in data.boons" class="buff-container">
-            <img :src="boon.buff.icon" :title="boon.buff.name" :alt="boon.buff.name" class="icon-s" />
-            <div v-if="boon.state > 1" class="buff-number">{{boon.state}}</div>
-        </div>
-    </div>
-    <div v-if="data.consumables.length > 0" class="d-flex">
-        <div v-for="consumable in data.consumables" class="buff-container">
-            <img :src="consumable.buff.icon" :title="consumable.buff.name" :alt="consumable.buff.name" class="icon-s" />
-            <div v-if="consumable.state > 1" class="buff-number">{{consumable.state}}</div>
-        </div>
-    </div>
-</div>
+</template>
+
+<script>
+    Vue.component("combat-replay-actor-buffs-stats-component", {
+        mixins: [timeRefreshComponent],
+        props: ["actorindex", "enemy"],
+        template: `${template}`,
+        computed: {
+            boons: function () {
+                var hash = new Set();
+                for (var i = 0; i < logData.boons.length; i++) {
+                    hash.add(logData.boons[i]);
+                }
+                return hash;
+            },
+            offs: function () {
+                var hash = new Set();
+                for (var i = 0; i < logData.offBuffs.length; i++) {
+                    hash.add(logData.offBuffs[i]);
+                }
+                return hash;
+            },
+            defs: function () {
+                var hash = new Set();
+                for (var i = 0; i < logData.defBuffs.length; i++) {
+                    hash.add(logData.defBuffs[i]);
+                }
+                return hash;
+            },
+            conditions: function () {
+                var hash = new Set();
+                for (var i = 0; i < logData.conditions.length; i++) {
+                    hash.add(logData.conditions[i]);
+                }
+                return hash;
+            },
+            actor: function () {
+                return this.enemy ? logData.targets[this.actorindex] : logData.players[this.actorindex];
+            },
+            buffData: function () {
+                return this.actor.details.boonGraph[0];
+            },
+            data: function () {
+                var res = {
+                    offs: [],
+                    defs: [],
+                    boons: [],
+                    conditions: [],
+                    fightSpecifics: [],
+                    others: [],
+                    consumables: []
+                };
+                for (var i = 0; i < this.buffData.length; i++) {
+                    var data = this.buffData[i];
+                    var id = data.id;
+                    var arrayToFill = [];
+                    var buff = findSkill(true, id);
+                    if (buff.consumable) {
+                        arrayToFill = res.consumables;
+                    } else if (buff.fightSpecific) {
+                        arrayToFill = res.fightSpecifics;
+                    } else if (this.boons.has(id)) {
+                        arrayToFill = res.boons;
+                    } else if (this.offs.has(id)) {
+                        arrayToFill = res.offs;
+                    } else if (this.defs.has(id)) {
+                        arrayToFill = res.defs;
+                    } else if (this.conditions.has(id)) {
+                        arrayToFill = res.conditions;
+                    } else {
+                        arrayToFill = res.others;
+                    }
+                    var t = this.timeToUse / 1000;
+                    var val = findState(data.states, t, 0, data.states.length - 1);
+                    if (val > 0) {
+                        arrayToFill.push({
+                            state: val,
+                            buff: buff
+                        });
+                    }
+                }
+                return res;
+            }
+        }
+    });
+</script>

@@ -1,44 +1,129 @@
-<div v-if="buffs.length > 0">
-    <img v-if="generation" class="mb-1 icon" src="https://i.imgur.com/nSYuby8.png" :data-original-title="tooltipExpl"/>
-    <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="id">
-        <thead>
-            <tr>
-                <th>Sub</th>
-                <th></th>
-                <th>Name</th>
-                <th v-for="buff in buffs" :data-original-title="buff.name + (buff.description ? '<br> ' + buff.description : '')">
-                    <img :src="buff.icon" :alt="buff.name" class="icon icon-hover">
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="row in playerdata" :class="{active: row.player.group && row.player.id === playerindex}">
-                <td>{{ row.player.group ? row.player.group : '-' }}</td>
-                <td :data-original-title="row.player.profession ? row.player.profession : row.player.name">
-                    <img :src="row.player.icon" :alt="row.player.profession ? row.player.profession : row.player.name"
-                        class="icon">
-                    <span style="display:none">
-                        {{ row.player.profession ? row.player.profession : row.player.name}}
-                    </span>
-                </td>
-                <td class="text-left" :data-original-title="getAvgTooltip(row.data.avg)">
-                    {{ row.player.name }}
-                </td>
-                <td v-for=" (buff, index) in buffs" :data-original-title="getCellTooltip(buff, row.data.data[index])">
-                    {{ getCellValue(buff, row.data.data[index]) }}
-                </td>
-            </tr>
-        </tbody>
-        <tfoot v-show="sums.length > 0">
-            <tr v-for="sum in sums">
-                <td></td>
-                <td v-if="sum.icon" :data-original-title="sum.name"><img :src="sum.icon" :alt="sum.name" class="icon"></td>
-                <td v-else></td>
-                <td class="text-left" :data-original-title="getAvgTooltip(sum.avg)">{{sum.name}}</td>
-                <td v-for=" (buff, index) in buffs" :data-original-title="getCellTooltip(buff, sum.data[index], !!sum.icon)">
-                    {{ getCellValue(buff, sum.data[index]) }}
-                </td>
-            </tr>
-        </tfoot>
-    </table>
-</div>
+<template>
+    <div v-if="buffs.length > 0">
+        <img v-if="generation" class="mb-1 icon" src="https://i.imgur.com/nSYuby8.png"
+            :data-original-title="tooltipExpl" />
+        <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="id">
+            <thead>
+                <tr>
+                    <th>Sub</th>
+                    <th></th>
+                    <th>Name</th>
+                    <th v-for="buff in buffs"
+                        :data-original-title="buff.name + (buff.description ? '<br> ' + buff.description : '')">
+                        <img :src="buff.icon" :alt="buff.name" class="icon icon-hover">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="row in playerdata" :class="{active: row.player.group && row.player.id === playerindex}">
+                    <td>{{ row.player.group ? row.player.group : '-' }}</td>
+                    <td :data-original-title="row.player.profession ? row.player.profession : row.player.name">
+                        <img :src="row.player.icon"
+                            :alt="row.player.profession ? row.player.profession : row.player.name" class="icon">
+                        <span style="display:none">
+                            {{ row.player.profession ? row.player.profession : row.player.name}}
+                        </span>
+                    </td>
+                    <td class="text-left" :data-original-title="getAvgTooltip(row.data.avg)">
+                        {{ row.player.name }}
+                    </td>
+                    <td v-for=" (buff, index) in buffs"
+                        :data-original-title="getCellTooltip(buff, row.data.data[index])">
+                        {{ getCellValue(buff, row.data.data[index]) }}
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot v-show="sums.length > 0">
+                <tr v-for="sum in sums">
+                    <td></td>
+                    <td v-if="sum.icon" :data-original-title="sum.name"><img :src="sum.icon" :alt="sum.name"
+                            class="icon"></td>
+                    <td v-else></td>
+                    <td class="text-left" :data-original-title="getAvgTooltip(sum.avg)">{{sum.name}}</td>
+                    <td v-for=" (buff, index) in buffs"
+                        :data-original-title="getCellTooltip(buff, sum.data[index], !!sum.icon)">
+                        {{ getCellValue(buff, sum.data[index]) }}
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</template>
+
+<script>
+    Vue.component("buff-table-component", {
+        props: ["buffs", "playerdata", "generation", "condition", "sums", "id", "playerindex"],
+        template: `${template}`,
+        methods: {
+            getAvgTooltip: function (avg) {
+                if (avg) {
+                    return (
+                        "Average number of " +
+                        (this.condition ? "conditions: " : "boons: ") +
+                        avg
+                    );
+                }
+                return false;
+            },
+            getCellTooltip: function (buff, val, uptime) {
+                if (val instanceof Array) {
+                    if (!uptime && this.generation && (val[1] > 0 || val[2] > 0 || val[3] > 0 || val[4] > 0)) {
+                        var res = (val[1] || 0) + (buff.stacking ? "" : "%") + " with overstack";
+                        if (val[4] > 0) {
+                            res += "<br>";
+                            res += val[4] + (buff.stacking ? "" : "%") + " by extension";
+                        }
+                        if (val[2] > 0) {
+                            res += "<br>";
+                            res += val[2] + (buff.stacking ? "" : "%") + " wasted";
+                        }
+                        if (val[5] > 0) {
+                            res += "<br>";
+                            res += val[5] + (buff.stacking ? "" : "%") + " extended";
+                        }
+                        if (val[3] > 0) {
+                            res += "<br>";
+                            res += val[3] + (buff.stacking ? "" : "%") + " extended by unknown source";
+                        }
+                        return res;
+                    } else if (buff.stacking && val[1] > 0) {
+                        return "Uptime: " + val[1] + "%";
+                    } else {
+                        return false;
+                    }
+                }
+                return false;
+            },
+            getCellValue: function (buff, val) {
+                var value = val;
+                var force = false;
+                if (val instanceof Array) {
+                    value = val[0];
+                    force = this.generation && (val[1] > 0 || val[2] > 0 || val[3] > 0 || val[4] > 0);
+                }
+                if (value > 0 || force) {
+                    return buff.stacking ? value : value + "%";
+                }
+                return "-";
+            }
+        },
+        computed: {
+            tooltipExpl: function () {
+                return `<ul style='text-align:left;margin-block-end: 0.3em;'>
+                        <li>The value shown in the row is "generation + extensions you are the source"</li>
+                        <li>With overstack is "generation + extensions you are the source + stacks that couldn't make into the queue/stacks"</li>
+                        <li>By extension is "extensions you are the source"</li>
+                        <li>Waste is "stacks that were overriden/cleansed". If you have high waste values that could mean there is an issue with your composition as someone may be overriding your stacks non-stop.</li>
+                        <li>Extended by unknown source is the extension value for which we were unable to find an src, not included in generation.</li>
+                        <li>Extended is "extended by unknown source + extended by known source other than yourself". Not included in generation. This value is just here to indicate if you are a good seed.</li>
+                        </ul>`
+            }
+        },
+        mounted() {
+            initTable("#" + this.id, 0, "asc");
+        },
+        updated() {
+            updateTable("#" + this.id);
+        }
+    });
+</script>

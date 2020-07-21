@@ -1,7 +1,27 @@
-<div v-if="phases.length > 1">
-    <ul class="nav nav-pills d-flex flex-row justify-content-center">
-        <li class="nav-item" v-for="(phase, id) in phases" :data-original-title="getPhaseData(id).durationS + ' seconds'">
-            <a class="nav-link" @click="select(phase)" :class="{active: phase.active}">{{getPhaseData(id).name}}</a>
-        </li>
-    </ul>
-</div>
+<template>
+    <div v-if="phases.length > 1">
+        <ul class="nav nav-pills d-flex flex-row justify-content-center">
+            <li class="nav-item" v-for="(phase, id) in phases" :data-original-title="getPhaseData(id).durationS + ' seconds'">
+                <a class="nav-link" @click="select(phase)" :class="{active: phase.active}">{{getPhaseData(id).name}}</a>
+            </li>
+        </ul>
+    </div>
+</template>
+
+<script>
+    Vue.component("phase-component", {
+        props: ["phases"],
+        template: `${template}`,
+        methods: {
+            select: function (phase) {
+                for (var i = 0; i < this.phases.length; i++) {
+                    this.phases[i].active = false;
+                }
+                phase.active = true;
+            },
+            getPhaseData: function(id) {
+                return logData.phases[id];
+            }
+        }
+    });
+</script>

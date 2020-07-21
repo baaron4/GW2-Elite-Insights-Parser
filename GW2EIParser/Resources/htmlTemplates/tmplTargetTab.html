@@ -1,12 +1,29 @@
-<div>
-    <keep-alive>
-        <dmgdist-target-component v-if="mode === 0" :key="'dist' + targetindex" :phaseindex="phaseindex"
-            :targetindex="targetindex"></dmgdist-target-component>
-        <dmgtaken-component v-if="mode === 1" :actor="target" :key="'taken' + targetindex" :tableid="'dmgtaken-target-'+targetindex"
-            :phaseindex="phaseindex"></dmgtaken-component>
-        <target-graph-tab-component v-for="(ph, id) in phases" v-if="mode === 2 && id === phaseindex" :key="id" :targetindex="targetindex" :phaseindex="id"
-            :light="light"></target-graph-tab-component>
-        <buff-stats-target-component v-if="mode === 3" :key="'buffs' + targetindex" :targetindex="targetindex"
-            :phaseindex="phaseindex" :playerindex="playerindex"></buff-stats-target-component>
-    </keep-alive>
-</div>
+<template>
+    <div>
+        <keep-alive>
+            <dmgdist-target-component v-if="mode === 0" :key="'dist' + targetindex" :phaseindex="phaseindex"
+                :targetindex="targetindex"></dmgdist-target-component>
+            <dmgtaken-component v-if="mode === 1" :actor="target" :key="'taken' + targetindex"
+                :tableid="'dmgtaken-target-'+targetindex" :phaseindex="phaseindex"></dmgtaken-component>
+            <target-graph-tab-component v-for="(ph, id) in phases" v-if="mode === 2 && id === phaseindex" :key="id"
+                :targetindex="targetindex" :phaseindex="id" :light="light"></target-graph-tab-component>
+            <buff-stats-target-component v-if="mode === 3" :key="'buffs' + targetindex" :targetindex="targetindex"
+                :phaseindex="phaseindex" :playerindex="playerindex"></buff-stats-target-component>
+        </keep-alive>
+    </div>
+</template>
+
+<script>
+    Vue.component("target-tab-component", {
+        props: ["phaseindex", "playerindex", 'targetindex', 'mode', 'light'],
+        template: `${template}`,
+        computed: {
+            phases: function () {
+                return logData.phases;
+            },
+            target: function () {
+                return logData.targets[this.targetindex];
+            }
+        }
+    });
+</script>

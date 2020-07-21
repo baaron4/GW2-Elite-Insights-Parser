@@ -1,13 +1,36 @@
-<div>
-    <keep-alive>
-        <dmgdist-player-component v-if="tabmode === 0" :key="'dist' + playerindex" :playerindex="playerindex"
-            :phaseindex="phaseindex" :activetargets="activetargets"></dmgdist-player-component>
-        <dmgtaken-component v-if="tabmode ===1" :key="'taken' + playerindex" :actor="player" :tableid="'dmgtaken-player-'+playerindex"
-            :phaseindex="phaseindex"></dmgtaken-component>
-        <player-graph-tab-component v-for="(ph, id) in phases" v-if="tabmode === 2 && id === phaseindex" :key="id"
-            :playerindex="playerindex" :phaseindex="id" :activetargets="activetargets" :light="light"></player-graph-tab-component>
-        <simplerotation-component v-if="tabmode === 3" :key="'rot' + playerindex" :playerindex="playerindex" :phaseindex="phaseindex"></simplerotation-component>
-        <food-component v-if="tabmode === 4" :key="'cons' + playerindex" :playerindex="playerindex" :phaseindex="phaseindex"></food-component>
-        <deathrecap-component v-if="tabmode === 5" :key="'recap' + playerindex" :playerindex="playerindex" :phaseindex="phaseindex"></deathrecap-component>
-    </keep-alive>
-</div>
+<template>
+    <div>
+        <keep-alive>
+            <dmgdist-player-component v-if="tabmode === 0" :key="'dist' + playerindex" :playerindex="playerindex"
+                :phaseindex="phaseindex" :activetargets="activetargets"></dmgdist-player-component>
+            <dmgtaken-component v-if="tabmode ===1" :key="'taken' + playerindex" :actor="player"
+                :tableid="'dmgtaken-player-'+playerindex" :phaseindex="phaseindex"></dmgtaken-component>
+            <player-graph-tab-component v-for="(ph, id) in phases" v-if="tabmode === 2 && id === phaseindex" :key="id"
+                :playerindex="playerindex" :phaseindex="id" :activetargets="activetargets" :light="light">
+            </player-graph-tab-component>
+            <simplerotation-component v-if="tabmode === 3" :key="'rot' + playerindex" :playerindex="playerindex"
+                :phaseindex="phaseindex"></simplerotation-component>
+            <food-component v-if="tabmode === 4" :key="'cons' + playerindex" :playerindex="playerindex"
+                :phaseindex="phaseindex"></food-component>
+            <deathrecap-component v-if="tabmode === 5" :key="'recap' + playerindex" :playerindex="playerindex"
+                :phaseindex="phaseindex"></deathrecap-component>
+        </keep-alive>
+    </div>
+</template>
+
+<script>
+    Vue.component('player-tab-component', {
+        props: ['playerindex', 'tabmode',
+            'phaseindex', 'activetargets', 'light'
+        ],
+        template: `${template}`,
+        computed: {
+            phases: function () {
+                return logData.phases;
+            },
+            player: function () {
+                return logData.players[this.playerindex];
+            }
+        }
+    });
+</script>

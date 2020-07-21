@@ -1,7 +1,16 @@
-﻿<div>
-    <combat-replay-actor-buffs-stats-component v-if="buffs" :time="time" :actorindex="playerindex" :enemy="false"></combat-replay-actor-buffs-stats-component>
-    <div class="d-flex mb-1 mt-1 align-items-center player-status-rotation">
-        <combat-replay-player-status-component :time="time" :playerindex="playerindex"></combat-replay-player-status-component>
-        <combat-replay-actor-rotation-component v-if="rotation" :time="time" :actorindex="playerindex" :enemy="false"></combat-replay-actor-rotation-component>
+﻿<template>
+    <div>
+        <combat-replay-actor-buffs-stats-component v-if="buffs" :time="time" :actorindex="playerindex" :enemy="false"></combat-replay-actor-buffs-stats-component>
+        <div class="d-flex mb-1 mt-1 align-items-center player-status-rotation">
+            <combat-replay-player-status-component :time="time" :playerindex="playerindex"></combat-replay-player-status-component>
+            <combat-replay-actor-rotation-component v-if="rotation" :time="time" :actorindex="playerindex" :enemy="false"></combat-replay-actor-rotation-component>
+        </div>
     </div>
-</div>
+</template>
+
+<script>
+    Vue.component("combat-replay-player-stats-component", {
+        props: ["playerindex", "time", "buffs", "rotation"],
+        template: `${template}`
+    });
+</script>

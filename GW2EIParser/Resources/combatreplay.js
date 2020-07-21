@@ -1,5 +1,6 @@
 /*jshint esversion: 6 */
 // const images
+"use strict";
 const deadIcon = new Image();
 deadIcon.onload = function () {
     animateCanvas(-1);

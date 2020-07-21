@@ -1,18 +1,61 @@
-<div class="d-flex d-flex flex-column justify-content-center align-items-center">
-    <div class="target-status" :style="{'background': getGradient(time)}">
-        <h6 class="actor-shorten text-center" :title="target.name + ' - ' + target.health + ' health'">
-            <img :src="target.icon" height="18" width="18">
-            {{target.name}}
-        </h6>
-        <p class="text-right cr-hp-display cr-hp-display-target">
-            {{(Math.round(100*getPercent(time))/100).toFixed(2)}} %
-        </p>
-    </div>
-    <div v-if="hasBreakbarPercent" class="cr-breakbar-display" >      
-        <div :style="{'background': getBreakbarGradient(time)}">
-            <p class="text-center">
-                {{(Math.round(100*getBreakbarPercent(time))/100).toFixed(2)}} %
+<template>
+    <div class="d-flex d-flex flex-column justify-content-center align-items-center">
+        <div class="target-status" :style="{'background': getGradient(time)}">
+            <h6 class="actor-shorten text-center" :title="target.name + ' - ' + target.health + ' health'">
+                <img :src="target.icon" height="18" width="18">
+                {{target.name}}
+            </h6>
+            <p class="text-right cr-hp-display cr-hp-display-target">
+                {{(Math.round(100*getPercent(time))/100).toFixed(2)}} %
             </p>
         </div>
+        <div v-if="hasBreakbarPercent" class="cr-breakbar-display" >      
+            <div :style="{'background': getBreakbarGradient(time)}">
+                <p class="text-center">
+                    {{(Math.round(100*getBreakbarPercent(time))/100).toFixed(2)}} %
+                </p>
+            </div>
+        </div>
     </div>
-</div>
+</template>
+
+<script>
+    Vue.component("combat-replay-target-status-component", {
+        props: ["targetindex", "time"],
+        template: `${template}`,
+        methods: {
+            getBreakbarPercent: function (time) {
+                if(!this.hasBreakbarPercent) {
+                    return 100.0;
+                }
+                return findState(this.breakbarPercent, time/1000.0, 0, this.breakbarPercent.length - 1);
+            },
+            getPercent: function (time) {
+                return findState(this.healths, time/1000.0, 0, this.healths.length - 1);
+            },
+            getGradient: function (time) {
+                return computeGradient("green", this.getPercent(time));
+            },
+            getBreakbarGradient: function (time) {
+                return computeGradient("#20B2AA", this.getPercent(time));
+            }
+        },
+        computed: {
+            phase: function () {
+                return logData.phases[0];
+            },
+            healths: function () {
+                return graphData.phases[0].targetsHealthStatesForCR[this.targetindex];
+            },
+            breakbarPercent: function () {
+                return graphData.phases[0].targetsBreakbarPercentStatesForCR[this.targetindex];
+            },
+            hasBreakbarPercent: function () {
+                return !!this.breakbarPercent;
+            },
+            target: function () {
+                return logData.targets[this.targetindex];
+            }
+        }
+    });
+</script>

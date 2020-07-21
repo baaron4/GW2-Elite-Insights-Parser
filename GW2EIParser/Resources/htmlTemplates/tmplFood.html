@@ -1,27 +1,79 @@
-<div class="mt-2">
-    <div v-if="data.start.length">
-        Started with:
-        <ul>
-            <li v-for="initial in data.start">
-                {{initial.name}} <img class="icon" :alt="initial.name" :data-original-title="initial.description" :src="initial.icon">
-                {{initial.stack > 1 ? "("+initial.stack+")" : ""}} ({{initial.duration}}
-                seconds remaining)
-            </li>
-        </ul>
+<template>
+    <div class="mt-2">
+        <div v-if="data.start.length">
+            Started with:
+            <ul>
+                <li v-for="initial in data.start">
+                    {{initial.name}} <img class="icon" :alt="initial.name" :data-original-title="initial.description"
+                        :src="initial.icon">
+                    {{initial.stack > 1 ? "("+initial.stack+")" : ""}} ({{initial.duration}}
+                    seconds remaining)
+                </li>
+            </ul>
+        </div>
+        <div v-if="data.refreshed.length">
+            In phase consumable updates:
+            <ul>
+                <li v-for="refresh in data.refreshed">
+                    {{refresh.dimished ? 'suffered' : 'consumed'}} {{refresh.name}}
+                    <img class="icon" :alt="refresh.name" :data-original-title="refresh.description"
+                        :src="refresh.icon">
+                    {{refresh.stack > 1 ? "("+refresh.stack+")" : ""}}
+                    at {{round3(refresh.time - phase.start)}}s ({{refresh.duration}}
+                    seconds)
+                </li>
+            </ul>
+        </div>
+        <div v-if="!data.refreshed.length && !data.start.length" class="text-center">
+            <h3>No consumable activity</h3>
+        </div>
     </div>
-    <div v-if="data.refreshed.length">
-        In phase consumable updates:
-        <ul>
-            <li v-for="refresh in data.refreshed">
-                {{refresh.dimished ? 'suffered' : 'consumed'}} {{refresh.name}}
-                <img class="icon" :alt="refresh.name" :data-original-title="refresh.description" :src="refresh.icon">
-                {{refresh.stack > 1 ? "("+refresh.stack+")" : ""}}
-                at {{round3(refresh.time - phase.start)}}s ({{refresh.duration}}
-                seconds)
-            </li>
-        </ul>
-    </div>
-    <div v-if="!data.refreshed.length && !data.start.length" class="text-center">
-        <h3>No consumable activity</h3>
-    </div>
-</div>
+</template>
+
+<script>
+    Vue.component("food-component", {
+        props: ["phaseindex", "playerindex"],
+        template: `${template}`,
+        data: function () {
+            return {
+                cache: new Map()
+            };
+        },
+        mixins: [roundingComponent],
+        computed: {
+            phase: function () {
+                return logData.phases[this.phaseindex];
+            },
+            food: function () {
+                return logData.players[this.playerindex].details.food;
+            },
+            data: function () {
+                if (this.cache.has(this.phase)) {
+                    return this.cache.get(this.phase);
+                }
+                var res = {
+                    start: [],
+                    refreshed: []
+                };
+                for (var k = 0; k < this.food.length; k++) {
+                    var foodData = this.food[k];
+                    if (!foodData.name) {
+                        var skill = findSkill(true, foodData.id);
+                        foodData.name = skill.name;
+                        foodData.icon = skill.icon;
+                        foodData.description = skill.description;
+                    }
+                    if (foodData.time >= this.phase.start && foodData.time <= this.phase.end) {
+                        if (foodData.time === 0) {
+                            res.start.push(foodData);
+                        } else {
+                            res.refreshed.push(foodData);
+                        }
+                    }
+                }
+                this.cache.set(this.phase, res);
+                return res;
+            }
+        }
+    });
+</script>

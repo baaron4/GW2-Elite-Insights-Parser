@@ -1,14 +1,50 @@
 /*jshint esversion: 6 */
-var apiRenderServiceOkay = true;
+"use strict";
+function compileTemplates() {
+    Vue.component("graph-component", {
+        props: ['id', 'layout', 'data'],
+        template: '<div :id="id" class="d-flex flex-row justify-content-center"></div>',
+        mounted: function () {
+            var div = document.querySelector(this.queryID);
+            Plotly.react(div, this.data, this.layout, {showEditInChartStudio: true, plotlyServerURL: "https://chart-studio.plotly.com"});
+            var _this = this;
+            div.on('plotly_animated', function () {
+                Plotly.relayout(div, _this.layout);
+            });
+        },
+        computed: {
+            queryID: function () {
+                return "#" + this.id;
+            }
+        },
+        watch: {
+            layout: {
+                handler: function () {
+                    var div = document.querySelector(this.queryID);
+                    var duration = 1000;
+                    Plotly.animate(div, {
+                        data: this.data
+                    }, {
+                        transition: {
+                            duration: duration,
+                            easing: 'cubic-in-out'
+                        },
+                        frame: {
+                            duration: 1.5 * duration
+                        }
+                    });
+                },
+                deep: true
+            }
+        }
+    });
+    TEMPLATE_COMPILE
+};
 
-var mainLoad = function () {
+function mainLoad() {
     // make some additional variables reactive
     var i;
-    var simpleLogData = {
-        phases: [],
-        players: [],
-        targets: []
-    };
+    
     for (i = 0; i < logData.phases.length; i++) {
         var phase = logData.phases[i];
         phase.durationS = phase.duration / 1000.0
@@ -44,80 +80,7 @@ var mainLoad = function () {
         playerData.icon = urls[playerData.profession];
         playerData.id = i;
     }
-
-    var layout = compileLayout();
-    compileCommons();
-    compileHeader();
-    compileGeneralStats();
-    compileDamageModifiers();
-    compileBuffStats();
-    compileMechanics();
-    compileGraphs();
-    compilePlayerTab();
-    compileTargetTab();
-    if (logData.crData) {
-        compileCombatReplay();
-        compileCombatReplayUI();
-    }
-    Vue.component("main-view-component", {
-        props: ['light'],
-        template: `${tmplMainView}`,
-        data: function () {
-            return {
-                datatypes: DataTypes,
-                logdata: simpleLogData,
-                layout: layout,
-                buffMode: 0
-            };
-        },
-        computed: {
-            activePhase: function () {
-                var phases = this.logdata.phases;
-                for (var i = 0; i < phases.length; i++) {
-                    if (phases[i].active) {
-                        return i;
-                    }
-                }
-            },
-            dataType: function () {
-                var cur = this.layout.tabs;
-                while (cur !== null) {
-                    for (var i = 0; i < cur.length; i++) {
-                        var tab = cur[i];
-                        if (tab.active) {
-                            if (tab.layout === null) {
-                                return tab.dataType;
-                            } else {
-                                cur = tab.layout.tabs;
-                                break;
-                            }
-                        }
-                    }
-                }
-                return -1;
-            },
-            activePlayer: function () {
-                var players = this.logdata.players;
-                for (var i = 0; i < players.length; i++) {
-                    if (players[i].active) {
-                        return i;
-                    }
-                }
-                return -1;
-            },
-            activePhaseTargets: function () {
-                var res = [];
-                var activePhase = logData.phases[this.activePhase];
-                for (var i = 0; i < activePhase.targets.length; i++) {
-                    var target = this.logdata.targets[activePhase.targets[i]];
-                    if (target.active) {
-                        res.push(i);
-                    }
-                }
-                return res;
-            },
-        }
-    });
+    compileTemplates() 
     new Vue({
         el: "#content",
         data: {
@@ -138,6 +101,9 @@ var mainLoad = function () {
                 if (storeTheme) storeTheme(newStyle);
                 var theme = document.getElementById('theme');
                 theme.href = themes[newStyle];
+            },
+            getLogData: function() {
+                return logData;
             }
         },
         computed: {
@@ -157,6 +123,7 @@ var mainLoad = function () {
 };
 
 window.onload = function () {
+    Vue.config.devtools = true
     // trick from
     var img = document.createElement("img");
     img.style.display = "none";
