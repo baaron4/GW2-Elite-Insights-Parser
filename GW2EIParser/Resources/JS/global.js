@@ -256,7 +256,7 @@ function computeRotationData(rotationData, images, data, phase) {
             else if (endType == 3) fillColor = 'rgb(40,220,40)';
             else fillColor = 'rgb(220,220,0)';
 
-            rotaTrace.x.push(clampedWidth);
+            rotaTrace.x.push(clampedWidth - 0.001);
             rotaTrace.base.push(clampedX);
             rotaTrace.y.push(1.2);
             rotaTrace.text.push(name + ' at ' + x + 's for ' + duration + 'ms');
@@ -458,6 +458,25 @@ function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, c
     return res;
 }
 
+function findState(states, timeS, start, end) {
+    // when the array exists, it covers from 0 to fightEnd by construction
+    var id = Math.floor((end + start) / 2);
+    if (id === start || id === end) {
+        return states[id][1];
+    }
+    var item = states[id];
+    var itemN = states[id + 1];
+    var x = item[0];
+    var xN = itemN[0];
+    if (timeS < x) {
+        return findState(states, timeS, start, id);
+    } else if (timeS > xN) {
+        return findState(states, timeS, id, end);
+    } else {
+        return item[1];
+    }
+}
+
 function getActorGraphLayout(images, color) {
     return {
         barmode: 'stack',
@@ -473,7 +492,7 @@ function getActorGraphLayout(images, color) {
         legend: {
             traceorder: 'reversed'
         },
-        hovermode: 'compare',
+        hovermode: 'x',
         hoverdistance: 1100,
         yaxis2: {
             title: 'Buffs',
@@ -509,23 +528,25 @@ function getActorGraphLayout(images, color) {
     };
 }
 
-function computeTargetHealthData(graph, targets, phase, data, yaxis, times) {
+function computeTargetHealthData(graph, targets, phase, data, yaxis) {
     for (var i = 0; i < graph.targets.length; i++) {
-        var health = graph.targets[i].health;
+        var health = graph.targets[i].healthStates;
         var hpTexts = [];
+        var times = [];
         var target = targets[phase.targets[i]];
         for (var j = 0; j < health.length; j++) {
-            hpTexts[j] = health[j] + "% hp - " + target.name ;
+            hpTexts[j] = health[j][1] + "% hp - " + target.name ;
+            times[j] = health[j][0];
         }
         var res = {
             x: times,
             text: hpTexts,
             mode: 'lines',
             line: {
-                shape: 'spline',
-                dash: 'dashdot'
+                dash: 'dashdot',
+                shape: 'hv'
             },
-            hoverinfo: 'text+x',
+            hoverinfo: 'text',
             name: target.name + ' health',
         };
         if (yaxis) {
@@ -536,21 +557,23 @@ function computeTargetHealthData(graph, targets, phase, data, yaxis, times) {
     return graph.targets.length;
 }
 
-function computePlayerHealthData(healthGraph, data, yaxis, times) {
+function computePlayerHealthData(healthGraph, data, yaxis) {
     var health = healthGraph;
     var hpTexts = [];
+    var times = [];
     for (var j = 0; j < health.length; j++) {
-        hpTexts[j] = health[j] + "% hp - Player";
+        hpTexts[j] = health[j][1] + "% hp - Player";
+        times[j] = health[j][0];
     }
     var res = {
         x: times,
         text: hpTexts,
         mode: 'lines',
         line: {
-            shape: 'spline',
-            dash: 'dashdot'
+            dash: 'dashdot',
+            shape: 'hv'
         },
-        hoverinfo: 'text+x',
+        hoverinfo: 'text',
         name: 'Player health',
         visible: 'legendonly',
     };
@@ -575,19 +598,13 @@ function computeBuffData(buffData, data) {
                 visible: boonItem.visible ? null : 'legendonly',
                 line: {
                     color: boonItem.color,
-                    shape: 'linear'
+                    shape: 'hv'
                 },
-                hoverinfo: 'text+x',
+                hoverinfo: 'text',
                 fill: 'tozeroy',
                 name: boon.name.substring(0,20)
             };
-            line.x.push(boonItem.states[0][0]);
-            line.y.push(boonItem.states[0][1]);
-            line.text.push(boon.name + ': ' + boonItem.states[0][1]);
-            for (var p = 1; p < boonItem.states.length; p++) {
-                line.x.push(boonItem.states[p][0]-0.001);
-                line.y.push(boonItem.states[p-1][1]);
-                line.text.push(boon.name + ': ' + boonItem.states[p-1][1]);
+            for (var p = 0; p < boonItem.states.length; p++) {
                 line.x.push(boonItem.states[p][0]);
                 line.y.push(boonItem.states[p][1]);
                 line.text.push(boon.name + ': ' + boonItem.states[p][1]);

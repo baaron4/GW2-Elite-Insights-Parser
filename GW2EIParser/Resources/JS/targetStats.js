@@ -271,27 +271,52 @@ var compileTargetTab = function () {
             var oldOffset = this.targetOffset;
             this.targetOffset += computeBuffData(this.target.details.boonGraph[this.phaseindex], this.data);
             var dpsY = oldOffset === this.targetOffset ? 'y2' : 'y3';
-            {
-                var health = this.graph.targets[this.phaseTargetIndex].health;
-                var hpTexts = [];
-                for (var j = 0; j < health.length; j++) {
-                    hpTexts[j] = health[j] + "% hp";
+            var breakbarStates = this.graph.targets[this.phaseTargetIndex].breakbarPercentStates;
+            if (breakbarStates){
+                var breakbarTexts = [];
+                var times = [];
+                for (var j = 0; j < breakbarStates.length; j++) {
+                    breakbarTexts[j] = breakbarStates[j][1] + "% breakbar";
+                    times[j] = breakbarStates[j][0];
                 }
                 var res = {
-                    x: this.phase.times,
+                    x: times,
+                    text: breakbarTexts,
+                    mode: 'lines',
+                    line: {
+                        dash: 'dashdot',
+                        shape: 'hv'
+                    },
+                    hoverinfo: 'text',
+                    name: this.target.name + ' breakbar',
+                    yaxis: dpsY
+                };
+                this.data.push(res);
+                this.targetOffset++;
+            }
+            {
+                var health = this.graph.targets[this.phaseTargetIndex].healthStates;
+                var hpTexts = [];
+                var times = [];
+                for (var j = 0; j < health.length; j++) {
+                    hpTexts[j] = health[j][1] + "% hp";
+                    times[j] = health[j][0];
+                }
+                var res = {
+                    x: times,
                     text: hpTexts,
                     mode: 'lines',
                     line: {
-                        shape: 'spline',
-                        dash: 'dashdot'
+                        dash: 'dashdot',
+                        shape: 'hv'
                     },
-                    hoverinfo: 'text+x',
+                    hoverinfo: 'text',
                     name: this.target.name + ' health',
                     yaxis: dpsY
                 };
                 this.data.push(res);
+                this.targetOffset++;
             }
-            this.targetOffset++;
             this.data.push({
                 x: this.phase.times,
                 y: [],
@@ -300,7 +325,7 @@ var compileTargetTab = function () {
                     shape: 'spline'
                 },
                 yaxis: dpsY,
-                hoverinfo: 'name+y+x',
+                hoverinfo: 'name+y',
                 name: 'Total DPS'
             });
             this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc');
@@ -344,6 +369,9 @@ var compileTargetTab = function () {
                 var data = this.computeDPSRelatedData();
                 this.data[this.targetOffset].y = data[0];
                 this.data[this.targetOffset - 1].y = data[1];
+                if (data[2]) {
+                    this.data[this.targetOffset - 2].y = data[2];
+                }
                 return res;
             }
         },
@@ -375,12 +403,20 @@ var compileTargetTab = function () {
                 var res = [];
                 res[0] = dpsData.dps;
                 {
-                    var health = this.graph.targets[this.phaseTargetIndex].health;
+                    var health = this.graph.targets[this.phaseTargetIndex].healthStates;
                     var hpPoints = [];
                     for (var j = 0; j < health.length; j++) {
-                        hpPoints[j] = health[j] * dpsData.maxDPS / 100.0;
+                        hpPoints[j] = health[j][1] * dpsData.maxDPS / 100.0;
                     }
                     res[1] = hpPoints;
+                }
+                var breakbarStates = this.graph.targets[this.phaseTargetIndex].breakbarPercentStates;
+                if (breakbarStates){
+                    var breakbarPoints = [];
+                    for (var j = 0; j < breakbarStates.length; j++) {
+                        breakbarPoints[j] = breakbarStates[j][1] * dpsData.maxDPS / 100.0;
+                    }
+                    res[2] = breakbarPoints;
                 }
                 this.dataCache.set(cacheID, res);
                 return res;

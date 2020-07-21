@@ -111,7 +111,7 @@ namespace GW2EIParser.Builders.JsonModels
             {
                 return null;
             }
-            var res = bgm.BuffChart.Select(x => new int[2] { (int)x.Start, x.Value }).ToList();
+            var res = bgm.BuffChart.Select(x => new int[2] { (int)x.Start, (int)x.Value }).ToList();
             return res.Count > 0 ? res : null;
         }
     }

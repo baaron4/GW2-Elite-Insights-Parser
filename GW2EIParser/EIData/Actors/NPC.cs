@@ -8,6 +8,7 @@ namespace GW2EIParser.EIData
     public class NPC : AbstractSingleActor
     {
         private List<Dictionary<long, FinalBuffs>> _buffs;
+        private List<Segment> _breakbarPercentUpdates { get; set; }
         // Constructors
         public NPC(AgentItem agent) : base(agent)
         {
@@ -25,17 +26,13 @@ namespace GW2EIParser.EIData
             return _health;
         }
 
-
-
-        public override List<double[]> Get1SHealthGraph(ParsedLog log)
+        public List<Segment> GetBreakbarPercentUpdates(ParsedLog log)
         {
-            if (HealthUpdates.Count == 0)
+            if (_breakbarPercentUpdates == null)
             {
-                List<PhaseData> phases = log.FightData.GetPhases(log);
-                List<HealthUpdateEvent> hpEvents = log.CombatData.GetHealthUpdateEvents(AgentItem);
-                Fill1SHPGraph(log, phases, hpEvents);
+                _breakbarPercentUpdates = Segment.FromStates(log.CombatData.GetBreakbarPercentEvents(AgentItem).Select(x => x.ToState()).ToList(), 0, log.FightData.FightEnd);
             }
-            return HealthUpdates;
+            return _breakbarPercentUpdates;
         }
 
         public void OverrideName(string name)

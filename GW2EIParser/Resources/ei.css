@@ -137,6 +137,13 @@
     width: 45px;
 }
 
+.cr-breakbar-display {
+    color: #DDDDDD;
+    font-size: 0.65rem;
+    height: 12px;
+    width: 200px;
+}
+
 .cr-hp-display-player {
     left: 53%;
 }
