@@ -1,34 +1,6 @@
 /*jshint esversion: 6 */
 
 var compileCombatReplay = function () {
-    var timeRefreshComponent = {
-        props: ["time"],
-        data: function() {
-            return {
-                refreshTime: 0
-            };
-        },
-        computed: {
-            timeToUse: function() {
-                if (animator) {
-                    var animated = animator.animation !== null;
-                    if (animated) {
-                        var speed = animator.speed;
-                        if (Math.abs(this.time - this.refreshTime) > speed * 64) {
-                            this.refreshTime = this.time;
-                            return this.time;
-                        }
-                        return this.refreshTime;
-                    } else {
-                        this.refreshTime = this.time;
-                        return this.time;
-                    }
-                }
-                return this.time;
-            },
-        },
-    };
-
     Vue.component("combat-replay-damage-stats-component", {
         mixins: [timeRefreshComponent],
         props: ["playerindex"],
@@ -238,6 +210,18 @@ var compileCombatReplay = function () {
         }
     });
 
+    var computeGradient = function (left, percent) {
+      var template = "linear-gradient(to right, $fill$, $middle$, $black$)";
+      var res = percent;
+      var fillPercent = left + " " + res + "%";
+      var blackPercent = "black " + (100 - res) + "%";
+      var middle = res + "%";
+      template = template.replace("$fill$", fillPercent);
+      template = template.replace("$black$", blackPercent);
+      template = template.replace("$middle$", middle);
+      return template;
+    };
+
     Vue.component("combat-replay-player-status-component", {
         props: ["playerindex", "time"],
         template: `${tmplCombatReplayPlayerStatus}`,
@@ -250,15 +234,7 @@ var compileCombatReplay = function () {
             },
             getGradient: function (time, status) {
                 var color = status === 0 ? 'black' : status === 1 ? 'red' : status === 2 ? 'grey' : 'green';
-                var template = 'linear-gradient(to right, $fill$, $middle$, $black$)';
-                var res = this.getPercent(time);
-                var fillPercent = color + " " + res + "%";
-                var blackPercent = "black " + (100 - res) + "%";
-                var middle = res + "%";
-                template = template.replace('$fill$', fillPercent);
-                template = template.replace('$black$', blackPercent);
-                template = template.replace('$middle$', middle);
-                return template;
+                return computeGradient(color, this.getPercent(time));
             }
         },
         computed: {
@@ -296,26 +272,10 @@ var compileCombatReplay = function () {
                 return findState(this.healths, time/1000.0, 0, this.healths.length - 1);
             },
             getGradient: function (time) {
-                var template = 'linear-gradient(to right, $green$, $middle$, $black$)';
-                var res = this.getPercent(time);
-                var greenPercent = "green " + res + "%";
-                var blackPercent = "black " + (100 - res) + "%";
-                var middle = res + "%";
-                template = template.replace('$green$', greenPercent);
-                template = template.replace('$black$', blackPercent);
-                template = template.replace('$middle$', middle);
-                return template;
+                return computeGradient("green", this.getPercent(time));
             },
             getBreakbarGradient: function (time) {
-                var template = 'linear-gradient(to right, $turquoise$, $middle$, $black$)';
-                var res = this.getBreakbarPercent(time);
-                var turquoisePercent = "#20B2AA " + res + "%";
-                var blackPercent = "black " + (100 - res) + "%";
-                var middle = res + "%";
-                template = template.replace('$turquoise$', turquoisePercent);
-                template = template.replace('$black$', blackPercent);
-                template = template.replace('$middle$', middle);
-                return template;
+                return computeGradient("#20B2AA", this.getPercent(time));
             }
         },
         computed: {
