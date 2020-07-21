@@ -40,7 +40,7 @@ namespace GW2EIParser.Controllers
                 builder.AddField(hasGroups ? "Group " + pair.Key : "Party Composition", String.Join("\n", groupField));
             }*/
             //
-            builder.AddField("Game Data", "ARC: " + log.LogData.BuildVersion + " | " + "GW2 Build: " + log.LogData.GW2Version);
+            builder.AddField("Game Data", "ARC: " + log.LogData.ArcVersion + " | " + "GW2 Build: " + log.LogData.GW2Build);
             //
             builder.WithTitle(log.FightData.GetFightName(log));
             builder.WithTimestamp(DateTime.Now);

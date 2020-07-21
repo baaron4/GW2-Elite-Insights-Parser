@@ -68,7 +68,7 @@ namespace GW2EIParser.Builders
             //header
             _log.UpdateProgressWithCancellationCheck("CSV: Building Meta Data");
             WriteLine(new[] { "Elite Insights Version", Application.ProductVersion });
-            WriteLine(new[] { "ARC Version", _log.LogData.BuildVersion });
+            WriteLine(new[] { "ARC Version", _log.LogData.ArcVersion });
             WriteLine(new[] { "Fight ID", _log.FightData.TriggerID.ToString() });
             WriteLine(new[] { "Recorded By", _log.LogData.PoVName });
             WriteLine(new[] { "Time Start", _log.LogData.LogStartStd });

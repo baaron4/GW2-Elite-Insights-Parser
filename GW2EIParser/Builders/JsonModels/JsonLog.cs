@@ -258,7 +258,7 @@ namespace GW2EIParser.Builders.JsonModels
             FightName = log.FightData.GetFightName(log);
             FightIcon = log.FightData.Logic.Icon;
             EliteInsightsVersion = Application.ProductVersion;
-            ArcVersion = log.LogData.BuildVersion;
+            ArcVersion = log.LogData.ArcVersion;
             RecordedBy = log.LogData.PoVName;
             TimeStart = log.LogData.LogStart;
             TimeEnd = log.LogData.LogEnd;
@@ -266,7 +266,7 @@ namespace GW2EIParser.Builders.JsonModels
             TimeEndStd = log.LogData.LogEndStd;
             Duration = log.FightData.DurationString;
             Success = log.FightData.Success;
-            GW2Build = log.LogData.GW2Version;
+            GW2Build = log.LogData.GW2Build;
             UploadLinks = uploadLinks;
             Language = log.LogData.Language;
             LanguageID = (byte)log.LogData.LanguageID;

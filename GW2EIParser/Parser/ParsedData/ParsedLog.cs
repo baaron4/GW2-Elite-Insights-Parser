@@ -60,9 +60,9 @@ namespace GW2EIParser.Parser.ParsedData
             FightData.SetCM(CombatData, AgentData, FightData);
             //
             _operation.UpdateProgressWithCancellationCheck("Creating Buff Container");
-            Buffs = new BuffsContainer(LogData.GW2Version, CombatData, operation);
+            Buffs = new BuffsContainer(LogData.GW2Build, CombatData, operation);
             _operation.UpdateProgressWithCancellationCheck("Creating Damage Modifier Container");
-            DamageModifiers = new DamageModifiersContainer(LogData.GW2Version, fightData.Logic.Mode);
+            DamageModifiers = new DamageModifiersContainer(LogData.GW2Build, fightData.Logic.Mode);
             _operation.UpdateProgressWithCancellationCheck("Creating Mechanic Data");
             MechanicData = FightData.Logic.GetMechanicData();
             _operation.UpdateProgressWithCancellationCheck("Creating General Statistics Container");

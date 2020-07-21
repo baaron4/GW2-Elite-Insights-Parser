@@ -91,10 +91,12 @@
             </keep-alive>
         </div>
         <div class="footer ei-header">
-            <div>Time Start: ${encounterStart} | Time End: ${encounterEnd}</div>
-            <div>ARC: ${evtcVersion} | GW2 Build: ${gw2build} | Fight ID: ${fightID} | EI Version: ${eiVersion}</div>
-            <div class="mb-2">File recorded by: ${recordedBy}</div>
-            <!--${UploadLinks}-->
+            <div>Time Start: {{getLogData().encounterStart}} | Time End: {{getLogData().encounterEnd}}</div>
+            <div>ARC: {{getLogData().arcVersion}} | GW2 Build: {{getLogData().gw2build}} | Fight ID: {{getLogData().fightID}} | EI Version: {{getLogData().eiVersion}}</div>
+            <div class="mb-2">File recorded by: {{getLogData().recordedBy}}</div>
+            <div v-if="uploadLinks">
+                <p v-for="link in uploadLinks" v-if="link.url.length > 0">{{link.key}}: <a :href="link.url">{{link.url}}</a> </p>
+            </div>
         </div>
     </div>
 </body>

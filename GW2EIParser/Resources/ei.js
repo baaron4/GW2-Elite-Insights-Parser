@@ -6,7 +6,7 @@ function compileTemplates() {
         template: '<div :id="id" class="d-flex flex-row justify-content-center"></div>',
         mounted: function () {
             var div = document.querySelector(this.queryID);
-            Plotly.react(div, this.data, this.layout, {showEditInChartStudio: true, plotlyServerURL: "https://chart-studio.plotly.com"});
+            Plotly.react(div, this.data, this.layout, { showEditInChartStudio: true, plotlyServerURL: "https://chart-studio.plotly.com" });
             var _this = this;
             div.on('plotly_animated', function () {
                 Plotly.relayout(div, _this.layout);
@@ -44,7 +44,7 @@ function compileTemplates() {
 function mainLoad() {
     // make some additional variables reactive
     var i;
-    
+
     for (i = 0; i < logData.phases.length; i++) {
         var phase = logData.phases[i];
         phase.durationS = phase.duration / 1000.0
@@ -80,7 +80,7 @@ function mainLoad() {
         playerData.icon = urls[playerData.profession];
         playerData.id = i;
     }
-    compileTemplates() 
+    compileTemplates()
     new Vue({
         el: "#content",
         data: {
@@ -102,13 +102,38 @@ function mainLoad() {
                 var theme = document.getElementById('theme');
                 theme.href = themes[newStyle];
             },
-            getLogData: function() {
+            getLogData: function () {
                 return logData;
             }
         },
         computed: {
             errorMessages: function () {
                 return logData.logErrors;
+            },
+            uploadLinks: function () {
+                var res = [
+                    { 
+                        key: "DPS Reports Link (EI)", 
+                        url: "" 
+                    },
+                    { 
+                        key: "DPS Reports Link (RH)", 
+                        url: "" 
+                    },
+                    { 
+                        key: "Raidar Link", 
+                        url: "" 
+                    }
+                ];
+                var hasAny = false;
+                for (var i = 0; i < logData.uploadLinks.length; i++) {
+                    var link = logData.uploadLinks[i];
+                    if (link.length > 0) {
+                        hasAny = true;
+                        res[i].url = link;
+                    }
+                }
+                return hasAny ? res : null;
             }
         },
         mounted() {
