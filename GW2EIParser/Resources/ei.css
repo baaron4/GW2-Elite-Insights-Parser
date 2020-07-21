@@ -20,12 +20,6 @@
     fill-opacity: 0.9 !important;
 }
 
-.ei-header {
-    min-width: 1000px;
-    margin-right: auto;
-    margin-left: auto;
-}
-
 .scrollable-y {
     overflow-y: auto;
 }

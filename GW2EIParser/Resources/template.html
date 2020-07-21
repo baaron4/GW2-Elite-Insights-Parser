@@ -55,8 +55,8 @@
             </div>
         </div>
     </div>
-    <div v-cloak id="content">
-        <div class="d-flex flex-row justify-content-center align-items-center mt-2 ei-header">
+    <div v-cloak id="content" :class="{'ei-container-small':mode === 0, 'ei-container-big':mode === 1}">
+        <div class="d-flex flex-row justify-content-center align-items-center mt-2 ">
             <div v-if="!!errorMessages" class="d-flex flex-column justify-content-center align-items-center">
                 <img v-for="message in errorMessages" class="mb-1 icon" src="https://i.imgur.com/k3tdKEQ.png" :data-original-title="message" />
             </div>
