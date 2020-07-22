@@ -1,15 +1,27 @@
 <template>
-    <div>
-        <h3>Range Selectors</h3>
-        <div class="d-flex flex-column flex-wrap justify-content-center align-items-center">
-            <div class="d-flex flex-column flex-wrap justify-content-center align-items-center mb-2" v-for="rangeCol in rangeSelectArrays">
-                <div class="range-btns d-flex flex-row flex-wrap justify-content-center align-items-center">
-                    <label v-for="range in rangeCol" @click="toggleRange(range);"
-                           class="btn btn-small range-btn" :class="{'active': selectedRanges.indexOf(range) > -1, 'btn-dark': !light, 'btn-light': light}">{{range}}</label>
+    <div class="d-flex flex-column justify-content-center align-items-center">
+        <div class="form-check mt-1 mb-2">
+            <input type="checkbox" class="form-check-input" id="subgroupCheck" checked>
+            <label class="form-check-label" for="subgroupCheck">Highlight Selected Group</label>
+        </div>
+        <div class="d-flex flex-row justify-content-center align-items-center">
+            <div>
+                <h3>Range Selectors</h3>           
+                <div class="d-flex flex-column flex-wrap justify-content-center align-items-center">
+                    <div class="d-flex flex-column flex-wrap justify-content-center align-items-center mb-2" v-for="rangeCol in rangeSelectArrays">
+                        <div class="range-btns d-flex flex-row flex-wrap justify-content-center align-items-center">
+                            <label v-for="range in rangeCol" @click="toggleRange(range);"
+                                class="btn btn-small range-btn" :class="{'active': selectedRanges.indexOf(range) > -1, 'btn-dark': !light, 'btn-light': light}">{{range}}</label>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <!-- <div>            
+                <h3>Cone Indicator</h3>
+            </div> -->
         </div>
     </div>
+    
 </template>
 
 <script>
@@ -46,6 +58,11 @@
                 }
                 return res;
             }
+        },
+        mounted() {
+            $('#subgroupCheck').change(function() {
+                animator.toggleHighlightSelectedGroup();
+            });
         }
     });
 </script>

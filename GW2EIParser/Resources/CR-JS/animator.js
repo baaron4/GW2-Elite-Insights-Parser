@@ -1,21 +1,23 @@
 /*jshint esversion: 6 */
 // const images
 "use strict";
+const noUpdateTime = -1;
+const updateText = -2;
 const deadIcon = new Image();
 deadIcon.onload = function () {
-    animateCanvas(-1);
+    animateCanvas(noUpdateTime);
 };
 const downIcon = new Image();
 downIcon.onload = function () {
-    animateCanvas(-1);
+    animateCanvas(noUpdateTime);
 };
 const dcIcon = new Image();
 dcIcon.onload = function () {
-    animateCanvas(-1);
+    animateCanvas(noUpdateTime);
 };
 const facingIcon = new Image();
 facingIcon.onload = function () {
-    animateCanvas(-1);
+    animateCanvas(noUpdateTime);
 };
 
 const resolutionMultiplier = window.devicePixelRatio;
@@ -36,6 +38,7 @@ class Animator {
         this.speed = 1;
         this.backwards = false;
         this.rangeControl = new Set();
+        this.highlightSelectedGroup = true;
         this.selectedGroup = -1;
         // actors
         this.targetData = new Map();
@@ -62,7 +65,7 @@ class Animator {
                     var image = new Image();
                     image.onload = function () {
                         _this.needBGUpdate = true;
-                        animateCanvas(-1);
+                        animateCanvas(noUpdateTime);
                     };
                     image.src = mapData.link;
                     this.backgroundImages.push({
@@ -171,7 +174,7 @@ class Animator {
     updateTime(value) {
         this.reactiveDataStatus.time = parseInt(value);
         if (this.animation === null) {
-            animateCanvas(-1);
+            animateCanvas(noUpdateTime);
         }
     }
 
@@ -188,7 +191,7 @@ class Animator {
             }
             const ms = Math.round(parsedTime * 1000.0);
             this.reactiveDataStatus.time = Math.min(Math.max(ms, 0), this.times[this.times.length - 1]);
-            animateCanvas(-2);
+            animateCanvas(updateText);
         } catch (error) {
             console.error(error);
         }
@@ -230,7 +233,7 @@ class Animator {
     restartAnimate() {
         this.reactiveDataStatus.time = 0;
         if (this.animation === null) {
-            animateCanvas(-1);
+            animateCanvas(noUpdateTime);
         }
     }
 
@@ -249,8 +252,13 @@ class Animator {
             this.reactiveDataStatus.selectedPlayerID = pId;
         }
         if (this.animation === null) {
-            animateCanvas(-1);
+            animateCanvas(noUpdateTime);
         }
+    }
+
+    toggleHighlightSelectedGroup() {
+        this.highlightSelectedGroup = !this.highlightSelectedGroup;
+        animateCanvas(noUpdateTime);
     }
 
     _initMouseEvents() {
@@ -270,7 +278,7 @@ class Animator {
             bgCtx.scale(resolutionMultiplier, resolutionMultiplier);
             _this.needBGUpdate = true;
             if (_this.animation === null) {
-                animateCanvas(-1);
+                animateCanvas(noUpdateTime);
             }
         }, false);
 
@@ -291,7 +299,7 @@ class Animator {
                 bgCtx.translate(pt.x - _this.dragStart.x, pt.y - _this.dragStart.y);
                 _this.needBGUpdate = true;
                 if (_this.animation === null) {
-                    animateCanvas(-1);
+                    animateCanvas(noUpdateTime);
                 }
             }
         }, false);
@@ -313,7 +321,7 @@ class Animator {
                 bgCtx.translate(-pt.x, -pt.y);
                 _this.needBGUpdate = true;
                 if (_this.animation === null) {
-                    animateCanvas(-1);
+                    animateCanvas(noUpdateTime);
                 }
             }
             return evt.preventDefault() && false;
@@ -353,7 +361,7 @@ class Animator {
             active = true;
         }
         if (this.animation === null) {
-            animateCanvas(-1);
+            animateCanvas(noUpdateTime);
         }
         return active;
     }
@@ -562,7 +570,7 @@ function animateCanvas(noRequest) {
         return;
     }
     let lastTime = animator.times[animator.times.length - 1];
-    if (noRequest > -1 && animator.animation !== null) {
+    if (noRequest > noUpdateTime && animator.animation !== null) {
         let curTime = new Date().getTime();
         let timeOffset = curTime - animator.prevTime;
         animator.prevTime = curTime;
@@ -572,11 +580,11 @@ function animateCanvas(noRequest) {
         animator.stopAnimate(true);
     }
     animator.timeSlider.value = animator.reactiveDataStatus.time.toString();
-    if (noRequest > -2) {
+    if (noRequest > updateText) {
         animator.updateTextInput();
     }
     animator.draw();
-    if (noRequest > -1 && animator.animation !== null) {
+    if (noRequest > noUpdateTime && animator.animation !== null) {
         animator.animation = requestAnimationFrame(animateCanvas);
     }
 }
@@ -606,7 +614,7 @@ function initCombatReplay(actors, options) {
         if (dragStart) {
             var pt = ctx.transformedPoint(lastX, lastY);
             ctx.translate(pt.x - dragStart.x, pt.y - dragStart.y);
-            animateCanvas(-1);
+            animateCanvas(noUpdateTime);
         }
         return evt.preventDefault() && false;
     }, false);

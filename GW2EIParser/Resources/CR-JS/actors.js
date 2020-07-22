@@ -8,7 +8,7 @@ class IconDrawable {
         this.img = new Image();
         this.img.src = imgSrc;
         this.img.onload = function () {
-            animateCanvas(-1);
+            animateCanvas(noUpdateTime);
         };
         this.pixelSize = pixelSize;
     }
@@ -90,7 +90,7 @@ class PlayerIconDrawable extends IconDrawable {
         var ctx = animator.mainContext;
         const fullSize = this.pixelSize / animator.scale;
         const halfSize = fullSize / 2;
-        if (!this.selected && this.group === animator.selectedGroup) {
+        if (animator.highlightSelectedGroup && !this.selected && this.group === animator.selectedGroup) {
             ctx.beginPath();
             ctx.lineWidth = (2 / animator.scale).toString();
             ctx.strokeStyle = 'blue';

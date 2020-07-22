@@ -353,7 +353,7 @@ class MovingPlatformDrawable extends BackgroundDrawable {
         this.image = new Image();
         this.image.src = image;
         this.image.onload = function () {
-            animateCanvas(-1);
+            animateCanvas(noUpdateTime);
         };
         this.width = width;
         this.height = height;
