@@ -260,7 +260,7 @@ namespace GW2EIParser
 
         private static string GetNPCIcon(int id)
         {
-            switch (ParseEnum.GetTargetIDS(id))
+            switch (ParseEnum.GetTargetID(id))
             {
                 case ParseEnum.TargetID.WorldVersusWorld:
                     return "https://wiki.guildwars2.com/images/d/db/PvP_Server_Browser_%28map_icon%29.png";
@@ -366,7 +366,7 @@ namespace GW2EIParser
                 case ParseEnum.TargetID.TwistedCastle:
                     return "https://i.imgur.com/ZBm5Uga.png";
             }
-            switch (ParseEnum.GetTrashIDS(id))
+            switch (ParseEnum.GetTrashID(id))
             {
                 case Spirit:
                 case Spirit2:

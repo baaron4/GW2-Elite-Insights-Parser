@@ -39,7 +39,7 @@ namespace GW2EIParser.Parser.ParsedData
             FightOffset = start;
             FightEnd = end - start;
             TriggerID = id;
-            switch (ParseEnum.GetTargetIDS(id))
+            switch (ParseEnum.GetTargetID(id))
             {
                 //
                 case ParseEnum.TargetID.ValeGuardian:
@@ -192,7 +192,7 @@ namespace GW2EIParser.Parser.ParsedData
                     break;
                     //
                 default:
-                    switch (ParseEnum.GetTrashIDS(id))
+                    switch (ParseEnum.GetTrashID(id))
                     {
                         case ParseEnum.TrashID.HauntingStatue:
                             Logic = new TwistedCastle((int)ParseEnum.TargetID.TwistedCastle);

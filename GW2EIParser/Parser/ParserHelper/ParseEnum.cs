@@ -503,7 +503,7 @@ namespace GW2EIParser.Parser
             //
             Unknown
         };
-        public static TrashID GetTrashIDS(int id)
+        public static TrashID GetTrashID(int id)
         {
             return Enum.IsDefined(typeof(TrashID), id) ? (TrashID)id : TrashID.Unknown;
         }
@@ -571,7 +571,7 @@ namespace GW2EIParser.Parser
             //
             Unknown
         };
-        public static TargetID GetTargetIDS(int id)
+        public static TargetID GetTargetID(int id)
         {
             return Enum.IsDefined(typeof(TargetID), id) ? (TargetID)id : TargetID.Unknown;
         }
