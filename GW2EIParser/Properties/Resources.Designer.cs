@@ -61,6 +61,32 @@ namespace GW2EIParser.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &quot;use strict&quot;;
+        /////// ACTORS
+        ///class IconDrawable {
+        ///    constructor(start, end, imgSrc, pixelSize) {
+        ///        this.pos = null;
+        ///        this.start = start;
+        ///        this.end = end;
+        ///        this.img = new Image();
+        ///        this.img.src = imgSrc;
+        ///        this.img.onload = function () {
+        ///            animateCanvas(-1);
+        ///        };
+        ///        this.pixelSize = pixelSize;
+        ///    }
+        ///
+        ///    getInterpolatedPosition(startIndex, currentIndex) {
+        ///        const offsetedIndex = currentIndex - startIndex;
+        ///        const positio [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string actors {
+            get {
+                return ResourceManager.GetString("actors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to /*jshint esversion: 6 */
         ///// const images
         ///&quot;use strict&quot;;
@@ -87,9 +113,37 @@ namespace GW2EIParser.Properties {
         ///
         ///cla [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string combatreplay_js {
+        internal static string animator {
             get {
-                return ResourceManager.GetString("combatreplay_js", resourceCulture);
+                return ResourceManager.GetString("animator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to //// BASE MECHANIC
+        ///class MechanicDrawable {
+        ///    constructor(start, end, connectedTo) {
+        ///        this.start = start;
+        ///        this.end = end;
+        ///        this.connectedTo = connectedTo;
+        ///        this.master = null;
+        ///    }
+        ///
+        ///    draw() {
+        ///        // to override
+        ///    }
+        ///
+        ///    getPosition() {
+        ///        if (this.connectedTo === null) {
+        ///            return null;
+        ///        }
+        ///        var time = animator.reactiveDataStatus.time;
+        ///        if (this.start !== -1 &amp;&amp; (this.start &gt;= time || this.end &lt;= time)) {
+        ///           [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string decorations {
+            get {
+                return ResourceManager.GetString("decorations", resourceCulture);
             }
         }
         

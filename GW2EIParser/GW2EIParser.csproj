@@ -119,7 +119,9 @@
     <None Include="Resources\theme-slate.png" />
     <None Include="Resources\ei.css" />
     <None Include="Resources\ei.js" />
-    <None Include="Resources\combatreplay.js" />
+    <None Include="Resources\CR-JS\animator.js" />
+    <None Include="Resources\CR-JS\actors.js" />
+    <None Include="Resources\CR-JS\decorations.js" />
     <None Include="Resources\JS\global.js" />
     <None Include="Resources\JS\functions.js" />
     <None Include="Resources\JS\mixins.js" />
