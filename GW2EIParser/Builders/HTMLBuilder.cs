@@ -128,7 +128,7 @@ namespace GW2EIParser.Builders
                 Properties.Resources.tmplCombatReplayPlayersStats,
                 Properties.Resources.tmplCombatReplayUI,
                 Properties.Resources.tmplCombatReplayPlayerSelect,
-                Properties.Resources.tmplCombatReplayRangeSelect,
+                Properties.Resources.tmplCombatReplayExtraDecorations,
                 Properties.Resources.tmplCombatReplayAnimationControl,
                 Properties.Resources.tmplCombatReplayMechanicsList
             };

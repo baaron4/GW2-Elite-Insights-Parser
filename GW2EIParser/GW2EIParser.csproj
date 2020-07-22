@@ -127,7 +127,7 @@
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayDamageData.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayDamageTable.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayActorRotation.html" />
-    <None Include="Resources\combatReplayTemplates\tmplCombatReplayRangeSelect.html" />
+    <None Include="Resources\combatReplayTemplates\tmplCombatReplayExtraDecorations.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayTargetsStats.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayPlayersStats.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayTargetStatus.html" />

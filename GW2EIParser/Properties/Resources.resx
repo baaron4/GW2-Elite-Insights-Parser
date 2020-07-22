@@ -277,8 +277,8 @@
   <data name="tmplCombatReplayPlayerSelect" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\combatReplayTemplates\tmplCombatReplayPlayerSelect.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="tmplCombatReplayRangeSelect" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\combatReplayTemplates\tmplCombatReplayRangeSelect.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="tmplCombatReplayExtraDecorations" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\combatReplayTemplates\tmplCombatReplayExtraDecorations.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="tmplCombatReplayAnimationControl" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\combatReplayTemplates\tmplCombatReplayAnimationControl.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
