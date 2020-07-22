@@ -124,6 +124,20 @@ namespace GW2EIParser.Parser
         {
             return Enum.IsDefined(typeof(StateChange), bt) ? (StateChange)bt : StateChange.Unknown;
         }
+        // Breakbar State
+
+        public enum BreakbarState { 
+            Active, 
+            Recover, 
+            Immune, 
+            None, 
+            Unknown 
+        };
+        public static BreakbarState GetBreakbarState(int value)
+        {
+            return Enum.IsDefined(typeof(BreakbarState), value) ? (BreakbarState)value : BreakbarState.Unknown;
+        }
+
         // Buff Formula
 
         public enum BuffStackType : short

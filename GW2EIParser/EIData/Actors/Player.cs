@@ -57,24 +57,6 @@ namespace GW2EIParser.EIData
         }
 
         // Public methods
-        public override List<double[]> Get1SHealthGraph(ParsedLog log)
-        {
-            if (HealthUpdates.Count == 0)
-            {
-                List<PhaseData> phases = log.FightData.GetPhases(log);
-                List<HealthUpdateEvent> hpEvents = log.CombatData.GetHealthUpdateEvents(AgentItem);
-                if (hpEvents.Count == 0)
-                {
-                    foreach (PhaseData phase in phases)
-                    {
-                        HealthUpdates.Add(null);
-                    }
-                    return HealthUpdates;
-                }
-                Fill1SHPGraph(log, phases, hpEvents);
-            }
-            return HealthUpdates;
-        }
 
         public FinalPlayerSupport GetPlayerSupport(ParsedLog log, int phaseIndex)
         {

@@ -84,7 +84,6 @@ namespace GW2EIParser.Logic
                 phase.Targets.Add(claw.AgentItem == enrage.To ? claw : voice);
                 phases.Add(phase);
             }
-            phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             return phases;
         }
 

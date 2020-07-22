@@ -1,34 +1,6 @@
 /*jshint esversion: 6 */
 
 var compileCombatReplay = function () {
-    var timeRefreshComponent = {
-        props: ["time"],
-        data: function() {
-            return {
-                refreshTime: 0
-            };
-        },
-        computed: {
-            timeToUse: function() {
-                if (animator) {
-                    var animated = animator.animation !== null;
-                    if (animated) {
-                        var speed = animator.speed;
-                        if (Math.abs(this.time - this.refreshTime) > speed * 64) {
-                            this.refreshTime = this.time;
-                            return this.time;
-                        }
-                        return this.refreshTime;
-                    } else {
-                        this.refreshTime = this.time;
-                        return this.time;
-                    }
-                }
-                return this.time;
-            },
-        },
-    };
-
     Vue.component("combat-replay-damage-stats-component", {
         mixins: [timeRefreshComponent],
         props: ["playerindex"],
@@ -159,26 +131,6 @@ var compileCombatReplay = function () {
         mixins: [timeRefreshComponent],
         props: ["actorindex", "enemy"],
         template: `${tmplCombatReplayActorBuffStats}`,
-        methods: {
-            findBuffState: function (states, timeS, start, end) {
-                // when the array exists, it covers from 0 to fightEnd by construction
-                var id = Math.floor((end + start) / 2);
-                if (id === start || id === end) {
-                    return states[id][1];
-                }
-                var item = states[id];
-                var itemN = states[id + 1];
-                var x = item[0];
-                var xN = itemN[0];
-                if (timeS < x) {
-                    return this.findBuffState(states, timeS, start, id);
-                } else if (timeS > xN) {
-                    return this.findBuffState(states, timeS, id, end);
-                } else {
-                    return item[1];
-                }
-            }
-        },
         computed: {
             boons: function () {
                 var hash = new Set();
@@ -245,7 +197,7 @@ var compileCombatReplay = function () {
                         arrayToFill = res.others;
                     }
                     var t = this.timeToUse / 1000;
-                    var val = this.findBuffState(data.states, t, 0, data.states.length - 1);
+                    var val = findState(data.states, t, 0, data.states.length - 1);
                     if (val > 0) {
                         arrayToFill.push({
                             state: val,
@@ -258,41 +210,31 @@ var compileCombatReplay = function () {
         }
     });
 
+    var computeGradient = function (left, percent) {
+      var template = "linear-gradient(to right, $fill$, $middle$, $black$)";
+      var res = percent;
+      var fillPercent = left + " " + res + "%";
+      var blackPercent = "black " + (100 - res) + "%";
+      var middle = res + "%";
+      template = template.replace("$fill$", fillPercent);
+      template = template.replace("$black$", blackPercent);
+      template = template.replace("$middle$", middle);
+      return template;
+    };
+
     Vue.component("combat-replay-player-status-component", {
         props: ["playerindex", "time"],
         template: `${tmplCombatReplayPlayerStatus}`,
-        methods: {
+        methods: {         
             getPercent: function (time) {
                 if (!this.hasHealth) {
                     return 100;
                 }
-                var curTime = Math.floor(time / 1000);
-                var nextTime = curTime + 1;
-                var dur = Math.floor(this.phase.end - this.phase.start);
-                if (nextTime == dur + 1 && this.phase.needsLastPoint) {
-                    nextTime = this.phase.end - this.phase.start;
-                }
-                var data = this.healths;
-                var cur = data[curTime];
-                var next = data[curTime + 1];
-                if (typeof next !== "undefined") {
-                    res = cur + (time / 1000 - curTime) * (next - cur) / (nextTime - curTime);
-                } else {
-                    res = cur;
-                }
-                return res;
+                return findState(this.healths, time/1000.0, 0, this.healths.length - 1);
             },
             getGradient: function (time, status) {
                 var color = status === 0 ? 'black' : status === 1 ? 'red' : status === 2 ? 'grey' : 'green';
-                var template = 'linear-gradient(to right, $fill$, $middle$, $black$)';
-                var res = this.getPercent(time);
-                var fillPercent = color + " " + res + "%";
-                var blackPercent = "black " + (100 - res) + "%";
-                var middle = res + "%";
-                template = template.replace('$fill$', fillPercent);
-                template = template.replace('$black$', blackPercent);
-                template = template.replace('$middle$', middle);
-                return template;
+                return computeGradient(color, this.getPercent(time));
             }
         },
         computed: {
@@ -303,7 +245,7 @@ var compileCombatReplay = function () {
                 return logData.players[this.playerindex];
             },
             healths: function () {
-                return graphData.phases[0].players[this.playerindex].health;
+                return graphData.phases[0].players[this.playerindex].healthStates;
             },
             status: function () {
                 var crPData = animator.playerData.get(this.player.combatReplayID);
@@ -320,33 +262,20 @@ var compileCombatReplay = function () {
         props: ["targetindex", "time"],
         template: `${tmplCombatReplayTargetStatus}`,
         methods: {
+            getBreakbarPercent: function (time) {
+                if(!this.hasBreakbarPercent) {
+                    return 100.0;
+                }
+                return findState(this.breakbarPercent, time/1000.0, 0, this.breakbarPercent.length - 1);
+            },
             getPercent: function (time) {
-                var curTime = Math.floor(time / 1000);
-                var nextTime = curTime + 1;
-                var dur = Math.floor(this.phase.end - this.phase.start);
-                if (nextTime == dur + 1 && this.phase.needsLastPoint) {
-                    nextTime = this.phase.end - this.phase.start;
-                }
-                var data = this.healths;
-                var cur = data[curTime];
-                var next = data[curTime + 1];
-                if (typeof next !== "undefined") {
-                    res = cur + (time / 1000 - curTime) * (next - cur) / (nextTime - curTime);
-                } else {
-                    res = cur;
-                }
-                return res;
+                return findState(this.healths, time/1000.0, 0, this.healths.length - 1);
             },
             getGradient: function (time) {
-                var template = 'linear-gradient(to right, $green$, $middle$, $black$)';
-                var res = this.getPercent(time);
-                var greenPercent = "green " + res + "%";
-                var blackPercent = "black " + (100 - res) + "%";
-                var middle = res + "%";
-                template = template.replace('$green$', greenPercent);
-                template = template.replace('$black$', blackPercent);
-                template = template.replace('$middle$', middle);
-                return template;
+                return computeGradient("green", this.getPercent(time));
+            },
+            getBreakbarGradient: function (time) {
+                return computeGradient("#20B2AA", this.getPercent(time));
             }
         },
         computed: {
@@ -354,7 +283,13 @@ var compileCombatReplay = function () {
                 return logData.phases[0];
             },
             healths: function () {
-                return graphData.phases[0].targetsHealthForCR[this.targetindex];
+                return graphData.phases[0].targetsHealthStatesForCR[this.targetindex];
+            },
+            breakbarPercent: function () {
+                return graphData.phases[0].targetsBreakbarPercentStatesForCR[this.targetindex];
+            },
+            hasBreakbarPercent: function () {
+                return !!this.breakbarPercent;
             },
             target: function () {
                 return logData.targets[this.targetindex];

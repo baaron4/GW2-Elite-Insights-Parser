@@ -177,6 +177,14 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                             metaDataEvents.SkillInfoEvents[c.SkillID] = skillInfoEvent;
                         }
                         break;
+                    case ParseEnum.StateChange.BreakbarState:
+                        var bSEvt = new BreakbarStateEvent(c, agentData);
+                        GeneralHelper.Add(statusEvents.BreakbarStateEvents, bSEvt.Src, bSEvt);
+                        break;
+                    case ParseEnum.StateChange.BreakbarPercent:
+                        var bPEvt = new BreakbarPercentEvent(c, agentData);
+                        GeneralHelper.Add(statusEvents.BreakbarPercentEvents, bPEvt.Src, bPEvt);
+                        break;
                     case ParseEnum.StateChange.Error:
                         metaDataEvents.ErrorEvents.Add(new ErrorEvent(c));
                         break;

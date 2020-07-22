@@ -25,6 +25,34 @@ var roundingComponent = {
     }
 };
 
+var timeRefreshComponent = {
+    props: ["time"],
+    data: function() {
+        return {
+            refreshTime: 0
+        };
+    },
+    computed: {
+        timeToUse: function() {
+            if (animator) {
+                var animated = animator.animation !== null;
+                if (animated) {
+                    var speed = animator.speed;
+                    if (Math.abs(this.time - this.refreshTime) > speed * 64) {
+                        this.refreshTime = this.time;
+                        return this.time;
+                    }
+                    return this.refreshTime;
+                } else {
+                    this.refreshTime = this.time;
+                    return this.time;
+                }
+            }
+            return this.time;
+        },
+    },
+};
+
 var compileCommons = function () {
     Vue.component('rotation-legend-component', {
         template: `${tmplRotationLegend}`

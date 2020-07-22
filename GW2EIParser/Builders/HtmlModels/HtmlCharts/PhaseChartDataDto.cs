@@ -7,6 +7,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public List<PlayerChartDataDto> Players { get; set; } = new List<PlayerChartDataDto>();
         public List<TargetChartDataDto> Targets { get; set; } = new List<TargetChartDataDto>();
 
-        public List<double[]> TargetsHealthForCR { get; set; } = null;
+        public List<List<object[]>> TargetsHealthStatesForCR { get; set; } = null;
+        public List<List<object[]>> TargetsBreakbarPercentStatesForCR { get; set; } = null;
     }
 }
