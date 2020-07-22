@@ -51,7 +51,8 @@ namespace GW2EIParser.Builders.JsonModels
         /// <seealso cref="JsonLog.BuffMap"/>
         public long Id { get; }
         /// <summary>
-        /// True if indirect damage
+        /// True if indirect damage \n
+        /// If true, the id is a buff
         /// </summary>
         public bool IndirectDamage { get; }
 

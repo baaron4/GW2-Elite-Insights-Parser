@@ -97,26 +97,26 @@ namespace GW2EIParser.Builders.JsonModels
         /// </remarks>
         public List<int>[] Damage1S { get; }
         /// <summary>
-        /// Array of int[2] that represents the number of conditions status \n
-        /// Value[i][0] will be the time, value[i][1] will be the number of conditions present from value[i][0] to value[i+1][0] \n
+        /// Array of int[2] that represents the number of conditions \n
+        /// Array[i][0] will be the time, Array[i][1] will be the number of conditions present from Array[i][0] to Array[i+1][0] \n
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight \n
         /// </summary>
         public List<int[]> ConditionsStates { get; }
         /// <summary>
-        /// Array of int[2] that represents the number of boons status \n
-        /// Value[i][0] will be the time, value[i][1] will be the number of boons present from value[i][0] to value[i+1][0] \n
+        /// Array of int[2] that represents the number of boons \n
+        /// Array[i][0] will be the time, Array[i][1] will be the number of boons present from Array[i][0] to Array[i+1][0] \n
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight
         /// </summary>
         public List<int[]> BoonsStates { get; }
         /// <summary>
         /// Array of int[2] that represents the number of active combat minions \n
-        /// Value[i][0] will be the time, value[i][1] will be the number of active combat minions present from value[i][0] to value[i+1][0] \n
+        /// Array[i][0] will be the time, Array[i][1] will be the number of active combat minions present from Array[i][0] to Array[i+1][0] \n
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight
         /// </summary>
         public List<int[]> ActiveCombatMinions { get; }
         /// <summary>
         /// Array of double[2] that represents the health status of the actor \n
-        /// Value[i][0] will be the time, value[i][1] will be health % \n
+        /// Array[i][0] will be the time, Array[i][1] will be health % \n
         /// If i corresponds to the last element that means the health did not change for the remainder of the fight \n
         /// </summary>
         public List<double[]> HealthPercents { get; }
