@@ -20,6 +20,10 @@ facingIcon.onload = function () {
     animateCanvas(noUpdateTime);
 };
 
+function ToRadians(degrees) {
+    return degrees * (Math.PI / 180);
+}
+
 const resolutionMultiplier = window.devicePixelRatio;
 
 var animator = null;
@@ -37,9 +41,14 @@ class Animator {
         this.pollingRate = 150;
         this.speed = 1;
         this.backwards = false;
-        this.rangeControl = new Set();
+        this.rangeControl = [{ enabled: false, radius: 180 }, { enabled: false, radius: 360 }, { enabled: false, radius: 720 }];
         this.highlightSelectedGroup = true;
         this.selectedGroup = -1;
+        this.coneControl = {
+            enabled: false,
+            openingAngle: 90,
+            radius: 360,
+        }
         // actors
         this.targetData = new Map();
         this.playerData = new Map();
@@ -261,6 +270,21 @@ class Animator {
         animateCanvas(noUpdateTime);
     }
 
+    toggleConeDisplay() {
+        this.coneControl.enabled = !this.coneControl.enabled;
+        animateCanvas(noUpdateTime);
+    }
+
+    setConeRadius(value) {
+        this.coneControl.radius = value;
+        animateCanvas(noUpdateTime);
+    }
+
+    setConeAngle(value) {
+        this.coneControl.openingAngle = value;
+        animateCanvas(noUpdateTime);
+    }
+
     _initMouseEvents() {
         var _this = this;
         var canvas = this.mainCanvas;
@@ -351,19 +375,14 @@ class Animator {
         return this.backwards;
     }
 
-    toggleRange(radius) {
-        var active;
-        if (this.rangeControl.has(radius)) {
-            this.rangeControl.delete(radius);
-            active = false;
-        } else {
-            this.rangeControl.add(radius);
-            active = true;
-        }
-        if (this.animation === null) {
-            animateCanvas(noUpdateTime);
-        }
-        return active;
+    toggleRange(index) {
+        this.rangeControl[index].enabled = !this.rangeControl[index].enabled;
+        animateCanvas(noUpdateTime);
+    }
+
+    setRangeRadius(index, value) {
+        this.rangeControl[index].radius = value;
+        animateCanvas(noUpdateTime);
     }
 
     // https://codepen.io/anon/pen/KrExzG
@@ -485,7 +504,7 @@ class Animator {
             ctx.moveTo(pos, pos);
             ctx.lineTo(pos + width, pos);
             ctx.stroke();
-            ctx.lineWidth = 2*resolutionMultiplier;
+            ctx.lineWidth = 2 * resolutionMultiplier;
             // right border
             ctx.beginPath();
             ctx.moveTo(pos - resolutionMultiplier, pos + height);
@@ -574,7 +593,7 @@ function animateCanvas(noRequest) {
         let curTime = new Date().getTime();
         let timeOffset = curTime - animator.prevTime;
         animator.prevTime = curTime;
-        animator.reactiveDataStatus.time = Math.round(Math.max(Math.min(animator.reactiveDataStatus.time + animator.getSpeed() * timeOffset, lastTime),0));
+        animator.reactiveDataStatus.time = Math.round(Math.max(Math.min(animator.reactiveDataStatus.time + animator.getSpeed() * timeOffset, lastTime), 0));
     }
     if ((animator.reactiveDataStatus.time === lastTime && !animator.backwards) || (animator.reactiveDataStatus.time === 0 && animator.backwards)) {
         animator.stopAnimate(true);
@@ -590,7 +609,7 @@ function animateCanvas(noRequest) {
 }
 /*
 function initCombatReplay(actors, options) {
-    // manipulation events  
+    // manipulation events
     canvas.addEventListener('touchstart', function (evt) {
         var touch = evt.changedTouches[0];
         if (!touch) {

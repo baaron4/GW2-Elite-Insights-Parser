@@ -56,7 +56,7 @@ class FacingMechanicDrawable extends MechanicDrawable {
         const startIndex = Math.ceil((animator.times.length - 1) * Math.max(this.start, 0) / lastTime);
         const currentIndex = Math.floor((animator.times.length - 1) * time / lastTime);
         const offsetedIndex = Math.max(currentIndex - startIndex, 0);
-        return this.facingData[offsetedIndex]; 
+        return this.facingData[offsetedIndex];
     }
 
     draw() {
@@ -66,12 +66,25 @@ class FacingMechanicDrawable extends MechanicDrawable {
             return;
         }
         var ctx = animator.mainContext;
-        const angle = rot * Math.PI / 180;
+        const angle = ToRadians(rot);
         ctx.save();
         ctx.translate(pos.x, pos.y);
         ctx.rotate(angle);
         const facingFullSize = 5 * this.master.pixelSize / (3 * animator.scale);
         const facingHalfSize = facingFullSize / 2;
+        if (this.master !== null && animator.coneControl.enabled && this.master.selected) {           
+            ctx.save(); 
+            var coneOpening = ToRadians(animator.coneControl.openingAngle);
+            ctx.rotate(0.5 * coneOpening);
+            var coneRadius = animator.inch * animator.coneControl.radius;
+            ctx.beginPath();
+            ctx.arc(0, 0, coneRadius, -coneOpening, 0, false);
+            ctx.arc(0, 0, 0, 0, coneOpening, true);
+            ctx.closePath();
+            ctx.fillStyle = "rgba(0, 255, 200, 0.3)";
+            ctx.fill();
+            ctx.restore();
+        }
         ctx.drawImage(facingIcon, -facingHalfSize, -facingHalfSize, facingFullSize, facingFullSize);
         ctx.restore();
     }
@@ -92,7 +105,7 @@ class FacingRectangleMechanicDrawable extends FacingMechanicDrawable {
             return;
         }
         var ctx = animator.mainContext;
-        const angle = rot * Math.PI / 180;
+        const angle = ToRadians(rot);
         ctx.save();
         ctx.translate(pos.x, pos.y);
         ctx.rotate(angle);
@@ -206,9 +219,9 @@ class RectangleMechanicDrawable extends FormMechanicDrawable {
 class RotatedRectangleMechanicDrawable extends RectangleMechanicDrawable {
     constructor(start, end, fill, growing, color, width, height, rotation, translation, spinangle, connectedTo) {
         super(start, end, fill, growing, color, width, height, connectedTo);
-        this.rotation = -rotation * Math.PI / 180; // positive mathematical direction, reversed since JS has downwards increasing y axis
+        this.rotation = ToRadians(-rotation); // positive mathematical direction, reversed since JS has downwards increasing y axis
         this.translation = translation;
-        this.spinangle = -spinangle * Math.PI / 180; // positive mathematical direction, reversed since JS has downwards increasing y axis
+        this.spinangle = ToRadians(-spinangle); // positive mathematical direction, reversed since JS has downwards increasing y axis
     }
 
     getSpinPercent() {
@@ -252,8 +265,8 @@ class RotatedRectangleMechanicDrawable extends RectangleMechanicDrawable {
 class PieMechanicDrawable extends FormMechanicDrawable {
     constructor(start, end, fill, growing, color, direction, openingAngle, radius, connectedTo) {
         super(start, end, fill, growing, color, connectedTo);
-        this.direction = -direction * Math.PI / 180; // positive mathematical direction, reversed since JS has downwards increasing y axis
-        this.openingAngle = 0.5 * openingAngle * Math.PI / 180;
+        this.direction = ToRadians(-direction); // positive mathematical direction, reversed since JS has downwards increasing y axis
+        this.openingAngle = ToRadians(0.5 * openingAngle);
         this.radius = radius;
         this.dx = Math.cos(this.direction - this.openingAngle) * this.radius;
         this.dy = Math.sin(this.direction - this.openingAngle) * this.radius;

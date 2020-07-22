@@ -102,11 +102,14 @@ class PlayerIconDrawable extends IconDrawable {
             ctx.strokeStyle = 'green';
             ctx.rect(pos.x - halfSize, pos.y - halfSize, fullSize, fullSize);
             ctx.stroke();
-            animator.rangeControl.forEach(function (present, radius, set) {
+            animator.rangeControl.forEach(function (element) {
+                if (!element.enabled) {
+                    return;
+                }
                 ctx.beginPath();
                 ctx.lineWidth = (2 / animator.scale).toString();
                 ctx.strokeStyle = 'green';
-                ctx.arc(pos.x, pos.y, animator.inch * radius, 0, 2 * Math.PI);
+                ctx.arc(pos.x, pos.y, animator.inch * element.radius, 0, 2 * Math.PI);
                 ctx.stroke();
             });
         }
