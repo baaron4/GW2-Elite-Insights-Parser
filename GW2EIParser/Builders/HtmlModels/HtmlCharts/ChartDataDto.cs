@@ -19,8 +19,8 @@ namespace GW2EIParser.Builders.HtmlModels
             {
                 return nullable ? null : new List<object[]>()
                 {
-                    new object[] {phase.Start, 100.0},
-                    new object[] {phase.End, 100.0},
+                    new object[] { Math.Round(phase.Start/1000.0, GeneralHelper.TimeDigit), 100.0},
+                    new object[] { Math.Round(phase.End/1000.0, GeneralHelper.TimeDigit), 100.0},
                 };
             }
             var res = new List<object[]>();
