@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.TrashID;
 
 namespace GW2EIParser.Logic
 {
@@ -36,9 +36,9 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/8/8b/Mini_Qadim_the_Peerless.png";
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>()
+            return new List<ParseEnum.TrashID>()
             {
                 Pylon1,
                 Pylon2,
@@ -74,7 +74,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.PeerlessQadim);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.PeerlessQadim);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Peerless Qadim not found");
@@ -151,7 +151,7 @@ namespace GW2EIParser.Logic
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetIDS.PeerlessQadim:
+                case (int)ParseEnum.TargetID.PeerlessQadim:
                     var cataCycle = cls.Where(x => x.SkillId == 56329).ToList();
 
                     foreach (AbstractCastEvent c in cataCycle)
@@ -174,7 +174,7 @@ namespace GW2EIParser.Logic
                     {
                         if (c is BuffApplyEvent)
                         {
-                            NPC qadim = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.PeerlessQadim);
+                            NPC qadim = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.PeerlessQadim);
                             surgeStart = (int)c.Time;
                             source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By) ?? qadim;
                         }
@@ -255,7 +255,7 @@ namespace GW2EIParser.Logic
             {
                 if (c is BuffApplyEvent)
                 {
-                    NPC qadim = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.PeerlessQadim);
+                    NPC qadim = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.PeerlessQadim);
                     surgeStart = (int)c.Time;
                     source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By) ?? qadim;
                 }
@@ -293,7 +293,7 @@ namespace GW2EIParser.Logic
 
         public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.PeerlessQadim);
+            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.PeerlessQadim);
             if (target == null)
             {
                 throw new InvalidOperationException("Peerless Qadim not found");

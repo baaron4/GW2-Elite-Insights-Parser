@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.TrashID;
 
 namespace GW2EIParser.Logic
 {
@@ -46,9 +46,9 @@ namespace GW2EIParser.Logic
                             (19072, 15484, 20992, 16508));
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.TrashID>
             {
                 Scythe,
                 TormentedDead,
@@ -62,7 +62,7 @@ namespace GW2EIParser.Logic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.SoullessHorror);
+                NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.SoullessHorror);
                 if (mainTarget == null)
                 {
                     throw new InvalidOperationException("Soulless Horror not found");
@@ -87,7 +87,7 @@ namespace GW2EIParser.Logic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.SoullessHorror);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.SoullessHorror);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Soulless Horror not found");
@@ -123,7 +123,7 @@ namespace GW2EIParser.Logic
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetIDS.SoullessHorror:
+                case (int)ParseEnum.TargetID.SoullessHorror:
                     var howling = cls.Where(x => x.SkillId == 48662).ToList();
                     foreach (AbstractCastEvent c in howling)
                     {

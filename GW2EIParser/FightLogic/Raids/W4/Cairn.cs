@@ -64,7 +64,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetIDS.Cairn:
+                case (int)ParseEnum.TargetID.Cairn:
                     var swordSweep = cls.Where(x => x.SkillId == 37631).ToList();
                     foreach (AbstractCastEvent c in swordSweep)
                     {
@@ -104,7 +104,7 @@ namespace GW2EIParser.Logic
 
         public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem target = agentData.GetNPCsByID((int)ParseEnum.TargetIDS.Cairn).FirstOrDefault();
+            AgentItem target = agentData.GetNPCsByID((int)ParseEnum.TargetID.Cairn).FirstOrDefault();
             if (target == null)
             {
                 throw new InvalidOperationException("Cairn not found");

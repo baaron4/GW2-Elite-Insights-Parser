@@ -33,14 +33,14 @@ namespace GW2EIParser.Logic
         
         protected override void SetSuccessByDeath(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, bool all)
         {
-            SetSuccessByDeath(combatData, fightData, playerAgents, all, (int)ParseEnum.TargetIDS.ClawOfTheFallen, (int)ParseEnum.TargetIDS.VoiceOfTheFallen);
+            SetSuccessByDeath(combatData, fightData, playerAgents, all, (int)ParseEnum.TargetID.ClawOfTheFallen, (int)ParseEnum.TargetID.VoiceOfTheFallen);
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC voice = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.ClawOfTheFallen);
-            NPC claw = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.VoiceOfTheFallen);
+            NPC voice = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.ClawOfTheFallen);
+            NPC claw = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.VoiceOfTheFallen);
             if (voice == null || claw == null)
             {
                 throw new InvalidOperationException("Claw or Voice not found");
@@ -64,7 +64,7 @@ namespace GW2EIParser.Logic
             //
             int voiceAndClawCount = 0;
             var offset = 1;
-            foreach (NPC voiceAndClaw in Targets.Where(x => x.ID == (int)ParseEnum.TargetIDS.VoiceAndClaw)) 
+            foreach (NPC voiceAndClaw in Targets.Where(x => x.ID == (int)ParseEnum.TargetID.VoiceAndClaw)) 
             {
                 EnterCombatEvent enterCombat = log.CombatData.GetEnterCombatEvents(voiceAndClaw.AgentItem).FirstOrDefault();
                 PhaseData nextUnmergedPhase = unmergedPhases.Count > offset + 1 ? unmergedPhases[offset] : null;
@@ -96,8 +96,8 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<int>
             {
-                (int)ParseEnum.TargetIDS.ClawOfTheFallen,
-                (int)ParseEnum.TargetIDS.VoiceOfTheFallen,
+                (int)ParseEnum.TargetID.ClawOfTheFallen,
+                (int)ParseEnum.TargetID.VoiceOfTheFallen,
             };
         }
 
@@ -105,9 +105,9 @@ namespace GW2EIParser.Logic
         {
             return new List<int>
             {
-                (int)ParseEnum.TargetIDS.VoiceOfTheFallen,
-                (int)ParseEnum.TargetIDS.ClawOfTheFallen,
-                (int)ParseEnum.TargetIDS.VoiceAndClaw,
+                (int)ParseEnum.TargetID.VoiceOfTheFallen,
+                (int)ParseEnum.TargetID.ClawOfTheFallen,
+                (int)ParseEnum.TargetID.VoiceAndClaw,
             };
         }
     }

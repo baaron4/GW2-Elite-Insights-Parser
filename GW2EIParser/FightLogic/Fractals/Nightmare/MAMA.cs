@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.TrashID;
 
 namespace GW2EIParser.Logic
 {
@@ -51,7 +51,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mama = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.MAMA);
+            NPC mama = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.MAMA);
             if (mama == null)
             {
                 throw new InvalidOperationException("MAMA not found");
@@ -106,16 +106,16 @@ namespace GW2EIParser.Logic
         {
             return new List<int>
             {
-                (int)ParseEnum.TargetIDS.MAMA,
+                (int)ParseEnum.TargetID.MAMA,
                 (int)GreenKnight,
                 (int)RedKnight,
                 (int)BlueKnight
             };
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.TrashID>
             {
                 TwistedHorror
             };
@@ -123,7 +123,7 @@ namespace GW2EIParser.Logic
 
         public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)ParseEnum.TargetIDS.MAMA, 762, 1500);
+            return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)ParseEnum.TargetID.MAMA, 762, 1500);
         }
     }
 }

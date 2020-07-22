@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.TrashID;
 
 namespace GW2EIParser.Logic
 {
@@ -74,7 +74,7 @@ namespace GW2EIParser.Logic
             long end = 0;
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.KeepConstruct);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.KeepConstruct);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Keep Construct not found");
@@ -192,9 +192,9 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.TrashID>
             {
                 Core,
                 Jessica,
@@ -221,7 +221,7 @@ namespace GW2EIParser.Logic
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetIDS.KeepConstruct:
+                case (int)ParseEnum.TargetID.KeepConstruct:
 
                     List<AbstractBuffEvent> kcOrbCollect = GetFilteredList(log.CombatData, 35025, target, true);
                     int kcOrbStart = 0, kcOrbEnd = 0;
@@ -348,7 +348,7 @@ namespace GW2EIParser.Logic
                 case (int)Henley:
                 case (int)Galletta:
                 case (int)Ianim:
-                    NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.KeepConstruct);
+                    NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.KeepConstruct);
                     if (mainTarget == null)
                     {
                         throw new InvalidOperationException("Keep Construct not found");

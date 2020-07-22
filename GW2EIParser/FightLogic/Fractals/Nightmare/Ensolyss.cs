@@ -4,7 +4,7 @@ using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.TrashID;
 
 namespace GW2EIParser.Logic
 {
@@ -46,7 +46,7 @@ namespace GW2EIParser.Logic
         }
         public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)ParseEnum.TargetIDS.Ensolyss, 762, 1500);
+            return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)ParseEnum.TargetID.Ensolyss, 762, 1500);
         }
 
         public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
@@ -54,9 +54,9 @@ namespace GW2EIParser.Logic
             return FightData.CMStatus.CMnoName;
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.TrashID>
             {
                 NightmareHallucination1,
                 NightmareHallucination2

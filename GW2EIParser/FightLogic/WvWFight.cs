@@ -25,7 +25,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.WorldVersusWorld);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.WorldVersusWorld);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -105,7 +105,7 @@ namespace GW2EIParser.Logic
 
         public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
-            AgentItem dummyAgent = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, "Enemy Players", "", (int)ParseEnum.TargetIDS.WorldVersusWorld);
+            AgentItem dummyAgent = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, "Enemy Players", "", (int)ParseEnum.TargetID.WorldVersusWorld);
             ComputeFightTargets(agentData, combatData);
             var aList = agentData.GetAgentByType(AgentItem.AgentType.EnemyPlayer).ToList();
             /*foreach (AgentItem a in aList)

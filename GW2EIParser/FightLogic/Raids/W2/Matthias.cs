@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.TrashID;
 
 namespace GW2EIParser.Logic
 {
@@ -59,7 +59,7 @@ namespace GW2EIParser.Logic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Matthias);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Matthias);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Matthias not found");
@@ -113,9 +113,9 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.TrashID>
             {
                 Storm,
                 Spirit,
@@ -132,7 +132,7 @@ namespace GW2EIParser.Logic
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetIDS.Matthias:
+                case (int)ParseEnum.TargetID.Matthias:
                     var humanShield = cls.Where(x => x.SkillId == 34468).ToList();
                     var humanShieldRemoval = log.CombatData.GetBuffRemoveAllData(34518).Select(x => (int)x.Time).Distinct().ToList();
                     for (int i = 0; i < humanShield.Count; i++)

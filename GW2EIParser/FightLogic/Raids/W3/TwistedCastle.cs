@@ -38,15 +38,15 @@ namespace GW2EIParser.Logic
 
         public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
-            agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, "Twisted Castle", "", (int)ParseEnum.TargetIDS.TwistedCastle);
+            agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, "Twisted Castle", "", (int)ParseEnum.TargetID.TwistedCastle);
             ComputeFightTargets(agentData, combatData);
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.TrashID>
             {
-               ParseEnum.TrashIDS.HauntingStatue,
+               ParseEnum.TrashID.HauntingStatue,
                //ParseEnum.TrashIDS.CastleFountain
             };
         }
@@ -55,7 +55,7 @@ namespace GW2EIParser.Logic
         {
             switch (npc.ID)
             {
-                case (int)ParseEnum.TrashIDS.HauntingStatue:
+                case (int)ParseEnum.TrashID.HauntingStatue:
                     var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
                     if (replay.Rotations.Any())
                     {

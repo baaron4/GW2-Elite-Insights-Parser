@@ -8,7 +8,7 @@ using GW2EIParser.Exceptions;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.TrashID;
 
 namespace GW2EIParser.Logic
 {
@@ -85,7 +85,7 @@ namespace GW2EIParser.Logic
         {
             return new List<int>
             {
-                (int)ParseEnum.TargetIDS.Qadim,
+                (int)ParseEnum.TargetID.Qadim,
                 (int)AncientInvokedHydra,
                 (int)WyvernMatriarch,
                 (int)WyvernPatriarch,
@@ -98,7 +98,7 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<int>
             {
-                (int)ParseEnum.TargetIDS.Qadim,
+                (int)ParseEnum.TargetID.Qadim,
                 (int)AncientInvokedHydra,
                 (int)ApocalypseBringer,
                 (int)WyvernMatriarch,
@@ -154,7 +154,7 @@ namespace GW2EIParser.Logic
         public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // Find target
-            AgentItem target = agentData.GetNPCsByID((int)ParseEnum.TargetIDS.Qadim).FirstOrDefault();
+            AgentItem target = agentData.GetNPCsByID((int)ParseEnum.TargetID.Qadim).FirstOrDefault();
             if (target == null)
             {
                 throw new InvalidOperationException("Qadim not found");
@@ -180,7 +180,7 @@ namespace GW2EIParser.Logic
             // If changing phase detection, combat replay platform timings may have to be updated.
 
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC qadim = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Qadim);
+            NPC qadim = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Qadim);
             if (qadim == null)
             {
                 throw new InvalidOperationException("Qadim not found");
@@ -251,9 +251,9 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>()
+            return new List<ParseEnum.TrashID>()
             {
                 LavaElemental1,
                 LavaElemental2,
@@ -279,7 +279,7 @@ namespace GW2EIParser.Logic
             int ccRadius = 200;
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetIDS.Qadim:
+                case (int)ParseEnum.TargetID.Qadim:
                     //CC
                     AddPlatformsToCombatReplay(target, log, replay);
                     var breakbar = cls.Where(x => x.SkillId == 51943).ToList();
@@ -514,7 +514,7 @@ namespace GW2EIParser.Logic
 
         public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Qadim);
+            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Qadim);
             if (target == null)
             {
                 throw new InvalidOperationException("Qadim not found");
@@ -525,7 +525,7 @@ namespace GW2EIParser.Logic
         private void AddPlatformsToCombatReplay(NPC target, ParsedLog log, CombatReplay replay)
         {
             // We later use the target to find out the timing of the last move
-            Debug.Assert(target.ID == (int)ParseEnum.TargetIDS.Qadim);
+            Debug.Assert(target.ID == (int)ParseEnum.TargetID.Qadim);
 
             // These values were all calculated by hand.
             // It would be way nicer to calculate them here, but we don't have a nice vector library

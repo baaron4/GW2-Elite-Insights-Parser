@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.TrashID;
 
 namespace GW2EIParser.Logic
 {
@@ -38,9 +38,9 @@ namespace GW2EIParser.Logic
                             (11774, 4480, 14078, 5376));
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.TrashID>
             {
                 Jade
             };
@@ -50,7 +50,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.MursaatOverseer);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.MursaatOverseer);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Mursaat Overseer not found");
@@ -104,7 +104,7 @@ namespace GW2EIParser.Logic
 
         public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.MursaatOverseer);
+            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.MursaatOverseer);
             if (target == null)
             {
                 throw new InvalidOperationException("Mursaat Overseer not found");

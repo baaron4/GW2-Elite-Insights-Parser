@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.TrashID;
 
 namespace GW2EIParser.Logic
 {
@@ -49,7 +49,7 @@ namespace GW2EIParser.Logic
 
         public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Skorvald);
+            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Skorvald);
             if (target == null)
             {
                 throw new InvalidOperationException("Skorvald not found");
@@ -57,9 +57,9 @@ namespace GW2EIParser.Logic
             return (target.GetHealth(combatData) == 5551340) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.TrashID>
             {
                 FluxAnomaly4,
                 FluxAnomaly3,

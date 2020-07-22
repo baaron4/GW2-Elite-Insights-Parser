@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.TrashID;
 
 namespace GW2EIParser.Logic
 {
@@ -43,9 +43,9 @@ namespace GW2EIParser.Logic
                             (2688, 11906, 3712, 14210));
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.TrashID>
             {
                 Slubling1,
                 Slubling2,
@@ -58,7 +58,7 @@ namespace GW2EIParser.Logic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Slothasor);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Slothasor);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Slothasor not found");
@@ -89,7 +89,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetIDS.Slothasor:
+                case (int)ParseEnum.TargetID.Slothasor:
                     var sleepy = cls.Where(x => x.SkillId == 34515).ToList();
                     foreach (AbstractCastEvent c in sleepy)
                     {

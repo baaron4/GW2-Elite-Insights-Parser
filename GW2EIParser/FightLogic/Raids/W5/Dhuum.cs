@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.TrashID;
 
 namespace GW2EIParser.Logic
 {
@@ -99,7 +99,7 @@ namespace GW2EIParser.Logic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC dhuum = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Dhuum);
+            NPC dhuum = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Dhuum);
             if (dhuum == null)
             {
                 throw new InvalidOperationException("Dhuum not found");
@@ -154,9 +154,9 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.TrashID>
             {
                 Echo,
                 Enforcer,
@@ -175,7 +175,7 @@ namespace GW2EIParser.Logic
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetIDS.Dhuum:
+                case (int)ParseEnum.TargetID.Dhuum:
                     var deathmark = cls.Where(x => x.SkillId == 48176).ToList();
                     AbstractCastEvent majorSplit = cls.Find(x => x.SkillId == 47396);
                     foreach (AbstractCastEvent c in deathmark)
@@ -305,7 +305,7 @@ namespace GW2EIParser.Logic
         {
             // spirit transform
             var spiritTransform = log.CombatData.GetBuffData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Dhuum);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Dhuum);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Dhuum not found");
@@ -390,7 +390,7 @@ namespace GW2EIParser.Logic
 
         public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Dhuum);
+            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Dhuum);
             if (target == null)
             {
                 throw new InvalidOperationException("Dhuum not found");

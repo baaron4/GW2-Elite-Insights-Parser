@@ -273,7 +273,7 @@ namespace GW2EIParser.Parser
 
         //
 
-        public enum TrashIDS : int
+        public enum TrashID : int
         {
             // VG
             Seekers = 15426,
@@ -503,12 +503,12 @@ namespace GW2EIParser.Parser
             //
             Unknown
         };
-        public static TrashIDS GetTrashIDS(int id)
+        public static TrashID GetTrashIDS(int id)
         {
-            return Enum.IsDefined(typeof(TrashIDS), id) ? (TrashIDS)id : TrashIDS.Unknown;
+            return Enum.IsDefined(typeof(TrashID), id) ? (TrashID)id : TrashID.Unknown;
         }
 
-        public enum TargetIDS : int
+        public enum TargetID : int
         {
             WorldVersusWorld = 1,
             TwistedCastle = _twilightCastle,
@@ -571,9 +571,9 @@ namespace GW2EIParser.Parser
             //
             Unknown
         };
-        public static TargetIDS GetTargetIDS(int id)
+        public static TargetID GetTargetIDS(int id)
         {
-            return Enum.IsDefined(typeof(TargetIDS), id) ? (TargetIDS)id : TargetIDS.Unknown;
+            return Enum.IsDefined(typeof(TargetID), id) ? (TargetID)id : TargetID.Unknown;
         }
 
     }

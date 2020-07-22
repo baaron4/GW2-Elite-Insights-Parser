@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.TrashID;
 
 namespace GW2EIParser.Logic
 {
@@ -92,7 +92,7 @@ namespace GW2EIParser.Logic
         {
             return new List<int>()
             {
-                (int)ParseEnum.TargetIDS.Adina,
+                (int)ParseEnum.TargetID.Adina,
                 (int)HandOfErosion,
                 (int)HandOfEruption
             };
@@ -101,7 +101,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Adina);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Adina);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Adina not found");
@@ -176,7 +176,7 @@ namespace GW2EIParser.Logic
 
         public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Adina);
+            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Adina);
             if (target == null)
             {
                 throw new InvalidOperationException("Adina not found");

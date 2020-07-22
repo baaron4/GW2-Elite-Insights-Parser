@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.TrashID;
 
 namespace GW2EIParser.Logic
 {
@@ -18,7 +18,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Freezie);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Freezie);
             NPC heartTarget = Targets.Find(x => x.ID == (int)FreeziesFrozenHeart);
             if (mainTarget == null)
             {
@@ -51,7 +51,7 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<int>
             {
-                (int)ParseEnum.TargetIDS.Freezie,
+                (int)ParseEnum.TargetID.Freezie,
                 (int)FreeziesFrozenHeart
             };
         }
@@ -60,7 +60,7 @@ namespace GW2EIParser.Logic
         {
             return new List<int>
             {
-                (int)ParseEnum.TargetIDS.Freezie,
+                (int)ParseEnum.TargetID.Freezie,
                 (int)FreeziesFrozenHeart
             };
         }

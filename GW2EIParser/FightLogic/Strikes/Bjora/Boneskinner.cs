@@ -36,15 +36,15 @@ namespace GW2EIParser.Logic
                             (0, 0, 0, 0));
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.TrashID>
             {
-                ParseEnum.TrashIDS.VigilTactician,
-                ParseEnum.TrashIDS.VigilRecruit,
-                ParseEnum.TrashIDS.PrioryExplorer,
-                ParseEnum.TrashIDS.PrioryScholar,
-                ParseEnum.TrashIDS.AberrantWisp,
+                ParseEnum.TrashID.VigilTactician,
+                ParseEnum.TrashID.VigilRecruit,
+                ParseEnum.TrashID.PrioryExplorer,
+                ParseEnum.TrashID.PrioryScholar,
+                ParseEnum.TrashID.AberrantWisp,
             };
         }
     }

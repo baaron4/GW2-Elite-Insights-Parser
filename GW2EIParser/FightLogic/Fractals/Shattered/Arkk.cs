@@ -4,7 +4,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.TrashID;
 
 namespace GW2EIParser.Logic
 {
@@ -59,9 +59,9 @@ namespace GW2EIParser.Logic
                             (11204, 4414, 13252, 6462));
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.TrashID>
             {
                 TemporalAnomaly2,
                 BLIGHT,
@@ -83,7 +83,7 @@ namespace GW2EIParser.Logic
         {
             return new List<int>
             {
-                (int)ParseEnum.TargetIDS.Arkk,
+                (int)ParseEnum.TargetID.Arkk,
                 (int)Archdiviner,
                 (int)BrazenGladiator
             };
@@ -91,7 +91,7 @@ namespace GW2EIParser.Logic
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Arkk);
+            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Arkk);
             SetSuccessByBuffCount(combatData, fightData, playerAgents, target, 762, 10);
             // missing buff apply events fallback, some phases will be missing
             // removes should be present

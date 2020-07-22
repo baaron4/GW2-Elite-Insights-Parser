@@ -196,7 +196,7 @@ namespace GW2EIParser.Parser.ParsedData
         {
             foreach (KeyValuePair<AgentItem, List<AbstractDamageEvent>> pair in _damageTakenData)
             {
-                if (pair.Key.ID == (int)ParseEnum.TargetIDS.WorldVersusWorld)
+                if (pair.Key.ID == (int)ParseEnum.TargetID.WorldVersusWorld)
                 {
                     continue;
                 }

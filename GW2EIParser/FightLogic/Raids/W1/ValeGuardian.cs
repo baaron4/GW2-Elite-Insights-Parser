@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.TrashID;
 
 namespace GW2EIParser.Logic
 {
@@ -53,7 +53,7 @@ namespace GW2EIParser.Logic
         {
             return new List<int>
             {
-                (int)ParseEnum.TargetIDS.ValeGuardian,
+                (int)ParseEnum.TargetID.ValeGuardian,
                 (int)RedGuardian,
                 (int)BlueGuardian,
                 (int)GreenGuardian
@@ -63,7 +63,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.ValeGuardian);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.ValeGuardian);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Vale Guardian not found");
@@ -102,9 +102,9 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.TrashID>
             {
                Seekers
             };
@@ -116,7 +116,7 @@ namespace GW2EIParser.Logic
             var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetIDS.ValeGuardian:
+                case (int)ParseEnum.TargetID.ValeGuardian:
                     var magicStorms = cls.Where(x => x.SkillId == 31419).ToList();
                     foreach (AbstractCastEvent c in magicStorms)
                     {

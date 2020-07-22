@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.TrashID;
 
 namespace GW2EIParser.Logic
 {
@@ -29,7 +29,7 @@ namespace GW2EIParser.Logic
         {
             return new List<int>
             {
-                (int)ParseEnum.TargetIDS.Narella
+                (int)ParseEnum.TargetID.Narella
             };
         }
 
@@ -37,9 +37,9 @@ namespace GW2EIParser.Logic
         {
             return new List<int>
             {
-                (int)ParseEnum.TargetIDS.Berg,
-                (int)ParseEnum.TargetIDS.Zane,
-                (int)ParseEnum.TargetIDS.Narella
+                (int)ParseEnum.TargetID.Berg,
+                (int)ParseEnum.TargetID.Zane,
+                (int)ParseEnum.TargetID.Narella
             };
         }
 
@@ -87,13 +87,13 @@ namespace GW2EIParser.Logic
                 phase.Targets.Add(target);
                 switch (target.ID)
                 {
-                    case (int)ParseEnum.TargetIDS.Narella:
+                    case (int)ParseEnum.TargetID.Narella:
                         phase.Name = "Narella";
                         break;
-                    case (int)ParseEnum.TargetIDS.Berg:
+                    case (int)ParseEnum.TargetID.Berg:
                         phase.Name = "Berg";
                         break;
-                    case (int)ParseEnum.TargetIDS.Zane:
+                    case (int)ParseEnum.TargetID.Zane:
                         phase.Name = "Zane";
                         break;
                     default:
@@ -107,26 +107,26 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<int>
             {
-                (int)ParseEnum.TargetIDS.Berg,
-                (int)ParseEnum.TargetIDS.Zane,
-                (int)ParseEnum.TargetIDS.Narella
+                (int)ParseEnum.TargetID.Berg,
+                (int)ParseEnum.TargetID.Zane,
+                (int)ParseEnum.TargetID.Narella
             };
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC berg = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Berg);
+            NPC berg = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Berg);
             if (berg == null)
             {
                 throw new InvalidOperationException("Berg not found");
             }
-            NPC zane = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Zane);
+            NPC zane = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Zane);
             if (zane == null)
             {
                 throw new InvalidOperationException("Zane not found");
             }
-            NPC narella = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Narella);
+            NPC narella = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Narella);
             if (narella == null)
             {
                 throw new InvalidOperationException("Narella not found");
@@ -143,9 +143,9 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.TrashID>
             {
                 BanditSaboteur,
                 Warg,
@@ -175,9 +175,9 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetIDS.Berg:
+                case (int)ParseEnum.TargetID.Berg:
                     break;
-                case (int)ParseEnum.TargetIDS.Zane:
+                case (int)ParseEnum.TargetID.Zane:
                     var bulletHail = cls.Where(x => x.SkillId == 34383).ToList();
                     foreach (AbstractCastEvent c in bulletHail)
                     {
@@ -199,7 +199,7 @@ namespace GW2EIParser.Logic
                     }
                     break;
 
-                case (int)ParseEnum.TargetIDS.Narella:
+                case (int)ParseEnum.TargetID.Narella:
                     break;
                 default:
                     break;

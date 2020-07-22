@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.TrashID;
 
 namespace GW2EIParser.Logic
 {
@@ -66,7 +66,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Sabetha);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Sabetha);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Sabetha not found");
@@ -123,7 +123,7 @@ namespace GW2EIParser.Logic
         {
             return new List<int>
             {
-                (int)ParseEnum.TargetIDS.Sabetha,
+                (int)ParseEnum.TargetID.Sabetha,
                 (int)Kernan,
                 (int)Knuckles,
                 (int)Karde,
@@ -135,7 +135,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetIDS.Sabetha:
+                case (int)ParseEnum.TargetID.Sabetha:
                     var flameWall = cls.Where(x => x.SkillId == 31332).ToList();
                     foreach (AbstractCastEvent c in flameWall)
                     {
@@ -199,9 +199,9 @@ namespace GW2EIParser.Logic
             }
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.TrashID>
             {
                 BanditSapper,
                 BanditThug,
@@ -242,7 +242,7 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<int>
             {
-                (int)ParseEnum.TargetIDS.Sabetha,
+                (int)ParseEnum.TargetID.Sabetha,
                 (int)Kernan,
                 (int)Karde,
                 (int)Knuckles,

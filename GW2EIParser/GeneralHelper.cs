@@ -7,7 +7,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using Newtonsoft.Json.Serialization;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.TrashID;
 
 namespace GW2EIParser
 {
@@ -262,108 +262,108 @@ namespace GW2EIParser
         {
             switch (ParseEnum.GetTargetIDS(id))
             {
-                case ParseEnum.TargetIDS.WorldVersusWorld:
+                case ParseEnum.TargetID.WorldVersusWorld:
                     return "https://wiki.guildwars2.com/images/d/db/PvP_Server_Browser_%28map_icon%29.png";
-                case ParseEnum.TargetIDS.ValeGuardian:
+                case ParseEnum.TargetID.ValeGuardian:
                     return "https://i.imgur.com/MIpP5pK.png";
-                case ParseEnum.TargetIDS.Gorseval:
+                case ParseEnum.TargetID.Gorseval:
                     return "https://i.imgur.com/5hmMq12.png";
-                case ParseEnum.TargetIDS.Sabetha:
+                case ParseEnum.TargetID.Sabetha:
                     return "https://i.imgur.com/UqbFp9S.png";
-                case ParseEnum.TargetIDS.Slothasor:
+                case ParseEnum.TargetID.Slothasor:
                     return "https://i.imgur.com/h1xH3ER.png";
-                case ParseEnum.TargetIDS.Berg:
+                case ParseEnum.TargetID.Berg:
                     return "https://i.imgur.com/tLMXqL7.png";
-                case ParseEnum.TargetIDS.Narella:
+                case ParseEnum.TargetID.Narella:
                     return "https://i.imgur.com/FwMCoR0.png";
-                case ParseEnum.TargetIDS.Zane:
+                case ParseEnum.TargetID.Zane:
                     return "https://i.imgur.com/tkPWMST.png";
-                case ParseEnum.TargetIDS.Matthias:
+                case ParseEnum.TargetID.Matthias:
                     return "https://i.imgur.com/3uMMmTS.png";
-                case ParseEnum.TargetIDS.KeepConstruct:
+                case ParseEnum.TargetID.KeepConstruct:
                     return "https://i.imgur.com/Kq0kL07.png";
-                case ParseEnum.TargetIDS.Xera:
+                case ParseEnum.TargetID.Xera:
                     return "https://i.imgur.com/lYwJEyV.png";
-                case ParseEnum.TargetIDS.Cairn:
+                case ParseEnum.TargetID.Cairn:
                     return "https://i.imgur.com/gQY37Tf.png";
-                case ParseEnum.TargetIDS.MursaatOverseer:
+                case ParseEnum.TargetID.MursaatOverseer:
                     return "https://i.imgur.com/5LNiw4Y.png";
-                case ParseEnum.TargetIDS.Samarog:
+                case ParseEnum.TargetID.Samarog:
                     return "https://i.imgur.com/MPQhKfM.png";
-                case ParseEnum.TargetIDS.Deimos:
+                case ParseEnum.TargetID.Deimos:
                     return "https://i.imgur.com/mWfxBaO.png";
-                case ParseEnum.TargetIDS.SoullessHorror:
-                case ParseEnum.TargetIDS.Desmina:
+                case ParseEnum.TargetID.SoullessHorror:
+                case ParseEnum.TargetID.Desmina:
                     return "https://i.imgur.com/jAiRplg.png";
-                case ParseEnum.TargetIDS.BrokenKing:
+                case ParseEnum.TargetID.BrokenKing:
                     return "https://i.imgur.com/FNgUmvL.png";
-                case ParseEnum.TargetIDS.SoulEater:
+                case ParseEnum.TargetID.SoulEater:
                     return "https://i.imgur.com/Sd6Az8M.png";
-                case ParseEnum.TargetIDS.EyeOfFate:
-                case ParseEnum.TargetIDS.EyeOfJudgement:
+                case ParseEnum.TargetID.EyeOfFate:
+                case ParseEnum.TargetID.EyeOfJudgement:
                     return "https://i.imgur.com/kAgdoa5.png";
-                case ParseEnum.TargetIDS.Dhuum:
+                case ParseEnum.TargetID.Dhuum:
                     return "https://i.imgur.com/RKaDon5.png";
-                case ParseEnum.TargetIDS.ConjuredAmalgamate:
+                case ParseEnum.TargetID.ConjuredAmalgamate:
                     return "https://i.imgur.com/C23rYTl.png";
-                case ParseEnum.TargetIDS.CALeftArm:
+                case ParseEnum.TargetID.CALeftArm:
                     return "https://i.imgur.com/qrkQvEY.png";
-                case ParseEnum.TargetIDS.CARightArm:
+                case ParseEnum.TargetID.CARightArm:
                     return "https://i.imgur.com/MVwjtH7.png";
-                case ParseEnum.TargetIDS.Kenut:
+                case ParseEnum.TargetID.Kenut:
                     return "https://i.imgur.com/6yq45Cc.png";
-                case ParseEnum.TargetIDS.Nikare:
+                case ParseEnum.TargetID.Nikare:
                     return "https://i.imgur.com/TLykcrJ.png";
-                case ParseEnum.TargetIDS.Qadim:
+                case ParseEnum.TargetID.Qadim:
                     return "https://i.imgur.com/IfoHTHT.png";
-                case ParseEnum.TargetIDS.Freezie:
+                case ParseEnum.TargetID.Freezie:
                     return "https://wiki.guildwars2.com/images/d/d9/Mini_Freezie.png";
-                case ParseEnum.TargetIDS.Adina:
+                case ParseEnum.TargetID.Adina:
                     return "https://i.imgur.com/or3m1yb.png";
-                case ParseEnum.TargetIDS.Sabir:
+                case ParseEnum.TargetID.Sabir:
                     return "https://i.imgur.com/Q4WUXqw.png";
-                case ParseEnum.TargetIDS.PeerlessQadim:
+                case ParseEnum.TargetID.PeerlessQadim:
                     return "https://i.imgur.com/47uePpb.png";
-                case ParseEnum.TargetIDS.IcebroodConstruct:
-                case ParseEnum.TargetIDS.IcebroodConstructFraenir:
+                case ParseEnum.TargetID.IcebroodConstruct:
+                case ParseEnum.TargetID.IcebroodConstructFraenir:
                     return "https://i.imgur.com/dpaZFa5.png";
-                case ParseEnum.TargetIDS.ClawOfTheFallen:
+                case ParseEnum.TargetID.ClawOfTheFallen:
                     return "https://i.imgur.com/HF85QpV.png";
-                case ParseEnum.TargetIDS.VoiceOfTheFallen:
+                case ParseEnum.TargetID.VoiceOfTheFallen:
                     return "https://i.imgur.com/BdTGXMU.png";
-                case ParseEnum.TargetIDS.VoiceAndClaw:
+                case ParseEnum.TargetID.VoiceAndClaw:
                     return "https://i.imgur.com/V1rJBnq.png";
-                case ParseEnum.TargetIDS.FraenirOfJormag:
+                case ParseEnum.TargetID.FraenirOfJormag:
                     return "https://i.imgur.com/MxudnKp.png";
-                case ParseEnum.TargetIDS.Boneskinner:
+                case ParseEnum.TargetID.Boneskinner:
                     return "https://i.imgur.com/7HPdKDQ.png";
-                case ParseEnum.TargetIDS.WhisperOfJormag:
+                case ParseEnum.TargetID.WhisperOfJormag:
                     return "https://i.imgur.com/lu9ZLVq.png";
-                case ParseEnum.TargetIDS.VariniaStormsounder:
+                case ParseEnum.TargetID.VariniaStormsounder:
                     return "https://i.imgur.com/2o8TtiM.png";
-                case ParseEnum.TargetIDS.MAMA:
+                case ParseEnum.TargetID.MAMA:
                     return "https://i.imgur.com/1h7HOII.png";
-                case ParseEnum.TargetIDS.Siax:
+                case ParseEnum.TargetID.Siax:
                     return "https://i.imgur.com/5C60cQb.png";
-                case ParseEnum.TargetIDS.Ensolyss:
+                case ParseEnum.TargetID.Ensolyss:
                     return "https://i.imgur.com/GUTNuyP.png";
-                case ParseEnum.TargetIDS.Skorvald:
+                case ParseEnum.TargetID.Skorvald:
                     return "https://i.imgur.com/IOPAHRE.png";
-                case ParseEnum.TargetIDS.Artsariiv:
+                case ParseEnum.TargetID.Artsariiv:
                     return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
-                case ParseEnum.TargetIDS.Arkk:
+                case ParseEnum.TargetID.Arkk:
                     return "https://i.imgur.com/u6vv8cW.png";
-                case ParseEnum.TargetIDS.LGolem:
+                case ParseEnum.TargetID.LGolem:
                     return "https://wiki.guildwars2.com/images/4/47/Mini_Baron_von_Scrufflebutt.png";
-                case ParseEnum.TargetIDS.AvgGolem:
+                case ParseEnum.TargetID.AvgGolem:
                     return "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
-                case ParseEnum.TargetIDS.StdGolem:
+                case ParseEnum.TargetID.StdGolem:
                     return "https://wiki.guildwars2.com/images/8/8f/Mini_Professor_Mew.png";
-                case ParseEnum.TargetIDS.MassiveGolem:
+                case ParseEnum.TargetID.MassiveGolem:
                     return "https://wiki.guildwars2.com/images/3/33/Mini_Snuggles.png";
-                case ParseEnum.TargetIDS.MedGolem:
+                case ParseEnum.TargetID.MedGolem:
                     return "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
-                case ParseEnum.TargetIDS.TwistedCastle:
+                case ParseEnum.TargetID.TwistedCastle:
                     return "https://i.imgur.com/ZBm5Uga.png";
             }
             switch (ParseEnum.GetTrashIDS(id))

@@ -126,7 +126,7 @@ namespace GW2EIParser.Logic
                     Targets.Add(new NPC(agentItem));
                 }
             }
-            List<ParseEnum.TrashIDS> ids2 = GetTrashMobsIDS();
+            List<ParseEnum.TrashID> ids2 = GetTrashMobsIDS();
             var aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
             //aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
             foreach (AgentItem a in aList)
@@ -308,9 +308,9 @@ namespace GW2EIParser.Logic
         {
         }
 
-        protected virtual List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected virtual List<ParseEnum.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>();
+            return new List<ParseEnum.TrashID>();
         }
 
         public virtual FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)

@@ -29,7 +29,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC varinia = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.VariniaStormsounder);
+            NPC varinia = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.VariniaStormsounder);
             if (varinia == null)
             {
                 throw new InvalidOperationException("Varinia Stormsounder not found");
@@ -46,22 +46,22 @@ namespace GW2EIParser.Logic
         }
 
         // TODO - complete IDs
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.TrashID>
             {
-                ParseEnum.TrashIDS.PropagandaBallon,
-                ParseEnum.TrashIDS.DominionBladestorm,
-                ParseEnum.TrashIDS.DominionStalker,
-                ParseEnum.TrashIDS.DominionSpy1,
-                ParseEnum.TrashIDS.DominionSpy2,
-                ParseEnum.TrashIDS.DominionAxeFiend,
-                ParseEnum.TrashIDS.DominionEffigy,
-                ParseEnum.TrashIDS.FrostLegionCrusher,
-                ParseEnum.TrashIDS.FrostLegionMusketeer,
-                ParseEnum.TrashIDS.BloodLegionBlademaster,
-                ParseEnum.TrashIDS.CharrTank,
-                ParseEnum.TrashIDS.SonsOfSvanirHighShaman,
+                ParseEnum.TrashID.PropagandaBallon,
+                ParseEnum.TrashID.DominionBladestorm,
+                ParseEnum.TrashID.DominionStalker,
+                ParseEnum.TrashID.DominionSpy1,
+                ParseEnum.TrashID.DominionSpy2,
+                ParseEnum.TrashID.DominionAxeFiend,
+                ParseEnum.TrashID.DominionEffigy,
+                ParseEnum.TrashID.FrostLegionCrusher,
+                ParseEnum.TrashID.FrostLegionMusketeer,
+                ParseEnum.TrashID.BloodLegionBlademaster,
+                ParseEnum.TrashID.CharrTank,
+                ParseEnum.TrashID.SonsOfSvanirHighShaman,
             };
         }
     }

@@ -42,160 +42,160 @@ namespace GW2EIParser.Parser.ParsedData
             switch (ParseEnum.GetTargetIDS(id))
             {
                 //
-                case ParseEnum.TargetIDS.ValeGuardian:
+                case ParseEnum.TargetID.ValeGuardian:
                     Logic = new ValeGuardian(id);
                     break;
-                case ParseEnum.TargetIDS.Gorseval:
+                case ParseEnum.TargetID.Gorseval:
                     Logic = new Gorseval(id);
                     break;
-                case ParseEnum.TargetIDS.Sabetha:
+                case ParseEnum.TargetID.Sabetha:
                     Logic = new Sabetha(id);
                     break;
-                case ParseEnum.TargetIDS.Slothasor:
+                case ParseEnum.TargetID.Slothasor:
                     Logic = new Slothasor(id);
                     break;
-                case ParseEnum.TargetIDS.Zane:
-                case ParseEnum.TargetIDS.Berg:
-                case ParseEnum.TargetIDS.Narella:
+                case ParseEnum.TargetID.Zane:
+                case ParseEnum.TargetID.Berg:
+                case ParseEnum.TargetID.Narella:
                     Logic = new BanditTrio(id);
                     break;
-                case ParseEnum.TargetIDS.Matthias:
+                case ParseEnum.TargetID.Matthias:
                     Logic = new Matthias(id);
                     break;
                 /*case ParseEnum.TargetIDS.Escort:
                     Logic = new Escort(id, agentData);
                     break;*/
-                case ParseEnum.TargetIDS.KeepConstruct:
+                case ParseEnum.TargetID.KeepConstruct:
                     Logic = new KeepConstruct(id);
                     break;
-                case ParseEnum.TargetIDS.Xera:
+                case ParseEnum.TargetID.Xera:
                     // some TC logs are registered as Xera
-                    if (agentData.GetNPCsByID((int)ParseEnum.TrashIDS.HauntingStatue).Count > 0)
+                    if (agentData.GetNPCsByID((int)ParseEnum.TrashID.HauntingStatue).Count > 0)
                     {
-                        TriggerID = (int)ParseEnum.TrashIDS.HauntingStatue;
-                        Logic = new TwistedCastle((int)ParseEnum.TargetIDS.TwistedCastle);
+                        TriggerID = (int)ParseEnum.TrashID.HauntingStatue;
+                        Logic = new TwistedCastle((int)ParseEnum.TargetID.TwistedCastle);
                         break;
                     }
                     Logic = new Xera(id);
                     break;
-                case ParseEnum.TargetIDS.Cairn:
+                case ParseEnum.TargetID.Cairn:
                     Logic = new Cairn(id);
                     break;
-                case ParseEnum.TargetIDS.MursaatOverseer:
+                case ParseEnum.TargetID.MursaatOverseer:
                     Logic = new MursaatOverseer(id);
                     break;
-                case ParseEnum.TargetIDS.Samarog:
+                case ParseEnum.TargetID.Samarog:
                     Logic = new Samarog(id);
                     break;
-                case ParseEnum.TargetIDS.Deimos:
+                case ParseEnum.TargetID.Deimos:
                     Logic = new Deimos(id);
                     break;
-                case ParseEnum.TargetIDS.SoullessHorror:
+                case ParseEnum.TargetID.SoullessHorror:
                     Logic = new SoullessHorror(id);
                     break;
-                case ParseEnum.TargetIDS.Desmina:
+                case ParseEnum.TargetID.Desmina:
                     Logic = new River(id);
                     break;
-                case ParseEnum.TargetIDS.BrokenKing:
+                case ParseEnum.TargetID.BrokenKing:
                     Logic = new BrokenKing(id);
                     break;
-                case ParseEnum.TargetIDS.SoulEater:
+                case ParseEnum.TargetID.SoulEater:
                     Logic = new EaterOfSouls(id);
                     break;
-                case ParseEnum.TargetIDS.EyeOfFate:
-                case ParseEnum.TargetIDS.EyeOfJudgement:
+                case ParseEnum.TargetID.EyeOfFate:
+                case ParseEnum.TargetID.EyeOfJudgement:
                     Logic = new DarkMaze(id);
                     break;
-                case ParseEnum.TargetIDS.Dhuum:
+                case ParseEnum.TargetID.Dhuum:
                     // some eyes logs are registered as Dhuum
-                    if (agentData.GetNPCsByID((int)ParseEnum.TargetIDS.EyeOfFate).Count > 0 ||
-                        agentData.GetNPCsByID((int)ParseEnum.TargetIDS.EyeOfJudgement).Count > 0)
+                    if (agentData.GetNPCsByID((int)ParseEnum.TargetID.EyeOfFate).Count > 0 ||
+                        agentData.GetNPCsByID((int)ParseEnum.TargetID.EyeOfJudgement).Count > 0)
                     {
-                        TriggerID = (int)ParseEnum.TargetIDS.EyeOfFate;
+                        TriggerID = (int)ParseEnum.TargetID.EyeOfFate;
                         Logic = new DarkMaze(TriggerID);
                         break;
                     }
                     Logic = new Dhuum(id);
                     break;
-                case ParseEnum.TargetIDS.ConjuredAmalgamate:
+                case ParseEnum.TargetID.ConjuredAmalgamate:
                     Logic = new ConjuredAmalgamate(id);
                     break;
-                case ParseEnum.TargetIDS.Kenut:
-                case ParseEnum.TargetIDS.Nikare:
+                case ParseEnum.TargetID.Kenut:
+                case ParseEnum.TargetID.Nikare:
                     Logic = new TwinLargos(id);
                     break;
-                case ParseEnum.TargetIDS.Qadim:
+                case ParseEnum.TargetID.Qadim:
                     Logic = new Qadim(id);
                     break;
-                case ParseEnum.TargetIDS.Freezie:
+                case ParseEnum.TargetID.Freezie:
                     Logic = new Freezie(id);
                     break;
-                case ParseEnum.TargetIDS.Adina:
+                case ParseEnum.TargetID.Adina:
                     Logic = new Adina(id);
                     break;
-                case ParseEnum.TargetIDS.Sabir:
+                case ParseEnum.TargetID.Sabir:
                     Logic = new Sabir(id);
                     break;
-                case ParseEnum.TargetIDS.PeerlessQadim:
+                case ParseEnum.TargetID.PeerlessQadim:
                     Logic = new PeerlessQadim(id);
                     break;
                     //
-                case ParseEnum.TargetIDS.IcebroodConstruct:
+                case ParseEnum.TargetID.IcebroodConstruct:
                     Logic = new IcebroodConstruct(id);
                     break;
-                case ParseEnum.TargetIDS.FraenirOfJormag:
+                case ParseEnum.TargetID.FraenirOfJormag:
                     Logic = new FraenirOfJormag(id);
                     break;
-                case ParseEnum.TargetIDS.VoiceOfTheFallen:
-                case ParseEnum.TargetIDS.ClawOfTheFallen:
+                case ParseEnum.TargetID.VoiceOfTheFallen:
+                case ParseEnum.TargetID.ClawOfTheFallen:
                     Logic = new SuperKodanBrothers(id);
                     break;
-                case ParseEnum.TargetIDS.Boneskinner:
+                case ParseEnum.TargetID.Boneskinner:
                     Logic = new Boneskinner(id);
                     break;
-                case ParseEnum.TargetIDS.WhisperOfJormag:
+                case ParseEnum.TargetID.WhisperOfJormag:
                     Logic = new WhisperOfJormag(id);
                     break;
-                case ParseEnum.TargetIDS.VariniaStormsounder:
+                case ParseEnum.TargetID.VariniaStormsounder:
                     Logic = new ColdWar(id);
                     break;
                 //
-                case ParseEnum.TargetIDS.MAMA:
+                case ParseEnum.TargetID.MAMA:
                     Logic = new MAMA(id);
                     break;
-                case ParseEnum.TargetIDS.Siax:
+                case ParseEnum.TargetID.Siax:
                     Logic = new Siax(id);
                     break;
-                case ParseEnum.TargetIDS.Ensolyss:
+                case ParseEnum.TargetID.Ensolyss:
                     Logic = new Ensolyss(id);
                     break;
-                case ParseEnum.TargetIDS.Skorvald:
+                case ParseEnum.TargetID.Skorvald:
                     Logic = new Skorvald(id);
                     break;
-                case ParseEnum.TargetIDS.Artsariiv:
+                case ParseEnum.TargetID.Artsariiv:
                     Logic = new Artsariiv(id);
                     break;
-                case ParseEnum.TargetIDS.Arkk:
+                case ParseEnum.TargetID.Arkk:
                     Logic = new Arkk(id);
                     break;
                     //
-                case ParseEnum.TargetIDS.WorldVersusWorld:
+                case ParseEnum.TargetID.WorldVersusWorld:
                     Logic = new WvWFight(id);
                     break;
                     //
-                case ParseEnum.TargetIDS.MassiveGolem:
-                case ParseEnum.TargetIDS.AvgGolem:
-                case ParseEnum.TargetIDS.LGolem:
-                case ParseEnum.TargetIDS.MedGolem:
-                case ParseEnum.TargetIDS.StdGolem:
+                case ParseEnum.TargetID.MassiveGolem:
+                case ParseEnum.TargetID.AvgGolem:
+                case ParseEnum.TargetID.LGolem:
+                case ParseEnum.TargetID.MedGolem:
+                case ParseEnum.TargetID.StdGolem:
                     Logic = new Golem(id);
                     break;
                     //
                 default:
                     switch (ParseEnum.GetTrashIDS(id))
                     {
-                        case ParseEnum.TrashIDS.HauntingStatue:
-                            Logic = new TwistedCastle((int)ParseEnum.TargetIDS.TwistedCastle);
+                        case ParseEnum.TrashID.HauntingStatue:
+                            Logic = new TwistedCastle((int)ParseEnum.TargetID.TwistedCastle);
                             break;
                         default:
                             // Unknown

@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.TrashID;
 
 namespace GW2EIParser.Logic
 {
@@ -65,7 +65,7 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<int>
             {
-                (int)ParseEnum.TargetIDS.Deimos,
+                (int)ParseEnum.TargetID.Deimos,
                 (int)Thief,
                 (int)Drunkard,
                 (int)Gambler,
@@ -105,7 +105,7 @@ namespace GW2EIParser.Logic
 
         public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Deimos);
+            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Deimos);
             if (target == null)
             {
                 throw new InvalidOperationException("Deimos not found");
@@ -142,7 +142,7 @@ namespace GW2EIParser.Logic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success && _specialSplit > 0)
             {
-                NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Deimos);
+                NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Deimos);
                 if (target == null)
                 {
                     throw new InvalidOperationException("Deimos not found");
@@ -218,7 +218,7 @@ namespace GW2EIParser.Logic
 
         public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            List<AgentItem> deimosAgents = agentData.GetNPCsByID((int)ParseEnum.TargetIDS.Deimos);
+            List<AgentItem> deimosAgents = agentData.GetNPCsByID((int)ParseEnum.TargetID.Deimos);
             long offset = fightData.FightOffset;
             foreach (AgentItem deimos in deimosAgents)
             {
@@ -238,7 +238,7 @@ namespace GW2EIParser.Logic
         {
             ComputeFightTargets(agentData, combatData);
             // Find target
-            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Deimos);
+            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Deimos);
             if (target == null)
             {
                 throw new InvalidOperationException("Deimos not found");
@@ -284,7 +284,7 @@ namespace GW2EIParser.Logic
             long end = 0;
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Deimos);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Deimos);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Deimos not found");
@@ -359,16 +359,16 @@ namespace GW2EIParser.Logic
         {
             return new List<int>
             {
-                (int)ParseEnum.TargetIDS.Deimos,
+                (int)ParseEnum.TargetID.Deimos,
                 (int)Thief,
                 (int)Drunkard,
                 (int)Gambler
             };
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.TrashID>
             {
                 Saul,
                 GamblerClones,
@@ -388,7 +388,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetIDS.Deimos:
+                case (int)ParseEnum.TargetID.Deimos:
                     var mindCrush = cls.Where(x => x.SkillId == 37613).ToList();
                     foreach (AbstractCastEvent c in mindCrush)
                     {
@@ -487,7 +487,7 @@ namespace GW2EIParser.Logic
 
         public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Deimos);
+            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Deimos);
             if (target == null)
             {
                 throw new InvalidOperationException("Deimos not found");

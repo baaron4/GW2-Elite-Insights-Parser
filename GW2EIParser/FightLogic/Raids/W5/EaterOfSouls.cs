@@ -4,7 +4,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.TrashID;
 
 namespace GW2EIParser.Logic
 {
@@ -32,9 +32,9 @@ namespace GW2EIParser.Logic
                             (19072, 15484, 20992, 16508));
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.TrashID>
             {
                 OrbSpider,
                 SpiritHorde1,
@@ -52,7 +52,7 @@ namespace GW2EIParser.Logic
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetIDS.SoulEater:
+                case (int)ParseEnum.TargetID.SoulEater:
                     var breakbar = cls.Where(x => x.SkillId == 48007).ToList();
                     foreach (AbstractCastEvent c in breakbar)
                     {
@@ -128,7 +128,7 @@ namespace GW2EIParser.Logic
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            SetSuccessByDeath(combatData, fightData, playerAgents, true, (int)ParseEnum.TargetIDS.SoulEater);
+            SetSuccessByDeath(combatData, fightData, playerAgents, true, (int)ParseEnum.TargetID.SoulEater);
         }
 
         public override string GetLogicName(ParsedLog log)

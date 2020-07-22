@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.TrashID;
 
 namespace GW2EIParser.Logic
 {
@@ -33,9 +33,9 @@ namespace GW2EIParser.Logic
                             (19072, 15484, 20992, 16508));
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.TrashID>
             {
                 Enervator,
                 HollowedBomber,
@@ -51,7 +51,7 @@ namespace GW2EIParser.Logic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                NPC desmina = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Desmina);
+                NPC desmina = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Desmina);
                 if (desmina == null)
                 {
                     throw new InvalidOperationException("Desmina not found");
@@ -114,7 +114,7 @@ namespace GW2EIParser.Logic
 
         public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
-            NPC desmina = Targets.Find(x => x.ID == (int)ParseEnum.TargetIDS.Desmina);
+            NPC desmina = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Desmina);
             if (desmina == null)
             {
                 throw new InvalidOperationException("Desmina not found");
