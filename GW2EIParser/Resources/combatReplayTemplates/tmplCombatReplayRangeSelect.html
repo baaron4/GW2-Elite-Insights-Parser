@@ -1,12 +1,51 @@
-
-<div>
-    <h3>Range Selectors</h3>
-    <div class="d-flex flex-column flex-wrap justify-content-center align-items-center">
-        <div class="d-flex flex-column flex-wrap justify-content-center align-items-center mb-2" v-for="rangeCol in rangeSelectArrays">
-            <div class="range-btns d-flex flex-row flex-wrap justify-content-center align-items-center">
-                <label v-for="range in rangeCol" @click="toggleRange(range);"
-                       class="btn btn-small range-btn" :class="{'active': selectedRanges.indexOf(range) > -1, 'btn-dark': !light, 'btn-light': light}">{{range}}</label>
+<template>
+    <div>
+        <h3>Range Selectors</h3>
+        <div class="d-flex flex-column flex-wrap justify-content-center align-items-center">
+            <div class="d-flex flex-column flex-wrap justify-content-center align-items-center mb-2" v-for="rangeCol in rangeSelectArrays">
+                <div class="range-btns d-flex flex-row flex-wrap justify-content-center align-items-center">
+                    <label v-for="range in rangeCol" @click="toggleRange(range);"
+                           class="btn btn-small range-btn" :class="{'active': selectedRanges.indexOf(range) > -1, 'btn-dark': !light, 'btn-light': light}">{{range}}</label>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</template>
+
+<script>
+    Vue.component("combat-replay-range-select-component", {
+        props: ["light"],
+        template: `${template}`,
+        data: function () {
+            return {
+                rangeSelect: [130, 180, 240, 300, 360, 400, 480, 600, 900, 1200, 1500],
+                selectedRanges: [],
+            };
+        },
+        methods: {
+            toggleRange: function (range) {
+                var active = animator.toggleRange(range);
+                if (active) {
+                    this.selectedRanges = this.selectedRanges.concat([range]);
+                } else {
+                    this.selectedRanges = this.selectedRanges.filter(x => x != range);
+                }
+            },
+        },
+        computed: {
+            rangeSelectArrays: function () {
+                var res = [];
+                var cols = Math.ceil(this.rangeSelect.length / 3);
+                for (var col = 0; col < cols; col++) {
+                    var offset = 3 * col;
+                    var column = [];
+                    for (var i = 0; i < Math.min(3, this.rangeSelect.length - offset); i++) {
+                        column.push(this.rangeSelect[offset + i]);
+                    }
+                    res.push(column);
+                }
+                return res;
+            }
+        }
+    });
+</script>

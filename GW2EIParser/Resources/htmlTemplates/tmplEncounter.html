@@ -1,30 +1,84 @@
-<div class="card fight-summary" style="min-width: 350px;">
-    <h3 class="card-header text-center">{{ encounter.name }}</h3>
-    <div class="card-body container">
-        <div class="d-flex flex-row justify-content-center align-items-center">
-            <div class="d-flex flex-column mr-3 justify-content-center">
-                <div v-if="fractalInstabilities" class="d-flex flex-row justify-content-center">
-                    <img v-for="fractalInstability in fractalInstabilities" :data-original-title="fractalInstability.name + (fractalInstability.description ? '<br> ' + fractalInstability.description : '')" :src="fractalInstability.icon" class="icon icon-hover" />
-                </div>
-                <img class="icon-xl" :src="encounter.icon" :alt="encounter.name">
-            </div>
-            <div class="ml-3 d-flex flex-column justify-content-center">
-                <div class="mb-2" v-for="target in encounter.targets">
-                    <div v-if="encounter.targets.length > 1" class="small" style="text-align:center;">
-                        {{target.name}}
+<template>
+    <div class="card fight-summary" style="min-width: 350px;">
+        <h3 class="card-header text-center">{{ encounter.name }}</h3>
+        <div class="card-body container">
+            <div class="d-flex flex-row justify-content-center align-items-center">
+                <div class="d-flex flex-column mr-3 justify-content-center">
+                    <div v-if="fractalInstabilities" class="d-flex flex-row justify-content-center">
+                        <img v-for="fractalInstability in fractalInstabilities"
+                            :data-original-title="fractalInstability.name + (fractalInstability.description ? '<br> ' + fractalInstability.description : '')"
+                            :src="fractalInstability.icon" class="icon icon-hover" />
                     </div>
-                    <div :style="{'background': getGradient(target.hpLeft ? target.hpLeft : 0), 'height': '10px', 'width': '100%', 'border-radius': '5px'}" :data-original-title="(target.hpLeft ? target.hpLeft : 0) + '% left'">
+                    <img class="icon-xl" :src="encounter.icon" :alt="encounter.name">
+                </div>
+                <div class="ml-3 d-flex flex-column justify-content-center">
+                    <div class="mb-2" v-for="target in encounter.targets">
+                        <div v-if="encounter.targets.length > 1" class="small" style="text-align:center;">
+                            {{target.name}}
+                        </div>
+                        <div :style="{'background': getGradient(target.hpLeft ? target.hpLeft : 0), 'height': '10px', 'width': '100%', 'border-radius': '5px'}"
+                            :data-original-title="(target.hpLeft ? target.hpLeft : 0) + '% left'">
 
+                        </div>
+                        <div class="small" style="text-align:center;">
+                            {{ target.health }} Health
+                        </div>
                     </div>
-                    <div class="small" style="text-align:center;">
-                        {{ target.health }} Health
+                    <div class="mb-2 text" :class="resultStatus.class">
+                        Result: {{resultStatus.text}}
                     </div>
+                    <div class="mb-2">Duration: {{ encounter.duration }}</div>
                 </div>
-                <div class="mb-2 text" :class="resultStatus.class">
-                    Result: {{resultStatus.text}}
-                </div>
-                <div class="mb-2">Duration: {{ encounter.duration }}</div>
             </div>
         </div>
     </div>
-</div>
+</template>
+
+<script>
+    Vue.component("encounter-component", {
+        props: [],
+        template: `${template}`,
+        methods: {
+            getGradient: function (percent) {
+                var template = 'linear-gradient(to right, $left$, $middle$, $right$)';
+                var greenPercent = "green " + (100 - percent) + "%";
+                var redPercent = "red " + (percent) + "%";
+                var middle = percent + "%";
+                template = template.replace('$right$', greenPercent);
+                template = template.replace('$left$', redPercent);
+                template = template.replace('$middle$', middle);
+                return template;
+            }
+        },
+        computed: {
+            encounter: function () {
+                var targets = [];
+                for (var i = 0; i < logData.phases[0].targets.length; i++) {
+                    var targetData = logData.targets[logData.phases[0].targets[i]];
+                    targets.push(targetData);
+                }
+
+                var encounter = {
+                    name: logData.fightName,
+                    icon: logData.fightIcon,
+                    duration: logData.encounterDuration,
+                    targets: targets
+                };
+                return encounter;
+            },
+            resultStatus: function () {
+                return logData.success ? { text: 'Success', class: ["text-success"] } : { text: 'Failure', class: ["text-warning"] };
+            },
+            fractalInstabilities: function () {
+                if (logData.fractalInstabilities.length == 0) {
+                    return null;
+                }
+                var res = [];
+                for (var i = 0; i < logData.fractalInstabilities.length; i++) {
+                    res.push(findSkill(true, logData.fractalInstabilities[i]));
+                }
+                return res;
+            },
+        }
+    });
+</script>

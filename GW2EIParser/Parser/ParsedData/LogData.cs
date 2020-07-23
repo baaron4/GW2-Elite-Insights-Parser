@@ -10,10 +10,10 @@ namespace GW2EIParser.Parser.ParsedData
         public static readonly string DefaultTimeValue = "MISSING";
 
         // Fields
-        public string BuildVersion { get; } = "N/A";
+        public string ArcVersion { get; } = "N/A";
         public string Language { get; } = "N/A";
         public LanguageEvent.LanguageEnum LanguageID { get; }
-        public ulong GW2Version { get; } = 0;
+        public ulong GW2Build { get; } = 0;
         public AgentItem PoV { get; private set; } = null;
         public string PoVName { get; private set; } = "N/A";
         private readonly string _dateFormat = "yyyy-MM-dd HH:mm:ss zz";
@@ -28,7 +28,7 @@ namespace GW2EIParser.Parser.ParsedData
         // Constructors
         public LogData(string buildVersion, CombatData combatData, long evtcLogDuration, List<Player> playerList, OperationController operation)
         {
-            BuildVersion = buildVersion;
+            ArcVersion = buildVersion;
             double unixStart = 0;
             double unixEnd = 0;
             //
@@ -42,9 +42,9 @@ namespace GW2EIParser.Parser.ParsedData
             BuildEvent buildEvt = combatData.GetBuildEvent();
             if (buildEvt != null)
             {
-                GW2Version = buildEvt.Build;
+                GW2Build = buildEvt.Build;
             }
-            operation.UpdateProgressWithCancellationCheck("GW2 Build " + GW2Version);
+            operation.UpdateProgressWithCancellationCheck("GW2 Build " + GW2Build);
             //
             LanguageEvent langEvt = combatData.GetLanguageEvent();
             if (langEvt != null)

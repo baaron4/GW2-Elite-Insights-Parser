@@ -1,37 +1,46 @@
-<div class="card">
-    <div class="card-body container">
-        <p><u>Fill</u></p>
-        <span style="padding: 2px; background-color:#0000FF; border-style:solid; border-width: 1px; border-color:#000000; color:#FFFFFF">
-            Hit
-            without aftercast
-        </span>
-        <span style="padding: 2px; background-color:#00FF00; border-style:solid; border-width: 1px; border-color:#000000; color:#000000">
-            Hit
-            with full aftercast
-        </span>
-        <span style="padding: 2px; background-color:#FF0000; border-style:solid; border-width: 1px; border-color:#000000; color:#FFFFFF">
-            Attack
-            canceled before completing
-        </span>
-        <span style="padding: 2px; background-color:#FFFF00; border-style:solid; border-width: 1px; border-color:#000000; color:#000000">
-            Unknown
-            state
-        </span>
-        <p class="mt-2"><u>Outline</u></p>
-        <div>
-            The outline will be a linear gradient between slowed animation and normal animation when slowed, animation with quickness and normal animation when accelerated.
+<template>
+    <div class="card">
+        <div class="card-body container">
+            <p><u>Fill</u></p>
+            <span style="padding: 2px; background-color:#0000FF; border-style:solid; border-width: 1px; border-color:#000000; color:#FFFFFF">
+                Hit
+                without aftercast
+            </span>
+            <span style="padding: 2px; background-color:#00FF00; border-style:solid; border-width: 1px; border-color:#000000; color:#000000">
+                Hit
+                with full aftercast
+            </span>
+            <span style="padding: 2px; background-color:#FF0000; border-style:solid; border-width: 1px; border-color:#000000; color:#FFFFFF">
+                Attack
+                canceled before completing
+            </span>
+            <span style="padding: 2px; background-color:#FFFF00; border-style:solid; border-width: 1px; border-color:#000000; color:#000000">
+                Unknown
+                state
+            </span>
+            <p class="mt-2"><u>Outline</u></p>
+            <div>
+                The outline will be a linear gradient between slowed animation and normal animation when slowed, animation with quickness and normal animation when accelerated.
+            </div>
+            <span style="padding: 2px; background-color:#999999; border-style:solid; border-width: 2px; border-color:rgb(220,125,30); color:#000000">
+                Slowed
+                animation length
+            </span>
+            <span style="padding: 2px; background-color:#999999; border-style:solid; border-width: 2px; border-color:rgb(125,125,125); color:#000000">
+                Normal
+                animation length
+            </span>
+            <span style="padding: 2px; background-color:#999999; border-style:solid; border-width: 2px; border-color:rgb(220,20,220); color:#000000">
+                Animation
+                with quickness
+            </span>
         </div>
-        <span style="padding: 2px; background-color:#999999; border-style:solid; border-width: 2px; border-color:rgb(220,125,30); color:#000000">
-            Slowed
-            animation length
-        </span>
-        <span style="padding: 2px; background-color:#999999; border-style:solid; border-width: 2px; border-color:rgb(125,125,125); color:#000000">
-            Normal
-            animation length
-        </span>
-        <span style="padding: 2px; background-color:#999999; border-style:solid; border-width: 2px; border-color:rgb(220,20,220); color:#000000">
-            Animation
-            with quickness
-        </span>
     </div>
-</div>
+</template>
+
+
+<script>
+    Vue.component('rotation-legend-component', {
+        template: `${template}`
+    });
+</script>

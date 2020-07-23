@@ -1,12 +1,108 @@
-<div class="d-flex align-items-center actor-rotation">
-    <div v-if="rotation.current">
-        <img :src="rotation.current.skill.icon" :alt="rotation.current.skill.name" :title="rotation.current.skill.name"
-            class="icon-ll" :class="{'rot-cancelled': rotation.current.end === 2}">
+<template>
+    <div class="d-flex align-items-center actor-rotation">
+        <div v-if="rotation.current">
+            <img :src="rotation.current.skill.icon" :alt="rotation.current.skill.name" :title="rotation.current.skill.name"
+                class="icon-ll" :class="{'rot-cancelled': rotation.current.end === 2}">
+        </div>
+        <div v-else class="empty-icon-ll">
+    
+        </div>
+        <div v-for="next in rotation.nexts">
+            <img :src="next.skill.icon" :alt="next.skill.name" :title="next.skill.name" class="icon-l" :class="{'rot-cancelled': next.end === 2}">
+        </div>
     </div>
-    <div v-else class="empty-icon-ll">
+</template>
 
-    </div>
-    <div v-for="next in rotation.nexts">
-        <img :src="next.skill.icon" :alt="next.skill.name" :title="next.skill.name" class="icon-l" :class="{'rot-cancelled': next.end === 2}">
-    </div>
-</div>
+<script>
+    Vue.component("combat-replay-actor-rotation-component", {
+        mixins: [timeRefreshComponent],
+        props: ["actorindex", "enemy"],
+        template: `${template}`,
+        methods: {
+            findRotationIndex: function (rotation, timeS, start, end) {
+                if (end === 0) {
+                    return 0;
+                }
+                if (timeS < rotation[start][0]) {
+                    return start;
+                } else if (timeS > rotation[end][0] + rotation[end][2] / 1000.0) {
+                    return end;
+                }
+                var id = Math.floor((end + start) / 2);
+                var item, x, duration;
+                if (id === start || id === end) {               
+                    item = rotation[start];
+                    x = item[0];
+                    duration = item[2] / 1000.0;
+                    if (timeS >= x && x + duration >= timeS) {
+                        return start;
+                    }
+                    return end;
+                }
+                item = rotation[id];
+                x = item[0];
+                duration = item[2] / 1000.0;
+                if (timeS < x) {
+                    return this.findRotationIndex(rotation, timeS, start, id);
+                } else if (timeS > x + duration) {
+                    return this.findRotationIndex(rotation, timeS, id, end);
+                } else {
+                    return id;
+                }
+            }
+        },
+        computed: {
+            actor: function () {
+                return this.enemy ? logData.targets[this.actorindex] : logData.players[this.actorindex];
+            },
+            actorRotation: function () {
+                return this.actor.details.rotation[0].filter(x => x[2] > 1e-2);
+            },
+            rotation: function () {
+                var res = {
+                    current: null,
+                    nexts: []
+                };
+                var time = this.timeToUse / 1000.0;
+                var id = this.findRotationIndex(this.actorRotation, time, 0, this.actorRotation.length - 1);
+                var j, next;
+                var item = this.actorRotation[id];
+                var x = item[0];
+                var skillId = item[1];
+                var endType = item[3];
+                var duration = item[2] / 1000.0;
+                var skill = findSkill(false, skillId);
+                if (x <= time && time <= x + duration) {
+                    res.current = {
+                        skill: skill,
+                        end: endType
+                    };
+                    for (j = id + 1; j < this.actorRotation.length; j++) {
+                        next = this.actorRotation[j];
+                        res.nexts.push({
+                            skill: findSkill(false, next[1]),
+                            end: next[3]
+                        });
+                        if (res.nexts.length == 3) {
+                            break;
+                        }
+                    }
+                } else {
+                    for (j = id; j < this.actorRotation.length; j++) {
+                        next = this.actorRotation[j];
+                        if (next[0] >= time) {
+                            res.nexts.push({
+                                skill: findSkill(false, next[1]),
+                                end: next[3]
+                            });
+                        }
+                        if (res.nexts.length == 3) {
+                            break;
+                        }
+                    }
+                }
+                return res;
+            },
+        }
+    });
+</script>

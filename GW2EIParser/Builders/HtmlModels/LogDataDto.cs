@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using GW2EIParser.EIData;
 using GW2EIParser.Logic;
 using GW2EIParser.Parser.ParsedData;
@@ -37,6 +38,15 @@ namespace GW2EIParser.Builders.HtmlModels
         public bool NoMechanics { get; set; }
         public bool SingleGroup { get; set; }
         public List<string> LogErrors { get; set; }
+
+        public string EncounterStart { get; set; }
+        public string EncounterEnd { get; set; }
+        public string ArcVersion { get; set; }
+        public ulong Gw2Build { get; set; }
+        public long FightID { get; set; }
+        public string EiVersion { get; set; }
+        public string RecordedBy { get; set; }
+        public List<string> UploadLinks { get; set; }
 
 
         private static Dictionary<string, List<Buff>> BuildPersonalBoonData(ParsedLog log, Dictionary<string, List<long>> dict, Dictionary<long, Buff> usedBuffs)
@@ -125,11 +135,21 @@ namespace GW2EIParser.Builders.HtmlModels
             return false;
         }
 
-        public static LogDataDto BuildLogData(ParsedLog log, Dictionary<long, SkillItem> usedSkills,Dictionary<long, Buff> usedBuffs, HashSet<DamageModifier> usedDamageMods, bool cr, bool light)
+        public static LogDataDto BuildLogData(ParsedLog log, Dictionary<long, SkillItem> usedSkills,Dictionary<long, Buff> usedBuffs, HashSet<DamageModifier> usedDamageMods, bool cr, bool light, string[] uploadLinks)
         {
             GeneralStatistics statistics = log.Statistics;
             log.UpdateProgressWithCancellationCheck("HTML: building Log Data");
-            var logData = new LogDataDto();
+            var logData = new LogDataDto
+            {
+                EncounterStart = log.LogData.LogStartStd,
+                EncounterEnd = log.LogData.LogEndStd,
+                ArcVersion = log.LogData.ArcVersion,
+                Gw2Build = log.LogData.GW2Build,
+                FightID = log.FightData.TriggerID,
+                EiVersion = Application.ProductVersion,
+                RecordedBy = log.LogData.PoVName,
+                UploadLinks = uploadLinks.ToList()
+            };
             if (cr)
             {
                 logData.CrData = new CombatReplayDto(log);

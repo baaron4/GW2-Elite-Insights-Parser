@@ -1,4 +1,25 @@
-<div class="d-flex flex-column justify-content-center">
-    <combat-replay-damage-stats-component :time="time" :playerindex="playerindex">
-    </combat-replay-damage-stats-component>
-</div>
+<template>
+    <div class="d-flex flex-column justify-content-center">
+        <combat-replay-damage-stats-component :time="time" :playerindex="playerindex">
+        </combat-replay-damage-stats-component>
+    </div>
+</template>
+
+<script>
+    Vue.component("combat-replay-damage-data-component", {
+        template: `${template}`,
+        props: ["time", "selectedplayer", "selectedplayerid"],
+        computed: {
+            playerindex: function () {
+                if (this.selectedplayer) {
+                    for (var i = 0; i < logData.players.length; i++) {
+                        if (logData.players[i].combatReplayID == this.selectedplayerid) {
+                            return i;
+                        }
+                    }
+                }
+                return -1;
+            }
+        }
+    });
+</script>

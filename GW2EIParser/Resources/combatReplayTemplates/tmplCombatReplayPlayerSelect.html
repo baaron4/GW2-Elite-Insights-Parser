@@ -1,17 +1,53 @@
-
-<div class="d-flex flex-row flex-wrap justify-content-center align-items-start mb-2">
-    <div class="d-flex flex-column scrollable-y" style="max-height: 250px;">
-        <div v-for="group in groups" class="d-flex flex-row align-items-center ml-2 mt-1" style="width:450px;">
-            <h5 class="mt-2">Group {{group.id}}</h5>
-            <div class="d-flex flex-row flex-wrap align-items-center ml-1" style="max-width:370px;">
-                <span v-for="player in group.players"
-                       @click="selectActor(player.combatReplayID);"
-                       class="btn btn-small ply-btn" :class="{'active': selectedplayerid === player.combatReplayID, 'btn-dark': !light, 'btn-light': light}" :title="player.name">
-                    <img v-if="player.isCommander" src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png" alt="Commander" class="icon">
-                    <img :src="player.icon" :alt="player.profession" class="icon">
-                    {{ player.name }}
-                </span>
+<template>
+    <div class="d-flex flex-row flex-wrap justify-content-center align-items-start mb-2">
+        <div class="d-flex flex-column scrollable-y" style="max-height: 250px;">
+            <div v-for="group in groups" class="d-flex flex-row align-items-center ml-2 mt-1" style="width:450px;">
+                <h5 class="mt-2">Group {{group.id}}</h5>
+                <div class="d-flex flex-row flex-wrap align-items-center ml-1" style="max-width:370px;">
+                    <span v-for="player in group.players"
+                           @click="selectActor(player.combatReplayID);"
+                           class="btn btn-small ply-btn" :class="{'active': selectedplayerid === player.combatReplayID, 'btn-dark': !light, 'btn-light': light}" :title="player.name">
+                        <img v-if="player.isCommander" src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png" alt="Commander" class="icon">
+                        <img :src="player.icon" :alt="player.profession" class="icon">
+                        {{ player.name }}
+                    </span>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</template>
+
+<script>
+    Vue.component("combat-replay-player-select-component", {
+        props: ['selectedplayerid', "light"],
+        template: `${template}`,
+        methods: {
+            selectActor: function (id) {
+                animator.selectActor(id);
+            }
+        },
+        computed: {
+            groups: function () {
+                var aux = [];
+                var i = 0;
+                for (i = 0; i < logData.players.length; i++) {
+                    var playerData = logData.players[i];
+                    if (playerData.isConjure) {
+                        continue;
+                    }
+                    if (!aux[playerData.group]) {
+                        aux[playerData.group] = [];
+                    }
+                    aux[playerData.group].push(playerData);
+                }
+                var noUndefinedGroups = [];
+                for (i = 0; i < aux.length; i++) {
+                    if (aux[i]) {
+                        noUndefinedGroups.push({ id: i, players: aux[i] });
+                    }
+                }
+                return noUndefinedGroups;
+            }
+        }
+    });
+</script>
