@@ -81,17 +81,27 @@ namespace GW2EIParser.Parser.ParsedData
             {52780, "https://wiki.guildwars2.com/images/0/02/Conjured_Protection.png" },
         };
 
-        private readonly HashSet<long> _nonCritable = new HashSet<long>
+        private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>
                     {
-                        9292,
-                        5492,
-                        13014,
-                        30770, // Pulmonary Impact
-                        52370,
-                        31686, // Lightning Jolt
-                        56883, // Sunspot
-                        56885, // Earthen Blast
-                        29604, // Chilling Nova
+                        { 9292, 0 },
+                        { 5492, 0 },
+                        { 13014, 0 },
+                        { 30770, 0 }, // Pulmonary Impact
+                        { 52370, 0 },
+                        { 31686, 0 }, // Lightning Jolt
+                        { 56883, 94051 }, // Sunspot
+                        { 56885, 94051 }, // Earthen Blast
+                        { 29604, 94051 }, // Chilling Nova
+                        // Spontaneous Destruction 94051
+                        // Weakining Shroud 94051
+                        // Spiteful Spirit 94051
+                        // Chill of Death 94051
+                        // Power block 94051
+                        // Shattered Aegis 94051
+                        // Glacial Heart 94051
+                        // Thermal Release Valve 94051
+                        // Loss Aversion
+                        // Mug
                     };
 
         private const string DefaultIcon = "https://render.guildwars2.com/file/1D55D34FB4EE20B1962E315245E40CA5E1042D0E/62248.png";
@@ -102,7 +112,6 @@ namespace GW2EIParser.Parser.ParsedData
         public bool AA => _apiSkill?.Slot == "Weapon_1" || _apiSkill?.Slot == "Downed_1";
         public string Name { get; private set; }
         public string Icon { get; private set; }
-        public bool CanCrit => !_nonCritable.Contains(ID);
         private WeaponDescriptor _weaponDescriptor;
         private readonly GW2APISkill _apiSkill;
         private SkillInfoEvent _skillInfo { get; set; }
@@ -120,6 +129,15 @@ namespace GW2EIParser.Parser.ParsedData
         public static bool IsWeaponSet(int swapped)
         {
             return swapped == FirstLandSet || swapped == SecondLandSet || swapped == FirstWaterSet || swapped == SecondWaterSet;
+        }
+
+        public static bool CanCrit(long id, ulong gw2Build)
+        {
+            if (_nonCritable.TryGetValue(id, out ulong build))
+            {
+                return build < gw2Build;
+            }
+            return true;
         }
 
         public int FindWeaponSlot(List<int> swaps)
