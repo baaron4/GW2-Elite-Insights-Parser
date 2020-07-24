@@ -79,29 +79,65 @@ namespace GW2EIParser.Parser.ParsedData
             {31686, "https://wiki.guildwars2.com/images/4/4b/Overload_Air.png" },
             {52325, "https://wiki.guildwars2.com/images/5/59/Conjured_Slash.png" },
             {52780, "https://wiki.guildwars2.com/images/0/02/Conjured_Protection.png" },
+            //{41243, "https://wiki.guildwars2.com/images/f/fb/Full_Counter.png" },
+            {31600, "https://wiki.guildwars2.com/images/3/30/Bounding_Dodger.png"},
+            //{10281, "https://wiki.guildwars2.com/images/9/91/Illusionary_Riposte.png"},
+            //{38769, "https://wiki.guildwars2.com/images/4/48/Phantasmal_Swordsman.png"},
+            {45534, "https://wiki.guildwars2.com/images/8/85/Loss_Aversion.png" },
+            {9292, "https://wiki.guildwars2.com/images/c/c3/Superior_Sigil_of_Air.png" },
+            {9433, "https://wiki.guildwars2.com/images/4/43/Superior_Sigil_of_Geomancy.png" },
+            {40015, "https://wiki.guildwars2.com/images/c/c9/Chapter_4-_Scorched_Aftermath.png"},
+            {41258, "https://wiki.guildwars2.com/images/d/d3/Chapter_1-_Searing_Spell.png"},
+            {46618, "https://wiki.guildwars2.com/images/a/a8/Flame_Rush.png"},
+            {40635, "https://wiki.guildwars2.com/images/5/53/Chapter_2-_Igniting_Burst.png"},
+            {42898, "https://wiki.guildwars2.com/images/6/6d/Epilogue-_Ashes_of_the_Just.png"},
+            {42986, "https://wiki.guildwars2.com/images/3/30/Chapter_1-_Unflinching_Charge.png"},
+            {31289, "https://wiki.guildwars2.com/images/7/70/King_of_Fires.png"},
+            {56885, "https://wiki.guildwars2.com/images/e/e2/Earthen_Blast.png"},
+            {40071, "https://wiki.guildwars2.com/images/4/40/Garish_Pillar.png" },
+            {46726, "https://wiki.guildwars2.com/images/0/08/Desert_Shroud.png" },
+            {41968,  "https://wiki.guildwars2.com/images/7/79/Chapter_2-_Daring_Challenge.png"},
+            {46616, "https://wiki.guildwars2.com/images/7/7e/Flame_Surge.png" },
+            {42449,  "https://wiki.guildwars2.com/images/e/e7/Chapter_3-_Heated_Rebuke.png"},
+            {40988, "https://wiki.guildwars2.com/images/8/89/Chapter_4-_Stalwart_Stand.png"},
+            {44455, "https://wiki.guildwars2.com/images/d/d8/Epilogue-_Unbroken_Lines.png"},
+            {43734, "https://wiki.guildwars2.com/images/6/68/Consuming_Bite.png"},
+            {45262,  "https://wiki.guildwars2.com/images/8/84/Narcotic_Spores.png"},
+            {41864, "https://wiki.guildwars2.com/images/c/c8/Crippling_Anguish.png" },
+            {43593, "https://wiki.guildwars2.com/images/b/bc/Kick_%28gazelle%29.png" },
+            {44051, "https://wiki.guildwars2.com/images/a/af/Charge_%28gazelle%29.png" },
+            {44733, "https://wiki.guildwars2.com/images/8/82/Headbutt_%28gazelle%29.png" },
+            {41836,  "https://wiki.guildwars2.com/images/7/73/Chapter_3-_Valiant_Bulwark.png"},
+            {9428, "https://wiki.guildwars2.com/images/3/33/Superior_Sigil_of_Hydromancy.png" },
+            {56911, "https://wiki.guildwars2.com/images/6/67/Pitfall.png" },
+            {40679, "https://wiki.guildwars2.com/images/9/95/Chapter_2-_Radiant_Recovery.png" },
+            {42008, "https://wiki.guildwars2.com/images/1/16/Chapter_4-_Shining_River.png" },
+            {42925, "https://wiki.guildwars2.com/images/5/5f/Epilogue-_Eternal_Oasis.png"},
+            {43630, "https://wiki.guildwars2.com/images/0/0c/Thermal_Release_Valve.png" },
+            {22499, "https://wiki.guildwars2.com/images/d/d0/Shattered_Aegis.png" },
         };
 
         private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>
                     {
-                        { 9292, 0 },
-                        { 5492, 0 },
-                        { 13014, 0 },
-                        { 30770, 0 }, // Pulmonary Impact
-                        { 52370, 0 },
-                        { 31686, 0 }, // Lightning Jolt
+                        { 9292, ulong.MaxValue }, // Lightning Strike (Sigil)
+                        { 5492, 94051 },  // Fire Attunement
+                        { 13014, ulong.MaxValue }, // Mug
+                        { 30770, 54485 }, // Pulmonary Impact
+                        { 52370, ulong.MaxValue },
+                        { 31686, ulong.MaxValue }, // Lightning Jolt
                         { 56883, 94051 }, // Sunspot
                         { 56885, 94051 }, // Earthen Blast
                         { 29604, 94051 }, // Chilling Nova
-                        // Spontaneous Destruction 94051
-                        // Weakining Shroud 94051
-                        // Spiteful Spirit 94051
-                        // Chill of Death 94051
-                        // Power block 94051
-                        // Shattered Aegis 94051
-                        // Glacial Heart 94051
-                        // Thermal Release Valve 94051
-                        // Loss Aversion
-                        // Mug
+                                         // Spontaneous Destruction 94051
+                        {13907, 94051 }, // Weakening Shroud
+                        {29560, 94051 }, // Spiteful Spirit
+                        {13906, 94051 }, // Chill of Death
+                                         // Power block 94051
+                        {22499, 94051 }, // Shattered Aegis
+                        {21795, 94051 }, // Glacial Heart
+                        {43630, 94051 }, // Thermal Release Valve
+                        {45534, 82356 }, // Loss Aversion
+                        // 
                     };
 
         private const string DefaultIcon = "https://render.guildwars2.com/file/1D55D34FB4EE20B1962E315245E40CA5E1042D0E/62248.png";
@@ -135,7 +171,7 @@ namespace GW2EIParser.Parser.ParsedData
         {
             if (_nonCritable.TryGetValue(id, out ulong build))
             {
-                return build < gw2Build;
+                return gw2Build < build;
             }
             return true;
         }
