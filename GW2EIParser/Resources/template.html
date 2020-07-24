@@ -90,7 +90,7 @@
                 <combat-replay-ui-component v-if="mode === 1" :mode="mode" :key="'combat-replay'" :light="light"></combat-replay-ui-component>
             </keep-alive>
         </div>
-        <div class="footer ei-header">
+        <div class="footer" :class="{'ei-cr-footer': mode === 1}">
             <div>Time Start: {{getLogData().encounterStart}} | Time End: {{getLogData().encounterEnd}}</div>
             <div>ARC: {{getLogData().arcVersion}} | GW2 Build: {{getLogData().gw2build}} | Fight ID: {{getLogData().fightID}} | EI Version: {{getLogData().eiVersion}}</div>
             <div class="mb-2">File recorded by: {{getLogData().recordedBy}}</div>

@@ -2,6 +2,10 @@
     border-top: 0;
 }
 
+.form-control {
+    padding: 0.300rem 0.4rem;
+}
+
 .theme-slate g.hovertext text.name {
     fill: #cccccc !important;
 }
@@ -65,6 +69,10 @@
     min-width: 1000px;
     margin-right: auto;
     margin-left: auto;
+}
+
+.ei-cr-footer{
+    transform: translate(0, -75px);
 }
 
 .buff-display {
@@ -570,11 +578,11 @@ canvas {
 }
 
 .combat-replay-mechanics-list-container {
-    height: 700px;
+    height: 600px;
 }
 
 .combat-actor-status-container {
-    height: 700px;
+    height: 600px;
 }
 
 .theme-yeti #combat-replay-mechanics-list-container > table > thead > tr > th {
