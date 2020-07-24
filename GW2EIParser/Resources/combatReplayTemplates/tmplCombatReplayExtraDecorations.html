@@ -14,7 +14,7 @@
                 <div class="d-flex flex-row justify-content-between align-items-center">
                     <span>Radius: </span>
                     <combat-replay-numberform-component :minValue="1" :id="'circle1Text'"
-                        :placeholderValue="getAnimator().rangeControl[0].radius"></combat-replay-numberform-component>
+                                                        :placeholderValue="getAnimator().rangeControl[0].radius"></combat-replay-numberform-component>
                 </div>
                 <div class="form-check mt-1 mb-2">
                     <input type="checkbox" class="form-check-input" id="circle2Check">
@@ -23,7 +23,7 @@
                 <div class="d-flex flex-row justify-content-between align-items-center">
                     <span>Radius: </span>
                     <combat-replay-numberform-component :minValue="1" :id="'circle2Text'"
-                        :placeholderValue="getAnimator().rangeControl[1].radius"></combat-replay-numberform-component>
+                                                        :placeholderValue="getAnimator().rangeControl[1].radius"></combat-replay-numberform-component>
                 </div>
                 <div class="form-check mt-1 mb-2">
                     <input type="checkbox" class="form-check-input" id="circle3Check">
@@ -32,7 +32,7 @@
                 <div class="d-flex flex-row justify-content-between align-items-center">
                     <span>Radius: </span>
                     <combat-replay-numberform-component :minValue="1" :id="'circle3Text'"
-                        :placeholderValue="getAnimator().rangeControl[2].radius"></combat-replay-numberform-component>
+                                                        :placeholderValue="getAnimator().rangeControl[2].radius"></combat-replay-numberform-component>
                 </div>
             </div>
             <div class="ml-3">
@@ -44,12 +44,12 @@
                 <div class="d-flex flex-row justify-content-between align-items-center mb-1">
                     <span>Radius: </span>
                     <combat-replay-numberform-component :minValue="1" :id="'coneRadiusText'"
-                        :placeholderValue="getAnimator().coneControl.radius"></combat-replay-numberform-component>
+                                                        :placeholderValue="getAnimator().coneControl.radius"></combat-replay-numberform-component>
                 </div>
                 <div class="d-flex flex-row justify-content-between align-items-center mt-1">
                     <span>Opening: </span>
                     <combat-replay-numberform-component :minValue="1" :maxValue="360" :id="'coneAngleText'"
-                        :placeholderValue="getAnimator().coneControl.openingAngle"></combat-replay-numberform-component>
+                                                        :placeholderValue="getAnimator().coneControl.openingAngle"></combat-replay-numberform-component>
                 </div>
             </div>
         </div>
@@ -61,9 +61,9 @@
     Vue.component("combat-replay-numberform-component", {
         props: ["minValue", "maxValue", "id", "placeholderValue"],
         template: `<div style="width: 100px;">
-                        <input class="form-control" type="number" :id="id" 
-                            @onkeypress="return isNumber(event)" onpaste="return false;" 
-                            :value="placeholderValue" data-bind="value:replyNumber, fireChange: true" 
+                        <input class="form-control" type="number" :id="id"
+                            @onkeypress="return isNumber(event)" onpaste="return false;"
+                            :value="placeholderValue" data-bind="value:replyNumber, fireChange: true"
                             :min="minValue" :max="maxValue">
                     </div>`,
         methods: {
@@ -88,47 +88,47 @@
                 }
             });
         }
-    }),
-        Vue.component("combat-replay-extra-decorations-component", {
-            props: ["light"],
-            template: `${template}`,
-            methods: {
-                getAnimator: function () {
-                    return animator;
-                }
-            },
-            mounted() {
-                $('#subgroupCheck').change(function () {
-                    animator.toggleHighlightSelectedGroup();
-                });
-                $('#circle1Check').change(function () {
-                    animator.toggleRange(0);
-                });
-                $('#circle2Check').change(function () {
-                    animator.toggleRange(1);
-                });
-                $('#circle3Check').change(function () {
-                    animator.toggleRange(2);
-                });
-                $('#coneCheck').change(function () {
-                    animator.toggleConeDisplay();
-                });
-                //
-                $('#circle1Text').on("input ", function () {
-                    animator.setRangeRadius(0, $(this).val());
-                });
-                $('#circle2Text').on("input ", function () {
-                    animator.setRangeRadius(1, $(this).val());
-                });
-                $('#circle3Text').on("input ", function () {
-                    animator.setRangeRadius(2, $(this).val());
-                });
-                $('#coneRadiusText').on("input ", function () {
-                    animator.setConeRadius($(this).val());
-                });
-                $('#coneAngleText').on("input ", function () {
-                    animator.setConeAngle($(this).val());
-                });
+    });
+    Vue.component("combat-replay-extra-decorations-component", {
+        props: ["light"],
+        template: `${template}`,
+        methods: {
+            getAnimator: function () {
+                return animator;
             }
-        });
+        },
+        mounted() {
+            $('#subgroupCheck').change(function () {
+                animator.toggleHighlightSelectedGroup();
+            });
+            $('#circle1Check').change(function () {
+                animator.toggleRange(0);
+            });
+            $('#circle2Check').change(function () {
+                animator.toggleRange(1);
+            });
+            $('#circle3Check').change(function () {
+                animator.toggleRange(2);
+            });
+            $('#coneCheck').change(function () {
+                animator.toggleConeDisplay();
+            });
+            //
+            $('#circle1Text').on("input ", function () {
+                animator.setRangeRadius(0, $(this).val());
+            });
+            $('#circle2Text').on("input ", function () {
+                animator.setRangeRadius(1, $(this).val());
+            });
+            $('#circle3Text').on("input ", function () {
+                animator.setRangeRadius(2, $(this).val());
+            });
+            $('#coneRadiusText').on("input ", function () {
+                animator.setConeRadius($(this).val());
+            });
+            $('#coneAngleText').on("input ", function () {
+                animator.setConeAngle($(this).val());
+            });
+        }
+    });
 </script>
