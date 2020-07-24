@@ -4,7 +4,7 @@
         <div class="card-body container">
             <div class="d-flex flex-row justify-content-center align-items-center">
                 <div class="d-flex flex-column mr-3 justify-content-center">
-                    <div v-if="fractalInstabilities" class="d-flex flex-row justify-content-center">
+                    <div v-if="fractalInstabilities" class="d-flex flex-row justify-content-around">
                         <img v-for="fractalInstability in fractalInstabilities"
                             :data-original-title="fractalInstability.name + (fractalInstability.description ? '<br> ' + fractalInstability.description : '')"
                             :src="fractalInstability.icon" class="icon icon-hover" />
