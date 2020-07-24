@@ -18,6 +18,7 @@ namespace GW2EIParser.Builders
     {
 
         private static string _eiJS;
+        private static string _eiCRJS;
 
         private readonly string _scriptVersion;
         private readonly int _scriptVersionRev;
@@ -128,7 +129,7 @@ namespace GW2EIParser.Builders
                 Properties.Resources.tmplCombatReplayPlayersStats,
                 Properties.Resources.tmplCombatReplayUI,
                 Properties.Resources.tmplCombatReplayPlayerSelect,
-                Properties.Resources.tmplCombatReplayRangeSelect,
+                Properties.Resources.tmplCombatReplayExtraDecorations,
                 Properties.Resources.tmplCombatReplayAnimationControl,
                 Properties.Resources.tmplCombatReplayMechanicsList
             };
@@ -157,6 +158,19 @@ namespace GW2EIParser.Builders
             List<string> templates = BuildTemplates();
             templates.AddRange(BuildCRTemplates());
             _eiJS = scriptContent.Replace("TEMPLATE_COMPILE", string.Join("\n", templates));
+            //
+            var orderedCRScripts = new List<string>()
+            {
+                Properties.Resources.animator,
+                Properties.Resources.actors,
+                Properties.Resources.decorations,
+            }; 
+            string scriptCRContent = orderedCRScripts[0];
+            for (int i = 1; i < orderedCRScripts.Count; i++)
+            {
+                scriptCRContent += orderedCRScripts[i];
+            }
+            _eiCRJS = scriptCRContent;
         }
 
         /// <summary>
@@ -193,7 +207,7 @@ namespace GW2EIParser.Builders
             {
                 return "";
             }
-            string scriptContent = Properties.Resources.combatreplay_js;
+            string scriptContent = _eiCRJS;
             if (_externalScripts && path != null)
             {
                 string jsFileName = "EliteInsights-CR-" + _scriptVersion + ".js";

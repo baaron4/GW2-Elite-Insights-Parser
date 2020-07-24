@@ -61,6 +61,32 @@ namespace GW2EIParser.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &quot;use strict&quot;;
+        /////// ACTORS
+        ///class IconDrawable {
+        ///    constructor(start, end, imgSrc, pixelSize) {
+        ///        this.pos = null;
+        ///        this.start = start;
+        ///        this.end = end;
+        ///        this.img = new Image();
+        ///        this.img.src = imgSrc;
+        ///        this.img.onload = function () {
+        ///            animateCanvas(-1);
+        ///        };
+        ///        this.pixelSize = pixelSize;
+        ///    }
+        ///
+        ///    getInterpolatedPosition(startIndex, currentIndex) {
+        ///        const offsetedIndex = currentIndex - startIndex;
+        ///        const positio [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string actors {
+            get {
+                return ResourceManager.GetString("actors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to /*jshint esversion: 6 */
         ///// const images
         ///&quot;use strict&quot;;
@@ -87,9 +113,37 @@ namespace GW2EIParser.Properties {
         ///
         ///cla [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string combatreplay_js {
+        internal static string animator {
             get {
-                return ResourceManager.GetString("combatreplay_js", resourceCulture);
+                return ResourceManager.GetString("animator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to //// BASE MECHANIC
+        ///class MechanicDrawable {
+        ///    constructor(start, end, connectedTo) {
+        ///        this.start = start;
+        ///        this.end = end;
+        ///        this.connectedTo = connectedTo;
+        ///        this.master = null;
+        ///    }
+        ///
+        ///    draw() {
+        ///        // to override
+        ///    }
+        ///
+        ///    getPosition() {
+        ///        if (this.connectedTo === null) {
+        ///            return null;
+        ///        }
+        ///        var time = animator.reactiveDataStatus.time;
+        ///        if (this.start !== -1 &amp;&amp; (this.start &gt;= time || this.end &lt;= time)) {
+        ///           [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string decorations {
+            get {
+                return ResourceManager.GetString("decorations", resourceCulture);
             }
         }
         
@@ -116,14 +170,13 @@ namespace GW2EIParser.Properties {
         ///    fill-opacity: 0.9 !important;
         ///}
         ///
-        ///.ei-header {
-        ///    min-width: 1000px;
-        ///    margin-right: auto;
-        ///    margin-left: auto;
+        ///.scrollable-y {
+        ///    overflow-y: auto;
         ///}
         ///
-        ///.scrollable-y {
-        ///    overflow-y [rest of string was truncated]&quot;;.
+        ///.theme-yeti ::-webkit-scrollbar {
+        ///    width: 6px;
+        ///    background-color: #DDD [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ei_css {
             get {
@@ -140,9 +193,9 @@ namespace GW2EIParser.Properties {
         ///        template: &apos;&lt;div :id=&quot;id&quot; class=&quot;d-flex flex-row justify-content-center&quot;&gt;&lt;/div&gt;&apos;,
         ///        mounted: function () {
         ///            var div = document.querySelector(this.queryID);
-        ///            Plotly.react(div, this.data, this.layout, {showEditInChartStudio: true, plotlyServerURL: &quot;https://chart-studio.plotly.com&quot;});
+        ///            Plotly.react(div, this.data, this.layout, { showEditInChartStudio: true, plotlyServerURL: &quot;https://chart-studio.plotly.com&quot; });
         ///            var _this = this;
-        ///      [rest of string was truncated]&quot;;.
+        ///    [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ei_js {
             get {
@@ -424,6 +477,22 @@ namespace GW2EIParser.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;h3&gt;Range Selectors&lt;/h3&gt;
+        ///        &lt;div class=&quot;d-flex flex-column flex-wrap justify-content-center align-items-center&quot;&gt;
+        ///            &lt;div class=&quot;d-flex flex-column flex-wrap justify-content-center align-items-center mb-2&quot; v-for=&quot;rangeCol in rangeSelectArrays&quot;&gt;
+        ///                &lt;div class=&quot;range-btns d-flex flex-row flex-wrap justify-content-center align-items-center&quot;&gt;
+        ///                    &lt;label v-for=&quot;range in rangeCol&quot; @click=&quot;toggleRange(range);&quot;
+        ///                            [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplCombatReplayExtraDecorations {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayExtraDecorations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div class=&quot;d-flex flex-row flex-wrap justify-content-center align-items-center&quot;&gt;
         ///        &lt;div class=&quot;combat-replay-mechanics-list-container d-flex d-flex-row justify-content-center w-100 scrollable-y&quot; style=&quot;max-width:450px&quot;&gt;
         ///            &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
@@ -508,22 +577,6 @@ namespace GW2EIParser.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div&gt;
-        ///        &lt;h3&gt;Range Selectors&lt;/h3&gt;
-        ///        &lt;div class=&quot;d-flex flex-column flex-wrap justify-content-center align-items-center&quot;&gt;
-        ///            &lt;div class=&quot;d-flex flex-column flex-wrap justify-content-center align-items-center mb-2&quot; v-for=&quot;rangeCol in rangeSelectArrays&quot;&gt;
-        ///                &lt;div class=&quot;range-btns d-flex flex-row flex-wrap justify-content-center align-items-center&quot;&gt;
-        ///                    &lt;label v-for=&quot;range in rangeCol&quot; @click=&quot;toggleRange(range);&quot;
-        ///                            [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string tmplCombatReplayRangeSelect {
-            get {
-                return ResourceManager.GetString("tmplCombatReplayRangeSelect", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div class=&quot;d-flex flex-column justify-content-center&quot;&gt;
         ///        &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mb-1&quot;&gt;
         ///            &lt;li class=&quot;nav-item&quot;&gt;
@@ -601,12 +654,12 @@ namespace GW2EIParser.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div class=&quot;d-flex mt-2 justify-content-center ei-container-big&quot;&gt;
+        ///    &lt;div class=&quot;d-flex mt-2 justify-content-center&quot;&gt;
         ///        &lt;div class=&quot;d-flex flex-column align-items-center mr-2&quot; style=&quot;margin-left: auto; min-width:450px;&quot;&gt;
         ///            &lt;combat-replay-damage-data-component :time=&quot;animationStatus.time&quot;
         ///                :selectedplayer=&quot;animationStatus.selectedPlayer&quot; :selectedplayerid=&quot;animationStatus.selectedPlayerID&quot;&gt;
         ///            &lt;/combat-replay-damage-data-component&gt;
-        ///            &lt;combat-replay-player-select-component :selectedplayerid [rest of string was truncated]&quot;;.
+        ///            &lt;combat-replay-player-select-component :selectedplayerid=&quot;animationStatus [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayUI {
             get {
@@ -935,14 +988,14 @@ namespace GW2EIParser.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div class=&quot;ei-container-small&quot;&gt;
+        ///    &lt;div&gt;
         ///        &lt;div class=&quot;d-flex flex-row justify-content-center mt-1&quot; id=&quot;phase-nav&quot;&gt;
         ///            &lt;phase-component :phases=&quot;logdata.phases&quot;&gt;&lt;/phase-component&gt;
         ///        &lt;/div&gt;
         ///        &lt;div class=&quot;d-flex flex-row justify-content-center mb-2 mt-2&quot; id=&quot;actors&quot;&gt;
         ///            &lt;div v-show=&quot;dataType !== datatypes.targetTab&quot; :class=&quot;{&apos;d-flex&apos;:dataType !== datatypes.targetTab}&quot;
         ///                class=&quot;flex-row justify-content-center align-items-center flex-wrap mr-5&quot;&gt;
-        ///  [rest of string was truncated]&quot;;.
+        ///                &lt;target-comp [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplMainView {
             get {
