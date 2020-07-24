@@ -319,7 +319,7 @@ img.icon-lg {
 
 table.composition td {
     max-width: 120px;
-    width: 120px;
+    min-width: 120px;
 }
 
 table.composition .shorten {

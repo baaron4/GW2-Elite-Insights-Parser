@@ -7,37 +7,37 @@
                     <td v-for="player in group" class="player-cell" :class="{active: player.id === playerindex}"
                         @click="select(player.id)">
                         <div>
-                            <img v-if="player.isCommander"
-                                src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png"
-                                alt="Commander" class="icon" data-original-title="Commander">
                             <img :src="player.icon" :alt="player.profession" class="icon"
-                                :data-original-title="player.profession">
+                                 :data-original-title="player.profession">
                             <img v-if="player.condi > 0"
-                                src="https://wiki.guildwars2.com/images/5/54/Condition_Damage.png"
-                                alt="Condition Damage" class="icon"
-                                :data-original-title="'Condition Damage: ' + player.condi">
+                                 src="https://wiki.guildwars2.com/images/5/54/Condition_Damage.png"
+                                 alt="Condition Damage" class="icon"
+                                 :data-original-title="'Condition Damage: ' + player.condi">
                             <img v-if="player.conc > 0" src="https://wiki.guildwars2.com/images/4/44/Boon_Duration.png"
-                                alt="Concentration" class="icon" :data-original-title="'Concentration: ' + player.conc">
+                                 alt="Concentration" class="icon" :data-original-title="'Concentration: ' + player.conc">
                             <img v-if="player.heal > 0" src="https://wiki.guildwars2.com/images/8/81/Healing_Power.png"
-                                alt="Healing Power" class="icon" :data-original-title="'Healing Power: ' + player.heal">
+                                 alt="Healing Power" class="icon" :data-original-title="'Healing Power: ' + player.heal">
                             <img v-if="player.tough > 0" src="https://wiki.guildwars2.com/images/1/12/Toughness.png"
-                                alt="Toughness" class="icon" :data-original-title="'Toughness: ' + player.tough">
+                                 alt="Toughness" class="icon" :data-original-title="'Toughness: ' + player.tough">
                         </div>
                         <div v-if="player.l1Set.length > 0 || player.l2Set.length > 0">
                             <img v-for="wep in player.l1Set" :src="getIcon(wep)" :data-original-title="wep"
-                                class="icon">
+                                 class="icon">
                             <span v-if="player.l1Set.length > 0 && player.l2Set.length > 0">/</span>
                             <img v-for="wep in player.l2Set" :src="getIcon(wep)" :data-original-title="wep"
-                                class="icon">
+                                 class="icon">
                         </div>
                         <div v-if="player.a1Set.length > 0 || player.a2Set.length > 0">
                             <img v-for="wep in player.a1Set" :src="getIcon(wep)" :data-original-title="wep"
-                                class="icon">
+                                 class="icon">
                             <span v-if="player.a1Set.length > 0 && player.a2Set.length > 0">/</span>
                             <img v-for="wep in player.a2Set" :src="getIcon(wep)" :data-original-title="wep"
-                                class="icon">
+                                 class="icon">
                         </div>
                         <div class="shorten" :data-original-title="player.acc">
+                            <img v-if="player.isCommander"
+                                 src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png"
+                                 alt="Commander" class="icon" data-original-title="Commander">
                             {{ player.name }}
                         </div>
                     </td>
