@@ -54,7 +54,7 @@ namespace GW2EIParser.EIData
                         Invulned++;
                     }
                     DirectDamageCount++;
-                    if (dl.Skill.CanCrit)
+                    if (SkillItem.CanCrit(dl.Skill.ID, log.LogData.GW2Build))
                     {
                         CritableDirectDamageCount++;
                     }
