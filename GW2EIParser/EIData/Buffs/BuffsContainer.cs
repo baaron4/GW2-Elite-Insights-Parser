@@ -136,15 +136,15 @@ namespace GW2EIParser.EIData
                 // Whisper of Jormalg
                 new Buff("Whisper Teleport Out", 59223, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 new Buff("Whisper Teleport Back", 59054, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
-                new Buff("Frigid Vortex", 59105, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
-                new Buff("Chains of Frost Active", 59100, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
-                new Buff("Chains of Frost Application", 59120, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
-                new Buff("Brain Freeze", 59073, GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 20, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Frigid Vortex", 59105, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Chains of Frost Active", 59100, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/63/Use_Soul_Binder.png" ),
+                new Buff("Chains of Frost Application", 59120, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png" ),
+                new Buff("Brain Freeze", 59073, GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 20, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png" ),
                 // Voice and Claw            
                 new Buff("Enraged", 58619, GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 // Fraenir of Jormag
-                new Buff("Frozen", 58376, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/7a/Bloodstone_Blessed.png" ),
-                new Buff("Snowblind", 58276, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/7a/Bloodstone_Blessed.png" ),
+                new Buff("Frozen", 58376, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png" ),
+                new Buff("Snowblind", 58276, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png" ),
                 // Twisted Castle
                 new Buff("Spatial Distortion", 34918, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/7a/Bloodstone_Blessed.png" ),
                 new Buff("Madness", 35006, GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/ee/Madness.png" ),
@@ -175,8 +175,8 @@ namespace GW2EIParser.EIData
                 new Buff("Blood Fueled",34422, GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 1, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Buff("Blood Fueled Abo",34428, GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 15, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 // Qadim
-                new Buff("Flame Armor",52568, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Buff("Fiery Surge",52588, GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Buff("Flame Armor",52568, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e7/Magma_Orb.png"),
+                new Buff("Fiery Surge",52588, GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/f9/Fiery_Surge.png"),
                 // Soulless Horror
                 new Buff("Necrosis",47414, GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/47/Ichor.png"),
                 // CA
@@ -192,9 +192,9 @@ namespace GW2EIParser.EIData
                 new Buff("Arm Up",52430 , GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 // Twin Largos
                 //new Buff("Aquatic Detainment",52931 , GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Buff("Aquatic Aura (Kenut)",52211 , GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 80, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Buff("Aquatic Aura (Nikare)",52929 , GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 80, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Buff("Waterlogged",51935 , GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Buff("Aquatic Aura (Kenut)",52211 , GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 80, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/44/Expose_Weakness.png"),
+                new Buff("Aquatic Aura (Nikare)",52929 , GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 80, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/fd/Fractured_%28effect%29.png"),
+                new Buff("Waterlogged",51935 , GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/89/Waterlogged.png"),
                 // Slothasor
                 new Buff("Narcolepsy", 34467, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 // VG
@@ -215,16 +215,16 @@ namespace GW2EIParser.EIData
                 new Buff("Residual Affliction", 47476, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/1/12/Residual_Affliction.png"),
                 new Buff("Arcing Affliction", 47646, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/f/f0/Arcing_Affliction.png"),
                 // Adina
-                new Buff("Pillar Pandemonium", 56204, GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
-                new Buff("Radiant Blindness", 56593, GeneralHelper.Source.FightSpecific, BuffStackType.Queue, 25, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
-                new Buff("Diamond Palisade (Damage)", 56099, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
-                new Buff("Diamond Palisade", 56636, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
-                new Buff("Eroding Curse", 56440, GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
+                new Buff("Pillar Pandemonium", 56204, GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/d/d9/Captain%27s_Inspiration.png"),
+                new Buff("Radiant Blindness", 56593, GeneralHelper.Source.FightSpecific, BuffStackType.Queue, 25, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6c/Radiant_Blindness.png"),
+                new Buff("Diamond Palisade (Damage)", 56099, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png"),
+                new Buff("Diamond Palisade", 56636, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png"),
+                new Buff("Eroding Curse", 56440, GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/d/de/Toxic_Gas.png"),
                 // Sabir
-                new Buff("Ion Shield", 56100, GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 80, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
+                new Buff("Ion Shield", 56100, GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 80, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/9/94/Ion_Shield.png"),
                 new Buff("Violent Currents", 56123, GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/0/06/Violent_Currents.png"),
                 new Buff("Repulsion Field", 56172, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
-                new Buff("Electrical Repulsion", 56391, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://render.guildwars2.com/file/5AF8170865B353E26127E10E34EFE8B90B9096D6/1451806.png"),
+                new Buff("Electrical Repulsion", 56391, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/71/Electrical_Repulsion.png"),
                 new Buff("Electro-Repulsion", 56474, GeneralHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/74/Unbridled_Chaos.png"),
                 // Peerless Qadim
                 new Buff("Erratic Energy", 56582, GeneralHelper.Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/45/Unstable.png"),
