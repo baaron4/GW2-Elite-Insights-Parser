@@ -609,3 +609,11 @@ canvas {
 .combat-replay-mechanics-list-header > a:hover {
     text-decoration: none;
 }
+
+.slider::-webkit-slider-thumb {
+    opacity: 0.7;
+  }
+  
+  .slider::-moz-range-thumb {
+    opacity: 0.7;
+  }

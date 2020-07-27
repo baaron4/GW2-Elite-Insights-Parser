@@ -12,6 +12,23 @@ function computeGradient(left, percent) {
     return template;
 };
 
+function computeSliderGradient(color, fillColor, startPercent, endPercent) {
+    var template = "linear-gradient(to right, $left$, $left2$, $middle$, $middle2$, $right$, $right2$)";
+    var left = color + " " + 0 + "%";
+    var left2 = color + " " + startPercent + "%";
+    var right = color + " " + endPercent + "%";
+    var right2 = color + " " + 100 + "%";
+    var middle = fillColor + " " + startPercent + "%";
+    var middle2 = fillColor + " " + endPercent + "%";
+    template = template.replace("$left$", left);
+    template = template.replace("$left2$", left2);
+    template = template.replace("$right$", right);
+    template = template.replace("$right2$", right2);
+    template = template.replace("$middle$", middle);
+    template = template.replace("$middle2$", middle2);
+    return template;
+};
+
 function buildFallBackURL(skill) {
     if (!skill.icon || skill.fallBack) {
         return;
