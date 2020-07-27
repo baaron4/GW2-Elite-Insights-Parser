@@ -216,26 +216,26 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        /*public List<PhaseData> GetBreakbarPhases(ParsedLog log, bool requirePhases)
+        public List<PhaseData> GetBreakbarPhases(ParsedLog log, bool requirePhases)
         {
             if (!requirePhases)
             {
                 return new List<PhaseData>();
             }
             var breakbarPhases = new List<PhaseData>();
-            int i = 0;
             foreach (NPC target in Targets)
             {
+                int i = 0;
                 List<BreakbarStateEvent> breakbarStateEvents = log.CombatData.GetBreakbarStateEvents(target.AgentItem);
                 List<BreakbarPercentEvent> breakbarPercentEvents = log.CombatData.GetBreakbarPercentEvents(target.AgentItem);
                 var breakbarActiveEvents = breakbarStateEvents.Where(x => x.State == ParseEnum.BreakbarState.Active).ToList();
-                var breakbarImmununeEvents = breakbarStateEvents.Where(x => x.State != ParseEnum.BreakbarState.Active).ToList();
+                var breakbarNotActiveEvents = breakbarStateEvents.Where(x => x.State != ParseEnum.BreakbarState.Active).ToList();
                 foreach (BreakbarStateEvent active in breakbarActiveEvents)
                 {
-                    long start = Math.Max(active.Time - 500, 0);
-                    BreakbarStateEvent immune = breakbarImmununeEvents.FirstOrDefault(x => x.Time >= active.Time);
-                    long end = Math.Min(immune != null ? immune.Time : log.FightData.FightEnd, log.FightData.FightEnd);
-                    var phase = new PhaseData(start, end, "Breakbar " + ++i)
+                    long start = Math.Max(active.Time - 2000, 0);
+                    BreakbarStateEvent notActive = breakbarNotActiveEvents.FirstOrDefault(x => x.Time >= active.Time);
+                    long end = Math.Min(notActive != null ? notActive.Time : log.FightData.FightEnd, log.FightData.FightEnd);
+                    var phase = new PhaseData(start, end, target.Character.Substring(3) + " Breakbar " + ++i)
                     {
                         BreakbarPhase = true,
                         CanBeSubPhase = false
@@ -245,7 +245,7 @@ namespace GW2EIParser.Logic
                 }
             }
             return breakbarPhases;
-        }*/
+        }
 
         public virtual List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {

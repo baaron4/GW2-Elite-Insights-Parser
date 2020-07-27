@@ -13,6 +13,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public double Start { get; set; }
         public double End { get; set; }
         public List<int> Targets { get; set; } = new List<int>();
+        public bool BreakbarPhase { get; set; }
 
         public List<List<object>> DpsStats { get; set; }
         public List<List<List<object>>> DpsStatsTargets { get; set; }
@@ -84,6 +85,7 @@ namespace GW2EIParser.Builders.HtmlModels
             Duration = phaseData.DurationInMS;
             Start = phaseData.Start / 1000.0;
             End = phaseData.End / 1000.0;
+            BreakbarPhase = phaseData.BreakbarPhase;
             foreach (NPC target in phaseData.Targets)
             {
                 Targets.Add(log.FightData.Logic.Targets.IndexOf(target));
@@ -96,40 +98,43 @@ namespace GW2EIParser.Builders.HtmlModels
             // add phase markup
             MarkupLines = new List<double>();
             MarkupAreas = new List<AreaLabelDto>();
-            for (int j = 1; j < phases.Count; j++)
+            if (!BreakbarPhase)
             {
-                PhaseData curPhase = phases[j];
-                if (curPhase.Start < phaseData.Start || curPhase.End > phaseData.End ||
-                    (curPhase.Start == phaseData.Start && curPhase.End == phaseData.End) || !curPhase.CanBeSubPhase)
+                for (int j = 1; j < phases.Count; j++)
                 {
-                    continue;
-                }
-                if (SubPhases == null)
-                {
-                    SubPhases = new List<int>();
-                }
-                SubPhases.Add(j);
-                long start = curPhase.Start - phaseData.Start;
-                long end = curPhase.End - phaseData.Start;
-                if (curPhase.DrawStart)
-                {
-                    MarkupLines.Add(start / 1000.0);
-                }
+                    PhaseData curPhase = phases[j];
+                    if (curPhase.Start < phaseData.Start || curPhase.End > phaseData.End ||
+                        (curPhase.Start == phaseData.Start && curPhase.End == phaseData.End) || !curPhase.CanBeSubPhase)
+                    {
+                        continue;
+                    }
+                    if (SubPhases == null)
+                    {
+                        SubPhases = new List<int>();
+                    }
+                    SubPhases.Add(j);
+                    long start = curPhase.Start - phaseData.Start;
+                    long end = curPhase.End - phaseData.Start;
+                    if (curPhase.DrawStart)
+                    {
+                        MarkupLines.Add(start / 1000.0);
+                    }
 
-                if (curPhase.DrawEnd)
-                {
-                    MarkupLines.Add(end / 1000.0);
-                }
+                    if (curPhase.DrawEnd)
+                    {
+                        MarkupLines.Add(end / 1000.0);
+                    }
 
-                var phaseArea = new AreaLabelDto
-                {
-                    Start = start / 1000.0,
-                    End = end / 1000.0,
-                    Label = curPhase.DrawLabel ? curPhase.Name : null,
-                    Highlight = curPhase.DrawArea
-                };
-                MarkupAreas.Add(phaseArea);
-            }
+                    var phaseArea = new AreaLabelDto
+                    {
+                        Start = start / 1000.0,
+                        End = end / 1000.0,
+                        Label = curPhase.DrawLabel ? curPhase.Name : null,
+                        Highlight = curPhase.DrawArea
+                    };
+                    MarkupAreas.Add(phaseArea);
+                }
+            }         
             if (MarkupAreas.Count == 0)
             {
                 MarkupAreas = null;

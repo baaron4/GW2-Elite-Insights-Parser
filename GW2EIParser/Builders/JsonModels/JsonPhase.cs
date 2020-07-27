@@ -31,6 +31,12 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         /// <seealso cref="JsonLog.Phases"/>
         public List<int> SubPhases { get; }
+        /// <summary>
+        /// Indicates that the phase is a breakbar phase \n
+        /// Only one target will be present in <see cref="JsonPhase.Targets"/> \n
+        /// The targets breakbar will be active 2 seconds after the start of the phase
+        /// </summary>
+        public bool BreakbarPhase { get; }
 
         public JsonPhase(PhaseData phase, ParsedLog log)
         {
@@ -38,25 +44,30 @@ namespace GW2EIParser.Builders.JsonModels
             End = phase.End;
             Name = phase.Name;
             Targets = new List<int>();
+            BreakbarPhase = phase.BreakbarPhase;
             foreach (NPC tar in phase.Targets)
             {
                 Targets.Add(log.FightData.Logic.Targets.IndexOf(tar));
             }
             List<PhaseData> phases = log.FightData.GetPhases(log);
-            for (int j = 1; j < phases.Count; j++)
+            if (!BreakbarPhase)
             {
-                PhaseData curPhase = phases[j];
-                if (curPhase.Start < Start || curPhase.End > End ||
-                     (curPhase.Start == Start && curPhase.End == End) || !curPhase.CanBeSubPhase)
+                for (int j = 1; j < phases.Count; j++)
                 {
-                    continue;
+                    PhaseData curPhase = phases[j];
+                    if (curPhase.Start < Start || curPhase.End > End ||
+                         (curPhase.Start == Start && curPhase.End == End) || !curPhase.CanBeSubPhase)
+                    {
+                        continue;
+                    }
+                    if (SubPhases == null)
+                    {
+                        SubPhases = new List<int>();
+                    }
+                    SubPhases.Add(j);
                 }
-                if (SubPhases == null)
-                {
-                    SubPhases = new List<int>();
-                }
-                SubPhases.Add(j);
             }
+            
         }
     }
 }
