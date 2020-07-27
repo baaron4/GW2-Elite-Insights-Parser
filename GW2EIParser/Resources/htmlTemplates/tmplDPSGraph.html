@@ -108,7 +108,9 @@
                 name: 'All Player Dps'
             });
             // targets health
-            computeTargetHealthData(this.graph, logData.targets, this.phase, this.data, null);
+            computeTargetHealthData(this.graph, logData.targets, this.phase, this.data, null);  
+            // targets breakbar          
+            computeTargetBreakbarData(this.graph, logData.targets, this.phase, this.data, null);
             // mechanics
             for (i = 0; i < graphData.mechanics.length; i++) {
                 var mech = graphData.mechanics[i];
@@ -298,6 +300,20 @@
                     hps[i] = hpPoints;
                     res[offset++] = hpPoints;
                 }
+                {
+                    for (i = 0; i < this.graph.targets.length; i++) {
+                        var breakbar = this.graph.targets[i].breakbarPercentStates;
+                        if (!breakbar) {
+                            continue;
+                        }
+                        var brPoints = [];
+                        for (j = 0; j < breakbar.length; j++) {
+                            brPoints[j] = breakbar[j][1] * maxDPS / 100.0;
+                        }
+                        res[offset++] = brPoints;
+                    }
+                }
+                
                 for (i = 0; i < graphData.mechanics.length; i++) {
                     var mech = graphData.mechanics[i];
                     var mechData = logData.mechanicMap[i];
