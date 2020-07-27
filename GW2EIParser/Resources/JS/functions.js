@@ -435,6 +435,41 @@ function computeTargetHealthData(graph, targets, phase, data, yaxis) {
     return graph.targets.length;
 }
 
+function computeTargetBreakbarData(graph, targets, phase, data, yaxis) {
+    var count = 0;
+    for (var i = 0; i < graph.targets.length; i++) {
+        var breakbar = graph.targets[i].breakbarPercentStates;
+        if (!breakbar) {
+            continue;
+        }
+        count++;
+        var breakbarTexts = [];
+        var times = [];
+        var target = targets[phase.targets[i]];
+        for (var j = 0; j < breakbar.length; j++) {
+            breakbarTexts[j] = breakbar[j][1] + "% breakbar - " + target.name;
+            times[j] = breakbar[j][0];
+        }
+        var res = {
+            x: times,
+            text: breakbarTexts,
+            mode: 'lines',
+            line: {
+                dash: 'dashdot',
+                shape: 'hv'
+            },
+            hoverinfo: 'text',
+            visible: phase.breakbarPhase ? true : "legendonly",
+            name: target.name + ' breakbar',
+        };
+        if (yaxis) {
+            res.yaxis = yaxis;
+        }
+        data.push(res);
+    }
+    return count;
+}
+
 function computePlayerHealthData(healthGraph, data, yaxis) {
     var health = healthGraph;
     var hpTexts = [];
