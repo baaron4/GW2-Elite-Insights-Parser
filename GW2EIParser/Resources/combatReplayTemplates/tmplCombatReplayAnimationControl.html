@@ -16,14 +16,15 @@
             </div>
                 <div class="d-flex flex-row flex-wrap justify-content-center mt-1 mb-1">
                     <div class="btn btn-ssmall" :class="{'active': backwards, 'btn-dark': !light, 'btn-light': light}"
-                        v-for="phase in phases" @click="updateTime(phase.start * 1000)"
+                        v-for="phase in phases" @click="updatePhaseTime(phase.start * 1000, phase.end * 1000, phase.name)"
                         :data-original-title="phase.durationS + ' seconds'">
                         {{phase.name}}
                     </div>
                 </div>
             <div class="d-flex justify-content-center slidecontainer">
                 <input style="min-width: 400px;" @input="updateTime($event.target.value)" type="range" min="0"
-                       :max="maxTime" value="0" class="slider" id="timeRange">
+                       :max="maxTime" value="0" class="slider" id="timeRange" :style="{'background': getSliderGradient()}">
+                <p style="position: absolute; color: black;">{{sliderDelimiter.name}}</p>
                 <input style="width: 70px; text-align: right;" class="ml-3 mr-1" type="text" id="timeRangeDisplay" value="0"
                        @input="updateInputTime($event.target.value);">
             </div>
@@ -52,6 +53,7 @@
                     y: logData.crData.sizes[1]
                 },
                 maxTime: logData.crData.maxTime,
+                sliderDelimiter: sliderDelimiter
             };
         },
         computed: {
@@ -60,6 +62,18 @@
             }
         },
         methods: {
+            getSliderGradient: function () {
+                var startPercent, endPercent;
+                if (!this.sliderDelimiter || this.sliderDelimiter.min === -1) {
+                    startPercent = 0;
+                    endPercent = 100;
+                } else {
+                    var max = animator.times[animator.times.length - 1];
+                    startPercent = this.sliderDelimiter.min / max * 100;
+                    endPercent = this.sliderDelimiter.max / max * 100;
+                }
+                return computeSliderGradient("#888888", "#F3F3F3", startPercent, endPercent);
+            },
             toggleBackwards: function () {
                 this.backwards = animator.toggleBackwards();
             },
@@ -75,6 +89,12 @@
             },
             updateTime: function (value) {
                 animator.updateTime(value);
+            },
+            updatePhaseTime: function (min, max, name) {
+                this.updateTime(min);
+                this.sliderDelimiter.min = min;
+                this.sliderDelimiter.max = max;
+                this.sliderDelimiter.name = name;
             },
             updateInputTime: function (value) {
                 animator.updateInputTime(value);

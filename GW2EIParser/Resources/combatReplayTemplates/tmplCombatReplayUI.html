@@ -22,16 +22,11 @@
         template: `${template}`,
         data: function () {
             return {
-                animationStatus: {
-                    time: 0,
-                    selectedPlayer: null,
-                    selectedPlayerID: null,
-                    animated: false
-                }
+                animationStatus: reactiveAnimationData
             };
         },
         created() {
-            animator = new Animator(logData.crData, this.animationStatus);
+            animator = new Animator(logData.crData);
         },
         mounted() {
             animator.attachDOM();

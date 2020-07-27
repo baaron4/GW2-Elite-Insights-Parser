@@ -27,12 +27,26 @@ function ToRadians(degrees) {
 const resolutionMultiplier = window.devicePixelRatio;
 
 var animator = null;
+// reactive structures
+var reactiveAnimationData = {
+    time: 0,
+    selectedPlayer: null,
+    selectedPlayerID: null,
+    animated: false
+};
+
+var sliderDelimiter = {
+    min: -1,
+    max: -1,
+    name: "Full Fight"
+}
+//
 
 class Animator {
-    constructor(options, reactiveData) {
+    constructor(options) {
         var _this = this;
         // status
-        this.reactiveDataStatus = reactiveData;
+        this.reactiveDataStatus = reactiveAnimationData;
         // time
         this.prevTime = 0;
         this.times = [];

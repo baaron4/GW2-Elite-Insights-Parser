@@ -17,7 +17,7 @@
             </div>
             <div style="transform: translate(0px, -22px);">
                 <ul class="nav nav-pills d-flex flex-row flex-wrap justify-content-center scale65">
-                    <li class="nav-item" v-for="(phase, id) in breakbarPhases" @click="updateTime(phase.start * 1000)"
+                    <li class="nav-item" v-for="(phase, id) in breakbarPhases" @click="updatePhaseTime(phase.start * 1000, phase.end * 1000, phase.name)"
                         :data-original-title="phase.durationS + ' seconds'">
                         <a class="nav-link">{{id + 1}} </a>
                     </li>
@@ -48,8 +48,11 @@
                 var color = findState(this.breakbarStates, time / 1000.0, 0, this.breakbarStates.length - 1) ? "#20B2AA" : "#888888";
                 return computeGradient(color, this.getBreakbarPercent(time));
             },
-            updateTime: function (value) {
-                animator.updateTime(value);
+            updatePhaseTime: function (min, max, name) {
+                animator.updateTime(min);
+                sliderDelimiter.min = min;
+                sliderDelimiter.max = max;
+                sliderDelimiter.name = name;
             },
         },
         computed: {

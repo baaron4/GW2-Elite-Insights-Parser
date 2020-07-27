@@ -612,8 +612,10 @@ canvas {
 
 .slider::-webkit-slider-thumb {
     opacity: 0.7;
+    width: 10px;
   }
   
   .slider::-moz-range-thumb {
     opacity: 0.7;
+    width: 10px;
   }
