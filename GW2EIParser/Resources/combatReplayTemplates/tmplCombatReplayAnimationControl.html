@@ -56,7 +56,7 @@
         },
         computed: {
             phases: function() {
-                return logData.phases;
+                return logData.phases.filter(phase => !phase.breakbarPhase);
             }
         },
         methods: {
