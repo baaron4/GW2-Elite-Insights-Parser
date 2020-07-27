@@ -235,7 +235,7 @@ namespace GW2EIParser.Logic
                     long start = Math.Max(active.Time - 2000, 0);
                     BreakbarStateEvent notActive = breakbarNotActiveEvents.FirstOrDefault(x => x.Time >= active.Time);
                     long end = Math.Min(notActive != null ? notActive.Time : log.FightData.FightEnd, log.FightData.FightEnd);
-                    var phase = new PhaseData(start, end, target.Character.Substring(3) + " Breakbar " + ++i)
+                    var phase = new PhaseData(start, end, "Breakbar " + ++i)
                     {
                         BreakbarPhase = true,
                         CanBeSubPhase = false
