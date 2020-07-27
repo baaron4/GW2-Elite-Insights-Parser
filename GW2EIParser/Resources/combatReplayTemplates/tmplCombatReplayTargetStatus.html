@@ -54,7 +54,7 @@
         },
         computed: {
             breakbarStates: function () {
-                if (!this.hasBreakbarPercent) {
+                if (this.breakbarPhases.length === 0) {
                     return [[0, false]];
                 }
                 var res = [];
