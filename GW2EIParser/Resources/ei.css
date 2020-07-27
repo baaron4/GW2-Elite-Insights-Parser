@@ -142,6 +142,7 @@
 .cr-breakbar-display {
     color: #DDDDDD;
     font-size: 0.65rem;
+    max-height: 32px;
     height: 12px;
     width: 200px;
 }
