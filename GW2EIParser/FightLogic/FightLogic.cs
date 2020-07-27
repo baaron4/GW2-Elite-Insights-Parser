@@ -240,6 +240,11 @@ namespace GW2EIParser.Logic
                         BreakbarPhase = true,
                         CanBeSubPhase = false
                     };
+                    if (phase.DurationInS < 2)
+                    {
+                        i--;
+                        continue;
+                    }
                     phase.Targets.Add(target);
                     breakbarPhases.Add(phase);
                 }
