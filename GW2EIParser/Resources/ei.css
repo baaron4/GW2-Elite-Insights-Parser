@@ -578,11 +578,11 @@ canvas {
 }
 
 .combat-replay-mechanics-list-container {
-    height: 600px;
+    height: 700px;
 }
 
 .combat-actor-status-container {
-    height: 600px;
+    height: 700px;
 }
 
 .theme-yeti #combat-replay-mechanics-list-container > table > thead > tr > th {
