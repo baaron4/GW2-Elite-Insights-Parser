@@ -62,6 +62,7 @@
             this.playerOffset += computeBuffData(this.player.details.boonGraph[this.phaseindex], this.data);
             var dpsY = oldOffset === this.playerOffset ? 'y2' : 'y3';
             this.graphOffset = this.playerOffset;
+            this.playerOffset += computeTargetBreakbarData(this.graph, logData.targets, this.phase, this.data, dpsY);
             this.playerOffset += computeTargetHealthData(this.graph, logData.targets, this.phase, this.data, dpsY);
             if (this.healthGraph) {
                 this.playerOffset += computePlayerHealthData(this.healthGraph, this.data, dpsY);
@@ -190,6 +191,17 @@
                 res[offset++] = dpsData.playerDPS.total;
                 res[offset++] = dpsData.playerDPS.target;
                 res[offset++] = dpsData.playerDPS.cleave;
+                for (var i = 0; i < this.graph.targets.length; i++) {
+                    var breakbar = this.graph.targets[i].breakbarPercentStates;
+                    if (!breakbar) {
+                        continue;
+                    }
+                    var brPoints = [];
+                    for (var j = 0; j < breakbar.length; j++) {
+                        brPoints[j] = breakbar[j][1] * dpsData.maxDPS / 100.0;
+                    }
+                    res[offset++] = brPoints;
+                }
                 for (var i = 0; i < this.graph.targets.length; i++) {
                     var health = this.graph.targets[i].healthStates;
                     var hpPoints = [];

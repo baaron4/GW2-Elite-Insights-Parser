@@ -139,9 +139,13 @@
     width: 45px;
 }
 
-.cr-breakbar-display {
+.cr-breakbar-bar {
     color: #DDDDDD;
+}
+
+.cr-breakbar-display {
     font-size: 0.65rem;
+    max-height: 35px;
     height: 12px;
     width: 200px;
 }
@@ -605,3 +609,13 @@ canvas {
 .combat-replay-mechanics-list-header > a:hover {
     text-decoration: none;
 }
+
+.slider::-webkit-slider-thumb {
+    opacity: 0.7;
+    width: 10px;
+  }
+  
+  .slider::-moz-range-thumb {
+    opacity: 0.7;
+    width: 10px;
+  }

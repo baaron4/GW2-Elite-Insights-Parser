@@ -604,7 +604,7 @@ namespace GW2EIParser.Logic
             const int lastPhasePreparationDuration = 13000;
 
             // If phase data is not calculated, only the first layout is used
-            List<PhaseData> phases = log.FightData.GetPhases(log);
+            var phases = log.FightData.GetPhases(log).Where(x => !x.BreakbarPhase).ToList();
 
             int qadimPhase1Time = (int)(phases.Count > 1 ? phases[1].End : int.MaxValue);
             int destroyerPhaseTime = (int)(phases.Count > 2 ? phases[2].End : int.MaxValue);
@@ -892,7 +892,7 @@ namespace GW2EIParser.Logic
             var platforms = new MovingPlatformDecoration[platformCount];
             for (int i = 0; i < platformCount; i++)
             {
-                platforms[i] = new MovingPlatformDecoration(platformImageUrl, 245, 245, (int.MinValue, int.MaxValue));
+                platforms[i] = new MovingPlatformDecoration(platformImageUrl, 2247, 2247, (int.MinValue, int.MaxValue));
                 replay.Decorations.Add(platforms[i]);
             }
 

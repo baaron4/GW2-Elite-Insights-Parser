@@ -12,6 +12,23 @@ function computeGradient(left, percent) {
     return template;
 };
 
+function computeSliderGradient(color, fillColor, startPercent, endPercent) {
+    var template = "linear-gradient(to right, $left$, $left2$, $middle$, $middle2$, $right$, $right2$)";
+    var left = color + " " + 0 + "%";
+    var left2 = color + " " + startPercent + "%";
+    var right = color + " " + endPercent + "%";
+    var right2 = color + " " + 100 + "%";
+    var middle = fillColor + " " + startPercent + "%";
+    var middle2 = fillColor + " " + endPercent + "%";
+    template = template.replace("$left$", left);
+    template = template.replace("$left2$", left2);
+    template = template.replace("$right$", right);
+    template = template.replace("$right2$", right2);
+    template = template.replace("$middle$", middle);
+    template = template.replace("$middle2$", middle2);
+    return template;
+};
+
 function buildFallBackURL(skill) {
     if (!skill.icon || skill.fallBack) {
         return;
@@ -433,6 +450,41 @@ function computeTargetHealthData(graph, targets, phase, data, yaxis) {
         data.push(res);
     }
     return graph.targets.length;
+}
+
+function computeTargetBreakbarData(graph, targets, phase, data, yaxis) {
+    var count = 0;
+    for (var i = 0; i < graph.targets.length; i++) {
+        var breakbar = graph.targets[i].breakbarPercentStates;
+        if (!breakbar) {
+            continue;
+        }
+        count++;
+        var breakbarTexts = [];
+        var times = [];
+        var target = targets[phase.targets[i]];
+        for (var j = 0; j < breakbar.length; j++) {
+            breakbarTexts[j] = breakbar[j][1] + "% breakbar - " + target.name;
+            times[j] = breakbar[j][0];
+        }
+        var res = {
+            x: times,
+            text: breakbarTexts,
+            mode: 'lines',
+            line: {
+                dash: 'dashdot',
+                shape: 'hv'
+            },
+            hoverinfo: 'text',
+            visible: phase.breakbarPhase ? true : "legendonly",
+            name: target.name + ' breakbar',
+        };
+        if (yaxis) {
+            res.yaxis = yaxis;
+        }
+        data.push(res);
+    }
+    return count;
 }
 
 function computePlayerHealthData(healthGraph, data, yaxis) {

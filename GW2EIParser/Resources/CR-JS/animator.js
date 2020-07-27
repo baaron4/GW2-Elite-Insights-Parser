@@ -27,12 +27,26 @@ function ToRadians(degrees) {
 const resolutionMultiplier = window.devicePixelRatio;
 
 var animator = null;
+// reactive structures
+var reactiveAnimationData = {
+    time: 0,
+    selectedPlayer: null,
+    selectedPlayerID: null,
+    animated: false
+};
+
+var sliderDelimiter = {
+    min: -1,
+    max: -1,
+    name: logData.phases[0].name
+}
+//
 
 class Animator {
-    constructor(options, reactiveData) {
+    constructor(options) {
         var _this = this;
         // status
-        this.reactiveDataStatus = reactiveData;
+        this.reactiveDataStatus = reactiveAnimationData;
         // time
         this.prevTime = 0;
         this.times = [];
@@ -174,7 +188,7 @@ class Animator {
                     this.attachedActorData.set(actor.connectedTo, new FacingRectangleMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, this.inch * actor.width, this.inch * actor.height, actor.color));
                     break;
                 case "MovingPlatform":
-                    this.backgroundActorData.push(new MovingPlatformDrawable(actor.start, actor.end, actor.image, actor.width, actor.height, actor.positions));
+                    this.backgroundActorData.push(new MovingPlatformDrawable(actor.start, actor.end, actor.image, this.inch * actor.width, this.inch * actor.height, actor.positions));
                     break;
             }
         }
