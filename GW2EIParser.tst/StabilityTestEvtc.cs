@@ -55,7 +55,7 @@ namespace GW2EIParser.tst
 
         private void GenerateCrashData(BlockingCollection<string> failed, BlockingCollection<string> messages, string type, bool copy)
         {
-            string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "../../../EvtcLogs/Crashes/";
+            string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/Crashes/";
 
             Directory.CreateDirectory(testLocation + "/Logs");
 
@@ -104,7 +104,7 @@ namespace GW2EIParser.tst
         [Test]
         public void TestEvtc()
         {
-            string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "../../../EvtcLogs/StabilityTest";
+            string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
             if (!Directory.Exists(testLocation))
             {
                 Directory.CreateDirectory(testLocation);
@@ -124,7 +124,7 @@ namespace GW2EIParser.tst
         [Test]
         public void TestEvtcZip()
         {
-            string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "../../../EvtcLogs/StabilityTest";
+            string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../../EvtcLogs/StabilityTest";
             if (!Directory.Exists(testLocation))
             {
                 Directory.CreateDirectory(testLocation);
@@ -143,7 +143,7 @@ namespace GW2EIParser.tst
         [Test]
         public void TestZevtc()
         {
-            string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "../../../EvtcLogs/StabilityTest";
+            string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
             if (!Directory.Exists(testLocation))
             {
                 Directory.CreateDirectory(testLocation);
@@ -163,7 +163,7 @@ namespace GW2EIParser.tst
         [Test]
         public void TestCrashed()
         {
-            string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "../../../EvtcLogs/Crashes/Logs";
+            string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/Crashes/Logs";
             if (!Directory.Exists(testLocation))
             {
                 Directory.CreateDirectory(testLocation);
