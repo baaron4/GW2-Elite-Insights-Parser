@@ -38,7 +38,7 @@ var reactiveAnimationData = {
 var sliderDelimiter = {
     min: -1,
     max: -1,
-    name: "Full Fight"
+    name: logData.phases[0].name
 }
 //
 
