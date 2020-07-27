@@ -123,7 +123,7 @@
                         shape: 'hv'
                     },
                     hoverinfo: 'text',
-                    visible: 'legendonly',
+                    visible: this.phase.breakbarPhase ? true : 'legendonly',
                     name: this.target.name + ' breakbar',
                     yaxis: dpsY
                 };
