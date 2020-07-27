@@ -106,8 +106,8 @@
             var oldOffset = this.targetOffset;
             this.targetOffset += computeBuffData(this.target.details.boonGraph[this.phaseindex], this.data);
             var dpsY = oldOffset === this.targetOffset ? 'y2' : 'y3';
-            var breakbarStates = this.graph.targets[this.phaseTargetIndex].breakbarPercentStates;
-            if (breakbarStates) {
+            if (this.hasBreakbarStates) {
+                var breakbarStates = this.graph.targets[this.phaseTargetIndex].breakbarPercentStates;
                 var breakbarTexts = [];
                 var times = [];
                 for (var j = 0; j < breakbarStates.length; j++) {
@@ -168,6 +168,9 @@
             computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
         },
         computed: {
+            hasBreakbarStates: function() {
+                return !!this.graph.targets[this.phaseTargetIndex].breakbarPercentStates;
+            },
             target: function () {
                 return logData.targets[this.targetindex];
             },
@@ -246,8 +249,8 @@
                     }
                     res[1] = hpPoints;
                 }
-                var breakbarStates = this.graph.targets[this.phaseTargetIndex].breakbarPercentStates;
-                if (breakbarStates) {
+                if (this.hasBreakbarStates) {
+                    var breakbarStates = this.graph.targets[this.phaseTargetIndex].breakbarPercentStates;
                     var breakbarPoints = [];
                     for (var j = 0; j < breakbarStates.length; j++) {
                         breakbarPoints[j] = breakbarStates[j][1] * dpsData.maxDPS / 100.0;
