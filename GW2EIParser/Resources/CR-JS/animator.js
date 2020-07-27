@@ -174,7 +174,7 @@ class Animator {
                     this.attachedActorData.set(actor.connectedTo, new FacingRectangleMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, this.inch * actor.width, this.inch * actor.height, actor.color));
                     break;
                 case "MovingPlatform":
-                    this.backgroundActorData.push(new MovingPlatformDrawable(actor.start, actor.end, actor.image, actor.width, actor.height, actor.positions));
+                    this.backgroundActorData.push(new MovingPlatformDrawable(actor.start, actor.end, actor.image, this.inch * actor.width, this.inch * actor.height, actor.positions));
                     break;
             }
         }
