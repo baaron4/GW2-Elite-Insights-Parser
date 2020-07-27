@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using GW2EIParser.EIData;
 using GW2EIParser.Logic;
 
@@ -216,8 +217,12 @@ namespace GW2EIParser.Parser.ParsedData
             if (_phases.Count == 0)
             {
                 _phases = Logic.GetPhases(log, log.ParserSettings.ParsePhases);
-                //_phases.AddRange(Logic.GetBreakbarPhases(log, log.ParserSettings.ParsePhases));
+                _phases.AddRange(Logic.GetBreakbarPhases(log, log.ParserSettings.ParsePhases));
                 _phases.RemoveAll(x => x.Targets.Count == 0);
+                if (_phases.Exists(x => x.BreakbarPhase && x.Targets.Count != 1))
+                {
+                    throw new InvalidDataException("Breakbar phases can only have one target");
+                }
                 _phases.RemoveAll(x => x.DurationInMS < GeneralHelper.PhaseTimeLimit);
                 _phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             }

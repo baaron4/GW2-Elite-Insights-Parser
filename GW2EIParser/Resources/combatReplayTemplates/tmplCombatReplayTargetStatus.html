@@ -37,10 +37,28 @@
                 return computeGradient("green", this.getPercent(time));
             },
             getBreakbarGradient: function (time) {
-                return computeGradient("#20B2AA", this.getBreakbarPercent(time));
+                var color = findState(this.breakbarStates, time / 1000.0, 0, this.breakbarStates.length - 1) ? "#20B2AA" : "#888888";
+                return computeGradient(color, this.getBreakbarPercent(time));
             }
         },
         computed: {
+            breakbarStates: function() {
+                if (!this.hasBreakbarPercent) {
+                    return [[0, false]];
+                }
+                var res = [];
+                var phases = logData.phases.filter(phase => phase.breakbarPhase && phase.targets.indexOf(this.targetindex) > -1);
+                for (var i = 0; i < phases.length; i++) {
+                    var phase = phases[i];
+                    if (i === 0 && phase.start > 0) {
+                        res.push([0, false]);
+                    }
+                    // 2 seconds for colors
+                    res.push([phase.start+2, true]);
+                    res.push([phase.end, false]);
+                }
+                return res;
+            },
             phase: function () {
                 return logData.phases[0];
             },
