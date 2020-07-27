@@ -124,7 +124,7 @@ namespace GW2EIParser.tst
         [Test]
         public void TestEvtcZip()
         {
-            string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../../EvtcLogs/StabilityTest";
+            string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
             if (!Directory.Exists(testLocation))
             {
                 Directory.CreateDirectory(testLocation);

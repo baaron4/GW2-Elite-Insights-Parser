@@ -6,5 +6,6 @@ var searchData=
   ['powerdamage',['PowerDamage',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_d_p_s.html#a69681cd86f19dc80dca0c11abab6f9ee',1,'GW2EIParser::Builders::JsonModels::JsonStatistics::JsonDPS']]],
   ['powerdps',['PowerDps',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_d_p_s.html#aae4aaaed907a38c79bae6865ae7d0880',1,'GW2EIParser::Builders::JsonModels::JsonStatistics::JsonDPS']]],
   ['presence',['Presence',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_buffs_uptime_1_1_json_buffs_uptime_data.html#aad1a5e9cdaa0a94a39a896273b4db0ad',1,'GW2EIParser::Builders::JsonModels::JsonBuffsUptime::JsonBuffsUptimeData']]],
+  ['presentfractalinstabilities',['PresentFractalInstabilities',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a057f45e0ebe09f1a04dbe094fb0ab0a9',1,'GW2EIParser::Builders::JsonModels::JsonLog']]],
   ['profession',['Profession',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a29a87654fd5ef9b46c236f49c9b33576',1,'GW2EIParser::Builders::JsonModels::JsonPlayer']]]
 ];

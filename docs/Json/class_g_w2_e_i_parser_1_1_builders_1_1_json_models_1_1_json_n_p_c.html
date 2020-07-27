@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="LI.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Guild Wars 2 - Elite Insights
-   &#160;<span id="projectnumber">2.25+</span>
+   &#160;<span id="projectnumber">2.26+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -131,6 +131,12 @@ Properties</h2></td></tr>
 <tr class="memitem:af0bee6bd829c7cef04a237b114b719a7"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_buffs_uptime.html">JsonBuffsUptime</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_n_p_c.html#af0bee6bd829c7cef04a237b114b719a7">Buffs</a><code> [get, protected set]</code></td></tr>
 <tr class="memdesc:af0bee6bd829c7cef04a237b114b719a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of buff status  <a href="#af0bee6bd829c7cef04a237b114b719a7">More...</a><br /></td></tr>
 <tr class="separator:af0bee6bd829c7cef04a237b114b719a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba1da6045361572d952b883957d13445"><td class="memItemLeft" align="right" valign="top">List&lt; double[]&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_n_p_c.html#aba1da6045361572d952b883957d13445">BreakbarPercents</a><code> [get]</code></td></tr>
+<tr class="memdesc:aba1da6045361572d952b883957d13445"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of double[2] that represents the breakbar percent of the actor <br />
+Value[i][0] will be the time, value[i][1] will be breakbar % <br />
+If i corresponds to the last element that means the breakbar did not change for the remainder of the fight <br />
+ <a href="#aba1da6045361572d952b883957d13445">More...</a><br /></td></tr>
+<tr class="separator:aba1da6045361572d952b883957d13445"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td colspan="2" onclick="javascript:toggleInherit('properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor')"><img src="closed.png" alt="-"/>&#160;Properties inherited from <a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html">GW2EIParser.Builders.JsonModels.JsonActor</a></td></tr>
 <tr class="memitem:a12064a3ce7d8a12a032abfd33e8e5637 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a12064a3ce7d8a12a032abfd33e8e5637">Name</a><code> [get]</code></td></tr>
 <tr class="memdesc:a12064a3ce7d8a12a032abfd33e8e5637 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name of the actor  <a href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a12064a3ce7d8a12a032abfd33e8e5637">More...</a><br /></td></tr>
@@ -186,19 +192,24 @@ Length == # of phases  <a href="class_g_w2_e_i_parser_1_1_builders_1_1_json_mode
 Length == # of phases  <a href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a9590b40a9206d6bd7646e7cc8f2540d0">More...</a><br /></td></tr>
 <tr class="separator:a9590b40a9206d6bd7646e7cc8f2540d0 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5179b412d8f8681783f7d8f1ddcbbbe7 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">List&lt; int[]&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a5179b412d8f8681783f7d8f1ddcbbbe7">ConditionsStates</a><code> [get]</code></td></tr>
-<tr class="memdesc:a5179b412d8f8681783f7d8f1ddcbbbe7 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of conditions status <br />
-Value[i][0] will be the time, value[i][1] will be the number of conditions present from value[i][0] to value[i+1][0] <br />
+<tr class="memdesc:a5179b412d8f8681783f7d8f1ddcbbbe7 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of conditions <br />
+Array[i][0] will be the time, Array[i][1] will be the number of conditions present from Array[i][0] to Array[i+1][0] <br />
 If i corresponds to the last element that means the status did not change for the remainder of the fight <br />
  <a href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a5179b412d8f8681783f7d8f1ddcbbbe7">More...</a><br /></td></tr>
 <tr class="separator:a5179b412d8f8681783f7d8f1ddcbbbe7 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad7bc746c9f98bd10a9e033aa17a0dc0 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">List&lt; int[]&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#aad7bc746c9f98bd10a9e033aa17a0dc0">BoonsStates</a><code> [get]</code></td></tr>
-<tr class="memdesc:aad7bc746c9f98bd10a9e033aa17a0dc0 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of boons status <br />
-Value[i][0] will be the time, value[i][1] will be the number of boons present from value[i][0] to value[i+1][0] <br />
+<tr class="memdesc:aad7bc746c9f98bd10a9e033aa17a0dc0 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of boons <br />
+Array[i][0] will be the time, Array[i][1] will be the number of boons present from Array[i][0] to Array[i+1][0] <br />
 If i corresponds to the last element that means the status did not change for the remainder of the fight  <a href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#aad7bc746c9f98bd10a9e033aa17a0dc0">More...</a><br /></td></tr>
 <tr class="separator:aad7bc746c9f98bd10a9e033aa17a0dc0 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29e8bb93c6c9032307cc901acd1ed609 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">List&lt; int[]&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a29e8bb93c6c9032307cc901acd1ed609">ActiveCombatMinions</a><code> [get]</code></td></tr>
+<tr class="memdesc:a29e8bb93c6c9032307cc901acd1ed609 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of active combat minions <br />
+Array[i][0] will be the time, Array[i][1] will be the number of active combat minions present from Array[i][0] to Array[i+1][0] <br />
+If i corresponds to the last element that means the status did not change for the remainder of the fight  <a href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a29e8bb93c6c9032307cc901acd1ed609">More...</a><br /></td></tr>
+<tr class="separator:a29e8bb93c6c9032307cc901acd1ed609 inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a455edac0af77e1e9a6945e2046047beb inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">List&lt; double[]&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a455edac0af77e1e9a6945e2046047beb">HealthPercents</a><code> [get]</code></td></tr>
 <tr class="memdesc:a455edac0af77e1e9a6945e2046047beb inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of double[2] that represents the health status of the actor <br />
-Value[i][0] will be the time, value[i][1] will be health % <br />
+Array[i][0] will be the time, Array[i][1] will be health % <br />
 If i corresponds to the last element that means the health did not change for the remainder of the fight <br />
  <a href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a455edac0af77e1e9a6945e2046047beb">More...</a><br /></td></tr>
 <tr class="separator:a455edac0af77e1e9a6945e2046047beb inherit properties_class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -208,6 +219,35 @@ If i corresponds to the last element that means the health did not change for th
 
 <p class="definition">Definition at line <a class="el" href="_json_n_p_c_8cs_source.html#l00014">14</a> of file <a class="el" href="_json_n_p_c_8cs_source.html">JsonNPC.cs</a>.</p>
 </div><h2 class="groupheader">Property Documentation</h2>
+<a id="aba1da6045361572d952b883957d13445"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba1da6045361572d952b883957d13445">&#9670;&nbsp;</a></span>BreakbarPercents</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">List&lt;double[]&gt; GW2EIParser.Builders.JsonModels.JsonNPC.BreakbarPercents</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Array of double[2] that represents the breakbar percent of the actor <br />
+Value[i][0] will be the time, value[i][1] will be breakbar % <br />
+If i corresponds to the last element that means the breakbar did not change for the remainder of the fight <br />
+</p>
+
+<p class="definition">Definition at line <a class="el" href="_json_n_p_c_8cs_source.html#l00050">50</a> of file <a class="el" href="_json_n_p_c_8cs_source.html">JsonNPC.cs</a>.</p>
+
+</div>
+</div>
 <a id="af0bee6bd829c7cef04a237b114b719a7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af0bee6bd829c7cef04a237b114b719a7">&#9670;&nbsp;</a></span>Buffs</h2>
 

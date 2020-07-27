@@ -1,5 +1,6 @@
 var class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor =
 [
+    [ "ActiveCombatMinions", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a29e8bb93c6c9032307cc901acd1ed609", null ],
     [ "BoonsStates", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#aad7bc746c9f98bd10a9e033aa17a0dc0", null ],
     [ "Concentration", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#aa636280196e323cbbb5c01a8245792de", null ],
     [ "Condition", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#aaddfe9847e86a6c46ed1ae7e551675cd", null ],

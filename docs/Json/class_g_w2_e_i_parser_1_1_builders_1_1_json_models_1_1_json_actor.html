@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="LI.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Guild Wars 2 - Elite Insights
-   &#160;<span id="projectnumber">2.25+</span>
+   &#160;<span id="projectnumber">2.26+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -165,19 +165,24 @@ Length == # of phases  <a href="#af327f342dbb7042fc6286ef6e63defa1">More...</a><
 Length == # of phases  <a href="#a9590b40a9206d6bd7646e7cc8f2540d0">More...</a><br /></td></tr>
 <tr class="separator:a9590b40a9206d6bd7646e7cc8f2540d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5179b412d8f8681783f7d8f1ddcbbbe7"><td class="memItemLeft" align="right" valign="top">List&lt; int[]&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a5179b412d8f8681783f7d8f1ddcbbbe7">ConditionsStates</a><code> [get]</code></td></tr>
-<tr class="memdesc:a5179b412d8f8681783f7d8f1ddcbbbe7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of conditions status <br />
-Value[i][0] will be the time, value[i][1] will be the number of conditions present from value[i][0] to value[i+1][0] <br />
+<tr class="memdesc:a5179b412d8f8681783f7d8f1ddcbbbe7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of conditions <br />
+Array[i][0] will be the time, Array[i][1] will be the number of conditions present from Array[i][0] to Array[i+1][0] <br />
 If i corresponds to the last element that means the status did not change for the remainder of the fight <br />
  <a href="#a5179b412d8f8681783f7d8f1ddcbbbe7">More...</a><br /></td></tr>
 <tr class="separator:a5179b412d8f8681783f7d8f1ddcbbbe7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad7bc746c9f98bd10a9e033aa17a0dc0"><td class="memItemLeft" align="right" valign="top">List&lt; int[]&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#aad7bc746c9f98bd10a9e033aa17a0dc0">BoonsStates</a><code> [get]</code></td></tr>
-<tr class="memdesc:aad7bc746c9f98bd10a9e033aa17a0dc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of boons status <br />
-Value[i][0] will be the time, value[i][1] will be the number of boons present from value[i][0] to value[i+1][0] <br />
+<tr class="memdesc:aad7bc746c9f98bd10a9e033aa17a0dc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of boons <br />
+Array[i][0] will be the time, Array[i][1] will be the number of boons present from Array[i][0] to Array[i+1][0] <br />
 If i corresponds to the last element that means the status did not change for the remainder of the fight  <a href="#aad7bc746c9f98bd10a9e033aa17a0dc0">More...</a><br /></td></tr>
 <tr class="separator:aad7bc746c9f98bd10a9e033aa17a0dc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29e8bb93c6c9032307cc901acd1ed609"><td class="memItemLeft" align="right" valign="top">List&lt; int[]&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a29e8bb93c6c9032307cc901acd1ed609">ActiveCombatMinions</a><code> [get]</code></td></tr>
+<tr class="memdesc:a29e8bb93c6c9032307cc901acd1ed609"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of active combat minions <br />
+Array[i][0] will be the time, Array[i][1] will be the number of active combat minions present from Array[i][0] to Array[i+1][0] <br />
+If i corresponds to the last element that means the status did not change for the remainder of the fight  <a href="#a29e8bb93c6c9032307cc901acd1ed609">More...</a><br /></td></tr>
+<tr class="separator:a29e8bb93c6c9032307cc901acd1ed609"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a455edac0af77e1e9a6945e2046047beb"><td class="memItemLeft" align="right" valign="top">List&lt; double[]&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a455edac0af77e1e9a6945e2046047beb">HealthPercents</a><code> [get]</code></td></tr>
 <tr class="memdesc:a455edac0af77e1e9a6945e2046047beb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of double[2] that represents the health status of the actor <br />
-Value[i][0] will be the time, value[i][1] will be health % <br />
+Array[i][0] will be the time, Array[i][1] will be health % <br />
 If i corresponds to the last element that means the health did not change for the remainder of the fight <br />
  <a href="#a455edac0af77e1e9a6945e2046047beb">More...</a><br /></td></tr>
 <tr class="separator:a455edac0af77e1e9a6945e2046047beb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -188,6 +193,34 @@ If i corresponds to the last element that means the health did not change for th
 
 <p class="definition">Definition at line <a class="el" href="_json_actor_8cs_source.html#l00014">14</a> of file <a class="el" href="_json_actor_8cs_source.html">JsonActor.cs</a>.</p>
 </div><h2 class="groupheader">Property Documentation</h2>
+<a id="a29e8bb93c6c9032307cc901acd1ed609"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29e8bb93c6c9032307cc901acd1ed609">&#9670;&nbsp;</a></span>ActiveCombatMinions</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">List&lt;int[]&gt; GW2EIParser.Builders.JsonModels.JsonActor.ActiveCombatMinions</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Array of int[2] that represents the number of active combat minions <br />
+Array[i][0] will be the time, Array[i][1] will be the number of active combat minions present from Array[i][0] to Array[i+1][0] <br />
+If i corresponds to the last element that means the status did not change for the remainder of the fight </p>
+
+<p class="definition">Definition at line <a class="el" href="_json_actor_8cs_source.html#l00116">116</a> of file <a class="el" href="_json_actor_8cs_source.html">JsonActor.cs</a>.</p>
+
+</div>
+</div>
 <a id="aad7bc746c9f98bd10a9e033aa17a0dc0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aad7bc746c9f98bd10a9e033aa17a0dc0">&#9670;&nbsp;</a></span>BoonsStates</h2>
 
@@ -208,8 +241,8 @@ If i corresponds to the last element that means the health did not change for th
 </table>
 </div><div class="memdoc">
 
-<p>Array of int[2] that represents the number of boons status <br />
-Value[i][0] will be the time, value[i][1] will be the number of boons present from value[i][0] to value[i+1][0] <br />
+<p>Array of int[2] that represents the number of boons <br />
+Array[i][0] will be the time, Array[i][1] will be the number of boons present from Array[i][0] to Array[i+1][0] <br />
 If i corresponds to the last element that means the status did not change for the remainder of the fight </p>
 
 <p class="definition">Definition at line <a class="el" href="_json_actor_8cs_source.html#l00110">110</a> of file <a class="el" href="_json_actor_8cs_source.html">JsonActor.cs</a>.</p>
@@ -288,8 +321,8 @@ If i corresponds to the last element that means the status did not change for th
 </table>
 </div><div class="memdoc">
 
-<p>Array of int[2] that represents the number of conditions status <br />
-Value[i][0] will be the time, value[i][1] will be the number of conditions present from value[i][0] to value[i+1][0] <br />
+<p>Array of int[2] that represents the number of conditions <br />
+Array[i][0] will be the time, Array[i][1] will be the number of conditions present from Array[i][0] to Array[i+1][0] <br />
 If i corresponds to the last element that means the status did not change for the remainder of the fight <br />
 </p>
 
@@ -429,11 +462,11 @@ Length == # of phases </p>
 </div><div class="memdoc">
 
 <p>Array of double[2] that represents the health status of the actor <br />
-Value[i][0] will be the time, value[i][1] will be health % <br />
+Array[i][0] will be the time, Array[i][1] will be health % <br />
 If i corresponds to the last element that means the health did not change for the remainder of the fight <br />
 </p>
 
-<p class="definition">Definition at line <a class="el" href="_json_actor_8cs_source.html#l00116">116</a> of file <a class="el" href="_json_actor_8cs_source.html">JsonActor.cs</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_json_actor_8cs_source.html#l00122">122</a> of file <a class="el" href="_json_actor_8cs_source.html">JsonActor.cs</a>.</p>
 
 </div>
 </div>

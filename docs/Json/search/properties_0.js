@@ -1,6 +1,7 @@
 var searchData=
 [
   ['account',['Account',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a51c02c637c3f36277ab9d8b690c4fcaa',1,'GW2EIParser::Builders::JsonModels::JsonPlayer']]],
+  ['activecombatminions',['ActiveCombatMinions',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#a29e8bb93c6c9032307cc901acd1ed609',1,'GW2EIParser::Builders::JsonModels::JsonActor']]],
   ['activetimes',['ActiveTimes',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a44e9b0881f80695fdc08f8119ea75364',1,'GW2EIParser::Builders::JsonModels::JsonPlayer']]],
   ['actor',['Actor',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_mechanics_1_1_json_mechanic.html#af5e93b771a7da779b9d39c2078207213',1,'GW2EIParser::Builders::JsonModels::JsonMechanics::JsonMechanic']]],
   ['actorcondidamage',['ActorCondiDamage',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_d_p_s.html#a3b3943fb4f8ab448fa0ae06cc3779ebb',1,'GW2EIParser::Builders::JsonModels::JsonStatistics::JsonDPS']]],

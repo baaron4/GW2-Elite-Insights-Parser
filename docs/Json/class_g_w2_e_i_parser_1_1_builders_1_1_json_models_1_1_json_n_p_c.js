@@ -1,5 +1,6 @@
 var class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_n_p_c =
 [
+    [ "BreakbarPercents", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_n_p_c.html#aba1da6045361572d952b883957d13445", null ],
     [ "Buffs", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_n_p_c.html#af0bee6bd829c7cef04a237b114b719a7", null ],
     [ "FinalHealth", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_n_p_c.html#ab1ba3d859d3e03b2d851a81c888c79b3", null ],
     [ "FirstAware", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_n_p_c.html#a40469d21fb388eea8a68c7cb3b231dee", null ],

@@ -19,6 +19,7 @@ var class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log =
     [ "PersonalBuffs", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a065cece4f31d39c96b49e530a0bee236", null ],
     [ "Phases", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a0485661b83a9cd69bf44154d548b7dd8", null ],
     [ "Players", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#ad56ecfd603c8f18e303a681f27bc9f6d", null ],
+    [ "PresentFractalInstabilities", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a057f45e0ebe09f1a04dbe094fb0ab0a9", null ],
     [ "RecordedBy", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a8eddc9a53d1a90f9a4406a4398c18743", null ],
     [ "SkillMap", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#aa929cd026b808c4eacef356ed16a225b", null ],
     [ "Success", "class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a7f890dbe58e421dda2f105571ec90f03", null ],
