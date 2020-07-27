@@ -106,6 +106,7 @@ namespace GW2EIParser.EIData
                 new Buff("Sigil of Benevolence", 9398, GeneralHelper.Source.Item, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/59/Superior_Sigil_of_Benevolence.png"),
                 new Buff("Sigil of Momentum", 22144, GeneralHelper.Source.Item, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/30/Superior_Sigil_of_Momentum.png"),
                 new Buff("Sigil of the Stars", 46953, GeneralHelper.Source.Item, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/dc/Superior_Sigil_of_the_Stars.png"),
+                new Buff("Sigil of Severance", 43930, GeneralHelper.Source.Item, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/c2/Superior_Sigil_of_Severance.png"),
         };
 
         private readonly List<Buff> _fractalInstabilities = new List<Buff>()
