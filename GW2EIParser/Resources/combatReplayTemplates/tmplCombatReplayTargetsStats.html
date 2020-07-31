@@ -2,7 +2,7 @@
     <div class="mt-1 combat-actor-status-container scrollable-y">
         <div class="d-flex flex-column justify-content-center align-items-center">
             <div v-for="(status, id) in targets" v-if="alive(status)" class="target-data ml-1 mr-1">
-                <combat-replay-target-stats-component :time="time" :targetindex="id">
+                <combat-replay-target-stats-component :time="time" :targetindex="id" :buffstoshow="buffsToShow">
                 </combat-replay-target-stats-component>
             </div>
         </div>
@@ -13,6 +13,11 @@
     Vue.component("combat-replay-targets-stats-component", {
         props: ["time"],
         template: `${template}`,
+        data: function () {
+            return {               
+                buffsToShow: ["others", "boons", "conditions", "fightSpecifics"]
+            }
+        },
         methods: {
             alive: function (status) {
                 return status.start <= this.time && status.end >= this.time;

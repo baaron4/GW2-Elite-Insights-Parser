@@ -13,7 +13,7 @@
                 <h5 style="width:70px" class="text-center mt-2">Group {{id}}</h5>
                 <div class="d-flex flex-row flex-wrap align-items-center ml-1 mr-1" style="width:280px;border: 2px solid #888;">
                     <div v-for="player in group" class="player-data ml-1" :class="{active: selectedplayerindex === player.id}">
-                        <combat-replay-player-stats-component :time="time" :buffs="buffs" :rotation="rotation" :playerindex="player.id"></combat-replay-player-stats-component>
+                        <combat-replay-player-stats-component :time="time" :buffs="buffs" :rotation="rotation" :playerindex="player.id" :buffstoshow="buffsToShow"></combat-replay-player-stats-component>
                     </div>
                 </div>
             </div>
@@ -28,7 +28,8 @@
         data: function () {
             return {
                 buffs: false,
-                rotation: true
+                rotation: true,
+                buffsToShow: ["others", "shared", "consumables", "boons"]
             };
         },
         computed: {
