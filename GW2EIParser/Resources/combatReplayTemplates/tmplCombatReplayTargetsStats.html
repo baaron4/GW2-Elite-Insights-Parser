@@ -23,7 +23,7 @@
         template: `${template}`,
         data: function () {
             return {
-                buffsToShow: ["Others", "Shared", "Consumables", "Boons", "Fight Specifics", "Conditions"]
+                buffsToShow: ["Others", "Boons", "Fight Specifics", "Conditions"]
             }
         },
         methods: {
@@ -33,7 +33,7 @@
         },
         computed: {
             possibleBuffs: function() {
-                return [ "Boons", "Conditions", "Fight Specifics","Shared", "Consumables", "Others"];
+                return [ "Boons", "Conditions", "Fight Specifics","Shared", "Others"];
             },
             targets: function () {
                 var res = [];
