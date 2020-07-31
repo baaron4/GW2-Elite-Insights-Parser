@@ -1,9 +1,17 @@
 <template>
-    <div class="mt-1 combat-actor-status-container scrollable-y">
-        <div class="d-flex flex-column justify-content-center align-items-center">
-            <div v-for="(status, id) in targets" v-if="alive(status)" class="target-data ml-1 mr-1">
-                <combat-replay-target-stats-component :time="time" :targetindex="id" :buffstoshow="buffsToShow">
-                </combat-replay-target-stats-component>
+    <div>
+        <ul class="nav nav-pills d-flex flex-row justify-content-center mb-1 scale65">
+            <li v-for="(buffType, index) in possibleBuffs" class="ml-1 mr-1">
+                <input :id="'crtar-possibleBuffs-' + index" type="checkbox" :value="buffType" v-model="buffsToShow" />
+                <label :for="'crtar-possibleBuffs-' + index">{{buffType}}</label>
+            </li>
+        </ul>
+        <div class="mt-1 combat-actor-status-container scrollable-y">
+            <div class="d-flex flex-column justify-content-center align-items-center">
+                <div v-for="(status, id) in targets" v-if="alive(status)" class="target-data ml-1 mr-1">
+                    <combat-replay-target-stats-component :time="time" :targetindex="id" :buffstoshow="buffsToShow">
+                    </combat-replay-target-stats-component>
+                </div>
             </div>
         </div>
     </div>
@@ -14,8 +22,8 @@
         props: ["time"],
         template: `${template}`,
         data: function () {
-            return {               
-                buffsToShow: ["others", "boons", "conditions", "fightSpecifics"]
+            return {
+                buffsToShow: ["Others", "Shared", "Consumables", "Boons", "Fight Specifics", "Conditions"]
             }
         },
         methods: {
@@ -24,6 +32,9 @@
             }
         },
         computed: {
+            possibleBuffs: function() {
+                return [ "Boons", "Conditions", "Fight Specifics","Shared", "Consumables", "Others"];
+            },
             targets: function () {
                 var res = [];
                 for (var i = 0; i < logData.targets.length; i++) {

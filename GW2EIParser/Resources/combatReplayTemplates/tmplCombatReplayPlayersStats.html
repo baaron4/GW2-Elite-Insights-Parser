@@ -2,10 +2,18 @@
     <div class="d-flex flex-row flex-wrap justify-content-center align-items-start mb-2">
         <ul class="nav nav-pills d-flex flex-row justify-content-center mb-1 scale85">
             <li class="nav-item">
-                <a class="nav-link" :class="{active: buffs}" @click="buffs = !buffs">Show Buffs</a>
+                <a class="nav-link" :class="{active: buffs}" @click="buffs = !buffs">
+                    Show Buffs
+                </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" :class="{active: rotation}" @click="rotation = !rotation">Show Rotation</a>
+            </li>
+        </ul>                    
+        <ul class="nav nav-pills d-flex flex-row justify-content-center mb-1 scale65">
+            <li v-for="(buffType, index) in possibleBuffs" class="ml-1 mr-1">
+                <input :id="'crpl-possibleBuffs-' + index" type="checkbox" :value="buffType" v-model="buffsToShow" />
+                <label :for="'crpl-possibleBuffs-' + index">{{buffType}}</label>
             </li>
         </ul>
         <div class="d-flex flex-column combat-actor-status-container scrollable-y" style="transform: translate(-42px,0);">
@@ -29,10 +37,13 @@
             return {
                 buffs: false,
                 rotation: true,
-                buffsToShow: ["others", "shared", "consumables", "boons"]
+                buffsToShow: ["Others", "Shared", "Consumables", "Boons", "Fight Specifics", "Conditions"]
             };
         },
         computed: {
+            possibleBuffs: function() {
+                return [ "Boons", "Conditions", "Fight Specifics","Shared", "Consumables", "Others"];
+            },
             selectedplayerindex: function () {
                 if (this.selectedplayer) {
                     for (var i = 0; i < logData.players.length; i++) {

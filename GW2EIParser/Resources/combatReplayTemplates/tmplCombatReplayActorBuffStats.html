@@ -1,21 +1,21 @@
 <template>
     <div class="d-flex flex-column justify-content-end" :style="{'height': height}">
-        <div v-if="buffsToShowSet.has('fightSpecifics')">
+        <div v-if="isPresent('Fight Specifics')">
             <combat-replay-buff-display :buffarray="data.fightSpecifics"></combat-replay-buff-display>
         </div>
-        <div v-if="buffsToShowSet.has('others')">
+        <div v-if="isPresent('Others')">
             <combat-replay-buff-display :buffarray="data.others"></combat-replay-buff-display>
         </div>
-        <div v-if="buffsToShowSet.has('conditions')">
+        <div v-if="isPresent('Conditions')">
             <combat-replay-buff-display :buffarray="data.conditions"></combat-replay-buff-display>
         </div>      
-        <div v-if="buffsToShowSet.has('shared')">
+        <div v-if="isPresent('Shared')">
             <combat-replay-buff-display :buffarray="data.shared"></combat-replay-buff-display>
         </div>  
-        <div v-if="buffsToShowSet.has('boons')">
+        <div v-if="isPresent('Boons')">
             <combat-replay-buff-display :buffarray="data.boons"></combat-replay-buff-display>
         </div>
-        <div v-if="buffsToShowSet.has('consumables')" >
+        <div v-if="isPresent('Consumables')" >
             <combat-replay-buff-display :buffarray="data.consumables"></combat-replay-buff-display>
         </div>
     </div>
@@ -43,12 +43,45 @@
         mixins: [timeRefreshComponent],
         props: ["actorindex", "enemy", "buffstoshow"],
         template: `${template}`,
+        methods: {
+            isPresent: function(type) {
+                return this.buffsToShowSet.has(type) && this.presentBuffTypes.has(type);
+            }
+        },
         computed: {
             height: function() {
-                return buffDisplayHeight * this.buffstoshow.length + "px";
+                var count = 0;
+                for (var i = 0; i < this.buffstoshow.length; i++) {
+                    count += this.isPresent(this.buffstoshow[i]) ? 1 : 0;
+                }
+                return buffDisplayHeight * count + "px";
             },
             buffsToShowSet: function() {
                 return new Set(this.buffstoshow);
+            },
+            presentBuffTypes: function() {
+                var res = new Set();
+                for (var i = 0; i < this.buffData.length; i++) {
+                    var data = this.buffData[i];
+                    var id = data.id;
+                    var buff = findSkill(true, id);
+                    if (buff.consumable) {
+                        res.add("Consumables");
+                    } else if (buff.fightSpecific) {
+                        res.add("Fight Specifics");
+                    } else if (this.boons.has(id)) {
+                        res.add("Boons");
+                    } else if (this.offs.has(id)) {
+                        res.add("Shared");
+                    } else if (this.defs.has(id)) {
+                        res.add("Shared");
+                    } else if (this.conditions.has(id)) {
+                        res.add("Conditions");
+                    } else {
+                        res.add("Others");
+                    }
+                }
+                return res;
             },
             boons: function () {
                 var hash = new Set();
@@ -100,37 +133,37 @@
                     var buff = findSkill(true, id);
                     if (buff.consumable) {
                         arrayToFill = res.consumables;
-                        if (!this.buffsToShowSet.has("consumables")) {
+                        if (!this.buffsToShowSet.has("Consumables")) {
                             continue;
                         }
                     } else if (buff.fightSpecific) {
                         arrayToFill = res.fightSpecifics;
-                        if (!this.buffsToShowSet.has("fightSpecifics")) {
+                        if (!this.buffsToShowSet.has("Fight Specifics")) {
                             continue;
                         }
                     } else if (this.boons.has(id)) {
                         arrayToFill = res.boons;
-                        if (!this.buffsToShowSet.has("boons")) {
+                        if (!this.buffsToShowSet.has("Boons")) {
                             continue;
                         }
                     } else if (this.offs.has(id)) {
                         arrayToFill = res.shared;
-                        if (!this.buffsToShowSet.has("shared")) {
+                        if (!this.buffsToShowSet.has("Shared")) {
                             continue;
                         }
                     } else if (this.defs.has(id)) {
                         arrayToFill = res.shared;
-                        if (!this.buffsToShowSet.has("shared")) {
+                        if (!this.buffsToShowSet.has("Shared")) {
                             continue;
                         }
                     } else if (this.conditions.has(id)) {
                         arrayToFill = res.conditions;
-                        if (!this.buffsToShowSet.has("conditions")) {
+                        if (!this.buffsToShowSet.has("Conditions")) {
                             continue;
                         }
                     } else {
                         arrayToFill = res.others;
-                        if (!this.buffsToShowSet.has("others")) {
+                        if (!this.buffsToShowSet.has("Others")) {
                             continue;
                         }
                     }
