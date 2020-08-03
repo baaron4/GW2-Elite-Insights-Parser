@@ -637,12 +637,12 @@ th.cr-dps-table-dps {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    min-width: 65px;
+    min-width: 105px;
     max-width: 105px;
 }
 
 td.cr-dps-table-dps {
-    min-width: 80px;
+    min-width: 120px;
     max-width: 120px;
 }
 
