@@ -325,6 +325,7 @@ namespace GW2EIParser.Logic
                 if (tar.ID == (int)Thief || tar.ID == (int)Drunkard || tar.ID == (int)Gambler)
                 {
                     string name = (tar.ID == (int)Thief ? "Thief" : (tar.ID == (int)Drunkard ? "Drunkard" : (tar.ID == (int)Gambler ? "Gambler" : "")));
+                    tar.OverrideName(name);
                     var tarPhase = new PhaseData(tar.FirstAware - 1000, Math.Min(tar.LastAware + 1000, fightDuration), name);
                     tarPhase.Targets.Add(tar);
                     tarPhase.OverrideTimes(log);
