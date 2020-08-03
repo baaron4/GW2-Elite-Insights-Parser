@@ -546,7 +546,7 @@ function computeBuffData(buffData, data) {
     return 0;
 }
 
-function initTable (id, cell, order, orderCallBack, extraData) {
+function initTable (id, cell, order, orderCallBack) {
     var table = $(id);
     if (!table.length) {
         return;
@@ -575,9 +575,6 @@ function initTable (id, cell, order, orderCallBack, extraData) {
             [cell, order]
         ]
     };
-    if (extraData) {
-        Object.assign(data, extraData);
-    }
     table.DataTable(data);
     if (orderCallBack) {
         table.DataTable().on('order.dt', orderCallBack);

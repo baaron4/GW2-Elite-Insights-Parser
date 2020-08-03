@@ -26,6 +26,7 @@
 
 .scrollable-y {
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .theme-yeti ::-webkit-scrollbar {
@@ -626,5 +627,45 @@ input[type=range].slider {
     border-radius: 13px;
     cursor: pointer;
   }
+
+.scrollable-cr-dps-table table tbody { display:block; }
+.scrollable-cr-dps-table thead { display:block; }
+.scrollable-cr-dps-table tfoot { display:block; }
+
+/* 25px due to datatable sort stuff */
+th.cr-dps-table-dps {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    min-width: 65px;
+    max-width: 105px;
+}
+
+td.cr-dps-table-dps {
+    min-width: 80px;
+    max-width: 120px;
+}
+
+th.cr-dps-table-name{
+    min-width: 85px;
+    max-width: 85px;
+}
+td.cr-dps-table-name{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    min-width: 100px;
+    max-width: 100px;
+}
+
+th.cr-dps-table-icon-col{
+    min-width: 8px;
+    max-width: 8px;
+}
+td.cr-dps-table-icon-col {   
+    min-width: 23px;
+    max-width: 23px;
+}
+
   
   
