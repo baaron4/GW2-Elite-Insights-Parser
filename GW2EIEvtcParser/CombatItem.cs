@@ -36,7 +36,7 @@ namespace GW2EIEvtcParser
         public byte Pad4 { get; }
 
         // Constructor
-        public CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
+        internal CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
                uint skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid,
                ushort dstMasterInstid, byte iff, byte isBuff,
                byte result, byte isActivation,
@@ -75,7 +75,7 @@ namespace GW2EIEvtcParser
             Pad4 = pads[3];
         }
 
-        public CombatItem(CombatItem c)
+        internal CombatItem(CombatItem c)
         {
             Time = c.Time;
             SrcAgent = c.SrcAgent;
@@ -108,7 +108,7 @@ namespace GW2EIEvtcParser
         }
 
 
-        public void OverrideTime(long time)
+        internal void OverrideTime(long time)
         {
             if (IsStateChange.HasTime())
             {
@@ -116,17 +116,17 @@ namespace GW2EIEvtcParser
             }
         }
 
-        public void OverrideSrcAgent(ulong agent)
+        internal void OverrideSrcAgent(ulong agent)
         {
             SrcAgent = agent;
         }
 
-        public void OverrideDstAgent(ulong agent)
+        internal void OverrideDstAgent(ulong agent)
         {
             DstAgent = agent;
         }
 
-        public void OverrideValue(int value)
+        internal void OverrideValue(int value)
         {
             Value = value;
         }

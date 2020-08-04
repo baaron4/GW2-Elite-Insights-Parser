@@ -77,25 +77,25 @@ namespace GW2EIEvtcParser.EIData
                     SwapCount++;
                 }
             }
-            TimeSaved = Math.Round(TimeSaved / 1000.0, GeneralHelper.TimeDigit);
-            TimeWasted = -Math.Round(TimeWasted / 1000.0, GeneralHelper.TimeDigit);
+            TimeSaved = Math.Round(TimeSaved / 1000.0, ParseHelper.TimeDigit);
+            TimeWasted = -Math.Round(TimeWasted / 1000.0, ParseHelper.TimeDigit);
 
             double avgBoons = 0;
             foreach (long duration in actor.GetBuffPresence(log, phaseIndex).Where(x => log.Buffs.BuffsByIds[x.Key].Nature == BuffNature.Boon).Select(x => x.Value))
             {
                 avgBoons += duration;
             }
-            AvgBoons = Math.Round(avgBoons / phase.DurationInMS, GeneralHelper.BuffDigit);
+            AvgBoons = Math.Round(avgBoons / phase.DurationInMS, ParseHelper._buffDigit);
             long activeDuration = phase.GetActorActiveDuration(actor, log);
-            AvgActiveBoons = activeDuration > 0 ? Math.Round(avgBoons / activeDuration, GeneralHelper.BuffDigit) : 0.0;
+            AvgActiveBoons = activeDuration > 0 ? Math.Round(avgBoons / activeDuration, ParseHelper._buffDigit) : 0.0;
 
             double avgCondis = 0;
             foreach (long duration in actor.GetBuffPresence(log, phaseIndex).Where(x => log.Buffs.BuffsByIds[x.Key].Nature == BuffNature.Condition).Select(x => x.Value))
             {
                 avgCondis += duration;
             }
-            AvgConditions = Math.Round(avgCondis / phase.DurationInMS, GeneralHelper.BuffDigit);
-            AvgActiveConditions = activeDuration > 0 ? Math.Round(avgCondis / activeDuration, GeneralHelper.BuffDigit) : 0.0;
+            AvgConditions = Math.Round(avgCondis / phase.DurationInMS, ParseHelper._buffDigit);
+            AvgActiveConditions = activeDuration > 0 ? Math.Round(avgCondis / activeDuration, ParseHelper._buffDigit) : 0.0;
 
             if (log.CombatData.HasMovementData && actor is Player player)
             {

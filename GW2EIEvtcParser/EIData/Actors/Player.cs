@@ -52,7 +52,7 @@ namespace GW2EIEvtcParser.EIData
 
         public override string GetIcon()
         {
-            return GeneralHelper.GetProfIcon(Prof);
+            return ParseHelper.GetProfIcon(Prof);
         }
 
 
@@ -80,7 +80,7 @@ namespace GW2EIEvtcParser.EIData
                     _playerSupport.Add(playerSup);
                     FinalSupportAll totals = GetSupport(log, phaseIndex);
                     playerSup.Resurrects = totals.Resurrects;
-                    playerSup.ResurrectTime = Math.Round(totals.ResurrectTime / 1000.0, GeneralHelper.TimeDigit);
+                    playerSup.ResurrectTime = Math.Round(totals.ResurrectTime / 1000.0, ParseHelper.TimeDigit);
                     FinalSupport self = GetSupport(log, this, phaseIndex);
                     foreach (Buff boon in log.Buffs.BuffsByNature[BuffNature.Boon])
                     {
@@ -120,9 +120,9 @@ namespace GW2EIEvtcParser.EIData
                             }
                         }
                     }
-                    playerSup.CondiCleanseTime = Math.Round(playerSup.CondiCleanseTime / 1000.0, GeneralHelper.TimeDigit);
-                    playerSup.CondiCleanseTimeSelf = Math.Round(playerSup.CondiCleanseTimeSelf / 1000.0, GeneralHelper.TimeDigit);
-                    playerSup.BoonStripsTime = Math.Round(playerSup.BoonStripsTime / 1000.0, GeneralHelper.TimeDigit);
+                    playerSup.CondiCleanseTime = Math.Round(playerSup.CondiCleanseTime / 1000.0, ParseHelper.TimeDigit);
+                    playerSup.CondiCleanseTimeSelf = Math.Round(playerSup.CondiCleanseTimeSelf / 1000.0, ParseHelper.TimeDigit);
+                    playerSup.BoonStripsTime = Math.Round(playerSup.BoonStripsTime / 1000.0, ParseHelper.TimeDigit);
                 }
             }
             return _playerSupport;
@@ -304,15 +304,15 @@ namespace GW2EIEvtcParser.EIData
                 return;
             }
             var damageMods = new List<DamageModifier>();
-            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(GeneralHelper.Source.Item, out List<DamageModifier> list))
+            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(ParseHelper.Source.Item, out List<DamageModifier> list))
             {
                 damageMods.AddRange(list);
             }
-            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(GeneralHelper.Source.Common, out list))
+            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(ParseHelper.Source.Common, out list))
             {
                 damageMods.AddRange(list);
             }
-            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(GeneralHelper.Source.FightSpecific, out list))
+            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(ParseHelper.Source.FightSpecific, out list))
             {
                 damageMods.AddRange(list);
             }

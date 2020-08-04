@@ -32,7 +32,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             else if (invulLost != null)
             {
-                CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcAgent == target.Agent && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && Math.Abs(x.Time - invulLost.Time) < GeneralHelper.ServerDelayConstant);
+                CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcAgent == target.Agent && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && Math.Abs(x.Time - invulLost.Time) < ParseHelper._serverDelayConstant);
                 if (enterCombat != null)
                 {
                     fightData.OverrideOffset(enterCombat.Time + 1);

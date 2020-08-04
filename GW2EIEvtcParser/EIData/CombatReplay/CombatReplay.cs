@@ -149,8 +149,8 @@ namespace GW2EIEvtcParser.EIData
 
         public void PollingRate(long fightDuration, bool forceInterpolate)
         {
-            PositionPolling(GeneralHelper.PollingRate, fightDuration, forceInterpolate);
-            RotationPolling(GeneralHelper.PollingRate, fightDuration, forceInterpolate);
+            PositionPolling(ParseHelper._pollingRate, fightDuration, forceInterpolate);
+            RotationPolling(ParseHelper._pollingRate, fightDuration, forceInterpolate);
         }
 
         public List<Point3D> GetActivePositions(List<(long start, long end)> deads, List<(long start, long end)> dcs)

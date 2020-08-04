@@ -19,14 +19,14 @@ namespace GW2EIEvtcParser.EIData
         {
             if (buff.Type == BuffType.Duration)
             {
-                Uptime = Math.Round(100.0 * buffDistribution.GetUptime(buff.ID) / phaseDuration, GeneralHelper.BuffDigit);
+                Uptime = Math.Round(100.0 * buffDistribution.GetUptime(buff.ID) / phaseDuration, ParseHelper._buffDigit);
             }
             else if (buff.Type == BuffType.Intensity)
             {
-                Uptime = Math.Round((double)buffDistribution.GetUptime(buff.ID) / phaseDuration, GeneralHelper.BuffDigit);
+                Uptime = Math.Round((double)buffDistribution.GetUptime(buff.ID) / phaseDuration, ParseHelper._buffDigit);
                 if (buffPresence.TryGetValue(buff.ID, out long presenceValueBoon))
                 {
-                    Presence = Math.Round(100.0 * presenceValueBoon / phaseDuration, GeneralHelper.BuffDigit);
+                    Presence = Math.Round(100.0 * presenceValueBoon / phaseDuration, ParseHelper._buffDigit);
                 }
             }
         }

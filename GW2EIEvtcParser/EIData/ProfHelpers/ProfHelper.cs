@@ -55,7 +55,7 @@ namespace GW2EIEvtcParser.EIData
                         // more than one candidate, put to unknown and drop the search
                         if (gadget.Master != null && gadget.GetFinalMaster() != castEvent.Caster.GetFinalMaster())
                         {
-                            gadget.SetMaster(ParseHelper.UnknownAgent);
+                            gadget.SetMaster(ParseHelper._unknownAgent);
                             break;
                         }
                         gadget.SetMaster(castEvent.Caster.GetFinalMaster());

@@ -29,30 +29,19 @@ namespace GW2EIParser
             try
             {
                 var fInfo = new FileInfo(operation.Location);
-                if (!fInfo.Exists)
-                {
-                    throw new FileNotFoundException("File " + fInfo.FullName + " does not exist");
-                }
+                
                 var parser = new EvtcParser(new EvtcParserSettings(Properties.Settings.Default.Anonymous, Properties.Settings.Default.SkipFailedTries, Properties.Settings.Default.ParsePhases, Properties.Settings.Default.ParseCombatReplay, Properties.Settings.Default.ComputeDamageModifiers));
 
                 if (!HasFormat())
                 {
                     throw new InvalidDataException("No output format has been selected");
                 }
-
-                if (GeneralHelper.IsSupportedFormat(fInfo.Name))
-                {
-                    //Process evtc here
-                    ParsedEvtcLog log = parser.ParseLog(operation, fInfo.FullName);
-                    string[] uploadresult = UploadController.UploadOperation(operation, fInfo, new UploadSettings(Properties.Settings.Default.UploadToDPSReports, Properties.Settings.Default.UploadToDPSReportsRH));
-                    WebhookController.SendMessage(operation, log.GetEmbed(uploadresult), uploadresult, new WebhookSettings(Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.ParseMultipleLogs, Properties.Settings.Default.WebhookURL, Properties.Settings.Default.SendSimpleMessageToWebhook));
-                    //Creating File
-                    GenerateFiles(log, operation, uploadresult, fInfo);
-                }
-                else
-                {
-                    throw new InvalidDataException("Not EVTC");
-                }
+                //Process evtc here
+                ParsedEvtcLog log = parser.ParseLog(operation, fInfo);
+                string[] uploadresult = UploadController.UploadOperation(operation, fInfo, new UploadSettings(Properties.Settings.Default.UploadToDPSReports, Properties.Settings.Default.UploadToDPSReportsRH));
+                WebhookController.SendMessage(operation, log.GetEmbed(uploadresult), uploadresult, new WebhookSettings(Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.ParseMultipleLogs, Properties.Settings.Default.WebhookURL, Properties.Settings.Default.SendSimpleMessageToWebhook));
+                //Creating File
+                GenerateFiles(log, operation, uploadresult, fInfo);
             }
             catch (Exception ex)
             {

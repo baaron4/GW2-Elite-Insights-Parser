@@ -86,7 +86,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (firstMovement != null)
                 {
                     // update start
-                    riverOfSoul.OverrideAwareTimes(firstMovement.Time - GeneralHelper.ServerDelayConstant, riverOfSoul.LastAware);
+                    riverOfSoul.OverrideAwareTimes(firstMovement.Time - ParseHelper._serverDelayConstant, riverOfSoul.LastAware);
                     foreach (CombatItem c in combatData)
                     {
                         if (c.SrcAgent == riverOfSoul.Agent && (c.IsStateChange == ArcDPSEnums.StateChange.Position || c.IsStateChange == ArcDPSEnums.StateChange.Rotation) && c.Time <= riverOfSoul.FirstAware)

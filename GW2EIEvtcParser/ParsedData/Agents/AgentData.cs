@@ -50,7 +50,7 @@ namespace GW2EIEvtcParser.ParsedData
                     return a;
                 }
             }
-            return ParseHelper.UnknownAgent;
+            return ParseHelper._unknownAgent;
         }
 
         public List<AgentItem> GetNPCsByID(int id)
@@ -88,10 +88,10 @@ namespace GW2EIEvtcParser.ParsedData
                     {
                         return a;
                     }
-                    return ParseHelper.UnknownAgent;
+                    return ParseHelper._unknownAgent;
                 }
             }
-            return ParseHelper.UnknownAgent;
+            return ParseHelper._unknownAgent;
         }
 
         public void OverrideID(int ID, AgentItem agentItem)

@@ -47,10 +47,10 @@ namespace GW2EIEvtcParser.EIData
                 targetDict = new Dictionary<AbstractActor, List<AbstractDamageEvent>>();
                 _damageLogsPerPhasePerTarget[phase] = targetDict;
             }
-            if (!targetDict.TryGetValue(target ?? ParseHelper.NullActor, out List<AbstractDamageEvent> dls))
+            if (!targetDict.TryGetValue(target ?? ParseHelper._nullActor, out List<AbstractDamageEvent> dls))
             {
                 dls = GetDamageLogs(target, log, phase.Start, phase.End);
-                targetDict[target ?? ParseHelper.NullActor] = dls;
+                targetDict[target ?? ParseHelper._nullActor] = dls;
             }
             return dls;
         }

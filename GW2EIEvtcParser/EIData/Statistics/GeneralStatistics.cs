@@ -49,7 +49,7 @@ namespace GW2EIEvtcParser.EIData
 
             }
 
-            foreach (Buff boon in boons.BuffsBySource[GeneralHelper.Source.FractalInstability])
+            foreach (Buff boon in boons.BuffsBySource[ParseHelper.Source.FractalInstability])
             {
                 if (skillIDs.Contains(boon.ID))
                 {
@@ -141,7 +141,7 @@ namespace GW2EIEvtcParser.EIData
                     x /= activePlayers;
                     y /= activePlayers;
                     z /= activePlayers;
-                    _stackCenterPositions.Add(new Point3D(x, y, z, GeneralHelper.PollingRate * time));
+                    _stackCenterPositions.Add(new Point3D(x, y, z, ParseHelper._pollingRate * time));
                 }
             }
         }

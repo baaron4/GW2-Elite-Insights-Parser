@@ -235,7 +235,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in _buffMap)
                     {
-                        pair.Value.Add(new BuffRemoveAllEvent(ParseHelper.UnknownAgent, AgentItem, dsp.Time, int.MaxValue, log.SkillData.Get(pair.Key), BuffRemoveAllEvent.FullRemoval, int.MaxValue));
+                        pair.Value.Add(new BuffRemoveAllEvent(ParseHelper._unknownAgent, AgentItem, dsp.Time, int.MaxValue, log.SkillData.Get(pair.Key), BuffRemoveAllEvent.FullRemoval, int.MaxValue));
                     }
                 }
                 _buffMap.Sort();
@@ -497,7 +497,7 @@ namespace GW2EIEvtcParser.EIData
             CastLogs = new List<AbstractCastEvent>(log.CombatData.GetAnimatedCastData(AgentItem));
             foreach (WeaponSwapEvent wepSwap in log.CombatData.GetWeaponSwapData(AgentItem))
             {
-                if (CastLogs.Count > 0 && (wepSwap.Time - CastLogs.Last().Time) < GeneralHelper.ServerDelayConstant && CastLogs.Last().SkillId == SkillItem.WeaponSwapId)
+                if (CastLogs.Count > 0 && (wepSwap.Time - CastLogs.Last().Time) < ParseHelper._serverDelayConstant && CastLogs.Last().SkillId == SkillItem.WeaponSwapId)
                 {
                     CastLogs[CastLogs.Count - 1] = wepSwap;
                 }
@@ -765,10 +765,10 @@ namespace GW2EIEvtcParser.EIData
                 targetDict = new Dictionary<AbstractActor, List<AbstractDamageEvent>>();
                 _selfDamageLogsPerPhasePerTarget[phase] = targetDict;
             }
-            if (!targetDict.TryGetValue(target ?? ParseHelper.NullActor, out List<AbstractDamageEvent> dls))
+            if (!targetDict.TryGetValue(target ?? ParseHelper._nullActor, out List<AbstractDamageEvent> dls))
             {
                 dls = GetDamageLogs(target, log, phase).Where(x => x.From == AgentItem).ToList();
-                targetDict[target ?? ParseHelper.NullActor] = dls;
+                targetDict[target ?? ParseHelper._nullActor] = dls;
             }
             return dls;
         }

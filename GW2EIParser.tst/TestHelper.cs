@@ -34,16 +34,8 @@ namespace GW2EIParser.tst
             var parser = new EvtcParser(parserSettings);
 
             var fInfo = new FileInfo(location);
-            if (!fInfo.Exists)
-            {
-                throw new FileNotFoundException("File does not exist", fInfo.FullName);
-            }
-            if (!GeneralHelper.IsSupportedFormat(fInfo.Name))
-            {
-                throw new InvalidDataException("Not EVTC");
-            }
 
-            return parser.ParseLog(new TestOperationController(), fInfo.FullName);
+            return parser.ParseLog(new TestOperationController(), fInfo);
         }
 
         public static string JsonString(ParsedEvtcLog log)

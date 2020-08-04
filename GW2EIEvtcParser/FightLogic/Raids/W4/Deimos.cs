@@ -118,8 +118,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         AbstractBuffEvent removal = list.FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > bfe.Time && x.Time < bfe.Time + 30000);
                         if (removal == null)
                         {
-                            res.Add(new BuffRemoveAllEvent(ParseHelper.UnknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224), 1, 0));
-                            res.Add(new BuffRemoveManualEvent(ParseHelper.UnknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224)));
+                            res.Add(new BuffRemoveAllEvent(ParseHelper._unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224), 1, 0));
+                            res.Add(new BuffRemoveManualEvent(ParseHelper._unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224)));
                         }
                     }
                     else if (bfe is BuffRemoveAllEvent)
@@ -127,7 +127,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         AbstractBuffEvent apply = list.FirstOrDefault(x => x is BuffApplyEvent && x.Time < bfe.Time && x.Time > bfe.Time - 30000);
                         if (apply == null)
                         {
-                            res.Add(new BuffApplyEvent(ParseHelper.UnknownAgent, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(38224), uint.MaxValue, true));
+                            res.Add(new BuffApplyEvent(ParseHelper._unknownAgent, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(38224), uint.MaxValue, true));
                         }
                     }
                 }
@@ -153,7 +153,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 long specialSplitTime = _specialSplit;
                 AgentItem attackTarget = attackTargets.Last().AttackTarget;
                 // sanity check
-                TargetableEvent attackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => x.Targetable && x.Time > specialSplitTime - GeneralHelper.ServerDelayConstant);
+                TargetableEvent attackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => x.Targetable && x.Time > specialSplitTime - ParseHelper._serverDelayConstant);
                 if (attackableEvent == null)
                 {
                     return;
@@ -185,7 +185,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             long firstAware = targetable.Time;
             AgentItem targetAgent = agentData.GetAgent(targetable.SrcAgent);
-            if (targetAgent != ParseHelper.UnknownAgent)
+            if (targetAgent != ParseHelper._unknownAgent)
             {
                 try
                 {
@@ -308,7 +308,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phases.Add(new PhaseData(start, end));
                 start = specialTime;
             }
-            if (fightDuration - start > GeneralHelper.PhaseTimeLimit && start >= phases.Last().End)
+            if (fightDuration - start > ParseHelper._phaseTimeLimit && start >= phases.Last().End)
             {
                 phases.Add(new PhaseData(start, fightDuration));
             }

@@ -224,7 +224,7 @@ namespace GW2EIEvtcParser.ParsedData
                 {
                     throw new InvalidDataException("Breakbar phases can only have one target");
                 }
-                _phases.RemoveAll(x => x.DurationInMS < GeneralHelper.PhaseTimeLimit);
+                _phases.RemoveAll(x => x.DurationInMS < ParseHelper._phaseTimeLimit);
                 _phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             }
             return _phases;

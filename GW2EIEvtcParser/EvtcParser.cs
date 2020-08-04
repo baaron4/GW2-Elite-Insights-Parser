@@ -43,16 +43,20 @@ namespace GW2EIEvtcParser
         /// <param name="operation">Operation object bound to the UI</param>
         /// <param name="evtc">The path to the log to parse</param>
         /// <returns>the ParsedEvtcLog</returns>
-        public ParsedEvtcLog ParseLog(OperationTracer operation, string evtc)
+        public ParsedEvtcLog ParseLog(OperationTracer operation, FileInfo evtc)
         {
             operation.UpdateProgressWithCancellationCheck("Reading Binary");
-            if (!GeneralHelper.IsSupportedFormat(evtc))
+            if (!evtc.Exists)
+            {
+                throw new FileNotFoundException("File " + evtc.FullName + " does not exist");
+            }
+            if (!ParseHelper.IsSupportedFormat(evtc.Name))
             {
                 throw new InvalidDataException("Not EVTC");
             }
-            using (var fs = new FileStream(evtc, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (var fs = new FileStream(evtc.FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                if (GeneralHelper.IsCompressedFormat(evtc))
+                if (ParseHelper.IsCompressedFormat(evtc.Name))
                 {
                     using (var arch = new ZipArchive(fs, ZipArchiveMode.Read))
                     {
@@ -565,10 +569,10 @@ namespace GW2EIEvtcParser
         private void FindAgentMaster(long logTime, ushort masterInstid, ulong minionAgent)
         {
             AgentItem master = _agentData.GetAgentByInstID(masterInstid, logTime);
-            if (master != ParseHelper.UnknownAgent)
+            if (master != ParseHelper._unknownAgent)
             {
                 AgentItem minion = _agentData.GetAgent(minionAgent);
-                if (minion != ParseHelper.UnknownAgent && minion.Master == null) 
+                if (minion != ParseHelper._unknownAgent && minion.Master == null) 
                 {
                     if (minion.FirstAware <= logTime && logTime <= minion.LastAware)
                     {

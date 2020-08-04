@@ -106,40 +106,40 @@ namespace GW2EIEvtcParser.EIData
                         finalActive[boon.ID] = uptimeActive;
                         if (boon.Type == BuffType.Duration)
                         {
-                            uptime.Generation = Math.Round(100.0 * totalGeneration / playerList.Count, GeneralHelper.BuffDigit);
-                            uptime.Overstack = Math.Round(100.0 * (totalOverstack + totalGeneration) / playerList.Count, GeneralHelper.BuffDigit);
-                            uptime.Wasted = Math.Round(100.0 * (totalWasted) / playerList.Count, GeneralHelper.BuffDigit);
-                            uptime.UnknownExtended = Math.Round(100.0 * (totalUnknownExtension) / playerList.Count, GeneralHelper.BuffDigit);
-                            uptime.ByExtension = Math.Round(100.0 * (totalExtension) / playerList.Count, GeneralHelper.BuffDigit);
-                            uptime.Extended = Math.Round(100.0 * (totalExtended) / playerList.Count, GeneralHelper.BuffDigit);
+                            uptime.Generation = Math.Round(100.0 * totalGeneration / playerList.Count, ParseHelper._buffDigit);
+                            uptime.Overstack = Math.Round(100.0 * (totalOverstack + totalGeneration) / playerList.Count, ParseHelper._buffDigit);
+                            uptime.Wasted = Math.Round(100.0 * (totalWasted) / playerList.Count, ParseHelper._buffDigit);
+                            uptime.UnknownExtended = Math.Round(100.0 * (totalUnknownExtension) / playerList.Count, ParseHelper._buffDigit);
+                            uptime.ByExtension = Math.Round(100.0 * (totalExtension) / playerList.Count, ParseHelper._buffDigit);
+                            uptime.Extended = Math.Round(100.0 * (totalExtended) / playerList.Count, ParseHelper._buffDigit);
                             //
                             if (activePlayerCount > 0)
                             {
-                                uptimeActive.Generation = Math.Round(100.0 * totalActiveGeneration / activePlayerCount, GeneralHelper.BuffDigit);
-                                uptimeActive.Overstack = Math.Round(100.0 * (totalActiveOverstack + totalActiveGeneration) / activePlayerCount, GeneralHelper.BuffDigit);
-                                uptimeActive.Wasted = Math.Round(100.0 * (totalActiveWasted) / activePlayerCount, GeneralHelper.BuffDigit);
-                                uptimeActive.UnknownExtended = Math.Round(100.0 * (totalActiveUnknownExtension) / activePlayerCount, GeneralHelper.BuffDigit);
-                                uptimeActive.ByExtension = Math.Round(100.0 * (totalActiveExtension) / activePlayerCount, GeneralHelper.BuffDigit);
-                                uptimeActive.Extended = Math.Round(100.0 * (totalActiveExtended) / activePlayerCount, GeneralHelper.BuffDigit);
+                                uptimeActive.Generation = Math.Round(100.0 * totalActiveGeneration / activePlayerCount, ParseHelper._buffDigit);
+                                uptimeActive.Overstack = Math.Round(100.0 * (totalActiveOverstack + totalActiveGeneration) / activePlayerCount, ParseHelper._buffDigit);
+                                uptimeActive.Wasted = Math.Round(100.0 * (totalActiveWasted) / activePlayerCount, ParseHelper._buffDigit);
+                                uptimeActive.UnknownExtended = Math.Round(100.0 * (totalActiveUnknownExtension) / activePlayerCount, ParseHelper._buffDigit);
+                                uptimeActive.ByExtension = Math.Round(100.0 * (totalActiveExtension) / activePlayerCount, ParseHelper._buffDigit);
+                                uptimeActive.Extended = Math.Round(100.0 * (totalActiveExtended) / activePlayerCount, ParseHelper._buffDigit);
                             }
                         }
                         else if (boon.Type == BuffType.Intensity)
                         {
-                            uptime.Generation = Math.Round(totalGeneration / playerList.Count, GeneralHelper.BuffDigit);
-                            uptime.Overstack = Math.Round((totalOverstack + totalGeneration) / playerList.Count, GeneralHelper.BuffDigit);
-                            uptime.Wasted = Math.Round((totalWasted) / playerList.Count, GeneralHelper.BuffDigit);
-                            uptime.UnknownExtended = Math.Round((totalUnknownExtension) / playerList.Count, GeneralHelper.BuffDigit);
-                            uptime.ByExtension = Math.Round((totalExtension) / playerList.Count, GeneralHelper.BuffDigit);
-                            uptime.Extended = Math.Round((totalExtended) / playerList.Count, GeneralHelper.BuffDigit);
+                            uptime.Generation = Math.Round(totalGeneration / playerList.Count, ParseHelper._buffDigit);
+                            uptime.Overstack = Math.Round((totalOverstack + totalGeneration) / playerList.Count, ParseHelper._buffDigit);
+                            uptime.Wasted = Math.Round((totalWasted) / playerList.Count, ParseHelper._buffDigit);
+                            uptime.UnknownExtended = Math.Round((totalUnknownExtension) / playerList.Count, ParseHelper._buffDigit);
+                            uptime.ByExtension = Math.Round((totalExtension) / playerList.Count, ParseHelper._buffDigit);
+                            uptime.Extended = Math.Round((totalExtended) / playerList.Count, ParseHelper._buffDigit);
                             //
                             if (activePlayerCount > 0)
                             {
-                                uptimeActive.Generation = Math.Round(totalActiveGeneration / activePlayerCount, GeneralHelper.BuffDigit);
-                                uptimeActive.Overstack = Math.Round((totalActiveOverstack + totalActiveGeneration) / activePlayerCount, GeneralHelper.BuffDigit);
-                                uptimeActive.Wasted = Math.Round((totalActiveWasted) / activePlayerCount, GeneralHelper.BuffDigit);
-                                uptimeActive.UnknownExtended = Math.Round((totalActiveUnknownExtension) / activePlayerCount, GeneralHelper.BuffDigit);
-                                uptimeActive.ByExtension = Math.Round((totalActiveExtension) / activePlayerCount, GeneralHelper.BuffDigit);
-                                uptimeActive.Extended = Math.Round((totalActiveExtended) / activePlayerCount, GeneralHelper.BuffDigit);
+                                uptimeActive.Generation = Math.Round(totalActiveGeneration / activePlayerCount, ParseHelper._buffDigit);
+                                uptimeActive.Overstack = Math.Round((totalActiveOverstack + totalActiveGeneration) / activePlayerCount, ParseHelper._buffDigit);
+                                uptimeActive.Wasted = Math.Round((totalActiveWasted) / activePlayerCount, ParseHelper._buffDigit);
+                                uptimeActive.UnknownExtended = Math.Round((totalActiveUnknownExtension) / activePlayerCount, ParseHelper._buffDigit);
+                                uptimeActive.ByExtension = Math.Round((totalActiveExtension) / activePlayerCount, ParseHelper._buffDigit);
+                                uptimeActive.Extended = Math.Round((totalActiveExtended) / activePlayerCount, ParseHelper._buffDigit);
                             }
                         }
                     }
@@ -205,53 +205,53 @@ namespace GW2EIEvtcParser.EIData
                         double extendedValue = selfBoons.GetExtended(boon.ID, player.AgentItem);
                         if (boon.Type == BuffType.Duration)
                         {
-                            uptime.Uptime = Math.Round(100.0 * uptimeValue / phaseDuration, GeneralHelper.BuffDigit);
-                            uptime.Generation = Math.Round(100.0 * generationValue / phaseDuration, GeneralHelper.BuffDigit);
-                            uptime.Overstack = Math.Round(100.0 * (overstackValue + generationValue) / phaseDuration, GeneralHelper.BuffDigit);
-                            uptime.Wasted = Math.Round(100.0 * wasteValue / phaseDuration, GeneralHelper.BuffDigit);
-                            uptime.UnknownExtended = Math.Round(100.0 * unknownExtensionValue / phaseDuration, GeneralHelper.BuffDigit);
-                            uptime.ByExtension = Math.Round(100.0 * extensionValue / phaseDuration, GeneralHelper.BuffDigit);
-                            uptime.Extended = Math.Round(100.0 * extendedValue / phaseDuration, GeneralHelper.BuffDigit);
+                            uptime.Uptime = Math.Round(100.0 * uptimeValue / phaseDuration, ParseHelper._buffDigit);
+                            uptime.Generation = Math.Round(100.0 * generationValue / phaseDuration, ParseHelper._buffDigit);
+                            uptime.Overstack = Math.Round(100.0 * (overstackValue + generationValue) / phaseDuration, ParseHelper._buffDigit);
+                            uptime.Wasted = Math.Round(100.0 * wasteValue / phaseDuration, ParseHelper._buffDigit);
+                            uptime.UnknownExtended = Math.Round(100.0 * unknownExtensionValue / phaseDuration, ParseHelper._buffDigit);
+                            uptime.ByExtension = Math.Round(100.0 * extensionValue / phaseDuration, ParseHelper._buffDigit);
+                            uptime.Extended = Math.Round(100.0 * extendedValue / phaseDuration, ParseHelper._buffDigit);
                             //
                             if (playerActiveDuration > 0)
                             {
-                                uptimeActive.Uptime = Math.Round(100.0 * uptimeValue / playerActiveDuration, GeneralHelper.BuffDigit);
-                                uptimeActive.Generation = Math.Round(100.0 * generationValue / playerActiveDuration, GeneralHelper.BuffDigit);
-                                uptimeActive.Overstack = Math.Round(100.0 * (overstackValue + generationValue) / playerActiveDuration, GeneralHelper.BuffDigit);
-                                uptimeActive.Wasted = Math.Round(100.0 * wasteValue / playerActiveDuration, GeneralHelper.BuffDigit);
-                                uptimeActive.UnknownExtended = Math.Round(100.0 * unknownExtensionValue / playerActiveDuration, GeneralHelper.BuffDigit);
-                                uptimeActive.ByExtension = Math.Round(100.0 * extensionValue / playerActiveDuration, GeneralHelper.BuffDigit);
-                                uptimeActive.Extended = Math.Round(100.0 * extendedValue / playerActiveDuration, GeneralHelper.BuffDigit);
+                                uptimeActive.Uptime = Math.Round(100.0 * uptimeValue / playerActiveDuration, ParseHelper._buffDigit);
+                                uptimeActive.Generation = Math.Round(100.0 * generationValue / playerActiveDuration, ParseHelper._buffDigit);
+                                uptimeActive.Overstack = Math.Round(100.0 * (overstackValue + generationValue) / playerActiveDuration, ParseHelper._buffDigit);
+                                uptimeActive.Wasted = Math.Round(100.0 * wasteValue / playerActiveDuration, ParseHelper._buffDigit);
+                                uptimeActive.UnknownExtended = Math.Round(100.0 * unknownExtensionValue / playerActiveDuration, ParseHelper._buffDigit);
+                                uptimeActive.ByExtension = Math.Round(100.0 * extensionValue / playerActiveDuration, ParseHelper._buffDigit);
+                                uptimeActive.Extended = Math.Round(100.0 * extendedValue / playerActiveDuration, ParseHelper._buffDigit);
                             }
                         }
                         else if (boon.Type == BuffType.Intensity)
                         {
-                            uptime.Uptime = Math.Round(uptimeValue / phaseDuration, GeneralHelper.BuffDigit);
-                            uptime.Generation = Math.Round(generationValue / phaseDuration, GeneralHelper.BuffDigit);
-                            uptime.Overstack = Math.Round((overstackValue + generationValue) / phaseDuration, GeneralHelper.BuffDigit);
-                            uptime.Wasted = Math.Round(wasteValue / phaseDuration, GeneralHelper.BuffDigit);
-                            uptime.UnknownExtended = Math.Round(unknownExtensionValue / phaseDuration, GeneralHelper.BuffDigit);
-                            uptime.ByExtension = Math.Round(extensionValue / phaseDuration, GeneralHelper.BuffDigit);
-                            uptime.Extended = Math.Round(extendedValue / phaseDuration, GeneralHelper.BuffDigit);
+                            uptime.Uptime = Math.Round(uptimeValue / phaseDuration, ParseHelper._buffDigit);
+                            uptime.Generation = Math.Round(generationValue / phaseDuration, ParseHelper._buffDigit);
+                            uptime.Overstack = Math.Round((overstackValue + generationValue) / phaseDuration, ParseHelper._buffDigit);
+                            uptime.Wasted = Math.Round(wasteValue / phaseDuration, ParseHelper._buffDigit);
+                            uptime.UnknownExtended = Math.Round(unknownExtensionValue / phaseDuration, ParseHelper._buffDigit);
+                            uptime.ByExtension = Math.Round(extensionValue / phaseDuration, ParseHelper._buffDigit);
+                            uptime.Extended = Math.Round(extendedValue / phaseDuration, ParseHelper._buffDigit);
                             //
                             if (playerActiveDuration > 0)
                             {
-                                uptimeActive.Uptime = Math.Round(uptimeValue / playerActiveDuration, GeneralHelper.BuffDigit);
-                                uptimeActive.Generation = Math.Round(generationValue / playerActiveDuration, GeneralHelper.BuffDigit);
-                                uptimeActive.Overstack = Math.Round((overstackValue + generationValue) / playerActiveDuration, GeneralHelper.BuffDigit);
-                                uptimeActive.Wasted = Math.Round(wasteValue / playerActiveDuration, GeneralHelper.BuffDigit);
-                                uptimeActive.UnknownExtended = Math.Round(unknownExtensionValue / playerActiveDuration, GeneralHelper.BuffDigit);
-                                uptimeActive.ByExtension = Math.Round(extensionValue / playerActiveDuration, GeneralHelper.BuffDigit);
-                                uptimeActive.Extended = Math.Round(extendedValue / playerActiveDuration, GeneralHelper.BuffDigit);
+                                uptimeActive.Uptime = Math.Round(uptimeValue / playerActiveDuration, ParseHelper._buffDigit);
+                                uptimeActive.Generation = Math.Round(generationValue / playerActiveDuration, ParseHelper._buffDigit);
+                                uptimeActive.Overstack = Math.Round((overstackValue + generationValue) / playerActiveDuration, ParseHelper._buffDigit);
+                                uptimeActive.Wasted = Math.Round(wasteValue / playerActiveDuration, ParseHelper._buffDigit);
+                                uptimeActive.UnknownExtended = Math.Round(unknownExtensionValue / playerActiveDuration, ParseHelper._buffDigit);
+                                uptimeActive.ByExtension = Math.Round(extensionValue / playerActiveDuration, ParseHelper._buffDigit);
+                                uptimeActive.Extended = Math.Round(extendedValue / playerActiveDuration, ParseHelper._buffDigit);
                             }
                             //
                             if (buffPresence.TryGetValue(boon.ID, out long presenceValueBoon))
                             {
-                                uptime.Presence = Math.Round(100.0 * presenceValueBoon / phaseDuration, GeneralHelper.BuffDigit);
+                                uptime.Presence = Math.Round(100.0 * presenceValueBoon / phaseDuration, ParseHelper._buffDigit);
                                 //
                                 if (playerActiveDuration > 0)
                                 {
-                                    uptimeActive.Presence = Math.Round(100.0 * presenceValueBoon / playerActiveDuration, GeneralHelper.BuffDigit);
+                                    uptimeActive.Presence = Math.Round(100.0 * presenceValueBoon / playerActiveDuration, ParseHelper._buffDigit);
                                 }
                             }
                         }
