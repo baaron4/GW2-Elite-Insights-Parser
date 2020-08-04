@@ -9,6 +9,10 @@ namespace GW2EIParser
     public abstract class OperationController : OperationTracer
     {
         /// <summary>
+        /// Status of the parse operation
+        /// </summary>
+        public string Status { get; protected set; }
+        /// <summary>
         /// Location of the file being parsed
         /// </summary>
         public string Location { get; }
@@ -21,14 +25,15 @@ namespace GW2EIParser
         /// </summary>
         public List<string> GeneratedFiles { get; }
 
-        public OperationController(string location, string status) : base(status)
+        public OperationController(string location, string status) : base()
         {
+            Status = status;
             Location = location;
             PathsToOpen = new HashSet<string>();
             GeneratedFiles = new List<string>();
         }
 
-        public override void FinalizeStatus(string prefix)
+        public void FinalizeStatus(string prefix)
         {
             Status = StatusList.LastOrDefault() ?? "";
             foreach (string generatedFile in GeneratedFiles)

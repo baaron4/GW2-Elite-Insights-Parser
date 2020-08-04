@@ -8,16 +8,11 @@ namespace GW2EIUtils
 
     public class OperationTracer
     {
-        /// <summary>
-        /// Status of the parse operation
-        /// </summary>
-        public string Status { get; protected set; }
 
         protected List<string> StatusList { get; }
 
-        public OperationTracer(string status)
+        public OperationTracer()
         {
-            Status = status;
             StatusList = new List<string>();
         }
 
@@ -42,12 +37,6 @@ namespace GW2EIUtils
         public void UpdateProgress(string status)
         {
             StatusList.Add(status);
-        }
-
-        public virtual void FinalizeStatus(string prefix)
-        {
-            Status = StatusList.LastOrDefault() ?? "";
-            Console.WriteLine(prefix + $"{Status}" + Environment.NewLine);
         }
     }
 }
