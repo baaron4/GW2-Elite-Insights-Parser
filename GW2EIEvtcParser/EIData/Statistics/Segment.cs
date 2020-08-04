@@ -7,9 +7,9 @@ namespace GW2EIEvtcParser.EIData
 {
     public class Segment
     {
-        public long Start { get; set; }
-        public long End { get; set; }
-        public double Value { get; set; }
+        public long Start { get; internal set; }
+        public long End { get; internal set; }
+        public double Value { get; internal set; }
 
         public Segment(long start, long end, double value)
         {

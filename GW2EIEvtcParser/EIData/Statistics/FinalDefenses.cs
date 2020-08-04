@@ -7,16 +7,16 @@ namespace GW2EIEvtcParser.EIData
     public class FinalDefenses
     {
         //public long allHealReceived;
-        public long DamageTaken { get; set; }
-        public int BlockedCount { get; set; }
-        public int EvadedCount { get; set; }
-        public int DodgeCount { get; set; }
-        public int InvulnedCount { get; set; }
-        public int DamageInvulned { get; set; }
-        public int DamageBarrier { get; set; }
-        public int InterruptedCount { get; set; }
+        public long DamageTaken { get; }
+        public int BlockedCount { get; }
+        public int EvadedCount { get; }
+        public int DodgeCount { get; }
+        public int InvulnedCount { get; }
+        public int DamageInvulned { get; }
+        public int DamageBarrier { get; }
+        public int InterruptedCount { get; }
 
-        public FinalDefenses(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor, AbstractSingleActor from)
+        internal FinalDefenses(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor, AbstractSingleActor from)
         {
             long start = phase.Start;
             long end = phase.End;

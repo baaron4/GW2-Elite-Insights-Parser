@@ -8,12 +8,12 @@ namespace GW2EIEvtcParser.EIData
     public class FinalDefensesAll : FinalDefenses
     {
         //public long allHealReceived;
-        public int DownCount { get; set; }
-        public long DownDuration { get; set; }
-        public int DeadCount { get; set; }
-        public long DeadDuration { get; set; }
-        public int DcCount { get; set; }
-        public long DcDuration { get; set; }
+        public int DownCount { get; }
+        public long DownDuration { get; }
+        public int DeadCount { get; }
+        public long DeadDuration { get; }
+        public int DcCount { get;  }
+        public long DcDuration { get; }
 
         public FinalDefensesAll(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor) : base(log, phase, actor, null)
         {

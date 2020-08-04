@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.EIData
         public Dictionary<AbstractSingleActor, double> Extended { get; } = new Dictionary<AbstractSingleActor, double>();
 
 
-        public static (FinalBuffsDictionary, FinalBuffsDictionary) GetFinalBuffsDictionary(ParsedEvtcLog log, Buff buff, BuffDistribution buffDistribution, long phaseDuration, long activePhaseDuration)
+        internal static (FinalBuffsDictionary, FinalBuffsDictionary) GetFinalBuffsDictionary(ParsedEvtcLog log, Buff buff, BuffDistribution buffDistribution, long phaseDuration, long activePhaseDuration)
         {
             var buffs = new FinalBuffsDictionary();
             var buffsActive = new FinalBuffsDictionary();

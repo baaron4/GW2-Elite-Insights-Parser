@@ -10,21 +10,21 @@ namespace GW2EIEvtcParser.EIData
     public class FinalGameplayStatsAll : FinalGameplayStats
     {
         // Rates
-        public int Wasted { get; set; }
-        public double TimeWasted { get; set; }
-        public int Saved { get; set; }
-        public double TimeSaved { get; set; }
-        public double StackDist { get; set; }
-        public double DistToCom { get; set; }
+        public int Wasted { get; internal set; }
+        public double TimeWasted { get; internal set; }
+        public int Saved { get; internal set; }
+        public double TimeSaved { get; internal set; }
+        public double StackDist { get; internal set; }
+        public double DistToCom { get; internal set; }
 
         // boons
-        public double AvgBoons { get; set; }
-        public double AvgActiveBoons { get; set; }
-        public double AvgConditions { get; set; }
-        public double AvgActiveConditions { get; set; }
+        public double AvgBoons { get; internal set; }
+        public double AvgActiveBoons { get; internal set; }
+        public double AvgConditions { get; internal set; }
+        public double AvgActiveConditions { get; internal set; }
 
         // Counts
-        public int SwapCount { get; set; }
+        public int SwapCount { get; internal set; }
 
         private static double GetDistanceToTarget(Player player, ParsedEvtcLog log, PhaseData phase, List<Point3D> reference)
         {
@@ -51,7 +51,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public FinalGameplayStatsAll(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor) : base(log, phase, actor, null)
+        internal FinalGameplayStatsAll(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor) : base(log, phase, actor, null)
         {
             // If fake actor, stop
             if (actor.IsFakeActor)

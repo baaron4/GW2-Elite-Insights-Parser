@@ -8,18 +8,18 @@ namespace GW2EIEvtcParser.EIData
     {
         public class DeathRecapDamageItem
         {
-            public long ID { get; set; }
-            public bool IndirectDamage { get; set; }
-            public string Src { get; set; }
-            public int Damage { get; set; }
-            public int Time { get; set; }
+            public long ID { get; internal set; }
+            public bool IndirectDamage { get; internal set; }
+            public string Src { get; internal set; }
+            public int Damage { get; internal set; }
+            public int Time { get; internal set; }
         }
 
         public long DeathTime { get; }
         public List<DeathRecapDamageItem> ToDown { get; }
         public List<DeathRecapDamageItem> ToKill { get; }
 
-        public DeathRecap(List<AbstractDamageEvent> damageLogs, DeadEvent dead, List<DownEvent> downs, List<AliveEvent> ups, long lastDeathTime)
+        internal DeathRecap(List<AbstractDamageEvent> damageLogs, DeadEvent dead, List<DownEvent> downs, List<AliveEvent> ups, long lastDeathTime)
         {
             DeathTime = dead.Time;
             DownEvent downed;

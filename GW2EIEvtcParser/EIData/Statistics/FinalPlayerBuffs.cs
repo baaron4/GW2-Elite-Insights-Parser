@@ -11,14 +11,14 @@ namespace GW2EIEvtcParser.EIData
     public enum BuffEnum { Self, Group, OffGroup, Squad };
     public class FinalPlayerBuffs : FinalBuffs
     {
-        public double Generation { get; set; }
-        public double Overstack { get; set; }
-        public double Wasted { get; set; }
-        public double UnknownExtended { get; set; }
-        public double ByExtension { get; set; }
-        public double Extended { get; set; }
+        public double Generation { get; internal set; }
+        public double Overstack { get; internal set; }
+        public double Wasted { get; internal set; }
+        public double UnknownExtended { get; internal set; }
+        public double ByExtension { get; internal set; }
+        public double Extended { get; internal set; }
 
-        public static (List<Dictionary<long, FinalPlayerBuffs>>, List<Dictionary<long, FinalPlayerBuffs>>) GetBuffsForPlayers(List<Player> playerList, ParsedEvtcLog log, AgentItem agentItem)
+        internal static (List<Dictionary<long, FinalPlayerBuffs>>, List<Dictionary<long, FinalPlayerBuffs>>) GetBuffsForPlayers(List<Player> playerList, ParsedEvtcLog log, AgentItem agentItem)
         {
             var uptimesByPhase = new List<Dictionary<long, FinalPlayerBuffs>>();
             var uptimesActiveByPhase = new List<Dictionary<long, FinalPlayerBuffs>>();
@@ -153,7 +153,7 @@ namespace GW2EIEvtcParser.EIData
         }
 
 
-        public static (List<Dictionary<long, FinalPlayerBuffs>>, List<Dictionary<long, FinalPlayerBuffs>>) GetBuffsForSelf(ParsedEvtcLog log, Player player)
+        internal static (List<Dictionary<long, FinalPlayerBuffs>>, List<Dictionary<long, FinalPlayerBuffs>>) GetBuffsForSelf(ParsedEvtcLog log, Player player)
         {
             var selfBuffsActive = new List<Dictionary<long, FinalPlayerBuffs>>();
             var selfBuffs = new List<Dictionary<long, FinalPlayerBuffs>>();

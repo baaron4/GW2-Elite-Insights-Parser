@@ -7,15 +7,15 @@ namespace GW2EIEvtcParser.EIData
 {
     public class FinalBuffs
     {
-        public double Uptime { get; set; }
-        public double Presence { get; set; }
+        public double Uptime { get; internal set; }
+        public double Presence { get; internal set; }
 
         protected FinalBuffs()
         {
 
         }
 
-        public FinalBuffs(Buff buff, BuffDistribution buffDistribution, Dictionary<long, long> buffPresence, long phaseDuration)
+        internal FinalBuffs(Buff buff, BuffDistribution buffDistribution, Dictionary<long, long> buffPresence, long phaseDuration)
         {
             if (buff.Type == BuffType.Duration)
             {

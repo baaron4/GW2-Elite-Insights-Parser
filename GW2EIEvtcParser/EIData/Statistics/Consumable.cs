@@ -5,7 +5,7 @@
         public Buff Buff { get; }
         public long Time { get; }
         public int Duration { get; }
-        public int Stack { get; set; }
+        public int Stack { get; internal set; }
 
         public Consumable(Buff item, long time, int duration)
         {

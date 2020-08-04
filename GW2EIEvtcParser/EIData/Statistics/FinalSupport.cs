@@ -8,7 +8,7 @@ namespace GW2EIEvtcParser.EIData
     {
         public Dictionary<long, (int count, long time)> Removals { get; } = new Dictionary<long, (int count, long time)>();
 
-        public FinalSupport(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor, AbstractSingleActor to)
+        internal FinalSupport(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor, AbstractSingleActor to)
         {
             foreach (long buffID in log.Buffs.BuffsByIds.Keys)
             {

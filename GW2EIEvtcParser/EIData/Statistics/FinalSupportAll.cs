@@ -6,8 +6,8 @@ namespace GW2EIEvtcParser.EIData
     public class FinalSupportAll : FinalSupport
     {
         //public long allHeal;
-        public int Resurrects { get; set; }
-        public long ResurrectTime { get; set; }
+        public int Resurrects { get; internal set; }
+        public long ResurrectTime { get; internal set; }
 
         private static long[] GetReses(ParsedEvtcLog log, AbstractSingleActor actor, long start, long end)
         {
@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.EIData
             return reses;
         }
 
-        public FinalSupportAll(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor) : base(log, phase, actor, null)
+        internal FinalSupportAll(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor) : base(log, phase, actor, null)
         {
             long[] resArray = GetReses(log, actor, phase.Start, phase.End);
             Resurrects = (int)resArray[0];

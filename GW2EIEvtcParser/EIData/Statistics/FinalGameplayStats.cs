@@ -5,18 +5,18 @@ namespace GW2EIEvtcParser.EIData
 {
     public class FinalGameplayStats
     {
-        public int DirectDamageCount { get; set; }
-        public int CritableDirectDamageCount { get; set; }
-        public int CriticalCount { get; set; }
-        public int CriticalDmg { get; set; }
-        public int FlankingCount { get; set; }
-        public int GlanceCount { get; set; }
-        public int Missed { get; set; }
-        public int Interrupts { get; set; }
-        public int Invulned { get; set; }
+        public int DirectDamageCount { get; internal set; }
+        public int CritableDirectDamageCount { get; internal set; }
+        public int CriticalCount { get; internal set; }
+        public int CriticalDmg { get; internal set; }
+        public int FlankingCount { get; internal set; }
+        public int GlanceCount { get; internal set; }
+        public int Missed { get; internal set; }
+        public int Interrupts { get; internal set; }
+        public int Invulned { get; internal set; }
 
 
-        public FinalGameplayStats(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor, AbstractSingleActor target)
+        internal FinalGameplayStats(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor, AbstractSingleActor target)
         {
             List<AbstractDamageEvent> dls = actor.GetJustPlayerDamageLogs(target, log, phase);
             foreach (AbstractDamageEvent dl in dls)

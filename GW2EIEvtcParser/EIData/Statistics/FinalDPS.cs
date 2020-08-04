@@ -6,22 +6,22 @@ namespace GW2EIEvtcParser.EIData
     public class FinalDPS
     {
         // Total
-        public int Dps { get; set; }
-        public int Damage { get; set; }
-        public int CondiDps { get; set; }
-        public int CondiDamage { get; set; }
-        public int PowerDps { get; set; }
-        public int PowerDamage { get; set; }
+        public int Dps { get; internal set; }
+        public int Damage { get; internal set; }
+        public int CondiDps { get; internal set; }
+        public int CondiDamage { get; internal set; }
+        public int PowerDps { get; internal set; }
+        public int PowerDamage { get; internal set; }
         // Actor only
-        public int ActorDps { get; set; }
-        public int ActorDamage { get; set; }
-        public int ActorCondiDps { get; set; }
-        public int ActorCondiDamage { get; set; }
-        public int ActorPowerDps { get; set; }
-        public int ActorPowerDamage { get; set; }
+        public int ActorDps { get; internal set; }
+        public int ActorDamage { get; internal set; }
+        public int ActorCondiDps { get; internal set; }
+        public int ActorCondiDamage { get; internal set; }
+        public int ActorPowerDps { get; internal set; }
+        public int ActorPowerDamage { get; internal set; }
 
 
-        public FinalDPS(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor, AbstractSingleActor target)
+        internal FinalDPS(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor, AbstractSingleActor target)
         {
             double phaseDuration = (phase.DurationInMS) / 1000.0;
             int damage;
