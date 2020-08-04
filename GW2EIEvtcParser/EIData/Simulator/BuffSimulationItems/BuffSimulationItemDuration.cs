@@ -5,7 +5,7 @@ using static GW2EIEvtcParser.EIData.AbstractBuffSimulator;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class BuffSimulationItemDuration : BuffSimulationItem
+    internal class BuffSimulationItemDuration : BuffSimulationItem
     {
         private readonly AgentItem _src;
         private readonly AgentItem _seedSrc;

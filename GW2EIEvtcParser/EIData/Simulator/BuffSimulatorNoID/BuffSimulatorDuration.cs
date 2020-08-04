@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class BuffSimulatorDuration : BuffSimulator
+    internal class BuffSimulatorDuration : BuffSimulator
     {
         private (AgentItem agent, bool extension) _lastSrcRemove = (ParseHelper._unknownAgent, false);
         // Constructor

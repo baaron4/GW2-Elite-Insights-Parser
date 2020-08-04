@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class BuffSimulationItemWasted : AbstractBuffSimulationItemWasted
+    internal class BuffSimulationItemWasted : AbstractBuffSimulationItemWasted
     {
 
         public BuffSimulationItemWasted(AgentItem src, long waste, long time) : base(src, waste, time)

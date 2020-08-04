@@ -3,7 +3,7 @@ using static GW2EIEvtcParser.EIData.AbstractBuffSimulator;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class HealingLogic : QueueLogic
+    internal class HealingLogic : QueueLogic
     {
 
         private struct CompareHealing

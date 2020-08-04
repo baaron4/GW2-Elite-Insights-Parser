@@ -6,7 +6,7 @@ using static GW2EIEvtcParser.EIData.AbstractBuffSimulator;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class QueueLogic : StackingLogic
+    internal class QueueLogic : StackingLogic
     {
         public override void Sort(ParsedEvtcLog log, List<BuffStackItem> stacks)
         {

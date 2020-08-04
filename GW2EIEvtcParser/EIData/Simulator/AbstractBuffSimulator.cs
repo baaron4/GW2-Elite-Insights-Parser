@@ -6,9 +6,9 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public abstract class AbstractBuffSimulator
+    internal abstract class AbstractBuffSimulator
     {
-        public class BuffStackItem
+        internal class BuffStackItem
         {
             public long Start { get; private set; }
             public long Duration { get; private set; }

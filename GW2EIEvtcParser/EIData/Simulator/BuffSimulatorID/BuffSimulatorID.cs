@@ -5,7 +5,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public abstract class BuffSimulatorID : AbstractBuffSimulator
+    internal abstract class BuffSimulatorID : AbstractBuffSimulator
     {
         protected List<(long duration, AgentItem src)> OverrideCandidates { get; } = new List<(long duration, AgentItem src)>();
 

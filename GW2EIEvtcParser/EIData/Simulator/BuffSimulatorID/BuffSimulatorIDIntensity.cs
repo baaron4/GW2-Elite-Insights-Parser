@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class BuffSimulatorIDIntensity : BuffSimulatorID
+    internal class BuffSimulatorIDIntensity : BuffSimulatorID
     {
         // Constructor
         public BuffSimulatorIDIntensity(ParsedEvtcLog log) : base(log)

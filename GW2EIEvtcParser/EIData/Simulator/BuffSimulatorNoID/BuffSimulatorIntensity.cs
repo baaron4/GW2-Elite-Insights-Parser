@@ -6,7 +6,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class BuffSimulatorIntensity : BuffSimulator
+    internal class BuffSimulatorIntensity : BuffSimulator
     {
         private readonly List<(AgentItem agent, bool extension)> _lastSrcRemoves = new List<(AgentItem agent, bool extension)>();
         // Constructor

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public abstract class AbstractSimulationItem
+    internal abstract class AbstractSimulationItem
     {
 
         protected static Dictionary<AgentItem, BuffDistributionItem> GetDistrib(BuffDistribution distribs, long boonid)

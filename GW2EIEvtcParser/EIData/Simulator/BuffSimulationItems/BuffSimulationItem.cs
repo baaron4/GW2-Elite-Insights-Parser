@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public abstract class BuffSimulationItem : AbstractSimulationItem
+    internal abstract class BuffSimulationItem : AbstractSimulationItem
     {
         public long Duration { get; protected set; }
         public long Start { get; protected set; }

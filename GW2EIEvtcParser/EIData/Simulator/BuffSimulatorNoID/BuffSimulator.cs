@@ -4,7 +4,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public abstract class BuffSimulator : AbstractBuffSimulator
+    internal abstract class BuffSimulator : AbstractBuffSimulator
     {
         protected int Capacity { get; }
         private readonly StackingLogic _logic;

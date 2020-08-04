@@ -3,7 +3,7 @@ using System;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class BuffSimulatorIDDuration : BuffSimulatorID
+    internal class BuffSimulatorIDDuration : BuffSimulatorID
     {
         private BuffStackItem _activeStack;
 
