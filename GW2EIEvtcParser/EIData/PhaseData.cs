@@ -12,14 +12,14 @@ namespace GW2EIEvtcParser.EIData
         public long DurationInS { get; private set; }
         public long DurationInMS { get; private set; }
         public long DurationInM { get; private set; }
-        public string Name { get; set; }
-        public bool DrawStart { get; set; } = true;
-        public bool DrawEnd { get; set; } = true;
-        public bool DrawArea { get; set; } = true;
-        public bool DrawLabel { get; set; } = true;
-        public bool CanBeSubPhase { get; set; } = true;
+        public string Name { get; internal set; }
+        public bool DrawStart { get; internal set; } = true;
+        public bool DrawEnd { get; internal set; } = true;
+        public bool DrawArea { get; internal set; } = true;
+        public bool DrawLabel { get; internal set; } = true;
+        public bool CanBeSubPhase { get; internal set; } = true;
 
-        public bool BreakbarPhase { get; set; } = false;
+        public bool BreakbarPhase { get; internal set; } = false;
         public List<NPC> Targets { get; } = new List<NPC>();
 
         public PhaseData(long start, long end)
@@ -41,7 +41,7 @@ namespace GW2EIEvtcParser.EIData
             return Start <= time && time <= End;
         }
 
-        public void OverrideStart(long start)
+        internal void OverrideStart(long start)
         {
             Start = start;
             DurationInM = (End - Start) / 60000;
@@ -49,7 +49,7 @@ namespace GW2EIEvtcParser.EIData
             DurationInS = (End - Start) / 1000;
         }
 
-        public void OverrideEnd(long end)
+        internal void OverrideEnd(long end)
         {
             End = end;
             DurationInM = (End - Start) / 60000;
@@ -61,7 +61,7 @@ namespace GW2EIEvtcParser.EIData
         /// Override times in a manner that the phase englobes the targets present in the phase (if possible)
         /// </summary>
         /// <param name="log"></param>
-        public void OverrideTimes(ParsedEvtcLog log)
+        internal void OverrideTimes(ParsedEvtcLog log)
         {
             if (Targets.Count > 0)
             {
