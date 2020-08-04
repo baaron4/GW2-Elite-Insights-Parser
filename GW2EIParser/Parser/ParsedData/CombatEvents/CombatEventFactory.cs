@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using GW2EIUtils;
 
 namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
@@ -14,13 +15,13 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                 AbstractMovementEvent evt = null;
                 switch (c.IsStateChange)
                 {
-                    case ParseEnum.StateChange.Velocity:
+                    case ArcDPSEnums.StateChange.Velocity:
                         evt = new VelocityEvent(c, agentData);
                         break;
-                    case ParseEnum.StateChange.Rotation:
+                    case ArcDPSEnums.StateChange.Rotation:
                         evt = new RotationEvent(c, agentData);
                         break;
-                    case ParseEnum.StateChange.Position:
+                    case ArcDPSEnums.StateChange.Position:
                         evt = new PositionEvent(c, agentData);
                         break;
                     default:
@@ -50,100 +51,100 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             {
                 switch (c.IsStateChange)
                 {
-                    case ParseEnum.StateChange.EnterCombat:
+                    case ArcDPSEnums.StateChange.EnterCombat:
                         var enterCombatEvt = new EnterCombatEvent(c, agentData);
                         GeneralHelper.Add(statusEvents.EnterCombatEvents, enterCombatEvt.Src, enterCombatEvt);
                         break;
-                    case ParseEnum.StateChange.ExitCombat:
+                    case ArcDPSEnums.StateChange.ExitCombat:
                         var exitCombatEvt = new ExitCombatEvent(c, agentData);
                         GeneralHelper.Add(statusEvents.ExitCombatEvents, exitCombatEvt.Src, exitCombatEvt);
                         break;
-                    case ParseEnum.StateChange.ChangeUp:
+                    case ArcDPSEnums.StateChange.ChangeUp:
                         var aliveEvt = new AliveEvent(c, agentData);
                         GeneralHelper.Add(statusEvents.AliveEvents, aliveEvt.Src, aliveEvt);
                         break;
-                    case ParseEnum.StateChange.ChangeDead:
+                    case ArcDPSEnums.StateChange.ChangeDead:
                         var deadEvt = new DeadEvent(c, agentData);
                         GeneralHelper.Add(statusEvents.DeadEvents, deadEvt.Src, deadEvt);
                         break;
-                    case ParseEnum.StateChange.ChangeDown:
+                    case ArcDPSEnums.StateChange.ChangeDown:
                         var downEvt = new DownEvent(c, agentData);
                         GeneralHelper.Add(statusEvents.DownEvents, downEvt.Src, downEvt);
                         break;
-                    case ParseEnum.StateChange.Spawn:
+                    case ArcDPSEnums.StateChange.Spawn:
                         var spawnEvt = new SpawnEvent(c, agentData);
                         GeneralHelper.Add(statusEvents.SpawnEvents, spawnEvt.Src, spawnEvt);
                         break;
-                    case ParseEnum.StateChange.Despawn:
+                    case ArcDPSEnums.StateChange.Despawn:
                         var despawnEvt = new DespawnEvent(c, agentData);
                         GeneralHelper.Add(statusEvents.DespawnEvents, despawnEvt.Src, despawnEvt);
                         break;
-                    case ParseEnum.StateChange.HealthUpdate:
+                    case ArcDPSEnums.StateChange.HealthUpdate:
                         var healthEvt = new HealthUpdateEvent(c, agentData);
                         GeneralHelper.Add(statusEvents.HealthUpdateEvents, healthEvt.Src, healthEvt);
                         break;
-                    case ParseEnum.StateChange.LogStart:
+                    case ArcDPSEnums.StateChange.LogStart:
                         if (c.Value == 0 || c.BuffDmg == 0)
                         {
                             continue;
                         }
                         metaDataEvents.LogStartEvent = new LogStartEvent(c);
                         break;
-                    case ParseEnum.StateChange.LogEnd:
+                    case ArcDPSEnums.StateChange.LogEnd:
                         if (c.Value == 0 || c.BuffDmg == 0)
                         {
                             continue;
                         }
                         metaDataEvents.LogEndEvent = new LogEndEvent(c);
                         break;
-                    case ParseEnum.StateChange.MaxHealthUpdate:
+                    case ArcDPSEnums.StateChange.MaxHealthUpdate:
                         var maxHealthEvt = new MaxHealthUpdateEvent(c, agentData);
                         GeneralHelper.Add(statusEvents.MaxHealthUpdateEvents, maxHealthEvt.Src, maxHealthEvt);
                         break;
-                    case ParseEnum.StateChange.PointOfView:
+                    case ArcDPSEnums.StateChange.PointOfView:
                         if (c.SrcAgent == 0)
                         {
                             continue;
                         }
                         metaDataEvents.PointOfViewEvent = new PointOfViewEvent(c, agentData);
                         break;
-                    case ParseEnum.StateChange.Language:
+                    case ArcDPSEnums.StateChange.Language:
                         metaDataEvents.LanguageEvent = new LanguageEvent(c);
                         break;
-                    case ParseEnum.StateChange.GWBuild:
+                    case ArcDPSEnums.StateChange.GWBuild:
                         if (c.SrcAgent == 0)
                         {
                             continue;
                         }
                         metaDataEvents.BuildEvent = new BuildEvent(c);
                         break;
-                    case ParseEnum.StateChange.ShardId:
+                    case ArcDPSEnums.StateChange.ShardId:
                         metaDataEvents.ShardEvents.Add(new ShardEvent(c));
                         break;
-                    case ParseEnum.StateChange.Reward:
+                    case ArcDPSEnums.StateChange.Reward:
                         rewardEvents.Add(new RewardEvent(c));
                         break;
-                    case ParseEnum.StateChange.TeamChange:
+                    case ArcDPSEnums.StateChange.TeamChange:
                         var tcEvt = new TeamChangeEvent(c, agentData);
                         GeneralHelper.Add(statusEvents.TeamChangeEvents, tcEvt.Src, tcEvt);
                         break;
-                    case ParseEnum.StateChange.AttackTarget:
+                    case ArcDPSEnums.StateChange.AttackTarget:
                         var aTEvt = new AttackTargetEvent(c, agentData);
                         GeneralHelper.Add(statusEvents.AttackTargetEvents, aTEvt.Src, aTEvt);
                         break;
-                    case ParseEnum.StateChange.Targetable:
+                    case ArcDPSEnums.StateChange.Targetable:
                         var tarEvt = new TargetableEvent(c, agentData);
                         GeneralHelper.Add(statusEvents.TargetableEvents, tarEvt.Src, tarEvt);
                         break;
-                    case ParseEnum.StateChange.MapID:
+                    case ArcDPSEnums.StateChange.MapID:
                         metaDataEvents.MapIDEvents.Add(new MapIDEvent(c));
                         break;
-                    case ParseEnum.StateChange.Guild:
+                    case ArcDPSEnums.StateChange.Guild:
                         var gEvt = new GuildEvent(c, agentData);
                         GeneralHelper.Add(metaDataEvents.GuildEvents, gEvt.Src, gEvt);
                         break;
-                    case ParseEnum.StateChange.BuffInfo:
-                    case ParseEnum.StateChange.BuffFormula:
+                    case ArcDPSEnums.StateChange.BuffInfo:
+                    case ArcDPSEnums.StateChange.BuffFormula:
                         if (metaDataEvents.BuffInfoEvents.TryGetValue(c.SkillID, out BuffInfoEvent buffInfoEvent))
                         {
                             buffInfoEvent.CompleteBuffInfoEvent(c);
@@ -153,7 +154,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                             buffInfoEvent = new BuffInfoEvent(c);
                             metaDataEvents.BuffInfoEvents[c.SkillID] = buffInfoEvent;
                         }
-                        if (c.IsStateChange == ParseEnum.StateChange.BuffInfo)
+                        if (c.IsStateChange == ArcDPSEnums.StateChange.BuffInfo)
                         {
                             if (metaDataEvents.BuffInfoEventsByCategory.TryGetValue(buffInfoEvent.Category, out List<BuffInfoEvent> bdEvtList))
                             {
@@ -165,8 +166,8 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                             }
                         }
                         break;
-                    case ParseEnum.StateChange.SkillInfo:
-                    case ParseEnum.StateChange.SkillTiming:
+                    case ArcDPSEnums.StateChange.SkillInfo:
+                    case ArcDPSEnums.StateChange.SkillTiming:
                         if (metaDataEvents.SkillInfoEvents.TryGetValue(c.SkillID, out SkillInfoEvent skillInfoEvent))
                         {
                             skillInfoEvent.CompleteSkillInfoEvent(c);
@@ -177,18 +178,18 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                             metaDataEvents.SkillInfoEvents[c.SkillID] = skillInfoEvent;
                         }
                         break;
-                    case ParseEnum.StateChange.BreakbarState:
+                    case ArcDPSEnums.StateChange.BreakbarState:
                         var bSEvt = new BreakbarStateEvent(c, agentData);
                         GeneralHelper.Add(statusEvents.BreakbarStateEvents, bSEvt.Src, bSEvt);
                         break;
-                    case ParseEnum.StateChange.BreakbarPercent:
+                    case ArcDPSEnums.StateChange.BreakbarPercent:
                         var bPEvt = new BreakbarPercentEvent(c, agentData);
                         GeneralHelper.Add(statusEvents.BreakbarPercentEvents, bPEvt.Src, bPEvt);
                         break;
-                    case ParseEnum.StateChange.Error:
+                    case ArcDPSEnums.StateChange.Error:
                         metaDataEvents.ErrorEvents.Add(new ErrorEvent(c));
                         break;
-                    case ParseEnum.StateChange.Tag:
+                    case ArcDPSEnums.StateChange.Tag:
                         // Getting ready in case this becomes an actual state event
                         _ = new TagEvent(c, agentData);
                         //GeneralHelper.Add(metaDataEvents.TagEvents, tagEvt.Src, tagEvt);
@@ -214,16 +215,16 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             {
                 switch (c.IsStateChange)
                 {
-                    case ParseEnum.StateChange.StackActive:
+                    case ArcDPSEnums.StateChange.StackActive:
                         res.Add(new BuffStackActiveEvent(c, agentData, skillData));
                         break;
-                    case ParseEnum.StateChange.StackReset:
+                    case ArcDPSEnums.StateChange.StackReset:
                         res.Add(new BuffStackResetEvent(c, agentData, skillData));
                         break;
                     default:
                         switch (c.IsBuffRemove)
                         {
-                            case ParseEnum.BuffRemove.None:
+                            case ArcDPSEnums.BuffRemove.None:
                                 if (c.IsOffcycle > 0)
                                 {
                                     res.Add(new BuffExtensionEvent(c, agentData, skillData));
@@ -233,13 +234,13 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                                     res.Add(new BuffApplyEvent(c, agentData, skillData));
                                 }
                                 break;
-                            case ParseEnum.BuffRemove.Single:
+                            case ArcDPSEnums.BuffRemove.Single:
                                 res.Add(new BuffRemoveSingleEvent(c, agentData, skillData));
                                 break;
-                            case ParseEnum.BuffRemove.All:
+                            case ArcDPSEnums.BuffRemove.All:
                                 res.Add(new BuffRemoveAllEvent(c, agentData, skillData));
                                 break;
-                            case ParseEnum.BuffRemove.Manual:
+                            case ArcDPSEnums.BuffRemove.Manual:
                                 res.Add(new BuffRemoveManualEvent(c, agentData, skillData));
                                 break;
                         }

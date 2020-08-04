@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashID;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -30,26 +30,26 @@ namespace GW2EIParser.Logic
 
         public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
-            var attackTargets = combatData.Where(x => x.IsStateChange == ParseEnum.StateChange.AttackTarget).ToList();
+            var attackTargets = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).ToList();
             long first = fightData.FightStart;
             long final = fightData.FightEnd;
             foreach (CombatItem at in attackTargets)
             {
                 AgentItem hand = agentData.GetAgent(at.DstAgent);
                 AgentItem atAgent = agentData.GetAgent(at.SrcAgent);
-                var attackables = combatData.Where(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.SrcAgent == atAgent.Agent && x.Time <= atAgent.LastAware && x.Time >= atAgent.FirstAware).ToList();
+                var attackables = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.SrcAgent == atAgent.Agent && x.Time <= atAgent.LastAware && x.Time >= atAgent.FirstAware).ToList();
                 var attackOn = attackables.Where(x => x.DstAgent == 1 && x.Time >= first + 2000).Select(x => x.Time).ToList();
                 var attackOff = attackables.Where(x => x.DstAgent == 0 && x.Time >= first + 2000).Select(x => x.Time).ToList();
-                var posFacingHP = combatData.Where(x => x.SrcAgent == hand.Agent && x.Time >= hand.FirstAware && hand.LastAware >= x.Time && (x.IsStateChange == ParseEnum.StateChange.Position || x.IsStateChange == ParseEnum.StateChange.Rotation || x.IsStateChange == ParseEnum.StateChange.MaxHealthUpdate)).ToList();
-                CombatItem pos = posFacingHP.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position);
-                int id = (int)HandOfErosion;
+                var posFacingHP = combatData.Where(x => x.SrcAgent == hand.Agent && x.Time >= hand.FirstAware && hand.LastAware >= x.Time && (x.IsStateChange == ArcDPSEnums.StateChange.Position || x.IsStateChange == ArcDPSEnums.StateChange.Rotation || x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)).ToList();
+                CombatItem pos = posFacingHP.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Position);
+                int id = (int)ArcDPSEnums.TrashID.HandOfErosion;
                 if (pos != null)
                 {
                     (float x, float y, _) = AbstractMovementEvent.UnpackMovementData(pos.DstAgent, 0);
                     if ((Math.Abs(x - 15570.5) < 10 && Math.Abs(y + 693.117) < 10) ||
                             (Math.Abs(x - 14277.2) < 10 && Math.Abs(y + 2202.52) < 10))
                     {
-                        id = (int)HandOfEruption;
+                        id = (int)ArcDPSEnums.TrashID.HandOfEruption;
                     }
                 }
                 for (int i = 0; i < attackOn.Count; i++)
@@ -92,16 +92,16 @@ namespace GW2EIParser.Logic
         {
             return new List<int>()
             {
-                (int)ParseEnum.TargetID.Adina,
-                (int)HandOfErosion,
-                (int)HandOfEruption
+                (int)ArcDPSEnums.TargetID.Adina,
+                (int)ArcDPSEnums.TrashID.HandOfErosion,
+                (int)ArcDPSEnums.TrashID.HandOfEruption
             };
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Adina);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Adina);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Adina not found");
@@ -140,7 +140,7 @@ namespace GW2EIParser.Logic
                 end = qQ.Time;
                 mainPhases.Add(new PhaseData(start, end, "Phase " + i ));
                 PhaseData split = phases[i];
-                AddTargetsToPhase(split, new List<int> { (int)HandOfErosion, (int)HandOfEruption }, log);
+                AddTargetsToPhase(split, new List<int> { (int)ArcDPSEnums.TrashID.HandOfErosion, (int)ArcDPSEnums.TrashID.HandOfEruption }, log);
                 start = split.End;
                 if (i == phases.Count - 1 && start != log.FightData.FightEnd)
                 {
@@ -176,7 +176,7 @@ namespace GW2EIParser.Logic
 
         public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Adina);
+            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Adina);
             if (target == null)
             {
                 throw new InvalidOperationException("Adina not found");

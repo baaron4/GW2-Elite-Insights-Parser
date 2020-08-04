@@ -4,7 +4,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashID;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -32,16 +32,16 @@ namespace GW2EIParser.Logic
                             (19072, 15484, 20992, 16508));
         }
 
-        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashID>
+            return new List<ArcDPSEnums.TrashID>
             {
-                OrbSpider,
-                SpiritHorde1,
-                SpiritHorde2,
-                SpiritHorde3,
-                GreenSpirit1,
-                GreenSpirit2
+                ArcDPSEnums.TrashID.OrbSpider,
+                ArcDPSEnums.TrashID.SpiritHorde1,
+                ArcDPSEnums.TrashID.SpiritHorde2,
+                ArcDPSEnums.TrashID.SpiritHorde3,
+                ArcDPSEnums.TrashID.GreenSpirit1,
+                ArcDPSEnums.TrashID.GreenSpirit2
             };
         }
 
@@ -52,7 +52,7 @@ namespace GW2EIParser.Logic
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetID.SoulEater:
+                case (int)ArcDPSEnums.TargetID.SoulEater:
                     var breakbar = cls.Where(x => x.SkillId == 48007).ToList();
                     foreach (AbstractCastEvent c in breakbar)
                     {
@@ -86,8 +86,8 @@ namespace GW2EIParser.Logic
                         replay.Decorations.Add(new CircleDecoration(true, end, 180, (start, end), "rgba(255, 180, 220, 0.7)", new AgentConnector(target)));
                     }
                     break;
-                case (int)GreenSpirit1:
-                case (int)GreenSpirit2:
+                case (int)ArcDPSEnums.TrashID.GreenSpirit1:
+                case (int)ArcDPSEnums.TrashID.GreenSpirit2:
                     var green = cls.Where(x => x.SkillId == 47153).ToList();
                     foreach (AbstractCastEvent c in green)
                     {
@@ -97,10 +97,10 @@ namespace GW2EIParser.Logic
                         replay.Decorations.Add(new CircleDecoration(true, gend, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(target)));
                     }
                     break;
-                case (int)SpiritHorde1:
-                case (int)SpiritHorde2:
-                case (int)SpiritHorde3:
-                case (int)OrbSpider:
+                case (int)ArcDPSEnums.TrashID.SpiritHorde1:
+                case (int)ArcDPSEnums.TrashID.SpiritHorde2:
+                case (int)ArcDPSEnums.TrashID.SpiritHorde3:
+                case (int)ArcDPSEnums.TrashID.OrbSpider:
                     break;
                 default:
                     break;
@@ -128,7 +128,7 @@ namespace GW2EIParser.Logic
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            SetSuccessByDeath(combatData, fightData, playerAgents, true, (int)ParseEnum.TargetID.SoulEater);
+            SetSuccessByDeath(combatData, fightData, playerAgents, true, (int)ArcDPSEnums.TargetID.SoulEater);
         }
 
         public override string GetLogicName(ParsedLog log)

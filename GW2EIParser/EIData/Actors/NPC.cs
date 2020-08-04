@@ -2,6 +2,7 @@
 using System.Linq;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIUtils;
 
 namespace GW2EIParser.EIData
 {
@@ -38,6 +39,11 @@ namespace GW2EIParser.EIData
         public void OverrideName(string name)
         {
             Character = name;
+        }
+
+        public override string GetIcon()
+        {
+            return GeneralHelper.GetNPCIcon(ID);
         }
 
         public void SetManualHealth(int health)

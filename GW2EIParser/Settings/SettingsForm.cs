@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using GW2EIParser.Controllers;
+using GW2EIControllers;
 
 namespace GW2EIParser.Setting
 {

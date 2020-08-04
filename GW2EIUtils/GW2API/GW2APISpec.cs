@@ -1,4 +1,4 @@
-﻿namespace GW2EIParser.Controllers.GW2API
+﻿namespace GW2EIUtils.GW2API
 {
     public class GW2APISpec
     {

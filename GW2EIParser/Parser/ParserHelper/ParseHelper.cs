@@ -1,9 +1,16 @@
 ﻿using System.IO;
+using GW2EIParser.EIData;
+using GW2EIParser.Parser.ParsedData;
 
 namespace GW2EIParser.Parser
 {
     internal static class ParseHelper
     {
+
+        public static AgentItem UnknownAgent = new AgentItem();
+        // use this for "null" in AbstractActor dictionaries
+        public static NPC NullActor = new NPC(UnknownAgent);
+
         public static void SafeSkip(Stream stream, long bytesToSkip)
         {
             if (stream.CanSeek)

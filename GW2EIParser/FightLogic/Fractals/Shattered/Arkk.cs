@@ -4,7 +4,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashID;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -59,18 +59,18 @@ namespace GW2EIParser.Logic
                             (11204, 4414, 13252, 6462));
         }
 
-        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashID>
+            return new List<ArcDPSEnums.TrashID>
             {
-                TemporalAnomaly2,
-                BLIGHT,
-                Fanatic,
-                SolarBloom,
-                PLINK,
-                DOC,
-                CHOP,
-                ProjectionArkk
+                ArcDPSEnums.TrashID.TemporalAnomaly2,
+                ArcDPSEnums.TrashID.BLIGHT,
+                ArcDPSEnums.TrashID.Fanatic,
+                ArcDPSEnums.TrashID.SolarBloom,
+                ArcDPSEnums.TrashID.PLINK,
+                ArcDPSEnums.TrashID.DOC,
+                ArcDPSEnums.TrashID.CHOP,
+                ArcDPSEnums.TrashID.ProjectionArkk
             };
         }
 
@@ -83,15 +83,15 @@ namespace GW2EIParser.Logic
         {
             return new List<int>
             {
-                (int)ParseEnum.TargetID.Arkk,
-                (int)Archdiviner,
-                (int)BrazenGladiator
+                (int)ArcDPSEnums.TargetID.Arkk,
+                (int)ArcDPSEnums.TrashID.Archdiviner,
+                (int)ArcDPSEnums.TrashID.BrazenGladiator
             };
         }
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Arkk);
+            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Arkk);
             SetSuccessByBuffCount(combatData, fightData, playerAgents, target, 762, 10);
             // missing buff apply events fallback, some phases will be missing
             // removes should be present

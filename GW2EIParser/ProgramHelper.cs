@@ -6,12 +6,13 @@ using System.IO.Compression;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using GW2EIControllers;
 using GW2EIParser.Builders;
-using GW2EIParser.Controllers;
 using GW2EIParser.EIData;
-using GW2EIParser.Exceptions;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
+using GW2EIUtils;
+using GW2EIUtils.Exceptions;
 
 namespace GW2EIParser
 {
@@ -91,7 +92,7 @@ namespace GW2EIParser
                 {
                     throw new FileNotFoundException("File " + fInfo.FullName + " does not exist");
                 }
-                var control = new ParsingController(new ParserSettings());
+                var parser = new ParsingController(new ParserSettings(Properties.Settings.Default.Anonymous, Properties.Settings.Default.SkipFailedTries, Properties.Settings.Default.ParsePhases, Properties.Settings.Default.ParseCombatReplay, Properties.Settings.Default.ComputeDamageModifiers));
 
                 if (!HasFormat())
                 {
@@ -101,8 +102,9 @@ namespace GW2EIParser
                 if (IsSupportedFormat(fInfo.Name))
                 {
                     //Process evtc here
-                    ParsedLog log = control.ParseLog(operation, fInfo.FullName);
-                    string[] uploadresult = UploadController.UploadOperation(operation, fInfo);
+                    ParsedLog log = parser.ParseLog(operation, fInfo.FullName);
+                    string[] uploadresult = UploadController.UploadOperation(operation, fInfo, new UploadSettings(Properties.Settings.Default.UploadToDPSReports, Properties.Settings.Default.UploadToDPSReportsRH));
+                    WebhookController.SendMessage(operation, log.GetEmbed(uploadresult), uploadresult, new WebhookSettings(Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.ParseMultipleLogs, Properties.Settings.Default.WebhookURL, Properties.Settings.Default.SendSimpleMessageToWebhook));
                     //Creating File
                     GenerateFiles(log, operation, uploadresult, fInfo);
                 }
@@ -207,7 +209,7 @@ namespace GW2EIParser
             fName = $"{fName}{PoVClassTerm}_{log.FightData.Logic.Extension}{encounterLengthTerm}_{result}";
 
             // parallel stuff
-            if (log.ParserSettings.MultiTasks)
+            if (Properties.Settings.Default.MultiThreaded)
             {
                 log.FightData.GetPhases(log);
                 operation.UpdateProgressWithCancellationCheck("Multi threading");
@@ -248,7 +250,7 @@ namespace GW2EIParser
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs))
                 {
-                    var builder = new HTMLBuilder(log, uploadresult, Properties.Settings.Default.LightTheme, Properties.Settings.Default.HtmlExternalScripts);
+                    var builder = new HTMLBuilder(log, new HTMLSettings(Properties.Settings.Default.LightTheme, Properties.Settings.Default.HtmlExternalScripts), uploadresult);
                     builder.CreateHTML(sw, saveDirectory.FullName);
                 }
                 operation.UpdateProgressWithCancellationCheck("HTML created");
@@ -265,14 +267,14 @@ namespace GW2EIParser
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                 {
-                    var builder = new CSVBuilder(sw, ",", log, uploadresult);
-                    builder.CreateCSV();
+                    var builder = new CSVBuilder(log, new CSVSettings(","), uploadresult);
+                    builder.CreateCSV(sw);
                 }
                 operation.UpdateProgressWithCancellationCheck("CSV created");
             }
             if (Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML)
             {
-                var builder = new RawFormatBuilder(log, uploadresult);
+                var builder = new RawFormatBuilder(log, new RawFormatSettings(Properties.Settings.Default.RawTimelineArrays), uploadresult);
                 if (Properties.Settings.Default.SaveOutJSON)
                 {
                     operation.UpdateProgressWithCancellationCheck("Creating JSON");
@@ -337,11 +339,6 @@ namespace GW2EIParser
                     }
                     operation.UpdateProgressWithCancellationCheck("XML created");
                 }
-            }
-
-            if (Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.ParseMultipleLogs)
-            {
-                WebhookController.SendMessage(log, uploadresult);
             }
             operation.UpdateProgress($"Completed parsing for {result}ed {log.FightData.Logic.Extension}");
         }

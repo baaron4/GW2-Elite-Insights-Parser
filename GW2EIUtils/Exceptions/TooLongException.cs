@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GW2EIParser.Exceptions
+namespace GW2EIUtils.Exceptions
 {
     public class TooLongException : Exception
     {

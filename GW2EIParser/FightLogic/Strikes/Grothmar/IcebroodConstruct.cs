@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -39,7 +40,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.IcebroodConstruct);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.IcebroodConstruct);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Icebrood Construct not found");

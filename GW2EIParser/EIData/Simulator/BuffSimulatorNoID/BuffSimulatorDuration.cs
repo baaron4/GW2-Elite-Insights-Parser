@@ -1,10 +1,11 @@
-﻿using GW2EIParser.Parser.ParsedData;
+﻿using GW2EIParser.Parser;
+using GW2EIParser.Parser.ParsedData;
 
 namespace GW2EIParser.EIData
 {
     public class BuffSimulatorDuration : BuffSimulator
     {
-        private (AgentItem agent, bool extension) _lastSrcRemove = (GeneralHelper.UnknownAgent, false);
+        private (AgentItem agent, bool extension) _lastSrcRemove = (ParseHelper.UnknownAgent, false);
         // Constructor
         public BuffSimulatorDuration(int capacity, ParsedLog log, StackingLogic logic) : base(capacity, log, logic)
         {
@@ -28,7 +29,7 @@ namespace GW2EIParser.EIData
         {
             if (BuffStack.Count > 0 && timePassed > 0)
             {
-                _lastSrcRemove = (GeneralHelper.UnknownAgent, false);
+                _lastSrcRemove = (ParseHelper.UnknownAgent, false);
                 var toAdd = new BuffSimulationItemDuration(BuffStack[0]);
                 GenerationSimulation.Add(toAdd);
                 long timeDiff = BuffStack[0].Duration - timePassed;

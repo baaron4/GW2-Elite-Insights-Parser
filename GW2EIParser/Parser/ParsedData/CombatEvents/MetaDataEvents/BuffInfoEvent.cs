@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GW2EIParser.EIData;
+using GW2EIUtils;
 
 namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
@@ -12,10 +13,10 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public bool ProbablyInvert { get; private set; }
 
-        public ParseEnum.BuffCategory Category { get; private set; }
+        public ArcDPSEnums.BuffCategory Category { get; private set; }
 
         public byte StackingTypeByte { get; private set; }
-        public ParseEnum.BuffStackType StackingType { get; private set; }
+        public ArcDPSEnums.BuffStackType StackingType { get; private set; }
 
         public bool ProbablyResistance { get; private set; }
 
@@ -36,10 +37,10 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             }
             switch (evtcItem.IsStateChange)
             {
-                case ParseEnum.StateChange.BuffFormula:
+                case ArcDPSEnums.StateChange.BuffFormula:
                     BuildFromBuffFormula(evtcItem);
                     break;
-                case ParseEnum.StateChange.BuffInfo:
+                case ArcDPSEnums.StateChange.BuffInfo:
                     BuildFromBuffInfo(evtcItem);
                     break;
                 default:
@@ -51,14 +52,14 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         {
             ProbablyInvul = evtcItem.IsFlanking > 0;
             ProbablyInvert = evtcItem.IsShields > 0;
-            Category = ParseEnum.GetBuffCategory(evtcItem.IsOffcycle);
+            Category = ArcDPSEnums.GetBuffCategory(evtcItem.IsOffcycle);
             MaxStacks = evtcItem.SrcMasterInstid;
             StackingTypeByte = evtcItem.Pad1;
-            StackingType = ParseEnum.GetBuffStackType(StackingTypeByte);
+            StackingType = ArcDPSEnums.GetBuffStackType(StackingTypeByte);
             ProbablyResistance = evtcItem.Pad2 > 0;
         }
 
-        public void AdjustBuffInfo(Dictionary<byte, ParseEnum.BuffAttribute> solved)
+        public void AdjustBuffInfo(Dictionary<byte, ArcDPSEnums.BuffAttribute> solved)
         {
             Formulas.Sort((x, y) => (x.TraitSelf + x.TraitSrc).CompareTo(y.TraitSrc + y.TraitSelf));
             if (solved.Count == 0)

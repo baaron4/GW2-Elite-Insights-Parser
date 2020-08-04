@@ -1,10 +1,11 @@
 ﻿using GW2EIParser.EIData;
+using GW2EIUtils;
 
 namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
     public class BuffRemoveSingleEvent : AbstractBuffRemoveEvent
     {
-        private readonly ParseEnum.IFF _iff;
+        private readonly ArcDPSEnums.IFF _iff;
         public uint BuffInstance { get; protected set; }
         public BuffRemoveSingleEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
@@ -12,7 +13,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             BuffInstance = evtcItem.Pad;
         }
 
-        public BuffRemoveSingleEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill, uint id, ParseEnum.IFF iff) : base(by, to, time, removedDuration, buffSkill)
+        public BuffRemoveSingleEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill, uint id, ArcDPSEnums.IFF iff) : base(by, to, time, removedDuration, buffSkill)
         {
             _iff = iff;
             BuffInstance = id;
@@ -22,7 +23,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         {
             return BuffID != ProfHelper.NoBuff &&
                     (hasStackIDs ||
-                        (!(_iff == ParseEnum.IFF.Unknown && By == GeneralHelper.UnknownAgent && !hasStackIDs) && // overstack or natural end removals
+                        (!(_iff == ArcDPSEnums.IFF.Unknown && By == ParseHelper.UnknownAgent && !hasStackIDs) && // overstack or natural end removals
                         !(RemovedDuration <= 50 && RemovedDuration != 0 && !hasStackIDs) &&// low value single stack remove that can mess up with the simulator if server delay
                         Time <= fightEnd - 50)); // don't take into account removal that are close to the end of the fight));
 
@@ -30,7 +31,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            simulator.Remove(By, RemovedDuration, 1, Time, ParseEnum.BuffRemove.Single, BuffInstance);
+            simulator.Remove(By, RemovedDuration, 1, Time, ArcDPSEnums.BuffRemove.Single, BuffInstance);
         }
         public override int CompareTo(AbstractBuffEvent abe)
         {

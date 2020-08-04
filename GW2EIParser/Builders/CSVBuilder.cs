@@ -16,17 +16,20 @@ namespace GW2EIParser.Builders
         private readonly List<PhaseData> _phases;
         private readonly NPC _legacyTarget;
         private readonly GeneralStatistics _statistics;
-        private readonly StreamWriter _sw;
+        private StreamWriter _sw;
         private readonly string _delimiter;
         private readonly string[] _uploadResult;
 
         private readonly List<Player> _noFakePlayers;
 
-        public CSVBuilder(StreamWriter sw, string delimiter, ParsedLog log, string[] uploadresult)
+        public CSVBuilder(ParsedLog log, CSVSettings settings, string[] uploadresult = null)
         {
+            if (settings == null)
+            {
+                throw new InvalidDataException("Missing settings in CSVBuilder");
+            }
             _log = log;
-            _sw = sw;
-            _delimiter = delimiter;
+            _delimiter = settings.Delimiter;
             _phases = log.FightData.GetPhases(log);
             _noFakePlayers = log.PlayerList.Where(x => !x.IsFakeActor).ToList();
 
@@ -63,8 +66,9 @@ namespace GW2EIParser.Builders
             NewLine();
         }
         //Creating CSV---------------------------------------------------------------------------------
-        public void CreateCSV()
+        public void CreateCSV(StreamWriter sw)
         {
+            _sw = sw;
             //header
             _log.UpdateProgressWithCancellationCheck("CSV: Building Meta Data");
             WriteLine(new[] { "Elite Insights Version", Application.ProductVersion });

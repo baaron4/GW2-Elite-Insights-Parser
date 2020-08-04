@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using GW2EIParser.EIData;
 using GW2EIParser.Logic;
+using GW2EIUtils;
 
 namespace GW2EIParser.Parser.ParsedData
 {
@@ -40,163 +41,163 @@ namespace GW2EIParser.Parser.ParsedData
             FightOffset = start;
             FightEnd = end - start;
             TriggerID = id;
-            switch (ParseEnum.GetTargetID(id))
+            switch (ArcDPSEnums.GetTargetID(id))
             {
                 //
-                case ParseEnum.TargetID.ValeGuardian:
+                case ArcDPSEnums.TargetID.ValeGuardian:
                     Logic = new ValeGuardian(id);
                     break;
-                case ParseEnum.TargetID.Gorseval:
+                case ArcDPSEnums.TargetID.Gorseval:
                     Logic = new Gorseval(id);
                     break;
-                case ParseEnum.TargetID.Sabetha:
+                case ArcDPSEnums.TargetID.Sabetha:
                     Logic = new Sabetha(id);
                     break;
-                case ParseEnum.TargetID.Slothasor:
+                case ArcDPSEnums.TargetID.Slothasor:
                     Logic = new Slothasor(id);
                     break;
-                case ParseEnum.TargetID.Zane:
-                case ParseEnum.TargetID.Berg:
-                case ParseEnum.TargetID.Narella:
+                case ArcDPSEnums.TargetID.Zane:
+                case ArcDPSEnums.TargetID.Berg:
+                case ArcDPSEnums.TargetID.Narella:
                     Logic = new BanditTrio(id);
                     break;
-                case ParseEnum.TargetID.Matthias:
+                case ArcDPSEnums.TargetID.Matthias:
                     Logic = new Matthias(id);
                     break;
                 /*case ParseEnum.TargetIDS.Escort:
                     Logic = new Escort(id, agentData);
                     break;*/
-                case ParseEnum.TargetID.KeepConstruct:
+                case ArcDPSEnums.TargetID.KeepConstruct:
                     Logic = new KeepConstruct(id);
                     break;
-                case ParseEnum.TargetID.Xera:
+                case ArcDPSEnums.TargetID.Xera:
                     // some TC logs are registered as Xera
-                    if (agentData.GetNPCsByID((int)ParseEnum.TrashID.HauntingStatue).Count > 0)
+                    if (agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.HauntingStatue).Count > 0)
                     {
-                        TriggerID = (int)ParseEnum.TrashID.HauntingStatue;
-                        Logic = new TwistedCastle((int)ParseEnum.TargetID.TwistedCastle);
+                        TriggerID = (int)ArcDPSEnums.TrashID.HauntingStatue;
+                        Logic = new TwistedCastle((int)ArcDPSEnums.TargetID.TwistedCastle);
                         break;
                     }
                     Logic = new Xera(id);
                     break;
-                case ParseEnum.TargetID.Cairn:
+                case ArcDPSEnums.TargetID.Cairn:
                     Logic = new Cairn(id);
                     break;
-                case ParseEnum.TargetID.MursaatOverseer:
+                case ArcDPSEnums.TargetID.MursaatOverseer:
                     Logic = new MursaatOverseer(id);
                     break;
-                case ParseEnum.TargetID.Samarog:
+                case ArcDPSEnums.TargetID.Samarog:
                     Logic = new Samarog(id);
                     break;
-                case ParseEnum.TargetID.Deimos:
+                case ArcDPSEnums.TargetID.Deimos:
                     Logic = new Deimos(id);
                     break;
-                case ParseEnum.TargetID.SoullessHorror:
+                case ArcDPSEnums.TargetID.SoullessHorror:
                     Logic = new SoullessHorror(id);
                     break;
-                case ParseEnum.TargetID.Desmina:
+                case ArcDPSEnums.TargetID.Desmina:
                     Logic = new River(id);
                     break;
-                case ParseEnum.TargetID.BrokenKing:
+                case ArcDPSEnums.TargetID.BrokenKing:
                     Logic = new BrokenKing(id);
                     break;
-                case ParseEnum.TargetID.SoulEater:
+                case ArcDPSEnums.TargetID.SoulEater:
                     Logic = new EaterOfSouls(id);
                     break;
-                case ParseEnum.TargetID.EyeOfFate:
-                case ParseEnum.TargetID.EyeOfJudgement:
+                case ArcDPSEnums.TargetID.EyeOfFate:
+                case ArcDPSEnums.TargetID.EyeOfJudgement:
                     Logic = new DarkMaze(id);
                     break;
-                case ParseEnum.TargetID.Dhuum:
+                case ArcDPSEnums.TargetID.Dhuum:
                     // some eyes logs are registered as Dhuum
-                    if (agentData.GetNPCsByID((int)ParseEnum.TargetID.EyeOfFate).Count > 0 ||
-                        agentData.GetNPCsByID((int)ParseEnum.TargetID.EyeOfJudgement).Count > 0)
+                    if (agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.EyeOfFate).Count > 0 ||
+                        agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.EyeOfJudgement).Count > 0)
                     {
-                        TriggerID = (int)ParseEnum.TargetID.EyeOfFate;
+                        TriggerID = (int)ArcDPSEnums.TargetID.EyeOfFate;
                         Logic = new DarkMaze(TriggerID);
                         break;
                     }
                     Logic = new Dhuum(id);
                     break;
-                case ParseEnum.TargetID.ConjuredAmalgamate:
+                case ArcDPSEnums.TargetID.ConjuredAmalgamate:
                     Logic = new ConjuredAmalgamate(id);
                     break;
-                case ParseEnum.TargetID.Kenut:
-                case ParseEnum.TargetID.Nikare:
+                case ArcDPSEnums.TargetID.Kenut:
+                case ArcDPSEnums.TargetID.Nikare:
                     Logic = new TwinLargos(id);
                     break;
-                case ParseEnum.TargetID.Qadim:
+                case ArcDPSEnums.TargetID.Qadim:
                     Logic = new Qadim(id);
                     break;
-                case ParseEnum.TargetID.Freezie:
+                case ArcDPSEnums.TargetID.Freezie:
                     Logic = new Freezie(id);
                     break;
-                case ParseEnum.TargetID.Adina:
+                case ArcDPSEnums.TargetID.Adina:
                     Logic = new Adina(id);
                     break;
-                case ParseEnum.TargetID.Sabir:
+                case ArcDPSEnums.TargetID.Sabir:
                     Logic = new Sabir(id);
                     break;
-                case ParseEnum.TargetID.PeerlessQadim:
+                case ArcDPSEnums.TargetID.PeerlessQadim:
                     Logic = new PeerlessQadim(id);
                     break;
                     //
-                case ParseEnum.TargetID.IcebroodConstruct:
+                case ArcDPSEnums.TargetID.IcebroodConstruct:
                     Logic = new IcebroodConstruct(id);
                     break;
-                case ParseEnum.TargetID.FraenirOfJormag:
+                case ArcDPSEnums.TargetID.FraenirOfJormag:
                     Logic = new FraenirOfJormag(id);
                     break;
-                case ParseEnum.TargetID.VoiceOfTheFallen:
-                case ParseEnum.TargetID.ClawOfTheFallen:
+                case ArcDPSEnums.TargetID.VoiceOfTheFallen:
+                case ArcDPSEnums.TargetID.ClawOfTheFallen:
                     Logic = new SuperKodanBrothers(id);
                     break;
-                case ParseEnum.TargetID.Boneskinner:
+                case ArcDPSEnums.TargetID.Boneskinner:
                     Logic = new Boneskinner(id);
                     break;
-                case ParseEnum.TargetID.WhisperOfJormag:
+                case ArcDPSEnums.TargetID.WhisperOfJormag:
                     Logic = new WhisperOfJormag(id);
                     break;
-                case ParseEnum.TargetID.VariniaStormsounder:
+                case ArcDPSEnums.TargetID.VariniaStormsounder:
                     Logic = new ColdWar(id);
                     break;
                 //
-                case ParseEnum.TargetID.MAMA:
+                case ArcDPSEnums.TargetID.MAMA:
                     Logic = new MAMA(id);
                     break;
-                case ParseEnum.TargetID.Siax:
+                case ArcDPSEnums.TargetID.Siax:
                     Logic = new Siax(id);
                     break;
-                case ParseEnum.TargetID.Ensolyss:
+                case ArcDPSEnums.TargetID.Ensolyss:
                     Logic = new Ensolyss(id);
                     break;
-                case ParseEnum.TargetID.Skorvald:
+                case ArcDPSEnums.TargetID.Skorvald:
                     Logic = new Skorvald(id);
                     break;
-                case ParseEnum.TargetID.Artsariiv:
+                case ArcDPSEnums.TargetID.Artsariiv:
                     Logic = new Artsariiv(id);
                     break;
-                case ParseEnum.TargetID.Arkk:
+                case ArcDPSEnums.TargetID.Arkk:
                     Logic = new Arkk(id);
                     break;
                     //
-                case ParseEnum.TargetID.WorldVersusWorld:
+                case ArcDPSEnums.TargetID.WorldVersusWorld:
                     Logic = new WvWFight(id);
                     break;
                     //
-                case ParseEnum.TargetID.MassiveGolem:
-                case ParseEnum.TargetID.AvgGolem:
-                case ParseEnum.TargetID.LGolem:
-                case ParseEnum.TargetID.MedGolem:
-                case ParseEnum.TargetID.StdGolem:
+                case ArcDPSEnums.TargetID.MassiveGolem:
+                case ArcDPSEnums.TargetID.AvgGolem:
+                case ArcDPSEnums.TargetID.LGolem:
+                case ArcDPSEnums.TargetID.MedGolem:
+                case ArcDPSEnums.TargetID.StdGolem:
                     Logic = new Golem(id);
                     break;
                     //
                 default:
-                    switch (ParseEnum.GetTrashID(id))
+                    switch (ArcDPSEnums.GetTrashID(id))
                     {
-                        case ParseEnum.TrashID.HauntingStatue:
-                            Logic = new TwistedCastle((int)ParseEnum.TargetID.TwistedCastle);
+                        case ArcDPSEnums.TrashID.HauntingStatue:
+                            Logic = new TwistedCastle((int)ArcDPSEnums.TargetID.TwistedCastle);
                             break;
                         default:
                             // Unknown

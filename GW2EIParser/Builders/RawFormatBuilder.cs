@@ -2,6 +2,7 @@
 using System.IO;
 using System.Xml;
 using GW2EIParser.Builders.JsonModels;
+using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -15,9 +16,13 @@ namespace GW2EIParser.Builders
 
         //
 
-        public RawFormatBuilder(ParsedLog log, string[] uploadLinks)
+        public RawFormatBuilder(ParsedLog log, RawFormatSettings settings, string[] uploadLinks = null)
         {
-            JsonLog = new JsonLog(log, uploadLinks);
+            if (settings == null)
+            {
+                throw new InvalidDataException("Missing settings in RawFormatBuilder");
+            }
+            JsonLog = new JsonLog(log, settings, uploadLinks);
         }
 
         public void CreateJSON(StreamWriter sw, bool indent)

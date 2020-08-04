@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashID;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -46,14 +46,14 @@ namespace GW2EIParser.Logic
                             (19072, 15484, 20992, 16508));
         }
 
-        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashID>
+            return new List<ArcDPSEnums.TrashID>
             {
-                Scythe,
-                TormentedDead,
-                SurgingSoul,
-                FleshWurm
+                ArcDPSEnums.TrashID.Scythe,
+                ArcDPSEnums.TrashID.TormentedDead,
+                ArcDPSEnums.TrashID.SurgingSoul,
+                ArcDPSEnums.TrashID.FleshWurm
             };
         }
 
@@ -62,7 +62,7 @@ namespace GW2EIParser.Logic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.SoullessHorror);
+                NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.SoullessHorror);
                 if (mainTarget == null)
                 {
                     throw new InvalidOperationException("Soulless Horror not found");
@@ -87,7 +87,7 @@ namespace GW2EIParser.Logic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.SoullessHorror);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.SoullessHorror);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Soulless Horror not found");
@@ -123,7 +123,7 @@ namespace GW2EIParser.Logic
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetID.SoullessHorror:
+                case (int)ArcDPSEnums.TargetID.SoullessHorror:
                     var howling = cls.Where(x => x.SkillId == 48662).ToList();
                     foreach (AbstractCastEvent c in howling)
                     {
@@ -195,17 +195,17 @@ namespace GW2EIParser.Logic
 
                     }
                     break;
-                case (int)Scythe:
+                case (int)ArcDPSEnums.TrashID.Scythe:
                     replay.Decorations.Add(new CircleDecoration(true, 0, 80, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     break;
-                case (int)TormentedDead:
+                case (int)ArcDPSEnums.TrashID.TormentedDead:
                     if (replay.Positions.Count == 0)
                     {
                         break;
                     }
                     replay.Decorations.Add(new CircleDecoration(true, 0, 400, (end, end + 60000), "rgba(255, 0, 0, 0.5)", new PositionConnector(replay.Positions.Last())));
                     break;
-                case (int)SurgingSoul:
+                case (int)ArcDPSEnums.TrashID.SurgingSoul:
                     List<Point3D> positions = replay.Positions;
                     if (positions.Count < 2)
                     {
@@ -222,7 +222,7 @@ namespace GW2EIParser.Logic
                         break;
                     }
                     break;
-                case (int)FleshWurm:
+                case (int)ArcDPSEnums.TrashID.FleshWurm:
                     break;
                 default:
                     break;

@@ -2,6 +2,7 @@
 using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser.ParsedData;
+using GW2EIUtils;
 using static GW2EIParser.Builders.JsonModels.JsonBuffsUptime;
 using static GW2EIParser.Builders.JsonModels.JsonPlayerBuffsGeneration;
 
@@ -147,7 +148,7 @@ namespace GW2EIParser.Builders.JsonModels
         public List<long> ActiveTimes { get; }
 
 
-        public JsonPlayer(Player player, ParsedLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc, Dictionary<string, JsonLog.DamageModDesc> damageModDesc, Dictionary<string, HashSet<long>> personalBuffs) : base(player, log, skillDesc, buffDesc)
+        public JsonPlayer(Player player, ParsedLog log, RawFormatSettings settings, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc, Dictionary<string, JsonLog.DamageModDesc> damageModDesc, Dictionary<string, HashSet<long>> personalBuffs) : base(player, log, settings, skillDesc, buffDesc)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             //
@@ -171,13 +172,13 @@ namespace GW2EIParser.Builders.JsonModels
                 for (int i = 0; i < phases.Count; i++)
                 {
                     PhaseData phase = phases[i];
-                    if (log.ParserSettings.RawTimelineArrays)
+                    if (settings.RawFormatTimelineArrays)
                     {
                         dpsGraphList[i] = player.Get1SDamageList(log, i, phase, target);
                     }
                     targetDamageDistList[i] = JsonDamageDist.BuildJsonDamageDistList(player.GetDamageLogs(target, log, phase).Where(x => !x.HasDowned).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
                 }
-                if (log.ParserSettings.RawTimelineArrays)
+                if (settings.RawFormatTimelineArrays)
                 {
                     TargetDamage1S[j] = dpsGraphList;
                 }
@@ -186,13 +187,13 @@ namespace GW2EIParser.Builders.JsonModels
                 StatsTargets[j] = player.GetGameplayStats(log, target).Select(x => new JsonStatistics.JsonGameplayStats(x)).ToArray();
             }
             //
-            BuffUptimes = GetPlayerJsonBuffsUptime(player, player.GetBuffs(log, BuffEnum.Self), player.GetBuffsDictionary(log), log, buffDesc, personalBuffs);
+            BuffUptimes = GetPlayerJsonBuffsUptime(player, player.GetBuffs(log, BuffEnum.Self), player.GetBuffsDictionary(log), log, settings, buffDesc, personalBuffs);
             SelfBuffs = GetPlayerBuffGenerations(player.GetBuffs(log, BuffEnum.Self), log, buffDesc);
             GroupBuffs = GetPlayerBuffGenerations(player.GetBuffs(log, BuffEnum.Group), log, buffDesc);
             OffGroupBuffs = GetPlayerBuffGenerations(player.GetBuffs(log, BuffEnum.OffGroup), log, buffDesc);
             SquadBuffs = GetPlayerBuffGenerations(player.GetBuffs(log, BuffEnum.Squad), log, buffDesc);
             //
-            BuffUptimesActive = GetPlayerJsonBuffsUptime(player, player.GetActiveBuffs(log, BuffEnum.Self), player.GetBuffsDictionary(log), log, buffDesc, personalBuffs);
+            BuffUptimesActive = GetPlayerJsonBuffsUptime(player, player.GetActiveBuffs(log, BuffEnum.Self), player.GetBuffsDictionary(log), log, settings, buffDesc, personalBuffs);
             SelfBuffsActive = GetPlayerBuffGenerations(player.GetActiveBuffs(log, BuffEnum.Self), log, buffDesc);
             GroupBuffsActive = GetPlayerBuffGenerations(player.GetActiveBuffs(log, BuffEnum.Group), log, buffDesc);
             OffGroupBuffsActive = GetPlayerBuffGenerations(player.GetActiveBuffs(log, BuffEnum.OffGroup), log, buffDesc);
@@ -254,7 +255,7 @@ namespace GW2EIParser.Builders.JsonModels
             return uptimes;
         }
 
-        private static List<JsonBuffsUptime> GetPlayerJsonBuffsUptime(Player player, List<Dictionary<long, FinalPlayerBuffs>> buffs, List<Dictionary<long, FinalBuffsDictionary>> buffsDictionary, ParsedLog log, Dictionary<string, JsonLog.BuffDesc> buffDesc, Dictionary<string, HashSet<long>> personalBuffs)
+        private static List<JsonBuffsUptime> GetPlayerJsonBuffsUptime(Player player, List<Dictionary<long, FinalPlayerBuffs>> buffs, List<Dictionary<long, FinalBuffsDictionary>> buffsDictionary, ParsedLog log, RawFormatSettings settings, Dictionary<string, JsonLog.BuffDesc> buffDesc, Dictionary<string, HashSet<long>> personalBuffs)
         {
             var res = new List<JsonBuffsUptime>();
             var profEnums = new HashSet<GeneralHelper.Source>(GeneralHelper.ProfToEnum(player.Prof));
@@ -285,7 +286,7 @@ namespace GW2EIParser.Builders.JsonModels
                         }
                     }
                 }
-                res.Add(new JsonBuffsUptime(player, pair.Key, log, data, buffDesc));
+                res.Add(new JsonBuffsUptime(player, pair.Key, log, settings, data, buffDesc));
             }
             return res;
         }

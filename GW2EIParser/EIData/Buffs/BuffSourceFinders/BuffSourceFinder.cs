@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIUtils;
 
 namespace GW2EIParser.EIData
 {
@@ -87,7 +89,7 @@ namespace GW2EIParser.EIData
                     // If uncertainty due to essence of speed or imbued melodies, return unknown
                     if (essenceOfSpeedCheck == 0 || CouldBeImbuedMelodies(item.Caster, time, extension, log))
                     {
-                        return GeneralHelper.UnknownAgent;
+                        return ParseHelper.UnknownAgent;
                     }
                     // otherwise the src is the caster
                     return item.Caster;
@@ -98,13 +100,13 @@ namespace GW2EIParser.EIData
                     // If uncertainty due to imbued melodies, return unknown
                     if (CouldBeImbuedMelodies(dst, time, extension, log))
                     {
-                        return GeneralHelper.UnknownAgent;
+                        return ParseHelper.UnknownAgent;
                     }
                     // otherwise return the soulbeast
                     return dst;
                 }
             }
-            return GeneralHelper.UnknownAgent;
+            return ParseHelper.UnknownAgent;
         }
 
     }

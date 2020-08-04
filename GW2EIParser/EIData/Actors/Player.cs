@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using GW2EIParser.Logic;
+using GW2EIUtils;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 using static GW2EIParser.EIData.Buff;
@@ -50,6 +50,12 @@ namespace GW2EIParser.EIData
             Group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
             IsFakeActor = fake;
         }
+
+        public override string GetIcon()
+        {
+            return GeneralHelper.GetProfIcon(Prof);
+        }
+
 
         public void MakeSquadless()
         {

@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GW2EIParser", "GW2EIParser\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GW2EIParser.tst", "GW2EIParser.tst\GW2EIParser.tst.csproj", "{D59E0D49-6854-40C6-BA61-236DDE04AEE9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GW2EIControllers", "GW2EIControllers\GW2EIControllers.csproj", "{333A23F3-CD0C-480C-836C-7FCAF8F9BB6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GW2EIUtils", "GW2EIUtils\GW2EIUtils.csproj", "{BED03588-9C18-43F2-8F95-291D0CBACBA2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,6 +26,14 @@ Global
 		{D59E0D49-6854-40C6-BA61-236DDE04AEE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D59E0D49-6854-40C6-BA61-236DDE04AEE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D59E0D49-6854-40C6-BA61-236DDE04AEE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{333A23F3-CD0C-480C-836C-7FCAF8F9BB6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{333A23F3-CD0C-480C-836C-7FCAF8F9BB6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{333A23F3-CD0C-480C-836C-7FCAF8F9BB6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{333A23F3-CD0C-480C-836C-7FCAF8F9BB6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BED03588-9C18-43F2-8F95-291D0CBACBA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BED03588-9C18-43F2-8F95-291D0CBACBA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BED03588-9C18-43F2-8F95-291D0CBACBA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BED03588-9C18-43F2-8F95-291D0CBACBA2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

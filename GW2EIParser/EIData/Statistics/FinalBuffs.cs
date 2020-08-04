@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using GW2EIUtils;
 using static GW2EIParser.EIData.Buff;
 
 namespace GW2EIParser.EIData

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 using static GW2EIParser.EIData.Buff;
-using static GW2EIParser.Parser.ParseEnum;
+using GW2EIUtils;
+using static GW2EIUtils.ArcDPSEnums;
 
 namespace GW2EIParser.EIData
 {
@@ -872,7 +872,7 @@ namespace GW2EIParser.EIData
         private readonly BuffSourceFinder _buffSourceFinder;
 
 
-        public BuffsContainer(ulong build, CombatData combatData, OperationController operation)
+        public BuffsContainer(ulong build, CombatData combatData, OperationTracer operation)
         {
             var AllBuffs = new List<List<Buff>>()
             {

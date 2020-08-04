@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using static GW2EIParser.EIData.AbstractBuffSimulator;
 
@@ -78,7 +79,7 @@ namespace GW2EIParser.EIData
                         0, 0, 0, 0, cDur));
                 }
             }
-            if (agent == GeneralHelper.UnknownAgent)
+            if (agent == ParseHelper.UnknownAgent)
             {
                 if (distrib.TryGetValue(seedAgent, out toModify))
                 {

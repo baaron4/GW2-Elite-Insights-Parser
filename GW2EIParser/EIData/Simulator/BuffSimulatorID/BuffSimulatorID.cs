@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIUtils;
 
 namespace GW2EIParser.EIData
 {
@@ -26,12 +27,12 @@ namespace GW2EIParser.EIData
             //ExtendedSimulationResult.Add(new BuffCreationItem(src, extension, time, toExtend.ID));
         }
 
-        public override void Remove(AgentItem by, long removedDuration, int removedStacks, long time, ParseEnum.BuffRemove removeType, uint stackID)
+        public override void Remove(AgentItem by, long removedDuration, int removedStacks, long time, ArcDPSEnums.BuffRemove removeType, uint stackID)
         {
             BuffStackItem toRemove;
             switch (removeType)
             {
-                case ParseEnum.BuffRemove.All:
+                case ArcDPSEnums.BuffRemove.All:
                     // remove all due to despawn event
                     if (removedStacks == BuffRemoveAllEvent.FullRemoval)
                     {
@@ -63,7 +64,7 @@ namespace GW2EIParser.EIData
                     }
                     toRemove = BuffStack[0];
                     break;
-                case ParseEnum.BuffRemove.Single:
+                case ArcDPSEnums.BuffRemove.Single:
                     toRemove = BuffStack.Find(x => x.StackID == stackID);
                     break;
                 default:
@@ -91,7 +92,7 @@ namespace GW2EIParser.EIData
                 }
             }
             // Removed due to a cleanse
-            else if (removedDuration > 50 && by != GeneralHelper.UnknownAgent)
+            else if (removedDuration > 50 && by != ParseHelper.UnknownAgent)
             {
                 WasteSimulationResult.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, time));
                 if (toRemove.Extensions.Count > 0)

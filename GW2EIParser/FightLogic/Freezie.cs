@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using GW2EIParser.EIData;
-using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
-using static GW2EIParser.Parser.ParseEnum.TrashID;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -18,8 +17,8 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Freezie);
-            NPC heartTarget = Targets.Find(x => x.ID == (int)FreeziesFrozenHeart);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Freezie);
+            NPC heartTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TrashID.FreeziesFrozenHeart);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Freezie not found");
@@ -51,8 +50,8 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<int>
             {
-                (int)ParseEnum.TargetID.Freezie,
-                (int)FreeziesFrozenHeart
+                (int)ArcDPSEnums.TargetID.Freezie,
+                (int)ArcDPSEnums.TrashID.FreeziesFrozenHeart
             };
         }
 
@@ -60,8 +59,8 @@ namespace GW2EIParser.Logic
         {
             return new List<int>
             {
-                (int)ParseEnum.TargetID.Freezie,
-                (int)FreeziesFrozenHeart
+                (int)ArcDPSEnums.TargetID.Freezie,
+                (int)ArcDPSEnums.TrashID.FreeziesFrozenHeart
             };
         }
     }

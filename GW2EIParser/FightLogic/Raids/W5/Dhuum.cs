@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashID;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -99,7 +99,7 @@ namespace GW2EIParser.Logic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC dhuum = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Dhuum);
+            NPC dhuum = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
             if (dhuum == null)
             {
                 throw new InvalidOperationException("Dhuum not found");
@@ -154,16 +154,16 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashID>
+            return new List<ArcDPSEnums.TrashID>
             {
-                Echo,
-                Enforcer,
-                Messenger,
-                Deathling,
-                UnderworldReaper,
-                DhuumDesmina
+                ArcDPSEnums.TrashID.Echo,
+                ArcDPSEnums.TrashID.Enforcer,
+                ArcDPSEnums.TrashID.Messenger,
+                ArcDPSEnums.TrashID.Deathling,
+                ArcDPSEnums.TrashID.UnderworldReaper,
+                ArcDPSEnums.TrashID.DhuumDesmina
             };
         }
 
@@ -175,7 +175,7 @@ namespace GW2EIParser.Logic
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetID.Dhuum:
+                case (int)ArcDPSEnums.TargetID.Dhuum:
                     var deathmark = cls.Where(x => x.SkillId == 48176).ToList();
                     AbstractCastEvent majorSplit = cls.Find(x => x.SkillId == 47396);
                     foreach (AbstractCastEvent c in deathmark)
@@ -231,19 +231,19 @@ namespace GW2EIParser.Logic
                         replay.Decorations.Add(new CircleDecoration(true, 0, 320, (start, end), "rgba(0, 180, 255, 0.2)", new AgentConnector(target)));
                     }
                     break;
-                case (int)DhuumDesmina:
+                case (int)ArcDPSEnums.TrashID.DhuumDesmina:
                     break;
-                case (int)Echo:
+                case (int)ArcDPSEnums.TrashID.Echo:
                     replay.Decorations.Add(new CircleDecoration(true, 0, 120, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     break;
-                case (int)Enforcer:
+                case (int)ArcDPSEnums.TrashID.Enforcer:
                     break;
-                case (int)Messenger:
+                case (int)ArcDPSEnums.TrashID.Messenger:
                     replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
                     break;
-                case (int)Deathling:
+                case (int)ArcDPSEnums.TrashID.Deathling:
                     break;
-                case (int)UnderworldReaper:
+                case (int)ArcDPSEnums.TrashID.UnderworldReaper:
                     // if not bugged and we assumed we are still on the reapers at the door, check if start is above 2 seconds (first reaper spawns around 10+ seconds). If yes, put _reapersSeen at 0 to start greens. 
                     if (!_isBugged && _reapersSeen < 0 && start > 2000)
                     {
@@ -305,7 +305,7 @@ namespace GW2EIParser.Logic
         {
             // spirit transform
             var spiritTransform = log.CombatData.GetBuffData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Dhuum);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Dhuum not found");
@@ -390,7 +390,7 @@ namespace GW2EIParser.Logic
 
         public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Dhuum);
+            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
             if (target == null)
             {
                 throw new InvalidOperationException("Dhuum not found");

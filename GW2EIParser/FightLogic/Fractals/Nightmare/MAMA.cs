@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
-using static GW2EIParser.Parser.ParseEnum.TrashID;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -51,7 +51,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mama = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.MAMA);
+            NPC mama = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.MAMA);
             if (mama == null)
             {
                 throw new InvalidOperationException("MAMA not found");
@@ -69,9 +69,9 @@ namespace GW2EIParser.Logic
                 {
                     var ids = new List<int>
                     {
-                       (int) GreenKnight,
-                       (int) RedKnight,
-                       (int) BlueKnight,
+                       (int) ArcDPSEnums.TrashID.GreenKnight,
+                       (int) ArcDPSEnums.TrashID.RedKnight,
+                       (int) ArcDPSEnums.TrashID.BlueKnight,
                     };
                     AddTargetsToPhase(phase, ids, log);
                     if (phase.Targets.Count > 0)
@@ -79,13 +79,13 @@ namespace GW2EIParser.Logic
                         NPC phaseTar = phase.Targets[0];
                         switch (phaseTar.ID)
                         {
-                            case (int)GreenKnight:
+                            case (int)ArcDPSEnums.TrashID.GreenKnight:
                                 phase.Name = "Green Knight";
                                 break;
-                            case (int)RedKnight:
+                            case (int)ArcDPSEnums.TrashID.RedKnight:
                                 phase.Name = "Red Knight";
                                 break;
-                            case (int)BlueKnight:
+                            case (int)ArcDPSEnums.TrashID.BlueKnight:
                                 phase.Name = "Blue Knight";
                                 break;
                             default:
@@ -106,24 +106,24 @@ namespace GW2EIParser.Logic
         {
             return new List<int>
             {
-                (int)ParseEnum.TargetID.MAMA,
-                (int)GreenKnight,
-                (int)RedKnight,
-                (int)BlueKnight
+                (int)ArcDPSEnums.TargetID.MAMA,
+                (int)ArcDPSEnums.TrashID.GreenKnight,
+                (int)ArcDPSEnums.TrashID.RedKnight,
+                (int)ArcDPSEnums.TrashID.BlueKnight
             };
         }
 
-        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashID>
+            return new List<ArcDPSEnums.TrashID>
             {
-                TwistedHorror
+                ArcDPSEnums.TrashID.TwistedHorror
             };
         }
 
         public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)ParseEnum.TargetID.MAMA, 762, 1500);
+            return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)ArcDPSEnums.TargetID.MAMA, 762, 1500);
         }
     }
 }

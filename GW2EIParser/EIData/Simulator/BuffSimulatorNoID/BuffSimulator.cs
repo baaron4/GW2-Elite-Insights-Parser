@@ -1,6 +1,7 @@
 ﻿using System;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
+using GW2EIUtils;
 
 namespace GW2EIParser.EIData
 {
@@ -65,11 +66,11 @@ namespace GW2EIParser.EIData
             }
         }
 
-        public override void Remove(AgentItem by, long removedDuration, int removedStacks, long time, ParseEnum.BuffRemove removeType, uint id)
+        public override void Remove(AgentItem by, long removedDuration, int removedStacks, long time, ArcDPSEnums.BuffRemove removeType, uint id)
         {
             switch (removeType)
             {
-                case ParseEnum.BuffRemove.All:
+                case ArcDPSEnums.BuffRemove.All:
                     foreach (BuffStackItem stackItem in BuffStack)
                     {
                         WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.Duration, time));
@@ -83,7 +84,7 @@ namespace GW2EIParser.EIData
                     }
                     BuffStack.Clear();
                     break;
-                case ParseEnum.BuffRemove.Single:
+                case ArcDPSEnums.BuffRemove.Single:
                     for (int i = 0; i < BuffStack.Count; i++)
                     {
                         BuffStackItem stackItem = BuffStack[i];

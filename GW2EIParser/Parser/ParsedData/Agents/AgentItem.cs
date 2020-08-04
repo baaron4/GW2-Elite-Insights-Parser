@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIUtils;
 
 namespace GW2EIParser.Parser.ParsedData
 {

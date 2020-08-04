@@ -90,7 +90,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public List<int[]> States { get; }
 
-        public JsonBuffsUptime(AbstractSingleActor actor, long buffID, ParsedLog log, List<JsonBuffsUptimeData> buffData, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        public JsonBuffsUptime(AbstractSingleActor actor, long buffID, ParsedLog log, RawFormatSettings settings, List<JsonBuffsUptimeData> buffData, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
             Id = buffID;
             BuffData = buffData;
@@ -98,7 +98,7 @@ namespace GW2EIParser.Builders.JsonModels
             {
                 buffDesc["b" + buffID] = new JsonLog.BuffDesc(log.Buffs.BuffsByIds[buffID], log);
             }
-            if (log.ParserSettings.RawTimelineArrays)
+            if (settings.RawFormatTimelineArrays)
             {
                 States = GetBuffStates(actor.GetBuffGraphs(log)[buffID]);
             }

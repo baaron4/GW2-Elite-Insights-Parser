@@ -49,7 +49,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public List<double[]> BreakbarPercents { get; }
 
-        public JsonNPC(NPC npc, ParsedLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc) : base(npc, log, skillDesc, buffDesc)
+        public JsonNPC(NPC npc, ParsedLog log, RawFormatSettings settings, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc) : base(npc, log, settings, skillDesc, buffDesc)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             //
@@ -73,16 +73,16 @@ namespace GW2EIParser.Builders.JsonModels
             HealthPercentBurned = 100.0 - hpLeft;
             FinalHealth = (int)Math.Round(TotalHealth * hpLeft / 100.0);
             //
-            Buffs = GetNPCJsonBuffsUptime(npc, npc.GetBuffs(log), npc.GetBuffsDictionary(log), log, buffDesc);
+            Buffs = GetNPCJsonBuffsUptime(npc, npc.GetBuffs(log), npc.GetBuffsDictionary(log), log, settings, buffDesc);
             // Breakbar
             List<BreakbarPercentEvent> breakbarPercentUpdates = log.CombatData.GetBreakbarPercentEvents(npc.AgentItem);
-            if (log.ParserSettings.RawTimelineArrays)
+            if (settings.RawFormatTimelineArrays)
             {
                 BreakbarPercents = breakbarPercentUpdates.Select(x => new double[2] { x.Time, x.BreakbarPercent }).ToList();
             }
         }
 
-        private static List<JsonBuffsUptime> GetNPCJsonBuffsUptime(NPC npc, List<Dictionary<long, FinalBuffs>> buffs, List<Dictionary<long, FinalBuffsDictionary>> buffsDictionary, ParsedLog log, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        private static List<JsonBuffsUptime> GetNPCJsonBuffsUptime(NPC npc, List<Dictionary<long, FinalBuffs>> buffs, List<Dictionary<long, FinalBuffsDictionary>> buffsDictionary, ParsedLog log, RawFormatSettings settings, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
             var res = new List<JsonBuffsUptime>();
             List<PhaseData> phases = log.FightData.GetPhases(log);
@@ -94,7 +94,7 @@ namespace GW2EIParser.Builders.JsonModels
                     var value = new JsonBuffsUptimeData(buffs[i][pair.Key], buffsDictionary[i][pair.Key]);
                     data.Add(value);
                 }
-                res.Add(new JsonBuffsUptime(npc, pair.Key, log, data, buffDesc));
+                res.Add(new JsonBuffsUptime(npc, pair.Key, log, settings, data, buffDesc));
             }
             return res;
         }

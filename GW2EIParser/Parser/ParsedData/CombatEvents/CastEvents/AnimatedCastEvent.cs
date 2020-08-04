@@ -1,4 +1,5 @@
 ﻿using System;
+using GW2EIUtils;
 
 namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
@@ -15,7 +16,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         private AnimatedCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData) : base(startItem, agentData, skillData)
         {
             ExpectedDuration = startItem.BuffDmg > 0 ? startItem.BuffDmg : startItem.Value;
-            if (startItem.IsActivation == ParseEnum.Activation.Quickness)
+            if (startItem.IsActivation == ArcDPSEnums.Activation.Quickness)
             {
                 Acceleration = 1;
             }
@@ -40,14 +41,14 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             }
             switch (endItem.IsActivation)
             {
-                case ParseEnum.Activation.CancelCancel:
+                case ArcDPSEnums.Activation.CancelCancel:
                     Status = AnimationStatus.Iterrupted;
                     SavedDuration = -ActualDuration;
                     break;
-                case ParseEnum.Activation.Reset:
+                case ArcDPSEnums.Activation.Reset:
                     Status = AnimationStatus.Full;
                     break;
-                case ParseEnum.Activation.CancelFire:
+                case ArcDPSEnums.Activation.CancelFire:
                     int nonScaledExpectedDuration = (int)Math.Round(ExpectedDuration / nonScaledToScaledRatio);
                     SavedDuration = Math.Max(nonScaledExpectedDuration - ActualDuration, 0);
                     Status = AnimationStatus.Reduced;

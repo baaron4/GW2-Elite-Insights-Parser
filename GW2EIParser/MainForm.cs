@@ -6,8 +6,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using GW2EIParser.Exceptions;
 using GW2EIParser.Setting;
+using GW2EIUtils;
+using GW2EIUtils.Exceptions;
 
 namespace GW2EIParser
 {

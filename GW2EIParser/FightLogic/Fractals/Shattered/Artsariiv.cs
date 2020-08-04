@@ -2,7 +2,7 @@
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
-using static GW2EIParser.Parser.ParseEnum.TrashID;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -35,15 +35,15 @@ namespace GW2EIParser.Logic
                             (11204, 4414, 13252, 6462));
         }
 
-        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashID>
+            return new List<ArcDPSEnums.TrashID>
             {
-                TemporalAnomaly,
-                Spark,
-                Artsariiv1,
-                Artsariiv2,
-                Artsariiv3
+                ArcDPSEnums.TrashID.TemporalAnomaly,
+                ArcDPSEnums.TrashID.Spark,
+                ArcDPSEnums.TrashID.Artsariiv1,
+                ArcDPSEnums.TrashID.Artsariiv2,
+                ArcDPSEnums.TrashID.Artsariiv3
             };
         }
 
@@ -54,7 +54,7 @@ namespace GW2EIParser.Logic
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            SetSuccessByBuffCount(combatData, fightData, playerAgents, Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Artsariiv), 762, 4);
+            SetSuccessByBuffCount(combatData, fightData, playerAgents, Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Artsariiv), 762, 4);
         }
     }
 }

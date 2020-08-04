@@ -1,12 +1,20 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using GW2EIParser.Exceptions;
 
 namespace GW2EIParser
 {
+    public enum OperationState
+    {
+        Ready = 0,
+        Parsing = 1,
+        Cancelling = 2,
+        Complete = 3,
+        Pending = 4,
+        ClearOnCancel = 5,
+        Queued = 6,
+    }
     public class FormOperationController : OperationController
     {
 
@@ -15,9 +23,19 @@ namespace GW2EIParser
         private Task _task;
 
         private readonly DataGridView _dgv;
+        /// <summary>
+        /// State of the button
+        /// </summary>
+        public string ButtonText { get; protected set; }
+        /// <summary>
+        /// Operation state
+        /// </summary>
+        public OperationState State { get; protected set; }
 
         public FormOperationController(string location, string status, DataGridView dgv) : base(location, status)
         {
+            ButtonText = "Parse";
+            State = OperationState.Ready;
             _dgv = dgv;
         }
 

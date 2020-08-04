@@ -5,6 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -126,8 +127,8 @@ namespace GW2EIParser.Logic
                     Targets.Add(new NPC(agentItem));
                 }
             }
-            List<ParseEnum.TrashID> ids2 = GetTrashMobsIDS();
-            var aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids2.Contains(ParseEnum.GetTrashID(x.ID))).ToList();
+            List<ArcDPSEnums.TrashID> ids2 = GetTrashMobsIDS();
+            var aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids2.Contains(ArcDPSEnums.GetTrashID(x.ID))).ToList();
             //aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
             foreach (AgentItem a in aList)
             {
@@ -228,8 +229,8 @@ namespace GW2EIParser.Logic
                 int i = 0;
                 List<BreakbarStateEvent> breakbarStateEvents = log.CombatData.GetBreakbarStateEvents(target.AgentItem);
                 List<BreakbarPercentEvent> breakbarPercentEvents = log.CombatData.GetBreakbarPercentEvents(target.AgentItem);
-                var breakbarActiveEvents = breakbarStateEvents.Where(x => x.State == ParseEnum.BreakbarState.Active).ToList();
-                var breakbarNotActiveEvents = breakbarStateEvents.Where(x => x.State != ParseEnum.BreakbarState.Active).ToList();
+                var breakbarActiveEvents = breakbarStateEvents.Where(x => x.State == ArcDPSEnums.BreakbarState.Active).ToList();
+                var breakbarNotActiveEvents = breakbarStateEvents.Where(x => x.State != ArcDPSEnums.BreakbarState.Active).ToList();
                 foreach (BreakbarStateEvent active in breakbarActiveEvents)
                 {
                     long start = Math.Max(active.Time - 2000, 0);
@@ -308,9 +309,9 @@ namespace GW2EIParser.Logic
         {
         }
 
-        protected virtual List<ParseEnum.TrashID> GetTrashMobsIDS()
+        protected virtual List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashID>();
+            return new List<ArcDPSEnums.TrashID>();
         }
 
         public virtual FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)

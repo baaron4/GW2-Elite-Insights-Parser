@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIUtils;
 
 namespace GW2EIParser.Parser.ParsedData
 {
@@ -26,7 +27,7 @@ namespace GW2EIParser.Parser.ParsedData
         public List<string> LogErrors { get; } = new List<string>();
 
         // Constructors
-        public LogData(string buildVersion, CombatData combatData, long evtcLogDuration, List<Player> playerList, OperationController operation)
+        public LogData(string buildVersion, CombatData combatData, long evtcLogDuration, List<Player> playerList, OperationTracer operation)
         {
             ArcVersion = buildVersion;
             double unixStart = 0;

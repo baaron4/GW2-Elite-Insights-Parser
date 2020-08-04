@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GW2EIParser.Controllers;
-using GW2EIParser.Controllers.GW2API;
+using GW2EIControllers;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIUtils.GW2API;
 
 namespace GW2EIParser.Parser.ParsedData
 {

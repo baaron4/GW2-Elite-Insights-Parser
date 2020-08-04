@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 
@@ -48,10 +49,10 @@ namespace GW2EIParser.EIData
                 targetDict = new Dictionary<AbstractActor, List<AbstractDamageEvent>>();
                 _damageLogsPerPhasePerTarget[phase] = targetDict;
             }
-            if (!targetDict.TryGetValue(target ?? GeneralHelper.NullActor, out List<AbstractDamageEvent> dls))
+            if (!targetDict.TryGetValue(target ?? ParseHelper.NullActor, out List<AbstractDamageEvent> dls))
             {
                 dls = GetDamageLogs(target, log, phase.Start, phase.End);
-                targetDict[target ?? GeneralHelper.NullActor] = dls;
+                targetDict[target ?? ParseHelper.NullActor] = dls;
             }
             return dls;
         }

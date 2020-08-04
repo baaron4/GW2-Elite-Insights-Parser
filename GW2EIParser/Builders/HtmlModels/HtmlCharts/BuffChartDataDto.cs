@@ -17,7 +17,7 @@ namespace GW2EIParser.Builders.HtmlModels
         {
             Id = bgm.Buff.ID;
             Visible = (bgm.Buff.Name == "Might" || bgm.Buff.Name == "Quickness" || bgm.Buff.Name == "Vulnerability");
-            Color = GeneralHelper.GetLink("Color-" + bgm.Buff.Name);
+            Color = HTMLBuilder.GetLink("Color-" + bgm.Buff.Name);
             States = Segment.ToObjectList(bChart, phase.Start, phase.End);
         }
 

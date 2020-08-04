@@ -71,14 +71,14 @@ namespace GW2EIParser.Properties {
         ///        this.img = new Image();
         ///        this.img.src = imgSrc;
         ///        this.img.onload = function () {
-        ///            animateCanvas(-1);
+        ///            animateCanvas(noUpdateTime);
         ///        };
         ///        this.pixelSize = pixelSize;
         ///    }
         ///
         ///    getInterpolatedPosition(startIndex, currentIndex) {
         ///        const offsetedIndex = currentIndex - startIndex;
-        ///        const positio [rest of string was truncated]&quot;;.
+        ///        con [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string actors {
             get {
@@ -90,28 +90,24 @@ namespace GW2EIParser.Properties {
         ///   Looks up a localized string similar to /*jshint esversion: 6 */
         ///// const images
         ///&quot;use strict&quot;;
+        ///const noUpdateTime = -1;
+        ///const updateText = -2;
         ///const deadIcon = new Image();
         ///deadIcon.onload = function () {
-        ///    animateCanvas(-1);
+        ///    animateCanvas(noUpdateTime);
         ///};
         ///const downIcon = new Image();
         ///downIcon.onload = function () {
-        ///    animateCanvas(-1);
+        ///    animateCanvas(noUpdateTime);
         ///};
         ///const dcIcon = new Image();
         ///dcIcon.onload = function () {
-        ///    animateCanvas(-1);
+        ///    animateCanvas(noUpdateTime);
         ///};
         ///const facingIcon = new Image();
         ///facingIcon.onload = function () {
-        ///    animateCanvas(-1);
-        ///};
-        ///
-        ///const resolutionMultiplier = window.devicePixelRatio;
-        ///
-        ///var animator = null;
-        ///
-        ///cla [rest of string was truncated]&quot;;.
+        ///    animateCanvas(noUpdateTime);
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string animator {
             get {
@@ -152,6 +148,10 @@ namespace GW2EIParser.Properties {
         ///    border-top: 0;
         ///}
         ///
+        ///.form-control {
+        ///    padding: 0.300rem 0.4rem;
+        ///}
+        ///
         ///.theme-slate g.hovertext text.name {
         ///    fill: #cccccc !important;
         ///}
@@ -172,11 +172,10 @@ namespace GW2EIParser.Properties {
         ///
         ///.scrollable-y {
         ///    overflow-y: auto;
+        ///    overflow-x: hidden;
         ///}
         ///
-        ///.theme-yeti ::-webkit-scrollbar {
-        ///    width: 6px;
-        ///    background-color: #DDD [rest of string was truncated]&quot;;.
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ei_css {
             get {
@@ -467,7 +466,8 @@ namespace GW2EIParser.Properties {
         ///                &lt;a class=&quot;nav-link&quot; @click=&quot;damageMode = 1&quot; :class=&quot;{active: damageMode === 1}&quot;&gt;DPS&lt;/a&gt;
         ///            &lt;/li&gt;
         ///        &lt;/ul&gt;
-        ///        &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0 [rest of string was truncated]&quot;;.
+        ///        &lt;div class=&quot;scrollable-cr-dps-table&quot;&gt;
+        ///            &lt;table class=&quot;table [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayDamageTable {
             get {
@@ -477,13 +477,15 @@ namespace GW2EIParser.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div&gt;
-        ///        &lt;h3&gt;Range Selectors&lt;/h3&gt;
-        ///        &lt;div class=&quot;d-flex flex-column flex-wrap justify-content-center align-items-center&quot;&gt;
-        ///            &lt;div class=&quot;d-flex flex-column flex-wrap justify-content-center align-items-center mb-2&quot; v-for=&quot;rangeCol in rangeSelectArrays&quot;&gt;
-        ///                &lt;div class=&quot;range-btns d-flex flex-row flex-wrap justify-content-center align-items-center&quot;&gt;
-        ///                    &lt;label v-for=&quot;range in rangeCol&quot; @click=&quot;toggleRange(range);&quot;
-        ///                            [rest of string was truncated]&quot;;.
+        ///    &lt;div class=&quot;d-flex flex-column justify-content-center align-items-center&quot;&gt;
+        ///        &lt;div class=&quot;form-check mb-2&quot;&gt;
+        ///            &lt;input type=&quot;checkbox&quot; class=&quot;form-check-input&quot; id=&quot;subgroupCheck&quot; checked&gt;
+        ///            &lt;label class=&quot;form-check-label&quot; for=&quot;subgroupCheck&quot;&gt;Highlight Selected Group&lt;/label&gt;
+        ///        &lt;/div&gt;
+        ///        &lt;div class=&quot;d-flex flex-row justify-content-center&quot;&gt;
+        ///            &lt;div class=&quot;mr-3&quot;&gt;
+        ///                &lt;h3&gt;Range Selectors&lt;/h3&gt;
+        ///                &lt;div class=&quot;form-check mt- [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayExtraDecorations {
             get {
@@ -512,9 +514,9 @@ namespace GW2EIParser.Properties {
         ///    &lt;div class=&quot;d-flex flex-row flex-wrap justify-content-center align-items-start mb-2&quot;&gt;
         ///        &lt;div class=&quot;d-flex flex-column scrollable-y&quot; style=&quot;max-height: 250px;&quot;&gt;
         ///            &lt;div v-for=&quot;group in groups&quot; class=&quot;d-flex flex-row align-items-center ml-2 mt-1&quot; style=&quot;width:450px;&quot;&gt;
-        ///                &lt;h5 class=&quot;mt-2&quot;&gt;Group {{group.id}}&lt;/h5&gt;
+        ///                &lt;h5 class=&quot;mt-2&quot; style=&quot;min-width:80px;max-width:80px;&quot;&gt;Group {{group.id}}&lt;/h5&gt;
         ///                &lt;div class=&quot;d-flex flex-row flex-wrap align-items-center ml-1&quot; style=&quot;max-width:370px;&quot;&gt;
-        ///                    &lt;span v-for=&quot;player in gro [rest of string was truncated]&quot;;.
+        ///        [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayPlayerSelect {
             get {
@@ -895,7 +897,7 @@ namespace GW2EIParser.Properties {
         ///        &lt;div class=&quot;card-body container&quot;&gt;
         ///            &lt;div class=&quot;d-flex flex-row justify-content-center align-items-center&quot;&gt;
         ///                &lt;div class=&quot;d-flex flex-column mr-3 justify-content-center&quot;&gt;
-        ///                    &lt;div v-if=&quot;fractalInstabilities&quot; class=&quot;d-flex flex-row justify-content-center&quot;&gt;
+        ///                    &lt;div v-if=&quot;fractalInstabilities&quot; class=&quot;d-flex flex-row justify-content-around&quot;&gt;
         ///                        &lt;img v-for=&quot;fractalInstability in [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplEncounter {
@@ -1045,17 +1047,11 @@ namespace GW2EIParser.Properties {
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div v-if=&quot;phases.length &gt; 1&quot;&gt;
         ///        &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center&quot;&gt;
-        ///            &lt;li class=&quot;nav-item&quot; v-for=&quot;(phase, id) in phases&quot; :data-original-title=&quot;getPhaseData(id).durationS + &apos; seconds&apos;&quot;&gt;
+        ///            &lt;li class=&quot;nav-item&quot; v-for=&quot;(phase, id) in phases&quot; v-show=&quot;!getPhaseData(id).breakbarPhase&quot; :data-original-title=&quot;getPhaseData(id).durationS + &apos; seconds&apos;&quot;&gt;
         ///                &lt;a class=&quot;nav-link&quot; @click=&quot;select(phase)&quot; :class=&quot;{active: phase.active}&quot;&gt;{{getPhaseData(id).name}}&lt;/a&gt;
         ///            &lt;/li&gt;
         ///        &lt;/ul&gt;
-        ///    &lt;/div&gt;
-        ///&lt;/template&gt;
-        ///
-        ///&lt;script&gt;
-        ///    Vue.component(&quot;phase-component&quot;, {
-        ///        props: [&quot;phases&quot;],
-        /// [rest of string was truncated]&quot;;.
+        ///        &lt;div v-if=&quot;hasBreakbarPhases&quot; class=&quot;d-flex flew-row jus [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPhase {
             get {
@@ -1073,7 +1069,7 @@ namespace GW2EIParser.Properties {
         ///                    &lt;td v-for=&quot;player in group&quot; class=&quot;player-cell&quot; :class=&quot;{active: player.id === playerindex}&quot;
         ///                        @click=&quot;select(player.id)&quot;&gt;
         ///                        &lt;div&gt;
-        ///                            &lt;img v-if=&quot;player.isCom [rest of string was truncated]&quot;;.
+        ///                            &lt;img :src=&quot;player.icon&quot; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayers {
             get {

@@ -36,9 +36,9 @@ namespace GW2EIParser.Builders.HtmlModels
             Heal = player.Healing;
             IsPoV = log.LogData.PoV == player.AgentItem;
             IsCommander = player.HasCommanderTag;
-            ColTarget = GeneralHelper.GetLink("Color-" + player.Prof);
-            ColCleave = GeneralHelper.GetLink("Color-" + player.Prof + "-NonBoss");
-            ColTotal = GeneralHelper.GetLink("Color-" + player.Prof + "-Total");
+            ColTarget = HTMLBuilder.GetLink("Color-" + player.Prof);
+            ColCleave = HTMLBuilder.GetLink("Color-" + player.Prof + "-NonBoss");
+            ColTotal = HTMLBuilder.GetLink("Color-" + player.Prof + "-Total");
             IsConjure = player.IsFakeActor;
             BuildWeaponSets(player, log);
         }

@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIParser.EIData;
-using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashID;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -38,11 +37,11 @@ namespace GW2EIParser.Logic
                             (11774, 4480, 14078, 5376));
         }
 
-        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashID>
+            return new List<ArcDPSEnums.TrashID>
             {
-                Jade
+                ArcDPSEnums.TrashID.Jade
             };
         }
 
@@ -50,7 +49,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.MursaatOverseer);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.MursaatOverseer);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Mursaat Overseer not found");
@@ -70,7 +69,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
-                case (int)Jade:
+                case (int)ArcDPSEnums.TrashID.Jade:
                     List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, 38155, target, true);
                     int shieldStart = 0;
                     int shieldRadius = 100;
@@ -104,7 +103,7 @@ namespace GW2EIParser.Logic
 
         public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.MursaatOverseer);
+            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.MursaatOverseer);
             if (target == null)
             {
                 throw new InvalidOperationException("Mursaat Overseer not found");

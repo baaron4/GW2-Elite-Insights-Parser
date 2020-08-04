@@ -250,7 +250,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public List<string> LogErrors { get; }
 
-        public JsonLog(ParsedLog log, string[] uploadLinks)
+        public JsonLog(ParsedLog log, RawFormatSettings settings, string[] uploadLinks)
         {
             //
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Meta Data");
@@ -300,10 +300,10 @@ namespace GW2EIParser.Builders.JsonModels
             Phases = log.FightData.GetPhases(log).Select(x => new JsonPhase(x, log)).ToList();
             //
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Targets");
-            Targets = log.FightData.Logic.Targets.Select(x => new JsonNPC(x, log, SkillMap, BuffMap)).ToList();
+            Targets = log.FightData.Logic.Targets.Select(x => new JsonNPC(x, log, settings, SkillMap, BuffMap)).ToList();
             //
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Players");
-            Players = log.PlayerList.Select(x => new JsonPlayer(x, log, SkillMap, BuffMap, DamageModMap, PersonalBuffs)).ToList();
+            Players = log.PlayerList.Select(x => new JsonPlayer(x, log, settings, SkillMap, BuffMap, DamageModMap, PersonalBuffs)).ToList();
             //
             if (log.LogData.LogErrors.Count > 0)
             {

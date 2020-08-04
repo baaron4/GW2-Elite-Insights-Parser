@@ -1,4 +1,5 @@
 ﻿using System;
+using GW2EIUtils;
 
 namespace GW2EIParser.Parser
 {
@@ -15,15 +16,15 @@ namespace GW2EIParser.Parser
         public ushort DstInstid { get; }
         public ushort SrcMasterInstid { get; }
         public ushort DstMasterInstid { get; }
-        public ParseEnum.IFF IFF { get; }
+        public ArcDPSEnums.IFF IFF { get; }
         public byte IsBuff { get; }
         public byte Result { get; }
-        public ParseEnum.Activation IsActivation { get; }
-        public ParseEnum.BuffRemove IsBuffRemove { get; }
+        public ArcDPSEnums.Activation IsActivation { get; }
+        public ArcDPSEnums.BuffRemove IsBuffRemove { get; }
         public byte IsNinety { get; }
         public byte IsFifty { get; }
         public byte IsMoving { get; }
-        public ParseEnum.StateChange IsStateChange { get; }
+        public ArcDPSEnums.StateChange IsStateChange { get; }
         public byte IsFlanking { get; }
         public byte IsShields { get; }
         public byte IsOffcycle { get; }
@@ -53,15 +54,15 @@ namespace GW2EIParser.Parser
             DstInstid = dstInstid;
             SrcMasterInstid = srcMasterInstid;
             DstMasterInstid = dstMasterInstid;
-            IFF = ParseEnum.GetIFF(iff);
+            IFF = ArcDPSEnums.GetIFF(iff);
             IsBuff = isBuff;
             Result = result;
-            IsActivation = ParseEnum.GetActivation(isActivation);
-            IsBuffRemove = ParseEnum.GetBuffRemove(isBuffRemove);
+            IsActivation = ArcDPSEnums.GetActivation(isActivation);
+            IsBuffRemove = ArcDPSEnums.GetBuffRemove(isBuffRemove);
             IsNinety = isNinety;
             IsFifty = isFifty;
             IsMoving = isMoving;
-            IsStateChange = ParseEnum.GetStateChange(isStateChange);
+            IsStateChange = ArcDPSEnums.GetStateChange(isStateChange);
             IsFlanking = isFlanking;
             IsShields = isShields;
             IsOffcycle = isOffcycle;

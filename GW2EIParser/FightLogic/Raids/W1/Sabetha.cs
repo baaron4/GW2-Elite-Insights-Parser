@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashID;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -66,7 +66,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Sabetha);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Sabetha);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Sabetha not found");
@@ -80,9 +80,9 @@ namespace GW2EIParser.Logic
             phases.AddRange(GetPhasesByInvul(log, 757, mainTarget, true, true));
             var ids = new List<int>
                     {
-                       (int) Kernan,
-                       (int) Knuckles,
-                       (int) Karde,
+                       (int) ArcDPSEnums.TrashID.Kernan,
+                       (int) ArcDPSEnums.TrashID.Knuckles,
+                       (int) ArcDPSEnums.TrashID.Karde,
                     };
             for (int i = 1; i < phases.Count; i++)
             {
@@ -95,13 +95,13 @@ namespace GW2EIParser.Logic
                         NPC phaseTar = phase.Targets[0];
                         switch (phaseTar.ID)
                         {
-                            case (int)Kernan:
+                            case (int)ArcDPSEnums.TrashID.Kernan:
                                 phase.Name = "Kernan";
                                 break;
-                            case (int)Knuckles:
+                            case (int)ArcDPSEnums.TrashID.Knuckles:
                                 phase.Name = "Knuckles";
                                 break;
-                            case (int)Karde:
+                            case (int)ArcDPSEnums.TrashID.Karde:
                                 phase.Name = "Karde";
                                 break;
                             default:
@@ -123,10 +123,10 @@ namespace GW2EIParser.Logic
         {
             return new List<int>
             {
-                (int)ParseEnum.TargetID.Sabetha,
-                (int)Kernan,
-                (int)Knuckles,
-                (int)Karde,
+                (int)ArcDPSEnums.TargetID.Sabetha,
+                (int)ArcDPSEnums.TrashID.Kernan,
+                (int)ArcDPSEnums.TrashID.Knuckles,
+                (int)ArcDPSEnums.TrashID.Karde,
             };
         }
 
@@ -135,7 +135,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetID.Sabetha:
+                case (int)ArcDPSEnums.TargetID.Sabetha:
                     var flameWall = cls.Where(x => x.SkillId == 31332).ToList();
                     foreach (AbstractCastEvent c in flameWall)
                     {
@@ -152,7 +152,7 @@ namespace GW2EIParser.Logic
                         }
                     }
                     break;
-                case (int)Kernan:
+                case (int)ArcDPSEnums.TrashID.Kernan:
                     var bulletHail = cls.Where(x => x.SkillId == 31721).ToList();
                     foreach (AbstractCastEvent c in bulletHail)
                     {
@@ -173,14 +173,14 @@ namespace GW2EIParser.Logic
                         }
                     }
                     break;
-                case (int)Knuckles:
+                case (int)ArcDPSEnums.TrashID.Knuckles:
                     var breakbar = cls.Where(x => x.SkillId == 31763).ToList();
                     foreach (AbstractCastEvent c in breakbar)
                     {
                         replay.Decorations.Add(new CircleDecoration(true, 0, 180, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
-                case (int)Karde:
+                case (int)ArcDPSEnums.TrashID.Karde:
                     var flameBlast = cls.Where(x => x.SkillId == 31761).ToList();
                     foreach (AbstractCastEvent c in flameBlast)
                     {
@@ -199,13 +199,13 @@ namespace GW2EIParser.Logic
             }
         }
 
-        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashID>
+            return new List<ArcDPSEnums.TrashID>
             {
-                BanditSapper,
-                BanditThug,
-                BanditArsonist
+                ArcDPSEnums.TrashID.BanditSapper,
+                ArcDPSEnums.TrashID.BanditThug,
+                ArcDPSEnums.TrashID.BanditArsonist
             };
         }
 
@@ -242,10 +242,10 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<int>
             {
-                (int)ParseEnum.TargetID.Sabetha,
-                (int)Kernan,
-                (int)Karde,
-                (int)Knuckles,
+                (int)ArcDPSEnums.TargetID.Sabetha,
+                (int)ArcDPSEnums.TrashID.Kernan,
+                (int)ArcDPSEnums.TrashID.Karde,
+                (int)ArcDPSEnums.TrashID.Knuckles,
             };
         }
     }

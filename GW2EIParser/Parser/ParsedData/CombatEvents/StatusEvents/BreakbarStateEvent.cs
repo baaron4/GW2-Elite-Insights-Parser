@@ -1,16 +1,16 @@
 ﻿using System;
-using static GW2EIParser.Parser.ParseEnum;
+using GW2EIUtils;
 
 namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
     public class BreakbarStateEvent : AbstractStatusEvent
     {     
 
-        public BreakbarState State { get; }
+        public ArcDPSEnums.BreakbarState State { get; }
 
         public BreakbarStateEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
-            State = ParseEnum.GetBreakbarState(evtcItem.Value);
+            State = ArcDPSEnums.GetBreakbarState(evtcItem.Value);
         }
 
     }

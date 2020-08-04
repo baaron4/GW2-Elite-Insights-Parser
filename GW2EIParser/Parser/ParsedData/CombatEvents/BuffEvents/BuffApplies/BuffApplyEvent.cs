@@ -1,4 +1,5 @@
 ﻿using GW2EIParser.EIData;
+using GW2EIUtils;
 
 namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
@@ -12,7 +13,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public BuffApplyEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
-            Initial = evtcItem.IsStateChange == ParseEnum.StateChange.BuffInitial;
+            Initial = evtcItem.IsStateChange == ArcDPSEnums.StateChange.BuffInitial;
             AppliedDuration = evtcItem.Value;
             _addedActive = evtcItem.IsShields > 0;
             _overstackDuration = evtcItem.OverstackValue;

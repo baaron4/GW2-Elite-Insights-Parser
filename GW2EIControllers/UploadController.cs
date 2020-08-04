@@ -4,18 +4,19 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using GW2EIUtils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace GW2EIParser.Controllers
+namespace GW2EIControllers
 {
     public static class UploadController
     {
-        private static string UploadDPSReportsEI(FileInfo fi, OperationController operation)
+        private static string UploadDPSReportsEI(FileInfo fi, OperationTracer operation)
         {
             return UploadToDPSR(fi, "https://dps.report/uploadContent?json=1&generator=ei", operation);
         }
-        private static string UploadDPSReportsRH(FileInfo fi, OperationController operation)
+        private static string UploadDPSReportsRH(FileInfo fi, OperationTracer operation)
         {
             return UploadToDPSR(fi, "https://dps.report/uploadContent?json=1&generator=rh", operation);
 
@@ -66,7 +67,7 @@ namespace GW2EIParser.Controllers
             public string Permalink { get; set; }
             public string Error { get; set; }
         }
-        private static string UploadToDPSR(FileInfo fi, string URI, OperationController operation)
+        private static string UploadToDPSR(FileInfo fi, string URI, OperationTracer operation)
         {
             string fileName = fi.Name;
             byte[] fileContents = File.ReadAllBytes(fi.FullName);
@@ -133,23 +134,23 @@ namespace GW2EIParser.Controllers
             return res;
         }
 
-        public static string[] UploadOperation(OperationController operation, FileInfo fInfo)
+        public static string[] UploadOperation(OperationTracer operation, FileInfo fInfo, UploadSettings settings)
         {
             //Upload Process
             string[] uploadresult = new string[3] { "", "", "" };
-            if (Properties.Settings.Default.UploadToDPSReports)
+            if (settings.UploadToDPSReportsUsingEI)
             {
                 operation.UpdateProgressWithCancellationCheck("Uploading to DPSReports using EI");
                 uploadresult[0] = UploadDPSReportsEI(fInfo, operation);
                 operation.UpdateProgressWithCancellationCheck("DPSReports using EI: " + uploadresult[0]);
             }
-            if (Properties.Settings.Default.UploadToDPSReportsRH)
+            if (settings.UploadToDPSReportsUsingRH)
             {
                 operation.UpdateProgressWithCancellationCheck("Uploading to DPSReports using RH");
                 uploadresult[1] = UploadDPSReportsRH(fInfo, operation);
                 operation.UpdateProgressWithCancellationCheck("DPSReports using RH: " + uploadresult[1]);
             }
-            if (Properties.Settings.Default.UploadToRaidar)
+            if (settings.UploadToRaidar)
             {
                 operation.UpdateProgressWithCancellationCheck("Uploading to Raidar");
                 uploadresult[2] = UploadRaidar(/*fInfo*/);

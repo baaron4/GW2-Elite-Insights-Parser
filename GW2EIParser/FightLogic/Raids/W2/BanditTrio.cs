@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashID;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -29,7 +29,7 @@ namespace GW2EIParser.Logic
         {
             return new List<int>
             {
-                (int)ParseEnum.TargetID.Narella
+                (int)ArcDPSEnums.TargetID.Narella
             };
         }
 
@@ -37,9 +37,9 @@ namespace GW2EIParser.Logic
         {
             return new List<int>
             {
-                (int)ParseEnum.TargetID.Berg,
-                (int)ParseEnum.TargetID.Zane,
-                (int)ParseEnum.TargetID.Narella
+                (int)ArcDPSEnums.TargetID.Berg,
+                (int)ArcDPSEnums.TargetID.Zane,
+                (int)ArcDPSEnums.TargetID.Narella
             };
         }
 
@@ -57,7 +57,7 @@ namespace GW2EIParser.Logic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                List<AgentItem> prisoners = agentData.GetNPCsByID((int)Prisoner2);
+                List<AgentItem> prisoners = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.Prisoner2);
                 var prisonerDeaths = new List<DeadEvent>();
                 foreach (AgentItem prisoner in prisoners)
                 {
@@ -87,13 +87,13 @@ namespace GW2EIParser.Logic
                 phase.Targets.Add(target);
                 switch (target.ID)
                 {
-                    case (int)ParseEnum.TargetID.Narella:
+                    case (int)ArcDPSEnums.TargetID.Narella:
                         phase.Name = "Narella";
                         break;
-                    case (int)ParseEnum.TargetID.Berg:
+                    case (int)ArcDPSEnums.TargetID.Berg:
                         phase.Name = "Berg";
                         break;
-                    case (int)ParseEnum.TargetID.Zane:
+                    case (int)ArcDPSEnums.TargetID.Zane:
                         phase.Name = "Zane";
                         break;
                     default:
@@ -107,26 +107,26 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<int>
             {
-                (int)ParseEnum.TargetID.Berg,
-                (int)ParseEnum.TargetID.Zane,
-                (int)ParseEnum.TargetID.Narella
+                (int)ArcDPSEnums.TargetID.Berg,
+                (int)ArcDPSEnums.TargetID.Zane,
+                (int)ArcDPSEnums.TargetID.Narella
             };
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC berg = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Berg);
+            NPC berg = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Berg);
             if (berg == null)
             {
                 throw new InvalidOperationException("Berg not found");
             }
-            NPC zane = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Zane);
+            NPC zane = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Zane);
             if (zane == null)
             {
                 throw new InvalidOperationException("Zane not found");
             }
-            NPC narella = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Narella);
+            NPC narella = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Narella);
             if (narella == null)
             {
                 throw new InvalidOperationException("Narella not found");
@@ -143,25 +143,25 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashID>
+            return new List<ArcDPSEnums.TrashID>
             {
-                BanditSaboteur,
-                Warg,
-                CagedWarg,
-                BanditAssassin,
-                BanditSapperTrio ,
-                BanditDeathsayer,
-                BanditBrawler,
-                BanditBattlemage,
-                BanditCleric,
-                BanditBombardier,
-                BanditSniper,
-                NarellaTornado,
-                OilSlick,
-                Prisoner1,
-                Prisoner2
+                ArcDPSEnums.TrashID.BanditSaboteur,
+                ArcDPSEnums.TrashID.Warg,
+                ArcDPSEnums.TrashID.CagedWarg,
+                ArcDPSEnums.TrashID.BanditAssassin,
+                ArcDPSEnums.TrashID.BanditSapperTrio ,
+                ArcDPSEnums.TrashID.BanditDeathsayer,
+                ArcDPSEnums.TrashID.BanditBrawler,
+                ArcDPSEnums.TrashID.BanditBattlemage,
+                ArcDPSEnums.TrashID.BanditCleric,
+                ArcDPSEnums.TrashID.BanditBombardier,
+                ArcDPSEnums.TrashID.BanditSniper,
+                ArcDPSEnums.TrashID.NarellaTornado,
+                ArcDPSEnums.TrashID.OilSlick,
+                ArcDPSEnums.TrashID.Prisoner1,
+                ArcDPSEnums.TrashID.Prisoner2
             };
         }
 
@@ -175,9 +175,9 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetID.Berg:
+                case (int)ArcDPSEnums.TargetID.Berg:
                     break;
-                case (int)ParseEnum.TargetID.Zane:
+                case (int)ArcDPSEnums.TargetID.Zane:
                     var bulletHail = cls.Where(x => x.SkillId == 34383).ToList();
                     foreach (AbstractCastEvent c in bulletHail)
                     {
@@ -199,7 +199,7 @@ namespace GW2EIParser.Logic
                     }
                     break;
 
-                case (int)ParseEnum.TargetID.Narella:
+                case (int)ArcDPSEnums.TargetID.Narella:
                     break;
                 default:
                     break;

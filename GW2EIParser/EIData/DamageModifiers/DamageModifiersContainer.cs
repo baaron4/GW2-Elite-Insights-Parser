@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIParser.Logic;
+using GW2EIUtils;
 using static GW2EIParser.EIData.DamageModifier;
 
 namespace GW2EIParser.EIData

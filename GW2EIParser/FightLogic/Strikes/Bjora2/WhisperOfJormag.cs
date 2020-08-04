@@ -5,6 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -33,7 +34,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC woj = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.WhisperOfJormag);
+            NPC woj = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.WhisperOfJormag);
             if (woj == null)
             {
                 throw new InvalidOperationException("Whisper of Jormag not found");
@@ -86,18 +87,18 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashID>
+            return new List<ArcDPSEnums.TrashID>
             {
-                ParseEnum.TrashID.WhisperEcho,
-                ParseEnum.TrashID.DoppelgangerGuardian1,
-                ParseEnum.TrashID.DoppelgangerGuardian2,
-                ParseEnum.TrashID.DoppelgangerNecro,
-                ParseEnum.TrashID.DoppelgangerRevenant,
-                ParseEnum.TrashID.DoppelgangerThief1,
-                ParseEnum.TrashID.DoppelgangerThief2,
-                ParseEnum.TrashID.DoppelgangerWarrior,
+                ArcDPSEnums.TrashID.WhisperEcho,
+                ArcDPSEnums.TrashID.DoppelgangerGuardian1,
+                ArcDPSEnums.TrashID.DoppelgangerGuardian2,
+                ArcDPSEnums.TrashID.DoppelgangerNecro,
+                ArcDPSEnums.TrashID.DoppelgangerRevenant,
+                ArcDPSEnums.TrashID.DoppelgangerThief1,
+                ArcDPSEnums.TrashID.DoppelgangerThief2,
+                ArcDPSEnums.TrashID.DoppelgangerWarrior,
             };
         }
     }

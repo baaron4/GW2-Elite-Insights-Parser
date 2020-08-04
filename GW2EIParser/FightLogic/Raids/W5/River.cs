@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashID;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -33,16 +33,16 @@ namespace GW2EIParser.Logic
                             (19072, 15484, 20992, 16508));
         }
 
-        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashID>
+            return new List<ArcDPSEnums.TrashID>
             {
-                Enervator,
-                HollowedBomber,
-                RiverOfSouls,
-                SpiritHorde1,
-                SpiritHorde2,
-                SpiritHorde3
+                ArcDPSEnums.TrashID.Enervator,
+                ArcDPSEnums.TrashID.HollowedBomber,
+                ArcDPSEnums.TrashID.RiverOfSouls,
+                ArcDPSEnums.TrashID.SpiritHorde1,
+                ArcDPSEnums.TrashID.SpiritHorde2,
+                ArcDPSEnums.TrashID.SpiritHorde3
             };
         }
 
@@ -51,7 +51,7 @@ namespace GW2EIParser.Logic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                NPC desmina = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Desmina);
+                NPC desmina = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Desmina);
                 if (desmina == null)
                 {
                     throw new InvalidOperationException("Desmina not found");
@@ -60,7 +60,7 @@ namespace GW2EIParser.Logic
                 if (ooc != null)
                 {
                     long time = 0;
-                    foreach (NPC mob in TrashMobs.Where(x => x.ID == (int)SpiritHorde3))
+                    foreach (NPC mob in TrashMobs.Where(x => x.ID == (int)ArcDPSEnums.TrashID.SpiritHorde3))
                     {
                         DespawnEvent dspwnHorde = combatData.GetDespawnEvents(mob.AgentItem).LastOrDefault();
                         if (dspwnHorde != null)
@@ -80,18 +80,18 @@ namespace GW2EIParser.Logic
         public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
             // The walls spawn at the start of the encounter, we fix it by overriding their first aware to the first velocity change event
-            List<AgentItem> riverOfSouls = agentData.GetNPCsByID((int)RiverOfSouls);
+            List<AgentItem> riverOfSouls = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.RiverOfSouls);
             bool sortCombatList = false;
             foreach (AgentItem riverOfSoul in riverOfSouls)
             {
-                CombatItem firstMovement = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Velocity && x.SrcAgent == riverOfSoul.Agent && x.DstAgent != 0);
+                CombatItem firstMovement = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && x.SrcAgent == riverOfSoul.Agent && x.DstAgent != 0);
                 if (firstMovement != null)
                 {
                     // update start
                     riverOfSoul.OverrideAwareTimes(firstMovement.Time - GeneralHelper.ServerDelayConstant, riverOfSoul.LastAware);
                     foreach (CombatItem c in combatData)
                     {
-                        if (c.SrcAgent == riverOfSoul.Agent && (c.IsStateChange == ParseEnum.StateChange.Position || c.IsStateChange == ParseEnum.StateChange.Rotation) && c.Time <= riverOfSoul.FirstAware)
+                        if (c.SrcAgent == riverOfSoul.Agent && (c.IsStateChange == ArcDPSEnums.StateChange.Position || c.IsStateChange == ArcDPSEnums.StateChange.Rotation) && c.Time <= riverOfSoul.FirstAware)
                         {
                             sortCombatList = true;
                             c.OverrideTime(riverOfSoul.FirstAware);
@@ -114,7 +114,7 @@ namespace GW2EIParser.Logic
 
         public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
-            NPC desmina = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Desmina);
+            NPC desmina = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Desmina);
             if (desmina == null)
             {
                 throw new InvalidOperationException("Desmina not found");
@@ -123,7 +123,7 @@ namespace GW2EIParser.Logic
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (int)HollowedBomber:
+                case (int)ArcDPSEnums.TrashID.HollowedBomber:
                     var bomberman = target.GetCastLogs(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == 48272).ToList();
                     foreach (AbstractCastEvent bomb in bomberman)
                     {
@@ -134,17 +134,17 @@ namespace GW2EIParser.Logic
                         replay.Decorations.Add(new CircleDecoration(true, expectedEnd, 480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(target)));
                     }
                     break;
-                case (int)RiverOfSouls:
+                case (int)ArcDPSEnums.TrashID.RiverOfSouls:
                     if (replay.Rotations.Count > 0)
                     {
                         replay.Decorations.Add(new FacingRectangleDecoration((start, end), new AgentConnector(target), replay.PolledRotations, 160, 390, "rgba(255,100,0,0.5)"));
                     }
                     break;
-                case (int)Enervator:
+                case (int)ArcDPSEnums.TrashID.Enervator:
                 // TODO Line actor between desmina and enervator. Missing skillID
-                case (int)SpiritHorde1:
-                case (int)SpiritHorde2:
-                case (int)SpiritHorde3:
+                case (int)ArcDPSEnums.TrashID.SpiritHorde1:
+                case (int)ArcDPSEnums.TrashID.SpiritHorde2:
+                case (int)ArcDPSEnums.TrashID.SpiritHorde3:
                     break;
                 default:
                     break;

@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashID;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -65,10 +65,10 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<int>
             {
-                (int)ParseEnum.TargetID.Deimos,
-                (int)Thief,
-                (int)Drunkard,
-                (int)Gambler,
+                (int)ArcDPSEnums.TargetID.Deimos,
+                (int)ArcDPSEnums.TrashID.Thief,
+                (int)ArcDPSEnums.TrashID.Drunkard,
+                (int)ArcDPSEnums.TrashID.Gambler,
             };
         }
 
@@ -82,11 +82,11 @@ namespace GW2EIParser.Logic
             {
                 if (gadgetAgents.Contains(c.SrcAgent))
                 {
-                    if (c.IsStateChange == ParseEnum.StateChange.MaxHealthUpdate)
+                    if (c.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)
                     {
                         continue;
                     }
-                    if (c.IsStateChange == ParseEnum.StateChange.HealthUpdate && c.DstAgent > 1500)
+                    if (c.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && c.DstAgent > 1500)
                     {
                         continue;
                     }
@@ -105,7 +105,7 @@ namespace GW2EIParser.Logic
 
         public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Deimos);
+            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
             if (target == null)
             {
                 throw new InvalidOperationException("Deimos not found");
@@ -120,8 +120,8 @@ namespace GW2EIParser.Logic
                         AbstractBuffEvent removal = list.FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > bfe.Time && x.Time < bfe.Time + 30000);
                         if (removal == null)
                         {
-                            res.Add(new BuffRemoveAllEvent(GeneralHelper.UnknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224), 1, 0));
-                            res.Add(new BuffRemoveManualEvent(GeneralHelper.UnknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224)));
+                            res.Add(new BuffRemoveAllEvent(ParseHelper.UnknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224), 1, 0));
+                            res.Add(new BuffRemoveManualEvent(ParseHelper.UnknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224)));
                         }
                     }
                     else if (bfe is BuffRemoveAllEvent)
@@ -129,7 +129,7 @@ namespace GW2EIParser.Logic
                         AbstractBuffEvent apply = list.FirstOrDefault(x => x is BuffApplyEvent && x.Time < bfe.Time && x.Time > bfe.Time - 30000);
                         if (apply == null)
                         {
-                            res.Add(new BuffApplyEvent(GeneralHelper.UnknownAgent, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(38224), uint.MaxValue, true));
+                            res.Add(new BuffApplyEvent(ParseHelper.UnknownAgent, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(38224), uint.MaxValue, true));
                         }
                     }
                 }
@@ -142,7 +142,7 @@ namespace GW2EIParser.Logic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success && _specialSplit > 0)
             {
-                NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Deimos);
+                NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
                 if (target == null)
                 {
                     throw new InvalidOperationException("Deimos not found");
@@ -187,14 +187,14 @@ namespace GW2EIParser.Logic
             }
             long firstAware = targetable.Time;
             AgentItem targetAgent = agentData.GetAgent(targetable.SrcAgent);
-            if (targetAgent != GeneralHelper.UnknownAgent)
+            if (targetAgent != ParseHelper.UnknownAgent)
             {
                 try
                 {
                     string[] names = targetAgent.Name.Split('-');
                     if (ushort.TryParse(names[2], out ushort masterInstid))
                     {
-                        CombatItem structDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && x.IFF == ParseEnum.IFF.Foe && x.DstInstid == masterInstid && x.IsStateChange == ParseEnum.StateChange.None && x.IsBuffRemove == ParseEnum.BuffRemove.None &&
+                        CombatItem structDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && x.IFF == ArcDPSEnums.IFF.Foe && x.DstInstid == masterInstid && x.IsStateChange == ArcDPSEnums.StateChange.None && x.IsBuffRemove == ArcDPSEnums.BuffRemove.None &&
                                 ((x.IsBuff == 1 && x.BuffDmg >= 0 && x.Value == 0) ||
                                 (x.IsBuff == 0 && x.Value >= 0)));
                         if (structDeimosDamageEvent != null)
@@ -218,12 +218,12 @@ namespace GW2EIParser.Logic
 
         public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            List<AgentItem> deimosAgents = agentData.GetNPCsByID((int)ParseEnum.TargetID.Deimos);
+            List<AgentItem> deimosAgents = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Deimos);
             long offset = fightData.FightOffset;
             foreach (AgentItem deimos in deimosAgents)
             {
                 // enter combat
-                CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcAgent == deimos.Agent && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
+                CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcAgent == deimos.Agent && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat);
                 if (enterCombat != null)
                 {
                     offset = Math.Max(offset, enterCombat.Time);
@@ -238,21 +238,21 @@ namespace GW2EIParser.Logic
         {
             ComputeFightTargets(agentData, combatData);
             // Find target
-            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Deimos);
+            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
             if (target == null)
             {
                 throw new InvalidOperationException("Deimos not found");
             }
             // Remove deimos despawn events as they are useless and mess with combat replay
-            combatData.RemoveAll(x => x.IsStateChange == ParseEnum.StateChange.Despawn && x.SrcAgent == target.Agent);
+            combatData.RemoveAll(x => x.IsStateChange == ArcDPSEnums.StateChange.Despawn && x.SrcAgent == target.Agent);
             // invul correction
-            CombatItem invulApp = combatData.FirstOrDefault(x => x.DstAgent == target.Agent && x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0 && x.SkillID == 762 && x.IsStateChange == ParseEnum.StateChange.None);
+            CombatItem invulApp = combatData.FirstOrDefault(x => x.DstAgent == target.Agent && x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0 && x.SkillID == 762 && x.IsStateChange == ArcDPSEnums.StateChange.None);
             if (invulApp != null)
             {
                 invulApp.OverrideValue((int)(target.LastAware - invulApp.Time));
             }
             // Deimos gadgets
-            CombatItem targetable = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.DstAgent > 0);
+            CombatItem targetable = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.DstAgent > 0);
             var gadgetAgents = new HashSet<ulong>();
             long firstAware = AttackTargetSpecialParse(targetable, agentData, combatData, gadgetAgents);
             // legacy method
@@ -284,7 +284,7 @@ namespace GW2EIParser.Logic
             long end = 0;
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Deimos);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Deimos not found");
@@ -322,9 +322,9 @@ namespace GW2EIParser.Logic
             }
             foreach (NPC tar in Targets)
             {
-                if (tar.ID == (int)Thief || tar.ID == (int)Drunkard || tar.ID == (int)Gambler)
+                if (tar.ID == (int)ArcDPSEnums.TrashID.Thief || tar.ID == (int)ArcDPSEnums.TrashID.Drunkard || tar.ID == (int)ArcDPSEnums.TrashID.Gambler)
                 {
-                    string name = (tar.ID == (int)Thief ? "Thief" : (tar.ID == (int)Drunkard ? "Drunkard" : (tar.ID == (int)Gambler ? "Gambler" : "")));
+                    string name = (tar.ID == (int)ArcDPSEnums.TrashID.Thief ? "Thief" : (tar.ID == (int)ArcDPSEnums.TrashID.Drunkard ? "Drunkard" : (tar.ID == (int)ArcDPSEnums.TrashID.Gambler ? "Gambler" : "")));
                     tar.OverrideName(name);
                     var tarPhase = new PhaseData(tar.FirstAware - 1000, Math.Min(tar.LastAware + 1000, fightDuration), name);
                     tarPhase.Targets.Add(tar);
@@ -360,25 +360,25 @@ namespace GW2EIParser.Logic
         {
             return new List<int>
             {
-                (int)ParseEnum.TargetID.Deimos,
-                (int)Thief,
-                (int)Drunkard,
-                (int)Gambler
+                (int)ArcDPSEnums.TargetID.Deimos,
+                (int)ArcDPSEnums.TrashID.Thief,
+                (int)ArcDPSEnums.TrashID.Drunkard,
+                (int)ArcDPSEnums.TrashID.Gambler
             };
         }
 
-        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashID>
+            return new List<ArcDPSEnums.TrashID>
             {
-                Saul,
-                GamblerClones,
-                GamblerReal,
-                Greed,
-                Pride,
-                Oil,
-                Tear,
-                Hands
+                ArcDPSEnums.TrashID.Saul,
+                ArcDPSEnums.TrashID.GamblerClones,
+                ArcDPSEnums.TrashID.GamblerReal,
+                ArcDPSEnums.TrashID.Greed,
+                ArcDPSEnums.TrashID.Pride,
+                ArcDPSEnums.TrashID.Oil,
+                ArcDPSEnums.TrashID.Tear,
+                ArcDPSEnums.TrashID.Hands
             };
         }
 
@@ -389,7 +389,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetID.Deimos:
+                case (int)ArcDPSEnums.TargetID.Deimos:
                     var mindCrush = cls.Where(x => x.SkillId == 37613).ToList();
                     foreach (AbstractCastEvent c in mindCrush)
                     {
@@ -441,21 +441,21 @@ namespace GW2EIParser.Logic
                         }
                     }
                     break;
-                case (int)Gambler:
-                case (int)Thief:
-                case (int)Drunkard:
+                case (int)ArcDPSEnums.TrashID.Gambler:
+                case (int)ArcDPSEnums.TrashID.Thief:
+                case (int)ArcDPSEnums.TrashID.Drunkard:
                     break;
-                case (int)Saul:
-                case (int)GamblerClones:
-                case (int)GamblerReal:
-                case (int)Greed:
-                case (int)Pride:
-                case (int)Tear:
+                case (int)ArcDPSEnums.TrashID.Saul:
+                case (int)ArcDPSEnums.TrashID.GamblerClones:
+                case (int)ArcDPSEnums.TrashID.GamblerReal:
+                case (int)ArcDPSEnums.TrashID.Greed:
+                case (int)ArcDPSEnums.TrashID.Pride:
+                case (int)ArcDPSEnums.TrashID.Tear:
                     break;
-                case (int)Hands:
+                case (int)ArcDPSEnums.TrashID.Hands:
                     replay.Decorations.Add(new CircleDecoration(true, 0, 90, (start, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
                     break;
-                case (int)Oil:
+                case (int)ArcDPSEnums.TrashID.Oil:
                     int delayOil = 3000;
                     replay.Decorations.Add(new CircleDecoration(true, start + delayOil, 200, (start, start + delayOil), "rgba(255,100, 0, 0.5)", new AgentConnector(target)));
                     replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start + delayOil, end), "rgba(0, 0, 0, 0.5)", new AgentConnector(target)));
@@ -488,7 +488,7 @@ namespace GW2EIParser.Logic
 
         public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Deimos);
+            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
             if (target == null)
             {
                 throw new InvalidOperationException("Deimos not found");

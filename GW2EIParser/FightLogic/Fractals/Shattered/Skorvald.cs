@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
-using static GW2EIParser.Parser.ParseEnum.TrashID;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -49,7 +49,7 @@ namespace GW2EIParser.Logic
 
         public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Skorvald);
+            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Skorvald);
             if (target == null)
             {
                 throw new InvalidOperationException("Skorvald not found");
@@ -57,15 +57,15 @@ namespace GW2EIParser.Logic
             return (target.GetHealth(combatData) == 5551340) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
         }
 
-        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashID>
+            return new List<ArcDPSEnums.TrashID>
             {
-                FluxAnomaly4,
-                FluxAnomaly3,
-                FluxAnomaly2,
-                FluxAnomaly1,
-                SolarBloom
+                ArcDPSEnums.TrashID.FluxAnomaly4,
+                ArcDPSEnums.TrashID.FluxAnomaly3,
+                ArcDPSEnums.TrashID.FluxAnomaly2,
+                ArcDPSEnums.TrashID.FluxAnomaly1,
+                ArcDPSEnums.TrashID.SolarBloom
             };
         }
     }

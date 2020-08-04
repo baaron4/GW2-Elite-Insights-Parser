@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashID;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -36,15 +36,15 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/8/8b/Mini_Qadim_the_Peerless.png";
         }
 
-        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashID>()
+            return new List<ArcDPSEnums.TrashID>()
             {
-                Pylon1,
-                Pylon2,
-                EntropicDistortion,
-                BigKillerTornado,
-                EnergyOrb,
+                ArcDPSEnums.TrashID.Pylon1,
+                ArcDPSEnums.TrashID.Pylon2,
+                ArcDPSEnums.TrashID.EntropicDistortion,
+                ArcDPSEnums.TrashID.BigKillerTornado,
+                ArcDPSEnums.TrashID.EnergyOrb,
             };
         }
 
@@ -74,7 +74,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.PeerlessQadim);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Peerless Qadim not found");
@@ -151,7 +151,7 @@ namespace GW2EIParser.Logic
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetID.PeerlessQadim:
+                case (int)ArcDPSEnums.TargetID.PeerlessQadim:
                     var cataCycle = cls.Where(x => x.SkillId == 56329).ToList();
 
                     foreach (AbstractCastEvent c in cataCycle)
@@ -165,7 +165,7 @@ namespace GW2EIParser.Logic
                         replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, (end, (int)log.FightData.FightEnd), "rgba(255, 220, 0, 0.5)", new PositionConnector(pylonPosition)));
                     }
                     break;
-                case (int)EntropicDistortion:
+                case (int)ArcDPSEnums.TrashID.EntropicDistortion:
                     //sapping surge, red tether
                     List<AbstractBuffEvent> sappingSurge = GetFilteredList(log.CombatData, 56118, target, true);
                     int surgeStart = 0;
@@ -174,7 +174,7 @@ namespace GW2EIParser.Logic
                     {
                         if (c is BuffApplyEvent)
                         {
-                            NPC qadim = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.PeerlessQadim);
+                            NPC qadim = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
                             surgeStart = (int)c.Time;
                             source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By) ?? qadim;
                         }
@@ -188,14 +188,14 @@ namespace GW2EIParser.Logic
                         }
                     }
                     break;
-                case (int)BigKillerTornado:
+                case (int)ArcDPSEnums.TrashID.BigKillerTornado:
                     replay.Decorations.Add(new CircleDecoration(true, 0, 450, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                     break;
-                case (int)Pylon1:
+                case (int)ArcDPSEnums.TrashID.Pylon1:
                     break;
-                case (int)Pylon2:
+                case (int)ArcDPSEnums.TrashID.Pylon2:
                     break;
-                case (int)EnergyOrb:
+                case (int)ArcDPSEnums.TrashID.EnergyOrb:
                     break;
                 default:
                     break;
@@ -255,7 +255,7 @@ namespace GW2EIParser.Logic
             {
                 if (c is BuffApplyEvent)
                 {
-                    NPC qadim = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.PeerlessQadim);
+                    NPC qadim = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
                     surgeStart = (int)c.Time;
                     source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By) ?? qadim;
                 }
@@ -293,7 +293,7 @@ namespace GW2EIParser.Logic
 
         public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.PeerlessQadim);
+            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
             if (target == null)
             {
                 throw new InvalidOperationException("Peerless Qadim not found");

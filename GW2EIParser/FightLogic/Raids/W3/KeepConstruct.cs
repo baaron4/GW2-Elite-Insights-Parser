@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashID;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -74,7 +74,7 @@ namespace GW2EIParser.Logic
             long end = 0;
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.KeepConstruct);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.KeepConstruct);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Keep Construct not found");
@@ -192,25 +192,25 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashID>
+            return new List<ArcDPSEnums.TrashID>
             {
-                Core,
-                Jessica,
-                Olson,
-                Engul,
-                Faerla,
-                Caulle,
-                Henley,
-                Galletta,
-                Ianim,
-                GreenPhantasm,
-                InsidiousProjection,
-                UnstableLeyRift,
-                RadiantPhantasm,
-                CrimsonPhantasm,
-                RetrieverProjection
+                ArcDPSEnums.TrashID.Core,
+                ArcDPSEnums.TrashID.Jessica,
+                ArcDPSEnums.TrashID.Olson,
+                ArcDPSEnums.TrashID.Engul,
+                ArcDPSEnums.TrashID.Faerla,
+                ArcDPSEnums.TrashID.Caulle,
+                ArcDPSEnums.TrashID.Henley,
+                ArcDPSEnums.TrashID.Galletta,
+                ArcDPSEnums.TrashID.Ianim,
+                ArcDPSEnums.TrashID.GreenPhantasm,
+                ArcDPSEnums.TrashID.InsidiousProjection,
+                ArcDPSEnums.TrashID.UnstableLeyRift,
+                ArcDPSEnums.TrashID.RadiantPhantasm,
+                ArcDPSEnums.TrashID.CrimsonPhantasm,
+                ArcDPSEnums.TrashID.RetrieverProjection
             };
         }
 
@@ -221,7 +221,7 @@ namespace GW2EIParser.Logic
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetID.KeepConstruct:
+                case (int)ArcDPSEnums.TargetID.KeepConstruct:
 
                     List<AbstractBuffEvent> kcOrbCollect = GetFilteredList(log.CombatData, 35025, target, true);
                     int kcOrbStart = 0, kcOrbEnd = 0;
@@ -314,14 +314,14 @@ namespace GW2EIParser.Logic
                     // phantasms locations
                     var phantasmsID = new HashSet<int>
                     {
-                        (int)Jessica,
-                        (int)Olson,
-                        (int)Engul,
-                        (int)Faerla,
-                        (int)Caulle,
-                        (int)Henley,
-                        (int)Galletta,
-                        (int)Ianim,
+                        (int)ArcDPSEnums.TrashID.Jessica,
+                        (int)ArcDPSEnums.TrashID.Olson,
+                        (int)ArcDPSEnums.TrashID.Engul,
+                        (int)ArcDPSEnums.TrashID.Faerla,
+                        (int)ArcDPSEnums.TrashID.Caulle,
+                        (int)ArcDPSEnums.TrashID.Henley,
+                        (int)ArcDPSEnums.TrashID.Galletta,
+                        (int)ArcDPSEnums.TrashID.Ianim,
                     };
                     foreach (NPC m in TrashMobs)
                     {
@@ -338,17 +338,17 @@ namespace GW2EIParser.Logic
                     }
                     break;
 
-                case (int)Core:
+                case (int)ArcDPSEnums.TrashID.Core:
                     break;
-                case (int)Jessica:
-                case (int)Olson:
-                case (int)Engul:
-                case (int)Faerla:
-                case (int)Caulle:
-                case (int)Henley:
-                case (int)Galletta:
-                case (int)Ianim:
-                    NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.KeepConstruct);
+                case (int)ArcDPSEnums.TrashID.Jessica:
+                case (int)ArcDPSEnums.TrashID.Olson:
+                case (int)ArcDPSEnums.TrashID.Engul:
+                case (int)ArcDPSEnums.TrashID.Faerla:
+                case (int)ArcDPSEnums.TrashID.Caulle:
+                case (int)ArcDPSEnums.TrashID.Henley:
+                case (int)ArcDPSEnums.TrashID.Galletta:
+                case (int)ArcDPSEnums.TrashID.Ianim:
+                    NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.KeepConstruct);
                     if (mainTarget == null)
                     {
                         throw new InvalidOperationException("Keep Construct not found");
@@ -356,16 +356,16 @@ namespace GW2EIParser.Logic
                     replay.Decorations.Add(new CircleDecoration(false, 0, 600, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     replay.Decorations.Add(new CircleDecoration(true, 0, 400, (start, end), "rgba(0, 125, 255, 0.5)", new AgentConnector(target)));
                     break;
-                case (int)GreenPhantasm:
+                case (int)ArcDPSEnums.TrashID.GreenPhantasm:
                     int lifetime = 8000;
                     replay.Decorations.Add(new CircleDecoration(true, 0, 210, (start, start + lifetime), "rgba(0,255,0,0.2)", new AgentConnector(target)));
                     replay.Decorations.Add(new CircleDecoration(true, start + lifetime, 210, (start, start + lifetime), "rgba(0,255,0,0.3)", new AgentConnector(target)));
                     break;
-                case (int)RetrieverProjection:
-                case (int)InsidiousProjection:
-                case (int)UnstableLeyRift:
-                case (int)RadiantPhantasm:
-                case (int)CrimsonPhantasm:
+                case (int)ArcDPSEnums.TrashID.RetrieverProjection:
+                case (int)ArcDPSEnums.TrashID.InsidiousProjection:
+                case (int)ArcDPSEnums.TrashID.UnstableLeyRift:
+                case (int)ArcDPSEnums.TrashID.RadiantPhantasm:
+                case (int)ArcDPSEnums.TrashID.CrimsonPhantasm:
                     break;
                 default:
                     break;

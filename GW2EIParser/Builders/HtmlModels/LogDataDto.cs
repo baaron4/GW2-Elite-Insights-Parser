@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using GW2EIParser.EIData;
 using GW2EIParser.Logic;
 using GW2EIParser.Parser.ParsedData;
+using GW2EIUtils;
 
 namespace GW2EIParser.Builders.HtmlModels
 {

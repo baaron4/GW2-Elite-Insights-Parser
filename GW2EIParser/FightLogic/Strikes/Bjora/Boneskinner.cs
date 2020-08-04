@@ -5,6 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -36,15 +37,15 @@ namespace GW2EIParser.Logic
                             (0, 0, 0, 0));
         }
 
-        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashID>
+            return new List<ArcDPSEnums.TrashID>
             {
-                ParseEnum.TrashID.VigilTactician,
-                ParseEnum.TrashID.VigilRecruit,
-                ParseEnum.TrashID.PrioryExplorer,
-                ParseEnum.TrashID.PrioryScholar,
-                ParseEnum.TrashID.AberrantWisp,
+                ArcDPSEnums.TrashID.VigilTactician,
+                ArcDPSEnums.TrashID.VigilRecruit,
+                ArcDPSEnums.TrashID.PrioryExplorer,
+                ArcDPSEnums.TrashID.PrioryScholar,
+                ArcDPSEnums.TrashID.AberrantWisp,
             };
         }
     }

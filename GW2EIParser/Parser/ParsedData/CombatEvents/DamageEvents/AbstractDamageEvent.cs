@@ -1,4 +1,6 @@
-﻿namespace GW2EIParser.Parser.ParsedData.CombatEvents
+﻿using GW2EIUtils;
+
+namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
     public abstract class AbstractDamageEvent : AbstractTimeCombatEvent
     {
@@ -7,7 +9,7 @@
 
         public SkillItem Skill { get; }
         public long SkillId => Skill.ID;
-        public ParseEnum.IFF IFF { get; }
+        public ArcDPSEnums.IFF IFF { get; }
 
         //private int _damage;
         public int Damage { get; protected set; }

@@ -6,29 +6,21 @@ using GW2EIParser.Builders;
 using GW2EIParser.Builders.JsonModels;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
+using GW2EIUtils;
 using Newtonsoft.Json.Linq;
 
 namespace GW2EIParser.tst
 {
     public class TestHelper
     {
-        private class TestParserSettings : ParserSettings
-        {
-            public TestParserSettings()
-            {
-                SkipFailedTries = false;
-                ParseCombatReplay = true;
-                ParsePhases = true;
-                AnonymousPlayer = true;
-                ComputeDamageModifiers = true;
-                RawTimelineArrays = true;
-                MultiTasks = true;
-            }
-        }
+        private static readonly ParserSettings parserSettings = new ParserSettings(false, true, true, true, true);
+        private static readonly HTMLSettings htmlSettings = new HTMLSettings(false, false);
+        private static readonly RawFormatSettings rawSettings = new RawFormatSettings(true);
+        private static readonly CSVSettings csvSettings = new CSVSettings(",");
 
-        private class TestOperationController : OperationController
+        private class TestOperationController : OperationTracer
         {
-            public TestOperationController() : base("", "")
+            public TestOperationController() : base("")
             {
 
             }
@@ -38,15 +30,11 @@ namespace GW2EIParser.tst
             }
         }
 
-        private static readonly TestOperationController _operation = new TestOperationController();
-
         public static ParsedLog ParseLog(string location)
         {
-            var parser = new ParsingController(new TestParserSettings());
+            var parser = new ParsingController(parserSettings);
 
-            var operation = new ConsoleOperationController(location as string, "Ready to parse");
-
-            var fInfo = new FileInfo(operation.Location);
+            var fInfo = new FileInfo(location);
             if (!fInfo.Exists)
             {
                 throw new FileNotFoundException("File does not exist", fInfo.FullName);
@@ -56,7 +44,7 @@ namespace GW2EIParser.tst
                 throw new InvalidDataException("Not EVTC");
             }
 
-            return parser.ParseLog(operation, fInfo.FullName);
+            return parser.ParseLog(new TestOperationController(), fInfo.FullName);
         }
 
         public static string JsonString(ParsedLog log)
@@ -75,9 +63,9 @@ namespace GW2EIParser.tst
         {
             var ms = new MemoryStream();
             var sw = new StreamWriter(ms);
-            var builder = new CSVBuilder(sw, ",", log, null);
+            var builder = new CSVBuilder(log, csvSettings);
 
-            builder.CreateCSV();
+            builder.CreateCSV(sw);
             sw.Close();
 
             return sw.ToString();
@@ -87,7 +75,7 @@ namespace GW2EIParser.tst
         {
             var ms = new MemoryStream();
             var sw = new StreamWriter(ms, GeneralHelper.NoBOMEncodingUTF8);
-            var builder = new HTMLBuilder(log, null, false, false);
+            var builder = new HTMLBuilder(log,htmlSettings);
 
             builder.CreateHTML(sw, null);
             sw.Close();
@@ -97,7 +85,7 @@ namespace GW2EIParser.tst
 
         public static JsonLog JsonLog(ParsedLog log)
         {
-            var builder = new RawFormatBuilder(log, null);
+            var builder = new RawFormatBuilder(log, rawSettings, null);
             return builder.JsonLog;
         }
 

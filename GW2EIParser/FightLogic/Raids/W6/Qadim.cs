@@ -4,11 +4,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using GW2EIParser.EIData;
-using GW2EIParser.Exceptions;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashID;
+using GW2EIUtils;
+using GW2EIUtils.Exceptions;
 
 namespace GW2EIParser.Logic
 {
@@ -62,9 +62,9 @@ namespace GW2EIParser.Logic
             new HitOnPlayerMechanic(52281, "Swap", new MechanicPlotlySetting("circle-cross-open","rgb(170,0,170)"), "Port","Swap (Ported from below Legendary Creature to Qadim)", "Port to Qadim",0),
             new PlayerBuffApplyMechanic(52035, "Power of the Lamp", new MechanicPlotlySetting("triangle-up","rgb(100,150,255)",10), "Lamp","Power of the Lamp (Returned from the Lamp)", "Lamp Return",0),
             new KilledMechanic(21050, "Pyre Guardian", new MechanicPlotlySetting("bowtie","rgb(255,0,0)"), "Pyre.K","Pyre Killed", "Pyre Killed",0),
-            new KilledMechanic((int)PyreGuardianStab, "Stab Pyre Guardian", new MechanicPlotlySetting("bowtie","rgb(255,0,0)"), "Pyre.S.K","Stab Pyre Killed", "Stab Pyre Killed",0),
-            new KilledMechanic((int)PyreGuardianProtect, "Protect Pyre Guardian", new MechanicPlotlySetting("bowtie","rgb(255,125,0)"), "Pyre.P.K","Protect Pyre Killed", "Protect Pyre Killed",0),
-            new KilledMechanic((int)PyreGuardianRetal, "Retal Pyre Guardian", new MechanicPlotlySetting("bowtie","rgb(255,125,125)"), "Pyre.R.K","Retal Pyre Killed", "Retal Pyre Killed",0),
+            new KilledMechanic((int)ArcDPSEnums.TrashID.PyreGuardianStab, "Stab Pyre Guardian", new MechanicPlotlySetting("bowtie","rgb(255,0,0)"), "Pyre.S.K","Stab Pyre Killed", "Stab Pyre Killed",0),
+            new KilledMechanic((int)ArcDPSEnums.TrashID.PyreGuardianProtect, "Protect Pyre Guardian", new MechanicPlotlySetting("bowtie","rgb(255,125,0)"), "Pyre.P.K","Protect Pyre Killed", "Protect Pyre Killed",0),
+            new KilledMechanic((int)ArcDPSEnums.TrashID.PyreGuardianRetal, "Retal Pyre Guardian", new MechanicPlotlySetting("bowtie","rgb(255,125,125)"), "Pyre.R.K","Retal Pyre Killed", "Retal Pyre Killed",0),
             });
             Extension = "qadim";
             Icon = "https://wiki.guildwars2.com/images/f/f2/Mini_Qadim.png";
@@ -85,12 +85,12 @@ namespace GW2EIParser.Logic
         {
             return new List<int>
             {
-                (int)ParseEnum.TargetID.Qadim,
-                (int)AncientInvokedHydra,
-                (int)WyvernMatriarch,
-                (int)WyvernPatriarch,
-                (int)ApocalypseBringer,
-                (int)QadimLamp,
+                (int)ArcDPSEnums.TargetID.Qadim,
+                (int)ArcDPSEnums.TrashID.AncientInvokedHydra,
+                (int)ArcDPSEnums.TrashID.WyvernMatriarch,
+                (int)ArcDPSEnums.TrashID.WyvernPatriarch,
+                (int)ArcDPSEnums.TrashID.ApocalypseBringer,
+                (int)ArcDPSEnums.TrashID.QadimLamp,
             };
         }
 
@@ -98,47 +98,47 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<int>
             {
-                (int)ParseEnum.TargetID.Qadim,
-                (int)AncientInvokedHydra,
-                (int)ApocalypseBringer,
-                (int)WyvernMatriarch,
-                (int)WyvernPatriarch
+                (int)ArcDPSEnums.TargetID.Qadim,
+                (int)ArcDPSEnums.TrashID.AncientInvokedHydra,
+                (int)ArcDPSEnums.TrashID.ApocalypseBringer,
+                (int)ArcDPSEnums.TrashID.WyvernMatriarch,
+                (int)ArcDPSEnums.TrashID.WyvernPatriarch
             };
         }
 
         public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
-            List<AgentItem> pyres = agentData.GetNPCsByID((int)PyreGuardian);
+            List<AgentItem> pyres = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.PyreGuardian);
             // Lamps
-            var lampAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ParseEnum.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202).ToList();
+            var lampAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202).ToList();
             foreach (AgentItem lamp in lampAgents)
             {
                 lamp.OverrideType(AgentItem.AgentType.NPC);
-                lamp.OverrideID((int)QadimLamp);
+                lamp.OverrideID((int)ArcDPSEnums.TrashID.QadimLamp);
             }
             bool refresh = lampAgents.Count > 0;
             // Pyres
             foreach (AgentItem pyre in pyres)
             {
-                CombatItem position = combatData.FirstOrDefault(x => x.SrcAgent == pyre.Agent && x.IsStateChange == ParseEnum.StateChange.Position);
+                CombatItem position = combatData.FirstOrDefault(x => x.SrcAgent == pyre.Agent && x.IsStateChange == ArcDPSEnums.StateChange.Position);
                 if (position != null)
                 {
                     (float x, float y, _) = AbstractMovementEvent.UnpackMovementData(position.DstAgent, 0);
                     if ((Math.Abs(x + 8947) < 10 && Math.Abs(y - 14728) < 10) || (Math.Abs(x + 10834) < 10 && Math.Abs(y - 12477) < 10))
                     {
-                        pyre.OverrideID((int)PyreGuardianProtect);
+                        pyre.OverrideID((int)ArcDPSEnums.TrashID.PyreGuardianProtect);
                         refresh = true;
                         pyre.OverrideName(pyre.Name.Insert(0, "Protect "));
                     }
                     else if ((Math.Abs(x + 4356) < 10 && Math.Abs(y - 12076) < 10) || (Math.Abs(x + 5889) < 10 && Math.Abs(y - 14723) < 10) || (Math.Abs(x + 7851) < 10 && Math.Abs(y - 13550) < 10))
                     {
-                        pyre.OverrideID((int)PyreGuardianStab);
+                        pyre.OverrideID((int)ArcDPSEnums.TrashID.PyreGuardianStab);
                         refresh = true;
                         pyre.OverrideName(pyre.Name.Insert(0, "Stab "));
                     }
                     else if ((Math.Abs(x + 8951) < 10 && Math.Abs(y - 9429) < 10) || (Math.Abs(x + 5716) < 10 && Math.Abs(y - 9325) < 10) || (Math.Abs(x + 7846) < 10 && Math.Abs(y - 10612) < 10))
                     {
-                        pyre.OverrideID((int)PyreGuardianRetal);
+                        pyre.OverrideID((int)ArcDPSEnums.TrashID.PyreGuardianRetal);
                         refresh = true;
                         pyre.OverrideName(pyre.Name.Insert(0, "Retal "));
                     }
@@ -154,7 +154,7 @@ namespace GW2EIParser.Logic
         public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // Find target
-            AgentItem target = agentData.GetNPCsByID((int)ParseEnum.TargetID.Qadim).FirstOrDefault();
+            AgentItem target = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Qadim).FirstOrDefault();
             if (target == null)
             {
                 throw new InvalidOperationException("Qadim not found");
@@ -180,7 +180,7 @@ namespace GW2EIParser.Logic
             // If changing phase detection, combat replay platform timings may have to be updated.
 
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC qadim = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Qadim);
+            NPC qadim = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Qadim);
             if (qadim == null)
             {
                 throw new InvalidOperationException("Qadim not found");
@@ -200,10 +200,10 @@ namespace GW2EIParser.Logic
                     var pyresFirstAware = new List<long>();
                     var pyres = new List<int>
                         {
-                            (int) PyreGuardian,
-                            (int) PyreGuardianProtect,
-                            (int) PyreGuardianStab,
-                            (int) PyreGuardianRetal,
+                            (int) ArcDPSEnums.TrashID.PyreGuardian,
+                            (int) ArcDPSEnums.TrashID.PyreGuardianProtect,
+                            (int) ArcDPSEnums.TrashID.PyreGuardianStab,
+                            (int) ArcDPSEnums.TrashID.PyreGuardianRetal,
                         };
                     foreach (int pyreId in pyres)
                     {
@@ -219,11 +219,11 @@ namespace GW2EIParser.Logic
                 {
                     var ids = new List<int>
                         {
-                           (int) WyvernMatriarch,
-                           (int) WyvernPatriarch,
-                           (int) AncientInvokedHydra,
-                           (int) ApocalypseBringer,
-                           (int) QadimLamp
+                           (int) ArcDPSEnums.TrashID.WyvernMatriarch,
+                           (int) ArcDPSEnums.TrashID.WyvernPatriarch,
+                           (int) ArcDPSEnums.TrashID.AncientInvokedHydra,
+                           (int) ArcDPSEnums.TrashID.ApocalypseBringer,
+                           (int) ArcDPSEnums.TrashID.QadimLamp
                         };
                     AddTargetsToPhase(phase, ids, log);
                     if (phase.Targets.Count > 0)
@@ -231,14 +231,14 @@ namespace GW2EIParser.Logic
                         NPC phaseTar = phase.Targets[0];
                         switch(phaseTar.ID)
                         {
-                            case (int)AncientInvokedHydra:
+                            case (int)ArcDPSEnums.TrashID.AncientInvokedHydra:
                                 phase.Name = "Hydra";
                                 break;
-                            case (int)ApocalypseBringer:
+                            case (int)ArcDPSEnums.TrashID.ApocalypseBringer:
                                 phase.Name = "Apocalypse";
                                 break;
-                            case (int)WyvernPatriarch:
-                            case (int)WyvernMatriarch:
+                            case (int)ArcDPSEnums.TrashID.WyvernPatriarch:
+                            case (int)ArcDPSEnums.TrashID.WyvernMatriarch:
                                 phase.Name = "Wyvern";
                                 break;
                             default:
@@ -251,25 +251,25 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashID>()
+            return new List<ArcDPSEnums.TrashID>()
             {
-                LavaElemental1,
-                LavaElemental2,
-                IcebornHydra,
-                GreaterMagmaElemental1,
-                GreaterMagmaElemental2,
-                FireElemental,
-                FireImp,
-                PyreGuardian,
-                PyreGuardianProtect,
-                PyreGuardianRetal,
-                PyreGuardianStab,
-                ReaperofFlesh,
-                DestroyerTroll,
-                IceElemental,
-                Zommoros
+                ArcDPSEnums.TrashID.LavaElemental1,
+                ArcDPSEnums.TrashID.LavaElemental2,
+                ArcDPSEnums.TrashID.IcebornHydra,
+                ArcDPSEnums.TrashID.GreaterMagmaElemental1,
+                ArcDPSEnums.TrashID.GreaterMagmaElemental2,
+                ArcDPSEnums.TrashID.FireElemental,
+                ArcDPSEnums.TrashID.FireImp,
+                ArcDPSEnums.TrashID.PyreGuardian,
+                ArcDPSEnums.TrashID.PyreGuardianProtect,
+                ArcDPSEnums.TrashID.PyreGuardianRetal,
+                ArcDPSEnums.TrashID.PyreGuardianStab,
+                ArcDPSEnums.TrashID.ReaperofFlesh,
+                ArcDPSEnums.TrashID.DestroyerTroll,
+                ArcDPSEnums.TrashID.IceElemental,
+                ArcDPSEnums.TrashID.Zommoros
             };
         }
 
@@ -279,7 +279,7 @@ namespace GW2EIParser.Logic
             int ccRadius = 200;
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetID.Qadim:
+                case (int)ArcDPSEnums.TargetID.Qadim:
                     //CC
                     AddPlatformsToCombatReplay(target, log, replay);
                     var breakbar = cls.Where(x => x.SkillId == 51943).ToList();
@@ -316,7 +316,7 @@ namespace GW2EIParser.Logic
                         }
                     }
                     break;
-                case (int)AncientInvokedHydra:
+                case (int)ArcDPSEnums.TrashID.AncientInvokedHydra:
                     //CC
                     var fieryMeteor = cls.Where(x => x.SkillId == 52941).ToList();
                     foreach (AbstractCastEvent c in fieryMeteor)
@@ -339,7 +339,7 @@ namespace GW2EIParser.Logic
                         }
                     }
                     break;
-                case (int)WyvernMatriarch:
+                case (int)ArcDPSEnums.TrashID.WyvernMatriarch:
                     //Wing Buffet
                     var wingBuffet = cls.Where(x => x.SkillId == 52734).ToList();
                     foreach (AbstractCastEvent c in wingBuffet)
@@ -399,7 +399,7 @@ namespace GW2EIParser.Logic
                         }
                     }
                     break;
-                case (int)WyvernPatriarch:
+                case (int)ArcDPSEnums.TrashID.WyvernPatriarch:
                     //CC
                     var patCC = cls.Where(x => x.SkillId == 53132).ToList();
                     foreach (AbstractCastEvent c in patCC)
@@ -448,7 +448,7 @@ namespace GW2EIParser.Logic
                         }
                     }
                     break;
-                case (int)ApocalypseBringer:
+                case (int)ArcDPSEnums.TrashID.ApocalypseBringer:
                     var jumpShockwave = cls.Where(x => x.SkillId == 51923).ToList();
                     foreach (AbstractCastEvent c in jumpShockwave)
                     {
@@ -514,7 +514,7 @@ namespace GW2EIParser.Logic
 
         public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Qadim);
+            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Qadim);
             if (target == null)
             {
                 throw new InvalidOperationException("Qadim not found");
@@ -525,7 +525,7 @@ namespace GW2EIParser.Logic
         private void AddPlatformsToCombatReplay(NPC target, ParsedLog log, CombatReplay replay)
         {
             // We later use the target to find out the timing of the last move
-            Debug.Assert(target.ID == (int)ParseEnum.TargetID.Qadim);
+            Debug.Assert(target.ID == (int)ArcDPSEnums.TargetID.Qadim);
 
             // These values were all calculated by hand.
             // It would be way nicer to calculate them here, but we don't have a nice vector library

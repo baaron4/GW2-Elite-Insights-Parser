@@ -1,4 +1,5 @@
 ﻿using GW2EIParser.EIData;
+using GW2EIUtils;
 
 namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
@@ -9,13 +10,13 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public NonDirectDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
             Damage = evtcItem.BuffDmg;
-            ParseEnum.ConditionResult result = ParseEnum.GetConditionResult(evtcItem.Result);
+            ArcDPSEnums.ConditionResult result = ArcDPSEnums.GetConditionResult(evtcItem.Result);
 
-            IsAbsorbed = result == ParseEnum.ConditionResult.InvulByBuff ||
-                result == ParseEnum.ConditionResult.InvulByPlayerSkill1 ||
-                result == ParseEnum.ConditionResult.InvulByPlayerSkill2 ||
-                result == ParseEnum.ConditionResult.InvulByPlayerSkill3;
-            HasHit = result == ParseEnum.ConditionResult.ExpectedToHit;
+            IsAbsorbed = result == ArcDPSEnums.ConditionResult.InvulByBuff ||
+                result == ArcDPSEnums.ConditionResult.InvulByPlayerSkill1 ||
+                result == ArcDPSEnums.ConditionResult.InvulByPlayerSkill2 ||
+                result == ArcDPSEnums.ConditionResult.InvulByPlayerSkill3;
+            HasHit = result == ArcDPSEnums.ConditionResult.ExpectedToHit;
             ShieldDamage = evtcItem.IsShields > 0 ? Damage : 0;
         }
 

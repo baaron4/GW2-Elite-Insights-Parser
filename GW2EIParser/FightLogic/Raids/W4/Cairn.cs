@@ -5,6 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -64,7 +65,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetID.Cairn:
+                case (int)ArcDPSEnums.TargetID.Cairn:
                     var swordSweep = cls.Where(x => x.SkillId == 37631).ToList();
                     foreach (AbstractCastEvent c in swordSweep)
                     {
@@ -104,13 +105,13 @@ namespace GW2EIParser.Logic
 
         public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem target = agentData.GetNPCsByID((int)ParseEnum.TargetID.Cairn).FirstOrDefault();
+            AgentItem target = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Cairn).FirstOrDefault();
             if (target == null)
             {
                 throw new InvalidOperationException("Cairn not found");
             }
             // spawn protection loss
-            CombatItem spawnProtectionLoss = combatData.Find(x => x.IsBuffRemove == ParseEnum.BuffRemove.All && x.IsBuff != 0 && x.SrcAgent == target.Agent && x.SkillID == 34113);
+            CombatItem spawnProtectionLoss = combatData.Find(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.IsBuff != 0 && x.SrcAgent == target.Agent && x.SkillID == 34113);
             if (spawnProtectionLoss != null)
             {
                 fightData.OverrideOffset(spawnProtectionLoss.Time);

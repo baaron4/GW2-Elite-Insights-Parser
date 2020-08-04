@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 
@@ -56,7 +57,7 @@ namespace GW2EIParser.EIData
                         // more than one candidate, put to unknown and drop the search
                         if (gadget.Master != null && gadget.GetFinalMaster() != castEvent.Caster.GetFinalMaster())
                         {
-                            gadget.SetMaster(GeneralHelper.UnknownAgent);
+                            gadget.SetMaster(ParseHelper.UnknownAgent);
                             break;
                         }
                         gadget.SetMaster(castEvent.Caster.GetFinalMaster());

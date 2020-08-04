@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIParser.Logic;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIUtils;
 
 namespace GW2EIParser.EIData
 {

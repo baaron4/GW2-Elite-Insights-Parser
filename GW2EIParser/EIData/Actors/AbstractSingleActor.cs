@@ -3,6 +3,7 @@ using System.Linq;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIUtils;
 using static GW2EIParser.EIData.Buff;
 
 namespace GW2EIParser.EIData
@@ -57,6 +58,8 @@ namespace GW2EIParser.EIData
             }
             return (_deads, _downs, _dcs);
         }
+
+        public abstract string GetIcon();     
 
         public List<Segment> GetHealthUpdates(ParsedLog log)
         {
@@ -234,7 +237,7 @@ namespace GW2EIParser.EIData
                 {
                     foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in _buffMap)
                     {
-                        pair.Value.Add(new BuffRemoveAllEvent(GeneralHelper.UnknownAgent, AgentItem, dsp.Time, int.MaxValue, log.SkillData.Get(pair.Key), BuffRemoveAllEvent.FullRemoval, int.MaxValue));
+                        pair.Value.Add(new BuffRemoveAllEvent(ParseHelper.UnknownAgent, AgentItem, dsp.Time, int.MaxValue, log.SkillData.Get(pair.Key), BuffRemoveAllEvent.FullRemoval, int.MaxValue));
                     }
                 }
                 _buffMap.Sort();
@@ -710,7 +713,7 @@ namespace GW2EIParser.EIData
             if (DamageLogs == null)
             {
                 DamageLogs = new List<AbstractDamageEvent>();
-                DamageLogs.AddRange(log.CombatData.GetDamageData(AgentItem).Where(x => x.IFF != ParseEnum.IFF.Friend));
+                DamageLogs.AddRange(log.CombatData.GetDamageData(AgentItem).Where(x => x.IFF != ArcDPSEnums.IFF.Friend));
                 Dictionary<long, Minions> minionsList = GetMinions(log);
                 foreach (Minions mins in minionsList.Values)
                 {
@@ -764,10 +767,10 @@ namespace GW2EIParser.EIData
                 targetDict = new Dictionary<AbstractActor, List<AbstractDamageEvent>>();
                 _selfDamageLogsPerPhasePerTarget[phase] = targetDict;
             }
-            if (!targetDict.TryGetValue(target ?? GeneralHelper.NullActor, out List<AbstractDamageEvent> dls))
+            if (!targetDict.TryGetValue(target ?? ParseHelper.NullActor, out List<AbstractDamageEvent> dls))
             {
                 dls = GetDamageLogs(target, log, phase).Where(x => x.From == AgentItem).ToList();
-                targetDict[target ?? GeneralHelper.NullActor] = dls;
+                targetDict[target ?? ParseHelper.NullActor] = dls;
             }
             return dls;
         }

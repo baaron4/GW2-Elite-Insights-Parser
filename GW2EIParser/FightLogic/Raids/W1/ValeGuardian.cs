@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashID;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -53,17 +53,17 @@ namespace GW2EIParser.Logic
         {
             return new List<int>
             {
-                (int)ParseEnum.TargetID.ValeGuardian,
-                (int)RedGuardian,
-                (int)BlueGuardian,
-                (int)GreenGuardian
+                (int)ArcDPSEnums.TargetID.ValeGuardian,
+                (int)ArcDPSEnums.TrashID.RedGuardian,
+                (int)ArcDPSEnums.TrashID.BlueGuardian,
+                (int)ArcDPSEnums.TrashID.GreenGuardian
             };
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.ValeGuardian);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.ValeGuardian);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Vale Guardian not found");
@@ -83,9 +83,9 @@ namespace GW2EIParser.Logic
                     phase.Name = "Split " + (i) / 2;
                     var ids = new List<int>
                     {
-                       (int) BlueGuardian,
-                       (int) GreenGuardian,
-                       (int) RedGuardian
+                       (int) ArcDPSEnums.TrashID.BlueGuardian,
+                       (int) ArcDPSEnums.TrashID.GreenGuardian,
+                       (int) ArcDPSEnums.TrashID.RedGuardian
                     };
                     AddTargetsToPhase(phase, ids, log);
                     foreach (NPC t in phase.Targets)
@@ -102,11 +102,11 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashID>
+            return new List<ArcDPSEnums.TrashID>
             {
-               Seekers
+               ArcDPSEnums.TrashID.Seekers
             };
         }
 
@@ -116,7 +116,7 @@ namespace GW2EIParser.Logic
             var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetID.ValeGuardian:
+                case (int)ArcDPSEnums.TargetID.ValeGuardian:
                     var magicStorms = cls.Where(x => x.SkillId == 31419).ToList();
                     foreach (AbstractCastEvent c in magicStorms)
                     {
@@ -156,16 +156,16 @@ namespace GW2EIParser.Logic
                         replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0,255,0,0.2)", new PositionConnector(new Point3D(-4735.0f, -21407.0f, 0.0f, 0))));
                     }
                     break;
-                case (int)BlueGuardian:
+                case (int)ArcDPSEnums.TrashID.BlueGuardian:
                     replay.Decorations.Add(new CircleDecoration(false, 0, 1500, lifespan, "rgba(0, 0, 255, 0.5)", new AgentConnector(target)));
                     break;
-                case (int)GreenGuardian:
+                case (int)ArcDPSEnums.TrashID.GreenGuardian:
                     replay.Decorations.Add(new CircleDecoration(false, 0, 1500, lifespan, "rgba(0, 255, 0, 0.5)", new AgentConnector(target)));
                     break;
-                case (int)RedGuardian:
+                case (int)ArcDPSEnums.TrashID.RedGuardian:
                     replay.Decorations.Add(new CircleDecoration(false, 0, 1500, lifespan, "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     break;
-                case (int)Seekers:
+                case (int)ArcDPSEnums.TrashID.Seekers:
                     replay.Decorations.Add(new CircleDecoration(false, 0, 180, lifespan, "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     break;
                 default:

@@ -5,6 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -29,7 +30,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC varinia = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.VariniaStormsounder);
+            NPC varinia = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.VariniaStormsounder);
             if (varinia == null)
             {
                 throw new InvalidOperationException("Varinia Stormsounder not found");
@@ -46,22 +47,22 @@ namespace GW2EIParser.Logic
         }
 
         // TODO - complete IDs
-        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashID>
+            return new List<ArcDPSEnums.TrashID>
             {
-                ParseEnum.TrashID.PropagandaBallon,
-                ParseEnum.TrashID.DominionBladestorm,
-                ParseEnum.TrashID.DominionStalker,
-                ParseEnum.TrashID.DominionSpy1,
-                ParseEnum.TrashID.DominionSpy2,
-                ParseEnum.TrashID.DominionAxeFiend,
-                ParseEnum.TrashID.DominionEffigy,
-                ParseEnum.TrashID.FrostLegionCrusher,
-                ParseEnum.TrashID.FrostLegionMusketeer,
-                ParseEnum.TrashID.BloodLegionBlademaster,
-                ParseEnum.TrashID.CharrTank,
-                ParseEnum.TrashID.SonsOfSvanirHighShaman,
+                ArcDPSEnums.TrashID.PropagandaBallon,
+                ArcDPSEnums.TrashID.DominionBladestorm,
+                ArcDPSEnums.TrashID.DominionStalker,
+                ArcDPSEnums.TrashID.DominionSpy1,
+                ArcDPSEnums.TrashID.DominionSpy2,
+                ArcDPSEnums.TrashID.DominionAxeFiend,
+                ArcDPSEnums.TrashID.DominionEffigy,
+                ArcDPSEnums.TrashID.FrostLegionCrusher,
+                ArcDPSEnums.TrashID.FrostLegionMusketeer,
+                ArcDPSEnums.TrashID.BloodLegionBlademaster,
+                ArcDPSEnums.TrashID.CharrTank,
+                ArcDPSEnums.TrashID.SonsOfSvanirHighShaman,
             };
         }
     }

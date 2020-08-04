@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using GW2EIParser.Controllers;
 using GW2EIParser.EIData;
-using GW2EIParser.Exceptions;
 //recommend CTRL+M+O to collapse all
 using GW2EIParser.Logic;
 using GW2EIParser.Parser.ParsedData;
+using GW2EIUtils.Exceptions;
+using GW2EIUtils;
+using GW2EIControllers;
+using GW2EIUtils.GW2API;
 
 //recommend CTRL+M+O to collapse all
 namespace GW2EIParser.Parser
@@ -42,7 +44,7 @@ namespace GW2EIParser.Parser
         /// <param name="operation">Operation object bound to the UI</param>
         /// <param name="evtc">The path to the log to parse</param>
         /// <returns>the ParsedLog</returns>
-        public ParsedLog ParseLog(OperationController operation, string evtc)
+        public ParsedLog ParseLog(OperationTracer operation, string evtc)
         {
             operation.UpdateProgressWithCancellationCheck("Reading Binary");
             using (var fs = new FileStream(evtc, FileMode.Open, FileAccess.Read, FileShare.Read))
@@ -75,7 +77,7 @@ namespace GW2EIParser.Parser
             return new ParsedLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _logEndTime - _logStartTime, _parserSettings, operation);
         }
 
-        private void ParseLog(OperationController operation, Stream stream)
+        private void ParseLog(OperationTracer operation, Stream stream)
         {
             operation.UpdateProgressWithCancellationCheck("Parsing fight data");
             ParseFightData(stream, operation);
@@ -117,7 +119,7 @@ namespace GW2EIParser.Parser
         /// <summary>
         /// Parses fight related data
         /// </summary>
-        private void ParseFightData(Stream stream, OperationController operation)
+        private void ParseFightData(Stream stream, OperationTracer operation)
         {
             using (BinaryReader reader = CreateReader(stream))
             {
@@ -136,11 +138,95 @@ namespace GW2EIParser.Parser
                 ParseHelper.SafeSkip(stream, 1);
             }
         }
+        private static string GetAgentProfString(uint prof, uint elite)
+        {
+            // non player
+            if (elite == 0xFFFFFFFF)
+            {
+                if ((prof & 0xffff0000) == 0xffff0000)
+                {
+                    return "GDG";
+                }
+                else
+                {
+                    return "NPC";
+                }
+            }
+            // base profession
+            else if (elite == 0)
+            {
+                switch (prof)
+                {
+                    case 1:
+                        return "Guardian";
+                    case 2:
+                        return "Warrior";
+                    case 3:
+                        return "Engineer";
+                    case 4:
+                        return "Ranger";
+                    case 5:
+                        return "Thief";
+                    case 6:
+                        return "Elementalist";
+                    case 7:
+                        return "Mesmer";
+                    case 8:
+                        return "Necromancer";
+                    case 9:
+                        return "Revenant";
+                }
+            }
+            // old elite
+            else if (elite == 1)
+            {
+                switch (prof)
+                {
+                    case 1:
+                        return "Dragonhunter";
+                    case 2:
+                        return "Berserker";
+                    case 3:
+                        return "Scrapper";
+                    case 4:
+                        return "Druid";
+                    case 5:
+                        return "Daredevil";
+                    case 6:
+                        return "Tempest";
+                    case 7:
+                        return "Chronomancer";
+                    case 8:
+                        return "Reaper";
+                    case 9:
+                        return "Herald";
+                }
+
+            }
+            // new way
+            else
+            {
+                GW2APISpec spec = GW2APIController.GetAPISpec((int)elite);
+                if (spec == null)
+                {
+                    throw new InvalidOperationException("Missing or outdated GW2 API Cache");
+                }
+                if (spec.Elite)
+                {
+                    return spec.Name;
+                }
+                else
+                {
+                    return spec.Profession;
+                }
+            }
+            throw new InvalidDataException("Unknown profession");
+        }
 
         /// <summary>
         /// Parses agent related data
         /// </summary>
-        private void ParseAgentData(Stream stream, OperationController operation)
+        private void ParseAgentData(Stream stream, OperationTracer operation)
         {
             using (BinaryReader reader = CreateReader(stream))
             {            // 4 bytes: player count
@@ -174,7 +260,7 @@ namespace GW2EIParser.Parser
                     // 68 bytes: name
                     string name = ParseHelper.GetString(stream, 68, false);
                     //Save
-                    string agentProf = GW2APIController.GetAgentProfString(prof, isElite);
+                    string agentProf = GetAgentProfString(prof, isElite);
                     AgentItem.AgentType type;
                     ushort ID = 0;
                     switch (agentProf)
@@ -216,7 +302,7 @@ namespace GW2EIParser.Parser
         /// <summary>
         /// Parses skill related data
         /// </summary>
-        private void ParseSkillData(Stream stream, OperationController operation)
+        private void ParseSkillData(Stream stream, OperationTracer operation)
         {
             using (BinaryReader reader = CreateReader(stream))
             {
@@ -398,7 +484,7 @@ namespace GW2EIParser.Parser
         /// <summary>
         /// Parses combat related data
         /// </summary>
-        private void ParseCombatList(Stream stream, OperationController operation)
+        private void ParseCombatList(Stream stream, OperationTracer operation)
         {
             // 64 bytes: each combat
             using (BinaryReader reader = CreateReader(stream))
@@ -445,17 +531,17 @@ namespace GW2EIParser.Parser
         /// <returns>true if the combat item is valid</returns>
         private static bool IsValid(CombatItem combatItem)
         {
-            if (combatItem.IsStateChange == ParseEnum.StateChange.HealthUpdate && combatItem.DstAgent > 20000)
+            if (combatItem.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && combatItem.DstAgent > 20000)
             {
                 // DstAgent should be target health % times 100, values higher than 10000 are unlikely. 
                 // If it is more than 200% health ignore this record
                 return false;
             }
-            if (combatItem.SrcInstid == 0 && combatItem.DstAgent == 0 && combatItem.SrcAgent == 0 && combatItem.DstInstid == 0 && combatItem.IFF == ParseEnum.IFF.Unknown)
+            if (combatItem.SrcInstid == 0 && combatItem.DstAgent == 0 && combatItem.SrcAgent == 0 && combatItem.DstInstid == 0 && combatItem.IFF == ArcDPSEnums.IFF.Unknown)
             {
                 return false;
             }
-            return combatItem.IsStateChange != ParseEnum.StateChange.Unknown;
+            return combatItem.IsStateChange != ArcDPSEnums.StateChange.Unknown;
         }
         private static void UpdateAgentData(AgentItem ag, long logTime, ushort instid)
         {
@@ -476,10 +562,10 @@ namespace GW2EIParser.Parser
         private void FindAgentMaster(long logTime, ushort masterInstid, ulong minionAgent)
         {
             AgentItem master = _agentData.GetAgentByInstID(masterInstid, logTime);
-            if (master != GeneralHelper.UnknownAgent)
+            if (master != ParseHelper.UnknownAgent)
             {
                 AgentItem minion = _agentData.GetAgent(minionAgent);
-                if (minion != GeneralHelper.UnknownAgent && minion.Master == null) 
+                if (minion != ParseHelper.UnknownAgent && minion.Master == null) 
                 {
                     if (minion.FirstAware <= logTime && logTime <= minion.LastAware)
                     {

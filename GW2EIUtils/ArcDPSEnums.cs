@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace GW2EIParser.Parser
+namespace GW2EIUtils
 {
-    public static class ParseEnum
+    public static class ArcDPSEnums
     {
         // Activation
         public enum Activation : byte
@@ -578,80 +578,80 @@ namespace GW2EIParser.Parser
 
     }
 
-    internal static class PhysicalResultExtensions
+    public static class PhysicalResultExtensions
     {
-        public static bool IsHit(this ParseEnum.PhysicalResult result)
+        public static bool IsHit(this ArcDPSEnums.PhysicalResult result)
         {
-            return result == ParseEnum.PhysicalResult.Normal || result == ParseEnum.PhysicalResult.Crit || result == ParseEnum.PhysicalResult.Glance || result == ParseEnum.PhysicalResult.KillingBlow; //Downed and Interrupt omitted for now due to double procing mechanics || result == ParseEnum.Result.Downed || result == ParseEnum.Result.Interrupt; 
+            return result == ArcDPSEnums.PhysicalResult.Normal || result == ArcDPSEnums.PhysicalResult.Crit || result == ArcDPSEnums.PhysicalResult.Glance || result == ArcDPSEnums.PhysicalResult.KillingBlow; //Downed and Interrupt omitted for now due to double procing mechanics || result == ParseEnum.Result.Downed || result == ParseEnum.Result.Interrupt; 
         }
     }
 
-    internal static class ConditionResultExtensions
+    public static class ConditionResultExtensions
     {
-        public static bool IsHit(this ParseEnum.ConditionResult result)
+        public static bool IsHit(this ArcDPSEnums.ConditionResult result)
         {
-            return result == ParseEnum.ConditionResult.ExpectedToHit;
+            return result == ArcDPSEnums.ConditionResult.ExpectedToHit;
         }
     }
 
-    internal static class SpanwExtensions
+    public static class SpanwExtensions
     {
-        public static bool IsSpawn(this ParseEnum.StateChange state)
+        public static bool IsSpawn(this ArcDPSEnums.StateChange state)
         {
-            return state == ParseEnum.StateChange.None || state == ParseEnum.StateChange.Position || state == ParseEnum.StateChange.Velocity || state == ParseEnum.StateChange.Rotation || state == ParseEnum.StateChange.MaxHealthUpdate || state == ParseEnum.StateChange.Spawn || state == ParseEnum.StateChange.TeamChange;
+            return state == ArcDPSEnums.StateChange.None || state == ArcDPSEnums.StateChange.Position || state == ArcDPSEnums.StateChange.Velocity || state == ArcDPSEnums.StateChange.Rotation || state == ArcDPSEnums.StateChange.MaxHealthUpdate || state == ArcDPSEnums.StateChange.Spawn || state == ArcDPSEnums.StateChange.TeamChange;
         }
     }
 
-    internal static class StateChangeAgentExtensions
+    public static class StateChangeAgentExtensions
     {
-        public static bool SrcIsAgent(this ParseEnum.StateChange state)
+        public static bool SrcIsAgent(this ArcDPSEnums.StateChange state)
         {
-            return state == ParseEnum.StateChange.None || state == ParseEnum.StateChange.EnterCombat
-                || state == ParseEnum.StateChange.ExitCombat || state == ParseEnum.StateChange.ChangeUp
-                || state == ParseEnum.StateChange.ChangeDead || state == ParseEnum.StateChange.ChangeDown
-                || state == ParseEnum.StateChange.Spawn || state == ParseEnum.StateChange.Despawn
-                || state == ParseEnum.StateChange.HealthUpdate || state == ParseEnum.StateChange.WeaponSwap
-                || state == ParseEnum.StateChange.MaxHealthUpdate || state == ParseEnum.StateChange.PointOfView
-                || state == ParseEnum.StateChange.BuffInitial || state == ParseEnum.StateChange.Position
-                || state == ParseEnum.StateChange.Velocity || state == ParseEnum.StateChange.Rotation
-                || state == ParseEnum.StateChange.TeamChange || state == ParseEnum.StateChange.AttackTarget
-                || state == ParseEnum.StateChange.Targetable || state == ParseEnum.StateChange.StackActive
-                || state == ParseEnum.StateChange.StackReset || state == ParseEnum.StateChange.BreakbarState 
-                || state == ParseEnum.StateChange.BreakbarPercent;
+            return state == ArcDPSEnums.StateChange.None || state == ArcDPSEnums.StateChange.EnterCombat
+                || state == ArcDPSEnums.StateChange.ExitCombat || state == ArcDPSEnums.StateChange.ChangeUp
+                || state == ArcDPSEnums.StateChange.ChangeDead || state == ArcDPSEnums.StateChange.ChangeDown
+                || state == ArcDPSEnums.StateChange.Spawn || state == ArcDPSEnums.StateChange.Despawn
+                || state == ArcDPSEnums.StateChange.HealthUpdate || state == ArcDPSEnums.StateChange.WeaponSwap
+                || state == ArcDPSEnums.StateChange.MaxHealthUpdate || state == ArcDPSEnums.StateChange.PointOfView
+                || state == ArcDPSEnums.StateChange.BuffInitial || state == ArcDPSEnums.StateChange.Position
+                || state == ArcDPSEnums.StateChange.Velocity || state == ArcDPSEnums.StateChange.Rotation
+                || state == ArcDPSEnums.StateChange.TeamChange || state == ArcDPSEnums.StateChange.AttackTarget
+                || state == ArcDPSEnums.StateChange.Targetable || state == ArcDPSEnums.StateChange.StackActive
+                || state == ArcDPSEnums.StateChange.StackReset || state == ArcDPSEnums.StateChange.BreakbarState 
+                || state == ArcDPSEnums.StateChange.BreakbarPercent;
         }
 
-        public static bool DstIsAgent(this ParseEnum.StateChange state)
+        public static bool DstIsAgent(this ArcDPSEnums.StateChange state)
         {
-            return state == ParseEnum.StateChange.None || state == ParseEnum.StateChange.AttackTarget;
+            return state == ArcDPSEnums.StateChange.None || state == ArcDPSEnums.StateChange.AttackTarget;
         }
 
-        public static bool HasTime(this ParseEnum.StateChange state)
+        public static bool HasTime(this ArcDPSEnums.StateChange state)
         {
-            return state == ParseEnum.StateChange.None || state == ParseEnum.StateChange.EnterCombat
-                || state == ParseEnum.StateChange.ExitCombat || state == ParseEnum.StateChange.ChangeUp
-                || state == ParseEnum.StateChange.ChangeDead || state == ParseEnum.StateChange.ChangeDown
-                || state == ParseEnum.StateChange.Spawn || state == ParseEnum.StateChange.Despawn
-                || state == ParseEnum.StateChange.HealthUpdate || state == ParseEnum.StateChange.WeaponSwap
-                || state == ParseEnum.StateChange.MaxHealthUpdate || state == ParseEnum.StateChange.BuffInitial
-                || state == ParseEnum.StateChange.Position || state == ParseEnum.StateChange.Velocity
-                || state == ParseEnum.StateChange.Rotation || state == ParseEnum.StateChange.TeamChange
-                || state == ParseEnum.StateChange.AttackTarget || state == ParseEnum.StateChange.Targetable
-                || state == ParseEnum.StateChange.StackActive || state == ParseEnum.StateChange.StackReset
-                || state == ParseEnum.StateChange.Reward || state == ParseEnum.StateChange.BreakbarState 
-                || state == ParseEnum.StateChange.BreakbarPercent;
+            return state == ArcDPSEnums.StateChange.None || state == ArcDPSEnums.StateChange.EnterCombat
+                || state == ArcDPSEnums.StateChange.ExitCombat || state == ArcDPSEnums.StateChange.ChangeUp
+                || state == ArcDPSEnums.StateChange.ChangeDead || state == ArcDPSEnums.StateChange.ChangeDown
+                || state == ArcDPSEnums.StateChange.Spawn || state == ArcDPSEnums.StateChange.Despawn
+                || state == ArcDPSEnums.StateChange.HealthUpdate || state == ArcDPSEnums.StateChange.WeaponSwap
+                || state == ArcDPSEnums.StateChange.MaxHealthUpdate || state == ArcDPSEnums.StateChange.BuffInitial
+                || state == ArcDPSEnums.StateChange.Position || state == ArcDPSEnums.StateChange.Velocity
+                || state == ArcDPSEnums.StateChange.Rotation || state == ArcDPSEnums.StateChange.TeamChange
+                || state == ArcDPSEnums.StateChange.AttackTarget || state == ArcDPSEnums.StateChange.Targetable
+                || state == ArcDPSEnums.StateChange.StackActive || state == ArcDPSEnums.StateChange.StackReset
+                || state == ArcDPSEnums.StateChange.Reward || state == ArcDPSEnums.StateChange.BreakbarState 
+                || state == ArcDPSEnums.StateChange.BreakbarPercent;
         }
     }
 
-    internal static class ActivationExtensions
+    public static class ActivationExtensions
     {
-        public static bool StartCasting(this ParseEnum.Activation activation)
+        public static bool StartCasting(this ArcDPSEnums.Activation activation)
         {
-            return activation == ParseEnum.Activation.Normal || activation == ParseEnum.Activation.Quickness;
+            return activation == ArcDPSEnums.Activation.Normal || activation == ArcDPSEnums.Activation.Quickness;
         }
 
-        public static bool EndCasting(this ParseEnum.Activation activation)
+        public static bool EndCasting(this ArcDPSEnums.Activation activation)
         {
-            return activation == ParseEnum.Activation.CancelFire || activation == ParseEnum.Activation.Reset || activation == ParseEnum.Activation.CancelCancel;
+            return activation == ArcDPSEnums.Activation.CancelFire || activation == ArcDPSEnums.Activation.Reset || activation == ArcDPSEnums.Activation.CancelCancel;
         }
     }
 }

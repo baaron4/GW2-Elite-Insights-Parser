@@ -4,6 +4,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -54,7 +55,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetID.BrokenKing:
+                case (int)ArcDPSEnums.TargetID.BrokenKing:
                     var Cone = cls.Where(x => x.SkillId == 48066).ToList();
                     foreach (AbstractCastEvent c in Cone)
                     {
@@ -80,7 +81,7 @@ namespace GW2EIParser.Logic
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            SetSuccessByDeath(combatData, fightData, playerAgents, true, (int)ParseEnum.TargetID.BrokenKing);
+            SetSuccessByDeath(combatData, fightData, playerAgents, true, (int)ArcDPSEnums.TargetID.BrokenKing);
         }
 
         public override string GetLogicName(ParsedLog log)

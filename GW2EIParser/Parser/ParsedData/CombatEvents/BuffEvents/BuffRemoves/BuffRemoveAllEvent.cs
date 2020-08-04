@@ -1,4 +1,5 @@
 ﻿using GW2EIParser.EIData;
+using GW2EIUtils;
 
 namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
@@ -31,7 +32,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            simulator.Remove(By, RemovedDuration, RemovedStacks, Time, ParseEnum.BuffRemove.All, 0);
+            simulator.Remove(By, RemovedDuration, RemovedStacks, Time, ArcDPSEnums.BuffRemove.All, 0);
         }
 
         public override int CompareTo(AbstractBuffEvent abe)

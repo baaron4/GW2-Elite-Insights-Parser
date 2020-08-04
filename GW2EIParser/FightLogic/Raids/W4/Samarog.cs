@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIParser.EIData;
-using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashID;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -58,7 +57,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Samarog);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Samarog);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Samarog not found");
@@ -78,8 +77,8 @@ namespace GW2EIParser.Logic
                     phase.Name = "Split " + i/2;
                     var ids = new List<int>
                     {
-                       (int) Rigom,
-                       (int) Guldhem
+                       (int) ArcDPSEnums.TrashID.Rigom,
+                       (int) ArcDPSEnums.TrashID.Guldhem
                     };
                     AddTargetsToPhase(phase, ids, log); 
                     foreach (NPC t in phase.Targets)
@@ -100,9 +99,9 @@ namespace GW2EIParser.Logic
         {
             return new List<int>
             {
-                (int)ParseEnum.TargetID.Samarog,
-                (int)Rigom,
-                (int)Guldhem,
+                (int)ArcDPSEnums.TargetID.Samarog,
+                (int)ArcDPSEnums.TrashID.Rigom,
+                (int)ArcDPSEnums.TrashID.Guldhem,
             };
         }
 
@@ -112,7 +111,7 @@ namespace GW2EIParser.Logic
             // TODO: facing information (shock wave)
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetID.Samarog:
+                case (int)ArcDPSEnums.TargetID.Samarog:
                     List<AbstractBuffEvent> brutalize = GetFilteredList(log.CombatData, 38226, target, true);
                     int brutStart = 0;
                     foreach (AbstractBuffEvent c in brutalize)
@@ -128,8 +127,8 @@ namespace GW2EIParser.Logic
                         }
                     }
                     break;
-                case (int)Rigom:
-                case (int)Guldhem:
+                case (int)ArcDPSEnums.TrashID.Rigom:
+                case (int)ArcDPSEnums.TrashID.Guldhem:
                     break;
                 default:
                     break;
@@ -180,7 +179,7 @@ namespace GW2EIParser.Logic
                 {
                     fixationGuldhemStart = (int)c.Time;
                     long logTime = c.Time;
-                    guldhem = Targets.FirstOrDefault(x => x.ID == (int)Guldhem && logTime >= x.FirstAware && logTime <= x.LastAware);
+                    guldhem = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TrashID.Guldhem && logTime >= x.FirstAware && logTime <= x.LastAware);
                 }
                 else
                 {
@@ -201,7 +200,7 @@ namespace GW2EIParser.Logic
                 {
                     fixationRigomStart = (int)c.Time;
                     long logTime = c.Time;
-                    rigom = Targets.FirstOrDefault(x => x.ID == (int)Rigom && logTime >= x.FirstAware && logTime <= x.LastAware);
+                    rigom = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TrashID.Rigom && logTime >= x.FirstAware && logTime <= x.LastAware);
                 }
                 else
                 {
@@ -216,7 +215,7 @@ namespace GW2EIParser.Logic
 
         public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Samarog);
+            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Samarog);
             if (target == null)
             {
                 throw new InvalidOperationException("Samarog not found");

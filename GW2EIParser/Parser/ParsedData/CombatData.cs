@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIUtils;
 
 namespace GW2EIParser.Parser.ParsedData
 {
@@ -196,7 +197,7 @@ namespace GW2EIParser.Parser.ParsedData
         {
             foreach (KeyValuePair<AgentItem, List<AbstractDamageEvent>> pair in _damageTakenData)
             {
-                if (pair.Key.ID == (int)ParseEnum.TargetID.WorldVersusWorld)
+                if (pair.Key.ID == (int)ArcDPSEnums.TargetID.WorldVersusWorld)
                 {
                     continue;
                 }
@@ -241,7 +242,7 @@ namespace GW2EIParser.Parser.ParsedData
             }
         }
 
-        private void EIExtraEventProcess(List<Player> players, SkillData skillData, FightData fightData, OperationController operation)
+        private void EIExtraEventProcess(List<Player> players, SkillData skillData, FightData fightData, OperationTracer operation)
         {
             operation.UpdateProgressWithCancellationCheck("Creating Custom Buff Events");
             EIBuffParse(players, skillData, fightData);
@@ -262,15 +263,15 @@ namespace GW2EIParser.Parser.ParsedData
             ProfHelper.AttachMasterToRacialGadgets(players, _damageDataById, _castDataById);
         }
 
-        public CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players, OperationController operation)
+        public CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players, OperationTracer operation)
         {
             _skillIds = new HashSet<long>(allCombatItems.Select(x => (long)x.SkillID));
-            IEnumerable<CombatItem> noStateActiBuffRem = allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.None && x.IsActivation == ParseEnum.Activation.None && x.IsBuffRemove == ParseEnum.BuffRemove.None);
+            IEnumerable<CombatItem> noStateActiBuffRem = allCombatItems.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.None && x.IsActivation == ArcDPSEnums.Activation.None && x.IsBuffRemove == ArcDPSEnums.BuffRemove.None);
             // movement events
             _movementData = CombatEventFactory.CreateMovementEvents(allCombatItems.Where(x =>
-                       x.IsStateChange == ParseEnum.StateChange.Position ||
-                       x.IsStateChange == ParseEnum.StateChange.Velocity ||
-                       x.IsStateChange == ParseEnum.StateChange.Rotation).ToList(), agentData);
+                       x.IsStateChange == ArcDPSEnums.StateChange.Position ||
+                       x.IsStateChange == ArcDPSEnums.StateChange.Velocity ||
+                       x.IsStateChange == ArcDPSEnums.StateChange.Rotation).ToList(), agentData);
             HasMovementData = _movementData.Count > 1;
             // state change events
             operation.UpdateProgressWithCancellationCheck("Creatint status and metadata events");
@@ -279,18 +280,18 @@ namespace GW2EIParser.Parser.ParsedData
             skillData.CombineWithSkillInfo(_metaDataEvents.SkillInfoEvents);
             // activation events
             operation.UpdateProgressWithCancellationCheck("Creating Cast Events");
-            List<AnimatedCastEvent> animatedCastData = CombatEventFactory.CreateCastEvents(allCombatItems.Where(x => x.IsActivation != ParseEnum.Activation.None).ToList(), agentData, skillData);
+            List<AnimatedCastEvent> animatedCastData = CombatEventFactory.CreateCastEvents(allCombatItems.Where(x => x.IsActivation != ArcDPSEnums.Activation.None).ToList(), agentData, skillData);
             operation.UpdateProgressWithCancellationCheck("Creating Weapon Swap Events");
-            List<WeaponSwapEvent> wepSwaps = CombatEventFactory.CreateWeaponSwapEvents(allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.WeaponSwap).ToList(), agentData, skillData);
+            List<WeaponSwapEvent> wepSwaps = CombatEventFactory.CreateWeaponSwapEvents(allCombatItems.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.WeaponSwap).ToList(), agentData, skillData);
             _weaponSwapData = wepSwaps.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
             _animatedCastData = animatedCastData.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
             var allCastEvents = new List<AbstractCastEvent>(animatedCastData);
             allCastEvents.AddRange(wepSwaps);
             _castDataById = allCastEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             // buff remove event
-            var buffCombatEvents = allCombatItems.Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.None && x.IsBuff != 0).ToList();
+            var buffCombatEvents = allCombatItems.Where(x => x.IsBuffRemove != ArcDPSEnums.BuffRemove.None && x.IsBuff != 0).ToList();
             buffCombatEvents.AddRange(noStateActiBuffRem.Where(x => x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0));
-            buffCombatEvents.AddRange(allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.BuffInitial));
+            buffCombatEvents.AddRange(allCombatItems.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.BuffInitial));
             buffCombatEvents.Sort((x, y) => x.Time.CompareTo(y.Time));
             operation.UpdateProgressWithCancellationCheck("Creating Buff Events");
             List<AbstractBuffEvent> buffEvents = CombatEventFactory.CreateBuffEvents(buffCombatEvents, agentData, skillData);
@@ -519,7 +520,7 @@ namespace GW2EIParser.Parser.ParsedData
             return null;
         }
 
-        public List<BuffInfoEvent> GetBuffInfoEvent(ParseEnum.BuffCategory category)
+        public List<BuffInfoEvent> GetBuffInfoEvent(ArcDPSEnums.BuffCategory category)
         {
             if (_metaDataEvents.BuffInfoEventsByCategory.TryGetValue(category, out List<BuffInfoEvent> evts))
             {

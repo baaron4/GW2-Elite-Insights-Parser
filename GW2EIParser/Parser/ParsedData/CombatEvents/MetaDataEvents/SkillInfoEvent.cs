@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GW2EIParser.EIData;
+using GW2EIUtils;
 
 namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
@@ -32,10 +33,10 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             }
             switch (evtcItem.IsStateChange)
             {
-                case ParseEnum.StateChange.SkillTiming:
+                case ArcDPSEnums.StateChange.SkillTiming:
                     BuildFromSkillTiming(evtcItem);
                     break;
-                case ParseEnum.StateChange.SkillInfo:
+                case ArcDPSEnums.StateChange.SkillInfo:
                     BuildFromSkillInfo(evtcItem);
                     break;
                 default:

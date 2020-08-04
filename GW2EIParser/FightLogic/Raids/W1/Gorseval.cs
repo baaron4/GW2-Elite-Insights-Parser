@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashID;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -41,7 +41,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Gorseval);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Gorseval);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Gorseval not found");
@@ -65,7 +65,7 @@ namespace GW2EIParser.Logic
                     phase.Name = "Split " + (i) / 2;
                     var ids = new List<int>
                     {
-                       (int) ChargedSoul
+                       (int) ArcDPSEnums.TrashID.ChargedSoul
                     };
                     AddTargetsToPhase(phase, ids, log);
                 }
@@ -77,17 +77,17 @@ namespace GW2EIParser.Logic
         {
             return new List<int>
             {
-                (int)ParseEnum.TargetID.Gorseval,
-                (int)ChargedSoul
+                (int)ArcDPSEnums.TargetID.Gorseval,
+                (int)ArcDPSEnums.TrashID.ChargedSoul
             };
         }
 
-        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashID>
+            return new List<ArcDPSEnums.TrashID>
             {
-                EnragedSpirit,
-                AngeredSpirit
+                ArcDPSEnums.TrashID.EnragedSpirit,
+                ArcDPSEnums.TrashID.AngeredSpirit
             };
         }
 
@@ -96,7 +96,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetID.Gorseval:
+                case (int)ArcDPSEnums.TargetID.Gorseval:
                     var blooms = cls.Where(x => x.SkillId == 31616).ToList();
                     foreach (AbstractCastEvent c in blooms)
                     {
@@ -250,7 +250,7 @@ namespace GW2EIParser.Logic
                         }
                     }
                     break;
-                case (int)ChargedSoul:
+                case (int)ArcDPSEnums.TrashID.ChargedSoul:
                     var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
                     replay.Decorations.Add(new CircleDecoration(false, 0, 220, lifespan, "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
                     break;

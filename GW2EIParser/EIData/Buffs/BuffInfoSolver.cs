@@ -5,6 +5,7 @@ using System.Linq;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIUtils;
 using static GW2EIParser.EIData.Buff;
 using static GW2EIParser.Parser.ParsedData.CombatEvents.BuffInfoEvent;
 
@@ -21,9 +22,9 @@ namespace GW2EIParser.EIData
             private readonly float _variable;
             private readonly int _traitSrc;
             private readonly int _traitSelf;
-            private readonly ParseEnum.BuffAttribute _result;
+            private readonly ArcDPSEnums.BuffAttribute _result;
 
-            public BuffFormulaDescriptor(float constantOffset, float levelOffset, float variable, int traitSelf, int traitSrc, ParseEnum.BuffAttribute result)
+            public BuffFormulaDescriptor(float constantOffset, float levelOffset, float variable, int traitSelf, int traitSrc, ArcDPSEnums.BuffAttribute result)
             {
                 _constantOffset = constantOffset;
                 _levelOffset = levelOffset;
@@ -33,9 +34,9 @@ namespace GW2EIParser.EIData
                 _result = result;
             }
 
-            public void Match(BuffFormula formula, Dictionary<byte, ParseEnum.BuffAttribute> toFill)
+            public void Match(BuffFormula formula, Dictionary<byte, ArcDPSEnums.BuffAttribute> toFill)
             {
-                if (formula.Attr1 == ParseEnum.BuffAttribute.Unknown && !toFill.ContainsKey(formula.ByteAttr1))
+                if (formula.Attr1 == ArcDPSEnums.BuffAttribute.Unknown && !toFill.ContainsKey(formula.ByteAttr1))
                 {
                     if (formula.ConstantOffset == _constantOffset || (formula.ConstantOffset > 0 && _constantOffset == AnyPositive) || (formula.ConstantOffset < 0 && _constantOffset == AnyNegative))
                     {
@@ -59,43 +60,43 @@ namespace GW2EIParser.EIData
         // VERY IMPORTANT: if using an id multiple time, make sure the stricter checking conditions are done first
         private static readonly Dictionary<BuffFormulaDescriptor, long> _recognizer = new Dictionary<BuffFormulaDescriptor, long> {
             // CriticalChance
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ParseEnum.BuffAttribute.CriticalChance), 725 },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.CriticalChance), 725 },
             // ConditionDurationIncrease
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, ParseEnum.BuffAttribute.ConditionDurationIncrease), 725 },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, ArcDPSEnums.BuffAttribute.ConditionDurationIncrease), 725 },
             // SkillCooldown
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ParseEnum.BuffAttribute.SkillCooldownReduction), 30328 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.SkillCooldownReduction), 30328 },
             // HealingOutputFormula
-            {new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, ParseEnum.BuffAttribute.HealingOutputFormula), 718 },
+            {new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, ArcDPSEnums.BuffAttribute.HealingOutputFormula), 718 },
             // EnduranceRegeneration
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ParseEnum.BuffAttribute.EnduranceRegeneration), 726 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.EnduranceRegeneration), 726 },
             // MovementSpeed
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ParseEnum.BuffAttribute.MovementSpeed), 719 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.MovementSpeed), 719 },
             // BuffPowerDamageFormula
-            {  new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, ParseEnum.BuffAttribute.BuffPowerDamageFormula), 873 },
+            {  new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, ArcDPSEnums.BuffAttribute.BuffPowerDamageFormula), 873 },
             // ConditionDamageFormula
-            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, ParseEnum.BuffAttribute.ConditionDamageFormula), 736 },
-            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, ParseEnum.BuffAttribute.ConditionDamageFormula), 737 },
-            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, ParseEnum.BuffAttribute.ConditionDamageFormula), 723 },
-            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, ParseEnum.BuffAttribute.ConditionDamageFormula), 861 },
+            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, ArcDPSEnums.BuffAttribute.ConditionDamageFormula), 736 },
+            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, ArcDPSEnums.BuffAttribute.ConditionDamageFormula), 737 },
+            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, ArcDPSEnums.BuffAttribute.ConditionDamageFormula), 723 },
+            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, ArcDPSEnums.BuffAttribute.ConditionDamageFormula), 861 },
             // ConditionSkillActivationFormula
-            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, ParseEnum.BuffAttribute.ConditionSkillActivationFormula), 861 },
+            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, ArcDPSEnums.BuffAttribute.ConditionSkillActivationFormula), 861 },
             // ConditionMovementActivationFormula
-            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, AnyPositive, ParseEnum.BuffAttribute.ConditionMovementActivationFormula), 19426 },
+            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, AnyPositive, ArcDPSEnums.BuffAttribute.ConditionMovementActivationFormula), 19426 },
             // IncomingHealingEffectiveness
-            { new BuffFormulaDescriptor(AnyNegative, 0, 0, 0, 0, ParseEnum.BuffAttribute.IncomingHealingEffectiveness), 723 },
+            { new BuffFormulaDescriptor(AnyNegative, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.IncomingHealingEffectiveness), 723 },
             // GlancingBlow
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ParseEnum.BuffAttribute.GlancingBlow), 742 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.GlancingBlow), 742 },
             // OutgoingHealingEffectivenessFlatInc
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ParseEnum.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 53285 },
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ParseEnum.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 26529 },
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ParseEnum.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 29025 },
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, ParseEnum.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 31508 },
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, ParseEnum.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 30449 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 53285 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 26529 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 29025 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, ArcDPSEnums.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 31508 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, ArcDPSEnums.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 30449 },
         };
 
-        public static void AdjustBuffs(CombatData combatData, Dictionary<long, Buff> buffsByID, OperationController operation)
+        public static void AdjustBuffs(CombatData combatData, Dictionary<long, Buff> buffsByID, OperationTracer operation)
         {
-            var solved = new Dictionary<byte, ParseEnum.BuffAttribute>();
+            var solved = new Dictionary<byte, ArcDPSEnums.BuffAttribute>();
             foreach (KeyValuePair<BuffFormulaDescriptor, long> pair in _recognizer)
             {
                 if (buffsByID.TryGetValue(pair.Value, out Buff buff))

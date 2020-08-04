@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIParser.EIData;
-using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.TrashID;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -59,7 +58,7 @@ namespace GW2EIParser.Logic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.Matthias);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Matthias);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Matthias not found");
@@ -113,15 +112,15 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashID>
+            return new List<ArcDPSEnums.TrashID>
             {
-                Storm,
-                Spirit,
-                Spirit2,
-                IcePatch,
-                Tornado
+                ArcDPSEnums.TrashID.Storm,
+                ArcDPSEnums.TrashID.Spirit,
+                ArcDPSEnums.TrashID.Spirit2,
+                ArcDPSEnums.TrashID.IcePatch,
+                ArcDPSEnums.TrashID.Tornado
             };
         }
 
@@ -132,7 +131,7 @@ namespace GW2EIParser.Logic
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (int)ParseEnum.TargetID.Matthias:
+                case (int)ArcDPSEnums.TargetID.Matthias:
                     var humanShield = cls.Where(x => x.SkillId == 34468).ToList();
                     var humanShieldRemoval = log.CombatData.GetBuffRemoveAllData(34518).Select(x => (int)x.Time).Distinct().ToList();
                     for (int i = 0; i < humanShield.Count; i++)
@@ -187,17 +186,17 @@ namespace GW2EIParser.Logic
                         }
                     }
                     break;
-                case (int)Storm:
+                case (int)ArcDPSEnums.TrashID.Storm:
                     replay.Decorations.Add(new CircleDecoration(false, 0, 260, (start, end), "rgba(0, 80, 255, 0.5)", new AgentConnector(target)));
                     break;
-                case (int)Spirit:
-                case (int)Spirit2:
+                case (int)ArcDPSEnums.TrashID.Spirit:
+                case (int)ArcDPSEnums.TrashID.Spirit2:
                     replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     break;
-                case (int)IcePatch:
+                case (int)ArcDPSEnums.TrashID.IcePatch:
                     replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start, end), "rgba(0, 0, 255, 0.5)", new AgentConnector(target)));
                     break;
-                case (int)Tornado:
+                case (int)ArcDPSEnums.TrashID.Tornado:
                     replay.Decorations.Add(new CircleDecoration(true, 0, 90, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     break;
                 default:

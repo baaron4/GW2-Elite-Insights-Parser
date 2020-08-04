@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum;
+using GW2EIUtils;
+using static GW2EIUtils.ArcDPSEnums;
 
 namespace GW2EIParser.EIData
 {
@@ -108,7 +109,7 @@ namespace GW2EIParser.EIData
             return new Buff(name + " " + id, id, GeneralHelper.Source.Item, capacity > 1 ? BuffStackType.Stacking : BuffStackType.Force, capacity, BuffNature.Consumable, link);
         }
 
-        public void AttachBuffInfoEvent(BuffInfoEvent buffInfoEvent, OperationController operation)
+        public void AttachBuffInfoEvent(BuffInfoEvent buffInfoEvent, OperationTracer operation)
         {
             if (buffInfoEvent.BuffID != ID)
             {

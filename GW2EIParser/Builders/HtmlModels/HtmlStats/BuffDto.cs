@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIUtils;
 
 namespace GW2EIParser.Builders.HtmlModels
 {

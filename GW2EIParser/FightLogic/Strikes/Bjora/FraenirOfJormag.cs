@@ -5,6 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIUtils;
 
 namespace GW2EIParser.Logic
 {
@@ -37,13 +38,13 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC fraenir = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.FraenirOfJormag);
+            NPC fraenir = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.FraenirOfJormag);
             if (fraenir == null)
             {
                 throw new InvalidOperationException("Fraenir of Jormag not found");
             }
             phases[0].Targets.Add(fraenir);
-            NPC icebrood = Targets.Find(x => x.ID == (int)ParseEnum.TargetID.IcebroodConstructFraenir);
+            NPC icebrood = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.IcebroodConstructFraenir);
             if (icebrood != null)
             {
                 phases[0].Targets.Add(icebrood);
@@ -112,16 +113,16 @@ namespace GW2EIParser.Logic
         {
             return new List<int>
             {
-                (int)ParseEnum.TargetID.FraenirOfJormag,
-                (int)ParseEnum.TargetID.IcebroodConstructFraenir,
+                (int)ArcDPSEnums.TargetID.FraenirOfJormag,
+                (int)ArcDPSEnums.TargetID.IcebroodConstructFraenir,
             };
         }
 
-        protected override List<ParseEnum.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashID>
+            return new List<ArcDPSEnums.TrashID>
             {
-                ParseEnum.TrashID.IcebroodElemental
+                ArcDPSEnums.TrashID.IcebroodElemental
             };
         }
     }

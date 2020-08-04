@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using GW2EIParser.EIData;
 using GW2EIParser.Logic;
-using static GW2EIParser.Parser.ParseEnum.BuffAttribute;
+using GW2EIUtils;
+using static GW2EIUtils.ArcDPSEnums.BuffAttribute;
 
 namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
     public class BuffFormula
     {
-        private static string GetAttributeString(ParseEnum.BuffAttribute attribute)
+        private static string GetAttributeString(ArcDPSEnums.BuffAttribute attribute)
         {
             switch (attribute)
             {
@@ -93,7 +94,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             }
         }
 
-        private static string GetVariableStat(ParseEnum.BuffAttribute attribute)
+        private static string GetVariableStat(ArcDPSEnums.BuffAttribute attribute)
         {
             switch (attribute)
             {
@@ -112,7 +113,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             }
         }
 
-        private static string GetPercent(ParseEnum.BuffAttribute attribute1, ParseEnum.BuffAttribute attribute2)
+        private static string GetPercent(ArcDPSEnums.BuffAttribute attribute1, ArcDPSEnums.BuffAttribute attribute2)
         {
             if (attribute2 != Unknown && attribute2 != None)
             {
@@ -157,9 +158,9 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public int Type { get; }
         // Effect attributes
         public byte ByteAttr1 { get; }
-        public ParseEnum.BuffAttribute Attr1 { get; private set; }
+        public ArcDPSEnums.BuffAttribute Attr1 { get; private set; }
         public byte ByteAttr2 { get; }
-        public ParseEnum.BuffAttribute Attr2 { get; private set; }
+        public ArcDPSEnums.BuffAttribute Attr2 { get; private set; }
         // Effect parameters
         public float ConstantOffset { get; }
         public float LevelOffset { get; }
@@ -182,7 +183,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         private readonly BuffInfoEvent _buffInfoEvent;
 
-        private int _level => (_buffInfoEvent.Category == ParseEnum.BuffCategory.Food || _buffInfoEvent.Category == ParseEnum.BuffCategory.Enhancement) ? 0 : (Type == 12 ? 6400 : 80);
+        private int _level => (_buffInfoEvent.Category == ArcDPSEnums.BuffCategory.Food || _buffInfoEvent.Category == ArcDPSEnums.BuffCategory.Enhancement) ? 0 : (Type == 12 ? 6400 : 80);
 
         public BuffFormula(CombatItem evtcItem, BuffInfoEvent buffInfoEvent)
         {
@@ -224,8 +225,8 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             Type = (int)formulaFloats[0];
             ByteAttr1 = (byte)formulaFloats[1];
             ByteAttr2 = (byte)formulaFloats[2];
-            Attr1 = ParseEnum.GetBuffAttribute(ByteAttr1);
-            Attr2 = ParseEnum.GetBuffAttribute(ByteAttr2);
+            Attr1 = ArcDPSEnums.GetBuffAttribute(ByteAttr1);
+            Attr2 = ArcDPSEnums.GetBuffAttribute(ByteAttr2);
             ConstantOffset = formulaFloats[3];
             LevelOffset = formulaFloats[4];
             Variable = formulaFloats[5];
@@ -235,9 +236,9 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             _extraNumberState = evtcItem.Pad1;
         }
 
-        public void AdjustUnknownFormulaAttributes(Dictionary<byte, ParseEnum.BuffAttribute> solved)
+        public void AdjustUnknownFormulaAttributes(Dictionary<byte, ArcDPSEnums.BuffAttribute> solved)
         {
-            if (Attr1 == Unknown && solved.TryGetValue(ByteAttr1, out ParseEnum.BuffAttribute solvedAttr))
+            if (Attr1 == Unknown && solved.TryGetValue(ByteAttr1, out ArcDPSEnums.BuffAttribute solvedAttr))
             {
                 Attr1 = solvedAttr;
             }
