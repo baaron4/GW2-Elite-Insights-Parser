@@ -10,7 +10,7 @@ namespace GW2EIEvtcParser.EIData
         private List<Dictionary<long, FinalBuffs>> _buffs;
         private List<Segment> _breakbarPercentUpdates { get; set; }
         // Constructors
-        public NPC(AgentItem agent) : base(agent)
+        internal NPC(AgentItem agent) : base(agent)
         {
         }
 
@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.EIData
             return _breakbarPercentUpdates;
         }
 
-        public void OverrideName(string name)
+        internal void OverrideName(string name)
         {
             Character = name;
         }
@@ -45,7 +45,7 @@ namespace GW2EIEvtcParser.EIData
             return ParseHelper.GetNPCIcon(ID);
         }
 
-        public void SetManualHealth(int health)
+        internal void SetManualHealth(int health)
         {
             _health = health;
         }

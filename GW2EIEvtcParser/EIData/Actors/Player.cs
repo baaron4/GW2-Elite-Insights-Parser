@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser.EIData
         private string[] _weaponsArray;
 
         // Constructors
-        public Player(AgentItem agent, bool noSquad, bool fake) : base(agent)
+        internal Player(AgentItem agent, bool noSquad, bool fake) : base(agent)
         {
             string[] name = agent.Name.Split('\0');
             if (name.Length < 2)
@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.EIData
         }
 
 
-        public void MakeSquadless()
+        internal void MakeSquadless()
         {
             Group = 1;
         }

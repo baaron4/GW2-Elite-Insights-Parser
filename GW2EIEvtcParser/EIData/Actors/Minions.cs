@@ -10,13 +10,13 @@ namespace GW2EIEvtcParser.EIData
         public List<NPC> MinionList { get; }
         public AbstractSingleActor Master { get; }
 
-        public Minions(AbstractSingleActor master, NPC firstMinion) : base(firstMinion.AgentItem)
+        internal Minions(AbstractSingleActor master, NPC firstMinion) : base(firstMinion.AgentItem)
         {
             MinionList = new List<NPC> { firstMinion };
             Master = master;
         }
 
-        public void AddMinion(NPC minion)
+        internal void AddMinion(NPC minion)
         {
             MinionList.Add(minion);
         }
