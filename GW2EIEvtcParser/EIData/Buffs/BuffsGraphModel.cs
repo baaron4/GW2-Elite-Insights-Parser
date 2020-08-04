@@ -8,11 +8,11 @@ namespace GW2EIEvtcParser.EIData
         public List<Segment> BuffChart { get; private set; } = new List<Segment>();
 
         // Constructor
-        public BuffsGraphModel(Buff buff)
+        internal BuffsGraphModel(Buff buff)
         {
             Buff = buff;
         }
-        public BuffsGraphModel(Buff buff, List<Segment> buffChartWithSource)
+        internal BuffsGraphModel(Buff buff, List<Segment> buffChartWithSource)
         {
             Buff = buff;
             BuffChart = buffChartWithSource;
@@ -49,7 +49,7 @@ namespace GW2EIEvtcParser.EIData
         /// <summary>
         /// Fuse consecutive segments with same value
         /// </summary>
-        public void FuseSegments()
+        internal void FuseSegments()
         {
             BuffChart = Segment.FuseSegments(BuffChart);
         }
@@ -60,7 +60,7 @@ namespace GW2EIEvtcParser.EIData
         /// </summary>
         /// <param name="from"></param> 
         /// <param name="to"></param>
-        public void MergePresenceInto(List<Segment> from)
+        internal void MergePresenceInto(List<Segment> from)
         {
             List<Segment> segmentsToFill = BuffChart;
             bool firstPass = segmentsToFill.Count == 0;

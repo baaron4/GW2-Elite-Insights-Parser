@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class BuffDictionary : Dictionary<long, List<AbstractBuffEvent>>
+    internal class BuffDictionary : Dictionary<long, List<AbstractBuffEvent>>
     {
         // Constructors
         public BuffDictionary()

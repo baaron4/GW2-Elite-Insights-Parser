@@ -871,7 +871,7 @@ namespace GW2EIEvtcParser.EIData
         private readonly BuffSourceFinder _buffSourceFinder;
 
 
-        public BuffsContainer(ulong build, CombatData combatData, OperationTracer operation)
+        internal BuffsContainer(ulong build, CombatData combatData, OperationTracer operation)
         {
             var AllBuffs = new List<List<Buff>>()
             {
@@ -944,7 +944,7 @@ namespace GW2EIEvtcParser.EIData
             throw new InvalidOperationException("Buff " + name + " does not exist");
         }
 
-        public AgentItem TryFindSrc(AgentItem dst, long time, long extension, ParsedEvtcLog log, long buffID)
+        internal AgentItem TryFindSrc(AgentItem dst, long time, long extension, ParsedEvtcLog log, long buffID)
         {
             return _buffSourceFinder.TryFindSrc(dst, time, extension, log, buffID);
         }

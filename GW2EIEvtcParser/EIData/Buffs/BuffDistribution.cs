@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.EIData
         public long Extension { get; set; }
         public long Extended { get; set; }
 
-        public BuffDistributionItem(long value, long overstack, long waste, long unknownExtension, long extension, long extended)
+        internal BuffDistributionItem(long value, long overstack, long waste, long unknownExtension, long extension, long extended)
         {
             Value = value;
             Overstack = overstack;

@@ -102,12 +102,12 @@ namespace GW2EIEvtcParser.EIData
             Link = link;
         }
 
-        public static Buff CreateCustomConsumable(string name, long id, string link, int capacity)
+        internal static Buff CreateCustomConsumable(string name, long id, string link, int capacity)
         {
             return new Buff(name + " " + id, id, ParseHelper.Source.Item, capacity > 1 ? BuffStackType.Stacking : BuffStackType.Force, capacity, BuffNature.Consumable, link);
         }
 
-        public void AttachBuffInfoEvent(BuffInfoEvent buffInfoEvent, OperationTracer operation)
+        internal void AttachBuffInfoEvent(BuffInfoEvent buffInfoEvent, OperationTracer operation)
         {
             if (buffInfoEvent.BuffID != ID)
             {
@@ -125,7 +125,7 @@ namespace GW2EIEvtcParser.EIData
                 Capacity = buffInfoEvent.MaxStacks;
             }
         }
-        public AbstractBuffSimulator CreateSimulator(ParsedEvtcLog log)
+        internal AbstractBuffSimulator CreateSimulator(ParsedEvtcLog log)
         {
             if (!log.CombatData.HasStackIDs)
             {
