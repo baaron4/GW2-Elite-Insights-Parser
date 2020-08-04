@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EIData
         public bool BreakbarPhase { get; internal set; } = false;
         public List<NPC> Targets { get; } = new List<NPC>();
 
-        public PhaseData(long start, long end)
+        internal PhaseData(long start, long end)
         {
             Start = start;
             End = end;
@@ -31,7 +31,7 @@ namespace GW2EIEvtcParser.EIData
             DurationInS = (End - Start) / 1000;
         }
 
-        public PhaseData(long start, long end, string name) : this(start, end)
+        internal PhaseData(long start, long end, string name) : this(start, end)
         {
             Name = name;
         }
