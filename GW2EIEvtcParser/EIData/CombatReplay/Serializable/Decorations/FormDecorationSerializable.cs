@@ -6,7 +6,7 @@
         public int Growing { get; }
         public string Color { get; }
 
-        protected FormDecorationSerializable(ParsedEvtcLog log, FormDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
+        internal FormDecorationSerializable(ParsedEvtcLog log, FormDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
         {
             Fill = decoration.Filled;
             Color = decoration.Color;

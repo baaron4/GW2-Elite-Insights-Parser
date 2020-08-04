@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.EIData
 {
-    public class RotatedRectangleDecoration : RectangleDecoration
+    internal class RotatedRectangleDecoration : RectangleDecoration
     {
         public int Rotation { get; } // initial rotation angle
         public int RadialTranslation { get; } // translation of the triangle center in the direction of the current rotation

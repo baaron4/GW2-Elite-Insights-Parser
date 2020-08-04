@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class FacingDecoration : GenericAttachedDecoration
+    internal class FacingDecoration : GenericAttachedDecoration
     {
         public List<int> Angles { get; } = new List<int>();
 

@@ -4,7 +4,7 @@
     {
         public int[] FacingData { get; }
 
-        public FacingDecorationSerializable(ParsedEvtcLog log, FacingDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
+        internal FacingDecorationSerializable(ParsedEvtcLog log, FacingDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
         {
             Type = "Facing";
             FacingData = decoration.Angles.ToArray();

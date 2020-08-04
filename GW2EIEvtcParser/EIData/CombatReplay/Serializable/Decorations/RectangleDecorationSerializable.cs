@@ -5,7 +5,7 @@
         public int Height { get; }
         public int Width { get; }
 
-        public RectangleDecorationSerializable(ParsedEvtcLog log, RectangleDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
+        internal RectangleDecorationSerializable(ParsedEvtcLog log, RectangleDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
         {
             Type = "Rectangle";
             Width = decoration.Width;

@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.EIData
 {
-    public class AgentConnector : Connector
+    internal class AgentConnector : Connector
     {
         private readonly AbstractSingleActor _agent;
 

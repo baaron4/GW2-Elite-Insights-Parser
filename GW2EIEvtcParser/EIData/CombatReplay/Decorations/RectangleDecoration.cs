@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.EIData
 {
-    public class RectangleDecoration : FormDecoration
+    internal class RectangleDecoration : FormDecoration
     {
         public int Height { get; }
         public int Width { get; }

@@ -6,7 +6,7 @@
         public int RadialTranslation { get; }
         public int SpinAngle { get; }
 
-        public RotatedRectangleDecorationSerializable(ParsedEvtcLog log, RotatedRectangleDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
+        internal RotatedRectangleDecorationSerializable(ParsedEvtcLog log, RotatedRectangleDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
         {
             Type = "RotatedRectangle";
             Rotation = decoration.Rotation;

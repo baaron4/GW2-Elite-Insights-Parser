@@ -5,7 +5,7 @@
         public int InnerRadius { get; }
         public int OuterRadius { get; }
 
-        public DoughnutDecorationSerializable(ParsedEvtcLog log, DoughnutDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
+        internal DoughnutDecorationSerializable(ParsedEvtcLog log, DoughnutDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
         {
             Type = "Doughnut";
             OuterRadius = decoration.OuterRadius;

@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.EIData
 {
-    public class DoughnutDecoration : FormDecoration
+    internal class DoughnutDecoration : FormDecoration
     {
         public int OuterRadius { get; }
         public int InnerRadius { get; }

@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.EIData
 {
-    public class InterpolatedPositionConnector : PositionConnector
+    internal class InterpolatedPositionConnector : PositionConnector
     {
         public InterpolatedPositionConnector(Point3D prev, Point3D next, int time) : base()
         {

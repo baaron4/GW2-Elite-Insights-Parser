@@ -6,7 +6,7 @@
         public int Height { get; }
         public string Color { get; }
 
-        public FacingRectangleDecorationSerializable(ParsedEvtcLog log, FacingRectangleDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
+        internal FacingRectangleDecorationSerializable(ParsedEvtcLog log, FacingRectangleDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
         {
             Type = "FacingRectangle";
             Width = decoration.Width;

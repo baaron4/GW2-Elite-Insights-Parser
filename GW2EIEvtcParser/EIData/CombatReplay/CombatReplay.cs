@@ -7,20 +7,20 @@ namespace GW2EIEvtcParser.EIData
 {
     public class CombatReplay
     {
-        public List<Point3D> Positions { get; } = new List<Point3D>();
-        public List<Point3D> PolledPositions { get; private set; } = new List<Point3D>();
-        public List<Point3D> Velocities { get; private set; } = new List<Point3D>();
-        public List<int> Times => PolledPositions.Select(x => (int)x.Time).ToList();
-        public List<Point3D> Rotations { get; } = new List<Point3D>();
-        public List<Point3D> PolledRotations { get; private set; } = new List<Point3D>();
+        internal List<Point3D> Positions { get; } = new List<Point3D>();
+        internal List<Point3D> PolledPositions { get; private set; } = new List<Point3D>();
+        internal List<Point3D> Velocities { get; private set; } = new List<Point3D>();
+        internal List<int> Times => PolledPositions.Select(x => (int)x.Time).ToList();
+        internal List<Point3D> Rotations { get; } = new List<Point3D>();
+        internal List<Point3D> PolledRotations { get; private set; } = new List<Point3D>();
         private long _start = -1;
         private long _end = -1;
-        public (long start, long end) TimeOffsets => (_start, _end);
+        internal (long start, long end) TimeOffsets => (_start, _end);
         // actors
-        public bool NoActors { get; set; } = true;
+        internal bool NoActors { get; set; } = true;
         public List<GenericDecoration> Decorations { get; } = new List<GenericDecoration>();
 
-        public void Trim(long start, long end)
+        internal void Trim(long start, long end)
         {
             PolledPositions.RemoveAll(x => x.Time < start || x.Time > end);
             PolledRotations.RemoveAll(x => x.Time < start || x.Time > end);
@@ -147,13 +147,13 @@ namespace GW2EIEvtcParser.EIData
             PolledRotations = PolledRotations.Where(x => x.Time >= 0).ToList();
         }
 
-        public void PollingRate(long fightDuration, bool forceInterpolate)
+        internal void PollingRate(long fightDuration, bool forceInterpolate)
         {
             PositionPolling(ParseHelper._pollingRate, fightDuration, forceInterpolate);
             RotationPolling(ParseHelper._pollingRate, fightDuration, forceInterpolate);
         }
 
-        public List<Point3D> GetActivePositions(List<(long start, long end)> deads, List<(long start, long end)> dcs)
+        internal List<Point3D> GetActivePositions(List<(long start, long end)> deads, List<(long start, long end)> dcs)
         {
             var activePositions = new List<Point3D>(PolledPositions);
             for (int i = 0; i < activePositions.Count; i++)

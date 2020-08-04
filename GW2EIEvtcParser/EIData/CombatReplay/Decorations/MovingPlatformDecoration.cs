@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class MovingPlatformDecoration : BackgroundDecoration
+    internal class MovingPlatformDecoration : BackgroundDecoration
     {
         public string Image { get; }
         public int Width { get; }

@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.EIData
 {
-    public abstract class GenericAttachedDecoration : GenericDecoration
+    internal abstract class GenericAttachedDecoration : GenericDecoration
     {
         public Connector ConnectedTo { get; }
 

@@ -2,7 +2,7 @@
 {
     public abstract class BackgroundDecorationSerializable : GenericDecorationSerializable
     {
-        protected BackgroundDecorationSerializable(BackgroundDecoration decoration) : base(decoration)
+        internal BackgroundDecorationSerializable(BackgroundDecoration decoration) : base(decoration)
         {
 
         }

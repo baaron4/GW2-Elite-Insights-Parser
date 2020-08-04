@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.EIData
 {
-    public class LineDecoration : FormDecoration
+    internal class LineDecoration : FormDecoration
     {
         public Connector ConnectedFrom { get; }
         public int Width { get; }

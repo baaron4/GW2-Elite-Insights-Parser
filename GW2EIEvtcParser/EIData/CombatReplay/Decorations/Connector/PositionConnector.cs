@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.EIData
 {
-    public class PositionConnector : Connector
+    internal class PositionConnector : Connector
     {
         protected Point3D Position { get; set; }
 

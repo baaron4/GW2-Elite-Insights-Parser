@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class FacingRectangleDecoration : FacingDecoration
+    internal class FacingRectangleDecoration : FacingDecoration
     {
         public int Width { get; }
         public int Height { get; }

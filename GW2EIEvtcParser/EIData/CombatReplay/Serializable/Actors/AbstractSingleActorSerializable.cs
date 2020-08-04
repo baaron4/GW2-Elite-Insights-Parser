@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData
         public int ID { get; }
         public List<double> Positions { get; }
 
-        protected AbstractSingleActorSerializable(AbstractSingleActor actor, ParsedEvtcLog log, CombatReplayMap map, CombatReplay replay, string type)
+        internal AbstractSingleActorSerializable(AbstractSingleActor actor, ParsedEvtcLog log, CombatReplayMap map, CombatReplay replay, string type)
         {
             Img = actor.GetIcon();
             ID = actor.CombatReplayID;

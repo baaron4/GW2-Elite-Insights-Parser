@@ -5,7 +5,7 @@
         public int Radius { get; }
         public int MinRadius { get; }
 
-        public CircleDecorationSerializable(ParsedEvtcLog log, CircleDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
+        internal CircleDecorationSerializable(ParsedEvtcLog log, CircleDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
         {
             Type = "Circle";
             Radius = decoration.Radius;

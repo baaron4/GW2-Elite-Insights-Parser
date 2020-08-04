@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData
         public List<long> Down { get; }
         public List<long> Dc { get; }
 
-        public PlayerSerializable(Player player, ParsedEvtcLog log, CombatReplayMap map, CombatReplay replay) : base(player, log, map, replay, "Player")
+        internal PlayerSerializable(Player player, ParsedEvtcLog log, CombatReplayMap map, CombatReplay replay) : base(player, log, map, replay, "Player")
         {
             Group = player.Group;
             Dead = new List<long>();

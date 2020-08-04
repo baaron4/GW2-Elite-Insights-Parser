@@ -9,9 +9,9 @@ namespace GW2EIEvtcParser.EIData
 
         public class MapItem
         {
-            public string Link { get; set; }
-            public long Start { get; set; }
-            public long End { get; set; }
+            public string Link { get; internal set; }
+            public long Start { get; internal set; }
+            public long End { get; internal set; }
         }
 
         public List<MapItem> Maps { get; } = new List<MapItem>();
@@ -20,7 +20,7 @@ namespace GW2EIEvtcParser.EIData
         private (int topX, int topY, int bottomX, int bottomY) _fullRect;
         private (int bottomX, int bottomY, int topX, int topY) _worldRect;
 
-        public CombatReplayMap(string link, (int width, int height) size, (int topX, int topY, int bottomX, int bottomY) rect, (int topX, int topY, int bottomX, int bottomY) fullRect, (int bottomX, int bottomY, int topX, int topY) worldRect)
+        internal CombatReplayMap(string link, (int width, int height) size, (int topX, int topY, int bottomX, int bottomY) rect, (int topX, int topY, int bottomX, int bottomY) fullRect, (int bottomX, int bottomY, int topX, int topY) worldRect)
         {
             Maps.Add(new MapItem()
             {
@@ -52,7 +52,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public void ComputeBoundingBox(ParsedEvtcLog log)
+        internal void ComputeBoundingBox(ParsedEvtcLog log)
         {
             if (log.CanCombatReplay && _rect.topX == _rect.bottomX)
             {
@@ -75,7 +75,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public (double x, double y) GetMapCoord(float realX, float realY)
+        internal (double x, double y) GetMapCoord(float realX, float realY)
         {
             (int width, int height) = GetPixelMapSize();
             double scaleX = (double)width / _size.width;
@@ -85,7 +85,7 @@ namespace GW2EIEvtcParser.EIData
             return (Math.Round(scaleX * _size.width * x, 2), Math.Round(scaleY * (_size.height - _size.height * y), 2));
         }
 
-        public void MatchMapsToPhases(List<string> urls, List<PhaseData> phases, long fightEnd)
+        internal void MatchMapsToPhases(List<string> urls, List<PhaseData> phases, long fightEnd)
         {
             if (phases.Count - 1 > urls.Count)
             {

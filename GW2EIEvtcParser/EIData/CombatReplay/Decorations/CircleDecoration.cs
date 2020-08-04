@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.EIData
 {
-    public class CircleDecoration : FormDecoration
+    internal class CircleDecoration : FormDecoration
     {
         public int Radius { get; }
         public int MinRadius { get; }
