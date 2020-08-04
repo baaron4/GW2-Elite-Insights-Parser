@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.ParsedData
         private readonly long _oldValue;
         private readonly long _durationChange;
 
-        public BuffExtensionEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
+        internal BuffExtensionEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
             if (InternalBy == ParseHelper._unknownAgent)
             {
@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.ParsedData
             _durationChange = evtcItem.Value;
         }
 
-        public override void TryFindSrc(ParsedEvtcLog log)
+        internal override void TryFindSrc(ParsedEvtcLog log)
         {
             if (InternalBy == null)
             {
@@ -25,12 +25,12 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        public override void UpdateSimulator(AbstractBuffSimulator simulator)
+        internal override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
             simulator.Extend(_durationChange, _oldValue, By, Time, BuffInstance);
         }
 
-        public override int CompareTo(AbstractBuffEvent abe)
+        internal override int CompareTo(AbstractBuffEvent abe)
         {
             if (abe is BuffExtensionEvent)
             {

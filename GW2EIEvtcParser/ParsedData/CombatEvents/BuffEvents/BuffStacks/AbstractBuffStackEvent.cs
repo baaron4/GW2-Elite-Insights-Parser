@@ -4,12 +4,12 @@
     {
         protected uint BuffInstance { get; set; }
 
-        protected AbstractBuffStackEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, skillData)
+        internal AbstractBuffStackEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, skillData)
         {
             To = agentData.GetAgent(evtcItem.SrcAgent);
         }
 
-        public override void TryFindSrc(ParsedEvtcLog log)
+        internal override void TryFindSrc(ParsedEvtcLog log)
         {
         }
     }

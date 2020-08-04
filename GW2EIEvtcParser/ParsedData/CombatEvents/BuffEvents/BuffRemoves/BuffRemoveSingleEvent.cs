@@ -7,19 +7,19 @@ namespace GW2EIEvtcParser.ParsedData
     {
         private readonly ArcDPSEnums.IFF _iff;
         public uint BuffInstance { get; protected set; }
-        public BuffRemoveSingleEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
+        internal BuffRemoveSingleEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
             _iff = evtcItem.IFF;
             BuffInstance = evtcItem.Pad;
         }
 
-        public BuffRemoveSingleEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill, uint id, ArcDPSEnums.IFF iff) : base(by, to, time, removedDuration, buffSkill)
+        internal BuffRemoveSingleEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill, uint id, ArcDPSEnums.IFF iff) : base(by, to, time, removedDuration, buffSkill)
         {
             _iff = iff;
             BuffInstance = id;
         }
 
-        public override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
+        internal override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
         {
             return BuffID != ProfHelper.NoBuff &&
                     (hasStackIDs ||
@@ -29,11 +29,11 @@ namespace GW2EIEvtcParser.ParsedData
 
         }
 
-        public override void UpdateSimulator(AbstractBuffSimulator simulator)
+        internal override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
             simulator.Remove(By, RemovedDuration, 1, Time, ArcDPSEnums.BuffRemove.Single, BuffInstance);
         }
-        public override int CompareTo(AbstractBuffEvent abe)
+        internal override int CompareTo(AbstractBuffEvent abe)
         {
             if (abe is BuffRemoveSingleEvent)
             {

@@ -5,23 +5,23 @@ namespace GW2EIEvtcParser.ParsedData
 {
     public class BuffRemoveManualEvent : AbstractBuffRemoveEvent
     {
-        public BuffRemoveManualEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
+        internal BuffRemoveManualEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
         }
 
-        public BuffRemoveManualEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill) : base(by, to, time, removedDuration, buffSkill)
+        internal BuffRemoveManualEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill) : base(by, to, time, removedDuration, buffSkill)
         {
         }
 
-        public override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
+        internal override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
         {
             return false; // don't consider manual remove events
         }
 
-        public override void UpdateSimulator(AbstractBuffSimulator simulator)
+        internal override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
         }
-        public override int CompareTo(AbstractBuffEvent abe)
+        internal override int CompareTo(AbstractBuffEvent abe)
         {
             throw new InvalidOperationException("Manual removes can't be sorted");
         }

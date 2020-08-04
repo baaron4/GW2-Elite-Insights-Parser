@@ -10,19 +10,19 @@ namespace GW2EIEvtcParser.ParsedData
         public int RemovedStacks { get; }
         private readonly int _lastRemovedDuration;
 
-        public BuffRemoveAllEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
+        internal BuffRemoveAllEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
             _lastRemovedDuration = evtcItem.BuffDmg;
             RemovedStacks = evtcItem.Result;
         }
 
-        public BuffRemoveAllEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill, int removedStacks, int lastRemovedDuration) : base(by, to, time, removedDuration, buffSkill)
+        internal BuffRemoveAllEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill, int removedStacks, int lastRemovedDuration) : base(by, to, time, removedDuration, buffSkill)
         {
             _lastRemovedDuration = lastRemovedDuration;
             RemovedStacks = removedStacks;
         }
 
-        public override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
+        internal override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
         {
             return BuffID != ProfHelper.NoBuff &&
                     (hasStackIDs ||
@@ -30,12 +30,12 @@ namespace GW2EIEvtcParser.ParsedData
                         Time <= fightEnd - 50)); // don't take into account removal that are close to the end of the fight
         }
 
-        public override void UpdateSimulator(AbstractBuffSimulator simulator)
+        internal override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
             simulator.Remove(By, RemovedDuration, RemovedStacks, Time, ArcDPSEnums.BuffRemove.All, 0);
         }
 
-        public override int CompareTo(AbstractBuffEvent abe)
+        internal override int CompareTo(AbstractBuffEvent abe)
         {
             if (abe is AbstractBuffStackEvent)
             {

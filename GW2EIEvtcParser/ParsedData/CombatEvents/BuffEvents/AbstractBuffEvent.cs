@@ -15,17 +15,17 @@ namespace GW2EIEvtcParser.ParsedData
 
         public AgentItem To { get; protected set; }
 
-        public AbstractBuffEvent(CombatItem evtcItem, SkillData skillData) : base(evtcItem.Time)
+        internal AbstractBuffEvent(CombatItem evtcItem, SkillData skillData) : base(evtcItem.Time)
         {
             BuffSkill = skillData.Get(evtcItem.SkillID);
         }
 
-        public AbstractBuffEvent(SkillItem buffSkill, long time) : base(time)
+        internal AbstractBuffEvent(SkillItem buffSkill, long time) : base(time)
         {
             BuffSkill = buffSkill;
         }
 
-        public void Invalidate(SkillData skillData)
+        internal void Invalidate(SkillData skillData)
         {
             if (BuffID != ProfHelper.NoBuff)
             {
@@ -34,12 +34,12 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        public abstract void UpdateSimulator(AbstractBuffSimulator simulator);
+        internal abstract void UpdateSimulator(AbstractBuffSimulator simulator);
 
-        public abstract void TryFindSrc(ParsedEvtcLog log);
+        internal abstract void TryFindSrc(ParsedEvtcLog log);
 
-        public abstract bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs);
+        internal abstract bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs);
 
-        public abstract int CompareTo(AbstractBuffEvent abe);
+        internal abstract int CompareTo(AbstractBuffEvent abe);
     }
 }
