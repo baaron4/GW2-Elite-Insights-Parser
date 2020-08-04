@@ -3,7 +3,7 @@
 namespace GW2EIEvtcParser.EIData
 {
 
-    public class HitOnPlayerMechanic : SkillOnPlayerMechanic
+    internal class HitOnPlayerMechanic : SkillOnPlayerMechanic
     {
         protected override bool Keep(AbstractDamageEvent c, ParsedEvtcLog log)
         {

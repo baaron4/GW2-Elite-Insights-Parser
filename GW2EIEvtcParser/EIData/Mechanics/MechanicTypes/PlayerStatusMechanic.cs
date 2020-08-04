@@ -6,7 +6,7 @@ using System.Linq;
 namespace GW2EIEvtcParser.EIData
 {
 
-    public class PlayerStatusMechanic : Mechanic
+    internal class PlayerStatusMechanic : Mechanic
     {
 
         public PlayerStatusMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)
@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.EIData
             ShowOnTable = false;
         }
 
-        public override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
+        internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
         {
             CombatData combatData = log.CombatData;
             foreach (Player p in log.PlayerList)

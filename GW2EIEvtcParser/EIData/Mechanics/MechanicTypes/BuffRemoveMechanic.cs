@@ -3,7 +3,7 @@
 namespace GW2EIEvtcParser.EIData
 {
 
-    public abstract class BuffRemoveMechanic : Mechanic
+    internal abstract class BuffRemoveMechanic : Mechanic
     {
         public delegate bool BuffRemoveChecker(BuffRemoveManualEvent rme, ParsedEvtcLog log);
 

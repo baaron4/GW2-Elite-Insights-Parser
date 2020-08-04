@@ -5,7 +5,7 @@ using System.Linq;
 namespace GW2EIEvtcParser.EIData
 {
 
-    public class FirstHitOnPlayerMechanic : HitOnPlayerMechanic
+    internal class FirstHitOnPlayerMechanic : HitOnPlayerMechanic
     {
         protected override bool Keep(AbstractDamageEvent c, ParsedEvtcLog log)
         {

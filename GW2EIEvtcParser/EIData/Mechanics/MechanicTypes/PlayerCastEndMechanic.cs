@@ -3,7 +3,7 @@
 namespace GW2EIEvtcParser.EIData
 {
 
-    public class PlayerCastEndMechanic : PlayerCastStartMechanic
+    internal class PlayerCastEndMechanic : PlayerCastStartMechanic
     {
         protected override long GetTime(AbstractCastEvent evt)
         {

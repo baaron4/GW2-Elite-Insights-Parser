@@ -3,7 +3,7 @@
 namespace GW2EIEvtcParser.EIData
 {
 
-    public abstract class CastMechanic : Mechanic
+    internal abstract class CastMechanic : Mechanic
     {
         public delegate bool CastChecker(AbstractCastEvent ce, ParsedEvtcLog log);
 

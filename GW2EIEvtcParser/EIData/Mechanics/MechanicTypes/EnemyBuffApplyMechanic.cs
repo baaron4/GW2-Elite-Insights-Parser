@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace GW2EIEvtcParser.EIData
 {
 
-    public class EnemyBuffApplyMechanic : BuffApplyMechanic
+    internal class EnemyBuffApplyMechanic : BuffApplyMechanic
     {
         public EnemyBuffApplyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, BuffApplyChecker condition) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, condition)
         {
@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.EIData
             IsEnemyMechanic = true;
         }
 
-        public override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
+        internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
         {
             foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(SkillId))
             {

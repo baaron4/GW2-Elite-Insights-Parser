@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace GW2EIEvtcParser.EIData
 {
 
-    public class SpawnMechanic : Mechanic
+    internal class SpawnMechanic : Mechanic
     {
 
         public SpawnMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)
@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EIData
             IsEnemyMechanic = true;
         }
 
-        public override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
+        internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
         {
             CombatData combatData = log.CombatData;
             foreach (AgentItem a in log.AgentData.GetNPCsByID((int)SkillId))

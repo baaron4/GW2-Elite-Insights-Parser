@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.EIData
         private List<HashSet<Mechanic>> _presentMechanics;
         private List<List<AbstractActor>> _enemyList;
 
-        public MechanicData(List<Mechanic> fightMechanics)
+        internal MechanicData(List<Mechanic> fightMechanics)
         {
             foreach (Mechanic m in fightMechanics)
             {

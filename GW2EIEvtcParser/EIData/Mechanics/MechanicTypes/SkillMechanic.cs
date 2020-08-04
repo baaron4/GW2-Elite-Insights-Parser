@@ -3,7 +3,7 @@
 namespace GW2EIEvtcParser.EIData
 {
 
-    public abstract class SkillMechanic : Mechanic
+    internal abstract class SkillMechanic : Mechanic
     {
         public delegate bool SkillChecker(AbstractDamageEvent d, ParsedEvtcLog log);
 

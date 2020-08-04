@@ -5,7 +5,7 @@ using System.Linq;
 namespace GW2EIEvtcParser.EIData
 {
 
-    public class PlayerOnPlayerMechanic : BuffApplyMechanic
+    internal class PlayerOnPlayerMechanic : BuffApplyMechanic
     {
 
         public PlayerOnPlayerMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, BuffApplyChecker condition) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, condition)
@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        public override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
+        internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
         {
             CombatData combatData = log.CombatData;
             foreach (Player p in log.PlayerList)
