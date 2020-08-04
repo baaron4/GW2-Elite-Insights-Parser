@@ -1,4 +1,4 @@
-﻿using GW2EIParser.EIData;
+﻿using GW2EIEvtcParser.EIData;
 
 namespace GW2EIParser.Builders.JsonModels
 {

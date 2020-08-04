@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using GW2EIParser.Parser.ParsedData;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIParser.Builders.JsonModels
 {

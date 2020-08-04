@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
 using GW2EIParser.Builders.HtmlModels;
-using GW2EIParser.EIData;
-using GW2EIParser.Logic;
-using GW2EIParser.Parser.ParsedData;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
 using GW2EIUtils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -24,7 +21,7 @@ namespace GW2EIParser.Builders
         private readonly string _scriptVersion;
         private readonly int _scriptVersionRev;
 
-        private readonly ParsedLog _log;
+        private readonly ParsedEvtcLog _log;
         private readonly bool _cr;
         private readonly bool _light;
         private readonly bool _externalScripts;
@@ -35,7 +32,7 @@ namespace GW2EIParser.Builders
         private readonly HashSet<DamageModifier> _usedDamageMods = new HashSet<DamageModifier>();
         private readonly Dictionary<long, SkillItem> _usedSkills = new Dictionary<long, SkillItem>();
 
-        public HTMLBuilder(ParsedLog log, HTMLSettings settings, string[] uploadString = null)
+        public HTMLBuilder(ParsedEvtcLog log, HTMLSettings settings, string[] uploadString = null)
         {
             if (settings == null)
             {

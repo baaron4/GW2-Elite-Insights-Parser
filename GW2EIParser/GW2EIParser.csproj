@@ -52,7 +52,6 @@
     <PlatformTarget>AnyCPU</PlatformTarget>  
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Discord.Net.Webhook" Version="2.2.0" />
     <PackageReference Include="System.IO.Compression" Version="4.3.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
@@ -180,6 +179,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GW2EIControllers\GW2EIControllers.csproj" />
+    <ProjectReference Include="..\GW2EIEvtcParser\GW2EIEvtcParser.csproj" />
     <ProjectReference Include="..\GW2EIUtils\GW2EIUtils.csproj" />
   </ItemGroup>
 </Project>

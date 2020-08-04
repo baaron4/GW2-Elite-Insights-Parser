@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIParser.Builders.JsonModels.JsonMechanics;
 
 namespace GW2EIParser.Builders.JsonModels
@@ -44,7 +44,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public class BuffDesc
         {
-            public BuffDesc(Buff item, ParsedLog log)
+            public BuffDesc(Buff item, ParsedEvtcLog log)
             {
                 Name = item.Name;
                 Icon = item.Link;
@@ -250,7 +250,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public List<string> LogErrors { get; }
 
-        public JsonLog(ParsedLog log, RawFormatSettings settings, string[] uploadLinks)
+        public JsonLog(ParsedEvtcLog log, RawFormatSettings settings, string[] uploadLinks)
         {
             //
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Meta Data");

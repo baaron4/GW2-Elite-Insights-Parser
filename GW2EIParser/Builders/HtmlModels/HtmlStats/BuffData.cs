@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
 
 namespace GW2EIParser.Builders.HtmlModels
 {
@@ -131,7 +131,7 @@ namespace GW2EIParser.Builders.HtmlModels
         }
 
         //////
-        public static List<BuffData> BuildBuffUptimeData(ParsedLog log, List<Buff> listToUse, int phaseIndex)
+        public static List<BuffData> BuildBuffUptimeData(ParsedEvtcLog log, List<Buff> listToUse, int phaseIndex)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             var list = new List<BuffData>();
@@ -149,7 +149,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return list;
         }
 
-        public static List<BuffData> BuildActiveBuffUptimeData(ParsedLog log, List<Buff> listToUse, int phaseIndex)
+        public static List<BuffData> BuildActiveBuffUptimeData(ParsedEvtcLog log, List<Buff> listToUse, int phaseIndex)
         {
             var list = new List<BuffData>();
             bool boonTable = listToUse.Select(x => x.Nature).Contains(Buff.BuffNature.Boon);
@@ -167,7 +167,7 @@ namespace GW2EIParser.Builders.HtmlModels
         }
 
         //////
-        public static List<BuffData> BuildPersonalBuffUptimeData(ParsedLog log, Dictionary<string, List<Buff>> boonsBySpec, int phaseIndex)
+        public static List<BuffData> BuildPersonalBuffUptimeData(ParsedEvtcLog log, Dictionary<string, List<Buff>> boonsBySpec, int phaseIndex)
         {
             var list = new List<BuffData>();
             foreach (Player player in log.PlayerList)
@@ -177,7 +177,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return list;
         }
 
-        public static List<BuffData> BuildActivePersonalBuffUptimeData(ParsedLog log, Dictionary<string, List<Buff>> boonsBySpec, int phaseIndex)
+        public static List<BuffData> BuildActivePersonalBuffUptimeData(ParsedEvtcLog log, Dictionary<string, List<Buff>> boonsBySpec, int phaseIndex)
         {
             var list = new List<BuffData>();
             foreach (Player player in log.PlayerList)
@@ -189,7 +189,7 @@ namespace GW2EIParser.Builders.HtmlModels
 
 
         //////
-        public static List<BuffData> BuildBuffGenerationData(ParsedLog log, List<Buff> listToUse, int phaseIndex, BuffEnum target)
+        public static List<BuffData> BuildBuffGenerationData(ParsedEvtcLog log, List<Buff> listToUse, int phaseIndex, BuffEnum target)
         {
             var list = new List<BuffData>();
 
@@ -202,7 +202,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return list;
         }
 
-        public static List<BuffData> BuildActiveBuffGenerationData(ParsedLog log, List<Buff> listToUse, int phaseIndex, BuffEnum target)
+        public static List<BuffData> BuildActiveBuffGenerationData(ParsedEvtcLog log, List<Buff> listToUse, int phaseIndex, BuffEnum target)
         {
             var list = new List<BuffData>();
 
@@ -216,7 +216,7 @@ namespace GW2EIParser.Builders.HtmlModels
         }
 
         /////
-        public static List<BuffData> BuildTargetCondiData(ParsedLog log, int phaseIndex, NPC target)
+        public static List<BuffData> BuildTargetCondiData(ParsedEvtcLog log, int phaseIndex, NPC target)
         {
             Dictionary<long, FinalBuffsDictionary> conditions = target.GetBuffsDictionary(log, phaseIndex);
             var list = new List<BuffData>();
@@ -228,13 +228,13 @@ namespace GW2EIParser.Builders.HtmlModels
             return list;
         }
 
-        public static BuffData BuildTargetCondiUptimeData(ParsedLog log, int phaseIndex, NPC target)
+        public static BuffData BuildTargetCondiUptimeData(ParsedEvtcLog log, int phaseIndex, NPC target)
         {
             Dictionary<long, FinalBuffs> buffs = target.GetBuffs(log, phaseIndex);
             return new BuffData(buffs, log.Statistics.PresentConditions, target.GetGameplayStats(log, phaseIndex).AvgConditions);
         }
 
-        public static BuffData BuildTargetBoonData(ParsedLog log, int phaseIndex, NPC target)
+        public static BuffData BuildTargetBoonData(ParsedEvtcLog log, int phaseIndex, NPC target)
         {
             Dictionary<long, FinalBuffs> buffs = target.GetBuffs(log, phaseIndex);
             return new BuffData(buffs, log.Statistics.PresentBoons, target.GetGameplayStats(log, phaseIndex).AvgBoons);

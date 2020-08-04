@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
 
 namespace GW2EIParser.Builders.HtmlModels
 {
@@ -9,7 +9,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public List<object[]> Data { get; } = new List<object[]>();
         public List<List<object[]>> DataTarget { get; } = new List<List<object[]>>();
 
-        private DamageModData(Player player, ParsedLog log, List<DamageModifier> listToUse, int phaseIndex)
+        private DamageModData(Player player, ParsedEvtcLog log, List<DamageModifier> listToUse, int phaseIndex)
         {
             Dictionary<string, List<DamageModifierStat>> dModData = player.GetDamageModifierStats(log, null);
             List<PhaseData> phases = log.FightData.GetPhases(log);
@@ -69,7 +69,7 @@ namespace GW2EIParser.Builders.HtmlModels
                 }
             }
         }
-        public static List<DamageModData> BuildDmgModifiersData(ParsedLog log, int phaseIndex, List<DamageModifier> damageModsToUse)
+        public static List<DamageModData> BuildDmgModifiersData(ParsedEvtcLog log, int phaseIndex, List<DamageModifier> damageModsToUse)
         {
             var pData = new List<DamageModData>();
             foreach (Player player in log.PlayerList)
@@ -79,7 +79,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return pData;
         }
 
-        public static List<DamageModData> BuildPersonalDmgModifiersData(ParsedLog log, int phaseIndex, Dictionary<string, List<DamageModifier>> damageModsToUse)
+        public static List<DamageModData> BuildPersonalDmgModifiersData(ParsedEvtcLog log, int phaseIndex, Dictionary<string, List<DamageModifier>> damageModsToUse)
         {
             var pData = new List<DamageModData>();
             foreach (Player player in log.PlayerList)

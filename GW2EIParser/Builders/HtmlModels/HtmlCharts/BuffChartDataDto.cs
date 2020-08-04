@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
 
 namespace GW2EIParser.Builders.HtmlModels
 {
@@ -49,7 +48,7 @@ namespace GW2EIParser.Builders.HtmlModels
             }
         }
 
-        public static List<BuffChartDataDto> BuildBoonGraphData(ParsedLog log, AbstractSingleActor p, int phaseIndex, Dictionary<long, Buff> usedBuffs)
+        public static List<BuffChartDataDto> BuildBoonGraphData(ParsedEvtcLog log, AbstractSingleActor p, int phaseIndex, Dictionary<long, Buff> usedBuffs)
         {
             var list = new List<BuffChartDataDto>();
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];

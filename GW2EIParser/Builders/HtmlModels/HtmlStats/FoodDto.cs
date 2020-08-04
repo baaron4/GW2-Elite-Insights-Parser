@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
 
 namespace GW2EIParser.Builders.HtmlModels
 {
@@ -21,7 +21,7 @@ namespace GW2EIParser.Builders.HtmlModels
             Dimished = (consume.Buff.ID == 46587 || consume.Buff.ID == 46668);
         }
 
-        public static List<FoodDto> BuildPlayerFoodData(ParsedLog log, Player p, Dictionary<long, Buff> usedBuffs)
+        public static List<FoodDto> BuildPlayerFoodData(ParsedEvtcLog log, Player p, Dictionary<long, Buff> usedBuffs)
         {
             var list = new List<FoodDto>();
             List<Consumable> consume = p.GetConsumablesList(log, 0, log.FightData.FightEnd);

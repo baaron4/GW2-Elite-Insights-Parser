@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIParser.Builders.HtmlModels
 {
@@ -38,7 +38,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return rotEntry;
         }
 
-        public static List<object[]> BuildRotationData(ParsedLog log, AbstractActor p, int phaseIndex, Dictionary<long, SkillItem> usedSkills)
+        public static List<object[]> BuildRotationData(ParsedEvtcLog log, AbstractActor p, int phaseIndex, Dictionary<long, SkillItem> usedSkills)
         {
             var list = new List<object[]>();
 

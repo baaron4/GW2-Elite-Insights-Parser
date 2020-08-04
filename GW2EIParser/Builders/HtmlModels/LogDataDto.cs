@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using GW2EIParser.EIData;
-using GW2EIParser.Logic;
-using GW2EIParser.Parser.ParsedData;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.EncounterLogic;
+using GW2EIEvtcParser.ParsedData;
 using GW2EIUtils;
 
 namespace GW2EIParser.Builders.HtmlModels
@@ -50,7 +51,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public List<string> UploadLinks { get; set; }
 
 
-        private static Dictionary<string, List<Buff>> BuildPersonalBoonData(ParsedLog log, Dictionary<string, List<long>> dict, Dictionary<long, Buff> usedBuffs)
+        private static Dictionary<string, List<Buff>> BuildPersonalBoonData(ParsedEvtcLog log, Dictionary<string, List<long>> dict, Dictionary<long, Buff> usedBuffs)
         {
             var boonsBySpec = new Dictionary<string, List<Buff>>();
             // Collect all personal buffs by spec
@@ -90,7 +91,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return boonsBySpec;
         }
 
-        private static Dictionary<string, List<DamageModifier>> BuildPersonalDamageModData(ParsedLog log, Dictionary<string, List<long>> dict, HashSet<DamageModifier> usedDamageMods)
+        private static Dictionary<string, List<DamageModifier>> BuildPersonalDamageModData(ParsedEvtcLog log, Dictionary<string, List<long>> dict, HashSet<DamageModifier> usedDamageMods)
         {
             var damageModBySpecs = new Dictionary<string, List<DamageModifier>>();
             // Collect all personal damage mods by spec
@@ -120,7 +121,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return damageModBySpecs;
         }
 
-        private static bool HasBoons(ParsedLog log, int phaseIndex, NPC target)
+        private static bool HasBoons(ParsedEvtcLog log, int phaseIndex, NPC target)
         {
             Dictionary<long, FinalBuffs> conditions = target.GetBuffs(log, phaseIndex);
             foreach (Buff boon in log.Statistics.PresentBoons)
@@ -136,7 +137,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return false;
         }
 
-        public static LogDataDto BuildLogData(ParsedLog log, Dictionary<long, SkillItem> usedSkills,Dictionary<long, Buff> usedBuffs, HashSet<DamageModifier> usedDamageMods, bool cr, bool light, string[] uploadLinks)
+        public static LogDataDto BuildLogData(ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills,Dictionary<long, Buff> usedBuffs, HashSet<DamageModifier> usedDamageMods, bool cr, bool light, string[] uploadLinks)
         {
             GeneralStatistics statistics = log.Statistics;
             log.UpdateProgressWithCancellationCheck("HTML: building Log Data");

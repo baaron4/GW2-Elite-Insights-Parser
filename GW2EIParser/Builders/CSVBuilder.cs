@@ -4,15 +4,15 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIParser.Builders
 {
     public class CSVBuilder
     {
-        private readonly ParsedLog _log;
+        private readonly ParsedEvtcLog _log;
         private readonly List<PhaseData> _phases;
         private readonly NPC _legacyTarget;
         private readonly GeneralStatistics _statistics;
@@ -22,7 +22,7 @@ namespace GW2EIParser.Builders
 
         private readonly List<Player> _noFakePlayers;
 
-        public CSVBuilder(ParsedLog log, CSVSettings settings, string[] uploadresult = null)
+        public CSVBuilder(ParsedEvtcLog log, CSVSettings settings, string[] uploadresult = null)
         {
             if (settings == null)
             {

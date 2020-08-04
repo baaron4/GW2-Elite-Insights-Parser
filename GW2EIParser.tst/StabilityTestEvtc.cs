@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using GW2EIParser.Parser.ParsedData;
+using GW2EIEvtcParser;
 using GW2EIUtils;
 using GW2EIUtils.Exceptions;
 using Newtonsoft.Json;
@@ -22,7 +22,7 @@ namespace GW2EIParser.tst
         {
             try
             {
-                ParsedLog log = TestHelper.ParseLog(file);
+                ParsedEvtcLog log = TestHelper.ParseLog(file);
                 TestHelper.JsonString(log);
                 TestHelper.HtmlString(log);
                 TestHelper.CsvString(log);

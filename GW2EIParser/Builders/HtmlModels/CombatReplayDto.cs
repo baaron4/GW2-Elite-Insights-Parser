@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
 
 namespace GW2EIParser.Builders.HtmlModels
 {
@@ -14,7 +14,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public int PollingRate { get; set; }
         public List<CombatReplayMap.MapItem> Maps { get; set; }
 
-        public CombatReplayDto(ParsedLog log)
+        public CombatReplayDto(ParsedEvtcLog log)
         {
             CombatReplayMap map = log.FightData.Logic.GetCombatMap(log);
             Actors = GetCombatReplayActors(log, map);
@@ -26,7 +26,7 @@ namespace GW2EIParser.Builders.HtmlModels
         }
 
 
-        private static List<object> GetCombatReplayActors(ParsedLog log, CombatReplayMap map)
+        private static List<object> GetCombatReplayActors(ParsedEvtcLog log, CombatReplayMap map)
         {
             var actors = new List<object>();
             foreach (Player p in log.PlayerList)

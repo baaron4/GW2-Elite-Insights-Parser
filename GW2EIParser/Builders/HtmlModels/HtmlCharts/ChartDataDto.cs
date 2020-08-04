@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
 using GW2EIUtils;
 
 namespace GW2EIParser.Builders.HtmlModels
@@ -13,7 +12,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public List<PhaseChartDataDto> Phases { get; set; } = new List<PhaseChartDataDto>();
         public List<MechanicChartDataDto> Mechanics { get; set; } = new List<MechanicChartDataDto>();
 
-        public static List<object[]> BuildHealthGraphStates(ParsedLog log, AbstractSingleActor actor, PhaseData phase, bool nullable)
+        public static List<object[]> BuildHealthGraphStates(ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase, bool nullable)
         {
             List<Segment> segments = actor.GetHealthUpdates(log);
             if (!segments.Any())
@@ -29,7 +28,7 @@ namespace GW2EIParser.Builders.HtmlModels
             ).ToList();
             return Segment.ToObjectList(subSegments, phase.Start, phase.End);
         }
-        public static List<object[]> BuildBreakbarPercentStates(ParsedLog log, NPC npc, PhaseData phase)
+        public static List<object[]> BuildBreakbarPercentStates(ParsedEvtcLog log, NPC npc, PhaseData phase)
         {
             List<Segment> segments = npc.GetBreakbarPercentUpdates(log);
             if (!segments.Any())
@@ -42,7 +41,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return Segment.ToObjectList(subSegments, phase.Start, phase.End);
         }
 
-        public static ChartDataDto BuildChartData(ParsedLog log)
+        public static ChartDataDto BuildChartData(ParsedEvtcLog log)
         {
             var chartData = new ChartDataDto();
             var phaseChartData = new List<PhaseChartDataDto>();

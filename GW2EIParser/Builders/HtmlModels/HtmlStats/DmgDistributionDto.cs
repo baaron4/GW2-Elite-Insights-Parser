@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIParser.Builders.HtmlModels
 {
@@ -110,7 +110,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return skillItem;
         }
 
-        public static DmgDistributionDto BuildDMGTakenDistData(ParsedLog log, AbstractSingleActor p, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        public static DmgDistributionDto BuildDMGTakenDistData(ParsedEvtcLog log, AbstractSingleActor p, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             var dto = new DmgDistributionDto
             {
@@ -130,7 +130,7 @@ namespace GW2EIParser.Builders.HtmlModels
         }
 
 
-        private static List<object[]> BuildDMGDistBodyData(ParsedLog log, List<AbstractCastEvent> casting, List<AbstractDamageEvent> damageLogs, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        private static List<object[]> BuildDMGDistBodyData(ParsedEvtcLog log, List<AbstractCastEvent> casting, List<AbstractDamageEvent> damageLogs, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             var list = new List<object[]>();
             var castLogsBySkill = casting.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
@@ -174,7 +174,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return list;
         }
 
-        private static DmgDistributionDto BuildDMGDistDataInternal(ParsedLog log, FinalDPS dps, AbstractSingleActor p, NPC target, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        private static DmgDistributionDto BuildDMGDistDataInternal(ParsedEvtcLog log, FinalDPS dps, AbstractSingleActor p, NPC target, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             var dto = new DmgDistributionDto();
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
@@ -189,20 +189,20 @@ namespace GW2EIParser.Builders.HtmlModels
         }
 
 
-        public static DmgDistributionDto BuildPlayerDMGDistData(ParsedLog log, Player p, NPC target, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        public static DmgDistributionDto BuildPlayerDMGDistData(ParsedEvtcLog log, Player p, NPC target, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             FinalDPS dps = p.GetDPSTarget(log, phaseIndex, target);
             return BuildDMGDistDataInternal(log, dps, p, target, phaseIndex, usedSkills, usedBuffs);
         }
 
 
-        public static DmgDistributionDto BuildTargetDMGDistData(ParsedLog log, NPC target, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        public static DmgDistributionDto BuildTargetDMGDistData(ParsedEvtcLog log, NPC target, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             FinalDPS dps = target.GetDPSAll(log, phaseIndex);
             return BuildDMGDistDataInternal(log ,dps, target, null, phaseIndex, usedSkills, usedBuffs);
         }
 
-        private static DmgDistributionDto BuildDMGDistDataMinionsInternal(ParsedLog log, FinalDPS dps, Minions minions, NPC target, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        private static DmgDistributionDto BuildDMGDistDataMinionsInternal(ParsedEvtcLog log, FinalDPS dps, Minions minions, NPC target, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             var dto = new DmgDistributionDto();
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
@@ -215,7 +215,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return dto;
         }
 
-        public static DmgDistributionDto BuildPlayerMinionDMGDistData(ParsedLog log, Player p, Minions minions, NPC target, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        public static DmgDistributionDto BuildPlayerMinionDMGDistData(ParsedEvtcLog log, Player p, Minions minions, NPC target, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             FinalDPS dps = p.GetDPSTarget(log, phaseIndex, target);
 
@@ -223,7 +223,7 @@ namespace GW2EIParser.Builders.HtmlModels
         }
 
 
-        public static DmgDistributionDto BuildTargetMinionDMGDistData(ParsedLog log, NPC target, Minions minions, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        public static DmgDistributionDto BuildTargetMinionDMGDistData(ParsedEvtcLog log, NPC target, Minions minions, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             FinalDPS dps = target.GetDPSAll(log, phaseIndex);
             return BuildDMGDistDataMinionsInternal(log, dps, minions, null, phaseIndex, usedSkills, usedBuffs);

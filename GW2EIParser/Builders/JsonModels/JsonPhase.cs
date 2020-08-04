@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
 
 namespace GW2EIParser.Builders.JsonModels
 {
@@ -38,7 +38,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public bool BreakbarPhase { get; }
 
-        public JsonPhase(PhaseData phase, ParsedLog log)
+        public JsonPhase(PhaseData phase, ParsedEvtcLog log)
         {
             Start = phase.Start;
             End = phase.End;

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIParser.Builders.HtmlModels
 {
@@ -18,7 +18,7 @@ namespace GW2EIParser.Builders.HtmlModels
 
         // helpers
 
-        public static ActorDetailsDto BuildPlayerData(ParsedLog log, Player player, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        public static ActorDetailsDto BuildPlayerData(ParsedEvtcLog log, Player player, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             var dto = new ActorDetailsDto
             {
@@ -52,7 +52,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return dto;
         }
 
-        private static ActorDetailsDto BuildPlayerMinionsData(ParsedLog log, Player player, Minions minion, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        private static ActorDetailsDto BuildPlayerMinionsData(ParsedEvtcLog log, Player player, Minions minion, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             var dto = new ActorDetailsDto
             {
@@ -72,7 +72,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return dto;
         }
 
-        public static ActorDetailsDto BuildTargetData(ParsedLog log, NPC target, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, bool cr)
+        public static ActorDetailsDto BuildTargetData(ParsedEvtcLog log, NPC target, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, bool cr)
         {
             var dto = new ActorDetailsDto
             {
@@ -115,7 +115,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return dto;
         }
 
-        private static ActorDetailsDto BuildTargetsMinionsData(ParsedLog log, NPC target, Minions minion, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        private static ActorDetailsDto BuildTargetsMinionsData(ParsedEvtcLog log, NPC target, Minions minion, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             var dto = new ActorDetailsDto
             {

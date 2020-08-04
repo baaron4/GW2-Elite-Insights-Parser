@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using GW2EIEvtcParser;
 using GW2EIParser.Builders.JsonModels;
-using GW2EIParser.Parser;
-using GW2EIParser.Parser.ParsedData;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -16,7 +15,7 @@ namespace GW2EIParser.Builders
 
         //
 
-        public RawFormatBuilder(ParsedLog log, RawFormatSettings settings, string[] uploadLinks = null)
+        public RawFormatBuilder(ParsedEvtcLog log, RawFormatSettings settings, string[] uploadLinks = null)
         {
             if (settings == null)
             {

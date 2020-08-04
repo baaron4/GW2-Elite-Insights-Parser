@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
 
 namespace GW2EIParser.Builders.JsonModels
 {
@@ -61,7 +61,7 @@ namespace GW2EIParser.Builders.JsonModels
         }
 
 
-        public static List<JsonDamageModifierData> GetDamageModifiers(Dictionary<string, List<DamageModifierStat>> damageModDict, ParsedLog log, Dictionary<string, JsonLog.DamageModDesc> damageModDesc)
+        public static List<JsonDamageModifierData> GetDamageModifiers(Dictionary<string, List<DamageModifierStat>> damageModDict, ParsedEvtcLog log, Dictionary<string, JsonLog.DamageModDesc> damageModDesc)
         {
             var dict = new Dictionary<int, List<JsonDamageModifierItem>>();
             foreach (string key in damageModDict.Keys)
@@ -82,7 +82,7 @@ namespace GW2EIParser.Builders.JsonModels
             return res;
         }
 
-        public static List<JsonDamageModifierData>[] GetDamageModifiersTarget(Player player, ParsedLog log, Dictionary<string, JsonLog.DamageModDesc> damageModDesc)
+        public static List<JsonDamageModifierData>[] GetDamageModifiersTarget(Player player, ParsedEvtcLog log, Dictionary<string, JsonLog.DamageModDesc> damageModDesc)
         {
             var res = new List<JsonDamageModifierData>[log.FightData.Logic.Targets.Count];
             for (int i = 0; i < log.FightData.Logic.Targets.Count; i++)

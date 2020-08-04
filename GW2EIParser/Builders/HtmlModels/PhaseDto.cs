@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
 
 namespace GW2EIParser.Builders.HtmlModels
 {
@@ -79,7 +79,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public List<AreaLabelDto> MarkupAreas { get; set; }
         public List<int> SubPhases { get; set; }
 
-        public PhaseDto(PhaseData phaseData, List<PhaseData> phases, ParsedLog log)
+        public PhaseDto(PhaseData phaseData, List<PhaseData> phases, ParsedEvtcLog log)
         {
             Name = phaseData.Name;
             Duration = phaseData.DurationInMS;
@@ -253,7 +253,7 @@ namespace GW2EIParser.Builders.HtmlModels
             }
             return data;
         }
-        public static List<List<object>> BuildDPSData(ParsedLog log, int phaseIndex)
+        public static List<List<object>> BuildDPSData(ParsedEvtcLog log, int phaseIndex)
         {
             var list = new List<List<object>>(log.PlayerList.Count);
             foreach (Player player in log.PlayerList)
@@ -264,7 +264,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return list;
         }
 
-        public static List<List<List<object>>> BuildDPSTargetsData(ParsedLog log, int phaseIndex)
+        public static List<List<List<object>>> BuildDPSTargetsData(ParsedEvtcLog log, int phaseIndex)
         {
             var list = new List<List<List<object>>>(log.PlayerList.Count);
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
@@ -282,7 +282,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return list;
         }
 
-        public static List<List<object>> BuildDMGStatsData(ParsedLog log, int phaseIndex)
+        public static List<List<object>> BuildDMGStatsData(ParsedEvtcLog log, int phaseIndex)
         {
             var list = new List<List<object>>();
             foreach (Player player in log.PlayerList)
@@ -293,7 +293,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return list;
         }
 
-        public static List<List<List<object>>> BuildDMGStatsTargetsData(ParsedLog log, int phaseIndex)
+        public static List<List<List<object>>> BuildDMGStatsTargetsData(ParsedEvtcLog log, int phaseIndex)
         {
             var list = new List<List<List<object>>>();
 
@@ -312,7 +312,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return list;
         }
 
-        public static List<List<object>> BuildDefenseData(ParsedLog log, int phaseIndex)
+        public static List<List<object>> BuildDefenseData(ParsedEvtcLog log, int phaseIndex)
         {
             var list = new List<List<object>>();
 
@@ -327,7 +327,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return list;
         }
 
-        public static List<List<object>> BuildSupportData(ParsedLog log, int phaseIndex)
+        public static List<List<object>> BuildSupportData(ParsedEvtcLog log, int phaseIndex)
         {
             var list = new List<List<object>>();
 

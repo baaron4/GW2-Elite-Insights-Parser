@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
 
 namespace GW2EIParser.Builders.HtmlModels
 {
@@ -28,7 +28,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return data;
         }
 
-        public static List<DeathRecapDto> BuildDeathRecap(ParsedLog log, Player p)
+        public static List<DeathRecapDto> BuildDeathRecap(ParsedEvtcLog log, Player p)
         {
             var res = new List<DeathRecapDto>();
             List<DeathRecap> recaps = p.GetDeathRecaps(log);

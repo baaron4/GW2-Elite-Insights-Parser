@@ -537,5 +537,64 @@ namespace GW2EIUtils
             }
             return "https://i.imgur.com/HuJHqRZ.png";
         }
+
+
+
+        private static readonly HashSet<string> _compressedFiles = new HashSet<string>()
+        {
+            ".zevtc",
+            ".evtc.zip",
+        };
+
+        private static readonly HashSet<string> _tmpFiles = new HashSet<string>()
+        {
+            ".tmp.zip"
+        };
+
+        private static readonly HashSet<string> _supportedFiles = new HashSet<string>(_compressedFiles)
+        {
+            ".evtc"
+        };
+
+        public static bool IsCompressedFormat(string fileName)
+        {
+            foreach (string format in _compressedFiles)
+            {
+                if (fileName.EndsWith(format, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static List<string> GetSupportedFormats()
+        {
+            return new List<string>(_supportedFiles);
+        }
+
+        public static bool IsSupportedFormat(string fileName)
+        {
+            foreach (string format in _supportedFiles)
+            {
+                if (fileName.EndsWith(format, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool IsTemporaryFormat(string fileName)
+        {
+            foreach (string format in _tmpFiles)
+            {
+                if (fileName.EndsWith(format, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

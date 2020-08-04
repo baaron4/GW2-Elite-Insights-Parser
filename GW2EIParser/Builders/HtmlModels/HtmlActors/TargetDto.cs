@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIParser.Builders.HtmlModels
 {
@@ -16,7 +16,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public double Percent { get; set; }
         public double HpLeft { get; set; }
 
-        public TargetDto(NPC target, ParsedLog log, bool cr, ActorDetailsDto details) : base(target, log, cr, details)
+        public TargetDto(NPC target, ParsedEvtcLog log, bool cr, ActorDetailsDto details) : base(target, log, cr, details)
         {
             Icon = target.GetIcon();
             Health = target.GetHealth(log.CombatData);

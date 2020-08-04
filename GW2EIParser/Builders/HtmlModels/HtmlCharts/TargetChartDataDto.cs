@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
 
 namespace GW2EIParser.Builders.HtmlModels
 {
@@ -11,7 +10,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public List<object[]> HealthStates { get; set; }
         public List<object[]> BreakbarPercentStates { get; set; }
 
-        public static TargetChartDataDto BuildTargetGraphData(ParsedLog log, int phaseIndex, NPC target)
+        public static TargetChartDataDto BuildTargetGraphData(ParsedEvtcLog log, int phaseIndex, NPC target)
         {
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
             return new TargetChartDataDto

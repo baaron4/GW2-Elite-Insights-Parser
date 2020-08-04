@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using GW2EIControllers;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
 using GW2EIParser.Builders;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser;
-using GW2EIParser.Parser.ParsedData;
 using GW2EIUtils;
 using GW2EIUtils.Exceptions;
 
@@ -21,63 +19,6 @@ namespace GW2EIParser
         private static bool HasFormat()
         {
             return Properties.Settings.Default.SaveOutCSV || Properties.Settings.Default.SaveOutHTML || Properties.Settings.Default.SaveOutXML || Properties.Settings.Default.SaveOutJSON;
-        }
-
-        private static readonly HashSet<string> _compressedFiles = new HashSet<string>()
-        {
-            ".zevtc",
-            ".evtc.zip",
-        };
-
-        private static readonly HashSet<string> _tmpFiles = new HashSet<string>()
-        {
-            ".tmp.zip"
-        };
-
-        private static readonly HashSet<string> _supportedFiles = new HashSet<string>(_compressedFiles)
-        {
-            ".evtc"
-        };
-
-        public static bool IsCompressedFormat(string fileName)
-        {
-            foreach (string format in _compressedFiles)
-            {
-                if (fileName.EndsWith(format, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public static List<string> GetSupportedFormats()
-        {
-            return new List<string>(_supportedFiles);
-        }
-
-        public static bool IsSupportedFormat(string fileName)
-        {
-            foreach (string format in _supportedFiles)
-            {
-                if (fileName.EndsWith(format, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public static bool IsTemporaryFormat(string fileName)
-        {
-            foreach (string format in _tmpFiles)
-            {
-                if (fileName.EndsWith(format, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-            }
-            return false;
         }
 
         public static void DoWork(OperationController operation)
@@ -92,17 +33,17 @@ namespace GW2EIParser
                 {
                     throw new FileNotFoundException("File " + fInfo.FullName + " does not exist");
                 }
-                var parser = new ParsingController(new ParserSettings(Properties.Settings.Default.Anonymous, Properties.Settings.Default.SkipFailedTries, Properties.Settings.Default.ParsePhases, Properties.Settings.Default.ParseCombatReplay, Properties.Settings.Default.ComputeDamageModifiers));
+                var parser = new EvtcParser(new EvtcParserSettings(Properties.Settings.Default.Anonymous, Properties.Settings.Default.SkipFailedTries, Properties.Settings.Default.ParsePhases, Properties.Settings.Default.ParseCombatReplay, Properties.Settings.Default.ComputeDamageModifiers));
 
                 if (!HasFormat())
                 {
                     throw new InvalidDataException("No output format has been selected");
                 }
 
-                if (IsSupportedFormat(fInfo.Name))
+                if (GeneralHelper.IsSupportedFormat(fInfo.Name))
                 {
                     //Process evtc here
-                    ParsedLog log = parser.ParseLog(operation, fInfo.FullName);
+                    ParsedEvtcLog log = parser.ParseLog(operation, fInfo.FullName);
                     string[] uploadresult = UploadController.UploadOperation(operation, fInfo, new UploadSettings(Properties.Settings.Default.UploadToDPSReports, Properties.Settings.Default.UploadToDPSReportsRH));
                     WebhookController.SendMessage(operation, log.GetEmbed(uploadresult), uploadresult, new WebhookSettings(Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.ParseMultipleLogs, Properties.Settings.Default.WebhookURL, Properties.Settings.Default.SendSimpleMessageToWebhook));
                     //Creating File
@@ -196,7 +137,7 @@ namespace GW2EIParser
             }
         }
 
-        private static void GenerateFiles(ParsedLog log, OperationController operation, string[] uploadresult, FileInfo fInfo)
+        private static void GenerateFiles(ParsedEvtcLog log, OperationController operation, string[] uploadresult, FileInfo fInfo)
         {
             operation.UpdateProgressWithCancellationCheck("Creating File(s)");
 

@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Security.Cryptography;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
 using GW2EIUtils;
 
 namespace GW2EIParser.Builders.HtmlModels
@@ -17,7 +16,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public bool Consumable { get; set; }
         public bool FightSpecific { get; set; }
 
-        public BuffDto(Buff buff, ParsedLog log)
+        public BuffDto(Buff buff, ParsedEvtcLog log)
         {
             Id = buff.ID;
             Name = buff.Name;
@@ -51,7 +50,7 @@ namespace GW2EIParser.Builders.HtmlModels
             }
         }
 
-        public static void AssembleBoons(ICollection<Buff> buffs, Dictionary<string, BuffDto> dict, ParsedLog log)
+        public static void AssembleBoons(ICollection<Buff> buffs, Dictionary<string, BuffDto> dict, ParsedEvtcLog log)
         {
             foreach (Buff buff in buffs)
             {

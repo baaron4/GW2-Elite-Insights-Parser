@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
 
 namespace GW2EIParser.Builders.HtmlModels
 {
@@ -26,7 +26,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public string ColTotal { get; set; }
         public bool IsConjure { get; set; }
 
-        public PlayerDto(Player player, ParsedLog log, bool cr, ActorDetailsDto details) : base(player, log, cr, details)
+        public PlayerDto(Player player, ParsedEvtcLog log, bool cr, ActorDetailsDto details) : base(player, log, cr, details)
         {
             Group = player.Group;
             Acc = player.Account;
@@ -85,7 +85,7 @@ namespace GW2EIParser.Builders.HtmlModels
             }
         }
 
-        private void BuildWeaponSets(Player player, ParsedLog log)
+        private void BuildWeaponSets(Player player, ParsedEvtcLog log)
         {
             string[] weps = player.GetWeaponsArray(log);
             BuildWeaponSets(weps, 0, L1Set, L2Set);

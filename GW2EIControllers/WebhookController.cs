@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Discord;
 using Discord.Webhook;
 using GW2EIUtils;

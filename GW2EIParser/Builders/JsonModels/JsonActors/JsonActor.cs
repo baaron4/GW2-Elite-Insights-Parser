@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIParser.Builders.JsonModels
 {
@@ -122,7 +122,7 @@ namespace GW2EIParser.Builders.JsonModels
         public List<double[]> HealthPercents { get; }
 
 
-        protected JsonActor(AbstractSingleActor actor, ParsedLog log, RawFormatSettings settings, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        protected JsonActor(AbstractSingleActor actor, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             //
@@ -181,7 +181,7 @@ namespace GW2EIParser.Builders.JsonModels
             }
         }
 
-        protected static List<JsonDamageDist>[] BuildDamageDistData(AbstractSingleActor actor, NPC target, List<PhaseData> phases, ParsedLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        protected static List<JsonDamageDist>[] BuildDamageDistData(AbstractSingleActor actor, NPC target, List<PhaseData> phases, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
             var res = new List<JsonDamageDist>[phases.Count];
             for (int i = 0; i < phases.Count; i++)
@@ -192,7 +192,7 @@ namespace GW2EIParser.Builders.JsonModels
             return res;
         }
 
-        protected static List<JsonDamageDist>[] BuildDamageTakenDistData(AbstractSingleActor actor, NPC target, List<PhaseData> phases, ParsedLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        protected static List<JsonDamageDist>[] BuildDamageTakenDistData(AbstractSingleActor actor, NPC target, List<PhaseData> phases, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
             var res = new List<JsonDamageDist>[phases.Count];
             for (int i = 0; i < phases.Count; i++)

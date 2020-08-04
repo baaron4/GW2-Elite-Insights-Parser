@@ -1,8 +1,4 @@
-﻿using System;
-using System.Configuration;
-using System.IO;
-
-namespace GW2EIParser.Builders
+﻿namespace GW2EIParser.Builders
 {
     public class HTMLSettings
     {

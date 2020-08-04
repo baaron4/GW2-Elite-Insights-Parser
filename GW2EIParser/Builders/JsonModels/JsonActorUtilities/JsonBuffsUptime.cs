@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
 
 namespace GW2EIParser.Builders.JsonModels
 {
@@ -90,7 +90,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public List<int[]> States { get; }
 
-        public JsonBuffsUptime(AbstractSingleActor actor, long buffID, ParsedLog log, RawFormatSettings settings, List<JsonBuffsUptimeData> buffData, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        public JsonBuffsUptime(AbstractSingleActor actor, long buffID, ParsedEvtcLog log, RawFormatSettings settings, List<JsonBuffsUptimeData> buffData, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
             Id = buffID;
             BuffData = buffData;

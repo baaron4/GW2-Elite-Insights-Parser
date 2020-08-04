@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
 
 namespace GW2EIParser.Builders.HtmlModels
 {
@@ -13,7 +13,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public List<MinionDto> Minions { get; } = new List<MinionDto>();
         public ActorDetailsDto Details { get; set; }
 
-        protected ActorDto(AbstractSingleActor actor, ParsedLog log, bool cr, ActorDetailsDto details)
+        protected ActorDto(AbstractSingleActor actor, ParsedEvtcLog log, bool cr, ActorDetailsDto details)
         {
             Name = actor.Character;
             Tough = actor.Toughness;

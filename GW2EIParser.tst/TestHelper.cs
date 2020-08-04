@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using GW2EIEvtcParser;
 using GW2EIParser.Builders;
 using GW2EIParser.Builders.JsonModels;
-using GW2EIParser.Parser;
-using GW2EIParser.Parser.ParsedData;
 using GW2EIUtils;
 using Newtonsoft.Json.Linq;
 
@@ -13,7 +12,7 @@ namespace GW2EIParser.tst
 {
     public class TestHelper
     {
-        private static readonly ParserSettings parserSettings = new ParserSettings(false, true, true, true, true);
+        private static readonly EvtcParserSettings parserSettings = new EvtcParserSettings(false, true, true, true, true);
         private static readonly HTMLSettings htmlSettings = new HTMLSettings(false, false);
         private static readonly RawFormatSettings rawSettings = new RawFormatSettings(true);
         private static readonly CSVSettings csvSettings = new CSVSettings(",");
@@ -30,16 +29,16 @@ namespace GW2EIParser.tst
             }
         }
 
-        public static ParsedLog ParseLog(string location)
+        public static ParsedEvtcLog ParseLog(string location)
         {
-            var parser = new ParsingController(parserSettings);
+            var parser = new EvtcParser(parserSettings);
 
             var fInfo = new FileInfo(location);
             if (!fInfo.Exists)
             {
                 throw new FileNotFoundException("File does not exist", fInfo.FullName);
             }
-            if (!ProgramHelper.IsSupportedFormat(fInfo.Name))
+            if (!GeneralHelper.IsSupportedFormat(fInfo.Name))
             {
                 throw new InvalidDataException("Not EVTC");
             }
@@ -47,7 +46,7 @@ namespace GW2EIParser.tst
             return parser.ParseLog(new TestOperationController(), fInfo.FullName);
         }
 
-        public static string JsonString(ParsedLog log)
+        public static string JsonString(ParsedEvtcLog log)
         {
             var ms = new MemoryStream();
             var sw = new StreamWriter(ms, GeneralHelper.NoBOMEncodingUTF8);
@@ -59,7 +58,7 @@ namespace GW2EIParser.tst
             return Encoding.UTF8.GetString(ms.ToArray());
         }
 
-        public static string CsvString(ParsedLog log)
+        public static string CsvString(ParsedEvtcLog log)
         {
             var ms = new MemoryStream();
             var sw = new StreamWriter(ms);
@@ -71,7 +70,7 @@ namespace GW2EIParser.tst
             return sw.ToString();
         }
 
-        public static string HtmlString(ParsedLog log)
+        public static string HtmlString(ParsedEvtcLog log)
         {
             var ms = new MemoryStream();
             var sw = new StreamWriter(ms, GeneralHelper.NoBOMEncodingUTF8);
@@ -83,7 +82,7 @@ namespace GW2EIParser.tst
             return Encoding.UTF8.GetString(ms.ToArray());
         }
 
-        public static JsonLog JsonLog(ParsedLog log)
+        public static JsonLog JsonLog(ParsedEvtcLog log)
         {
             var builder = new RawFormatBuilder(log, rawSettings, null);
             return builder.JsonLog;

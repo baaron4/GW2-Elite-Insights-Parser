@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
 
 namespace GW2EIParser.Builders.HtmlModels
 {
@@ -10,7 +10,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public List<int> Total { get; set; }
         public List<object[]> HealthStates { get; set; }
 
-        public static List<PlayerChartDataDto> BuildPlayersGraphData(ParsedLog log, int phaseIndex)
+        public static List<PlayerChartDataDto> BuildPlayersGraphData(ParsedEvtcLog log, int phaseIndex)
         {
             var list = new List<PlayerChartDataDto>();
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];

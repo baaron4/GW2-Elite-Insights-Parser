@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
+
 namespace GW2EIParser.Builders.HtmlModels
 {
     public class MechanicDto
@@ -15,7 +16,7 @@ namespace GW2EIParser.Builders.HtmlModels
         public bool EnemyMech { get; set; }
         public bool PlayerMech { get; set; }
 
-        private static List<int[]> GetMechanicData(HashSet<Mechanic> presMech, ParsedLog log, AbstractActor actor, PhaseData phase)
+        private static List<int[]> GetMechanicData(HashSet<Mechanic> presMech, ParsedEvtcLog log, AbstractActor actor, PhaseData phase)
         {
             var res = new List<int[]>();
 
@@ -56,7 +57,7 @@ namespace GW2EIParser.Builders.HtmlModels
             }
         }
 
-        public static List<List<int[]>> BuildPlayerMechanicData(ParsedLog log, int phaseIndex)
+        public static List<List<int[]>> BuildPlayerMechanicData(ParsedEvtcLog log, int phaseIndex)
         {
             var list = new List<List<int[]>>();
             HashSet<Mechanic> presMech = log.MechanicData.GetPresentPlayerMechs(log, 0);
@@ -69,7 +70,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return list;
         }
 
-        public static List<List<int[]>> BuildEnemyMechanicData(ParsedLog log, int phaseIndex)
+        public static List<List<int[]>> BuildEnemyMechanicData(ParsedEvtcLog log, int phaseIndex)
         {
             var list = new List<List<int[]>>();
             HashSet<Mechanic> presMech = log.MechanicData.GetPresentEnemyMechs(log, 0);

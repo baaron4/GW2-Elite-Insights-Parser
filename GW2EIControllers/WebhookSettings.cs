@@ -1,8 +1,4 @@
-﻿using System;
-using System.Configuration;
-using System.IO;
-
-namespace GW2EIControllers
+﻿namespace GW2EIControllers
 {
     public class WebhookSettings
     {
