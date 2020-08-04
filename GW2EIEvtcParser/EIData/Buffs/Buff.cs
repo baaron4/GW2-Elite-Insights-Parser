@@ -169,7 +169,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public static BuffSourceFinder GetBuffSourceFinder(ulong version, HashSet<long> boonIds)
+        internal static BuffSourceFinder GetBuffSourceFinder(ulong version, HashSet<long> boonIds)
         {
             if (version > 99526)
             {

@@ -6,7 +6,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public abstract class BuffSourceFinder
+    internal abstract class BuffSourceFinder
     {
         private List<AbstractCastEvent> _extensionSkills = null;
         private readonly HashSet<long> _boonIds = null;
