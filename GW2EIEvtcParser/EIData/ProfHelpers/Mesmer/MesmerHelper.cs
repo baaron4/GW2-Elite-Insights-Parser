@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.EIData
 {
-    public class MesmerHelper : ProfHelper
+    internal class MesmerHelper : ProfHelper
     {
     }
 }

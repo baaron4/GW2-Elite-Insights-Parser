@@ -6,31 +6,31 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class WeaverHelper : ElementalistHelper
+    internal class WeaverHelper : ElementalistHelper
     {
-        private const long FireMajor = 40926;
-        private const long FireMinor = 42811;
-        private const long WaterMajor = 43236;
-        private const long WaterMinor = 43370;
-        private const long AirMajor = 41692;
-        private const long AirMinor = 43229;
-        private const long EarthMajor = 43740;
-        private const long EarthMinor = 44822;
+        private const long _fireMajor = 40926;
+        private const long _fireMinor = 42811;
+        private const long _waterMajor = 43236;
+        private const long _waterMinor = 43370;
+        private const long _airMajor = 41692;
+        private const long _airMinor = 43229;
+        private const long _earthMajor = 43740;
+        private const long _earthMinor = 44822;
 
         private static readonly Dictionary<long, HashSet<long>> _minorsTranslation = new Dictionary<long, HashSet<long>>
         {
-            { FireMinor, new HashSet<long> { WaterFire, AirFire, EarthFire, FireDual}},
-            { WaterMinor, new HashSet<long> { FireWater, AirWater, EarthWater, WaterDual}},
-            { AirMinor, new HashSet<long> { FireAir, WaterAir, EarthAir, AirDual}},
-            { EarthMinor, new HashSet<long> { FireEarth, WaterEarth, AirEarth, EarthDual}},
+            { _fireMinor, new HashSet<long> { WaterFire, AirFire, EarthFire, FireDual}},
+            { _waterMinor, new HashSet<long> { FireWater, AirWater, EarthWater, WaterDual}},
+            { _airMinor, new HashSet<long> { FireAir, WaterAir, EarthAir, AirDual}},
+            { _earthMinor, new HashSet<long> { FireEarth, WaterEarth, AirEarth, EarthDual}},
         };
 
         private static readonly Dictionary<long, HashSet<long>> _majorsTranslation = new Dictionary<long, HashSet<long>>
         {
-            { FireMajor, new HashSet<long> { FireWater, FireAir, FireEarth, FireDual}},
-            { WaterMajor, new HashSet<long> { WaterFire, WaterAir, WaterEarth, WaterDual}},
-            { AirMajor, new HashSet<long> { AirFire, AirWater, AirEarth, AirDual}},
-            { EarthMajor, new HashSet<long> { EarthFire, EarthWater, EarthAir, EarthDual}},
+            { _fireMajor, new HashSet<long> { FireWater, FireAir, FireEarth, FireDual}},
+            { _waterMajor, new HashSet<long> { WaterFire, WaterAir, WaterEarth, WaterDual}},
+            { _airMajor, new HashSet<long> { AirFire, AirWater, AirEarth, AirDual}},
+            { _earthMajor, new HashSet<long> { EarthFire, EarthWater, EarthAir, EarthDual}},
         };
 
         private static long TranslateWeaverAttunement(List<BuffApplyEvent> buffApplies)
@@ -99,14 +99,14 @@ namespace GW2EIEvtcParser.EIData
 
             var weaverAttunements = new HashSet<long>
             {
-               FireMajor,
-                FireMinor,
-                WaterMajor,
-                WaterMinor,
-                AirMajor,
-                AirMinor,
-                EarthMajor,
-                EarthMinor,
+               _fireMajor,
+                _fireMinor,
+                _waterMajor,
+                _waterMinor,
+                _airMajor,
+                _airMinor,
+                _earthMajor,
+                _earthMinor,
 
                 FireDual,
                 WaterDual,

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class ElementalistHelper : ProfHelper
+    internal class ElementalistHelper : ProfHelper
     {
 
         public static void RemoveDualBuffs(List<AbstractBuffEvent> buffsPerDst, SkillData skillData)
