@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace GW2EIParser
 {
-    public enum OperationState
+    internal enum OperationState
     {
         Ready = 0,
         Parsing = 1,
@@ -15,7 +15,7 @@ namespace GW2EIParser
         ClearOnCancel = 5,
         Queued = 6,
     }
-    public class FormOperationController : OperationController
+    internal class FormOperationController : OperationController
     {
 
         private CancellationTokenSource _cancelTokenSource;

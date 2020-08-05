@@ -6,7 +6,7 @@ using GW2EIUtils;
 namespace GW2EIParser
 {
 
-    public abstract class OperationController : OperationTracer
+    internal abstract class OperationController : OperationTracer
     {
         /// <summary>
         /// Status of the parse operation
