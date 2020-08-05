@@ -11,6 +11,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIBuilders;
 using GW2EIUtils;
 using GW2EIUtils.Exceptions;
+using System.Windows.Forms;
 
 namespace GW2EIParser
 {
@@ -29,7 +30,7 @@ namespace GW2EIParser
             try
             {
                 var fInfo = new FileInfo(operation.Location);
-                
+
                 var parser = new EvtcParser(new EvtcParserSettings(Properties.Settings.Default.Anonymous, Properties.Settings.Default.SkipFailedTries, Properties.Settings.Default.ParsePhases, Properties.Settings.Default.ParseCombatReplay, Properties.Settings.Default.ComputeDamageModifiers));
 
                 if (!HasFormat())
@@ -138,6 +139,9 @@ namespace GW2EIParser
             string fName = fInfo.Name.Split('.')[0];
             fName = $"{fName}{PoVClassTerm}_{log.FightData.Logic.Extension}{encounterLengthTerm}_{result}";
 
+            var parserName = "Elite Insights";
+            var version = new Version(Application.ProductVersion);
+
             // parallel stuff
             if (Properties.Settings.Default.MultiThreaded)
             {
@@ -180,7 +184,7 @@ namespace GW2EIParser
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs))
                 {
-                    var builder = new HTMLBuilder(log, new HTMLSettings(Properties.Settings.Default.LightTheme, Properties.Settings.Default.HtmlExternalScripts), uploadresult);
+                    var builder = new HTMLBuilder(log, new HTMLSettings(parserName, version, Properties.Settings.Default.LightTheme, Properties.Settings.Default.HtmlExternalScripts), uploadresult);
                     builder.CreateHTML(sw, saveDirectory.FullName);
                 }
                 operation.UpdateProgressWithCancellationCheck("HTML created");
@@ -197,14 +201,14 @@ namespace GW2EIParser
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                 {
-                    var builder = new CSVBuilder(log, new CSVSettings(","), uploadresult);
+                    var builder = new CSVBuilder(log, new CSVSettings(parserName, version, ","), uploadresult);
                     builder.CreateCSV(sw);
                 }
                 operation.UpdateProgressWithCancellationCheck("CSV created");
             }
             if (Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML)
             {
-                var builder = new RawFormatBuilder(log, new RawFormatSettings(Properties.Settings.Default.RawTimelineArrays), uploadresult);
+                var builder = new RawFormatBuilder(log, new RawFormatSettings(parserName, version, Properties.Settings.Default.RawTimelineArrays), uploadresult);
                 if (Properties.Settings.Default.SaveOutJSON)
                 {
                     operation.UpdateProgressWithCancellationCheck("Creating JSON");

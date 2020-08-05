@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using GW2EIEvtcParser;
@@ -46,7 +47,7 @@ namespace GW2EIBuilders.HtmlModels
         public string ArcVersion { get; internal set; }
         public ulong Gw2Build { get; internal set; }
         public long FightID { get; internal set; }
-        public string Version { get; internal set; }
+        public string Parser { get; internal set; }
         public string RecordedBy { get; internal set; }
         public List<string> UploadLinks { get; internal set; }
 
@@ -137,7 +138,7 @@ namespace GW2EIBuilders.HtmlModels
             return false;
         }
 
-        internal static LogDataDto BuildLogData(ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills,Dictionary<long, Buff> usedBuffs, HashSet<DamageModifier> usedDamageMods, bool cr, bool light, string[] uploadLinks, Assembly executingAssembly)
+        internal static LogDataDto BuildLogData(ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills,Dictionary<long, Buff> usedBuffs, HashSet<DamageModifier> usedDamageMods, bool cr, bool light, string[] uploadLinks, string parser, Version version)
         {
             GeneralStatistics statistics = log.Statistics;
             log.UpdateProgressWithCancellationCheck("HTML: building Log Data");
@@ -148,7 +149,7 @@ namespace GW2EIBuilders.HtmlModels
                 ArcVersion = log.LogData.ArcVersion,
                 Gw2Build = log.LogData.GW2Build,
                 FightID = log.FightData.TriggerID,
-                Version = executingAssembly.FullName,
+                Parser = parser + " " + version.ToString(4),
                 RecordedBy = log.LogData.PoVName,
                 UploadLinks = uploadLinks.ToList()
             };

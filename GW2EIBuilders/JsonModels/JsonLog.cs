@@ -254,15 +254,15 @@ namespace GW2EIBuilders.JsonModels
         /// </summary>
         public List<string> LogErrors { get; }
 
-        internal JsonLog(ParsedEvtcLog log, RawFormatSettings settings, string[] uploadLinks, Assembly executingAssembly)
+        internal JsonLog(ParsedEvtcLog log, RawFormatSettings settings, string[] uploadLinks)
         {
             //
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Meta Data");
             TriggerID = log.FightData.TriggerID;
             FightName = log.FightData.GetFightName(log);
             FightIcon = log.FightData.Logic.Icon;
-            EliteInsightsVersion = executingAssembly.GetName().Version.ToString(4);
-            Parser = executingAssembly.FullName;
+            EliteInsightsVersion = settings.Version.ToString(4);
+            Parser = settings.ParserName + " " + settings.Version.ToString(4);
             ArcVersion = log.LogData.ArcVersion;
             RecordedBy = log.LogData.PoVName;
             TimeStart = log.LogData.LogStart;

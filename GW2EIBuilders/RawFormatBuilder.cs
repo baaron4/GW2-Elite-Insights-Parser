@@ -21,7 +21,7 @@ namespace GW2EIBuilders
             {
                 throw new InvalidDataException("Missing settings in RawFormatBuilder");
             }
-            JsonLog = new JsonLog(log, settings, uploadLinks, System.Reflection.Assembly.GetExecutingAssembly());
+            JsonLog = new JsonLog(log, settings, uploadLinks);
         }
 
         public void CreateJSON(StreamWriter sw, bool indent)

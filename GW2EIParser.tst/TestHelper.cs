@@ -13,9 +13,9 @@ namespace GW2EIParser.tst
     public class TestHelper
     {
         private static readonly EvtcParserSettings parserSettings = new EvtcParserSettings(false, true, true, true, true);
-        private static readonly HTMLSettings htmlSettings = new HTMLSettings(false, false);
-        private static readonly RawFormatSettings rawSettings = new RawFormatSettings(true);
-        private static readonly CSVSettings csvSettings = new CSVSettings(",");
+        private static readonly HTMLSettings htmlSettings = new HTMLSettings("", new Version(), false, false);
+        private static readonly RawFormatSettings rawSettings = new RawFormatSettings("", new Version(), true);
+        private static readonly CSVSettings csvSettings = new CSVSettings("", new Version(), ",");
 
         private class TestOperationController : OperationTracer
         {
@@ -66,7 +66,7 @@ namespace GW2EIParser.tst
         {
             var ms = new MemoryStream();
             var sw = new StreamWriter(ms, GeneralHelper.NoBOMEncodingUTF8);
-            var builder = new HTMLBuilder(log,htmlSettings);
+            var builder = new HTMLBuilder(log, htmlSettings);
 
             builder.CreateHTML(sw, null);
             sw.Close();
