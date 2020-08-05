@@ -8,11 +8,11 @@ namespace GW2EIParser.Builders.HtmlModels
 {
     public class MechanicChartDataDto
     {
-        public string Symbol { get; set; }
-        public int Size { get; set; }
-        public string Color { get; set; }
-        public List<List<List<object>>> Points { get; set; }
-        public bool Visible { get; set; }
+        public string Symbol { get; internal set; }
+        public int Size { get; internal set; }
+        public string Color { get; internal set; }
+        public List<List<List<object>>> Points { get; internal set; }
+        public bool Visible { get; internal set; }
 
         private static List<List<object>> GetMechanicChartPoints(List<MechanicEvent> mechanicLogs, PhaseData phase, ParsedEvtcLog log, bool enemyMechanic)
         {
@@ -69,7 +69,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return list;
         }
 
-        public static List<MechanicChartDataDto> BuildMechanicsChartData(ParsedEvtcLog log)
+        internal static List<MechanicChartDataDto> BuildMechanicsChartData(ParsedEvtcLog log)
         {
             var mechanicsChart = new List<MechanicChartDataDto>();
             foreach (Mechanic mech in log.MechanicData.GetPresentMechanics(log, 0))

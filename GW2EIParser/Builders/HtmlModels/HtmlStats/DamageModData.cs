@@ -69,7 +69,7 @@ namespace GW2EIParser.Builders.HtmlModels
                 }
             }
         }
-        public static List<DamageModData> BuildDmgModifiersData(ParsedEvtcLog log, int phaseIndex, List<DamageModifier> damageModsToUse)
+        internal static List<DamageModData> BuildDmgModifiersData(ParsedEvtcLog log, int phaseIndex, List<DamageModifier> damageModsToUse)
         {
             var pData = new List<DamageModData>();
             foreach (Player player in log.PlayerList)
@@ -79,7 +79,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return pData;
         }
 
-        public static List<DamageModData> BuildPersonalDmgModifiersData(ParsedEvtcLog log, int phaseIndex, Dictionary<string, List<DamageModifier>> damageModsToUse)
+        internal static List<DamageModData> BuildPersonalDmgModifiersData(ParsedEvtcLog log, int phaseIndex, Dictionary<string, List<DamageModifier>> damageModsToUse)
         {
             var pData = new List<DamageModData>();
             foreach (Player player in log.PlayerList)

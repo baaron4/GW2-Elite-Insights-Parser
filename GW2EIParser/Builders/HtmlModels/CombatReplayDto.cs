@@ -7,14 +7,14 @@ namespace GW2EIParser.Builders.HtmlModels
 {
     public class CombatReplayDto
     {
-        public List<object> Actors { get; set; }
-        public int[] Sizes { get; set; }
-        public int MaxTime { get; set; }
-        public float Inch { get; set; }
-        public int PollingRate { get; set; }
-        public List<CombatReplayMap.MapItem> Maps { get; set; }
+        public List<object> Actors { get; internal set; }
+        public int[] Sizes { get; internal set; }
+        public int MaxTime { get; internal set; }
+        public float Inch { get; internal set; }
+        public int PollingRate { get; internal set; }
+        public List<CombatReplayMap.MapItem> Maps { get; internal set; }
 
-        public CombatReplayDto(ParsedEvtcLog log)
+        internal CombatReplayDto(ParsedEvtcLog log)
         {
             CombatReplayMap map = log.FightData.Logic.GetCombatMap(log);
             Actors = GetCombatReplayActors(log, map);

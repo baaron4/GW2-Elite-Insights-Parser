@@ -7,12 +7,12 @@ namespace GW2EIParser.Builders.HtmlModels
 {
     public class SkillDto
     {
-        public long Id { get; set; }
-        public string Name { get; set; }
-        public string Icon { get; set; }
-        public bool Aa { get; set; }
+        public long Id { get; internal set; }
+        public string Name { get; internal set; }
+        public string Icon { get; internal set; }
+        public bool Aa { get; internal set; }
 
-        public static void AssembleSkills(ICollection<SkillItem> skills, Dictionary<string, SkillDto> dict)
+        internal static void AssembleSkills(ICollection<SkillItem> skills, Dictionary<string, SkillDto> dict)
         {
             foreach (SkillItem skill in skills)
             {
@@ -38,7 +38,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return rotEntry;
         }
 
-        public static List<object[]> BuildRotationData(ParsedEvtcLog log, AbstractActor p, int phaseIndex, Dictionary<long, SkillItem> usedSkills)
+        internal static List<object[]> BuildRotationData(ParsedEvtcLog log, AbstractActor p, int phaseIndex, Dictionary<long, SkillItem> usedSkills)
         {
             var list = new List<object[]>();
 

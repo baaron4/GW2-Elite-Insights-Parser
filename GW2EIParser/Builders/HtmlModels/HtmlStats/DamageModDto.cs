@@ -5,14 +5,14 @@ namespace GW2EIParser.Builders.HtmlModels
 {
     public class DamageModDto
     {
-        public long Id { get; set; }
-        public string Name { get; set; }
-        public string Icon { get; set; }
-        public string Tooltip { get; set; }
-        public bool NonMultiplier { get; set; }
-        public bool SkillBased { get; set; }
+        public long Id { get; internal set; }
+        public string Name { get; internal set; }
+        public string Icon { get; internal set; }
+        public string Tooltip { get; internal set; }
+        public bool NonMultiplier { get; internal set; }
+        public bool SkillBased { get; internal set; }
 
-        public static void AssembleDamageModifiers(ICollection<DamageModifier> damageMods, Dictionary<string, DamageModDto> dict)
+        internal static void AssembleDamageModifiers(ICollection<DamageModifier> damageMods, Dictionary<string, DamageModDto> dict)
         {
             foreach (DamageModifier mod in damageMods)
             {

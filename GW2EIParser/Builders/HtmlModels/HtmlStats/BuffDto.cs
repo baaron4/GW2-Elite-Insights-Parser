@@ -8,15 +8,15 @@ namespace GW2EIParser.Builders.HtmlModels
 {
     public class BuffDto
     {
-        public long Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; } = null;
-        public string Icon { get; set; }
-        public bool Stacking { get; set; }
-        public bool Consumable { get; set; }
-        public bool FightSpecific { get; set; }
+        public long Id { get; internal set; }
+        public string Name { get; internal set; }
+        public string Description { get; internal set; } = null;
+        public string Icon { get; internal set; }
+        public bool Stacking { get; internal set; }
+        public bool Consumable { get; internal set; }
+        public bool FightSpecific { get; internal set; }
 
-        public BuffDto(Buff buff, ParsedEvtcLog log)
+        internal BuffDto(Buff buff, ParsedEvtcLog log)
         {
             Id = buff.ID;
             Name = buff.Name;
@@ -50,7 +50,7 @@ namespace GW2EIParser.Builders.HtmlModels
             }
         }
 
-        public static void AssembleBoons(ICollection<Buff> buffs, Dictionary<string, BuffDto> dict, ParsedEvtcLog log)
+        internal static void AssembleBoons(ICollection<Buff> buffs, Dictionary<string, BuffDto> dict, ParsedEvtcLog log)
         {
             foreach (Buff buff in buffs)
             {

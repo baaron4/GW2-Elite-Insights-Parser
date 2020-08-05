@@ -11,7 +11,7 @@ namespace GW2EIParser.Builders.HtmlModels
 {
     public class LogDataDto
     {
-        public List<TargetDto> Targets { get; set; } = new List<TargetDto>();
+        public List<TargetDto> Targets { get; internal set; } = new List<TargetDto>();
         public List<PlayerDto> Players { get; } = new List<PlayerDto>();
         public List<EnemyDto> Enemies { get; } = new List<EnemyDto>();
         public List<PhaseDto> Phases { get; } = new List<PhaseDto>();
@@ -27,28 +27,28 @@ namespace GW2EIParser.Builders.HtmlModels
         public Dictionary<string, SkillDto> SkillMap { get; } = new Dictionary<string, SkillDto>();
         public Dictionary<string, BuffDto> BuffMap { get; } = new Dictionary<string, BuffDto>();
         public Dictionary<string, DamageModDto> DamageModMap { get; } = new Dictionary<string, DamageModDto>();
-        public List<MechanicDto> MechanicMap { get; set; } = new List<MechanicDto>();
-        public CombatReplayDto CrData { get; set; } = null;
-        public string EncounterDuration { get; set; }
-        public bool Success { get; set; }
-        public bool Wvw { get; set; }
-        public bool HasCommander { get; set; }
-        public bool Targetless { get; set; }
-        public string FightName { get; set; }
-        public string FightIcon { get; set; }
-        public bool LightTheme { get; set; }
-        public bool NoMechanics { get; set; }
-        public bool SingleGroup { get; set; }
-        public List<string> LogErrors { get; set; }
+        public List<MechanicDto> MechanicMap { get; internal set; } = new List<MechanicDto>();
+        public CombatReplayDto CrData { get; internal set; } = null;
+        public string EncounterDuration { get; internal set; }
+        public bool Success { get; internal set; }
+        public bool Wvw { get; internal set; }
+        public bool HasCommander { get; internal set; }
+        public bool Targetless { get; internal set; }
+        public string FightName { get; internal set; }
+        public string FightIcon { get; internal set; }
+        public bool LightTheme { get; internal set; }
+        public bool NoMechanics { get; internal set; }
+        public bool SingleGroup { get; internal set; }
+        public List<string> LogErrors { get; internal set; }
 
-        public string EncounterStart { get; set; }
-        public string EncounterEnd { get; set; }
-        public string ArcVersion { get; set; }
-        public ulong Gw2Build { get; set; }
-        public long FightID { get; set; }
-        public string EiVersion { get; set; }
-        public string RecordedBy { get; set; }
-        public List<string> UploadLinks { get; set; }
+        public string EncounterStart { get; internal set; }
+        public string EncounterEnd { get; internal set; }
+        public string ArcVersion { get; internal set; }
+        public ulong Gw2Build { get; internal set; }
+        public long FightID { get; internal set; }
+        public string EiVersion { get; internal set; }
+        public string RecordedBy { get; internal set; }
+        public List<string> UploadLinks { get; internal set; }
 
 
         private static Dictionary<string, List<Buff>> BuildPersonalBoonData(ParsedEvtcLog log, Dictionary<string, List<long>> dict, Dictionary<long, Buff> usedBuffs)
@@ -137,7 +137,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return false;
         }
 
-        public static LogDataDto BuildLogData(ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills,Dictionary<long, Buff> usedBuffs, HashSet<DamageModifier> usedDamageMods, bool cr, bool light, string[] uploadLinks)
+        internal static LogDataDto BuildLogData(ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills,Dictionary<long, Buff> usedBuffs, HashSet<DamageModifier> usedDamageMods, bool cr, bool light, string[] uploadLinks)
         {
             GeneralStatistics statistics = log.Statistics;
             log.UpdateProgressWithCancellationCheck("HTML: building Log Data");

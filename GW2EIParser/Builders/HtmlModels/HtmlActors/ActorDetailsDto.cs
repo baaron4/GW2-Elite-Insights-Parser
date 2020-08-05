@@ -7,18 +7,18 @@ namespace GW2EIParser.Builders.HtmlModels
 {
     public class ActorDetailsDto
     {
-        public List<DmgDistributionDto> DmgDistributions { get; set; }
-        public List<List<DmgDistributionDto>> DmgDistributionsTargets { get; set; }
-        public List<DmgDistributionDto> DmgDistributionsTaken { get; set; }
-        public List<List<object[]>> Rotation { get; set; }
-        public List<List<BuffChartDataDto>> BoonGraph { get; set; }
-        public List<FoodDto> Food { get; set; }
-        public List<ActorDetailsDto> Minions { get; set; }
-        public List<DeathRecapDto> DeathRecap { get; set; }
+        public List<DmgDistributionDto> DmgDistributions { get; internal set; }
+        public List<List<DmgDistributionDto>> DmgDistributionsTargets { get; internal set; }
+        public List<DmgDistributionDto> DmgDistributionsTaken { get; internal set; }
+        public List<List<object[]>> Rotation { get; internal set; }
+        public List<List<BuffChartDataDto>> BoonGraph { get; internal set; }
+        public List<FoodDto> Food { get; internal set; }
+        public List<ActorDetailsDto> Minions { get; internal set; }
+        public List<DeathRecapDto> DeathRecap { get; internal set; }
 
         // helpers
 
-        public static ActorDetailsDto BuildPlayerData(ParsedEvtcLog log, Player player, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        internal static ActorDetailsDto BuildPlayerData(ParsedEvtcLog log, Player player, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             var dto = new ActorDetailsDto
             {
@@ -72,7 +72,7 @@ namespace GW2EIParser.Builders.HtmlModels
             return dto;
         }
 
-        public static ActorDetailsDto BuildTargetData(ParsedEvtcLog log, NPC target, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, bool cr)
+        internal static ActorDetailsDto BuildTargetData(ParsedEvtcLog log, NPC target, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, bool cr)
         {
             var dto = new ActorDetailsDto
             {

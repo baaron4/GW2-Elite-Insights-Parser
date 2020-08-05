@@ -7,11 +7,11 @@ namespace GW2EIParser.Builders.HtmlModels
 
     public abstract class ActorDto
     {
-        public int CombatReplayID { get; set; }
-        public string Name { get; set; }
-        public uint Tough { get; set; }
+        public int CombatReplayID { get; internal set; }
+        public string Name { get; internal set; }
+        public uint Tough { get; internal set; }
         public List<MinionDto> Minions { get; } = new List<MinionDto>();
-        public ActorDetailsDto Details { get; set; }
+        public ActorDetailsDto Details { get; internal set; }
 
         protected ActorDto(AbstractSingleActor actor, ParsedEvtcLog log, bool cr, ActorDetailsDto details)
         {

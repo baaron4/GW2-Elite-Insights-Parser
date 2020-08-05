@@ -6,11 +6,11 @@ namespace GW2EIParser.Builders.HtmlModels
 {
     public class TargetChartDataDto
     {
-        public List<int> Total { get; set; }
-        public List<object[]> HealthStates { get; set; }
-        public List<object[]> BreakbarPercentStates { get; set; }
+        public List<int> Total { get; internal set; }
+        public List<object[]> HealthStates { get; internal set; }
+        public List<object[]> BreakbarPercentStates { get; internal set; }
 
-        public static TargetChartDataDto BuildTargetGraphData(ParsedEvtcLog log, int phaseIndex, NPC target)
+        internal static TargetChartDataDto BuildTargetGraphData(ParsedEvtcLog log, int phaseIndex, NPC target)
         {
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
             return new TargetChartDataDto

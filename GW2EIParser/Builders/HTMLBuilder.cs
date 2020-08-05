@@ -303,7 +303,7 @@ namespace GW2EIParser.Builders
         }
 
 
-        public static string GetLink(string name)
+        internal static string GetLink(string name)
         {
             switch (name)
             {
