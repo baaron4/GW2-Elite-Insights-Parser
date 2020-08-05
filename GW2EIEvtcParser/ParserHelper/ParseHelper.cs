@@ -1,9 +1,9 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
-using GW2EIUtils;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace GW2EIEvtcParser
 {
@@ -58,7 +58,52 @@ namespace GW2EIEvtcParser
             FractalInstability,
             Unknown
         };
+        internal static T Clamp<T>(T value, T max, T min) where T : IComparable<T>
+        {
+            return value.CompareTo(max) > 0 ? max : (value.CompareTo(min) < 0 ? min : value);
+        }
 
+        internal static T MaxBy<T, TComparable>(this IEnumerable<T> en, Func<T, TComparable> evaluate) where TComparable : IComparable<TComparable>
+        {
+            return en.Select(t => (value: t, eval: evaluate(t)))
+                .Aggregate((max, next) => next.eval.CompareTo(max.eval) > 0 ? next : max).value;
+        }
+
+        internal static T MinBy<T, TComparable>(this IEnumerable<T> en, Func<T, TComparable> evaluate) where TComparable : IComparable<TComparable>
+        {
+            return en.Select(t => (value: t, eval: evaluate(t)))
+                .Aggregate((max, next) => next.eval.CompareTo(max.eval) < 0 ? next : max).value;
+        }
+
+        /*
+        public static string UppercaseFirst(string s)
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                return string.Empty;
+            }
+            char[] a = s.ToCharArray();
+            a[0] = char.ToUpper(a[0]);
+            return new string(a);
+        }
+
+
+        public static string FindPattern(string source, string regex)
+        {
+            if (string.IsNullOrEmpty(source))
+            {
+                return null;
+            }
+
+            Match match = Regex.Match(source, regex);
+            if (match.Success)
+            {
+                return match.Groups[1].Value;
+            }
+
+            return null;
+        }
+        */
         public static List<Source> ProfToEnum(string prof)
         {
             switch (prof)

@@ -1,11 +1,24 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using GW2EIUtils;
 
 namespace GW2EIEvtcParser.ParsedData
 {
     internal static class CombatEventFactory
     {
+        private static void Add<TKey, TValue>(Dictionary<TKey, List<TValue>> dict, TKey key, TValue evt)
+        {
+            if (dict.TryGetValue(key, out List<TValue> list))
+            {
+                list.Add(evt);
+            }
+            else
+            {
+                dict[key] = new List<TValue>()
+                {
+                    evt
+                };
+            }
+        }
 
         public static Dictionary<AgentItem, List<AbstractMovementEvent>> CreateMovementEvents(List<CombatItem> movementEvents, AgentData agentData)
         {
@@ -53,35 +66,35 @@ namespace GW2EIEvtcParser.ParsedData
                 {
                     case ArcDPSEnums.StateChange.EnterCombat:
                         var enterCombatEvt = new EnterCombatEvent(c, agentData);
-                        GeneralHelper.Add(statusEvents.EnterCombatEvents, enterCombatEvt.Src, enterCombatEvt);
+                        Add(statusEvents.EnterCombatEvents, enterCombatEvt.Src, enterCombatEvt);
                         break;
                     case ArcDPSEnums.StateChange.ExitCombat:
                         var exitCombatEvt = new ExitCombatEvent(c, agentData);
-                        GeneralHelper.Add(statusEvents.ExitCombatEvents, exitCombatEvt.Src, exitCombatEvt);
+                        Add(statusEvents.ExitCombatEvents, exitCombatEvt.Src, exitCombatEvt);
                         break;
                     case ArcDPSEnums.StateChange.ChangeUp:
                         var aliveEvt = new AliveEvent(c, agentData);
-                        GeneralHelper.Add(statusEvents.AliveEvents, aliveEvt.Src, aliveEvt);
+                        Add(statusEvents.AliveEvents, aliveEvt.Src, aliveEvt);
                         break;
                     case ArcDPSEnums.StateChange.ChangeDead:
                         var deadEvt = new DeadEvent(c, agentData);
-                        GeneralHelper.Add(statusEvents.DeadEvents, deadEvt.Src, deadEvt);
+                        Add(statusEvents.DeadEvents, deadEvt.Src, deadEvt);
                         break;
                     case ArcDPSEnums.StateChange.ChangeDown:
                         var downEvt = new DownEvent(c, agentData);
-                        GeneralHelper.Add(statusEvents.DownEvents, downEvt.Src, downEvt);
+                        Add(statusEvents.DownEvents, downEvt.Src, downEvt);
                         break;
                     case ArcDPSEnums.StateChange.Spawn:
                         var spawnEvt = new SpawnEvent(c, agentData);
-                        GeneralHelper.Add(statusEvents.SpawnEvents, spawnEvt.Src, spawnEvt);
+                        Add(statusEvents.SpawnEvents, spawnEvt.Src, spawnEvt);
                         break;
                     case ArcDPSEnums.StateChange.Despawn:
                         var despawnEvt = new DespawnEvent(c, agentData);
-                        GeneralHelper.Add(statusEvents.DespawnEvents, despawnEvt.Src, despawnEvt);
+                        Add(statusEvents.DespawnEvents, despawnEvt.Src, despawnEvt);
                         break;
                     case ArcDPSEnums.StateChange.HealthUpdate:
                         var healthEvt = new HealthUpdateEvent(c, agentData);
-                        GeneralHelper.Add(statusEvents.HealthUpdateEvents, healthEvt.Src, healthEvt);
+                        Add(statusEvents.HealthUpdateEvents, healthEvt.Src, healthEvt);
                         break;
                     case ArcDPSEnums.StateChange.LogStart:
                         if (c.Value == 0 || c.BuffDmg == 0)
@@ -99,7 +112,7 @@ namespace GW2EIEvtcParser.ParsedData
                         break;
                     case ArcDPSEnums.StateChange.MaxHealthUpdate:
                         var maxHealthEvt = new MaxHealthUpdateEvent(c, agentData);
-                        GeneralHelper.Add(statusEvents.MaxHealthUpdateEvents, maxHealthEvt.Src, maxHealthEvt);
+                        Add(statusEvents.MaxHealthUpdateEvents, maxHealthEvt.Src, maxHealthEvt);
                         break;
                     case ArcDPSEnums.StateChange.PointOfView:
                         if (c.SrcAgent == 0)
@@ -126,22 +139,22 @@ namespace GW2EIEvtcParser.ParsedData
                         break;
                     case ArcDPSEnums.StateChange.TeamChange:
                         var tcEvt = new TeamChangeEvent(c, agentData);
-                        GeneralHelper.Add(statusEvents.TeamChangeEvents, tcEvt.Src, tcEvt);
+                        Add(statusEvents.TeamChangeEvents, tcEvt.Src, tcEvt);
                         break;
                     case ArcDPSEnums.StateChange.AttackTarget:
                         var aTEvt = new AttackTargetEvent(c, agentData);
-                        GeneralHelper.Add(statusEvents.AttackTargetEvents, aTEvt.Src, aTEvt);
+                        Add(statusEvents.AttackTargetEvents, aTEvt.Src, aTEvt);
                         break;
                     case ArcDPSEnums.StateChange.Targetable:
                         var tarEvt = new TargetableEvent(c, agentData);
-                        GeneralHelper.Add(statusEvents.TargetableEvents, tarEvt.Src, tarEvt);
+                        Add(statusEvents.TargetableEvents, tarEvt.Src, tarEvt);
                         break;
                     case ArcDPSEnums.StateChange.MapID:
                         metaDataEvents.MapIDEvents.Add(new MapIDEvent(c));
                         break;
                     case ArcDPSEnums.StateChange.Guild:
                         var gEvt = new GuildEvent(c, agentData);
-                        GeneralHelper.Add(metaDataEvents.GuildEvents, gEvt.Src, gEvt);
+                        Add(metaDataEvents.GuildEvents, gEvt.Src, gEvt);
                         break;
                     case ArcDPSEnums.StateChange.BuffInfo:
                     case ArcDPSEnums.StateChange.BuffFormula:
@@ -180,11 +193,11 @@ namespace GW2EIEvtcParser.ParsedData
                         break;
                     case ArcDPSEnums.StateChange.BreakbarState:
                         var bSEvt = new BreakbarStateEvent(c, agentData);
-                        GeneralHelper.Add(statusEvents.BreakbarStateEvents, bSEvt.Src, bSEvt);
+                        Add(statusEvents.BreakbarStateEvents, bSEvt.Src, bSEvt);
                         break;
                     case ArcDPSEnums.StateChange.BreakbarPercent:
                         var bPEvt = new BreakbarPercentEvent(c, agentData);
-                        GeneralHelper.Add(statusEvents.BreakbarPercentEvents, bPEvt.Src, bPEvt);
+                        Add(statusEvents.BreakbarPercentEvents, bPEvt.Src, bPEvt);
                         break;
                     case ArcDPSEnums.StateChange.Error:
                         metaDataEvents.ErrorEvents.Add(new ErrorEvent(c));
@@ -192,7 +205,7 @@ namespace GW2EIEvtcParser.ParsedData
                     case ArcDPSEnums.StateChange.Tag:
                         // Getting ready in case this becomes an actual state event
                         _ = new TagEvent(c, agentData);
-                        //GeneralHelper.Add(metaDataEvents.TagEvents, tagEvt.Src, tagEvt);
+                        //Add(metaDataEvents.TagEvents, tagEvt.Src, tagEvt);
                         break;
                 }
             }

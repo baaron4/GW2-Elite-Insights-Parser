@@ -1,5 +1,4 @@
 ﻿using System;
-using GW2EIUtils;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -37,7 +36,7 @@ namespace GW2EIEvtcParser.ParsedData
             if (_scaledActualDuration > 0)
             {
                 nonScaledToScaledRatio = (double)_scaledActualDuration / ActualDuration;
-                Acceleration = GeneralHelper.Clamp(2.0 * ((Math.Log(nonScaledToScaledRatio) - _lowerLimit) / _diffLimit) - 1.0, -1.0, 1.0);
+                Acceleration = ParseHelper.Clamp(2.0 * ((Math.Log(nonScaledToScaledRatio) - _lowerLimit) / _diffLimit) - 1.0, -1.0, 1.0);
             }
             switch (endItem.IsActivation)
             {

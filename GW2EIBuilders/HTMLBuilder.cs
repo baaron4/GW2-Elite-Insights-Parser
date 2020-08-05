@@ -6,10 +6,8 @@ using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIBuilders.HtmlModels;
-using GW2EIUtils;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using System.Reflection;
+using GW2EIControllers;
 
 namespace GW2EIBuilders
 {
@@ -221,7 +219,7 @@ namespace GW2EIBuilders
                 try
                 {
                     using (var fs = new FileStream(jsPath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
+                    using (var scriptWriter = new StreamWriter(fs, BuilderHelper.NoBOMEncodingUTF8))
                     {
                         scriptWriter.Write(scriptContent);
                     }
@@ -249,7 +247,7 @@ namespace GW2EIBuilders
                 try
                 {
                     using (var fs = new FileStream(cssPath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
+                    using (var scriptWriter = new StreamWriter(fs, BuilderHelper.NoBOMEncodingUTF8))
                     {
                         scriptWriter.Write(scriptContent);
                     }
@@ -276,7 +274,7 @@ namespace GW2EIBuilders
                 try
                 {
                     using (var fs = new FileStream(scriptPath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
+                    using (var scriptWriter = new StreamWriter(fs, BuilderHelper.NoBOMEncodingUTF8))
                     {
                         scriptWriter.Write(scriptContent);
                     }
@@ -294,14 +292,10 @@ namespace GW2EIBuilders
 
         private static string ToJson(object value)
         {
-            var contractResolver = new DefaultContractResolver
-            {
-                NamingStrategy = new CamelCaseNamingStrategy()
-            };
             var settings = new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = contractResolver
+                ContractResolver = ControllerHelper.ContractResolver
             };
             return JsonConvert.SerializeObject(value, settings);
         }

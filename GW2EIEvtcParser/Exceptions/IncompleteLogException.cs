@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace GW2EIUtils.Exceptions
+namespace GW2EIEvtcParser.Exceptions
 {
     public class IncompleteLogException : Exception
     {
-        public IncompleteLogException() : base("Log incomplete")
+        internal IncompleteLogException() : base("Log incomplete")
         {
         }
 

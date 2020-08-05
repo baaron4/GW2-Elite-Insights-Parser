@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using GW2EIUtils.Exceptions;
-using GW2EIUtils;
 using GW2EIControllers;
 using GW2EIControllers.GW2API;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EncounterLogic;
+using GW2EIEvtcParser.Exceptions;
 
 //recommend CTRL+M+O to collapse all
 namespace GW2EIEvtcParser

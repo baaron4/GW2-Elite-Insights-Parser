@@ -32,6 +32,5 @@
   <ItemGroup>
     <ProjectReference Include="..\GW2EIEvtcParser\GW2EIEvtcParser.csproj" />
     <ProjectReference Include="..\GW2EIParser\GW2EIParser.csproj" />
-    <ProjectReference Include="..\GW2EIUtils\GW2EIUtils.csproj" />
   </ItemGroup>
 </Project>

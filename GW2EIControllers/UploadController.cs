@@ -4,9 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using GW2EIUtils;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace GW2EIControllers
 {
@@ -106,10 +104,7 @@ namespace GW2EIControllers
                         string stringContents = stringContentsTask.Result;
                         DPSReportsResponseItem item = JsonConvert.DeserializeObject<DPSReportsResponseItem>(stringContents, new JsonSerializerSettings
                         {
-                            ContractResolver = new DefaultContractResolver()
-                            {
-                                NamingStrategy = new CamelCaseNamingStrategy()
-                            }
+                            ContractResolver = ControllerHelper.ContractResolver
                         });
                         if (item.Error != null)
                         {
@@ -121,7 +116,7 @@ namespace GW2EIControllers
                 }
                 catch (Exception e)
                 {
-                    res = e.GetFinalException().Message;
+                    res = e.Message;
                     operation.UpdateProgressWithCancellationCheck("Upload tentative failed: " + res);
                 }
                 finally

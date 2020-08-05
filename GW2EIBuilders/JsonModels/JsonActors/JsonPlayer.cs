@@ -2,7 +2,6 @@
 using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
-using GW2EIUtils;
 using static GW2EIBuilders.JsonModels.JsonBuffsUptime;
 using static GW2EIBuilders.JsonModels.JsonPlayerBuffsGeneration;
 

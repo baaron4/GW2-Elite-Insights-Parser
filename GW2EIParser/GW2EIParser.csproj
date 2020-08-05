@@ -114,6 +114,5 @@
     <ProjectReference Include="..\GW2EIBuilders\GW2EIBuilders.csproj" />
     <ProjectReference Include="..\GW2EIControllers\GW2EIControllers.csproj" />
     <ProjectReference Include="..\GW2EIEvtcParser\GW2EIEvtcParser.csproj" />
-    <ProjectReference Include="..\GW2EIUtils\GW2EIUtils.csproj" />
   </ItemGroup>
 </Project>

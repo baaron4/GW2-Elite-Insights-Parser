@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using GW2EIControllers;
 using GW2EIEvtcParser.ParsedData;
-using GW2EIUtils;
 using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EIData

@@ -1,7 +1,6 @@
 ﻿using System;
 using Discord;
 using Discord.Webhook;
-using GW2EIUtils;
 
 namespace GW2EIControllers
 {
@@ -38,7 +37,7 @@ namespace GW2EIControllers
                 }
                 catch (Exception e)
                 {
-                    operation.UpdateProgressWithCancellationCheck("Couldn't send embed: " + e.GetFinalException().Message);
+                    operation.UpdateProgressWithCancellationCheck("Couldn't send embed: " + e.Message);
                 }
             }
             

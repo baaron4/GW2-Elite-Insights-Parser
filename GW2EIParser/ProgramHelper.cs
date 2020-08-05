@@ -9,14 +9,23 @@ using GW2EIControllers;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIBuilders;
-using GW2EIUtils;
-using GW2EIUtils.Exceptions;
 using System.Windows.Forms;
+using GW2EIParser.Exceptions;
 
 namespace GW2EIParser
 {
     internal static class ProgramHelper
     {
+        internal static Exception GetFinalException(this Exception ex)
+        {
+            Exception final = ex;
+            while (final.InnerException != null)
+            {
+                final = final.InnerException;
+            }
+            return final;
+        }
+
         private static bool HasFormat()
         {
             return Properties.Settings.Default.SaveOutCSV || Properties.Settings.Default.SaveOutHTML || Properties.Settings.Default.SaveOutXML || Properties.Settings.Default.SaveOutJSON;
@@ -226,7 +235,7 @@ namespace GW2EIParser
                     {
                         str = new FileStream(outputFile, FileMode.Create, FileAccess.Write);
                     }
-                    using (var sw = new StreamWriter(str, GeneralHelper.NoBOMEncodingUTF8))
+                    using (var sw = new StreamWriter(str, BuilderHelper.NoBOMEncodingUTF8))
                     {
                         builder.CreateJSON(sw, Properties.Settings.Default.IndentJSON);
                     }
@@ -258,7 +267,7 @@ namespace GW2EIParser
                     {
                         str = new FileStream(outputFile, FileMode.Create, FileAccess.Write);
                     }
-                    using (var sw = new StreamWriter(str, GeneralHelper.NoBOMEncodingUTF8))
+                    using (var sw = new StreamWriter(str, BuilderHelper.NoBOMEncodingUTF8))
                     {
                         builder.CreateXML(sw, Properties.Settings.Default.IndentXML);
                     }

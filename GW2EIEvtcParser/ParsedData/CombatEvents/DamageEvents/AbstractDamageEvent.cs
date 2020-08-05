@@ -1,6 +1,4 @@
-﻿using GW2EIUtils;
-
-namespace GW2EIEvtcParser.ParsedData
+﻿namespace GW2EIEvtcParser.ParsedData
 {
     public abstract class AbstractDamageEvent : AbstractTimeCombatEvent
     {

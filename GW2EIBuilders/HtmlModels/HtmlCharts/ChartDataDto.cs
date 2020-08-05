@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
-using GW2EIUtils;
 
 namespace GW2EIBuilders.HtmlModels
 {

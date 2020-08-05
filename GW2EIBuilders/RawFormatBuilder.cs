@@ -4,7 +4,7 @@ using System.Xml;
 using GW2EIEvtcParser;
 using GW2EIBuilders.JsonModels;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using GW2EIControllers;
 
 namespace GW2EIBuilders
 {
@@ -26,15 +26,10 @@ namespace GW2EIBuilders
 
         public void CreateJSON(StreamWriter sw, bool indent)
         {
-            var contractResolver = new DefaultContractResolver
-            {
-                NamingStrategy = new CamelCaseNamingStrategy()
-            };
-
             var serializer = new JsonSerializer
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = contractResolver
+                ContractResolver = ControllerHelper.ContractResolver
             };
             var writer = new JsonTextWriter(sw)
             {
@@ -46,14 +41,10 @@ namespace GW2EIBuilders
 
         public void CreateXML(StreamWriter sw, bool indent)
         {
-            var contractResolver = new DefaultContractResolver
-            {
-                NamingStrategy = new CamelCaseNamingStrategy()
-            };
             var settings = new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = contractResolver
+                ContractResolver = ControllerHelper.ContractResolver
             };
             var root = new Dictionary<string, JsonLog>()
             {

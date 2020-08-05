@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GW2EIUtils;
+using GW2EIControllers;
 
 namespace GW2EIParser
 {

@@ -2,7 +2,6 @@
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
-using GW2EIUtils;
 
 namespace GW2EIBuilders.HtmlModels
 {

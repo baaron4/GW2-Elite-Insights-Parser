@@ -5,11 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using GW2EIBuilders;
+using GW2EIControllers;
 using GW2EIEvtcParser;
-using GW2EIUtils;
-using GW2EIUtils.Exceptions;
+using GW2EIEvtcParser.Exceptions;
+using GW2EIParser.Exceptions;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 
@@ -81,17 +82,12 @@ namespace GW2EIParser.tst
 
             using (var fs = new FileStream(logName, FileMode.Create, FileAccess.Write))
             {
-                using (var sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
+                using (var sw = new StreamWriter(fs, BuilderHelper.NoBOMEncodingUTF8))
                 {
-                    var contractResolver = new DefaultContractResolver
-                    {
-                        NamingStrategy = new CamelCaseNamingStrategy()
-                    };
-
                     var serializer = new JsonSerializer
                     {
                         NullValueHandling = NullValueHandling.Ignore,
-                        ContractResolver = contractResolver
+                        ContractResolver = ControllerHelper.ContractResolver
                     };
                     var writer = new JsonTextWriter(sw)
                     {

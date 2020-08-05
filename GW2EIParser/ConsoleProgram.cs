@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using GW2EIUtils.Exceptions;
-using GW2EIUtils;
+using GW2EIParser.Exceptions;
 
 namespace GW2EIParser
 {
