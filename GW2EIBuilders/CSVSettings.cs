@@ -1,11 +1,9 @@
-﻿using System;
-
-namespace GW2EIBuilders
+﻿namespace GW2EIBuilders
 {
-    public class CSVSettings : BuilderSettings
+    public class CSVSettings
     {
         public string Delimiter { get; }
-        public CSVSettings(string parserName, Version version, string delimiter) : base(parserName, version)
+        public CSVSettings(string delimiter)
         {
             Delimiter = delimiter;
         }

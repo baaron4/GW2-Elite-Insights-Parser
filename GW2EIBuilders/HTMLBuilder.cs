@@ -39,8 +39,7 @@ namespace GW2EIBuilders
             {
                 throw new InvalidDataException("Missing settings in HTMLBuilder");
             }
-            _parser = settings.ParserName;
-            _version = settings.Version;
+            (_parser, _version) = ControllerHelper.GetControllerInformation();
             _scriptVersion = _version.Major + "." + _version.Minor;
 #if !DEBUG
             _scriptVersion += "." + _version.Build;

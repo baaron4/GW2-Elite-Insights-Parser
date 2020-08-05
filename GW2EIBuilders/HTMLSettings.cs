@@ -1,15 +1,13 @@
-﻿using System;
-
-namespace GW2EIBuilders
+﻿namespace GW2EIBuilders
 {
-    public class HTMLSettings : BuilderSettings
+    public class HTMLSettings
     {
 
         public bool HTMLLightTheme { get; }
 
         public bool ExternalHTMLScripts { get; }
 
-        public HTMLSettings(string parserName, Version version, bool htmlLightTheme, bool externalHTMLScripts) : base(parserName, version)
+        public HTMLSettings(bool htmlLightTheme, bool externalHTMLScripts)
         {
             HTMLLightTheme = htmlLightTheme;
             ExternalHTMLScripts = externalHTMLScripts;

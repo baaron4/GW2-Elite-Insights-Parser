@@ -165,7 +165,8 @@ namespace GW2EIEvtcParser
             //
             builder.WithTitle(FightData.GetFightName(this));
             builder.WithTimestamp(DateTime.Now);
-            builder.WithAuthor("Elite Insights", "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EIParser/Content/LI.png?raw=true", "https://github.com/baaron4/GW2-Elite-Insights-Parser");
+            (string parserName, Version parserVersion) = ControllerHelper.GetControllerInformation();
+            builder.WithAuthor(parserName + " " + parserVersion.ToString(4), "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EIParser/Content/LI.png?raw=true", "https://github.com/baaron4/GW2-Elite-Insights-Parser");
             builder.WithFooter(LogData.LogStartStd + " / " + LogData.LogEndStd);
             builder.WithColor(FightData.Success ? Color.Green : Color.Red);
             if (uploadresult[0].Length > 0)

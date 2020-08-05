@@ -19,20 +19,27 @@ namespace GW2EIEvtcParser
         //Main data storage after binary parse
         private FightData _fightData;
         private AgentData _agentData;
-        private readonly List<AgentItem> _allAgentsList = new List<AgentItem>();
-        private readonly SkillData _skillData = new SkillData();
-        private readonly List<CombatItem> _combatItems = new List<CombatItem>();
-        private List<Player> _playerList = new List<Player>();
+        private readonly List<AgentItem> _allAgentsList ;
+        private readonly SkillData _skillData;
+        private readonly List<CombatItem> _combatItems;
+        private List<Player> _playerList;
         private byte _revision;
         private ushort _id;
-        private long _logStartTime = 0;
-        private long _logEndTime = 0;
+        private long _logStartTime;
+        private long _logEndTime;
         private string _buildVersion;
         private readonly EvtcParserSettings _parserSettings;
 
         public EvtcParser(EvtcParserSettings parserSettings)
         {
             _parserSettings = parserSettings;
+            _allAgentsList = new List<AgentItem>();
+            _skillData = new SkillData(); 
+            _combatItems = new List<CombatItem>();
+            _playerList = new List<Player>();
+            _logStartTime = 0;
+            _logEndTime = 0;
+            (_, _) = ControllerHelper.GetControllerInformation();
         }
 
         //Main Parse method------------------------------------------------------------------------------------------------------------------------------------------------

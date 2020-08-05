@@ -27,7 +27,7 @@ namespace GW2EIControllers
         }
         // INIT
 
-        public static void InitAPICache()
+        internal static void InitAPICache()
         {
             SetAPISkills();
             //SetAPITraits();

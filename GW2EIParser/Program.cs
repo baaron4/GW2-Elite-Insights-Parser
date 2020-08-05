@@ -135,7 +135,7 @@ namespace GW2EIParser
 
             }
             HTMLBuilder.InitScripts();
-            GW2APIController.InitAPICache();
+            ControllerHelper.SetControllerInformation("Elite Insights", new Version(Application.ProductVersion));
             if (uiMode)
             {
                 Application.EnableVisualStyles();

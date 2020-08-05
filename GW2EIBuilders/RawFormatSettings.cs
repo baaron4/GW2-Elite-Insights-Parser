@@ -1,12 +1,10 @@
-﻿using System;
-
-namespace GW2EIBuilders
+﻿namespace GW2EIBuilders
 {
-    public class RawFormatSettings: BuilderSettings
+    public class RawFormatSettings
     {
         public bool RawFormatTimelineArrays { get; }
 
-        public RawFormatSettings(string parserName, Version version, bool rawFormatTimelineArrays) : base(parserName, version)
+        public RawFormatSettings(bool rawFormatTimelineArrays)
         {
             RawFormatTimelineArrays = rawFormatTimelineArrays;
         }
