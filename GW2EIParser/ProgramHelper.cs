@@ -14,7 +14,7 @@ using GW2EIUtils.Exceptions;
 
 namespace GW2EIParser
 {
-    public static class ProgramHelper
+    internal static class ProgramHelper
     {
         private static bool HasFormat()
         {

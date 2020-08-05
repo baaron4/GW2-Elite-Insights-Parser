@@ -11,7 +11,7 @@ using GW2EIUtils.Exceptions;
 
 namespace GW2EIParser
 {
-    public partial class MainForm : Form
+    internal partial class MainForm : Form
     {
         private readonly SettingsForm _settingsForm;
         private readonly List<string> _logsFiles;

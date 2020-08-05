@@ -6,7 +6,7 @@ using GW2EIUtils;
 
 namespace GW2EIParser
 {
-    public class ConsoleProgram
+    internal class ConsoleProgram
     {
         public ConsoleProgram(IEnumerable<string> logFiles)
         {
