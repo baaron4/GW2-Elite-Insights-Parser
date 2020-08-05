@@ -42,25 +42,18 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <CodeAnalysisRuleSet>..\GW2EI.ruleset</CodeAnalysisRuleSet>
     <PlatformTarget>AnyCPU</PlatformTarget>  
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
-    <CodeAnalysisRuleSet>..\GW2EI.ruleset</CodeAnalysisRuleSet>
     <PlatformTarget>AnyCPU</PlatformTarget>  
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="System.IO.Compression" Version="4.3.0" />
-    <PackageReference Include="System.Net.Http" Version="4.3.4" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
@@ -116,68 +109,9 @@
     </None>
     <None Include="Resources\theme-cosmo.png" />
     <None Include="Resources\theme-slate.png" />
-    <None Include="Resources\ei.css" />
-    <None Include="Resources\ei.js" />
-    <None Include="Resources\CR-JS\animator.js" />
-    <None Include="Resources\CR-JS\actors.js" />
-    <None Include="Resources\CR-JS\decorations.js" />
-    <None Include="Resources\JS\global.js" />
-    <None Include="Resources\JS\functions.js" />
-    <None Include="Resources\JS\mixins.js" />
-    <None Include="Resources\combatReplayTemplates\tmplCombatReplayUI.html" />
-    <None Include="Resources\combatReplayTemplates\tmplCombatReplayDamageData.html" />
-    <None Include="Resources\combatReplayTemplates\tmplCombatReplayDamageTable.html" />
-    <None Include="Resources\combatReplayTemplates\tmplCombatReplayActorRotation.html" />
-    <None Include="Resources\combatReplayTemplates\tmplCombatReplayExtraDecorations.html" />
-    <None Include="Resources\combatReplayTemplates\tmplCombatReplayTargetsStats.html" />
-    <None Include="Resources\combatReplayTemplates\tmplCombatReplayPlayersStats.html" />
-    <None Include="Resources\combatReplayTemplates\tmplCombatReplayTargetStatus.html" />
-    <None Include="Resources\combatReplayTemplates\tmplCombatReplayTargetStats.html" />
-    <None Include="Resources\combatReplayTemplates\tmplCombatReplayPlayerStatus.html" />
-    <None Include="Resources\combatReplayTemplates\tmplCombatReplayActorBuffStats.html" />
-    <None Include="Resources\combatReplayTemplates\tmplCombatReplayPlayerStats.html" />
-    <None Include="Resources\combatReplayTemplates\tmplCombatReplayStatusData.html" />
-    <None Include="Resources\combatReplayTemplates\tmplCombatReplayMechanicsList.html" />
-    <None Include="Resources\combatReplayTemplates\tmplCombatReplayPlayerSelect.html" />
-    <None Include="Resources\combatReplayTemplates\tmplCombatReplayAnimationControl.html" />
-    <None Include="Resources\htmlTemplates\tmplGeneralLayout.html" />
-    <None Include="Resources\htmlTemplates\tmplBuffTable.html" />
-    <None Include="Resources\htmlTemplates\tmplDamageDistTable.html" />
-    <None Include="Resources\htmlTemplates\tmplEncounter.html" />
-    <None Include="Resources\htmlTemplates\tmplPhase.html" />
-    <None Include="Resources\htmlTemplates\tmplGameplayTable.html" />
-    <None Include="Resources\htmlTemplates\tmplMechanicsTable.html" />
-    <None Include="Resources\htmlTemplates\tmplDefenseTable.html" />
-    <None Include="Resources\htmlTemplates\tmplSupportTable.html" />
-    <None Include="Resources\htmlTemplates\tmplBuffStats.html" />
-    <None Include="Resources\htmlTemplates\tmplPersonalBuffTable.html" />
-    <None Include="Resources\htmlTemplates\tmplBuffStatsTarget.html" />
-    <None Include="Resources\htmlTemplates\tmplDamageDistTarget.html" />
-    <None Include="Resources\htmlTemplates\tmplTargetTab.html" />
-    <None Include="Resources\htmlTemplates\tmplTargetStats.html" />
-    <None Include="Resources\htmlTemplates\tmplDeathRecap.html" />
-    <None Include="Resources\htmlTemplates\tmplSimpleRotation.html" />
-    <None Include="Resources\htmlTemplates\tmplFood.html" />
-    <None Include="Resources\htmlTemplates\tmplDamageDistPlayer.html" />
-    <None Include="Resources\htmlTemplates\tmplPlayerTab.html" />
-    <None Include="Resources\htmlTemplates\tmplPlayerStats.html" />
-    <None Include="Resources\htmlTemplates\tmplGraphStats.html" />
-    <None Include="Resources\htmlTemplates\tmplDPSGraph.html" />
-    <None Include="Resources\htmlTemplates\tmplTargets.html" />
-    <None Include="Resources\htmlTemplates\tmplPlayers.html" />
-    <None Include="Resources\htmlTemplates\tmplDamageModifierTable.html" />
-    <None Include="Resources\htmlTemplates\tmplPlayerTabGraph.html" />
-    <None Include="Resources\htmlTemplates\tmplRotationLegend.html" />
-    <None Include="Resources\htmlTemplates\tmplTargetTabGraph.html" />
-    <None Include="Resources\htmlTemplates\tmplDamageTable.html" />
-    <None Include="Resources\htmlTemplates\tmplDamageModifierStats.html" />
-    <None Include="Resources\htmlTemplates\tmplDamageModifierPersStats.html" />
-    <None Include="Resources\htmlTemplates\tmplMainView.html" />
-    <None Include="Resources\htmlTemplates\tmplDamageTaken.html" />
-    <None Include="Resources\htmlTemplates\tmplTargetData.html" /> 
-    <None Include="Resources\template.html" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GW2EIBuilders\GW2EIBuilders.csproj" />
     <ProjectReference Include="..\GW2EIControllers\GW2EIControllers.csproj" />
     <ProjectReference Include="..\GW2EIEvtcParser\GW2EIEvtcParser.csproj" />
     <ProjectReference Include="..\GW2EIUtils\GW2EIUtils.csproj" />

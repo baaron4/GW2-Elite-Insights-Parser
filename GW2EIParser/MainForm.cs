@@ -98,7 +98,7 @@ namespace GW2EIParser
                         else
                         {
                             Exception ex = t.Exception.InnerExceptions[0];
-                            if (!(ex is ExceptionEncompass))
+                            if (!(ex is EncompassException))
                             {
                                 operation.UpdateProgress("Something terrible has happened");
                             }

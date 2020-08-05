@@ -31,7 +31,7 @@ namespace GW2EIParser
                 ProgramHelper.DoWork(operation);
                 operation.FinalizeStatus("Parsing Successful - ");
             }
-            catch (ExceptionEncompass ex)
+            catch (EncompassException ex)
             {
                 operation.UpdateProgress(ex.GetFinalException().Message);
                 operation.FinalizeStatus("Parsing Failure - ");

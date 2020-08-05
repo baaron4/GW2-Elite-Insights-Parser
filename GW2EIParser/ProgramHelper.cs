@@ -45,7 +45,7 @@ namespace GW2EIParser
             }
             catch (Exception ex)
             {
-                throw new ExceptionEncompass(ex);
+                throw new EncompassException(ex);
             }
             finally
             {
