@@ -4,7 +4,7 @@ using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIParser.Builders.JsonModels
+namespace GW2EIBuilders.JsonModels
 {
     /// <summary>
     /// Class corresponding to the regrouping of the same type of minions

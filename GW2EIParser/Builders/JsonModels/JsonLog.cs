@@ -4,9 +4,9 @@ using System.Windows.Forms;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIParser.Builders.JsonModels.JsonMechanics;
+using static GW2EIBuilders.JsonModels.JsonMechanics;
 
-namespace GW2EIParser.Builders.JsonModels
+namespace GW2EIBuilders.JsonModels
 {
     /// <summary>
     /// The root of the JSON

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using GW2EIControllers;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
-using GW2EIParser.Builders;
+using GW2EIBuilders;
 using GW2EIUtils;
 using GW2EIUtils.Exceptions;
 

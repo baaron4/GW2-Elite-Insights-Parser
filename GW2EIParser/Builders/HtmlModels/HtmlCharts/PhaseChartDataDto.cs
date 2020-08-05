@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GW2EIParser.Builders.HtmlModels
+namespace GW2EIBuilders.HtmlModels
 {
     public class PhaseChartDataDto
     {

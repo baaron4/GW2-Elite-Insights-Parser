@@ -1,4 +1,4 @@
-﻿namespace GW2EIParser.Builders.HtmlModels
+﻿namespace GW2EIBuilders.HtmlModels
 {
     public class EnemyDto
     {

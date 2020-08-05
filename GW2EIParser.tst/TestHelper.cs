@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using GW2EIEvtcParser;
-using GW2EIParser.Builders;
-using GW2EIParser.Builders.JsonModels;
+using GW2EIBuilders;
+using GW2EIBuilders.JsonModels;
 using GW2EIUtils;
 using Newtonsoft.Json.Linq;
 

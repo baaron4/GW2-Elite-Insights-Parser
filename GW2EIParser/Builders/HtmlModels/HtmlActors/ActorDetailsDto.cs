@@ -3,7 +3,7 @@ using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIParser.Builders.HtmlModels
+namespace GW2EIBuilders.HtmlModels
 {
     public class ActorDetailsDto
     {

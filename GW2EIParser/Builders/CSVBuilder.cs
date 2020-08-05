@@ -8,7 +8,7 @@ using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIParser.Builders
+namespace GW2EIBuilders
 {
     public class CSVBuilder
     {

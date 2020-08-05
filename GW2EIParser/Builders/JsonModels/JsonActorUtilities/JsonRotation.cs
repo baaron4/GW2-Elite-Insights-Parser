@@ -2,7 +2,7 @@
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIParser.Builders.JsonModels
+namespace GW2EIBuilders.JsonModels
 {
     /// <summary>
     /// Class corresponding to a rotation

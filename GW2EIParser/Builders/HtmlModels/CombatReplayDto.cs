@@ -3,7 +3,7 @@ using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 
-namespace GW2EIParser.Builders.HtmlModels
+namespace GW2EIBuilders.HtmlModels
 {
     public class CombatReplayDto
     {

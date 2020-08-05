@@ -2,11 +2,11 @@
 using System.IO;
 using System.Xml;
 using GW2EIEvtcParser;
-using GW2EIParser.Builders.JsonModels;
+using GW2EIBuilders.JsonModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace GW2EIParser.Builders
+namespace GW2EIBuilders
 {
     public class RawFormatBuilder
     {

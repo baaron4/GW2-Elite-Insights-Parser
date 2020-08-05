@@ -7,7 +7,7 @@ using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIUtils;
 
-namespace GW2EIParser.Builders.HtmlModels
+namespace GW2EIBuilders.HtmlModels
 {
     public class LogDataDto
     {

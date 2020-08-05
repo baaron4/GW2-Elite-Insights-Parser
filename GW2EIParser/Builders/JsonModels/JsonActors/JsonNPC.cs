@@ -4,9 +4,9 @@ using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIParser.Builders.JsonModels.JsonBuffsUptime;
+using static GW2EIBuilders.JsonModels.JsonBuffsUptime;
 
-namespace GW2EIParser.Builders.JsonModels
+namespace GW2EIBuilders.JsonModels
 {
     /// <summary>
     /// Class representing an NPC

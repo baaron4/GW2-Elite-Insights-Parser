@@ -2,7 +2,7 @@
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 
-namespace GW2EIParser.Builders.JsonModels
+namespace GW2EIBuilders.JsonModels
 {
     /// <summary>
     /// Class corresponding to a phase

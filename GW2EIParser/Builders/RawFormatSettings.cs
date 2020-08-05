@@ -1,4 +1,4 @@
-﻿namespace GW2EIParser.Builders
+﻿namespace GW2EIBuilders
 {
     public class RawFormatSettings
     {

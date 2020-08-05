@@ -5,12 +5,12 @@ using System.Text.RegularExpressions;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
-using GW2EIParser.Builders.HtmlModels;
+using GW2EIBuilders.HtmlModels;
 using GW2EIUtils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace GW2EIParser.Builders
+namespace GW2EIBuilders
 {
     public class HTMLBuilder
     {
@@ -70,41 +70,41 @@ namespace GW2EIParser.Builders
         {
             var templates = new List<string>
             {
-                Properties.Resources.tmplBuffStats,
-                Properties.Resources.tmplBuffStatsTarget,
-                Properties.Resources.tmplBuffTable,
-                Properties.Resources.tmplDamageDistPlayer,
-                Properties.Resources.tmplDamageDistTable,
-                Properties.Resources.tmplDamageDistTarget,
-                Properties.Resources.tmplDamageModifierTable,
-                Properties.Resources.tmplDamageModifierStats,
-                Properties.Resources.tmplDamageModifierPersStats,
-                Properties.Resources.tmplDamageTable,
-                Properties.Resources.tmplDamageTaken,
-                Properties.Resources.tmplDeathRecap,
-                Properties.Resources.tmplDefenseTable,
-                Properties.Resources.tmplEncounter,
-                Properties.Resources.tmplFood,
-                Properties.Resources.tmplGameplayTable,
-                Properties.Resources.tmplGeneralLayout,
-                Properties.Resources.tmplMechanicsTable,
-                Properties.Resources.tmplPersonalBuffTable,
-                Properties.Resources.tmplPhase,
-                Properties.Resources.tmplPlayers,
-                Properties.Resources.tmplPlayerStats,
-                Properties.Resources.tmplPlayerTab,
-                Properties.Resources.tmplSimpleRotation,
-                Properties.Resources.tmplSupportTable,
-                Properties.Resources.tmplTargets,
-                Properties.Resources.tmplTargetStats,
-                Properties.Resources.tmplTargetTab,
-                Properties.Resources.tmplDPSGraph,
-                Properties.Resources.tmplGraphStats,
-                Properties.Resources.tmplPlayerTabGraph,
-                Properties.Resources.tmplRotationLegend,
-                Properties.Resources.tmplTargetTabGraph,
-                Properties.Resources.tmplTargetData,
-                Properties.Resources.tmplMainView,
+                GW2EIParser.Properties.Resources.tmplBuffStats,
+                GW2EIParser.Properties.Resources.tmplBuffStatsTarget,
+                GW2EIParser.Properties.Resources.tmplBuffTable,
+                GW2EIParser.Properties.Resources.tmplDamageDistPlayer,
+                GW2EIParser.Properties.Resources.tmplDamageDistTable,
+                GW2EIParser.Properties.Resources.tmplDamageDistTarget,
+                GW2EIParser.Properties.Resources.tmplDamageModifierTable,
+                GW2EIParser.Properties.Resources.tmplDamageModifierStats,
+                GW2EIParser.Properties.Resources.tmplDamageModifierPersStats,
+                GW2EIParser.Properties.Resources.tmplDamageTable,
+                GW2EIParser.Properties.Resources.tmplDamageTaken,
+                GW2EIParser.Properties.Resources.tmplDeathRecap,
+                GW2EIParser.Properties.Resources.tmplDefenseTable,
+                GW2EIParser.Properties.Resources.tmplEncounter,
+                GW2EIParser.Properties.Resources.tmplFood,
+                GW2EIParser.Properties.Resources.tmplGameplayTable,
+                GW2EIParser.Properties.Resources.tmplGeneralLayout,
+                GW2EIParser.Properties.Resources.tmplMechanicsTable,
+                GW2EIParser.Properties.Resources.tmplPersonalBuffTable,
+                GW2EIParser.Properties.Resources.tmplPhase,
+                GW2EIParser.Properties.Resources.tmplPlayers,
+                GW2EIParser.Properties.Resources.tmplPlayerStats,
+                GW2EIParser.Properties.Resources.tmplPlayerTab,
+                GW2EIParser.Properties.Resources.tmplSimpleRotation,
+                GW2EIParser.Properties.Resources.tmplSupportTable,
+                GW2EIParser.Properties.Resources.tmplTargets,
+                GW2EIParser.Properties.Resources.tmplTargetStats,
+                GW2EIParser.Properties.Resources.tmplTargetTab,
+                GW2EIParser.Properties.Resources.tmplDPSGraph,
+                GW2EIParser.Properties.Resources.tmplGraphStats,
+                GW2EIParser.Properties.Resources.tmplPlayerTabGraph,
+                GW2EIParser.Properties.Resources.tmplRotationLegend,
+                GW2EIParser.Properties.Resources.tmplTargetTabGraph,
+                GW2EIParser.Properties.Resources.tmplTargetData,
+                GW2EIParser.Properties.Resources.tmplMainView,
             };
             var res = new List<string>();
             foreach (string template in templates)
@@ -118,22 +118,22 @@ namespace GW2EIParser.Builders
         {
             var templates = new List<string>
             {
-                Properties.Resources.tmplCombatReplayDamageData,
-                Properties.Resources.tmplCombatReplayStatusData,
-                Properties.Resources.tmplCombatReplayDamageTable,
-                Properties.Resources.tmplCombatReplayActorBuffStats,
-                Properties.Resources.tmplCombatReplayPlayerStats,
-                Properties.Resources.tmplCombatReplayPlayerStatus,
-                Properties.Resources.tmplCombatReplayActorRotation,
-                Properties.Resources.tmplCombatReplayTargetStats,
-                Properties.Resources.tmplCombatReplayTargetStatus,
-                Properties.Resources.tmplCombatReplayTargetsStats,
-                Properties.Resources.tmplCombatReplayPlayersStats,
-                Properties.Resources.tmplCombatReplayUI,
-                Properties.Resources.tmplCombatReplayPlayerSelect,
-                Properties.Resources.tmplCombatReplayExtraDecorations,
-                Properties.Resources.tmplCombatReplayAnimationControl,
-                Properties.Resources.tmplCombatReplayMechanicsList
+                GW2EIParser.Properties.Resources.tmplCombatReplayDamageData,
+                GW2EIParser.Properties.Resources.tmplCombatReplayStatusData,
+                GW2EIParser.Properties.Resources.tmplCombatReplayDamageTable,
+                GW2EIParser.Properties.Resources.tmplCombatReplayActorBuffStats,
+                GW2EIParser.Properties.Resources.tmplCombatReplayPlayerStats,
+                GW2EIParser.Properties.Resources.tmplCombatReplayPlayerStatus,
+                GW2EIParser.Properties.Resources.tmplCombatReplayActorRotation,
+                GW2EIParser.Properties.Resources.tmplCombatReplayTargetStats,
+                GW2EIParser.Properties.Resources.tmplCombatReplayTargetStatus,
+                GW2EIParser.Properties.Resources.tmplCombatReplayTargetsStats,
+                GW2EIParser.Properties.Resources.tmplCombatReplayPlayersStats,
+                GW2EIParser.Properties.Resources.tmplCombatReplayUI,
+                GW2EIParser.Properties.Resources.tmplCombatReplayPlayerSelect,
+                GW2EIParser.Properties.Resources.tmplCombatReplayExtraDecorations,
+                GW2EIParser.Properties.Resources.tmplCombatReplayAnimationControl,
+                GW2EIParser.Properties.Resources.tmplCombatReplayMechanicsList
             };
             var res = new List<string>();
             foreach (string template in templates)
@@ -147,10 +147,10 @@ namespace GW2EIParser.Builders
         {
             var orderedScripts = new List<string>()
             {
-                Properties.Resources.globalJS,
-                Properties.Resources.mixinsJS,
-                Properties.Resources.functionsJS,
-                Properties.Resources.ei_js
+                GW2EIParser.Properties.Resources.globalJS,
+                GW2EIParser.Properties.Resources.mixinsJS,
+                GW2EIParser.Properties.Resources.functionsJS,
+                GW2EIParser.Properties.Resources.ei_js
             };
             string scriptContent = orderedScripts[0];
             for (int i = 1; i < orderedScripts.Count; i++)
@@ -163,9 +163,9 @@ namespace GW2EIParser.Builders
             //
             var orderedCRScripts = new List<string>()
             {
-                Properties.Resources.animator,
-                Properties.Resources.actors,
-                Properties.Resources.decorations,
+                GW2EIParser.Properties.Resources.animator,
+                GW2EIParser.Properties.Resources.actors,
+                GW2EIParser.Properties.Resources.decorations,
             }; 
             string scriptCRContent = orderedCRScripts[0];
             for (int i = 1; i < orderedCRScripts.Count; i++)
@@ -183,7 +183,7 @@ namespace GW2EIParser.Builders
 
         public void CreateHTML(StreamWriter sw, string path)
         {
-            string html = Properties.Resources.template_html;
+            string html = GW2EIParser.Properties.Resources.template_html;
             _log.UpdateProgressWithCancellationCheck("HTML: replacing global variables");
             html = html.Replace("${bootstrapTheme}", !_light ? "slate" : "yeti");
 
@@ -236,7 +236,7 @@ namespace GW2EIParser.Builders
 
         private string BuildCss(string path)
         {
-            string scriptContent = Properties.Resources.ei_css;
+            string scriptContent = GW2EIParser.Properties.Resources.ei_css;
 
             if (_externalScripts && path != null)
             {

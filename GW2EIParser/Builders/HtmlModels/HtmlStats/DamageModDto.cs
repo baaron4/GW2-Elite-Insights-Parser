@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using GW2EIEvtcParser.EIData;
 
-namespace GW2EIParser.Builders.HtmlModels
+namespace GW2EIBuilders.HtmlModels
 {
     public class DamageModDto
     {

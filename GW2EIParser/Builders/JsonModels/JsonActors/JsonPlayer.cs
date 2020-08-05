@@ -3,10 +3,10 @@ using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIUtils;
-using static GW2EIParser.Builders.JsonModels.JsonBuffsUptime;
-using static GW2EIParser.Builders.JsonModels.JsonPlayerBuffsGeneration;
+using static GW2EIBuilders.JsonModels.JsonBuffsUptime;
+using static GW2EIBuilders.JsonModels.JsonPlayerBuffsGeneration;
 
-namespace GW2EIParser.Builders.JsonModels
+namespace GW2EIBuilders.JsonModels
 {
     /// <summary>
     /// Class representing a player

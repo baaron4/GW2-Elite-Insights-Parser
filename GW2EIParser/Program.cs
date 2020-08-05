@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using GW2EIControllers;
-using GW2EIParser.Builders;
+using GW2EIBuilders;
 
 namespace GW2EIParser
 {
