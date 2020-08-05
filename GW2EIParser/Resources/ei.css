@@ -72,12 +72,7 @@
     margin-left: auto;
 }
 
-.ei-cr-footer{
-    transform: translate(0, -75px);
-}
-
 .buff-display {
-    height: 110px;
     width: 250px;
 }
 

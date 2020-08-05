@@ -1,54 +1,88 @@
 <template>
-    <div class="d-flex flex-column justify-content-end buff-display">
-        <div v-if="data.fightSpecifics.length > 0" class="d-flex">
-            <div v-for="fightSpecific in data.fightSpecifics" class="buff-container">
-                <img :src="fightSpecific.buff.icon" :title="fightSpecific.buff.name" :alt="fightSpecific.buff.name" class="icon-s" />
-                <div v-if="fightSpecific.state > 1" class="buff-number">{{fightSpecific.state}}</div>
-            </div>
+    <div class="d-flex flex-column justify-content-end" :style="{'height': height}">
+        <div v-if="isPresent('Fight Specifics')">
+            <combat-replay-buff-display :buffarray="data.fightSpecifics"></combat-replay-buff-display>
         </div>
-        <div v-if="data.others.length > 0" class="d-flex">
-            <div v-for="other in data.others" class="buff-container">
-                <img :src="other.buff.icon" :title="other.buff.name" :alt="other.buff.name" class="icon-s" />
-                <div v-if="other.state > 1" class="buff-number">{{other.state}}</div>
-            </div>
+        <div v-if="isPresent('Others')">
+            <combat-replay-buff-display :buffarray="data.others"></combat-replay-buff-display>
         </div>
-        <div v-if="data.conditions.length > 0" class="d-flex">
-            <div v-for="condition in data.conditions" class="buff-container">
-                <img :src="condition.buff.icon" :title="condition.buff.name" :alt="condition.buff.name" class="icon-s" />
-                <div v-if="condition.state > 1" class="buff-number">{{condition.state}}</div>
-            </div>
+        <div v-if="isPresent('Conditions')">
+            <combat-replay-buff-display :buffarray="data.conditions"></combat-replay-buff-display>
+        </div>      
+        <div v-if="isPresent('Shared')">
+            <combat-replay-buff-display :buffarray="data.shared"></combat-replay-buff-display>
+        </div>  
+        <div v-if="isPresent('Boons')">
+            <combat-replay-buff-display :buffarray="data.boons"></combat-replay-buff-display>
         </div>
-        <div v-if="(data.offs.length > 0 || data.defs.length > 0)" class="d-flex">
-            <div v-for="off in data.offs" class="buff-container">
-                <img :src="off.buff.icon" :title="off.buff.name" :alt="off.buff.name" class="icon-s" />
-                <div v-if="off.state > 1" class="buff-number">{{off.state}}</div>
-            </div>
-            <div v-for="def in data.defs" class="buff-container">
-                <img :src="def.buff.icon" :title="def.buff.name" :alt="def.buff.name" class="icon-s" />
-                <div v-if="def.state > 1" class="buff-number">{{def.state}}</div>
-            </div>
-        </div>
-        <div v-if="data.boons.length > 0" class="d-flex">
-            <div v-for="boon in data.boons" class="buff-container">
-                <img :src="boon.buff.icon" :title="boon.buff.name" :alt="boon.buff.name" class="icon-s" />
-                <div v-if="boon.state > 1" class="buff-number">{{boon.state}}</div>
-            </div>
-        </div>
-        <div v-if="data.consumables.length > 0" class="d-flex">
-            <div v-for="consumable in data.consumables" class="buff-container">
-                <img :src="consumable.buff.icon" :title="consumable.buff.name" :alt="consumable.buff.name" class="icon-s" />
-                <div v-if="consumable.state > 1" class="buff-number">{{consumable.state}}</div>
-            </div>
+        <div v-if="isPresent('Consumables')" >
+            <combat-replay-buff-display :buffarray="data.consumables"></combat-replay-buff-display>
         </div>
     </div>
 </template>
 
 <script>
+    var buffDisplayHeight = 18;
+    Vue.component("combat-replay-buff-display", {     
+        props: ["buffarray"],    
+        template: `
+        <div v-if="buffarray.length > 0" class="d-flex buff-display" :style="{'height': height}">
+            <div v-for="buff in buffarray" class="buff-container">
+                <img :src="buff.buff.icon" :title="buff.buff.name" :alt="buff.buff.name" class="icon-s" />
+                <div v-if="buff.state > 1" class="buff-number">{{buff.state}}</div>
+            </div>
+        </div>
+        `,      
+        computed: {
+            height: function() {
+                return buffDisplayHeight+ "px";
+            },
+        },
+    });
     Vue.component("combat-replay-actor-buffs-stats-component", {
         mixins: [timeRefreshComponent],
-        props: ["actorindex", "enemy"],
+        props: ["actorindex", "enemy", "buffstoshow"],
         template: `${template}`,
+        methods: {
+            isPresent: function(type) {
+                return this.buffsToShowSet.has(type) && this.presentBuffTypes.has(type);
+            }
+        },
         computed: {
+            height: function() {
+                var count = 0;
+                for (var i = 0; i < this.buffstoshow.length; i++) {
+                    count += this.isPresent(this.buffstoshow[i]) ? 1 : 0;
+                }
+                return buffDisplayHeight * count + "px";
+            },
+            buffsToShowSet: function() {
+                return new Set(this.buffstoshow);
+            },
+            presentBuffTypes: function() {
+                var res = new Set();
+                for (var i = 0; i < this.buffData.length; i++) {
+                    var data = this.buffData[i];
+                    var id = data.id;
+                    var buff = findSkill(true, id);
+                    if (buff.consumable) {
+                        res.add("Consumables");
+                    } else if (buff.fightSpecific) {
+                        res.add("Fight Specifics");
+                    } else if (this.boons.has(id)) {
+                        res.add("Boons");
+                    } else if (this.offs.has(id)) {
+                        res.add("Shared");
+                    } else if (this.defs.has(id)) {
+                        res.add("Shared");
+                    } else if (this.conditions.has(id)) {
+                        res.add("Conditions");
+                    } else {
+                        res.add("Others");
+                    }
+                }
+                return res;
+            },
             boons: function () {
                 var hash = new Set();
                 for (var i = 0; i < logData.boons.length; i++) {
@@ -85,8 +119,7 @@
             },
             data: function () {
                 var res = {
-                    offs: [],
-                    defs: [],
+                    shared: [],
                     boons: [],
                     conditions: [],
                     fightSpecifics: [],
@@ -100,18 +133,39 @@
                     var buff = findSkill(true, id);
                     if (buff.consumable) {
                         arrayToFill = res.consumables;
+                        if (!this.buffsToShowSet.has("Consumables")) {
+                            continue;
+                        }
                     } else if (buff.fightSpecific) {
                         arrayToFill = res.fightSpecifics;
+                        if (!this.buffsToShowSet.has("Fight Specifics")) {
+                            continue;
+                        }
                     } else if (this.boons.has(id)) {
                         arrayToFill = res.boons;
+                        if (!this.buffsToShowSet.has("Boons")) {
+                            continue;
+                        }
                     } else if (this.offs.has(id)) {
-                        arrayToFill = res.offs;
+                        arrayToFill = res.shared;
+                        if (!this.buffsToShowSet.has("Shared")) {
+                            continue;
+                        }
                     } else if (this.defs.has(id)) {
-                        arrayToFill = res.defs;
+                        arrayToFill = res.shared;
+                        if (!this.buffsToShowSet.has("Shared")) {
+                            continue;
+                        }
                     } else if (this.conditions.has(id)) {
                         arrayToFill = res.conditions;
+                        if (!this.buffsToShowSet.has("Conditions")) {
+                            continue;
+                        }
                     } else {
                         arrayToFill = res.others;
+                        if (!this.buffsToShowSet.has("Others")) {
+                            continue;
+                        }
                     }
                     var t = this.timeToUse / 1000;
                     var val = findState(data.states, t, 0, data.states.length - 1);

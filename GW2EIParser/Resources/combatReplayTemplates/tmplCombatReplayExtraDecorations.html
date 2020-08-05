@@ -1,14 +1,14 @@
 <template>
     <div class="d-flex flex-column justify-content-center align-items-center">
         <div class="form-check mb-2">
-            <input type="checkbox" class="form-check-input" id="subgroupCheck" checked>
+            <input type="checkbox" class="form-check-input" id="subgroupCheck" checked v-on:change="getAnimator().toggleHighlightSelectedGroup()">
             <label class="form-check-label" for="subgroupCheck">Highlight Selected Group</label>
         </div>
         <div class="d-flex flex-row justify-content-center">
             <div class="mr-3">
                 <h3>Range Selectors</h3>
                 <div class="form-check mt-1 mb-2">
-                    <input type="checkbox" class="form-check-input" id="circle1Check">
+                    <input type="checkbox" class="form-check-input" id="circle1Check" v-on:change="getAnimator().toggleRange(0)">
                     <label class="form-check-label" for="circle1Check">Circle 1</label>
                 </div>
                 <div class="d-flex flex-row justify-content-between align-items-center">
@@ -17,7 +17,7 @@
                                                         :placeholderValue="getAnimator().rangeControl[0].radius"></combat-replay-numberform-component>
                 </div>
                 <div class="form-check mt-1 mb-2">
-                    <input type="checkbox" class="form-check-input" id="circle2Check">
+                    <input type="checkbox" class="form-check-input" id="circle2Check" v-on:change="getAnimator().toggleRange(1)">
                     <label class="form-check-label" for="circle2Check">Circle 2</label>
                 </div>
                 <div class="d-flex flex-row justify-content-between align-items-center">
@@ -26,7 +26,7 @@
                                                         :placeholderValue="getAnimator().rangeControl[1].radius"></combat-replay-numberform-component>
                 </div>
                 <div class="form-check mt-1 mb-2">
-                    <input type="checkbox" class="form-check-input" id="circle3Check">
+                    <input type="checkbox" class="form-check-input" id="circle3Check" v-on:change="getAnimator().toggleRange(2)">
                     <label class="form-check-label" for="circle3Check">Circle 3</label>
                 </div>
                 <div class="d-flex flex-row justify-content-between align-items-center">
@@ -38,7 +38,7 @@
             <div class="ml-3">
                 <h3 data-original-title="Has an effect only when facing arrow are present">Cone Indicator</h3>
                 <div class="form-check mt-1 mb-2">
-                    <input type="checkbox" class="form-check-input" id="coneCheck">
+                    <input type="checkbox" class="form-check-input" id="coneCheck" v-on:change="getAnimator().toggleConeDisplay()">
                     <label class="form-check-label" for="coneCheck">Display Cone</label>
                 </div>
                 <div class="d-flex flex-row justify-content-between align-items-center mb-1">
@@ -60,12 +60,14 @@
 <script>
     Vue.component("combat-replay-numberform-component", {
         props: ["minValue", "maxValue", "id", "placeholderValue"],
-        template: `<div style="width: 100px;">
-                        <input class="form-control" type="number" :id="id"
-                            @onkeypress="return isNumber(event)" onpaste="return false;"
-                            :value="placeholderValue" data-bind="value:replyNumber, fireChange: true"
-                            :min="minValue" :max="maxValue">
-                    </div>`,
+        template: `
+        <div style="width: 100px;">
+            <input class="form-control" type="number" :id="id"
+                @onkeypress="return isNumber(event)" onpaste="return false;"
+                    :value="placeholderValue" data-bind="value:replyNumber, fireChange: true"
+                    :min="minValue" :max="maxValue">
+        </div>
+        `,
         methods: {
             isNumber: function (evt) {
                 evt = (evt) ? evt : window.event;
@@ -98,22 +100,6 @@
             }
         },
         mounted() {
-            $('#subgroupCheck').change(function () {
-                animator.toggleHighlightSelectedGroup();
-            });
-            $('#circle1Check').change(function () {
-                animator.toggleRange(0);
-            });
-            $('#circle2Check').change(function () {
-                animator.toggleRange(1);
-            });
-            $('#circle3Check').change(function () {
-                animator.toggleRange(2);
-            });
-            $('#coneCheck').change(function () {
-                animator.toggleConeDisplay();
-            });
-            //
             $('#circle1Text').on("input ", function () {
                 animator.setRangeRadius(0, $(this).val());
             });
