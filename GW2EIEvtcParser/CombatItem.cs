@@ -43,7 +43,7 @@ namespace GW2EIEvtcParser
                byte isBuffRemove, byte isNinety, byte isFifty, byte isMoving,
                byte isStateChange, byte isFlanking, byte isShields, byte isOffcycle, uint pad)
         {
-            this.Time = time;
+            Time = time;
             SrcAgent = srcAgent;
             DstAgent = dstAgent;
             Value = value;
