@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.ParsedData
 {
-    public class StatusEventsContainer
+    internal class StatusEventsContainer
     {
         public Dictionary<AgentItem, List<AliveEvent>> AliveEvents { get; } = new Dictionary<AgentItem, List<AliveEvent>>();
         public Dictionary<AgentItem, List<AttackTargetEvent>> AttackTargetEvents { get; } = new Dictionary<AgentItem, List<AttackTargetEvent>>();

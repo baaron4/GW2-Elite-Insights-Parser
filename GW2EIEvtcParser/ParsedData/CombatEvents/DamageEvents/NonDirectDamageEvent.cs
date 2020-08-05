@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.ParsedData
     {
         private int _isCondi = -1;
 
-        public NonDirectDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
+        internal NonDirectDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
             Damage = evtcItem.BuffDmg;
             ArcDPSEnums.ConditionResult result = ArcDPSEnums.GetConditionResult(evtcItem.Result);

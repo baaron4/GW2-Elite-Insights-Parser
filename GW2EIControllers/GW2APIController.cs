@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using GW2EIUtils;
-using GW2EIUtils.GW2API;
+using GW2EIControllers.GW2API;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 

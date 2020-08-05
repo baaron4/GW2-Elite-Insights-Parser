@@ -2,7 +2,7 @@
 {
     public class LogEndEvent : LogDateEvent
     {
-        public LogEndEvent(CombatItem evtcItem) : base(evtcItem)
+        internal LogEndEvent(CombatItem evtcItem) : base(evtcItem)
         {
         }
 

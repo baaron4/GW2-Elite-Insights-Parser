@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.ParsedData
     public class ErrorEvent : AbstractMetaDataEvent
     {
         public string Message { get; }
-        public ErrorEvent(CombatItem evtcItem) : base(evtcItem)
+        internal ErrorEvent(CombatItem evtcItem) : base(evtcItem)
         {
             byte[] bytes = new byte[32 * 1]; // 32 * sizeof(char), char as in C not C#
             int offset = 0;

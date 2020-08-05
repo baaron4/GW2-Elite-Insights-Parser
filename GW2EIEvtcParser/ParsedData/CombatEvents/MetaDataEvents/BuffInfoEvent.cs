@@ -22,13 +22,13 @@ namespace GW2EIEvtcParser.ParsedData
         public ushort MaxStacks { get; private set; }
         public List<BuffFormula> Formulas { get; } = new List<BuffFormula>();
 
-        public BuffInfoEvent(CombatItem evtcItem) : base(evtcItem)
+        internal BuffInfoEvent(CombatItem evtcItem) : base(evtcItem)
         {
             BuffID = evtcItem.SkillID;
             CompleteBuffInfoEvent(evtcItem);
         }
 
-        public void CompleteBuffInfoEvent(CombatItem evtcItem)
+        internal void CompleteBuffInfoEvent(CombatItem evtcItem)
         {
             if (evtcItem.SkillID != BuffID)
             {
@@ -58,7 +58,7 @@ namespace GW2EIEvtcParser.ParsedData
             ProbablyResistance = evtcItem.Pad2 > 0;
         }
 
-        public void AdjustBuffInfo(Dictionary<byte, ArcDPSEnums.BuffAttribute> solved)
+        internal void AdjustBuffInfo(Dictionary<byte, ArcDPSEnums.BuffAttribute> solved)
         {
             Formulas.Sort((x, y) => (x.TraitSelf + x.TraitSrc).CompareTo(y.TraitSrc + y.TraitSelf));
             if (solved.Count == 0)

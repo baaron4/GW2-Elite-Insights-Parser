@@ -6,7 +6,7 @@
 
         public LanguageEnum Language { get; }
 
-        public LanguageEvent(CombatItem evtcItem) : base(evtcItem)
+        internal LanguageEvent(CombatItem evtcItem) : base(evtcItem)
         {
             Language = evtcItem.SrcAgent < (byte)LanguageEnum.Unknown ? (LanguageEnum)evtcItem.SrcAgent
                 : LanguageEnum.Unknown;

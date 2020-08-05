@@ -4,7 +4,7 @@
     {
         public int MaxHealth { get; }
 
-        public MaxHealthUpdateEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
+        internal MaxHealthUpdateEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
             MaxHealth = (int)evtcItem.DstAgent;
         }

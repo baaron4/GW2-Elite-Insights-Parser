@@ -96,11 +96,11 @@ namespace GW2EIEvtcParser.EIData
             var res = new List<object[]>();
             foreach (Segment seg in segments)
             {
-                double segStart = Math.Round(Math.Max(seg.Start - start, 0) / 1000.0, ParseHelper.TimeDigit);
+                double segStart = Math.Round(Math.Max(seg.Start - start, 0) / 1000.0, ParseHelper._timeDigit);
                 res.Add(new object[] { segStart, seg.Value });
             }
             Segment lastSeg = segments.Last();
-            double segEnd = Math.Round(Math.Min(lastSeg.End - start, end - start) / 1000.0, ParseHelper.TimeDigit);
+            double segEnd = Math.Round(Math.Min(lastSeg.End - start, end - start) / 1000.0, ParseHelper._timeDigit);
             res.Add(new object[] { segEnd, lastSeg.Value });
             return res;
         }

@@ -4,7 +4,7 @@
     {
         public ulong TeamID { get; }
 
-        public TeamChangeEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
+        internal TeamChangeEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
             TeamID = evtcItem.DstAgent;
         }

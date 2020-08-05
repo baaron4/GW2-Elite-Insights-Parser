@@ -18,13 +18,13 @@ namespace GW2EIEvtcParser.ParsedData
 
         public List<SkillTiming> SkillTimings { get; } = new List<SkillTiming>();
 
-        public SkillInfoEvent(CombatItem evtcItem) : base(evtcItem)
+        internal SkillInfoEvent(CombatItem evtcItem) : base(evtcItem)
         {
             SkillID = evtcItem.SkillID;
             CompleteSkillInfoEvent(evtcItem);
         }
 
-        public void CompleteSkillInfoEvent(CombatItem evtcItem)
+        internal void CompleteSkillInfoEvent(CombatItem evtcItem)
         {
             if (evtcItem.SkillID != SkillID)
             {

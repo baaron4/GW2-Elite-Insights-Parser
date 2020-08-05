@@ -8,7 +8,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         public byte[] Guid { get; }
 
-        public GuildEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem)
+        internal GuildEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem)
         {
             Src = agentData.GetAgent(evtcItem.SrcAgent);
             Guid = new byte[16];

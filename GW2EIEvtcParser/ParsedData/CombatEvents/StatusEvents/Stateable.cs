@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData
 {
-    public interface Stateable
+    internal interface IStateable
     {
         (long start, double value) ToState();
 

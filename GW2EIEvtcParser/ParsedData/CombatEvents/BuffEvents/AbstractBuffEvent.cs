@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.ParsedData
         //private long _originalBuffID;
 
         protected AgentItem InternalBy { get; set; }
-        public AgentItem By => InternalBy != null ? InternalBy.GetFinalMaster() : null;
+        public AgentItem By => InternalBy?.GetFinalMaster();
 
         public AgentItem ByMinion => InternalBy != null && InternalBy.Master != null ? InternalBy : null;
 

@@ -3,7 +3,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.ParsedData
 {
-    public class MetaEventsContainer
+    internal class MetaEventsContainer
     {
         public BuildEvent BuildEvent { get; set; }
         public LanguageEvent LanguageEvent { get; set; }

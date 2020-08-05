@@ -168,28 +168,28 @@ namespace GW2EIEvtcParser.ParsedData
         public int TraitSrc { get; }
         public int TraitSelf { get; }
         // Meta data
-        private bool _npc { get; }
-        private bool _player { get; }
-        private bool _break { get; }
+        private bool Npc { get; }
+        private bool Player { get; }
+        private bool Break { get; }
         // Extra number
-        private byte _extraNumberState { get; }
-        private uint _extraNumber { get; }
-        private bool _isExtraNumberBuffID => _extraNumberState == 2;
-        private bool _isExtraNumberNone => _extraNumberState == 0;
-        private bool _isExtraNumberSomething => _extraNumberState == 1;
+        private byte ExtraNumberState { get; }
+        private uint ExtraNumber { get; }
+        private bool IsExtraNumberBuffID => ExtraNumberState == 2;
+        private bool IsExtraNumberNone => ExtraNumberState == 0;
+        private bool IsExtraNumberSomething => ExtraNumberState == 1;
 
         private string _solvedDescription = null;
 
         private readonly BuffInfoEvent _buffInfoEvent;
 
-        private int _level => (_buffInfoEvent.Category == ArcDPSEnums.BuffCategory.Food || _buffInfoEvent.Category == ArcDPSEnums.BuffCategory.Enhancement) ? 0 : (Type == 12 ? 6400 : 80);
+        private int Level => (_buffInfoEvent.Category == ArcDPSEnums.BuffCategory.Food || _buffInfoEvent.Category == ArcDPSEnums.BuffCategory.Enhancement) ? 0 : (Type == 12 ? 6400 : 80);
 
-        public BuffFormula(CombatItem evtcItem, BuffInfoEvent buffInfoEvent)
+        internal BuffFormula(CombatItem evtcItem, BuffInfoEvent buffInfoEvent)
         {
             _buffInfoEvent = buffInfoEvent;
-            _npc = evtcItem.IsFlanking == 0;
-            _player = evtcItem.IsShields == 0;
-            _break = evtcItem.IsOffcycle > 0;
+            Npc = evtcItem.IsFlanking == 0;
+            Player = evtcItem.IsShields == 0;
+            Break = evtcItem.IsOffcycle > 0;
             byte[] formulaBytes = new byte[8 * sizeof(float)];
             int offset = 0;
             // 2 
@@ -231,11 +231,11 @@ namespace GW2EIEvtcParser.ParsedData
             Variable = formulaFloats[5];
             TraitSrc = (int)formulaFloats[6];
             TraitSelf = (int)formulaFloats[7];
-            _extraNumber = evtcItem.OverstackValue;
-            _extraNumberState = evtcItem.Pad1;
+            ExtraNumber = evtcItem.OverstackValue;
+            ExtraNumberState = evtcItem.Pad1;
         }
 
-        public void AdjustUnknownFormulaAttributes(Dictionary<byte, ArcDPSEnums.BuffAttribute> solved)
+        internal void AdjustUnknownFormulaAttributes(Dictionary<byte, ArcDPSEnums.BuffAttribute> solved)
         {
             if (Attr1 == Unknown && solved.TryGetValue(ByteAttr1, out ArcDPSEnums.BuffAttribute solvedAttr))
             {
@@ -267,9 +267,9 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 stat1 += " " + ByteAttr1;
             }
-            if (_isExtraNumberBuffID)
+            if (IsExtraNumberBuffID)
             {
-                if (buffsByIds.TryGetValue(_extraNumber, out Buff buff))
+                if (buffsByIds.TryGetValue(ExtraNumber, out Buff buff))
                 {
                     stat1 += " (" + buff.Name + ")";
                 }
@@ -285,7 +285,7 @@ namespace GW2EIEvtcParser.ParsedData
                 _solvedDescription += " from " + stat2;
             }
             _solvedDescription += ": ";
-            double totalOffset = Math.Round(_level * LevelOffset + ConstantOffset, 4);
+            double totalOffset = Math.Round(Level * LevelOffset + ConstantOffset, 4);
             bool addParenthesis = totalOffset != 0 && Variable != 0;
             if (addParenthesis)
             {
@@ -306,11 +306,11 @@ namespace GW2EIEvtcParser.ParsedData
                 _solvedDescription += ")";
             }
             _solvedDescription += GetPercent(Attr1, Attr2);
-            if (_npc && !_player)
+            if (Npc && !Player)
             {
                 _solvedDescription += ", on NPCs";
             }
-            if (!_npc && _player)
+            if (!Npc && Player)
             {
                 _solvedDescription += ", on Players";
             }

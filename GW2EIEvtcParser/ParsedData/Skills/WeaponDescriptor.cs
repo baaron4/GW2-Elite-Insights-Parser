@@ -1,8 +1,8 @@
-﻿using GW2EIUtils.GW2API;
+﻿using GW2EIControllers.GW2API;
 
 namespace GW2EIEvtcParser.ParsedData
 {
-    public class WeaponDescriptor
+    internal class WeaponDescriptor
     {
         public enum Hand { MainHand, TwoHand, OffHand, Dual }
 

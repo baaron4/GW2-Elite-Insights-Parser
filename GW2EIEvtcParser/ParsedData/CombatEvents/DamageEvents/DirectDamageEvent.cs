@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.ParsedData
 {
     public class DirectDamageEvent : AbstractDamageEvent
     {
-        public DirectDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
+        internal DirectDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
             Damage = evtcItem.Value;
             ArcDPSEnums.PhysicalResult result = ArcDPSEnums.GetPhysicalResult(evtcItem.Result);

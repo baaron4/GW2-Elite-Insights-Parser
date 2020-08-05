@@ -2,12 +2,12 @@
 {
     public class DownEvent : AbstractStatusEvent
     {
-        public DownEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
+        internal DownEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
 
         }
 
-        public DownEvent(AgentItem src, long time) : base(src, time)
+        internal DownEvent(AgentItem src, long time) : base(src, time)
         {
 
         }

@@ -2,11 +2,11 @@
 
 namespace GW2EIEvtcParser.ParsedData
 {
-    public class BreakbarPercentEvent : AbstractStatusEvent, Stateable
+    public class BreakbarPercentEvent : AbstractStatusEvent, IStateable
     {
         public double BreakbarPercent { get; }
 
-        public BreakbarPercentEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
+        internal BreakbarPercentEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
             byte[] bytes = new byte[sizeof(float)];
             int offset = 0;

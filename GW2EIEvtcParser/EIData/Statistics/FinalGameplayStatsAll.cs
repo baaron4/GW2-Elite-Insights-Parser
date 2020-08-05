@@ -77,8 +77,8 @@ namespace GW2EIEvtcParser.EIData
                     SwapCount++;
                 }
             }
-            TimeSaved = Math.Round(TimeSaved / 1000.0, ParseHelper.TimeDigit);
-            TimeWasted = -Math.Round(TimeWasted / 1000.0, ParseHelper.TimeDigit);
+            TimeSaved = Math.Round(TimeSaved / 1000.0, ParseHelper._timeDigit);
+            TimeWasted = -Math.Round(TimeWasted / 1000.0, ParseHelper._timeDigit);
 
             double avgBoons = 0;
             foreach (long duration in actor.GetBuffPresence(log, phaseIndex).Where(x => log.Buffs.BuffsByIds[x.Key].Nature == BuffNature.Boon).Select(x => x.Value))

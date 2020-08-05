@@ -16,13 +16,13 @@ namespace GW2EIEvtcParser.ParsedData
         public HashSet<ulong> AgentValues => new HashSet<ulong>(_allAgentsList.Select(x => x.Agent));
         public HashSet<ushort> InstIDValues => new HashSet<ushort>(_allAgentsList.Select(x => x.InstID));
 
-        public AgentData(List<AgentItem> allAgentsList)
+        internal AgentData(List<AgentItem> allAgentsList)
         {
             _allAgentsList = allAgentsList;
             Refresh();
         }
 
-        public AgentItem AddCustomAgent(long start, long end, AgentItem.AgentType type, string name, string prof, int ID, uint toughness = 0, uint healing = 0, uint condition = 0, uint concentration = 0, uint hitboxWidth = 0, uint hitboxHeight = 0)
+        internal AgentItem AddCustomAgent(long start, long end, AgentItem.AgentType type, string name, string prof, int ID, uint toughness = 0, uint healing = 0, uint condition = 0, uint concentration = 0, uint hitboxWidth = 0, uint hitboxHeight = 0)
         {
             var rnd = new Random();
             ulong agentValue = 0;
@@ -94,14 +94,14 @@ namespace GW2EIEvtcParser.ParsedData
             return ParseHelper._unknownAgent;
         }
 
-        public void OverrideID(int ID, AgentItem agentItem)
+        internal void OverrideID(int ID, AgentItem agentItem)
         {
             _allAgentsList.RemoveAll(x => x.ID == ID);
             _allAgentsList.Add(agentItem);
             Refresh();
         }
 
-        public void Refresh()
+        internal void Refresh()
         {
             _allAgentsByAgent = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList().First());
             _allNPCsByID = _allAgentsList.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.Where(y => y.Type == AgentItem.AgentType.NPC).ToList());
@@ -123,7 +123,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        public void SwapMasters(HashSet<AgentItem> froms, AgentItem to)
+        internal void SwapMasters(HashSet<AgentItem> froms, AgentItem to)
         {
             foreach (AgentItem a in GetAgentByType(AgentItem.AgentType.NPC))
             {
@@ -134,7 +134,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        public void SwapMasters(AgentItem from, AgentItem to)
+        internal void SwapMasters(AgentItem from, AgentItem to)
         {
             foreach (AgentItem a in GetAgentByType(AgentItem.AgentType.NPC))
             {

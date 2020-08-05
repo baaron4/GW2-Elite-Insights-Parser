@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         public ArcDPSEnums.BreakbarState State { get; }
 
-        public BreakbarStateEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
+        internal BreakbarStateEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
             State = ArcDPSEnums.GetBreakbarState(evtcItem.Value);
         }

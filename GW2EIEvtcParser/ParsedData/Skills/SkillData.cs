@@ -4,11 +4,15 @@ namespace GW2EIEvtcParser.ParsedData
 {
     public class SkillData
     {
-        public ICollection<SkillItem> Values => _skills.Values;
         // Fields
         private readonly Dictionary<long, SkillItem> _skills = new Dictionary<long, SkillItem>();
 
         // Public Methods
+
+        internal SkillData()
+        {
+
+        }
 
         public SkillItem Get(long ID)
         {
@@ -21,7 +25,7 @@ namespace GW2EIEvtcParser.ParsedData
             return item;
         }
 
-        public void Add(SkillItem skillItem)
+        internal void Add(SkillItem skillItem)
         {
             if (!_skills.ContainsKey(skillItem.ID))
             {
@@ -29,7 +33,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        public void CombineWithSkillInfo(Dictionary<long, SkillInfoEvent> skillInfoEvents)
+        internal void CombineWithSkillInfo(Dictionary<long, SkillInfoEvent> skillInfoEvents)
         {
             foreach (KeyValuePair<long, SkillItem> pair in _skills)
             {

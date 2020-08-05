@@ -2,7 +2,7 @@
 {
     public class AliveEvent : AbstractStatusEvent
     {
-        public AliveEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
+        internal AliveEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
 
         }

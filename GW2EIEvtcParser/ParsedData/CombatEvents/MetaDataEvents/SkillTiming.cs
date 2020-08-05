@@ -7,7 +7,7 @@
 
         public ulong AtMillisecond { get; }
 
-        public SkillTiming(CombatItem evtcItem)
+        internal SkillTiming(CombatItem evtcItem)
         {
             Action = evtcItem.SrcAgent;
             AtMillisecond = evtcItem.DstAgent;

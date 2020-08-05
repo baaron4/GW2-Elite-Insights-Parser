@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.ParsedData
         public string ShortName => _mechanic.ShortName;
         public string Description => _mechanic.Description;
 
-        public MechanicEvent(long time, Mechanic mech, AbstractSingleActor actor) : base(time)
+        internal MechanicEvent(long time, Mechanic mech, AbstractSingleActor actor) : base(time)
         {
             Actor = actor;
             _mechanic = mech;

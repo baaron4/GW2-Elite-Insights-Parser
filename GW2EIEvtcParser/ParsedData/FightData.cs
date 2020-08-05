@@ -31,12 +31,12 @@ namespace GW2EIEvtcParser.ParsedData
         }
         public bool Success { get; private set; }
 
-        public enum CMStatus { NotSet, CM, NoCM, CMnoName }
+        internal enum CMStatus { NotSet, CM, NoCM, CMnoName }
 
         private CMStatus _isCM = CMStatus.NotSet;
         public bool IsCM => _isCM == CMStatus.CMnoName || _isCM == CMStatus.CM;
         // Constructors
-        public FightData(int id, AgentData agentData, long start, long end)
+        internal FightData(int id, AgentData agentData, long start, long end)
         {
             FightOffset = start;
             FightEnd = end - start;
@@ -236,7 +236,7 @@ namespace GW2EIEvtcParser.ParsedData
         }
 
         // Setters
-        public void SetCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal void SetCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             if (_isCM == CMStatus.NotSet)
             {
@@ -244,13 +244,13 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        public void SetSuccess(bool success, long fightEnd)
+        internal void SetSuccess(bool success, long fightEnd)
         {
             Success = success;
             FightEnd = fightEnd;
         }
 
-        public void OverrideOffset(long offset)
+        internal void OverrideOffset(long offset)
         {
             FightEnd += FightOffset - offset;
             FightOffset = offset;

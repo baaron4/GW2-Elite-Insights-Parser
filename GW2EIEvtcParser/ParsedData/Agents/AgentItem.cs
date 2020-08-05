@@ -33,7 +33,7 @@ namespace GW2EIEvtcParser.ParsedData
         public bool HasCommanderTag { get; protected set; }
 
         // Constructors
-        public AgentItem(ulong agent, string name, string prof, int id, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight)
+        internal AgentItem(ulong agent, string name, string prof, int id, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight)
         {
             UniqueID = AgentCount++;
             Agent = agent;
@@ -65,14 +65,14 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        public AgentItem(ulong agent, string name, string prof, int id, ushort instid, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight, long firstAware, long lastAware): this(agent, name, prof, id, type, toughness, healing, condition, concentration, hbWidth, hbHeight)
+        internal AgentItem(ulong agent, string name, string prof, int id, ushort instid, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight, long firstAware, long lastAware): this(agent, name, prof, id, type, toughness, healing, condition, concentration, hbWidth, hbHeight)
         {
             InstID = instid;
             FirstAware = firstAware;
             LastAware = lastAware;
         }
 
-        public AgentItem(AgentItem other)
+        internal AgentItem(AgentItem other)
         {
             UniqueID = AgentCount++;
             Agent = other.Agent;
@@ -91,47 +91,47 @@ namespace GW2EIEvtcParser.ParsedData
             HasCommanderTag = other.HasCommanderTag;
         }
 
-        public AgentItem()
+        internal AgentItem()
         {
         }
 
-        public void OverrideType(AgentType type)
+        internal void OverrideType(AgentType type)
         {
             Type = type;
         }
 
-        public void SetInstid(ushort instid)
+        internal void SetInstid(ushort instid)
         {
             InstID = instid;
         }
 
-        public void OverrideID(int id)
+        internal void OverrideID(int id)
         {
             ID = id;
         }
 
-        public void OverrideName(string name)
+        internal void OverrideName(string name)
         {
             Name = name;
         }
 
-        public void OverrideToughness(uint toughness)
+        internal void OverrideToughness(uint toughness)
         {
             Toughness = toughness;
         }
 
-        public void OverrideAwareTimes(long firstAware, long lastAware)
+        internal void OverrideAwareTimes(long firstAware, long lastAware)
         {
             FirstAware = firstAware;
             LastAware = lastAware;
         }
 
-        public void SetMaster(AgentItem master )
+        internal void SetMaster(AgentItem master )
         {
             Master = master;
         }
 
-        public void SetCommanderTag(TagEvent tagEvt)
+        internal void SetCommanderTag(TagEvent tagEvt)
         {
             HasCommanderTag = tagEvt.TagID != 0;
         }

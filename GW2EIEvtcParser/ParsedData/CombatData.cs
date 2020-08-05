@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.ParsedData
         private readonly Dictionary<AgentItem, List<AbstractMovementEvent>> _movementData;
         private readonly List<RewardEvent> _rewardEvents = new List<RewardEvent>();
 
-        public bool HasStackIDs { get; } = false;
+        internal bool HasStackIDs { get; } = false;
 
         private void EIBuffParse(List<Player> players, SkillData skillData, FightData fightData)
         {
@@ -262,7 +262,7 @@ namespace GW2EIEvtcParser.ParsedData
             ProfHelper.AttachMasterToRacialGadgets(players, _damageDataById, _castDataById);
         }
 
-        public CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players, OperationTracer operation)
+        internal CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players, OperationTracer operation)
         {
             _skillIds = new HashSet<long>(allCombatItems.Select(x => (long)x.SkillID));
             IEnumerable<CombatItem> noStateActiBuffRem = allCombatItems.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.None && x.IsActivation == ArcDPSEnums.Activation.None && x.IsBuffRemove == ArcDPSEnums.BuffRemove.None);

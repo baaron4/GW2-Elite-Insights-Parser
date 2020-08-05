@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.ParsedData
 {
     public class LogData
     {
-        public static readonly string DefaultTimeValue = "MISSING";
+        private static readonly string _defaultTimeValue = "MISSING";
 
         // Fields
         public string ArcVersion { get; } = "N/A";
@@ -18,15 +18,15 @@ namespace GW2EIEvtcParser.ParsedData
         public string PoVName { get; private set; } = "N/A";
         private readonly string _dateFormat = "yyyy-MM-dd HH:mm:ss zz";
         private readonly string _dateFormatStd = "yyyy-MM-dd HH:mm:ss zzz";
-        public string LogStart { get; private set; } = DefaultTimeValue;
-        public string LogEnd { get; private set; } = DefaultTimeValue;
-        public string LogStartStd { get; private set; } = DefaultTimeValue;
-        public string LogEndStd { get; private set; } = DefaultTimeValue;
+        public string LogStart { get; private set; } = _defaultTimeValue;
+        public string LogEnd { get; private set; } = _defaultTimeValue;
+        public string LogStartStd { get; private set; } = _defaultTimeValue;
+        public string LogEndStd { get; private set; } = _defaultTimeValue;
 
         public List<string> LogErrors { get; } = new List<string>();
 
         // Constructors
-        public LogData(string buildVersion, CombatData combatData, long evtcLogDuration, List<Player> playerList, OperationTracer operation)
+        internal LogData(string buildVersion, CombatData combatData, long evtcLogDuration, List<Player> playerList, OperationTracer operation)
         {
             ArcVersion = buildVersion;
             double unixStart = 0;
@@ -70,7 +70,7 @@ namespace GW2EIEvtcParser.ParsedData
                 unixEnd = logEnd.LocalUnixTimeStamp;
             }
             // log end event is missing, log start is present
-            if (LogEnd == DefaultTimeValue && LogStart != DefaultTimeValue)
+            if (LogEnd == _defaultTimeValue && LogStart != _defaultTimeValue)
             {
                 operation.UpdateProgressWithCancellationCheck("Missing Log End Event");
                 double dur = Math.Round(evtcLogDuration / 1000.0, 3);
@@ -78,7 +78,7 @@ namespace GW2EIEvtcParser.ParsedData
                 SetLogEndStd(dur + unixStart);
             }
             // log start event is missing, log end is present
-            if (LogEnd != DefaultTimeValue && LogStart == DefaultTimeValue)
+            if (LogEnd != _defaultTimeValue && LogStart == _defaultTimeValue)
             {
                 operation.UpdateProgressWithCancellationCheck("Missing Log Start Event");
                 double dur = Math.Round(evtcLogDuration / 1000.0, 3);

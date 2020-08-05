@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser
         internal static readonly int _pollingRate = 150;
 
         internal static readonly int _buffDigit = 2;
-        public static readonly int TimeDigit = 3;
+        internal static readonly int _timeDigit = 3;
 
         internal static readonly long _serverDelayConstant = 10;
 

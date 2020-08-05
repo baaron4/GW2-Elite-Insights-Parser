@@ -4,12 +4,12 @@
     {
         public AgentItem Src { get; protected set; }
 
-        public AbstractStatusEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem.Time)
+        protected AbstractStatusEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem.Time)
         {
             Src = agentData.GetAgent(evtcItem.SrcAgent);
         }
 
-        public AbstractStatusEvent(AgentItem src, long time) : base(time)
+        protected AbstractStatusEvent(AgentItem src, long time) : base(time)
         {
             Src = src;
         }

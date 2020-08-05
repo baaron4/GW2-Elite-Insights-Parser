@@ -9,9 +9,9 @@ namespace GW2EIEvtcParser.ParsedData
         //private readonly int _effectHappenedDuration;
 
 
-        private static double _upperLimit = Math.Log(4.0/3.0);
-        private static double _lowerLimit = Math.Log(0.5);
-        private static double _diffLimit = _upperLimit - _lowerLimit;
+        private static readonly double _upperLimit = Math.Log(4.0/3.0);
+        private static readonly double _lowerLimit = Math.Log(0.5);
+        private static readonly double _diffLimit = _upperLimit - _lowerLimit;
 
         private AnimatedCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData) : base(startItem, agentData, skillData)
         {
@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.ParsedData
             //_effectHappenedDuration = startItem.Value;
         }
 
-        public AnimatedCastEvent(CombatItem startItem, CombatItem endItem, AgentData agentData, SkillData skillData) : this(startItem, agentData, skillData)
+        internal AnimatedCastEvent(CombatItem startItem, CombatItem endItem, AgentData agentData, SkillData skillData) : this(startItem, agentData, skillData)
         {
             ActualDuration = endItem.Value;
             _scaledActualDuration = endItem.BuffDmg;
@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        public AnimatedCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData, long logEnd) : this(startItem, agentData, skillData)
+        internal AnimatedCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData, long logEnd) : this(startItem, agentData, skillData)
         {
             if (Skill.ID == SkillItem.DodgeId)
             {
@@ -70,7 +70,7 @@ namespace GW2EIEvtcParser.ParsedData
         }
 
 
-        public AnimatedCastEvent(long time, SkillItem skill, int duration, AgentItem caster) : base(time, skill, caster)
+        internal AnimatedCastEvent(long time, SkillItem skill, int duration, AgentItem caster) : base(time, skill, caster)
         {
             ActualDuration = duration;
             ExpectedDuration = duration;

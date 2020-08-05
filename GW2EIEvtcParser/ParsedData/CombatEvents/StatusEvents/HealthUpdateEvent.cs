@@ -1,10 +1,10 @@
 ﻿namespace GW2EIEvtcParser.ParsedData
 {
-    public class HealthUpdateEvent : AbstractStatusEvent, Stateable
+    public class HealthUpdateEvent : AbstractStatusEvent, IStateable
     {
         public double HPPercent { get; }
 
-        public HealthUpdateEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
+        internal HealthUpdateEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
             HPPercent = evtcItem.DstAgent / 100.0;
         }

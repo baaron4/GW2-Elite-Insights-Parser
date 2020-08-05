@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIControllers;
-using GW2EIUtils.GW2API;
+using GW2EIControllers.GW2API;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -19,10 +19,10 @@ namespace GW2EIEvtcParser.ParsedData
         public const long AliveId = -6;
         public const long RespawnId = -7;
 
-        private const int FirstLandSet = 4;
-        private const int SecondLandSet = 5;
-        private const int FirstWaterSet = 0;
-        private const int SecondWaterSet = 1;
+        private const int _firstLandSet = 4;
+        private const int _secondLandSet = 5;
+        private const int _firstWaterSet = 0;
+        private const int _secondWaterSet = 1;
         private static readonly Dictionary<long, string> _overrideNames = new Dictionary<long, string>()
         {
             {ResurrectId, "Resurrect"},
@@ -161,11 +161,6 @@ namespace GW2EIEvtcParser.ParsedData
             CompleteItem();
         }
 
-        public static bool IsWeaponSet(int swapped)
-        {
-            return swapped == FirstLandSet || swapped == SecondLandSet || swapped == FirstWaterSet || swapped == SecondWaterSet;
-        }
-
         public static bool CanCrit(long id, ulong gw2Build)
         {
             if (_nonCritable.TryGetValue(id, out ulong build))
@@ -175,7 +170,7 @@ namespace GW2EIEvtcParser.ParsedData
             return true;
         }
 
-        public int FindWeaponSlot(List<int> swaps)
+        internal int FindWeaponSlot(List<int> swaps)
         {
             int swapped = -1;
             // we started on a proper weapon set
@@ -185,38 +180,38 @@ namespace GW2EIEvtcParser.ParsedData
                 if (_weaponDescriptor.IsLand)
                 {
                     // if the first swap is not a land set that means the next time we get to a land set was the first set to begin with
-                    if (firstSwap != FirstLandSet && firstSwap != SecondLandSet)
+                    if (firstSwap != _firstLandSet && firstSwap != _secondLandSet)
                     {
-                        swapped = swaps.Exists(x => x == FirstLandSet || x == SecondLandSet) ? swaps.First(x => x == FirstLandSet || x == SecondLandSet) : FirstLandSet;
+                        swapped = swaps.Exists(x => x == _firstLandSet || x == _secondLandSet) ? swaps.First(x => x == _firstLandSet || x == _secondLandSet) : _firstLandSet;
                     }
                     else
                     {
-                        swapped = firstSwap == FirstLandSet ? SecondLandSet : FirstLandSet;
+                        swapped = firstSwap == _firstLandSet ? _secondLandSet : _firstLandSet;
                     }
                 }
                 else
                 {
                     // if the first swap is not a water set that means the next time we get to a water set was the first set to begin with
-                    if (firstSwap != FirstWaterSet && firstSwap != SecondWaterSet)
+                    if (firstSwap != _firstWaterSet && firstSwap != _secondWaterSet)
                     {
-                        swapped = swaps.Exists(x => x == FirstWaterSet || x == FirstWaterSet) ? swaps.First(x => x == FirstWaterSet || x == SecondWaterSet) : FirstWaterSet;
+                        swapped = swaps.Exists(x => x == _firstWaterSet || x == _firstWaterSet) ? swaps.First(x => x == _firstWaterSet || x == _secondWaterSet) : _firstWaterSet;
                     }
                     else
                     {
-                        swapped = firstSwap == FirstWaterSet ? SecondWaterSet : FirstWaterSet;
+                        swapped = firstSwap == _firstWaterSet ? _secondWaterSet : _firstWaterSet;
                     }
                 }
             }
             return swapped;
         }
 
-        public bool EstimateWeapons(string[] weapons, int swapped, bool swapCheck)
+        internal bool EstimateWeapons(string[] weapons, int swapped, bool swapCheck)
         {
             if (weapons.Length != 8)
             {
                 throw new InvalidOperationException("Invalid count in weapons array");
             }
-            int id = swapped == FirstLandSet ? 0 : swapped == SecondLandSet ? 2 : swapped == FirstWaterSet ? 4 : swapped == SecondWaterSet ? 6 : -1;
+            int id = swapped == _firstLandSet ? 0 : swapped == _secondLandSet ? 2 : swapped == _firstWaterSet ? 4 : swapped == _secondWaterSet ? 6 : -1;
             if (_weaponDescriptor == null || id == -1 || !swapCheck)
             {
                 return false;
@@ -242,7 +237,7 @@ namespace GW2EIEvtcParser.ParsedData
             return true;
         }
 
-        public void AttachSkillInfoEvent(SkillInfoEvent skillInfo)
+        internal void AttachSkillInfoEvent(SkillInfoEvent skillInfo)
         {
             if (ID == skillInfo.SkillID)
             {

@@ -80,7 +80,7 @@ namespace GW2EIEvtcParser.EIData
                     _playerSupport.Add(playerSup);
                     FinalSupportAll totals = GetSupport(log, phaseIndex);
                     playerSup.Resurrects = totals.Resurrects;
-                    playerSup.ResurrectTime = Math.Round(totals.ResurrectTime / 1000.0, ParseHelper.TimeDigit);
+                    playerSup.ResurrectTime = Math.Round(totals.ResurrectTime / 1000.0, ParseHelper._timeDigit);
                     FinalSupport self = GetSupport(log, this, phaseIndex);
                     foreach (Buff boon in log.Buffs.BuffsByNature[BuffNature.Boon])
                     {
@@ -120,9 +120,9 @@ namespace GW2EIEvtcParser.EIData
                             }
                         }
                     }
-                    playerSup.CondiCleanseTime = Math.Round(playerSup.CondiCleanseTime / 1000.0, ParseHelper.TimeDigit);
-                    playerSup.CondiCleanseTimeSelf = Math.Round(playerSup.CondiCleanseTimeSelf / 1000.0, ParseHelper.TimeDigit);
-                    playerSup.BoonStripsTime = Math.Round(playerSup.BoonStripsTime / 1000.0, ParseHelper.TimeDigit);
+                    playerSup.CondiCleanseTime = Math.Round(playerSup.CondiCleanseTime / 1000.0, ParseHelper._timeDigit);
+                    playerSup.CondiCleanseTimeSelf = Math.Round(playerSup.CondiCleanseTimeSelf / 1000.0, ParseHelper._timeDigit);
+                    playerSup.BoonStripsTime = Math.Round(playerSup.BoonStripsTime / 1000.0, ParseHelper._timeDigit);
                 }
             }
             return _playerSupport;

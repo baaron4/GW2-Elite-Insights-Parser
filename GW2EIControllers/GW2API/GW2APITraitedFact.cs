@@ -1,11 +1,11 @@
 ﻿using Newtonsoft.Json;
 
-namespace GW2EIUtils.GW2API
+namespace GW2EIControllers.GW2API
 {
     public class GW2APITraitedFact : GW2APIFact
     {
         [JsonProperty(PropertyName = "requires_trait")]
-        public int RequiresTrait { get; set; }
-        public int Overrides { get; set; }
+        public int RequiresTrait { get; internal set; }
+        public int Overrides { get; internal set; }
     }
 }

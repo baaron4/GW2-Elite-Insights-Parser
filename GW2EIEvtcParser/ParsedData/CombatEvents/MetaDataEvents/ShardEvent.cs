@@ -4,7 +4,7 @@
     {
         public int ShardID { get; }
 
-        public ShardEvent(CombatItem evtcItem) : base(evtcItem)
+        internal ShardEvent(CombatItem evtcItem) : base(evtcItem)
         {
             ShardID = (int)evtcItem.SrcAgent;
         }

@@ -9,7 +9,7 @@
             Time = time;
         }
 
-        public void OverrideTime(long time)
+        internal void OverrideTime(long time)
         {
             Time = time;
         }

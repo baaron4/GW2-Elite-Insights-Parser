@@ -4,7 +4,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.ParsedData
 {
-    public static class CombatEventFactory
+    internal static class CombatEventFactory
     {
 
         public static Dictionary<AgentItem, List<AbstractMovementEvent>> CreateMovementEvents(List<CombatItem> movementEvents, AgentData agentData)
