@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.ParsedData
 {
     public class LogData
     {
-        private static readonly string _defaultTimeValue = "MISSING";
+        private const string _defaultTimeValue = "MISSING";
 
         // Fields
         public string ArcVersion { get; } = "N/A";

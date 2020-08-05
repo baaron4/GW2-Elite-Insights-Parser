@@ -31,14 +31,14 @@ namespace GW2EIEvtcParser
         }
 
 
-        internal static readonly int _pollingRate = 150;
+        internal const int _pollingRate = 150;
 
-        internal static readonly int _buffDigit = 2;
-        internal static readonly int _timeDigit = 3;
+        internal const int _buffDigit = 2;
+        internal const int _timeDigit = 3;
 
-        internal static readonly long _serverDelayConstant = 10;
+        internal const long _serverDelayConstant = 10;
 
-        internal static readonly int _phaseTimeLimit = 1000;
+        internal const int _phaseTimeLimit = 1000;
 
 
         public enum Source
