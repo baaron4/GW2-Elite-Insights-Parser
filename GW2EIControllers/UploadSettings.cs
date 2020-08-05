@@ -12,5 +12,9 @@
             UploadToDPSReportsUsingRH = uploadToDPSReportsUsingRH;
             UploadToRaidar = false;
         }
+
+        public UploadSettings(bool uploadToDPSReportsUsingEI) : this(uploadToDPSReportsUsingEI, false)
+        {
+        }
     }
 }

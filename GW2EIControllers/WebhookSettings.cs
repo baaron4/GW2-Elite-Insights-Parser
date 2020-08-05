@@ -12,5 +12,8 @@
             WebhookURL = webhookURL;
             SendSimpleWebhookMessage = simpleWebhookMessage;
         }
+        public WebhookSettings(bool sendEmbedToWebhook, string webhookURL) : this(sendEmbedToWebhook, webhookURL, false)
+        {
+        }
     }
 }
