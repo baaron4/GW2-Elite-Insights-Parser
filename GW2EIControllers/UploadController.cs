@@ -62,7 +62,7 @@ namespace GW2EIControllers
             //}
             return "";
         }
-        private class DPSReportsResponseItem
+        internal class DPSReportsResponseItem
         {
             public string Permalink { get; set; }
             public string Error { get; set; }

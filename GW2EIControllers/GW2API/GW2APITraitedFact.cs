@@ -6,6 +6,7 @@ namespace GW2EIControllers.GW2API
     {
         [JsonProperty(PropertyName = "requires_trait")]
         public int RequiresTrait { get; internal set; }
+        [JsonProperty]
         public int Overrides { get; internal set; }
     }
 }
