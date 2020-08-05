@@ -6,7 +6,7 @@ using System.Linq;
 namespace GW2EIUtils
 {
 
-    public class OperationTracer
+    public abstract class OperationTracer
     {
 
         protected List<string> StatusList { get; }
