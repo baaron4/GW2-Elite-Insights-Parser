@@ -1,0 +1,15 @@
+﻿<template>
+    <div>
+        <combat-replay-actor-buffs-stats-component v-if="buffstoshow.length > 0" :time="time" :actorindex="targetindex" :enemy="true" :buffstoshow="buffstoshow"></combat-replay-actor-buffs-stats-component>
+        <div class="d-flex mb-1 mt-1 align-items-center">
+            <combat-replay-target-status-component :time="time" :targetindex="targetindex"></combat-replay-target-status-component>
+        </div>
+    </div>
+</template>
+
+<script>
+    Vue.component("combat-replay-target-stats-component", {
+        props: ["targetindex", "time", "buffstoshow"],
+        template: `${template}`
+    });
+</script>

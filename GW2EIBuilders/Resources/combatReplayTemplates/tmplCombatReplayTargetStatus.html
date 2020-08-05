@@ -1,0 +1,102 @@
+<template>
+    <div class="d-flex d-flex flex-column justify-content-center align-items-center">
+        <div class="target-status" :style="{'background': getGradient(time)}">
+            <h6 class="actor-shorten text-center" :title="target.name + ' - ' + target.health + ' health'">
+                <img :src="target.icon" height="18" width="18">
+                {{target.name}}
+            </h6>
+            <p class="text-right cr-hp-display cr-hp-display-target">
+                {{(Math.round(100*getPercent(time))/100).toFixed(2)}} %
+            </p>
+        </div>
+        <div v-if="hasBreakbarPercent" class="cr-breakbar-display">
+            <div class="cr-breakbar-bar" :style="{'background': getBreakbarGradient(time)}">
+                <p class="text-center">
+                    {{(Math.round(100*getBreakbarPercent(time))/100).toFixed(2)}} %
+                </p>
+            </div>
+            <div style="transform: translate(0px, -22px);">
+                <ul class="nav nav-pills d-flex flex-row flex-wrap justify-content-center scale65">
+                    <li class="nav-item" v-for="(phase, id) in breakbarPhases" @click="updatePhaseTime(phase.start * 1000, phase.end * 1000, phase.name)"
+                        :data-original-title="phase.durationS + ' seconds'">
+                        <a class="nav-link">{{id + 1}} </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    Vue.component("combat-replay-target-status-component", {
+        props: ["targetindex", "time"],
+        template: `${template}`,
+        methods: {
+            getBreakbarPercent: function (time) {
+                if (!this.hasBreakbarPercent) {
+                    return 100.0;
+                }
+                return findState(this.breakbarPercent, time / 1000.0, 0, this.breakbarPercent.length - 1);
+            },
+            getPercent: function (time) {
+                return findState(this.healths, time / 1000.0, 0, this.healths.length - 1);
+            },
+            getGradient: function (time) {
+                return computeGradient("green", this.getPercent(time));
+            },
+            getBreakbarGradient: function (time) {
+                var color = findState(this.breakbarStates, time / 1000.0, 0, this.breakbarStates.length - 1) ? "#20B2AA" : "#888888";
+                return computeGradient(color, this.getBreakbarPercent(time));
+            },
+            updatePhaseTime: function (min, max, name) {
+                animator.updateTime(min);
+                sliderDelimiter.min = min;
+                sliderDelimiter.max = max;
+                sliderDelimiter.name = name;
+            },
+        },
+        computed: {
+            breakbarStates: function () {
+                if (this.breakbarPhases.length === 0) {
+                    return [[0, false]];
+                }
+                var res = [];
+                var phases = this.breakbarPhases;
+                for (var i = 0; i < phases.length; i++) {
+                    var phase = phases[i];
+                    if (i === 0 && phase.start > 0) {
+                        res.push([0, false]);
+                    }
+                    // 2 seconds for colors
+                    res.push([phase.start + 2, true]);
+                    res.push([phase.end, false]);
+                    if (i === phases.length - 1) {                   
+                        res.push([this.phase.end, false]);
+                    }
+                }
+                return res;
+            },
+            breakbarPhases: function () {
+                if (!this.hasBreakbarPercent) {
+                    return [];
+                }
+                return logData.phases.filter(phase => phase.breakbarPhase && phase.targets.indexOf(this.targetindex) > -1);
+            },
+            phase: function () {
+                return logData.phases[0];
+            },
+            healths: function () {
+                return graphData.phases[0].targetsHealthStatesForCR[this.targetindex];
+            },
+            breakbarPercent: function () {
+                return graphData.phases[0].targetsBreakbarPercentStatesForCR[this.targetindex];
+            },
+            hasBreakbarPercent: function () {
+                return !!this.breakbarPercent;
+            },
+            target: function () {
+                return logData.targets[this.targetindex];
+            }
+        }
+    });
+</script>

@@ -1,0 +1,134 @@
+<template>
+    <div>
+        <table v-if="playerMechHeader.length > 0" class="table table-sm table-striped table-hover" cellspacing="0" id="playermechs">
+            <thead>
+                <tr>
+                    <th width="30px">Sub</th>
+                    <th width="30px"></th>
+                    <th class="text-left">Player</th>
+                    <th v-for="mech in playerMechHeader" :data-original-title="mech.description">
+                        {{ mech.shortName}}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="row in playerMechRows" :class="{active: row.player.id === playerindex}">
+                    <td>{{row.player.group}}</td>
+                    <td :data-original-title="row.player.profession">
+                        <img :src="row.player.icon" :alt="row.player.profession" class="icon">
+                        <span style="display:none">{{row.player.profession}}</span>
+                    </td>
+                    <td class="text-left">{{row.player.name}}</td>
+                    <td v-for="mech in row.mechs" :data-original-title="mech[1] !== mech[0] ? mech[1] + ' times (multi hits)' : false">
+                        {{ mech[0] ? mech[0] : '-'}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table v-if="enemyMechHeader.length > 0" class="table table-sm table-striped table-hover" cellspacing="0" id="enemymechs">
+            <thead>
+                <tr>
+                    <th class="text-left">Enemy</th>
+                    <th v-for="mech in enemyMechHeader" :data-original-title="mech.description">
+                        {{ mech.shortName}}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="row in enemyMechRows">
+                    <td class="text-left">{{row.enemy}}</td>
+                    <td v-for="mech in row.mechs" :data-original-title="mech[1] !== mech[0] ? mech[1] + ' times (multi hits)' : false">
+                        {{mech[0] ? mech[0] : '-'}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</template>
+
+<script>
+    Vue.component("mechanics-stats-component", {
+        props: ["phaseindex", "playerindex"],
+        template: `${template}`,
+        data: function () {
+            return {
+                cacheP: new Map(),
+                cacheE: new Map()
+            };
+        },
+        mounted() {
+            initTable("#playermechs", 0, "asc");
+            //
+            if (this.enemyMechHeader.length) {
+                initTable("#enemymechs", 0, "asc");
+            }
+        },
+        updated() {
+            updateTable("#playermechs");
+            //
+            if (this.enemyMechHeader.length) {
+                updateTable("#enemymechs");
+            }
+        },
+        computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
+            playerMechHeader: function () {
+                var playerMechanics = [];
+                for (var i = 0; i < logData.mechanicMap.length; i++) {
+                    var mech = logData.mechanicMap[i];
+                    if (mech.playerMech) {
+                        playerMechanics.push(mech);
+                    }
+                }
+                return playerMechanics;
+            },
+            playerMechRows: function () {
+                if (this.cacheP.has(this.phaseindex)) {
+                    return this.cacheP.get(this.phaseindex);
+                }
+                var players = logData.players;
+                var rows = [];
+                for (var i = 0; i < players.length; i++) {
+                    var player = players[i];
+                    if (player.isConjure) {
+                        continue;
+                    }
+                    rows.push({
+                        player: player,
+                        mechs: this.phase.mechanicStats[i]
+                    });
+                }
+                this.cacheP.set(this.phaseindex, rows);
+                return rows;
+            },
+            enemyMechHeader: function () {
+                var enemyMechanics = [];
+                for (var i = 0; i < logData.mechanicMap.length; i++) {
+                    var mech = logData.mechanicMap[i];
+                    if (mech.enemyMech) {
+                        enemyMechanics.push(mech);
+                    }
+                }
+                return enemyMechanics;
+            },
+            enemyMechRows: function () {
+                if (this.cacheE.has(this.phaseindex)) {
+                    return this.cacheE.get(this.phaseindex);
+                }
+                var enemies = logData.enemies;
+                var rows = [];
+                for (var i = 0; i < enemies.length; i++) {
+                    var enemy = enemies[i];
+                    rows.push({
+                        enemy: enemy.name,
+                        mechs: this.phase.enemyMechanicStats[i]
+                    });
+                }
+                this.cacheE.set(this.phaseindex, rows);
+                return rows;
+            }
+        }
+    });
+</script>

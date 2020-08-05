@@ -1,0 +1,114 @@
+<template>
+    <div>
+        <div v-if="player.minions.length > 0">
+            <ul class="nav nav-tabs">
+                <li>
+                    <a class="nav-link" :class="{active: distmode === -1}" @click="distmode = -1">{{player.name}}</a>
+                </li>
+                <li v-for="(minion, mindex) in player.minions">
+                    <a class="nav-link" :class="{active: distmode === mindex}"
+                        @click="distmode = mindex">{{minion.name}}</a>
+                </li>
+            </ul>
+        </div>
+        <div v-if="!targetless" class="d-flex flex-row justify-content-center mt-1 mb-1">
+            <ul class="nav nav-pills scale85">
+                <li class="nav-item">
+                    <a class="nav-link" @click="targetmode = 1" :class="{active: targetmode}">Target</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" @click="targetmode = 0" :class="{active: !targetmode }">All</a>
+                </li>
+            </ul>
+        </div>
+        <damagedist-table-component :dmgdist="targetmode === 0 ? dmgdist : dmgdisttarget"
+            :tableid="'dmgdist-' + playerindex" :actor="actor" :isminion="distmode>=0" :istarget="targetmode === 1"
+            :phaseindex="phaseindex"></damagedist-table-component>
+    </div>
+</template>
+
+<script>
+    Vue.component('dmgdist-player-component', {
+        props: ['playerindex',
+            'phaseindex', 'activetargets'
+        ],
+        template: `${template}`,
+        data: function () {
+            return {
+                distmode: -1,
+                targetless: logData.targetless,
+                targetmode: logData.targetless ? 0 : 1,
+                cacheTarget: new Map()
+            };
+        },
+        computed: {
+            phase: function () {
+                return logData.phases[this.phaseindex];
+            },
+            player: function () {
+                return logData.players[this.playerindex];
+            },
+            actor: function () {
+                if (this.distmode === -1) {
+                    return this.player;
+                }
+                return this.player.minions[this.distmode];
+            },
+            dmgdist: function () {
+                if (this.distmode === -1) {
+                    return this.player.details.dmgDistributions[this.phaseindex];
+                }
+                return this.player.details.minions[this.distmode].dmgDistributions[this.phaseindex];
+            },
+            dmgdisttarget: function () {
+                var cacheID = this.phaseindex + '-' + this.distmode + '-';
+                cacheID += getTargetCacheID(this.activetargets);
+                if (this.cacheTarget.has(cacheID)) {
+                    return this.cacheTarget.get(cacheID);
+                }
+                var dist = {
+                    contributedDamage: 0,
+                    totalDamage: 0,
+                    distribution: [],
+                };
+                var rows = new Map();
+                for (var i = 0; i < this.activetargets.length; i++) {
+                    var targetid = this.activetargets[i];
+                    var targetDist = this.distmode === -1 ?
+                        this.player.details.dmgDistributionsTargets[this.phaseindex][targetid] :
+                        this.player.details.minions[this.distmode].dmgDistributionsTargets[this.phaseindex][targetid];
+                    dist.contributedDamage += targetDist.contributedDamage;
+                    dist.totalDamage += targetDist.totalDamage;
+                    var distribution = targetDist.distribution;
+                    for (var k = 0; k < distribution.length; k++) {
+                        var targetDistribution = distribution[k];
+                        if (rows.has(targetDistribution[1])) {
+                            var row = rows.get(targetDistribution[1]);
+                            row[2] += targetDistribution[2];
+                            if (row[3] < 0) {
+                                row[3] = targetDistribution[3];
+                            } else if (targetDistribution[3] >= 0) {
+                                row[3] = Math.min(targetDistribution[3], row[3]);
+                            }
+                            row[4] = Math.max(targetDistribution[4], row[4]);
+                            row[6] += targetDistribution[6];
+                            row[7] += targetDistribution[7];
+                            row[8] += targetDistribution[8];
+                            row[9] += targetDistribution[9];
+                        } else {
+                            rows.set(targetDistribution[1], targetDistribution.slice(0));
+                        }
+
+                    }
+                }
+                rows.forEach(function (value, key, map) {
+                    dist.distribution.push(value);
+                });
+                dist.contributedDamage = Math.max(dist.contributedDamage, 0);
+                dist.totalDamage = Math.max(dist.totalDamage, 0);
+                this.cacheTarget.set(cacheID, dist);
+                return dist;
+            }
+        },
+    });
+</script>

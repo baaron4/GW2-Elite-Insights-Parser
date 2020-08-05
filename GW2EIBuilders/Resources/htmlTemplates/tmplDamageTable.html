@@ -1,0 +1,191 @@
+<template>
+    <div>
+        <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" id="dps-table">
+            <thead>
+                <tr>
+                    <th>Sub</th>
+                    <th></th>
+                    <th class="text-left">Name</th>
+                    <th>Account</th>
+                    <th v-show="!targetless" v-if="!showDamage">Target DPS</th>
+                    <th v-show="!targetless" v-else>Target Damage</th>
+                    <th v-show="!targetless">Power</th>
+                    <th v-show="!targetless">Condi</th>
+                    <th v-if="!showDamage">All DPS</th>
+                    <th v-else>All Damage</th>
+                    <th>Power</th>
+                    <th>Condi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="row in tableData.rows" :class="{active: row.player.id === playerindex}">
+                    <td>{{row.player.group}}</td>
+                    <td :data-original-title="row.player.profession">
+                        <img :src="row.player.icon" :alt="row.player.profession" class="icon"><span
+                            style="display:none">{{row.player.profession}}</span>
+                    </td>
+                    <td class="text-left">{{row.player.name}}</td>
+                    <td>{{row.player.acc}}</td>
+                    <td v-show="!targetless" v-if="!showDamage"
+                        :data-original-title="row.dps[0] + ' dmg'+ '<br>' + computeTotalContribution(0, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 0, row.dps,tableData.sums)">
+                        {{round(row.dps[0]/phase.durationS)}}</td>
+                    <td v-show="!targetless" v-else
+                        :data-original-title="round(row.dps[0]/phase.durationS) + ' dps'+ '<br>' + computeTotalContribution(0, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 0, row.dps,tableData.sums)">
+                        {{row.dps[0]}}</td>
+                    <td v-show="!targetless" v-if="!showDamage"
+                        :data-original-title="row.dps[1] + ' dmg'+ '<br>' + computeTotalContribution(1, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 1, row.dps,tableData.sums)">
+                        {{round(row.dps[1]/phase.durationS)}}</td>
+                    <td v-show="!targetless" v-else
+                        :data-original-title="round(row.dps[1]/phase.durationS) + ' dps'+ '<br>' + computeTotalContribution(1, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 1, row.dps,tableData.sums)">
+                        {{row.dps[1]}}</td>
+                    <td v-show="!targetless" v-if="!showDamage"
+                        :data-original-title="row.dps[2] + ' dmg'+ '<br>' + computeTotalContribution(2, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 2, row.dps,tableData.sums)">
+                        {{round(row.dps[2]/phase.durationS)}}</td>
+                    <td v-show="!targetless" v-else
+                        :data-original-title="round(row.dps[2]/phase.durationS) + ' dps'+ '<br>' + computeTotalContribution(2, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 2, row.dps,tableData.sums)">
+                        {{row.dps[2]}}</td>
+                    <td v-if="!showDamage"
+                        :data-original-title="row.dps[3] + ' dmg'+ '<br>' + computeTotalContribution(3, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 3, row.dps,tableData.sums)">
+                        {{round(row.dps[3]/phase.durationS)}}</td>
+                    <td v-else
+                        :data-original-title="round(row.dps[3]/phase.durationS) + ' dps'+ '<br>' + computeTotalContribution(3, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 3, row.dps,tableData.sums)">
+                        {{row.dps[3]}}</td>
+                    <td v-if="!showDamage"
+                        :data-original-title="row.dps[4] + ' dmg'+ '<br>' + computeTotalContribution(4, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 4, row.dps,tableData.sums)">
+                        {{round(row.dps[4]/phase.durationS)}}</td>
+                    <td v-else
+                        :data-original-title="round(row.dps[4]/phase.durationS) + ' dps'+ '<br>' + computeTotalContribution(4, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 4, row.dps,tableData.sums)">
+                        {{row.dps[4]}}</td>
+                    <td v-if="!showDamage"
+                        :data-original-title="row.dps[5] + ' dmg'+ '<br>' + computeTotalContribution(5, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 5, row.dps,tableData.sums)">
+                        {{round(row.dps[5]/phase.durationS)}}</td>
+                    <td v-else
+                        :data-original-title="round(row.dps[5]/phase.durationS) + ' dps'+ '<br>' + computeTotalContribution(5, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 5, row.dps,tableData.sums)">
+                        {{row.dps[5]}}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr v-for="sum in tableData.sums">
+                    <td></td>
+                    <td></td>
+                    <td class="text-left">{{sum.name}}</td>
+                    <td></td>
+                    <td v-show="!targetless" v-if="!showDamage" :data-original-title="sum.dps[0] + ' dmg'">
+                        {{round(sum.dps[0]/phase.durationS)}}</td>
+                    <td v-show="!targetless" v-else :data-original-title="round(sum.dps[0]/phase.durationS) + ' dps'">
+                        {{sum.dps[0]}}</td>
+                    <td v-show="!targetless" v-if="!showDamage" :data-original-title="sum.dps[1] + ' dmg'">
+                        {{round(sum.dps[1]/phase.durationS)}}</td>
+                    <td v-show="!targetless" v-else :data-original-title="round(sum.dps[1]/phase.durationS) + ' dps'">
+                        {{sum.dps[1]}}</td>
+                    <td v-show="!targetless" v-if="!showDamage" :data-original-title="sum.dps[2] + ' dmg'">
+                        {{round(sum.dps[2]/phase.durationS)}}</td>
+                    <td v-show="!targetless" v-else :data-original-title="round(sum.dps[2]/phase.durationS) + ' dps'">
+                        {{sum.dps[2]}}</td>
+                    <td v-if="!showDamage" :data-original-title="sum.dps[3] + ' dmg'">
+                        {{round(sum.dps[3]/phase.durationS)}}</td>
+                    <td v-else :data-original-title="round(sum.dps[3]/phase.durationS) + ' dps'">{{sum.dps[3]}}</td>
+                    <td v-if="!showDamage" :data-original-title="sum.dps[4] + ' dmg'">
+                        {{round(sum.dps[4]/phase.durationS)}}</td>
+                    <td v-else :data-original-title="round(sum.dps[4]/phase.durationS) + ' dps'">{{sum.dps[4]}}</td>
+                    <td v-if="!showDamage" :data-original-title="sum.dps[5] + ' dmg'">
+                        {{round(sum.dps[5]/phase.durationS)}}</td>
+                    <td v-else :data-original-title="round(sum.dps[5]/phase.durationS) + ' dps'">{{sum.dps[5]}}</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</template>
+
+<script>
+    Vue.component("damage-stats-component", {
+        props: ["activetargets", "playerindex", "phaseindex"],
+        template: `${template}`,
+        mixins: [roundingComponent],
+        data: function () {
+            return {
+                targetless: logData.targetless,
+                showDamage: logData.wvw,
+                cacheTarget: new Map()
+            };
+        },
+        mounted() {
+            initTable("#dps-table", logData.targetless ? 7 : 4, "desc");
+        },
+        updated() {
+            updateTable("#dps-table");
+        },
+        methods: {
+            computeTotalContribution: function (index, row, sums) {
+                return this.round2(row[index] * 100 / sums[sums.length - 1].dps[index]) + '% of total';
+            },
+            computeGroupContribution: function (groupIndex, index, row, sums) {
+                var sumId = 0;
+                for (var sumId = 0; sumId < sums.length; sumId++) {
+                    if (sums[sumId].name.includes(groupIndex)) {
+                        break;
+                    }
+                }
+                return this.round2(row[index] * 100 / sums[sumId].dps[index]) + '% of group';
+            }
+        },
+        computed: {
+            phase: function () {
+                return logData.phases[this.phaseindex];
+            },
+            tableData: function () {
+                var cacheID = this.phaseindex + '-';
+                cacheID += getTargetCacheID(this.activetargets);
+                if (this.cacheTarget.has(cacheID)) {
+                    return this.cacheTarget.get(cacheID);
+                }
+                var rows = [];
+                var sums = [];
+                var total = [0, 0, 0, 0, 0, 0];
+                var groups = [];
+                var i, j;
+                for (i = 0; i < this.phase.dpsStats.length; i++) {
+                    var dpsStat = this.phase.dpsStats[i];
+                    var dpsTargetStat = [0, 0, 0];
+                    for (j = 0; j < this.activetargets.length; j++) {
+                        var tar = this.phase.dpsStatsTargets[i][this.activetargets[j]];
+                        for (var k = 0; k < dpsTargetStat.length; k++) {
+                            dpsTargetStat[k] += tar[k];
+                        }
+                    }
+                    var player = logData.players[i];
+                    if (!groups[player.group]) {
+                        groups[player.group] = [0, 0, 0, 0, 0, 0];
+                    }
+                    var dps = dpsTargetStat.concat(dpsStat);
+                    for (j = 0; j < dps.length; j++) {
+                        total[j] += dps[j];
+                        groups[player.group][j] += dps[j];
+                    }
+                    rows.push({
+                        player: player,
+                        dps: dps
+                    });
+                }
+                for (i = 0; i < groups.length; i++) {
+                    if (groups[i]) {
+                        sums.push({
+                            name: "Group " + i,
+                            dps: groups[i]
+                        });
+                    }
+                }
+                sums.push({
+                    name: "Total",
+                    dps: total
+                });
+                var res = {
+                    rows: rows,
+                    sums: sums
+                };
+                this.cacheTarget.set(cacheID, res);
+                return res;
+            }
+        }
+    });
+</script>

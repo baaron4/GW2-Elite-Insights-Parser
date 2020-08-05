@@ -1,0 +1,74 @@
+<template>
+    <div class="d-flex flex-row flex-wrap justify-content-center align-items-start mb-2">
+        <ul class="nav nav-pills d-flex flex-row justify-content-center mb-1 scale85">
+            <li class="nav-item">
+                <a class="nav-link" :class="{active: buffs}" @click="buffs = !buffs">
+                    Show Buffs
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" :class="{active: rotation}" @click="rotation = !rotation">Show Rotation</a>
+            </li>
+        </ul>                    
+        <ul class="nav nav-pills d-flex flex-row justify-content-center mb-1 scale65">
+            <li v-for="(buffType, index) in possibleBuffs" class="ml-1 mr-1">
+                <input :id="'crpl-possibleBuffs-' + index" type="checkbox" :value="buffType" v-model="buffsToShow" />
+                <label :for="'crpl-possibleBuffs-' + index">{{buffType}}</label>
+            </li>
+        </ul>
+        <div class="d-flex flex-column combat-actor-status-container scrollable-y" style="transform: translate(-42px,0);">
+            <div v-for="(group,id) in groups" v-if="group" class="d-flex flex-row align-items-center ml-2 mt-1">
+                <h5 style="width:70px" class="text-center mt-2">Group {{id}}</h5>
+                <div class="d-flex flex-row flex-wrap align-items-center ml-1 mr-1" style="width:280px;border: 2px solid #888;">
+                    <div v-for="player in group" class="player-data ml-1" :class="{active: selectedplayerindex === player.id}">
+                        <combat-replay-player-stats-component :time="time" :buffs="buffs" :rotation="rotation" :playerindex="player.id" :buffstoshow="buffsToShow"></combat-replay-player-stats-component>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    Vue.component("combat-replay-players-stats-component", {
+        props: ["time", "selectedplayer", "selectedplayerid"],
+        template: `${template}`,
+        data: function () {
+            return {
+                buffs: false,
+                rotation: true,
+                buffsToShow: ["Others", "Shared", "Consumables", "Boons"]
+            };
+        },
+        computed: {
+            possibleBuffs: function() {
+                return [ "Boons", "Conditions", "Fight Specifics","Shared", "Consumables", "Others"];
+            },
+            selectedplayerindex: function () {
+                if (this.selectedplayer) {
+                    for (var i = 0; i < logData.players.length; i++) {
+                        if (logData.players[i].combatReplayID == this.selectedplayerid) {
+                            return i;
+                        }
+                    }
+                }
+                return -1;
+            },
+            groups: function () {
+                var res = [];
+                var i = 0;
+                for (i = 0; i < logData.players.length; i++) {
+                    var playerData = logData.players[i];
+                    if (playerData.isConjure) {
+                        continue;
+                    }
+                    if (!res[playerData.group]) {
+                        res[playerData.group] = [];
+                    }
+                    res[playerData.group].push(playerData);
+                }
+                return res;
+            }
+        }
+    });
+</script>

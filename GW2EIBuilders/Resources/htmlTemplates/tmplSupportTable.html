@@ -1,0 +1,114 @@
+<template>
+    <div>
+        <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" id="sup-table">
+            <thead>
+                <tr>
+                    <th>Sub</th>
+                    <th></th>
+                    <th class="text-left">Name</th>
+                    <th>Account</th>
+                    <th>Condi Cleanse on Others</th>
+                    <th>Condi Cleanse on Self</th>
+                    <th>Boon Strips</th>
+                    <th>Resurrects</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="row in tableData.rows" :class="{active: row.player.id === playerindex}">
+                    <td>{{row.player.group}}</td>
+                    <td :data-original-title="row.player.profession">
+                        <img :src="row.player.icon" :alt="row.player.profession" class="icon"><span style="display:none">{{row.player.profession}}</span>
+                    </td>
+                    <td class="text-left">{{row.player.name}}</td>
+                    <td>{{row.player.acc}}</td>
+                    <td :data-original-title="row.sup[1] + ' seconds'">{{row.sup[0]}}</td>
+                    <td :data-original-title="row.sup[3] + ' seconds'">{{row.sup[2]}}</td>
+                    <td :data-original-title="row.sup[5] + ' seconds'">{{row.sup[4]}}</td>
+                    <td :data-original-title="row.sup[7] + ' seconds'">{{row.sup[6]}}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr v-for="sum in tableData.sums">
+                    <td></td>
+                    <td></td>
+                    <td class="text-left">{{sum.name}}</td>
+                    <td></td>
+                    <td :data-original-title="round3(sum.sup[1]) + ' seconds'">{{sum.sup[0]}}</td>
+                    <td :data-original-title="round3(sum.sup[3])  + ' seconds'">{{sum.sup[2]}}</td>
+                    <td :data-original-title="round3(sum.sup[5])  + ' seconds'">{{sum.sup[4]}}</td>
+                    <td :data-original-title="round3(sum.sup[7])  + ' seconds'">{{sum.sup[6]}}</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</template>
+
+<script>
+    Vue.component("support-stats-component", {
+        props: ["phaseindex", "playerindex"],
+        template: `${template}`,
+        data: function () {
+            return {
+                cache: new Map()
+            };
+        },
+        mixins: [roundingComponent],
+        mounted() {
+            initTable("#sup-table", 4, "desc");
+        },
+        updated() {
+            updateTable("#sup-table");
+        },
+        computed: {
+            phase: function () {
+                return logData.phases[this.phaseindex];
+            },
+            tableData: function () {
+                if (this.cache.has(this.phaseindex)) {
+                    return this.cache.get(this.phaseindex);
+                }
+                var rows = [];
+                var sums = [];
+                var total = [0, 0, 0, 0, 0, 0, 0, 0];
+                var groups = [];
+                var i;
+                for (i = 0; i < this.phase.supportStats.length; i++) {
+                    var sup = this.phase.supportStats[i];
+                    var player = logData.players[i];
+                    if (player.isConjure) {
+                        continue;
+                    }
+                    rows.push({
+                        player: player,
+                        sup: sup
+                    });
+                    if (!groups[player.group]) {
+                        groups[player.group] = [0, 0, 0, 0, 0, 0, 0, 0];
+                    }
+                    for (var j = 0; j < sup.length; j++) {
+                        total[j] += sup[j];
+                        groups[player.group][j] += sup[j];
+                    }
+                }
+                for (i = 0; i < groups.length; i++) {
+                    if (groups[i]) {
+                        sums.push({
+                            name: "Group " + i,
+                            sup: groups[i]
+                        });
+                    }
+                }
+                sums.push({
+                    name: "Total",
+                    sup: total
+                });
+                var res = {
+                    rows: rows,
+                    sums: sums
+                };
+                this.cache.set(this.phaseindex, res);
+                return res;
+            }
+        }
+    });
+</script>

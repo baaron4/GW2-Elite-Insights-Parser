@@ -1,0 +1,71 @@
+<template>
+    <div>
+        <ul class="nav nav-tabs">
+            <li v-if="itemModifiers.length > 0">
+                <a class="nav-link" :class="{active: displayMode === 0}" @click="displayMode = 0"> Gear Based Damage
+                    Modifiers </a>
+            </li>
+            <li v-if="commonModifiers.length > 0">
+                <a class="nav-link" :class="{active: displayMode === 1}" @click="displayMode = 1"> Shared Damage
+                    Modifiers </a>
+            </li>
+            <li>
+                <a class="nav-link" :class="{active: displayMode === 2}" @click="displayMode = 2"> Class Based Damage
+                    Modifiers </a>
+            </li>
+        </ul>
+        <ul class="nav nav-pills d-flex flex-row justify-content-center mt-1 mb-1 scale85">
+            <li class="nav-item">
+                <a class="nav-link" @click="mode = 1" :class="{active: mode}">Target</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" @click="mode = 0" :class="{active: !mode }">All</a>
+            </li>
+        </ul>
+        <keep-alive>
+            <dmgmodifier-table-component v-if="displayMode === 0" :key="'gear'" :phaseindex="phaseindex"
+                :playerindex="playerindex" :activetargets="activetargets" :mode="mode"
+                :id="'damage-modifier-item-table'" :playerindices="null" :modifiers="itemModifiers"
+                :modifiersdata="phase.dmgModifiersItem" :sum="true"></dmgmodifier-table-component>
+            <dmgmodifier-table-component v-if="displayMode === 1" :key="'common'" :phaseindex="phaseindex"
+                :playerindex="playerindex" :activetargets="activetargets" :mode="mode"
+                :id="'damage-modifier-common-table'" :playerindices="null" :modifiers="commonModifiers"
+                :modifiersdata="phase.dmgModifiersCommon" :sum="true"></dmgmodifier-table-component>
+            <dmgmodifier-persstats-component v-if="displayMode === 2" :key="'pers'" :phaseindex="phaseindex"
+                :playerindex="playerindex" :activetargets="activetargets" :mode="mode">
+            </dmgmodifier-persstats-component>
+        </keep-alive>
+    </div>
+</template>
+
+<script>
+    Vue.component("dmgmodifier-stats-component", {
+        props: ['phaseindex', 'playerindex', 'activetargets'],
+        template: `${template}`,
+        data: function () {
+            return {
+                mode: 1,
+                displayMode: logData.dmgModifiersItem.length > 0 ? 0 : logData.dmgModifiersCommon.length > 0 ? 1 : 2
+            };
+        },
+        computed: {
+            phase: function () {
+                return logData.phases[this.phaseindex];
+            },
+            commonModifiers: function () {
+                var modifiers = [];
+                for (var i = 0; i < logData.dmgModifiersCommon.length; i++) {
+                    modifiers.push(logData.damageModMap['d' + logData.dmgModifiersCommon[i]]);
+                }
+                return modifiers;
+            },
+            itemModifiers: function () {
+                var modifiers = [];
+                for (var i = 0; i < logData.dmgModifiersItem.length; i++) {
+                    modifiers.push(logData.damageModMap['d' + logData.dmgModifiersItem[i]]);
+                }
+                return modifiers;
+            }
+        }
+    });
+</script>

@@ -1,0 +1,19 @@
+<template>
+    <damagedist-table-component :dmgdist="dmgtaken" :tableid="tableid" :actor="null" :isminion="false" :istarget="false"
+        :phaseindex="phaseindex">
+    </damagedist-table-component>
+</template>
+
+<script>
+    Vue.component('dmgtaken-component', {
+        props: ['actor', 'tableid',
+            'phaseindex'
+        ],
+        template: `${template}`,
+        computed: {
+            dmgtaken: function () {
+                return this.actor.details.dmgDistributionsTaken[this.phaseindex];
+            }
+        },
+    });
+</script>
