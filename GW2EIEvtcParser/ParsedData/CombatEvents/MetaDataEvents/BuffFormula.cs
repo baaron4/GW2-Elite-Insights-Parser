@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using GW2EIEvtcParser.EIData;
 using GW2EIUtils;
-using static GW2EIUtils.ArcDPSEnums.BuffAttribute;
+using static GW2EIEvtcParser.ArcDPSEnums.BuffAttribute;
 
 namespace GW2EIEvtcParser.ParsedData
 {

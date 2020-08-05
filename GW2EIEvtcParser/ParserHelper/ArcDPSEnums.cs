@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GW2EIUtils
+namespace GW2EIEvtcParser
 {
     public static class ArcDPSEnums
     {
@@ -17,7 +17,7 @@ namespace GW2EIUtils
             Unknown
         };
 
-        public static Activation GetActivation(byte bt)
+        internal static Activation GetActivation(byte bt)
         {
             return Enum.IsDefined(typeof(Activation), bt) ? (Activation)bt : Activation.Unknown;
         }
@@ -33,7 +33,7 @@ namespace GW2EIUtils
             Unknown
         };
 
-        public static BuffRemove GetBuffRemove(byte bt)
+        internal static BuffRemove GetBuffRemove(byte bt)
         {
             return Enum.IsDefined(typeof(BuffRemove), bt) ? (BuffRemove)bt : BuffRemove.Unknown;
         }
@@ -56,7 +56,7 @@ namespace GW2EIUtils
             Unknown
         };
 
-        public static PhysicalResult GetPhysicalResult(byte bt)
+        internal static PhysicalResult GetPhysicalResult(byte bt)
         {
             return Enum.IsDefined(typeof(PhysicalResult), bt) ? (PhysicalResult)bt : PhysicalResult.Unknown;
         }
@@ -71,7 +71,7 @@ namespace GW2EIUtils
 
             Unknown
         };
-        public static ConditionResult GetConditionResult(byte bt)
+        internal static ConditionResult GetConditionResult(byte bt)
         {
             return Enum.IsDefined(typeof(ConditionResult), bt) ? (ConditionResult)bt : ConditionResult.Unknown;
         }
@@ -120,7 +120,7 @@ namespace GW2EIUtils
             Unknown
         };
 
-        public static StateChange GetStateChange(byte bt)
+        internal static StateChange GetStateChange(byte bt)
         {
             return Enum.IsDefined(typeof(StateChange), bt) ? (StateChange)bt : StateChange.Unknown;
         }
@@ -133,7 +133,7 @@ namespace GW2EIUtils
             None, 
             Unknown 
         };
-        public static BreakbarState GetBreakbarState(int value)
+        internal static BreakbarState GetBreakbarState(int value)
         {
             return Enum.IsDefined(typeof(BreakbarState), value) ? (BreakbarState)value : BreakbarState.Unknown;
         }
@@ -149,7 +149,7 @@ namespace GW2EIUtils
             Force = 4,
             Unknown = -1,
         };
-        public static BuffStackType GetBuffStackType(short bt)
+        internal static BuffStackType GetBuffStackType(short bt)
         {
             return Enum.IsDefined(typeof(BuffStackType), bt) ? (BuffStackType)bt : BuffStackType.Unknown;
         }
@@ -223,7 +223,7 @@ namespace GW2EIUtils
             ExperienceFromAll = -21,
             WXP = -22,
         }
-        public static BuffAttribute GetBuffAttribute(short bt)
+        internal static BuffAttribute GetBuffAttribute(short bt)
         {
             return Enum.IsDefined(typeof(BuffAttribute), bt) ? (BuffAttribute)bt : BuffAttribute.Unknown;
         }
@@ -241,7 +241,7 @@ namespace GW2EIUtils
             Stance = 16,
             Unknown
         }
-        public static BuffCategory GetBuffCategory(byte bt)
+        internal static BuffCategory GetBuffCategory(byte bt)
         {
             return Enum.IsDefined(typeof(BuffCategory), bt) ? (BuffCategory)bt : BuffCategory.Unknown;
         }
@@ -256,7 +256,7 @@ namespace GW2EIUtils
             Unknown
         };
 
-        public static IFF GetIFF(byte bt)
+        internal static IFF GetIFF(byte bt)
         {
             return Enum.IsDefined(typeof(IFF), bt) ? (IFF)bt : IFF.Unknown;
         }

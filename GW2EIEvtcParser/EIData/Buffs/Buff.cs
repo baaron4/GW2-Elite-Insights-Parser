@@ -2,7 +2,7 @@
 using System.IO;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIUtils;
-using static GW2EIUtils.ArcDPSEnums;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EIData
 {
