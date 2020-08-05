@@ -5,7 +5,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public class Artsariiv : ShatteredFractal
+    internal class Artsariiv : ShatteredFractal
     {
         public Artsariiv(int triggerID) : base(triggerID)
         {
@@ -46,12 +46,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             return FightData.CMStatus.CMnoName;
         }
 
-        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             SetSuccessByBuffCount(combatData, fightData, playerAgents, Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Artsariiv), 762, 4);
         }

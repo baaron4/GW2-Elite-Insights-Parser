@@ -7,7 +7,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public abstract class NightmareFractal : FractalLogic
+    internal abstract class NightmareFractal : FractalLogic
     {
         public NightmareFractal(int triggerID) : base(triggerID)
         {

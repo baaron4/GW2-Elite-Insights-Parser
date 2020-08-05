@@ -7,7 +7,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public class Samarog : RaidLogic
+    internal class Samarog : RaidLogic
     {
         public Samarog(int triggerID) : base(triggerID)
         {
@@ -105,7 +105,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         }
 
 
-        public override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             // TODO: facing information (shock wave)
             switch (target.ID)
@@ -134,7 +134,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        public override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
         {
             // big bomb
             var bigbomb = log.CombatData.GetBuffData(37966).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
@@ -212,7 +212,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Samarog);
             if (target == null)

@@ -6,7 +6,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public class Skorvald : ShatteredFractal
+    internal class Skorvald : ShatteredFractal
     {
         public Skorvald(int triggerID) : base(triggerID)
         {
@@ -46,7 +46,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (11204, 4414, 13252, 6462));
         }
 
-        public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Skorvald);
             if (target == null)

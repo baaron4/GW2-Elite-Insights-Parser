@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public abstract class StrikeMissionLogic : FightLogic
+    internal abstract class StrikeMissionLogic : FightLogic
     {
 
         protected StrikeMissionLogic(int triggerID) : base(triggerID)
@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             SetSuccessByDeath(combatData, fightData, playerAgents, all, GenericTriggerID);
         }
 
-        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             var strikeRewardIDs = new HashSet<ulong>
                 {

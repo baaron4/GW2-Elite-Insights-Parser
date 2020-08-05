@@ -7,7 +7,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public class WhisperOfJormag : StrikeMissionLogic
+    internal class WhisperOfJormag : StrikeMissionLogic
     {
         public WhisperOfJormag(int triggerID) : base(triggerID)
         {

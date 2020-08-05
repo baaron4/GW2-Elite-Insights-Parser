@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public abstract class RaidLogic : FightLogic
+    internal abstract class RaidLogic : FightLogic
     {
         protected enum FallBackMethod { None, Death, CombatExit }
 
@@ -29,7 +29,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             SetSuccessByCombatExit(targets, combatData, fightData, playerAgents);
         }
 
-        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             var raidRewardsTypes = new HashSet<int>
                 {

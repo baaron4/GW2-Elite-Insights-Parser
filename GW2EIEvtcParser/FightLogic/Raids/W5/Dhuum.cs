@@ -7,7 +7,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public class Dhuum : RaidLogic
+    internal class Dhuum : RaidLogic
     {
         private bool _isBugged;
         private short _reapersSeen;
@@ -165,7 +165,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        public override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             // TODO: correct position
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
@@ -299,7 +299,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
-        public override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
         {
             // spirit transform
             var spiritTransform = log.CombatData.GetBuffData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
@@ -386,7 +386,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
             if (target == null)

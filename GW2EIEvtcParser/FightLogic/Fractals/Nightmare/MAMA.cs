@@ -6,7 +6,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public class MAMA : NightmareFractal
+    internal class MAMA : NightmareFractal
     {
         public MAMA(int triggerID) : base(triggerID)
         {
@@ -42,7 +42,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (11804, 4414, 12444, 5054));
         }
 
-        public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             return FightData.CMStatus.CMnoName;
         }
@@ -120,7 +120,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)ArcDPSEnums.TargetID.MAMA, 762, 1500);
         }

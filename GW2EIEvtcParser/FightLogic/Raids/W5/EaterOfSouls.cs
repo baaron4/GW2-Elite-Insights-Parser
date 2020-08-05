@@ -6,7 +6,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public class EaterOfSouls : RaidLogic
+    internal class EaterOfSouls : RaidLogic
     {
         // TODO - add CR icons/indicators (vomit, greens, etc) and some mechanics
         public EaterOfSouls(int triggerID) : base(triggerID)
@@ -43,7 +43,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        public override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
@@ -106,7 +106,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
-        public override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
         {
             var spiritTransform = log.CombatData.GetBuffData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent c in spiritTransform)
@@ -124,7 +124,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             SetSuccessByDeath(combatData, fightData, playerAgents, true, (int)ArcDPSEnums.TargetID.SoulEater);
         }

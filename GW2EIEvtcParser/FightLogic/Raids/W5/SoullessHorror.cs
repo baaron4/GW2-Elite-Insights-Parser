@@ -7,7 +7,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public class SoullessHorror : RaidLogic
+    internal class SoullessHorror : RaidLogic
     {
         public SoullessHorror(int triggerID) : base(triggerID)
         {
@@ -55,7 +55,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
@@ -73,7 +73,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
+        internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
         {
             var res = new List<AbstractBuffEvent>();
             // Necrosis adjust
@@ -114,7 +114,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        public override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
@@ -228,7 +228,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
-        public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             var necrosis = combatData.GetBuffData(47414).Where(x => x is BuffApplyEvent).ToList();
             if (necrosis.Count == 0)

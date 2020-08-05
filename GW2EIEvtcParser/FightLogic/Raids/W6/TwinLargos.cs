@@ -7,7 +7,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public class TwinLargos : RaidLogic
+    internal class TwinLargos : RaidLogic
     {
         public TwinLargos(int triggerID) : base(triggerID)
         {
@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return GetFightTargetsIDs();
         }
 
-        public override List<AbstractDamageEvent> SpecialDamageEventProcess(Dictionary<AgentItem, List<AbstractDamageEvent>> damageBySrc, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst, Dictionary<long, List<AbstractDamageEvent>> damageById, SkillData skillData)
+        internal override List<AbstractDamageEvent> SpecialDamageEventProcess(Dictionary<AgentItem, List<AbstractDamageEvent>> damageBySrc, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst, Dictionary<long, List<AbstractDamageEvent>> damageById, SkillData skillData)
         {
             NegateDamageAgainstBarrier(Targets.Select(x => x.AgentItem).ToList(), damageByDst);
             return new List<AbstractDamageEvent>();
@@ -214,7 +214,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        public override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
@@ -283,7 +283,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        public override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
         {
             // Water "Poison Bomb"
             List<AbstractBuffEvent> waterToDrop = GetFilteredList(log.CombatData, 53097, p, true);
@@ -335,7 +335,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return "Twin Largos";
         }
 
-        public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Nikare);
             if (target == null)

@@ -7,7 +7,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public class Adina : RaidLogic
+    internal class Adina : RaidLogic
     {
         public Adina(int triggerID) : base(triggerID)
         {
@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Icon = "https://wiki.guildwars2.com/images/a/a0/Mini_Earth_Djinn.png";
         }
 
-        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
             var attackTargets = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).ToList();
             long first = fightData.FightStart;
@@ -172,7 +172,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (33530, 34050, 35450, 35970));
         }
 
-        public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Adina);
             if (target == null)

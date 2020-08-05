@@ -5,7 +5,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public class ColdWar : StrikeMissionLogic
+    internal class ColdWar : StrikeMissionLogic
     {
         public ColdWar(int triggerID) : base(triggerID)
         {

@@ -9,7 +9,7 @@ using GW2EIUtils.Exceptions;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public class Qadim : RaidLogic
+    internal class Qadim : RaidLogic
     {
         private int _startOffset = 0;
 
@@ -103,7 +103,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
             List<AgentItem> pyres = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.PyreGuardian);
             // Lamps
@@ -148,7 +148,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             ComputeFightTargets(agentData, combatData);
         }
 
-        public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // Find target
             AgentItem target = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Qadim).FirstOrDefault();
@@ -270,7 +270,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        public override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             int ccRadius = 200;
@@ -509,7 +509,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Qadim);
             if (target == null)

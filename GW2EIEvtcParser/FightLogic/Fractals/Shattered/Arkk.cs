@@ -6,7 +6,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public class Arkk : ShatteredFractal
+    internal class Arkk : ShatteredFractal
     {
         public Arkk(int triggerID) : base(triggerID)
         {
@@ -72,7 +72,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             return FightData.CMStatus.CMnoName;
         }
@@ -87,7 +87,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Arkk);
             SetSuccessByBuffCount(combatData, fightData, playerAgents, target, 762, 10);

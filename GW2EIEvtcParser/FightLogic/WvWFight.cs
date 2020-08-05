@@ -7,9 +7,9 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public class WvWFight : FightLogic
+    internal class WvWFight : FightLogic
     {
-        private const string DefaultName = "World vs World";
+        private const string _defaultName = "World vs World";
         public WvWFight(int triggerID) : base(triggerID)
         {
             Extension = "wvw";
@@ -78,7 +78,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             MapIDEvent mapID = log.CombatData.GetMapIDEvents().LastOrDefault();
             if (mapID == null)
             {
-                return DefaultName;
+                return _defaultName;
             }
             switch(mapID.MapID)
             {
@@ -95,15 +95,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case 968:
                     return "Edge of the Mists";
             }
-            return DefaultName;
+            return _defaultName;
         }
 
-        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             fightData.SetSuccess(true, fightData.FightEnd);
         }
 
-        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
             AgentItem dummyAgent = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, "Enemy Players", "", (int)ArcDPSEnums.TargetID.WorldVersusWorld);
             ComputeFightTargets(agentData, combatData);

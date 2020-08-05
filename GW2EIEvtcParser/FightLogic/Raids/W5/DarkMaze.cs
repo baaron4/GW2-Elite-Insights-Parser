@@ -7,7 +7,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public class DarkMaze : RaidLogic
+    internal class DarkMaze : RaidLogic
     {
         // TODO - add CR icons and some mechanics
         public DarkMaze(int triggerID) : base(triggerID)
@@ -119,7 +119,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             // First check using hp, best
             HPCheck(combatData, fightData);

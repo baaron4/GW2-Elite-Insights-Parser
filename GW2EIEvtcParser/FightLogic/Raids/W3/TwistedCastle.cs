@@ -7,7 +7,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public class TwistedCastle : RaidLogic
+    internal class TwistedCastle : RaidLogic
     {
         public TwistedCastle(int triggerID) : base(triggerID)
         {
@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (1920, 12160, 2944, 14464));
         }
 
-        public override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
             agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, "Twisted Castle", "", (int)ArcDPSEnums.TargetID.TwistedCastle);
             ComputeFightTargets(agentData, combatData);
@@ -50,7 +50,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        public override void ComputeNPCCombatReplayActors(NPC npc, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputeNPCCombatReplayActors(NPC npc, ParsedEvtcLog log, CombatReplay replay)
         {
             switch (npc.ID)
             {

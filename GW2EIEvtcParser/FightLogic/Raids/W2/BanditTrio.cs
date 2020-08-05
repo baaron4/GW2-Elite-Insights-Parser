@@ -7,7 +7,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public class BanditTrio : RaidLogic
+    internal class BanditTrio : RaidLogic
     {
         public BanditTrio(int triggerID) : base(triggerID)
         {
@@ -50,7 +50,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (2688, 11906, 3712, 14210));
         }
 
-        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
@@ -168,7 +168,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return "Bandit Trio";
         }
 
-        public override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)

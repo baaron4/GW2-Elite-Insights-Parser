@@ -7,7 +7,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public class ValeGuardian : RaidLogic
+    internal class ValeGuardian : RaidLogic
     {
         public ValeGuardian(int triggerID) : base(triggerID)
         {
@@ -108,7 +108,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        public override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);

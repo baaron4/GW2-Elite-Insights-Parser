@@ -7,7 +7,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public class SuperKodanBrothers : StrikeMissionLogic
+    internal class SuperKodanBrothers : StrikeMissionLogic
     {
         public SuperKodanBrothers(int triggerID) : base(triggerID)
         {

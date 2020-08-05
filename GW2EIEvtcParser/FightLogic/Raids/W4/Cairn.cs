@@ -7,7 +7,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public class Cairn : RaidLogic
+    internal class Cairn : RaidLogic
     {
         public Cairn(int triggerID) : base(triggerID)
         {
@@ -58,7 +58,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (11774, 4480, 14078, 5376));
         }
 
-        public override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
@@ -101,7 +101,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        public override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             AgentItem target = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Cairn).FirstOrDefault();
             if (target == null)
@@ -117,7 +117,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return fightData.FightOffset;
         }
 
-        public override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
         {
             // shared agony
             var agony = log.CombatData.GetBuffData(38049).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
@@ -129,7 +129,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        public override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             return combatData.GetSkills().Contains(38098) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
         }

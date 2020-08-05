@@ -5,7 +5,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public class Boneskinner : StrikeMissionLogic
+    internal class Boneskinner : StrikeMissionLogic
     {
         public Boneskinner(int triggerID) : base(triggerID)
         {

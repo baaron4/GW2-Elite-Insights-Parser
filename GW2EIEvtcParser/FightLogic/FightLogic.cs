@@ -270,7 +270,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             phase.OverrideTimes(log);
         }
 
-        public virtual List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
+        internal virtual List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
         {
             return new List<AbstractBuffEvent>();
         }
@@ -294,16 +294,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        public virtual List<AbstractDamageEvent> SpecialDamageEventProcess(Dictionary<AgentItem, List<AbstractDamageEvent>> damageBySrc, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst, Dictionary<long, List<AbstractDamageEvent>> damageById, SkillData skillData)
+        internal virtual List<AbstractDamageEvent> SpecialDamageEventProcess(Dictionary<AgentItem, List<AbstractDamageEvent>> damageBySrc, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst, Dictionary<long, List<AbstractDamageEvent>> damageById, SkillData skillData)
         {
             return new List<AbstractDamageEvent>();
         }
 
-        public virtual void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
+        internal virtual void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
         {
         }
 
-        public virtual void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        internal virtual void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
         }
 
@@ -312,7 +312,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<ArcDPSEnums.TrashID>();
         }
 
-        public virtual FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal virtual FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             return FightData.CMStatus.NoCM;
         }
@@ -403,17 +403,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        public virtual void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        internal virtual void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             SetSuccessByDeath(combatData, fightData, playerAgents, true, GenericTriggerID);
         }
 
-        public virtual long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal virtual long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             return fightData.FightOffset;
         }
 
-        public virtual void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal virtual void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
             ComputeFightTargets(agentData, combatData);
         }

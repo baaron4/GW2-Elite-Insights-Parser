@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public class Escort : RaidLogic
+    internal class Escort : RaidLogic
     {
         public Escort(int triggerID) : base(triggerID)
         {

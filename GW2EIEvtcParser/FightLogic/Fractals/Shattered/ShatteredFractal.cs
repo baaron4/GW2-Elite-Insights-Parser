@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public abstract class ShatteredFractal : FractalLogic
+    internal abstract class ShatteredFractal : FractalLogic
     {
         public ShatteredFractal(int triggerID) : base(triggerID)
         {

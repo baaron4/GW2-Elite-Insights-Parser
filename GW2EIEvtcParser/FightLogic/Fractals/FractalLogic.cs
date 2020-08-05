@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public abstract class FractalLogic : FightLogic
+    internal abstract class FractalLogic : FightLogic
     {
         protected FractalLogic(int triggerID) : base(triggerID)
         {
@@ -50,7 +50,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             // check reward
             NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);

@@ -19,7 +19,7 @@ namespace GW2EIParser.tst
 
         private class TestOperationController : OperationTracer
         {
-            public TestOperationController() : base("")
+            public TestOperationController() : base()
             {
 
             }

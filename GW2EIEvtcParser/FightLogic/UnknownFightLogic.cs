@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public class UnknownFightLogic : FightLogic
+    internal class UnknownFightLogic : FightLogic
     {
         public UnknownFightLogic(int triggerID) : base(triggerID)
         {

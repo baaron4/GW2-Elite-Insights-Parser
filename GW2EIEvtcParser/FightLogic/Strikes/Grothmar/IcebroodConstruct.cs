@@ -5,7 +5,7 @@ using GW2EIUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    public class IcebroodConstruct : StrikeMissionLogic
+    internal class IcebroodConstruct : StrikeMissionLogic
     {
         public IcebroodConstruct(int triggerID) : base(triggerID)
         {
