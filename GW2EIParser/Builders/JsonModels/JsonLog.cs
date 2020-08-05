@@ -18,7 +18,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public class SkillDesc
         {
-            public SkillDesc(SkillItem item)
+            internal SkillDesc(SkillItem item)
             {
                 Name = item.Name;
                 AutoAttack = item.AA;
@@ -44,7 +44,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public class BuffDesc
         {
-            public BuffDesc(Buff item, ParsedEvtcLog log)
+            internal BuffDesc(Buff item, ParsedEvtcLog log)
             {
                 Name = item.Name;
                 Icon = item.Link;
@@ -93,7 +93,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public class DamageModDesc
         {
-            public DamageModDesc(DamageModifier item)
+            internal DamageModDesc(DamageModifier item)
             {
                 Name = item.Name;
                 Icon = item.Icon;
@@ -250,7 +250,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public List<string> LogErrors { get; }
 
-        public JsonLog(ParsedEvtcLog log, RawFormatSettings settings, string[] uploadLinks)
+        internal JsonLog(ParsedEvtcLog log, RawFormatSettings settings, string[] uploadLinks)
         {
             //
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Meta Data");

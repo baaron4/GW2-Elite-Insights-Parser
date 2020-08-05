@@ -16,29 +16,29 @@ namespace GW2EIParser.Builders.JsonModels
             /// <summary>
             /// Generation done
             /// </summary>
-            public double Generation { get; set; }
+            public double Generation { get; internal set; }
             /// <summary>
             /// Generation with overstack
             /// </summary>
-            public double Overstack { get; set; }
+            public double Overstack { get; internal set; }
             /// <summary>
             /// Wasted generation
             /// </summary>
-            public double Wasted { get; set; }
+            public double Wasted { get; internal set; }
             /// <summary>
             /// Extension from unknown source
             /// </summary>
-            public double UnknownExtended { get; set; }
+            public double UnknownExtended { get; internal set; }
             /// <summary>
             /// Generation done by extension
             /// </summary>
-            public double ByExtension { get; set; }
+            public double ByExtension { get; internal set; }
             /// <summary>
             /// Buff extended 
             /// </summary>
-            public double Extended { get; set; }
+            public double Extended { get; internal set; }
 
-            public JsonBuffsGenerationData(FinalPlayerBuffs stats)
+            internal JsonBuffsGenerationData(FinalPlayerBuffs stats)
             {
                 Generation = stats.Generation;
                 Overstack = stats.Overstack;

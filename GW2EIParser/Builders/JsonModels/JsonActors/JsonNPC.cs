@@ -49,7 +49,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public List<double[]> BreakbarPercents { get; }
 
-        public JsonNPC(NPC npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc) : base(npc, log, settings, skillDesc, buffDesc)
+        internal JsonNPC(NPC npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc) : base(npc, log, settings, skillDesc, buffDesc)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             //

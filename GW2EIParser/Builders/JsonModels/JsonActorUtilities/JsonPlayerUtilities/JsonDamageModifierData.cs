@@ -33,7 +33,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public int TotalDamage { get; }
 
-            public JsonDamageModifierItem(DamageModifierStat extraData)
+            internal JsonDamageModifierItem(DamageModifierStat extraData)
             {
                 HitCount = extraData.HitCount;
                 TotalHitCount = extraData.TotalHitCount;
@@ -61,7 +61,7 @@ namespace GW2EIParser.Builders.JsonModels
         }
 
 
-        public static List<JsonDamageModifierData> GetDamageModifiers(Dictionary<string, List<DamageModifierStat>> damageModDict, ParsedEvtcLog log, Dictionary<string, JsonLog.DamageModDesc> damageModDesc)
+        internal static List<JsonDamageModifierData> GetDamageModifiers(Dictionary<string, List<DamageModifierStat>> damageModDict, ParsedEvtcLog log, Dictionary<string, JsonLog.DamageModDesc> damageModDesc)
         {
             var dict = new Dictionary<int, List<JsonDamageModifierItem>>();
             foreach (string key in damageModDict.Keys)
@@ -82,7 +82,7 @@ namespace GW2EIParser.Builders.JsonModels
             return res;
         }
 
-        public static List<JsonDamageModifierData>[] GetDamageModifiersTarget(Player player, ParsedEvtcLog log, Dictionary<string, JsonLog.DamageModDesc> damageModDesc)
+        internal static List<JsonDamageModifierData>[] GetDamageModifiersTarget(Player player, ParsedEvtcLog log, Dictionary<string, JsonLog.DamageModDesc> damageModDesc)
         {
             var res = new List<JsonDamageModifierData>[log.FightData.Logic.Targets.Count];
             for (int i = 0; i < log.FightData.Logic.Targets.Count; i++)

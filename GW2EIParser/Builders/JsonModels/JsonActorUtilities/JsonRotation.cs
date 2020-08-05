@@ -32,7 +32,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>	
             public double Quickness { get; }
 
-            public JsonSkill(AbstractCastEvent cl)
+            internal JsonSkill(AbstractCastEvent cl)
             {
                 CastTime = (int)cl.Time;
                 Duration = cl.ActualDuration;
@@ -64,7 +64,7 @@ namespace GW2EIParser.Builders.JsonModels
             Skills = skillCasts.Select(x => new JsonSkill(x)).ToList();
         }
 
-        public static List<JsonRotation> BuildJsonRotationList(Dictionary<long, List<AbstractCastEvent>> skillByID, Dictionary<string, JsonLog.SkillDesc> skillDesc)
+        internal static List<JsonRotation> BuildJsonRotationList(Dictionary<long, List<AbstractCastEvent>> skillByID, Dictionary<string, JsonLog.SkillDesc> skillDesc)
         {
             var res = new List<JsonRotation>();
             foreach (KeyValuePair<long, List<AbstractCastEvent>> pair in skillByID)

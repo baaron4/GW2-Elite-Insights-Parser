@@ -38,7 +38,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public bool BreakbarPhase { get; }
 
-        public JsonPhase(PhaseData phase, ParsedEvtcLog log)
+        internal JsonPhase(PhaseData phase, ParsedEvtcLog log)
         {
             Start = phase.Start;
             End = phase.End;

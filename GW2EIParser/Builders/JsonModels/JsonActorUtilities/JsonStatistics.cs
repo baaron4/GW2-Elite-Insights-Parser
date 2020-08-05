@@ -69,7 +69,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public long DcDuration { get; }
 
-            public JsonDefensesAll(FinalDefensesAll defenses)
+            internal JsonDefensesAll(FinalDefensesAll defenses)
             {
                 DamageTaken = defenses.DamageTaken;
                 BlockedCount = defenses.BlockedCount;
@@ -142,7 +142,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public int ActorPowerDamage { get; }
 
-            public JsonDPS(FinalDPS stats)
+            internal JsonDPS(FinalDPS stats)
             {
                 Dps = stats.Dps;
                 Damage = stats.Damage;
@@ -203,7 +203,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public int Invulned { get; }
 
-            public JsonGameplayStats(FinalGameplayStats stats)
+            internal JsonGameplayStats(FinalGameplayStats stats)
             {
                 DirectDamageCount = stats.DirectDamageCount;
                 CritableDirectDamageCount = stats.CritableDirectDamageCount;
@@ -216,7 +216,7 @@ namespace GW2EIParser.Builders.JsonModels
                 Invulned = stats.Invulned;
             }
 
-            public JsonGameplayStats(FinalGameplayStatsAll stats)
+            internal JsonGameplayStats(FinalGameplayStatsAll stats)
             {
                 DirectDamageCount = stats.DirectDamageCount;
                 CritableDirectDamageCount = stats.CritableDirectDamageCount;
@@ -280,7 +280,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public int SwapCount { get; }
 
-            public JsonGameplayStatsAll(FinalGameplayStatsAll stats) : base(stats)
+            internal JsonGameplayStatsAll(FinalGameplayStatsAll stats) : base(stats)
             {
                 Wasted = stats.Wasted;
                 TimeWasted = stats.TimeWasted;
@@ -334,7 +334,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public double BoonStripsTime { get; }
 
-            public JsonPlayerSupport(FinalPlayerSupport stats)
+            internal JsonPlayerSupport(FinalPlayerSupport stats)
             {
                 Resurrects = stats.Resurrects;
                 ResurrectTime = stats.ResurrectTime;

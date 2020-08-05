@@ -59,7 +59,7 @@ namespace GW2EIParser.Builders.JsonModels
                 return res;
             }
 
-            public JsonBuffsUptimeData(FinalBuffs buffs, FinalBuffsDictionary buffsDictionary)
+            internal JsonBuffsUptimeData(FinalBuffs buffs, FinalBuffsDictionary buffsDictionary)
             {
                 Uptime = buffs.Uptime;
                 Presence = buffs.Presence;
@@ -90,7 +90,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public List<int[]> States { get; }
 
-        public JsonBuffsUptime(AbstractSingleActor actor, long buffID, ParsedEvtcLog log, RawFormatSettings settings, List<JsonBuffsUptimeData> buffData, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        internal JsonBuffsUptime(AbstractSingleActor actor, long buffID, ParsedEvtcLog log, RawFormatSettings settings, List<JsonBuffsUptimeData> buffData, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
             Id = buffID;
             BuffData = buffData;
@@ -105,7 +105,7 @@ namespace GW2EIParser.Builders.JsonModels
         }
 
 
-        public static List<int[]> GetBuffStates(BuffsGraphModel bgm)
+        internal static List<int[]> GetBuffStates(BuffsGraphModel bgm)
         {
             if (bgm == null || bgm.BuffChart.Count == 0)
             {

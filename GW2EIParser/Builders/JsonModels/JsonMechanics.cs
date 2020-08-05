@@ -22,7 +22,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public string Actor { get; }
 
-            public JsonMechanic(MechanicEvent ml)
+            internal JsonMechanic(MechanicEvent ml)
             {
                 Time = ml.Time;
                 Actor = ml.Actor.Character;
@@ -50,7 +50,7 @@ namespace GW2EIParser.Builders.JsonModels
             MechanicsData = data;
         }
 
-        public static List<JsonMechanics> GetJsonMechanicsList(List<MechanicEvent> mechanicLogs)
+        internal static List<JsonMechanics> GetJsonMechanicsList(List<MechanicEvent> mechanicLogs)
         {
             var mechanics = new List<JsonMechanics>();
             var dict = new Dictionary<string, (string desc, List<JsonMechanic> data)>();

@@ -37,7 +37,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public int Time { get; }
 
-            public JsonDeathRecapDamageItem(DeathRecap.DeathRecapDamageItem item)
+            internal JsonDeathRecapDamageItem(DeathRecap.DeathRecapDamageItem item)
             {
                 Id = item.ID;
                 IndirectDamage = item.IndirectDamage;
@@ -60,7 +60,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public List<JsonDeathRecapDamageItem> ToKill { get; }
 
-        public JsonDeathRecap(DeathRecap recap)
+        internal JsonDeathRecap(DeathRecap recap)
         {
             DeathTime = recap.DeathTime;
             ToDown = recap.ToDown?.Select(x => new JsonDeathRecapDamageItem(x)).ToList();

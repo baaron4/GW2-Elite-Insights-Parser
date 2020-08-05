@@ -54,7 +54,7 @@ namespace GW2EIParser.Builders.JsonModels
         public List<JsonRotation> Rotation { get; }
 
 
-        public JsonMinions(Minions minions, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        internal JsonMinions(Minions minions, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             bool isNPCMinion = minions.Master is NPC;
