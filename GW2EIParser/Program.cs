@@ -134,7 +134,7 @@ namespace GW2EIParser
                 }
 
             }
-            HTMLBuilder.InitScripts();
+            ProgramHelper.htmlAssets = new HTMLAssets();
             ControllerHelper.SetControllerInformation("Elite Insights", new Version(Application.ProductVersion));
             if (uiMode)
             {
