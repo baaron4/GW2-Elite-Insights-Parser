@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new HashSet<int>();
         }
 
-        public override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+        internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
             NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.WorldVersusWorld);
@@ -73,7 +73,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             return base.GetCombatMapInternal(log);
         }
-        public override string GetLogicName(ParsedEvtcLog log)
+        internal override string GetLogicName(ParsedEvtcLog log)
         {
             MapIDEvent mapID = log.CombatData.GetMapIDEvents().LastOrDefault();
             if (mapID == null)

@@ -171,7 +171,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return fightData.FightOffset;
         }
 
-        public override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+        internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             // Warning: Combat replay relies on these phases.
             // If changing phase detection, combat replay platform timings may have to be updated.

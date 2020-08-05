@@ -73,7 +73,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        public virtual string GetLogicName(ParsedEvtcLog log)
+        internal virtual string GetLogicName(ParsedEvtcLog log)
         {
             NPC target = Targets.Find(x => x.ID == GenericTriggerID);
             if (target == null)
@@ -215,7 +215,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        public List<PhaseData> GetBreakbarPhases(ParsedEvtcLog log, bool requirePhases)
+        internal List<PhaseData> GetBreakbarPhases(ParsedEvtcLog log, bool requirePhases)
         {
             if (!requirePhases)
             {
@@ -246,7 +246,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return breakbarPhases;
         }
 
-        public virtual List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+        internal virtual List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
             NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);

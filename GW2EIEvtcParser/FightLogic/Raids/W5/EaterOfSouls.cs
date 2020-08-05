@@ -129,7 +129,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             SetSuccessByDeath(combatData, fightData, playerAgents, true, (int)ArcDPSEnums.TargetID.SoulEater);
         }
 
-        public override string GetLogicName(ParsedEvtcLog log)
+        internal override string GetLogicName(ParsedEvtcLog log)
         {
             return "Statue of Death";
         }

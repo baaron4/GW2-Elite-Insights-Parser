@@ -63,7 +63,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        public override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+        internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
             NPC eye1 = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfFate);
@@ -130,7 +130,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        public override string GetLogicName(ParsedEvtcLog log)
+        internal override string GetLogicName(ParsedEvtcLog log)
         {
             return "Statue of Darkness";
         }

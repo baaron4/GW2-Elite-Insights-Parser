@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             SetSuccessByDeath(combatData, fightData, playerAgents, all, (int)ArcDPSEnums.TargetID.ClawOfTheFallen, (int)ArcDPSEnums.TargetID.VoiceOfTheFallen);
         }
 
-        public override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+        internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
             NPC voice = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.ClawOfTheFallen);
@@ -86,7 +86,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        public override string GetLogicName(ParsedEvtcLog log)
+        internal override string GetLogicName(ParsedEvtcLog log)
         {
             return "Super Kodan Brothers";
         }

@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
         }
 
-        public override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+        internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             // generic method for fractals
             List<PhaseData> phases = GetInitialPhase(log);

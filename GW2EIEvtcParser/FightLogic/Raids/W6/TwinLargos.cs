@@ -184,7 +184,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        public override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+        internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
             NPC nikare = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Nikare);
@@ -330,7 +330,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        public override string GetLogicName(ParsedEvtcLog log)
+        internal override string GetLogicName(ParsedEvtcLog log)
         {
             return "Twin Largos";
         }

@@ -65,7 +65,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return res;
         }
 
-        public override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+        internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             long start = 0;
             long fightDuration = log.FightData.FightEnd;

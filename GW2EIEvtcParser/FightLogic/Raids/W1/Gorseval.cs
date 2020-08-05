@@ -36,7 +36,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (3456, 11012, 4736, 14212));
         }
 
-        public override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+        internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
             NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Gorseval);
