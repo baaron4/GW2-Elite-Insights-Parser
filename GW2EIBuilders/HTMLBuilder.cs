@@ -7,11 +7,13 @@ using GW2EIEvtcParser.ParsedData;
 using GW2EIBuilders.HtmlModels;
 using Newtonsoft.Json;
 using GW2EIGW2API;
+using System.Text;
 
 namespace GW2EIBuilders
 {
     public class HTMLBuilder
     {
+        private static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
 
         private readonly string _eiJS;
         private readonly string _eiCRJS;
@@ -97,7 +99,7 @@ namespace GW2EIBuilders
                 try
                 {
                     using (var fs = new FileStream(jsPath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, APIHelper.NoBOMEncodingUTF8))
+                    using (var scriptWriter = new StreamWriter(fs, NoBOMEncodingUTF8))
                     {
                         scriptWriter.Write(scriptContent);
                     }
@@ -125,7 +127,7 @@ namespace GW2EIBuilders
                 try
                 {
                     using (var fs = new FileStream(cssPath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, APIHelper.NoBOMEncodingUTF8))
+                    using (var scriptWriter = new StreamWriter(fs, NoBOMEncodingUTF8))
                     {
                         scriptWriter.Write(scriptContent);
                     }
@@ -152,7 +154,7 @@ namespace GW2EIBuilders
                 try
                 {
                     using (var fs = new FileStream(scriptPath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, APIHelper.NoBOMEncodingUTF8))
+                    using (var scriptWriter = new StreamWriter(fs, NoBOMEncodingUTF8))
                     {
                         scriptWriter.Write(scriptContent);
                     }
@@ -173,7 +175,7 @@ namespace GW2EIBuilders
             var settings = new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = APIHelper.DefaultJsonContractResolver
+                ContractResolver = RawFormatBuilder.DefaultJsonContractResolver
             };
             return JsonConvert.SerializeObject(value, settings);
         }

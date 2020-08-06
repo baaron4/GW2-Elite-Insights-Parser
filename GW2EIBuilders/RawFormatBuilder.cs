@@ -4,13 +4,16 @@ using System.Xml;
 using GW2EIEvtcParser;
 using GW2EIBuilders.JsonModels;
 using Newtonsoft.Json;
-using GW2EIGW2API;
+using Newtonsoft.Json.Serialization;
 
 namespace GW2EIBuilders
 {
     public class RawFormatBuilder
     {
-
+        internal static readonly DefaultContractResolver DefaultJsonContractResolver = new DefaultContractResolver
+        {
+            NamingStrategy = new CamelCaseNamingStrategy()
+        };
         public JsonLog JsonLog { get; }
 
         //
@@ -29,7 +32,7 @@ namespace GW2EIBuilders
             var serializer = new JsonSerializer
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = APIHelper.DefaultJsonContractResolver
+                ContractResolver = DefaultJsonContractResolver
             };
             var writer = new JsonTextWriter(sw)
             {
@@ -44,7 +47,7 @@ namespace GW2EIBuilders
             var settings = new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = APIHelper.DefaultJsonContractResolver
+                ContractResolver = DefaultJsonContractResolver
             };
             var root = new Dictionary<string, JsonLog>()
             {

@@ -6,12 +6,17 @@ using GW2EIEvtcParser;
 using GW2EIBuilders;
 using GW2EIBuilders.JsonModels;
 using Newtonsoft.Json.Linq;
-using GW2EIGW2API;
+using Newtonsoft.Json.Serialization;
 
 namespace GW2EIParser.tst
 {
     public class TestHelper
     {
+        internal static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
+        internal static readonly DefaultContractResolver DefaultJsonContractResolver = new DefaultContractResolver
+        {
+            NamingStrategy = new CamelCaseNamingStrategy()
+        };
         private static readonly EvtcParserSettings parserSettings = new EvtcParserSettings(false, true, true, true, true);
         private static readonly HTMLSettings htmlSettings = new HTMLSettings(false, false);
         private static readonly RawFormatSettings rawSettings = new RawFormatSettings(true);
@@ -42,7 +47,7 @@ namespace GW2EIParser.tst
         public static string JsonString(ParsedEvtcLog log)
         {
             var ms = new MemoryStream();
-            var sw = new StreamWriter(ms, APIHelper.NoBOMEncodingUTF8);
+            var sw = new StreamWriter(ms, NoBOMEncodingUTF8);
             var builder = new RawFormatBuilder(log, null);
 
             builder.CreateJSON(sw, false);
@@ -66,7 +71,7 @@ namespace GW2EIParser.tst
         public static string HtmlString(ParsedEvtcLog log)
         {
             var ms = new MemoryStream();
-            var sw = new StreamWriter(ms, APIHelper.NoBOMEncodingUTF8);
+            var sw = new StreamWriter(ms, NoBOMEncodingUTF8);
             var builder = new HTMLBuilder(log, htmlSettings, htmlAssets);
 
             builder.CreateHTML(sw, null);

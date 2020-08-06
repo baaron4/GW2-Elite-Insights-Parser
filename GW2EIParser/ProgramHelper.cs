@@ -14,7 +14,6 @@ using System.Linq;
 using GW2EIDPSReport;
 using GW2EIDiscord;
 using System.Windows.Forms;
-using GW2EIGW2API;
 
 namespace GW2EIParser
 {
@@ -24,6 +23,8 @@ namespace GW2EIParser
 
         internal static Version ParserVersion { get; } = new Version(Application.ProductVersion);
         internal static string ParserName { get; } = "Elite Insights";
+
+        private static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
 
         private static Embed GetEmbed(ParsedEvtcLog log, string[] uploadresult)
         {
@@ -285,7 +286,7 @@ namespace GW2EIParser
                     {
                         str = new FileStream(outputFile, FileMode.Create, FileAccess.Write);
                     }
-                    using (var sw = new StreamWriter(str, APIHelper.NoBOMEncodingUTF8))
+                    using (var sw = new StreamWriter(str, NoBOMEncodingUTF8))
                     {
                         builder.CreateJSON(sw, Properties.Settings.Default.IndentJSON);
                     }
@@ -317,7 +318,7 @@ namespace GW2EIParser
                     {
                         str = new FileStream(outputFile, FileMode.Create, FileAccess.Write);
                     }
-                    using (var sw = new StreamWriter(str, APIHelper.NoBOMEncodingUTF8))
+                    using (var sw = new StreamWriter(str, NoBOMEncodingUTF8))
                     {
                         builder.CreateXML(sw, Properties.Settings.Default.IndentXML);
                     }

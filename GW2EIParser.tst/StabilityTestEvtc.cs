@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using GW2EIBuilders;
 using GW2EIEvtcParser;
@@ -83,12 +84,12 @@ namespace GW2EIParser.tst
 
             using (var fs = new FileStream(logName, FileMode.Create, FileAccess.Write))
             {
-                using (var sw = new StreamWriter(fs, APIHelper.NoBOMEncodingUTF8))
+                using (var sw = new StreamWriter(fs, TestHelper.NoBOMEncodingUTF8))
                 {
                     var serializer = new JsonSerializer
                     {
                         NullValueHandling = NullValueHandling.Ignore,
-                        ContractResolver = APIHelper.DefaultJsonContractResolver
+                        ContractResolver = TestHelper.DefaultJsonContractResolver
                     };
                     var writer = new JsonTextWriter(sw)
                     {

@@ -5,13 +5,17 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using GW2EIGW2API;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace GW2EIDPSReport
 {
     public static class UploadController
     {
+        private static readonly DefaultContractResolver DefaultJsonContractResolver = new DefaultContractResolver
+        {
+            NamingStrategy = new CamelCaseNamingStrategy()
+        };
         private static string UploadDPSReportsEI(FileInfo fi, List<string> traces)
         {
             return UploadToDPSR(fi, "https://dps.report/uploadContent?json=1&generator=ei", traces);
@@ -106,7 +110,7 @@ namespace GW2EIDPSReport
                         string stringContents = stringContentsTask.Result;
                         DPSReportsResponseItem item = JsonConvert.DeserializeObject<DPSReportsResponseItem>(stringContents, new JsonSerializerSettings
                         {
-                            ContractResolver = APIHelper.DefaultJsonContractResolver
+                            ContractResolver = DefaultJsonContractResolver
                         });
                         if (item.Error != null)
                         {
