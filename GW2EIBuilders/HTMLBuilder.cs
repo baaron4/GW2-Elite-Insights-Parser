@@ -6,6 +6,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIBuilders.HtmlModels;
 using Newtonsoft.Json;
+using GW2EIGW2API;
 
 namespace GW2EIBuilders
 {
@@ -96,7 +97,7 @@ namespace GW2EIBuilders
                 try
                 {
                     using (var fs = new FileStream(jsPath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, BuilderHelper.NoBOMEncodingUTF8))
+                    using (var scriptWriter = new StreamWriter(fs, APIHelper.NoBOMEncodingUTF8))
                     {
                         scriptWriter.Write(scriptContent);
                     }
@@ -124,7 +125,7 @@ namespace GW2EIBuilders
                 try
                 {
                     using (var fs = new FileStream(cssPath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, BuilderHelper.NoBOMEncodingUTF8))
+                    using (var scriptWriter = new StreamWriter(fs, APIHelper.NoBOMEncodingUTF8))
                     {
                         scriptWriter.Write(scriptContent);
                     }
@@ -151,7 +152,7 @@ namespace GW2EIBuilders
                 try
                 {
                     using (var fs = new FileStream(scriptPath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, BuilderHelper.NoBOMEncodingUTF8))
+                    using (var scriptWriter = new StreamWriter(fs, APIHelper.NoBOMEncodingUTF8))
                     {
                         scriptWriter.Write(scriptContent);
                     }
@@ -172,7 +173,7 @@ namespace GW2EIBuilders
             var settings = new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = BuilderHelper.ContractResolver
+                ContractResolver = APIHelper.DefaultJsonContractResolver
             };
             return JsonConvert.SerializeObject(value, settings);
         }

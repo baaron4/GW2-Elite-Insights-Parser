@@ -1,14 +1,16 @@
 ﻿using System.Text;
 using Newtonsoft.Json.Serialization;
 
-namespace GW2EIBuilders
+namespace GW2EIGW2API
 {
-    public abstract class BuilderHelper
+    public static class APIHelper
     {
-        internal static readonly DefaultContractResolver ContractResolver = new DefaultContractResolver
+
+        public static readonly DefaultContractResolver DefaultJsonContractResolver = new DefaultContractResolver
         {
             NamingStrategy = new CamelCaseNamingStrategy()
         };
+
         public static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
     }
 }

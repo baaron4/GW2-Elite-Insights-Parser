@@ -4,6 +4,7 @@ using System.Xml;
 using GW2EIEvtcParser;
 using GW2EIBuilders.JsonModels;
 using Newtonsoft.Json;
+using GW2EIGW2API;
 
 namespace GW2EIBuilders
 {
@@ -28,7 +29,7 @@ namespace GW2EIBuilders
             var serializer = new JsonSerializer
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = BuilderHelper.ContractResolver
+                ContractResolver = APIHelper.DefaultJsonContractResolver
             };
             var writer = new JsonTextWriter(sw)
             {
@@ -43,7 +44,7 @@ namespace GW2EIBuilders
             var settings = new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = BuilderHelper.ContractResolver
+                ContractResolver = APIHelper.DefaultJsonContractResolver
             };
             var root = new Dictionary<string, JsonLog>()
             {

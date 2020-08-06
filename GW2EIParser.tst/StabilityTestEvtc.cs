@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using GW2EIBuilders;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIGW2API;
 using GW2EIParser.Exceptions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -19,10 +20,6 @@ namespace GW2EIParser.tst
     [TestFixture]
     public class StabilityTestEvtc
     {
-        private static readonly DefaultContractResolver ContractResolver = new DefaultContractResolver
-        {
-            NamingStrategy = new CamelCaseNamingStrategy()
-        };
         private bool Loop(BlockingCollection<string> failed, BlockingCollection<string> messages, string file)
         {
             try
@@ -86,12 +83,12 @@ namespace GW2EIParser.tst
 
             using (var fs = new FileStream(logName, FileMode.Create, FileAccess.Write))
             {
-                using (var sw = new StreamWriter(fs, BuilderHelper.NoBOMEncodingUTF8))
+                using (var sw = new StreamWriter(fs, APIHelper.NoBOMEncodingUTF8))
                 {
                     var serializer = new JsonSerializer
                     {
                         NullValueHandling = NullValueHandling.Ignore,
-                        ContractResolver = ContractResolver
+                        ContractResolver = APIHelper.DefaultJsonContractResolver
                     };
                     var writer = new JsonTextWriter(sw)
                     {

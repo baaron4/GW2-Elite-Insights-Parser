@@ -6,6 +6,7 @@ using GW2EIEvtcParser;
 using GW2EIBuilders;
 using GW2EIBuilders.JsonModels;
 using Newtonsoft.Json.Linq;
+using GW2EIGW2API;
 
 namespace GW2EIParser.tst
 {
@@ -41,7 +42,7 @@ namespace GW2EIParser.tst
         public static string JsonString(ParsedEvtcLog log)
         {
             var ms = new MemoryStream();
-            var sw = new StreamWriter(ms, BuilderHelper.NoBOMEncodingUTF8);
+            var sw = new StreamWriter(ms, APIHelper.NoBOMEncodingUTF8);
             var builder = new RawFormatBuilder(log, null);
 
             builder.CreateJSON(sw, false);
@@ -65,7 +66,7 @@ namespace GW2EIParser.tst
         public static string HtmlString(ParsedEvtcLog log)
         {
             var ms = new MemoryStream();
-            var sw = new StreamWriter(ms, BuilderHelper.NoBOMEncodingUTF8);
+            var sw = new StreamWriter(ms, APIHelper.NoBOMEncodingUTF8);
             var builder = new HTMLBuilder(log, htmlSettings, htmlAssets);
 
             builder.CreateHTML(sw, null);

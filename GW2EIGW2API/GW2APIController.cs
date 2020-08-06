@@ -5,16 +5,11 @@ using System.Linq;
 using System.Net.Http;
 using GW2EIGW2API.GW2API;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace GW2EIGW2API
 {
     public static class GW2APIController
     {
-        private static readonly DefaultContractResolver ContractResolver = new DefaultContractResolver
-        {
-            NamingStrategy = new CamelCaseNamingStrategy()
-        };
         private static HttpClient APIClient { get; set; }
 
         private static void GetAPIClient()
@@ -80,7 +75,7 @@ namespace GW2EIGW2API
                     string data = response.Content.ReadAsStringAsync().Result;
                     GW2APISkill[] responseArray = JsonConvert.DeserializeObject<GW2APISkill[]>(data, new JsonSerializerSettings
                     {
-                        ContractResolver = ContractResolver
+                        ContractResolver = APIHelper.DefaultJsonContractResolver
                     });
                     skill_L.AddRange(responseArray);
                 }
@@ -127,7 +122,7 @@ namespace GW2EIGW2API
                     NullValueHandling = NullValueHandling.Ignore,
                     Formatting = Formatting.None,
                     DefaultValueHandling = DefaultValueHandling.Ignore,
-                    ContractResolver = ContractResolver
+                    ContractResolver = APIHelper.DefaultJsonContractResolver
                 };
                 serializer.Serialize(writer, skillList);
                 writer.Close();
@@ -153,7 +148,7 @@ namespace GW2EIGW2API
                         {
                             var serializer = new JsonSerializer()
                             {
-                                ContractResolver = ContractResolver
+                                ContractResolver = APIHelper.DefaultJsonContractResolver
                             };
                             var skillList = (List<GW2APISkill>)serializer.Deserialize(reader, typeof(List<GW2APISkill>));
                             _apiSkills = new APISkills(skillList);
@@ -254,7 +249,7 @@ namespace GW2EIGW2API
                 {
                     NullValueHandling = NullValueHandling.Ignore,
                     Formatting = Formatting.None,
-                    ContractResolver = ContractResolver
+                    ContractResolver = APIHelper.DefaultJsonContractResolver
                 };
                 serializer.Serialize(writer, specList);
                 writer.Close();
@@ -281,7 +276,7 @@ namespace GW2EIGW2API
                         {
                             var serializer = new JsonSerializer()
                             {
-                                ContractResolver = ContractResolver
+                                ContractResolver = APIHelper.DefaultJsonContractResolver
                             };
                             var specList = (List<GW2APISpec>)serializer.Deserialize(reader, typeof(List<GW2APISpec>));
                             _apiSpecs = new APISpecs(specList);
@@ -334,7 +329,7 @@ namespace GW2EIGW2API
                     string data = response.Content.ReadAsStringAsync().Result;
                     GW2APITrait[] responseArray = JsonConvert.DeserializeObject<GW2APITrait[]>(data, new JsonSerializerSettings
                     {
-                        ContractResolver = ContractResolver
+                        ContractResolver = APIHelper.DefaultJsonContractResolver
                     });
                     trait_L.AddRange(responseArray);
                 }
@@ -381,7 +376,7 @@ namespace GW2EIGW2API
                     NullValueHandling = NullValueHandling.Ignore,
                     Formatting = Formatting.None,
                     DefaultValueHandling = DefaultValueHandling.Ignore,
-                    ContractResolver = ContractResolver
+                    ContractResolver = APIHelper.DefaultJsonContractResolver
                 };
                 serializer.Serialize(writer, traitList);
                 writer.Close();
@@ -407,7 +402,7 @@ namespace GW2EIGW2API
                         {
                             var serializer = new JsonSerializer()
                             {
-                                ContractResolver = ContractResolver
+                                ContractResolver = APIHelper.DefaultJsonContractResolver
                             };
                             var traitList = (List<GW2APITrait>)serializer.Deserialize(reader, typeof(List<GW2APITrait>));
                             _apiTraits = new APITraits(traitList);
