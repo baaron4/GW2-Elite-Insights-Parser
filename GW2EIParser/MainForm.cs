@@ -381,7 +381,7 @@ namespace GW2EIParser
             if (path != null)
             {
                 var toAdd = new List<string>();
-                foreach (string format in ParseHelper.GetSupportedFormats())
+                foreach (string format in ParserHelper.GetSupportedFormats())
                 {
                     toAdd.AddRange(Directory.EnumerateFiles(path, "*" + format, SearchOption.AllDirectories));
                 }
@@ -433,7 +433,7 @@ namespace GW2EIParser
 
         private void LogFileWatcher_Created(object sender, FileSystemEventArgs e)
         {
-            if (ParseHelper.IsSupportedFormat(e.FullPath))
+            if (ParserHelper.IsSupportedFormat(e.FullPath))
             {
                 AddDelayed(e.FullPath);
             }
@@ -441,7 +441,7 @@ namespace GW2EIParser
 
         private void LogFileWatcher_Renamed(object sender, RenamedEventArgs e)
         {
-            if (ParseHelper.IsTemporaryFormat(e.OldFullPath) && ParseHelper.IsCompressedFormat(e.FullPath))
+            if (ParserHelper.IsTemporaryFormat(e.OldFullPath) && ParserHelper.IsCompressedFormat(e.FullPath))
             {
                 AddDelayed(e.FullPath);
             }

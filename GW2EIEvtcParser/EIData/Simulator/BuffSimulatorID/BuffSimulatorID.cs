@@ -89,7 +89,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Removed due to a cleanse
-            else if (removedDuration > 50 && by != ParseHelper._unknownAgent)
+            else if (removedDuration > 50 && by != ParserHelper._unknownAgent)
             {
                 WasteSimulationResult.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, time));
                 if (toRemove.Extensions.Count > 0)

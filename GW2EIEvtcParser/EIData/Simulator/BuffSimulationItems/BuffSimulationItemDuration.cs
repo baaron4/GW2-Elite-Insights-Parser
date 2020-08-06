@@ -78,7 +78,7 @@ namespace GW2EIEvtcParser.EIData
                         0, 0, 0, 0, cDur));
                 }
             }
-            if (agent == ParseHelper._unknownAgent)
+            if (agent == ParserHelper._unknownAgent)
             {
                 if (distrib.TryGetValue(seedAgent, out toModify))
                 {

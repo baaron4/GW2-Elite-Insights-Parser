@@ -41,7 +41,7 @@ namespace GW2EIEvtcParser.EIData
 
         public override string GetIcon()
         {
-            return ParseHelper.GetNPCIcon(ID);
+            return ParserHelper.GetNPCIcon(ID);
         }
 
         internal void SetManualHealth(int health)

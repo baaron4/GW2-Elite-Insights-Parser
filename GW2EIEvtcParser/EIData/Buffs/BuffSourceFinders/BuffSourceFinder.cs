@@ -30,7 +30,7 @@ namespace GW2EIEvtcParser.EIData
                     _extensionSkills.AddRange(p.GetIntersectingCastLogs(log, 0, log.FightData.FightEnd).Where(x => ExtensionIDS.Contains(x.SkillId) && x.Status != AbstractCastEvent.AnimationStatus.Iterrupted));
                 }
             }
-            return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillId) && x.Time <= time && time <= x.EndTime + ParseHelper._serverDelayConstant).ToList();
+            return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillId) && x.Time <= time && time <= x.EndTime + ParserHelper._serverDelayConstant).ToList();
         }
         // Spec specific checks
         private int CouldBeEssenceOfSpeed(AgentItem dst, long extension, ParsedEvtcLog log)
@@ -52,7 +52,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (extension == ImbuedMelodies && log.PlayerListBySpec.TryGetValue("Tempest", out List<Player> tempests))
             {
-                var magAuraApplications = new HashSet<AgentItem>(log.CombatData.GetBuffData(5684).Where(x => x is BuffApplyEvent && Math.Abs(x.Time - time) < ParseHelper._serverDelayConstant && x.By != agent).Select(x => x.By));
+                var magAuraApplications = new HashSet<AgentItem>(log.CombatData.GetBuffData(5684).Where(x => x is BuffApplyEvent && Math.Abs(x.Time - time) < ParserHelper._serverDelayConstant && x.By != agent).Select(x => x.By));
                 foreach (Player tempest in tempests)
                 {
                     if (magAuraApplications.Contains(tempest.AgentItem))
@@ -86,7 +86,7 @@ namespace GW2EIEvtcParser.EIData
                     // If uncertainty due to essence of speed or imbued melodies, return unknown
                     if (essenceOfSpeedCheck == 0 || CouldBeImbuedMelodies(item.Caster, time, extension, log))
                     {
-                        return ParseHelper._unknownAgent;
+                        return ParserHelper._unknownAgent;
                     }
                     // otherwise the src is the caster
                     return item.Caster;
@@ -97,13 +97,13 @@ namespace GW2EIEvtcParser.EIData
                     // If uncertainty due to imbued melodies, return unknown
                     if (CouldBeImbuedMelodies(dst, time, extension, log))
                     {
-                        return ParseHelper._unknownAgent;
+                        return ParserHelper._unknownAgent;
                     }
                     // otherwise return the soulbeast
                     return dst;
                 }
             }
-            return ParseHelper._unknownAgent;
+            return ParserHelper._unknownAgent;
         }
 
     }

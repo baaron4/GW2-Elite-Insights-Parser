@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EIData
     public class DamageModifiersContainer
     {
 
-        public Dictionary<ParseHelper.Source, List<DamageModifier>> DamageModifiersPerSource { get; }
+        public Dictionary<ParserHelper.Source, List<DamageModifier>> DamageModifiersPerSource { get; }
 
         public Dictionary<string, DamageModifier> DamageModifiersByName { get; }
 
@@ -25,8 +25,8 @@ namespace GW2EIEvtcParser.EIData
         public List<DamageModifier> GetModifiersPerProf(string prof)
         {
             var res = new List<DamageModifier>();
-            List<ParseHelper.Source> srcs = ParseHelper.ProfToEnum(prof);
-            foreach (ParseHelper.Source src in srcs)
+            List<ParserHelper.Source> srcs = ParserHelper.ProfToEnum(prof);
+            foreach (ParserHelper.Source src in srcs)
             {
                 if (DamageModifiersPerSource.TryGetValue(src, out List<DamageModifier> list))
                 {

@@ -55,13 +55,13 @@ namespace GW2EIEvtcParser
             {
                 throw new FileNotFoundException("File " + evtc.FullName + " does not exist");
             }
-            if (!ParseHelper.IsSupportedFormat(evtc.Name))
+            if (!ParserHelper.IsSupportedFormat(evtc.Name))
             {
                 throw new InvalidDataException("Not EVTC");
             }
             using (var fs = new FileStream(evtc.FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                if (ParseHelper.IsCompressedFormat(evtc.Name))
+                if (ParserHelper.IsCompressedFormat(evtc.Name))
                 {
                     using (var arch = new ZipArchive(fs, ZipArchiveMode.Read))
                     {
@@ -136,7 +136,7 @@ namespace GW2EIEvtcParser
             using (BinaryReader reader = CreateReader(stream))
             {
                 // 12 bytes: arc build version
-                _buildVersion = ParseHelper.GetString(stream, 12);
+                _buildVersion = ParserHelper.GetString(stream, 12);
                 operation.UpdateProgressWithCancellationCheck("ArcDPS Build " + _buildVersion);
 
                 // 1 byte: skip
@@ -147,7 +147,7 @@ namespace GW2EIEvtcParser
                 _id = reader.ReadUInt16();
                 operation.UpdateProgressWithCancellationCheck("Fight Instance " + _id);
                 // 1 byte: position
-                ParseHelper.SafeSkip(stream, 1);
+                ParserHelper.SafeSkip(stream, 1);
             }
         }
         private static string GetAgentProfString(uint prof, uint elite)
@@ -270,7 +270,7 @@ namespace GW2EIEvtcParser
                     // 2 bytes: hitbox height
                     uint hbHeight = (uint)2 * reader.ReadUInt16();
                     // 68 bytes: name
-                    string name = ParseHelper.GetString(stream, 68, false);
+                    string name = ParserHelper.GetString(stream, 68, false);
                     //Save
                     string agentProf = GetAgentProfString(prof, isElite);
                     AgentItem.AgentType type;
@@ -328,7 +328,7 @@ namespace GW2EIEvtcParser
                     // 4 bytes: skill ID
                     int skillId = reader.ReadInt32();
                     // 64 bytes: name
-                    string name = ParseHelper.GetString(stream, 64);
+                    string name = ParserHelper.GetString(stream, 64);
                     //Save
                     var skill = new SkillItem(skillId, name);
                     _skillData.Add(skill);
@@ -369,7 +369,7 @@ namespace GW2EIEvtcParser
             ushort srcMasterInstid = reader.ReadUInt16();
 
             // 9 bytes: garbage
-            ParseHelper.SafeSkip(reader.BaseStream, 9);
+            ParserHelper.SafeSkip(reader.BaseStream, 9);
 
             // 1 byte: iff
             byte iff = reader.ReadByte();
@@ -406,7 +406,7 @@ namespace GW2EIEvtcParser
             // 1 byte: is_flanking
             byte isOffcycle = reader.ReadByte();
             // 1 bytes: garbage
-            ParseHelper.SafeSkip(reader.BaseStream, 1);
+            ParserHelper.SafeSkip(reader.BaseStream, 1);
 
             //save
             // Add combat
@@ -574,10 +574,10 @@ namespace GW2EIEvtcParser
         private void FindAgentMaster(long logTime, ushort masterInstid, ulong minionAgent)
         {
             AgentItem master = _agentData.GetAgentByInstID(masterInstid, logTime);
-            if (master != ParseHelper._unknownAgent)
+            if (master != ParserHelper._unknownAgent)
             {
                 AgentItem minion = _agentData.GetAgent(minionAgent);
-                if (minion != ParseHelper._unknownAgent && minion.Master == null) 
+                if (minion != ParserHelper._unknownAgent && minion.Master == null) 
                 {
                     if (minion.FirstAware <= logTime && logTime <= minion.LastAware)
                     {

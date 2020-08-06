@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal BuffExtensionEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
-            if (InternalBy == ParseHelper._unknownAgent)
+            if (InternalBy == ParserHelper._unknownAgent)
             {
                 InternalBy = null;
             }

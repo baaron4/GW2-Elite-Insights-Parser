@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class BuffSimulatorDuration : BuffSimulator
     {
-        private (AgentItem agent, bool extension) _lastSrcRemove = (ParseHelper._unknownAgent, false);
+        private (AgentItem agent, bool extension) _lastSrcRemove = (ParserHelper._unknownAgent, false);
         // Constructor
         public BuffSimulatorDuration(int capacity, ParsedEvtcLog log, StackingLogic logic) : base(capacity, log, logic)
         {
@@ -28,7 +28,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (BuffStack.Count > 0 && timePassed > 0)
             {
-                _lastSrcRemove = (ParseHelper._unknownAgent, false);
+                _lastSrcRemove = (ParserHelper._unknownAgent, false);
                 var toAdd = new BuffSimulationItemDuration(BuffStack[0]);
                 GenerationSimulation.Add(toAdd);
                 long timeDiff = BuffStack[0].Duration - timePassed;

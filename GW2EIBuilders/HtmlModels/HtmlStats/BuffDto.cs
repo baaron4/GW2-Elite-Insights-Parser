@@ -22,7 +22,7 @@ namespace GW2EIBuilders.HtmlModels
             Icon = buff.Link;
             Stacking = (buff.Type == Buff.BuffType.Intensity);
             Consumable = (buff.Nature == Buff.BuffNature.Consumable);
-            FightSpecific = (buff.Source == ParseHelper.Source.FightSpecific || buff.Source == ParseHelper.Source.FractalInstability);
+            FightSpecific = (buff.Source == ParserHelper.Source.FightSpecific || buff.Source == ParserHelper.Source.FractalInstability);
             BuffInfoEvent buffInfoEvent = buff.BuffInfo;
             if (buffInfoEvent != null)
             {

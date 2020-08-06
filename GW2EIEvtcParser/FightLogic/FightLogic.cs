@@ -196,7 +196,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     last = end;
                 }
             }
-            if (fightDuration - last > ParseHelper._phaseTimeLimit)
+            if (fightDuration - last > ParserHelper._phaseTimeLimit)
             {
                 phases.Add(new PhaseData(last, fightDuration));
             }

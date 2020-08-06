@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
             return BuffID != ProfHelper.NoBuff &&
                     (hasStackIDs ||
-                        (!(_iff == ArcDPSEnums.IFF.Unknown && By == ParseHelper._unknownAgent && !hasStackIDs) && // overstack or natural end removals
+                        (!(_iff == ArcDPSEnums.IFF.Unknown && By == ParserHelper._unknownAgent && !hasStackIDs) && // overstack or natural end removals
                         !(RemovedDuration <= 50 && RemovedDuration != 0 && !hasStackIDs) &&// low value single stack remove that can mess up with the simulator if server delay
                         Time <= fightEnd - 50)); // don't take into account removal that are close to the end of the fight));
 

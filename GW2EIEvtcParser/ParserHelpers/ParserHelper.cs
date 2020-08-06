@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace GW2EIEvtcParser
 {
-    public static class ParseHelper
+    public static class ParserHelper
     {
 
         internal static AgentItem _unknownAgent = new AgentItem();

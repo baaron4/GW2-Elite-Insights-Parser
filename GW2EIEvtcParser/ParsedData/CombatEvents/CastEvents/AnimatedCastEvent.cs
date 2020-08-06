@@ -36,7 +36,7 @@ namespace GW2EIEvtcParser.ParsedData
             if (_scaledActualDuration > 0)
             {
                 nonScaledToScaledRatio = (double)_scaledActualDuration / ActualDuration;
-                Acceleration = ParseHelper.Clamp(2.0 * ((Math.Log(nonScaledToScaledRatio) - _lowerLimit) / _diffLimit) - 1.0, -1.0, 1.0);
+                Acceleration = ParserHelper.Clamp(2.0 * ((Math.Log(nonScaledToScaledRatio) - _lowerLimit) / _diffLimit) - 1.0, -1.0, 1.0);
             }
             switch (endItem.IsActivation)
             {
