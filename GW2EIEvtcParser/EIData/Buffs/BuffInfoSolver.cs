@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using GW2EIControllers;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
@@ -88,7 +87,7 @@ namespace GW2EIEvtcParser.EIData
             { new BuffFormulaDescriptor(_anyPositive, 0, 0, _anyPositive, 0, ArcDPSEnums.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 30449 },
         };
 
-        public static void AdjustBuffs(CombatData combatData, Dictionary<long, Buff> buffsByID, OperationTracer operation)
+        public static void AdjustBuffs(CombatData combatData, Dictionary<long, Buff> buffsByID, ParserController operation)
         {
             var solved = new Dictionary<byte, ArcDPSEnums.BuffAttribute>();
             foreach (KeyValuePair<BuffFormulaDescriptor, long> pair in _recognizer)

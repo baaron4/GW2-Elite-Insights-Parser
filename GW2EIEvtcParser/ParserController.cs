@@ -1,17 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
-namespace GW2EIControllers
+namespace GW2EIEvtcParser
 {
 
-    public abstract class OperationTracer
+    public abstract class ParserController
     {
 
         protected List<string> StatusList { get; }
 
-        public OperationTracer()
+        public string ParserName { get; }
+
+        public Version ParserVersion { get; }
+
+        public ParserController(string parserName, Version parserVersion)
         {
             StatusList = new List<string>();
+            ParserName = parserName;
+            ParserVersion = parserVersion;
         }
 
         protected virtual void ThrowIfCanceled()

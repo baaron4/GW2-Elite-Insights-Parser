@@ -1,4 +1,4 @@
-﻿using GW2EIControllers.GW2API;
+﻿using GW2EIGW2API.GW2API;
 
 namespace GW2EIEvtcParser.ParsedData
 {

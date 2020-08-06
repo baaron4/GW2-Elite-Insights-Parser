@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GW2EIControllers;
-using GW2EIControllers.GW2API;
+using GW2EIGW2API;
+using GW2EIGW2API.GW2API;
 
 namespace GW2EIEvtcParser.ParsedData
 {

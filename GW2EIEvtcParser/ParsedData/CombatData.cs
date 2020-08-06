@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GW2EIControllers;
 using GW2EIEvtcParser.EIData;
 
 namespace GW2EIEvtcParser.ParsedData
@@ -241,7 +240,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        private void EIExtraEventProcess(List<Player> players, SkillData skillData, FightData fightData, OperationTracer operation)
+        private void EIExtraEventProcess(List<Player> players, SkillData skillData, FightData fightData, ParserController operation)
         {
             operation.UpdateProgressWithCancellationCheck("Creating Custom Buff Events");
             EIBuffParse(players, skillData, fightData);
@@ -262,7 +261,7 @@ namespace GW2EIEvtcParser.ParsedData
             ProfHelper.AttachMasterToRacialGadgets(players, _damageDataById, _castDataById);
         }
 
-        internal CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players, OperationTracer operation)
+        internal CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players, ParserController operation)
         {
             _skillIds = new HashSet<long>(allCombatItems.Select(x => (long)x.SkillID));
             IEnumerable<CombatItem> noStateActiBuffRem = allCombatItems.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.None && x.IsActivation == ArcDPSEnums.Activation.None && x.IsBuffRemove == ArcDPSEnums.BuffRemove.None);

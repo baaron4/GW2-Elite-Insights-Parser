@@ -1,4 +1,4 @@
-﻿namespace GW2EIControllers
+﻿namespace GW2EIDPSReport
 {
     public class UploadSettings
     {

@@ -5,18 +5,62 @@ using System.IO.Compression;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using GW2EIControllers;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIBuilders;
-using System.Windows.Forms;
 using GW2EIParser.Exceptions;
+using Discord;
+using System.Linq;
+using GW2EIDPSReport;
+using GW2EIDiscord;
+using System.Windows.Forms;
 
 namespace GW2EIParser
 {
     internal static class ProgramHelper
     {
         internal static HTMLAssets htmlAssets { get; set; }
+
+        internal static Version ParserVersion { get; } = new Version(Application.ProductVersion);
+        internal static string ParserName { get; } = "Elite Insights";
+
+        private static Embed GetEmbed(ParsedEvtcLog log, string[] uploadresult)
+        {
+            var builder = new EmbedBuilder();
+            builder.WithThumbnailUrl(log.FightData.Logic.Icon);
+            //
+            builder.AddField("Encounter Duration", log.FightData.DurationString);
+            //
+            if (log.Statistics.PresentFractalInstabilities.Any())
+            {
+                builder.AddField("Instabilities", String.Join("\n", log.Statistics.PresentFractalInstabilities.Select(x => x.Name)));
+            }
+            //
+            /*var playerByGroup = log.PlayerList.Where(x => !x.IsFakeActor).GroupBy(x => x.Group).ToDictionary(x => x.Key, x => x.ToList());
+            var hasGroups = playerByGroup.Count > 1;
+            foreach (KeyValuePair<int, List<Player>> pair in playerByGroup)
+            {
+                var groupField = new List<string>();
+                foreach (Player p in pair.Value)
+                {
+                    groupField.Add(p.Character + " - " + p.Prof);
+                }
+                builder.AddField(hasGroups ? "Group " + pair.Key : "Party Composition", String.Join("\n", groupField));
+            }*/
+            //
+            builder.AddField("Game Data", "ARC: " + log.LogData.ArcVersion + " | " + "GW2 Build: " + log.LogData.GW2Build);
+            //
+            builder.WithTitle(log.FightData.GetFightName(log));
+            builder.WithTimestamp(DateTime.Now);
+            builder.WithAuthor(log.ParserName + " " + log.ParserVersion.ToString(4), "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EIParser/Content/LI.png?raw=true", "https://github.com/baaron4/GW2-Elite-Insights-Parser");
+            builder.WithFooter(log.LogData.LogStartStd + " / " + log.LogData.LogEndStd);
+            builder.WithColor(log.FightData.Success ? Color.Green : Color.Red);
+            if (uploadresult[0].Length > 0)
+            {
+                builder.WithUrl(uploadresult[0]);
+            }
+            return builder.Build();
+        }
 
         internal static Exception GetFinalException(this Exception ex)
         {
@@ -50,8 +94,14 @@ namespace GW2EIParser
                 }
                 //Process evtc here
                 ParsedEvtcLog log = parser.ParseLog(operation, fInfo);
-                string[] uploadresult = UploadController.UploadOperation(operation, fInfo, new UploadSettings(Properties.Settings.Default.UploadToDPSReports, Properties.Settings.Default.UploadToDPSReportsRH));
-                WebhookController.SendMessage(operation, log.GetEmbed(uploadresult), uploadresult, new WebhookSettings(Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.ParseMultipleLogs, Properties.Settings.Default.WebhookURL, Properties.Settings.Default.SendSimpleMessageToWebhook));
+                var externalTraces = new List<string>();
+                string[] uploadresult = UploadController.UploadOperation(externalTraces, fInfo, new UploadSettings(Properties.Settings.Default.UploadToDPSReports, Properties.Settings.Default.UploadToDPSReportsRH));
+
+                WebhookController.SendMessage(externalTraces, GetEmbed(log, uploadresult), uploadresult, new WebhookSettings(Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.ParseMultipleLogs, Properties.Settings.Default.WebhookURL, Properties.Settings.Default.SendSimpleMessageToWebhook));
+                foreach (string trace in externalTraces)
+                {
+                    operation.UpdateProgress(trace);
+                }
                 //Creating File
                 GenerateFiles(log, operation, uploadresult, fInfo);
             }

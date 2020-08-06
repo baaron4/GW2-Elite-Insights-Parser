@@ -1,22 +1,28 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
-namespace GW2EIControllers
+namespace GW2EIDPSReport
 {
     public static class UploadController
     {
-        private static string UploadDPSReportsEI(FileInfo fi, OperationTracer operation)
+        private static readonly DefaultContractResolver ContractResolver = new DefaultContractResolver
         {
-            return UploadToDPSR(fi, "https://dps.report/uploadContent?json=1&generator=ei", operation);
+            NamingStrategy = new CamelCaseNamingStrategy()
+        };
+        private static string UploadDPSReportsEI(FileInfo fi, List<string> traces)
+        {
+            return UploadToDPSR(fi, "https://dps.report/uploadContent?json=1&generator=ei", traces);
         }
-        private static string UploadDPSReportsRH(FileInfo fi, OperationTracer operation)
+        private static string UploadDPSReportsRH(FileInfo fi, List<string> traces)
         {
-            return UploadToDPSR(fi, "https://dps.report/uploadContent?json=1&generator=rh", operation);
+            return UploadToDPSR(fi, "https://dps.report/uploadContent?json=1&generator=rh", traces);
 
         }
         private static string UploadRaidar(/*FileInfo fi*/)
@@ -65,7 +71,7 @@ namespace GW2EIControllers
             public string Permalink { get; set; }
             public string Error { get; set; }
         }
-        private static string UploadToDPSR(FileInfo fi, string URI, OperationTracer operation)
+        private static string UploadToDPSR(FileInfo fi, string URI, List<string> traces)
         {
             string fileName = fi.Name;
             byte[] fileContents = File.ReadAllBytes(fi.FullName);
@@ -73,7 +79,7 @@ namespace GW2EIControllers
             string res = "Upload process failed";
             for (int i = 0; i < tentatives; i++)
             {
-                operation.UpdateProgressWithCancellationCheck("Upload tentative");
+                traces.Add("Upload tentative");
                 var webService = new Uri(@URI);
                 var requestMessage = new HttpRequestMessage(HttpMethod.Post, webService);
                 requestMessage.Headers.ExpectContinue = false;
@@ -104,20 +110,20 @@ namespace GW2EIControllers
                         string stringContents = stringContentsTask.Result;
                         DPSReportsResponseItem item = JsonConvert.DeserializeObject<DPSReportsResponseItem>(stringContents, new JsonSerializerSettings
                         {
-                            ContractResolver = ControllerHelper.ContractResolver
+                            ContractResolver = ContractResolver
                         });
                         if (item.Error != null)
                         {
                             throw new InvalidOperationException(item.Error);
                         }
-                        operation.UpdateProgressWithCancellationCheck("Upload tentative successful");
+                        traces.Add("Upload tentative successful");
                         return item.Permalink;
                     }
                 }
                 catch (Exception e)
                 {
                     res = e.Message;
-                    operation.UpdateProgressWithCancellationCheck("Upload tentative failed: " + res);
+                    traces.Add("Upload tentative failed: " + res);
                 }
                 finally
                 {
@@ -129,27 +135,27 @@ namespace GW2EIControllers
             return res;
         }
 
-        public static string[] UploadOperation(OperationTracer operation, FileInfo fInfo, UploadSettings settings)
+        public static string[] UploadOperation(List<string> traces, FileInfo fInfo, UploadSettings settings)
         {
             //Upload Process
             string[] uploadresult = new string[3] { "", "", "" };
             if (settings.UploadToDPSReportsUsingEI)
             {
-                operation.UpdateProgressWithCancellationCheck("Uploading to DPSReports using EI");
-                uploadresult[0] = UploadDPSReportsEI(fInfo, operation);
-                operation.UpdateProgressWithCancellationCheck("DPSReports using EI: " + uploadresult[0]);
+                traces.Add("Uploading to DPSReports using EI");
+                uploadresult[0] = UploadDPSReportsEI(fInfo, traces);
+                traces.Add("DPSReports using EI: " + uploadresult[0]);
             }
             if (settings.UploadToDPSReportsUsingRH)
             {
-                operation.UpdateProgressWithCancellationCheck("Uploading to DPSReports using RH");
-                uploadresult[1] = UploadDPSReportsRH(fInfo, operation);
-                operation.UpdateProgressWithCancellationCheck("DPSReports using RH: " + uploadresult[1]);
+                traces.Add("Uploading to DPSReports using RH");
+                uploadresult[1] = UploadDPSReportsRH(fInfo, traces);
+                traces.Add("DPSReports using RH: " + uploadresult[1]);
             }
             if (settings.UploadToRaidar)
             {
-                operation.UpdateProgressWithCancellationCheck("Uploading to Raidar");
+                traces.Add("Uploading to Raidar");
                 uploadresult[2] = UploadRaidar(/*fInfo*/);
-                operation.UpdateProgressWithCancellationCheck("Raidar: " + uploadresult[2]);
+                traces.Add("Raidar: " + uploadresult[2]);
             }
             return uploadresult;
         }

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Discord;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Exceptions;
-using GW2EIControllers;
 
 namespace GW2EIEvtcParser
 {
@@ -29,12 +27,15 @@ namespace GW2EIEvtcParser
         public MechanicData MechanicData { get; }
         public GeneralStatistics Statistics { get; }
 
-        private readonly OperationTracer _operation;
+        private readonly ParserController _operation;
 
         private Dictionary<AgentItem, AbstractSingleActor> _agentToActorDictionary;
 
+        public string ParserName => _operation.ParserName;
+        public Version ParserVersion => _operation.ParserVersion;
+
         public ParsedEvtcLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData,
-                List<CombatItem> combatItems, List<Player> playerList, long evtcLogDuration, EvtcParserSettings parserSettings, OperationTracer operation)
+                List<CombatItem> combatItems, List<Player> playerList, long evtcLogDuration, EvtcParserSettings parserSettings, ParserController operation)
         {
             FightData = fightData;
             AgentData = agentData;
@@ -135,45 +136,6 @@ namespace GW2EIEvtcParser
                 return null;
             }
             return actor;
-        }
-
-        public Embed GetEmbed(string[] uploadresult)
-        {
-            var builder = new EmbedBuilder();
-            builder.WithThumbnailUrl(FightData.Logic.Icon);
-            //
-            builder.AddField("Encounter Duration", FightData.DurationString);
-            //
-            if (Statistics.PresentFractalInstabilities.Any())
-            {
-                builder.AddField("Instabilities", String.Join("\n", Statistics.PresentFractalInstabilities.Select(x => x.Name)));
-            }
-            //
-            /*var playerByGroup = log.PlayerList.Where(x => !x.IsFakeActor).GroupBy(x => x.Group).ToDictionary(x => x.Key, x => x.ToList());
-            var hasGroups = playerByGroup.Count > 1;
-            foreach (KeyValuePair<int, List<Player>> pair in playerByGroup)
-            {
-                var groupField = new List<string>();
-                foreach (Player p in pair.Value)
-                {
-                    groupField.Add(p.Character + " - " + p.Prof);
-                }
-                builder.AddField(hasGroups ? "Group " + pair.Key : "Party Composition", String.Join("\n", groupField));
-            }*/
-            //
-            builder.AddField("Game Data", "ARC: " + LogData.ArcVersion + " | " + "GW2 Build: " + LogData.GW2Build);
-            //
-            builder.WithTitle(FightData.GetFightName(this));
-            builder.WithTimestamp(DateTime.Now);
-            (string parserName, Version parserVersion) = ControllerHelper.GetControllerInformation();
-            builder.WithAuthor(parserName + " " + parserVersion.ToString(4), "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EIParser/Content/LI.png?raw=true", "https://github.com/baaron4/GW2-Elite-Insights-Parser");
-            builder.WithFooter(LogData.LogStartStd + " / " + LogData.LogEndStd);
-            builder.WithColor(FightData.Success ? Color.Green : Color.Red);
-            if (uploadresult[0].Length > 0)
-            {
-                builder.WithUrl(uploadresult[0]);
-            }
-            return builder.Build();
         }
     }
 }

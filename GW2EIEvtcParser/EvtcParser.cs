@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using GW2EIControllers;
-using GW2EIControllers.GW2API;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIGW2API.GW2API;
+using GW2EIGW2API;
 
 //recommend CTRL+M+O to collapse all
 namespace GW2EIEvtcParser
@@ -39,7 +39,6 @@ namespace GW2EIEvtcParser
             _playerList = new List<Player>();
             _logStartTime = 0;
             _logEndTime = 0;
-            (_, _) = ControllerHelper.GetControllerInformation();
         }
 
         //Main Parse method------------------------------------------------------------------------------------------------------------------------------------------------
@@ -49,7 +48,7 @@ namespace GW2EIEvtcParser
         /// <param name="operation">Operation object bound to the UI</param>
         /// <param name="evtc">The path to the log to parse</param>
         /// <returns>the ParsedEvtcLog</returns>
-        public ParsedEvtcLog ParseLog(OperationTracer operation, FileInfo evtc)
+        public ParsedEvtcLog ParseLog(ParserController operation, FileInfo evtc)
         {
             operation.UpdateProgressWithCancellationCheck("Reading Binary");
             if (!evtc.Exists)
@@ -90,7 +89,7 @@ namespace GW2EIEvtcParser
             return new ParsedEvtcLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _logEndTime - _logStartTime, _parserSettings, operation);
         }
 
-        private void ParseLog(OperationTracer operation, Stream stream)
+        private void ParseLog(ParserController operation, Stream stream)
         {
             operation.UpdateProgressWithCancellationCheck("Parsing fight data");
             ParseFightData(stream, operation);
@@ -132,7 +131,7 @@ namespace GW2EIEvtcParser
         /// <summary>
         /// Parses fight related data
         /// </summary>
-        private void ParseFightData(Stream stream, OperationTracer operation)
+        private void ParseFightData(Stream stream, ParserController operation)
         {
             using (BinaryReader reader = CreateReader(stream))
             {
@@ -239,7 +238,7 @@ namespace GW2EIEvtcParser
         /// <summary>
         /// Parses agent related data
         /// </summary>
-        private void ParseAgentData(Stream stream, OperationTracer operation)
+        private void ParseAgentData(Stream stream, ParserController operation)
         {
             using (BinaryReader reader = CreateReader(stream))
             {            // 4 bytes: player count
@@ -315,7 +314,7 @@ namespace GW2EIEvtcParser
         /// <summary>
         /// Parses skill related data
         /// </summary>
-        private void ParseSkillData(Stream stream, OperationTracer operation)
+        private void ParseSkillData(Stream stream, ParserController operation)
         {
             using (BinaryReader reader = CreateReader(stream))
             {
@@ -497,7 +496,7 @@ namespace GW2EIEvtcParser
         /// <summary>
         /// Parses combat related data
         /// </summary>
-        private void ParseCombatList(Stream stream, OperationTracer operation)
+        private void ParseCombatList(Stream stream, ParserController operation)
         {
             // 64 bytes: each combat
             using (BinaryReader reader = CreateReader(stream))

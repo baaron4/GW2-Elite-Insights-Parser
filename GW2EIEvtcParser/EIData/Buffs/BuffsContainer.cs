@@ -4,7 +4,6 @@ using System.Linq;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using GW2EIEvtcParser.ParsedData;
-using GW2EIControllers;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -871,7 +870,7 @@ namespace GW2EIEvtcParser.EIData
         private readonly BuffSourceFinder _buffSourceFinder;
 
 
-        internal BuffsContainer(ulong build, CombatData combatData, OperationTracer operation)
+        internal BuffsContainer(ulong build, CombatData combatData, ParserController operation)
         {
             var AllBuffs = new List<List<Buff>>()
             {

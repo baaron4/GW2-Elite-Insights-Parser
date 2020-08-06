@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using GW2EIControllers;
 using GW2EIBuilders;
+using GW2EIGW2API;
 
 namespace GW2EIParser
 {
@@ -135,7 +135,7 @@ namespace GW2EIParser
 
             }
             ProgramHelper.htmlAssets = new HTMLAssets();
-            ControllerHelper.SetControllerInformation("Elite Insights", new Version(Application.ProductVersion));
+            GW2APIController.InitAPICache();
             if (uiMode)
             {
                 Application.EnableVisualStyles();

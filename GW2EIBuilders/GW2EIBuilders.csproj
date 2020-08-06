@@ -9,10 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove=".editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
     <AdditionalFiles Include=".editorconfig" />
   </ItemGroup>
 
@@ -88,6 +84,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GW2EI-GW2API\GW2EIGW2API.csproj" />
     <ProjectReference Include="..\GW2EIEvtcParser\GW2EIEvtcParser.csproj" />
   </ItemGroup>
 

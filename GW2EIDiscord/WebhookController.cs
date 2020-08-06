@@ -1,18 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using Discord;
 using Discord.Webhook;
 
-namespace GW2EIControllers
+namespace GW2EIDiscord
 {
     public static class WebhookController
     {
-        public static void SendMessage(OperationTracer operation, Embed embed, string[] uploadresult, WebhookSettings settings)
+        public static void SendMessage(List<string> traces, Embed embed, string[] uploadresult, WebhookSettings settings)
         {
             if (settings.WebhookURL != null && settings.WebhookURL.Length > 0)
             {
                 if (!uploadresult[0].Contains("https"))
                 {
-                    operation.UpdateProgressWithCancellationCheck("Nothing to send to Webhook");
+                    traces.Add("Nothing to send to Webhook");
                     return;
                 }
                 try
@@ -28,7 +29,7 @@ namespace GW2EIControllers
                         {
                             _ = client.SendMessageAsync(embeds: new[] { embed }).Result;
                         }
-                        operation.UpdateProgressWithCancellationCheck("Sent Embed");
+                        traces.Add("Sent Embed");
                     }
                     finally
                     {
@@ -37,7 +38,7 @@ namespace GW2EIControllers
                 }
                 catch (Exception e)
                 {
-                    operation.UpdateProgressWithCancellationCheck("Couldn't send embed: " + e.Message);
+                    traces.Add("Couldn't send embed: " + e.Message);
                 }
             }
             

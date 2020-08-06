@@ -96,6 +96,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <AdditionalFiles Include=".editorconfig" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Content\Dodge_Instructor.png" />
     <Content Include="Content\SkillList.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -111,8 +114,10 @@
     <None Include="Resources\theme-slate.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GW2EI-GW2API\GW2EIGW2API.csproj" />
     <ProjectReference Include="..\GW2EIBuilders\GW2EIBuilders.csproj" />
-    <ProjectReference Include="..\GW2EIControllers\GW2EIControllers.csproj" />
+    <ProjectReference Include="..\GW2EIDiscord\GW2EIDiscord.csproj" />
+    <ProjectReference Include="..\GW2EIDPSReport\GW2EIDPSReport.csproj" />
     <ProjectReference Include="..\GW2EIEvtcParser\GW2EIEvtcParser.csproj" />
   </ItemGroup>
 </Project>

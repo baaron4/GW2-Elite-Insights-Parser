@@ -6,11 +6,11 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using GW2EIBuilders;
-using GW2EIControllers;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIParser.Exceptions;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 
@@ -19,6 +19,10 @@ namespace GW2EIParser.tst
     [TestFixture]
     public class StabilityTestEvtc
     {
+        private static readonly DefaultContractResolver ContractResolver = new DefaultContractResolver
+        {
+            NamingStrategy = new CamelCaseNamingStrategy()
+        };
         private bool Loop(BlockingCollection<string> failed, BlockingCollection<string> messages, string file)
         {
             try
@@ -87,7 +91,7 @@ namespace GW2EIParser.tst
                     var serializer = new JsonSerializer
                     {
                         NullValueHandling = NullValueHandling.Ignore,
-                        ContractResolver = ControllerHelper.ContractResolver
+                        ContractResolver = ContractResolver
                     };
                     var writer = new JsonTextWriter(sw)
                     {

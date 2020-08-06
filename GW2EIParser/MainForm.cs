@@ -53,7 +53,7 @@ namespace GW2EIParser
 
                 _logsFiles.Add(file);
 
-                var operation = new FormOperationController(file, "Ready to parse", dgvFiles);
+                var operation = new FormOperationController(ProgramHelper.ParserName, ProgramHelper.ParserVersion, file, "Ready to parse", dgvFiles);
                 operatorBindingSource.Add(operation);
 
                 if (Properties.Settings.Default.AutoParse)

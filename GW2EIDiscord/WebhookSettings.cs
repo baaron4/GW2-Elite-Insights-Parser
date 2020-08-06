@@ -1,4 +1,4 @@
-﻿namespace GW2EIControllers
+﻿namespace GW2EIDiscord
 {
     public class WebhookSettings
     {

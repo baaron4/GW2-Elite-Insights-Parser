@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using GW2EIControllers;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 
@@ -107,7 +106,7 @@ namespace GW2EIEvtcParser.EIData
             return new Buff(name + " " + id, id, ParseHelper.Source.Item, capacity > 1 ? BuffStackType.Stacking : BuffStackType.Force, capacity, BuffNature.Consumable, link);
         }
 
-        internal void AttachBuffInfoEvent(BuffInfoEvent buffInfoEvent, OperationTracer operation)
+        internal void AttachBuffInfoEvent(BuffInfoEvent buffInfoEvent, ParserController operation)
         {
             if (buffInfoEvent.BuffID != ID)
             {

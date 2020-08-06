@@ -265,7 +265,7 @@ namespace GW2EIBuilders.JsonModels
             TriggerID = log.FightData.TriggerID;
             FightName = log.FightData.GetFightName(log);
             FightIcon = log.FightData.Logic.Icon;
-            (string parserName, Version parserVersion) = GW2EIControllers.ControllerHelper.GetControllerInformation();
+            (string parserName, Version parserVersion) = (log.ParserName, log.ParserVersion);
             ParserVersion = parserVersion.ToString(4);
             EliteInsightsVersion = ParserVersion;
             ParserName = parserName;

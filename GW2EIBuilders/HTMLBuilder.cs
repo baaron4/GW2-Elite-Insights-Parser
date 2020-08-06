@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.RegularExpressions;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIBuilders.HtmlModels;
 using Newtonsoft.Json;
-using GW2EIControllers;
 
 namespace GW2EIBuilders
 {
@@ -41,7 +39,7 @@ namespace GW2EIBuilders
             }
             _eiJS = assets.EIJavascriptCode;
             _eiCRJS = assets.EICRJavascriptCode;
-            (_parser, _version) = ControllerHelper.GetControllerInformation();
+            (_parser, _version) = (log.ParserName, log.ParserVersion);
             _scriptVersion = _version.Major + "." + _version.Minor;
 #if !DEBUG
             _scriptVersion += "." + _version.Build;
@@ -174,7 +172,7 @@ namespace GW2EIBuilders
             var settings = new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = ControllerHelper.ContractResolver
+                ContractResolver = BuilderHelper.ContractResolver
             };
             return JsonConvert.SerializeObject(value, settings);
         }

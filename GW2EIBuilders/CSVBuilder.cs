@@ -29,7 +29,7 @@ namespace GW2EIBuilders
             {
                 throw new InvalidDataException("Missing settings in CSVBuilder");
             }
-            (_parser, _version) = GW2EIControllers.ControllerHelper.GetControllerInformation();
+            (_parser, _version) = (log.ParserName, log.ParserVersion);
             _log = log;
             _delimiter = settings.Delimiter;
             _phases = log.FightData.GetPhases(log);

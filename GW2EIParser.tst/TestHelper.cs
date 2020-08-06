@@ -6,7 +6,6 @@ using GW2EIEvtcParser;
 using GW2EIBuilders;
 using GW2EIBuilders.JsonModels;
 using Newtonsoft.Json.Linq;
-using GW2EIControllers;
 
 namespace GW2EIParser.tst
 {
@@ -16,10 +15,11 @@ namespace GW2EIParser.tst
         private static readonly HTMLSettings htmlSettings = new HTMLSettings(false, false);
         private static readonly RawFormatSettings rawSettings = new RawFormatSettings(true);
         private static readonly CSVSettings csvSettings = new CSVSettings(",");
+        private static readonly HTMLAssets htmlAssets = new HTMLAssets();
 
-        private class TestOperationController : OperationTracer
+        private class TestOperationController : ParserController
         {
-            public TestOperationController() : base()
+            public TestOperationController() : base("EI Stability Tests", new Version(1, 0))
             {
 
             }
@@ -31,7 +31,6 @@ namespace GW2EIParser.tst
 
         public static ParsedEvtcLog ParseLog(string location)
         {
-            ControllerHelper.SetControllerInformation("EI Stability Tests", new Version(1, 0));
             var parser = new EvtcParser(parserSettings);
 
             var fInfo = new FileInfo(location);
@@ -67,7 +66,7 @@ namespace GW2EIParser.tst
         {
             var ms = new MemoryStream();
             var sw = new StreamWriter(ms, BuilderHelper.NoBOMEncodingUTF8);
-            var builder = new HTMLBuilder(log, htmlSettings);
+            var builder = new HTMLBuilder(log, htmlSettings, htmlAssets);
 
             builder.CreateHTML(sw, null);
             sw.Close();

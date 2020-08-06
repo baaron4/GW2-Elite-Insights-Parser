@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using GW2EIParser.Exceptions;
 
 namespace GW2EIParser
@@ -24,7 +25,7 @@ namespace GW2EIParser
 
         private static void ParseLog(string logFile)
         {
-            var operation = new ConsoleOperationController(logFile, "Ready to parse");
+            var operation = new ConsoleOperationController(ProgramHelper.ParserName, ProgramHelper.ParserVersion, logFile, "Ready to parse");
             try
             {
                 ProgramHelper.DoWork(operation);

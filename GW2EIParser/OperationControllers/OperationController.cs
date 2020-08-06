@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GW2EIControllers;
+using GW2EIEvtcParser;
 
 namespace GW2EIParser
 {
 
-    internal abstract class OperationController : OperationTracer
+    internal abstract class OperationController : ParserController
     {
         /// <summary>
         /// Status of the parse operation
@@ -25,7 +25,7 @@ namespace GW2EIParser
         /// </summary>
         public List<string> GeneratedFiles { get; }
 
-        public OperationController(string location, string status) : base()
+        public OperationController(string parserName, Version parserVersion, string location, string status) : base(parserName, parserVersion)
         {
             Status = status;
             Location = location;

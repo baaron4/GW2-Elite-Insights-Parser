@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace GW2EIControllers.GW2API
+namespace GW2EIGW2API.GW2API
 {
     public class GW2APITrait
     {
