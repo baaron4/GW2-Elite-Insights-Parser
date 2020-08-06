@@ -14,6 +14,7 @@ using System.Linq;
 using GW2EIDPSReport;
 using GW2EIDiscord;
 using System.Windows.Forms;
+using GW2EIDPSReport.DPSReportJsons;
 
 namespace GW2EIParser
 {
@@ -26,7 +27,7 @@ namespace GW2EIParser
 
         private static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
 
-        private static Embed GetEmbed(ParsedEvtcLog log, string[] uploadresult)
+        private static Embed BuildEmbed(ParsedEvtcLog log, string dpsReportPermalink)
         {
             var builder = new EmbedBuilder();
             builder.WithThumbnailUrl(log.FightData.Logic.Icon);
@@ -35,7 +36,7 @@ namespace GW2EIParser
             //
             if (log.Statistics.PresentFractalInstabilities.Any())
             {
-                builder.AddField("Instabilities", String.Join("\n", log.Statistics.PresentFractalInstabilities.Select(x => x.Name)));
+                builder.AddField("Instabilities", string.Join("\n", log.Statistics.PresentFractalInstabilities.Select(x => x.Name)));
             }
             //
             /*var playerByGroup = log.PlayerList.Where(x => !x.IsFakeActor).GroupBy(x => x.Group).ToDictionary(x => x.Key, x => x.ToList());
@@ -57,9 +58,9 @@ namespace GW2EIParser
             builder.WithAuthor(log.ParserName + " " + log.ParserVersion.ToString(4), "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EIParser/Content/LI.png?raw=true", "https://github.com/baaron4/GW2-Elite-Insights-Parser");
             builder.WithFooter(log.LogData.LogStartStd + " / " + log.LogData.LogEndStd);
             builder.WithColor(log.FightData.Success ? Color.Green : Color.Red);
-            if (uploadresult[0].Length > 0)
+            if (dpsReportPermalink.Length > 0)
             {
-                builder.WithUrl(uploadresult[0]);
+                builder.WithUrl(dpsReportPermalink);
             }
             return builder.Build();
         }
@@ -77,6 +78,34 @@ namespace GW2EIParser
         private static bool HasFormat()
         {
             return Properties.Settings.Default.SaveOutCSV || Properties.Settings.Default.SaveOutHTML || Properties.Settings.Default.SaveOutXML || Properties.Settings.Default.SaveOutJSON;
+        }
+
+        private static string[] UploadOperation(List<string> traces, FileInfo fInfo)
+        {
+            var settings = new DPSReportSettings();
+            //Upload Process
+            string[] uploadresult = new string[3] { "", "", "" };
+            if (Properties.Settings.Default.UploadToDPSReports)
+            {
+                traces.Add("Uploading to DPSReports using EI");
+                DPSReportUploadObject response = DPSReportAPI.UploadDPSReportsEI(fInfo, settings, traces);
+                uploadresult[0] =  response != null ? response.Permalink : "Upload process failed";
+                traces.Add("DPSReports using EI: " + uploadresult[0]);
+            }
+            if (Properties.Settings.Default.UploadToDPSReportsRH)
+            {
+                traces.Add("Uploading to DPSReports using RH");
+                DPSReportUploadObject response = DPSReportAPI.UploadDPSReportsRH(fInfo, settings, traces);
+                uploadresult[1] = response != null ? response.Permalink : "Upload process failed";
+                traces.Add("DPSReports using RH: " + uploadresult[1]);
+            }
+            /*if (settings.UploadToRaidar)
+            {
+                traces.Add("Uploading to Raidar");
+                uploadresult[2] = UploadController.UploadRaidar();
+                traces.Add("Raidar: " + uploadresult[2]);
+            }*/
+            return uploadresult;
         }
 
         public static void DoWork(OperationController operation)
@@ -97,9 +126,12 @@ namespace GW2EIParser
                 //Process evtc here
                 ParsedEvtcLog log = parser.ParseLog(operation, fInfo);
                 var externalTraces = new List<string>();
-                string[] uploadresult = UploadController.UploadOperation(externalTraces, fInfo, new UploadSettings(Properties.Settings.Default.UploadToDPSReports, Properties.Settings.Default.UploadToDPSReportsRH));
-
-                WebhookController.SendMessage(externalTraces, GetEmbed(log, uploadresult), uploadresult, new WebhookSettings(Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.ParseMultipleLogs, Properties.Settings.Default.WebhookURL, Properties.Settings.Default.SendSimpleMessageToWebhook));
+                string[] uploadresult = UploadOperation(externalTraces, fInfo);
+                if (Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.ParseMultipleLogs)
+                {
+                    var webhookSettings = new WebhookSettings(Properties.Settings.Default.WebhookURL, Properties.Settings.Default.SendSimpleMessageToWebhook ? BuildEmbed(log, uploadresult[0]) : null);
+                    WebhookController.SendMessage(externalTraces, uploadresult[0], webhookSettings);
+                }
                 foreach (string trace in externalTraces)
                 {
                     operation.UpdateProgress(trace);

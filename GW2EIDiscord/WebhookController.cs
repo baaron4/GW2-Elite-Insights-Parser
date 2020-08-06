@@ -7,11 +7,11 @@ namespace GW2EIDiscord
 {
     public static class WebhookController
     {
-        public static void SendMessage(List<string> traces, Embed embed, string[] uploadresult, WebhookSettings settings)
+        public static void SendMessage(List<string> traces, string dpsReportPermalink, WebhookSettings settings)
         {
             if (settings.WebhookURL != null && settings.WebhookURL.Length > 0)
             {
-                if (!uploadresult[0].Contains("https"))
+                if (!dpsReportPermalink.Contains("https"))
                 {
                     traces.Add("Nothing to send to Webhook");
                     return;
@@ -21,13 +21,13 @@ namespace GW2EIDiscord
                     var client = new DiscordWebhookClient(settings.WebhookURL);
                     try
                     {
-                        if (settings.SendSimpleWebhookMessage)
+                        if (settings.Embed == null)
                         {
-                            _ = client.SendMessageAsync(text: uploadresult[0]).Result;
+                            _ = client.SendMessageAsync(text: dpsReportPermalink).Result;
                         } 
                         else
                         {
-                            _ = client.SendMessageAsync(embeds: new[] { embed }).Result;
+                            _ = client.SendMessageAsync(embeds: new[] { settings.Embed }).Result;
                         }
                         traces.Add("Sent Embed");
                     }

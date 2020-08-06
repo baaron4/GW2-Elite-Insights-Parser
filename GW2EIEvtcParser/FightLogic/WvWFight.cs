@@ -8,7 +8,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 {
     internal class WvWFight : FightLogic
     {
-        private const string _defaultName = "World vs World";
+        private const string DefaultName = "World vs World";
         public WvWFight(int triggerID) : base(triggerID)
         {
             Extension = "wvw";
@@ -77,7 +77,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             MapIDEvent mapID = log.CombatData.GetMapIDEvents().LastOrDefault();
             if (mapID == null)
             {
-                return _defaultName;
+                return DefaultName;
             }
             switch(mapID.MapID)
             {
@@ -94,7 +94,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case 968:
                     return "Edge of the Mists";
             }
-            return _defaultName;
+            return DefaultName;
         }
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)

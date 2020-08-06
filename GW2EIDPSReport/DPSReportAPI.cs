@@ -5,27 +5,40 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using GW2EIDPSReport.DPSReportJsons;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 namespace GW2EIDPSReport
 {
-    public static class UploadController
+    public static class DPSReportAPI
     {
         private static readonly DefaultContractResolver DefaultJsonContractResolver = new DefaultContractResolver
         {
             NamingStrategy = new CamelCaseNamingStrategy()
         };
-        private static string UploadDPSReportsEI(FileInfo fi, List<string> traces)
+        private static string BaseUploadContentURL { get; } = "https://dps.report/uploadContent?json=1";
+
+        private static string GetUploadContentURL(DPSReportSettings settings)
         {
-            return UploadToDPSR(fi, "https://dps.report/uploadContent?json=1&generator=ei", traces);
+            string url = BaseUploadContentURL;
+            if (settings.UserToken != null && settings.UserToken.Length > 0)
+            {
+                url += "&userToken=" + settings.UserToken;
+            }
+            return url;
         }
-        private static string UploadDPSReportsRH(FileInfo fi, List<string> traces)
+
+        public static DPSReportUploadObject UploadDPSReportsEI(FileInfo fi, DPSReportSettings settings, List<string> traces)
+        {         
+            return UploadToDPSR(fi, GetUploadContentURL(settings) + "&generator=ei", traces);
+        }
+        public static DPSReportUploadObject UploadDPSReportsRH(FileInfo fi, DPSReportSettings settings, List<string> traces)
         {
-            return UploadToDPSR(fi, "https://dps.report/uploadContent?json=1&generator=rh", traces);
+            return UploadToDPSR(fi, GetUploadContentURL(settings) + "&generator=rh", traces);
 
         }
-        private static string UploadRaidar(/*FileInfo fi*/)
+        /*private static string UploadRaidar(FileInfo fi)
         {
             //string fileName = fi.Name;
             //byte[] fileContents = File.ReadAllBytes(fi.FullName);
@@ -65,18 +78,12 @@ namespace GW2EIDPSReport
             //    // Console.WriteLine(ex.Message);
             //}
             return "";
-        }
-        internal class DPSReportsResponseItem
-        {
-            public string Permalink { get; set; }
-            public string Error { get; set; }
-        }
-        private static string UploadToDPSR(FileInfo fi, string URI, List<string> traces)
+        }*/
+        private static DPSReportUploadObject UploadToDPSR(FileInfo fi, string URI, List<string> traces)
         {
             string fileName = fi.Name;
             byte[] fileContents = File.ReadAllBytes(fi.FullName);
             const int tentatives = 5;
-            string res = "Upload process failed";
             for (int i = 0; i < tentatives; i++)
             {
                 traces.Add("Upload tentative");
@@ -108,7 +115,7 @@ namespace GW2EIDPSReport
                     {
                         Task<string> stringContentsTask = responseContent.ReadAsStringAsync();
                         string stringContents = stringContentsTask.Result;
-                        DPSReportsResponseItem item = JsonConvert.DeserializeObject<DPSReportsResponseItem>(stringContents, new JsonSerializerSettings
+                        DPSReportUploadObject item = JsonConvert.DeserializeObject<DPSReportUploadObject>(stringContents, new JsonSerializerSettings
                         {
                             ContractResolver = DefaultJsonContractResolver
                         });
@@ -117,13 +124,12 @@ namespace GW2EIDPSReport
                             throw new InvalidOperationException(item.Error);
                         }
                         traces.Add("Upload tentative successful");
-                        return item.Permalink;
+                        return item;
                     }
                 }
                 catch (Exception e)
                 {
-                    res = e.Message;
-                    traces.Add("Upload tentative failed: " + res);
+                    traces.Add("Upload tentative failed: " + e.Message);
                 }
                 finally
                 {
@@ -132,32 +138,7 @@ namespace GW2EIDPSReport
                     requestMessage.Dispose();
                 }
             }        
-            return res;
-        }
-
-        public static string[] UploadOperation(List<string> traces, FileInfo fInfo, UploadSettings settings)
-        {
-            //Upload Process
-            string[] uploadresult = new string[3] { "", "", "" };
-            if (settings.UploadToDPSReportsUsingEI)
-            {
-                traces.Add("Uploading to DPSReports using EI");
-                uploadresult[0] = UploadDPSReportsEI(fInfo, traces);
-                traces.Add("DPSReports using EI: " + uploadresult[0]);
-            }
-            if (settings.UploadToDPSReportsUsingRH)
-            {
-                traces.Add("Uploading to DPSReports using RH");
-                uploadresult[1] = UploadDPSReportsRH(fInfo, traces);
-                traces.Add("DPSReports using RH: " + uploadresult[1]);
-            }
-            if (settings.UploadToRaidar)
-            {
-                traces.Add("Uploading to Raidar");
-                uploadresult[2] = UploadRaidar(/*fInfo*/);
-                traces.Add("Raidar: " + uploadresult[2]);
-            }
-            return uploadresult;
+            return null;
         }
 
     }

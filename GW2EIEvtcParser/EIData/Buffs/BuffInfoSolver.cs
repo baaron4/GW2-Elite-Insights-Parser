@@ -6,8 +6,8 @@ namespace GW2EIEvtcParser.EIData
 {
     internal static class BuffInfoSolver
     {
-        private const int _anyPositive = int.MinValue;
-        private const int _anyNegative = int.MaxValue;
+        private const int AnyPositive = int.MinValue;
+        private const int AnyNegative = int.MaxValue;
         private class BuffFormulaDescriptor
         {
             private readonly float _constantOffset;
@@ -31,15 +31,15 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (formula.Attr1 == ArcDPSEnums.BuffAttribute.Unknown && !toFill.ContainsKey(formula.ByteAttr1))
                 {
-                    if (formula.ConstantOffset == _constantOffset || (formula.ConstantOffset > 0 && _constantOffset == _anyPositive) || (formula.ConstantOffset < 0 && _constantOffset == _anyNegative))
+                    if (formula.ConstantOffset == _constantOffset || (formula.ConstantOffset > 0 && _constantOffset == AnyPositive) || (formula.ConstantOffset < 0 && _constantOffset == AnyNegative))
                     {
-                        if (formula.LevelOffset == _levelOffset || (formula.LevelOffset > 0 && _levelOffset == _anyPositive) || (formula.LevelOffset < 0 && _levelOffset == _anyNegative))
+                        if (formula.LevelOffset == _levelOffset || (formula.LevelOffset > 0 && _levelOffset == AnyPositive) || (formula.LevelOffset < 0 && _levelOffset == AnyNegative))
                         {
-                            if (formula.Variable == _variable || (formula.Variable > 0 && _variable == _anyPositive) || (formula.Variable < 0 && _variable == _anyNegative))
+                            if (formula.Variable == _variable || (formula.Variable > 0 && _variable == AnyPositive) || (formula.Variable < 0 && _variable == AnyNegative))
                             {
-                                if (formula.TraitSelf == _traitSelf || (formula.TraitSelf > 0 && _traitSelf == _anyPositive) || (formula.TraitSelf < 0 && _traitSelf == _anyNegative))
+                                if (formula.TraitSelf == _traitSelf || (formula.TraitSelf > 0 && _traitSelf == AnyPositive) || (formula.TraitSelf < 0 && _traitSelf == AnyNegative))
                                 {
-                                    if (formula.TraitSrc == _traitSrc || (formula.TraitSrc > 0 && _traitSrc == _anyPositive) || (formula.TraitSrc < 0 && _traitSrc == _anyNegative))
+                                    if (formula.TraitSrc == _traitSrc || (formula.TraitSrc > 0 && _traitSrc == AnyPositive) || (formula.TraitSrc < 0 && _traitSrc == AnyNegative))
                                     {
                                         toFill[formula.ByteAttr1] = _result;
                                     }
@@ -53,38 +53,38 @@ namespace GW2EIEvtcParser.EIData
         // VERY IMPORTANT: if using an id multiple time, make sure the stricter checking conditions are done first
         private static readonly Dictionary<BuffFormulaDescriptor, long> _recognizer = new Dictionary<BuffFormulaDescriptor, long> {
             // CriticalChance
-            {new BuffFormulaDescriptor(_anyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.CriticalChance), 725 },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.CriticalChance), 725 },
             // ConditionDurationIncrease
-            {new BuffFormulaDescriptor(_anyPositive, 0, 0, _anyPositive, 0, ArcDPSEnums.BuffAttribute.ConditionDurationIncrease), 725 },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, ArcDPSEnums.BuffAttribute.ConditionDurationIncrease), 725 },
             // SkillCooldown
-            { new BuffFormulaDescriptor(_anyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.SkillCooldownReduction), 30328 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.SkillCooldownReduction), 30328 },
             // HealingOutputFormula
-            {new BuffFormulaDescriptor(_anyPositive, _anyPositive, _anyPositive, 0, 0, ArcDPSEnums.BuffAttribute.HealingOutputFormula), 718 },
+            {new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, ArcDPSEnums.BuffAttribute.HealingOutputFormula), 718 },
             // EnduranceRegeneration
-            { new BuffFormulaDescriptor(_anyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.EnduranceRegeneration), 726 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.EnduranceRegeneration), 726 },
             // MovementSpeed
-            { new BuffFormulaDescriptor(_anyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.MovementSpeed), 719 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.MovementSpeed), 719 },
             // BuffPowerDamageFormula
-            {  new BuffFormulaDescriptor(_anyPositive, _anyPositive, _anyPositive, 0, 0, ArcDPSEnums.BuffAttribute.BuffPowerDamageFormula), 873 },
+            {  new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, ArcDPSEnums.BuffAttribute.BuffPowerDamageFormula), 873 },
             // ConditionDamageFormula
-            { new BuffFormulaDescriptor(_anyPositive, _anyPositive, _anyPositive, 0, 0, ArcDPSEnums.BuffAttribute.ConditionDamageFormula), 736 },
-            { new BuffFormulaDescriptor(_anyPositive, _anyPositive, _anyPositive, 0, 0, ArcDPSEnums.BuffAttribute.ConditionDamageFormula), 737 },
-            { new BuffFormulaDescriptor(_anyPositive, _anyPositive, _anyPositive, 0, 0, ArcDPSEnums.BuffAttribute.ConditionDamageFormula), 723 },
-            { new BuffFormulaDescriptor(_anyPositive, _anyPositive, 0, 0, 0, ArcDPSEnums.BuffAttribute.ConditionDamageFormula), 861 },
+            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, ArcDPSEnums.BuffAttribute.ConditionDamageFormula), 736 },
+            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, ArcDPSEnums.BuffAttribute.ConditionDamageFormula), 737 },
+            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, ArcDPSEnums.BuffAttribute.ConditionDamageFormula), 723 },
+            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, ArcDPSEnums.BuffAttribute.ConditionDamageFormula), 861 },
             // ConditionSkillActivationFormula
-            { new BuffFormulaDescriptor(_anyPositive, _anyPositive, _anyPositive, 0, 0, ArcDPSEnums.BuffAttribute.ConditionSkillActivationFormula), 861 },
+            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, ArcDPSEnums.BuffAttribute.ConditionSkillActivationFormula), 861 },
             // ConditionMovementActivationFormula
-            { new BuffFormulaDescriptor(_anyPositive, _anyPositive, _anyPositive, 0, _anyPositive, ArcDPSEnums.BuffAttribute.ConditionMovementActivationFormula), 19426 },
+            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, AnyPositive, ArcDPSEnums.BuffAttribute.ConditionMovementActivationFormula), 19426 },
             // IncomingHealingEffectiveness
-            { new BuffFormulaDescriptor(_anyNegative, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.IncomingHealingEffectiveness), 723 },
+            { new BuffFormulaDescriptor(AnyNegative, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.IncomingHealingEffectiveness), 723 },
             // GlancingBlow
-            { new BuffFormulaDescriptor(_anyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.GlancingBlow), 742 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.GlancingBlow), 742 },
             // OutgoingHealingEffectivenessFlatInc
-            { new BuffFormulaDescriptor(_anyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 53285 },
-            { new BuffFormulaDescriptor(_anyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 26529 },
-            { new BuffFormulaDescriptor(_anyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 29025 },
-            { new BuffFormulaDescriptor(_anyPositive, 0, 0, _anyPositive, 0, ArcDPSEnums.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 31508 },
-            { new BuffFormulaDescriptor(_anyPositive, 0, 0, _anyPositive, 0, ArcDPSEnums.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 30449 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 53285 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 26529 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 29025 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, ArcDPSEnums.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 31508 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, ArcDPSEnums.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 30449 },
         };
 
         public static void AdjustBuffs(CombatData combatData, Dictionary<long, Buff> buffsByID, ParserController operation)

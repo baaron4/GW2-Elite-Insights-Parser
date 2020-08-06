@@ -1,18 +1,18 @@
-﻿namespace GW2EIDiscord
+﻿using Discord;
+
+namespace GW2EIDiscord
 {
     public class WebhookSettings
     {
-        public bool SendEmbedToWebhook { get; }
         public string WebhookURL { get; }
-        public bool SendSimpleWebhookMessage { get; }
+        public Embed Embed { get; }
 
-        public WebhookSettings(bool sendEmbedToWebhook, string webhookURL, bool simpleWebhookMessage)
+        public WebhookSettings(string webhookURL, Embed embed)
         {
-            SendEmbedToWebhook = sendEmbedToWebhook;
             WebhookURL = webhookURL;
-            SendSimpleWebhookMessage = simpleWebhookMessage;
+            Embed = embed;
         }
-        public WebhookSettings(bool sendEmbedToWebhook, string webhookURL) : this(sendEmbedToWebhook, webhookURL, false)
+        public WebhookSettings(string webhookURL) : this(webhookURL, null)
         {
         }
     }
