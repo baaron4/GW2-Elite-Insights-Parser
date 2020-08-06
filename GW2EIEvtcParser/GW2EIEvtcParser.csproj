@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GW2EI-GW2API\GW2EIGW2API.csproj" />
+    <ProjectReference Include="..\GW2EIGW2API\GW2EIGW2API.csproj" />
   </ItemGroup>
 
 </Project>
