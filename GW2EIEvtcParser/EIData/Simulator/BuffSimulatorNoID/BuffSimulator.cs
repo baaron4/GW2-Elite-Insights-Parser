@@ -86,7 +86,7 @@ namespace GW2EIEvtcParser.EIData
                     for (int i = 0; i < BuffStack.Count; i++)
                     {
                         BuffStackItem stackItem = BuffStack[i];
-                        if (Math.Abs(removedDuration - stackItem.TotalBoonDuration()) < ParserHelper._serverDelayConstant)
+                        if (Math.Abs(removedDuration - stackItem.TotalBoonDuration()) < ParserHelper.ServerDelayConstant)
                         {
                             WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.Duration, time));
                             if (stackItem.Extensions.Count > 0)

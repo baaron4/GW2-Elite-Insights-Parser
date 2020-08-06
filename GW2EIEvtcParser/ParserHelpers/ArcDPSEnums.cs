@@ -262,13 +262,13 @@ namespace GW2EIEvtcParser
         }
 
         // Custom ids
-        private const int _twilightCastle = -1;
-        private const int _handOfErosion = -2;
-        private const int _handOfEruption = -3;
-        private const int _pyreGuardianProtect = -4;
-        private const int _pyreGuardianStab = -5;
-        private const int _pyreGuardianRetal = -6;
-        private const int _qadimLamp = -7;
+        private const int TwilightCastle = -1;
+        private const int HandOfErosion = -2;
+        private const int HandOfEruption = -3;
+        private const int PyreGuardianProtect = -4;
+        private const int PyreGuardianStab = -5;
+        private const int PyreGuardianRetal = -6;
+        private const int QadimLamp = -7;
 
 
         //
@@ -405,9 +405,9 @@ namespace GW2EIEvtcParser
             FireElemental = 21221,
             FireImp = 21100,
             PyreGuardian = 21050,
-            PyreGuardianRetal = _pyreGuardianRetal,
-            PyreGuardianProtect = _pyreGuardianProtect,
-            PyreGuardianStab = _pyreGuardianStab,
+            PyreGuardianRetal = ArcDPSEnums.PyreGuardianRetal,
+            PyreGuardianProtect = ArcDPSEnums.PyreGuardianProtect,
+            PyreGuardianStab = ArcDPSEnums.PyreGuardianStab,
             ReaperofFlesh = 21218,
             DestroyerTroll = 20944,
             IceElemental = 21049,
@@ -415,11 +415,11 @@ namespace GW2EIEvtcParser
             ApocalypseBringer = 21073,
             WyvernMatriarch = 20997,
             WyvernPatriarch = 21183,
-            QadimLamp = _qadimLamp,
+            QadimLamp = ArcDPSEnums.QadimLamp,
             Zommoros = 20961, //21118 is probably the start and end NPC, not the one during the battle
             // Adina
-            HandOfErosion = _handOfErosion,
-            HandOfEruption = _handOfEruption,
+            HandOfErosion = ArcDPSEnums.HandOfErosion,
+            HandOfEruption = ArcDPSEnums.HandOfEruption,
             // Sabir
             ParalyzingWisp = 21955,
             VoltaicWisp = 21975,
@@ -511,7 +511,7 @@ namespace GW2EIEvtcParser
         public enum TargetID : int
         {
             WorldVersusWorld = 1,
-            TwistedCastle = _twilightCastle,
+            TwistedCastle = TwilightCastle,
             // Raid
             ValeGuardian = 15438,
             Gorseval = 15429,

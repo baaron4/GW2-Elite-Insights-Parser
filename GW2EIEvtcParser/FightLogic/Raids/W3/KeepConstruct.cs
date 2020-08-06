@@ -95,7 +95,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     start = c.Time;
                 }
             }
-            if (fightDuration - start > ParserHelper._phaseTimeLimit && start >= phases.Last().End)
+            if (fightDuration - start > ParserHelper.PhaseTimeLimit && start >= phases.Last().End)
             {
                 phases.Add(new PhaseData(start, fightDuration));
                 start = fightDuration;

@@ -38,20 +38,20 @@ namespace GW2EIEvtcParser.EIData
                     extension *= 100.0;
                     extended *= 100.0;
                 }
-                buffs.Generated[actor] = Math.Round(generated / phaseDuration, ParserHelper._buffDigit);
-                buffs.Overstacked[actor] = Math.Round(overstacked / phaseDuration, ParserHelper._buffDigit);
-                buffs.Wasted[actor] = Math.Round(wasted / phaseDuration, ParserHelper._buffDigit);
-                buffs.UnknownExtension[actor] = Math.Round(unknownExtension / phaseDuration, ParserHelper._buffDigit);
-                buffs.Extension[actor] = Math.Round(extension / phaseDuration, ParserHelper._buffDigit);
-                buffs.Extended[actor] = Math.Round(extended / phaseDuration, ParserHelper._buffDigit);
+                buffs.Generated[actor] = Math.Round(generated / phaseDuration, ParserHelper.BuffDigit);
+                buffs.Overstacked[actor] = Math.Round(overstacked / phaseDuration, ParserHelper.BuffDigit);
+                buffs.Wasted[actor] = Math.Round(wasted / phaseDuration, ParserHelper.BuffDigit);
+                buffs.UnknownExtension[actor] = Math.Round(unknownExtension / phaseDuration, ParserHelper.BuffDigit);
+                buffs.Extension[actor] = Math.Round(extension / phaseDuration, ParserHelper.BuffDigit);
+                buffs.Extended[actor] = Math.Round(extended / phaseDuration, ParserHelper.BuffDigit);
                 if (activePhaseDuration > 0)
                 {
-                    buffsActive.Generated[actor] = Math.Round(generated / activePhaseDuration, ParserHelper._buffDigit);
-                    buffsActive.Overstacked[actor] = Math.Round(overstacked / activePhaseDuration, ParserHelper._buffDigit);
-                    buffsActive.Wasted[actor] = Math.Round(wasted / activePhaseDuration, ParserHelper._buffDigit);
-                    buffsActive.UnknownExtension[actor] = Math.Round(unknownExtension / activePhaseDuration, ParserHelper._buffDigit);
-                    buffsActive.Extension[actor] = Math.Round(extension / activePhaseDuration, ParserHelper._buffDigit);
-                    buffsActive.Extended[actor] = Math.Round(extended / activePhaseDuration, ParserHelper._buffDigit);
+                    buffsActive.Generated[actor] = Math.Round(generated / activePhaseDuration, ParserHelper.BuffDigit);
+                    buffsActive.Overstacked[actor] = Math.Round(overstacked / activePhaseDuration, ParserHelper.BuffDigit);
+                    buffsActive.Wasted[actor] = Math.Round(wasted / activePhaseDuration, ParserHelper.BuffDigit);
+                    buffsActive.UnknownExtension[actor] = Math.Round(unknownExtension / activePhaseDuration, ParserHelper.BuffDigit);
+                    buffsActive.Extension[actor] = Math.Round(extension / activePhaseDuration, ParserHelper.BuffDigit);
+                    buffsActive.Extended[actor] = Math.Round(extended / activePhaseDuration, ParserHelper.BuffDigit);
                 }
                 else
                 {

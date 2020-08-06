@@ -30,7 +30,7 @@ namespace GW2EIEvtcParser.EIData
                     _extensionSkills.AddRange(p.GetIntersectingCastLogs(log, 0, log.FightData.FightEnd).Where(x => ExtensionIDS.Contains(x.SkillId) && x.Status != AbstractCastEvent.AnimationStatus.Iterrupted));
                 }
             }
-            return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillId) && x.Time <= time && time <= x.EndTime + ParserHelper._serverDelayConstant).ToList();
+            return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillId) && x.Time <= time && time <= x.EndTime + ParserHelper.ServerDelayConstant).ToList();
         }
         // Spec specific checks
         private int CouldBeEssenceOfSpeed(AgentItem dst, long extension, ParsedEvtcLog log)
@@ -52,7 +52,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (extension == ImbuedMelodies && log.PlayerListBySpec.TryGetValue("Tempest", out List<Player> tempests))
             {
-                var magAuraApplications = new HashSet<AgentItem>(log.CombatData.GetBuffData(5684).Where(x => x is BuffApplyEvent && Math.Abs(x.Time - time) < ParserHelper._serverDelayConstant && x.By != agent).Select(x => x.By));
+                var magAuraApplications = new HashSet<AgentItem>(log.CombatData.GetBuffData(5684).Where(x => x is BuffApplyEvent && Math.Abs(x.Time - time) < ParserHelper.ServerDelayConstant && x.By != agent).Select(x => x.By));
                 foreach (Player tempest in tempests)
                 {
                     if (magAuraApplications.Contains(tempest.AgentItem))

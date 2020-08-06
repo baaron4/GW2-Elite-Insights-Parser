@@ -152,7 +152,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 long specialSplitTime = _specialSplit;
                 AgentItem attackTarget = attackTargets.Last().AttackTarget;
                 // sanity check
-                TargetableEvent attackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => x.Targetable && x.Time > specialSplitTime - ParserHelper._serverDelayConstant);
+                TargetableEvent attackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => x.Targetable && x.Time > specialSplitTime - ParserHelper.ServerDelayConstant);
                 if (attackableEvent == null)
                 {
                     return;
@@ -307,7 +307,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phases.Add(new PhaseData(start, end));
                 start = specialTime;
             }
-            if (fightDuration - start > ParserHelper._phaseTimeLimit && start >= phases.Last().End)
+            if (fightDuration - start > ParserHelper.PhaseTimeLimit && start >= phases.Last().End)
             {
                 phases.Add(new PhaseData(start, fightDuration));
             }
