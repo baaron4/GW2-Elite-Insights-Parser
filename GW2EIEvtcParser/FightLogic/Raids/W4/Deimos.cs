@@ -69,7 +69,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        private static void MergeWithGadgets(AgentItem target, HashSet<ulong> gadgetAgents, AgentData agentData, List<CombatItem> combatData)
+        private static void MergeWithGadgets(AgentItem target, HashSet<ulong> gadgetAgents, List<CombatItem> combatData)
         {
             var allAgents = new HashSet<ulong>(gadgetAgents)
             {
@@ -269,7 +269,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (gadgetAgents.Count > 0)
             {
                 _specialSplit = (firstAware >= target.LastAware ? firstAware : target.LastAware);
-                MergeWithGadgets(target.AgentItem, gadgetAgents, agentData, combatData);
+                MergeWithGadgets(target.AgentItem, gadgetAgents, combatData);
             }
             target.AgentItem.OverrideAwareTimes(target.FirstAware, fightData.FightEnd);
             target.OverrideName("Deimos");

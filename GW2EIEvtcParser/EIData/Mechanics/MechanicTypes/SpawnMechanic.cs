@@ -18,7 +18,6 @@ namespace GW2EIEvtcParser.EIData
 
         internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
         {
-            CombatData combatData = log.CombatData;
             foreach (AgentItem a in log.AgentData.GetNPCsByID((int)SkillId))
             {
                 if (!regroupedMobs.TryGetValue(a.ID, out AbstractSingleActor amp))

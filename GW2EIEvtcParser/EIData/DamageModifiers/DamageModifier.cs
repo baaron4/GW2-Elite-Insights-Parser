@@ -140,11 +140,11 @@ namespace GW2EIEvtcParser.EIData
 
         public abstract void ComputeDamageModifier(Dictionary<string, List<DamageModifierStat>> data, Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>> dataTarget, Player p, ParsedEvtcLog log);
 
-        protected static GainComputer ByPresence = new GainComputerByPresence();
-        protected static GainComputer ByPresenceNonMulti = new GainComputerNonMultiplier();
-        protected static GainComputer BySkill = new GainComputerBySkill();
-        protected static GainComputer ByStack = new GainComputerByStack();
-        protected static GainComputer ByAbsence = new GainComputerByAbsence();
+        private static readonly GainComputer ByPresence = new GainComputerByPresence();
+        private static readonly GainComputer ByPresenceNonMulti = new GainComputerNonMultiplier();
+        private static readonly GainComputer BySkill = new GainComputerBySkill();
+        private static readonly GainComputer ByStack = new GainComputerByStack();
+        protected static readonly GainComputer ByAbsence = new GainComputerByAbsence();
 
         private static readonly List<DamageModifier> _itemDamageModifiers = new List<DamageModifier>
         {
