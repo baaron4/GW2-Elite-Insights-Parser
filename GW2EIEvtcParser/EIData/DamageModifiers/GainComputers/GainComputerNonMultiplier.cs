@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.EIData
 {
-    public class GainComputerNonMultiplier : GainComputer
+    internal class GainComputerNonMultiplier : GainComputer
     {
         public GainComputerNonMultiplier()
         {

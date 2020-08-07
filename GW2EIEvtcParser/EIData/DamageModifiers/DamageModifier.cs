@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EIData
         private DamageType _srcType { get; }
         private DamageSource _dmgSrc { get; }
         protected double GainPerStack { get; }
-        protected GainComputer GainComputer { get; }
+        internal GainComputer GainComputer { get; }
         public ulong MinBuild { get; } = ulong.MaxValue;
         public ulong MaxBuild { get; } = ulong.MinValue;
         public bool Multiplier => GainComputer.Multiplier;
@@ -30,7 +30,7 @@ namespace GW2EIEvtcParser.EIData
         protected DamageModifierMode Mode { get; set; } = DamageModifierMode.All;
         protected DamageLogChecker DLChecker { get; set; }
 
-        protected DamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ParserHelper.Source src, string icon, GainComputer gainComputer, DamageLogChecker dlChecker, ulong minBuild, ulong maxBuild, DamageModifierMode mode)
+        internal DamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ParserHelper.Source src, string icon, GainComputer gainComputer, DamageLogChecker dlChecker, ulong minBuild, ulong maxBuild, DamageModifierMode mode)
         {
             Tooltip = tooltip;
             Name = name;
@@ -84,7 +84,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public bool Keep(FightLogic.ParseMode mode)
+        internal bool Keep(FightLogic.ParseMode mode)
         {
             if (Mode == DamageModifierMode.All)
             {
@@ -138,13 +138,13 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public abstract void ComputeDamageModifier(Dictionary<string, List<DamageModifierStat>> data, Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>> dataTarget, Player p, ParsedEvtcLog log);
+        internal abstract void ComputeDamageModifier(Dictionary<string, List<DamageModifierStat>> data, Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>> dataTarget, Player p, ParsedEvtcLog log);
 
-        private static readonly GainComputer ByPresence = new GainComputerByPresence();
-        private static readonly GainComputer ByPresenceNonMulti = new GainComputerNonMultiplier();
-        private static readonly GainComputer BySkill = new GainComputerBySkill();
-        private static readonly GainComputer ByStack = new GainComputerByStack();
-        protected static readonly GainComputer ByAbsence = new GainComputerByAbsence();
+        internal static readonly GainComputer ByPresence = new GainComputerByPresence();
+        internal static readonly GainComputer ByPresenceNonMulti = new GainComputerNonMultiplier();
+        internal static readonly GainComputer BySkill = new GainComputerBySkill();
+        internal static readonly GainComputer ByStack = new GainComputerByStack();
+        internal static readonly GainComputer ByAbsence = new GainComputerByAbsence();
 
         private static readonly List<DamageModifier> _itemDamageModifiers = new List<DamageModifier>
         {
@@ -316,7 +316,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifier(new long[] { 719, 5974}, "Swift Revenge", "10% under swiftness/superspeed", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ParserHelper.Source.Weaver, ByPresence, "https://wiki.guildwars2.com/images/9/94/Swift_Revenge.png", 97950, ulong.MaxValue, DamageModifierMode.All)
         };
 
-        public static List<List<DamageModifier>> AllDamageModifiers = new List<List<DamageModifier>>
+        internal static List<List<DamageModifier>> AllDamageModifiers = new List<List<DamageModifier>>
         {
             _itemDamageModifiers,
             _commonDamageModifiers,

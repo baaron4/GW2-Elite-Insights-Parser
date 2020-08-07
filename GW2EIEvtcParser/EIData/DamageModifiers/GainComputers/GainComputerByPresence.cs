@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.EIData
 {
-    public class GainComputerByPresence : GainComputer
+    internal class GainComputerByPresence : GainComputer
     {
         public GainComputerByPresence()
         {

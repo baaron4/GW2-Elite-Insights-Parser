@@ -11,7 +11,7 @@ namespace GW2EIEvtcParser.EIData
 
         public Dictionary<string, DamageModifier> DamageModifiersByName { get; }
 
-        public DamageModifiersContainer(ulong build, FightLogic.ParseMode mode)
+        internal DamageModifiersContainer(ulong build, FightLogic.ParseMode mode)
         {
             var currentDamageMods = new List<DamageModifier>();
             foreach (List<DamageModifier> boons in DamageModifier.AllDamageModifiers)

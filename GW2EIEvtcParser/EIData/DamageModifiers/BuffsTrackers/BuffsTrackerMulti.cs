@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class BuffsTrackerMulti : BuffsTracker
+    internal class BuffsTrackerMulti : BuffsTracker
     {
         private readonly HashSet<long> _ids;
 

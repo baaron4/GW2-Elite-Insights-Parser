@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class BuffsTrackerSingle : BuffsTracker
+    internal class BuffsTrackerSingle : BuffsTracker
     {
         private readonly long _id;
 
