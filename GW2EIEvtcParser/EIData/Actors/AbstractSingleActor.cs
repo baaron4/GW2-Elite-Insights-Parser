@@ -132,7 +132,7 @@ namespace GW2EIEvtcParser.EIData
                 return res;
             }
             var dmgList = new List<int>();
-            List<AbstractDamageEvent> damageLogs = GetHitDamageLogs(target, log, phase);
+            List<AbstractDamageEvent> damageLogs = GetDamageLogs(target, log, phase.Start, phase.End);
             // fill the graph, full precision
             var dmgListFull = new List<int>();
             for (int i = 0; i <= phase.DurationInMS; i++)
