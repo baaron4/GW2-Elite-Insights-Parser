@@ -16,22 +16,27 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
-    <CodeAnalysisRuleSet>..\GW2EIParser\GW2EIParser.ruleset</CodeAnalysisRuleSet>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <CodeAnalysisRuleSet>..\GW2EIParser\GW2EIParser.ruleset</CodeAnalysisRuleSet>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="nunit" Version="3.12.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />
   </ItemGroup>
   <ItemGroup>
+    <AdditionalFiles Include=".editorconfig" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GW2EIBuilders\GW2EIBuilders.csproj" />
+    <ProjectReference Include="..\GW2EIDiscord\GW2EIDiscord.csproj" />
+    <ProjectReference Include="..\GW2EIDPSReport\GW2EIDPSReport.csproj" />
+    <ProjectReference Include="..\GW2EIEvtcParser\GW2EIEvtcParser.csproj" />
+    <ProjectReference Include="..\GW2EIGW2API\GW2EIGW2API.csproj" />
     <ProjectReference Include="..\GW2EIParser\GW2EIParser.csproj" />
   </ItemGroup>
 </Project>

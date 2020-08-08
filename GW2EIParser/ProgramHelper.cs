@@ -1,82 +1,111 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using GW2EIParser.Builders;
-using GW2EIParser.Controllers;
-using GW2EIParser.EIData;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
+using GW2EIBuilders;
 using GW2EIParser.Exceptions;
-using GW2EIParser.Parser;
-using GW2EIParser.Parser.ParsedData;
+using Discord;
+using System.Linq;
+using GW2EIDPSReport;
+using GW2EIDiscord;
+using System.Windows.Forms;
+using GW2EIDPSReport.DPSReportJsons;
 
 namespace GW2EIParser
 {
-    public static class ProgramHelper
+    internal static class ProgramHelper
     {
+        internal static HTMLAssets htmlAssets { get; set; }
+
+        internal static Version ParserVersion { get; } = new Version(Application.ProductVersion);
+        internal static string ParserName { get; } = "Elite Insights";
+
+        private static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
+
+        private static Embed BuildEmbed(ParsedEvtcLog log, string dpsReportPermalink)
+        {
+            var builder = new EmbedBuilder();
+            builder.WithThumbnailUrl(log.FightData.Logic.Icon);
+            //
+            builder.AddField("Encounter Duration", log.FightData.DurationString);
+            //
+            if (log.Statistics.PresentFractalInstabilities.Any())
+            {
+                builder.AddField("Instabilities", string.Join("\n", log.Statistics.PresentFractalInstabilities.Select(x => x.Name)));
+            }
+            //
+            /*var playerByGroup = log.PlayerList.Where(x => !x.IsFakeActor).GroupBy(x => x.Group).ToDictionary(x => x.Key, x => x.ToList());
+            var hasGroups = playerByGroup.Count > 1;
+            foreach (KeyValuePair<int, List<Player>> pair in playerByGroup)
+            {
+                var groupField = new List<string>();
+                foreach (Player p in pair.Value)
+                {
+                    groupField.Add(p.Character + " - " + p.Prof);
+                }
+                builder.AddField(hasGroups ? "Group " + pair.Key : "Party Composition", String.Join("\n", groupField));
+            }*/
+            //
+            builder.AddField("Game Data", "ARC: " + log.LogData.ArcVersion + " | " + "GW2 Build: " + log.LogData.GW2Build);
+            //
+            builder.WithTitle(log.FightData.GetFightName(log));
+            builder.WithTimestamp(DateTime.Now);
+            builder.WithAuthor(log.ParserName + " " + log.ParserVersion.ToString(), "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EIParser/Content/LI.png?raw=true", "https://github.com/baaron4/GW2-Elite-Insights-Parser");
+            builder.WithFooter(log.LogData.LogStartStd + " / " + log.LogData.LogEndStd);
+            builder.WithColor(log.FightData.Success ? Color.Green : Color.Red);
+            if (dpsReportPermalink.Length > 0)
+            {
+                builder.WithUrl(dpsReportPermalink);
+            }
+            return builder.Build();
+        }
+
+        internal static Exception GetFinalException(this Exception ex)
+        {
+            Exception final = ex;
+            while (final.InnerException != null)
+            {
+                final = final.InnerException;
+            }
+            return final;
+        }
+
         private static bool HasFormat()
         {
             return Properties.Settings.Default.SaveOutCSV || Properties.Settings.Default.SaveOutHTML || Properties.Settings.Default.SaveOutXML || Properties.Settings.Default.SaveOutJSON;
         }
 
-        private static readonly HashSet<string> _compressedFiles = new HashSet<string>()
+        private static string[] UploadOperation(List<string> traces, FileInfo fInfo)
         {
-            ".zevtc",
-            ".evtc.zip",
-        };
-
-        private static readonly HashSet<string> _tmpFiles = new HashSet<string>()
-        {
-            ".tmp.zip"
-        };
-
-        private static readonly HashSet<string> _supportedFiles = new HashSet<string>(_compressedFiles)
-        {
-            ".evtc"
-        };
-
-        public static bool IsCompressedFormat(string fileName)
-        {
-            foreach (string format in _compressedFiles)
+            var settings = new DPSReportSettings();
+            //Upload Process
+            string[] uploadresult = new string[3] { "", "", "" };
+            if (Properties.Settings.Default.UploadToDPSReports)
             {
-                if (fileName.EndsWith(format, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
+                traces.Add("Uploading to DPSReports using EI");
+                DPSReportUploadObject response = DPSReportAPI.UploadDPSReportsEI(fInfo, settings, traces);
+                uploadresult[0] =  response != null ? response.Permalink : "Upload process failed";
+                traces.Add("DPSReports using EI: " + uploadresult[0]);
             }
-            return false;
-        }
-
-        public static List<string> GetSupportedFormats()
-        {
-            return new List<string>(_supportedFiles);
-        }
-
-        public static bool IsSupportedFormat(string fileName)
-        {
-            foreach (string format in _supportedFiles)
+            if (Properties.Settings.Default.UploadToDPSReportsRH)
             {
-                if (fileName.EndsWith(format, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
+                traces.Add("Uploading to DPSReports using RH");
+                DPSReportUploadObject response = DPSReportAPI.UploadDPSReportsRH(fInfo, settings, traces);
+                uploadresult[1] = response != null ? response.Permalink : "Upload process failed";
+                traces.Add("DPSReports using RH: " + uploadresult[1]);
             }
-            return false;
-        }
-
-        public static bool IsTemporaryFormat(string fileName)
-        {
-            foreach (string format in _tmpFiles)
+            /*if (settings.UploadToRaidar)
             {
-                if (fileName.EndsWith(format, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-            }
-            return false;
+                traces.Add("Uploading to Raidar");
+                uploadresult[2] = UploadController.UploadRaidar();
+                traces.Add("Raidar: " + uploadresult[2]);
+            }*/
+            return uploadresult;
         }
 
         public static void DoWork(OperationController operation)
@@ -87,33 +116,32 @@ namespace GW2EIParser
             try
             {
                 var fInfo = new FileInfo(operation.Location);
-                if (!fInfo.Exists)
-                {
-                    throw new FileNotFoundException("File " + fInfo.FullName + " does not exist");
-                }
-                var control = new ParsingController(new ParserSettings());
+
+                var parser = new EvtcParser(new EvtcParserSettings(Properties.Settings.Default.Anonymous, Properties.Settings.Default.SkipFailedTries, Properties.Settings.Default.ParsePhases, Properties.Settings.Default.ParseCombatReplay, Properties.Settings.Default.ComputeDamageModifiers));
 
                 if (!HasFormat())
                 {
                     throw new InvalidDataException("No output format has been selected");
                 }
-
-                if (IsSupportedFormat(fInfo.Name))
+                //Process evtc here
+                ParsedEvtcLog log = parser.ParseLog(operation, fInfo);
+                var externalTraces = new List<string>();
+                string[] uploadresult = UploadOperation(externalTraces, fInfo);
+                if (Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.ParseMultipleLogs)
                 {
-                    //Process evtc here
-                    ParsedLog log = control.ParseLog(operation, fInfo.FullName);
-                    string[] uploadresult = UploadController.UploadOperation(operation, fInfo);
-                    //Creating File
-                    GenerateFiles(log, operation, uploadresult, fInfo);
+                    var webhookSettings = new WebhookSettings(Properties.Settings.Default.WebhookURL, Properties.Settings.Default.SendSimpleMessageToWebhook ? BuildEmbed(log, uploadresult[0]) : null);
+                    WebhookController.SendMessage(externalTraces, uploadresult[0], webhookSettings);
                 }
-                else
+                foreach (string trace in externalTraces)
                 {
-                    throw new InvalidDataException("Not EVTC");
+                    operation.UpdateProgress(trace);
                 }
+                //Creating File
+                GenerateFiles(log, operation, uploadresult, fInfo);
             }
             catch (Exception ex)
             {
-                throw new ExceptionEncompass(ex);
+                throw new EncompassException(ex);
             }
             finally
             {
@@ -194,7 +222,7 @@ namespace GW2EIParser
             }
         }
 
-        private static void GenerateFiles(ParsedLog log, OperationController operation, string[] uploadresult, FileInfo fInfo)
+        private static void GenerateFiles(ParsedEvtcLog log, OperationController operation, string[] uploadresult, FileInfo fInfo)
         {
             operation.UpdateProgressWithCancellationCheck("Creating File(s)");
 
@@ -207,7 +235,7 @@ namespace GW2EIParser
             fName = $"{fName}{PoVClassTerm}_{log.FightData.Logic.Extension}{encounterLengthTerm}_{result}";
 
             // parallel stuff
-            if (log.ParserSettings.MultiTasks)
+            if (Properties.Settings.Default.MultiThreaded)
             {
                 log.FightData.GetPhases(log);
                 operation.UpdateProgressWithCancellationCheck("Multi threading");
@@ -248,7 +276,7 @@ namespace GW2EIParser
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs))
                 {
-                    var builder = new HTMLBuilder(log, uploadresult, Properties.Settings.Default.LightTheme, Properties.Settings.Default.HtmlExternalScripts);
+                    var builder = new HTMLBuilder(log, new HTMLSettings(Properties.Settings.Default.LightTheme, Properties.Settings.Default.HtmlExternalScripts), htmlAssets, uploadresult);
                     builder.CreateHTML(sw, saveDirectory.FullName);
                 }
                 operation.UpdateProgressWithCancellationCheck("HTML created");
@@ -265,14 +293,14 @@ namespace GW2EIParser
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                 {
-                    var builder = new CSVBuilder(sw, ",", log, uploadresult);
-                    builder.CreateCSV();
+                    var builder = new CSVBuilder(log, new CSVSettings(","), uploadresult);
+                    builder.CreateCSV(sw);
                 }
                 operation.UpdateProgressWithCancellationCheck("CSV created");
             }
             if (Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML)
             {
-                var builder = new RawFormatBuilder(log, uploadresult);
+                var builder = new RawFormatBuilder(log, new RawFormatSettings(Properties.Settings.Default.RawTimelineArrays), uploadresult);
                 if (Properties.Settings.Default.SaveOutJSON)
                 {
                     operation.UpdateProgressWithCancellationCheck("Creating JSON");
@@ -290,7 +318,7 @@ namespace GW2EIParser
                     {
                         str = new FileStream(outputFile, FileMode.Create, FileAccess.Write);
                     }
-                    using (var sw = new StreamWriter(str, GeneralHelper.NoBOMEncodingUTF8))
+                    using (var sw = new StreamWriter(str, NoBOMEncodingUTF8))
                     {
                         builder.CreateJSON(sw, Properties.Settings.Default.IndentJSON);
                     }
@@ -322,7 +350,7 @@ namespace GW2EIParser
                     {
                         str = new FileStream(outputFile, FileMode.Create, FileAccess.Write);
                     }
-                    using (var sw = new StreamWriter(str, GeneralHelper.NoBOMEncodingUTF8))
+                    using (var sw = new StreamWriter(str, NoBOMEncodingUTF8))
                     {
                         builder.CreateXML(sw, Properties.Settings.Default.IndentXML);
                     }
@@ -337,11 +365,6 @@ namespace GW2EIParser
                     }
                     operation.UpdateProgressWithCancellationCheck("XML created");
                 }
-            }
-
-            if (Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.ParseMultipleLogs)
-            {
-                WebhookController.SendMessage(log, uploadresult);
             }
             operation.UpdateProgress($"Completed parsing for {result}ed {log.FightData.Logic.Extension}");
         }

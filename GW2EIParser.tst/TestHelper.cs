@@ -2,33 +2,30 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using GW2EIParser.Builders;
-using GW2EIParser.Builders.JsonModels;
-using GW2EIParser.Parser;
-using GW2EIParser.Parser.ParsedData;
+using GW2EIEvtcParser;
+using GW2EIBuilders;
+using GW2EIBuilders.JsonModels;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 
 namespace GW2EIParser.tst
 {
     public class TestHelper
     {
-        private class TestParserSettings : ParserSettings
+        internal static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
+        internal static readonly DefaultContractResolver DefaultJsonContractResolver = new DefaultContractResolver
         {
-            public TestParserSettings()
-            {
-                SkipFailedTries = false;
-                ParseCombatReplay = true;
-                ParsePhases = true;
-                AnonymousPlayer = true;
-                ComputeDamageModifiers = true;
-                RawTimelineArrays = true;
-                MultiTasks = true;
-            }
-        }
+            NamingStrategy = new CamelCaseNamingStrategy()
+        };
+        private static readonly EvtcParserSettings parserSettings = new EvtcParserSettings(false, true, true, true, true);
+        private static readonly HTMLSettings htmlSettings = new HTMLSettings(false, false);
+        private static readonly RawFormatSettings rawSettings = new RawFormatSettings(true);
+        private static readonly CSVSettings csvSettings = new CSVSettings(",");
+        private static readonly HTMLAssets htmlAssets = new HTMLAssets();
 
-        private class TestOperationController : OperationController
+        private class TestOperationController : ParserController
         {
-            public TestOperationController() : base("", "")
+            public TestOperationController() : base("EI Stability Tests", new Version(1, 0))
             {
 
             }
@@ -38,32 +35,20 @@ namespace GW2EIParser.tst
             }
         }
 
-        private static readonly TestOperationController _operation = new TestOperationController();
-
-        public static ParsedLog ParseLog(string location)
+        public static ParsedEvtcLog ParseLog(string location)
         {
-            var parser = new ParsingController(new TestParserSettings());
+            var parser = new EvtcParser(parserSettings);
 
-            var operation = new ConsoleOperationController(location as string, "Ready to parse");
+            var fInfo = new FileInfo(location);
 
-            var fInfo = new FileInfo(operation.Location);
-            if (!fInfo.Exists)
-            {
-                throw new FileNotFoundException("File does not exist", fInfo.FullName);
-            }
-            if (!ProgramHelper.IsSupportedFormat(fInfo.Name))
-            {
-                throw new InvalidDataException("Not EVTC");
-            }
-
-            return parser.ParseLog(operation, fInfo.FullName);
+            return parser.ParseLog(new TestOperationController(), fInfo);
         }
 
-        public static string JsonString(ParsedLog log)
+        public static string JsonString(ParsedEvtcLog log)
         {
             var ms = new MemoryStream();
-            var sw = new StreamWriter(ms, GeneralHelper.NoBOMEncodingUTF8);
-            var builder = new RawFormatBuilder(log, null);
+            var sw = new StreamWriter(ms, NoBOMEncodingUTF8);
+            var builder = new RawFormatBuilder(log, rawSettings);
 
             builder.CreateJSON(sw, false);
             sw.Close();
@@ -71,23 +56,23 @@ namespace GW2EIParser.tst
             return Encoding.UTF8.GetString(ms.ToArray());
         }
 
-        public static string CsvString(ParsedLog log)
+        public static string CsvString(ParsedEvtcLog log)
         {
             var ms = new MemoryStream();
             var sw = new StreamWriter(ms);
-            var builder = new CSVBuilder(sw, ",", log, null);
+            var builder = new CSVBuilder(log, csvSettings);
 
-            builder.CreateCSV();
+            builder.CreateCSV(sw);
             sw.Close();
 
             return sw.ToString();
         }
 
-        public static string HtmlString(ParsedLog log)
+        public static string HtmlString(ParsedEvtcLog log)
         {
             var ms = new MemoryStream();
-            var sw = new StreamWriter(ms, GeneralHelper.NoBOMEncodingUTF8);
-            var builder = new HTMLBuilder(log, null, false, false);
+            var sw = new StreamWriter(ms, NoBOMEncodingUTF8);
+            var builder = new HTMLBuilder(log, htmlSettings, htmlAssets);
 
             builder.CreateHTML(sw, null);
             sw.Close();
@@ -95,9 +80,9 @@ namespace GW2EIParser.tst
             return Encoding.UTF8.GetString(ms.ToArray());
         }
 
-        public static JsonLog JsonLog(ParsedLog log)
+        public static JsonLog JsonLog(ParsedEvtcLog log)
         {
-            var builder = new RawFormatBuilder(log, null);
+            var builder = new RawFormatBuilder(log, rawSettings, null);
             return builder.JsonLog;
         }
 

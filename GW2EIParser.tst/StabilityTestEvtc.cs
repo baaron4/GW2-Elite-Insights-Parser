@@ -4,9 +4,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
+using GW2EIBuilders;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.Exceptions;
+using GW2EIGW2API;
 using GW2EIParser.Exceptions;
-using GW2EIParser.Parser.ParsedData;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
@@ -21,12 +25,12 @@ namespace GW2EIParser.tst
         {
             try
             {
-                ParsedLog log = TestHelper.ParseLog(file);
+                ParsedEvtcLog log = TestHelper.ParseLog(file);
                 TestHelper.JsonString(log);
                 TestHelper.HtmlString(log);
                 TestHelper.CsvString(log);
             }
-            catch (ExceptionEncompass canc)
+            catch (EncompassException canc)
             {
                 if (canc.InnerException == null || !(canc.InnerException is TooShortException || canc.InnerException is SkipException))
                 {
@@ -80,17 +84,12 @@ namespace GW2EIParser.tst
 
             using (var fs = new FileStream(logName, FileMode.Create, FileAccess.Write))
             {
-                using (var sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8))
+                using (var sw = new StreamWriter(fs, TestHelper.NoBOMEncodingUTF8))
                 {
-                    var contractResolver = new DefaultContractResolver
-                    {
-                        NamingStrategy = new CamelCaseNamingStrategy()
-                    };
-
                     var serializer = new JsonSerializer
                     {
                         NullValueHandling = NullValueHandling.Ignore,
-                        ContractResolver = contractResolver
+                        ContractResolver = TestHelper.DefaultJsonContractResolver
                     };
                     var writer = new JsonTextWriter(sw)
                     {
@@ -104,6 +103,7 @@ namespace GW2EIParser.tst
         [Test]
         public void TestEvtc()
         {
+            GW2APIController.InitAPICache();
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
             if (!Directory.Exists(testLocation))
             {
@@ -124,6 +124,7 @@ namespace GW2EIParser.tst
         [Test]
         public void TestEvtcZip()
         {
+            GW2APIController.InitAPICache();
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
             if (!Directory.Exists(testLocation))
             {
@@ -143,6 +144,7 @@ namespace GW2EIParser.tst
         [Test]
         public void TestZevtc()
         {
+            GW2APIController.InitAPICache();
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
             if (!Directory.Exists(testLocation))
             {
@@ -163,6 +165,7 @@ namespace GW2EIParser.tst
         [Test]
         public void TestCrashed()
         {
+            GW2APIController.InitAPICache();
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/Crashes/Logs";
             if (!Directory.Exists(testLocation))
             {

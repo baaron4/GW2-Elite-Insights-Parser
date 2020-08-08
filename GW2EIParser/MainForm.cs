@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using GW2EIEvtcParser;
 using GW2EIParser.Exceptions;
 using GW2EIParser.Setting;
 
 namespace GW2EIParser
 {
-    public partial class MainForm : Form
+    internal partial class MainForm : Form
     {
         private readonly SettingsForm _settingsForm;
         private readonly List<string> _logsFiles;
@@ -54,7 +53,7 @@ namespace GW2EIParser
 
                 _logsFiles.Add(file);
 
-                var operation = new FormOperationController(file, "Ready to parse", dgvFiles);
+                var operation = new FormOperationController(ProgramHelper.ParserName, ProgramHelper.ParserVersion, file, "Ready to parse", dgvFiles);
                 operatorBindingSource.Add(operation);
 
                 if (Properties.Settings.Default.AutoParse)
@@ -98,7 +97,7 @@ namespace GW2EIParser
                         else
                         {
                             Exception ex = t.Exception.InnerExceptions[0];
-                            if (!(ex is ExceptionEncompass))
+                            if (!(ex is EncompassException))
                             {
                                 operation.UpdateProgress("Something terrible has happened");
                             }
@@ -382,7 +381,7 @@ namespace GW2EIParser
             if (path != null)
             {
                 var toAdd = new List<string>();
-                foreach (string format in ProgramHelper.GetSupportedFormats())
+                foreach (string format in ParserHelper.GetSupportedFormats())
                 {
                     toAdd.AddRange(Directory.EnumerateFiles(path, "*" + format, SearchOption.AllDirectories));
                 }
@@ -434,7 +433,7 @@ namespace GW2EIParser
 
         private void LogFileWatcher_Created(object sender, FileSystemEventArgs e)
         {
-            if (ProgramHelper.IsSupportedFormat(e.FullPath))
+            if (ParserHelper.IsSupportedFormat(e.FullPath))
             {
                 AddDelayed(e.FullPath);
             }
@@ -442,7 +441,7 @@ namespace GW2EIParser
 
         private void LogFileWatcher_Renamed(object sender, RenamedEventArgs e)
         {
-            if (ProgramHelper.IsTemporaryFormat(e.OldFullPath) && ProgramHelper.IsCompressedFormat(e.FullPath))
+            if (ParserHelper.IsTemporaryFormat(e.OldFullPath) && ParserHelper.IsCompressedFormat(e.FullPath))
             {
                 AddDelayed(e.FullPath);
             }

@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <link id="theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/${bootstrapTheme}/bootstrap.min.css"
+          crossorigin="anonymous">
+    <!--${Css}-->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-1.53.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.13/sorting/alt-string.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.min.js"></script>
+    <script>
+        function initTheme() {
+            window.theme = '${bootstrapTheme}';
+            if (window.localStorage) {
+                var theme = window.localStorage.getItem('ei_theme');
+                if (theme) {
+                    window.theme = theme;
+                    $('#theme').attr('href', 'https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/' + theme + '/bootstrap.min.css');
+                }
+            }
+        }
+        function storeTheme(theme) {
+            if (window.localStorage) {
+                window.localStorage.setItem('ei_theme', theme);
+            }
+        }
+        initTheme();
+    </script>
+    <script>
+        var logData = '${logDataJson}';
+    </script>
+    <script>
+        var graphData = '${graphDataJson}';
+    </script>
+    <!--${Js}-->   
+    <!--${CombatReplayJS}-->
+</head>
+
+<body>
+    <script>
+        $('body').addClass('theme-' + window.theme);
+    </script>
+    <div class="d-flex justify-content-center align-item-center mt-2" id="loading">
+        <div class="card" style="width: 75%;">
+            <div class="card-body" style="margin: 100px; text-align: center;">
+                Loading data...
+            </div>
+        </div>
+    </div>
+    <div v-cloak id="content" :class="{'ei-container-small':mode === 0, 'ei-container-big':mode === 1}">
+        <div class="d-flex flex-row justify-content-center align-items-center mt-2 ">
+            <div v-if="!!errorMessages" class="d-flex flex-column justify-content-center align-items-center">
+                <img v-for="message in errorMessages" class="mb-1 icon" src="https://i.imgur.com/k3tdKEQ.png" :data-original-title="message" />
+            </div>
+            <encounter-component></encounter-component>
+            <div class="d-flex flex-column justify-content-center align-items-center ml-5">
+                <div class="d-flex flex-row justify-content-center align-items-center mt-2 mb-2">
+                    <ul class="nav nav-pills" style="pointer-events:auto;">
+                        <li class="nav-item">
+                            <a class="nav-link" @click="switchTheme(true)" :class="{active: light}">Light Theme</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" @click="switchTheme(false)" :class="{active: !light }">Dark Theme</a>
+                        </li>
+                    </ul>
+                </div>
+                <div v-if="cr" class="d-flex flex-row justify-content-center align-items-center">
+                    <ul class="nav nav-pills">
+                        <li class="nav-item mb-1">
+                            <a class="nav-link" @click="mode = 0" :class="{active: mode === 0}">Statistics</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" @click="mode = 1" :class="{active: mode === 1 }">Combat Replay</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div>
+            <keep-alive>
+                <main-view-component v-if="mode === 0" :key="'main-view'" :light="light"></main-view-component>
+                <combat-replay-ui-component v-if="mode === 1" :mode="mode" :key="'combat-replay'" :light="light"></combat-replay-ui-component>
+            </keep-alive>
+        </div>
+        <div class="footer">
+            <div>Time Start: {{getLogData().encounterStart}} | Time End: {{getLogData().encounterEnd}}</div>
+            <div>ARC: {{getLogData().arcVersion}} | GW2 Build: {{getLogData().gw2Build}} | Fight ID: {{getLogData().fightID}} | {{getLogData().parser}}</div>
+            <div class="mb-2">File recorded by: {{getLogData().recordedBy}}</div>
+            <div v-if="uploadLinks">
+                <p v-for="link in uploadLinks" v-if="link.url.length > 0">{{link.key}}: <a :href="link.url">{{link.url}}</a> </p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using GW2EIParser.Builders;
-using GW2EIParser.Controllers;
+using GW2EIBuilders;
+using GW2EIGW2API;
 
 namespace GW2EIParser
 {
@@ -134,7 +134,7 @@ namespace GW2EIParser
                 }
 
             }
-            HTMLBuilder.InitScripts();
+            ProgramHelper.htmlAssets = new HTMLAssets();
             GW2APIController.InitAPICache();
             if (uiMode)
             {
