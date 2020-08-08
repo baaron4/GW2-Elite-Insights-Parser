@@ -40,6 +40,11 @@ namespace GW2EIEvtcParser.EIData
 
         public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long boonid, ParsedEvtcLog log)
         {
+            long cDur = GetClampedDuration(start, end);
+            if (cDur == 0)
+            {
+                return;
+            }
             foreach (BuffSimulationItemDuration item in _stacks)
             {
                 item.SetBuffDistributionItem(distribs, start, end, boonid, log);
