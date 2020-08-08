@@ -183,7 +183,10 @@ namespace GW2EIBuilders.HtmlModels
 
                     stats.Missed,// 6
                     stats.Interrupts, // 7
-                    stats.Invulned // 8
+                    stats.Invulned, // 8
+                    stats.Evaded,// 9
+                    stats.DamageInvulned, // 10
+                    stats.Blocked,// 11
                 };
             return data;
         }
@@ -251,6 +254,8 @@ namespace GW2EIBuilders.HtmlModels
                 data.Add(0);
                 data.Add("100% Alive");
             }
+            data.Add(defenses.MissedCount);
+            data.Add(defenses.DamageInvulned);
             return data;
         }
         internal static List<List<object>> BuildDPSData(ParsedEvtcLog log, int phaseIndex)

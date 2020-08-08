@@ -13,13 +13,15 @@ namespace GW2EIBuilders.HtmlModels
         public long TotalDamage { get; internal set; }
         public List<object[]> Distribution { get; internal set; }
 
-        private static object[] GetDMGDtoItem(KeyValuePair<SkillItem, List<AbstractDamageEvent>> entry, Dictionary<SkillItem, List<AbstractCastEvent>> castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons)
+        private static object[] GetDMGDtoItem(ParsedEvtcLog log,  KeyValuePair<SkillItem, List<AbstractDamageEvent>> entry, Dictionary<SkillItem, List<AbstractCastEvent>> castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons)
         {
             int totaldamage = 0,
                     mindamage = int.MaxValue,
                     maxdamage = int.MinValue,
                     hits = 0,
                     crit = 0,
+                    critDamage = 0,
+                    critable = 0,
                     flank = 0,
                     glance = 0,
                     shieldDamage = 0;
@@ -32,11 +34,16 @@ namespace GW2EIBuilders.HtmlModels
                 if (curdmg < mindamage) { mindamage = curdmg; }
                 if (curdmg > maxdamage) { maxdamage = curdmg; }
                 hits++;
-                if (dl.HasCrit)
+                if (SkillItem.CanCrit(dl.SkillId, log.LogData.GW2Build) && dl.HasHit)
                 {
-                    crit++;
+                    if (dl.HasCrit)
+                    {
+                        crit++;
+                        critDamage += dl.Damage;
+                    }
+                    critable++;
                 }
-
+                
                 if (dl.HasGlanced)
                 {
                     glance++;
@@ -106,6 +113,8 @@ namespace GW2EIBuilders.HtmlModels
                     IsIndirectDamage ? 0 : -timeswasted / 1000.0,
                     IsIndirectDamage ? 0 : timessaved / 1000.0,
                     shieldDamage,
+                    IsIndirectDamage ? 0 : critDamage,
+                    IsIndirectDamage ? 0 : critable,
                 };
             return skillItem;
         }
@@ -124,7 +133,7 @@ namespace GW2EIBuilders.HtmlModels
             var conditionsById = log.Statistics.PresentConditions.ToDictionary(x => x.ID);
             foreach (KeyValuePair<SkillItem, List<AbstractDamageEvent>> entry in damageLogsBySkill)
             {
-                dto.Distribution.Add(DmgDistributionDto.GetDMGDtoItem(entry, null, usedSkills, usedBuffs, log.Buffs));
+                dto.Distribution.Add(DmgDistributionDto.GetDMGDtoItem(log, entry, null, usedSkills, usedBuffs, log.Buffs));
             }
             return dto;
         }
@@ -138,7 +147,7 @@ namespace GW2EIBuilders.HtmlModels
             var conditionsById = log.Statistics.PresentConditions.ToDictionary(x => x.ID);
             foreach (KeyValuePair<SkillItem, List<AbstractDamageEvent>> entry in damageLogsBySkill)
             {
-                list.Add(DmgDistributionDto.GetDMGDtoItem(entry, castLogsBySkill, usedSkills, usedBuffs, log.Buffs));
+                list.Add(DmgDistributionDto.GetDMGDtoItem(log, entry, castLogsBySkill, usedSkills, usedBuffs, log.Buffs));
             }
             // non damaging
             foreach (KeyValuePair<SkillItem, List<AbstractCastEvent>> entry in castLogsBySkill)
@@ -167,8 +176,23 @@ namespace GW2EIBuilders.HtmlModels
                     }
                 }
 
-                object[] skillData = { false, entry.Key.ID, 0, -1, 0, casts,
-                    0, 0, 0, 0, -timeswasted / 1000.0, timessaved / 1000.0, 0 };
+                object[] skillData = { 
+                    false, 
+                    entry.Key.ID, 
+                    0, 
+                    -1, 
+                    0, 
+                    casts,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -timeswasted / 1000.0,
+                    timessaved / 1000.0,
+                    0,
+                    0,
+                    0 
+                };
                 list.Add(skillData);
             }
             return list;
