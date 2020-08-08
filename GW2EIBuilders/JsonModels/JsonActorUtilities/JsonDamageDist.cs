@@ -111,12 +111,12 @@ namespace GW2EIBuilders.JsonModels
                     skillDesc["s" + id] = new JsonLog.SkillDesc(skill, log.LogData.GW2Build);
                 }
             }
-            Hits = list.Count;
             Id = id;
             Min = int.MaxValue;
             Max = int.MinValue;
             foreach (AbstractDamageEvent dmgEvt in list)
             {
+                Hits += dmgEvt.DoubleProcHit ? 0 : 1;
                 TotalDamage += dmgEvt.Damage;
                 Min = Math.Min(Min, dmgEvt.Damage);
                 Max = Math.Max(Max, dmgEvt.Damage);
@@ -128,11 +128,11 @@ namespace GW2EIBuilders.JsonModels
                         Glance += dmgEvt.HasGlanced ? 1 : 0;
                         Crit += dmgEvt.HasCrit ? 1 : 0;
                         CritDamage += dmgEvt.HasCrit ? dmgEvt.Damage : 0;
-                        Interrupted += dmgEvt.HasInterrupted ? 1 : 0;
                     }
                     Missed += dmgEvt.IsBlind ? 1 : 0;
                     Evaded += dmgEvt.IsEvaded ? 1 : 0;
                     Blocked += dmgEvt.IsBlocked ? 1 : 0;
+                    Interrupted += dmgEvt.HasInterrupted ? 1 : 0;
                 }
                 ConnectedHits += dmgEvt.HasHit ? 1 : 0;
                 Invulned += dmgEvt.IsAbsorbed ? 1 : 0;

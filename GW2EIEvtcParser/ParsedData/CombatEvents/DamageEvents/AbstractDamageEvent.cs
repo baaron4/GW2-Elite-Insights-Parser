@@ -17,6 +17,7 @@
         public bool IsMoving { get; }
         public bool IsFlanking { get; }
         public bool HasHit { get; protected set; }
+        public bool DoubleProcHit { get; protected set; }
         public bool HasCrit { get; protected set; }
         public bool HasGlanced { get; protected set; }
         public bool IsBlind { get; protected set; }

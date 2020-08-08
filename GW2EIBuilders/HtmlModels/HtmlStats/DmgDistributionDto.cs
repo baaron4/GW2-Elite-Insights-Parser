@@ -26,7 +26,7 @@ namespace GW2EIBuilders.HtmlModels
                     glance = 0,
                     shieldDamage = 0;
             bool IsIndirectDamage = false;
-            foreach (AbstractDamageEvent dl in entry.Value.Where(x => !x.HasDowned))
+            foreach (AbstractDamageEvent dl in entry.Value.Where(x => !x.DoubleProcHit))
             {
                 IsIndirectDamage = IsIndirectDamage || dl is NonDirectDamageEvent;
                 int curdmg = dl.Damage;

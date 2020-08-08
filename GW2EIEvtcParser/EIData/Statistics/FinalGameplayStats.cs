@@ -46,11 +46,12 @@ namespace GW2EIEvtcParser.EIData
                         {
                             GlanceCount++;
                         }
-                        if (dl.HasInterrupted)
-                        {
-                            Interrupts++;
-                        }
                         ConnectedDirectDamageCount++;
+                    }
+
+                    if (dl.HasInterrupted)
+                    {
+                        Interrupts++;
                     }
 
                     if (dl.IsBlind)
@@ -65,13 +66,19 @@ namespace GW2EIEvtcParser.EIData
                     {
                         Blocked++;
                     }
-                    DirectDamageCount++;
+                    if (!dl.DoubleProcHit)
+                    {
+                        DirectDamageCount++;
+                    }
                 }
                 if (dl.IsAbsorbed)
                 {
                     Invulned++;
                 }
-                TotalDamageCount++;
+                if (!dl.DoubleProcHit)
+                {
+                    TotalDamageCount++;
+                }
             }
         }
     }
