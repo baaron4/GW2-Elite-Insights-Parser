@@ -172,9 +172,17 @@ namespace GW2EIBuilders.JsonModels
         public class JsonGameplayStats
         {
             /// <summary>
+            /// Number of damage hit
+            /// </summary>
+            public int TotalDamageCount { get; }
+            /// <summary>
             /// Number of direct damage hit
             /// </summary>
             public int DirectDamageCount { get; }
+            /// <summary>
+            /// Number of connected direct damage hit
+            /// </summary>
+            public int ConnectedDirectDamageCount { get; }
             /// <summary>
             /// Number of critable hit
             /// </summary>
@@ -222,8 +230,10 @@ namespace GW2EIBuilders.JsonModels
 
             internal JsonGameplayStats(FinalGameplayStats stats)
             {
-                DirectDamageCount = stats.DirectDamageCount;
-                CritableDirectDamageCount = stats.CritableDirectDamageCount;
+                TotalDamageCount = stats.TotalHitCount;
+                DirectDamageCount = stats.DirectHitCount;
+                ConnectedDirectDamageCount = stats.ConnectedDirectHitCount;
+                CritableDirectDamageCount = stats.CritableDirectHitCount;
                 CriticalRate = stats.CriticalCount;
                 CriticalDmg = stats.CriticalDmg;
                 FlankingRate = stats.FlankingCount;

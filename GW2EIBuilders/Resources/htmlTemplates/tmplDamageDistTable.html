@@ -14,7 +14,7 @@
             <thead>
                 <tr>
                     <th class="text-left">Skill</th>
-                    <th></th>
+                    <th>% of total</th>
                     <th>Damage</th>
                     <th data-original-title="Damage against barrier. Not necessarily included in total damage">B.Damage
                     </th>
@@ -23,7 +23,7 @@
                     <th>Max</th>
                     <th v-if="actor !== null">Casts</th>
                     <th>Hits</th>
-                    <th>Hits per Cast</th>
+                    <th v-if="actor !== null">Hits/Cast</th>
                     <th>Crit</th>
                     <th>Flank</th>
                     <th>Glance</th>
@@ -45,7 +45,7 @@
                     <td>{{ row[4] }}</td>
                     <td v-if="actor !== null">{{ !getSkill(row[0], row[1]).condi && row[5] ? row[5] : ''}}</td>
                     <td>{{ row[6] }}</td>
-                    <td>{{(!getSkill(row[0], row[1]).condi && row[6] && row[5]) ? round2(row[6]/row[5]) : ''}}</td>
+                    <td v-if="actor !== null">{{(!getSkill(row[0], row[1]).condi && row[6] && row[5]) ? round2(row[6]/row[5]) : ''}}</td>
                     <td
                         :data-original-title="(!getSkill(row[0], row[1]).condi && row[6]) ? row[7] +' out of ' + row[6] + ' hits': false">
                         {{(!getSkill(row[0], row[1]).condi && row[6]) ? round2(row[7]*100/row[6]) + '%' : ''}}
@@ -81,7 +81,7 @@
                     <td></td>
                     <td v-if="actor !== null"></td>
                     <td></td>
-                    <td></td>
+                    <td v-if="actor !== null"></td>
                     <td></td>
                     <td></td>
                     <td></td>

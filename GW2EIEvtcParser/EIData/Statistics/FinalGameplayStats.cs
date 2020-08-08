@@ -5,8 +5,10 @@ namespace GW2EIEvtcParser.EIData
 {
     public class FinalGameplayStats
     {
-        public int DirectDamageCount { get; internal set; }
-        public int CritableDirectDamageCount { get; internal set; }
+        public int TotalHitCount { get; internal set; }
+        public int DirectHitCount { get; internal set; }
+        public int ConnectedDirectHitCount { get; internal set; }
+        public int CritableDirectHitCount { get; internal set; }
         public int CriticalCount { get; internal set; }
         public int CriticalDmg { get; internal set; }
         public int FlankingCount { get; internal set; }
@@ -26,6 +28,18 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (!(dl is NonDirectDamageEvent))
                 {
+                    if (dl.HasHit) {
+                        if (SkillItem.CanCrit(dl.SkillId, log.LogData.GW2Build))
+                        {
+                            if (dl.HasCrit)
+                            {
+                                CriticalCount++;
+                                CriticalDmg += dl.Damage;
+                            }
+                            CritableDirectHitCount++;
+                        }
+                        ConnectedDirectHitCount++;
+                    }
 
                     if (dl.IsFlanking)
                     {
@@ -45,12 +59,6 @@ namespace GW2EIEvtcParser.EIData
                     {
                         Interrupts++;
                     }
-
-                    if (dl.IsAbsorbed)
-                    {
-                        Invulned++;
-                        DamageInvulned += dl.Damage;
-                    }
                     if (dl.IsEvaded)
                     {
                         Evaded++;
@@ -59,16 +67,12 @@ namespace GW2EIEvtcParser.EIData
                     {
                         Blocked++;
                     }
-                    DirectDamageCount++;
-                    if (SkillItem.CanCrit(dl.SkillId, log.LogData.GW2Build) && dl.HasHit)
-                    {
-                        if (dl.HasCrit)
-                        {
-                            CriticalCount++;
-                            CriticalDmg += dl.Damage;
-                        }
-                        CritableDirectDamageCount++;
-                    }
+                    DirectHitCount++;
+                }
+                if (dl.IsAbsorbed)
+                {
+                    Invulned++;
+                    DamageInvulned += dl.Damage;
                 }
             }
         }
