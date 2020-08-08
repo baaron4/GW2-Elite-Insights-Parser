@@ -41,9 +41,29 @@ namespace GW2EIBuilders.JsonModels
         /// </summary>
         public int Flank { get; }
         /// <summary>
+        /// Number of times the hit missed ==
+        /// </summary>
+        public int Missed { get; }
+        /// <summary>
+        /// Number of times the hit was invulned
+        /// </summary>
+        public int Invulned { get; }
+        /// <summary>
+        /// Number of times the hit was evaded
+        /// </summary>
+        public int Dodged { get; }
+        /// <summary>
+        /// Number of times the hit was blocked
+        /// </summary>
+        public int Blocked { get; }
+        /// <summary>
         /// Damage done against barrier, not necessarily included in total damage
         /// </summary>
         public int ShieldDamage { get; }
+        /// <summary>
+        /// Damage absorbed by invul
+        /// </summary>
+        public int InvulDamage { get; }
         /// <summary>
         /// ID of the damaging skill
         /// </summary>
@@ -80,7 +100,7 @@ namespace GW2EIBuilders.JsonModels
                 if (!skillDesc.ContainsKey("s" + id))
                 {
                     SkillItem skill = list.First().Skill;
-                    skillDesc["s" + id] = new JsonLog.SkillDesc(skill);
+                    skillDesc["s" + id] = new JsonLog.SkillDesc(skill, log.LogData.GW2Build);
                 }
             }
             Hits = list.Count;
@@ -92,12 +112,17 @@ namespace GW2EIBuilders.JsonModels
                 TotalDamage += dmgEvt.Damage;
                 Min = Math.Min(Min, dmgEvt.Damage);
                 Max = Math.Max(Max, dmgEvt.Damage);
-                if (IndirectDamage)
+                if (!IndirectDamage)
                 {
                     Flank += dmgEvt.IsFlanking ? 1 : 0;
                     Crit += dmgEvt.HasCrit ? 1 : 0;
                     Glance += dmgEvt.HasGlanced ? 1 : 0;
+                    Missed += dmgEvt.IsBlind ? 1 : 0;
+                    Dodged += dmgEvt.IsEvaded ? 1 : 0;
+                    Blocked += dmgEvt.IsBlocked ? 1 : 0;
                 }
+                Invulned += dmgEvt.IsAbsorbed ? 1 : 0;
+                InvulDamage += dmgEvt.IsAbsorbed ? dmgEvt.Damage : 0;
                 ShieldDamage += dmgEvt.ShieldDamage;
             }
         }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser;
 
 namespace GW2EIBuilders.JsonModels
 {
@@ -53,23 +54,23 @@ namespace GW2EIBuilders.JsonModels
         public List<JsonSkill> Skills { get; }
 
 
-        protected JsonRotation(long skillID, List<AbstractCastEvent> skillCasts, Dictionary<string, JsonLog.SkillDesc> skillDesc)
+        protected JsonRotation(ParsedEvtcLog log, long skillID, List<AbstractCastEvent> skillCasts, Dictionary<string, JsonLog.SkillDesc> skillDesc)
         {
             if (!skillDesc.ContainsKey("s" + skillID))
             {
                 SkillItem skill = skillCasts.First().Skill;
-                skillDesc["s" + skillID] = new JsonLog.SkillDesc(skill);
+                skillDesc["s" + skillID] = new JsonLog.SkillDesc(skill, log.LogData.GW2Build);
             }
             Id = skillID;
             Skills = skillCasts.Select(x => new JsonSkill(x)).ToList();
         }
 
-        internal static List<JsonRotation> BuildJsonRotationList(Dictionary<long, List<AbstractCastEvent>> skillByID, Dictionary<string, JsonLog.SkillDesc> skillDesc)
+        internal static List<JsonRotation> BuildJsonRotationList(ParsedEvtcLog log, Dictionary<long, List<AbstractCastEvent>> skillByID, Dictionary<string, JsonLog.SkillDesc> skillDesc)
         {
             var res = new List<JsonRotation>();
             foreach (KeyValuePair<long, List<AbstractCastEvent>> pair in skillByID)
             {
-                res.Add(new JsonRotation(pair.Key, pair.Value, skillDesc));
+                res.Add(new JsonRotation(log, pair.Key, pair.Value, skillDesc));
             }
             return res;
         }

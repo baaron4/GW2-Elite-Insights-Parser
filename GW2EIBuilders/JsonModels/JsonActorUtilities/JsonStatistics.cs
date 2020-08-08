@@ -25,6 +25,10 @@ namespace GW2EIBuilders.JsonModels
             /// </summary>
             public int EvadedCount { get; }
             /// <summary>
+            /// Number of misses
+            /// </summary>
+            public int MissedCount { get; }
+            /// <summary>
             /// Number of dodges
             /// </summary>
             public int DodgeCount { get; }
@@ -74,6 +78,7 @@ namespace GW2EIBuilders.JsonModels
                 DamageTaken = defenses.DamageTaken;
                 BlockedCount = defenses.BlockedCount;
                 DodgeCount = defenses.DodgeCount;
+                MissedCount = defenses.MissedCount;
                 EvadedCount = defenses.EvadedCount;
                 InvulnedCount = defenses.InvulnedCount;
                 DamageInvulned = defenses.DamageInvulned;
@@ -195,6 +200,14 @@ namespace GW2EIBuilders.JsonModels
             /// </summary>
             public int Missed { get; }
             /// <summary>
+            /// Number of dodged hits
+            /// </summary>
+            public int Dodged { get; }
+            /// <summary>
+            /// Number of blocked hits
+            /// </summary>
+            public int Blocked { get; }
+            /// <summary>
             /// Number of hits that interrupted a skill
             /// </summary>
             public int Interrupts { get; }
@@ -212,21 +225,14 @@ namespace GW2EIBuilders.JsonModels
                 FlankingRate = stats.FlankingCount;
                 GlanceRate = stats.GlanceCount;
                 Missed = stats.Missed;
+                Blocked = stats.Blocked;
+                Dodged = stats.Dodged;
                 Interrupts = stats.Interrupts;
                 Invulned = stats.Invulned;
             }
 
-            internal JsonGameplayStats(FinalGameplayStatsAll stats)
+            internal JsonGameplayStats(FinalGameplayStatsAll stats) : this(stats as FinalGameplayStats)
             {
-                DirectDamageCount = stats.DirectDamageCount;
-                CritableDirectDamageCount = stats.CritableDirectDamageCount;
-                CriticalRate = stats.CriticalCount;
-                CriticalDmg = stats.CriticalDmg;
-                FlankingRate = stats.FlankingCount;
-                GlanceRate = stats.GlanceCount;
-                Missed = stats.Missed;
-                Interrupts = stats.Interrupts;
-                Invulned = stats.Invulned;
             }
         }
 

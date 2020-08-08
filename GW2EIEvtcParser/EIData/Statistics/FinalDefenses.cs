@@ -9,6 +9,7 @@ namespace GW2EIEvtcParser.EIData
         //public long allHealReceived;
         public long DamageTaken { get; }
         public int BlockedCount { get; }
+        public int MissedCount { get; }
         public int EvadedCount { get; }
         public int DodgeCount { get; }
         public int InvulnedCount { get; }
@@ -24,6 +25,7 @@ namespace GW2EIEvtcParser.EIData
 
             DamageTaken = damageLogs.Sum(x => (long)x.Damage);
             BlockedCount = damageLogs.Count(x => x.IsBlocked);
+            MissedCount = damageLogs.Count(x => x.IsBlind);
             InvulnedCount = 0;
             DamageInvulned = 0;
             EvadedCount = damageLogs.Count(x => x.IsEvaded);

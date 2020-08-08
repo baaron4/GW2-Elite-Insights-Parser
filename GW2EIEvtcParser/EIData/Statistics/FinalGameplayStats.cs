@@ -12,6 +12,8 @@ namespace GW2EIEvtcParser.EIData
         public int FlankingCount { get; internal set; }
         public int GlanceCount { get; internal set; }
         public int Missed { get; internal set; }
+        public int Blocked { get; internal set; }
+        public int Dodged { get; internal set; }
         public int Interrupts { get; internal set; }
         public int Invulned { get; internal set; }
 
@@ -23,11 +25,6 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (!(dl is NonDirectDamageEvent))
                 {
-                    if (dl.HasCrit)
-                    {
-                        CriticalCount++;
-                        CriticalDmg += dl.Damage;
-                    }
 
                     if (dl.IsFlanking)
                     {
@@ -52,9 +49,22 @@ namespace GW2EIEvtcParser.EIData
                     {
                         Invulned++;
                     }
-                    DirectDamageCount++;
-                    if (SkillItem.CanCrit(dl.Skill.ID, log.LogData.GW2Build))
+                    if (dl.IsEvaded)
                     {
+                        Dodged++;
+                    }
+                    if (dl.IsBlocked)
+                    {
+                        Blocked++;
+                    }
+                    DirectDamageCount++;
+                    if (SkillItem.CanCrit(dl.SkillId, log.LogData.GW2Build) && !dl.HasNotConnected)
+                    {
+                        if (dl.HasCrit)
+                        {
+                            CriticalCount++;
+                            CriticalDmg += dl.Damage;
+                        }
                         CritableDirectDamageCount++;
                     }
                 }
