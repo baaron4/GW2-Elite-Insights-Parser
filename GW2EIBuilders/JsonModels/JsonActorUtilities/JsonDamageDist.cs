@@ -51,7 +51,7 @@ namespace GW2EIBuilders.JsonModels
         /// <summary>
         /// Number of times the hit was evaded
         /// </summary>
-        public int Dodged { get; }
+        public int Evaded { get; }
         /// <summary>
         /// Number of times the hit was blocked
         /// </summary>
@@ -118,7 +118,7 @@ namespace GW2EIBuilders.JsonModels
                     Crit += dmgEvt.HasCrit ? 1 : 0;
                     Glance += dmgEvt.HasGlanced ? 1 : 0;
                     Missed += dmgEvt.IsBlind ? 1 : 0;
-                    Dodged += dmgEvt.IsEvaded ? 1 : 0;
+                    Evaded += dmgEvt.IsEvaded ? 1 : 0;
                     Blocked += dmgEvt.IsBlocked ? 1 : 0;
                 }
                 Invulned += dmgEvt.IsAbsorbed ? 1 : 0;

@@ -13,9 +13,10 @@ namespace GW2EIEvtcParser.EIData
         public int GlanceCount { get; internal set; }
         public int Missed { get; internal set; }
         public int Blocked { get; internal set; }
-        public int Dodged { get; internal set; }
+        public int Evaded { get; internal set; }
         public int Interrupts { get; internal set; }
         public int Invulned { get; internal set; }
+        public int DamageInvulned { get; internal set; }
 
 
         internal FinalGameplayStats(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor, AbstractSingleActor target)
@@ -48,10 +49,11 @@ namespace GW2EIEvtcParser.EIData
                     if (dl.IsAbsorbed)
                     {
                         Invulned++;
+                        DamageInvulned += dl.Damage;
                     }
                     if (dl.IsEvaded)
                     {
-                        Dodged++;
+                        Evaded++;
                     }
                     if (dl.IsBlocked)
                     {

@@ -200,9 +200,9 @@ namespace GW2EIBuilders.JsonModels
             /// </summary>
             public int Missed { get; }
             /// <summary>
-            /// Number of dodged hits
+            /// Number of evaded hits
             /// </summary>
-            public int Dodged { get; }
+            public int Evaded { get; }
             /// <summary>
             /// Number of blocked hits
             /// </summary>
@@ -215,6 +215,10 @@ namespace GW2EIBuilders.JsonModels
             /// Number of hits against invulnerable targets
             /// </summary>
             public int Invulned { get; }
+            /// <summary>
+            /// Damage negated by invul
+            /// </summary>
+            public int DamageInvulned { get; }
 
             internal JsonGameplayStats(FinalGameplayStats stats)
             {
@@ -226,9 +230,10 @@ namespace GW2EIBuilders.JsonModels
                 GlanceRate = stats.GlanceCount;
                 Missed = stats.Missed;
                 Blocked = stats.Blocked;
-                Dodged = stats.Dodged;
+                Evaded = stats.Evaded;
                 Interrupts = stats.Interrupts;
                 Invulned = stats.Invulned;
+                DamageInvulned = stats.DamageInvulned;
             }
 
             internal JsonGameplayStats(FinalGameplayStatsAll stats) : this(stats as FinalGameplayStats)
