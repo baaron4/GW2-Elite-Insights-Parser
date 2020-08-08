@@ -48,7 +48,7 @@ namespace GW2EIParser.tst
         {
             var ms = new MemoryStream();
             var sw = new StreamWriter(ms, NoBOMEncodingUTF8);
-            var builder = new RawFormatBuilder(log, null);
+            var builder = new RawFormatBuilder(log, rawSettings);
 
             builder.CreateJSON(sw, false);
             sw.Close();

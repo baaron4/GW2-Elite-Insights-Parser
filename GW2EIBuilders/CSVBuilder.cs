@@ -73,7 +73,7 @@ namespace GW2EIBuilders
             _sw = sw;
             //header
             _log.UpdateProgressWithCancellationCheck("CSV: Building Meta Data");
-            WriteLine(new[] { _parser, _version.ToString(4) });
+            WriteLine(new[] { _parser, _version.ToString() });
             WriteLine(new[] { "ARC Version", _log.LogData.ArcVersion });
             WriteLine(new[] { "Fight ID", _log.FightData.TriggerID.ToString() });
             WriteLine(new[] { "Recorded By", _log.LogData.PoVName });

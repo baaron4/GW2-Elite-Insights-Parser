@@ -55,7 +55,7 @@ namespace GW2EIParser
             //
             builder.WithTitle(log.FightData.GetFightName(log));
             builder.WithTimestamp(DateTime.Now);
-            builder.WithAuthor(log.ParserName + " " + log.ParserVersion.ToString(4), "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EIParser/Content/LI.png?raw=true", "https://github.com/baaron4/GW2-Elite-Insights-Parser");
+            builder.WithAuthor(log.ParserName + " " + log.ParserVersion.ToString(), "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EIParser/Content/LI.png?raw=true", "https://github.com/baaron4/GW2-Elite-Insights-Parser");
             builder.WithFooter(log.LogData.LogStartStd + " / " + log.LogData.LogEndStd);
             builder.WithColor(log.FightData.Success ? Color.Green : Color.Red);
             if (dpsReportPermalink.Length > 0)

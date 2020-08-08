@@ -266,7 +266,7 @@ namespace GW2EIBuilders.JsonModels
             FightName = log.FightData.GetFightName(log);
             FightIcon = log.FightData.Logic.Icon;
             (string parserName, Version parserVersion) = (log.ParserName, log.ParserVersion);
-            ParserVersion = parserVersion.ToString(4);
+            ParserVersion = parserVersion.ToString();
             EliteInsightsVersion = ParserVersion;
             ParserName = parserName;
             ArcVersion = log.LogData.ArcVersion;

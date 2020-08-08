@@ -147,7 +147,7 @@ namespace GW2EIBuilders.HtmlModels
                 ArcVersion = log.LogData.ArcVersion,
                 Gw2Build = log.LogData.GW2Build,
                 FightID = log.FightData.TriggerID,
-                Parser = parser + " " + version.ToString(4),
+                Parser = parser + " " + version.ToString(),
                 RecordedBy = log.LogData.PoVName,
                 UploadLinks = uploadLinks.ToList()
             };

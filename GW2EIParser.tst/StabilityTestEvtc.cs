@@ -103,6 +103,7 @@ namespace GW2EIParser.tst
         [Test]
         public void TestEvtc()
         {
+            GW2APIController.InitAPICache();
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
             if (!Directory.Exists(testLocation))
             {
@@ -123,6 +124,7 @@ namespace GW2EIParser.tst
         [Test]
         public void TestEvtcZip()
         {
+            GW2APIController.InitAPICache();
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
             if (!Directory.Exists(testLocation))
             {
@@ -142,6 +144,7 @@ namespace GW2EIParser.tst
         [Test]
         public void TestZevtc()
         {
+            GW2APIController.InitAPICache();
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
             if (!Directory.Exists(testLocation))
             {
@@ -162,6 +165,7 @@ namespace GW2EIParser.tst
         [Test]
         public void TestCrashed()
         {
+            GW2APIController.InitAPICache();
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/Crashes/Logs";
             if (!Directory.Exists(testLocation))
             {
