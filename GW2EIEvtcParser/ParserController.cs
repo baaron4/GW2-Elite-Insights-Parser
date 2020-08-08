@@ -34,6 +34,11 @@ namespace GW2EIEvtcParser
             }
         }
 
+        public void ClearTraces()
+        {
+            StatusList.Clear();
+        }
+
         public virtual void UpdateProgressWithCancellationCheck(string status)
         {
             UpdateProgress(status);

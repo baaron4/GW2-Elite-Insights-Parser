@@ -15,6 +15,7 @@ using GW2EIDPSReport;
 using GW2EIDiscord;
 using System.Windows.Forms;
 using GW2EIDPSReport.DPSReportJsons;
+using System.Diagnostics;
 
 namespace GW2EIParser
 {
@@ -113,8 +114,11 @@ namespace GW2EIParser
             System.Globalization.CultureInfo before = Thread.CurrentThread.CurrentCulture;
             Thread.CurrentThread.CurrentCulture =
                     new System.Globalization.CultureInfo("en-US");
+            operation.ClearTraces();
+            var sw = new Stopwatch();
             try
             {
+                sw.Start();
                 var fInfo = new FileInfo(operation.Location);
 
                 var parser = new EvtcParser(new EvtcParserSettings(Properties.Settings.Default.Anonymous, Properties.Settings.Default.SkipFailedTries, Properties.Settings.Default.ParsePhases, Properties.Settings.Default.ParseCombatReplay, Properties.Settings.Default.ComputeDamageModifiers));
@@ -145,8 +149,10 @@ namespace GW2EIParser
             }
             finally
             {
+                sw.Stop();
                 GC.Collect();
                 Thread.CurrentThread.CurrentCulture = before;
+                operation.Elapsed = ("Elapsed " + sw.ElapsedMilliseconds + " ms");
             }
         }
 
