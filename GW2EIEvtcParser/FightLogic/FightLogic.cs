@@ -288,7 +288,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (de.ShieldDamage > 0)
                 {
-                    de.NegateDamage();
+                    de.NegateShieldDamage();
                 }
             }
         }
