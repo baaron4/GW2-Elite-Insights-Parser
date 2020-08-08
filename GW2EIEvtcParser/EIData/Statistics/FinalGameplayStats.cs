@@ -5,10 +5,10 @@ namespace GW2EIEvtcParser.EIData
 {
     public class FinalGameplayStats
     {
-        public int TotalHitCount { get; internal set; }
-        public int DirectHitCount { get; internal set; }
-        public int ConnectedDirectHitCount { get; internal set; }
-        public int CritableDirectHitCount { get; internal set; }
+        public int TotalDamageCount { get; internal set; }
+        public int DirectDamageCount { get; internal set; }
+        public int ConnectedDirectDamageCount { get; internal set; }
+        public int CritableDirectDamageCount { get; internal set; }
         public int CriticalCount { get; internal set; }
         public int CriticalDmg { get; internal set; }
         public int FlankingCount { get; internal set; }
@@ -36,28 +36,27 @@ namespace GW2EIEvtcParser.EIData
                                 CriticalCount++;
                                 CriticalDmg += dl.Damage;
                             }
-                            CritableDirectHitCount++;
+                            CritableDirectDamageCount++;
                         }
-                        ConnectedDirectHitCount++;
-                    }
+                        if (dl.IsFlanking)
+                        {
+                            FlankingCount++;
+                        }
 
-                    if (dl.IsFlanking)
-                    {
-                        FlankingCount++;
-                    }
-
-                    if (dl.HasGlanced)
-                    {
-                        GlanceCount++;
+                        if (dl.HasGlanced)
+                        {
+                            GlanceCount++;
+                        }
+                        if (dl.HasInterrupted)
+                        {
+                            Interrupts++;
+                        }
+                        ConnectedDirectDamageCount++;
                     }
 
                     if (dl.IsBlind)
                     {
                         Missed++;
-                    }
-                    if (dl.HasInterrupted)
-                    {
-                        Interrupts++;
                     }
                     if (dl.IsEvaded)
                     {
@@ -67,13 +66,14 @@ namespace GW2EIEvtcParser.EIData
                     {
                         Blocked++;
                     }
-                    DirectHitCount++;
+                    DirectDamageCount++;
                 }
                 if (dl.IsAbsorbed)
                 {
                     Invulned++;
                     DamageInvulned += dl.Damage;
                 }
+                TotalDamageCount++;
             }
         }
     }

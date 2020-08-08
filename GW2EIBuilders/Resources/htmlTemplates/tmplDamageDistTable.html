@@ -14,48 +14,65 @@
             <thead>
                 <tr>
                     <th class="text-left">Skill</th>
-                    <th>% of total</th>
+                    <th>%</th>
                     <th>Damage</th>
-                    <th data-original-title="Damage against barrier. Not necessarily included in total damage">B.Damage
+                    <th data-original-title="Damage against barrier. Not necessarily included in total damage">
+                        B.Damage
                     </th>
                     <th>Min</th>
                     <th>Avg</th>
                     <th>Max</th>
-                    <th v-if="actor !== null">Casts</th>
+                    <th v-if="actor !== null">
+                        Casts
+                    </th>
                     <th>Hits</th>
-                    <th v-if="actor !== null">Hits/Cast</th>
+                    <th v-if="actor !== null">
+                        Hits/Cast
+                    </th>
                     <th>Crit</th>
                     <th>Flank</th>
                     <th>Glance</th>
-                    <th v-if="actor !== null">Wasted</th>
-                    <th v-if="actor !== null">Saved</th>
+                    <th v-if="actor !== null">
+                        Wasted</th>
+                    <th v-if="actor !== null">
+                        Saved
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="row in dmgdist.distribution" :class="{condi: getSkill(row[0], row[1]).condi}">
                     <td class="text-left" :data-original-title="getSkill(row[0], row[1]).id">
-                        <img :src="getSkill(row[0], row[1]).icon" class="icon icon-hover"> {{getSkill(row[0],
-                        row[1]).name}}
+                        <img :src="getSkill(row[0], row[1]).icon" class="icon icon-hover"> 
+                        {{getSkill(row[0],row[1]).name}}
                     </td>
                     <td>{{ round3(100*row[2]/dmgdist.contributedDamage) }}%</td>
-                    <td :data-original-title="round2(row[2]/phase.durationS) +' dps'">{{ row[2] }}</td>
-                    <td :data-original-title="round2(row[12]/phase.durationS) +' dps'">{{ row[12] }}</td>
+                    <td :data-original-title="round2(row[2]/phase.durationS) +' dps'">
+                        {{ row[2] }}
+                    </td>
+                    <td :data-original-title="round2(row[12]/phase.durationS) +' dps'">
+                        {{ row[12] }}
+                    </td>
                     <td>{{ Math.max(row[3],0) }}</td>
                     <td>{{ round(row[2]/row[6]) }}</td>
                     <td>{{ row[4] }}</td>
-                    <td v-if="actor !== null">{{ !getSkill(row[0], row[1]).condi && row[5] ? row[5] : ''}}</td>
-                    <td>{{ row[6] }}</td>
-                    <td v-if="actor !== null">{{(!getSkill(row[0], row[1]).condi && row[6] && row[5]) ? round2(row[6]/row[5]) : ''}}</td>
+                    <td v-if="actor !== null">
+                        {{ !getSkill(row[0], row[1]).condi && row[5] ? row[5] : ''}}
+                    </td>
+                    <td :data-original-title="(row[14] - row[6]) + ' hit(s) not connected'">
+                        {{ row[6] }}
+                    </td>
+                    <td v-if="actor !== null">
+                        {{(!getSkill(row[0], row[1]).condi && row[6] && row[5]) ? round2(row[6]/row[5]) : ''}}</td>
                     <td
-                        :data-original-title="(!getSkill(row[0], row[1]).condi && row[6]) ? row[7] +' out of ' + row[6] + ' hits': false">
+                        :data-original-title="(!getSkill(row[0], row[1]).condi && row[6]) ? row[7] +' out of ' + row[6] + ' hit(s) <br> Damage: ' + row[13] : false">
                         {{(!getSkill(row[0], row[1]).condi && row[6]) ? round2(row[7]*100/row[6]) + '%' : ''}}
                     </td>
                     <td
-                        :data-original-title="(!getSkill(row[0], row[1]).condi && row[6]) ? row[8] +' out of ' + row[6] + ' hits': false">
+                        :data-original-title="(!getSkill(row[0], row[1]).condi && row[6]) ? row[8] +' out of ' + row[6] + ' hit(s)': false">
                         {{(!getSkill(row[0], row[1]).condi && row[6]) ? round2(row[8]*100/row[6]) + '%' : ''}}
                     </td>
                     <td
-                        :data-original-title="(!getSkill(row[0], row[1]).condi && row[6]) ? row[9] +' out of ' + row[6] + ' hits': false">
+                        :data-original-title="(!getSkill(row[0], row[1]).condi && row[6]) ? row[9] +' out of ' + row[6] + ' hit(s)': false">
                         {{(!getSkill(row[0], row[1]).condi && row[6]) ? round2(row[9]*100/row[6]) + '%' : ''}}
                     </td>
                     <td v-if="actor !== null"

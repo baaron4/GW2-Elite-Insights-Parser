@@ -230,10 +230,10 @@ namespace GW2EIBuilders.JsonModels
 
             internal JsonGameplayStats(FinalGameplayStats stats)
             {
-                TotalDamageCount = stats.TotalHitCount;
-                DirectDamageCount = stats.DirectHitCount;
-                ConnectedDirectDamageCount = stats.ConnectedDirectHitCount;
-                CritableDirectDamageCount = stats.CritableDirectHitCount;
+                TotalDamageCount = stats.TotalDamageCount;
+                DirectDamageCount = stats.DirectDamageCount;
+                ConnectedDirectDamageCount = stats.ConnectedDirectDamageCount;
+                CritableDirectDamageCount = stats.CritableDirectDamageCount;
                 CriticalRate = stats.CriticalCount;
                 CriticalDmg = stats.CriticalDmg;
                 FlankingRate = stats.FlankingCount;

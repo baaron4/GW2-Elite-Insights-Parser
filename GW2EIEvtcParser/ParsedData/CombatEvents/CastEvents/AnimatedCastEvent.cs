@@ -7,11 +7,6 @@ namespace GW2EIEvtcParser.ParsedData
         private readonly int _scaledActualDuration;
         //private readonly int _effectHappenedDuration;
 
-
-        private static readonly double _upperLimit = Math.Log(4.0/3.0);
-        private static readonly double _lowerLimit = Math.Log(0.5);
-        private static readonly double _diffLimit = _upperLimit - _lowerLimit;
-
         private AnimatedCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData) : base(startItem, agentData, skillData)
         {
             ExpectedDuration = startItem.BuffDmg > 0 ? startItem.BuffDmg : startItem.Value;
@@ -36,7 +31,16 @@ namespace GW2EIEvtcParser.ParsedData
             if (_scaledActualDuration > 0)
             {
                 nonScaledToScaledRatio = (double)_scaledActualDuration / ActualDuration;
-                Acceleration = ParserHelper.Clamp(2.0 * ((Math.Log(nonScaledToScaledRatio) - _lowerLimit) / _diffLimit) - 1.0, -1.0, 1.0);
+                if (nonScaledToScaledRatio > 1.0)
+                {
+                    // faster
+                    Acceleration = (nonScaledToScaledRatio - 1.0) / 0.66;
+                }
+                else
+                {
+                    Acceleration = -(1.0 - nonScaledToScaledRatio) / 0.5;
+                }
+                Acceleration = Math.Max(Math.Min(Acceleration, 1.0), -1.0);
             }
             switch (endItem.IsActivation)
             {

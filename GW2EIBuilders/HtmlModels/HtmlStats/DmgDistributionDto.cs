@@ -13,7 +13,7 @@ namespace GW2EIBuilders.HtmlModels
         public long TotalDamage { get; internal set; }
         public List<object[]> Distribution { get; internal set; }
 
-        private static object[] GetDMGDtoItem(ParsedEvtcLog log,  KeyValuePair<SkillItem, List<AbstractDamageEvent>> entry, Dictionary<SkillItem, List<AbstractCastEvent>> castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons)
+        private static object[] GetDMGDtoItem(KeyValuePair<SkillItem, List<AbstractDamageEvent>> entry, Dictionary<SkillItem, List<AbstractCastEvent>> castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons)
         {
             int totaldamage = 0,
                     mindamage = int.MaxValue,
@@ -21,7 +21,7 @@ namespace GW2EIBuilders.HtmlModels
                     hits = 0,
                     crit = 0,
                     critDamage = 0,
-                    critable = 0,
+                    connectedHits = 0,
                     flank = 0,
                     glance = 0,
                     shieldDamage = 0;
@@ -34,24 +34,23 @@ namespace GW2EIBuilders.HtmlModels
                 if (curdmg < mindamage) { mindamage = curdmg; }
                 if (curdmg > maxdamage) { maxdamage = curdmg; }
                 hits++;
-                if (SkillItem.CanCrit(dl.SkillId, log.LogData.GW2Build) && dl.HasHit)
+                if (dl.HasHit)
                 {
+                    connectedHits++;
                     if (dl.HasCrit)
                     {
                         crit++;
                         critDamage += dl.Damage;
                     }
-                    critable++;
-                }
-                
-                if (dl.HasGlanced)
-                {
-                    glance++;
-                }
+                    if (dl.HasGlanced)
+                    {
+                        glance++;
+                    }
 
-                if (dl.IsFlanking)
-                {
-                    flank++;
+                    if (dl.IsFlanking)
+                    {
+                        flank++;
+                    }
                 }
 
                 shieldDamage += dl.ShieldDamage;
@@ -106,7 +105,7 @@ namespace GW2EIBuilders.HtmlModels
                     mindamage == int.MaxValue ? 0 : mindamage,
                     maxdamage == int.MinValue ? 0 : maxdamage,
                     IsIndirectDamage ? 0 : casts,
-                    hits,
+                    connectedHits,
                     IsIndirectDamage ? 0 : crit,
                     IsIndirectDamage ? 0 : flank,
                     IsIndirectDamage ? 0 : glance,
@@ -114,7 +113,7 @@ namespace GW2EIBuilders.HtmlModels
                     IsIndirectDamage ? 0 : timessaved / 1000.0,
                     shieldDamage,
                     IsIndirectDamage ? 0 : critDamage,
-                    IsIndirectDamage ? 0 : critable,
+                    hits
                 };
             return skillItem;
         }
@@ -128,12 +127,12 @@ namespace GW2EIBuilders.HtmlModels
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
             List<AbstractDamageEvent> damageLogs = p.GetDamageTakenLogs(null, log, phase.Start, phase.End);
             var damageLogsBySkill = damageLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
-            dto.ContributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.Damage) : 0;
-            dto.ContributedShieldDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.ShieldDamage) : 0;
+            dto.ContributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
+            dto.ContributedShieldDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.ShieldDamage) : 0;
             var conditionsById = log.Statistics.PresentConditions.ToDictionary(x => x.ID);
             foreach (KeyValuePair<SkillItem, List<AbstractDamageEvent>> entry in damageLogsBySkill)
             {
-                dto.Distribution.Add(DmgDistributionDto.GetDMGDtoItem(log, entry, null, usedSkills, usedBuffs, log.Buffs));
+                dto.Distribution.Add(DmgDistributionDto.GetDMGDtoItem(entry, null, usedSkills, usedBuffs, log.Buffs));
             }
             return dto;
         }
@@ -147,7 +146,7 @@ namespace GW2EIBuilders.HtmlModels
             var conditionsById = log.Statistics.PresentConditions.ToDictionary(x => x.ID);
             foreach (KeyValuePair<SkillItem, List<AbstractDamageEvent>> entry in damageLogsBySkill)
             {
-                list.Add(DmgDistributionDto.GetDMGDtoItem(log, entry, castLogsBySkill, usedSkills, usedBuffs, log.Buffs));
+                list.Add(DmgDistributionDto.GetDMGDtoItem(entry, castLogsBySkill, usedSkills, usedBuffs, log.Buffs));
             }
             // non damaging
             foreach (KeyValuePair<SkillItem, List<AbstractCastEvent>> entry in castLogsBySkill)
@@ -191,7 +190,7 @@ namespace GW2EIBuilders.HtmlModels
                     timessaved / 1000.0,
                     0,
                     0,
-                    0 
+                    0
                 };
                 list.Add(skillData);
             }

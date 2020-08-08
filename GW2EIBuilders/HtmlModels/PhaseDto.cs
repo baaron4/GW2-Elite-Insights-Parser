@@ -155,15 +155,15 @@ namespace GW2EIBuilders.HtmlModels
             data.AddRange(new List<object>
                 {
                     // commons
-                    stats.TimeWasted, // 9
-                    stats.Wasted, // 10
+                    stats.TimeWasted, // 13
+                    stats.Wasted, // 14
 
-                    stats.TimeSaved, // 11
-                    stats.Saved, // 12
+                    stats.TimeSaved, // 15
+                    stats.Saved, // 16
 
-                    stats.SwapCount, // 13
-                    Math.Round(stats.StackDist, 2), // 14
-                    Math.Round(stats.DistToCom, 2) // 15
+                    stats.SwapCount, // 17
+                    Math.Round(stats.StackDist, 2), // 18
+                    Math.Round(stats.DistToCom, 2) // 19
                 });
             return data;
         }
@@ -187,6 +187,7 @@ namespace GW2EIBuilders.HtmlModels
                     stats.Evaded,// 9
                     stats.DamageInvulned, // 10
                     stats.Blocked,// 11
+                    stats.ConnectedDirectDamageCount, // 12
                 };
             return data;
         }
@@ -228,7 +229,9 @@ namespace GW2EIBuilders.HtmlModels
                     defenses.InvulnedCount,
                     defenses.InterruptedCount,
                     defenses.EvadedCount,
-                    defenses.DodgeCount
+                    defenses.DodgeCount,
+                    defenses.MissedCount,
+                    defenses.DamageInvulned
                 };
 
             if (defenses.DownDuration > 0)
@@ -254,8 +257,6 @@ namespace GW2EIBuilders.HtmlModels
                 data.Add(0);
                 data.Add("100% Alive");
             }
-            data.Add(defenses.MissedCount);
-            data.Add(defenses.DamageInvulned);
             return data;
         }
         internal static List<List<object>> BuildDPSData(ParsedEvtcLog log, int phaseIndex)
