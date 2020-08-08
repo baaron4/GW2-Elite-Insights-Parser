@@ -24,8 +24,8 @@
                             data-original-title="Number of times was invulnerable to damage" class="icon icon-hover">
                     </th>
                     <th>
-                        <img src="https://wiki.guildwars2.com/images/7/79/Daze.png" alt="Interupted"
-                            data-original-title="Number of times interupted"
+                        <img src="https://wiki.guildwars2.com/images/7/79/Daze.png" alt="Interrupted"
+                            data-original-title="Number of times interrupted"
                             class="icon icon-hover">
                     </th>
                     <th>
@@ -65,15 +65,15 @@
                     <td>{{row.def[0]}}</td>
                     <td>{{row.def[1]}}</td>
                     <td>{{row.def[2]}}</td>
-                    <td :data-original-title="row.def[8] ? row.def[8] + ' damage negated' : false">
+                    <td>
                         {{row.def[3]}}
                     </td>
                     <td>{{row.def[4]}}</td>
                     <td>{{row.def[5]}}</td>
                     <td>{{row.def[6]}}</td>
-                    <td>{{row.def[8]}}</td>
-                    <td :data-original-title="row.def[10]">{{row.def[9]}}</td>
-                    <td :data-original-title="row.def[12]">{{row.def[11]}}</td>
+                    <td>{{row.def[7]}}</td>
+                    <td :data-original-title="row.def[9]">{{row.def[8]}}</td>
+                    <td :data-original-title="row.def[11]">{{row.def[10]}}</td>
                 </tr>
             </tbody>
             <tfoot>
@@ -85,15 +85,15 @@
                     <td>{{sum.def[0]}}</td>
                     <td>{{sum.def[1]}}</td>
                     <td>{{sum.def[2]}}</td>
-                    <td :data-original-title="sum.def[8] ? sum.def[8] + ' damage negated' : false">
+                    <td>
                         {{sum.def[3]}}
                     </td>
                     <td>{{sum.def[4]}}</td>
                     <td>{{sum.def[5]}}</td>
                     <td>{{sum.def[6]}}</td>
+                    <td>{{sum.def[7]}}</td>
                     <td>{{sum.def[8]}}</td>
-                    <td>{{sum.def[9]}}</td>
-                    <td>{{sum.def[11]}}</td>
+                    <td>{{sum.def[10]}}</td>
                 </tr>
             </tfoot>
         </table>

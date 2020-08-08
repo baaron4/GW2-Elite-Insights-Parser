@@ -155,15 +155,15 @@ namespace GW2EIBuilders.HtmlModels
             data.AddRange(new List<object>
                 {
                     // commons
-                    stats.TimeWasted, // 13
-                    stats.Wasted, // 14
+                    stats.TimeWasted, // 12
+                    stats.Wasted, // 13
 
-                    stats.TimeSaved, // 15
-                    stats.Saved, // 16
+                    stats.TimeSaved, // 14
+                    stats.Saved, // 15
 
-                    stats.SwapCount, // 17
-                    Math.Round(stats.StackDist, 2), // 18
-                    Math.Round(stats.DistToCom, 2) // 19
+                    stats.SwapCount, // 16
+                    Math.Round(stats.StackDist, 2), // 17
+                    Math.Round(stats.DistToCom, 2) // 18
                 });
             return data;
         }
@@ -185,9 +185,8 @@ namespace GW2EIBuilders.HtmlModels
                     stats.Interrupts, // 7
                     stats.Invulned, // 8
                     stats.Evaded,// 9
-                    stats.DamageInvulned, // 10
-                    stats.Blocked,// 11
-                    stats.ConnectedDirectDamageCount, // 12
+                    stats.Blocked,// 10
+                    stats.ConnectedDirectDamageCount, // 11
                 };
             return data;
         }
@@ -230,8 +229,7 @@ namespace GW2EIBuilders.HtmlModels
                     defenses.InterruptedCount,
                     defenses.EvadedCount,
                     defenses.DodgeCount,
-                    defenses.MissedCount,
-                    defenses.DamageInvulned
+                    defenses.MissedCount
                 };
 
             if (defenses.DownDuration > 0)

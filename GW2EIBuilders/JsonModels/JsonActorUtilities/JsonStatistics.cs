@@ -37,10 +37,6 @@ namespace GW2EIBuilders.JsonModels
             /// </summary>
             public int InvulnedCount { get; }
             /// <summary>
-            /// Damage negated by invul
-            /// </summary>
-            public int DamageInvulned { get; }
-            /// <summary>
             /// Damage done against barrier
             /// </summary>
             public int DamageBarrier { get; }
@@ -81,7 +77,6 @@ namespace GW2EIBuilders.JsonModels
                 MissedCount = defenses.MissedCount;
                 EvadedCount = defenses.EvadedCount;
                 InvulnedCount = defenses.InvulnedCount;
-                DamageInvulned = defenses.DamageInvulned;
                 DamageBarrier = defenses.DamageBarrier;
                 InterruptedCount = defenses.InterruptedCount;
                 DownCount = defenses.DownCount;
@@ -223,10 +218,6 @@ namespace GW2EIBuilders.JsonModels
             /// Number of hits against invulnerable targets
             /// </summary>
             public int Invulned { get; }
-            /// <summary>
-            /// Damage negated by invul
-            /// </summary>
-            public int DamageInvulned { get; }
 
             internal JsonGameplayStats(FinalGameplayStats stats)
             {
@@ -243,7 +234,6 @@ namespace GW2EIBuilders.JsonModels
                 Evaded = stats.Evaded;
                 Interrupts = stats.Interrupts;
                 Invulned = stats.Invulned;
-                DamageInvulned = stats.DamageInvulned;
             }
 
             internal JsonGameplayStats(FinalGameplayStatsAll stats) : this(stats as FinalGameplayStats)

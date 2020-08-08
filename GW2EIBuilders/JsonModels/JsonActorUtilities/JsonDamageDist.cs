@@ -53,6 +53,10 @@ namespace GW2EIBuilders.JsonModels
         /// </summary>
         public int Invulned { get; }
         /// <summary>
+        /// Number of times the hit nterrupted
+        /// </summary>
+        public int Interrupted { get; }
+        /// <summary>
         /// Number of times the hit was evaded
         /// </summary>
         public int Evaded { get; }
@@ -64,10 +68,6 @@ namespace GW2EIBuilders.JsonModels
         /// Damage done against barrier, not necessarily included in total damage
         /// </summary>
         public int ShieldDamage { get; }
-        /// <summary>
-        /// Damage absorbed by invul
-        /// </summary>
-        public int InvulDamage { get; }
         /// <summary>
         /// Critical damage
         /// </summary>
@@ -128,6 +128,7 @@ namespace GW2EIBuilders.JsonModels
                         Glance += dmgEvt.HasGlanced ? 1 : 0;
                         Crit += dmgEvt.HasCrit ? 1 : 0;
                         CritDamage += dmgEvt.HasCrit ? dmgEvt.Damage : 0;
+                        Interrupted += dmgEvt.HasInterrupted ? 1 : 0;
                     }
                     Missed += dmgEvt.IsBlind ? 1 : 0;
                     Evaded += dmgEvt.IsEvaded ? 1 : 0;
@@ -135,7 +136,6 @@ namespace GW2EIBuilders.JsonModels
                 }
                 ConnectedHits += dmgEvt.HasHit ? 1 : 0;
                 Invulned += dmgEvt.IsAbsorbed ? 1 : 0;
-                InvulDamage += dmgEvt.IsAbsorbed ? dmgEvt.Damage : 0;
                 ShieldDamage += dmgEvt.ShieldDamage;
             }
         }

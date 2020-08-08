@@ -13,7 +13,6 @@ namespace GW2EIEvtcParser.EIData
         public int EvadedCount { get; }
         public int DodgeCount { get; }
         public int InvulnedCount { get; }
-        public int DamageInvulned { get; }
         public int DamageBarrier { get; }
         public int InterruptedCount { get; }
 
@@ -26,17 +25,11 @@ namespace GW2EIEvtcParser.EIData
             DamageTaken = damageLogs.Sum(x => (long)x.Damage);
             BlockedCount = damageLogs.Count(x => x.IsBlocked);
             MissedCount = damageLogs.Count(x => x.IsBlind);
-            InvulnedCount = 0;
-            DamageInvulned = 0;
+            InvulnedCount = damageLogs.Count(x => x.IsAbsorbed);
             EvadedCount = damageLogs.Count(x => x.IsEvaded);
             DodgeCount = actor.GetCastLogs(log, start, end).Count(x => x.SkillId == SkillItem.DodgeId || x.SkillId == SkillItem.MirageCloakDodgeId);
             DamageBarrier = damageLogs.Sum(x => x.ShieldDamage);
             InterruptedCount = damageLogs.Count(x => x.HasInterrupted);
-            foreach (AbstractDamageEvent dl in damageLogs.Where(x => x.IsAbsorbed))
-            {
-                InvulnedCount++;
-                DamageInvulned += dl.Damage;
-            }
         }
     }
 }

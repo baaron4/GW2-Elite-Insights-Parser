@@ -18,7 +18,6 @@ namespace GW2EIEvtcParser.EIData
         public int Evaded { get; internal set; }
         public int Interrupts { get; internal set; }
         public int Invulned { get; internal set; }
-        public int DamageInvulned { get; internal set; }
 
 
         internal FinalGameplayStats(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor, AbstractSingleActor target)
@@ -47,6 +46,10 @@ namespace GW2EIEvtcParser.EIData
                         {
                             GlanceCount++;
                         }
+                        if (dl.HasInterrupted)
+                        {
+                            Interrupts++;
+                        }
                         ConnectedDirectDamageCount++;
                     }
 
@@ -67,11 +70,6 @@ namespace GW2EIEvtcParser.EIData
                 if (dl.IsAbsorbed)
                 {
                     Invulned++;
-                    DamageInvulned += dl.Damage;
-                }
-                if (dl.HasInterrupted)
-                {
-                    Interrupts++;
                 }
                 TotalDamageCount++;
             }
