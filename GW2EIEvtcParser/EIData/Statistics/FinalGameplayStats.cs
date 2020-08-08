@@ -47,10 +47,6 @@ namespace GW2EIEvtcParser.EIData
                         {
                             GlanceCount++;
                         }
-                        if (dl.HasInterrupted)
-                        {
-                            Interrupts++;
-                        }
                         ConnectedDirectDamageCount++;
                     }
 
@@ -72,6 +68,10 @@ namespace GW2EIEvtcParser.EIData
                 {
                     Invulned++;
                     DamageInvulned += dl.Damage;
+                }
+                if (dl.HasInterrupted)
+                {
+                    Interrupts++;
                 }
                 TotalDamageCount++;
             }

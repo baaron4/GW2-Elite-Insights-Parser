@@ -272,8 +272,8 @@ namespace GW2EIBuilders
                 Math.Round((double)(statsBoss.CriticalCount) / statsBoss.CritableDirectDamageCount * 100,1).ToString(), statsBoss.CriticalCount.ToString(),statsBoss.CriticalDmg.ToString(),
                 Math.Round((double)(scholar.HitCount) / scholar.TotalHitCount * 100,1).ToString(),scholar.HitCount.ToString(),scholar.DamageGain.ToString(),Math.Round(100.0 * (scholar.TotalDamage / (scholar.TotalDamage - scholar.DamageGain) - 1.0), 3).ToString(),
                 Math.Round((double)(moving.HitCount) / moving.TotalHitCount * 100,1).ToString(),moving.HitCount.ToString(),moving.DamageGain.ToString(),Math.Round(100.0 * (moving.TotalDamage / (moving.TotalDamage - moving.DamageGain) - 1.0), 3).ToString(),
-                Math.Round(statsBoss.FlankingCount / (double)statsBoss.DirectDamageCount * 100,1).ToString(),statsBoss.FlankingCount.ToString(),
-                Math.Round(statsBoss.GlanceCount / (double)statsBoss.DirectDamageCount * 100,1).ToString(),statsBoss.GlanceCount.ToString(),
+                Math.Round(statsBoss.FlankingCount / (double)statsBoss.ConnectedDirectDamageCount * 100,1).ToString(),statsBoss.FlankingCount.ToString(),
+                Math.Round(statsBoss.GlanceCount / (double)statsBoss.ConnectedDirectDamageCount * 100,1).ToString(),statsBoss.GlanceCount.ToString(),
                 Math.Round(statsBoss.Missed / (double)statsBoss.DirectDamageCount * 100,1).ToString(),statsBoss.Missed.ToString(),
                 statsBoss.DirectDamageCount.ToString(),
                 statsBoss.Interrupts.ToString(),statsBoss.Invulned.ToString(),stats.TimeWasted.ToString(),stats.TimeSaved.ToString(),stats.SwapCount.ToString() });
@@ -317,8 +317,8 @@ namespace GW2EIBuilders
                 Math.Round((double)(stats.CriticalCount) / stats.CritableDirectDamageCount * 100,1).ToString(), stats.CriticalCount.ToString(),stats.CriticalDmg.ToString(),
                 Math.Round((double)(scholar.HitCount) / scholar.TotalHitCount * 100,1).ToString(),scholar.HitCount.ToString(),scholar.DamageGain.ToString(),Math.Round(100.0 * (scholar.TotalDamage / (scholar.TotalDamage - scholar.DamageGain) - 1.0), 3).ToString(),
                 Math.Round((double)(moving.HitCount) / moving.TotalHitCount * 100,1).ToString(),moving.HitCount.ToString(),moving.DamageGain.ToString(),Math.Round(100.0 * (moving.TotalDamage / (moving.TotalDamage - moving.DamageGain) - 1.0), 3).ToString(),
-                Math.Round(stats.FlankingCount / (double)stats.DirectDamageCount * 100,1).ToString(),stats.FlankingCount.ToString(),
-                Math.Round(stats.GlanceCount / (double)stats.DirectDamageCount * 100,1).ToString(),stats.GlanceCount.ToString(),
+                Math.Round(stats.FlankingCount / (double)stats.ConnectedDirectDamageCount * 100,1).ToString(),stats.FlankingCount.ToString(),
+                Math.Round(stats.GlanceCount / (double)stats.ConnectedDirectDamageCount * 100,1).ToString(),stats.GlanceCount.ToString(),
                 Math.Round(stats.Missed / (double)stats.DirectDamageCount * 100,1).ToString(),stats.Missed.ToString(),
                 stats.DirectDamageCount.ToString(),
                 stats.Interrupts.ToString(),stats.Invulned.ToString(),stats.TimeWasted.ToString(),stats.TimeSaved.ToString(),stats.SwapCount.ToString() });
