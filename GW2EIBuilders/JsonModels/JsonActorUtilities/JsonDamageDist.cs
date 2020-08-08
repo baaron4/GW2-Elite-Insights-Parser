@@ -65,6 +65,10 @@ namespace GW2EIBuilders.JsonModels
         /// </summary>
         public int InvulDamage { get; }
         /// <summary>
+        /// Critical damage
+        /// </summary>
+        public int CritDamage { get; }
+        /// <summary>
         /// ID of the damaging skill
         /// </summary>
         /// <seealso cref="JsonLog.SkillMap"/>
@@ -116,6 +120,7 @@ namespace GW2EIBuilders.JsonModels
                 {
                     Flank += dmgEvt.IsFlanking ? 1 : 0;
                     Crit += dmgEvt.HasCrit ? 1 : 0;
+                    CritDamage += dmgEvt.HasCrit ? dmgEvt.Damage : 0;
                     Glance += dmgEvt.HasGlanced ? 1 : 0;
                     Missed += dmgEvt.IsBlind ? 1 : 0;
                     Evaded += dmgEvt.IsEvaded ? 1 : 0;

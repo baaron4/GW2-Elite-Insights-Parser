@@ -60,7 +60,7 @@ namespace GW2EIEvtcParser.EIData
                         Blocked++;
                     }
                     DirectDamageCount++;
-                    if (SkillItem.CanCrit(dl.SkillId, log.LogData.GW2Build) && !dl.HasNotConnected)
+                    if (SkillItem.CanCrit(dl.SkillId, log.LogData.GW2Build) && dl.HasHit)
                     {
                         if (dl.HasCrit)
                         {
