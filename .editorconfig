@@ -123,23 +123,65 @@ csharp_preserve_single_line_blocks = true
 # CA1303: Do not pass literals as localized parameters
 dotnet_diagnostic.CA1303.severity = silent
 
+# CA1305: Specify IFormatProvider
+dotnet_diagnostic.CA1305.severity = silent
+
+# CA1304: Specify CultureInfo
+dotnet_diagnostic.CA1304.severity = silent
+
+# CA1307: Specify StringComparison
+dotnet_diagnostic.CA1307.severity = silent
+
 # CA1031: Do not catch general exception types
 dotnet_diagnostic.CA1031.severity = none
 
+# CA1060: Move pinvokes to native methods class
+dotnet_diagnostic.CA1060.severity = none
+
+# CA1032: Implement standard exception constructors
+dotnet_diagnostic.CA1032.severity = none
+
+# CA2237: Mark ISerializable types with serializable
+dotnet_diagnostic.CA2237.severity = none
+
 # CA1062: Validate arguments of public methods
-dotnet_diagnostic.CA1062.severity = none
+dotnet_diagnostic.CA1062.severity = silent
 
-# CA1054: Uri parameters should not be strings
-dotnet_diagnostic.CA1054.severity = none
+# CA1819: Properties should not return arrays
+dotnet_diagnostic.CA1819.severity = none
 
-# CA1056: Uri properties should not be strings
-dotnet_diagnostic.CA1056.severity = none
+# CA1034: Nested types should not be visible
+dotnet_diagnostic.CA1034.severity = none
 
-# CA1812: 
-dotnet_diagnostic.CA1812.severity = none
+# CA1716: Identifiers should not match keywords
+dotnet_diagnostic.CA1716.severity = none
+
+# CA1028: Enum Storage should be Int32
+dotnet_diagnostic.CA1028.severity = suggestion
+
+# CA1720: Identifier contains type name
+dotnet_diagnostic.CA1720.severity = none
 
 # CA2227: Collection properties should be read only
-dotnet_diagnostic.CA2227.severity = silent
+dotnet_diagnostic.CA2227.severity = none
+
+# CA1056: Uri properties should not be strings
+dotnet_diagnostic.CA1056.severity = suggestion
+
+# CA1721: Property names should not match get methods
+dotnet_diagnostic.CA1721.severity = none
+
+# CA1801: Review unused parameters
+dotnet_diagnostic.CA1801.severity = silent
+
+# CA1812:
+dotnet_diagnostic.CA1812.severity = silent
+
+# CA1724:
+dotnet_diagnostic.CA1724.severity = silent
+
+# CA1054: Uri parameters should not be strings
+dotnet_diagnostic.CA1054.severity = suggestion
 
 [*.vb] 
 # Modifier preferences 

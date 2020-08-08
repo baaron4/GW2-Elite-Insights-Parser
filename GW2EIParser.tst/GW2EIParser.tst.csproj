@@ -29,9 +29,6 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />
   </ItemGroup>
   <ItemGroup>
-    <AdditionalFiles Include=".editorconfig" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\GW2EIBuilders\GW2EIBuilders.csproj" />
     <ProjectReference Include="..\GW2EIDiscord\GW2EIDiscord.csproj" />
     <ProjectReference Include="..\GW2EIDPSReport\GW2EIDPSReport.csproj" />

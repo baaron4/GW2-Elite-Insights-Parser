@@ -9,10 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <AdditionalFiles Include=".editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Discord.Net.Webhook" Version="2.2.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
       <PrivateAssets>all</PrivateAssets>
