@@ -21,14 +21,14 @@
                     <th>Min</th>
                     <th>Avg</th>
                     <th>Max</th>
-                    <th>Casts</th>
+                    <th v-if="actor !== null">Casts</th>
                     <th>Hits</th>
                     <th>Hits per Cast</th>
                     <th>Crit</th>
                     <th>Flank</th>
                     <th>Glance</th>
-                    <th>Wasted</th>
-                    <th>Saved</th>
+                    <th v-if="actor !== null">Wasted</th>
+                    <th v-if="actor !== null">Saved</th>
                 </tr>
             </thead>
             <tbody>
@@ -43,7 +43,7 @@
                     <td>{{ Math.max(row[3],0) }}</td>
                     <td>{{ round(row[2]/row[6]) }}</td>
                     <td>{{ row[4] }}</td>
-                    <td>{{ !getSkill(row[0], row[1]).condi && row[5] ? row[5] : ''}}</td>
+                    <td v-if="actor !== null">{{ !getSkill(row[0], row[1]).condi && row[5] ? row[5] : ''}}</td>
                     <td>{{ row[6] }}</td>
                     <td>{{(!getSkill(row[0], row[1]).condi && row[6] && row[5]) ? round2(row[6]/row[5]) : ''}}</td>
                     <td
@@ -58,10 +58,10 @@
                         :data-original-title="(!getSkill(row[0], row[1]).condi && row[6]) ? row[9] +' out of ' + row[6] + ' hits': false">
                         {{(!getSkill(row[0], row[1]).condi && row[6]) ? round2(row[9]*100/row[6]) + '%' : ''}}
                     </td>
-                    <td
+                    <td v-if="actor !== null"
                         :data-original-title="row[10] ? round2(100.0 * row[10]/phase.durationS) + '% of the phase' : false">
                         {{ row[10] ? row[10] + 's' : ''}}</td>
-                    <td
+                    <td v-if="actor !== null"
                         :data-original-title="row[11] ? round2(100.0 * row[11]/phase.durationS) + '% of the phase' : false">
                         {{ row[11] ? row[11] + 's' : ''}}</td>
                 </tr>
@@ -79,14 +79,14 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td v-if="actor !== null"></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td v-if="actor !== null"></td>
+                    <td v-if="actor !== null"></td>
                 </tr>
             </tfoot>
         </table>
