@@ -187,7 +187,7 @@ namespace GW2EIBuilders.JsonModels
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                res[i] = JsonDamageDist.BuildJsonDamageDistList(actor.GetDamageLogs(target, log, phase).Where(x => !x.HasDowned).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
+                res[i] = JsonDamageDist.BuildJsonDamageDistList(actor.GetDamageLogs(target, log, phase.Start, phase.End).Where(x => !x.HasDowned).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
             }
             return res;
         }

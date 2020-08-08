@@ -202,7 +202,7 @@ namespace GW2EIBuilders.HtmlModels
             var dto = new DmgDistributionDto();
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
             List<AbstractCastEvent> casting = p.GetCastLogs(log, phase.Start, phase.End);
-            List<AbstractDamageEvent> damageLogs = p.GetJustPlayerDamageLogs(target, log, phase);
+            List<AbstractDamageEvent> damageLogs = p.GetJustActorDamageLogs(target, log, phase.Start, phase.End);
             dto.TotalDamage = dps.Damage;
             dto.ContributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
             dto.ContributedShieldDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.ShieldDamage) : 0;
@@ -230,7 +230,7 @@ namespace GW2EIBuilders.HtmlModels
             var dto = new DmgDistributionDto();
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
             List<AbstractCastEvent> casting = minions.GetCastLogs(log, phase.Start, phase.End);
-            List<AbstractDamageEvent> damageLogs = minions.GetDamageLogs(target, log, phase);
+            List<AbstractDamageEvent> damageLogs = minions.GetDamageLogs(target, log, phase.Start, phase.End);
             dto.ContributedDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
             dto.ContributedShieldDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.ShieldDamage) : 0;
             dto.TotalDamage = dps.Damage;

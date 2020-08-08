@@ -67,7 +67,7 @@ namespace GW2EIBuilders.JsonModels
             {
                 int tot = 0;
                 int shdTot = 0;
-                foreach (AbstractDamageEvent de in minions.GetDamageLogs(null, log, phase))
+                foreach (AbstractDamageEvent de in minions.GetDamageLogs(null, log, phase.Start, phase.End))
                 {
                     tot += de.Damage;
                     shdTot = de.ShieldDamage;
@@ -90,7 +90,7 @@ namespace GW2EIBuilders.JsonModels
                     {
                         int tot = 0;
                         int shdTot = 0;
-                        foreach (AbstractDamageEvent de in minions.GetDamageLogs(tar, log, phase))
+                        foreach (AbstractDamageEvent de in minions.GetDamageLogs(tar, log, phase.Start, phase.End))
                         {
                             tot += de.Damage;
                             shdTot = de.ShieldDamage;
@@ -115,7 +115,7 @@ namespace GW2EIBuilders.JsonModels
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                TotalDamageDist[i] = JsonDamageDist.BuildJsonDamageDistList(minions.GetDamageLogs(null, log, phase).Where(x => !x.HasDowned).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
+                TotalDamageDist[i] = JsonDamageDist.BuildJsonDamageDistList(minions.GetDamageLogs(null, log, phase.Start, phase.End).Where(x => !x.HasDowned).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
             }
             if (!isNPCMinion)
             {
@@ -127,7 +127,7 @@ namespace GW2EIBuilders.JsonModels
                     for (int j = 0; j < phases.Count; j++)
                     {
                         PhaseData phase = phases[j];
-                        TargetDamageDist[i][j] = JsonDamageDist.BuildJsonDamageDistList(minions.GetDamageLogs(target, log, phase).Where(x => !x.HasDowned).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
+                        TargetDamageDist[i][j] = JsonDamageDist.BuildJsonDamageDistList(minions.GetDamageLogs(target, log, phase.Start, phase.End).Where(x => !x.HasDowned).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
                     }
                 }
             }

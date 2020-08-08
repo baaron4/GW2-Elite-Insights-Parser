@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal FinalGameplayStats(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor, AbstractSingleActor target)
         {
-            List<AbstractDamageEvent> dls = actor.GetJustPlayerDamageLogs(target, log, phase);
+            List<AbstractDamageEvent> dls = actor.GetJustActorDamageLogs(target, log, phase.Start, phase.End);
             foreach (AbstractDamageEvent dl in dls)
             {
                 if (!(dl is NonDirectDamageEvent))

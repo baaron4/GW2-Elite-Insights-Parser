@@ -132,7 +132,7 @@ namespace GW2EIEvtcParser.EIData
                 return res;
             }
             var dmgList = new List<int>();
-            List<AbstractDamageEvent> damageLogs = GetDamageLogs(target, log, phase);
+            List<AbstractDamageEvent> damageLogs = GetHitDamageLogs(target, log, phase);
             // fill the graph, full precision
             var dmgListFull = new List<int>();
             for (int i = 0; i <= phase.DurationInMS; i++)
@@ -733,6 +733,11 @@ namespace GW2EIEvtcParser.EIData
             return DamageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
+        public List<AbstractDamageEvent> GetJustActorDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        {
+            return GetDamageLogs(target, log, start, end).Where(x => x.From == AgentItem).ToList();
+        }
+
         public override List<AbstractDamageEvent> GetDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
             if (DamageTakenlogs == null)
@@ -757,7 +762,10 @@ namespace GW2EIEvtcParser.EIData
             return DamageTakenlogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public List<AbstractDamageEvent> GetJustPlayerDamageLogs(AbstractActor target, ParsedEvtcLog log, PhaseData phase)
+        /// <summary>
+        /// cached method for damage modifiers
+        /// </summary>
+        internal List<AbstractDamageEvent> GetJustActorHitDamageLogs(AbstractActor target, ParsedEvtcLog log, PhaseData phase)
         {
             if (!_selfDamageLogsPerPhasePerTarget.TryGetValue(phase, out Dictionary<AbstractActor, List<AbstractDamageEvent>> targetDict))
             {
@@ -766,7 +774,7 @@ namespace GW2EIEvtcParser.EIData
             }
             if (!targetDict.TryGetValue(target ?? ParserHelper._nullActor, out List<AbstractDamageEvent> dls))
             {
-                dls = GetDamageLogs(target, log, phase).Where(x => x.From == AgentItem).ToList();
+                dls = GetHitDamageLogs(target, log, phase).Where(x => x.From == AgentItem).ToList();
                 targetDict[target ?? ParserHelper._nullActor] = dls;
             }
             return dls;
