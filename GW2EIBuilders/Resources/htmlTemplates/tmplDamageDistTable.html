@@ -42,7 +42,7 @@
             <tbody>
                 <tr v-for="row in dmgdist.distribution" :class="{condi: getSkill(row[0], row[1]).condi}">
                     <td class="text-left" :data-original-title="getSkill(row[0], row[1]).id">
-                        <img :src="getSkill(row[0], row[1]).icon" class="icon icon-hover"> 
+                        <img :src="getSkill(row[0], row[1]).icon" class="icon"> 
                         {{getSkill(row[0],row[1]).name}}
                     </td>
                     <td>{{ round3(100*row[2]/dmgdist.contributedDamage) }}%</td>
