@@ -25,7 +25,7 @@ namespace GW2EIParser
         /// </summary>
         public List<string> GeneratedFiles { get; }
 
-        public OperationController(string parserName, Version parserVersion, string location, string status) : base(parserName, parserVersion)
+        public OperationController(Version parserVersion, string location, string status) : base(parserVersion)
         {
             Status = status;
             Location = location;

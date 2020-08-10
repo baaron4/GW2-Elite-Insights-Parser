@@ -25,7 +25,7 @@ namespace GW2EIParser.tst
 
         private class TestOperationController : ParserController
         {
-            public TestOperationController() : base("EI Stability Tests", new Version(1, 0))
+            public TestOperationController() : base(new Version(1, 0))
             {
 
             }

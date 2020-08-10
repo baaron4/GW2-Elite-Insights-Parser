@@ -23,7 +23,6 @@ namespace GW2EIParser
         internal static HTMLAssets htmlAssets { get; set; }
 
         internal static Version ParserVersion { get; } = new Version(Application.ProductVersion);
-        internal static string ParserName { get; } = "Elite Insights";
 
         private static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
 
@@ -55,7 +54,7 @@ namespace GW2EIParser
             //
             builder.WithTitle(log.FightData.GetFightName(log));
             builder.WithTimestamp(DateTime.Now);
-            builder.WithAuthor(log.ParserName + " " + log.ParserVersion.ToString(), "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EIParser/Content/LI.png?raw=true", "https://github.com/baaron4/GW2-Elite-Insights-Parser");
+            builder.WithAuthor("Elite Insights " + ParserVersion.ToString(), "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EIParser/Content/LI.png?raw=true", "https://github.com/baaron4/GW2-Elite-Insights-Parser");
             builder.WithFooter(log.LogData.LogStartStd + " / " + log.LogData.LogEndStd);
             builder.WithColor(log.FightData.Success ? Color.Green : Color.Red);
             if (dpsReportPermalink.Length > 0)

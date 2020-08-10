@@ -20,8 +20,6 @@ namespace GW2EIBuilders
 
         private readonly string _scriptVersion;
         private readonly int _scriptVersionRev;
-        private readonly Version _version;
-        private readonly string _parser;
 
         private readonly ParsedEvtcLog _log;
         private readonly bool _cr;
@@ -42,12 +40,11 @@ namespace GW2EIBuilders
             }
             _eiJS = assets.EIJavascriptCode;
             _eiCRJS = assets.EICRJavascriptCode;
-            (_parser, _version) = (log.ParserName, log.ParserVersion);
-            _scriptVersion = _version.Major + "." + _version.Minor;
+            _scriptVersion = log.ParserVersion.Major + "." + log.ParserVersion.Minor;
 #if !DEBUG
-            _scriptVersion += "." + _version.Build;
+            _scriptVersion += "." + log.ParserVersion.Build;
 #endif
-            _scriptVersionRev = _version.Revision;
+            _scriptVersionRev = log.ParserVersion.Revision;
             _log = log;
 
             _uploadLink = uploadString ?? new string[] { "", "", "" };
@@ -76,7 +73,7 @@ namespace GW2EIBuilders
             _log.UpdateProgressWithCancellationCheck("HTML: building Combat Replay JS");
             html = html.Replace("<!--${CombatReplayJS}-->", BuildCombatReplayJS(path));
 
-            html = html.Replace("'${logDataJson}'", ToJson(LogDataDto.BuildLogData(_log, _usedSkills, _usedBuffs, _usedDamageMods, _cr, _light, _uploadLink, _parser, _version)));
+            html = html.Replace("'${logDataJson}'", ToJson(LogDataDto.BuildLogData(_log, _usedSkills, _usedBuffs, _usedDamageMods, _cr, _light, _uploadLink)));
 
             _log.UpdateProgressWithCancellationCheck("HTML: building Graph Data");
             html = html.Replace("'${graphDataJson}'", ToJson(ChartDataDto.BuildChartData(_log)));

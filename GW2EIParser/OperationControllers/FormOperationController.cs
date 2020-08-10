@@ -32,7 +32,7 @@ namespace GW2EIParser
         /// </summary>
         public OperationState State { get; protected set; }
 
-        public FormOperationController(string parserName, Version parserVersion, string location, string status, DataGridView dgv) : base(parserName, parserVersion, location, status)
+        public FormOperationController(Version parserVersion, string location, string status, DataGridView dgv) : base(parserVersion, location, status)
         {
             ButtonText = "Parse";
             State = OperationState.Ready;
