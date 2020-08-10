@@ -13,17 +13,22 @@ namespace GW2EIEvtcParser.EIData
         public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long boonid, ParsedEvtcLog log)
         {
             Dictionary<AgentItem, BuffDistributionItem> distrib = GetDistrib(distribs, boonid);
-            AgentItem agent = Src;
+            AgentItem agent = Src; 
+            var value = GetValue(start, end);
+            if (value == 0)
+            {
+                return;
+            }
             if (distrib.TryGetValue(agent, out BuffDistributionItem toModify))
             {
-                toModify.Overstack += GetValue(start, end);
+                toModify.Overstack += value;
                 distrib[agent] = toModify;
             }
             else
             {
                 distrib.Add(agent, new BuffDistributionItem(
                     0,
-                    GetValue(start, end), 0, 0, 0, 0));
+                    value, 0, 0, 0, 0));
             }
         }
     }

@@ -24,6 +24,8 @@ namespace GW2EIParser
         /// Location of the generated files
         /// </summary>
         public List<string> GeneratedFiles { get; }
+        
+        internal string Elapsed { get; set; } = "";
 
         public OperationController(Version parserVersion, string location, string status) : base(parserVersion)
         {
@@ -35,6 +37,7 @@ namespace GW2EIParser
 
         public void FinalizeStatus(string prefix)
         {
+            StatusList.Insert(0, Elapsed);
             Status = StatusList.LastOrDefault() ?? "";
             foreach (string generatedFile in GeneratedFiles)
             {

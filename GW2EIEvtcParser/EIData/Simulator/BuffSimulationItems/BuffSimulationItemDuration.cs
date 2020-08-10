@@ -37,6 +37,10 @@ namespace GW2EIEvtcParser.EIData
         {
             Dictionary<AgentItem, BuffDistributionItem> distrib = GetDistrib(distribs, boonid);
             long cDur = GetClampedDuration(start, end);
+            if (cDur == 0)
+            {
+                return;
+            }
             AgentItem agent = _src;
             AgentItem seedAgent = _seedSrc;
             if (distrib.TryGetValue(agent, out BuffDistributionItem toModify))

@@ -286,7 +286,12 @@ namespace GW2EIEvtcParser.EIData
                         for (int i = 0; i < phases.Count; i++)
                         {
                             PhaseData phase = phases[i];
-                            Add(_buffPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
+                            var value = simul.GetClampedDuration(phase.Start, phase.End);
+                            if (value == 0)
+                            {
+                                continue;
+                            }
+                            Add(_buffPresence[i], boonid, value);
                             simul.SetBuffDistributionItem(_buffDistribution[i], phase.Start, phase.End, boonid, log);
                         }
                         // Graph
