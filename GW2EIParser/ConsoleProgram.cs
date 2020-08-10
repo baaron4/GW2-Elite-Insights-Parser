@@ -24,7 +24,7 @@ namespace GW2EIParser
 
         private static void ParseLog(string logFile)
         {
-            var operation = new ConsoleOperationController(ProgramHelper.ParserName, ProgramHelper.ParserVersion, logFile, "Ready to parse");
+            var operation = new ConsoleOperationController(ProgramHelper.ParserVersion, logFile, "Ready to parse");
             try
             {
                 ProgramHelper.DoWork(operation);

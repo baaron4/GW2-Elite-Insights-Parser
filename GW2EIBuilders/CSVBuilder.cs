@@ -18,8 +18,6 @@ namespace GW2EIBuilders
         private StreamWriter _sw;
         private readonly string _delimiter;
         private readonly string[] _uploadResult;
-        private readonly Version _version;
-        private readonly string _parser;
 
         private readonly List<Player> _noFakePlayers;
 
@@ -29,7 +27,6 @@ namespace GW2EIBuilders
             {
                 throw new InvalidDataException("Missing settings in CSVBuilder");
             }
-            (_parser, _version) = (log.ParserName, log.ParserVersion);
             _log = log;
             _delimiter = settings.Delimiter;
             _phases = log.FightData.GetPhases(log);
@@ -73,7 +70,7 @@ namespace GW2EIBuilders
             _sw = sw;
             //header
             _log.UpdateProgressWithCancellationCheck("CSV: Building Meta Data");
-            WriteLine(new[] { _parser, _version.ToString() });
+            WriteLine(new[] { "Elite Insights", _log.ParserVersion.ToString() });
             WriteLine(new[] { "ARC Version", _log.LogData.ArcVersion });
             WriteLine(new[] { "Fight ID", _log.FightData.TriggerID.ToString() });
             WriteLine(new[] { "Recorded By", _log.LogData.PoVName });

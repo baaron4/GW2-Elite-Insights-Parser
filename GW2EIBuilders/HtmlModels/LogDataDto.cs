@@ -136,7 +136,7 @@ namespace GW2EIBuilders.HtmlModels
             return false;
         }
 
-        internal static LogDataDto BuildLogData(ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills,Dictionary<long, Buff> usedBuffs, HashSet<DamageModifier> usedDamageMods, bool cr, bool light, string[] uploadLinks, string parser, Version version)
+        internal static LogDataDto BuildLogData(ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills,Dictionary<long, Buff> usedBuffs, HashSet<DamageModifier> usedDamageMods, bool cr, bool light, string[] uploadLinks)
         {
             GeneralStatistics statistics = log.Statistics;
             log.UpdateProgressWithCancellationCheck("HTML: building Log Data");
@@ -147,7 +147,7 @@ namespace GW2EIBuilders.HtmlModels
                 ArcVersion = log.LogData.ArcVersion,
                 Gw2Build = log.LogData.GW2Build,
                 FightID = log.FightData.TriggerID,
-                Parser = parser + " " + version.ToString(),
+                Parser = "Elite Insights " + log.ParserVersion.ToString(),
                 RecordedBy = log.LogData.PoVName,
                 UploadLinks = uploadLinks.ToList()
             };

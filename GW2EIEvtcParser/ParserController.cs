@@ -10,14 +10,11 @@ namespace GW2EIEvtcParser
 
         protected List<string> StatusList { get; }
 
-        public string ParserName { get; }
-
         public Version ParserVersion { get; }
 
-        public ParserController(string parserName, Version parserVersion)
+        public ParserController(Version parserVersion)
         {
             StatusList = new List<string>();
-            ParserName = parserName;
             ParserVersion = parserVersion;
         }
 

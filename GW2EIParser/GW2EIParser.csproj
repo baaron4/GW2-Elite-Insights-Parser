@@ -61,15 +61,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Update="MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Update="MainForm.cs" />
     <Compile Update="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Update="Settings\SettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Update="Settings\SettingsForm.cs" />
     <Compile Update="Settings\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
@@ -94,9 +90,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <AdditionalFiles Include=".editorconfig" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Dodge_Instructor.png" />

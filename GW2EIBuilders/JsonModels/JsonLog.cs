@@ -131,17 +131,9 @@ namespace GW2EIBuilders.JsonModels
         }
 
         /// <summary>
-        /// The used EI version. DEPRECATED, use ParserName and ParserVersion instead
+        /// The used EI version.
         /// </summary>
         public string EliteInsightsVersion { get; }
-        /// <summary>
-        /// The used parser's name
-        /// </summary>
-        public string ParserName { get; }
-        /// <summary>
-        /// The used parser's version
-        /// </summary>
-        public string ParserVersion { get; }
         /// <summary>
         /// The id with which the log has been triggered
         /// </summary>
@@ -270,10 +262,7 @@ namespace GW2EIBuilders.JsonModels
             TriggerID = log.FightData.TriggerID;
             FightName = log.FightData.GetFightName(log);
             FightIcon = log.FightData.Logic.Icon;
-            (string parserName, Version parserVersion) = (log.ParserName, log.ParserVersion);
-            ParserVersion = parserVersion.ToString();
-            EliteInsightsVersion = ParserVersion;
-            ParserName = parserName;
+            EliteInsightsVersion = log.ParserVersion.ToString();
             ArcVersion = log.LogData.ArcVersion;
             RecordedBy = log.LogData.PoVName;
             TimeStart = log.LogData.LogStart;

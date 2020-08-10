@@ -24,10 +24,10 @@ namespace GW2EIParser
         /// Location of the generated files
         /// </summary>
         public List<string> GeneratedFiles { get; }
-
+        
         internal string Elapsed { get; set; } = "";
 
-        public OperationController(string parserName, Version parserVersion, string location, string status) : base(parserName, parserVersion)
+        public OperationController(Version parserVersion, string location, string status) : base(parserVersion)
         {
             Status = status;
             Location = location;
