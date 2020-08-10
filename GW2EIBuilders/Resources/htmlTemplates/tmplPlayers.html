@@ -34,11 +34,13 @@
                             <img v-for="wep in player.a2Set" :src="getIcon(wep)" :data-original-title="wep"
                                  class="icon">
                         </div>
-                        <div class="shorten" :data-original-title="player.acc">
+                        <div class="shorten">
                             <img v-if="player.isCommander"
                                  src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png"
                                  alt="Commander" class="icon" data-original-title="Commander">
-                            {{ player.name }}
+                            <span :data-original-title="player.acc">
+                                {{ player.name }}
+                            </span>
                         </div>
                     </td>
                 </tr>

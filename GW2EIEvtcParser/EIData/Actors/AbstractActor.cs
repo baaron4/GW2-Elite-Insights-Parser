@@ -1,5 +1,6 @@
 ﻿using GW2EIEvtcParser.ParsedData;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -40,7 +41,10 @@ namespace GW2EIEvtcParser.EIData
         // Damage logs
         public abstract List<AbstractDamageEvent> GetDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
 
-        public List<AbstractDamageEvent> GetDamageLogs(AbstractActor target, ParsedEvtcLog log, PhaseData phase)
+        /// <summary>
+        /// cached method for damage modifiers
+        /// </summary>
+        internal List<AbstractDamageEvent> GetHitDamageLogs(AbstractActor target, ParsedEvtcLog log, PhaseData phase)
         {
             if (!_damageLogsPerPhasePerTarget.TryGetValue(phase, out Dictionary<AbstractActor, List<AbstractDamageEvent>> targetDict))
             {
@@ -49,7 +53,7 @@ namespace GW2EIEvtcParser.EIData
             }
             if (!targetDict.TryGetValue(target ?? ParserHelper._nullActor, out List<AbstractDamageEvent> dls))
             {
-                dls = GetDamageLogs(target, log, phase.Start, phase.End);
+                dls = GetDamageLogs(target, log, phase.Start, phase.End).Where(x => x.HasHit).ToList();
                 targetDict[target ?? ParserHelper._nullActor] = dls;
             }
             return dls;

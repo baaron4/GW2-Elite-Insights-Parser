@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -26,8 +28,9 @@ namespace GW2EIEvtcParser.EIData
             double phaseDuration = (phase.DurationInMS) / 1000.0;
             int damage;
             double dps = 0.0;
+            List<AbstractDamageEvent> damageLogs = actor.GetDamageLogs(target, log, phase.Start, phase.End);
             //DPS
-            damage = actor.GetDamageLogs(target, log, phase).Sum(x => x.Damage);
+            damage = damageLogs.Sum(x => x.Damage);
 
             if (phaseDuration > 0)
             {
@@ -36,7 +39,7 @@ namespace GW2EIEvtcParser.EIData
             Dps = (int)Math.Round(dps);
             Damage = damage;
             //Condi DPS
-            damage = actor.GetDamageLogs(target, log, phase).Sum(x => x.IsCondi(log) ? x.Damage : 0);
+            damage = damageLogs.Sum(x => x.IsCondi(log) ? x.Damage : 0);
 
             if (phaseDuration > 0)
             {
@@ -52,8 +55,9 @@ namespace GW2EIEvtcParser.EIData
             }
             PowerDps = (int)Math.Round(dps);
             PowerDamage = damage;
+            var actorDamageLogs = actor.GetJustActorDamageLogs(target, log, phase.Start, phase.End);
             // Actor DPS
-            damage = actor.GetJustPlayerDamageLogs(target, log, phase).Sum(x => x.Damage);
+            damage = actorDamageLogs.Sum(x => x.Damage);
 
             if (phaseDuration > 0)
             {
@@ -62,7 +66,7 @@ namespace GW2EIEvtcParser.EIData
             ActorDps = (int)Math.Round(dps);
             ActorDamage = damage;
             //Actor Condi DPS
-            damage = actor.GetJustPlayerDamageLogs(target, log, phase).Sum(x => x.IsCondi(log) ? x.Damage : 0);
+            damage = actorDamageLogs.Sum(x => x.IsCondi(log) ? x.Damage : 0);
 
             if (phaseDuration > 0)
             {

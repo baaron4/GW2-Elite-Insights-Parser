@@ -25,6 +25,10 @@ namespace GW2EIBuilders.JsonModels
             /// </summary>
             public int EvadedCount { get; }
             /// <summary>
+            /// Number of misses
+            /// </summary>
+            public int MissedCount { get; }
+            /// <summary>
             /// Number of dodges
             /// </summary>
             public int DodgeCount { get; }
@@ -32,10 +36,6 @@ namespace GW2EIBuilders.JsonModels
             /// Number of time an incoming attack was negated by invul
             /// </summary>
             public int InvulnedCount { get; }
-            /// <summary>
-            /// Damage negated by invul
-            /// </summary>
-            public int DamageInvulned { get; }
             /// <summary>
             /// Damage done against barrier
             /// </summary>
@@ -74,9 +74,9 @@ namespace GW2EIBuilders.JsonModels
                 DamageTaken = defenses.DamageTaken;
                 BlockedCount = defenses.BlockedCount;
                 DodgeCount = defenses.DodgeCount;
+                MissedCount = defenses.MissedCount;
                 EvadedCount = defenses.EvadedCount;
                 InvulnedCount = defenses.InvulnedCount;
-                DamageInvulned = defenses.DamageInvulned;
                 DamageBarrier = defenses.DamageBarrier;
                 InterruptedCount = defenses.InterruptedCount;
                 DownCount = defenses.DownCount;
@@ -167,9 +167,17 @@ namespace GW2EIBuilders.JsonModels
         public class JsonGameplayStats
         {
             /// <summary>
+            /// Number of damage hit
+            /// </summary>
+            public int TotalDamageCount { get; }
+            /// <summary>
             /// Number of direct damage hit
             /// </summary>
             public int DirectDamageCount { get; }
+            /// <summary>
+            /// Number of connected direct damage hit
+            /// </summary>
+            public int ConnectedDirectDamageCount { get; }
             /// <summary>
             /// Number of critable hit
             /// </summary>
@@ -195,6 +203,14 @@ namespace GW2EIBuilders.JsonModels
             /// </summary>
             public int Missed { get; }
             /// <summary>
+            /// Number of evaded hits
+            /// </summary>
+            public int Evaded { get; }
+            /// <summary>
+            /// Number of blocked hits
+            /// </summary>
+            public int Blocked { get; }
+            /// <summary>
             /// Number of hits that interrupted a skill
             /// </summary>
             public int Interrupts { get; }
@@ -205,28 +221,23 @@ namespace GW2EIBuilders.JsonModels
 
             internal JsonGameplayStats(FinalGameplayStats stats)
             {
+                TotalDamageCount = stats.TotalDamageCount;
                 DirectDamageCount = stats.DirectDamageCount;
+                ConnectedDirectDamageCount = stats.ConnectedDirectDamageCount;
                 CritableDirectDamageCount = stats.CritableDirectDamageCount;
                 CriticalRate = stats.CriticalCount;
                 CriticalDmg = stats.CriticalDmg;
                 FlankingRate = stats.FlankingCount;
                 GlanceRate = stats.GlanceCount;
                 Missed = stats.Missed;
+                Blocked = stats.Blocked;
+                Evaded = stats.Evaded;
                 Interrupts = stats.Interrupts;
                 Invulned = stats.Invulned;
             }
 
-            internal JsonGameplayStats(FinalGameplayStatsAll stats)
+            internal JsonGameplayStats(FinalGameplayStatsAll stats) : this(stats as FinalGameplayStats)
             {
-                DirectDamageCount = stats.DirectDamageCount;
-                CritableDirectDamageCount = stats.CritableDirectDamageCount;
-                CriticalRate = stats.CriticalCount;
-                CriticalDmg = stats.CriticalDmg;
-                FlankingRate = stats.FlankingCount;
-                GlanceRate = stats.GlanceCount;
-                Missed = stats.Missed;
-                Interrupts = stats.Interrupts;
-                Invulned = stats.Invulned;
             }
         }
 

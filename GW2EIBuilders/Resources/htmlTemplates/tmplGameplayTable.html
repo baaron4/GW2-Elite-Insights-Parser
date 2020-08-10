@@ -35,12 +35,20 @@
                     </th>
                     <th>
                         <img src="https://wiki.guildwars2.com/images/7/79/Daze.png" alt="Interupts"
-                            data-original-title="Number of hits interupted?/hits used to interupt"
+                            data-original-title="Number of hits used to interupt"
                             class="icon icon-hover">
                     </th>
                     <th>
                         <img src="https://wiki.guildwars2.com/images/e/eb/Determined.png" alt="Ivuln"
-                            data-original-title="times the enemy was invulnerable to attacks" class="icon icon-hover">
+                            data-original-title="Times the enemy was invulnerable to attacks" class="icon icon-hover">
+                    </th>
+                    <th>
+                        <img src="https://wiki.guildwars2.com/images/e/e2/Evade.png" alt="Evaded"
+                            data-original-title="Times the enemy evaded an attack" class="icon icon-hover">
+                    </th>
+                    <th>
+                        <img src="https://wiki.guildwars2.com/images/e/e5/Aegis.png" alt="Blocked"
+                            data-original-title="Times the enemy blocked an attack" class="icon icon-hover">
                     </th>
                     <th>
                         <img src="https://wiki.guildwars2.com/images/b/b3/Out_Of_Health_Potions.png" alt="Wasted"
@@ -78,24 +86,38 @@
                     <td class="text-left">{{row.player.name}}</td>
                     <td>{{row.player.acc}}</td>
                     <td
-                        :data-original-title="row.data[2] + ' out of ' + row.data[1] + ' critable hits<br>Total Damage Critical Damage: ' + row.data[3]">
+                        :data-original-title="row.data[2] + ' out of ' + row.data[1] + ' critable hit(s)<br>Total Damage Critical Damage: ' + row.data[3]">
                         {{round2(100*row.data[2] / row.data[1])}}%
                     </td>
-                    <td :data-original-title="row.data[4] + ' out of ' + row.data[0] + ' hits'">
-                        {{round2(100*row.data[4]/ row.data[0])}}%
+                    <td :data-original-title="row.data[4] + ' out of ' + row.data[11] + ' connected hit(s)'">
+                        {{round2(100*row.data[4]/ row.data[11])}}%
                     </td>
-                    <td :data-original-title="row.data[5] + ' out of ' + row.data[0] + ' hits'">
-                        {{round2(100*row.data[5]/ row.data[0])}}%
+                    <td :data-original-title="row.data[5] + ' out of ' + row.data[11] + ' connected hit(s)'">
+                        {{round2(100*row.data[5]/ row.data[11])}}%
                     </td>
-                    <td>{{row.data[6]}}</td>
-                    <td>{{row.data[7]}}</td>
-                    <td>{{row.data[8]}}</td>
+                    <td :data-original-title="round2(100*row.data[6]/ row.data[0]) + '% of hit(s)'">
+                        {{row.data[6]}}
+                    </td>
+                    <td :data-original-title="round2(100*row.data[7]/ row.data[12]) + '% connected hit(s)'">
+                        {{row.data[7]}}
+                    </td>
+                    <td>
+                        {{row.data[8]}}
+                    </td>
+                    <td :data-original-title="round2(100*row.data[9]/ row.data[0]) + '% of hit(s)'">
+                        {{row.data[9]}}
+                    </td>
+                    <td :data-original-title="round2(100*row.data[10]/ row.data[0]) + '% of hit(s)'">
+                        {{row.data[10]}}
+                    </td>
                     <td
                         :data-original-title="row.commons[1] + ' cancels <br>' + round2(100.0 * row.commons[0] / phase.durationS) + '% of the phase'">
-                        {{row.commons[0]}}</td>
+                        {{row.commons[0]}}
+                    </td>
                     <td
                         :data-original-title="row.commons[3] + ' cancels <br>' + round2(100.0 * row.commons[2] / phase.durationS) + '% of the phase'">
-                        {{row.commons[2]}}</td>
+                        {{row.commons[2]}}
+                    </td>
                     <td>{{row.commons[4]}}</td>
                     <td>{{row.commons[5]}}</td>
                     <td v-if="hasCommander">{{row.commons[6]}}</td>
@@ -108,18 +130,30 @@
                     <td class="text-left">{{row.name}}</td>
                     <td></td>
                     <td
-                        :data-original-title="row.data[2] + ' out of ' + row.data[1] + ' critable hits<br>Total Damage Critical Damage: ' + row.data[3]">
+                        :data-original-title="row.data[2] + ' out of ' + row.data[1] + ' critable hit(s)<br>Total Damage Critical Damage: ' + row.data[3]">
                         {{round2(100*row.data[2] / row.data[1])}}%
                     </td>
-                    <td :data-original-title="row.data[4] + ' out of ' + row.data[0] + ' hits'">
-                        {{round2(100*row.data[4]/ row.data[0])}}%
+                    <td :data-original-title="row.data[4] + ' out of ' + row.data[11] + ' connected hit(s)'">
+                        {{round2(100*row.data[4]/ row.data[11])}}%
                     </td>
-                    <td :data-original-title="row.data[5] + ' out of ' + row.data[0] + ' hits'">
-                        {{round2(100*row.data[5]/ row.data[0])}}%
+                    <td :data-original-title="row.data[5] + ' out of ' + row.data[11] + ' connected hit(s)'">
+                        {{round2(100*row.data[5]/ row.data[11])}}%
                     </td>
-                    <td>{{row.data[6]}}</td>
-                    <td>{{row.data[7]}}</td>
-                    <td>{{row.data[8]}}</td>
+                    <td :data-original-title="round2(100*row.data[6]/ row.data[0])+ '% of hit(s)'">
+                        {{row.data[6]}}
+                    </td>
+                    <td :data-original-title="round2(100*row.data[7]/ row.data[12]) + '% connected hit(s)'">
+                        {{row.data[7]}}
+                    </td>
+                    <td>
+                        {{row.data[8]}}
+                    </td>
+                    <td :data-original-title="round2(100*row.data[9]/ row.data[0])+ '% of hit(s)'">
+                        {{row.data[9]}}
+                    </td>
+                    <td :data-original-title="round2(100*row.data[10]/ row.data[0]) + '% of hit(s)'">
+                        {{row.data[10]}}
+                    </td>
                     <td :data-original-title="row.commons[1] + ' cancels'">{{round3(row.commons[0])}}</td>
                     <td :data-original-title="row.commons[3] + ' cancels'">{{round3(row.commons[2])}}</td>
                     <td>{{row.commons[4]}}</td>
@@ -132,6 +166,8 @@
 </template>
 
 <script>
+    var commonOffset = 12;
+
     Vue.component("gameplay-stats-component", {
         props: ["activetargets", "playerindex", "phaseindex"],
         template: `${template}`,
@@ -187,10 +223,10 @@
                     total.count++;
                     var stats = this.phase.dmgStats[i];
                     for (var j = 0; j < stats.length; j++) {
-                        if (j >= 9) {
-                            commons[j - 9] = stats[j];
-                            groups[player.group].commons[j - 9] = (groups[player.group].commons[j - 9] || 0) + commons[j - 9];
-                            total.commons[j - 9] = (total.commons[j - 9] || 0) + commons[j - 9];
+                        if (j >= commonOffset) {
+                            commons[j - commonOffset] = stats[j];
+                            groups[player.group].commons[j - commonOffset] = (groups[player.group].commons[j - commonOffset] || 0) + commons[j - commonOffset];
+                            total.commons[j - commonOffset] = (total.commons[j - commonOffset] || 0) + commons[j - commonOffset];
                         } else {
                             data[j] = stats[j];
                             groups[player.group].data[j] = (groups[player.group].data[j] || 0) + data[j];
@@ -250,10 +286,10 @@
                     total.count++;
                     var stats = this.phase.dmgStats[i];
                     for (var j = 0; j < stats.length; j++) {
-                        if (j >= 9) {
-                            commons[j - 9] = stats[j];
-                            groups[player.group].commons[j - 9] = (groups[player.group].commons[j - 9] || 0) + commons[j - 9];
-                            total.commons[j - 9] = (total.commons[j - 9] || 0) + commons[j - 9];
+                        if (j >= commonOffset) {
+                            commons[j - commonOffset] = stats[j];
+                            groups[player.group].commons[j - commonOffset] = (groups[player.group].commons[j - commonOffset] || 0) + commons[j - commonOffset];
+                            total.commons[j - commonOffset] = (total.commons[j - commonOffset] || 0) + commons[j - commonOffset];
                         } else {
                             for (var k = 0; k < this.activetargets.length; k++) {
                                 var tar = this.phase.dmgStatsTargets[i][this.activetargets[k]];

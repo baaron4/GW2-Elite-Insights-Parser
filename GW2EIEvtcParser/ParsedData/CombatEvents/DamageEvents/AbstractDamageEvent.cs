@@ -1,4 +1,6 @@
-﻿namespace GW2EIEvtcParser.ParsedData
+﻿using System;
+
+namespace GW2EIEvtcParser.ParsedData
 {
     public abstract class AbstractDamageEvent : AbstractTimeCombatEvent
     {
@@ -17,6 +19,7 @@
         public bool IsMoving { get; }
         public bool IsFlanking { get; }
         public bool HasHit { get; protected set; }
+        public bool DoubleProcHit { get; protected set; }
         public bool HasCrit { get; protected set; }
         public bool HasGlanced { get; protected set; }
         public bool IsBlind { get; protected set; }
@@ -39,10 +42,10 @@
             IFF = evtcItem.IFF;
         }
 
-        internal void NegateDamage()
+        internal void NegateShieldDamage()
         {
             //_damage = Damage;
-            Damage = 0;
+            Damage = Math.Max(Damage - ShieldDamage, 0);
         }
 
         public abstract bool IsCondi(ParsedEvtcLog log);

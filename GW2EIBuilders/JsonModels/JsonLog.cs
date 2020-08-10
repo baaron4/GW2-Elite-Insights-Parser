@@ -18,11 +18,12 @@ namespace GW2EIBuilders.JsonModels
         /// </summary>
         public class SkillDesc
         {
-            internal SkillDesc(SkillItem item)
+            internal SkillDesc(SkillItem item, ulong gw2Build)
             {
                 Name = item.Name;
                 AutoAttack = item.AA;
                 Icon = item.Icon;
+                CanCrit = SkillItem.CanCrit(item.ID, gw2Build);
             }
 
             /// <summary>
@@ -33,6 +34,10 @@ namespace GW2EIBuilders.JsonModels
             /// If the skill is an auto attack
             /// </summary>
             public bool AutoAttack { get; }
+            /// <summary>
+            /// If the skill can crit
+            /// </summary>
+            public bool CanCrit { get; }
             /// <summary>
             /// Icon of the skill
             /// </summary>

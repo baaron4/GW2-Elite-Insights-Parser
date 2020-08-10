@@ -58,10 +58,6 @@ namespace GW2EIEvtcParser
             FractalInstability,
             Unknown
         };
-        internal static T Clamp<T>(T value, T max, T min) where T : IComparable<T>
-        {
-            return value.CompareTo(max) > 0 ? max : (value.CompareTo(min) < 0 ? min : value);
-        }
 
         internal static T MaxBy<T, TComparable>(this IEnumerable<T> en, Func<T, TComparable> evaluate) where TComparable : IComparable<TComparable>
         {

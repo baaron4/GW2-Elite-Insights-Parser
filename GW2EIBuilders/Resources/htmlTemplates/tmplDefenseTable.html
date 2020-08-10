@@ -7,18 +7,45 @@
                     <th></th>
                     <th class="text-left">Name</th>
                     <th>Account</th>
-                    <th>Dmg Taken</th>
-                    <th>Dmg Barrier</th>
-                    <th>Blocked</th>
-                    <th>Invulned</th>
-                    <th>Interrupted</th>
-                    <th>Evaded</th>
                     <th>
-                        <span data-toggle="tooltip" data-html="true" data-placement="top" data-original-title="Dodges or Mirage Cloak ">Dodges</span>
+                        <img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="Damage Taken"
+                        data-original-title="Damage taken" class="icon icon-hover">
                     </th>
                     <th>
-                        <img src="https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png" alt="Downs" data-original-title="Times downed"
+                        <img src="https://wiki.guildwars2.com/images/thumb/c/cc/Barrier.png/30px-Barrier.png" alt="Damage Barrier"
+                        data-original-title="Damage absorbed by barrier"class="icon icon-hover">
+                    </th>
+                    <th>
+                        <img src="https://wiki.guildwars2.com/images/e/e5/Aegis.png" alt="Blocked"
+                            data-original-title="Number of times blocked an attack" class="icon icon-hover">
+                    </th>
+                    <th>
+                        <img src="https://wiki.guildwars2.com/images/e/eb/Determined.png" alt="Ivuln"
+                            data-original-title="Number of times was invulnerable to damage" class="icon icon-hover">
+                    </th>
+                    <th>
+                        <img src="https://wiki.guildwars2.com/images/7/79/Daze.png" alt="Interrupted"
+                            data-original-title="Number of times interrupted"
                             class="icon icon-hover">
+                    </th>
+                    <th>
+                        <img src="https://wiki.guildwars2.com/images/e/e2/Evade.png" alt="Evaded"
+                            data-original-title="Number of times evaded" class="icon icon-hover">
+                    </th>
+                    <th>
+                        <span data-toggle="tooltip" data-html="true" data-placement="top"
+                            data-original-title="Dodges or Mirage Cloak ">
+                            <img src="https://wiki.guildwars2.com/images/b/b2/Dodge.png" alt="Dodge"
+                            data-original-title="Number of times dodge" class="icon icon-hover">
+                        </span>
+                    </th>
+                    <th>
+                        <img src="https://wiki.guildwars2.com/images/3/33/Blinded.png" alt="Missed"
+                            data-original-title="Number of hits missed" class="icon icon-hover">
+                    </th>
+                    <th>
+                        <img src="https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png" alt="Downs"
+                            data-original-title="Times downed" class="icon icon-hover">
                     </th>
                     <th>
                         <img src="https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png" alt="Dead"
@@ -30,19 +57,23 @@
                 <tr v-for="row in tableData.rows" :class="{active: row.player.id === playerindex}">
                     <td>{{row.player.group}}</td>
                     <td :data-original-title="row.player.profession">
-                        <img :src="row.player.icon" :alt="row.player.profession" class="icon"><span style="display:none">{{row.player.profession}}</span>
+                        <img :src="row.player.icon" :alt="row.player.profession" class="icon"><span
+                            style="display:none">{{row.player.profession}}</span>
                     </td>
                     <td class="text-left">{{row.player.name}}</td>
                     <td>{{row.player.acc}}</td>
                     <td>{{row.def[0]}}</td>
                     <td>{{row.def[1]}}</td>
                     <td>{{row.def[2]}}</td>
-                    <td>{{row.def[3]}}</td>
+                    <td>
+                        {{row.def[3]}}
+                    </td>
                     <td>{{row.def[4]}}</td>
                     <td>{{row.def[5]}}</td>
                     <td>{{row.def[6]}}</td>
-                    <td :data-original-title="row.def[8]">{{row.def[7]}}</td>
-                    <td :data-original-title="row.def[10]">{{row.def[9]}}</td>
+                    <td>{{row.def[7]}}</td>
+                    <td :data-original-title="row.def[9]">{{row.def[8]}}</td>
+                    <td :data-original-title="row.def[11]">{{row.def[10]}}</td>
                 </tr>
             </tbody>
             <tfoot>
@@ -54,12 +85,15 @@
                     <td>{{sum.def[0]}}</td>
                     <td>{{sum.def[1]}}</td>
                     <td>{{sum.def[2]}}</td>
-                    <td>{{sum.def[3]}}</td>
+                    <td>
+                        {{sum.def[3]}}
+                    </td>
                     <td>{{sum.def[4]}}</td>
                     <td>{{sum.def[5]}}</td>
                     <td>{{sum.def[6]}}</td>
                     <td>{{sum.def[7]}}</td>
-                    <td>{{sum.def[9]}}</td>
+                    <td>{{sum.def[8]}}</td>
+                    <td>{{sum.def[10]}}</td>
                 </tr>
             </tfoot>
         </table>
@@ -91,7 +125,7 @@
                 }
                 var rows = [];
                 var sums = [];
-                var total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                var total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                 var groups = [];
                 var i;
                 for (i = 0; i < this.phase.defStats.length; i++) {
@@ -105,7 +139,7 @@
                         def: def
                     });
                     if (!groups[player.group]) {
-                        groups[player.group] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                        groups[player.group] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                     }
                     for (var j = 0; j < total.length; j++) {
                         total[j] += def[j];
