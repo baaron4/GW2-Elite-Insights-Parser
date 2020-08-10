@@ -54,12 +54,12 @@ namespace GW2EIBuilders.JsonModels
         /// ID of the buff
         /// </summary>
         /// <seealso cref="JsonLog.BuffMap"/>
-        public long Id { get; set; }
+        public long Id { get; internal set; }
         /// <summary>
         /// Array of buff data \n
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonBuffsGenerationData"/>
-        public List<JsonBuffsGenerationData> BuffData { get; set; }
+        public List<JsonBuffsGenerationData> BuffData { get; internal set; }
     }
 }

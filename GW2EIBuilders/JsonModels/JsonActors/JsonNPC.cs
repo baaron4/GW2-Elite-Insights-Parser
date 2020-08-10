@@ -41,7 +41,7 @@ namespace GW2EIBuilders.JsonModels
         /// List of buff status
         /// </summary>
         /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsUptime> Buffs { get; protected set; }
+        public List<JsonBuffsUptime> Buffs { get; internal set; }
         /// <summary>
         /// Array of double[2] that represents the breakbar percent of the actor \n
         /// Value[i][0] will be the time, value[i][1] will be breakbar % \n

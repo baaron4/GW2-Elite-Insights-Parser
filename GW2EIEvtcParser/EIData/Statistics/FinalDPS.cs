@@ -55,7 +55,7 @@ namespace GW2EIEvtcParser.EIData
             }
             PowerDps = (int)Math.Round(dps);
             PowerDamage = damage;
-            var actorDamageLogs = actor.GetJustActorDamageLogs(target, log, phase.Start, phase.End);
+            List<AbstractDamageEvent> actorDamageLogs = actor.GetJustActorDamageLogs(target, log, phase.Start, phase.End);
             // Actor DPS
             damage = actorDamageLogs.Sum(x => x.Damage);
 
