@@ -128,7 +128,7 @@ namespace GW2EIParser
                 string[] uploadresult = UploadOperation(externalTraces, fInfo);
                 if (Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.ParseMultipleLogs)
                 {
-                    var webhookSettings = new WebhookSettings(Properties.Settings.Default.WebhookURL, Properties.Settings.Default.SendSimpleMessageToWebhook ? BuildEmbed(log, uploadresult[0]) : null);
+                    var webhookSettings = new WebhookSettings(Properties.Settings.Default.WebhookURL, !Properties.Settings.Default.SendSimpleMessageToWebhook ? BuildEmbed(log, uploadresult[0]) : null);
                     WebhookController.SendMessage(externalTraces, uploadresult[0], webhookSettings);
                 }
                 foreach (string trace in externalTraces)
