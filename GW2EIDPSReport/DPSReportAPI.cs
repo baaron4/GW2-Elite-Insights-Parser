@@ -72,7 +72,7 @@ namespace GW2EIDPSReport
             {
                 throw new InvalidDataException("Missing ID for GetUploadMetaData end point");
             }
-            return GetDPSReportResponse<DPSReportUploadObject>("GetUploadMetaDataWithID", BaseGetUploadMetadataURL + "id =" + id, traces);
+            return GetDPSReportResponse<DPSReportUploadObject>("GetUploadMetaDataWithID", BaseGetUploadMetadataURL + "id=" + id, traces);
         }
         public static DPSReportUploadObject GetUploadMetaDataWithPermalink(string permalink, List<string> traces)
         {
@@ -80,24 +80,24 @@ namespace GW2EIDPSReport
             {
                 throw new InvalidDataException("Missing Permalink for GetUploadMetaData end point");
             }
-            return GetDPSReportResponse<DPSReportUploadObject>("GetUploadMetaDataWithPermalink", BaseGetUploadMetadataURL + "permalink =" + permalink, traces);
+            return GetDPSReportResponse<DPSReportUploadObject>("GetUploadMetaDataWithPermalink", BaseGetUploadMetadataURL + "permalink=" + permalink, traces);
         }
 
-        public static object GetJsonWithID(string id, List<string> traces)
+        public static T GetJsonWithID<T>(string id, List<string> traces)
         {
             if (id == null || id.Length == 0)
             {
                 throw new InvalidDataException("Missing ID for GetJson end point");
             }
-            return GetDPSReportResponse<object>("GetJsonWithID", BaseGetJsonURL + "id =" + id, traces);
+            return GetDPSReportResponse<T>("GetJsonWithID", BaseGetJsonURL + "id=" + id, traces);
         }
-        public static object GetJsonWithPermalink(string permalink, List<string> traces)
+        public static T GetJsonWithPermalink<T>(string permalink, List<string> traces)
         {
             if (permalink == null || permalink.Length == 0)
             {
                 throw new InvalidDataException("Missing Permalink for GetJson end point");
             }
-            return GetDPSReportResponse<object>("GetJsonWithPermalink", BaseGetJsonURL + "permalink =" + permalink, traces);
+            return GetDPSReportResponse<T>("GetJsonWithPermalink", BaseGetJsonURL + "permalink=" + permalink, traces);
         }
 
         /*private static string UploadRaidar(FileInfo fi)
@@ -170,7 +170,6 @@ namespace GW2EIDPSReport
                         string stringContents = stringContentsTask.Result;
                         T item = JsonConvert.DeserializeObject<T>(stringContents, new JsonSerializerSettings
                         {
-                            NullValueHandling = NullValueHandling.Ignore,
                             ContractResolver = DefaultJsonContractResolver
                         });
                         traces.Add(requestName + " tentative successful");
