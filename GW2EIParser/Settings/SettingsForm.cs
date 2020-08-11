@@ -29,56 +29,57 @@ namespace GW2EIParser.Setting
 
         public void ConditionalSettingDisable(bool busy)
         {
-            chkMultiThreaded.Enabled = !busy;
-            chkMultiLogs.Enabled = !busy;
+            ChkMultiThreaded.Enabled = !busy;
+            ChkMultiLogs.Enabled = !busy;
         }
 
         private void SetUIEnable()
         {
-            panelHtml.Enabled = Properties.Settings.Default.SaveOutHTML;
-            panelJson.Enabled = Properties.Settings.Default.SaveOutJSON;
-            panelXML.Enabled = Properties.Settings.Default.SaveOutXML;
-            groupRawSettings.Enabled = Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML;
+            PanelHtml.Enabled = Properties.Settings.Default.SaveOutHTML;
+            PanelJson.Enabled = Properties.Settings.Default.SaveOutJSON;
+            PanelXML.Enabled = Properties.Settings.Default.SaveOutXML;
+            GroupRawSettings.Enabled = Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML;
 
-            groupWebhookSettings.Enabled = Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.ParseMultipleLogs;
+            GroupWebhookSettings.Enabled = Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.ParseMultipleLogs;
         }
 
         private void SetValues()
         {
 
-            chkDefaultOutputLoc.Checked = Properties.Settings.Default.SaveAtOut;
-            txtCustomSaveLoc.Text = Properties.Settings.Default.OutLocation;
-            chkOutputHtml.Checked = Properties.Settings.Default.SaveOutHTML;
-            chkOutputCsv.Checked = Properties.Settings.Default.SaveOutCSV;
-            chkPhaseParsing.Checked = Properties.Settings.Default.ParsePhases;
-            chkMultiThreaded.Checked = Properties.Settings.Default.MultiThreaded;
-            radioThemeLight.Checked = Properties.Settings.Default.LightTheme;
-            radioThemeDark.Checked = !Properties.Settings.Default.LightTheme;
-            imgTheme.Image = Properties.Settings.Default.LightTheme ? Properties.Resources.theme_cosmo : Properties.Resources.theme_slate;
-            chkCombatReplay.Checked = Properties.Settings.Default.ParseCombatReplay;
-            chkOutputJson.Checked = Properties.Settings.Default.SaveOutJSON;
-            chkIndentJSON.Checked = Properties.Settings.Default.IndentJSON;
-            chkOutputXml.Checked = Properties.Settings.Default.SaveOutXML;
-            chkIndentXML.Checked = Properties.Settings.Default.IndentXML;
-            UploadDPSReports_checkbox.Checked = Properties.Settings.Default.UploadToDPSReports;
-            UploadDRRH_check.Checked = Properties.Settings.Default.UploadToDPSReportsRH;
-            UploadRaidar_check.Checked = Properties.Settings.Default.UploadToRaidar;
-            UploadWebhook_check.Checked = Properties.Settings.Default.SendEmbedToWebhook;
-            UploadSimpleMessageWebhook_check.Checked = Properties.Settings.Default.SendSimpleMessageToWebhook;
-            UploadtxtWebhookUrl.Text = Properties.Settings.Default.WebhookURL;
-            chkB_SkipFailedTries.Checked = Properties.Settings.Default.SkipFailedTries;
-            chkAutoAdd.Checked = Properties.Settings.Default.AutoAdd;
-            chkAutoParse.Checked = Properties.Settings.Default.AutoParse;
-            chkAddPoVProf.Checked = Properties.Settings.Default.AddPoVProf;
-            chkCompressRaw.Checked = Properties.Settings.Default.CompressRaw;
-            chkAddDuration.Checked = Properties.Settings.Default.AddDuration;
-            chkAnonymous.Checked = Properties.Settings.Default.Anonymous;
-            chkSaveOutTrace.Checked = Properties.Settings.Default.SaveOutTrace;
-            chkDamageMods.Checked = Properties.Settings.Default.ComputeDamageModifiers;
-            chkMultiLogs.Checked = Properties.Settings.Default.ParseMultipleLogs;
-            chkRawTimelineArrays.Checked = Properties.Settings.Default.RawTimelineArrays;
+            ChkDefaultOutputLoc.Checked = Properties.Settings.Default.SaveAtOut;
+            TxtCustomSaveLoc.Text = Properties.Settings.Default.OutLocation;
+            ChkOutputHtml.Checked = Properties.Settings.Default.SaveOutHTML;
+            ChkOutputCsv.Checked = Properties.Settings.Default.SaveOutCSV;
+            ChkPhaseParsing.Checked = Properties.Settings.Default.ParsePhases;
+            ChkMultiThreaded.Checked = Properties.Settings.Default.MultiThreaded;
+            RadioThemeLight.Checked = Properties.Settings.Default.LightTheme;
+            RadioThemeDark.Checked = !Properties.Settings.Default.LightTheme;
+            PictureTheme.Image = Properties.Settings.Default.LightTheme ? Properties.Resources.theme_cosmo : Properties.Resources.theme_slate;
+            ChkCombatReplay.Checked = Properties.Settings.Default.ParseCombatReplay;
+            ChkOutputJson.Checked = Properties.Settings.Default.SaveOutJSON;
+            ChkIndentJSON.Checked = Properties.Settings.Default.IndentJSON;
+            ChkOutputXml.Checked = Properties.Settings.Default.SaveOutXML;
+            ChkIndentXML.Checked = Properties.Settings.Default.IndentXML;
+            ChkUploadDPSReports.Checked = Properties.Settings.Default.UploadToDPSReports;
+            TxtDPSReportUserToken.Text = Properties.Settings.Default.DPSReportUserToken;
+            ChkUploadDRRH.Checked = Properties.Settings.Default.UploadToDPSReportsRH;
+            ChkUploadRaidar.Checked = Properties.Settings.Default.UploadToRaidar;
+            ChkUploadWebhook.Checked = Properties.Settings.Default.SendEmbedToWebhook;
+            ChkUploadSimpleMessageWebhook.Checked = Properties.Settings.Default.SendSimpleMessageToWebhook;
+            TxtUploadWebhookUrl.Text = Properties.Settings.Default.WebhookURL;
+            ChkSkipFailedTries.Checked = Properties.Settings.Default.SkipFailedTries;
+            ChkAutoAdd.Checked = Properties.Settings.Default.AutoAdd;
+            ChkAutoParse.Checked = Properties.Settings.Default.AutoParse;
+            ChkAddPoVProf.Checked = Properties.Settings.Default.AddPoVProf;
+            ChkCompressRaw.Checked = Properties.Settings.Default.CompressRaw;
+            ChkAddDuration.Checked = Properties.Settings.Default.AddDuration;
+            ChkAnonymous.Checked = Properties.Settings.Default.Anonymous;
+            ChkSaveOutTrace.Checked = Properties.Settings.Default.SaveOutTrace;
+            ChkDamageMods.Checked = Properties.Settings.Default.ComputeDamageModifiers;
+            ChkMultiLogs.Checked = Properties.Settings.Default.ParseMultipleLogs;
+            ChkRawTimelineArrays.Checked = Properties.Settings.Default.RawTimelineArrays;
 
-            chkHtmlExternalScripts.Checked = Properties.Settings.Default.HtmlExternalScripts;
+            ChkHtmlExternalScripts.Checked = Properties.Settings.Default.HtmlExternalScripts;
 
             SetUIEnable();
         }
@@ -88,9 +89,9 @@ namespace GW2EIParser.Setting
             SetValues();
         }
 
-        private void DefaultOutputLocationCheckedChanged(object sender, EventArgs e)
+        private void ChkDefaultOutputLocationCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.SaveAtOut = chkDefaultOutputLoc.Checked;
+            Properties.Settings.Default.SaveAtOut = ChkDefaultOutputLoc.Checked;
         }
 
         private void BtnFolderSelectClick(object sender, EventArgs e)
@@ -101,145 +102,150 @@ namespace GW2EIParser.Setting
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
                 {
-                    txtCustomSaveLoc.Text = fbd.SelectedPath;
+                    TxtCustomSaveLoc.Text = fbd.SelectedPath;
                 }
             }
         }
 
-        private void CustomSaveLocationTextChanged(object sender, EventArgs e)
+        private void TxtCustomSaveLocationTextChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.OutLocation = txtCustomSaveLoc.Text;
+            Properties.Settings.Default.OutLocation = TxtCustomSaveLoc.Text;
         }
 
-        private void WebhookURLChanged(object sender, EventArgs e)
+        private void TxtWebhookURLChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.WebhookURL = UploadtxtWebhookUrl.Text;
+            Properties.Settings.Default.WebhookURL = TxtUploadWebhookUrl.Text;
         }
 
-        private void ResetSkillListClick(object sender, EventArgs e)
+        private void BtnResetSkillListClick(object sender, EventArgs e)
         {
             //Update skill list
             GW2APIController.WriteAPISkillsToFile();
             MessageBox.Show("Skill List has been redone");
         }
 
-        private void ResetTraitListClick(object sender, EventArgs e)
+        private void BtnResetTraitListClick(object sender, EventArgs e)
         {
             //Update skill list
             GW2APIController.WriteAPITraitsToFile();
             MessageBox.Show("Trait List has been redone");
         }
 
-        private void ResetSpecListClick(object sender, EventArgs e)
+        private void BtnResetSpecListClick(object sender, EventArgs e)
         {
             //Update skill list
             GW2APIController.WriteAPISpecsToFile();
             MessageBox.Show("Spec List has been redone");
         }
 
-        private void OuputCheckedChanged(object sender, EventArgs e)
+        private void ChkOuputHTMLCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.SaveOutHTML = chkOutputHtml.Checked;
-            panelHtml.Enabled = Properties.Settings.Default.SaveOutHTML;
+            Properties.Settings.Default.SaveOutHTML = ChkOutputHtml.Checked;
+            PanelHtml.Enabled = Properties.Settings.Default.SaveOutHTML;
         }
 
-        private void OutputCsvCheckedChanged(object sender, EventArgs e)
+        private void ChkOutputCsvCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.SaveOutCSV = chkOutputCsv.Checked;
+            Properties.Settings.Default.SaveOutCSV = ChkOutputCsv.Checked;
         }
 
         private void ChkMultiThreadedCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.MultiThreaded = chkMultiThreaded.Checked;
+            Properties.Settings.Default.MultiThreaded = ChkMultiThreaded.Checked;
         }
 
-        private void PhaseParsingCheckedChanged(object sender, EventArgs e)
+        private void ChkPhaseParsingCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.ParsePhases = chkPhaseParsing.Checked;
+            Properties.Settings.Default.ParsePhases = ChkPhaseParsing.Checked;
         }
 
         private void ChkCombatReplayCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.ParseCombatReplay = chkCombatReplay.Checked;
+            Properties.Settings.Default.ParseCombatReplay = ChkCombatReplay.Checked;
         }
 
-        private void UploadDPSReports_checkbox_CheckedChanged(object sender, EventArgs e)
+        private void ChkUploadDPSReportsCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.UploadToDPSReports = UploadDPSReports_checkbox.Checked;
+            Properties.Settings.Default.UploadToDPSReports = ChkUploadDPSReports.Checked;
             SetUIEnable();
         }
 
-        private void UploadRaidar_check_CheckedChanged(object sender, EventArgs e)
+        private void ChkDPSReportUserTokenTextChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.UploadToRaidar = UploadRaidar_check.Checked;
+            Properties.Settings.Default.DPSReportUserToken = TxtDPSReportUserToken.Text;
         }
 
-        private void UploadWebhook_check_CheckedChanged(object sender, EventArgs e)
+        private void ChkUploadRaidarCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.SendEmbedToWebhook = UploadWebhook_check.Checked;
+            Properties.Settings.Default.UploadToRaidar = ChkUploadRaidar.Checked;
         }
 
-        private void UploadSimpleMessageWebhook_check_CheckedChanged(object sender, EventArgs e)
+        private void ChkUploadWebhookCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.SendSimpleMessageToWebhook = UploadSimpleMessageWebhook_check.Checked;
+            Properties.Settings.Default.SendEmbedToWebhook = ChkUploadWebhook.Checked;
         }
 
-        private void UploadDRRH_check_CheckedChanged(object sender, EventArgs e)
+        private void ChkUploadSimpleMessageWebhookCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.UploadToDPSReportsRH = UploadDRRH_check.Checked;
+            Properties.Settings.Default.SendSimpleMessageToWebhook = ChkUploadSimpleMessageWebhook.Checked;
         }
 
-        private void ChkB_SkipFailedTries_CheckedChanged(object sender, EventArgs e)
+        private void ChkUploadDRRHCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.SkipFailedTries = chkB_SkipFailedTries.Checked;
+            Properties.Settings.Default.UploadToDPSReportsRH = ChkUploadDRRH.Checked;
         }
-        private void OutputJSONCheckedChanged(object sender, EventArgs e)
+
+        private void ChkSkipFailedTriesCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.SaveOutJSON = chkOutputJson.Checked;
+            Properties.Settings.Default.SkipFailedTries = ChkSkipFailedTries.Checked;
+        }
+        private void ChkOutputJSONCheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.SaveOutJSON = ChkOutputJson.Checked;
             SetUIEnable();
         }
 
-        private void OutputXMLCheckedChanged(object sender, EventArgs e)
+        private void ChkOutputXMLCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.SaveOutXML = chkOutputXml.Checked;
+            Properties.Settings.Default.SaveOutXML = ChkOutputXml.Checked;
             SetUIEnable();
         }
 
         private void ChkIndentJSONCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.IndentJSON = chkIndentJSON.Checked;
+            Properties.Settings.Default.IndentJSON = ChkIndentJSON.Checked;
         }
 
         private void ChkIndentXMLCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.IndentXML = chkIndentXML.Checked;
+            Properties.Settings.Default.IndentXML = ChkIndentXML.Checked;
         }
 
-        private void ChkHtmlExternalScripts_CheckedChanged(object sender, EventArgs e)
+        private void ChkHtmlExternalScriptsCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.HtmlExternalScripts = chkHtmlExternalScripts.Checked;
+            Properties.Settings.Default.HtmlExternalScripts = ChkHtmlExternalScripts.Checked;
         }
 
-        private void RadioThemeLight_CheckedChanged(object sender, EventArgs e)
+        private void RadioThemeLightCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.LightTheme = radioThemeLight.Checked;
-            imgTheme.Image = Properties.Settings.Default.LightTheme ? Properties.Resources.theme_cosmo : Properties.Resources.theme_slate;
+            Properties.Settings.Default.LightTheme = RadioThemeLight.Checked;
+            PictureTheme.Image = Properties.Settings.Default.LightTheme ? Properties.Resources.theme_cosmo : Properties.Resources.theme_slate;
         }
 
-        private void RadioThemeDark_CheckedChanged(object sender, EventArgs e)
+        private void RadioThemeDarkCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.LightTheme = radioThemeLight.Checked;
-            imgTheme.Image = Properties.Settings.Default.LightTheme ? Properties.Resources.theme_cosmo : Properties.Resources.theme_slate;
+            Properties.Settings.Default.LightTheme = RadioThemeLight.Checked;
+            PictureTheme.Image = Properties.Settings.Default.LightTheme ? Properties.Resources.theme_cosmo : Properties.Resources.theme_slate;
         }
 
-        private void CmdClose_Click(object sender, EventArgs e)
+        private void BtnCloseClick(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void ChkAutoAdd_CheckedChanged(object sender, EventArgs e)
+        private void ChkAutoAddCheckedChanged(object sender, EventArgs e)
         {
-            if (chkAutoAdd.Checked && !Properties.Settings.Default.AutoAdd)
+            if (ChkAutoAdd.Checked && !Properties.Settings.Default.AutoAdd)
             {
                 string path = Properties.Settings.Default.AutoAddPath;
                 if (string.IsNullOrEmpty(path) || !Directory.Exists(path))
@@ -270,34 +276,34 @@ namespace GW2EIParser.Setting
                     }
                     else
                     {
-                        chkAutoAdd.Checked = false;
+                        ChkAutoAdd.Checked = false;
                     }
                 }
             }
-            Properties.Settings.Default.AutoAdd = chkAutoAdd.Checked;
+            Properties.Settings.Default.AutoAdd = ChkAutoAdd.Checked;
             WatchDirectoryUpdatedEvent(this, null);
         }
 
-        private void ChkAutoParse_CheckedChanged(object sender, EventArgs e)
+        private void ChkAutoParseCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.AutoParse = chkAutoParse.Checked;
+            Properties.Settings.Default.AutoParse = ChkAutoParse.Checked;
         }
 
-        private void ChkAddPoVProf_CheckedChanged(object sender, EventArgs e)
+        private void ChkAddPoVProfCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.AddPoVProf = chkAddPoVProf.Checked;
+            Properties.Settings.Default.AddPoVProf = ChkAddPoVProf.Checked;
         }
-        private void ChkCompressRaw_CheckedChanged(object sender, EventArgs e)
+        private void ChkCompressRawCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.CompressRaw = chkCompressRaw.Checked;
-        }
-
-        private void ChkAddDuration_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.AddDuration = chkAddDuration.Checked;
+            Properties.Settings.Default.CompressRaw = ChkCompressRaw.Checked;
         }
 
-        private void SettingsDump_Click(object sender, EventArgs e)
+        private void ChkAddDurationCheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.AddDuration = ChkAddDuration.Checked;
+        }
+
+        private void BtnDumpSettingsClicked(object sender, EventArgs e)
         {
             string dump = CustomSettingsManager.DumpSettings();
             using (var saveFile = new SaveFileDialog())
@@ -315,7 +321,7 @@ namespace GW2EIParser.Setting
             }
         }
 
-        private void SettingsLoad_Click(object sender, EventArgs e)
+        private void BtnLoadSettingsClicked(object sender, EventArgs e)
         {
             using (var loadFile = new OpenFileDialog())
             {
@@ -330,30 +336,30 @@ namespace GW2EIParser.Setting
             }
         }
 
-        private void ChkAnonymous_CheckedChanged(object sender, EventArgs e)
+        private void ChkAnonymousCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.Anonymous = chkAnonymous.Checked;
+            Properties.Settings.Default.Anonymous = ChkAnonymous.Checked;
         }
 
-        private void ChkSaveOutTrace_CheckedChanged(object sender, EventArgs e)
+        private void ChkSaveOutTraceCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.SaveOutTrace = chkSaveOutTrace.Checked;
+            Properties.Settings.Default.SaveOutTrace = ChkSaveOutTrace.Checked;
         }
 
-        private void ChkComputeDamageMods_CheckedChanged(object sender, EventArgs e)
+        private void ChkComputeDamageModsCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.ComputeDamageModifiers = chkDamageMods.Checked;
+            Properties.Settings.Default.ComputeDamageModifiers = ChkDamageMods.Checked;
         }
 
-        private void ChkMultiLogs_CheckedChanged(object sender, EventArgs e)
+        private void ChkMultiLogsCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.ParseMultipleLogs = chkMultiLogs.Checked;
+            Properties.Settings.Default.ParseMultipleLogs = ChkMultiLogs.Checked;
             SetUIEnable();
         }
 
-        private void ChkRawTimelineArrays_CheckedChanged(object sender, EventArgs e)
+        private void ChkRawTimelineArraysCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.RawTimelineArrays = chkRawTimelineArrays.Checked;
+            Properties.Settings.Default.RawTimelineArrays = ChkRawTimelineArrays.Checked;
         }
     }
 }

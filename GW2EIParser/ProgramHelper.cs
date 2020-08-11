@@ -82,20 +82,20 @@ namespace GW2EIParser
 
         private static string[] UploadOperation(List<string> traces, FileInfo fInfo)
         {
-            var settings = new DPSReportSettings();
+            var settings = new DPSReportSettings(Properties.Settings.Default.DPSReportUserToken);
             //Upload Process
             string[] uploadresult = new string[3] { "", "", "" };
             if (Properties.Settings.Default.UploadToDPSReports)
             {
                 traces.Add("Uploading to DPSReports using EI");
-                DPSReportUploadObject response = DPSReportAPI.UploadDPSReportsEI(fInfo, settings, traces);
+                DPSReportUploadObject response = DPSReportAPI.UploadUsingEI(fInfo, settings, traces);
                 uploadresult[0] =  response != null ? response.Permalink : "Upload process failed";
                 traces.Add("DPSReports using EI: " + uploadresult[0]);
             }
             if (Properties.Settings.Default.UploadToDPSReportsRH)
             {
                 traces.Add("Uploading to DPSReports using RH");
-                DPSReportUploadObject response = DPSReportAPI.UploadDPSReportsRH(fInfo, settings, traces);
+                DPSReportUploadObject response = DPSReportAPI.UploadUsingRH(fInfo, settings, traces);
                 uploadresult[1] = response != null ? response.Permalink : "Upload process failed";
                 traces.Add("DPSReports using RH: " + uploadresult[1]);
             }

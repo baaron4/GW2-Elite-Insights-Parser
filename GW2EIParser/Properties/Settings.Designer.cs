@@ -130,7 +130,22 @@ namespace GW2EIParser.Properties {
                 this["UploadToDPSReports"] = value;
             }
         }
-        
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DPSReportUserToken
+        {
+            get
+            {
+                return ((string)(this["DPSReportUserToken"]));
+            }
+            set
+            {
+                this["DPSReportUserToken"] = value;
+            }
+        }
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
