@@ -70,6 +70,7 @@
                     contributedDamage: 0,
                     contributedShieldDamage: 0,
                     totalDamage: 0,
+                    totalCasting: 0,
                     distribution: [],
                 };
                 var rows = new Map();
@@ -81,6 +82,7 @@
                     dist.contributedDamage += targetDist.contributedDamage;
                     dist.totalDamage += targetDist.totalDamage;
                     dist.contributedShieldDamage += targetDist.contributedShieldDamage;
+                    dist.totalCasting += targetDist.totalCasting;
                     var distribution = targetDist.distribution;
                     for (var k = 0; k < distribution.length; k++) {
                         var targetDistribution = distribution[k];
@@ -97,9 +99,12 @@
                             row[7] += targetDistribution[7];
                             row[8] += targetDistribution[8];
                             row[9] += targetDistribution[9];
+                            // skip 10
+                            // skip 11
                             row[12] += targetDistribution[12];
                             row[13] += targetDistribution[13];
                             row[14] += targetDistribution[14];
+                            // skip 15
                         } else {
                             rows.set(targetDistribution[1], targetDistribution.slice(0));
                         }
@@ -112,6 +117,7 @@
                 dist.contributedDamage = Math.max(dist.contributedDamage, 0);
                 dist.totalDamage = Math.max(dist.totalDamage, 0);
                 dist.contributedShieldDamage = Math.max(dist.contributedShieldDamage, 0);
+                dist.totalCasting = Math.max(dist.totalCasting, 0);
                 this.cacheTarget.set(cacheID, dist);
                 return dist;
             }
