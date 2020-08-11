@@ -1,4 +1,5 @@
 ﻿using GW2EIEvtcParser.EIData;
+using Newtonsoft.Json;
 
 namespace GW2EIBuilders.JsonModels
 {
@@ -12,62 +13,82 @@ namespace GW2EIBuilders.JsonModels
         /// </summary>
         public class JsonDefensesAll
         {
+            [JsonProperty]
             /// <summary>
             /// Total damage taken
             /// </summary>
-            public long DamageTaken { get; }
+            public long DamageTaken { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Number of blocks
             /// </summary>
-            public int BlockedCount { get; }
+            public int BlockedCount { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Number of evades
             /// </summary>
-            public int EvadedCount { get; }
+            public int EvadedCount { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Number of misses
             /// </summary>
-            public int MissedCount { get; }
+            public int MissedCount { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Number of dodges
             /// </summary>
-            public int DodgeCount { get; }
+            public int DodgeCount { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Number of time an incoming attack was negated by invul
             /// </summary>
-            public int InvulnedCount { get; }
+            public int InvulnedCount { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Damage done against barrier
             /// </summary>
-            public int DamageBarrier { get; }
+            public int DamageBarrier { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Number of time interrupted
             /// </summary>
-            public int InterruptedCount { get; }
+            public int InterruptedCount { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Number of time downed
             /// </summary>
-            public int DownCount { get; }
+            public int DownCount { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Time passed in downstate
             /// </summary>
-            public long DownDuration { get; }
+            public long DownDuration { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Number of time died
             /// </summary>
-            public int DeadCount { get; }
+            public int DeadCount { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Time passed in dead state
             /// </summary>
-            public long DeadDuration { get; }
+            public long DeadDuration { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Number of time disconnected
             /// </summary>
-            public int DcCount { get; }
+            public int DcCount { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Time passed in disconnected state
             /// </summary>
-            public long DcDuration { get; }
+            public long DcDuration { get; internal set; }
+
+            [JsonConstructor]
+            internal JsonDefensesAll()
+            {
+
+            }
 
             internal JsonDefensesAll(FinalDefensesAll defenses)
             {
@@ -93,54 +114,72 @@ namespace GW2EIBuilders.JsonModels
         /// </summary>
         public class JsonDPS
         {
+            [JsonProperty]
             /// <summary>
             /// Total dps
             /// </summary>
-            public int Dps { get; }
+            public int Dps { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Total damage
             /// </summary>
-            public int Damage { get; }
+            public int Damage { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Total condi dps
             /// </summary>
-            public int CondiDps { get; }
+            public int CondiDps { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Total condi damage
             /// </summary>
-            public int CondiDamage { get; }
+            public int CondiDamage { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Total power dps
             /// </summary>
-            public int PowerDps { get; }
+            public int PowerDps { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Total power damage
             /// </summary>
-            public int PowerDamage { get; }
+            public int PowerDamage { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Total actor only dps
             /// </summary>
-            public int ActorDps { get; }
+            public int ActorDps { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Total actor only damage
             /// </summary>
-            public int ActorDamage { get; }
+            public int ActorDamage { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Total actor only condi dps
             /// </summary>
-            public int ActorCondiDps { get; }
+            public int ActorCondiDps { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Total actor only condi damage
             /// </summary>
-            public int ActorCondiDamage { get; }
+            public int ActorCondiDamage { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Total actor only power dps
             /// </summary>
-            public int ActorPowerDps { get; }
+            public int ActorPowerDps { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Total actor only power damage
             /// </summary>
-            public int ActorPowerDamage { get; }
+            public int ActorPowerDamage { get; internal set; }
+
+            [JsonConstructor]
+            internal JsonDPS()
+            {
+
+            }
 
             internal JsonDPS(FinalDPS stats)
             {
@@ -166,58 +205,77 @@ namespace GW2EIBuilders.JsonModels
         /// </summary>
         public class JsonGameplayStats
         {
+            [JsonProperty]
             /// <summary>
             /// Number of damage hit
             /// </summary>
-            public int TotalDamageCount { get; }
+            public int TotalDamageCount { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Number of direct damage hit
             /// </summary>
-            public int DirectDamageCount { get; }
+            public int DirectDamageCount { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Number of connected direct damage hit
             /// </summary>
-            public int ConnectedDirectDamageCount { get; }
+            public int ConnectedDirectDamageCount { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Number of critable hit
             /// </summary>
-            public int CritableDirectDamageCount { get; }
+            public int CritableDirectDamageCount { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Number of crit
             /// </summary>
-            public int CriticalRate { get; }
+            public int CriticalRate { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Total critical damage
             /// </summary>
-            public int CriticalDmg { get; }
+            public int CriticalDmg { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Number of hits while flanking
             /// </summary>
-            public int FlankingRate { get; }
+            public int FlankingRate { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Number of glanced hits
             /// </summary>
-            public int GlanceRate { get; }
+            public int GlanceRate { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Number of missed hits
             /// </summary>
-            public int Missed { get; }
+            public int Missed { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Number of evaded hits
             /// </summary>
-            public int Evaded { get; }
+            public int Evaded { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Number of blocked hits
             /// </summary>
-            public int Blocked { get; }
+            public int Blocked { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Number of hits that interrupted a skill
             /// </summary>
-            public int Interrupts { get; }
+            public int Interrupts { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Number of hits against invulnerable targets
             /// </summary>
-            public int Invulned { get; }
+            public int Invulned { get; internal set; }
+
+            [JsonConstructor]
+            internal JsonGameplayStats()
+            {
+
+            }
 
             internal JsonGameplayStats(FinalGameplayStats stats)
             {
@@ -246,50 +304,67 @@ namespace GW2EIBuilders.JsonModels
         /// </summary>
         public class JsonGameplayStatsAll : JsonGameplayStats
         {
+            [JsonProperty]
             /// <summary>
             /// Number of time you interrupted your cast
             /// </summary>
-            public int Wasted { get; }
+            public int Wasted { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Time wasted by interrupting your cast
             /// </summary>
-            public double TimeWasted { get; }
+            public double TimeWasted { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Number of time you skipped an aftercast
             /// </summary>
-            public int Saved { get; }
+            public int Saved { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Time saved while skipping aftercast
             /// </summary>
-            public double TimeSaved { get; }
+            public double TimeSaved { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Distance to the epicenter of the squad
             /// </summary>
-            public double StackDist { get; }
+            public double StackDist { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Distance to the commander of the squad. Only when a player with commander tag is present
             /// </summary>
-            public double DistToCom { get; }
+            public double DistToCom { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Average amount of boons
             /// </summary>
-            public double AvgBoons { get; }
+            public double AvgBoons { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Average amount of boons over active time
             /// </summary>
-            public double AvgActiveBoons { get; }
+            public double AvgActiveBoons { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Average amount of conditions
             /// </summary>
-            public double AvgConditions { get; }
+            public double AvgConditions { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Average amount of conditions over active time
             /// </summary>
-            public double AvgActiveConditions { get; }
+            public double AvgActiveConditions { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Number of time a weapon swap happened
             /// </summary>
-            public int SwapCount { get; }
+            public int SwapCount { get; internal set; }
+
+            [JsonConstructor]
+            internal JsonGameplayStatsAll()
+            {
+
+            }
 
             internal JsonGameplayStatsAll(FinalGameplayStatsAll stats) : base(stats)
             {
@@ -312,38 +387,52 @@ namespace GW2EIBuilders.JsonModels
         /// </summary>
         public class JsonPlayerSupport
         {
+            [JsonProperty]
             /// <summary>
             /// Number of time ressurected someone
             /// </summary>
-            public long Resurrects { get; }
+            public long Resurrects { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Time passed on ressurecting
             /// </summary>
-            public double ResurrectTime { get; }
+            public double ResurrectTime { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Number of time a condition was removed, self excluded
             /// </summary>
-            public long CondiCleanse { get; }
+            public long CondiCleanse { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Total time of condition removed, self excluded
             /// </summary>
-            public double CondiCleanseTime { get; }
+            public double CondiCleanseTime { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Number of time a condition was removed from self
             /// </summary>
-            public long CondiCleanseSelf { get; }
+            public long CondiCleanseSelf { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Total time of condition removed from self
             /// </summary>
-            public double CondiCleanseTimeSelf { get; }
+            public double CondiCleanseTimeSelf { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Number of time a boon was removed
             /// </summary>
-            public long BoonStrips { get; }
+            public long BoonStrips { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Total time of boons removed from self
             /// </summary>
-            public double BoonStripsTime { get; }
+            public double BoonStripsTime { get; internal set; }
+
+            [JsonConstructor]
+            internal JsonPlayerSupport()
+            {
+
+            }
 
             internal JsonPlayerSupport(FinalPlayerSupport stats)
             {

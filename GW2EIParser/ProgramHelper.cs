@@ -16,6 +16,7 @@ using GW2EIDiscord;
 using System.Windows.Forms;
 using GW2EIDPSReport.DPSReportJsons;
 using System.Diagnostics;
+using GW2EIBuilders.JsonModels;
 
 namespace GW2EIParser
 {
@@ -97,8 +98,8 @@ namespace GW2EIParser
                 DPSReportGetUploadsObject response4 = DPSReportAPI.GetUploads(settings2, traces);
                 if (response.Encounter.JsonAvailable)
                 {
-                    object response5 = DPSReportAPI.GetJsonWithID(response.Id, traces);
-                    object response6 = DPSReportAPI.GetJsonWithPermalink(response.Permalink, traces);
+                    JsonLog response5 = DPSReportAPI.GetJsonWithID<JsonLog>(response.Id, traces);
+                    JsonLog response6 = DPSReportAPI.GetJsonWithPermalink<JsonLog>(response.Permalink, traces);
                 }
 #endif
                 */

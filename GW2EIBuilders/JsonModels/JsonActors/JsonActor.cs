@@ -3,6 +3,7 @@ using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
+using Newtonsoft.Json;
 
 namespace GW2EIBuilders.JsonModels
 {
@@ -14,79 +15,95 @@ namespace GW2EIBuilders.JsonModels
     public abstract class JsonActor
     {
 
+        [JsonProperty]
         /// <summary>
         /// Name of the actor
         /// </summary>
-        public string Name { get; }
+        public string Name { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Condition damage score
         /// </summary>
-        public uint Condition { get; }
+        public uint Condition { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Concentration score
         /// </summary>
-        public uint Concentration { get; }
+        public uint Concentration { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Healing Power score
         /// </summary>
-        public uint Healing { get; }
+        public uint Healing { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Toughness score
         /// </summary>
-        public uint Toughness { get; }
+        public uint Toughness { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Height of the hitbox
         /// </summary>
-        public uint HitboxHeight { get; }
+        public uint HitboxHeight { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Width of the hitbox
         /// </summary>
-        public uint HitboxWidth { get; }
+        public uint HitboxWidth { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// ID of the actor in the instance
         /// </summary>
-        public ushort InstanceID { get; }
+        public ushort InstanceID { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// List of minions
         /// </summary>
         /// <seealso cref="JsonMinions"/>
-        public List<JsonMinions> Minions { get; }
+        public List<JsonMinions> Minions { get; internal set; }
+        [JsonProperty]
 
         /// <summary>
         /// Array of Total DPS stats \n
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonDPS"/>
-        public JsonStatistics.JsonDPS[] DpsAll { get; }
+        public JsonStatistics.JsonDPS[] DpsAll { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Stats against all  \n
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonGameplayStatsAll"/>
-        public JsonStatistics.JsonGameplayStatsAll[] StatsAll { get; }
+        public JsonStatistics.JsonGameplayStatsAll[] StatsAll { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Defensive stats \n
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonDefensesAll"/>
-        public JsonStatistics.JsonDefensesAll[] Defenses { get; }
+        public JsonStatistics.JsonDefensesAll[] Defenses { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Total Damage distribution array \n
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonDamageDist"/>
-        public List<JsonDamageDist>[] TotalDamageDist { get; }
+        public List<JsonDamageDist>[] TotalDamageDist { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Damage taken array
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonDamageDist"/>
-        public List<JsonDamageDist>[] TotalDamageTaken { get; }
+        public List<JsonDamageDist>[] TotalDamageTaken { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Rotation data
         /// </summary>
         /// <seealso cref="JsonRotation"/>
-        public List<JsonRotation> Rotation { get; }
+        public List<JsonRotation> Rotation { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Array of int representing 1S damage points \n
         /// Length == # of phases
@@ -95,32 +112,42 @@ namespace GW2EIBuilders.JsonModels
         /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
-        public List<int>[] Damage1S { get; }
+        public List<int>[] Damage1S { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Array of int[2] that represents the number of conditions \n
         /// Array[i][0] will be the time, Array[i][1] will be the number of conditions present from Array[i][0] to Array[i+1][0] \n
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight \n
         /// </summary>
-        public List<int[]> ConditionsStates { get; }
+        public List<int[]> ConditionsStates { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Array of int[2] that represents the number of boons \n
         /// Array[i][0] will be the time, Array[i][1] will be the number of boons present from Array[i][0] to Array[i+1][0] \n
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight
         /// </summary>
-        public List<int[]> BoonsStates { get; }
+        public List<int[]> BoonsStates { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Array of int[2] that represents the number of active combat minions \n
         /// Array[i][0] will be the time, Array[i][1] will be the number of active combat minions present from Array[i][0] to Array[i+1][0] \n
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight
         /// </summary>
-        public List<int[]> ActiveCombatMinions { get; }
+        public List<int[]> ActiveCombatMinions { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Array of double[2] that represents the health status of the actor \n
         /// Array[i][0] will be the time, Array[i][1] will be health % \n
         /// If i corresponds to the last element that means the health did not change for the remainder of the fight \n
         /// </summary>
-        public List<double[]> HealthPercents { get; }
+        public List<double[]> HealthPercents { get; internal set; }
 
+
+        [JsonConstructor]
+        internal JsonActor()
+        {
+
+        }
 
         protected JsonActor(AbstractSingleActor actor, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {

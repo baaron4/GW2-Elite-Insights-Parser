@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
+using Newtonsoft.Json;
 using static GW2EIBuilders.JsonModels.JsonBuffsUptime;
 
 namespace GW2EIBuilders.JsonModels
@@ -13,41 +14,55 @@ namespace GW2EIBuilders.JsonModels
     /// </summary>
     public class JsonNPC : JsonActor
     {
+        [JsonProperty]
         /// <summary>
         /// Game ID of the target
         /// </summary>
-        public int Id { get; }
+        public int Id { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Total health of the target
         /// </summary>
-        public int TotalHealth { get; }
+        public int TotalHealth { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Final health of the target
         /// </summary>
-        public int FinalHealth { get; }
+        public int FinalHealth { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// % of health burned
         /// </summary>
-        public double HealthPercentBurned { get; }
+        public double HealthPercentBurned { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Time at which target became active
         /// </summary>
-        public int FirstAware { get; }
+        public int FirstAware { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Time at which target became inactive 
         /// </summary>
-        public int LastAware { get; }
+        public int LastAware { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// List of buff status
         /// </summary>
         /// <seealso cref="JsonBuffsUptime"/>
         public List<JsonBuffsUptime> Buffs { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Array of double[2] that represents the breakbar percent of the actor \n
         /// Value[i][0] will be the time, value[i][1] will be breakbar % \n
         /// If i corresponds to the last element that means the breakbar did not change for the remainder of the fight \n
         /// </summary>
-        public List<double[]> BreakbarPercents { get; }
+        public List<double[]> BreakbarPercents { get; internal set; }
+
+        [JsonConstructor]
+        internal JsonNPC()
+        {
+
+        }
 
         internal JsonNPC(NPC npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc) : base(npc, log, settings, skillDesc, buffDesc)
         {

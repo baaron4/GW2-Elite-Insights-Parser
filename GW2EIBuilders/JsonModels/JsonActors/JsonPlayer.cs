@@ -2,6 +2,7 @@
 using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
+using Newtonsoft.Json;
 using static GW2EIBuilders.JsonModels.JsonBuffsUptime;
 using static GW2EIBuilders.JsonModels.JsonPlayerBuffsGeneration;
 
@@ -12,22 +13,27 @@ namespace GW2EIBuilders.JsonModels
     /// </summary>
     public class JsonPlayer : JsonActor
     {
+        [JsonProperty]
         /// <summary>
         /// Account name of the player
         /// </summary>
-        public string Account { get; }
+        public string Account { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Group of the player
         /// </summary>
-        public int Group { get; }
+        public int Group { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Indicates if a player has a commander tag
         /// </summary>
-        public bool HasCommanderTag { get; }
+        public bool HasCommanderTag { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Profession of the player
         /// </summary>
-        public string Profession { get; }
+        public string Profession { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Weapons of the player \n
         /// 0-1 are the first land set, 1-2 are the second land set \n
@@ -35,13 +41,15 @@ namespace GW2EIBuilders.JsonModels
         /// When unknown, 'Unknown' value will appear \n
         /// If 2 handed weapon even indices will have "2Hand" as value
         /// </summary>
-        public string[] Weapons { get; }
+        public string[] Weapons { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Array of Total DPS stats \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
         /// </summary>
         /// <seealso cref="JsonStatistics.JsonDPS"/>
-        public JsonStatistics.JsonDPS[][] DpsTargets { get; }
+        public JsonStatistics.JsonDPS[][] DpsTargets { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Array of int representing 1S damage points \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
@@ -50,102 +58,125 @@ namespace GW2EIBuilders.JsonModels
         /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
-        public List<int>[][] TargetDamage1S { get; }
+        public List<int>[][] TargetDamage1S { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Per Target Damage distribution array \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
         /// </summary>
         /// <seealso cref="JsonDamageDist"/>
-        public List<JsonDamageDist>[][] TargetDamageDist { get; }
+        public List<JsonDamageDist>[][] TargetDamageDist { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Stats against targets  \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
         /// </summary>
         /// <seealso cref="JsonStatistics.JsonGameplayStats"/>
-        public JsonStatistics.JsonGameplayStats[][] StatsTargets { get; }
+        public JsonStatistics.JsonGameplayStats[][] StatsTargets { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Support stats \n
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonStatistics.JsonPlayerSupport"/>
-        public JsonStatistics.JsonPlayerSupport[] Support { get; }
+        public JsonStatistics.JsonPlayerSupport[] Support { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Damage modifiers against all
         /// </summary>
         /// <seealso cref="JsonDamageModifierData"/>
-        public List<JsonDamageModifierData> DamageModifiers { get; }
+        public List<JsonDamageModifierData> DamageModifiers { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Damage modifiers against targets \n
         /// Length == # of targets
         /// </summary>
         /// <seealso cref="JsonDamageModifierData"/>
-        public List<JsonDamageModifierData>[] DamageModifiersTarget { get; }
+        public List<JsonDamageModifierData>[] DamageModifiersTarget { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// List of buff status
         /// </summary>
         /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsUptime> BuffUptimes { get; }
+        public List<JsonBuffsUptime> BuffUptimes { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// List of buff status on self generation  \n
         /// Key is "'b' + id"
         /// </summary>
         /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonPlayerBuffsGeneration> SelfBuffs { get; }
+        public List<JsonPlayerBuffsGeneration> SelfBuffs { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// List of buff status on group generation
         /// </summary>
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
-        public List<JsonPlayerBuffsGeneration> GroupBuffs { get; }
+        public List<JsonPlayerBuffsGeneration> GroupBuffs { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// List of buff status on off group generation
         /// </summary>
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
-        public List<JsonPlayerBuffsGeneration> OffGroupBuffs { get; }
+        public List<JsonPlayerBuffsGeneration> OffGroupBuffs { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// List of buff status on squad generation
         /// </summary>
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
-        public List<JsonPlayerBuffsGeneration> SquadBuffs { get; }
+        public List<JsonPlayerBuffsGeneration> SquadBuffs { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// List of buff status on active time
         /// </summary>
         /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsUptime> BuffUptimesActive { get; }
+        public List<JsonBuffsUptime> BuffUptimesActive { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// List of buff status on self generation on active time
         /// </summary>
         /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonPlayerBuffsGeneration> SelfBuffsActive { get; }
+        public List<JsonPlayerBuffsGeneration> SelfBuffsActive { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// List of buff status on group generation on active time
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
-        public List<JsonPlayerBuffsGeneration> GroupBuffsActive { get; }
+        public List<JsonPlayerBuffsGeneration> GroupBuffsActive { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// List of buff status on off group generation on active time
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
-        public List<JsonPlayerBuffsGeneration> OffGroupBuffsActive { get; }
+        public List<JsonPlayerBuffsGeneration> OffGroupBuffsActive { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// List of buff status on squad generation on active time
         /// </summary>
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
-        public List<JsonPlayerBuffsGeneration> SquadBuffsActive { get; }
+        public List<JsonPlayerBuffsGeneration> SquadBuffsActive { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// List of death recaps \n
         /// Length == number of death
         /// </summary>
         /// <seealso cref="JsonDeathRecap"/>
-        public List<JsonDeathRecap> DeathRecap { get; }
+        public List<JsonDeathRecap> DeathRecap { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// List of used consumables
         /// </summary>
         /// <seealso cref="JsonConsumable"/>
-        public List<JsonConsumable> Consumables { get; }
+        public List<JsonConsumable> Consumables { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// List of time during which the player was active (not dead and not dc) \n
         /// Length == number of phases
         /// </summary>
-        public List<long> ActiveTimes { get; }
+        public List<long> ActiveTimes { get; internal set; }
 
+        [JsonConstructor]
+        internal JsonPlayer()
+        {
+
+        }
 
         internal JsonPlayer(Player player, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc, Dictionary<string, JsonLog.DamageModDesc> damageModDesc, Dictionary<string, HashSet<long>> personalBuffs) : base(player, log, settings, skillDesc, buffDesc)
         {
