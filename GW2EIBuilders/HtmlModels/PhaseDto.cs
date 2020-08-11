@@ -263,7 +263,7 @@ namespace GW2EIBuilders.HtmlModels
             foreach (Player player in log.PlayerList)
             {
                 FinalDPS dpsAll = player.GetDPSAll(log, phaseIndex);
-                list.Add(PhaseDto.GetDPSStatData(dpsAll));
+                list.Add(GetDPSStatData(dpsAll));
             }
             return list;
         }
@@ -279,7 +279,7 @@ namespace GW2EIBuilders.HtmlModels
 
                 foreach (NPC target in phase.Targets)
                 {
-                    playerData.Add(PhaseDto.GetDPSStatData(player.GetDPSTarget(log, phaseIndex, target)));
+                    playerData.Add(GetDPSStatData(player.GetDPSTarget(log, phaseIndex, target)));
                 }
                 list.Add(playerData);
             }
@@ -292,7 +292,7 @@ namespace GW2EIBuilders.HtmlModels
             foreach (Player player in log.PlayerList)
             {
                 FinalGameplayStatsAll stats = player.GetGameplayStats(log, phaseIndex);
-                list.Add(PhaseDto.GetDMGStatData(stats));
+                list.Add(GetDMGStatData(stats));
             }
             return list;
         }
@@ -309,7 +309,7 @@ namespace GW2EIBuilders.HtmlModels
                 foreach (NPC target in phase.Targets)
                 {
                     FinalGameplayStats statsTarget = player.GetGameplayStats(log, phaseIndex, target);
-                    playerData.Add(PhaseDto.GetDMGTargetStatData(statsTarget));
+                    playerData.Add(GetDMGTargetStatData(statsTarget));
                 }
                 list.Add(playerData);
             }
@@ -325,7 +325,7 @@ namespace GW2EIBuilders.HtmlModels
             foreach (Player player in log.PlayerList)
             {
                 FinalDefensesAll defenses = player.GetDefenses(log, phaseIndex);
-                list.Add(PhaseDto.GetDefenseStatData(defenses, phase));
+                list.Add(GetDefenseStatData(defenses, phase));
             }
 
             return list;
@@ -338,7 +338,7 @@ namespace GW2EIBuilders.HtmlModels
             foreach (Player player in log.PlayerList)
             {
                 FinalPlayerSupport support = player.GetPlayerSupport(log, phaseIndex);
-                list.Add(PhaseDto.GetSupportStatData(support));
+                list.Add(GetSupportStatData(support));
             }
             return list;
         }

@@ -65,7 +65,7 @@ namespace GW2EIBuilders.HtmlModels
 
             foreach (Player p in log.PlayerList)
             {
-                list.Add(MechanicDto.GetMechanicData(presMech, log, p, phase));
+                list.Add(GetMechanicData(presMech, log, p, phase));
             }
             return list;
         }
