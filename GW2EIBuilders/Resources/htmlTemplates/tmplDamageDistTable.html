@@ -96,7 +96,7 @@
                         {{(!getSkill(row[0], row[1]).condi && row[6] && row[5]) ? round2(row[6]/row[5]) : ''}}
                     </td>
                     <td v-if="actor !== null">
-                        {{(!getSkill(row[0], row[1]).condi && row[6] && row[5]) ? round2(row[2]/(0.001 * row[15])) : ''}}
+                        {{(!getSkill(row[0], row[1]).condi && row[6] && row[15]) ? round2(row[2]/(0.001 * row[15])) : ''}}
                     </td>
                     <td
                         :data-original-title="(!getSkill(row[0], row[1]).condi && row[6]) ? row[7] +' out of ' + row[6] + ' hit(s) <br> Damage: ' + row[13] : false">
@@ -123,11 +123,13 @@
                     <td class="text-left">Total</td>
                     <td></td>
                     <td
-                        :data-original-title="Math.round((dmgdist.contributedDamage ? dmgdist.contributedDamage : 0)/phase.durationS) +' dps'">
-                        {{dmgdist.contributedDamage ? dmgdist.contributedDamage : 0}}</td>
+                        :data-original-title="Math.round(dmgdist.contributedDamage/phase.durationS) +' dps'">
+                        {{dmgdist.contributedDamage}}
+                    </td>
                     <td
-                        :data-original-title="Math.round((dmgdist.contributedShieldDamage ? dmgdist.contributedShieldDamage : 0)/phase.durationS) +' dps'">
-                        {{dmgdist.contributedShieldDamage ? dmgdist.contributedShieldDamage : 0}}</td>
+                        :data-original-title="Math.round(dmgdist.contributedShieldDamage/phase.durationS) +' dps'">
+                        {{dmgdist.contributedShieldDamage}}
+                    </td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -135,7 +137,7 @@
                     <td></td>
                     <td v-if="actor !== null"></td>
                     <td v-if="actor !== null">
-                        {{dmgdist.contributedDamage ? round2(dmgdist.contributedDamage/(0.001 * dmgdist.totalCasting)) : 0}}
+                        {{round2(dmgdist.contributedDamage/(0.001 * dmgdist.totalCasting))}}
                     </td>
                     <td></td>
                     <td></td>
