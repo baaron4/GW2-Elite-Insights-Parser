@@ -17,11 +17,21 @@ namespace GW2EIDPSReport
         {
             NamingStrategy = new CamelCaseNamingStrategy()
         };
-        private static string BaseUploadContentURL { get; } = "https://dps.report/uploadContent?json=1";
 
-        private static string GetUploadContentURL(DPSReportSettings settings)
+        private class DPSReportUserTokenResponse
         {
-            string url = BaseUploadContentURL;
+            public string UserToken { get; set; }
+        }
+
+        private static string BaseUploadContentURL { get; } = "https://dps.report/uploadContent?json=1";
+        private static string BaseGetUploadsURL { get; } = "https://dps.report/getUploads?page=";
+        private static string BaseGetUserTokenURL { get; } = "https://dps.report/getUserToken";
+        private static string BaseGetUploadMetadataURL { get; } = "https://dps.report/getUploadMetadata?";
+        private static string BaseGetJsonURL { get; } = "https://dps.report/getJson?";
+
+        private static string GetURL(string baseURL, DPSReportSettings settings)
+        {
+            string url = baseURL;
             if (settings.UserToken != null && settings.UserToken.Length > 0)
             {
                 url += "&userToken=" + settings.UserToken;
@@ -29,15 +39,67 @@ namespace GW2EIDPSReport
             return url;
         }
 
-        public static DPSReportUploadObject UploadDPSReportsEI(FileInfo fi, DPSReportSettings settings, List<string> traces)
-        {         
-            return UploadToDPSR(fi, GetUploadContentURL(settings) + "&generator=ei", traces);
-        }
-        public static DPSReportUploadObject UploadDPSReportsRH(FileInfo fi, DPSReportSettings settings, List<string> traces)
+        public static DPSReportUploadObject UploadUsingEI(FileInfo fi, DPSReportSettings settings, List<string> traces)
         {
-            return UploadToDPSR(fi, GetUploadContentURL(settings) + "&generator=rh", traces);
-
+            return UploadToDPSR(fi, GetURL(BaseUploadContentURL, settings) + "&generator=ei", traces);
         }
+
+        public static DPSReportUploadObject UploadUsingRH(FileInfo fi, DPSReportSettings settings, List<string> traces)
+        {
+            return UploadToDPSR(fi, GetURL(BaseUploadContentURL, settings) + "&generator=rh", traces);
+        }
+
+        public static DPSReportGetUploadsObject GetUploads(DPSReportSettings settings, List<string> traces, int page = 1)
+        {
+            if (settings.UserToken == null || settings.UserToken.Length == 0)
+            {
+                throw new InvalidDataException("Missing User Token for GetUploads end point");
+            }
+            return GetDPSReportResponse<DPSReportGetUploadsObject>("GetUploads", GetURL(BaseGetUploadsURL + page, settings), traces);
+        }
+        public static string GenerateUserToken(List<string> traces)
+        {
+            DPSReportUserTokenResponse responseItem = GetDPSReportResponse<DPSReportUserTokenResponse>("GenerateUserToken", BaseGetUserTokenURL, traces);
+            if (responseItem != null)
+            {
+                return responseItem.UserToken;
+            }
+            return "";
+        }
+        public static DPSReportUploadObject GetUploadMetaDataWithID(string id, List<string> traces)
+        {
+            if (id == null || id.Length == 0)
+            {
+                throw new InvalidDataException("Missing ID for GetUploadMetaData end point");
+            }
+            return GetDPSReportResponse<DPSReportUploadObject>("GetUploadMetaDataWithID", BaseGetUploadMetadataURL + "id =" + id, traces);
+        }
+        public static DPSReportUploadObject GetUploadMetaDataWithPermalink(string permalink, List<string> traces)
+        {
+            if (permalink == null || permalink.Length == 0)
+            {
+                throw new InvalidDataException("Missing Permalink for GetUploadMetaData end point");
+            }
+            return GetDPSReportResponse<DPSReportUploadObject>("GetUploadMetaDataWithPermalink", BaseGetUploadMetadataURL + "permalink =" + permalink, traces);
+        }
+
+        public static object GetJsonWithID(string id, List<string> traces)
+        {
+            if (id == null || id.Length == 0)
+            {
+                throw new InvalidDataException("Missing ID for GetJson end point");
+            }
+            return GetDPSReportResponse<object>("GetJsonWithID", BaseGetJsonURL + "id =" + id, traces);
+        }
+        public static object GetJsonWithPermalink(string permalink, List<string> traces)
+        {
+            if (permalink == null || permalink.Length == 0)
+            {
+                throw new InvalidDataException("Missing Permalink for GetJson end point");
+            }
+            return GetDPSReportResponse<object>("GetJsonWithPermalink", BaseGetJsonURL + "permalink =" + permalink, traces);
+        }
+
         /*private static string UploadRaidar(FileInfo fi)
         {
             //string fileName = fi.Name;
@@ -79,6 +141,54 @@ namespace GW2EIDPSReport
             //}
             return "";
         }*/
+        private static T GetDPSReportResponse<T>(string requestName, string URI, List<string> traces)
+        {
+            const int tentatives = 5;
+            for (int i = 0; i < tentatives; i++)
+            {
+                traces.Add(requestName + " tentative");
+                var webService = new Uri(@URI);
+                var requestMessage = new HttpRequestMessage(HttpMethod.Post, webService);
+                requestMessage.Headers.ExpectContinue = false;
+
+                var httpClient = new HttpClient();
+                try
+                {
+                    Task<HttpResponseMessage> httpRequest = httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
+                    HttpResponseMessage httpResponse = httpRequest.Result;
+                    HttpStatusCode statusCode = httpResponse.StatusCode;
+                    HttpContent responseContent = httpResponse.Content;
+
+                    if (statusCode != HttpStatusCode.OK)
+                    {
+                        throw new HttpRequestException(statusCode.ToString());
+                    }
+
+                    if (responseContent != null)
+                    {
+                        Task<string> stringContentsTask = responseContent.ReadAsStringAsync();
+                        string stringContents = stringContentsTask.Result;
+                        T item = JsonConvert.DeserializeObject<T>(stringContents, new JsonSerializerSettings
+                        {
+                            NullValueHandling = NullValueHandling.Ignore,
+                            ContractResolver = DefaultJsonContractResolver
+                        });
+                        traces.Add(requestName + " tentative successful");
+                        return item;
+                    }
+                }
+                catch (Exception e)
+                {
+                    traces.Add(requestName + " tentative failed: " + e.Message);
+                }
+                finally
+                {
+                    httpClient.Dispose();
+                    requestMessage.Dispose();
+                }
+            }
+            return default;
+        }
         private static DPSReportUploadObject UploadToDPSR(FileInfo fi, string URI, List<string> traces)
         {
             string fileName = fi.Name;
@@ -117,6 +227,7 @@ namespace GW2EIDPSReport
                         string stringContents = stringContentsTask.Result;
                         DPSReportUploadObject item = JsonConvert.DeserializeObject<DPSReportUploadObject>(stringContents, new JsonSerializerSettings
                         {
+                            NullValueHandling = NullValueHandling.Ignore,
                             ContractResolver = DefaultJsonContractResolver
                         });
                         if (item.Error != null)
@@ -137,7 +248,7 @@ namespace GW2EIDPSReport
                     httpClient.Dispose();
                     requestMessage.Dispose();
                 }
-            }        
+            }
             return null;
         }
 

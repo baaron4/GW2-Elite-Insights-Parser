@@ -89,6 +89,19 @@ namespace GW2EIParser
             {
                 traces.Add("Uploading to DPSReports using EI");
                 DPSReportUploadObject response = DPSReportAPI.UploadUsingEI(fInfo, settings, traces);
+                /*
+#if DEBUG
+                var settings2 = new DPSReportSettings(response.UserToken);
+                DPSReportUploadObject response2 = DPSReportAPI.GetUploadMetaDataWithPermalink(response.Permalink, traces);
+                DPSReportUploadObject response3 = DPSReportAPI.GetUploadMetaDataWithID(response.Id, traces);
+                DPSReportGetUploadsObject response4 = DPSReportAPI.GetUploads(settings2, traces);
+                if (response.Encounter.JsonAvailable)
+                {
+                    object response5 = DPSReportAPI.GetJsonWithID(response.Id, traces);
+                    object response6 = DPSReportAPI.GetJsonWithPermalink(response.Permalink, traces);
+                }
+#endif
+                */
                 uploadresult[0] =  response != null ? response.Permalink : "Upload process failed";
                 traces.Add("DPSReports using EI: " + uploadresult[0]);
             }
