@@ -23,7 +23,8 @@ namespace GW2EIBuilders.JsonModels
             public int CastTime { get; internal set; }
             [JsonProperty]
             /// <summary>
-            /// Duration of the animation, instant cast if 0
+            /// Duration of the animation, instant cast if 0 \n
+            /// Instant casts, outside of SkillMap['s' + ID].IsSwap and Mirage Cloaks, are estimated by EI, some may be missing
             /// </summary>
             public int Duration { get; internal set; }
             [JsonProperty]
