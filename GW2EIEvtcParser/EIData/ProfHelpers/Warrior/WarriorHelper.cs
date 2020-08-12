@@ -7,6 +7,11 @@ namespace GW2EIEvtcParser.EIData
     internal class WarriorHelper : ProfHelper
     {
 
+        internal static readonly List<InstantCastFinder> WarriorInstantCastFinders = new List<InstantCastFinder>()
+        {
+
+        };
+
         private static HashSet<AgentItem> GetBannerAgents(Dictionary<long, List<AbstractBuffEvent>> buffData, long id, HashSet<AgentItem> playerAgents)
         {
             if (buffData.TryGetValue(id, out List<AbstractBuffEvent> list))

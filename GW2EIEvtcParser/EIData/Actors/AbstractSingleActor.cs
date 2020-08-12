@@ -511,7 +511,22 @@ namespace GW2EIEvtcParser.EIData
                     CastLogs.Add(wepSwap);
                 }
             }
-            CastLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
+            CastLogs.Sort((x, y) =>
+            {
+                var compare = x.Time.CompareTo(y.Time);
+                if (compare == 0 && x.SkillId != y.SkillId)
+                {
+                    if (y.SkillId == SkillItem.WeaponSwapId)
+                    {
+                        return -1;
+                    }
+                    if (x.SkillId == SkillItem.WeaponSwapId)
+                    {
+                        return 1;
+                    }
+                }
+                return compare;
+            });
         }
 
         // DPS Stats

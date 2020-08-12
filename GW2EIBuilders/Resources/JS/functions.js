@@ -130,6 +130,7 @@ function computeRotationData(rotationData, images, data, phase) {
             }
 
             var fillColor;
+            var originalDuration = duration;
             if (endType == 1) { 
                 fillColor = 'rgb(0,0,255)'; 
             }
@@ -167,7 +168,7 @@ function computeRotationData(rotationData, images, data, phase) {
             rotaTrace.x.push(clampedWidth - 0.001);
             rotaTrace.base.push(clampedX);
             rotaTrace.y.push(1.2);
-            rotaTrace.text.push(name + ' at ' + x + 's for ' + duration + 'ms');
+            rotaTrace.text.push(name + ' at ' + x + 's for ' + originalDuration + 'ms');
             rotaTrace.width.push(aa ? 0.5 : 1.0);
             rotaTrace.marker.color.push(fillColor);
 

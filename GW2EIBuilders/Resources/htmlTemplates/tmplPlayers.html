@@ -59,11 +59,10 @@
                 return urls[path];
             },
             select: function (id) {
-                var oldStatus = this.players[id].active;
                 for (var i = 0; i < this.players.length; i++) {
                     this.players[i].active = false;
                 }
-                this.players[id].active = !oldStatus;
+                this.players[id].active = true;
             }
         },
         computed: {

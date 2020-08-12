@@ -16,6 +16,33 @@ namespace GW2EIEvtcParser.EIData
         private const long EarthMajor = 43740;
         private const long EarthMinor = 44822;
 
+        internal static readonly List<InstantCastFinder> WeaverInstantCastFinders = new List<InstantCastFinder>()
+        {
+            new BuffGainCastFinder(40183, 42086, 500), // Primordial Stance
+            //new BuffGainCastFinder(44926, ???, 500), // Stone Resonance + condition?
+            new BuffGainCastFinder(44612, 42683, 500), // Unravel
+            // Fire       
+            new BuffGainCastFinder(FireDual, FireDual, 500),
+            new BuffGainCastFinder(FireWater, FireWater, 500),
+            new BuffGainCastFinder(FireAir, FireAir, 500),
+            new BuffGainCastFinder(FireEarth, FireEarth, 500),
+            // Water
+            new BuffGainCastFinder(WaterFire, WaterFire, 500),
+            new BuffGainCastFinder(WaterDual, WaterDual, 500),
+            new BuffGainCastFinder(WaterAir, WaterAir, 500),
+            new BuffGainCastFinder(WaterEarth, WaterEarth, 500),
+            // Air
+            new BuffGainCastFinder(AirFire, AirFire, 500),
+            new BuffGainCastFinder(AirWater, AirWater, 500),
+            new BuffGainCastFinder(AirDual, AirDual, 500),
+            new BuffGainCastFinder(AirEarth, AirEarth, 500),
+            // Earth
+            new BuffGainCastFinder(EarthFire, EarthFire, 500),
+            new BuffGainCastFinder(EarthWater, EarthWater, 500),
+            new BuffGainCastFinder(EarthAir, EarthAir, 500),
+            new BuffGainCastFinder(EarthDual, EarthDual, 500),
+        };
+
         private static readonly Dictionary<long, HashSet<long>> _minorsTranslation = new Dictionary<long, HashSet<long>>
         {
             { FireMinor, new HashSet<long> { WaterFire, AirFire, EarthFire, FireDual}},

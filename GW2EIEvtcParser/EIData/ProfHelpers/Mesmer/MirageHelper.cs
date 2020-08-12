@@ -6,9 +6,16 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class MirageHelper : MesmerHelper
     {
-        public static List<AbstractCastEvent> TranslateMirageCloak(List<AbstractBuffEvent> buffs, SkillData skillData)
+
+        internal static readonly List<InstantCastFinder> MirageInstantCastFinders = new List<InstantCastFinder>()
         {
-            var res = new List<AbstractCastEvent>();
+            new DamageCastFinder(45449, 45449, 500), // Jaunt
+        };
+
+
+        public static List<InstantCastEvent> TranslateMirageCloak(List<AbstractBuffEvent> buffs, SkillData skillData)
+        {
+            var res = new List<InstantCastEvent>();
             long cloakStart = 0;
             foreach (AbstractBuffEvent ba in buffs.Where(x => x is BuffApplyEvent))
             {

@@ -95,7 +95,7 @@
                     <td :data-original-title="(row[14] - row[6]) + ' hit(s) not connected'">
                         {{ row[6] }}
                     </td>
-                    <td v-if="actor !== null" :data-original-title=" (!getSkill(row[0], row[1]).condi && row[14] && row[5]) ? (isEstimated(getSkill(row[0], row[1]),row[15]) ? '<= ' : '') + round2(row[14]/row[5]) : '' + ' with missed hits'">
+                    <td v-if="actor !== null" :data-original-title=" (!getSkill(row[0], row[1]).condi && row[14] && row[5]) ? (isEstimated(getSkill(row[0], row[1]),row[15]) ? '<= ' : '') + round2(row[14]/row[5]) + ' with missed hits' : false" >
                         {{(!getSkill(row[0], row[1]).condi && row[6] && row[5]) ? (isEstimated(getSkill(row[0], row[1]),row[15]) ? '<= ' : '') + round2(row[6]/row[5]) : ''}}
                     </td>
                     <td v-if="actor !== null">

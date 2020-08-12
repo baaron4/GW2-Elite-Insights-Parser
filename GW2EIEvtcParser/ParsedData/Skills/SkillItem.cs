@@ -65,6 +65,26 @@ namespace GW2EIEvtcParser.ParsedData
             {56375, "Teleport Center" },
             {56446, "Eat Pylon" },
             {56329, "Big Magma Drop" },
+            // Weaver attunements
+            {ProfHelper.FireDual, "Dual Fire Attunement" },
+            {ProfHelper.FireWater, "Fire Water Attunement" },
+            {ProfHelper.FireAir, "Fire Air Attunement" },
+            {ProfHelper.FireEarth, "Fire Earth Attunement" },
+
+            {ProfHelper.WaterDual, "Dual Water Attunement" },
+            {ProfHelper.WaterFire, "Water Fire Attunement" },
+            {ProfHelper.WaterAir, "Water Air Attunement" },
+            {ProfHelper.WaterEarth, "Water Earth Attunement" },
+
+            {ProfHelper.AirDual, "Dual Air Attunement" },
+            {ProfHelper.AirFire, "Air Fire Attunement" },
+            {ProfHelper.AirWater, "Air Water Attunement" },
+            {ProfHelper.AirEarth, "Air Earth Attunement" },
+
+            {ProfHelper.EarthDual, "Dual Earth Attunement" },
+            {ProfHelper.EarthFire, "Earth Fire Attunement" },
+            {ProfHelper.EarthWater, "Earth Water Attunement" },
+            {ProfHelper.EarthAir, "Earth Air Attunement" },
         };
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
         {
@@ -115,6 +135,27 @@ namespace GW2EIEvtcParser.ParsedData
             {42925, "https://wiki.guildwars2.com/images/5/5f/Epilogue-_Eternal_Oasis.png"},
             {43630, "https://wiki.guildwars2.com/images/0/0c/Thermal_Release_Valve.png" },
             {22499, "https://wiki.guildwars2.com/images/d/d0/Shattered_Aegis.png" },
+            {29604, "https://wiki.guildwars2.com/images/8/82/Chilling_Nova.png" },
+            // Weaver attunements
+            {ProfHelper.FireDual, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
+            {ProfHelper.FireWater, "https://i.imgur.com/ihqKuUJ.png" },
+            {ProfHelper.FireAir, "https://i.imgur.com/kKFJ8cT.png" },
+            {ProfHelper.FireEarth, "https://i.imgur.com/T4187h0.png" },
+
+            {ProfHelper.WaterDual, "https://wiki.guildwars2.com/images/3/31/Water_Attunement.png" },
+            {ProfHelper.WaterFire, "https://i.imgur.com/vMUkzxH.png" },
+            {ProfHelper.WaterAir, "https://i.imgur.com/5G5OFud.png" },
+            {ProfHelper.WaterEarth, "https://i.imgur.com/QKEtF2P.png" },
+
+            {ProfHelper.AirDual, "https://wiki.guildwars2.com/images/9/91/Air_Attunement.png" },
+            {ProfHelper.AirFire, "https://i.imgur.com/vf68GJm.png" },
+            {ProfHelper.AirWater, "https://i.imgur.com/Tuj5Sro.png" },
+            {ProfHelper.AirEarth, "https://i.imgur.com/lHcOSwk.png" },
+
+            {ProfHelper.EarthDual, "https://wiki.guildwars2.com/images/a/a8/Earth_Attunement.png" },
+            {ProfHelper.EarthFire, "https://i.imgur.com/aJWvE0I.png" },
+            {ProfHelper.EarthWater, "https://i.imgur.com/jtjj2TG.png" },
+            {ProfHelper.EarthAir, "https://i.imgur.com/4Eti7Pb.png" },
         };
 
         private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>
@@ -268,7 +309,7 @@ namespace GW2EIEvtcParser.ParsedData
                     }
                 }*/
             }
-            if (_apiSkill == null && _overrideIcons.TryGetValue(ID, out string icon))
+            if (_overrideIcons.TryGetValue(ID, out string icon))
             {
                 Icon = icon;
             }

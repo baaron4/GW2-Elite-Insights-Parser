@@ -36,7 +36,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 if (p.Prof == "Weaver")
                 {
-                    toAdd = WeaverHelper.TransformWeaverAttunements(GetBuffData(p.AgentItem), p.AgentItem, skillData);
+                    toAdd.AddRange(WeaverHelper.TransformWeaverAttunements(GetBuffData(p.AgentItem), p.AgentItem, skillData));
                 }
                 if (p.Prof == "Elementalist" || p.Prof == "Tempest")
                 {
@@ -142,17 +142,11 @@ namespace GW2EIEvtcParser.ParsedData
                 _damageData[a].Sort((x, y) => x.Time.CompareTo(y.Time));
             }
         }
-        private void EICastParse(List<Player> players, SkillData skillData)
+        private void EICastParse(List<Player> players, SkillData skillData, AgentData agentData)
         {
             var toAdd = new List<AbstractCastEvent>();
-            foreach (Player p in players)
-            {
-                if (p.Prof == "Mirage")
-                {
-                    toAdd.AddRange(MirageHelper.TranslateMirageCloak(GetBuffData(40408), skillData));
-                    break;
-                }
-            }
+            toAdd.AddRange(ProfHelper.ComputeInstantCastEvents(players, this, skillData, agentData));
+            //
             var castIDsToSort = new HashSet<long>();
             var castAgentsToSort = new HashSet<AgentItem>();
             var wepSwapAgentsToSort = new HashSet<AgentItem>();
@@ -284,14 +278,14 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        private void EIExtraEventProcess(List<Player> players, SkillData skillData, FightData fightData, ParserController operation)
+        private void EIExtraEventProcess(List<Player> players, SkillData skillData, AgentData agentData, FightData fightData, ParserController operation)
         {
             operation.UpdateProgressWithCancellationCheck("Creating Custom Buff Events");
             EIBuffParse(players, skillData, fightData);
             operation.UpdateProgressWithCancellationCheck("Creating Custom Damage Events");
             EIDamageParse(skillData, fightData);
             operation.UpdateProgressWithCancellationCheck("Creating Custom Cast Events");
-            EICastParse(players, skillData);
+            EICastParse(players, skillData, agentData);
             operation.UpdateProgressWithCancellationCheck("Creating Custom Status Events");
             EIStatusParse();
             // master attachements
@@ -354,7 +348,7 @@ namespace GW2EIEvtcParser.ParsedData
             healing_received_data = allCombatItems.Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                             ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
                                                 (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
-            EIExtraEventProcess(players, skillData, fightData, operation);
+            EIExtraEventProcess(players, skillData, agentData, fightData, operation);
             _buffRemoveAllData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffRemoveAllEvent>().ToList());
         }
 
@@ -585,7 +579,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
             if (_buffData.TryGetValue(key, out List<AbstractBuffEvent> res))
             {
-                return res;
+                return res.Where(x => x.BuffID != ProfHelper.NoBuff).ToList();
             }
             return new List<AbstractBuffEvent>(); ;
         }
@@ -594,7 +588,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
             if (_buffRemoveAllData.TryGetValue(key, out List<BuffRemoveAllEvent> res))
             {
-                return res;
+                return res.Where(x => x.BuffID != ProfHelper.NoBuff).ToList();
             }
             return new List<BuffRemoveAllEvent>(); ;
         }
@@ -608,7 +602,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
             if (_buffDataByDst.TryGetValue(key, out List<AbstractBuffEvent> res))
             {
-                return res;
+                return res.Where(x => x.BuffID != ProfHelper.NoBuff).ToList();
             }
             return new List<AbstractBuffEvent>(); ;
         }
