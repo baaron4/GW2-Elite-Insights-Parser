@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using Newtonsoft.Json;
 
 namespace GW2EIBuilders.JsonModels
 {
@@ -14,29 +15,39 @@ namespace GW2EIBuilders.JsonModels
         /// </summary>
         public class JsonDeathRecapDamageItem
         {
+            [JsonProperty]
             /// <summary>
             /// Id of the skill
             /// </summary>
             /// <seealso cref="JsonLog.SkillMap"/>
             /// <seealso cref="JsonLog.BuffMap"/>
-            public long Id { get; }
+            public long Id { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// True if the damage was indirect
             /// </summary>
-            public bool IndirectDamage { get; }
+            public bool IndirectDamage { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Source of the damage
             /// </summary>
-            public string Src { get; }
+            public string Src { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Damage done
             /// </summary>
-            public int Damage { get; }
+            public int Damage { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Time value
             /// </summary>
-            public int Time { get; }
+            public int Time { get; internal set; }
 
+            [JsonConstructor]
+            internal JsonDeathRecapDamageItem()
+            {
+
+            }
             internal JsonDeathRecapDamageItem(DeathRecap.DeathRecapDamageItem item)
             {
                 Id = item.ID;
@@ -47,18 +58,27 @@ namespace GW2EIBuilders.JsonModels
             }
         }
 
+        [JsonProperty]
         /// <summary>
         /// Time of death
         /// </summary>
-        public long DeathTime { get; }
+        public long DeathTime { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// List of damaging events to put into downstate
         /// </summary>
-        public List<JsonDeathRecapDamageItem> ToDown { get; }
+        public List<JsonDeathRecapDamageItem> ToDown { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// List of damaging events to put into deadstate
         /// </summary>
-        public List<JsonDeathRecapDamageItem> ToKill { get; }
+        public List<JsonDeathRecapDamageItem> ToKill { get; internal set; }
+
+        [JsonConstructor]
+        internal JsonDeathRecap()
+        {
+
+        }
 
         internal JsonDeathRecap(DeathRecap recap)
         {

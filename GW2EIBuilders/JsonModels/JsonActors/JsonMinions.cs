@@ -3,6 +3,7 @@ using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
+using Newtonsoft.Json;
 
 namespace GW2EIBuilders.JsonModels
 {
@@ -11,48 +12,61 @@ namespace GW2EIBuilders.JsonModels
     /// </summary>
     public class JsonMinions
     {
+        [JsonProperty]
         /// <summary>
         /// Name of the minion
         /// </summary>
-        public string Name { get; }
+        public string Name { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Total Damage done by minions \n
         /// Length == # of phases
         /// </summary>
-        public List<int> TotalDamage { get; }
+        public List<int> TotalDamage { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Damage done by minions against targets \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
         /// </summary>
-        public List<int>[] TotalTargetDamage { get; }
+        public List<int>[] TotalTargetDamage { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Total Shield Damage done by minions \n
         /// Length == # of phases
         /// </summary>
-        public List<int> TotalShieldDamage { get; }
+        public List<int> TotalShieldDamage { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Shield Damage done by minions against targets \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
         /// </summary>
-        public List<int>[] TotalTargetShieldDamage { get; }
+        public List<int>[] TotalTargetShieldDamage { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Total Damage distribution array \n
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonDamageDist"/>
-        public List<JsonDamageDist>[] TotalDamageDist { get; }
+        public List<JsonDamageDist>[] TotalDamageDist { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Per Target Damage distribution array \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
         /// </summary>
         /// <seealso cref="JsonDamageDist"/>
-        public List<JsonDamageDist>[][] TargetDamageDist { get; }
+        public List<JsonDamageDist>[][] TargetDamageDist { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Rotation data
         /// </summary>
         /// <seealso cref="JsonRotation"/>
-        public List<JsonRotation> Rotation { get; }
+        public List<JsonRotation> Rotation { get; internal set; }
 
+        [JsonConstructor]
+        internal JsonMinions()
+        {
+
+        }
 
         internal JsonMinions(Minions minions, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {

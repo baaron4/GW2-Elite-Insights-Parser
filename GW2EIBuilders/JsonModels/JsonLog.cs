@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
+using Newtonsoft.Json;
 using static GW2EIBuilders.JsonModels.JsonMechanics;
 
 namespace GW2EIBuilders.JsonModels
@@ -18,6 +19,11 @@ namespace GW2EIBuilders.JsonModels
         /// </summary>
         public class SkillDesc
         {
+            [JsonConstructor]
+            internal SkillDesc()
+            {
+
+            }
             internal SkillDesc(SkillItem item, ulong gw2Build)
             {
                 Name = item.Name;
@@ -26,22 +32,26 @@ namespace GW2EIBuilders.JsonModels
                 CanCrit = SkillItem.CanCrit(item.ID, gw2Build);
             }
 
+            [JsonProperty]
             /// <summary>
             /// Name of the skill
             /// </summary>
-            public string Name { get; }
+            public string Name { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// If the skill is an auto attack
             /// </summary>
-            public bool AutoAttack { get; }
+            public bool AutoAttack { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// If the skill can crit
             /// </summary>
-            public bool CanCrit { get; }
+            public bool CanCrit { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Icon of the skill
             /// </summary>
-            public string Icon { get; }
+            public string Icon { get; internal set; }
         }
 
         /// <summary>
@@ -49,6 +59,10 @@ namespace GW2EIBuilders.JsonModels
         /// </summary>
         public class BuffDesc
         {
+            [JsonConstructor]
+            internal BuffDesc()
+            {
+            }
             internal BuffDesc(Buff item, ParsedEvtcLog log)
             {
                 Name = item.Name;
@@ -75,22 +89,26 @@ namespace GW2EIBuilders.JsonModels
                 }
             }
 
+            [JsonProperty]
             /// <summary>
             /// Name of the buff
             /// </summary>
-            public string Name { get; }
+            public string Name { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Icon of the buff
             /// </summary>
-            public string Icon { get; }
+            public string Icon { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// True if the buff is stacking
             /// </summary>
-            public bool Stacking { get; }
+            public bool Stacking { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Descriptions of the buffs (no traits)
             /// </summary>
-            public List<string> Descriptions { get; }
+            public List<string> Descriptions { get; internal set; }
         }
 
         /// <summary>
@@ -98,6 +116,12 @@ namespace GW2EIBuilders.JsonModels
         /// </summary>
         public class DamageModDesc
         {
+            [JsonConstructor]
+            internal DamageModDesc()
+            {
+
+            }
+
             internal DamageModDesc(DamageModifier item)
             {
                 Name = item.Name;
@@ -107,153 +131,190 @@ namespace GW2EIBuilders.JsonModels
                 SkillBased = item.SkillBased;
             }
 
+            [JsonProperty]
             /// <summary>
             /// Name of the damage modifier
             /// </summary>
-            public string Name { get; }
+            public string Name { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Icon of the damage modifier
             /// </summary>
-            public string Icon { get; }
+            public string Icon { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// Description of the damage modifier
             /// </summary>
-            public string Description { get; }
+            public string Description { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// False if the modifier is multiplicative \n
             /// If true then the correspond <see cref="JsonDamageModifierData.JsonDamageModifierItem.DamageGain"/> are damage done under the effect. One will have to deduce the gain manualy depending on your gear.
             /// </summary>
-            public bool NonMultiplier { get; }
+            public bool NonMultiplier { get; internal set; }
+            [JsonProperty]
             /// <summary>
             /// True if the modifier is skill based
             /// </summary>
-            public bool SkillBased { get; }
+            public bool SkillBased { get; internal set; }
         }
-
+        [JsonProperty]
         /// <summary>
         /// The used EI version.
         /// </summary>
-        public string EliteInsightsVersion { get; }
+        public string EliteInsightsVersion { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// The id with which the log has been triggered
         /// </summary>
-        public int TriggerID { get; }
+        public int TriggerID { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// The name of the fight
         /// </summary>
-        public string FightName { get; }
+        public string FightName { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// The icon of the fight
         /// </summary>
-        public string FightIcon { get; }
+        public string FightIcon { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// The used arcdps version
         /// </summary>
-        public string ArcVersion { get; }
+        public string ArcVersion { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// GW2 build
         /// </summary>
-        public ulong GW2Build { get; }
+        public ulong GW2Build { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Language with which the evtc was generated
         /// </summary>
-        public string Language { get; }
+        public string Language { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// ID of the language
         /// </summary>
-        public byte LanguageID { get; }
+        public byte LanguageID { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// The player who recorded the fight
         /// </summary>
-        public string RecordedBy { get; }
+        public string RecordedBy { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// DEPRECATED: use TimeStartStd instead \n
         /// The time at which the fight started in "yyyy-mm-dd hh:mm:ss zz" format \n
         /// The value will be <see cref="LogData.DefaultTimeValue"/> if the event does not exist
         /// </summary>
-        public string TimeStart { get; }
+        public string TimeStart { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// DEPRECATED: use TimeEndStd instead \n
         /// The time at which the fight ended in "yyyy-mm-dd hh:mm:ss zz" format \n
         /// The value will be <see cref="LogData.DefaultTimeValue"/> if the event does not exist
         /// </summary>
-        public string TimeEnd { get; }
+        public string TimeEnd { get; internal set; }
+        [JsonProperty]
 
         /// <summary>
         /// The time at which the fight started in "yyyy-mm-dd hh:mm:ss zzz" format \n
         /// The value will be <see cref="LogData.DefaultTimeValue"/> if the event does not exist
         /// </summary>
-        public string TimeStartStd { get; }
+        public string TimeStartStd { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// The time at which the fight ended in "yyyy-mm-dd hh:mm:ss zzz" format \n
         /// The value will be <see cref="LogData.DefaultTimeValue"/> if the event does not exist
         /// </summary>
-        public string TimeEndStd { get; }
+        public string TimeEndStd { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// The duration of the fight in "xh xm xs xms" format
         /// </summary>
-        public string Duration { get; }
+        public string Duration { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// The success status of the fight
         /// </summary>
-        public bool Success { get; }
+        public bool Success { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// If the fight is in challenge mode
         /// </summary>
-        public bool IsCM { get; }
+        public bool IsCM { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// The list of targets
         /// </summary>
         /// <seealso cref="JsonNPC"/>
-        public List<JsonNPC> Targets { get; }
+        public List<JsonNPC> Targets { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// The list of players
         /// </summary>
         /// <seealso cref="JsonPlayer"/>
-        public List<JsonPlayer> Players { get; }
+        public List<JsonPlayer> Players { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// The list of phases
         /// </summary>
         /// <seealso cref="JsonPhase"/>
-        public List<JsonPhase> Phases { get; }
+        public List<JsonPhase> Phases { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// List of mechanics
         /// </summary>
         /// <seealso cref="JsonMechanics"/>
-        public List<JsonMechanics> Mechanics { get; }
+        public List<JsonMechanics> Mechanics { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Upload links to dps.reports/raidar
         /// </summary>
-        public string[] UploadLinks { get; }
+        public string[] UploadLinks { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// Dictionary of skills' description, the key is in "'s' + id" format
         /// </summary>
         /// <seealso cref="SkillDesc"/>
-        public Dictionary<string, SkillDesc> SkillMap { get; } = new Dictionary<string, SkillDesc>();
+        public Dictionary<string, SkillDesc> SkillMap { get; internal set; } = new Dictionary<string, SkillDesc>();
+        [JsonProperty]
         /// <summary>
         /// Dictionary of buffs' description, the key is in "'b' + id" format
         /// </summary>
         /// <seealso cref="BuffDesc"/>
-        public Dictionary<string, BuffDesc> BuffMap { get; } = new Dictionary<string, BuffDesc>();
+        public Dictionary<string, BuffDesc> BuffMap { get; internal set; } = new Dictionary<string, BuffDesc>();
+        [JsonProperty]
         /// <summary>
         /// Dictionary of damage modifiers' description, the key is in "'d' + id" format
         /// </summary>
         /// <seealso cref="DamageModDesc"/>
-        public Dictionary<string, DamageModDesc> DamageModMap { get; } = new Dictionary<string, DamageModDesc>();
+        public Dictionary<string, DamageModDesc> DamageModMap { get; internal set; } = new Dictionary<string, DamageModDesc>();
+        [JsonProperty]
         /// <summary>
         /// Dictionary of personal buffs. The key is the profession, the value is a list of buff ids
         /// </summary>
         /// <seealso cref="BuffMap"/>
-        public Dictionary<string, HashSet<long>> PersonalBuffs { get; } = new Dictionary<string, HashSet<long>>();
+        public Dictionary<string, HashSet<long>> PersonalBuffs { get; internal set; } = new Dictionary<string, HashSet<long>>();
+        [JsonProperty]
         /// <summary>
         /// List of present fractal instabilities, the values are buff ids
         /// </summary>
         /// <seealso cref="BuffMap"/>
-        public List<long> PresentFractalInstabilities { get; }
+        public List<long> PresentFractalInstabilities { get; internal set; }
+        [JsonProperty]
         /// <summary>
         /// List of error messages given by ArcDPS
         /// </summary>
-        public List<string> LogErrors { get; }
+        public List<string> LogErrors { get; internal set; }
+
+        [JsonConstructor]
+        internal JsonLog()
+        {
+
+        }
 
         internal JsonLog(ParsedEvtcLog log, RawFormatSettings settings, string[] uploadLinks)
         {
@@ -279,7 +340,7 @@ namespace GW2EIBuilders.JsonModels
             if (log.Statistics.PresentFractalInstabilities.Any())
             {
                 PresentFractalInstabilities = new List<long>();
-                foreach(Buff fractalInstab in log.Statistics.PresentFractalInstabilities)
+                foreach (Buff fractalInstab in log.Statistics.PresentFractalInstabilities)
                 {
                     PresentFractalInstabilities.Add(fractalInstab.ID);
                     if (!BuffMap.ContainsKey("b" + fractalInstab.ID))
