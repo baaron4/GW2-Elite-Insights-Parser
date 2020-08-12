@@ -5,7 +5,7 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class Buff
+    public class Buff : IVersionable
     {
         // Boon
         public enum BuffNature { 
@@ -50,8 +50,8 @@ namespace GW2EIEvtcParser.EIData
 
         public BuffInfoEvent BuffInfo { get; private set; }
 
-        public ulong MaxBuild { get; } = ulong.MaxValue;
-        public ulong MinBuild { get; } = ulong.MinValue;
+        private ulong _maxBuild { get; } = ulong.MaxValue;
+        private ulong _minBuild { get; } = ulong.MinValue;
         public int Capacity { get; private set; }
         public string Link { get; }
 
@@ -82,8 +82,8 @@ namespace GW2EIEvtcParser.EIData
 
         public Buff(string name, long id, ParserHelper.Source source, BuffStackType type, int capacity, BuffNature nature, string link, ulong minBuild, ulong maxBuild) : this(name, id, source, type, capacity, nature, link)
         {
-            MaxBuild = maxBuild;
-            MinBuild = minBuild;
+            _maxBuild = maxBuild;
+            _minBuild = minBuild;
         }
 
         public Buff(string name, long id, ParserHelper.Source source, BuffNature nature, string link, ulong minBuild, ulong maxBuild) : this(name, id, source, BuffStackType.Force, 1, nature, link, minBuild, maxBuild)
@@ -179,6 +179,11 @@ namespace GW2EIEvtcParser.EIData
                 return new BuffSourceFinder05032019(boonIds);
             }
             return new BuffSourceFinder11122018(boonIds);
+        }
+
+        public bool Available(ulong gw2Build)
+        {
+            return gw2Build < _maxBuild && gw2Build >= _minBuild;
         }
     }
 }

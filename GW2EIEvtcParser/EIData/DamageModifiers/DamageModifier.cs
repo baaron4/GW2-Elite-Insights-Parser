@@ -5,7 +5,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public abstract class DamageModifier
+    public abstract class DamageModifier : IVersionable
     {
 
         public enum DamageModifierMode { PvE, sPvP, WvW, All, sPvPWvW };
@@ -17,8 +17,8 @@ namespace GW2EIEvtcParser.EIData
         private DamageSource _dmgSrc { get; }
         protected double GainPerStack { get; }
         internal GainComputer GainComputer { get; }
-        public ulong MinBuild { get; } = ulong.MaxValue;
-        public ulong MaxBuild { get; } = ulong.MinValue;
+        private ulong _minBuild { get; } = ulong.MaxValue;
+        private ulong _maxBuild { get; } = ulong.MinValue;
         public bool Multiplier => GainComputer.Multiplier;
         public bool SkillBased => GainComputer.SkillBased;
         public ParserHelper.Source Src { get; }
@@ -42,8 +42,8 @@ namespace GW2EIEvtcParser.EIData
             Icon = icon;
             GainComputer = gainComputer;
             DLChecker = dlChecker;
-            MaxBuild = maxBuild;
-            MinBuild = minBuild;
+            _maxBuild = maxBuild;
+            _minBuild = minBuild;
             Mode = mode;
             switch (_dmgSrc)
             {
@@ -82,6 +82,10 @@ namespace GW2EIEvtcParser.EIData
             {
                 Tooltip += "<br>Non multiplier";
             }
+        }
+        public bool Available(ulong gw2Build)
+        {
+            return gw2Build < _maxBuild && gw2Build >= _minBuild;
         }
 
         internal bool Keep(FightLogic.ParseMode mode)
