@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIEvtcParser.EIData;
 using GW2EIGW2API;
 using GW2EIGW2API.GW2API;
 
@@ -145,6 +146,8 @@ namespace GW2EIEvtcParser.ParsedData
         public long ID { get; private set; }
         //public int Range { get; private set; } = 0;
         public bool AA => _apiSkill?.Slot == "Weapon_1" || _apiSkill?.Slot == "Downed_1";
+
+        public bool IsSwap => ID == WeaponSwapId || ElementalistHelper.IsElementalSwap(ID);
         public string Name { get; private set; }
         public string Icon { get; private set; }
         private WeaponDescriptor _weaponDescriptor;

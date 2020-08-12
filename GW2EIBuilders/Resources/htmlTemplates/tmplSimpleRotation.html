@@ -22,7 +22,7 @@
             </ul>
         </div>
         <span class="rot-skill" v-for="rota in rotation"
-            :class="{'rot-swap': rota[1] === -2 ,'mb-1': rota[1] === -2, 'rot-small': small || (smallAA && getSkill(rota[1]).aa)}"
+            :class="{'rot-swap': isSwap(rota[1]) ,'mb-1': isSwap(rota[1]), 'rot-small': small || (smallAA && getSkill(rota[1]).aa)}"
             v-show="showSkill(rota)">
             <img class="rot-icon"
                 :class="{'rot-cancelled': rota[3] === 2, 'rot-animfull': rota[3] === 3, 'rot-unknown': rota[3] === 0, 'rot-instant': rota[3] === 4}"
@@ -73,6 +73,9 @@
         methods: {
             getSkill: function (id) {
                 return findSkill(false, id);
+            },
+            isSwap: function(id) {
+                return findSkill(false, id).isSwap;
             },
             showSkill: function (rota) {
                 var aa = this.getSkill(rota[1]).aa;

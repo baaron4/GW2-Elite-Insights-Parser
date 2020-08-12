@@ -11,6 +11,7 @@ namespace GW2EIBuilders.HtmlModels
         public string Name { get; internal set; }
         public string Icon { get; internal set; }
         public bool Aa { get; internal set; }
+        public bool IsSwap { get; internal set; }
 
         internal static void AssembleSkills(ICollection<SkillItem> skills, Dictionary<string, SkillDto> dict)
         {
@@ -21,7 +22,8 @@ namespace GW2EIBuilders.HtmlModels
                     Id = skill.ID,
                     Name = skill.Name,
                     Icon = skill.Icon,
-                    Aa = skill.AA
+                    Aa = skill.AA,
+                    IsSwap = skill.IsSwap,
                 };
             }
         }

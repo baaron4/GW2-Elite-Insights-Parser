@@ -30,6 +30,7 @@ namespace GW2EIBuilders.JsonModels
                 AutoAttack = item.AA;
                 Icon = item.Icon;
                 CanCrit = SkillItem.CanCrit(item.ID, gw2Build);
+                IsSwap = item.IsSwap;
             }
 
             [JsonProperty]
@@ -52,6 +53,11 @@ namespace GW2EIBuilders.JsonModels
             /// Icon of the skill
             /// </summary>
             public string Icon { get; internal set; }
+            [JsonProperty]
+            /// <summary>
+            /// True if this skill can trigger on weapon swap sigils
+            /// </summary>
+            public bool IsSwap { get; internal set; }
         }
 
         /// <summary>
