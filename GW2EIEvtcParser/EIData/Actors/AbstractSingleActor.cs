@@ -516,11 +516,11 @@ namespace GW2EIEvtcParser.EIData
                 var compare = x.Time.CompareTo(y.Time);
                 if (compare == 0 && x.SkillId != y.SkillId)
                 {
-                    if (y.SkillId == SkillItem.WeaponSwapId)
+                    if (y.Skill.IsSwap)
                     {
                         return -1;
                     }
-                    if (x.SkillId == SkillItem.WeaponSwapId)
+                    if (x.Skill.IsSwap)
                     {
                         return 1;
                     }
