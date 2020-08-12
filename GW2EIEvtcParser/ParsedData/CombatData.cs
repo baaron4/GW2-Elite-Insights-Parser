@@ -20,6 +20,7 @@ namespace GW2EIEvtcParser.ParsedData
         private readonly Dictionary<AgentItem, List<AbstractDamageEvent>> _damageData;
         private readonly Dictionary<long, List<AbstractDamageEvent>> _damageDataById;
         private readonly Dictionary<AgentItem, List<AnimatedCastEvent>> _animatedCastData;
+        private readonly Dictionary<AgentItem, List<InstantCastEvent>> _instantCastData;
         private readonly Dictionary<AgentItem, List<WeaponSwapEvent>> _weaponSwapData;
         private readonly Dictionary<long, List<AbstractCastEvent>> _castDataById;
         private readonly Dictionary<AgentItem, List<AbstractDamageEvent>> _damageTakenData;
@@ -143,31 +144,66 @@ namespace GW2EIEvtcParser.ParsedData
         }
         private void EICastParse(List<Player> players, SkillData skillData)
         {
-            var toAdd = new List<AnimatedCastEvent>();
+            var toAdd = new List<AbstractCastEvent>();
             foreach (Player p in players)
             {
                 if (p.Prof == "Mirage")
                 {
-                    toAdd = MirageHelper.TranslateMirageCloak(GetBuffData(40408), skillData);
+                    toAdd.AddRange(MirageHelper.TranslateMirageCloak(GetBuffData(40408), skillData));
                     break;
                 }
             }
             var castIDsToSort = new HashSet<long>();
             var castAgentsToSort = new HashSet<AgentItem>();
-            foreach (AnimatedCastEvent cast in toAdd)
+            var wepSwapAgentsToSort = new HashSet<AgentItem>();
+            var instantAgentsToSort = new HashSet<AgentItem>();
+            foreach (AbstractCastEvent cast in toAdd)
             {
-                if (_animatedCastData.TryGetValue(cast.Caster, out List<AnimatedCastEvent> list1))
+                if (cast is AnimatedCastEvent ace)
                 {
-                    list1.Add(cast);
-                }
-                else
-                {
-                    _animatedCastData[cast.Caster] = new List<AnimatedCastEvent>()
+                    if (_animatedCastData.TryGetValue(ace.Caster, out List<AnimatedCastEvent> list1))
                     {
-                        cast
-                    };
+                        list1.Add(ace);
+                    }
+                    else
+                    {
+                        _animatedCastData[ace.Caster] = new List<AnimatedCastEvent>()
+                        {
+                            ace
+                        };
+                    }
+                    castAgentsToSort.Add(ace.Caster);
                 }
-                castAgentsToSort.Add(cast.Caster);
+                if (cast is WeaponSwapEvent wse)
+                {
+                    if (_weaponSwapData.TryGetValue(wse.Caster, out List<WeaponSwapEvent> list1))
+                    {
+                        list1.Add(wse);
+                    }
+                    else
+                    {
+                        _weaponSwapData[wse.Caster] = new List<WeaponSwapEvent>()
+                        {
+                            wse
+                        };
+                    }
+                    wepSwapAgentsToSort.Add(wse.Caster);
+                }
+                if (cast is InstantCastEvent ice)
+                {
+                    if (_instantCastData.TryGetValue(ice.Caster, out List<InstantCastEvent> list1))
+                    {
+                        list1.Add(ice);
+                    }
+                    else
+                    {
+                        _instantCastData[ice.Caster] = new List<InstantCastEvent>()
+                        {
+                            ice
+                        };
+                    }
+                    instantAgentsToSort.Add(ice.Caster);
+                }
                 if (_castDataById.TryGetValue(cast.SkillId, out List<AbstractCastEvent> list2))
                 {
                     list2.Add(cast);
@@ -188,6 +224,14 @@ namespace GW2EIEvtcParser.ParsedData
             foreach (AgentItem a in castAgentsToSort)
             {
                 _animatedCastData[a].Sort((x, y) => x.Time.CompareTo(y.Time));
+            }
+            foreach (AgentItem a in wepSwapAgentsToSort)
+            {
+                _weaponSwapData[a].Sort((x, y) => x.Time.CompareTo(y.Time));
+            }
+            foreach (AgentItem a in instantAgentsToSort)
+            {
+                _instantCastData[a].Sort((x, y) => x.Time.CompareTo(y.Time));
             }
         }
 
@@ -283,6 +327,7 @@ namespace GW2EIEvtcParser.ParsedData
             List<WeaponSwapEvent> wepSwaps = CombatEventFactory.CreateWeaponSwapEvents(allCombatItems.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.WeaponSwap).ToList(), agentData, skillData);
             _weaponSwapData = wepSwaps.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
             _animatedCastData = animatedCastData.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
+            _instantCastData = new Dictionary<AgentItem, List<InstantCastEvent>>();
             var allCastEvents = new List<AbstractCastEvent>(animatedCastData);
             allCastEvents.AddRange(wepSwaps);
             _castDataById = allCastEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
@@ -608,6 +653,20 @@ namespace GW2EIEvtcParser.ParsedData
                 return res;
             }
             return new List<AnimatedCastEvent>(); ;
+        }
+
+        /// <summary>
+        /// Returns list of instant cast events done by Agent
+        /// </summary>
+        /// <param name="key"></param> Agent
+        /// <returns></returns>
+        public List<InstantCastEvent> GetInstantCastData(AgentItem key)
+        {
+            if (_instantCastData.TryGetValue(key, out List<InstantCastEvent> res))
+            {
+                return res;
+            }
+            return new List<InstantCastEvent>(); ;
         }
 
         /// <summary>

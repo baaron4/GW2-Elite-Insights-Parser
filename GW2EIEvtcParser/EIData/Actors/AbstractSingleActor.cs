@@ -499,6 +499,7 @@ namespace GW2EIEvtcParser.EIData
         protected void SetCastLogs(ParsedEvtcLog log)
         {
             CastLogs = new List<AbstractCastEvent>(log.CombatData.GetAnimatedCastData(AgentItem));
+            CastLogs.AddRange(log.CombatData.GetInstantCastData(AgentItem));
             foreach (WeaponSwapEvent wepSwap in log.CombatData.GetWeaponSwapData(AgentItem))
             {
                 if (CastLogs.Count > 0 && (wepSwap.Time - CastLogs.Last().Time) < ParserHelper.ServerDelayConstant && CastLogs.Last().SkillId == SkillItem.WeaponSwapId)

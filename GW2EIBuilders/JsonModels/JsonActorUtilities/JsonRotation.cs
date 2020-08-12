@@ -23,7 +23,7 @@ namespace GW2EIBuilders.JsonModels
             public int CastTime { get; internal set; }
             [JsonProperty]
             /// <summary>
-            /// Duration of the animation
+            /// Duration of the animation, instant cast if 0
             /// </summary>
             public int Duration { get; internal set; }
             [JsonProperty]
