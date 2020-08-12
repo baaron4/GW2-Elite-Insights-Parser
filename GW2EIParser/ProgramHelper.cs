@@ -16,7 +16,6 @@ using GW2EIDiscord;
 using System.Windows.Forms;
 using GW2EIDPSReport.DPSReportJsons;
 using System.Diagnostics;
-using GW2EIBuilders.JsonModels;
 
 namespace GW2EIParser
 {
@@ -90,19 +89,6 @@ namespace GW2EIParser
             {
                 traces.Add("Uploading to DPSReports using EI");
                 DPSReportUploadObject response = DPSReportAPI.UploadUsingEI(fInfo, settings, traces);
-                /*
-#if DEBUG
-                var settings2 = new DPSReportSettings(response.UserToken);
-                DPSReportUploadObject response2 = DPSReportAPI.GetUploadMetaDataWithPermalink(response.Permalink, traces);
-                DPSReportUploadObject response3 = DPSReportAPI.GetUploadMetaDataWithID(response.Id, traces);
-                DPSReportGetUploadsObject response4 = DPSReportAPI.GetUploads(settings2, traces);
-                if (response.Encounter.JsonAvailable)
-                {
-                    JsonLog response5 = DPSReportAPI.GetJsonWithID<JsonLog>(response.Id, traces);
-                    JsonLog response6 = DPSReportAPI.GetJsonWithPermalink<JsonLog>(response.Permalink, traces);
-                }
-#endif
-                */
                 uploadresult[0] =  response != null ? response.Permalink : "Upload process failed";
                 traces.Add("DPSReports using EI: " + uploadresult[0]);
             }
