@@ -66,25 +66,25 @@ namespace GW2EIEvtcParser.ParsedData
             {56446, "Eat Pylon" },
             {56329, "Big Magma Drop" },
             // Weaver attunements
-            {ProfHelper.FireDual, "Dual Fire Attunement" },
-            {ProfHelper.FireWater, "Fire Water Attunement" },
-            {ProfHelper.FireAir, "Fire Air Attunement" },
-            {ProfHelper.FireEarth, "Fire Earth Attunement" },
+            {Buff.FireDual, "Dual Fire Attunement" },
+            {Buff.FireWater, "Fire Water Attunement" },
+            {Buff.FireAir, "Fire Air Attunement" },
+            {Buff.FireEarth, "Fire Earth Attunement" },
 
-            {ProfHelper.WaterDual, "Dual Water Attunement" },
-            {ProfHelper.WaterFire, "Water Fire Attunement" },
-            {ProfHelper.WaterAir, "Water Air Attunement" },
-            {ProfHelper.WaterEarth, "Water Earth Attunement" },
+            {Buff.WaterDual, "Dual Water Attunement" },
+            {Buff.WaterFire, "Water Fire Attunement" },
+            {Buff.WaterAir, "Water Air Attunement" },
+            {Buff.WaterEarth, "Water Earth Attunement" },
 
-            {ProfHelper.AirDual, "Dual Air Attunement" },
-            {ProfHelper.AirFire, "Air Fire Attunement" },
-            {ProfHelper.AirWater, "Air Water Attunement" },
-            {ProfHelper.AirEarth, "Air Earth Attunement" },
+            {Buff.AirDual, "Dual Air Attunement" },
+            {Buff.AirFire, "Air Fire Attunement" },
+            {Buff.AirWater, "Air Water Attunement" },
+            {Buff.AirEarth, "Air Earth Attunement" },
 
-            {ProfHelper.EarthDual, "Dual Earth Attunement" },
-            {ProfHelper.EarthFire, "Earth Fire Attunement" },
-            {ProfHelper.EarthWater, "Earth Water Attunement" },
-            {ProfHelper.EarthAir, "Earth Air Attunement" },
+            {Buff.EarthDual, "Dual Earth Attunement" },
+            {Buff.EarthFire, "Earth Fire Attunement" },
+            {Buff.EarthWater, "Earth Water Attunement" },
+            {Buff.EarthAir, "Earth Air Attunement" },
         };
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
         {
@@ -137,25 +137,25 @@ namespace GW2EIEvtcParser.ParsedData
             {22499, "https://wiki.guildwars2.com/images/d/d0/Shattered_Aegis.png" },
             {29604, "https://wiki.guildwars2.com/images/8/82/Chilling_Nova.png" },
             // Weaver attunements
-            {ProfHelper.FireDual, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
-            {ProfHelper.FireWater, "https://i.imgur.com/ihqKuUJ.png" },
-            {ProfHelper.FireAir, "https://i.imgur.com/kKFJ8cT.png" },
-            {ProfHelper.FireEarth, "https://i.imgur.com/T4187h0.png" },
+            {Buff.FireDual, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
+            {Buff.FireWater, "https://i.imgur.com/ihqKuUJ.png" },
+            {Buff.FireAir, "https://i.imgur.com/kKFJ8cT.png" },
+            {Buff.FireEarth, "https://i.imgur.com/T4187h0.png" },
 
-            {ProfHelper.WaterDual, "https://wiki.guildwars2.com/images/3/31/Water_Attunement.png" },
-            {ProfHelper.WaterFire, "https://i.imgur.com/vMUkzxH.png" },
-            {ProfHelper.WaterAir, "https://i.imgur.com/5G5OFud.png" },
-            {ProfHelper.WaterEarth, "https://i.imgur.com/QKEtF2P.png" },
+            {Buff.WaterDual, "https://wiki.guildwars2.com/images/3/31/Water_Attunement.png" },
+            {Buff.WaterFire, "https://i.imgur.com/vMUkzxH.png" },
+            {Buff.WaterAir, "https://i.imgur.com/5G5OFud.png" },
+            {Buff.WaterEarth, "https://i.imgur.com/QKEtF2P.png" },
 
-            {ProfHelper.AirDual, "https://wiki.guildwars2.com/images/9/91/Air_Attunement.png" },
-            {ProfHelper.AirFire, "https://i.imgur.com/vf68GJm.png" },
-            {ProfHelper.AirWater, "https://i.imgur.com/Tuj5Sro.png" },
-            {ProfHelper.AirEarth, "https://i.imgur.com/lHcOSwk.png" },
+            {Buff.AirDual, "https://wiki.guildwars2.com/images/9/91/Air_Attunement.png" },
+            {Buff.AirFire, "https://i.imgur.com/vf68GJm.png" },
+            {Buff.AirWater, "https://i.imgur.com/Tuj5Sro.png" },
+            {Buff.AirEarth, "https://i.imgur.com/lHcOSwk.png" },
 
-            {ProfHelper.EarthDual, "https://wiki.guildwars2.com/images/a/a8/Earth_Attunement.png" },
-            {ProfHelper.EarthFire, "https://i.imgur.com/aJWvE0I.png" },
-            {ProfHelper.EarthWater, "https://i.imgur.com/jtjj2TG.png" },
-            {ProfHelper.EarthAir, "https://i.imgur.com/4Eti7Pb.png" },
+            {Buff.EarthDual, "https://wiki.guildwars2.com/images/a/a8/Earth_Attunement.png" },
+            {Buff.EarthFire, "https://i.imgur.com/aJWvE0I.png" },
+            {Buff.EarthWater, "https://i.imgur.com/jtjj2TG.png" },
+            {Buff.EarthAir, "https://i.imgur.com/4Eti7Pb.png" },
         };
 
         private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>

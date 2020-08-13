@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.EIData
 
         private static readonly HashSet<long> _elementalSwaps = new HashSet<long>
         {
-            5492,5493,5494, 5495, FireDual, FireWater, FireAir, FireEarth, WaterFire, WaterDual, WaterAir, WaterEarth, AirFire, AirWater, AirDual, AirEarth, EarthFire, EarthWater, EarthAir, EarthDual
+            5492,5493,5494, 5495, Buff.FireDual, Buff.FireWater, Buff.FireAir, Buff.FireEarth, Buff.WaterFire, Buff.WaterDual, Buff.WaterAir, Buff.WaterEarth, Buff.AirFire, Buff.AirWater, Buff.AirDual, Buff.AirEarth, Buff.EarthFire, Buff.EarthWater, Buff.EarthAir, Buff.EarthDual
         };
 
         public static bool IsElementalSwap(long id)
@@ -36,10 +36,10 @@ namespace GW2EIEvtcParser.EIData
         {
             var duals = new HashSet<long>
             {
-                FireDual,
-                WaterDual,
-                AirDual,
-                EarthDual,
+                Buff.FireDual,
+                Buff.WaterDual,
+                Buff.AirDual,
+                Buff.EarthDual,
             };
             foreach (AbstractBuffEvent c in buffsPerDst.Where(x => duals.Contains(x.BuffID)))
             {

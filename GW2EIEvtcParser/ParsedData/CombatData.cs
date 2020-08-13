@@ -579,7 +579,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
             if (_buffData.TryGetValue(key, out List<AbstractBuffEvent> res))
             {
-                return res.Where(x => x.BuffID != ProfHelper.NoBuff).ToList();
+                return res.Where(x => x.BuffID != Buff.NoBuff).ToList();
             }
             return new List<AbstractBuffEvent>(); ;
         }
@@ -588,7 +588,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
             if (_buffRemoveAllData.TryGetValue(key, out List<BuffRemoveAllEvent> res))
             {
-                return res.Where(x => x.BuffID != ProfHelper.NoBuff).ToList();
+                return res.Where(x => x.BuffID != Buff.NoBuff).ToList();
             }
             return new List<BuffRemoveAllEvent>(); ;
         }
@@ -602,7 +602,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
             if (_buffDataByDst.TryGetValue(key, out List<AbstractBuffEvent> res))
             {
-                return res.Where(x => x.BuffID != ProfHelper.NoBuff).ToList();
+                return res.Where(x => x.BuffID != Buff.NoBuff).ToList();
             }
             return new List<AbstractBuffEvent>(); ;
         }
