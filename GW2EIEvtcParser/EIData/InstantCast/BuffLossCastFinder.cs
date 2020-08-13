@@ -4,30 +4,27 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class BuffLossCastFinder : InstantCastFinder
+    internal class BuffLossCastFinder : BuffCastFinder
     {
 
         public delegate bool BuffLossCastChecker(BuffRemoveAllEvent evt, CombatData combatData);
         private readonly BuffLossCastChecker _triggerCondition;
 
 
-        private readonly long _buffID;
-        public BuffLossCastFinder(long skillID, long buffID, long icd, BuffLossCastChecker checker = null) : base(skillID, icd)
+        public BuffLossCastFinder(long skillID, long buffID, long icd, BuffLossCastChecker checker = null) : base(skillID, buffID, icd)
         {
             _triggerCondition = checker;
-            _buffID = buffID;
         }
 
-        public BuffLossCastFinder(long skillID, long buffID, long icd, ulong minBuild, ulong maxBuild, BuffLossCastChecker checker = null) : base(skillID, icd, minBuild, maxBuild)
+        public BuffLossCastFinder(long skillID, long buffID, long icd, ulong minBuild, ulong maxBuild, BuffLossCastChecker checker = null) : base(skillID, buffID, icd, minBuild, maxBuild)
         {
             _triggerCondition = checker;
-            _buffID = buffID;
         }
 
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
         {
             var res = new List<InstantCastEvent>();
-            var removals = combatData.GetBuffData(_buffID).OfType<BuffRemoveAllEvent>().GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            var removals = combatData.GetBuffData(BuffID).OfType<BuffRemoveAllEvent>().GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             foreach (KeyValuePair<AgentItem, List<BuffRemoveAllEvent>> pair in removals)
             {
                 long lastTime = long.MinValue;

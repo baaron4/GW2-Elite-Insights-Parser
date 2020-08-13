@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> MirageInstantCastFinders = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(45449, 45449, 500), // Jaunt
+            new DamageCastFinder(45449, 45449, InstantCastFinder.DefaultICD), // Jaunt
         };
 
 

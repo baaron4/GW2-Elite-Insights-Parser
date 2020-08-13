@@ -7,6 +7,10 @@ namespace GW2EIEvtcParser.EIData
     internal class EngineerHelper : ProfHelper
     {
 
+        internal static readonly List<InstantCastFinder> EngineerInstantCastFinders = new List<InstantCastFinder>()
+        {
+        };
+
         public static void AttachMasterToEngineerTurrets(List<Player> players, Dictionary<long, List<AbstractDamageEvent>> damageData, Dictionary<long, List<AbstractCastEvent>> castData)
         {
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));

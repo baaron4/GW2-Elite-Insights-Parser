@@ -213,6 +213,10 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (icf.Available(build))
                 {
+                    if (icf is BuffCastFinder)
+                    {
+                        skillData.IgnoreInequalities.Add(icf.SkillID);
+                    }
                     res.AddRange(icf.ComputeInstantCast(combatData, skillData, agentData));
                 }
             }

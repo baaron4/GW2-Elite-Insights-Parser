@@ -18,29 +18,29 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> WeaverInstantCastFinders = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(40183, 42086, 500), // Primordial Stance
+            new BuffGainCastFinder(40183, 42086, InstantCastFinder.DefaultICD), // Primordial Stance
             //new BuffGainCastFinder(44926, ???, 500), // Stone Resonance + condition?
-            new BuffGainCastFinder(44612, 42683, 500), // Unravel
+            new BuffGainCastFinder(44612, 42683, InstantCastFinder.DefaultICD), // Unravel
             // Fire       
-            new BuffGainCastFinder(FireDual, FireDual, 500),
-            new BuffGainCastFinder(FireWater, FireWater, 500),
-            new BuffGainCastFinder(FireAir, FireAir, 500),
-            new BuffGainCastFinder(FireEarth, FireEarth, 500),
+            new BuffGainCastFinder(FireDual, FireDual, InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(FireWater, FireWater, InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(FireAir, FireAir, InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(FireEarth, FireEarth, InstantCastFinder.DefaultICD),
             // Water
-            new BuffGainCastFinder(WaterFire, WaterFire, 500),
-            new BuffGainCastFinder(WaterDual, WaterDual, 500),
-            new BuffGainCastFinder(WaterAir, WaterAir, 500),
-            new BuffGainCastFinder(WaterEarth, WaterEarth, 500),
+            new BuffGainCastFinder(WaterFire, WaterFire, InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(WaterDual, WaterDual, InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(WaterAir, WaterAir, InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(WaterEarth, WaterEarth, InstantCastFinder.DefaultICD),
             // Air
-            new BuffGainCastFinder(AirFire, AirFire, 500),
-            new BuffGainCastFinder(AirWater, AirWater, 500),
-            new BuffGainCastFinder(AirDual, AirDual, 500),
-            new BuffGainCastFinder(AirEarth, AirEarth, 500),
+            new BuffGainCastFinder(AirFire, AirFire, InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(AirWater, AirWater, InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(AirDual, AirDual, InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(AirEarth, AirEarth, InstantCastFinder.DefaultICD),
             // Earth
-            new BuffGainCastFinder(EarthFire, EarthFire, 500),
-            new BuffGainCastFinder(EarthWater, EarthWater, 500),
-            new BuffGainCastFinder(EarthAir, EarthAir, 500),
-            new BuffGainCastFinder(EarthDual, EarthDual, 500),
+            new BuffGainCastFinder(EarthFire, EarthFire, InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(EarthWater, EarthWater, InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(EarthAir, EarthAir, InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(EarthDual, EarthDual, InstantCastFinder.DefaultICD),
         };
 
         private static readonly Dictionary<long, HashSet<long>> _minorsTranslation = new Dictionary<long, HashSet<long>>

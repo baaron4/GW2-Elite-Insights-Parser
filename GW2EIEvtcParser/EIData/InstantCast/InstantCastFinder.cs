@@ -6,7 +6,8 @@ namespace GW2EIEvtcParser.EIData
 {
     internal abstract class InstantCastFinder : IVersionable
     {
-        protected long SkillID { get; }
+        public const long DefaultICD = 50;
+        public long SkillID { get; }
 
         protected long ICD { get; }
 

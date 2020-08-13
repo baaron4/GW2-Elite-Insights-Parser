@@ -10,8 +10,8 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> MesmerInstantCastFinders = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(10212, 10212, 500), // Power spike
-            new BuffLossCastFinder(10233, 10233, 500, (brae, combatData) => {
+            new DamageCastFinder(10212, 10212, InstantCastFinder.DefaultICD), // Power spike
+            new BuffLossCastFinder(10233, 10233, InstantCastFinder.DefaultICD, (brae, combatData) => {
                 return combatData.GetBuffData(brae.To).Exists(x => 
                                     x is BuffApplyEvent bae &&
                                     bae.BuffID == 13017 &&
