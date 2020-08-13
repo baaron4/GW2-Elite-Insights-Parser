@@ -121,88 +121,62 @@ namespace GW2EIEvtcParser.EIData
         //
         public static List<InstantCastEvent> ComputeInstantCastEvents(List<Player> players, CombatData combatData, SkillData skillData, AgentData agentData)
         {
-            List<InstantCastEvent> res = ComputeInstantCastEvents(combatData, skillData, agentData, _genericInstantCastFinders);
-            var calledProfs = new HashSet<string>();
+            var instantCastFinders = new HashSet<InstantCastFinder>(_genericInstantCastFinders);
             foreach (Player p in players)
             {
-                if (calledProfs.Contains(p.Prof))
-                {
-                    continue;
-                }
                 switch (p.Prof)
                 {
                     //
                     case "Elementalist":
-                        calledProfs.Add("Elementalist");
-                        res.AddRange(ComputeInstantCastEvents(combatData, skillData, agentData, ElementalistHelper.ElementalistInstantCastFinders));
+                        ElementalistHelper.ElementalistInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
                         break;
                     case "Tempest":
-                        calledProfs.Add("Elementalist");
-                        calledProfs.Add("Tempest");
-                        res.AddRange(ComputeInstantCastEvents(combatData, skillData, agentData, ElementalistHelper.ElementalistInstantCastFinders));
-                        res.AddRange(ComputeInstantCastEvents(combatData, skillData, agentData, TempestHelper.TempestInstantCastFinders));
+                        ElementalistHelper.ElementalistInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        TempestHelper.TempestInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
                         break;
                     case "Weaver":
-                        calledProfs.Add("Elementalist");
-                        calledProfs.Add("Weaver");
-                        res.AddRange(ComputeInstantCastEvents(combatData, skillData, agentData, ElementalistHelper.ElementalistInstantCastFinders));
-                        res.AddRange(ComputeInstantCastEvents(combatData, skillData, agentData, WeaverHelper.WeaverInstantCastFinders));
+                        ElementalistHelper.ElementalistInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        WeaverHelper.WeaverInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
                         break;
                     //
                     case "Necromancer":
-                        calledProfs.Add("Necromancer");
-                        res.AddRange(ComputeInstantCastEvents(combatData, skillData, agentData, NecromancerHelper.NecromancerInstantCastFinders));
+                        NecromancerHelper.NecromancerInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
                         break;
                     case "Reaper":
-                        calledProfs.Add("Necromancer");
-                        calledProfs.Add("Reaper");
-                        res.AddRange(ComputeInstantCastEvents(combatData, skillData, agentData, NecromancerHelper.NecromancerInstantCastFinders));
-                        res.AddRange(ComputeInstantCastEvents(combatData, skillData, agentData, ReaperHelper.ReaperInstantCastFinders));
+                        NecromancerHelper.NecromancerInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        ReaperHelper.ReaperInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
                         break;
                     case "Scourge":
-                        calledProfs.Add("Necromancer");
-                        calledProfs.Add("Scourge");
-                        res.AddRange(ComputeInstantCastEvents(combatData, skillData, agentData, NecromancerHelper.NecromancerInstantCastFinders));
-                        res.AddRange(ComputeInstantCastEvents(combatData, skillData, agentData, ScourgeHelper.ScourgeInstantCastFinders));
+                        NecromancerHelper.NecromancerInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        ScourgeHelper.ScourgeInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
                         break;
                     //
                     case "Mesmer":
-                        calledProfs.Add("Mesmer");
-                        res.AddRange(ComputeInstantCastEvents(combatData, skillData, agentData, MesmerHelper.MesmerInstantCastFinders));
+                        MesmerHelper.MesmerInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
                         break;
                     case "Chronomancer":
-                        calledProfs.Add("Mesmer");
-                        calledProfs.Add("Chronomancer");
-                        res.AddRange(ComputeInstantCastEvents(combatData, skillData, agentData, MesmerHelper.MesmerInstantCastFinders));
-                        res.AddRange(ComputeInstantCastEvents(combatData, skillData, agentData, ChronomancerHelper.ChronomancerInstantCastFinders));
+                        MesmerHelper.MesmerInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        ChronomancerHelper.ChronomancerInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
                         break;
                     case "Mirage":
-                        calledProfs.Add("Mesmer");
-                        calledProfs.Add("Mirage");
-                        res.AddRange(ComputeInstantCastEvents(combatData, skillData, agentData, MesmerHelper.MesmerInstantCastFinders));
-                        res.AddRange(ComputeInstantCastEvents(combatData, skillData, agentData, MirageHelper.MirageInstantCastFinders));
-                        res.AddRange(MirageHelper.TranslateMirageCloak(combatData.GetBuffData(40408), skillData));
+                        MesmerHelper.MesmerInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        MirageHelper.MirageInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
                         break;
                     //
                     case "Warrior":
-                        calledProfs.Add("Warrior");
-                        res.AddRange(ComputeInstantCastEvents(combatData, skillData, agentData, WarriorHelper.WarriorInstantCastFinders));
+                        WarriorHelper.WarriorInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
                         break;
                     case "Berserker":
-                        calledProfs.Add("Warrior");
-                        calledProfs.Add("Berserker");
-                        res.AddRange(ComputeInstantCastEvents(combatData, skillData, agentData, WarriorHelper.WarriorInstantCastFinders));
-                        res.AddRange(ComputeInstantCastEvents(combatData, skillData, agentData, BerserkerHelper.BerserkerInstantCastFinders));
+                        WarriorHelper.WarriorInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        BerserkerHelper.BerserkerInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
                         break;
                     case "Spellbreaker":
-                        calledProfs.Add("Warrior");
-                        calledProfs.Add("Spellbreaker");
-                        res.AddRange(ComputeInstantCastEvents(combatData, skillData, agentData, WarriorHelper.WarriorInstantCastFinders));
-                        res.AddRange(ComputeInstantCastEvents(combatData, skillData, agentData, SpellbreakerHelper.SpellbreakerInstantCastFinders));
+                        WarriorHelper.WarriorInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        SpellbreakerHelper.SpellbreakerInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
                         break;
                 }
             }
-            return res;
+            return ComputeInstantCastEvents(combatData, skillData, agentData, instantCastFinders.ToList());
         }
 
         private static List<InstantCastEvent> ComputeInstantCastEvents(CombatData combatData, SkillData skillData, AgentData agentData, List<InstantCastFinder> instantCastFinders)
