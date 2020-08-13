@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EIData
             var removals = combatData.GetBuffData(BuffID).OfType<BuffRemoveAllEvent>().GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             foreach (KeyValuePair<AgentItem, List<BuffRemoveAllEvent>> pair in removals)
             {
-                long lastTime = long.MinValue;
+                long lastTime = int.MinValue;
                 foreach (BuffRemoveAllEvent brae in pair.Value)
                 {
                     if (brae.Time - lastTime < ICD)

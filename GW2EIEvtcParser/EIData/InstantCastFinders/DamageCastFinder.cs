@@ -28,7 +28,7 @@ namespace GW2EIEvtcParser.EIData
             var damages = combatData.GetDamageData(_damageSkillID).GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             foreach (KeyValuePair<AgentItem, List<AbstractDamageEvent>> pair in damages)
             {
-                long lastTime = long.MinValue;
+                long lastTime = int.MinValue;
                 foreach (AbstractDamageEvent de in pair.Value)
                 {
                     if (de.Time - lastTime < ICD)
