@@ -25,6 +25,13 @@ namespace GW2EIEvtcParser.ParsedData
             return item;
         }
 
+        internal HashSet<long> IgnoreInequalities = new HashSet<long>();
+
+        public bool IgnoreInequality(long ID)
+        {
+            return IgnoreInequalities.Contains(ID);
+        }
+
         internal void Add(SkillItem skillItem)
         {
             if (!_skills.ContainsKey(skillItem.ID))

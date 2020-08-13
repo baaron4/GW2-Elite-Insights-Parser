@@ -328,7 +328,7 @@ namespace GW2EIBuilders.HtmlModels
                 logData.LogErrors = new List<string>(log.LogData.LogErrors);
             }
             //
-            SkillDto.AssembleSkills(usedSkills.Values, logData.SkillMap);
+            SkillDto.AssembleSkills(usedSkills.Values, logData.SkillMap, log.SkillData);
             DamageModDto.AssembleDamageModifiers(usedDamageMods, logData.DamageModMap);
             BuffDto.AssembleBoons(usedBuffs.Values, logData.BuffMap, log);
             MechanicDto.BuildMechanics(log.MechanicData.GetPresentMechanics(log, 0), logData.MechanicMap);

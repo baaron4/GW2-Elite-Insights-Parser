@@ -90,13 +90,13 @@
                     <td>{{ round(row[2]/row[6]) }}</td>
                     <td>{{ row[4] }}</td>
                     <td v-if="actor !== null">
-                        {{ !getSkill(row[0], row[1]).condi && row[5] ? (isEstimated(getSkill(row[0], row[1]),row[15]) ? '>= ' : '') + row[5] : ''}}
+                        {{ !getSkill(row[0], row[1]).condi && row[5] ? (showInequality(getSkill(row[0], row[1]),row[15]) ? '>= ' : '') + row[5] : ''}}
                     </td>
                     <td :data-original-title="(row[14] - row[6]) + ' hit(s) not connected'">
                         {{ row[6] }}
                     </td>
-                    <td v-if="actor !== null" :data-original-title=" (!getSkill(row[0], row[1]).condi && row[14] && row[5]) ? (isEstimated(getSkill(row[0], row[1]),row[15]) ? '<= ' : '') + round2(row[14]/row[5]) + ' with missed hits' : false" >
-                        {{(!getSkill(row[0], row[1]).condi && row[6] && row[5]) ? (isEstimated(getSkill(row[0], row[1]),row[15]) ? '<= ' : '') + round2(row[6]/row[5]) : ''}}
+                    <td v-if="actor !== null" :data-original-title=" (!getSkill(row[0], row[1]).condi && row[14] && row[5]) ? (showInequality(getSkill(row[0], row[1]),row[15]) ? '<= ' : '') + round2(row[14]/row[5]) + ' with missed hits' : false" >
+                        {{(!getSkill(row[0], row[1]).condi && row[6] && row[5]) ? (showInequality(getSkill(row[0], row[1]),row[15]) ? '<= ' : '') + round2(row[6]/row[5]) : ''}}
                     </td>
                     <td v-if="actor !== null">
                         {{(!getSkill(row[0], row[1]).condi && row[6] && row[15]) ? round2(row[2]/(0.001 * row[15])) : ''}}
@@ -203,8 +203,8 @@
             getSkill: function (isBoon, id) {
                 return findSkill(isBoon, id);
             },
-            isEstimated: function (skillData, castDuration) {
-                return skillData.id !== -2 && skillData.id !== 65002 && castDuration === 0 && !skillData.isSwap;
+            showInequality: function (skillData, castDuration) {
+                return skillData.id !== -2 && skillData.id !== 65002 && castDuration === 0 && !skillData.ignoreInequality;
             },
         },
         computed: {
