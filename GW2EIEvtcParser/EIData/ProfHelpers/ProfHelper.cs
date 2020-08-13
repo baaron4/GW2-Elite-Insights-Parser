@@ -122,6 +122,7 @@ namespace GW2EIEvtcParser.EIData
         public static List<InstantCastEvent> ComputeInstantCastEvents(List<Player> players, CombatData combatData, SkillData skillData, AgentData agentData)
         {
             var instantCastFinders = new HashSet<InstantCastFinder>(_genericInstantCastFinders);
+            var res = new List<InstantCastEvent>();
             foreach (Player p in players)
             {
                 switch (p.Prof)
@@ -161,6 +162,67 @@ namespace GW2EIEvtcParser.EIData
                     case "Mirage":
                         MesmerHelper.MesmerInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
                         MirageHelper.MirageInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        res.AddRange(MirageHelper.TranslateMirageCloak(combatData.GetBuffData(40408), skillData));
+                        break;
+                    //
+                    case "Thief":
+                        ThiefHelper.ThiefInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        break;
+                    case "Daredevil":
+                        ThiefHelper.ThiefInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        DaredevilHelper.DaredevilInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        break;
+                    case "Deadeye":
+                        ThiefHelper.ThiefInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        DeadeyeHelper.DeadeyeInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        break;
+                    //
+                    case "Engineer":
+                        EngineerHelper.EngineerInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        break;
+                    case "Scrapper":
+                        EngineerHelper.EngineerInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        ScrapperHelper.ScrapperInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        break;
+                    case "Holosmith":
+                        EngineerHelper.EngineerInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        HolosmithHelper.HolosmithInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        break;
+                    //
+                    case "Ranger":
+                        RangerHelper.RangerInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        break;
+                    case "Druid":
+                        RangerHelper.RangerInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        DruidHelper.DruidInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        break;
+                    case "Soulbeast":
+                        RangerHelper.RangerInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        SoulbeastHelper.SoulbeastInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        break;
+                    //
+                    case "Revenant":
+                        RevenantHelper.RevenantInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        break;
+                    case "Herald":
+                        RevenantHelper.RevenantInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        HeraldHelper.HeraldInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        break;
+                    case "Renegade":
+                        RevenantHelper.RevenantInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        RenegadeHelper.RenegadeInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        break;
+                    //
+                    case "Guardian":
+                        GuardianHelper.GuardianInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        break;
+                    case "Dragonhunter":
+                        GuardianHelper.GuardianInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        DragonhunterHelper.DragonhunterInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        break;
+                    case "Firebrand":
+                        GuardianHelper.GuardianInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
+                        FirebrandHelper.FirebrandInstantCastFinders.ForEach(x => instantCastFinders.Add(x));
                         break;
                     //
                     case "Warrior":
@@ -176,7 +238,8 @@ namespace GW2EIEvtcParser.EIData
                         break;
                 }
             }
-            return ComputeInstantCastEvents(combatData, skillData, agentData, instantCastFinders.ToList());
+            res.AddRange(ComputeInstantCastEvents(combatData, skillData, agentData, instantCastFinders.ToList()));
+            return res;
         }
 
         private static List<InstantCastEvent> ComputeInstantCastEvents(CombatData combatData, SkillData skillData, AgentData agentData, List<InstantCastFinder> instantCastFinders)
@@ -187,7 +250,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (icf.Available(build))
                 {
-                    if (icf is BuffCastFinder)
+                    if (icf.IgnoreInequality)
                     {
                         skillData.IgnoreInequalities.Add(icf.SkillID);
                     }

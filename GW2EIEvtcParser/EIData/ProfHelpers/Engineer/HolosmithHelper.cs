@@ -8,6 +8,7 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> HolosmithInstantCastFinders = new List<InstantCastFinder>()
         {
+            new BuffGainCastFinder(43937, 41037, InstantCastFinder.DefaultICD), // Overheat
         };
     }
 }

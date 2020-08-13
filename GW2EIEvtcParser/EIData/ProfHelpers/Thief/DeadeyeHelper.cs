@@ -9,7 +9,6 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> DeadeyeInstantCastFinders = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(31600, 31600, InstantCastFinder.DefaultICD), // bound
         };
     }
 }

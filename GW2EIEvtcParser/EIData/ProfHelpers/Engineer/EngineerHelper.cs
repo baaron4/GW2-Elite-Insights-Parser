@@ -9,6 +9,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> EngineerInstantCastFinders = new List<InstantCastFinder>()
         {
+            new BuffLossCastFinder(59562, 59579, InstantCastFinder.DefaultICD, 102321, ulong.MaxValue), // Explosive Entrance
         };
 
         public static void AttachMasterToEngineerTurrets(List<Player> players, Dictionary<long, List<AbstractDamageEvent>> damageData, Dictionary<long, List<AbstractCastEvent>> castData)
