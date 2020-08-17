@@ -9,6 +9,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> RenegadeInstantCastFinders = new List<InstantCastFinder>()
         {
+            new BuffGainCastFinder(41858, 44272, InstantCastFinder.DefaultICD), // Legendary Renegade Stance
         };
     }
 }

@@ -85,6 +85,12 @@ namespace GW2EIEvtcParser.ParsedData
             {Buff.EarthFire, "Earth Fire Attunement" },
             {Buff.EarthWater, "Earth Water Attunement" },
             {Buff.EarthAir, "Earth Air Attunement" },
+
+            {51696, "True Nature - Dragon" },
+            {51714, "True Nature - Demon" },
+            {51675, "True Nature - Dwarf" },
+            {51667, "True Nature - Assassin" },
+            {51713, "True Nature - Centaur" },
         };
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
         {
@@ -188,7 +194,7 @@ namespace GW2EIEvtcParser.ParsedData
         //public int Range { get; private set; } = 0;
         public bool AA => _apiSkill?.Slot == "Weapon_1" || _apiSkill?.Slot == "Downed_1";
 
-        public bool IsSwap => ID == WeaponSwapId || ElementalistHelper.IsElementalSwap(ID);
+        public bool IsSwap => ID == WeaponSwapId || ElementalistHelper.IsElementalSwap(ID) || RevenantHelper.IsLegendSwap(ID);
         public string Name { get; private set; }
         public string Icon { get; private set; }
         private WeaponDescriptor _weaponDescriptor;
@@ -291,7 +297,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         private void CompleteItem()
         {
-            if (_apiSkill == null && _overrideNames.TryGetValue(ID, out string name))
+            if (_overrideNames.TryGetValue(ID, out string name))
             {
                 Name = name;
             }
