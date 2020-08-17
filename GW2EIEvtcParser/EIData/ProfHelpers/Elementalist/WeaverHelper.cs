@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<InstantCastFinder> WeaverInstantCastFinders = new List<InstantCastFinder>()
         {
             new BuffGainCastFinder(40183, 42086, InstantCastFinder.DefaultICD), // Primordial Stance
-            //new BuffGainCastFinder(44926, ???, 500), // Stone Resonance + condition?
+            //new BuffGainCastFinder(44926, ???, 500), // Stone Resonance, lesser stone resonance makes thing complicated
             new BuffGainCastFinder(44612, 42683, InstantCastFinder.DefaultICD), // Unravel
             // Fire       
             new BuffGainCastFinder(Buff.FireDual, Buff.FireDual, InstantCastFinder.DefaultICD),
