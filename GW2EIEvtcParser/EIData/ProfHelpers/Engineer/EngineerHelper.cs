@@ -13,7 +13,8 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(30881, 21660,InstantCastFinder.DefaultICD), // A.E.D.
             new BuffGainCastFinder(5861, 5863,InstantCastFinder.DefaultICD), // Elixir S
             // Need to check kits
-
+            new DamageCastFinder(6154,6154,InstantCastFinder.DefaultICD), // Overcharged Shot
+            //new DamageCastFinder(6004,6004,InstantCastFinder.DefaultICD), // Net Shot - projectile
         };
 
         public static void AttachMasterToEngineerTurrets(List<Player> players, Dictionary<long, List<AbstractDamageEvent>> damageData, Dictionary<long, List<AbstractCastEvent>> castData)
