@@ -11,7 +11,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<InstantCastFinder> GuardianInstantCastFinders = new List<InstantCastFinder>()
         {
             new BuffGainCastFinder(9082, 9123, InstantCastFinder.DefaultICD), // Shield of Wrath
-            new BuffGainCastFinder(9103, 9104, InstantCastFinder.DefaultICD), // Zealot's Flame
+            new BuffGainCastFinder(9104, 9103, 0), // Zealot's Flame
             new BuffLossCastFinder(9115,9114,InstantCastFinder.DefaultICD), // Virtue of Justice
             new BuffLossCastFinder(9120,9119,InstantCastFinder.DefaultICD), // Virtue of Resolve
             new BuffLossCastFinder(9118,9113,InstantCastFinder.DefaultICD), // Virtue of Courage

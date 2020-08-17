@@ -10,8 +10,8 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> FirebrandInstantCastFinders = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(45082,45082,InstantCastFinder.DefaultICD), // Flame Rush
-            new DamageCastFinder(42924,42924,InstantCastFinder.DefaultICD), // Flame Surge
+            new DamageCastFinder(45082,46618,InstantCastFinder.DefaultICD), // Flame Rush
+            new DamageCastFinder(42924,46616,InstantCastFinder.DefaultICD), // Flame Surge
             new DamageCastFinder(42360,42360,InstantCastFinder.DefaultICD), // Echo of Truth
             new DamageCastFinder(44008,44008,InstantCastFinder.DefaultICD), // Voice of Truth
         };

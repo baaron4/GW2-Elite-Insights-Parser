@@ -10,7 +10,6 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<InstantCastFinder> DragonhunterInstantCastFinders = new List<InstantCastFinder>()
         {
             new BuffLossCastFinder(30039,29523,InstantCastFinder.DefaultICD), // Shield of Courage
-            new BuffLossCastFinder(30029,29523,InstantCastFinder.DefaultICD), // Shield of Courage
         };
     }
 }
