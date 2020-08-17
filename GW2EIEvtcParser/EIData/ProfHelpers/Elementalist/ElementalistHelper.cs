@@ -20,6 +20,8 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(5572, 5572, InstantCastFinder.DefaultICD), // Signet of Air
             new DamageCastFinder(56883, 56883, InstantCastFinder.DefaultICD), // Sunspot
             new DamageCastFinder(56885, 56885, InstantCastFinder.DefaultICD), // Earth Blast
+            new DamageCastFinder(5561, 5561, InstantCastFinder.DefaultICD), // Lightning Strike
+            new BuffGainCastFinder(5529, 5588, InstantCastFinder.DefaultICD), // Ride the Lightning
         };
 
         private static readonly HashSet<long> _elementalSwaps = new HashSet<long>
