@@ -12,6 +12,9 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffGainCastFinder(10574, 790, InstantCastFinder.DefaultICD), // Death shroud
             new BuffLossCastFinder(10585, 790, InstantCastFinder.DefaultICD), // Death shroud
+            new DamageCastFinder(29560, 29560, InstantCastFinder.DefaultICD), // Spiteful Spirit
+            new DamageCastFinder(13907, 13907, InstantCastFinder.DefaultICD), // Lesser Enfeeble
+            new DamageCastFinder(13906, 13906, InstantCastFinder.DefaultICD), // Lesser Spinal Shivers
             new BuffGainCastFinder(10583, 10582, InstantCastFinder.DefaultICD), // Spectral Armor
             new BuffGainCastFinder(10685, 15083, InstantCastFinder.DefaultICD, 0, 94051), // Spectral Walk
             new BuffGainCastFinder(10685, 53476, InstantCastFinder.DefaultICD, 94051, ulong.MaxValue), // Spectral Walk
