@@ -78,7 +78,7 @@ namespace GW2EIBuilders.JsonModels
             if (!skillDesc.ContainsKey("s" + skillID))
             {
                 SkillItem skill = skillCasts.First().Skill;
-                skillDesc["s" + skillID] = new JsonLog.SkillDesc(skill, log.LogData.GW2Build);
+                skillDesc["s" + skillID] = new JsonLog.SkillDesc(skill, log.LogData.GW2Build, log.SkillData);
             }
             Id = skillID;
             Skills = skillCasts.Select(x => new JsonSkill(x)).ToList();

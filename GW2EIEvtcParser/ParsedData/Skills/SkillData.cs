@@ -25,11 +25,11 @@ namespace GW2EIEvtcParser.ParsedData
             return item;
         }
 
-        internal HashSet<long> IgnoreInequalities = new HashSet<long>();
+        internal HashSet<long> NotAccurate = new HashSet<long>();
 
-        public bool IgnoreInequality(long ID)
+        public bool IsNotAccurate(long ID)
         {
-            return IgnoreInequalities.Contains(ID);
+            return NotAccurate.Contains(ID);
         }
 
         internal void Add(SkillItem skillItem)

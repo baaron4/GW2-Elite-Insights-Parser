@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData
         public const long DefaultICD = 50;
         public long SkillID { get; }
 
-        public bool IgnoreInequality { get; protected set; } = false;
+        public bool NotAccurate { get; protected set; } = false;
 
         protected long ICD { get; }
 

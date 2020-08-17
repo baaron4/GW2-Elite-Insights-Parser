@@ -204,7 +204,7 @@
                 return findSkill(isBoon, id);
             },
             showInequality: function (skillData, castDuration) {
-                return skillData.id !== -2 && skillData.id !== 65002 && castDuration === 0 && !skillData.ignoreInequality;
+                return castDuration === 0 && skillData.notAccurate;
             },
         },
         computed: {

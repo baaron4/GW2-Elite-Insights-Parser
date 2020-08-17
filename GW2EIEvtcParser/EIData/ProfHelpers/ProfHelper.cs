@@ -226,9 +226,9 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (icf.Available(build))
                 {
-                    if (icf.IgnoreInequality)
+                    if (icf.NotAccurate)
                     {
-                        skillData.IgnoreInequalities.Add(icf.SkillID);
+                        skillData.NotAccurate.Add(icf.SkillID);
                     }
                     res.AddRange(icf.ComputeInstantCast(combatData, skillData, agentData));
                 }

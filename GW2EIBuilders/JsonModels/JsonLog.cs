@@ -24,13 +24,14 @@ namespace GW2EIBuilders.JsonModels
             {
 
             }
-            internal SkillDesc(SkillItem item, ulong gw2Build)
+            internal SkillDesc(SkillItem item, ulong gw2Build, SkillData skillData)
             {
                 Name = item.Name;
                 AutoAttack = item.AA;
                 Icon = item.Icon;
                 CanCrit = SkillItem.CanCrit(item.ID, gw2Build);
                 IsSwap = item.IsSwap;
+                IsNotAccurate = skillData.IsNotAccurate(item.ID);
             }
 
             [JsonProperty]
@@ -58,6 +59,10 @@ namespace GW2EIBuilders.JsonModels
             /// True if this skill can trigger on weapon swap sigils
             /// </summary>
             public bool IsSwap { get; internal set; }
+            /// <summary>
+            /// True in case where the skill is an instant cast and the detection may have missed some
+            /// </summary>
+            public bool IsNotAccurate { get; internal set; }
         }
 
         /// <summary>

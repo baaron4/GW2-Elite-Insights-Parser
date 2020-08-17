@@ -12,12 +12,14 @@ namespace GW2EIEvtcParser.EIData
         private readonly long _damageSkillID;
         public DamageCastFinder(long skillID, long damageSkillID, long icd, DamageCastChecker checker = null) : base(skillID, icd)
         {
+            NotAccurate = true;
             _triggerCondition = checker;
             _damageSkillID = damageSkillID;
         }
 
         public DamageCastFinder(long skillID, long damageSkillID, long icd, ulong minBuild, ulong maxBuild, DamageCastChecker checker = null) : base(skillID, icd, minBuild, maxBuild)
         {
+            NotAccurate = true;
             _triggerCondition = checker;
             _damageSkillID = damageSkillID;
         }

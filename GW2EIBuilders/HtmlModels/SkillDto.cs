@@ -12,7 +12,7 @@ namespace GW2EIBuilders.HtmlModels
         public string Icon { get; internal set; }
         public bool Aa { get; internal set; }
         public bool IsSwap { get; internal set; }
-        public bool IgnoreInequality { get; internal set; }
+        public bool NotAccurate { get; internal set; }
 
         internal static void AssembleSkills(ICollection<SkillItem> skills, Dictionary<string, SkillDto> dict, SkillData skillData)
         {
@@ -25,7 +25,7 @@ namespace GW2EIBuilders.HtmlModels
                     Icon = skill.Icon,
                     Aa = skill.AA,
                     IsSwap = skill.IsSwap,
-                    IgnoreInequality = skillData.IgnoreInequality(skill.ID)
+                    NotAccurate = skillData.IsNotAccurate(skill.ID)
                 };
             }
         }
