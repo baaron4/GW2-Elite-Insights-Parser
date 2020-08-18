@@ -18,6 +18,8 @@ namespace GW2EIEvtcParser.EIData
             //new BuffLossCastFinder(9242,9156,InstantCastFinder.DefaultICD), // Signet of Judgment
             //new BuffLossCastFinder(9242,9239,InstantCastFinder.DefaultICD), // Signet of Judgment PI
             new DamageCastFinder(9247,9247, InstantCastFinder.DefaultICD), // Judge's Intervention
+            new DamageCastFinder(21795, 21795, InstantCastFinder.DefaultICD), // Glacial Heart
+            new DamageCastFinder(22499, 22499, InstantCastFinder.DefaultICD), // Shattered Aegis
         };
     }
 }

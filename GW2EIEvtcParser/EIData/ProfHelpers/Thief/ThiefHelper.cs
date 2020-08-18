@@ -12,6 +12,7 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffGainCastFinder(13002,13135,InstantCastFinder.DefaultICD), // Shadowstep
             new BuffLossCastFinder(13106,13135,InstantCastFinder.DefaultICD, (evt, combatData) => evt.RemovedDuration > ParserHelper.ServerDelayConstant), // Shadow Return
+            new DamageCastFinder(13014, 13014, InstantCastFinder.DefaultICD), // Mug
             new BuffGainCastFinder(13046,44597,InstantCastFinder.DefaultICD), // Assassin's Signet
             new BuffGiveCastFinder(13093,13094,InstantCastFinder.DefaultICD), // Devourer Venom
             new BuffGiveCastFinder(13096,13095,InstantCastFinder.DefaultICD), // Ice Drake Venom
