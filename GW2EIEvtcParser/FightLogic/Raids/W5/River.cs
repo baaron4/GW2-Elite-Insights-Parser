@@ -76,22 +76,23 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
-            // The walls spawn at the start of the encounter, we fix it by overriding their first aware to the first velocity change event
-            List<AgentItem> riverOfSouls = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.RiverOfSouls);
+            // The walls and bombers spawn at the start of the encounter, we fix it by overriding their first aware to the first velocity change event
+            List<AgentItem> agentsToOverrideFirstAware = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.RiverOfSouls);
+            agentsToOverrideFirstAware.AddRange(agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.HollowedBomber));
             bool sortCombatList = false;
-            foreach (AgentItem riverOfSoul in riverOfSouls)
+            foreach (AgentItem agentToOverrideFirstAware in agentsToOverrideFirstAware)
             {
-                CombatItem firstMovement = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && x.SrcAgent == riverOfSoul.Agent && x.DstAgent != 0);
+                CombatItem firstMovement = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && x.SrcAgent == agentToOverrideFirstAware.Agent && x.DstAgent != 0);
                 if (firstMovement != null)
                 {
                     // update start
-                    riverOfSoul.OverrideAwareTimes(firstMovement.Time - ParserHelper.ServerDelayConstant, riverOfSoul.LastAware);
+                    agentToOverrideFirstAware.OverrideAwareTimes(firstMovement.Time - ParserHelper.ServerDelayConstant, agentToOverrideFirstAware.LastAware);
                     foreach (CombatItem c in combatData)
                     {
-                        if (c.SrcAgent == riverOfSoul.Agent && (c.IsStateChange == ArcDPSEnums.StateChange.Position || c.IsStateChange == ArcDPSEnums.StateChange.Rotation) && c.Time <= riverOfSoul.FirstAware)
+                        if (c.SrcAgent == agentToOverrideFirstAware.Agent && (c.IsStateChange == ArcDPSEnums.StateChange.Position || c.IsStateChange == ArcDPSEnums.StateChange.Rotation) && c.Time <= agentToOverrideFirstAware.FirstAware)
                         {
                             sortCombatList = true;
-                            c.OverrideTime(riverOfSoul.FirstAware);
+                            c.OverrideTime(agentToOverrideFirstAware.FirstAware);
                         }
                     }
                 }
