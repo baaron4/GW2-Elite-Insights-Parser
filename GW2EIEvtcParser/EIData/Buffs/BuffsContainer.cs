@@ -491,17 +491,16 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Signet of Agility",13061, ParserHelper.Source.Thief, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/1d/Signet_of_Agility.png"),
                 new Buff("Signet of Shadows",13059, ParserHelper.Source.Thief, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/17/Signet_of_Shadows.png"),
                 //venoms // src is always the user, makes generation data useless
-                new Buff("Skelk Venom",21780, ParserHelper.Source.Thief, BuffStackType.StackingConditionalLoss, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/75/Skelk_Venom.png"),
-                new Buff("Ice Drake Venom",13095, ParserHelper.Source.Thief, BuffStackType.StackingConditionalLoss, 4, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/7b/Ice_Drake_Venom.png"),
-                new Buff("Devourer Venom", 13094, ParserHelper.Source.Thief, BuffStackType.StackingConditionalLoss, 2, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/4d/Devourer_Venom.png"),
-                new Buff("Skale Venom", 13054, ParserHelper.Source.Thief, BuffStackType.StackingConditionalLoss, 4, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/14/Skale_Venom.png"),
-                new Buff("Spider Venom",13036, ParserHelper.Source.Thief, BuffStackType.StackingConditionalLoss, 6, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/39/Spider_Venom.png"),
-                new Buff("Basilisk Venom", 13133, ParserHelper.Source.Thief, BuffStackType.StackingConditionalLoss, 2, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/3a/Basilisk_Venom.png"),
+                new Buff("Skelk Venom",21780, ParserHelper.Source.Thief, BuffStackType.StackingConditionalLoss, 5, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/7/75/Skelk_Venom.png"),
+                new Buff("Ice Drake Venom",13095, ParserHelper.Source.Thief, BuffStackType.StackingConditionalLoss, 4, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/7/7b/Ice_Drake_Venom.png"),
+                new Buff("Devourer Venom", 13094, ParserHelper.Source.Thief, BuffStackType.StackingConditionalLoss, 2, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/4/4d/Devourer_Venom.png"),
+                new Buff("Skale Venom", 13054, ParserHelper.Source.Thief, BuffStackType.StackingConditionalLoss, 4, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/1/14/Skale_Venom.png"),
+                new Buff("Spider Venom",13036, ParserHelper.Source.Thief, BuffStackType.StackingConditionalLoss, 6, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/3/39/Spider_Venom.png"),
+                new Buff("Basilisk Venom", 13133, ParserHelper.Source.Thief, BuffStackType.StackingConditionalLoss, 2, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/3/3a/Basilisk_Venom.png"),
                 //physical
                 new Buff("Palm Strike",30423, ParserHelper.Source.Daredevil, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/1a/Palm_Strike.png"),
                 new Buff("Pulmonary Impact",30510, ParserHelper.Source.Daredevil, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/1a/Palm_Strike.png"),
-                //weapon
-                new Buff("Infiltration",13135, ParserHelper.Source.Thief, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/62/Infiltrator%27s_Return.png"),
+                new Buff("Infiltration",13135, ParserHelper.Source.Thief, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/25/Shadowstep.png"),
                 //transforms
                 new Buff("Dagger Storm",13134, ParserHelper.Source.Thief, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/c0/Dagger_Storm.png"),
                 new Buff("Kneeling",42869, ParserHelper.Source.Deadeye, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/56/Kneel.png"),
