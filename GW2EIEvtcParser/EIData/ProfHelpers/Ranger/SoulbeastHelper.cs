@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EIData
             // 
             new BuffGiveCastFinder(45789,41815,InstantCastFinder.DefaultICD), // Dolyak Stance
             new BuffGiveCastFinder(45970,45038,InstantCastFinder.DefaultICD), // Moa Stance
-            new BuffGiveCastFinder(40498,44651,InstantCastFinder.DefaultICD), // Beastmode
+            new BuffGiveCastFinder(40498,44651,InstantCastFinder.DefaultICD), // Vulture Stance
         };
     }
 }
