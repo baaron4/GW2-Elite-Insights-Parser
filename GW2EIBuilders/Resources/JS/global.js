@@ -19,12 +19,13 @@ const DataTypes = {
     mechanicTable: 4,
     boonTable: 5,
     offensiveBuffTable: 6,
-    defensiveBuffTable: 7,
-    personalBuffTable: 8,
-    playerTab: 9,
-    targetTab: 10,
-    dpsGraph: 11,
-    dmgModifiersTable: 12,
+    supportBuffTable: 7,
+    defensiveBuffTable: 8,
+    personalBuffTable: 9,
+    playerTab: 10,
+    targetTab: 11,
+    dpsGraph: 12,
+    dmgModifiersTable: 13,
 };
 
 const simpleLogData = {
@@ -101,11 +102,16 @@ var buildLayout = function () {
             dataType: DataTypes.offensiveBuffTable
         }));
     }
+    if (logData.supBuffs.length > 0) {
+        buffLayout.addTab(new Tab("Support Buffs", {
+            dataType: DataTypes.supportBuffTable
+        }));
+    }
     if (logData.defBuffs.length > 0) {
         buffLayout.addTab(new Tab("Defensive Buffs", {
             dataType: DataTypes.defensiveBuffTable
         }));
-    }
+    } 
     if (logData.persBuffs) {
         var hasPersBuffs = false;
         for (var prop in logData.persBuffs) {
