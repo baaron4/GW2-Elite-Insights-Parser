@@ -75,6 +75,8 @@
                         res.add("Shared");
                     } else if (this.defs.has(id)) {
                         res.add("Shared");
+                    } else if (this.sups.has(id)) {
+                        res.add("Shared");
                     } else if (this.conditions.has(id)) {
                         res.add("Conditions");
                     } else {
@@ -101,6 +103,13 @@
                 var hash = new Set();
                 for (var i = 0; i < logData.defBuffs.length; i++) {
                     hash.add(logData.defBuffs[i]);
+                }
+                return hash;
+            },
+            sups: function () {
+                var hash = new Set();
+                for (var i = 0; i < logData.supBuffs.length; i++) {
+                    hash.add(logData.supBuffs[i]);
                 }
                 return hash;
             },
@@ -152,6 +161,11 @@
                             continue;
                         }
                     } else if (this.defs.has(id)) {
+                        arrayToFill = res.shared;
+                        if (!this.buffsToShowSet.has("Shared")) {
+                            continue;
+                        }
+                    } else if (this.sups.has(id)) {
                         arrayToFill = res.shared;
                         if (!this.buffsToShowSet.has("Shared")) {
                             continue;
