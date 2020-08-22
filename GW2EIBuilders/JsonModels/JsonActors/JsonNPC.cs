@@ -106,8 +106,16 @@ namespace GW2EIBuilders.JsonModels
                 var data = new List<JsonBuffsUptimeData>();
                 for (int i = 0; i < phases.Count; i++)
                 {
-                    var value = new JsonBuffsUptimeData(buffs[i][pair.Key], buffsDictionary[i][pair.Key]);
-                    data.Add(value);
+                    if (buffs[i].TryGetValue(pair.Key, out FinalBuffs val))
+                    {
+                        var value = new JsonBuffsUptimeData(val, buffsDictionary[i][pair.Key]);
+                        data.Add(value);
+                    } 
+                    else
+                    {
+                        var value = new JsonBuffsUptimeData();
+                        data.Add(value);
+                    }
                 }
                 res.Add(new JsonBuffsUptime(npc, pair.Key, log, settings, data, buffDesc));
             }

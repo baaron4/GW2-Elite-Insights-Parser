@@ -267,7 +267,16 @@ namespace GW2EIBuilders.JsonModels
                 var data = new List<JsonBuffsGenerationData>();
                 for (int i = 0; i < phases.Count; i++)
                 {
-                    data.Add(new JsonBuffsGenerationData(buffs[i][pair.Key]));
+                    if (buffs[i].TryGetValue(pair.Key, out FinalPlayerBuffs val))
+                    {
+                        var value = new JsonBuffsGenerationData(val);
+                        data.Add(value);
+                    }
+                    else
+                    {
+                        var value = new JsonBuffsGenerationData();
+                        data.Add(value);
+                    }
                 }
                 var jsonBuffs = new JsonPlayerBuffsGeneration()
                 {
@@ -296,8 +305,16 @@ namespace GW2EIBuilders.JsonModels
                 var data = new List<JsonBuffsUptimeData>();
                 for (int i = 0; i < phases.Count; i++)
                 {
-                    var value = new JsonBuffsUptimeData(buffs[i][pair.Key], buffsDictionary[i][pair.Key]);
-                    data.Add(value);
+                    if (buffs[i].TryGetValue(pair.Key, out FinalPlayerBuffs val))
+                    {
+                        var value = new JsonBuffsUptimeData(val, buffsDictionary[i][pair.Key]);
+                        data.Add(value);
+                    }
+                    else
+                    {
+                        var value = new JsonBuffsUptimeData();
+                        data.Add(value);
+                    }
                 }
                 if (buff.Nature == Buff.BuffNature.GraphOnlyBuff && profEnums.Contains(buff.Source))
                 {
