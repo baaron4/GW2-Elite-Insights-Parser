@@ -34,6 +34,12 @@ namespace GW2EIBuilders.HtmlModels
         public List<BuffData> OffBuffGenOGroupStats { get; internal set; }
         public List<BuffData> OffBuffGenSquadStats { get; internal set; }
 
+        public List<BuffData> SupBuffStats { get; internal set; }
+        public List<BuffData> SupBuffGenSelfStats { get; internal set; }
+        public List<BuffData> SupBuffGenGroupStats { get; internal set; }
+        public List<BuffData> SupBuffGenOGroupStats { get; internal set; }
+        public List<BuffData> SupBuffGenSquadStats { get; internal set; }
+
         public List<BuffData> DefBuffStats { get; internal set; }
         public List<BuffData> DefBuffGenSelfStats { get; internal set; }
         public List<BuffData> DefBuffGenGroupStats { get; internal set; }
@@ -54,6 +60,12 @@ namespace GW2EIBuilders.HtmlModels
         public List<BuffData> OffBuffGenActiveGroupStats { get; internal set; }
         public List<BuffData> OffBuffGenActiveOGroupStats { get; internal set; }
         public List<BuffData> OffBuffGenActiveSquadStats { get; internal set; }
+
+        public List<BuffData> SupBuffActiveStats { get; internal set; }
+        public List<BuffData> SupBuffGenActiveSelfStats { get; internal set; }
+        public List<BuffData> SupBuffGenActiveGroupStats { get; internal set; }
+        public List<BuffData> SupBuffGenActiveOGroupStats { get; internal set; }
+        public List<BuffData> SupBuffGenActiveSquadStats { get; internal set; }
 
         public List<BuffData> DefBuffActiveStats { get; internal set; }
         public List<BuffData> DefBuffGenActiveSelfStats { get; internal set; }
