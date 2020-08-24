@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
         {
-            return BuffID != ProfHelper.NoBuff &&
+            return BuffID != Buff.NoBuff &&
                     (hasStackIDs ||
                         (!(RemovedDuration <= 50 && RemovedDuration != 0 && _lastRemovedDuration <= 50 && _lastRemovedDuration != 0) && // low value all stack remove that can mess up with the simulator if server delay));
                         Time <= fightEnd - 50)); // don't take into account removal that are close to the end of the fight

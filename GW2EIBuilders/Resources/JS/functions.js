@@ -128,6 +128,26 @@ function computeRotationData(rotationData, images, data, phase) {
             if (!icon.includes("render") && !icon.includes("darthmaim")) {
                 icon = null;
             }
+
+            var fillColor;
+            var originalDuration = duration;
+            if (endType == 1) { 
+                fillColor = 'rgb(0,0,255)'; 
+            }
+            else if (endType == 2) { 
+                fillColor = 'rgb(255,0,0)'; 
+            }
+            else if (endType == 3) { 
+                fillColor = 'rgb(0,255,0)'; 
+            }
+            else if (endType == 4) { 
+                fillColor = 'rgb(0,255,255)'; 
+                duration = 50;
+            }
+            else { 
+                fillColor = 'rgb(255,255,0)'; 
+            }
+
             var clampedX = Math.max(x, 0);
             var diffX = clampedX - x;
             var clampedWidth = Math.min(x + duration / 1000.0, phase.duration / 1000.0) - x - diffX;
@@ -145,16 +165,10 @@ function computeRotationData(rotationData, images, data, phase) {
                 });
             }
 
-            var fillColor;
-            if (endType == 1) fillColor = 'rgb(40,40,220)';
-            else if (endType == 2) fillColor = 'rgb(220,40,40)';
-            else if (endType == 3) fillColor = 'rgb(40,220,40)';
-            else fillColor = 'rgb(220,220,0)';
-
             rotaTrace.x.push(clampedWidth - 0.001);
             rotaTrace.base.push(clampedX);
             rotaTrace.y.push(1.2);
-            rotaTrace.text.push(name + ' at ' + x + 's for ' + duration + 'ms');
+            rotaTrace.text.push(name + ' at ' + x + 's for ' + originalDuration + 'ms');
             rotaTrace.width.push(aa ? 0.5 : 1.0);
             rotaTrace.marker.color.push(fillColor);
 

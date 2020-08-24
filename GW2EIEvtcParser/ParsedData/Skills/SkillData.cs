@@ -25,6 +25,13 @@ namespace GW2EIEvtcParser.ParsedData
             return item;
         }
 
+        internal HashSet<long> NotAccurate = new HashSet<long>();
+
+        public bool IsNotAccurate(long ID)
+        {
+            return NotAccurate.Contains(ID);
+        }
+
         internal void Add(SkillItem skillItem)
         {
             if (!_skills.ContainsKey(skillItem.ID))

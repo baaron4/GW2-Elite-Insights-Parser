@@ -157,22 +157,22 @@
                     for (i = 0; i < gravg.length; i++) {
                         if (gravg[i]) {
                             for (k = 0; k < gravg[i].length; k++) {
-                                gravg[i][k] = Math.round(100 * gravg[i][k] / grcount[i]) / 100;
+                                gravg[i][k] = Math.round(1000 * gravg[i][k] / grcount[i]) / 1000;
                             }
                             avg.push({
                                 name: "Group " + i,
                                 data: gravg[i],
-                                avg: Math.round(100 * grBoonAvg[i] / grcount[i]) / 100
+                                avg: Math.round(1000 * grBoonAvg[i] / grcount[i]) / 1000
                             });
                         }
                     }
                     for (k = 0; k < totalavg.length; k++) {
-                        totalavg[k] = Math.round(100 * totalavg[k] / totalcount) / 100;
+                        totalavg[k] = Math.round(1000 * totalavg[k] / totalcount) / 1000;
                     }
                     avg.push({
                         name: "Total",
                         data: totalavg,
-                        avg: Math.round(100 * totalBoonAvg / totalcount) / 100
+                        avg: Math.round(1000 * totalBoonAvg / totalcount) / 1000
                     });
                     return [uptimes, gens, gengr, genoff, gensq, avg];
                 };

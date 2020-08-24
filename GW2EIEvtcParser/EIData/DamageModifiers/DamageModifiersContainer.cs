@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EIData
             var currentDamageMods = new List<DamageModifier>();
             foreach (List<DamageModifier> boons in DamageModifier.AllDamageModifiers)
             {
-                currentDamageMods.AddRange(boons.Where(x => x.MaxBuild > build && build >= x.MinBuild && x.Keep(mode)));
+                currentDamageMods.AddRange(boons.Where(x => x.Available(build) && x.Keep(mode)));
             }
             DamageModifiersPerSource = currentDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
             DamageModifiersByName = currentDamageMods.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().First());

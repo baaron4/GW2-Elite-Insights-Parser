@@ -20,7 +20,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
         {
-            return BuffID != ProfHelper.NoBuff &&
+            return BuffID != Buff.NoBuff &&
                     (hasStackIDs ||
                         (!(_iff == ArcDPSEnums.IFF.Unknown && By == ParserHelper._unknownAgent && !hasStackIDs) && // overstack or natural end removals
                         !(RemovedDuration <= 50 && RemovedDuration != 0 && !hasStackIDs) &&// low value single stack remove that can mess up with the simulator if server delay

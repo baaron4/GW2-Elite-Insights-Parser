@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
         {
-            return BuffID != ProfHelper.NoBuff && hasStackIDs && BuffInstance != 0;
+            return BuffID != Buff.NoBuff && hasStackIDs && BuffInstance != 0;
         }
         internal override int CompareTo(AbstractBuffEvent abe)
         {

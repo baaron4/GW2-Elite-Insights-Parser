@@ -71,7 +71,7 @@ namespace GW2EIEvtcParser.EIData
                         TimeSaved += cl.SavedDuration;
                         break;
                 }
-                if (cl.SkillId == SkillItem.WeaponSwapId)
+                if (cl.Skill.IsSwap)
                 {
                     SwapCount++;
                 }

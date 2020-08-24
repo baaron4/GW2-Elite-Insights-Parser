@@ -253,9 +253,9 @@ namespace GW2EIEvtcParser.EIData
             BuffDictionary buffMap = _buffMap;
             long dur = log.FightData.FightEnd;
             int fightDuration = (int)(dur) / 1000;
-            var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[ProfHelper.NumberOfBoonsID]);
-            var activeCombatMinionsGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[ProfHelper.NumberOfActiveCombatMinions]);
-            var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[ProfHelper.NumberOfConditionsID]);
+            var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[Buff.NumberOfBoonsID]);
+            var activeCombatMinionsGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[Buff.NumberOfActiveCombatMinions]);
+            var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[Buff.NumberOfConditionsID]);
             var boonIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Boon].Select(x => x.ID));
             var condiIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Condition].Select(x => x.ID));
             // Init status
@@ -334,8 +334,8 @@ namespace GW2EIEvtcParser.EIData
 
                 }
             }
-            BuffPoints[ProfHelper.NumberOfBoonsID] = boonPresenceGraph;
-            BuffPoints[ProfHelper.NumberOfConditionsID] = condiPresenceGraph;
+            BuffPoints[Buff.NumberOfBoonsID] = boonPresenceGraph;
+            BuffPoints[Buff.NumberOfConditionsID] = condiPresenceGraph;
             foreach(Minions minions in GetMinions(log).Values)
             {
                 foreach(List<Segment> minionsSegments in minions.GetLifeSpanSegments(log))
@@ -345,7 +345,7 @@ namespace GW2EIEvtcParser.EIData
             }
             if (activeCombatMinionsGraph.BuffChart.Any())
             {
-                BuffPoints[ProfHelper.NumberOfActiveCombatMinions] = activeCombatMinionsGraph;
+                BuffPoints[Buff.NumberOfActiveCombatMinions] = activeCombatMinionsGraph;
             }
         }
 
@@ -499,6 +499,7 @@ namespace GW2EIEvtcParser.EIData
         protected void SetCastLogs(ParsedEvtcLog log)
         {
             CastLogs = new List<AbstractCastEvent>(log.CombatData.GetAnimatedCastData(AgentItem));
+            CastLogs.AddRange(log.CombatData.GetInstantCastData(AgentItem));
             foreach (WeaponSwapEvent wepSwap in log.CombatData.GetWeaponSwapData(AgentItem))
             {
                 if (CastLogs.Count > 0 && (wepSwap.Time - CastLogs.Last().Time) < ParserHelper.ServerDelayConstant && CastLogs.Last().SkillId == SkillItem.WeaponSwapId)
@@ -510,7 +511,22 @@ namespace GW2EIEvtcParser.EIData
                     CastLogs.Add(wepSwap);
                 }
             }
-            CastLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
+            CastLogs.Sort((x, y) =>
+            {
+                var compare = x.Time.CompareTo(y.Time);
+                if (compare == 0 && x.SkillId != y.SkillId)
+                {
+                    if (y.Skill.IsSwap)
+                    {
+                        return -1;
+                    }
+                    if (x.Skill.IsSwap)
+                    {
+                        return 1;
+                    }
+                }
+                return compare;
+            });
         }
 
         // DPS Stats

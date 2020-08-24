@@ -11,8 +11,10 @@ namespace GW2EIBuilders.HtmlModels
         public string Name { get; internal set; }
         public string Icon { get; internal set; }
         public bool Aa { get; internal set; }
+        public bool IsSwap { get; internal set; }
+        public bool NotAccurate { get; internal set; }
 
-        internal static void AssembleSkills(ICollection<SkillItem> skills, Dictionary<string, SkillDto> dict)
+        internal static void AssembleSkills(ICollection<SkillItem> skills, Dictionary<string, SkillDto> dict, SkillData skillData)
         {
             foreach (SkillItem skill in skills)
             {
@@ -21,7 +23,9 @@ namespace GW2EIBuilders.HtmlModels
                     Id = skill.ID,
                     Name = skill.Name,
                     Icon = skill.Icon,
-                    Aa = skill.AA
+                    Aa = skill.AA,
+                    IsSwap = skill.IsSwap,
+                    NotAccurate = skillData.IsNotAccurate(skill.ID)
                 };
             }
         }

@@ -56,7 +56,7 @@
                 return this.enemy ? logData.targets[this.actorindex] : logData.players[this.actorindex];
             },
             actorRotation: function () {
-                return this.actor.details.rotation[0].filter(x => x[2] > 1e-2);
+                return this.actor.details.rotation[0];
             },
             rotation: function () {
                 var res = {

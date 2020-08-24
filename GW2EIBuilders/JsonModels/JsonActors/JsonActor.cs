@@ -193,9 +193,9 @@ namespace GW2EIBuilders.JsonModels
             if (settings.RawFormatTimelineArrays)
             {
                 Dictionary<long, BuffsGraphModel> buffGraphs = actor.GetBuffGraphs(log);
-                BoonsStates = JsonBuffsUptime.GetBuffStates(buffGraphs[ProfHelper.NumberOfBoonsID]);
-                ConditionsStates = JsonBuffsUptime.GetBuffStates(buffGraphs[ProfHelper.NumberOfConditionsID]);
-                if (buffGraphs.TryGetValue(ProfHelper.NumberOfActiveCombatMinions, out BuffsGraphModel states))
+                BoonsStates = JsonBuffsUptime.GetBuffStates(buffGraphs[Buff.NumberOfBoonsID]);
+                ConditionsStates = JsonBuffsUptime.GetBuffStates(buffGraphs[Buff.NumberOfConditionsID]);
+                if (buffGraphs.TryGetValue(Buff.NumberOfActiveCombatMinions, out BuffsGraphModel states))
                 {
                     ActiveCombatMinions = JsonBuffsUptime.GetBuffStates(states);
                 }
