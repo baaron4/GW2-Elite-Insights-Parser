@@ -1,9 +1,5 @@
-﻿using GW2EIEvtcParser.ParsedData;
-using System.Collections.Generic;
-using System.Linq;
-using static GW2EIEvtcParser.ArcDPSEnums;
+﻿using System.Collections.Generic;
 using static GW2EIEvtcParser.EIData.Buff;
-using static GW2EIEvtcParser.EIData.DamageModifier;
 
 namespace GW2EIEvtcParser.EIData
 {

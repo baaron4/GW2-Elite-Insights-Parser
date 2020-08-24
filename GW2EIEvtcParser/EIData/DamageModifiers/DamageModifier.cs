@@ -2,7 +2,6 @@
 using System.Linq;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -31,6 +30,13 @@ namespace GW2EIEvtcParser.EIData
 
         protected DamageModifierMode Mode { get; } = DamageModifierMode.All;
         protected DamageLogChecker DLChecker { get; }
+
+
+        internal static readonly GainComputer ByPresence = new GainComputerByPresence();
+        internal static readonly GainComputer ByPresenceNonMulti = new GainComputerNonMultiplier();
+        internal static readonly GainComputer BySkill = new GainComputerBySkill();
+        internal static readonly GainComputer ByStack = new GainComputerByStack();
+        internal static readonly GainComputer ByAbsence = new GainComputerByAbsence();
 
         internal DamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ParserHelper.Source src, string icon, GainComputer gainComputer, DamageLogChecker dlChecker, ulong minBuild, ulong maxBuild, DamageModifierMode mode)
         {

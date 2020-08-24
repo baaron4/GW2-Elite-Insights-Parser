@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GW2EIEvtcParser.ParsedData
+﻿namespace GW2EIEvtcParser.ParsedData
 {
     public class InstantCastEvent : AbstractCastEvent
     {

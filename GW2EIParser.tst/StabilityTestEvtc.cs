@@ -4,15 +4,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-using GW2EIBuilders;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIGW2API;
 using GW2EIParser.Exceptions;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 

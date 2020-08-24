@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Discord;
 using Discord.Webhook;
 
 namespace GW2EIDiscord
