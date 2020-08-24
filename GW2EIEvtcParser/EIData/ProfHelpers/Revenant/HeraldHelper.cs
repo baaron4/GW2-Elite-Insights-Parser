@@ -20,6 +20,10 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(27760, 27983, EIData.InstantCastFinder.DefaultICD), // Facet of Chaos
         };
 
+        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        {
+        };
+
         internal static readonly List<Buff> Buffs = new List<Buff>
         {         
                 //skills

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
+using static GW2EIEvtcParser.EIData.DamageModifier;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -12,6 +13,10 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffGainCastFinder(31869,31508,EIData.InstantCastFinder.DefaultICD), // Celestial Avatar
             new BuffLossCastFinder(31411,31508,EIData.InstantCastFinder.DefaultICD), // Release Celestial Avatar
+        };
+
+        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        {
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

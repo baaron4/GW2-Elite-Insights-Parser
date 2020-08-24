@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
+using static GW2EIEvtcParser.EIData.DamageModifier;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -23,6 +24,24 @@ namespace GW2EIEvtcParser.EIData
             }
             return new HashSet<AgentItem>();
         }
+
+
+        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        {
+            new BuffDamageModifier(46853, "Peak Performance (absent)", "5%", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.All, ParserHelper.Source.Warrior, ByAbsence, "https://wiki.guildwars2.com/images/9/98/Peak_Performance.png", 90455, ulong.MaxValue, DamageModifierMode.PvE),
+            new BuffDamageModifier(46853, "Peak Performance (present)", "20%", DamageSource.NoPets, 20.0, DamageType.Power, DamageType.All, ParserHelper.Source.Warrior, ByPresence, "https://wiki.guildwars2.com/images/9/98/Peak_Performance.png", 90455, ulong.MaxValue, DamageModifierMode.PvE),
+            new BuffDamageModifier(46853, "Peak Performance (absent)", "3%", DamageSource.NoPets, 3.0, DamageType.Power, DamageType.All, ParserHelper.Source.Warrior, ByAbsence, "https://wiki.guildwars2.com/images/9/98/Peak_Performance.png", 90455, ulong.MaxValue, DamageModifierMode.sPvPWvW),
+            new BuffDamageModifier(46853, "Peak Performance (present)", "10%", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ParserHelper.Source.Warrior, ByPresence, "https://wiki.guildwars2.com/images/9/98/Peak_Performance.png", 90455, ulong.MaxValue, DamageModifierMode.sPvPWvW),
+            new BuffDamageModifier(46853, "Peak Performance", "33%", DamageSource.NoPets, 33.0, DamageType.Power, DamageType.All, ParserHelper.Source.Warrior, ByPresence, "https://wiki.guildwars2.com/images/9/98/Peak_Performance.png", 0, 90455, DamageModifierMode.PvE),
+            new BuffDamageModifier(719, "Warrior's Sprint", "7% under swiftness", DamageSource.NoPets, 7.0, DamageType.Power, DamageType.All, ParserHelper.Source.Warrior, ByPresence, "https://wiki.guildwars2.com/images/e/e3/Warrior%27s_Sprint.png", 86181 , ulong.MaxValue, DamageModifierMode.PvE),
+            new BuffDamageModifier(719, "Warrior's Sprint", "3% under swiftness", DamageSource.NoPets, 3.0, DamageType.Power, DamageType.All, ParserHelper.Source.Warrior, ByPresence, "https://wiki.guildwars2.com/images/e/e3/Warrior%27s_Sprint.png", 86181 , ulong.MaxValue, DamageModifierMode.sPvPWvW),
+            new BuffDamageModifierTarget(742, "Cull the Weak", "7% on weakened target", DamageSource.NoPets, 7.0, DamageType.Power, DamageType.All, ParserHelper.Source.Warrior, ByPresence, "https://wiki.guildwars2.com/images/7/72/Cull_the_Weak.png", DamageModifierMode.All),
+            new BuffDamageModifier(Buff.NumberOfBoonsID, "Empowered", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Power, DamageType.All, ParserHelper.Source.Warrior, ByStack, "https://wiki.guildwars2.com/images/c/c2/Empowered.png", DamageModifierMode.All),
+            new BuffDamageModifier(42539, "Berserker's Power", "7% per stack", DamageSource.NoPets, 7.0, DamageType.Power, DamageType.All, ParserHelper.Source.Warrior, ByStack, "https://wiki.guildwars2.com/images/6/6f/Berserker%27s_Power.png", DamageModifierMode.All),
+            new BuffDamageModifierTarget(Buff.NumberOfBoonsID, "Destruction of the Empowered", "3% per target boon", DamageSource.NoPets, 3.0, DamageType.Power, DamageType.All, ParserHelper.Source.Warrior, ByStack, "https://wiki.guildwars2.com/images/5/5c/Destruction_of_the_Empowered.png", DamageModifierMode.All),
+            new BuffDamageModifierTarget(new long[] {721, 727, 722}, "Leg Specialist", "7% to movement-impaired foes", DamageSource.NoPets, 7.0, DamageType.Power, DamageType.All, ParserHelper.Source.Warrior, ByPresence, "https://wiki.guildwars2.com/images/9/9e/Leg_Specialist.png", 99526, ulong.MaxValue, DamageModifierMode.All)
+
+        };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {

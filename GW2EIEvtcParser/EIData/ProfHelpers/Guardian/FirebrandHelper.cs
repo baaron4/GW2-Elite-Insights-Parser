@@ -18,6 +18,10 @@ namespace GW2EIEvtcParser.EIData
             //new DamageCastFinder(44008,44008,InstantCastFinder.DefaultICD), // Voice of Truth
         };
 
+        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        {
+        };
+
         internal static readonly List<Buff> Buffs = new List<Buff>
         {        
                 new Buff("Ashes of the Just",41957, ParserHelper.Source.Firebrand, BuffStackType.StackingConditionalLoss, 25, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/6/6d/Epilogue-_Ashes_of_the_Just.png"),

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
+using static GW2EIEvtcParser.EIData.DamageModifier;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -15,6 +16,11 @@ namespace GW2EIEvtcParser.EIData
             new BuffLossCastFinder(41123, 43708, EIData.InstantCastFinder.DefaultICD), // Deactivate Photon Forge - red or blue irrevelant
             new BuffGainCastFinder(41218, 43066, EIData.InstantCastFinder.DefaultICD), // Spectrum Shield
             new DamageCastFinder(43630, 43630, EIData.InstantCastFinder.DefaultICD), // Thermal Release Valve
+        };
+
+        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        {
+            new BuffDamageModifier(44414, "Laser's Edge", "15%", DamageSource.NoPets, 15.0, DamageType.Power, DamageType.All, ParserHelper.Source.Holosmith, ByPresenceNonMulti, "https://wiki.guildwars2.com/images/5/5d/Laser%27s_Edge.png", 0, 97950, DamageModifierMode.PvE),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

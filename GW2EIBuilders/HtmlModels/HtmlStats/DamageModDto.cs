@@ -16,7 +16,7 @@ namespace GW2EIBuilders.HtmlModels
         {
             foreach (DamageModifier mod in damageMods)
             {
-                int id = mod.Name.GetHashCode();
+                int id = mod.ID;
                 dict["d" + id] = new DamageModDto()
                 {
                     Id = id,

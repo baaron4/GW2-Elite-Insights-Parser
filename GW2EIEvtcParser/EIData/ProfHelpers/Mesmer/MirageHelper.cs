@@ -14,6 +14,10 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(45449, 45449, EIData.InstantCastFinder.DefaultICD), // Jaunt
         };
 
+        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        {
+        };
+
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
                 new Buff("Mirage Cloak",40408, ParserHelper.Source.Mirage, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a5/Mirage_Cloak_%28effect%29.png"),

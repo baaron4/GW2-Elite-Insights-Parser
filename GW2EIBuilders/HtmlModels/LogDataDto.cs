@@ -114,7 +114,7 @@ namespace GW2EIBuilders.HtmlModels
                 dict[pair.Key] = new List<long>();
                 foreach (DamageModifier mod in pair.Value)
                 {
-                    dict[pair.Key].Add(mod.Name.GetHashCode());
+                    dict[pair.Key].Add(mod.ID);
                     usedDamageMods.Add(mod);
                 }
             }
@@ -192,7 +192,7 @@ namespace GW2EIBuilders.HtmlModels
                     if (allDamageMods.Contains(dMod.Name))
                     {
                         commonDamageModifiers.Add(dMod);
-                        logData.DmgModifiersCommon.Add(dMod.Name.GetHashCode());
+                        logData.DmgModifiersCommon.Add(dMod.ID);
                         usedDamageMods.Add(dMod);
                     }
                 }
@@ -204,7 +204,7 @@ namespace GW2EIBuilders.HtmlModels
                     if (allDamageMods.Contains(dMod.Name))
                     {
                         commonDamageModifiers.Add(dMod);
-                        logData.DmgModifiersCommon.Add(dMod.Name.GetHashCode());
+                        logData.DmgModifiersCommon.Add(dMod.ID);
                         usedDamageMods.Add(dMod);
                     }
                 }
@@ -217,7 +217,7 @@ namespace GW2EIBuilders.HtmlModels
                     if (allDamageMods.Contains(dMod.Name))
                     {
                         itemDamageModifiers.Add(dMod);
-                        logData.DmgModifiersItem.Add(dMod.Name.GetHashCode());
+                        logData.DmgModifiersItem.Add(dMod.ID);
                         usedDamageMods.Add(dMod);
                     }
                 }

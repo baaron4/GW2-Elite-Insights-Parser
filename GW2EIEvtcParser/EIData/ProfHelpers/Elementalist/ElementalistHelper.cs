@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
+using static GW2EIEvtcParser.EIData.DamageModifier;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -23,6 +24,24 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(56883, 56883, EIData.InstantCastFinder.DefaultICD), // Sunspot
             new DamageCastFinder(56885, 56885, EIData.InstantCastFinder.DefaultICD), // Earth Blast
             new DamageCastFinder(5561, 5561, EIData.InstantCastFinder.DefaultICD), // Lightning Strike
+        };
+
+        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        {
+            new BuffDamageModifier(13342, "Persisting Flames", "1% per stack", DamageSource.NoPets, 1.0, DamageType.Power, DamageType.All, ParserHelper.Source.Elementalist, ByStack, "https://wiki.guildwars2.com/images/5/5f/Persisting_Flames.png", 104844 , ulong.MaxValue, DamageModifierMode.All),
+            new BuffDamageModifier(new long[] { 5585, Buff.FireWater, Buff.FireAir, Buff.FireEarth, Buff.FireDual }, "Pyromancer's Training", "10% while fire attuned", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ParserHelper.Source.Elementalist, ByPresence, "https://wiki.guildwars2.com/images/e/e6/Pyromancer%27s_Training.png", 0, 97950, DamageModifierMode.PvE),
+            new BuffDamageModifierTarget(737, "Burning Rage", "10% on burning target", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ParserHelper.Source.Elementalist, ByPresence, "https://wiki.guildwars2.com/images/b/bd/Burning_Rage.png", 0, 97950, DamageModifierMode.PvE),
+            new BuffDamageModifierTarget(737, "Pyromancer's Training", "10% on burning target", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ParserHelper.Source.Elementalist, ByPresence, "https://wiki.guildwars2.com/images/e/e6/Pyromancer%27s_Training.png", 97950, ulong.MaxValue, DamageModifierMode.All),
+            new DamageLogDamageModifier( "Bolt to the Heart", "20% if target <50% HP", DamageSource.NoPets, 20.0, DamageType.Power, DamageType.All, ParserHelper.Source.Elementalist,"https://wiki.guildwars2.com/images/f/f8/Bolt_to_the_Heart.png", x => x.AgainstUnderFifty, ByPresence, DamageModifierMode.All),
+            new BuffDamageModifierTarget(736, "Serrated Stones", "5% to bleeding target", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.All, ParserHelper.Source.Elementalist, ByPresence, "https://wiki.guildwars2.com/images/6/60/Serrated_Stones.png", DamageModifierMode.All),
+            new DamageLogDamageModifier("Aquamancer's Training", "10% over 90% HP", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ParserHelper.Source.Elementalist,"https://wiki.guildwars2.com/images/8/81/Aquamancer%27s_Training.png", x => x.IsOverNinety, ByPresence, 0, 97950, DamageModifierMode.PvE),
+            new BuffDamageModifierTarget(738, new long[] { 5586, Buff.WaterAir, Buff.WaterEarth, Buff.WaterFire, Buff.WaterDual}, "Piercing Shards w/ Water", "20% on vuln target while on water", DamageSource.NoPets, 20.0, DamageType.Power, DamageType.All, ParserHelper.Source.Elementalist, ByPresence, ByPresence, "https://wiki.guildwars2.com/images/4/4b/Piercing_Shards.png", 97950, ulong.MaxValue, DamageModifierMode.PvE),
+            new BuffDamageModifierTarget(738, new long[] { 5586, Buff.WaterAir, Buff.WaterEarth, Buff.WaterFire, Buff.WaterDual}, "Piercing Shards", "10% on vuln target", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ParserHelper.Source.Elementalist, ByPresence, ByAbsence, "https://wiki.guildwars2.com/images/4/4b/Piercing_Shards.png", 97950, ulong.MaxValue, DamageModifierMode.PvE),
+            new BuffDamageModifierTarget(738, new long[] { 5586, Buff.WaterAir, Buff.WaterEarth, Buff.WaterFire, Buff.WaterDual}, "Piercing Shards w/ Water", "10% on vuln target while on water", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ParserHelper.Source.Elementalist, ByPresence, ByPresence, "https://wiki.guildwars2.com/images/4/4b/Piercing_Shards.png", 97950, ulong.MaxValue, DamageModifierMode.sPvPWvW),
+            new BuffDamageModifierTarget(738, new long[] { 5586, Buff.WaterAir, Buff.WaterEarth, Buff.WaterFire, Buff.WaterDual}, "Piercing Shards", "5% on vuln target", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.All, ParserHelper.Source.Elementalist, ByPresence, ByAbsence, "https://wiki.guildwars2.com/images/4/4b/Piercing_Shards.png", 97950, ulong.MaxValue, DamageModifierMode.sPvPWvW),
+            new BuffDamageModifierTarget(738, new long[] { 5586, Buff.WaterAir, Buff.WaterEarth, Buff.WaterFire, Buff.WaterDual}, "Piercing Shards", "20% on vuln target while on water", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ParserHelper.Source.Elementalist, ByPresence, ByPresence, "https://wiki.guildwars2.com/images/4/4b/Piercing_Shards.png", 0, 97950, DamageModifierMode.PvE),
+            //new DamageLogDamageModifier("Flow like Water", "10% over 75% HP", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ParseHelper.Source.Elementalist,"https://wiki.guildwars2.com/images/0/0a/Flow_like_Water.png", x => x.IsOverNinety, ByPresence, 97950, ulong.MaxValue),
+            new BuffDamageModifier(Buff.NumberOfBoonsID, "Bountiful Power", "2% per boon", DamageSource.NoPets, 2.0, DamageType.Power, DamageType.All, ParserHelper.Source.Elementalist, ByStack, "https://wiki.guildwars2.com/images/7/75/Bountiful_Power.png", DamageModifierMode.All),
         };
 
 

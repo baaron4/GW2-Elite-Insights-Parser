@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
+using static GW2EIEvtcParser.EIData.DamageModifier;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -13,6 +14,11 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffGainCastFinder(43745, 40616, EIData.InstantCastFinder.DefaultICD), // Sight beyond Sight
             new DamageCastFinder(45534, 45534, EIData.InstantCastFinder.DefaultICD), // Loss Aversion
+
+        };
+
+        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        {
 
         };
 

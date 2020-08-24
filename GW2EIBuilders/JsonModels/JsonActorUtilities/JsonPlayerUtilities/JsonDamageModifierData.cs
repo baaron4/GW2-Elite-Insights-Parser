@@ -84,11 +84,12 @@ namespace GW2EIBuilders.JsonModels
             var dict = new Dictionary<int, List<JsonDamageModifierItem>>();
             foreach (string key in damageModDict.Keys)
             {
-                int iKey = key.GetHashCode();
+                DamageModifier dMod = log.DamageModifiers.DamageModifiersByName[key];
+                int iKey = dMod.ID;
                 string nKey = "d" + iKey;
                 if (!damageModDesc.ContainsKey(nKey))
                 {
-                    damageModDesc[nKey] = new JsonLog.DamageModDesc(log.DamageModifiers.DamageModifiersByName[key]);
+                    damageModDesc[nKey] = new JsonLog.DamageModDesc(dMod);
                 }
                 dict[iKey] = damageModDict[key].Select(x => new JsonDamageModifierItem(x)).ToList();
             }

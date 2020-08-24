@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EncounterLogic;
 
@@ -19,7 +20,14 @@ namespace GW2EIEvtcParser.EIData
                 currentDamageMods.AddRange(boons.Where(x => x.Available(build) && x.Keep(mode)));
             }
             DamageModifiersPerSource = currentDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
-            DamageModifiersByName = currentDamageMods.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().First());
+            DamageModifiersByName = currentDamageMods.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => {
+                var list = x.ToList();
+                if (list.Count > 1)
+                {
+                    throw new InvalidOperationException("Same name present multiple times in damage mods - " + x.First().Name);
+                }
+                return list.First();
+            });
         }
 
         public List<DamageModifier> GetModifiersPerProf(string prof)
