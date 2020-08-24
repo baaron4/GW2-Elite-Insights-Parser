@@ -38,7 +38,8 @@ namespace GW2EIEvtcParser.EIData
             Condition, 
             Boon, 
             OffensiveBuffTable, 
-            DefensiveBuffTable, 
+            DefensiveBuffTable,
+            SupportBuffTable,
             GraphOnlyBuff, 
             Consumable, 
             Unknow 

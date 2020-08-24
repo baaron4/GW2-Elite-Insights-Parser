@@ -16,6 +16,7 @@ namespace GW2EIBuilders.HtmlModels
         public List<PhaseDto> Phases { get; } = new List<PhaseDto>();
         public List<long> Boons { get; } = new List<long>();
         public List<long> OffBuffs { get; } = new List<long>();
+        public List<long> SupBuffs { get; } = new List<long>();
         public List<long> DefBuffs { get; } = new List<long>();
         public List<long> FractalInstabilities { get; } = new List<long>();
         public List<long> DmgModifiersItem { get; } = new List<long>();
@@ -236,6 +237,11 @@ namespace GW2EIBuilders.HtmlModels
                 logData.OffBuffs.Add(boon.ID);
                 usedBuffs[boon.ID] = boon;
             }
+            foreach (Buff boon in statistics.PresentSupbuffs)
+            {
+                logData.SupBuffs.Add(boon.ID);
+                usedBuffs[boon.ID] = boon;
+            }
             foreach (Buff boon in statistics.PresentDefbuffs)
             {
                 logData.DefBuffs.Add(boon.ID);
@@ -263,6 +269,7 @@ namespace GW2EIBuilders.HtmlModels
                     //
                     BoonStats = BuffData.BuildBuffUptimeData(log, statistics.PresentBoons, i),
                     OffBuffStats = BuffData.BuildBuffUptimeData(log, statistics.PresentOffbuffs, i),
+                    SupBuffStats = BuffData.BuildBuffUptimeData(log, statistics.PresentSupbuffs, i),
                     DefBuffStats = BuffData.BuildBuffUptimeData(log, statistics.PresentDefbuffs, i),
                     PersBuffStats = BuffData.BuildPersonalBuffUptimeData(log, persBuffDict, i),
                     BoonGenSelfStats = BuffData.BuildBuffGenerationData(log, statistics.PresentBoons, i, BuffEnum.Self),
@@ -273,6 +280,10 @@ namespace GW2EIBuilders.HtmlModels
                     OffBuffGenGroupStats = BuffData.BuildBuffGenerationData(log, statistics.PresentOffbuffs, i, BuffEnum.Group),
                     OffBuffGenOGroupStats = BuffData.BuildBuffGenerationData(log, statistics.PresentOffbuffs, i, BuffEnum.OffGroup),
                     OffBuffGenSquadStats = BuffData.BuildBuffGenerationData(log, statistics.PresentOffbuffs, i, BuffEnum.Squad),
+                    SupBuffGenSelfStats = BuffData.BuildBuffGenerationData(log, statistics.PresentSupbuffs, i, BuffEnum.Self),
+                    SupBuffGenGroupStats = BuffData.BuildBuffGenerationData(log, statistics.PresentSupbuffs, i, BuffEnum.Group),
+                    SupBuffGenOGroupStats = BuffData.BuildBuffGenerationData(log, statistics.PresentSupbuffs, i, BuffEnum.OffGroup),
+                    SupBuffGenSquadStats = BuffData.BuildBuffGenerationData(log, statistics.PresentSupbuffs, i, BuffEnum.Squad),
                     DefBuffGenSelfStats = BuffData.BuildBuffGenerationData(log, statistics.PresentDefbuffs, i, BuffEnum.Self),
                     DefBuffGenGroupStats = BuffData.BuildBuffGenerationData(log, statistics.PresentDefbuffs, i, BuffEnum.Group),
                     DefBuffGenOGroupStats = BuffData.BuildBuffGenerationData(log, statistics.PresentDefbuffs, i, BuffEnum.OffGroup),
@@ -280,6 +291,7 @@ namespace GW2EIBuilders.HtmlModels
                     //
                     BoonActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentBoons, i),
                     OffBuffActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentOffbuffs, i),
+                    SupBuffActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentSupbuffs, i),
                     DefBuffActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentDefbuffs, i),
                     PersBuffActiveStats = BuffData.BuildActivePersonalBuffUptimeData(log, persBuffDict, i),
                     BoonGenActiveSelfStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentBoons, i, BuffEnum.Self),
@@ -290,6 +302,10 @@ namespace GW2EIBuilders.HtmlModels
                     OffBuffGenActiveGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentOffbuffs, i, BuffEnum.Group),
                     OffBuffGenActiveOGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentOffbuffs, i, BuffEnum.OffGroup),
                     OffBuffGenActiveSquadStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentOffbuffs, i, BuffEnum.Squad),
+                    SupBuffGenActiveSelfStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentSupbuffs, i, BuffEnum.Self),
+                    SupBuffGenActiveGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentSupbuffs, i, BuffEnum.Group),
+                    SupBuffGenActiveOGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentSupbuffs, i, BuffEnum.OffGroup),
+                    SupBuffGenActiveSquadStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentSupbuffs, i, BuffEnum.Squad),
                     DefBuffGenActiveSelfStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentDefbuffs, i, BuffEnum.Self),
                     DefBuffGenActiveGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentDefbuffs, i, BuffEnum.Group),
                     DefBuffGenActiveOGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentDefbuffs, i, BuffEnum.OffGroup),
