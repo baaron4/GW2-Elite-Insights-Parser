@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -42,6 +44,39 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(Buff.EarthAir, Buff.EarthAir, InstantCastFinder.DefaultICD),
             new BuffGainCastFinder(Buff.EarthDual, Buff.EarthDual, InstantCastFinder.DefaultICD),
         };
+
+
+        internal static readonly List<Buff> WeaverBuffs = new List<Buff>
+        {
+                new Buff("Dual Fire Attunement", FireDual, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png"),
+                new Buff("Fire Water Attunement", FireWater, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/ihqKuUJ.png"),
+                new Buff("Fire Air Attunement", FireAir, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/kKFJ8cT.png"),
+                new Buff("Fire Earth Attunement", FireEarth, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/T4187h0.png"),
+                new Buff("Dual Water Attunement", WaterDual, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/31/Water_Attunement.png"),
+                new Buff("Water Fire Attunement", WaterFire, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/vMUkzxH.png"),
+                new Buff("Water Air Attunement", WaterAir, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/5G5OFud.png"),
+                new Buff("Water Earth Attunement", WaterEarth, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/QKEtF2P.png"),
+                new Buff("Dual Air Attunement", AirDual, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/91/Air_Attunement.png"),
+                new Buff("Air Fire Attunement", AirFire, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/vf68GJm.png"),
+                new Buff("Air Water Attunement", AirWater, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/Tuj5Sro.png"),
+                new Buff("Air Earth Attunement", AirEarth, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/lHcOSwk.png"),
+                new Buff("Dual Earth Attunement", EarthDual, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a8/Earth_Attunement.png"),
+                new Buff("Earth Fire Attunement", EarthFire, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/aJWvE0I.png"),
+                new Buff("Earth Water Attunement", EarthWater, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/jtjj2TG.png"),
+                new Buff("Earth Air Attunement", EarthAir, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/4Eti7Pb.png"),
+                new Buff("Primordial Stance",42086, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/3a/Primordial_Stance.png"),
+                new Buff("Unravel",42683, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/4b/Unravel.png"),
+                new Buff("Weave Self",42951, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/2a/Weave_Self.png"),
+                new Buff("Woven Air",43038, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/bc/Woven_Air.png"),
+                new Buff("Woven Fire",45110, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b1/Woven_Fire.png"),
+                new Buff("Woven Earth",45662, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/7a/Woven_Earth.png"),
+                new Buff("Woven Water",43499, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a6/Woven_Water.png"),
+                new Buff("Perfect Weave",45267, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/2a/Weave_Self.png"),
+                new Buff("Molten Armor",43586, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/71/Lava_Skin.png"),
+                new Buff("Weaver's Prowess",42061, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/75/Weaver%27s_Prowess.png"),
+                new Buff("Elements of Rage",42416, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a2/Elements_of_Rage.png"),
+        };
+
 
         private static readonly Dictionary<long, HashSet<long>> _minorsTranslation = new Dictionary<long, HashSet<long>>
         {

@@ -1,6 +1,8 @@
 ﻿using GW2EIEvtcParser.ParsedData;
 using System.Collections.Generic;
 using System.Linq;
+using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -14,6 +16,25 @@ namespace GW2EIEvtcParser.EIData
             // Need to check kits
             new DamageCastFinder(6154,6154,InstantCastFinder.DefaultICD), // Overcharged Shot
             //new DamageCastFinder(6004,6004,InstantCastFinder.DefaultICD), // Net Shot - projectile
+        };
+
+        internal static readonly List<Buff> EngineerBuffs = new List<Buff>
+        {  
+                new Buff("Static Shield",6055, ParserHelper.Source.Engineer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/90/Static_Shield.png"),
+                new Buff("Absorb",6056, ParserHelper.Source.Engineer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/8a/Absorb.png"),
+                new Buff("A.E.D.",21660, ParserHelper.Source.Engineer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e6/A.E.D..png"),
+                new Buff("Elixir S",5863, ParserHelper.Source.Engineer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d8/Elixir_S.png"),
+                new Buff("Utility Goggles",5864, ParserHelper.Source.Engineer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/0/02/Utility_Goggles.png"),
+                new Buff("Slick Shoes",5833, ParserHelper.Source.Engineer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/3d/Slick_Shoes.png"),
+                new Buff("Gear Shield",5997, ParserHelper.Source.Engineer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/ca/Gear_Shield.png"),
+                new Buff("Iron Blooded",49065, ParserHelper.Source.Engineer, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/1e/Iron_Blooded.png"),
+                new Buff("Streamlined Kits",18687, ParserHelper.Source.Engineer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/cb/Streamlined_Kits.png"),
+                new Buff("Kinetic Charge",45781, ParserHelper.Source.Engineer, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e0/Kinetic_Battery.png"),
+                new Buff("Pinpoint Distribution", 38333, ParserHelper.Source.Engineer, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/b/bf/Pinpoint_Distribution.png"),
+                new Buff("Thermal Vision", 51389, ParserHelper.Source.Engineer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/8a/Skilled_Marksman.png"),
+                new Buff("Explosive Entrance",59579, ParserHelper.Source.Engineer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/33/Explosive_Entrance.png", 102321, ulong.MaxValue),
+                new Buff("Explosive Temper",59528, ParserHelper.Source.Engineer, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/c1/Explosive_Temper.png", 102321, ulong.MaxValue),
+
         };
 
         public static void AttachMasterToEngineerTurrets(List<Player> players, Dictionary<long, List<AbstractDamageEvent>> damageData, Dictionary<long, List<AbstractCastEvent>> castData)

@@ -1,6 +1,8 @@
 ﻿using GW2EIEvtcParser.ParsedData;
 using System.Collections.Generic;
 using System.Linq;
+using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -21,6 +23,41 @@ namespace GW2EIEvtcParser.EIData
             }
             return new HashSet<AgentItem>();
         }
+
+        internal static readonly List<Buff> WarriorBuffs = new List<Buff>
+        {
+            //skills
+                new Buff("Riposte",14434, ParserHelper.Source.Warrior, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/d/de/Riposte.png"),
+                //signets
+                new Buff("Healing Signet",786, ParserHelper.Source.Warrior, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/85/Healing_Signet.png"),
+                new Buff("Dolyak Signet",14458, ParserHelper.Source.Warrior, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/60/Dolyak_Signet.png"),
+                new Buff("Signet of Fury",14459, ParserHelper.Source.Warrior, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/c1/Signet_of_Fury.png"),
+                new Buff("Signet of Might",14444, ParserHelper.Source.Warrior, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/40/Signet_of_Might.png"),
+                new Buff("Signet of Stamina",14478, ParserHelper.Source.Warrior, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6b/Signet_of_Stamina.png"),
+                new Buff("Signet of Rage",14496, ParserHelper.Source.Warrior, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/bc/Signet_of_Rage.png"),
+                //banners
+                new Buff("Banner of Strength", 14417, ParserHelper.Source.Warrior, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/e/e1/Banner_of_Strength.png/33px-Banner_of_Strength.png"),
+                new Buff("Banner of Discipline", 14449, ParserHelper.Source.Warrior, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/5/5f/Banner_of_Discipline.png/33px-Banner_of_Discipline.png"),
+                new Buff("Banner of Tactics",14450, ParserHelper.Source.Warrior, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/thumb/3/3f/Banner_of_Tactics.png/33px-Banner_of_Tactics.png"),
+                new Buff("Banner of Defense",14543, ParserHelper.Source.Warrior, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/f/f1/Banner_of_Defense.png/33px-Banner_of_Defense.png"),
+                //stances
+                new Buff("Shield Stance",756, ParserHelper.Source.Warrior, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/d/de/Shield_Stance.png"),
+                new Buff("Berserker's Stance",14453, ParserHelper.Source.Warrior, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/8a/Berserker_Stance.png"),
+                new Buff("Enduring Pain",787, ParserHelper.Source.Warrior, BuffStackType.Queue, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/24/Endure_Pain.png"),
+                new Buff("Balanced Stance",34778, ParserHelper.Source.Warrior, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/27/Balanced_Stance.png"),
+                new Buff("Defiant Stance",21816, ParserHelper.Source.Warrior, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/db/Defiant_Stance.png"),
+                new Buff("Rampage",14484, ParserHelper.Source.Warrior, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e4/Rampage.png"),
+                //traits
+                new Buff("Soldier's Focus", 58102, ParserHelper.Source.Warrior, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/29/Soldier%27s_Focus.png", 99526, ulong.MaxValue),
+                new Buff("Brave Stride", 43063, ParserHelper.Source.Warrior, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b8/Death_from_Above.png"),
+                new Buff("Empower Allies", 14222, ParserHelper.Source.Warrior, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/4/4c/Empower_Allies.png/20px-Empower_Allies.png"),
+                new Buff("Peak Performance",46853, ParserHelper.Source.Warrior, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/98/Peak_Performance.png"),
+                new Buff("Furious Surge", 30204, ParserHelper.Source.Warrior, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/65/Furious.png"),
+                //new Boon("Health Gain per Adrenaline bar Spent",-1, BoonSource.Warrior, BoonType.Intensity, 3, BoonEnum.GraphOnlyBuff,RemoveType.Normal),
+                new Buff("Rousing Resilience",24383, ParserHelper.Source.Warrior, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/ca/Rousing_Resilience.png"),
+                new Buff("Berserker's Power",42539, ParserHelper.Source.Warrior, BuffStackType.Stacking, 3, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6f/Berserker%27s_Power.png"),
+        };
+
 
         /*private static HashSet<AgentItem> FindBattleStandards(Dictionary<long, List<AbstractBuffEvent>> buffData, HashSet<AgentItem> playerAgents)
         {
