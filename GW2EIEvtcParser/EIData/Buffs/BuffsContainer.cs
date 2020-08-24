@@ -916,7 +916,7 @@ namespace GW2EIEvtcParser.EIData
             BuffInfoSolver.AdjustBuffs(combatData, BuffsByIds, operation);
             foreach (Buff buff in currentBuffs)
             {
-                BuffInfoEvent buffInfoEvt = buff.BuffInfo;
+                BuffInfoEvent buffInfoEvt = combatData.GetBuffInfoEvent(buff.ID);
                 if (buffInfoEvt != null)
                 {
                     foreach (BuffFormula formula in buffInfoEvt.Formulas)

@@ -114,7 +114,7 @@ namespace GW2EIEvtcParser.EIData
                 BuffInfoEvent buffInfoEvent = combatData.GetBuffInfoEvent(pair.Key);
                 if (buffInfoEvent != null)
                 {
-                    pair.Value.AttachBuffInfoEvent(buffInfoEvent, operation);
+                    pair.Value.VerifyBuffInfoEvent(buffInfoEvent, operation);
                     buffInfoEvent.AdjustBuffInfo(solved);
                 }
             }
