@@ -37,6 +37,11 @@
                 :playerdata="buffData.defsData[mode]" :sums="mode === 0 ? buffData.defsData[5] : []"
                 :playerindex="playerindex">
             </buff-table-component>
+            <buff-table-component v-if="datatype === datatypes.supportBuffTable" :key="'supportbuff-stats-table'"
+                :condition="false" :generation="mode > 0" :id="'supportbuff-stats-table'" :buffs="sups"
+                :playerdata="buffData.supsData[mode]" :sums="mode === 0 ? buffData.supsData[5] : []"
+                :playerindex="playerindex">
+            </buff-table-component>
         </keep-alive>
     </div>
 </template>
@@ -76,6 +81,13 @@
                 var data = [];
                 for (var i = 0; i < logData.defBuffs.length; i++) {
                     data[i] = findSkill(true, logData.defBuffs[i]);
+                }
+                return data;
+            },
+            sups: function () {
+                var data = [];
+                for (var i = 0; i < logData.supBuffs.length; i++) {
+                    data[i] = findSkill(true, logData.supBuffs[i]);
                 }
                 return data;
             },
@@ -145,22 +157,22 @@
                     for (i = 0; i < gravg.length; i++) {
                         if (gravg[i]) {
                             for (k = 0; k < gravg[i].length; k++) {
-                                gravg[i][k] = Math.round(100 * gravg[i][k] / grcount[i]) / 100;
+                                gravg[i][k] = Math.round(1000 * gravg[i][k] / grcount[i]) / 1000;
                             }
                             avg.push({
                                 name: "Group " + i,
                                 data: gravg[i],
-                                avg: Math.round(100 * grBoonAvg[i] / grcount[i]) / 100
+                                avg: Math.round(1000 * grBoonAvg[i] / grcount[i]) / 1000
                             });
                         }
                     }
                     for (k = 0; k < totalavg.length; k++) {
-                        totalavg[k] = Math.round(100 * totalavg[k] / totalcount) / 100;
+                        totalavg[k] = Math.round(1000 * totalavg[k] / totalcount) / 1000;
                     }
                     avg.push({
                         name: "Total",
                         data: totalavg,
-                        avg: Math.round(100 * totalBoonAvg / totalcount) / 100
+                        avg: Math.round(1000 * totalBoonAvg / totalcount) / 1000
                     });
                     return [uptimes, gens, gengr, genoff, gensq, avg];
                 };
@@ -172,7 +184,9 @@
                         offsData: getData(this.phase.offBuffActiveStats, this.phase.offBuffGenActiveSelfStats,
                             this.phase.offBuffGenActiveGroupStats, this.phase.offBuffGenActiveOGroupStats, this.phase.offBuffGenActiveSquadStats),
                         defsData: getData(this.phase.defBuffActiveStats, this.phase.defBuffGenActiveSelfStats,
-                            this.phase.defBuffGenActiveGroupStats, this.phase.defBuffGenActiveOGroupStats, this.phase.defBuffGenActiveSquadStats)
+                            this.phase.defBuffGenActiveGroupStats, this.phase.defBuffGenActiveOGroupStats, this.phase.defBuffGenActiveSquadStats),
+                        supsData: getData(this.phase.supBuffActiveStats, this.phase.supBuffGenActiveSelfStats,
+                            this.phase.supBuffGenActiveGroupStats, this.phase.supBuffGenActiveOGroupStats, this.phase.supBuffGenActiveSquadStats)
                     };
                 } else {
                     res = {
@@ -181,7 +195,9 @@
                         offsData: getData(this.phase.offBuffStats, this.phase.offBuffGenSelfStats,
                             this.phase.offBuffGenGroupStats, this.phase.offBuffGenOGroupStats, this.phase.offBuffGenSquadStats),
                         defsData: getData(this.phase.defBuffStats, this.phase.defBuffGenSelfStats,
-                            this.phase.defBuffGenGroupStats, this.phase.defBuffGenOGroupStats, this.phase.defBuffGenSquadStats)
+                            this.phase.defBuffGenGroupStats, this.phase.defBuffGenOGroupStats, this.phase.defBuffGenSquadStats),
+                        supsData: getData(this.phase.supBuffStats, this.phase.supBuffGenSelfStats,
+                            this.phase.supBuffGenGroupStats, this.phase.supBuffGenOGroupStats, this.phase.supBuffGenSquadStats)
                     };
                 }
                 this.cache.set(id, res);

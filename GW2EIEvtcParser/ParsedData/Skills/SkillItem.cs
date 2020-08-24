@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIEvtcParser.EIData;
 using GW2EIGW2API;
 using GW2EIGW2API.GW2API;
 
@@ -64,6 +65,32 @@ namespace GW2EIEvtcParser.ParsedData
             {56375, "Teleport Center" },
             {56446, "Eat Pylon" },
             {56329, "Big Magma Drop" },
+            // Weaver attunements
+            {Buff.FireDual, "Dual Fire Attunement" },
+            {Buff.FireWater, "Fire Water Attunement" },
+            {Buff.FireAir, "Fire Air Attunement" },
+            {Buff.FireEarth, "Fire Earth Attunement" },
+
+            {Buff.WaterDual, "Dual Water Attunement" },
+            {Buff.WaterFire, "Water Fire Attunement" },
+            {Buff.WaterAir, "Water Air Attunement" },
+            {Buff.WaterEarth, "Water Earth Attunement" },
+
+            {Buff.AirDual, "Dual Air Attunement" },
+            {Buff.AirFire, "Air Fire Attunement" },
+            {Buff.AirWater, "Air Water Attunement" },
+            {Buff.AirEarth, "Air Earth Attunement" },
+
+            {Buff.EarthDual, "Dual Earth Attunement" },
+            {Buff.EarthFire, "Earth Fire Attunement" },
+            {Buff.EarthWater, "Earth Water Attunement" },
+            {Buff.EarthAir, "Earth Air Attunement" },
+
+            {51696, "True Nature - Dragon" },
+            {51714, "True Nature - Demon" },
+            {51675, "True Nature - Dwarf" },
+            {51667, "True Nature - Assassin" },
+            {51713, "True Nature - Centaur" },
         };
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
         {
@@ -86,7 +113,9 @@ namespace GW2EIEvtcParser.ParsedData
             {9292, "https://wiki.guildwars2.com/images/c/c3/Superior_Sigil_of_Air.png" },
             {9433, "https://wiki.guildwars2.com/images/4/43/Superior_Sigil_of_Geomancy.png" },
             {40015, "https://wiki.guildwars2.com/images/c/c9/Chapter_4-_Scorched_Aftermath.png"},
+            {45128, "https://wiki.guildwars2.com/images/b/bf/Chapter_3-_Azure_Sun.png"},
             {41258, "https://wiki.guildwars2.com/images/d/d3/Chapter_1-_Searing_Spell.png"},
+            {45022, "https://wiki.guildwars2.com/images/f/fd/Chapter_1-_Desert_Bloom.png"},
             {46618, "https://wiki.guildwars2.com/images/a/a8/Flame_Rush.png"},
             {40635, "https://wiki.guildwars2.com/images/5/53/Chapter_2-_Igniting_Burst.png"},
             {42898, "https://wiki.guildwars2.com/images/6/6d/Epilogue-_Ashes_of_the_Just.png"},
@@ -114,6 +143,27 @@ namespace GW2EIEvtcParser.ParsedData
             {42925, "https://wiki.guildwars2.com/images/5/5f/Epilogue-_Eternal_Oasis.png"},
             {43630, "https://wiki.guildwars2.com/images/0/0c/Thermal_Release_Valve.png" },
             {22499, "https://wiki.guildwars2.com/images/d/d0/Shattered_Aegis.png" },
+            {29604, "https://wiki.guildwars2.com/images/8/82/Chilling_Nova.png" },
+            // Weaver attunements
+            {Buff.FireDual, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
+            {Buff.FireWater, "https://i.imgur.com/ihqKuUJ.png" },
+            {Buff.FireAir, "https://i.imgur.com/kKFJ8cT.png" },
+            {Buff.FireEarth, "https://i.imgur.com/T4187h0.png" },
+
+            {Buff.WaterDual, "https://wiki.guildwars2.com/images/3/31/Water_Attunement.png" },
+            {Buff.WaterFire, "https://i.imgur.com/vMUkzxH.png" },
+            {Buff.WaterAir, "https://i.imgur.com/5G5OFud.png" },
+            {Buff.WaterEarth, "https://i.imgur.com/QKEtF2P.png" },
+
+            {Buff.AirDual, "https://wiki.guildwars2.com/images/9/91/Air_Attunement.png" },
+            {Buff.AirFire, "https://i.imgur.com/vf68GJm.png" },
+            {Buff.AirWater, "https://i.imgur.com/Tuj5Sro.png" },
+            {Buff.AirEarth, "https://i.imgur.com/lHcOSwk.png" },
+
+            {Buff.EarthDual, "https://wiki.guildwars2.com/images/a/a8/Earth_Attunement.png" },
+            {Buff.EarthFire, "https://i.imgur.com/aJWvE0I.png" },
+            {Buff.EarthWater, "https://i.imgur.com/jtjj2TG.png" },
+            {Buff.EarthAir, "https://i.imgur.com/4Eti7Pb.png" },
         };
 
         private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>
@@ -145,6 +195,8 @@ namespace GW2EIEvtcParser.ParsedData
         public long ID { get; private set; }
         //public int Range { get; private set; } = 0;
         public bool AA => _apiSkill?.Slot == "Weapon_1" || _apiSkill?.Slot == "Downed_1";
+
+        public bool IsSwap => ID == WeaponSwapId || ElementalistHelper.IsElementalSwap(ID) || RevenantHelper.IsLegendSwap(ID);
         public string Name { get; private set; }
         public string Icon { get; private set; }
         private WeaponDescriptor _weaponDescriptor;
@@ -247,7 +299,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         private void CompleteItem()
         {
-            if (_apiSkill == null && _overrideNames.TryGetValue(ID, out string name))
+            if (_overrideNames.TryGetValue(ID, out string name))
             {
                 Name = name;
             }
@@ -265,7 +317,7 @@ namespace GW2EIEvtcParser.ParsedData
                     }
                 }*/
             }
-            if (_apiSkill == null && _overrideIcons.TryGetValue(ID, out string icon))
+            if (_overrideIcons.TryGetValue(ID, out string icon))
             {
                 Icon = icon;
             }

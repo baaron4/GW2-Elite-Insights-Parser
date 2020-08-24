@@ -23,7 +23,7 @@ namespace GW2EIBuilders.JsonModels
             public int CastTime { get; internal set; }
             [JsonProperty]
             /// <summary>
-            /// Duration of the animation
+            /// Duration of the animation, instant cast if 0
             /// </summary>
             public int Duration { get; internal set; }
             [JsonProperty]
@@ -77,7 +77,7 @@ namespace GW2EIBuilders.JsonModels
             if (!skillDesc.ContainsKey("s" + skillID))
             {
                 SkillItem skill = skillCasts.First().Skill;
-                skillDesc["s" + skillID] = new JsonLog.SkillDesc(skill, log.LogData.GW2Build);
+                skillDesc["s" + skillID] = new JsonLog.SkillDesc(skill, log.LogData.GW2Build, log.SkillData);
             }
             Id = skillID;
             Skills = skillCasts.Select(x => new JsonSkill(x)).ToList();

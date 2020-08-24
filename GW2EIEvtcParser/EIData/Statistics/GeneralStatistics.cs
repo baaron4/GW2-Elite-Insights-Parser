@@ -39,6 +39,14 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
 
+            foreach (Buff boon in boons.BuffsByNature[BuffNature.SupportBuffTable])
+            {
+                if (skillIDs.Contains(boon.ID))
+                {
+                    PresentSupbuffs.Add(boon);
+                }
+            }
+
             foreach (Buff boon in boons.BuffsByNature[BuffNature.DefensiveBuffTable])
             {
                 if (skillIDs.Contains(boon.ID))
@@ -76,6 +84,7 @@ namespace GW2EIEvtcParser.EIData
         public List<Buff> PresentBoons { get; } = new List<Buff>();//Used only for Boon tables
         public List<Buff> PresentConditions { get; } = new List<Buff>();//Used only for Condition tables
         public List<Buff> PresentOffbuffs { get; } = new List<Buff>();//Used only for Off Buff tables
+        public List<Buff> PresentSupbuffs { get; } = new List<Buff>();//Used only for Off Buff tables
         public List<Buff> PresentDefbuffs { get; } = new List<Buff>();//Used only for Def Buff tables
         public List<Buff> PresentFractalInstabilities { get; } = new List<Buff>();
         public Dictionary<Player, HashSet<Buff>> PresentPersonalBuffs { get; } = new Dictionary<Player, HashSet<Buff>>();

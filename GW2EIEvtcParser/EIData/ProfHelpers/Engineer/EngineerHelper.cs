@@ -7,6 +7,15 @@ namespace GW2EIEvtcParser.EIData
     internal class EngineerHelper : ProfHelper
     {
 
+        internal static readonly List<InstantCastFinder> EngineerInstantCastFinders = new List<InstantCastFinder>()
+        {
+            new BuffLossCastFinder(59562, 59579, InstantCastFinder.DefaultICD, 102321, ulong.MaxValue), // Explosive Entrance
+            new BuffGainCastFinder(5861, 5863,InstantCastFinder.DefaultICD), // Elixir S
+            // Need to check kits
+            new DamageCastFinder(6154,6154,InstantCastFinder.DefaultICD), // Overcharged Shot
+            //new DamageCastFinder(6004,6004,InstantCastFinder.DefaultICD), // Net Shot - projectile
+        };
+
         public static void AttachMasterToEngineerTurrets(List<Player> players, Dictionary<long, List<AbstractDamageEvent>> damageData, Dictionary<long, List<AbstractCastEvent>> castData)
         {
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));

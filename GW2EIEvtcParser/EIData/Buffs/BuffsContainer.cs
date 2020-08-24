@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Swiftness", 719, ParserHelper.Source.Common, BuffStackType.Queue, 9, BuffNature.Boon, "https://wiki.guildwars2.com/images/a/af/Swiftness.png"),
                 new Buff("Retaliation", 873, ParserHelper.Source.Common, BuffStackType.Queue, 5, BuffNature.Boon, "https://wiki.guildwars2.com/images/5/53/Retaliation.png"),
                 new Buff("Resistance", 26980, ParserHelper.Source.Common, BuffStackType.Queue, 5, BuffNature.Boon, "https://wiki.guildwars2.com/images/4/4b/Resistance.png"),
-                new Buff("Number of Boons", ProfHelper.NumberOfBoonsID, ParserHelper.Source.Common, BuffStackType.Stacking, 0, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/44/Boon_Duration.png"),
+                new Buff("Number of Boons", NumberOfBoonsID, ParserHelper.Source.Common, BuffStackType.Stacking, 0, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/44/Boon_Duration.png"),
         };
 
         private readonly List<Buff> _conditions = new List<Buff>
@@ -43,18 +43,18 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Weakness", 742, ParserHelper.Source.Common, BuffStackType.Queue, 5, BuffNature.Condition, "https://wiki.guildwars2.com/images/f/f9/Weakness.png"),
                 new Buff("Taunt", 27705, ParserHelper.Source.Common, BuffStackType.Queue, 5, BuffNature.Condition, "https://wiki.guildwars2.com/images/c/cc/Taunt.png"),
                 new Buff("Vulnerability", 738, ParserHelper.Source.Common, BuffStackType.Stacking, 25, BuffNature.Condition, "https://wiki.guildwars2.com/images/a/af/Vulnerability.png"),
-                new Buff("Number of Conditions", ProfHelper.NumberOfConditionsID, ParserHelper.Source.Common, BuffStackType.Stacking, 0, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/38/Condition_Duration.png"),
+                new Buff("Number of Conditions", NumberOfConditionsID, ParserHelper.Source.Common, BuffStackType.Stacking, 0, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/38/Condition_Duration.png"),
         };
 
         private readonly List<Buff> _commons = new List<Buff>
         {
-                new Buff("Number of Active Combat Minions", ProfHelper.NumberOfActiveCombatMinions, ParserHelper.Source.Common, BuffStackType.Stacking, 0, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/ad/Superior_Rune_of_the_Ranger.png"),
+                new Buff("Number of Active Combat Minions", NumberOfActiveCombatMinions, ParserHelper.Source.Common, BuffStackType.Stacking, 0, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/ad/Superior_Rune_of_the_Ranger.png"),
                 new Buff("Downed", 770, ParserHelper.Source.Common, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/dd/Downed.png"),
                 new Buff("Exhaustion", 46842, ParserHelper.Source.Common, BuffStackType.Queue, 3, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/88/Exhaustion.png"),
-                new Buff("Stealth", 13017, ParserHelper.Source.Common, BuffStackType.Queue, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
+                new Buff("Stealth", 13017, ParserHelper.Source.Common, BuffStackType.Queue, 5, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
                 new Buff("Hide in Shadows", 10269, ParserHelper.Source.Common, BuffStackType.Queue, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
-                new Buff("Revealed", 890, ParserHelper.Source.Common, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/db/Revealed.png"),
-                new Buff("Superspeed", 5974, ParserHelper.Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/1/1a/Super_Speed.png"),
+                new Buff("Revealed", 890, ParserHelper.Source.Common, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/d/db/Revealed.png"),
+                new Buff("Superspeed", 5974, ParserHelper.Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/1/1a/Super_Speed.png"),
                 new Buff("Determined (762)", 762, ParserHelper.Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Buff("Determined (788)", 788, ParserHelper.Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Buff("Determined (895)", 895, ParserHelper.Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
@@ -69,13 +69,13 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Exposed", 48209, ParserHelper.Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/f/f4/Exposed_%28effect%29.png"),
                 new Buff("Unblockable",36781, ParserHelper.Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/f0/Unblockable_%28effect%29.png",102321 , ulong.MaxValue),
                 //Auras
-                new Buff("Chaos Aura", 10332, ParserHelper.Source.Common, BuffNature.OffensiveBuffTable,"https://wiki.guildwars2.com/images/e/ec/Chaos_Aura.png"),
-                new Buff("Fire Aura", 5677, ParserHelper.Source.Common, BuffNature.OffensiveBuffTable,"https://wiki.guildwars2.com/images/c/ce/Fire_Aura.png"),
-                new Buff("Frost Aura", 5579, ParserHelper.Source.Common, BuffNature.DefensiveBuffTable,"https://wiki.guildwars2.com/images/8/87/Frost_Aura_%28effect%29.png"),
-                new Buff("Light Aura", 25518, ParserHelper.Source.Common, BuffNature.DefensiveBuffTable,"https://wiki.guildwars2.com/images/5/5a/Light_Aura.png"),
-                new Buff("Magnetic Aura", 5684, ParserHelper.Source.Common, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/0/0b/Magnetic_Aura_%28effect%29.png"),
-                new Buff("Shocking Aura", 5577, ParserHelper.Source.Common, BuffNature.DefensiveBuffTable,"https://wiki.guildwars2.com/images/5/5d/Shocking_Aura_%28effect%29.png"),
-                new Buff("Dark Aura", 39978, ParserHelper.Source.Common, BuffNature.OffensiveBuffTable,"https://wiki.guildwars2.com/images/e/ef/Dark_Aura.png", 96406, ulong.MaxValue),
+                new Buff("Chaos Aura", 10332, ParserHelper.Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/e/ec/Chaos_Aura.png"),
+                new Buff("Fire Aura", 5677, ParserHelper.Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/c/ce/Fire_Aura.png"),
+                new Buff("Frost Aura", 5579, ParserHelper.Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/8/87/Frost_Aura_%28effect%29.png"),
+                new Buff("Light Aura", 25518, ParserHelper.Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/5/5a/Light_Aura.png"),
+                new Buff("Magnetic Aura", 5684, ParserHelper.Source.Common, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/0/0b/Magnetic_Aura_%28effect%29.png"),
+                new Buff("Shocking Aura", 5577, ParserHelper.Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/5/5d/Shocking_Aura_%28effect%29.png"),
+                new Buff("Dark Aura", 39978, ParserHelper.Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/e/ef/Dark_Aura.png", 96406, ulong.MaxValue),
                 //race
                 new Buff("Take Root", 12459, ParserHelper.Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/b2/Take_Root.png"),
                 new Buff("Become the Bear",12426, ParserHelper.Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/7e/Become_the_Bear.png"),
@@ -313,7 +313,7 @@ namespace GW2EIEvtcParser.EIData
                 //banners
                 new Buff("Banner of Strength", 14417, ParserHelper.Source.Warrior, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/e/e1/Banner_of_Strength.png/33px-Banner_of_Strength.png"),
                 new Buff("Banner of Discipline", 14449, ParserHelper.Source.Warrior, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/5/5f/Banner_of_Discipline.png/33px-Banner_of_Discipline.png"),
-                new Buff("Banner of Tactics",14450, ParserHelper.Source.Warrior, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/3/3f/Banner_of_Tactics.png/33px-Banner_of_Tactics.png"),
+                new Buff("Banner of Tactics",14450, ParserHelper.Source.Warrior, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/thumb/3/3f/Banner_of_Tactics.png/33px-Banner_of_Tactics.png"),
                 new Buff("Banner of Defense",14543, ParserHelper.Source.Warrior, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/f/f1/Banner_of_Defense.png/33px-Banner_of_Defense.png"),
                 //stances
                 new Buff("Shield Stance",756, ParserHelper.Source.Warrior, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/d/de/Shield_Stance.png"),
@@ -395,7 +395,8 @@ namespace GW2EIEvtcParser.EIData
                 //new Boon("Elixir X", -1,BoonSource.Engineer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Normal),
                 new Buff("Utility Goggles",5864, ParserHelper.Source.Engineer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/0/02/Utility_Goggles.png"),
                 new Buff("Slick Shoes",5833, ParserHelper.Source.Engineer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/3d/Slick_Shoes.png"),
-                //new Boon("Watchful Eye",-1, BoonSource.Engineer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Normal),
+                new Buff("Watchful Eye",31229, ParserHelper.Source.Scrapper, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/29/Bulwark_Gyro.png"),
+                new Buff("Watchful Eye PvP",46910, ParserHelper.Source.Scrapper, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/29/Bulwark_Gyro.png"),
                 new Buff("Cooling Vapor",46444, ParserHelper.Source.Holosmith, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b1/Coolant_Blast.png"),
                 new Buff("Photon Wall Deployed",46094, ParserHelper.Source.Holosmith, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/ea/Photon_Wall.png"),
                 new Buff("Spectrum Shield",43066, ParserHelper.Source.Holosmith, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/29/Spectrum_Shield.png"),
@@ -442,7 +443,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Frost Spirit", 50421, ParserHelper.Source.Ranger, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png", 88541, ulong.MaxValue),
                 new Buff("Sun Spirit", 50413, ParserHelper.Source.Ranger, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/d/dd/Sun_Spirit.png/33px-Sun_Spirit.png", 88541, ulong.MaxValue),
                 new Buff("Stone Spirit", 50415, ParserHelper.Source.Ranger, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/3/35/Stone_Spirit.png/20px-Stone_Spirit.png", 88541, ulong.MaxValue),
-                new Buff("Storm Spirit", 50381, ParserHelper.Source.Ranger, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/2/25/Storm_Spirit.png/30px-Storm_Spirit.png", 88541, ulong.MaxValue),
+                new Buff("Storm Spirit", 50381, ParserHelper.Source.Ranger, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/thumb/2/25/Storm_Spirit.png/30px-Storm_Spirit.png", 88541, ulong.MaxValue),
                 //skills
                 new Buff("Attack of Opportunity",12574, ParserHelper.Source.Ranger, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/47/Moment_of_Clarity.png"),
                 new Buff("Call of the Wild",36781, ParserHelper.Source.Ranger, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/8d/Call_of_the_Wild.png",0 , 97950),
@@ -458,8 +459,8 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Glyph of the Stars", 55048, ParserHelper.Source.Druid, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/d/d7/Glyph_of_the_Stars.png", 96406, ulong.MaxValue),
                 new Buff("Glyph of the Stars (CA)", 55049, ParserHelper.Source.Druid, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/d/d7/Glyph_of_the_Stars.png", 96406, ulong.MaxValue),
                 new Buff("Dolyak Stance",41815, ParserHelper.Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/7/71/Dolyak_Stance.png"),
-                new Buff("Griffon Stance",46280, ParserHelper.Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/9/98/Griffon_Stance.png"),
-                new Buff("Moa Stance",45038, ParserHelper.Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/6/66/Moa_Stance.png"),
+                new Buff("Griffon Stance",46280, ParserHelper.Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/9/98/Griffon_Stance.png"),
+                new Buff("Moa Stance",45038, ParserHelper.Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/6/66/Moa_Stance.png"),
                 new Buff("Vulture Stance",44651, ParserHelper.Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/8/8f/Vulture_Stance.png"),
                 new Buff("Bear Stance",40045, ParserHelper.Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/f/f0/Bear_Stance.png"),
                 new Buff("One Wolf Pack",44139, ParserHelper.Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png"),
@@ -490,17 +491,16 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Signet of Agility",13061, ParserHelper.Source.Thief, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/1d/Signet_of_Agility.png"),
                 new Buff("Signet of Shadows",13059, ParserHelper.Source.Thief, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/17/Signet_of_Shadows.png"),
                 //venoms // src is always the user, makes generation data useless
-                new Buff("Skelk Venom",21780, ParserHelper.Source.Thief, BuffStackType.StackingConditionalLoss, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/75/Skelk_Venom.png"),
-                new Buff("Ice Drake Venom",13095, ParserHelper.Source.Thief, BuffStackType.StackingConditionalLoss, 4, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/7b/Ice_Drake_Venom.png"),
-                new Buff("Devourer Venom", 13094, ParserHelper.Source.Thief, BuffStackType.StackingConditionalLoss, 2, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/4d/Devourer_Venom.png"),
-                new Buff("Skale Venom", 13054, ParserHelper.Source.Thief, BuffStackType.StackingConditionalLoss, 4, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/14/Skale_Venom.png"),
-                new Buff("Spider Venom",13036, ParserHelper.Source.Thief, BuffStackType.StackingConditionalLoss, 6, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/39/Spider_Venom.png"),
-                new Buff("Basilisk Venom", 13133, ParserHelper.Source.Thief, BuffStackType.StackingConditionalLoss, 2, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/3a/Basilisk_Venom.png"),
+                new Buff("Skelk Venom",21780, ParserHelper.Source.Thief, BuffStackType.StackingConditionalLoss, 5, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/7/75/Skelk_Venom.png"),
+                new Buff("Ice Drake Venom",13095, ParserHelper.Source.Thief, BuffStackType.StackingConditionalLoss, 4, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/7/7b/Ice_Drake_Venom.png"),
+                new Buff("Devourer Venom", 13094, ParserHelper.Source.Thief, BuffStackType.StackingConditionalLoss, 2, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/4/4d/Devourer_Venom.png"),
+                new Buff("Skale Venom", 13054, ParserHelper.Source.Thief, BuffStackType.StackingConditionalLoss, 4, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/1/14/Skale_Venom.png"),
+                new Buff("Spider Venom",13036, ParserHelper.Source.Thief, BuffStackType.StackingConditionalLoss, 6, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/3/39/Spider_Venom.png"),
+                new Buff("Basilisk Venom", 13133, ParserHelper.Source.Thief, BuffStackType.StackingConditionalLoss, 2, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/3/3a/Basilisk_Venom.png"),
                 //physical
                 new Buff("Palm Strike",30423, ParserHelper.Source.Daredevil, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/1a/Palm_Strike.png"),
                 new Buff("Pulmonary Impact",30510, ParserHelper.Source.Daredevil, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/1a/Palm_Strike.png"),
-                //weapon
-                new Buff("Infiltration",13135, ParserHelper.Source.Thief, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/62/Infiltrator%27s_Return.png"),
+                new Buff("Infiltration",13135, ParserHelper.Source.Thief, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/25/Shadowstep.png"),
                 //transforms
                 new Buff("Dagger Storm",13134, ParserHelper.Source.Thief, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/c0/Dagger_Storm.png"),
                 new Buff("Kneeling",42869, ParserHelper.Source.Deadeye, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/56/Kneel.png"),
@@ -597,28 +597,28 @@ namespace GW2EIEvtcParser.EIData
                 ///attunements
                 // Fire
                 new Buff("Fire Attunement", 5585, ParserHelper.Source.Elementalist, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png"),
-                new Buff("Dual Fire Attunement", ProfHelper.FireDual, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png"),
-                new Buff("Fire Water Attunement", ProfHelper.FireWater, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/ihqKuUJ.png"),
-                new Buff("Fire Air Attunement", ProfHelper.FireAir, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/kKFJ8cT.png"),
-                new Buff("Fire Earth Attunement", ProfHelper.FireEarth, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/T4187h0.png"),
+                new Buff("Dual Fire Attunement", FireDual, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png"),
+                new Buff("Fire Water Attunement", FireWater, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/ihqKuUJ.png"),
+                new Buff("Fire Air Attunement", FireAir, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/kKFJ8cT.png"),
+                new Buff("Fire Earth Attunement", FireEarth, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/T4187h0.png"),
                 // Water
                 new Buff("Water Attunement", 5586, ParserHelper.Source.Elementalist, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/31/Water_Attunement.png"),
-                new Buff("Dual Water Attunement", ProfHelper.WaterDual, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/31/Water_Attunement.png"),
-                new Buff("Water Fire Attunement", ProfHelper.WaterFire, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/vMUkzxH.png"),
-                new Buff("Water Air Attunement", ProfHelper.WaterAir, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/5G5OFud.png"),
-                new Buff("Water Earth Attunement", ProfHelper.WaterEarth, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/QKEtF2P.png"),
+                new Buff("Dual Water Attunement", WaterDual, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/31/Water_Attunement.png"),
+                new Buff("Water Fire Attunement", WaterFire, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/vMUkzxH.png"),
+                new Buff("Water Air Attunement", WaterAir, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/5G5OFud.png"),
+                new Buff("Water Earth Attunement", WaterEarth, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/QKEtF2P.png"),
                 // Air
                 new Buff("Air Attunement", 5575, ParserHelper.Source.Elementalist, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/91/Air_Attunement.png"),
-                new Buff("Dual Air Attunement", ProfHelper.AirDual, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/91/Air_Attunement.png"),
-                new Buff("Air Fire Attunement", ProfHelper.AirFire, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/vf68GJm.png"),
-                new Buff("Air Water Attunement", ProfHelper.AirWater, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/Tuj5Sro.png"),
-                new Buff("Air Earth Attunement", ProfHelper.AirEarth, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/lHcOSwk.png"),
+                new Buff("Dual Air Attunement", AirDual, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/91/Air_Attunement.png"),
+                new Buff("Air Fire Attunement", AirFire, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/vf68GJm.png"),
+                new Buff("Air Water Attunement", AirWater, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/Tuj5Sro.png"),
+                new Buff("Air Earth Attunement", AirEarth, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/lHcOSwk.png"),
                 // Earth
                 new Buff("Earth Attunement", 5580, ParserHelper.Source.Elementalist, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a8/Earth_Attunement.png"),
-                new Buff("Dual Earth Attunement", ProfHelper.EarthDual, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a8/Earth_Attunement.png"),
-                new Buff("Earth Fire Attunement", ProfHelper.EarthFire, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/aJWvE0I.png"),
-                new Buff("Earth Water Attunement", ProfHelper.EarthWater, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/jtjj2TG.png"),
-                new Buff("Earth Air Attunement", ProfHelper.EarthAir, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/4Eti7Pb.png"),
+                new Buff("Dual Earth Attunement", EarthDual, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a8/Earth_Attunement.png"),
+                new Buff("Earth Fire Attunement", EarthFire, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/aJWvE0I.png"),
+                new Buff("Earth Water Attunement", EarthWater, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/jtjj2TG.png"),
+                new Buff("Earth Air Attunement", EarthAir, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/4Eti7Pb.png"),
                 //forms
                 new Buff("Mist Form",5543, ParserHelper.Source.Elementalist, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/1b/Mist_Form.png"),
                 new Buff("Ride the Lightning",5588, ParserHelper.Source.Elementalist, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/59/Ride_the_Lightning.png"),
@@ -626,11 +626,11 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Tornado",5583, ParserHelper.Source.Elementalist, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/40/Tornado.png"),
                 //new Boon("Whirlpool", -1,BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Normal),
                 //conjures
-                new Buff("Conjure Earth Shield", 15788, ParserHelper.Source.Elementalist, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/7/7a/Conjure_Earth_Shield.png"),
-                new Buff("Conjure Flame Axe", 15789, ParserHelper.Source.Elementalist, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/a/a1/Conjure_Flame_Axe.png"),
-                new Buff("Conjure Frost Bow", 15790, ParserHelper.Source.Elementalist, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/c/c3/Conjure_Frost_Bow.png"),
-                new Buff("Conjure Lightning Hammer", 15791, ParserHelper.Source.Elementalist, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/1/1f/Conjure_Lightning_Hammer.png"),
-                new Buff("Conjure Fiery Greatsword", 15792, ParserHelper.Source.Elementalist, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/e/e2/Conjure_Fiery_Greatsword.png"),
+                new Buff("Conjure Earth Shield", 15788, ParserHelper.Source.Elementalist, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/7/7a/Conjure_Earth_Shield.png"),
+                new Buff("Conjure Flame Axe", 15789, ParserHelper.Source.Elementalist, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/a/a1/Conjure_Flame_Axe.png"),
+                new Buff("Conjure Frost Bow", 15790, ParserHelper.Source.Elementalist, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/c/c3/Conjure_Frost_Bow.png"),
+                new Buff("Conjure Lightning Hammer", 15791, ParserHelper.Source.Elementalist, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/1/1f/Conjure_Lightning_Hammer.png"),
+                new Buff("Conjure Fiery Greatsword", 15792, ParserHelper.Source.Elementalist, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/e/e2/Conjure_Fiery_Greatsword.png"),
                 //skills
                 new Buff("Arcane Power",5582, ParserHelper.Source.Elementalist, BuffStackType.Stacking, 6, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/72/Arcane_Power.png"),
                 new Buff("Primordial Stance",42086, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/3a/Primordial_Stance.png"),
@@ -894,7 +894,7 @@ namespace GW2EIEvtcParser.EIData
             var currentBuffs = new List<Buff>();
             foreach (List<Buff> buffs in AllBuffs)
             {
-                currentBuffs.AddRange(buffs.Where(x => x.MaxBuild > build && build >= x.MinBuild));
+                currentBuffs.AddRange(buffs.Where(x => x.Available(build)));
             }
             _buffsByName = currentBuffs.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().Count > 1 ? throw new InvalidOperationException("Same name present multiple times in buffs - " + x.First().Name) : x.First());
             // Unknown consumables

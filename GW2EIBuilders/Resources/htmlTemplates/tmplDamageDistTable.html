@@ -19,17 +19,17 @@
                     </th>
                     <th data-original-title="Damage">
                         <img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="Damage"
-                         class="icon icon-hover">
+                            class="icon icon-hover">
                     </th>
                     <th data-original-title="Damage against barrier. Not necessarily included in total damage">
-                        <img src="https://wiki.guildwars2.com/images/thumb/c/cc/Barrier.png/30px-Barrier.png" alt="Barrier Damage"
-                         class="icon icon-hover">
+                        <img src="https://wiki.guildwars2.com/images/thumb/c/cc/Barrier.png/30px-Barrier.png"
+                            alt="Barrier Damage" class="icon icon-hover">
                     </th>
                     <th data-original-title="Minimum">
                         Min
                     </th>
                     <th data-original-title="Average">
-                        <span style="text-decoration:overline;">X</span>
+                        Avg
                     </th>
                     <th data-original-title="Maximum">
                         Max
@@ -41,39 +41,42 @@
                         Hits
                     </th>
                     <th v-if="actor !== null" data-original-title="Hits per Cast">
-                        <img src="https://wiki.guildwars2.com/images/thumb/5/53/Number_of_targets.png/20px-Number_of_targets.png" alt="Hits per Cast" class="icon icon-hover">
+                        <img src="https://wiki.guildwars2.com/images/thumb/5/53/Number_of_targets.png/20px-Number_of_targets.png"
+                            alt="Hits per Cast" class="icon icon-hover">
                     </th>
                     <th v-if="actor !== null" data-original-title="Damage divided by time spent in animation">
-                        <img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="Damage" class="icon">
-                        /                      
-                        <img src="https://wiki.guildwars2.com/images/6/6e/Activation.png" alt="Activation Time" class="icon">
+                        <img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="Damage"
+                            class="icon">
+                        /
+                        <img src="https://wiki.guildwars2.com/images/6/6e/Activation.png" alt="Activation Time"
+                            class="icon">
                     </th>
-                    <th data-original-title="Percent time hits critical" >
+                    <th data-original-title="Percent time hits critical">
                         <img src="https://wiki.guildwars2.com/images/9/95/Critical_Chance.png" alt="Crits"
                             class="icon icon-hover">
                     </th>
-                    <th data-original-title="Percent time hits while flanking" >
+                    <th data-original-title="Percent time hits while flanking">
                         <img src="https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png" alt="Flank"
                             class="icon icon-hover">
                     </th>
-                    <th data-original-title="Percent time hits while glancing" >
+                    <th data-original-title="Percent time hits while glancing">
                         <img src="https://wiki.guildwars2.com/images/f/f9/Weakness.png" alt="Glance"
                             class="icon icon-hover">
                     </th>
                     <th v-if="actor !== null" data-original-title="Time wasted interupting skill casts">
-                        <img src="https://wiki.guildwars2.com/images/b/b3/Out_Of_Health_Potions.png" alt="Wasted"                  
+                        <img src="https://wiki.guildwars2.com/images/b/b3/Out_Of_Health_Potions.png" alt="Wasted"
                             class="icon icon-hover">
                     </th>
                     <th v-if="actor !== null" data-original-title="Time saved(in seconds) interupting skill casts">
-                        <img src="https://wiki.guildwars2.com/images/e/eb/Ready.png" alt="Saved"                    
+                        <img src="https://wiki.guildwars2.com/images/e/eb/Ready.png" alt="Saved"
                             class="icon icon-hover">
                     </th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="row in dmgdist.distribution" :class="{condi: getSkill(row[0], row[1]).condi}">
-                    <td class="text-left" :data-original-title="getSkill(row[0], row[1]).id">
-                        <img :src="getSkill(row[0], row[1]).icon" class="icon"> 
+                    <td class="text-left" :data-original-title="row[1]">
+                        <img :src="getSkill(row[0], row[1]).icon" class="icon">
                         {{getSkill(row[0],row[1]).name}}
                     </td>
                     <td>{{ round3(100*row[2]/dmgdist.contributedDamage) }}%</td>
@@ -87,13 +90,13 @@
                     <td>{{ round(row[2]/row[6]) }}</td>
                     <td>{{ row[4] }}</td>
                     <td v-if="actor !== null">
-                        {{ !getSkill(row[0], row[1]).condi && row[5] ? row[5] : ''}}
+                        {{ !getSkill(row[0], row[1]).condi && row[5] ? (showInequality(getSkill(row[0], row[1]),row[15]) ? '>= ' : '') + row[5] : ''}}
                     </td>
                     <td :data-original-title="(row[14] - row[6]) + ' hit(s) not connected'">
                         {{ row[6] }}
                     </td>
-                    <td v-if="actor !== null">
-                        {{(!getSkill(row[0], row[1]).condi && row[6] && row[5]) ? round2(row[6]/row[5]) : ''}}
+                    <td v-if="actor !== null" :data-original-title=" (!getSkill(row[0], row[1]).condi && row[14] && row[5]) ? (showInequality(getSkill(row[0], row[1]),row[15]) ? '<= ' : '') + round2(row[14]/row[5]) + ' with missed hits' : false" >
+                        {{(!getSkill(row[0], row[1]).condi && row[6] && row[5]) ? (showInequality(getSkill(row[0], row[1]),row[15]) ? '<= ' : '') + round2(row[6]/row[5]) : ''}}
                     </td>
                     <td v-if="actor !== null">
                         {{(!getSkill(row[0], row[1]).condi && row[6] && row[15]) ? round2(row[2]/(0.001 * row[15])) : ''}}
@@ -122,12 +125,10 @@
                 <tr>
                     <td class="text-left">Total</td>
                     <td></td>
-                    <td
-                        :data-original-title="Math.round(dmgdist.contributedDamage/phase.durationS) +' dps'">
+                    <td :data-original-title="Math.round(dmgdist.contributedDamage/phase.durationS) +' dps'">
                         {{dmgdist.contributedDamage}}
                     </td>
-                    <td
-                        :data-original-title="Math.round(dmgdist.contributedShieldDamage/phase.durationS) +' dps'">
+                    <td :data-original-title="Math.round(dmgdist.contributedShieldDamage/phase.durationS) +' dps'">
                         {{dmgdist.contributedShieldDamage}}
                     </td>
                     <td></td>
@@ -201,7 +202,10 @@
         methods: {
             getSkill: function (isBoon, id) {
                 return findSkill(isBoon, id);
-            }
+            },
+            showInequality: function (skillData, castDuration) {
+                return castDuration === 0 && skillData.notAccurate;
+            },
         },
         computed: {
             phase: function () {
