@@ -8,22 +8,22 @@ using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class NecromancerHelper : ProfHelper
+    internal class NecromancerHelper
     {
-        internal static readonly List<InstantCastFinder> NecromancerInstantCastFinders = new List<InstantCastFinder>()
+        internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(10574, 790, InstantCastFinder.DefaultICD), // Death shroud
-            new BuffLossCastFinder(10585, 790, InstantCastFinder.DefaultICD), // Death shroud
-            new DamageCastFinder(29560, 29560, InstantCastFinder.DefaultICD), // Spiteful Spirit
-            new DamageCastFinder(13907, 13907, InstantCastFinder.DefaultICD), // Lesser Enfeeble
-            new DamageCastFinder(13906, 13906, InstantCastFinder.DefaultICD), // Lesser Spinal Shivers
-            new BuffGainCastFinder(10583, 10582, InstantCastFinder.DefaultICD), // Spectral Armor
-            new BuffGainCastFinder(10685, 15083, InstantCastFinder.DefaultICD, 0, 94051), // Spectral Walk
-            new BuffGainCastFinder(10685, 53476, InstantCastFinder.DefaultICD, 94051, ulong.MaxValue), // Spectral Walk
+            new BuffGainCastFinder(10574, 790, EIData.InstantCastFinder.DefaultICD), // Death shroud
+            new BuffLossCastFinder(10585, 790, EIData.InstantCastFinder.DefaultICD), // Death shroud
+            new DamageCastFinder(29560, 29560, EIData.InstantCastFinder.DefaultICD), // Spiteful Spirit
+            new DamageCastFinder(13907, 13907, EIData.InstantCastFinder.DefaultICD), // Lesser Enfeeble
+            new DamageCastFinder(13906, 13906, EIData.InstantCastFinder.DefaultICD), // Lesser Spinal Shivers
+            new BuffGainCastFinder(10583, 10582, EIData.InstantCastFinder.DefaultICD), // Spectral Armor
+            new BuffGainCastFinder(10685, 15083, EIData.InstantCastFinder.DefaultICD, 0, 94051), // Spectral Walk
+            new BuffGainCastFinder(10685, 53476, EIData.InstantCastFinder.DefaultICD, 94051, ulong.MaxValue), // Spectral Walk
             //new BuffGainCastFinder(10635,???, 80647, ulong.MaxValue), // Lich's Gaze
         };
 
-        internal static readonly List<Buff> NecromancerBuffs = new List<Buff>
+        internal static readonly List<Buff> Buffs = new List<Buff>
         {     
                 //forms
                 new Buff("Lich Form",10631, ParserHelper.Source.Necromancer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/ab/Lich_Form.png"),

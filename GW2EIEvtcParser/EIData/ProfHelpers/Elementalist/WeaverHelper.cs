@@ -7,7 +7,7 @@ using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class WeaverHelper : ElementalistHelper
+    internal class WeaverHelper
     {
         private const long FireMajor = 40926;
         private const long FireMinor = 42811;
@@ -18,35 +18,35 @@ namespace GW2EIEvtcParser.EIData
         private const long EarthMajor = 43740;
         private const long EarthMinor = 44822;
 
-        internal static readonly List<InstantCastFinder> WeaverInstantCastFinders = new List<InstantCastFinder>()
+        internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(40183, 42086, InstantCastFinder.DefaultICD), // Primordial Stance
+            new BuffGainCastFinder(40183, 42086, EIData.InstantCastFinder.DefaultICD), // Primordial Stance
             //new BuffGainCastFinder(44926, ???, 500), // Stone Resonance, lesser stone resonance makes thing complicated
-            new BuffGainCastFinder(44612, 42683, InstantCastFinder.DefaultICD), // Unravel
+            new BuffGainCastFinder(44612, 42683, EIData.InstantCastFinder.DefaultICD), // Unravel
             // Fire       
-            new BuffGainCastFinder(Buff.FireDual, Buff.FireDual, InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(Buff.FireWater, Buff.FireWater, InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(Buff.FireAir, Buff.FireAir, InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(Buff.FireEarth, Buff.FireEarth, InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(Buff.FireDual, Buff.FireDual, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(Buff.FireWater, Buff.FireWater, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(Buff.FireAir, Buff.FireAir, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(Buff.FireEarth, Buff.FireEarth, EIData.InstantCastFinder.DefaultICD),
             // Water
-            new BuffGainCastFinder(Buff.WaterFire, Buff.WaterFire, InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(Buff.WaterDual, Buff.WaterDual, InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(Buff.WaterAir, Buff.WaterAir, InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(Buff.WaterEarth, Buff.WaterEarth, InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(Buff.WaterFire, Buff.WaterFire, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(Buff.WaterDual, Buff.WaterDual, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(Buff.WaterAir, Buff.WaterAir, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(Buff.WaterEarth, Buff.WaterEarth, EIData.InstantCastFinder.DefaultICD),
             // Air
-            new BuffGainCastFinder(Buff.AirFire, Buff.AirFire, InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(Buff.AirWater, Buff.AirWater, InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(Buff.AirDual, Buff.AirDual, InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(Buff.AirEarth, Buff.AirEarth, InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(Buff.AirFire, Buff.AirFire, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(Buff.AirWater, Buff.AirWater, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(Buff.AirDual, Buff.AirDual, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(Buff.AirEarth, Buff.AirEarth, EIData.InstantCastFinder.DefaultICD),
             // Earth
-            new BuffGainCastFinder(Buff.EarthFire, Buff.EarthFire, InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(Buff.EarthWater, Buff.EarthWater, InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(Buff.EarthAir, Buff.EarthAir, InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(Buff.EarthDual, Buff.EarthDual, InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(Buff.EarthFire, Buff.EarthFire, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(Buff.EarthWater, Buff.EarthWater, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(Buff.EarthAir, Buff.EarthAir, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(Buff.EarthDual, Buff.EarthDual, EIData.InstantCastFinder.DefaultICD),
         };
 
 
-        internal static readonly List<Buff> WeaverBuffs = new List<Buff>
+        internal static readonly List<Buff> Buffs = new List<Buff>
         {
                 new Buff("Dual Fire Attunement", FireDual, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png"),
                 new Buff("Fire Water Attunement", FireWater, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://i.imgur.com/ihqKuUJ.png"),

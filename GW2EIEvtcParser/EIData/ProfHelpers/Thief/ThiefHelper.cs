@@ -8,22 +8,22 @@ using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class ThiefHelper : ProfHelper
+    internal class ThiefHelper
     {
-        internal static readonly List<InstantCastFinder> ThiefInstantCastFinders = new List<InstantCastFinder>()
+        internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(13002,13135,InstantCastFinder.DefaultICD), // Shadowstep
-            new BuffLossCastFinder(13106,13135,InstantCastFinder.DefaultICD, (evt, combatData) => evt.RemovedDuration > ParserHelper.ServerDelayConstant), // Shadow Return
-            new DamageCastFinder(13014, 13014, InstantCastFinder.DefaultICD), // Mug
-            new BuffGainCastFinder(13046,44597,InstantCastFinder.DefaultICD), // Assassin's Signet
-            new BuffGiveCastFinder(13093,13094,InstantCastFinder.DefaultICD), // Devourer Venom
-            new BuffGiveCastFinder(13096,13095,InstantCastFinder.DefaultICD), // Ice Drake Venom
-            new BuffGiveCastFinder(13055,13054,InstantCastFinder.DefaultICD), // Skale Venom
+            new BuffGainCastFinder(13002,13135,EIData.InstantCastFinder.DefaultICD), // Shadowstep
+            new BuffLossCastFinder(13106,13135,EIData.InstantCastFinder.DefaultICD, (evt, combatData) => evt.RemovedDuration > ParserHelper.ServerDelayConstant), // Shadow Return
+            new DamageCastFinder(13014, 13014, EIData.InstantCastFinder.DefaultICD), // Mug
+            new BuffGainCastFinder(13046,44597,EIData.InstantCastFinder.DefaultICD), // Assassin's Signet
+            new BuffGiveCastFinder(13093,13094,EIData.InstantCastFinder.DefaultICD), // Devourer Venom
+            new BuffGiveCastFinder(13096,13095,EIData.InstantCastFinder.DefaultICD), // Ice Drake Venom
+            new BuffGiveCastFinder(13055,13054,EIData.InstantCastFinder.DefaultICD), // Skale Venom
             //new BuffGiveCastFinder(13037,13036,InstantCastFinder.DefaultICD), // Spider Venom - same id as leeching venom trait?
         };
 
 
-        internal readonly static List<Buff> ThiefBuffs = new List<Buff>
+        internal static readonly List<Buff> Buffs = new List<Buff>
         {
                 //signets
                 new Buff("Signet of Malice",13049, ParserHelper.Source.Thief, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/ae/Signet_of_Malice.png"),

@@ -8,15 +8,15 @@ using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class DaredevilHelper : ThiefHelper
+    internal class DaredevilHelper
     {
-        internal static readonly List<InstantCastFinder> DaredevilInstantCastFinders = new List<InstantCastFinder>()
+        internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(31600, 33162, InstantCastFinder.DefaultICD), // bound
-            new DamageCastFinder(30520, 30520, InstantCastFinder.DefaultICD), // Debilitating Arc
+            new BuffGainCastFinder(31600, 33162, EIData.InstantCastFinder.DefaultICD), // bound
+            new DamageCastFinder(30520, 30520, EIData.InstantCastFinder.DefaultICD), // Debilitating Arc
         };
 
-        internal static readonly List<Buff> DaredevilBuffs = new List<Buff>
+        internal static readonly List<Buff> Buffs = new List<Buff>
         {
                 new Buff("Palm Strike",30423, ParserHelper.Source.Daredevil, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/1a/Palm_Strike.png"),
                 new Buff("Pulmonary Impact",30510, ParserHelper.Source.Daredevil, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/1a/Palm_Strike.png"),

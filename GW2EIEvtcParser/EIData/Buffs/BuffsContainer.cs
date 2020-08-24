@@ -30,41 +30,41 @@ namespace GW2EIEvtcParser.EIData
                 FightSpecific,
                 FractalInstabilities,
                 //
-                RevenantHelper.RevenantBuffs,
-                HeraldHelper.HeraldBuffs,
-                RenegadeHelper.RenegadeBuffs,
+                RevenantHelper.Buffs,
+                HeraldHelper.Buffs,
+                RenegadeHelper.Buffs,
                 //
-                WarriorHelper.WarriorBuffs,
-                BerserkerHelper.BerserkerBuffs,
-                SpellbreakerHelper.SpellbreakerBuffs,
+                WarriorHelper.Buffs,
+                BerserkerHelper.Buffs,
+                SpellbreakerHelper.Buffs,
                 //
-                GuardianHelper.GuardianBuffs,
-                DragonhunterHelper.DragonhunterBuffs,
-                FirebrandHelper.FirebrandBuffs,
+                GuardianHelper.Buffs,
+                DragonhunterHelper.Buffs,
+                FirebrandHelper.Buffs,
                 //
-                RangerHelper.RangerBuffs,
-                DruidHelper.DruidBuffs,
-                SoulbeastHelper.SoulbeastBuffs,
+                RangerHelper.Buffs,
+                DruidHelper.Buffs,
+                SoulbeastHelper.Buffs,
                 //
-                ThiefHelper.ThiefBuffs,
-                DaredevilHelper.DaredevilBuffs,
-                DeadeyeHelper.DeadeyeBuffs,
+                ThiefHelper.Buffs,
+                DaredevilHelper.Buffs,
+                DeadeyeHelper.Buffs,
                 //
-                EngineerHelper.EngineerBuffs,
-                ScrapperHelper.ScrapperBuffs,
-                HolosmithHelper.HolosmithBuffs,
+                EngineerHelper.Buffs,
+                ScrapperHelper.Buffs,
+                HolosmithHelper.Buffs,
                 //
-                MesmerHelper.MesmerBuffs,
-                ChronomancerHelper.ChronomancerBuffs,
-                MirageHelper.MirageBuffs,
+                MesmerHelper.Buffs,
+                ChronomancerHelper.Buffs,
+                MirageHelper.Buffs,
                 //
-                NecromancerHelper.NecromancerBuffs,
-                ReaperHelper.ReaperBuffs,
-                ScourgeHelper.ScourgeBuffs,
+                NecromancerHelper.Buffs,
+                ReaperHelper.Buffs,
+                ScourgeHelper.Buffs,
                 //
-                ElementalistHelper.ElementalistBuffs,
-                TempestHelper.TempestBuffs,
-                WeaverHelper.WeaverBuffs,
+                ElementalistHelper.Buffs,
+                TempestHelper.Buffs,
+                WeaverHelper.Buffs,
             };
             var currentBuffs = new List<Buff>();
             foreach (List<Buff> buffs in AllBuffs)

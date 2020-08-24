@@ -6,15 +6,15 @@ using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class RenegadeHelper : RevenantHelper
+    internal class RenegadeHelper
     {
 
-        internal static readonly List<InstantCastFinder> RenegadeInstantCastFinders = new List<InstantCastFinder>()
+        internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(41858, 44272, InstantCastFinder.DefaultICD), // Legendary Renegade Stance
+            new BuffGainCastFinder(41858, 44272, EIData.InstantCastFinder.DefaultICD), // Legendary Renegade Stance
         };
 
-        internal static readonly List<Buff> RenegadeBuffs = new List<Buff>
+        internal static readonly List<Buff> Buffs = new List<Buff>
         { 
                 new Buff("Legendary Renegade Stance",44272, ParserHelper.Source.Renegade, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/19/Legendary_Renegade_Stance.png"),
                 new Buff("Breakrazor's Bastion",44682, ParserHelper.Source.Renegade, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/a/a7/Breakrazor%27s_Bastion.png"),

@@ -6,15 +6,15 @@ using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class BerserkerHelper : WarriorHelper
+    internal class BerserkerHelper
     {
         /////////////////////
-        internal static readonly List<InstantCastFinder> BerserkerInstantCastFinders = new List<InstantCastFinder>()
+        internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new DamageCastFinder(31289, 31289, 500, 97950, ulong.MaxValue), // King of Fires
         };
 
-        internal static readonly List<Buff> BerserkerBuffs = new List<Buff>
+        internal static readonly List<Buff> Buffs = new List<Buff>
         {
                 new Buff("Berserk",29502, ParserHelper.Source.Berserker, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/44/Berserk.png"),
                 new Buff("Flames of War", 31708, ParserHelper.Source.Berserker, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6f/Flames_of_War_%28warrior_skill%29.png"),

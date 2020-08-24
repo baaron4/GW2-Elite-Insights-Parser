@@ -6,19 +6,19 @@ using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class EngineerHelper : ProfHelper
+    internal class EngineerHelper
     {
 
-        internal static readonly List<InstantCastFinder> EngineerInstantCastFinders = new List<InstantCastFinder>()
+        internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffLossCastFinder(59562, 59579, InstantCastFinder.DefaultICD, 102321, ulong.MaxValue), // Explosive Entrance
-            new BuffGainCastFinder(5861, 5863,InstantCastFinder.DefaultICD), // Elixir S
+            new BuffLossCastFinder(59562, 59579, EIData.InstantCastFinder.DefaultICD, 102321, ulong.MaxValue), // Explosive Entrance
+            new BuffGainCastFinder(5861, 5863,EIData.InstantCastFinder.DefaultICD), // Elixir S
             // Need to check kits
-            new DamageCastFinder(6154,6154,InstantCastFinder.DefaultICD), // Overcharged Shot
+            new DamageCastFinder(6154,6154,EIData.InstantCastFinder.DefaultICD), // Overcharged Shot
             //new DamageCastFinder(6004,6004,InstantCastFinder.DefaultICD), // Net Shot - projectile
         };
 
-        internal static readonly List<Buff> EngineerBuffs = new List<Buff>
+        internal static readonly List<Buff> Buffs = new List<Buff>
         {  
                 new Buff("Static Shield",6055, ParserHelper.Source.Engineer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/90/Static_Shield.png"),
                 new Buff("Absorb",6056, ParserHelper.Source.Engineer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/8a/Absorb.png"),
@@ -41,23 +41,23 @@ namespace GW2EIEvtcParser.EIData
         {
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
 
-            HashSet<AgentItem> flameTurrets = GetOffensiveGadgetAgents(damageData, 5903, playerAgents);
+            HashSet<AgentItem> flameTurrets = ProfHelper.GetOffensiveGadgetAgents(damageData, 5903, playerAgents);
 
-            HashSet<AgentItem> rifleTurrets = GetOffensiveGadgetAgents(damageData, 5841, playerAgents);
-            rifleTurrets.UnionWith(GetOffensiveGadgetAgents(damageData, 5875, playerAgents));
+            HashSet<AgentItem> rifleTurrets = ProfHelper.GetOffensiveGadgetAgents(damageData, 5841, playerAgents);
+            rifleTurrets.UnionWith(ProfHelper.GetOffensiveGadgetAgents(damageData, 5875, playerAgents));
 
-            HashSet<AgentItem> netTurrets = GetOffensiveGadgetAgents(damageData, 5896, playerAgents);
-            netTurrets.UnionWith(GetOffensiveGadgetAgents(damageData, 22137, playerAgents));
+            HashSet<AgentItem> netTurrets = ProfHelper.GetOffensiveGadgetAgents(damageData, 5896, playerAgents);
+            netTurrets.UnionWith(ProfHelper.GetOffensiveGadgetAgents(damageData, 22137, playerAgents));
 
-            HashSet<AgentItem> rocketTurrets = GetOffensiveGadgetAgents(damageData, 6108, playerAgents);
-            rocketTurrets.UnionWith(GetOffensiveGadgetAgents(damageData, 5914, playerAgents));
+            HashSet<AgentItem> rocketTurrets = ProfHelper.GetOffensiveGadgetAgents(damageData, 6108, playerAgents);
+            rocketTurrets.UnionWith(ProfHelper.GetOffensiveGadgetAgents(damageData, 5914, playerAgents));
 
-            HashSet<AgentItem> thumperTurrets = GetOffensiveGadgetAgents(damageData, 5856, playerAgents);
-            thumperTurrets.UnionWith(GetOffensiveGadgetAgents(damageData, 5890, playerAgents));
+            HashSet<AgentItem> thumperTurrets = ProfHelper.GetOffensiveGadgetAgents(damageData, 5856, playerAgents);
+            thumperTurrets.UnionWith(ProfHelper.GetOffensiveGadgetAgents(damageData, 5890, playerAgents));
             // TODO: need ID here
-            HashSet<AgentItem> harpoonTurrets = GetOffensiveGadgetAgents(damageData, -1, playerAgents);
+            HashSet<AgentItem> harpoonTurrets = ProfHelper.GetOffensiveGadgetAgents(damageData, -1, playerAgents);
 
-            HashSet<AgentItem> healingTurrets = GetOffensiveGadgetAgents(damageData, 5958, playerAgents);
+            HashSet<AgentItem> healingTurrets = ProfHelper.GetOffensiveGadgetAgents(damageData, 5958, playerAgents);
             healingTurrets.RemoveWhere(x => thumperTurrets.Contains(x) || rocketTurrets.Contains(x) || netTurrets.Contains(x) || rifleTurrets.Contains(x) || flameTurrets.Contains(x) || harpoonTurrets.Contains(x));
 
             var engineers = players.Where(x => x.Prof == "Engineer" || x.Prof == "Scrapper" || x.Prof == "Holosmith").ToList();
@@ -65,21 +65,21 @@ namespace GW2EIEvtcParser.EIData
             if (engineers.Count == 1)
             {
                 Player engineer = engineers[0];
-                SetGadgetMaster(flameTurrets, engineer.AgentItem);
-                SetGadgetMaster(netTurrets, engineer.AgentItem);
-                SetGadgetMaster(rocketTurrets, engineer.AgentItem);
-                SetGadgetMaster(rifleTurrets, engineer.AgentItem);
-                SetGadgetMaster(thumperTurrets, engineer.AgentItem);
-                SetGadgetMaster(harpoonTurrets, engineer.AgentItem);
-                SetGadgetMaster(healingTurrets, engineer.AgentItem);
+                ProfHelper.SetGadgetMaster(flameTurrets, engineer.AgentItem);
+                ProfHelper.SetGadgetMaster(netTurrets, engineer.AgentItem);
+                ProfHelper.SetGadgetMaster(rocketTurrets, engineer.AgentItem);
+                ProfHelper.SetGadgetMaster(rifleTurrets, engineer.AgentItem);
+                ProfHelper.SetGadgetMaster(thumperTurrets, engineer.AgentItem);
+                ProfHelper.SetGadgetMaster(harpoonTurrets, engineer.AgentItem);
+                ProfHelper.SetGadgetMaster(healingTurrets, engineer.AgentItem);
             }
             else if (engineers.Count > 1)
             {
-                AttachMasterToGadgetByCastData(castData, flameTurrets, new List<long> { 5836, 5868 }, 1000);
-                AttachMasterToGadgetByCastData(castData, rifleTurrets, new List<long> { 5818 }, 1000);
-                AttachMasterToGadgetByCastData(castData, netTurrets, new List<long> { 5837, 5868, 6183 }, 1000);
-                AttachMasterToGadgetByCastData(castData, rocketTurrets, new List<long> { 5912, 22574, 6183 }, 1000);
-                AttachMasterToGadgetByCastData(castData, thumperTurrets, new List<long> { 5838 }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(castData, flameTurrets, new List<long> { 5836, 5868 }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(castData, rifleTurrets, new List<long> { 5818 }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(castData, netTurrets, new List<long> { 5837, 5868, 6183 }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(castData, rocketTurrets, new List<long> { 5912, 22574, 6183 }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(castData, thumperTurrets, new List<long> { 5838 }, 1000);
                 //AttachMasterToGadgetByCastData(castData, harpoonTurrets, new List<long> { 6093, 6183 }, 1000);
                 //AttachMasterToGadgetByCastData(castData, healingTurrets, new List<long> { 5857, 5868 }, 1000);
             }

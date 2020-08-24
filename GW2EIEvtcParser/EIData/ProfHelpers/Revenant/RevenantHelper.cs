@@ -8,21 +8,21 @@ using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class RevenantHelper : ProfHelper
+    internal class RevenantHelper
     {
-        internal static readonly List<InstantCastFinder> RevenantInstantCastFinders = new List<InstantCastFinder>()
+        internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(28134, 27890, InstantCastFinder.DefaultICD), // Legendary Assassin Stance
-            new BuffGainCastFinder(28494, 27928, InstantCastFinder.DefaultICD), // Legendary Demon Stance
-            new BuffGainCastFinder(28419, 27205, InstantCastFinder.DefaultICD), // Legendary Dwarf Stance
-            new BuffGainCastFinder(28195, 27972, InstantCastFinder.DefaultICD), // Legendary Centaur Stance
+            new BuffGainCastFinder(28134, 27890, EIData.InstantCastFinder.DefaultICD), // Legendary Assassin Stance
+            new BuffGainCastFinder(28494, 27928, EIData.InstantCastFinder.DefaultICD), // Legendary Demon Stance
+            new BuffGainCastFinder(28419, 27205, EIData.InstantCastFinder.DefaultICD), // Legendary Dwarf Stance
+            new BuffGainCastFinder(28195, 27972, EIData.InstantCastFinder.DefaultICD), // Legendary Centaur Stance
             new BuffGainCastFinder(27107, 27581, 500), // Impossible Odds
             new BuffLossCastFinder(28382, 27581, 500), // Relinquish Power
-            new BuffGainCastFinder(26557, 27273, InstantCastFinder.DefaultICD), // Vengeful Hammers
-            new BuffLossCastFinder(26956, 27273, InstantCastFinder.DefaultICD), // Release Hammers
+            new BuffGainCastFinder(26557, 27273, EIData.InstantCastFinder.DefaultICD), // Vengeful Hammers
+            new BuffLossCastFinder(26956, 27273, EIData.InstantCastFinder.DefaultICD), // Release Hammers
         };
 
-        internal static readonly List<Buff> RevenantBuffs = new List<Buff>
+        internal static readonly List<Buff> Buffs = new List<Buff>
         {         
                 //skills
                 new Buff("Crystal Hibernation", 29303, ParserHelper.Source.Herald, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/4a/Crystal_Hibernation.png"),

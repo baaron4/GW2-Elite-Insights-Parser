@@ -6,15 +6,15 @@ using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class MirageHelper : MesmerHelper
+    internal class MirageHelper
     {
 
-        internal static readonly List<InstantCastFinder> MirageInstantCastFinders = new List<InstantCastFinder>()
+        internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(45449, 45449, InstantCastFinder.DefaultICD), // Jaunt
+            new DamageCastFinder(45449, 45449, EIData.InstantCastFinder.DefaultICD), // Jaunt
         };
 
-        internal static readonly List<Buff> MirageBuffs = new List<Buff>
+        internal static readonly List<Buff> Buffs = new List<Buff>
         {
                 new Buff("Mirage Cloak",40408, ParserHelper.Source.Mirage, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a5/Mirage_Cloak_%28effect%29.png"),
         };

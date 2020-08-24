@@ -8,17 +8,17 @@ using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class FirebrandHelper : GuardianHelper
+    internal class FirebrandHelper
     {
-        internal static readonly List<InstantCastFinder> FirebrandInstantCastFinders = new List<InstantCastFinder>()
+        internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(46618,46618,InstantCastFinder.DefaultICD), // Flame Rush
-            new DamageCastFinder(46616,46616,InstantCastFinder.DefaultICD), // Flame Surge
+            new DamageCastFinder(46618,46618,EIData.InstantCastFinder.DefaultICD), // Flame Rush
+            new DamageCastFinder(46616,46616,EIData.InstantCastFinder.DefaultICD), // Flame Surge
             //new DamageCastFinder(42360,42360,InstantCastFinder.DefaultICD), // Echo of Truth
             //new DamageCastFinder(44008,44008,InstantCastFinder.DefaultICD), // Voice of Truth
         };
 
-        internal static readonly List<Buff> FirebrandBuffs = new List<Buff>
+        internal static readonly List<Buff> Buffs = new List<Buff>
         {        
                 new Buff("Ashes of the Just",41957, ParserHelper.Source.Firebrand, BuffStackType.StackingConditionalLoss, 25, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/6/6d/Epilogue-_Ashes_of_the_Just.png"),
                 new Buff("Eternal Oasis",44871, ParserHelper.Source.Firebrand, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/5/5f/Epilogue-_Eternal_Oasis.png"),

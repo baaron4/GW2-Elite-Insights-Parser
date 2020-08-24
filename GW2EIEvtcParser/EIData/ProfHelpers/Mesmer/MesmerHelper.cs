@@ -8,17 +8,17 @@ using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class MesmerHelper : ProfHelper
+    internal class MesmerHelper
     {
-        internal static readonly List<InstantCastFinder> MesmerInstantCastFinders = new List<InstantCastFinder>()
+        internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(10212, 10212, InstantCastFinder.DefaultICD), // Power spike
-            new BuffLossCastFinder(10233, 10233, InstantCastFinder.DefaultICD, (brae, combatData) => {
+            new DamageCastFinder(10212, 10212, EIData.InstantCastFinder.DefaultICD), // Power spike
+            new BuffLossCastFinder(10233, 10233, EIData.InstantCastFinder.DefaultICD, (brae, combatData) => {
                 return combatData.GetBuffData(brae.To).Exists(x => 
                                     x is BuffApplyEvent bae &&
                                     bae.BuffID == 13017 &&
                                     Math.Abs(bae.AppliedDuration - 2000) <= ParserHelper.ServerDelayConstant &&
-                                    bae.By == brae.To && 
+                                    bae.By == brae.To &&
                                     Math.Abs(brae.Time - bae.Time) <= ParserHelper.ServerDelayConstant
                                  );
                 }
@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EIData
         };
 
 
-        internal static readonly List<Buff> MesmerBuffs = new List<Buff>
+        internal static readonly List<Buff> Buffs = new List<Buff>
         {
             
                 //signets

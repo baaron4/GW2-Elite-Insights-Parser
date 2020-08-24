@@ -8,21 +8,21 @@ using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class GuardianHelper : ProfHelper
+    internal class GuardianHelper
     {
-        internal static readonly List<InstantCastFinder> GuardianInstantCastFinders = new List<InstantCastFinder>()
+        internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(9082, 9123, InstantCastFinder.DefaultICD), // Shield of Wrath
+            new BuffGainCastFinder(9082, 9123, EIData.InstantCastFinder.DefaultICD), // Shield of Wrath
             new BuffGainCastFinder(9104, 9103, 0), // Zealot's Flame
             //new BuffLossCastFinder(9115,9114,InstantCastFinder.DefaultICD), // Virtue of Justice
             //new BuffLossCastFinder(9120,9119,InstantCastFinder.DefaultICD), // Virtue of Resolve
             //new BuffLossCastFinder(9118,9113,InstantCastFinder.DefaultICD), // Virtue of Courage
-            new DamageCastFinder(9247,9247, InstantCastFinder.DefaultICD), // Judge's Intervention
-            new DamageCastFinder(21795, 21795, InstantCastFinder.DefaultICD), // Glacial Heart
-            new DamageCastFinder(22499, 22499, InstantCastFinder.DefaultICD), // Shattered Aegis
+            new DamageCastFinder(9247,9247, EIData.InstantCastFinder.DefaultICD), // Judge's Intervention
+            new DamageCastFinder(21795, 21795, EIData.InstantCastFinder.DefaultICD), // Glacial Heart
+            new DamageCastFinder(22499, 22499, EIData.InstantCastFinder.DefaultICD), // Shattered Aegis
         };
 
-        internal static readonly List<Buff> GuardianBuffs = new List<Buff>
+        internal static readonly List<Buff> Buffs = new List<Buff>
         {        
                 //skills
                 new Buff("Zealot's Flame", 9103, ParserHelper.Source.Guardian, BuffStackType.Queue, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/7a/Zealot%27s_Flame.png"),

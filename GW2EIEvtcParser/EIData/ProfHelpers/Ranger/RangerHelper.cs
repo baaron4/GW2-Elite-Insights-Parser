@@ -7,21 +7,21 @@ using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class RangerHelper : ProfHelper
+    internal class RangerHelper
     {
 
-        internal static readonly List<InstantCastFinder> RangerInstantCastFinders = new List<InstantCastFinder>()
+        internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(12573,12573,InstantCastFinder.DefaultICD), // Hunter's Shot
-            new DamageCastFinder(12507,12507,InstantCastFinder.DefaultICD), // Crippling Shot
-            new BuffGiveCastFinder(33902,12633,InstantCastFinder.DefaultICD), // "Sic 'Em!"
-            new BuffGiveCastFinder(56923,12633,InstantCastFinder.DefaultICD), // "Sic 'Em!" PvP
-            new BuffGainCastFinder(12500,12543,InstantCastFinder.DefaultICD, (evt, combatData) => Math.Abs(evt.AppliedDuration - 6000) < ParserHelper.ServerDelayConstant), // Signet of Stone
-            new BuffGainCastFinder(42470,12543,InstantCastFinder.DefaultICD, (evt, combatData) => Math.Abs(evt.AppliedDuration - 5000) < ParserHelper.ServerDelayConstant), // Lesser Signet of Stone
-            new BuffGainCastFinder(12537,12536,InstantCastFinder.DefaultICD), // Sharpening Stone
+            new DamageCastFinder(12573,12573,EIData.InstantCastFinder.DefaultICD), // Hunter's Shot
+            new DamageCastFinder(12507,12507,EIData.InstantCastFinder.DefaultICD), // Crippling Shot
+            new BuffGiveCastFinder(33902,12633,EIData.InstantCastFinder.DefaultICD), // "Sic 'Em!"
+            new BuffGiveCastFinder(56923,12633,EIData.InstantCastFinder.DefaultICD), // "Sic 'Em!" PvP
+            new BuffGainCastFinder(12500,12543,EIData.InstantCastFinder.DefaultICD, (evt, combatData) => Math.Abs(evt.AppliedDuration - 6000) < ParserHelper.ServerDelayConstant), // Signet of Stone
+            new BuffGainCastFinder(42470,12543,EIData.InstantCastFinder.DefaultICD, (evt, combatData) => Math.Abs(evt.AppliedDuration - 5000) < ParserHelper.ServerDelayConstant), // Lesser Signet of Stone
+            new BuffGainCastFinder(12537,12536,EIData.InstantCastFinder.DefaultICD), // Sharpening Stone
         };
 
-        internal static readonly List<Buff> RangerBuffs = new List<Buff>
+        internal static readonly List<Buff> Buffs = new List<Buff>
         {
                 new Buff("Counterattack",14509, ParserHelper.Source.Ranger, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/c1/Counterattack.png"),
                 //signets
@@ -65,20 +65,20 @@ namespace GW2EIEvtcParser.EIData
         {
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
             // entangle works fine already
-            HashSet<AgentItem> jacarandaEmbraces = GetOffensiveGadgetAgents(damageData, 1286, playerAgents);
-            HashSet<AgentItem> blackHoles = GetOffensiveGadgetAgents(damageData, 31436, playerAgents);
+            HashSet<AgentItem> jacarandaEmbraces = ProfHelper.GetOffensiveGadgetAgents(damageData, 1286, playerAgents);
+            HashSet<AgentItem> blackHoles = ProfHelper.GetOffensiveGadgetAgents(damageData, 31436, playerAgents);
             var rangers = players.Where(x => x.Prof == "Ranger" || x.Prof == "Soulbeast" || x.Prof == "Druid").ToList();
             // if only one ranger, could only be that one
             if (rangers.Count == 1)
             {
                 Player ranger = rangers[0];
-                SetGadgetMaster(jacarandaEmbraces, ranger.AgentItem);
-                SetGadgetMaster(blackHoles, ranger.AgentItem);
+                ProfHelper.SetGadgetMaster(jacarandaEmbraces, ranger.AgentItem);
+                ProfHelper.SetGadgetMaster(blackHoles, ranger.AgentItem);
             }
             else if (rangers.Count > 1)
             {
-                AttachMasterToGadgetByCastData(castData, jacarandaEmbraces, new List<long> { 44980 }, 1000);
-                AttachMasterToGadgetByCastData(castData, blackHoles, new List<long> { 31503 }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(castData, jacarandaEmbraces, new List<long> { 44980 }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(castData, blackHoles, new List<long> { 31503 }, 1000);
             }
         }
 

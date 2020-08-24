@@ -6,13 +6,13 @@ using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class WarriorHelper : ProfHelper
+    internal class WarriorHelper
     {
 
-        internal static readonly List<InstantCastFinder> WarriorInstantCastFinders = new List<InstantCastFinder>()
+        internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(14268, 14268, InstantCastFinder.DefaultICD, 84794, ulong.MaxValue), // Reckless Impact
-            new BuffGainCastFinder(45534, 45534, InstantCastFinder.DefaultICD), // Berserker Stance
+            new DamageCastFinder(14268, 14268, EIData.InstantCastFinder.DefaultICD, 84794, ulong.MaxValue), // Reckless Impact
+            new BuffGainCastFinder(45534, 45534, EIData.InstantCastFinder.DefaultICD), // Berserker Stance
         };
 
         private static HashSet<AgentItem> GetBannerAgents(Dictionary<long, List<AbstractBuffEvent>> buffData, long id, HashSet<AgentItem> playerAgents)
@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.EIData
             return new HashSet<AgentItem>();
         }
 
-        internal static readonly List<Buff> WarriorBuffs = new List<Buff>
+        internal static readonly List<Buff> Buffs = new List<Buff>
         {
             //skills
                 new Buff("Riposte",14434, ParserHelper.Source.Warrior, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/d/de/Riposte.png"),
@@ -96,19 +96,19 @@ namespace GW2EIEvtcParser.EIData
             if (warriors.Count == 1)
             {
                 Player warrior = warriors[0];
-                SetGadgetMaster(strBanners, warrior.AgentItem);
-                SetGadgetMaster(disBanners, warrior.AgentItem);
-                SetGadgetMaster(tacBanners, warrior.AgentItem);
-                SetGadgetMaster(defBanners, warrior.AgentItem);
+                ProfHelper.SetGadgetMaster(strBanners, warrior.AgentItem);
+                ProfHelper.SetGadgetMaster(disBanners, warrior.AgentItem);
+                ProfHelper.SetGadgetMaster(tacBanners, warrior.AgentItem);
+                ProfHelper.SetGadgetMaster(defBanners, warrior.AgentItem);
                 //SetBannerMaster(battleBanner, warrior.AgentItem);
             }
             else if (warriors.Count > 1)
             {
                 // land and under water cast ids
-                AttachMasterToGadgetByCastData(castData, strBanners, new List<long> { 14405, 14572 }, 1000);
-                AttachMasterToGadgetByCastData(castData, defBanners, new List<long> { 14528, 14570 }, 1000);
-                AttachMasterToGadgetByCastData(castData, disBanners, new List<long> { 14407, 14571 }, 1000);
-                AttachMasterToGadgetByCastData(castData, tacBanners, new List<long> { 14408, 14573 }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(castData, strBanners, new List<long> { 14405, 14572 }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(castData, defBanners, new List<long> { 14528, 14570 }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(castData, disBanners, new List<long> { 14407, 14571 }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(castData, tacBanners, new List<long> { 14408, 14573 }, 1000);
                 //AttachMasterToBanner(castData, battleBanner, 14419, 14569);
             }
         }

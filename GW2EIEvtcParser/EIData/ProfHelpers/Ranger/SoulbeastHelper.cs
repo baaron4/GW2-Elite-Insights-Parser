@@ -6,32 +6,32 @@ using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class SoulbeastHelper : RangerHelper
+    internal class SoulbeastHelper
     {
-        internal static readonly List<InstantCastFinder> SoulbeastInstantCastFinders = new List<InstantCastFinder>()
+        internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             // Stout
-            new BuffGainCastFinder(42944,40272,InstantCastFinder.DefaultICD), // Beastmode
-            new BuffLossCastFinder(43014,40272,InstantCastFinder.DefaultICD), // Leave Beastmode
+            new BuffGainCastFinder(42944,40272,EIData.InstantCastFinder.DefaultICD), // Beastmode
+            new BuffLossCastFinder(43014,40272,EIData.InstantCastFinder.DefaultICD), // Leave Beastmode
             // Deadly
-            new BuffGainCastFinder(42944,44932,InstantCastFinder.DefaultICD), // Beastmode
-            new BuffLossCastFinder(43014,44932,InstantCastFinder.DefaultICD), // Leave Beastmode
+            new BuffGainCastFinder(42944,44932,EIData.InstantCastFinder.DefaultICD), // Beastmode
+            new BuffLossCastFinder(43014,44932,EIData.InstantCastFinder.DefaultICD), // Leave Beastmode
             // Versatile
-            new BuffGainCastFinder(42944,44693,InstantCastFinder.DefaultICD), // Beastmode
-            new BuffLossCastFinder(43014,44693,InstantCastFinder.DefaultICD), // Leave Beastmode
+            new BuffGainCastFinder(42944,44693,EIData.InstantCastFinder.DefaultICD), // Beastmode
+            new BuffLossCastFinder(43014,44693,EIData.InstantCastFinder.DefaultICD), // Leave Beastmode
             // Ferocious
-            new BuffGainCastFinder(42944,41720,InstantCastFinder.DefaultICD), // Beastmode
-            new BuffLossCastFinder(43014,41720,InstantCastFinder.DefaultICD), // Leave Beastmode
+            new BuffGainCastFinder(42944,41720,EIData.InstantCastFinder.DefaultICD), // Beastmode
+            new BuffLossCastFinder(43014,41720,EIData.InstantCastFinder.DefaultICD), // Leave Beastmode
             // Supportive
-            new BuffGainCastFinder(42944,40069,InstantCastFinder.DefaultICD), // Beastmode
-            new BuffLossCastFinder(43014,40069,InstantCastFinder.DefaultICD), // Leave Beastmode
+            new BuffGainCastFinder(42944,40069,EIData.InstantCastFinder.DefaultICD), // Beastmode
+            new BuffLossCastFinder(43014,40069,EIData.InstantCastFinder.DefaultICD), // Leave Beastmode
             // 
-            new BuffGiveCastFinder(45789,41815,InstantCastFinder.DefaultICD), // Dolyak Stance
-            new BuffGiveCastFinder(45970,45038,InstantCastFinder.DefaultICD), // Moa Stance
-            new BuffGiveCastFinder(40498,44651,InstantCastFinder.DefaultICD), // Vulture Stance
+            new BuffGiveCastFinder(45789,41815,EIData.InstantCastFinder.DefaultICD), // Dolyak Stance
+            new BuffGiveCastFinder(45970,45038,EIData.InstantCastFinder.DefaultICD), // Moa Stance
+            new BuffGiveCastFinder(40498,44651,EIData.InstantCastFinder.DefaultICD), // Vulture Stance
         };
 
-        internal static readonly List<Buff> SoulbeastBuffs = new List<Buff>
+        internal static readonly List<Buff> Buffs = new List<Buff>
         {
                 new Buff("Dolyak Stance",41815, ParserHelper.Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/7/71/Dolyak_Stance.png"),
                 new Buff("Griffon Stance",46280, ParserHelper.Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/9/98/Griffon_Stance.png"),

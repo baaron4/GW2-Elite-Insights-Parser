@@ -6,15 +6,15 @@ using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class DruidHelper : RangerHelper
+    internal class DruidHelper
     {
-        internal static readonly List<InstantCastFinder> DruidInstantCastFinders = new List<InstantCastFinder>()
+        internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(31869,31508,InstantCastFinder.DefaultICD), // Celestial Avatar
-            new BuffLossCastFinder(31411,31508,InstantCastFinder.DefaultICD), // Release Celestial Avatar
+            new BuffGainCastFinder(31869,31508,EIData.InstantCastFinder.DefaultICD), // Celestial Avatar
+            new BuffLossCastFinder(31411,31508,EIData.InstantCastFinder.DefaultICD), // Release Celestial Avatar
         };
 
-        internal static readonly List<Buff> DruidBuffs = new List<Buff>
+        internal static readonly List<Buff> Buffs = new List<Buff>
         {
                 new Buff("Celestial Avatar", 31508, ParserHelper.Source.Druid, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/59/Celestial_Avatar.png"),
                 new Buff("Ancestral Grace", 31584, ParserHelper.Source.Druid, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/4b/Ancestral_Grace.png"),

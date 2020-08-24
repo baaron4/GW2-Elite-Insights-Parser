@@ -6,14 +6,14 @@ using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class DragonhunterHelper : GuardianHelper
+    internal class DragonhunterHelper
     {
 
-        internal static readonly List<InstantCastFinder> DragonhunterInstantCastFinders = new List<InstantCastFinder>()
+        internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
         };
 
-        internal static readonly List<Buff> DragonhunterBuffs = new List<Buff>
+        internal static readonly List<Buff> Buffs = new List<Buff>
         {  
                 new Buff("Justice",30232, ParserHelper.Source.Dragonhunter, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b0/Spear_of_Light.png"),
                 new Buff("Shield of Courage (Active)", 29906, ParserHelper.Source.Dragonhunter, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/63/Shield_of_Courage.png"),
