@@ -2,6 +2,7 @@
 using System.Linq;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -146,13 +147,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal abstract void ComputeDamageModifier(Dictionary<string, List<DamageModifierStat>> data, Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>> dataTarget, Player p, ParsedEvtcLog log);
 
-        internal static readonly GainComputer ByPresence = new GainComputerByPresence();
-        internal static readonly GainComputer ByPresenceNonMulti = new GainComputerNonMultiplier();
-        internal static readonly GainComputer BySkill = new GainComputerBySkill();
-        internal static readonly GainComputer ByStack = new GainComputerByStack();
-        internal static readonly GainComputer ByAbsence = new GainComputerByAbsence();
-
-        private static readonly List<DamageModifier> _itemDamageModifiers = new List<DamageModifier>
+        internal static readonly List<DamageModifier> ItemDamageModifiers = new List<DamageModifier>
         {
             new DamageLogDamageModifier("Scholar Rune", "5% over 90% HP", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ParserHelper.Source.Item,"https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png", x => x.IsOverNinety, ByPresence, 93543, ulong.MaxValue, DamageModifierMode.All ),
             new DamageLogDamageModifier("Scholar Rune", "10% over 90% HP", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.Power, ParserHelper.Source.Item,"https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png", x => x.IsOverNinety, ByPresence, 0, 93543, DamageModifierMode.All ),
@@ -168,14 +163,14 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifier(725, "Rage Rune", "5% under fury",  DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, ParserHelper.Source.Item, ByPresence, "https://wiki.guildwars2.com/images/9/9e/Superior_Rune_of_Rage.png", DamageModifierMode.All),
             new BuffDamageModifier(32473, "Fractal Offensive", "3% per stack", DamageSource.NoPets, 3.0, DamageType.All, DamageType.All, ParserHelper.Source.Item, ByStack, "https://wiki.guildwars2.com/images/thumb/8/8d/Mist_Offensive_Potion.png/40px-Mist_Offensive_Potion.png", DamageModifierMode.PvE),
         };
-        private static readonly List<DamageModifier> _commonDamageModifiers = new List<DamageModifier>
+        internal static readonly List<DamageModifier> CommonDamageModifiers = new List<DamageModifier>
         {
             new BuffDamageModifierTarget(738, "Vulnerability", "1% per Stack", DamageSource.All, 1.0, DamageType.All, DamageType.All, ParserHelper.Source.Common, ByStack, "https://wiki.guildwars2.com/images/a/af/Vulnerability.png", DamageModifierMode.All),
             new BuffDamageModifier(50421, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.All, ParserHelper.Source.Common, ByPresenceNonMulti, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png", 88541, ulong.MaxValue, DamageModifierMode.All),
             new DamageLogDamageModifier("Soulcleave's Summit", "per hit (no ICD)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, ParserHelper.Source.Common,"https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png", (x => x.SkillId == 45026), BySkill, DamageModifierMode.All),
             new DamageLogDamageModifier("One Wolf Pack", "per hit (max. once every 0.25s)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, ParserHelper.Source.Common, "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png", (x => x.SkillId == 42145), BySkill, DamageModifierMode.All),
         };
-        private static readonly List<DamageModifier> _fightSpecificDamageModifiers = new List<DamageModifier>
+        internal static readonly List<DamageModifier> FightSpecificDamageModifiers = new List<DamageModifier>
         {
             new BuffDamageModifier(56123, "Violent Currents", "5%", DamageSource.NoPets, 5.0, DamageType.All, DamageType.All, ParserHelper.Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/0/06/Violent_Currents.png", DamageModifierMode.PvE),
             new BuffDamageModifierTarget(38224,"Unnatural Signet", "100%", DamageSource.All, 100.0, DamageType.All, DamageType.All, ParserHelper.Source.FightSpecific, ByPresence, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png", DamageModifierMode.PvE),
@@ -185,48 +180,6 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifier(34422, "Blood Fueled", "10% per stack", DamageSource.NoPets, 10.0, DamageType.All, DamageType.All, ParserHelper.Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png", DamageModifierMode.PvE),
             new BuffDamageModifier(34428, "Blood Fueled Abo", "10% per stack", DamageSource.NoPets, 10.0, DamageType.All, DamageType.All, ParserHelper.Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png", DamageModifierMode.PvE),
         };
-
-        internal static List<List<DamageModifier>> AllDamageModifiers = new List<List<DamageModifier>>
-        {
-            _itemDamageModifiers,
-            _commonDamageModifiers,
-            _fightSpecificDamageModifiers,
-            //
-            RevenantHelper.DamageMods,
-            HeraldHelper.DamageMods,
-            RenegadeHelper.DamageMods,
-            //
-            WarriorHelper.DamageMods,
-            BerserkerHelper.DamageMods,
-            SpellbreakerHelper.DamageMods,
-            //
-            GuardianHelper.DamageMods,
-            DragonhunterHelper.DamageMods,
-            FirebrandHelper.DamageMods,
-            //
-            EngineerHelper.DamageMods,
-            ScrapperHelper.DamageMods,
-            HolosmithHelper.DamageMods,
-            //
-            ThiefHelper.DamageMods,
-            DaredevilHelper.DamageMods,
-            DeadeyeHelper.DamageMods,
-            //
-            RangerHelper.DamageMods,
-            DruidHelper.DamageMods,
-            SoulbeastHelper.DamageMods,
-            //
-            MesmerHelper.DamageMods,
-            ChronomancerHelper.DamageMods,
-            MirageHelper.DamageMods,
-            //
-            NecromancerHelper.DamageMods,
-            ReaperHelper.DamageMods,
-            ScourgeHelper.DamageMods,
-            //
-            ElementalistHelper.DamageMods,
-            TempestHelper.DamageMods,
-            WeaverHelper.DamageMods,
-        };
+   
     }
 }

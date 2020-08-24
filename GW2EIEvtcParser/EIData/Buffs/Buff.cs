@@ -75,8 +75,6 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public BuffInfoEvent BuffInfo { get; private set; }
-
         private ulong _maxBuild { get; } = ulong.MaxValue;
         private ulong _minBuild { get; } = ulong.MinValue;
         public int Capacity { get; }
@@ -223,7 +221,7 @@ namespace GW2EIEvtcParser.EIData
         }
 
 
-        private static readonly List<Buff> _boons = new List<Buff>
+        internal static readonly List<Buff> Boons = new List<Buff>
         {
                 new Buff("Might", 740, ParserHelper.Source.Common, BuffStackType.Stacking, 25, BuffNature.Boon, "https://wiki.guildwars2.com/images/7/7c/Might.png"),
                 new Buff("Fury", 725, ParserHelper.Source.Common, BuffStackType.Queue, 9, BuffNature.Boon, "https://wiki.guildwars2.com/images/4/46/Fury.png"),//or 3m and 30s
@@ -240,7 +238,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Number of Boons", NumberOfBoonsID, ParserHelper.Source.Common, BuffStackType.Stacking, 0, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/44/Boon_Duration.png"),
         };
 
-        private static readonly List<Buff> _conditions = new List<Buff>
+        internal static readonly List<Buff> Conditions = new List<Buff>
         {
                 new Buff("Bleeding", 736, ParserHelper.Source.Common, BuffStackType.Stacking, 1500, BuffNature.Condition, "https://wiki.guildwars2.com/images/3/33/Bleeding.png"),
                 new Buff("Burning", 737, ParserHelper.Source.Common, BuffStackType.Stacking, 1500, BuffNature.Condition, "https://wiki.guildwars2.com/images/4/45/Burning.png"),
@@ -259,7 +257,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Number of Conditions", NumberOfConditionsID, ParserHelper.Source.Common, BuffStackType.Stacking, 0, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/38/Condition_Duration.png"),
         };
 
-        private static readonly List<Buff> _commons = new List<Buff>
+        internal static readonly List<Buff> Commons = new List<Buff>
         {
                 new Buff("Number of Active Combat Minions", NumberOfActiveCombatMinions, ParserHelper.Source.Common, BuffStackType.Stacking, 0, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/ad/Superior_Rune_of_the_Ranger.png"),
                 new Buff("Downed", 770, ParserHelper.Source.Common, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/dd/Downed.png"),
@@ -305,7 +303,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Guild Item Research", 33833, ParserHelper.Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/c/c6/Guild_Magic_Find_Banner_Boost.png"),
         };
 
-        private static readonly List<Buff> _gear = new List<Buff>
+        internal static readonly List<Buff> Gear = new List<Buff>
         {
                 new Buff("Sigil of Concentration", 33719, ParserHelper.Source.Item, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b3/Superior_Sigil_of_Concentration.png",0 , 93543),
                 new Buff("Superior Rune of the Monk", 53285, ParserHelper.Source.Item, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/18/Superior_Rune_of_the_Monk.png", 93543, ulong.MaxValue),
@@ -320,7 +318,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Sigil of Severance", 43930, ParserHelper.Source.Item, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/c2/Superior_Sigil_of_Severance.png"),
         };
 
-        private static readonly List<Buff> _fractalInstabilities = new List<Buff>()
+        internal static readonly List<Buff> FractalInstabilities = new List<Buff>()
         {
             new Buff("Mistlock Instability: Adrenaline Rush", 36341, ParserHelper.Source.FractalInstability, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/72/Mistlock_Instability_Adrenaline_Rush.png"),
             new Buff("Mistlock Instability: Afflicted", 22228, ParserHelper.Source.FractalInstability, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/3f/Mistlock_Instability_Afflicted.png"),
@@ -341,7 +339,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Mistlock Instability: We Bleed Fire", 54719, ParserHelper.Source.FractalInstability, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/24/Mistlock_Instability_We_Bleed_Fire.png"),
         };
 
-        private static readonly List<Buff> _fightSpecific = new List<Buff>
+        internal static readonly List<Buff> FightSpecific = new List<Buff>
         {
                 new Buff("Spectral Agony", 38077, ParserHelper.Source.FightSpecific,BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/70/Spectral_Agony.png" ),
                 new Buff("Agony", 15773, ParserHelper.Source.FightSpecific,BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/be/Agony.png" ),
@@ -452,7 +450,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Unseen Burden", 38153, ParserHelper.Source.FightSpecific, BuffStackType.Stacking , 99, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/b9/Unseen_Burden.png"),
         };
 
-        private static readonly List<Buff> _consumables = new List<Buff>
+        internal static readonly List<Buff> Consumables = new List<Buff>
         {
                 new Buff("Malnourished",46587, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/6/67/Malnourished.png"),
                 new Buff("Plate of Truffle Steak",9769, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/4/4c/Plate_of_Truffle_Steak.png"),
@@ -649,54 +647,6 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Spiced Peppercorn Cheesecake",-1, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/9c/Spiced_Peppercorn_Cheesecake.png"),
                 new Buff("Strawberry Cilantro Cheesecake", -1, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/8/8d/Strawberry_Cilantro_Cheesecake.png"),
         };
-
-
-        internal static readonly List<List<Buff>> AllBuffs = new List<List<Buff>>()
-            {
-                _boons,
-                _conditions,
-                _commons,
-                _gear,
-                _consumables,
-                _fightSpecific,
-                _fractalInstabilities,
-                //
-                RevenantHelper.Buffs,
-                HeraldHelper.Buffs,
-                RenegadeHelper.Buffs,
-                //
-                WarriorHelper.Buffs,
-                BerserkerHelper.Buffs,
-                SpellbreakerHelper.Buffs,
-                //
-                GuardianHelper.Buffs,
-                DragonhunterHelper.Buffs,
-                FirebrandHelper.Buffs,
-                //
-                RangerHelper.Buffs,
-                DruidHelper.Buffs,
-                SoulbeastHelper.Buffs,
-                //
-                ThiefHelper.Buffs,
-                DaredevilHelper.Buffs,
-                DeadeyeHelper.Buffs,
-                //
-                EngineerHelper.Buffs,
-                ScrapperHelper.Buffs,
-                HolosmithHelper.Buffs,
-                //
-                MesmerHelper.Buffs,
-                ChronomancerHelper.Buffs,
-                MirageHelper.Buffs,
-                //
-                NecromancerHelper.Buffs,
-                ReaperHelper.Buffs,
-                ScourgeHelper.Buffs,
-                //
-                ElementalistHelper.Buffs,
-                TempestHelper.Buffs,
-                WeaverHelper.Buffs,
-            };
 
     }
 }

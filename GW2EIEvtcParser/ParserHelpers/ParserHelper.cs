@@ -10,6 +10,12 @@ namespace GW2EIEvtcParser
     public static class ParserHelper
     {
 
+        internal static readonly GainComputer ByPresence = new GainComputerByPresence();
+        internal static readonly GainComputer ByPresenceNonMulti = new GainComputerNonMultiplier();
+        internal static readonly GainComputer BySkill = new GainComputerBySkill();
+        internal static readonly GainComputer ByStack = new GainComputerByStack();
+        internal static readonly GainComputer ByAbsence = new GainComputerByAbsence();
+
         internal static AgentItem _unknownAgent = new AgentItem();
         // use this for "null" in AbstractActor dictionaries
         internal static NPC _nullActor = new NPC(_unknownAgent);

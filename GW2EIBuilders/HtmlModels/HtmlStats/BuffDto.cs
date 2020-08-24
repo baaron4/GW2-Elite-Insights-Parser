@@ -23,7 +23,7 @@ namespace GW2EIBuilders.HtmlModels
             Stacking = (buff.Type == Buff.BuffType.Intensity);
             Consumable = (buff.Nature == Buff.BuffNature.Consumable);
             FightSpecific = (buff.Source == ParserHelper.Source.FightSpecific || buff.Source == ParserHelper.Source.FractalInstability);
-            BuffInfoEvent buffInfoEvent = buff.BuffInfo;
+            BuffInfoEvent buffInfoEvent = log.CombatData.GetBuffInfoEvent(buff.ID);
             if (buffInfoEvent != null)
             {
                 var descriptions = new List<string>() { 

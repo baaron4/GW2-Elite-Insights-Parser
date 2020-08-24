@@ -20,12 +20,59 @@ namespace GW2EIEvtcParser.EIData
 
         internal BuffsContainer(ulong build, CombatData combatData, ParserController operation)
         {
+            var AllBuffs = new List<List<Buff>>()
+            {
+                Boons,
+                Conditions,
+                Commons,
+                Gear,
+                Consumables,
+                FightSpecific,
+                FractalInstabilities,
+                //
+                RevenantHelper.Buffs,
+                HeraldHelper.Buffs,
+                RenegadeHelper.Buffs,
+                //
+                WarriorHelper.Buffs,
+                BerserkerHelper.Buffs,
+                SpellbreakerHelper.Buffs,
+                //
+                GuardianHelper.Buffs,
+                DragonhunterHelper.Buffs,
+                FirebrandHelper.Buffs,
+                //
+                RangerHelper.Buffs,
+                DruidHelper.Buffs,
+                SoulbeastHelper.Buffs,
+                //
+                ThiefHelper.Buffs,
+                DaredevilHelper.Buffs,
+                DeadeyeHelper.Buffs,
+                //
+                EngineerHelper.Buffs,
+                ScrapperHelper.Buffs,
+                HolosmithHelper.Buffs,
+                //
+                MesmerHelper.Buffs,
+                ChronomancerHelper.Buffs,
+                MirageHelper.Buffs,
+                //
+                NecromancerHelper.Buffs,
+                ReaperHelper.Buffs,
+                ScourgeHelper.Buffs,
+                //
+                ElementalistHelper.Buffs,
+                TempestHelper.Buffs,
+                WeaverHelper.Buffs,
+            };
             var currentBuffs = new List<Buff>();
             foreach (List<Buff> buffs in AllBuffs)
             {
                 currentBuffs.AddRange(buffs.Where(x => x.Available(build)));
             }
-            _buffsByName = currentBuffs.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => {
+            _buffsByName = currentBuffs.GroupBy(x => x.Name).ToDictionary(x => x.Key, x =>
+            {
                 var list = x.ToList();
                 if (list.Count > 1)
                 {
