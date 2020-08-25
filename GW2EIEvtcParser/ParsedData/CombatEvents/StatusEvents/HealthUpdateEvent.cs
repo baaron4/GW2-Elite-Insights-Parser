@@ -1,4 +1,6 @@
-﻿namespace GW2EIEvtcParser.ParsedData
+﻿using GW2EIEvtcParser.Interfaces;
+
+namespace GW2EIEvtcParser.ParsedData
 {
     public class HealthUpdateEvent : AbstractStatusEvent, IStateable
     {

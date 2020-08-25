@@ -1,4 +1,4 @@
-﻿namespace GW2EIEvtcParser.ParsedData
+﻿namespace GW2EIEvtcParser.Interfaces
 {
     internal interface IStateable
     {

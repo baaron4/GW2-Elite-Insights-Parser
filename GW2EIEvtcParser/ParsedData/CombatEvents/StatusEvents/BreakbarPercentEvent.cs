@@ -1,4 +1,5 @@
 ﻿using System;
+using GW2EIEvtcParser.Interfaces;
 
 namespace GW2EIEvtcParser.ParsedData
 {
