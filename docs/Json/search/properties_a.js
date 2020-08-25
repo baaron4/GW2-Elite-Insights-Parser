@@ -1,9 +1,10 @@
 var searchData=
 [
-  ['max',['Max',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_dist.html#ac7f56e6a6b29bf7654c12dc11f024a81',1,'GW2EIParser::Builders::JsonModels::JsonDamageDist']]],
-  ['mechanics',['Mechanics',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a773dd75651bd7b744a3d1c5aad9fecef',1,'GW2EIParser::Builders::JsonModels::JsonLog']]],
-  ['mechanicsdata',['MechanicsData',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_mechanics.html#a30750085f148463343a531a523111fce',1,'GW2EIParser::Builders::JsonModels::JsonMechanics']]],
-  ['min',['Min',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_dist.html#ab682c6b68b78152419513f9da00dcf3a',1,'GW2EIParser::Builders::JsonModels::JsonDamageDist']]],
-  ['minions',['Minions',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#acf3fa4941646a5563294271e15d418bb',1,'GW2EIParser::Builders::JsonModels::JsonActor']]],
-  ['missed',['Missed',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html#add770986132662470d8006df1434e0aa',1,'GW2EIParser::Builders::JsonModels::JsonStatistics::JsonGameplayStats']]]
+  ['max',['Max',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_damage_dist.html#aa42b2628bdd40063884c2e4e7accb217',1,'GW2EIBuilders::JsonModels::JsonDamageDist']]],
+  ['mechanics',['Mechanics',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_log.html#a6de981b3707660520b920df5d00beb98',1,'GW2EIBuilders::JsonModels::JsonLog']]],
+  ['mechanicsdata',['MechanicsData',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_mechanics.html#a4e6b0d85c4fde8d81c1f7baacb96ee83',1,'GW2EIBuilders::JsonModels::JsonMechanics']]],
+  ['min',['Min',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_damage_dist.html#a642942a23924bcc927182bcf4524a00c',1,'GW2EIBuilders::JsonModels::JsonDamageDist']]],
+  ['minions',['Minions',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#aa7a5044129032d5e042fc00f031ca0b7',1,'GW2EIBuilders::JsonModels::JsonActor']]],
+  ['missed',['Missed',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_damage_dist.html#afe4397b9d9d58b5e5d498e1c7d5e12a6',1,'GW2EIBuilders.JsonModels.JsonDamageDist.Missed()'],['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html#ab0dc31aa284af4311a287a69126a3d75',1,'GW2EIBuilders.JsonModels.JsonStatistics.JsonGameplayStats.Missed()']]],
+  ['missedcount',['MissedCount',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_defenses_all.html#ac6b019a94c0cccd3bb6257347b1f7fcf',1,'GW2EIBuilders::JsonModels::JsonStatistics::JsonDefensesAll']]]
 ];

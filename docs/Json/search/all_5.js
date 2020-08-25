@@ -1,9 +1,9 @@
 var searchData=
 [
-  ['fighticon',['FightIcon',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#ac033d5cefa408e897951862f2d805602',1,'GW2EIParser::Builders::JsonModels::JsonLog']]],
-  ['fightname',['FightName',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a5588839d04f4e2a0c38bcc56f0cf554b',1,'GW2EIParser::Builders::JsonModels::JsonLog']]],
-  ['finalhealth',['FinalHealth',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_n_p_c.html#ab1ba3d859d3e03b2d851a81c888c79b3',1,'GW2EIParser::Builders::JsonModels::JsonNPC']]],
-  ['firstaware',['FirstAware',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_n_p_c.html#a40469d21fb388eea8a68c7cb3b231dee',1,'GW2EIParser::Builders::JsonModels::JsonNPC']]],
-  ['flank',['Flank',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_damage_dist.html#a348dd55c9db1db7eac95f9a21c349c67',1,'GW2EIParser::Builders::JsonModels::JsonDamageDist']]],
-  ['flankingrate',['FlankingRate',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html#a0f6b2693b281ce379505fdddee0b6376',1,'GW2EIParser::Builders::JsonModels::JsonStatistics::JsonGameplayStats']]]
+  ['fighticon',['FightIcon',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_log.html#ad94d4979eb99daf7ce98405365718f0e',1,'GW2EIBuilders::JsonModels::JsonLog']]],
+  ['fightname',['FightName',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_log.html#ad0951531e0badcb059a4a69249878446',1,'GW2EIBuilders::JsonModels::JsonLog']]],
+  ['finalhealth',['FinalHealth',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_n_p_c.html#a411e1b2c7ee7c912628b8d6fb6bc8662',1,'GW2EIBuilders::JsonModels::JsonNPC']]],
+  ['firstaware',['FirstAware',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_n_p_c.html#aa7f998f3607d710e41618703a16001ca',1,'GW2EIBuilders::JsonModels::JsonNPC']]],
+  ['flank',['Flank',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_damage_dist.html#a8372c61aeb68f71cbb311df8f052dd9d',1,'GW2EIBuilders::JsonModels::JsonDamageDist']]],
+  ['flankingrate',['FlankingRate',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html#ad8646e5a33c7040c587c104bd36b2a80',1,'GW2EIBuilders::JsonModels::JsonStatistics::JsonGameplayStats']]]
 ];
