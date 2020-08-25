@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
-            new BuffDamageModifier(Buff.NumberOfBoonsID, "Premeditation", "1% per boon",DamageSource.NoPets, 1.0, DamageType.Power, DamageType.All, ParserHelper.Source.Deadeye, ByStack, "https://wiki.guildwars2.com/images/d/d7/Premeditation.png", DamageModifierMode.All),
+            new BuffDamageModifier(NumberOfBoonsID, "Premeditation", "1% per boon",DamageSource.NoPets, 1.0, DamageType.Power, DamageType.All, ParserHelper.Source.Deadeye, ByStack, "https://wiki.guildwars2.com/images/d/d7/Premeditation.png", DamageModifierMode.All),
         };
 
 

@@ -31,8 +31,8 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifierTarget(738, "Fragility", "0.5% per stack vuln on target", DamageSource.NoPets, 0.5, DamageType.Power, DamageType.All, ParserHelper.Source.Mesmer, ByStack, "https://wiki.guildwars2.com/images/3/33/Fragility.png", DamageModifierMode.All),
             // Phantasmal Force would require activating buff tracking on minions, huge performance impact and some code impact
             // TOCHECK Superiority Complex
-            new BuffDamageModifierTarget(Buff.NumberOfBoonsID, "Vicious Expression", "25% on boonless target",  DamageSource.All, 25.0, DamageType.Power, DamageType.All, ParserHelper.Source.Mesmer, ByAbsence, "https://wiki.guildwars2.com/images/f/f6/Confounding_Suggestions.png", 102321, 102389, DamageModifierMode.PvE),
-            new BuffDamageModifierTarget(Buff.NumberOfBoonsID, "Vicious Expression", "15% on boonless target",  DamageSource.All, 15.0, DamageType.Power, DamageType.All, ParserHelper.Source.Mesmer, ByAbsence, "https://wiki.guildwars2.com/images/f/f6/Confounding_Suggestions.png", 102389, ulong.MaxValue, DamageModifierMode.All),
+            new BuffDamageModifierTarget(NumberOfBoonsID, "Vicious Expression", "25% on boonless target",  DamageSource.All, 25.0, DamageType.Power, DamageType.All, ParserHelper.Source.Mesmer, ByAbsence, "https://wiki.guildwars2.com/images/f/f6/Confounding_Suggestions.png", 102321, 102389, DamageModifierMode.PvE),
+            new BuffDamageModifierTarget(NumberOfBoonsID, "Vicious Expression", "15% on boonless target",  DamageSource.All, 15.0, DamageType.Power, DamageType.All, ParserHelper.Source.Mesmer, ByAbsence, "https://wiki.guildwars2.com/images/f/f6/Confounding_Suggestions.png", 102389, ulong.MaxValue, DamageModifierMode.All),
         };
 
 

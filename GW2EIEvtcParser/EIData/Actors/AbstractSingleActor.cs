@@ -253,9 +253,9 @@ namespace GW2EIEvtcParser.EIData
             BuffDictionary buffMap = _buffMap;
             long dur = log.FightData.FightEnd;
             int fightDuration = (int)(dur) / 1000;
-            var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[Buff.NumberOfBoonsID]);
-            var activeCombatMinionsGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[Buff.NumberOfActiveCombatMinions]);
-            var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[Buff.NumberOfConditionsID]);
+            var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[NumberOfBoonsID]);
+            var activeCombatMinionsGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[NumberOfActiveCombatMinions]);
+            var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[NumberOfConditionsID]);
             var boonIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Boon].Select(x => x.ID));
             var condiIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Condition].Select(x => x.ID));
             // Init status
@@ -334,8 +334,8 @@ namespace GW2EIEvtcParser.EIData
 
                 }
             }
-            BuffPoints[Buff.NumberOfBoonsID] = boonPresenceGraph;
-            BuffPoints[Buff.NumberOfConditionsID] = condiPresenceGraph;
+            BuffPoints[NumberOfBoonsID] = boonPresenceGraph;
+            BuffPoints[NumberOfConditionsID] = condiPresenceGraph;
             foreach(Minions minions in GetMinions(log).Values)
             {
                 foreach(List<Segment> minionsSegments in minions.GetLifeSpanSegments(log))
@@ -345,7 +345,7 @@ namespace GW2EIEvtcParser.EIData
             }
             if (activeCombatMinionsGraph.BuffChart.Any())
             {
-                BuffPoints[Buff.NumberOfActiveCombatMinions] = activeCombatMinionsGraph;
+                BuffPoints[NumberOfActiveCombatMinions] = activeCombatMinionsGraph;
             }
         }
 

@@ -24,25 +24,25 @@ namespace GW2EIEvtcParser.EIData
             //new BuffGainCastFinder(44926, ???, 500), // Stone Resonance, lesser stone resonance makes thing complicated
             new BuffGainCastFinder(44612, 42683, EIData.InstantCastFinder.DefaultICD), // Unravel
             // Fire       
-            new BuffGainCastFinder(Buff.FireDual, Buff.FireDual, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(Buff.FireWater, Buff.FireWater, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(Buff.FireAir, Buff.FireAir, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(Buff.FireEarth, Buff.FireEarth, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(FireDual, FireDual, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(FireWater, FireWater, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(FireAir, FireAir, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(FireEarth, FireEarth, EIData.InstantCastFinder.DefaultICD),
             // Water
-            new BuffGainCastFinder(Buff.WaterFire, Buff.WaterFire, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(Buff.WaterDual, Buff.WaterDual, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(Buff.WaterAir, Buff.WaterAir, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(Buff.WaterEarth, Buff.WaterEarth, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(WaterFire, WaterFire, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(WaterDual, WaterDual, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(WaterAir, WaterAir, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(WaterEarth, WaterEarth, EIData.InstantCastFinder.DefaultICD),
             // Air
-            new BuffGainCastFinder(Buff.AirFire, Buff.AirFire, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(Buff.AirWater, Buff.AirWater, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(Buff.AirDual, Buff.AirDual, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(Buff.AirEarth, Buff.AirEarth, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(AirFire, AirFire, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(AirWater, AirWater, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(AirDual, AirDual, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(AirEarth, AirEarth, EIData.InstantCastFinder.DefaultICD),
             // Earth
-            new BuffGainCastFinder(Buff.EarthFire, Buff.EarthFire, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(Buff.EarthWater, Buff.EarthWater, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(Buff.EarthAir, Buff.EarthAir, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(Buff.EarthDual, Buff.EarthDual, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(EarthFire, EarthFire, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(EarthWater, EarthWater, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(EarthAir, EarthAir, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(EarthDual, EarthDual, EIData.InstantCastFinder.DefaultICD),
         };
 
 
@@ -91,18 +91,18 @@ namespace GW2EIEvtcParser.EIData
 
         private static readonly Dictionary<long, HashSet<long>> _minorsTranslation = new Dictionary<long, HashSet<long>>
         {
-            { FireMinor, new HashSet<long> { Buff.WaterFire, Buff.AirFire, Buff.EarthFire, Buff.FireDual }},
-            { WaterMinor, new HashSet<long> { Buff.FireWater, Buff.AirWater, Buff.EarthWater, Buff.WaterDual }},
-            { AirMinor, new HashSet<long> { Buff.FireAir, Buff.WaterAir, Buff.EarthAir, Buff.AirDual }},
-            { EarthMinor, new HashSet<long> { Buff.FireEarth, Buff.WaterEarth, Buff.AirEarth, Buff.EarthDual }},
+            { FireMinor, new HashSet<long> { WaterFire, AirFire, EarthFire, FireDual }},
+            { WaterMinor, new HashSet<long> { FireWater, AirWater, EarthWater, WaterDual }},
+            { AirMinor, new HashSet<long> { FireAir, WaterAir, EarthAir, AirDual }},
+            { EarthMinor, new HashSet<long> { FireEarth, WaterEarth, AirEarth, EarthDual }},
         };
 
         private static readonly Dictionary<long, HashSet<long>> _majorsTranslation = new Dictionary<long, HashSet<long>>
         {
-            { FireMajor, new HashSet<long> { Buff.FireWater, Buff.FireAir, Buff.FireEarth, Buff.FireDual }},
-            { WaterMajor, new HashSet<long> { Buff.WaterFire, Buff.WaterAir, Buff.WaterEarth, Buff.WaterDual }},
-            { AirMajor, new HashSet<long> { Buff.AirFire, Buff.AirWater, Buff.AirEarth, Buff.AirDual }},
-            { EarthMajor, new HashSet<long> { Buff.EarthFire, Buff.EarthWater, Buff.EarthAir, Buff.EarthDual }},
+            { FireMajor, new HashSet<long> { FireWater, FireAir, FireEarth, FireDual }},
+            { WaterMajor, new HashSet<long> { WaterFire, WaterAir, WaterEarth, WaterDual }},
+            { AirMajor, new HashSet<long> { AirFire, AirWater, AirEarth, AirDual }},
+            { EarthMajor, new HashSet<long> { EarthFire, EarthWater, EarthAir, EarthDual }},
         };
 
         private static long TranslateWeaverAttunement(List<BuffApplyEvent> buffApplies)
@@ -116,10 +116,10 @@ namespace GW2EIEvtcParser.EIData
             }*/
             var duals = new HashSet<long>
             {
-                Buff.FireDual,
-                Buff.WaterDual,
-                Buff.AirDual,
-                Buff.EarthDual
+                FireDual,
+                WaterDual,
+                AirDual,
+                EarthDual
             };
             HashSet<long> major = null;
             HashSet<long> minor = null;
@@ -180,10 +180,10 @@ namespace GW2EIEvtcParser.EIData
                 EarthMajor,
                 EarthMinor,
 
-                Buff.FireDual,
-                Buff.WaterDual,
-                Buff.AirDual,
-                Buff.EarthDual,
+                FireDual,
+                WaterDual,
+                AirDual,
+                EarthDual,
 
                 /*fireAir,
                 fireEarth,
