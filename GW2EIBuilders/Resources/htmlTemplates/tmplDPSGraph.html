@@ -50,7 +50,7 @@
                     xrangeslider: {}
                 },
                 hovermode: 'x',
-                hoverdistance: 1100,
+                hoverdistance: 150,
                 legend: {
                     orientation: 'h',
                     font: {
@@ -93,7 +93,7 @@
                         width: i === this.playerindex ? 5 : 2
                     },
                     text: pText,
-                    hoverinfo: 'y+text',
+                    hoverinfo: 'y+text+x',
                     name: player.name + ' DPS',
                 });
             }
@@ -103,7 +103,7 @@
                 line: {
                     shape: 'spline'
                 },
-                hoverinfo: 'name+y',
+                hoverinfo: 'name+y+x',
                 visible: 'legendonly',
                 name: 'All Player Dps'
             });
