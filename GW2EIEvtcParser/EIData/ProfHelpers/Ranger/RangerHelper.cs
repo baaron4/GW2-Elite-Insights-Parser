@@ -8,7 +8,7 @@ using static GW2EIEvtcParser.EIData.DamageModifier;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class RangerHelper
+    internal static class RangerHelper
     {
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()

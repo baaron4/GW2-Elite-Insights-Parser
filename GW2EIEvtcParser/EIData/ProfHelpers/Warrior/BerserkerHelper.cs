@@ -4,7 +4,7 @@ using static GW2EIEvtcParser.EIData.DamageModifier;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class BerserkerHelper
+    internal static class BerserkerHelper
     {
         /////////////////////
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()

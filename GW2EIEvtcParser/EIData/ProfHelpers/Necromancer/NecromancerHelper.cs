@@ -5,7 +5,7 @@ using static GW2EIEvtcParser.EIData.DamageModifier;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class NecromancerHelper
+    internal static class NecromancerHelper
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
@@ -65,7 +65,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Soul Barbs",53489, ParserHelper.Source.Necromancer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/bd/Soul_Barbs.png"),
         };
 
-        private static readonly HashSet<long> _shroudTransform = new HashSet<long>
+        /*private static readonly HashSet<long> _shroudTransform = new HashSet<long>
         {
             10574,10585,30792, 30961,
         };
@@ -73,6 +73,6 @@ namespace GW2EIEvtcParser.EIData
         public static bool IsShroudTransform(long id)
         {
             return _shroudTransform.Contains(id);
-        }
+        }*/
     }
 }

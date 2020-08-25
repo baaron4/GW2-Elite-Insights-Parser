@@ -3,7 +3,7 @@ using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class ScourgeHelper
+    internal static class ScourgeHelper
     {
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()

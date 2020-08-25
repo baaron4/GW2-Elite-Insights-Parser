@@ -5,7 +5,7 @@ using static GW2EIEvtcParser.EIData.DamageModifier;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class DragonhunterHelper
+    internal static class DragonhunterHelper
     {
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()

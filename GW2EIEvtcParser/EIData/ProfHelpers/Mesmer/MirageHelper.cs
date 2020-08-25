@@ -5,7 +5,7 @@ using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class MirageHelper
+    internal static class MirageHelper
     {
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()

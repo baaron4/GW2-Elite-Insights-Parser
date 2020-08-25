@@ -7,7 +7,7 @@ using static GW2EIEvtcParser.EIData.DamageModifier;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class WeaverHelper
+    internal static class WeaverHelper
     {
         private const long FireMajor = 40926;
         private const long FireMinor = 42811;
