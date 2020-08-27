@@ -24,7 +24,7 @@ namespace GW2EIParser
             string version = Application.ProductVersion;
             VersionLabel.Text = version;
             _logsFiles = new List<string>();
-            btnCancel.Enabled = false;
+            btnCancelAll.Enabled = false;
             btnParse.Enabled = false;
             UpdateWatchDirectory();
             _settingsForm = new SettingsForm();
@@ -63,7 +63,7 @@ namespace GW2EIParser
             }
 
             btnParse.Enabled = !Properties.Settings.Default.AutoParse;
-            btnCancel.Enabled = Properties.Settings.Default.AutoParse;
+            btnCancelAll.Enabled = Properties.Settings.Default.AutoParse;
         }
 
         private void EnableSettingsWatcher(object sender, EventArgs e)
@@ -155,7 +155,7 @@ namespace GW2EIParser
         {
             btnClearAll.Enabled = false;
             btnParse.Enabled = false;
-            btnCancel.Enabled = true;
+            btnCancelAll.Enabled = true;
             if (Properties.Settings.Default.ParseMultipleLogs)
             {
                 _RunOperation(operation);
@@ -190,7 +190,7 @@ namespace GW2EIParser
                 {
                     btnParse.Enabled = true;
                     btnClearAll.Enabled = true;
-                    btnCancel.Enabled = false;
+                    btnCancelAll.Enabled = false;
                     _settingsForm.ConditionalSettingDisable(_anyRunning);
                 }
             }
@@ -209,7 +209,7 @@ namespace GW2EIParser
             if (_logsFiles.Count > 0)
             {
                 btnParse.Enabled = false;
-                btnCancel.Enabled = true;
+                btnCancelAll.Enabled = true;
 
                 foreach (FormOperationController operation in operatorBindingSource)
                 {
@@ -226,7 +226,7 @@ namespace GW2EIParser
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BtnCancelClick(object sender, EventArgs e)
+        private void BtnCancelAllClick(object sender, EventArgs e)
         {
             //Clear queue so queued workers don't get started by any cancellations
             var operations = new HashSet<FormOperationController>(_logQueue);
@@ -247,7 +247,7 @@ namespace GW2EIParser
 
             btnClearAll.Enabled = true;
             btnParse.Enabled = true;
-            btnCancel.Enabled = false;
+            btnCancelAll.Enabled = false;
         }
 
         /// <summary>
@@ -268,7 +268,7 @@ namespace GW2EIParser
         /// <param name="e"></param>
         private void BtnClearAllClick(object sender, EventArgs e)
         {
-            btnCancel.Enabled = false;
+            btnCancelAll.Enabled = false;
             btnParse.Enabled = false;
 
             //Clear the queue so that cancelled workers don't invoke queued workers
@@ -338,7 +338,7 @@ namespace GW2EIParser
                     case OperationState.Ready:
                     case OperationState.UnComplete:
                         QueueOrRunOperation(operation);
-                        btnCancel.Enabled = true;
+                        btnCancelAll.Enabled = true;
                         break;
 
                     case OperationState.Parsing:

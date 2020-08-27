@@ -35,7 +35,7 @@
             this.lblHeader = new System.Windows.Forms.Label();
             this.btnParse = new System.Windows.Forms.Button();
             this.btnPopulate = new System.Windows.Forms.Button();
-            this.btnCancel = new System.Windows.Forms.Button();
+            this.btnCancelAll = new System.Windows.Forms.Button();
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnClearAll = new System.Windows.Forms.Button();
             this.dgvFiles = new System.Windows.Forms.DataGridView();
@@ -90,16 +90,16 @@
             this.btnPopulate.UseVisualStyleBackColor = true;
             this.btnPopulate.Click += new System.EventHandler(this.BtnPopulateFromDirectory);
             // 
-            // btnCancel
+            // btnCancelAll
             // 
-            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.Location = new System.Drawing.Point(444, 333);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 11;
-            this.btnCancel.Text = "Cancel All";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.BtnCancelClick);
+            this.btnCancelAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancelAll.Location = new System.Drawing.Point(444, 333);
+            this.btnCancelAll.Name = "btnCancelAll";
+            this.btnCancelAll.Size = new System.Drawing.Size(75, 23);
+            this.btnCancelAll.TabIndex = 11;
+            this.btnCancelAll.Text = "Cancel All";
+            this.btnCancelAll.UseVisualStyleBackColor = true;
+            this.btnCancelAll.Click += new System.EventHandler(this.BtnCancelAllClick);
             // 
             // btnSettings
             // 
@@ -229,7 +229,7 @@
             this.Controls.Add(this.VersionLabel);
             this.Controls.Add(this.btnClearAll);
             this.Controls.Add(this.btnSettings);
-            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.btnCancelAll);
             this.Controls.Add(this.btnParse);
             this.Controls.Add(this.btnPopulate);
             this.Controls.Add(this.lblHeader);
@@ -250,7 +250,7 @@
         private System.Windows.Forms.Label lblHeader;
         private System.Windows.Forms.Button btnParse;
         private System.Windows.Forms.Button btnPopulate;
-        private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Button btnCancelAll;
         private System.Windows.Forms.Button btnSettings;
         private System.Windows.Forms.Button btnClearAll;
         private System.Windows.Forms.DataGridView dgvFiles;
