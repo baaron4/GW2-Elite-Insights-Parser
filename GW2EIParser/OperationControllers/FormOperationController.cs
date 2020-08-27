@@ -115,8 +115,8 @@ namespace GW2EIParser
 
         public void ToCompleteState()
         {
-            State = OperationState.Complete;
-            ButtonText = "Open";
+            State = OperationState.Ready;
+            ButtonText = "Parse";
             FinalizeStatus("Parsing Successful - ");
             InvalidateDataView();
         }

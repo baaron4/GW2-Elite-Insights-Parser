@@ -30,6 +30,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            this.MinimumSize = new System.Drawing.Size(600, 300);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.lblHeader = new System.Windows.Forms.Label();
@@ -39,18 +40,18 @@
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnClearAll = new System.Windows.Forms.Button();
             this.dgvFiles = new System.Windows.Forms.DataGridView();
-            this.locationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.statusDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ButtonState = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.operatorBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.TlpMainWindow = new System.Windows.Forms.ToolTip(this.components);
             this.btnClearFailed = new System.Windows.Forms.Button();
             this.logFileWatcher = new System.IO.FileSystemWatcher();
             this.VersionLabel = new System.Windows.Forms.Label();
             this.labWatchingDir = new System.Windows.Forms.Label();
+            this.locationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.statusDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.operatorBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.operatorBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.logFileWatcher)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.operatorBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -81,7 +82,7 @@
             // 
             // btnPopulate
             // 
-            this.btnPopulate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnPopulate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnPopulate.Location = new System.Drawing.Point(97, 331);
             this.btnPopulate.Name = "btnPopulate";
             this.btnPopulate.Size = new System.Drawing.Size(154, 23);
@@ -146,24 +147,9 @@
             this.dgvFiles.Size = new System.Drawing.Size(663, 255);
             this.dgvFiles.TabIndex = 17;
             this.dgvFiles.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvFilesCellContentClick);
+            this.dgvFiles.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvFilesCellContentDoubleClick);
             this.dgvFiles.DragDrop += new System.Windows.Forms.DragEventHandler(this.DgvFilesDragDrop);
             this.dgvFiles.DragEnter += new System.Windows.Forms.DragEventHandler(this.DgvFilesDragEnter);
-            // 
-            // locationDataGridViewTextBoxColumn
-            // 
-            this.locationDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.locationDataGridViewTextBoxColumn.DataPropertyName = "Location";
-            this.locationDataGridViewTextBoxColumn.HeaderText = "Location";
-            this.locationDataGridViewTextBoxColumn.Name = "locationDataGridViewTextBoxColumn";
-            this.locationDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // statusDataGridViewTextBoxColumn
-            // 
-            this.statusDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.statusDataGridViewTextBoxColumn.DataPropertyName = "Status";
-            this.statusDataGridViewTextBoxColumn.HeaderText = "Status";
-            this.statusDataGridViewTextBoxColumn.Name = "statusDataGridViewTextBoxColumn";
-            this.statusDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // ButtonState
             // 
@@ -171,10 +157,6 @@
             this.ButtonState.HeaderText = "";
             this.ButtonState.Name = "ButtonState";
             this.ButtonState.ReadOnly = true;
-            // 
-            // operatorBindingSource
-            // 
-            this.operatorBindingSource.DataSource = typeof(GW2EIParser.FormOperationController);
             // 
             // btnClearFailed
             // 
@@ -217,6 +199,26 @@
             this.labWatchingDir.TabIndex = 18;
             this.labWatchingDir.Text = "Watching log dir";
             // 
+            // locationDataGridViewTextBoxColumn
+            // 
+            this.locationDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.locationDataGridViewTextBoxColumn.DataPropertyName = "Location";
+            this.locationDataGridViewTextBoxColumn.HeaderText = "Location";
+            this.locationDataGridViewTextBoxColumn.Name = "locationDataGridViewTextBoxColumn";
+            this.locationDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // statusDataGridViewTextBoxColumn
+            // 
+            this.statusDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.statusDataGridViewTextBoxColumn.DataPropertyName = "Status";
+            this.statusDataGridViewTextBoxColumn.HeaderText = "Status";
+            this.statusDataGridViewTextBoxColumn.Name = "statusDataGridViewTextBoxColumn";
+            this.statusDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // operatorBindingSource
+            // 
+            this.operatorBindingSource.DataSource = typeof(GW2EIParser.FormOperationController);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -238,8 +240,8 @@
             this.Text = "GW2 Elite Insights Parser";
             this.TransparencyKey = System.Drawing.Color.OrangeRed;
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.operatorBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.logFileWatcher)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.operatorBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -258,6 +260,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn locationDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn statusDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewButtonColumn ButtonState;
+        private System.Windows.Forms.DataGridViewComboBoxColumn ResultState;
         private System.Windows.Forms.Label VersionLabel;
         private System.IO.FileSystemWatcher logFileWatcher;
         private System.Windows.Forms.Label labWatchingDir;

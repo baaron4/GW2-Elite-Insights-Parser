@@ -24,7 +24,9 @@ namespace GW2EIParser
         /// Location of the generated files
         /// </summary>
         public List<string> GeneratedFiles { get; }
-        
+
+        public string DPSReportLink { get; protected set; }
+
         internal string Elapsed { get; set; } = "";
 
         public OperationController(Version parserVersion, string location, string status) : base(parserVersion)
@@ -33,6 +35,10 @@ namespace GW2EIParser
             Location = location;
             PathsToOpen = new HashSet<string>();
             GeneratedFiles = new List<string>();
+        }
+        public void SetDPSReportLink(string link)
+        {
+            DPSReportLink = link;
         }
 
         public void FinalizeStatus(string prefix)

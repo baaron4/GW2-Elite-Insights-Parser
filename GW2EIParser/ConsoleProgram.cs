@@ -42,7 +42,7 @@ namespace GW2EIParser
             }
             finally
             {
-                ProgramHelper.GenerateLogFile(operation);
+                ProgramHelper.GenerateTraceFile(operation);
             }
         }
     }

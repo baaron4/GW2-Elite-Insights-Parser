@@ -114,6 +114,7 @@ namespace GW2EIParser
             Thread.CurrentThread.CurrentCulture =
                     new System.Globalization.CultureInfo("en-US");
             operation.ClearTraces();
+            operation.SetDPSReportLink(null);
             var sw = new Stopwatch();
             try
             {
@@ -138,6 +139,10 @@ namespace GW2EIParser
                 foreach (string trace in externalTraces)
                 {
                     operation.UpdateProgress(trace);
+                }
+                if (uploadresult[0].Contains("https"))
+                {
+                    operation.SetDPSReportLink(uploadresult[0]);
                 }
                 //Creating File
                 GenerateFiles(log, operation, uploadresult, fInfo);
@@ -199,7 +204,7 @@ namespace GW2EIParser
             return saveDirectory;
         }
 
-        public static void GenerateLogFile(OperationController operation)
+        public static void GenerateTraceFile(OperationController operation)
         {
             if (Properties.Settings.Default.SaveOutTrace)
             {
@@ -277,6 +282,7 @@ namespace GW2EIParser
                 $"{fName}.html"
                 );
                 operation.GeneratedFiles.Add(outputFile);
+                operation.PathsToOpen.Add(saveDirectory.FullName);
                 operation.PathsToOpen.Add(outputFile);
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs))
@@ -294,6 +300,7 @@ namespace GW2EIParser
                     $"{fName}.csv"
                 );
                 operation.GeneratedFiles.Add(outputFile);
+                operation.PathsToOpen.Add(saveDirectory.FullName);
                 operation.PathsToOpen.Add(outputFile);
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))

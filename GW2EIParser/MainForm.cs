@@ -141,7 +141,7 @@ namespace GW2EIParser
                         operation.ToUnCompleteState();
                     }
                 }
-                ProgramHelper.GenerateLogFile(operation);
+                ProgramHelper.GenerateTraceFile(operation);
                 RunNextOperation();
             }, TaskScheduler.FromCurrentSynchronizationContext());
             operation.SetContext(cancelTokenSource, task);
@@ -322,6 +322,46 @@ namespace GW2EIParser
             e.Effect = DragDropEffects.All;
         }
 
+        private void DgvActionButtonClick(FormOperationController operation)
+        {
+            switch (operation.State)
+            {
+                case OperationState.Ready:
+                case OperationState.UnComplete:
+                    QueueOrRunOperation(operation);
+                    btnCancelAll.Enabled = true;
+                    break;
+
+                case OperationState.Parsing:
+                    operation.ToCancelState();
+                    break;
+
+                case OperationState.Pending:
+                    var operations = new HashSet<FormOperationController>(_logQueue);
+                    _logQueue.Clear();
+                    operations.Remove(operation);
+                    foreach (FormOperationController op in operations)
+                    {
+                        _logQueue.Enqueue(op);
+                    }
+                    operation.ToReadyState();
+                    break;
+                case OperationState.Queued:
+                    operation.ToRemovalFromQueueState();
+                    break;
+
+                case OperationState.Complete:
+                    foreach (string path in operation.PathsToOpen)
+                    {
+                        if (File.Exists(path) || Directory.Exists(path))
+                        {
+                            System.Diagnostics.Process.Start(path);
+                        }
+                    }
+                    break;
+            }
+        }
+
         /// <summary>
         /// Invoked when a the content of a datagridview cell is clicked
         /// </summary>
@@ -329,47 +369,35 @@ namespace GW2EIParser
         /// <param name="e"></param>
         private void DgvFilesCellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex == 2)
+            var operation = (FormOperationController)operatorBindingSource[e.RowIndex];
+            switch (e.ColumnIndex)
             {
-                var operation = (FormOperationController)operatorBindingSource[e.RowIndex];
+                case 2:
+                    DgvActionButtonClick(operation);
+                    break;
+                default:
+                    break;
+            }
+        }
 
-                switch (operation.State)
-                {
-                    case OperationState.Ready:
-                    case OperationState.UnComplete:
-                        QueueOrRunOperation(operation);
-                        btnCancelAll.Enabled = true;
-                        break;
-
-                    case OperationState.Parsing:
-                        operation.ToCancelState();
-                        break;
-
-                    case OperationState.Pending:
-                        var operations = new HashSet<FormOperationController>(_logQueue);
-                        _logQueue.Clear();
-                        operations.Remove(operation);
-                        foreach (FormOperationController op in operations)
-                        {
-                            _logQueue.Enqueue(op);
-                        }
-                        operation.ToReadyState();
-                        break;
-                    case OperationState.Queued:
-                        operation.ToRemovalFromQueueState();
-                        break;
-
-                    case OperationState.Complete:
-                        foreach (string path in operation.PathsToOpen)
-                        {
-                            if (File.Exists(path) || Directory.Exists(path))
-                            {
-                                System.Diagnostics.Process.Start(path);
-                            }
-                        }
-                        break;
-
-                }
+        /// <summary>
+        /// Invoked when a the content of a datagridview cell is double clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DgvFilesCellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var operation = (FormOperationController)operatorBindingSource[e.RowIndex];
+            switch (e.ColumnIndex)
+            {
+                case 0:
+                    if (File.Exists(operation.Location))
+                    {
+                        System.Diagnostics.Process.Start(new FileInfo(operation.Location).DirectoryName);
+                    }
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -396,7 +424,14 @@ namespace GW2EIParser
                 var toAdd = new List<string>();
                 foreach (string format in ParserHelper.GetSupportedFormats())
                 {
-                    toAdd.AddRange(Directory.EnumerateFiles(path, "*" + format, SearchOption.AllDirectories));
+                    try
+                    {
+                        toAdd.AddRange(Directory.EnumerateFiles(path, "*" + format, SearchOption.AllDirectories));
+                    } 
+                    catch
+                    {
+                        // nothing to do
+                    }
                 }
                 AddLogFiles(toAdd);
             }
