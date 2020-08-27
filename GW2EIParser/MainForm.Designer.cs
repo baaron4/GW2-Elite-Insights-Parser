@@ -37,12 +37,14 @@
             this.btnPopulate = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSettings = new System.Windows.Forms.Button();
-            this.btnClear = new System.Windows.Forms.Button();
+            this.btnClearAll = new System.Windows.Forms.Button();
             this.dgvFiles = new System.Windows.Forms.DataGridView();
             this.locationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.statusDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ButtonState = new System.Windows.Forms.DataGridViewButtonColumn();
             this.operatorBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.TlpMainWindow = new System.Windows.Forms.ToolTip(this.components);
+            this.btnClearFailed = new System.Windows.Forms.Button();
             this.logFileWatcher = new System.IO.FileSystemWatcher();
             this.VersionLabel = new System.Windows.Forms.Label();
             this.labWatchingDir = new System.Windows.Forms.Label();
@@ -69,9 +71,9 @@
             // btnParse
             // 
             this.btnParse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnParse.Location = new System.Drawing.Point(525, 307);
+            this.btnParse.Location = new System.Drawing.Point(444, 307);
             this.btnParse.Name = "btnParse";
-            this.btnParse.Size = new System.Drawing.Size(154, 23);
+            this.btnParse.Size = new System.Drawing.Size(235, 23);
             this.btnParse.TabIndex = 10;
             this.btnParse.Text = "Parse All";
             this.btnParse.UseVisualStyleBackColor = true;
@@ -91,7 +93,7 @@
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.Location = new System.Drawing.Point(525, 333);
+            this.btnCancel.Location = new System.Drawing.Point(444, 333);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 11;
@@ -110,16 +112,16 @@
             this.btnSettings.UseVisualStyleBackColor = true;
             this.btnSettings.Click += new System.EventHandler(this.BtnSettingsClick);
             // 
-            // btnClear
+            // btnClearAll
             // 
-            this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.Location = new System.Drawing.Point(604, 333);
-            this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(75, 23);
-            this.btnClear.TabIndex = 16;
-            this.btnClear.Text = "Clear";
-            this.btnClear.UseVisualStyleBackColor = true;
-            this.btnClear.Click += new System.EventHandler(this.BtnClearClick);
+            this.btnClearAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClearAll.Location = new System.Drawing.Point(604, 333);
+            this.btnClearAll.Name = "btnClearAll";
+            this.btnClearAll.Size = new System.Drawing.Size(75, 23);
+            this.btnClearAll.TabIndex = 16;
+            this.btnClearAll.Text = "Clear All";
+            this.btnClearAll.UseVisualStyleBackColor = true;
+            this.btnClearAll.Click += new System.EventHandler(this.BtnClearAllClick);
             // 
             // dgvFiles
             // 
@@ -174,6 +176,18 @@
             // 
             this.operatorBindingSource.DataSource = typeof(GW2EIParser.FormOperationController);
             // 
+            // btnClearFailed
+            // 
+            this.btnClearFailed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClearFailed.Location = new System.Drawing.Point(523, 333);
+            this.btnClearFailed.Name = "btnClearFailed";
+            this.btnClearFailed.Size = new System.Drawing.Size(75, 23);
+            this.btnClearFailed.TabIndex = 19;
+            this.btnClearFailed.Text = "Clear Failed";
+            this.TlpMainWindow.SetToolTip(this.btnClearFailed, "Removes from the list logs that could not be parsed");
+            this.btnClearFailed.UseVisualStyleBackColor = true;
+            this.btnClearFailed.Click += new System.EventHandler(this.BtnClearFailedClick);
+            // 
             // logFileWatcher
             // 
             this.logFileWatcher.EnableRaisingEvents = true;
@@ -199,7 +213,7 @@
             this.labWatchingDir.AutoEllipsis = true;
             this.labWatchingDir.Location = new System.Drawing.Point(16, 312);
             this.labWatchingDir.Name = "labWatchingDir";
-            this.labWatchingDir.Size = new System.Drawing.Size(504, 13);
+            this.labWatchingDir.Size = new System.Drawing.Size(412, 13);
             this.labWatchingDir.TabIndex = 18;
             this.labWatchingDir.Text = "Watching log dir";
             // 
@@ -209,10 +223,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Menu;
             this.ClientSize = new System.Drawing.Size(696, 375);
+            this.Controls.Add(this.btnClearFailed);
             this.Controls.Add(this.labWatchingDir);
             this.Controls.Add(this.dgvFiles);
             this.Controls.Add(this.VersionLabel);
-            this.Controls.Add(this.btnClear);
+            this.Controls.Add(this.btnClearAll);
             this.Controls.Add(this.btnSettings);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnParse);
@@ -237,7 +252,7 @@
         private System.Windows.Forms.Button btnPopulate;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnSettings;
-        private System.Windows.Forms.Button btnClear;
+        private System.Windows.Forms.Button btnClearAll;
         private System.Windows.Forms.DataGridView dgvFiles;
         private System.Windows.Forms.BindingSource operatorBindingSource;
         private System.Windows.Forms.DataGridViewTextBoxColumn locationDataGridViewTextBoxColumn;
@@ -246,6 +261,8 @@
         private System.Windows.Forms.Label VersionLabel;
         private System.IO.FileSystemWatcher logFileWatcher;
         private System.Windows.Forms.Label labWatchingDir;
+        private System.Windows.Forms.Button btnClearFailed;
+        private System.Windows.Forms.ToolTip TlpMainWindow;
     }
 }
 

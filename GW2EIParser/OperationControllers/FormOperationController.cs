@@ -14,6 +14,7 @@ namespace GW2EIParser
         Pending = 4,
         ClearOnCancel = 5,
         Queued = 6,
+        UnComplete = 7,
     }
     internal class FormOperationController : OperationController
     {
@@ -122,7 +123,7 @@ namespace GW2EIParser
 
         public void ToUnCompleteState()
         {
-            State = OperationState.Ready;
+            State = OperationState.UnComplete;
             ButtonText = "Parse";
             FinalizeStatus("Parsing Failure - ");
             InvalidateDataView();

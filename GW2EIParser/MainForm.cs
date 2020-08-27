@@ -153,7 +153,7 @@ namespace GW2EIParser
         /// <param name="operation"></param>
         private void QueueOrRunOperation(FormOperationController operation)
         {
-            btnClear.Enabled = false;
+            btnClearAll.Enabled = false;
             btnParse.Enabled = false;
             btnCancel.Enabled = true;
             if (Properties.Settings.Default.ParseMultipleLogs)
@@ -189,7 +189,7 @@ namespace GW2EIParser
                 if (!_anyRunning)
                 {
                     btnParse.Enabled = true;
-                    btnClear.Enabled = true;
+                    btnClearAll.Enabled = true;
                     btnCancel.Enabled = false;
                     _settingsForm.ConditionalSettingDisable(_anyRunning);
                 }
@@ -245,7 +245,7 @@ namespace GW2EIParser
                 }
             }
 
-            btnClear.Enabled = true;
+            btnClearAll.Enabled = true;
             btnParse.Enabled = true;
             btnCancel.Enabled = false;
         }
@@ -266,7 +266,7 @@ namespace GW2EIParser
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BtnClearClick(object sender, EventArgs e)
+        private void BtnClearAllClick(object sender, EventArgs e)
         {
             btnCancel.Enabled = false;
             btnParse.Enabled = false;
@@ -283,6 +283,18 @@ namespace GW2EIParser
                     operation.ToCancelAndClearState();
                 }
                 else
+                {
+                    operatorBindingSource.RemoveAt(i);
+                }
+            }
+        }
+
+        private void BtnClearFailedClick(object sender, EventArgs e)
+        {
+            for (int i = operatorBindingSource.Count - 1; i >= 0; i--)
+            {
+                var operation = operatorBindingSource[i] as FormOperationController;
+                if (!operation.IsBusy() && operation.State == OperationState.UnComplete)
                 {
                     operatorBindingSource.RemoveAt(i);
                 }
@@ -324,6 +336,7 @@ namespace GW2EIParser
                 switch (operation.State)
                 {
                     case OperationState.Ready:
+                    case OperationState.UnComplete:
                         QueueOrRunOperation(operation);
                         btnCancel.Enabled = true;
                         break;
