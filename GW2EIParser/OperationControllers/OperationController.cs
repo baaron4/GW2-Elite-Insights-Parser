@@ -15,30 +15,38 @@ namespace GW2EIParser
         /// <summary>
         /// Location of the file being parsed
         /// </summary>
-        public string Location { get; }
+        public string InputFile { get; }
         /// <summary>
-        /// Files/directories to open when open button is clicked
+        /// Location of the output
         /// </summary>
-        public HashSet<string> PathsToOpen { get; }
+        public string OutLocation { get; set; }
         /// <summary>
         /// Location of the generated files
         /// </summary>
         public List<string> GeneratedFiles { get; }
-
-        public string DPSReportLink { get; protected set; }
-
-        internal string Elapsed { get; set; } = "";
+        /// <summary>
+        /// Link to dps.report
+        /// </summary>
+        public string DPSReportLink { get; set; }
+        /// <summary>
+        /// Time elapsed parsing
+        /// </summary>
+        public string Elapsed { get; set; } = "";
 
         public OperationController(Version parserVersion, string location, string status) : base(parserVersion)
         {
             Status = status;
-            Location = location;
-            PathsToOpen = new HashSet<string>();
+            InputFile = location;
             GeneratedFiles = new List<string>();
         }
-        public void SetDPSReportLink(string link)
+
+        public override void Reset()
         {
-            DPSReportLink = link;
+            base.Reset();
+            DPSReportLink = null;
+            OutLocation = null;
+            Elapsed = "";
+            GeneratedFiles.Clear();
         }
 
         public void FinalizeStatus(string prefix)
@@ -49,7 +57,7 @@ namespace GW2EIParser
             {
                 Console.WriteLine("Generated" +$": {generatedFile}" + Environment.NewLine);
             }
-            Console.WriteLine(prefix + $"{Location}: {Status}" + Environment.NewLine);
+            Console.WriteLine(prefix + $"{InputFile}: {Status}" + Environment.NewLine);
         }
     }
 }

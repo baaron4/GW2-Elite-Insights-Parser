@@ -31,7 +31,7 @@ namespace GW2EIEvtcParser
             }
         }
 
-        public void ClearTraces()
+        public virtual void Reset()
         {
             StatusList.Clear();
         }

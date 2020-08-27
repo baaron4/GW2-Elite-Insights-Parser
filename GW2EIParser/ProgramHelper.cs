@@ -113,13 +113,12 @@ namespace GW2EIParser
             System.Globalization.CultureInfo before = Thread.CurrentThread.CurrentCulture;
             Thread.CurrentThread.CurrentCulture =
                     new System.Globalization.CultureInfo("en-US");
-            operation.ClearTraces();
-            operation.SetDPSReportLink(null);
+            operation.Reset();
             var sw = new Stopwatch();
             try
             {
                 sw.Start();
-                var fInfo = new FileInfo(operation.Location);
+                var fInfo = new FileInfo(operation.InputFile);
 
                 var parser = new EvtcParser(new EvtcParserSettings(Properties.Settings.Default.Anonymous, Properties.Settings.Default.SkipFailedTries, Properties.Settings.Default.ParsePhases, Properties.Settings.Default.ParseCombatReplay, Properties.Settings.Default.ComputeDamageModifiers));
 
@@ -142,7 +141,7 @@ namespace GW2EIParser
                 }
                 if (uploadresult[0].Contains("https"))
                 {
-                    operation.SetDPSReportLink(uploadresult[0]);
+                    operation.DPSReportLink = uploadresult[0];
                 }
                 //Creating File
                 GenerateFiles(log, operation, uploadresult, fInfo);
@@ -208,7 +207,7 @@ namespace GW2EIParser
         {
             if (Properties.Settings.Default.SaveOutTrace)
             {
-                var fInfo = new FileInfo(operation.Location);
+                var fInfo = new FileInfo(operation.InputFile);
 
                 string fName = fInfo.Name.Split('.')[0];
                 if (!fInfo.Exists)
@@ -223,7 +222,7 @@ namespace GW2EIParser
                 $"{fName}.log"
                 );
                 operation.GeneratedFiles.Add(outputFile);
-                operation.PathsToOpen.Add(saveDirectory.FullName);
+                operation.OutLocation = saveDirectory.FullName;
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs))
                 {
@@ -282,7 +281,7 @@ namespace GW2EIParser
                 $"{fName}.html"
                 );
                 operation.GeneratedFiles.Add(outputFile);
-                operation.PathsToOpen.Add(saveDirectory.FullName);
+                operation.OutLocation = saveDirectory.FullName;
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs))
                 {
@@ -299,7 +298,7 @@ namespace GW2EIParser
                     $"{fName}.csv"
                 );
                 operation.GeneratedFiles.Add(outputFile);
-                operation.PathsToOpen.Add(saveDirectory.FullName);
+                operation.OutLocation = saveDirectory.FullName;
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                 {
@@ -318,7 +317,7 @@ namespace GW2EIParser
                         saveDirectory.FullName,
                         $"{fName}.json"
                     );
-                    operation.PathsToOpen.Add(saveDirectory.FullName);
+                    operation.OutLocation = saveDirectory.FullName;
                     Stream str;
                     if (Properties.Settings.Default.CompressRaw)
                     {
@@ -350,7 +349,7 @@ namespace GW2EIParser
                         saveDirectory.FullName,
                         $"{fName}.xml"
                     );
-                    operation.PathsToOpen.Add(saveDirectory.FullName);
+                    operation.OutLocation = saveDirectory.FullName;
                     Stream str;
                     if (Properties.Settings.Default.CompressRaw)
                     {

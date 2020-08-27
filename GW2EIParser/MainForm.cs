@@ -377,12 +377,9 @@ namespace GW2EIParser
                         {
 
                             case OperationState.Complete:
-                                foreach (string path in operation.PathsToOpen)
+                                if (operation.OutLocation != null && Directory.Exists(operation.OutLocation))
                                 {
-                                    if (Directory.Exists(path))
-                                    {
-                                        System.Diagnostics.Process.Start(path);
-                                    }
+                                    System.Diagnostics.Process.Start(operation.OutLocation);
                                 }
                                 break;
                         }
@@ -401,9 +398,9 @@ namespace GW2EIParser
                 case 0:
                     if (e.Button == MouseButtons.Left)
                     {
-                        if (File.Exists(operation.Location))
+                        if (File.Exists(operation.InputFile))
                         {
-                            System.Diagnostics.Process.Start(new FileInfo(operation.Location).DirectoryName);
+                            System.Diagnostics.Process.Start(new FileInfo(operation.InputFile).DirectoryName);
                         }
                     }
                     break;
