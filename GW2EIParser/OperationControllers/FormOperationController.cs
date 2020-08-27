@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -115,8 +116,8 @@ namespace GW2EIParser
 
         public void ToCompleteState()
         {
-            State = OperationState.Ready;
-            ButtonText = "Parse";
+            State = OperationState.Complete;
+            ButtonText = "Open";
             FinalizeStatus("Parsing Successful - ");
             InvalidateDataView();
         }

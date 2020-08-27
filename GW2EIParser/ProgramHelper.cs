@@ -283,7 +283,6 @@ namespace GW2EIParser
                 );
                 operation.GeneratedFiles.Add(outputFile);
                 operation.PathsToOpen.Add(saveDirectory.FullName);
-                operation.PathsToOpen.Add(outputFile);
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs))
                 {
@@ -301,7 +300,6 @@ namespace GW2EIParser
                 );
                 operation.GeneratedFiles.Add(outputFile);
                 operation.PathsToOpen.Add(saveDirectory.FullName);
-                operation.PathsToOpen.Add(outputFile);
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                 {

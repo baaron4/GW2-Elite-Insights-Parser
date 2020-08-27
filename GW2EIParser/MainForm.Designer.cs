@@ -40,7 +40,7 @@
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnClearAll = new System.Windows.Forms.Button();
             this.dgvFiles = new System.Windows.Forms.DataGridView();
-            this.ButtonState = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.ParseButtonState = new System.Windows.Forms.DataGridViewButtonColumn();
             this.TlpMainWindow = new System.Windows.Forms.ToolTip(this.components);
             this.btnClearFailed = new System.Windows.Forms.Button();
             this.logFileWatcher = new System.IO.FileSystemWatcher();
@@ -135,9 +135,11 @@
             this.dgvFiles.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvFiles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvFiles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.locationDataGridViewTextBoxColumn,
-            this.statusDataGridViewTextBoxColumn,
-            this.ButtonState});
+                this.locationDataGridViewTextBoxColumn,
+                this.statusDataGridViewTextBoxColumn,
+                this.ParseButtonState
+                }
+            );
             this.dgvFiles.DataSource = this.operatorBindingSource;
             this.dgvFiles.GridColor = System.Drawing.SystemColors.Control;
             this.dgvFiles.Location = new System.Drawing.Point(16, 46);
@@ -146,17 +148,23 @@
             this.dgvFiles.ReadOnly = true;
             this.dgvFiles.Size = new System.Drawing.Size(663, 255);
             this.dgvFiles.TabIndex = 17;
-            this.dgvFiles.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvFilesCellContentClick);
-            this.dgvFiles.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvFilesCellContentDoubleClick);
+            this.dgvFiles.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DgvFilesCellContentClick);
+            this.dgvFiles.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DgvFilesCellContentDoubleClick);
             this.dgvFiles.DragDrop += new System.Windows.Forms.DragEventHandler(this.DgvFilesDragDrop);
             this.dgvFiles.DragEnter += new System.Windows.Forms.DragEventHandler(this.DgvFilesDragEnter);
             // 
-            // ButtonState
+            // ParseButtonState
             // 
-            this.ButtonState.DataPropertyName = "ButtonText";
-            this.ButtonState.HeaderText = "";
-            this.ButtonState.Name = "ButtonState";
-            this.ButtonState.ReadOnly = true;
+            this.ParseButtonState.DataPropertyName = "ButtonText";
+            this.ParseButtonState.HeaderText = "Action";
+            this.ParseButtonState.Name = "ParseButtonState";
+            this.ParseButtonState.ReadOnly = true;
+            this.ParseButtonState.ToolTipText =
+                "Left click open generated files" + 
+                System.Environment.NewLine +
+                "Right click to copy dps.report link to clipboard, if applicable" + 
+                System.Environment.NewLine + 
+                "Middle click to open output location";
             // 
             // btnClearFailed
             // 
@@ -206,6 +214,7 @@
             this.locationDataGridViewTextBoxColumn.HeaderText = "Location";
             this.locationDataGridViewTextBoxColumn.Name = "locationDataGridViewTextBoxColumn";
             this.locationDataGridViewTextBoxColumn.ReadOnly = true;
+            this.locationDataGridViewTextBoxColumn.ToolTipText = "Double left click to open input location";
             // 
             // statusDataGridViewTextBoxColumn
             // 
@@ -259,8 +268,7 @@
         private System.Windows.Forms.BindingSource operatorBindingSource;
         private System.Windows.Forms.DataGridViewTextBoxColumn locationDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn statusDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewButtonColumn ButtonState;
-        private System.Windows.Forms.DataGridViewComboBoxColumn ResultState;
+        private System.Windows.Forms.DataGridViewButtonColumn ParseButtonState;
         private System.Windows.Forms.Label VersionLabel;
         private System.IO.FileSystemWatcher logFileWatcher;
         private System.Windows.Forms.Label labWatchingDir;
