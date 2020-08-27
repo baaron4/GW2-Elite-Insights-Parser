@@ -328,7 +328,7 @@ namespace GW2EIParser
             switch (e.ColumnIndex)
             {
                 case 2:
-                    if (e.Button == MouseButtons.Right && operation.DPSReportLink != null)
+                    if (operation.State == OperationState.Complete && e.Button == MouseButtons.Right && operation.DPSReportLink != null)
                     {
                         Clipboard.SetText(operation.DPSReportLink);
                     }

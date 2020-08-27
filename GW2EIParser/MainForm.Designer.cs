@@ -210,8 +210,8 @@
             // locationDataGridViewTextBoxColumn
             // 
             this.locationDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.locationDataGridViewTextBoxColumn.DataPropertyName = "Location";
-            this.locationDataGridViewTextBoxColumn.HeaderText = "Location";
+            this.locationDataGridViewTextBoxColumn.DataPropertyName = "InputFile";
+            this.locationDataGridViewTextBoxColumn.HeaderText = "Input File";
             this.locationDataGridViewTextBoxColumn.Name = "locationDataGridViewTextBoxColumn";
             this.locationDataGridViewTextBoxColumn.ReadOnly = true;
             this.locationDataGridViewTextBoxColumn.ToolTipText = "Double left click to open input location";
