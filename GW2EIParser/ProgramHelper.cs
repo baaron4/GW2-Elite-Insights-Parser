@@ -281,6 +281,7 @@ namespace GW2EIParser
                 $"{fName}.html"
                 );
                 operation.GeneratedFiles.Add(outputFile);
+                operation.OpenableFiles.Add(outputFile);
                 operation.OutLocation = saveDirectory.FullName;
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs))
@@ -298,6 +299,7 @@ namespace GW2EIParser
                     $"{fName}.csv"
                 );
                 operation.GeneratedFiles.Add(outputFile);
+                operation.OpenableFiles.Add(outputFile);
                 operation.OutLocation = saveDirectory.FullName;
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))

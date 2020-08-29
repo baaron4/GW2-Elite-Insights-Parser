@@ -25,6 +25,10 @@ namespace GW2EIParser
         /// </summary>
         public List<string> GeneratedFiles { get; }
         /// <summary>
+        /// Location of the openable files
+        /// </summary>
+        public List<string> OpenableFiles { get; }
+        /// <summary>
         /// Link to dps.report
         /// </summary>
         public string DPSReportLink { get; set; }
@@ -38,6 +42,7 @@ namespace GW2EIParser
             Status = status;
             InputFile = location;
             GeneratedFiles = new List<string>();
+            OpenableFiles = new List<string>();
         }
 
         public override void Reset()
@@ -47,6 +52,7 @@ namespace GW2EIParser
             OutLocation = null;
             Elapsed = "";
             GeneratedFiles.Clear();
+            OpenableFiles.Clear();
         }
 
         public void FinalizeStatus(string prefix)

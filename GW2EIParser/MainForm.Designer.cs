@@ -160,11 +160,11 @@
             this.ParseButtonState.Name = "ParseButtonState";
             this.ParseButtonState.ReadOnly = true;
             this.ParseButtonState.ToolTipText =
-                "Left click open generated files" + 
+                "Left click open files and output location" + 
                 System.Environment.NewLine +
                 "Right click to copy dps.report link to clipboard, if applicable" + 
                 System.Environment.NewLine + 
-                "Middle click to open output location";
+                "Middle click to only open output location";
             // 
             // btnClearFailed
             // 
