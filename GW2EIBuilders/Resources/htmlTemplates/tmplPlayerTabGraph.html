@@ -76,7 +76,7 @@
                     color: this.player.colTotal,
                 },
                 yaxis: dpsY,
-                hoverinfo: 'name+y',
+                hoverinfo: 'name+y+x',
                 name: 'Total DPS'
             });
             if (!logData.targetless) {
@@ -89,7 +89,7 @@
                         color: this.player.colTarget,
                     },
                     yaxis: dpsY,
-                    hoverinfo: 'name+y',
+                    hoverinfo: 'name+y+x',
                     name: 'Target DPS'
                 });
                 this.data.push({
@@ -101,7 +101,7 @@
                         color: this.player.colCleave,
                     },
                     yaxis: dpsY,
-                    hoverinfo: 'name+y',
+                    hoverinfo: 'name+y+x',
                     name: 'Cleave DPS'
                 });
             }

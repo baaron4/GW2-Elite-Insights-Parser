@@ -52,7 +52,7 @@ namespace GW2EIEvtcParser.EIData
             }
             res.Add(new Segment(res.Last().End, max, lastValue));
             res.RemoveAll(x => x.Start == x.End);
-            return res;
+            return Segment.FuseSegments(res);
         }
 
 

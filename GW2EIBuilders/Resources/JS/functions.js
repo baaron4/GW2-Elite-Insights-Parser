@@ -402,7 +402,7 @@ function getActorGraphLayout(images, color) {
             traceorder: 'reversed'
         },
         hovermode: 'x',
-        hoverdistance: 1100,
+        hoverdistance: 150,
         yaxis2: {
             title: 'Buffs',
             domain: [0.11, 0.6],
@@ -544,7 +544,7 @@ function computeBuffData(buffData, data) {
                     color: boonItem.color,
                     shape: 'hv'
                 },
-                hoverinfo: 'text',
+                hoverinfo: 'text+x',
                 fill: 'tozeroy',
                 name: boon.name.substring(0, 20)
             };
