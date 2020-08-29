@@ -101,32 +101,30 @@ namespace GW2EIEvtcParser.EIData
             var fightDur = log.FightData.FightEnd;
             foreach (NPC minion in MinionList)
             {
-                (List<(long start, long end)> deads, List<(long start, long end)> downs, List<(long start, long end)> dcs) = minion.GetStatus(log);
                 var minionSegments = new List<Segment>();
-                var off = new List<(long start, long end)>();
-                off.AddRange(deads);
-                off.AddRange(downs);
-                off.AddRange(dcs);
-                off.Sort((x, y) => x.start.CompareTo(y.start));
-                if (off.Any())
+                long start = Math.Max(minion.FirstAware, 0);
+                // Find end
+                long end = minion.LastAware;
+                DownEvent down = log.CombatData.GetDownEvents(minion.AgentItem).LastOrDefault();
+                if (down != null)
                 {
-                    long presenceStart = 0;
-                    foreach ((long start, long end) in off)
-                    {
-                        minionSegments.Add(new Segment(presenceStart, start, 1));
-                        minionSegments.Add(new Segment(start, end, 0));
-                        presenceStart = end;
-                    }
-                    minionSegments.Add(new Segment(presenceStart, fightDur, 1));
-                } 
-                else
-                {
-                    long start = Math.Max(minion.FirstAware, 0);
-                    long end = Math.Min(minion.LastAware, fightDur);
-                    minionSegments.Add(new Segment(0, start, 0));
-                    minionSegments.Add(new Segment(start, end, 1));
-                    minionSegments.Add(new Segment(end, fightDur, 0));
+                    end = Math.Min(down.Time, end);
                 }
+                DeadEvent dead = log.CombatData.GetDeadEvents(minion.AgentItem).LastOrDefault();
+                if (dead != null)
+                {
+                    end = Math.Min(dead.Time, end);
+                }
+                DespawnEvent despawn = log.CombatData.GetDespawnEvents(minion.AgentItem).LastOrDefault();
+                if (despawn != null)
+                {
+                    end = Math.Min(despawn.Time, end);
+                }
+                //
+                end = Math.Min(end, fightDur);
+                minionSegments.Add(new Segment(0, start, 0));
+                minionSegments.Add(new Segment(start, end, 1));
+                minionSegments.Add(new Segment(end, fightDur, 0));
                 minionsSegments.Add(minionSegments);
             }
             return minionsSegments;
