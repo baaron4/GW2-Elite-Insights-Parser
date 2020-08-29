@@ -35,6 +35,7 @@ namespace GW2EIParser.Setting
 
         private void SetUIEnable()
         {
+            ChkUploadRaidar.Enabled = false;
             PanelHtml.Enabled = Properties.Settings.Default.SaveOutHTML;
             PanelJson.Enabled = Properties.Settings.Default.SaveOutJSON;
             PanelXML.Enabled = Properties.Settings.Default.SaveOutXML;
