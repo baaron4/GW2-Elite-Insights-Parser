@@ -331,6 +331,7 @@ namespace GW2EIParser
                     if (operation.State == OperationState.Complete && e.Button == MouseButtons.Right && operation.DPSReportLink != null)
                     {
                         Clipboard.SetText(operation.DPSReportLink);
+                        MessageBox.Show("dps.report link copied to clipbloard");
                     }
                     else if (e.Button == MouseButtons.Left)
                     {
