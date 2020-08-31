@@ -13,8 +13,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(12573,12573,EIData.InstantCastFinder.DefaultICD), // Hunter's Shot
-            new DamageCastFinder(12507,12507,EIData.InstantCastFinder.DefaultICD), // Crippling Shot
+            //new DamageCastFinder(12573,12573,EIData.InstantCastFinder.DefaultICD), // Hunter's Shot
+            //new DamageCastFinder(12507,12507,EIData.InstantCastFinder.DefaultICD), // Crippling Shot
             new BuffGiveCastFinder(33902,12633,EIData.InstantCastFinder.DefaultICD), // "Sic 'Em!"
             new BuffGiveCastFinder(56923,12633,EIData.InstantCastFinder.DefaultICD), // "Sic 'Em!" PvP
             new BuffGainCastFinder(12500,12543,EIData.InstantCastFinder.DefaultICD, (evt, combatData) => Math.Abs(evt.AppliedDuration - 6000) < ParserHelper.ServerDelayConstant), // Signet of Stone

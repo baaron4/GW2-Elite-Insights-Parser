@@ -10,7 +10,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffGainCastFinder(31600, 33162, EIData.InstantCastFinder.DefaultICD), // bound
-            new DamageCastFinder(30520, 30520, EIData.InstantCastFinder.DefaultICD), // Debilitating Arc
+            //new DamageCastFinder(30520, 30520, EIData.InstantCastFinder.DefaultICD), // Debilitating Arc
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
