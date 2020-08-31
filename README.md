@@ -128,6 +128,8 @@ Note it may take some time for each file to parse and they will not be ready to 
 
 -__UploadToDPSReports__: if true, the log will be uploaded to dps.reports using EI as generator.
 
+-__DPSReportUserToken__: dps.report user token.
+
 -__UploadToDPSReportsRH__: if true, the log will be uploaded to dps.reports using RH as generator.
 
 -__UploadToRaidar__: if true, the log will be uploaded to raidar (not used).
