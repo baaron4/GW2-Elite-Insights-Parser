@@ -35,17 +35,14 @@ var NAVTREE =
         [ "All", "functions.html", "functions_dup" ],
         [ "Properties", "functions_prop.html", "functions_prop" ]
       ] ]
-    ] ],
-    [ "Files", "files.html", [
-      [ "File List", "files.html", "files_dup" ]
     ] ]
   ] ]
 ];
 
 var NAVTREEINDEX =
 [
-"_json_actor_8cs_source.html",
-"class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats_all.html#aa87298682564b69302da2818359512d0"
+"annotated.html",
+"class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats_all.html#a8c5451ca77df768c8b319e9a2791edc3"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

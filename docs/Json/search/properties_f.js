@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['recordedby',['RecordedBy',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a8eddc9a53d1a90f9a4406a4398c18743',1,'GW2EIParser::Builders::JsonModels::JsonLog']]],
-  ['resurrects',['Resurrects',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_player_support.html#a7ba02199a205739061cd30117f07ee53',1,'GW2EIParser::Builders::JsonModels::JsonStatistics::JsonPlayerSupport']]],
-  ['resurrecttime',['ResurrectTime',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_player_support.html#ab17de9719564e259961372dfab757733',1,'GW2EIParser::Builders::JsonModels::JsonStatistics::JsonPlayerSupport']]],
-  ['rotation',['Rotation',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#aea9d46723a7c661f76fe2fa5bf183784',1,'GW2EIParser.Builders.JsonModels.JsonActor.Rotation()'],['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_minions.html#a1bc744376cfa5e3b7552104ae46b2abf',1,'GW2EIParser.Builders.JsonModels.JsonMinions.Rotation()']]]
+  ['recordedby',['RecordedBy',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_log.html#a3be589d306202465c041aa8850e980f1',1,'GW2EIBuilders::JsonModels::JsonLog']]],
+  ['resurrects',['Resurrects',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_player_support.html#a134b8a0c3d6a783acd393a8be78da768',1,'GW2EIBuilders::JsonModels::JsonStatistics::JsonPlayerSupport']]],
+  ['resurrecttime',['ResurrectTime',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_player_support.html#ab5ee8432656967e802f11514ad61974d',1,'GW2EIBuilders::JsonModels::JsonStatistics::JsonPlayerSupport']]],
+  ['rotation',['Rotation',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a0e1f728e576b0ab2e4de4a3a166d4e13',1,'GW2EIBuilders.JsonModels.JsonActor.Rotation()'],['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_minions.html#ab7c18beefe5222d9c7461bf575cdec72',1,'GW2EIBuilders.JsonModels.JsonMinions.Rotation()']]]
 ];

@@ -1,11 +1,11 @@
 var searchData=
 [
-  ['personalbuffs',['PersonalBuffs',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a065cece4f31d39c96b49e530a0bee236',1,'GW2EIParser::Builders::JsonModels::JsonLog']]],
-  ['phases',['Phases',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a0485661b83a9cd69bf44154d548b7dd8',1,'GW2EIParser::Builders::JsonModels::JsonLog']]],
-  ['players',['Players',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#ad56ecfd603c8f18e303a681f27bc9f6d',1,'GW2EIParser::Builders::JsonModels::JsonLog']]],
-  ['powerdamage',['PowerDamage',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_d_p_s.html#a69681cd86f19dc80dca0c11abab6f9ee',1,'GW2EIParser::Builders::JsonModels::JsonStatistics::JsonDPS']]],
-  ['powerdps',['PowerDps',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_d_p_s.html#aae4aaaed907a38c79bae6865ae7d0880',1,'GW2EIParser::Builders::JsonModels::JsonStatistics::JsonDPS']]],
-  ['presence',['Presence',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_buffs_uptime_1_1_json_buffs_uptime_data.html#aad1a5e9cdaa0a94a39a896273b4db0ad',1,'GW2EIParser::Builders::JsonModels::JsonBuffsUptime::JsonBuffsUptimeData']]],
-  ['presentfractalinstabilities',['PresentFractalInstabilities',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a057f45e0ebe09f1a04dbe094fb0ab0a9',1,'GW2EIParser::Builders::JsonModels::JsonLog']]],
-  ['profession',['Profession',['../class_g_w2_e_i_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a29a87654fd5ef9b46c236f49c9b33576',1,'GW2EIParser::Builders::JsonModels::JsonPlayer']]]
+  ['personalbuffs',['PersonalBuffs',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_log.html#a0fd8d34e368b57f51eaa39d2726d3bad',1,'GW2EIBuilders::JsonModels::JsonLog']]],
+  ['phases',['Phases',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_log.html#a0555e58001a2dafe2cf3976c68a7a607',1,'GW2EIBuilders::JsonModels::JsonLog']]],
+  ['players',['Players',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_log.html#adb78d85dbbae9891ae5e23ac578a1b3a',1,'GW2EIBuilders::JsonModels::JsonLog']]],
+  ['powerdamage',['PowerDamage',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_d_p_s.html#a8d5ded43cefd484b98475534cf8e7e9e',1,'GW2EIBuilders::JsonModels::JsonStatistics::JsonDPS']]],
+  ['powerdps',['PowerDps',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_d_p_s.html#a92680a0605a138c373e9a51d680dd183',1,'GW2EIBuilders::JsonModels::JsonStatistics::JsonDPS']]],
+  ['presence',['Presence',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_buffs_uptime_1_1_json_buffs_uptime_data.html#a067b8611e2ad57d2693b4d2b09164411',1,'GW2EIBuilders::JsonModels::JsonBuffsUptime::JsonBuffsUptimeData']]],
+  ['presentfractalinstabilities',['PresentFractalInstabilities',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_log.html#a58de0bc9304c23f96935ba1e40ec4694',1,'GW2EIBuilders::JsonModels::JsonLog']]],
+  ['profession',['Profession',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a6ec5c5d23da523e98390ffa96b0eee3c',1,'GW2EIBuilders::JsonModels::JsonPlayer']]]
 ];
