@@ -232,7 +232,23 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     long start = Math.Max(active.Time - 2000, 0);
                     BreakbarStateEvent notActive = breakbarNotActiveEvents.FirstOrDefault(x => x.Time >= active.Time);
-                    long end = Math.Min(notActive != null ? notActive.Time : log.FightData.FightEnd, log.FightData.FightEnd);
+                    long end;
+                    if (notActive == null)
+                    {
+                        DeadEvent deadEvent = log.CombatData.GetDeadEvents(target.AgentItem).LastOrDefault();
+                        if (deadEvent == null)
+                        {
+                            end = Math.Min(target.LastAware, log.FightData.FightEnd);
+                        } 
+                        else
+                        {
+                            end = Math.Min(deadEvent.Time, log.FightData.FightEnd);
+                        }
+                    } 
+                    else
+                    {
+                        end = Math.Min(notActive.Time, log.FightData.FightEnd);
+                    }
                     var phase = new PhaseData(start, end, target.Character + " Breakbar " + ++i)
                     {
                         BreakbarPhase = true,
