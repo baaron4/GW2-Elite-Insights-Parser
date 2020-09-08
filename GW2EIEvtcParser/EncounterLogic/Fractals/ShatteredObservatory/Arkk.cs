@@ -5,7 +5,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Arkk : ShatteredFractal
+    internal class Arkk : ShatteredObservatory
     {
         public Arkk(int triggerID) : base(triggerID)
         {

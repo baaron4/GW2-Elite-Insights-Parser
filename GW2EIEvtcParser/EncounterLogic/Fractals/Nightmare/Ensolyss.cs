@@ -4,7 +4,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Ensolyss : NightmareFractal
+    internal class Ensolyss : Nightmare
     {
         public Ensolyss(int triggerID) : base(triggerID)
         {

@@ -5,7 +5,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class MAMA : NightmareFractal
+    internal class MAMA : Nightmare
     {
         public MAMA(int triggerID) : base(triggerID)
         {

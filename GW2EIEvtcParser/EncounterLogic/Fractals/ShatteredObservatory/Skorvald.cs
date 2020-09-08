@@ -5,7 +5,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Skorvald : ShatteredFractal
+    internal class Skorvald : ShatteredObservatory
     {
         public Skorvald(int triggerID) : base(triggerID)
         {

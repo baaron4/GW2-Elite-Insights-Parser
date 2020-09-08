@@ -5,9 +5,9 @@ using System.Linq;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal abstract class ShatteredFractal : FractalLogic
+    internal abstract class ShatteredObservatory : FractalLogic
     {
-        public ShatteredFractal(int triggerID) : base(triggerID)
+        public ShatteredObservatory(int triggerID) : base(triggerID)
         {
 
         }

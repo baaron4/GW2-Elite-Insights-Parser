@@ -6,9 +6,9 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal abstract class NightmareFractal : FractalLogic
+    internal abstract class Nightmare : FractalLogic
     {
-        public NightmareFractal(int triggerID) : base(triggerID)
+        public Nightmare(int triggerID) : base(triggerID)
         {
 
         }

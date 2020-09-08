@@ -4,7 +4,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Siax : NightmareFractal
+    internal class Siax : Nightmare
     {
         public Siax(int triggerID) : base(triggerID)
         {

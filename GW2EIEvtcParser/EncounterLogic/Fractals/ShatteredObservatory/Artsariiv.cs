@@ -4,7 +4,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Artsariiv : ShatteredFractal
+    internal class Artsariiv : ShatteredObservatory
     {
         public Artsariiv(int triggerID) : base(triggerID)
         {
