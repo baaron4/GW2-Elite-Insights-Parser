@@ -170,6 +170,7 @@ namespace GW2EIDPSReport
                         string stringContents = stringContentsTask.Result;
                         T item = JsonConvert.DeserializeObject<T>(stringContents, new JsonSerializerSettings
                         {
+                            NullValueHandling = NullValueHandling.Ignore,
                             ContractResolver = DefaultJsonContractResolver
                         });
                         traces.Add(requestName + " tentative successful");

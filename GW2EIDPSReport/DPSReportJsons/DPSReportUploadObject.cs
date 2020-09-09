@@ -18,11 +18,15 @@ namespace GW2EIDPSReport.DPSReportJsons
         [JsonProperty]
         public string Generator { get; internal set; }
         [JsonProperty]
+        public int GeneratorId { get; internal set; }
+        [JsonProperty]
+        public int GeneratorVersion { get; internal set; }
+        [JsonProperty]
         public string Language { get; internal set; }
         [JsonProperty]
-        public string UserToken { get; internal set; }
+        public int LanguageId { get; internal set; }
         [JsonProperty]
-        public string TempApiId { get; internal set; }
+        public string UserToken { get; internal set; }
         [JsonProperty]
         public string Error { get; internal set; }
         [JsonProperty]
@@ -31,5 +35,7 @@ namespace GW2EIDPSReport.DPSReportJsons
         public DPSReportUploadEvtcObject Evtc { get; internal set; }
         [JsonProperty]
         public Dictionary<string, DPSReportUploadPlayerObject> Players { get; internal set; }
+        [JsonProperty]
+        public string TempApiId { get; internal set; }
     }
 }

@@ -56,17 +56,17 @@ namespace GW2EIEvtcParser.ParsedData
             LogStartEvent logStr = combatData.GetLogStartEvent();
             if (logStr != null)
             {
-                SetLogStart(logStr.LocalUnixTimeStamp);
-                SetLogStartStd(logStr.LocalUnixTimeStamp);
-                unixStart = logStr.LocalUnixTimeStamp;
+                SetLogStart(logStr.ServerUnixTimeStamp);
+                SetLogStartStd(logStr.ServerUnixTimeStamp);
+                unixStart = logStr.ServerUnixTimeStamp;
             }
             //
             LogEndEvent logEnd = combatData.GetLogEndEvent();
             if (logEnd != null)
             {
-                SetLogEnd(logEnd.LocalUnixTimeStamp);
-                SetLogEndStd(logEnd.LocalUnixTimeStamp);
-                unixEnd = logEnd.LocalUnixTimeStamp;
+                SetLogEnd(logEnd.ServerUnixTimeStamp);
+                SetLogEndStd(logEnd.ServerUnixTimeStamp);
+                unixEnd = logEnd.ServerUnixTimeStamp;
             }
             // log end event is missing, log start is present
             if (LogEnd == DefaultTimeValue && LogStart != DefaultTimeValue)
