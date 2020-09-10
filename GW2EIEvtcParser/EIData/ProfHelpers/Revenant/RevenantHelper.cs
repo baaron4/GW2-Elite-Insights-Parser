@@ -17,6 +17,12 @@ namespace GW2EIEvtcParser.EIData
             new BuffLossCastFinder(28382, 27581, 500), // Relinquish Power
             new BuffGainCastFinder(26557, 27273, EIData.InstantCastFinder.DefaultICD), // Vengeful Hammers
             new BuffLossCastFinder(26956, 27273, EIData.InstantCastFinder.DefaultICD), // Release Hammers
+            new BuffGainCastFinder(27975, 26596, EIData.InstantCastFinder.DefaultICD), // Rite of the Great Dwarf
+            new BuffGainCastFinder(27975, 33330, EIData.InstantCastFinder.DefaultICD), // Rite of the Great Dwarf (traited)
+            new DamageCastFinder(59591, 59591, EIData.InstantCastFinder.DefaultICD, 102321, ulong.MaxValue), // Invoking Torment
+            new DamageCastFinder(46854, 46854, EIData.InstantCastFinder.DefaultICD), // Call of the Assassin
+            new DamageCastFinder(46843, 46843, EIData.InstantCastFinder.DefaultICD), // Call of the Dwarf
+            new DamageCastFinder(46856, 46856, EIData.InstantCastFinder.DefaultICD), // Call of the Demon
         };
 
 
@@ -38,6 +44,7 @@ namespace GW2EIEvtcParser.EIData
         {         
                 new Buff("Vengeful Hammers", 27273, ParserHelper.Source.Revenant, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/c/c8/Vengeful_Hammers.png"),
                 new Buff("Rite of the Great Dwarf", 26596, ParserHelper.Source.Revenant, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/6/69/Rite_of_the_Great_Dwarf.png"),
+                new Buff("Rite of the Great Dwarf (Traited)", 33330, ParserHelper.Source.Revenant, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/6/69/Rite_of_the_Great_Dwarf.png"),
                 new Buff("Embrace the Darkness", 28001, ParserHelper.Source.Revenant, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/51/Embrace_the_Darkness.png"),
                 new Buff("Enchanted Daggers", 28557, ParserHelper.Source.Revenant, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/fa/Enchanted_Daggers.png"),
                 new Buff("Phase Traversal", 28395, ParserHelper.Source.Revenant, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/f2/Phase_Traversal.png"),
