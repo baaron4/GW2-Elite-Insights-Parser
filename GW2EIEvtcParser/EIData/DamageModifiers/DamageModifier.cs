@@ -33,11 +33,12 @@ namespace GW2EIEvtcParser.EIData
         protected DamageLogChecker DLChecker { get; }
 
 
-        internal static readonly GainComputer ByPresence = new GainComputerByPresence();
-        internal static readonly GainComputer ByPresenceNonMulti = new GainComputerNonMultiplier();
-        internal static readonly GainComputer BySkill = new GainComputerBySkill();
-        internal static readonly GainComputer ByStack = new GainComputerByStack();
-        internal static readonly GainComputer ByAbsence = new GainComputerByAbsence();
+        internal static readonly GainComputerByPresence ByPresence = new GainComputerByPresence();
+        internal static readonly GainComputerByMultiPresence ByMultiPresence = new GainComputerByMultiPresence();
+        internal static readonly GainComputerNonMultiplier ByPresenceNonMulti = new GainComputerNonMultiplier();
+        internal static readonly GainComputerBySkill BySkill = new GainComputerBySkill();
+        internal static readonly GainComputerByStack ByStack = new GainComputerByStack();
+        internal static readonly GainComputerByAbsence ByAbsence = new GainComputerByAbsence();
 
         internal DamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ParserHelper.Source src, string icon, GainComputer gainComputer, DamageLogChecker dlChecker, ulong minBuild, ulong maxBuild, DamageModifierMode mode)
         {

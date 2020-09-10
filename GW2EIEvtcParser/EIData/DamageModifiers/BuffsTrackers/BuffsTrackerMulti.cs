@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.EIData
             int stack = 0;
             foreach (long key in bgms.Keys.Intersect(_ids))
             {
-                stack = Math.Max(bgms[key].GetStackCount(time), stack);
+                stack += bgms[key].GetStackCount(time) > 0 ? 1 : 0;
             }
             return stack;
         }
