@@ -11,6 +11,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffGainCastFinder(41858, 44272, EIData.InstantCastFinder.DefaultICD), // Legendary Renegade Stance
+            new DamageCastFinder(46849, 46849, EIData.InstantCastFinder.DefaultICD), // Call of the Renegade
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
