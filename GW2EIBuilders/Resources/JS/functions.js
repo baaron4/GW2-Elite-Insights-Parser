@@ -273,7 +273,7 @@ function computePhaseMarkups(shapes, annotations, phase, linecolor) {
 }
 
 
-function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, cacheID, lastTime) {
+function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, cacheID, times) {
     if (player.dpsGraphCache.has(cacheID)) {
         return player.dpsGraphCache.get(cacheID);
     }
@@ -290,18 +290,16 @@ function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, c
         cleave: 0,
         target: 0
     };
-    var end = damageData.total.length;
-    if (lastTime > 0) {
-        end--;
-    }
+    var end = times.length;
     var j, limID = 0, targetid, k;
     for (j = 1; j < end; j++) {
+        var time = times[j];
         if (lim > 0) {
-            limID = Math.max(j - lim, 0);
+            limID = Math.max(Math.round(time - lim), 0);
         } else if (phasebreaks && phasebreaks[j - 1]) {
             limID = j;
         }
-        var div = Math.max(j - limID, 1);
+        var div = Math.max(time - times[limID], 1);
         totalDamage = damageData.total[j] - damageData.total[limID];
         targetDamage = 0;
         for (k = 0; k < activetargets.length; k++) {
@@ -311,29 +309,6 @@ function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, c
         totalDPS[j] = Math.round(totalDamage / div);
         targetDPS[j] = Math.round(targetDamage / div);
         cleaveDPS[j] = Math.round((totalDamage - targetDamage) / div);
-        totalTotalDamage[j] = totalDamage;
-        totalTargetDamage[j] = targetDamage;
-        totalCleaveDamage[j] = (totalDamage - targetDamage);
-        maxDPS.total = Math.max(maxDPS.total, totalDPS[j]);
-        maxDPS.target = Math.max(maxDPS.target, targetDPS[j]);
-        maxDPS.cleave = Math.max(maxDPS.cleave, cleaveDPS[j]);
-    }
-    // last point management
-    if (lastTime > 0) {
-        if (lim > 0) {
-            limID = Math.round(Math.max(lastTime - lim, 0));
-        } else if (phasebreaks && phasebreaks[j - 1]) {
-            limID = j;
-        }
-        totalDamage = damageData.total[j] - damageData.total[limID];
-        targetDamage = 0;
-        for (k = 0; k < activetargets.length; k++) {
-            targetid = activetargets[k];
-            targetDamage += damageData.targets[targetid][j] - damageData.targets[targetid][limID];
-        }
-        totalDPS[j] = Math.round(totalDamage / (lastTime - limID));
-        targetDPS[j] = Math.round(targetDamage / (lastTime - limID));
-        cleaveDPS[j] = Math.round((totalDamage - targetDamage) / (lastTime - limID));
         totalTotalDamage[j] = totalDamage;
         totalTargetDamage[j] = targetDamage;
         totalCleaveDamage[j] = (totalDamage - targetDamage);
