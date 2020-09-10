@@ -324,6 +324,10 @@ namespace GW2EIParser
 
         private void DgvFilesCellContentClick(object sender, DataGridViewCellMouseEventArgs e)
         {
+            if (e.RowIndex < 0)
+            {
+                return;
+            }
             var operation = (FormOperationController)operatorBindingSource[e.RowIndex];
             switch (e.ColumnIndex)
             {
@@ -397,6 +401,10 @@ namespace GW2EIParser
 
         private void DgvFilesCellContentDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
+            if (e.RowIndex < 0)
+            {
+                return;
+            }
             var operation = (FormOperationController)operatorBindingSource[e.RowIndex];
             switch (e.ColumnIndex)
             {
