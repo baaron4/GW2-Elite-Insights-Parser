@@ -1,0 +1,34 @@
+<template>
+    <div>
+        <ul class="nav nav-pills d-flex flex-row justify-content-center mt-1 mb-1 scale85">
+            <li class="nav-item">
+                <a class="nav-link" @click="data.dpsmode = 0" :class="{active: data.dpsmode === 0}">Full</a>
+            </li>                         
+            <li v-if="phaseduration > 2" class="nav-item">
+                <a class="nav-link" @click="data.dpsmode = 2" :class="{active: data.dpsmode === 2}">2s</a>
+            </li>                
+            <li v-if="phaseduration > 4" class="nav-item">
+                <a class="nav-link" @click="data.dpsmode = 4" :class="{active: data.dpsmode === 4}">4s</a>
+            </li>
+            <li v-if="phaseduration > 10" class="nav-item">
+                <a class="nav-link" @click="data.dpsmode = 10" :class="{active: data.dpsmode === 10}">10s</a>
+            </li>    
+            <li v-if="phaseduration > 20" class="nav-item">
+                <a class="nav-link" @click="data.dpsmode = 20" :class="{active: data.dpsmode === 20}">20s</a>
+            </li>
+            <li v-if="phaseduration > 30" class="nav-item">
+                <a class="nav-link" @click="data.dpsmode = 30" :class="{active: data.dpsmode === 30}">30s</a>
+            </li>
+            <li v-if="phasehassubphases" class="nav-item">
+                <a class="nav-link" @click="data.dpsmode = -1" :class="{active: data.dpsmode === -1}">Phase</a>
+            </li>
+        </ul>
+    </div>
+</template>
+
+<script>
+    Vue.component("dps-graph-mode-selector-component", {
+        props: ['data', 'phaseduration', 'phasehassubphases'],
+        template: `${template}`,
+    });
+</script>

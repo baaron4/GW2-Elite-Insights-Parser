@@ -228,12 +228,11 @@ namespace GW2EIBuilders.Properties {
         ///    mechanicTable: 4,
         ///    boonTable: 5,
         ///    offensiveBuffTable: 6,
-        ///    defensiveBuffTable: 7,
-        ///    personalBuffTable: 8,
-        ///    playerTab: 9,
-        ///    targetTab: 10,
-        ///    dpsGraph: 11,
-        ///    dm [rest of string was truncated]&quot;;.
+        ///    supportBuffTable: 7,
+        ///    defensiveBuffTable: 8,
+        ///    personalBuffTable: 9,
+        ///    playerTab: 10,
+        ///    targetTab: 11, [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string global {
             get {
@@ -818,11 +817,8 @@ namespace GW2EIBuilders.Properties {
         ///                    &lt;th&gt;&lt;/th&gt;
         ///                    &lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
         ///                    &lt;th&gt;Account&lt;/th&gt;
-        ///                    &lt;th&gt;Dmg Taken&lt;/th&gt;
-        ///                    &lt;th&gt;Dmg Barrier&lt;/th&gt;
-        ///                    &lt;th&gt;Blocked&lt;/th&gt;
-        ///                    &lt;th&gt;Invulned&lt;/th&gt;
-        ///                    &lt; [rest of string was truncated]&quot;;.
+        ///                    &lt;th data-original-title=&quot;Damage taken&quot; &gt;
+        ///                        &lt;img src=&quot;https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png&quot; alt=&quot;Damag [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplDefenseTable {
             get {
@@ -832,19 +828,40 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div&gt;
-        ///        &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mt-1 mb-1 scale85&quot;&gt;
-        ///            &lt;li class=&quot;nav-item&quot;&gt;
-        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;dpsmode = 0&quot; :class=&quot;{active: dpsmode === 0}&quot;&gt;Full&lt;/a&gt;
-        ///            &lt;/li&gt;
-        ///            &lt;li v-if=&quot;phase.end - phase.start &gt; 10&quot; class=&quot;nav-item&quot;&gt;
-        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;dpsmode = 1&quot; :class=&quot;{active: dpsmode === 1}&quot;&gt;10s&lt;/a&gt;
-        ///            &lt;/li&gt;
-        ///            &lt;li v-if=&quot;phase.end - phase.start &gt; 30&quot; c [rest of string was truncated]&quot;;.
+        ///    &lt;div&gt;      
+        ///        &lt;dps-graph-mode-selector-component :dpsmode=&quot;dpsmode&quot; :graphmode=&quot;graphmode&quot;&gt;&lt;/graph-component&gt;
+        ///        &lt;h3 class=&quot;text-center mt-1 mb-1&quot;&gt;{{graphname}}&lt;/h3&gt;
+        ///        &lt;graph-component :id=&quot;graphid&quot; :layout=&quot;layout&quot; :data=&quot;computeData&quot;&gt;&lt;/graph-component&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/template&gt;
+        ///
+        ///&lt;script&gt;
+        ///    Vue.component(&quot;dps-graph-component&quot;, {
+        ///        props: [&quot;activetargets&quot;, &apos;mode&apos;, &apos;phaseindex&apos;, &apos;playerindex&apos;, &apos;light&apos;],
+        ///        template: `${template}`,       
+        ///        mixins: [ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplDPSGraph {
             get {
                 return ResourceManager.GetString("tmplDPSGraph", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mt-1 mb-1 scale85&quot;&gt;
+        ///            &lt;li class=&quot;nav-item&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;dpsmode = 0&quot; :class=&quot;{active: dpsmode === 0}&quot;&gt;Full&lt;/a&gt;
+        ///            &lt;/li&gt;                         
+        ///            &lt;li v-if=&quot;phase.end - phase.start &gt; 2&quot; class=&quot;nav-item&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;dpsmode = 2&quot; :class=&quot;{active: dpsmode === 2}&quot;&gt;2s&lt;/a&gt;
+        ///            &lt;/li&gt;                
+        ///            &lt;l [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplDPSGraphModeSelector {
+            get {
+                return ResourceManager.GetString("tmplDPSGraphModeSelector", resourceCulture);
             }
         }
         
@@ -1090,15 +1107,17 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div&gt;
-        ///        &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mt-1 mb-1 scale85&quot;&gt;
-        ///            &lt;li class=&quot;nav-item&quot;&gt;
-        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;dpsmode = 0&quot; :class=&quot;{active: dpsmode === 0}&quot;&gt;Full&lt;/a&gt;
-        ///            &lt;/li&gt;
-        ///            &lt;li v-if=&quot;phase.end - phase.start &gt; 10&quot; class=&quot;nav-item&quot;&gt;
-        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;dpsmode = 1&quot; :class=&quot;{active: dpsmode === 1}&quot;&gt;10s&lt;/a&gt;
-        ///            &lt;/li&gt;
-        ///            &lt;li v-if=&quot;phase.end - phase.start &gt; 30&quot; c [rest of string was truncated]&quot;;.
+        ///    &lt;div&gt;     
+        ///        &lt;dps-graph-mode-selector-component :dpsmode=&quot;dpsmode&quot; :graphmode=&quot;graphmode&quot;&gt;&lt;/graph-component&gt;
+        ///        &lt;h3 class=&quot;text-center mt-1 mb-1&quot;&gt;{{graphname}}&lt;/h3&gt;
+        ///        &lt;graph-component :id=&quot;graphid&quot; :layout=&quot;layout&quot; :data=&quot;computeData&quot;&gt;&lt;/graph-component&gt;
+        ///        &lt;rotation-legend-component&gt;&lt;/rotation-legend-component&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/template&gt;
+        ///
+        ///&lt;script&gt;
+        ///    Vue.component(&quot;player-graph-tab-component&quot;, {
+        ///        props: [&quot;playerindex&quot;, &quot;phaseindex&quot;, &quot;activetargets&quot;, &quot;light [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayerTabGraph {
             get {
@@ -1154,10 +1173,8 @@ namespace GW2EIBuilders.Properties {
         ///                    &lt;th&gt;&lt;/th&gt;
         ///                    &lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
         ///                    &lt;th&gt;Account&lt;/th&gt;
-        ///                    &lt;th&gt;Condi Cleanse on Others&lt;/th&gt;
-        ///                    &lt;th&gt;Condi Cleanse on Self&lt;/th&gt;
-        ///                    &lt;th&gt;Boon Strips&lt;/th&gt;
-        ///                    &lt;th&gt;Resurrec [rest of string was truncated]&quot;;.
+        ///                    &lt;th data-original-title=&quot;Condition Cleanse on Others&quot; &gt;
+        ///                        &lt;img src=&quot;https://wiki.guildwars2.com/images/1/12/Healing_Spring.png&quot; alt=&quot;Cond [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplSupportTable {
             get {
@@ -1235,15 +1252,18 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div&gt;
-        ///        &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mt-1 mb-1 scale85&quot;&gt;
-        ///            &lt;li class=&quot;nav-item&quot;&gt;
-        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;dpsmode = 0&quot; :class=&quot;{active: dpsmode === 0}&quot;&gt;Full&lt;/a&gt;
-        ///            &lt;/li&gt;
-        ///            &lt;li v-if=&quot;phase.end - phase.start &gt; 10&quot; class=&quot;nav-item&quot;&gt;
-        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;dpsmode = 1&quot; :class=&quot;{active: dpsmode === 1}&quot;&gt;10s&lt;/a&gt;
-        ///            &lt;/li&gt;
-        ///            &lt;li v-if=&quot;phase.end - phase.start &gt; 30&quot; c [rest of string was truncated]&quot;;.
+        ///    &lt;div&gt;     
+        ///        &lt;dps-graph-mode-selector-component :dpsmode=&quot;dpsmode&quot; :graphmode=&quot;graphmode&quot;&gt;&lt;/graph-component&gt;
+        ///        &lt;h3 class=&quot;text-center mt-1 mb-1&quot;&gt;{{graphname}}&lt;/h3&gt;
+        ///        &lt;graph-component :id=&quot;graphid&quot; :layout=&quot;layout&quot; :data=&quot;computeData&quot;&gt;&lt;/graph-component&gt;
+        ///        &lt;rotation-legend-component&gt;&lt;/rotation-legend-component&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/template&gt;
+        ///
+        ///&lt;script&gt;
+        ///
+        ///    function computeTargetDPS(target, damageData, lim, phasebreaks, cacheID, times) {
+        ///        if (target.dpsGraphCac [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplTargetTabGraph {
             get {

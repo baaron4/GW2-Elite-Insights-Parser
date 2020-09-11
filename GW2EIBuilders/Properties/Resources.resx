@@ -232,6 +232,9 @@
   <data name="tmplDPSGraph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlTemplates\tmplDPSGraph.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="tmplDPSGraphModeSelector" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\htmlTemplates\tmplDPSGraphModeSelector.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="tmplEncounter" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlTemplates\tmplEncounter.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

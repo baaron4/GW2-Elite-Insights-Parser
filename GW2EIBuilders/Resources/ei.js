@@ -148,7 +148,7 @@ function mainLoad() {
 };
 
 window.onload = function () {
-    Vue.config.devtools = true
+    Vue.config.devtools = true;
     // trick from
     var img = document.createElement("img");
     img.style.display = "none";

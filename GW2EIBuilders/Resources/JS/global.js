@@ -28,6 +28,11 @@ const DataTypes = {
     dmgModifiersTable: 13,
 };
 
+const GraphType = {
+    DPS: 0,
+    Damage: 1,
+};
+
 const simpleLogData = {
     phases: [],
     players: [],
