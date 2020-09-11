@@ -185,7 +185,17 @@
                 return graphData.phases[this.phaseindex];
             },
             graphname: function () {
-                var name = "DPS Graph";
+                var name = "Graph";
+                switch (this.graphdata.graphmode) {
+                    case GraphType.DPS:
+                        name = "DPS " + name;
+                        break;
+                    case GraphType.Damage:
+                        name = "Damage " + name;
+                        break;
+                    default:
+                        break;
+                }
                 switch (this.graphdata.dpsmode) {
                     case 0:
                         name = "Full " + name;
@@ -213,6 +223,16 @@
             },
             computeData: function () {
                 this.layout.datarevision = new Date().getTime();
+                switch (this.graphdata.graphmode) {
+                    case GraphType.DPS:
+                        this.layout.yaxis.title = "DPS";
+                        break;
+                    case GraphType.Damage:
+                        this.layout.yaxis.title = "Damage";
+                        break;
+                    default:
+                        break;
+                }
                 var points = this.computeDPSRelatedData();
                 var res = this.data;
                 for (var i = 0; i < points.length; i++) {
@@ -236,7 +256,7 @@
                 var playerDPS = [];
                 for (var i = 0; i < logData.players.length; i++) {
                     var data = computePlayerDPS(logData.players[i], this.graph.players[i], lim, phasebreaks,
-                        this.activetargets, cacheID + '-' + this.phaseindex, this.phase.times);
+                        this.activetargets, cacheID + '-' + this.phaseindex, this.phase.times, this.graphdata.graphmode);
                     playerDPS.push(data.dps);
                     maxDPS.total = Math.max(maxDPS.total, data.maxDPS.total);
                     maxDPS.cleave = Math.max(maxDPS.cleave, data.maxDPS.cleave);
@@ -255,7 +275,7 @@
                 };
             },
             computeDPSData: function () {
-                var cacheID = this.graphdata.dpsmode + '-';
+                var cacheID = this.graphdata.dpsmode + '-' + this.graphdata.graphmode + '-';
                 cacheID += getTargetCacheID(this.activetargets);
                 if (this.dpsCache.has(cacheID)) {
                     return this.dpsCache.get(cacheID);
@@ -270,7 +290,7 @@
                 return res;
             },
             computeDPSRelatedData: function () {
-                var cacheID = this.graphdata.dpsmode + '-' + this.mode + '-';
+                var cacheID = this.graphdata.dpsmode + '-' + this.graphdata.graphmode + '-' + this.mode + '-';
                 var i, j;
                 cacheID += getTargetCacheID(this.activetargets);
                 if (this.dataCache.has(cacheID)) {

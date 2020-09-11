@@ -30,7 +30,7 @@ function compileTemplates() {
                             easing: 'cubic-in-out'
                         },
                         frame: {
-                            duration: 1.5 * duration
+                            duration: 0.75 * duration
                         }
                     });
                 },

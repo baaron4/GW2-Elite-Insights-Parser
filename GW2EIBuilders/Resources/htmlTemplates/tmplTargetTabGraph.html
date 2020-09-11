@@ -11,7 +11,7 @@
 
 <script>
 
-    function computeTargetDPS(target, damageData, lim, phasebreaks, cacheID, times) {
+    function computeTargetDPS(target, damageData, lim, phasebreaks, cacheID, times, graphMode) {
         if (target.dpsGraphCache.has(cacheID)) {
             return target.dpsGraphCache.get(cacheID);
         }
@@ -27,7 +27,7 @@
             } else if (phasebreaks && phasebreaks[j - 1]) {
                 limID = j;
             }
-            var div = Math.max(time - times[limID], 1);
+            var div = graphMode === GraphType.DPS ? Math.max(time - times[limID], 1) : 1;
             totalDamage = damageData[j] - damageData[limID];
             totalDPS[j] = Math.round(totalDamage / (div));
             maxDPS = Math.max(maxDPS, totalDPS[j]);
@@ -160,7 +160,17 @@
                 return "targetgraph-" + this.phaseTargetIndex + '-' + this.phaseindex;
             },
             graphname: function () {
-                var name = "DPS Graph";
+                var name = "Graph";
+                switch (this.graphdata.graphmode) {
+                    case GraphType.DPS:
+                        name = "DPS " + name;
+                        break;
+                    case GraphType.Damage:
+                        name = "Damage " + name;
+                        break;
+                    default:
+                        break;
+                }
                 switch (this.graphdata.dpsmode) {
                     case 0:
                         name = "Full " + name;
@@ -187,6 +197,16 @@
             },
             computeData: function () {
                 this.layout.datarevision = new Date().getTime();
+                switch (this.graphdata.graphmode) {
+                    case GraphType.DPS:
+                        this.layout.yaxis3.title = "DPS";
+                        break;
+                    case GraphType.Damage:
+                        this.layout.yaxis3.title = "Damage";
+                        break;
+                    default:
+                        break;
+                }
                 var res = this.data;
                 var data = this.computeDPSRelatedData();
                 this.data[this.targetOffset].y = data[0];
@@ -199,7 +219,7 @@
         },
         methods: {
             computeDPSData: function () {
-                var cacheID = this.graphdata.dpsmode;
+                var cacheID = this.graphdata.dpsmode + '-' + this.graphdata.graphmode;
                 if (this.dpsCache.has(cacheID)) {
                     return this.dpsCache.get(cacheID);
                 }
@@ -207,15 +227,15 @@
                 var res;
                 var damageData = this.graph.targets[this.phaseTargetIndex].total;
                 if (this.graphdata.dpsmode >= 0) {
-                    res = computeTargetDPS(this.target, damageData, this.graphdata.dpsmode, null, cacheID + '-' + this.phaseindex, this.phase.times);
+                    res = computeTargetDPS(this.target, damageData, this.graphdata.dpsmode, null, cacheID + '-' + this.phaseindex, this.phase.times, this.graphdata.graphmode);
                 } else {
-                    res = computeTargetDPS(this.target, damageData, 0, this.computePhaseBreaks, cacheID + '-' + this.phaseindex, this.phase.times);
+                    res = computeTargetDPS(this.target, damageData, 0, this.computePhaseBreaks, cacheID + '-' + this.phaseindex, this.phase.times, this.graphdata.graphmode);
                 }
                 this.dpsCache.set(cacheID, res);
                 return res;
             },
             computeDPSRelatedData: function () {
-                var cacheID = this.graphdata.dpsmode;
+                var cacheID = this.graphdata.dpsmode + '-' + this.graphdata.graphmode;
                 if (this.dataCache.has(cacheID)) {
                     return this.dataCache.get(cacheID);
                 }

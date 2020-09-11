@@ -273,7 +273,7 @@ function computePhaseMarkups(shapes, annotations, phase, linecolor) {
 }
 
 
-function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, cacheID, times) {
+function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, cacheID, times, graphMode) {
     if (player.dpsGraphCache.has(cacheID)) {
         return player.dpsGraphCache.get(cacheID);
     }
@@ -298,8 +298,8 @@ function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, c
             limID = Math.max(Math.round(time - lim), 0);
         } else if (phasebreaks && phasebreaks[j - 1]) {
             limID = j;
-        }
-        var div = Math.max(time - times[limID], 1);
+        }       
+        var div = graphMode === GraphType.DPS ? Math.max(time - times[limID], 1) : 1;
         totalDamage = damageData.total[j] - damageData.total[limID];
         targetDamage = 0;
         for (k = 0; k < activetargets.length; k++) {

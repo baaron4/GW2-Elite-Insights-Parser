@@ -111,7 +111,17 @@
                 return "playergraph-" + this.playerindex + '-' + this.phaseindex;
             },
             graphname: function () {
-                var name = "DPS Graph";
+                var name = "Graph";
+                switch (this.graphdata.graphmode) {
+                    case GraphType.DPS:
+                        name = "DPS " + name;
+                        break;
+                    case GraphType.Damage:
+                        name = "Damage " + name;
+                        break;
+                    default:
+                        break;
+                }
                 switch (this.graphdata.dpsmode) {
                     case 0:
                         name = "Full " + name;
@@ -138,6 +148,16 @@
             },
             computeData: function () {
                 this.layout.datarevision = new Date().getTime();
+                switch (this.graphdata.graphmode) {
+                    case GraphType.DPS:
+                        this.layout.yaxis3.title = "DPS";
+                        break;
+                    case GraphType.Damage:
+                        this.layout.yaxis3.title = "Damage";
+                        break;
+                    default:
+                        break;
+                }
                 var res = this.data;
                 var data = this.computeDPSRelatedData();
                 this.data[this.playerOffset].y = data[0];
@@ -154,7 +174,7 @@
         },
         methods: {
             computeDPSData: function () {
-                var cacheID = this.graphdata.dpsmode + '-';
+                var cacheID = this.graphdata.dpsmode + '-' + this.graphdata.graphmode + '-';
                 cacheID += getTargetCacheID(this.activetargets);
                 if (this.dpsCache.has(cacheID)) {
                     return this.dpsCache.get(cacheID);
@@ -162,9 +182,9 @@
                 var data;
                 var graphData = this.graph.players[this.playerindex];
                 if (this.graphdata.dpsmode >= 0) {
-                    data = computePlayerDPS(this.player, graphData, this.graphdata.dpsmode, null, this.activetargets, cacheID + '-' + this.phaseindex, this.phase.times);
+                    data = computePlayerDPS(this.player, graphData, this.graphdata.dpsmode, null, this.activetargets, cacheID + '-' + this.phaseindex, this.phase.times, this.graphdata.graphmode);
                 } else {
-                    data = computePlayerDPS(this.player, graphData, 0, this.computePhaseBreaks, this.activetargets, cacheID + '-' + this.phaseindex, this.phase.times);
+                    data = computePlayerDPS(this.player, graphData, 0, this.computePhaseBreaks, this.activetargets, cacheID + '-' + this.phaseindex, this.phase.times, this.graphdata.graphmode);
                 }
                 var res = {
                     maxDPS: data.maxDPS.total,
@@ -174,7 +194,7 @@
                 return res;
             },
             computeDPSRelatedData: function () {
-                var cacheID = this.graphdata.dpsmode + '-';
+                var cacheID = this.graphdata.dpsmode + '-' + this.graphdata.graphmode + '-';
                 cacheID += getTargetCacheID(this.activetargets);
                 if (this.dataCache.has(cacheID)) {
                     return this.dataCache.get(cacheID);

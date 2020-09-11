@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <ul class="nav nav-pills d-flex flex-row justify-content-center mt-1 mb-1 scale85">
+    <div class="d-flex flex-row justify-content-center mt-1 mb-1">
+        <ul class="nav nav-pills d-flex flex-row justify-content-center mr-3 scale85">
             <li class="nav-item">
                 <a class="nav-link" @click="data.dpsmode = 0" :class="{active: data.dpsmode === 0}">Full</a>
             </li>                         
@@ -23,6 +23,14 @@
                 <a class="nav-link" @click="data.dpsmode = -1" :class="{active: data.dpsmode === -1}">Phase</a>
             </li>
         </ul>
+        <ul class="nav nav-pills d-flex flex-row justify-content-center ml-3 scale85">
+            <li class="nav-item">
+                <a class="nav-link" @click="data.graphmode = graphModeEnum.DPS" :class="{active: data.graphmode === graphModeEnum.DPS}">DPS</a>
+            </li>                         
+            <li class="nav-item">
+                <a class="nav-link" @click="data.graphmode = graphModeEnum.Damage" :class="{active: data.graphmode === graphModeEnum.Damage}">Damage</a>
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -30,5 +38,10 @@
     Vue.component("dps-graph-mode-selector-component", {
         props: ['data', 'phaseduration', 'phasehassubphases'],
         template: `${template}`,
+        computed: {
+            graphModeEnum: function() {
+                return GraphType;
+            }
+        }
     });
 </script>
