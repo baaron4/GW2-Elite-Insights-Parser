@@ -11,8 +11,11 @@
                             </a>
                             <ul class="dropdown-menu p-2 font-weight-normal">
                                 <li v-for="(mechanic, index) in mechanicsList" :key="index">
-                                    <input :id="'crml-mechanic-' + index" type="checkbox" v-model="mechanic.included" />
-                                    <label :for="'crml-mechanic-' + index">{{mechanic.shortName}}</label>
+                                    <input :id="'crml-mechanic-' + index" type="checkbox" v-model="mechanic.included"
+                                           @click.stop="stopClickEvent" />
+                                    <label :for="'crml-mechanic-' + index" @click.stop="stopClickEvent">
+                                        {{mechanic.shortName}}
+                                    </label>
                                 </li>
                             </ul>
                         </th>
@@ -22,8 +25,11 @@
                             </a>
                             <ul class="dropdown-menu p-2 font-weight-normal">
                                 <li v-for="(actor, index) in actorsList" :key="index">
-                                    <input :id="'crml-actor-' + index" type="checkbox" v-model="actor.included" />
-                                    <label :for="'crml-actor-' + index">{{actor.name}}</label>
+                                    <input :id="'crml-actor-' + index" type="checkbox" v-model="actor.included"
+                                           @click.stop="stopClickEvent" />
+                                    <label :for="'crml-actor-' + index" @click.stop="stopClickEvent">
+                                        {{actor.name}}
+                                    </label>
                                 </li>
                             </ul>
                         </th>
@@ -147,6 +153,9 @@
         methods: {
             selectMechanic: function (mechanic) {
                 animator.updateTime(mechanic.time);
+            },
+            stopClickEvent: function (event) {
+                event.stopPropagation();
             },
         },
         computed: {
