@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class WeaponSwapCastFinder : InstantCastFinder
     {
-        public delegate bool WeaponSwapCastChecker(WeaponSwapEvent evt, CombatData combatData);
+        public delegate bool WeaponSwapCastChecker(WeaponSwapEvent evt, CombatData combatData, SkillData skillData);
         private readonly WeaponSwapCastChecker _triggerCondition;
 
         private readonly long _swappedTo;
@@ -45,7 +45,7 @@ namespace GW2EIEvtcParser.EIData
                     }
                     if (_triggerCondition != null)
                     {
-                        if (_triggerCondition(swap, combatData))
+                        if (_triggerCondition(swap, combatData, skillData))
                         {
                             lastTime = swap.Time;
                             res.Add(new InstantCastEvent(swap.Time - 1, skillData.Get(SkillID), swap.Caster));
