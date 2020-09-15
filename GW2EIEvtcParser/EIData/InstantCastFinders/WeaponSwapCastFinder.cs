@@ -13,14 +13,12 @@ namespace GW2EIEvtcParser.EIData
         private readonly long _swappedTo;
         public WeaponSwapCastFinder(long skillID, long swappedTo, long icd, WeaponSwapCastChecker checker = null) : base(skillID, icd)
         {
-            NotAccurate = true;
             _triggerCondition = checker;
             _swappedTo = swappedTo;
         }
 
         public WeaponSwapCastFinder(long skillID, long swappedTo, long icd, ulong minBuild, ulong maxBuild, WeaponSwapCastChecker checker = null) : base(skillID, icd, minBuild, maxBuild)
         {
-            NotAccurate = true;
             _triggerCondition = checker;
             _swappedTo = swappedTo;
         }
