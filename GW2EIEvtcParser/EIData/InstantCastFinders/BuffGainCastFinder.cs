@@ -39,13 +39,13 @@ namespace GW2EIEvtcParser.EIData
                         if (_triggerCondition(bae, combatData))
                         {
                             lastTime = bae.Time;
-                            res.Add(new InstantCastEvent(bae.Time, skillData.Get(SkillID), bae.To));
+                            res.Add(new InstantCastEvent(bae.Time - 1, skillData.Get(SkillID), bae.To));
                         }
                     }
                     else
                     {
                         lastTime = bae.Time;
-                        res.Add(new InstantCastEvent(bae.Time, skillData.Get(SkillID), bae.To));
+                        res.Add(new InstantCastEvent(bae.Time - 1, skillData.Get(SkillID), bae.To));
                     }
                 }
             }
