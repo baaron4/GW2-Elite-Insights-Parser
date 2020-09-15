@@ -18,17 +18,35 @@
         var totalDamage = 0;
         var totalDPS = [0];
         var maxDPS = 0;
-        var limID = 0, j;
+        var left = 0, right = 0;
         var end = times.length;
-        for (j = 1; j < end; j++) {
+        if (graphMode === GraphType.CenteredDPS) {
+            lim /= 2;
+        }
+        for (j = 0; j < end; j++) {
             var time = times[j];
             if (lim > 0) {
-                limID = Math.max(Math.round(time - lim), 0);
-            } else if (phasebreaks && phasebreaks[j - 1]) {
-                limID = j;
+                left = Math.max(Math.round(time - lim), 0);
+            } else if (phasebreaks && phasebreaks[j]) {
+                left = j;
             }
-            var div = graphMode === GraphType.DPS ? Math.max(time - times[limID], 1) : 1;
-            totalDamage = damageData[j] - damageData[limID];
+            right = j;    
+            if (graphMode === GraphType.CenteredDPS) {
+                if (lim > 0) {
+                    right = Math.min(Math.round(time + lim), end - 1);
+                } else if (phasebreaks) {
+                    for (var i = left + 1; i < phasebreaks.length; i++) {
+                        if (phasebreaks[i]) {
+                            right = i;
+                            break;
+                        }
+                    }
+                } else {
+                    right = end - 1;
+                }
+            }  
+            var div = graphMode !== GraphType.Damage ? Math.max(times[right] - times[left], 1) : 1;
+            totalDamage = damageData[right] - damageData[left];
             totalDPS[j] = Math.round(totalDamage / (div));
             maxDPS = Math.max(maxDPS, totalDPS[j]);
         }

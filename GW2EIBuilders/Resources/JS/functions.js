@@ -290,21 +290,39 @@ function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, c
         cleave: 0,
         target: 0
     };
+    if (graphMode === GraphType.CenteredDPS) {
+        lim /= 2;
+    }
     var end = times.length;
-    var j, limID = 0, targetid, k;
-    for (j = 1; j < end; j++) {
+    var left = 0, right = 0, targetid, k;
+    for (var j = 0; j < end; j++) {
         var time = times[j];
         if (lim > 0) {
-            limID = Math.max(Math.round(time - lim), 0);
-        } else if (phasebreaks && phasebreaks[j - 1]) {
-            limID = j;
-        }       
-        var div = graphMode === GraphType.DPS ? Math.max(time - times[limID], 1) : 1;
-        totalDamage = damageData.total[j] - damageData.total[limID];
+            left = Math.max(Math.round(time - lim), 0);
+        } else if (phasebreaks && phasebreaks[j]) {
+            left = j;
+        }
+        right = j;    
+        if (graphMode === GraphType.CenteredDPS) {
+            if (lim > 0) {
+                right = Math.min(Math.round(time + lim), end - 1);
+            } else if (phasebreaks) {
+                for (var i = left + 1; i < phasebreaks.length; i++) {
+                    if (phasebreaks[i]) {
+                        right = i;
+                        break;
+                    }
+                }
+            } else {
+                right = end - 1;
+            }
+        }          
+        var div = graphMode !== GraphType.Damage ? Math.max(times[right] - times[left], 1) : 1;
+        totalDamage = damageData.total[right] - damageData.total[left];
         targetDamage = 0;
         for (k = 0; k < activetargets.length; k++) {
             targetid = activetargets[k];
-            targetDamage += damageData.targets[targetid][j] - damageData.targets[targetid][limID];
+            targetDamage += damageData.targets[targetid][right] - damageData.targets[targetid][left];
         }
         totalDPS[j] = Math.round(totalDamage / div);
         targetDPS[j] = Math.round(targetDamage / div);
