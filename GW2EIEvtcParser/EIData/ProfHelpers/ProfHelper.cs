@@ -138,7 +138,6 @@ namespace GW2EIEvtcParser.EIData
                     case "Mirage":
                         MesmerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         MirageHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
-                        res.AddRange(MirageHelper.TranslateMirageCloak(combatData.GetBuffData(40408), skillData));
                         break;
                     //
                     case "Thief":

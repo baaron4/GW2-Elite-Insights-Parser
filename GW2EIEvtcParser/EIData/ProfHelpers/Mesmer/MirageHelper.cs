@@ -11,6 +11,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new DamageCastFinder(45449, 45449, EIData.InstantCastFinder.DefaultICD), // Jaunt
+            new BuffGainCastFinder(SkillItem.MirageCloakDodgeId, 40408, EIData.InstantCastFinder.DefaultICD), // Mirage Cloak
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
@@ -21,22 +22,5 @@ namespace GW2EIEvtcParser.EIData
         {
                 new Buff("Mirage Cloak",40408, ParserHelper.Source.Mirage, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a5/Mirage_Cloak_%28effect%29.png"),
         };
-
-
-        public static List<InstantCastEvent> TranslateMirageCloak(List<AbstractBuffEvent> buffs, SkillData skillData)
-        {
-            var res = new List<InstantCastEvent>();
-            long cloakStart = 0;
-            foreach (AbstractBuffEvent ba in buffs.Where(x => x is BuffApplyEvent))
-            {
-                if (ba.Time - cloakStart > 10)
-                {
-                    var dodgeLog = new InstantCastEvent(ba.Time, skillData.Get(SkillItem.MirageCloakDodgeId), ba.To.GetFinalMaster());
-                    res.Add(dodgeLog);
-                    cloakStart = ba.Time;
-                }
-            }
-            return res;
-        }
     }
 }
