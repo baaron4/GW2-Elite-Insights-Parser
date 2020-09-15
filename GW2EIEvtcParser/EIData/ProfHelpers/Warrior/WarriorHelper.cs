@@ -13,7 +13,9 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new DamageCastFinder(14268, 14268, EIData.InstantCastFinder.DefaultICD, 84794, ulong.MaxValue), // Reckless Impact
-            new BuffGainCastFinder(45534, 45534, EIData.InstantCastFinder.DefaultICD), // Berserker Stance
+            new BuffGainCastFinder(14406, 14453, EIData.InstantCastFinder.DefaultICD), // Berserker Stance
+            new BuffGainCastFinder(14412, 34778, EIData.InstantCastFinder.DefaultICD), // Balanced Stance
+            new BuffGainCastFinder(14392, 787, EIData.InstantCastFinder.DefaultICD), // Endure Pain
         };
 
         private static HashSet<AgentItem> GetBannerAgents(Dictionary<long, List<AbstractBuffEvent>> buffData, long id, HashSet<AgentItem> playerAgents)
