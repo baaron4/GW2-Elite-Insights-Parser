@@ -31,6 +31,7 @@ const DataTypes = {
 const GraphType = {
     DPS: 0,
     Damage: 1,
+    CenteredDPS: 2,
 };
 
 const simpleLogData = {

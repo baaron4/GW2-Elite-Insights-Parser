@@ -189,6 +189,9 @@
                 switch (this.graphdata.graphmode) {
                     case GraphType.DPS:
                         name = "DPS " + name;
+                        break;                   
+                    case GraphType.CenteredDPS:
+                        name = "Centered DPS " + name;
                         break;
                     case GraphType.Damage:
                         name = "Damage " + name;
@@ -226,6 +229,9 @@
                 switch (this.graphdata.graphmode) {
                     case GraphType.DPS:
                         this.layout.yaxis.title = "DPS";
+                        break;
+                    case GraphType.CenteredDPS:
+                        this.layout.yaxis.title = "Centered DPS";
                         break;
                     case GraphType.Damage:
                         this.layout.yaxis.title = "Damage";
