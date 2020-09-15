@@ -20,10 +20,12 @@ namespace GW2EIEvtcParser.ParsedData
         public const long AliveId = -6;
         public const long RespawnId = -7;
 
-        private const int FirstLandSet = 4;
-        private const int SecondLandSet = 5;
-        private const int FirstWaterSet = 0;
-        private const int SecondWaterSet = 1;
+        public const int FirstLandSet = 4;
+        public const int SecondLandSet = 5;
+        public const int FirstWaterSet = 0;
+        public const int SecondWaterSet = 1;
+        public const int TransformSet = 3;
+        public const int KitSet = 2;
         private static readonly Dictionary<long, string> _overrideNames = new Dictionary<long, string>()
         {
             {ResurrectId, "Resurrect"},
@@ -194,13 +196,13 @@ namespace GW2EIEvtcParser.ParsedData
         // Fields
         public long ID { get; private set; }
         //public int Range { get; private set; } = 0;
-        public bool AA => _apiSkill?.Slot == "Weapon_1" || _apiSkill?.Slot == "Downed_1";
+        public bool AA => ApiSkill?.Slot == "Weapon_1" || ApiSkill?.Slot == "Downed_1";
 
         public bool IsSwap => ID == WeaponSwapId || ElementalistHelper.IsElementalSwap(ID) || RevenantHelper.IsLegendSwap(ID);
         public string Name { get; private set; }
         public string Icon { get; private set; }
         private WeaponDescriptor _weaponDescriptor;
-        private readonly GW2APISkill _apiSkill;
+        internal GW2APISkill ApiSkill { get; }
         private SkillInfoEvent _skillInfo { get; set; }
 
         // Constructor
@@ -209,7 +211,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
             this.ID = ID;
             Name = name.Replace("\0", "");
-            _apiSkill = GW2APIController.GetAPISkill(ID);
+            ApiSkill = GW2APIController.GetAPISkill(ID);
             CompleteItem();
         }
 
@@ -270,21 +272,21 @@ namespace GW2EIEvtcParser.ParsedData
             }
             if (_weaponDescriptor.WeaponSlot == WeaponDescriptor.Hand.Dual)
             {
-                weapons[id] = _apiSkill.WeaponType;
-                weapons[id + 1] = _apiSkill.DualWield;
+                weapons[id] = ApiSkill.WeaponType;
+                weapons[id + 1] = ApiSkill.DualWield;
             }
             else if (_weaponDescriptor.WeaponSlot == WeaponDescriptor.Hand.TwoHand)
             {
-                weapons[id] = _apiSkill.WeaponType;
+                weapons[id] = ApiSkill.WeaponType;
                 weapons[id + 1] = "2Hand";
             }
             else if (_weaponDescriptor.WeaponSlot == WeaponDescriptor.Hand.MainHand)
             {
-                weapons[id] = _apiSkill.WeaponType;
+                weapons[id] = ApiSkill.WeaponType;
             }
             else
             {
-                weapons[id + 1] = _apiSkill.WeaponType;
+                weapons[id + 1] = ApiSkill.WeaponType;
             }
             return true;
         }
@@ -303,9 +305,9 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 Name = name;
             }
-            else if (_apiSkill != null)
+            else if (ApiSkill != null)
             {
-                Name = _apiSkill.Name;
+                Name = ApiSkill.Name;
                 /*if (_apiSkill.Facts != null)
                 {
                     foreach (GW2APIFact fact in _apiSkill.Facts)
@@ -323,11 +325,11 @@ namespace GW2EIEvtcParser.ParsedData
             }
             else
             {
-                Icon = _apiSkill != null ? _apiSkill.Icon : DefaultIcon;
+                Icon = ApiSkill != null ? ApiSkill.Icon : DefaultIcon;
             }
-            if (_apiSkill != null && _apiSkill.Type == "Weapon" && _apiSkill.WeaponType != "None" && _apiSkill.Professions.Count > 0 && (_apiSkill.Categories == null || (_apiSkill.Categories.Count == 1 && (_apiSkill.Categories[0] == "Phantasm" || _apiSkill.Categories[0] == "DualWield"))))
+            if (ApiSkill != null && ApiSkill.Type == "Weapon" && ApiSkill.WeaponType != "None" && ApiSkill.Professions.Count > 0 && (ApiSkill.Categories == null || (ApiSkill.Categories.Count == 1 && (ApiSkill.Categories[0] == "Phantasm" || ApiSkill.Categories[0] == "DualWield"))))
             {
-                _weaponDescriptor = new WeaponDescriptor(_apiSkill);
+                _weaponDescriptor = new WeaponDescriptor(ApiSkill);
             }
 #if DEBUG
             Name += " (" + ID + ")";
