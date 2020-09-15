@@ -3,10 +3,7 @@
         <ul class="nav nav-pills d-flex flex-row justify-content-center mr-3 scale85">
             <li class="nav-item">
                 <a class="nav-link" @click="data.dpsmode = 0" :class="{active: data.dpsmode === 0}">Full</a>
-            </li>                         
-            <li v-if="phaseduration > 2" class="nav-item">
-                <a class="nav-link" @click="data.dpsmode = 2" :class="{active: data.dpsmode === 2}">2s</a>
-            </li>                
+            </li>            
             <li v-if="phaseduration > 4" class="nav-item">
                 <a class="nav-link" @click="data.dpsmode = 4" :class="{active: data.dpsmode === 4}">4s</a>
             </li>
