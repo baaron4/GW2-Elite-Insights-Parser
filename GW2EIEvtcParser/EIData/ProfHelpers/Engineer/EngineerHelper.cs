@@ -9,14 +9,38 @@ namespace GW2EIEvtcParser.EIData
 {
     internal static class EngineerHelper
     {
+        private class EngineerKitFinder : WeaponSwapCastFinder
+        {
+            public EngineerKitFinder(long skillID, long icd, ulong minBuild = ulong.MinValue, ulong maxBuild = ulong.MaxValue) : base(skillID, SkillItem.KitSet, icd, minBuild, maxBuild, (swap, combatData, skillData) => {
+                SkillItem skill = skillData.Get(skillID);
+                if (skill.ApiSkill == null || skill.ApiSkill.BundleSkills == null)
+                {
+                    return false;
+                }
+                WeaponSwapEvent nextSwap = combatData.GetWeaponSwapData(swap.Caster).FirstOrDefault(x => x.Time > swap.Time + ParserHelper.ServerDelayConstant);
+                long nextSwapTime = nextSwap != null ? nextSwap.Time : long.MaxValue;
+                var castIds = new HashSet<long>(combatData.GetAnimatedCastData(swap.Caster).Where(x => x.Time >= swap.Time && x.Time <= nextSwapTime).Select(x => x.SkillId));
+                return skill.ApiSkill.BundleSkills.Intersect(castIds).Any();
+            })
+            {
+                NotAccurate = true;
+            }
+        }
+
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffLossCastFinder(59562, 59579, EIData.InstantCastFinder.DefaultICD, 102321, ulong.MaxValue), // Explosive Entrance
             new BuffGainCastFinder(5861, 5863,EIData.InstantCastFinder.DefaultICD), // Elixir S
-            // Need to check kits
             new DamageCastFinder(6154,6154,EIData.InstantCastFinder.DefaultICD), // Overcharged Shot
-            //new DamageCastFinder(6004,6004,InstantCastFinder.DefaultICD), // Net Shot - projectile
+            // Kits
+            new EngineerKitFinder(5812, EIData.InstantCastFinder.DefaultICD), // Bomb Kit
+            new EngineerKitFinder(5933, EIData.InstantCastFinder.DefaultICD), // Elixir Gun
+            new EngineerKitFinder(5927, EIData.InstantCastFinder.DefaultICD), // Flamethrower
+            new EngineerKitFinder(6020, EIData.InstantCastFinder.DefaultICD), // Grenade Kit
+            new EngineerKitFinder(5802, EIData.InstantCastFinder.DefaultICD), // Med Kit
+            new EngineerKitFinder(5904, EIData.InstantCastFinder.DefaultICD), // Tool Kit
+            new EngineerKitFinder(30800, EIData.InstantCastFinder.DefaultICD), // Elite Mortar Kit
         };
 
 
