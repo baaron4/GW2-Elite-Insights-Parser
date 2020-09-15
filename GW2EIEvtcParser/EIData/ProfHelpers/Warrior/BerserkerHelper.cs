@@ -10,6 +10,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new DamageCastFinder(31289, 31289, 500, 97950, ulong.MaxValue), // King of Fires
+            new BuffGainCastFinder(30189, 29466, EIData.InstantCastFinder.DefaultICD), // Blood Reckoning
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
