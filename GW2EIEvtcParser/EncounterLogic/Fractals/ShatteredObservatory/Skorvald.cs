@@ -52,7 +52,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new InvalidOperationException("Skorvald not found");
             }
-            return (target.GetHealth(combatData) == 5551340) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            return (target.GetHealth(combatData) == 5526980) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
