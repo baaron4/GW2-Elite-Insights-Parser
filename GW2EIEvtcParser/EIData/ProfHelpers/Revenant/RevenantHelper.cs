@@ -17,8 +17,6 @@ namespace GW2EIEvtcParser.EIData
             new BuffLossCastFinder(28382, 27581, 500), // Relinquish Power
             new BuffGainCastFinder(26557, 27273, EIData.InstantCastFinder.DefaultICD), // Vengeful Hammers
             new BuffLossCastFinder(26956, 27273, EIData.InstantCastFinder.DefaultICD), // Release Hammers
-            new BuffGainCastFinder(27975, 26596, EIData.InstantCastFinder.DefaultICD), // Rite of the Great Dwarf
-            new BuffGainCastFinder(27975, 33330, EIData.InstantCastFinder.DefaultICD), // Rite of the Great Dwarf (traited)
             new DamageCastFinder(59591, 59591, EIData.InstantCastFinder.DefaultICD, 102321, ulong.MaxValue), // Invoking Torment
             new DamageCastFinder(46854, 46854, EIData.InstantCastFinder.DefaultICD), // Call of the Assassin
             new DamageCastFinder(46843, 46843, EIData.InstantCastFinder.DefaultICD), // Call of the Dwarf
