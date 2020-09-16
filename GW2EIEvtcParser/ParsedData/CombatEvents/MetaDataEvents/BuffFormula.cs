@@ -33,6 +33,10 @@ namespace GW2EIEvtcParser.ParsedData
                     return "Armor";
                 case Agony:
                     return "Agony";
+                case StatInc:
+                    return "Stat Increase";
+                case FlatInc:
+                    return "Flat Increase";
                 case PhysInc:
                     return "Outgoing Physical Damage";
                 case CondInc:
@@ -119,6 +123,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
             switch (attribute1)
             {
+                case FlatInc:
                 case PhysInc:
                 case CondInc:
                 case CondRec:
