@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
@@ -13,7 +14,7 @@ namespace GW2EIEvtcParser.EIData
         {
             new DamageCastFinder(10212, 10212, EIData.InstantCastFinder.DefaultICD), // Power spike
             new BuffLossCastFinder(10233, 10233, EIData.InstantCastFinder.DefaultICD, (brae, combatData) => {
-                return combatData.GetBuffData(brae.To).Exists(x => 
+                return combatData.GetBuffData(brae.To).Exists(x =>
                                     x is BuffApplyEvent bae &&
                                     bae.BuffID == 13017 &&
                                     Math.Abs(bae.AppliedDuration - 2000) <= ParserHelper.ServerDelayConstant &&
@@ -22,6 +23,57 @@ namespace GW2EIEvtcParser.EIData
                                  );
                 }
             ), // Signet of Midnight
+            new BuffGainCastFinder(10197, 10198, EIData.InstantCastFinder.DefaultICD), // Portal Entre
+            new DamageCastFinder(30192, 30192, EIData.InstantCastFinder.DefaultICD), // Lesser Phantasmal Defender
+            new BuffGainCastFinder(10192, 10243, EIData.InstantCastFinder.DefaultICD, 92715, 97950, (evt, combatData) => {
+                var buffsLossToCheck = new List<long>
+                {
+                    10235, 30739, 21751, 10231, 10246, 10233
+                }; // signets
+                foreach (long buffID in buffsLossToCheck)
+                {
+                    if (combatData.GetBuffData(buffID).Where(x => x.Time >= evt.Time - ParserHelper.ServerDelayConstant && x.Time <= evt.Time + ParserHelper.ServerDelayConstant && x is BuffRemoveAllEvent).Any())
+                    {
+                        return false;
+                    }
+                }
+                return true;
+
+            }), // Distortion
+            new BuffGainCastFinder(10192, 10243, EIData.InstantCastFinder.DefaultICD, 97950, 104844, (evt, combatData) => {
+                if (evt.To.Prof == "Chronomancer")
+                {
+                    return false;
+                }
+                var buffsLossToCheck = new List<long>
+                {
+                    10235, 30739, 21751, 10231, 10246, 10233
+                }; // signets
+                foreach (long buffID in buffsLossToCheck)
+                {
+                    if (combatData.GetBuffData(buffID).Where(x => x.Time >= evt.Time - ParserHelper.ServerDelayConstant && x.Time <= evt.Time + ParserHelper.ServerDelayConstant && x is BuffRemoveAllEvent).Any())
+                    {
+                        return false;
+                    }
+                }
+                return true;
+
+            }), // Distortion
+            new BuffGainCastFinder(10192, 10243, EIData.InstantCastFinder.DefaultICD, 104844, ulong.MaxValue, (evt, combatData) => {
+                var buffsLossToCheck = new List<long>
+                {
+                    10235, 30739, 21751, 10231, 10246, 10233
+                }; // signets
+                foreach (long buffID in buffsLossToCheck)
+                {
+                    if (combatData.GetBuffData(buffID).Where(x => x.Time >= evt.Time - ParserHelper.ServerDelayConstant && x.Time <= evt.Time + ParserHelper.ServerDelayConstant && x is BuffRemoveAllEvent).Any()) 
+                    {
+                        return false;
+                    }
+                }
+                return true;
+                
+            }), // Distortion
         };
 
 
@@ -54,6 +106,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Illusionary Counter",10278, ParserHelper.Source.Mesmer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e5/Illusionary_Counter.png"),
                 new Buff("Illusionary Riposte",10279, ParserHelper.Source.Mesmer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/91/Illusionary_Riposte.png"),
                 new Buff("Illusionary Leap",10353, ParserHelper.Source.Mesmer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/18/Illusionary_Leap.png"),
+                new Buff("Portal Weaving",10198, ParserHelper.Source.Mesmer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/81/Portal_Entre.png"),
                 //traits
                 new Buff("Fencer's Finesse", 30426 , ParserHelper.Source.Mesmer, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e7/Fencer%27s_Finesse.png"),
                 new Buff("Illusionary Defense",49099, ParserHelper.Source.Mesmer, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e0/Illusionary_Defense.png"),

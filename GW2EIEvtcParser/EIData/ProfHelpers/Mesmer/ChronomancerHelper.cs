@@ -9,6 +9,8 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
+            new BuffGainCastFinder(29830, 30136, EIData.InstantCastFinder.DefaultICD), // Continuum Split
+            new BuffLossCastFinder(30747, 30136, EIData.InstantCastFinder.DefaultICD), // Continuum Shift
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

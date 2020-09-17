@@ -14,6 +14,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(27014, 28243, EIData.InstantCastFinder.DefaultICD), // Facet of Elements
             new BuffGainCastFinder(26644, 27376, EIData.InstantCastFinder.DefaultICD), // Facet of Strength
             new BuffGainCastFinder(27760, 27983, EIData.InstantCastFinder.DefaultICD), // Facet of Chaos
+            new DamageCastFinder(46857, 46857, EIData.InstantCastFinder.DefaultICD), // Call of the Dragon
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

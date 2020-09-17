@@ -9,6 +9,8 @@ namespace GW2EIEvtcParser.EIData
 {
     internal static class ElementalistHelper
     {
+        // TODO - add glyph of elemental power stuff
+
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffGainCastFinder(5492, 5585, EIData.InstantCastFinder.DefaultICD), // Fire
@@ -17,13 +19,14 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(5495, 5580, EIData.InstantCastFinder.DefaultICD), // Earth
             new DamageCastFinder(5539, 5539, EIData.InstantCastFinder.DefaultICD), // Arcane Blast
             new BuffGiveCastFinder(5635, 5582, EIData.InstantCastFinder.DefaultICD), // Arcane Power
-            //new BuffGainCastFinder(5641, 5640, InstantCastFinder.DefaultICD), // Arcane Shield - indiscernable from lesser version
+            new BuffGainCastFinder(5641, 5640, EIData.InstantCastFinder.DefaultICD), // Arcane Shield
             new DamageCastFinder(22572, 22572, EIData.InstantCastFinder.DefaultICD), // Arcane Wave
             new BuffGainCastFinder(5543, 5543, EIData.InstantCastFinder.DefaultICD), // Mist Form
             new DamageCastFinder(5572, 5572, EIData.InstantCastFinder.DefaultICD), // Signet of Air
             new DamageCastFinder(56883, 56883, EIData.InstantCastFinder.DefaultICD), // Sunspot
             new DamageCastFinder(56885, 56885, EIData.InstantCastFinder.DefaultICD), // Earth Blast
             new DamageCastFinder(5561, 5561, EIData.InstantCastFinder.DefaultICD), // Lightning Strike
+            new DamageCastFinder(24305, 24305, EIData.InstantCastFinder.DefaultICD), // Lightning Rod
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
