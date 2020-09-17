@@ -23,7 +23,7 @@
         if (graphMode === GraphType.CenteredDPS) {
             lim /= 2;
         }
-        for (j = 0; j < end; j++) {
+        for (var j = 0; j < end; j++) {
             var time = times[j];
             if (lim > 0) {
                 left = Math.max(Math.round(time - lim), 0);
