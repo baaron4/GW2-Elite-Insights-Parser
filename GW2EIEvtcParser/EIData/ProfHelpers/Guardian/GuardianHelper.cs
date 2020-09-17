@@ -15,6 +15,10 @@ namespace GW2EIEvtcParser.EIData
             //new BuffLossCastFinder(9120,9119,InstantCastFinder.DefaultICD), // Virtue of Resolve
             //new BuffLossCastFinder(9118,9113,InstantCastFinder.DefaultICD), // Virtue of Courage
             new DamageCastFinder(9247,9247, EIData.InstantCastFinder.DefaultICD), // Judge's Intervention
+            new DamageCastFinder(30255,30255, EIData.InstantCastFinder.DefaultICD), // Wrath of Justice
+            new DamageCastFinder(9101,9101, EIData.InstantCastFinder.DefaultICD), // Smiter's Boon
+            new DamageCastFinder(9245,9245, EIData.InstantCastFinder.DefaultICD), // Smite Condition
+            new DamageCastFinder(9097,9097, EIData.InstantCastFinder.DefaultICD), // Symbol of Blades
             new DamageCastFinder(21795, 21795, EIData.InstantCastFinder.DefaultICD), // Glacial Heart
             new DamageCastFinder(22499, 22499, EIData.InstantCastFinder.DefaultICD), // Shattered Aegis
         };

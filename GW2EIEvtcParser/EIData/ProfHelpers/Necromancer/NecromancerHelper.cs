@@ -14,10 +14,9 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(29560, 29560, EIData.InstantCastFinder.DefaultICD), // Spiteful Spirit
             new DamageCastFinder(13907, 13907, EIData.InstantCastFinder.DefaultICD), // Lesser Enfeeble
             new DamageCastFinder(13906, 13906, EIData.InstantCastFinder.DefaultICD), // Lesser Spinal Shivers
-            new BuffGainCastFinder(10583, 10582, EIData.InstantCastFinder.DefaultICD), // Spectral Armor
+            new BuffGainCastFinder(10583, 10582, EIData.InstantCastFinder.DefaultICD, 94051, ulong.MaxValue), // Spectral Armor
             new BuffGainCastFinder(10685, 15083, EIData.InstantCastFinder.DefaultICD, 0, 94051), // Spectral Walk
             new BuffGainCastFinder(10685, 53476, EIData.InstantCastFinder.DefaultICD, 94051, ulong.MaxValue), // Spectral Walk
-            //new BuffGainCastFinder(10635,???, 80647, ulong.MaxValue), // Lich's Gaze
         };
 
 

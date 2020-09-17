@@ -21,7 +21,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffGainCastFinder(40183, 42086, EIData.InstantCastFinder.DefaultICD), // Primordial Stance
-            //new BuffGainCastFinder(44926, ???, 500), // Stone Resonance, lesser stone resonance makes thing complicated
+            new BuffGainCastFinder(44926, 45097, 500), // Stone Resonance
             new BuffGainCastFinder(44612, 42683, EIData.InstantCastFinder.DefaultICD), // Unravel
             // Fire       
             new BuffGainCastFinder(FireDual, FireDual, EIData.InstantCastFinder.DefaultICD),
@@ -86,6 +86,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Molten Armor",43586, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/71/Lava_Skin.png"),
                 new Buff("Weaver's Prowess",42061, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/75/Weaver%27s_Prowess.png"),
                 new Buff("Elements of Rage",42416, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a2/Elements_of_Rage.png"),
+                new Buff("Stone Resonance",45097, ParserHelper.Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/57/Stone_Resonance.png"),
         };
 
 

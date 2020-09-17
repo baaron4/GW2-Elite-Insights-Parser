@@ -28,6 +28,10 @@ namespace GW2EIEvtcParser.EIData
                 long lastTime = int.MinValue;
                 foreach (BuffApplyEvent bae in pair.Value)
                 {
+                    if (bae.Initial)
+                    {
+                        continue;
+                    }
                     if (bae.Time - lastTime < ICD)
                     {
                         lastTime = bae.Time;
@@ -38,13 +42,13 @@ namespace GW2EIEvtcParser.EIData
                         if (_triggerCondition(bae, combatData))
                         {
                             lastTime = bae.Time;
-                            res.Add(new InstantCastEvent(bae.Time, skillData.Get(SkillID), bae.By));
+                            res.Add(new InstantCastEvent(bae.Time - 1, skillData.Get(SkillID), bae.By));
                         }
                     }
                     else
                     {
                         lastTime = bae.Time;
-                        res.Add(new InstantCastEvent(bae.Time, skillData.Get(SkillID), bae.By));
+                        res.Add(new InstantCastEvent(bae.Time - 1, skillData.Get(SkillID), bae.By));
                     }
                 }
             }
