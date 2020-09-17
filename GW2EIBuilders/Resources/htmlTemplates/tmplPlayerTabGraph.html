@@ -63,7 +63,7 @@
                 },
                 yaxis: dpsY,
                 hoverinfo: 'name+y+x',
-                name: 'Total DPS'
+                name: 'Total'
             });
             if (!logData.targetless) {
                 this.data.push({
@@ -76,7 +76,7 @@
                     },
                     yaxis: dpsY,
                     hoverinfo: 'name+y+x',
-                    name: 'Target DPS'
+                    name: 'Target'
                 });
                 this.data.push({
                     x: this.phase.times,
@@ -88,7 +88,7 @@
                     },
                     yaxis: dpsY,
                     hoverinfo: 'name+y+x',
-                    name: 'Cleave DPS'
+                    name: 'Cleave'
                 });
             }
             this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc');

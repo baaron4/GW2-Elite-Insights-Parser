@@ -80,7 +80,7 @@
                     },
                     text: pText,
                     hoverinfo: 'y+text+x',
-                    name: player.name + ' DPS',
+                    name: player.name,
                 });
             }
             data.push({
@@ -91,7 +91,7 @@
                 },
                 hoverinfo: 'name+y+x',
                 visible: 'legendonly',
-                name: 'All Player Dps'
+                name: 'All Player'
             });
             // targets health
             computeTargetHealthData(this.graph, logData.targets, this.phase, this.data, null);  
