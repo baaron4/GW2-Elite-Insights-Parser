@@ -40,13 +40,13 @@ namespace GW2EIEvtcParser.EIData
                         if (_triggerCondition(brae, combatData))
                         {
                             lastTime = brae.Time;
-                            res.Add(new InstantCastEvent(brae.Time - 1, skillData.Get(SkillID), brae.To));
+                            res.Add(new InstantCastEvent(brae.Time, skillData.Get(SkillID), brae.To));
                         }
                     }
                     else
                     {
                         lastTime = brae.Time;
-                        res.Add(new InstantCastEvent(brae.Time - 1, skillData.Get(SkillID), brae.To));
+                        res.Add(new InstantCastEvent(brae.Time, skillData.Get(SkillID), brae.To));
                     }
                 }
             }

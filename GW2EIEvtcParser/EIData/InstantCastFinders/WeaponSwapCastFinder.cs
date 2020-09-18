@@ -46,13 +46,13 @@ namespace GW2EIEvtcParser.EIData
                         if (_triggerCondition(swap, combatData, skillData))
                         {
                             lastTime = swap.Time;
-                            res.Add(new InstantCastEvent(swap.Time - 1, skillData.Get(SkillID), swap.Caster));
+                            res.Add(new InstantCastEvent(swap.Time, skillData.Get(SkillID), swap.Caster));
                         }
                     }
                     else
                     {
                         lastTime = swap.Time;
-                        res.Add(new InstantCastEvent(swap.Time - 1, skillData.Get(SkillID), swap.Caster));
+                        res.Add(new InstantCastEvent(swap.Time, skillData.Get(SkillID), swap.Caster));
                     }
                 }
             }

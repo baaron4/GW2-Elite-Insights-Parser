@@ -518,11 +518,11 @@ namespace GW2EIEvtcParser.EIData
                 {
                     if (y.Skill.IsSwap)
                     {
-                        return -1;
+                        return 1;
                     }
                     if (x.Skill.IsSwap)
                     {
-                        return 1;
+                        return -1;
                     }
                 }
                 return compare;
