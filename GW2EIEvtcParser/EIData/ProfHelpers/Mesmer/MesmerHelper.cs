@@ -25,7 +25,7 @@ namespace GW2EIEvtcParser.EIData
             ), // Signet of Midnight
             new BuffGainCastFinder(10197, 10198, EIData.InstantCastFinder.DefaultICD), // Portal Entre
             new DamageCastFinder(30192, 30192, EIData.InstantCastFinder.DefaultICD), // Lesser Phantasmal Defender
-            new BuffGainCastFinder(10192, 10243, EIData.InstantCastFinder.DefaultICD, 92715, 97950, (evt, combatData) => {
+            /*new BuffGainCastFinder(10192, 10243, EIData.InstantCastFinder.DefaultICD, 92715, 97950, (evt, combatData) => {
                 var buffsLossToCheck = new List<long>
                 {
                     10235, 30739, 21751, 10231, 10246, 10233
@@ -73,7 +73,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return true;
                 
-            }), // Distortion
+            }), // Distortion*/
         };
 
 
