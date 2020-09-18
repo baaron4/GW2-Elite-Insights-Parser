@@ -194,14 +194,14 @@ namespace GW2EIEvtcParser.ParsedData
         private const string DefaultIcon = "https://render.guildwars2.com/file/1D55D34FB4EE20B1962E315245E40CA5E1042D0E/62248.png";
 
         // Fields
-        public long ID { get; private set; }
+        public long ID { get; }
         //public int Range { get; private set; } = 0;
-        public bool AA => ApiSkill?.Slot == "Weapon_1" || ApiSkill?.Slot == "Downed_1";
+        public bool AA { get; }
 
         public bool IsSwap => ID == WeaponSwapId || ElementalistHelper.IsElementalSwap(ID) || RevenantHelper.IsLegendSwap(ID);
-        public string Name { get; private set; }
-        public string Icon { get; private set; }
-        private WeaponDescriptor _weaponDescriptor;
+        public string Name { get; }
+        public string Icon { get;}
+        private readonly WeaponDescriptor _weaponDescriptor;
         internal GW2APISkill ApiSkill { get; }
         private SkillInfoEvent _skillInfo { get; set; }
 
@@ -212,7 +212,42 @@ namespace GW2EIEvtcParser.ParsedData
             this.ID = ID;
             Name = name.Replace("\0", "");
             ApiSkill = GW2APIController.GetAPISkill(ID);
-            CompleteItem();
+            //
+            if (_overrideNames.TryGetValue(ID, out string overrideName))
+            {
+                Name = overrideName;
+            }
+            else if (ApiSkill != null)
+            {
+                Name = ApiSkill.Name;
+            }
+            if (_overrideIcons.TryGetValue(ID, out string icon))
+            {
+                Icon = icon;
+            }
+            else
+            {
+                Icon = ApiSkill != null ? ApiSkill.Icon : DefaultIcon;
+            }
+            if (ApiSkill != null && ApiSkill.Type == "Weapon" && ApiSkill.WeaponType != "None" && ApiSkill.Professions.Count > 0 && (ApiSkill.Categories == null || (ApiSkill.Categories.Contains("Phantasm") || ApiSkill.Categories.Contains("DualWield"))))
+            {
+                _weaponDescriptor = new WeaponDescriptor(ApiSkill);
+            }
+            AA = (ApiSkill?.Slot == "Weapon_1" || ApiSkill?.Slot == "Downed_1");
+            if (AA)
+            {
+                if (ApiSkill.Categories != null)
+                {
+                    AA = AA && !ApiSkill.Categories.Contains("StealthAttack") && !ApiSkill.Categories.Contains("Ambush"); // Ambush in case one day it's added
+                }
+                if (ApiSkill.Description != null)
+                {
+                    AA = AA && !ApiSkill.Description.Contains("Ambush.");
+                }
+            }
+#if DEBUG
+            Name += " (" + ID + ")";
+#endif
         }
 
         public static bool CanCrit(long id, ulong gw2Build)
@@ -297,43 +332,6 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 _skillInfo = skillInfo;
             }
-        }
-
-        private void CompleteItem()
-        {
-            if (_overrideNames.TryGetValue(ID, out string name))
-            {
-                Name = name;
-            }
-            else if (ApiSkill != null)
-            {
-                Name = ApiSkill.Name;
-                /*if (_apiSkill.Facts != null)
-                {
-                    foreach (GW2APIFact fact in _apiSkill.Facts)
-                    {
-                        if (fact.Text != null && fact.Text == "Range" && fact.Value != null)
-                        {
-                            Range = Convert.ToInt32(fact.Value);
-                        }
-                    }
-                }*/
-            }
-            if (_overrideIcons.TryGetValue(ID, out string icon))
-            {
-                Icon = icon;
-            }
-            else
-            {
-                Icon = ApiSkill != null ? ApiSkill.Icon : DefaultIcon;
-            }
-            if (ApiSkill != null && ApiSkill.Type == "Weapon" && ApiSkill.WeaponType != "None" && ApiSkill.Professions.Count > 0 && (ApiSkill.Categories == null || (ApiSkill.Categories.Count == 1 && (ApiSkill.Categories[0] == "Phantasm" || ApiSkill.Categories[0] == "DualWield"))))
-            {
-                _weaponDescriptor = new WeaponDescriptor(ApiSkill);
-            }
-#if DEBUG
-            Name += " (" + ID + ")";
-#endif
         }
 
         // Public Methods
