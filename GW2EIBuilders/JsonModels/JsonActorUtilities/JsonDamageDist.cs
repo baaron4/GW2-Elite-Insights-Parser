@@ -142,12 +142,12 @@ namespace GW2EIBuilders.JsonModels
             {
                 Hits += dmgEvt.DoubleProcHit ? 0 : 1;
                 TotalDamage += dmgEvt.Damage;
-                Min = Math.Min(Min, dmgEvt.Damage);
-                Max = Math.Max(Max, dmgEvt.Damage);
                 if (!IndirectDamage)
                 {
                     if (dmgEvt.HasHit)
                     {
+                        Min = Math.Min(Min, dmgEvt.Damage);
+                        Max = Math.Max(Max, dmgEvt.Damage);
                         Flank += dmgEvt.IsFlanking ? 1 : 0;
                         Glance += dmgEvt.HasGlanced ? 1 : 0;
                         Crit += dmgEvt.HasCrit ? 1 : 0;
@@ -162,6 +162,8 @@ namespace GW2EIBuilders.JsonModels
                 Invulned += dmgEvt.IsAbsorbed ? 1 : 0;
                 ShieldDamage += dmgEvt.ShieldDamage;
             }
+            Min = Min == int.MaxValue ? 0 : Min;
+            Max = Max == int.MinValue ? 0 : Max;
         }
 
         internal static List<JsonDamageDist> BuildJsonDamageDistList(Dictionary<long, List<AbstractDamageEvent>> dlsByID, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)

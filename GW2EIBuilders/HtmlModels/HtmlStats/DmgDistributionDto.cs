@@ -33,11 +33,11 @@ namespace GW2EIBuilders.HtmlModels
                 IsIndirectDamage = IsIndirectDamage || dl is NonDirectDamageEvent;
                 int curdmg = dl.Damage;
                 totaldamage += curdmg;
-                if (curdmg < mindamage) { mindamage = curdmg; }
-                if (curdmg > maxdamage) { maxdamage = curdmg; }
                 hits++;
                 if (dl.HasHit)
                 {
+                    if (curdmg < mindamage) { mindamage = curdmg; }
+                    if (curdmg > maxdamage) { maxdamage = curdmg; }
                     connectedHits++;
                     if (dl.HasCrit)
                     {
