@@ -15,8 +15,8 @@ namespace GW2EIEvtcParser.EIData
         {
             //new DamageCastFinder(12573,12573,EIData.InstantCastFinder.DefaultICD), // Hunter's Shot
             //new DamageCastFinder(12507,12507,EIData.InstantCastFinder.DefaultICD), // Crippling Shot
-            new BuffGiveCastFinder(12633,33902,EIData.InstantCastFinder.DefaultICD), // "Sic 'Em!"
-            new BuffGiveCastFinder(12633,56923,EIData.InstantCastFinder.DefaultICD), // "Sic 'Em!" PvP
+            new BuffGainCastFinder(12633,33902,EIData.InstantCastFinder.DefaultICD), // "Sic 'Em!"
+            new BuffGainCastFinder(12633,56923,EIData.InstantCastFinder.DefaultICD), // "Sic 'Em!" PvP
             new BuffGainCastFinder(12500,12543,EIData.InstantCastFinder.DefaultICD, (evt, combatData) => Math.Abs(evt.AppliedDuration - 6000) < ParserHelper.ServerDelayConstant), // Signet of Stone
             new BuffGainCastFinder(42470,12543,EIData.InstantCastFinder.DefaultICD, (evt, combatData) => Math.Abs(evt.AppliedDuration - 5000) < ParserHelper.ServerDelayConstant), // Lesser Signet of Stone
             new BuffGainCastFinder(12537,12536,EIData.InstantCastFinder.DefaultICD), // Sharpening Stone
