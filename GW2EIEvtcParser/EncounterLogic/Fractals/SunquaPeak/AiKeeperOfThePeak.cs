@@ -13,7 +13,48 @@ namespace GW2EIEvtcParser.EncounterLogic
         public AiKeeperOfThePeak(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
-            {       
+            {
+                // Air
+            new HitOnPlayerMechanic(61574, "Elemental Manipulation (Air)", new MechanicPlotlySetting("triangle","rgb(255,0,255)"), "Air Manip.","Elemental Manipulation (Air)", "Elemental Manipulation (Air).",0),
+            new HitOnPlayerMechanic(61534, "Elemental Manipulation (Air)", new MechanicPlotlySetting("triangle","rgb(255,0,255)"), "Air Manip.","Elemental Manipulation (Air)", "Elemental Manipulation (Air)",0),
+            new HitOnPlayerMechanic(61196, "Elemental Manipulation (Air)", new MechanicPlotlySetting("triangle","rgb(255,0,255)"), "Air Manip.","Elemental Manipulation (Air)", "Elemental Manipulation (Air)",0),
+            new HitOnPlayerMechanic(61487, "Fulgor Sphere", new MechanicPlotlySetting("circle","rgb(255,0,255)"), "Flg.Sph.","Fulgor Sphere", "Fulgor Sphere",0),
+            new HitOnPlayerMechanic(61565, "Fulgor Sphere", new MechanicPlotlySetting("circle","rgb(255,0,255)"), "Flg.Sph.","Fulgor Sphere", "Fulgor Sphere",0),
+            new HitOnPlayerMechanic(61205, "Wind Burst", new MechanicPlotlySetting("triangle-down","rgb(255,0,255)"), "Wnd.Burst","Wind Burst", "Wind Burst",0),
+            new EnemyBuffApplyMechanic(61224, "Whirlwind Shield",new MechanicPlotlySetting("asterisk-open","rgb(255,0,255)"), "W.Shield" ,"Whirlwind Shield","Whirlwind Shield",0),
+            // Fire
+            new HitOnPlayerMechanic(61279, "Elemental Manipulation (Fire)", new MechanicPlotlySetting("triangle","rgb(255,125,0)"), "Fire Manip.","Elemental Manipulation (Fire)", "Elemental Manipulation (Fire)",0),
+            new HitOnPlayerMechanic(61256, "Elemental Manipulation (Fire)", new MechanicPlotlySetting("triangle","rgb(255,125,0)"), "Fire Manip.","Elemental Manipulation (Fire)", "Elemental Manipulation (Fire)",0),
+            new HitOnPlayerMechanic(61271, "Elemental Manipulation (Fire)", new MechanicPlotlySetting("triangle","rgb(255,125,0)"), "Fire Manip.","Elemental Manipulation (Fire)", "Elemental Manipulation (Fire)",0),
+            new HitOnPlayerMechanic(61273, "Roiling Flames", new MechanicPlotlySetting("circle","rgb(255,125,0)"), "Rlng.Flms.","Roiling Flames", "Roiling Flames",0),
+            new HitOnPlayerMechanic(61582, "Roiling Flames", new MechanicPlotlySetting("circle","rgb(255,125,0)"), "Rlng.Flms.","Roiling Flames", "Roiling Flames",0),
+            new SkillOnPlayerMechanic(61348, "Call Meteor", new MechanicPlotlySetting("hexagram","rgb(255,125,0)"), "Meteor.H","Hit by Meteor", "Meteor Hit",1000, (evt, log) => evt.HasDowned || evt.HasKilled),
+            new HitOnPlayerMechanic(61248, "Flame Burst", new MechanicPlotlySetting("triangle-down","rgb(255,125,0)"), "Flm.Burst","Flame Burst", "Flame Burst",0),
+            new EnemyCastStartMechanic(61439, "Call Meteor", new MechanicPlotlySetting("asterisk-open","rgb(255,125,0)"), "Smn.Meteor", "Summoned Meteor", "Summong Meteor", 0),
+            // Water
+            new HitOnPlayerMechanic(61172, "Elemental Manipulation (Water)", new MechanicPlotlySetting("triangle","rgb(0,125,255)"), "Water Manip.","Elemental Manipulation (Water)", "Elemental Manipulation (Water)",0),
+            new HitOnPlayerMechanic(61207, "Elemental Manipulation (Water)", new MechanicPlotlySetting("triangle","rgb(0,125,255)"), "Water Manip.","Elemental Manipulation (Water)", "Elemental Manipulation (Water)",0),
+            new HitOnPlayerMechanic(61556, "Elemental Manipulation (Water)", new MechanicPlotlySetting("triangle","rgb(0,125,255)"), "Water Manip.","Elemental Manipulation (Water)", "Elemental Manipulation (Water)",0),
+            new HitOnPlayerMechanic(61556, "Torrential Bolt", new MechanicPlotlySetting("circle","rgb(0,125,255)"), "Tor.Bolt","Torrential Bolt", "Torrential Bolt",0),
+            new HitOnPlayerMechanic(61177, "Torrential Bolt", new MechanicPlotlySetting("circle","rgb(0,125,255)"), "Tor.Bolt","Torrential Bolt", "Torrential Bolt",0),
+            new HitOnPlayerMechanic(61251, "Aquatic Burst", new MechanicPlotlySetting("triangle-down","rgb(0,125,255)"), "Aq.Burst","Aquatic Burst", "Aquatic Burst",0),
+            new EnemyBuffApplyMechanic(61402, "Tidal Barrier", new MechanicPlotlySetting("asterisk-open","rgb(0,125,255)"), "Tid.Bar.", "Tidal Barrier", "Tidal Barrier", 0),
+            // Dark
+            new HitOnPlayerMechanic(61602, "Empathic Manipulation", new MechanicPlotlySetting("triangle","rgb(200,125,255)"), "Emp.Manip. Manip.","Empathic Manipulation", "Empathic Manipulation",0),
+            new HitOnPlayerMechanic(61606, "Empathic Manipulation", new MechanicPlotlySetting("triangle","rgb(200,125,255)"), "Emp.Manip. Manip.","Empathic Manipulation", "Empathic Manipulation",0),
+            new HitOnPlayerMechanic(61604, "Empathic Manipulation", new MechanicPlotlySetting("triangle","rgb(200,125,255)"), "Emp.Manip. Manip.","Empathic Manipulation", "Empathic Manipulation",0),
+            new HitOnPlayerMechanic(61508, "Empathic Manipulation", new MechanicPlotlySetting("triangle","rgb(200,125,255)"), "Emp.Manip. Manip.","Empathic Manipulation", "Empathic Manipulation",0),
+            new HitOnPlayerMechanic(61217, "Empathic Manipulation", new MechanicPlotlySetting("triangle","rgb(200,125,255)"), "Emp.Manip. Manip.","Empathic Manipulation", "Empathic Manipulation",0),
+            new HitOnPlayerMechanic(61529, "Empathic Manipulation", new MechanicPlotlySetting("triangle","rgb(200,125,255)"), "Emp.Manip. Manip.","Empathic Manipulation", "Empathic Manipulation",0),
+            new HitOnPlayerMechanic(61260, "Empathic Manipulation", new MechanicPlotlySetting("triangle","rgb(200,125,255)"), "Emp.Manip. Manip.","Empathic Manipulation", "Empathic Manipulation",0),
+            new HitOnPlayerMechanic(61600, "Empathic Manipulation", new MechanicPlotlySetting("triangle","rgb(200,125,255)"), "Emp.Manip. Manip.","Empathic Manipulation", "Empathic Manipulation",0),
+            new HitOnPlayerMechanic(61527, "Empathic Manipulation", new MechanicPlotlySetting("triangle","rgb(200,125,255)"), "Emp.Manip. Manip.","Empathic Manipulation", "Empathic Manipulation",0),
+            new EnemyCastStartMechanic(61508, "Empathic Manipulation (Fear)", new MechanicPlotlySetting("triangle-up","rgb(200,125,255)"), "Fear Manip.", "Empathic Manipulation (Fear)", "Empathic Manipulation (Fear)", 0),
+            new EnemyCastEndMechanic(61508, "Empathic Manipulation (Fear) Interrupt", new MechanicPlotlySetting("triangle-open-up","rgb(200,125,255)"), "IntFear Manip.", "Empathic Manipulation (Fear) Interrupt", "Empathic Manipulation (Fear) Interrupt", 0, (evt, log) => evt is AnimatedCastEvent ace && ace.Status == AbstractCastEvent.AnimationStatus.Interrupted),
+            new EnemyCastStartMechanic(61606, "Empathic Manipulation (Sorrow)", new MechanicPlotlySetting("triangle-left","rgb(200,125,255)"), "Sor.Manip.", "Empathic Manipulation (Sorrow)", "Empathic Manipulation (Sorrow)", 0),
+            new EnemyCastEndMechanic(61606, "Empathic Manipulation (Sorrow) Interrupt", new MechanicPlotlySetting("triangle-open-left","rgb(200,125,255)"), "IntSor.Manip.", "Empathic Manipulation (Sorrow) Interrupt", "Empathic Manipulation (Sorrow) Interrupt", 0, (evt, log) => evt is AnimatedCastEvent ace && ace.Status == AbstractCastEvent.AnimationStatus.Interrupted),
+            new EnemyCastStartMechanic(61602, "Empathic Manipulation (Guilt)", new MechanicPlotlySetting("triangle-right","rgb(200,125,255)"), "Glt.Manip.", "Empathic Manipulation (Guilt)", "Empathic Manipulation (Guilt)", 0),
+            new EnemyCastEndMechanic(61602, "Empathic Manipulation (Guilt) Interrupt", new MechanicPlotlySetting("triangle-open-right","rgb(200,125,255)"), "Int.Glt.Manip.", "Empathic Manipulation (Guilt) Interrupt", "Empathic Manipulation (Guilt) Interrupt", 0, (evt, log) => evt is AnimatedCastEvent ace && ace.Status == AbstractCastEvent.AnimationStatus.Interrupted),
             });
             Extension = "ai";
             Icon = "https://i.imgur.com/3mlCdI9.png";
@@ -24,11 +65,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (_hasDarkMode && _hasElementalMode)
             {
                 return "Ai, Keeper of the Peak";
-            } 
+            }
             else if (_hasDarkMode)
             {
                 return "Dark Ai, Keeper of the Peak";
-            } 
+            }
             else
             {
                 return "Elemental Ai, Keeper of the Peak";
@@ -112,7 +153,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     targetAgent.OverrideID((int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2);
                     agentData.Refresh();
                 }
-            } 
+            }
             else
             {
                 Extension = "elai";
@@ -145,7 +186,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     throw new InvalidOperationException("Ai not found");
                 }
-            } 
+            }
             else
             {
                 phases[0].Targets.Add(elementalAi);
@@ -157,7 +198,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     throw new InvalidOperationException("Ai not found");
                 }
-            } 
+            }
             else
             {
                 phases[0].Targets.Add(darkAi);
@@ -176,7 +217,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var elePhase = new PhaseData(eleStart, eleEnd, "Elemental Phase");
                     elePhase.Targets.Add(elementalAi);
                     phases.Add(elePhase);
-                }          
+                }
                 //
                 var invul762Gains = log.CombatData.GetBuffData(762).OfType<BuffApplyEvent>().Where(x => x.To == elementalAi.AgentItem).ToList();
                 var invul762Losses = log.CombatData.GetBuffData(762).OfType<BuffRemoveAllEvent>().Where(x => x.To == elementalAi.AgentItem).ToList();
@@ -199,7 +240,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             break;
                         }
                         subStart = castEvt.Time;
-                    } 
+                    }
                     else
                     {
                         var subPhase = new PhaseData(subStart, subEnd, eleNames[i]);
@@ -207,7 +248,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         phases.Add(subPhase);
                         break;
                     }
-                    
+
                 }
             }
             if (_hasDarkMode)
@@ -220,7 +261,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var darkPhase = new PhaseData(darkStart, darkEnd, "Dark Phase");
                     darkPhase.Targets.Add(darkAi);
                     phases.Add(darkPhase);
-                }             
+                }
                 // sub phases
                 AbstractCastEvent fearToSorrow = darkAi.GetCastLogs(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillId == 61606);
                 if (fearToSorrow != null)
