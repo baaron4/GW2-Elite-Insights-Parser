@@ -322,6 +322,10 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
                 case ArcDPSEnums.TargetID.Arkk:
                     return "https://i.imgur.com/u6vv8cW.png";
+                case ArcDPSEnums.TargetID.AiKeeperOfThePeak:
+                    return "https://i.imgur.com/eCXjoAS.png";
+                case ArcDPSEnums.TargetID.AiKeeperOfThePeak2:
+                    return "https://i.imgur.com/I8nwhAw.png";
                 case ArcDPSEnums.TargetID.LGolem:
                     return "https://wiki.guildwars2.com/images/4/47/Mini_Baron_von_Scrufflebutt.png";
                 case ArcDPSEnums.TargetID.AvgGolem:
