@@ -45,7 +45,7 @@ namespace GW2EIEvtcParser.ParsedData
             switch (endItem.IsActivation)
             {
                 case ArcDPSEnums.Activation.CancelCancel:
-                    Status = AnimationStatus.Iterrupted;
+                    Status = AnimationStatus.Interrupted;
                     SavedDuration = -ActualDuration;
                     break;
                 case ArcDPSEnums.Activation.Reset:

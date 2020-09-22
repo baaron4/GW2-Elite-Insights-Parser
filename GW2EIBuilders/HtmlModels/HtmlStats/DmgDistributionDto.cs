@@ -92,7 +92,7 @@ namespace GW2EIBuilders.HtmlModels
                         casts++;
                         switch (cl.Status)
                         {
-                            case AbstractCastEvent.AnimationStatus.Iterrupted:
+                            case AbstractCastEvent.AnimationStatus.Interrupted:
                                 timeWasted += cl.SavedDuration;
                                 break;
 
@@ -179,7 +179,7 @@ namespace GW2EIBuilders.HtmlModels
                         casts++;
                         switch (cl.Status)
                         {
-                            case AbstractCastEvent.AnimationStatus.Iterrupted:
+                            case AbstractCastEvent.AnimationStatus.Interrupted:
                                 timeWasted += cl.SavedDuration;
                                 break;
 
