@@ -325,12 +325,9 @@
                             pts = mech.points[this.phaseindex][j];
                             var tarId = this.phase.targets[j];
                             if (tarId >= 0) {
+                                var health = this.graph.targets[j].healthStates;
                                 for (k = 0; k < pts.length; k++) {
-                                    time = pts[k];
-                                    ftime = Math.floor(time);
-                                    y = hps[j][ftime];
-                                    yp1 = hps[j][ftime + 1];
-                                    chart.push(this.interpolatePoint(ftime, ftime + 1, y, yp1, time));
+                                    chart.push(findState(health, pts[k], 0, health.length - 1) * maxDPS / 100.0);
                                 }
                             } else {
                                 for (k = 0; k < pts.length; k++) {
