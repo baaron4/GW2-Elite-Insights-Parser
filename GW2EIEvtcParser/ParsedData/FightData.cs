@@ -179,7 +179,10 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.Arkk:
                     Logic = new Arkk(id);
                     break;
-                    //
+                case ArcDPSEnums.TargetID.AiKeeperOfThePeak:
+                    Logic = new AiKeeperOfThePeak(id);
+                    break;
+                //
                 case ArcDPSEnums.TargetID.WorldVersusWorld:
                     Logic = new WvWFight(id);
                     break;
