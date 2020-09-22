@@ -15,13 +15,24 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {       
             });
-            Extension = "keeperpeak";
+            Extension = "ai";
             Icon = "https://i.imgur.com/3mlCdI9.png";
         }
 
         internal override string GetLogicName(ParsedEvtcLog log)
         {
-            return "Ai, Keeper of the Peak";
+            if (_hasDarkMode && _hasElementalMode)
+            {
+                return "Ai, Keeper of the Peak";
+            } 
+            else if (_hasDarkMode)
+            {
+                return "Dark Ai, Keeper of the Peak";
+            } 
+            else
+            {
+                return "Elemental Ai, Keeper of the Peak";
+            }
         }
 
         protected override List<int> GetFightTargetsIDs()
@@ -55,11 +66,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             targetAgent.OverrideName("Elemental Ai");
             if (_hasDarkMode)
             {
-                CombatItem darkModeStartEvent = combatData.FirstOrDefault(x => x.SkillID == 61277 && x.Time >= darkModePhaseEvent.Time);
                 if (_hasElementalMode)
                 {
-                    CombatItem invul895Loss = combatData.FirstOrDefault(x => x.Time <= darkModeStartEvent.Time && x.SkillID == 895 && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All);
-                    long lastAwareTime = (invul895Loss != null ? invul895Loss.Time : darkModeStartEvent.Time);
+                    long darkModeStart = combatData.FirstOrDefault(x => x.SkillID == 61277 && x.Time >= darkModePhaseEvent.Time).Time;
+                    CombatItem invul895Loss = combatData.FirstOrDefault(x => x.Time <= darkModeStart && x.SkillID == 895 && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All);
+                    long lastAwareTime = (invul895Loss != null ? invul895Loss.Time : darkModeStart);
                     AgentItem targetAgent2 = agentData.AddCustomAgent(lastAwareTime + 1, targetAgent.LastAware, AgentItem.AgentType.NPC, "Dark Ai", "", (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2, targetAgent.Toughness, targetAgent.Healing, targetAgent.Condition, targetAgent.Concentration, targetAgent.HitboxWidth, targetAgent.HitboxHeight);
                     targetAgent.OverrideAwareTimes(targetAgent.FirstAware, lastAwareTime);
                     // Redirect combat events
@@ -96,6 +107,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 else
                 {
+                    Extension = "drkai";
                     targetAgent.OverrideName("Dark Ai");
                     targetAgent.OverrideID((int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2);
                     agentData.Refresh();
@@ -103,6 +115,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             } 
             else
             {
+                Extension = "elai";
                 agentData.Refresh();
             }
             base.EIEvtcParse(fightData, agentData, combatData, playerList);
@@ -125,8 +138,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC elementalAI = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak);
-            if (elementalAI == null)
+            NPC elementalAi = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak);
+            if (elementalAi == null)
             {
                 if (_hasElementalMode)
                 {
@@ -135,10 +148,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             } 
             else
             {
-                phases[0].Targets.Add(elementalAI);
+                phases[0].Targets.Add(elementalAi);
             }
-            NPC darkAI = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2);
-            if (darkAI == null)
+            NPC darkAi = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2);
+            if (darkAi == null)
             {
                 if (_hasDarkMode)
                 {
@@ -147,11 +160,91 @@ namespace GW2EIEvtcParser.EncounterLogic
             } 
             else
             {
-                phases[0].Targets.Add(darkAI);
+                phases[0].Targets.Add(darkAi);
             }
             if (!requirePhases)
             {
                 return phases;
+            }
+            if (_hasElementalMode)
+            {
+                BuffApplyEvent invul895Gain = log.CombatData.GetBuffData(895).OfType<BuffApplyEvent>().Where(x => x.To == elementalAi.AgentItem).FirstOrDefault();
+                long eleStart = Math.Max(elementalAi.FirstAware, 0);
+                long eleEnd = invul895Gain != null ? invul895Gain.Time : log.FightData.FightEnd;
+                if (_hasDarkMode)
+                {
+                    var elePhase = new PhaseData(eleStart, eleEnd, "Elemental Phase");
+                    elePhase.Targets.Add(elementalAi);
+                    phases.Add(elePhase);
+                }          
+                //
+                var invul762Gains = log.CombatData.GetBuffData(762).OfType<BuffApplyEvent>().Where(x => x.To == elementalAi.AgentItem).ToList();
+                var invul762Losses = log.CombatData.GetBuffData(762).OfType<BuffRemoveAllEvent>().Where(x => x.To == elementalAi.AgentItem).ToList();
+                // sub phases
+                string[] eleNames = { "Air", "Fire", "Water" };
+                long subStart = eleStart;
+                long subEnd = 0;
+                for (int i = 0; i < invul762Gains.Count; i++)
+                {
+                    subEnd = invul762Gains[i].Time;
+                    if (i < invul762Losses.Count)
+                    {
+                        var subPhase = new PhaseData(subStart, subEnd, eleNames[i]);
+                        subPhase.Targets.Add(elementalAi);
+                        phases.Add(subPhase);
+                        long invul762Loss = invul762Losses[i].Time;
+                        AbstractCastEvent castEvt = elementalAi.GetCastLogs(log, eleStart, eleEnd).FirstOrDefault(x => x.SkillId == 61385 && x.Time >= invul762Loss);
+                        if (castEvt == null)
+                        {
+                            break;
+                        }
+                        subStart = castEvt.Time;
+                    } 
+                    else
+                    {
+                        var subPhase = new PhaseData(subStart, subEnd, eleNames[i]);
+                        subPhase.Targets.Add(elementalAi);
+                        phases.Add(subPhase);
+                        break;
+                    }
+                    
+                }
+            }
+            if (_hasDarkMode)
+            {
+                BuffApplyEvent invul895Gain = log.CombatData.GetBuffData(895).OfType<BuffApplyEvent>().Where(x => x.To == darkAi.AgentItem).FirstOrDefault();
+                long darkStart = Math.Max(darkAi.FirstAware, 0);
+                long darkEnd = invul895Gain != null ? invul895Gain.Time : log.FightData.FightEnd;
+                if (_hasElementalMode)
+                {
+                    var darkPhase = new PhaseData(darkStart, darkEnd, "Dark Phase");
+                    darkPhase.Targets.Add(darkAi);
+                    phases.Add(darkPhase);
+                }             
+                // sub phases
+                AbstractCastEvent fearToSorrow = darkAi.GetCastLogs(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillId == 61606);
+                if (fearToSorrow != null)
+                {
+                    var fearPhase = new PhaseData(darkStart + 1, fearToSorrow.Time, "Fear");
+                    fearPhase.Targets.Add(darkAi);
+                    phases.Add(fearPhase);
+                    AbstractCastEvent sorrowToGuilt = darkAi.GetCastLogs(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillId == 61602);
+                    if (sorrowToGuilt != null)
+                    {
+                        var sorrowPhase = new PhaseData(fearToSorrow.Time + 1, sorrowToGuilt.Time, "Sorrow");
+                        sorrowPhase.Targets.Add(darkAi);
+                        phases.Add(sorrowPhase);
+                        var guiltPhase = new PhaseData(sorrowToGuilt.Time + 1, darkEnd, "Guilt");
+                        guiltPhase.Targets.Add(darkAi);
+                        phases.Add(guiltPhase);
+                    }
+                    else
+                    {
+                        var sorrowPhase = new PhaseData(fearToSorrow.Time + 1, darkEnd, "Sorrow");
+                        sorrowPhase.Targets.Add(darkAi);
+                        phases.Add(sorrowPhase);
+                    }
+                }
             }
             return phases;
         }
