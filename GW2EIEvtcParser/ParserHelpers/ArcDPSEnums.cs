@@ -501,6 +501,16 @@ namespace GW2EIEvtcParser
             DOC = 16657,
             CHOP = 16552,
             ProjectionArkk = 17613,
+            // Ai
+            EnrageWaterSprite = 23270,
+            SorrowDemon1 = 23265,
+            SorrowDemon2 = 23242,
+            SorrowDemon3 = 23279,
+            SorrowDemon4 = 23245,
+            SorrowDemon5 = 23256,
+            DoubtDemon = 23268,
+            FearDemon = 23264,
+            GuiltDemon = 23252,
             //
             Unknown
         };

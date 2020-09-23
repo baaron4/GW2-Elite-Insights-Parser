@@ -95,6 +95,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
+        {
+            return new List<ArcDPSEnums.TrashID>
+            {
+                ArcDPSEnums.TrashID.FearDemon,
+                ArcDPSEnums.TrashID.GuiltDemon,
+                ArcDPSEnums.TrashID.EnrageWaterSprite,
+                ArcDPSEnums.TrashID.SorrowDemon1,
+                ArcDPSEnums.TrashID.SorrowDemon2,
+                ArcDPSEnums.TrashID.SorrowDemon3,
+                ArcDPSEnums.TrashID.SorrowDemon4,
+                ArcDPSEnums.TrashID.SorrowDemon5,
+            };
+        }
+
         protected override HashSet<int> GetUniqueTargetIDs()
         {
             return new HashSet<int>

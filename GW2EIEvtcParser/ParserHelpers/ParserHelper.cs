@@ -345,6 +345,8 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.Spirit2:
                 case ArcDPSEnums.TrashID.ChargedSoul:
                 case ArcDPSEnums.TrashID.HollowedBomber:
+                case ArcDPSEnums.TrashID.GuiltDemon:
+                case ArcDPSEnums.TrashID.DoubtDemon:
                     return "https://i.imgur.com/sHmksvO.png";
                 case ArcDPSEnums.TrashID.Saul:
                     return "https://i.imgur.com/ck2IsoS.png";
@@ -460,6 +462,12 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.WhisperEcho:
                 case ArcDPSEnums.TrashID.CharrTank:
                 case ArcDPSEnums.TrashID.PropagandaBallon:
+                case ArcDPSEnums.TrashID.FearDemon:
+                case ArcDPSEnums.TrashID.SorrowDemon1:
+                case ArcDPSEnums.TrashID.SorrowDemon2:
+                case ArcDPSEnums.TrashID.SorrowDemon3:
+                case ArcDPSEnums.TrashID.SorrowDemon4:
+                case ArcDPSEnums.TrashID.SorrowDemon5:
                     return "https://i.imgur.com/k79t7ZA.png";
                 case ArcDPSEnums.TrashID.HandOfErosion:
                 case ArcDPSEnums.TrashID.HandOfEruption:
