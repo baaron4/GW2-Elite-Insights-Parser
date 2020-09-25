@@ -270,6 +270,15 @@ namespace GW2EIBuilders.JsonModels
             /// Number of hits against invulnerable targets
             /// </summary>
             public int Invulned { get; internal set; }
+            /// <summary>
+            /// Number of times killed target
+            /// </summary>
+            public int Killed { get; internal set; }
+            [JsonProperty]
+            /// <summary>
+            /// Number of times downed target
+            /// </summary>
+            public int Downed { get; internal set; }
 
             [JsonConstructor]
             internal JsonGameplayStats()
@@ -292,6 +301,8 @@ namespace GW2EIBuilders.JsonModels
                 Evaded = stats.Evaded;
                 Interrupts = stats.Interrupts;
                 Invulned = stats.Invulned;
+                Killed = stats.Killed;
+                Downed = stats.Downed;
             }
 
             internal JsonGameplayStats(FinalGameplayStatsAll stats) : this(stats as FinalGameplayStats)

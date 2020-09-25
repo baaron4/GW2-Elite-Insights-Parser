@@ -49,6 +49,16 @@
                     <th data-original-title="Times the enemy blocked an attack">
                         <img src="https://wiki.guildwars2.com/images/e/e5/Aegis.png" alt="Blocked"
                              class="icon icon-hover">
+                    </th>                  
+                    <th v-if="wvw" data-original-title="Number of times downed target">
+                        <img src="https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png"
+                            alt="Downed" 
+                            class="icon icon-hover">
+                    </th>             
+                    <th v-if="wvw" data-original-title="Number of times killed target">
+                        <img src="https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png"
+                            alt="Killed" 
+                            class="icon icon-hover">
                     </th>
                     <th data-original-title="Time wasted(in seconds) interupting skill casts">
                         <img src="https://wiki.guildwars2.com/images/b/b3/Out_Of_Health_Potions.png" alt="Wasted"
@@ -98,7 +108,7 @@
                     <td :data-original-title="round2(100*row.data[6]/ row.data[0]) + '% of hit(s)'">
                         {{row.data[6]}}
                     </td>
-                    <td :data-original-title="round2(100*row.data[7]/ row.data[12]) + '% connected hit(s)'">
+                    <td :data-original-title="round2(100*row.data[7]/ row.data[11]) + '% connected hit(s)'">
                         {{row.data[7]}}
                     </td>
                     <td>
@@ -109,6 +119,12 @@
                     </td>
                     <td :data-original-title="round2(100*row.data[10]/ row.data[0]) + '% of hit(s)'">
                         {{row.data[10]}}
+                    </td>
+                    <td v-if="wvw">
+                        {{row.data[13]}}
+                    </td>
+                    <td v-if="wvw">
+                        {{row.data[12]}}
                     </td>
                     <td
                         :data-original-title="row.commons[1] + ' cancels <br>' + round2(100.0 * row.commons[0] / phase.durationS) + '% of the phase'">
@@ -142,7 +158,7 @@
                     <td :data-original-title="round2(100*row.data[6]/ row.data[0])+ '% of hit(s)'">
                         {{row.data[6]}}
                     </td>
-                    <td :data-original-title="round2(100*row.data[7]/ row.data[12]) + '% connected hit(s)'">
+                    <td :data-original-title="round2(100*row.data[7]/ row.data[11]) + '% connected hit(s)'">
                         {{row.data[7]}}
                     </td>
                     <td>
@@ -153,6 +169,12 @@
                     </td>
                     <td :data-original-title="round2(100*row.data[10]/ row.data[0]) + '% of hit(s)'">
                         {{row.data[10]}}
+                    </td>
+                    <td v-if="wvw">
+                        {{row.data[13]}}
+                    </td>
+                    <td v-if="wvw">
+                        {{row.data[12]}}
                     </td>
                     <td :data-original-title="row.commons[1] + ' cancels'">{{round3(row.commons[0])}}</td>
                     <td :data-original-title="row.commons[3] + ' cancels'">{{round3(row.commons[2])}}</td>
@@ -166,7 +188,7 @@
 </template>
 
 <script>
-    var commonOffset = 12;
+    var commonOffset = 14;
 
     Vue.component("gameplay-stats-component", {
         props: ["activetargets", "playerindex", "phaseindex"],
@@ -175,6 +197,7 @@
         data: function () {
             return {
                 targetless: logData.targetless,
+                wvw: logData.wvw,
                 mode: logData.targetless ? 0 : 1,
                 hasCommander: logData.hasCommander,
                 cache: new Map(),
