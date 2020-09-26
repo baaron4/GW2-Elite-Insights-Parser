@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 
@@ -52,7 +53,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new InvalidOperationException("Skorvald not found");
             }
-            return (target.GetHealth(combatData) == 5551340) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            if (combatData.GetBuildEvent().Build >= 106277)
+            {
+                return agentData.GetNPCsByID(16725).Any() && agentData.GetNPCsByID(11245).Any() ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            }
+            else
+            {
+                return (target.GetHealth(combatData) == 5551340) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            }
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()

@@ -12,7 +12,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new HitOnPlayerMechanic(59441, "Chains of Frost Hit", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "H.Chains","Hit by Chains of Frost", "Chains of Frost",50),
+                new HitOnPlayerMechanic(59159, "Chains of Frost Hit", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "H.Chains","Hit by Chains of Frost", "Chains of Frost",50),
+                new HitOnPlayerMechanic(59441, "Lethal Coalescence Soaked", new MechanicPlotlySetting("hexagram","rgb(255,0,0)"), "S.Lethal.Coal.","Soaked Lethal Coalescence Damage", "Soaked Lethal Coalescence",50),
                 new HitOnPlayerMechanic(59102, "Spreading Ice (Own)", new MechanicPlotlySetting("circle","rgb(255,125,0)"), "S.Ice","Hit by own spreading ice", "Spreading Ice (Own)",50),
                 new HitOnPlayerMechanic(59468, "Spreading Ice (Others)", new MechanicPlotlySetting("triangle","rgb(255,150,0)"), "S.Ice.O","Hit by other's spreading ice", "Spreading Ice (Others)",50),
                 new HitOnPlayerMechanic(59076, "Icy Slice", new MechanicPlotlySetting("hexagram","rgb(255,100,0)"), "I.Slice","Hit by Icy Slice", "Icy Slice",50),

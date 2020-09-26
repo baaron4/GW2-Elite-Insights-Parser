@@ -90,7 +90,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 foreach (KeyValuePair<long, Minions> pair in auxMinions)
                 {
-                    if (pair.Value.GetDamageLogs(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastLogs(log, 0, log.FightData.FightEnd).Any(x => x.SkillId != SkillItem.WeaponSwapId))
+                    if (pair.Value.GetDamageLogs(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastLogs(log, 0, log.FightData.FightEnd).Any(x => x.SkillId != SkillItem.WeaponSwapId && x.SkillId != SkillItem.MirageCloakDodgeId))
                     {
                         _minions[pair.Value.AgentItem.UniqueID] = pair.Value;
                     }
@@ -112,7 +112,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 foreach (KeyValuePair<string, Minions> pair in auxGadgetMinions)
                 {
-                    if (pair.Value.GetDamageLogs(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastLogs(log, 0, log.FightData.FightEnd).Any(x => x.SkillId != SkillItem.WeaponSwapId))
+                    if (pair.Value.GetDamageLogs(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastLogs(log, 0, log.FightData.FightEnd).Any(x => x.SkillId != SkillItem.WeaponSwapId && x.SkillId != SkillItem.MirageCloakDodgeId))
                     {
                         _minions[pair.Value.AgentItem.UniqueID] = pair.Value;
                     }
@@ -518,11 +518,11 @@ namespace GW2EIEvtcParser.EIData
                 {
                     if (y.Skill.IsSwap)
                     {
-                        return -1;
+                        return 1;
                     }
                     if (x.Skill.IsSwap)
                     {
-                        return 1;
+                        return -1;
                     }
                 }
                 return compare;

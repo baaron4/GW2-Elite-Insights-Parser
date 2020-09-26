@@ -1,19 +1,8 @@
 <template>
-    <div>
-        <ul class="nav nav-pills d-flex flex-row justify-content-center mt-1 mb-1 scale85">
-            <li class="nav-item">
-                <a class="nav-link" @click="dpsmode = 0" :class="{active: dpsmode === 0}">Full</a>
-            </li>
-            <li v-if="phase.end - phase.start > 10" class="nav-item">
-                <a class="nav-link" @click="dpsmode = 1" :class="{active: dpsmode === 1}">10s</a>
-            </li>
-            <li v-if="phase.end - phase.start > 30" class="nav-item">
-                <a class="nav-link" @click="dpsmode = 2" :class="{active: dpsmode === 2}">30s</a>
-            </li>
-            <li v-if="phase.subPhases" class="nav-item">
-                <a class="nav-link" @click="dpsmode = 3" :class="{active: dpsmode === 3}">Phase</a>
-            </li>
-        </ul>
+    <div>     
+        <dps-graph-mode-selector-component :data="graphdata" 
+            :phaseduration="this.phase.end - this.phase.start" :phasehassubphases="!!this.phase.subPhases">
+        </dps-graph-mode-selector-component>
         <h3 class="text-center mt-1 mb-1">{{graphname}}</h3>
         <graph-component :id="graphid" :layout="layout" :data="computeData"></graph-component>
         <rotation-legend-component></rotation-legend-component>
@@ -22,24 +11,42 @@
 
 <script>
 
-    function computeTargetDPS(target, damageData, lim, phasebreaks, cacheID, times) {
+    function computeTargetDPS(target, damageData, lim, phasebreaks, cacheID, times, graphMode) {
         if (target.dpsGraphCache.has(cacheID)) {
             return target.dpsGraphCache.get(cacheID);
         }
         var totalDamage = 0;
         var totalDPS = [0];
         var maxDPS = 0;
-        var limID = 0, j;
+        var left = 0, right = 0;
         var end = times.length;
-        for (j = 1; j < end; j++) {
+        if (graphMode === GraphType.CenteredDPS) {
+            lim /= 2;
+        }
+        for (var j = 0; j < end; j++) {
             var time = times[j];
             if (lim > 0) {
-                limID = Math.max(Math.round(time - lim), 0);
-            } else if (phasebreaks && phasebreaks[j - 1]) {
-                limID = j;
+                left = Math.max(Math.round(time - lim), 0);
+            } else if (phasebreaks && phasebreaks[j]) {
+                left = j;
             }
-            var div = Math.max(time - times[limID], 1);
-            totalDamage = damageData[j] - damageData[limID];
+            right = j;    
+            if (graphMode === GraphType.CenteredDPS) {
+                if (lim > 0) {
+                    right = Math.min(Math.round(time + lim), end - 1);
+                } else if (phasebreaks) {
+                    for (var i = left + 1; i < phasebreaks.length; i++) {
+                        if (phasebreaks[i]) {
+                            right = i;
+                            break;
+                        }
+                    }
+                } else {
+                    right = end - 1;
+                }
+            }  
+            var div = graphMode !== GraphType.Damage ? Math.max(times[right] - times[left], 1) : 1;
+            totalDamage = damageData[right] - damageData[left];
             totalDPS[j] = Math.round(totalDamage / (div));
             maxDPS = Math.max(maxDPS, totalDPS[j]);
         }
@@ -56,13 +63,10 @@
 
     Vue.component("target-graph-tab-component", {
         props: ["targetindex", "phaseindex", 'light'],
-        template: `${template}`,
+        template: `${template}`,   
+        mixins: [graphComponent],
         data: function () {
             return {
-                dpsmode: 0,
-                layout: {},
-                dpsCache: new Map(),
-                dataCache: new Map(),
                 targetOffset: 0
             };
         },
@@ -149,7 +153,7 @@
                 },
                 yaxis: dpsY,
                 hoverinfo: 'name+y+x',
-                name: 'Total DPS'
+                name: 'Total'
             });
             this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc');
             computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
@@ -174,8 +178,31 @@
                 return "targetgraph-" + this.phaseTargetIndex + '-' + this.phaseindex;
             },
             graphname: function () {
-                var name = "DPS graph";
-                name = (this.dpsmode === 0 ? "Full " : (this.dpsmode === 1 ? "10s " : (this.dpsmode === 2 ? "30s " : "Phase "))) + name;
+                var name = "Graph";
+                switch (this.graphdata.graphmode) {
+                    case GraphType.DPS:
+                        name = "DPS " + name;
+                        break;
+                    case GraphType.CenteredDPS:
+                        name = "Centered DPS " + name;
+                        break;
+                    case GraphType.Damage:
+                        name = "Damage " + name;
+                        break;
+                    default:
+                        break;
+                }
+                switch (this.graphdata.dpsmode) {
+                    case 0:
+                        name = "Full " + name;
+                        break;
+                    case -1:
+                        name = "Phase " + name;
+                        break;
+                    default:                       
+                        name = this.graphdata.dpsmode + "s " + name;
+                        break;
+                }
                 return name;
             },
             computePhaseBreaks: function () {
@@ -191,6 +218,19 @@
             },
             computeData: function () {
                 this.layout.datarevision = new Date().getTime();
+                switch (this.graphdata.graphmode) {
+                    case GraphType.DPS:
+                        this.layout.yaxis3.title = "DPS";
+                        break;
+                    case GraphType.CenteredDPS:
+                        this.layout.yaxis3.title = "Centered DPS";
+                        break;
+                    case GraphType.Damage:
+                        this.layout.yaxis3.title = "Damage";
+                        break;
+                    default:
+                        break;
+                }
                 var res = this.data;
                 var data = this.computeDPSRelatedData();
                 this.data[this.targetOffset].y = data[0];
@@ -203,24 +243,23 @@
         },
         methods: {
             computeDPSData: function () {
-                var cacheID = this.dpsmode;
+                var cacheID = this.graphdata.dpsmode + '-' + this.graphdata.graphmode;
                 if (this.dpsCache.has(cacheID)) {
                     return this.dpsCache.get(cacheID);
                 }
                 //var before = performance.now();
                 var res;
                 var damageData = this.graph.targets[this.phaseTargetIndex].total;
-                if (this.dpsmode < 3) {
-                    var lim = (this.dpsmode === 0 ? 0 : (this.dpsmode === 1 ? 10 : 30));
-                    res = computeTargetDPS(this.target, damageData, lim, null, cacheID + '-' + this.phaseindex, this.phase.times);
+                if (this.graphdata.dpsmode >= 0) {
+                    res = computeTargetDPS(this.target, damageData, this.graphdata.dpsmode, null, cacheID + '-' + this.phaseindex, this.phase.times, this.graphdata.graphmode);
                 } else {
-                    res = computeTargetDPS(this.target, damageData, 0, this.computePhaseBreaks, cacheID + '-' + this.phaseindex, this.phase.times);
+                    res = computeTargetDPS(this.target, damageData, 0, this.computePhaseBreaks, cacheID + '-' + this.phaseindex, this.phase.times, this.graphdata.graphmode);
                 }
                 this.dpsCache.set(cacheID, res);
                 return res;
             },
             computeDPSRelatedData: function () {
-                var cacheID = this.dpsmode;
+                var cacheID = this.graphdata.dpsmode + '-' + this.graphdata.graphmode;
                 if (this.dataCache.has(cacheID)) {
                     return this.dataCache.get(cacheID);
                 }

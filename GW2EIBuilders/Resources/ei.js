@@ -30,7 +30,7 @@ function compileTemplates() {
                             easing: 'cubic-in-out'
                         },
                         frame: {
-                            duration: 1.5 * duration
+                            duration: 0.75 * duration
                         }
                     });
                 },
@@ -148,7 +148,7 @@ function mainLoad() {
 };
 
 window.onload = function () {
-    Vue.config.devtools = true
+    Vue.config.devtools = true;
     // trick from
     var img = document.createElement("img");
     img.style.display = "none";

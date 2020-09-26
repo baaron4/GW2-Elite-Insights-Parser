@@ -18,6 +18,8 @@ namespace GW2EIEvtcParser.EIData
         public int Evaded { get; internal set; }
         public int Interrupts { get; internal set; }
         public int Invulned { get; internal set; }
+        public int Killed { get; internal set; }
+        public int Downed { get; internal set; }
 
 
         internal FinalGameplayStats(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor, AbstractSingleActor target)
@@ -78,6 +80,14 @@ namespace GW2EIEvtcParser.EIData
                 if (!dl.DoubleProcHit)
                 {
                     TotalDamageCount++;
+                }
+                if (dl.HasKilled)
+                {
+                    Killed++;
+                }
+                if (dl.HasDowned)
+                {
+                    Downed++;
                 }
             }
         }

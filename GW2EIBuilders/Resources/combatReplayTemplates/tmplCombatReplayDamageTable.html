@@ -86,14 +86,14 @@
                 cacheID += getTargetCacheID(activeTargets);
                 // compute dps for all players
                 for (i = 0; i < logData.players.length; i++) {
-                    computePlayerDPS(logData.players[i], this.graph[i], 0, null, activeTargets, cacheID + '-' + 0, this.phase.times);
+                    computePlayerDPS(logData.players[i], this.graph[i], 0, null, activeTargets, cacheID + '-' + 0, this.phase.times, GraphType.DPS);
                 }
             }
             cacheID = 0 + '-';
             cacheID += getTargetCacheID(this.targets);
             // compute dps for all players
             for (i = 0; i < logData.players.length; i++) {
-                computePlayerDPS(logData.players[i], this.graph[i], 0, null, this.targets, cacheID + '-' + 0, this.phase.times);
+                computePlayerDPS(logData.players[i], this.graph[i], 0, null, this.targets, cacheID + '-' + 0, this.phase.times, GraphType.DPS);
             }
         },
         mounted() {
@@ -140,7 +140,7 @@
                         var activeTargets = [j];
                         cacheID = 0 + '-';
                         cacheID += getTargetCacheID(activeTargets);
-                        data = computePlayerDPS(player, graphData, 0, null, activeTargets, cacheID + '-' + 0, this.phase.times).total.target;
+                        data = computePlayerDPS(player, graphData, 0, null, activeTargets, cacheID + '-' + 0, this.phase.times, GraphType.DPS).total.target;
                         cur = data[curTime];
                         next = data[curTime + 1];
                         if (typeof next !== "undefined") {
@@ -152,7 +152,7 @@
                     }
                     cacheID = 0 + '-';
                     cacheID += getTargetCacheID(this.targets);
-                    data = computePlayerDPS(player, graphData, 0, null, this.targets, cacheID + '-' + 0, this.phase.times).total.total;
+                    data = computePlayerDPS(player, graphData, 0, null, this.targets, cacheID + '-' + 0, this.phase.times, GraphType.DPS).total.total;
                     cur = data[curTime];
                     next = data[curTime + 1];
                     if (typeof next !== "undefined") {

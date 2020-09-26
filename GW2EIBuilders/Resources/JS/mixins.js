@@ -25,6 +25,20 @@ var roundingComponent = {
     }
 };
 
+var graphComponent = {
+    data: function () {
+        return {
+            graphdata: {
+                dpsmode: 0,
+                graphmode: GraphType.DPS,
+            },
+            layout: {},
+            dpsCache: new Map(),
+            dataCache: new Map(),
+        };
+    }
+};
+
 var timeRefreshComponent = {
     props: ["time"],
     data: function () {

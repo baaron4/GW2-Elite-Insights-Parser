@@ -55,48 +55,49 @@ namespace GW2EIEvtcParser.EIData
             {
                 return;
             }
-            CheckMechanics(log);
             _presentOnPlayerMechanics = new List<HashSet<Mechanic>>();
             _presentOnEnemyMechanics = new List<HashSet<Mechanic>>();
             _presentMechanics = new List<HashSet<Mechanic>>();
             _enemyList = new List<List<AbstractActor>>();
-            // ready present mechanics
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
-                var toAddPlayer = new HashSet<Mechanic>();
-                var toAddEnemy = new HashSet<Mechanic>();
-                var toAddAll = new HashSet<Mechanic>();
-                _presentOnPlayerMechanics.Add(toAddPlayer);
-                _presentOnEnemyMechanics.Add(toAddEnemy);
-                _presentMechanics.Add(toAddAll);
+                _presentOnPlayerMechanics.Add(new HashSet<Mechanic>());
+                _presentOnEnemyMechanics.Add(new HashSet<Mechanic>());
+                _presentMechanics.Add(new HashSet<Mechanic>());
+                _enemyList.Add(new List<AbstractActor>());
+            }
+            CheckMechanics(log);
+            // ready present mechanics
+            int i = 0;
+            foreach (PhaseData phase in log.FightData.GetPhases(log))
+            {
                 foreach (KeyValuePair<Mechanic, List<MechanicEvent>> pair in _mechanicLogs)
                 {
                     if (pair.Value.Any(x => phase.InInterval(x.Time)))
                     {
-                        toAddAll.Add(pair.Key);
+                        _presentMechanics[i].Add(pair.Key);
                         if (pair.Key.IsEnemyMechanic)
                         {
-                            toAddEnemy.Add(pair.Key);
+                            _presentOnEnemyMechanics[i].Add(pair.Key);
                         }
                         else if (pair.Key.ShowOnTable)
                         {
-                            toAddPlayer.Add(pair.Key);
+                            _presentOnPlayerMechanics[i].Add(pair.Key);
                         }
                     }
                 }
                 // ready enemy list
-                var toAdd = new List<AbstractActor>();
-                _enemyList.Add(toAdd);
                 foreach (Mechanic m in _mechanicLogs.Keys.Where(x => x.IsEnemyMechanic))
                 {
                     foreach (AbstractActor p in _mechanicLogs[m].Where(x => phase.InInterval(x.Time)).Select(x => x.Actor).Distinct())
                     {
-                        if (toAdd.FirstOrDefault(x => x.AgentItem == p.AgentItem) == null)
+                        if (_enemyList[i].FirstOrDefault(x => x.AgentItem == p.AgentItem) == null)
                         {
-                            toAdd.Add(p);
+                            _enemyList[i].Add(p);
                         }
                     }
                 }
+                i++;
             }
             var emptyMechanic = _mechanicLogs.Where(pair => pair.Value.Count == 0).Select(pair => pair.Key).ToList();
             foreach (Mechanic m in emptyMechanic)

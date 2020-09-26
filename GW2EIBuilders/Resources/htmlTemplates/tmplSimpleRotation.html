@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="d-flex flex-row justify-content-center mt-1 mb-1">
-            <ul class="nav nav-pills mr-2 scale85">
+            <ul class="nav nav-pills mr-1 scale85">
                 <li class="nav-item">
                     <a class="nav-link" @click="autoattack = !autoattack" :class="{active: autoattack}">Show auto
                         attacks</a>
@@ -10,8 +10,12 @@
                     <a class="nav-link" @click="hideInterruptedAA = !hideInterruptedAA"
                         :class="{active: hideInterruptedAA}">Hide interrupted auto attacks</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" @click="hideInstantCast = !hideInstantCast"
+                        :class="{active: hideInstantCast}">Hide instant cast</a>
+                </li>
             </ul>
-            <ul class="nav nav-pills ml-2 scale85">
+            <ul class="nav nav-pills ml-1 scale85">
                 <li class="nav-item">
                     <a class="nav-link" @click="small = !small" :class="{active: small}">Small icons</a>
                 </li>
@@ -63,6 +67,7 @@
                 small: false,
                 smallAA: true,
                 hideInterruptedAA: false,
+                hideInstantCast: false,
             };
         },
         computed: {
@@ -86,6 +91,9 @@
                     if (this.hideInterruptedAA && rota[3] === 2) {
                         return false;
                     }
+                }
+                if (this.hideInstantCast && rota[3] === 4 && !this.isSwap(rota[1])) {
+                    return false;
                 }
                 return true;
             }

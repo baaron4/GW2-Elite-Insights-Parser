@@ -20,10 +20,12 @@ namespace GW2EIEvtcParser.ParsedData
         public const long AliveId = -6;
         public const long RespawnId = -7;
 
-        private const int FirstLandSet = 4;
-        private const int SecondLandSet = 5;
-        private const int FirstWaterSet = 0;
-        private const int SecondWaterSet = 1;
+        public const int FirstLandSet = 4;
+        public const int SecondLandSet = 5;
+        public const int FirstWaterSet = 0;
+        public const int SecondWaterSet = 1;
+        public const int TransformSet = 3;
+        public const int KitSet = 2;
         private static readonly Dictionary<long, string> _overrideNames = new Dictionary<long, string>()
         {
             {ResurrectId, "Resurrect"},
@@ -192,15 +194,15 @@ namespace GW2EIEvtcParser.ParsedData
         private const string DefaultIcon = "https://render.guildwars2.com/file/1D55D34FB4EE20B1962E315245E40CA5E1042D0E/62248.png";
 
         // Fields
-        public long ID { get; private set; }
+        public long ID { get; }
         //public int Range { get; private set; } = 0;
-        public bool AA => _apiSkill?.Slot == "Weapon_1" || _apiSkill?.Slot == "Downed_1";
+        public bool AA { get; }
 
         public bool IsSwap => ID == WeaponSwapId || ElementalistHelper.IsElementalSwap(ID) || RevenantHelper.IsLegendSwap(ID);
-        public string Name { get; private set; }
-        public string Icon { get; private set; }
-        private WeaponDescriptor _weaponDescriptor;
-        private readonly GW2APISkill _apiSkill;
+        public string Name { get; }
+        public string Icon { get;}
+        private readonly WeaponDescriptor _weaponDescriptor;
+        internal GW2APISkill ApiSkill { get; }
         private SkillInfoEvent _skillInfo { get; set; }
 
         // Constructor
@@ -209,8 +211,43 @@ namespace GW2EIEvtcParser.ParsedData
         {
             this.ID = ID;
             Name = name.Replace("\0", "");
-            _apiSkill = GW2APIController.GetAPISkill(ID);
-            CompleteItem();
+            ApiSkill = GW2APIController.GetAPISkill(ID);
+            //
+            if (_overrideNames.TryGetValue(ID, out string overrideName))
+            {
+                Name = overrideName;
+            }
+            else if (ApiSkill != null)
+            {
+                Name = ApiSkill.Name;
+            }
+            if (_overrideIcons.TryGetValue(ID, out string icon))
+            {
+                Icon = icon;
+            }
+            else
+            {
+                Icon = ApiSkill != null ? ApiSkill.Icon : DefaultIcon;
+            }
+            if (ApiSkill != null && ApiSkill.Type == "Weapon" && ApiSkill.WeaponType != "None" && ApiSkill.Professions.Count > 0 && (ApiSkill.Categories == null || (ApiSkill.Categories.Contains("Phantasm") || ApiSkill.Categories.Contains("DualWield"))))
+            {
+                _weaponDescriptor = new WeaponDescriptor(ApiSkill);
+            }
+            AA = (ApiSkill?.Slot == "Weapon_1" || ApiSkill?.Slot == "Downed_1");
+            if (AA)
+            {
+                if (ApiSkill.Categories != null)
+                {
+                    AA = AA && !ApiSkill.Categories.Contains("StealthAttack") && !ApiSkill.Categories.Contains("Ambush"); // Ambush in case one day it's added
+                }
+                if (ApiSkill.Description != null)
+                {
+                    AA = AA && !ApiSkill.Description.Contains("Ambush.");
+                }
+            }
+#if DEBUG
+            Name += " (" + ID + ")";
+#endif
         }
 
         public static bool CanCrit(long id, ulong gw2Build)
@@ -270,21 +307,21 @@ namespace GW2EIEvtcParser.ParsedData
             }
             if (_weaponDescriptor.WeaponSlot == WeaponDescriptor.Hand.Dual)
             {
-                weapons[id] = _apiSkill.WeaponType;
-                weapons[id + 1] = _apiSkill.DualWield;
+                weapons[id] = ApiSkill.WeaponType;
+                weapons[id + 1] = ApiSkill.DualWield;
             }
             else if (_weaponDescriptor.WeaponSlot == WeaponDescriptor.Hand.TwoHand)
             {
-                weapons[id] = _apiSkill.WeaponType;
+                weapons[id] = ApiSkill.WeaponType;
                 weapons[id + 1] = "2Hand";
             }
             else if (_weaponDescriptor.WeaponSlot == WeaponDescriptor.Hand.MainHand)
             {
-                weapons[id] = _apiSkill.WeaponType;
+                weapons[id] = ApiSkill.WeaponType;
             }
             else
             {
-                weapons[id + 1] = _apiSkill.WeaponType;
+                weapons[id + 1] = ApiSkill.WeaponType;
             }
             return true;
         }
@@ -295,43 +332,6 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 _skillInfo = skillInfo;
             }
-        }
-
-        private void CompleteItem()
-        {
-            if (_overrideNames.TryGetValue(ID, out string name))
-            {
-                Name = name;
-            }
-            else if (_apiSkill != null)
-            {
-                Name = _apiSkill.Name;
-                /*if (_apiSkill.Facts != null)
-                {
-                    foreach (GW2APIFact fact in _apiSkill.Facts)
-                    {
-                        if (fact.Text != null && fact.Text == "Range" && fact.Value != null)
-                        {
-                            Range = Convert.ToInt32(fact.Value);
-                        }
-                    }
-                }*/
-            }
-            if (_overrideIcons.TryGetValue(ID, out string icon))
-            {
-                Icon = icon;
-            }
-            else
-            {
-                Icon = _apiSkill != null ? _apiSkill.Icon : DefaultIcon;
-            }
-            if (_apiSkill != null && _apiSkill.Type == "Weapon" && _apiSkill.WeaponType != "None" && _apiSkill.Professions.Count > 0 && (_apiSkill.Categories == null || (_apiSkill.Categories.Count == 1 && (_apiSkill.Categories[0] == "Phantasm" || _apiSkill.Categories[0] == "DualWield"))))
-            {
-                _weaponDescriptor = new WeaponDescriptor(_apiSkill);
-            }
-#if DEBUG
-            Name += " (" + ID + ")";
-#endif
         }
 
         // Public Methods
