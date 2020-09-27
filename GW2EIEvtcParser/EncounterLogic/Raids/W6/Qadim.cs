@@ -292,7 +292,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, 0, radius, ((int)c.Time, (int)c.EndTime), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     }
                     //Big Hit
-                    var maceShockwave = cls.Where(x => x.SkillId == 52310 && x.Status != AbstractCastEvent.AnimationStatus.Iterrupted).ToList();
+                    var maceShockwave = cls.Where(x => x.SkillId == 52310 && x.Status != AbstractCastEvent.AnimationStatus.Interrupted).ToList();
                     foreach (AbstractCastEvent c in maceShockwave)
                     {
                         int start = (int)c.Time;

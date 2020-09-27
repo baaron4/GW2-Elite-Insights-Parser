@@ -62,7 +62,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 switch (cl.Status)
                 {
-                    case AbstractCastEvent.AnimationStatus.Iterrupted:
+                    case AbstractCastEvent.AnimationStatus.Interrupted:
                         Wasted++;
                         TimeWasted += cl.SavedDuration;
                         break;

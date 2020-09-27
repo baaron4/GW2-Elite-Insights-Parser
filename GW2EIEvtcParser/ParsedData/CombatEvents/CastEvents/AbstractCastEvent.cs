@@ -3,7 +3,7 @@
     public abstract class AbstractCastEvent : AbstractTimeCombatEvent
     {
 
-        public enum AnimationStatus { Unknown, Reduced, Iterrupted, Full, Instant};
+        public enum AnimationStatus { Unknown, Reduced, Interrupted, Full, Instant};
 
         // start item
         public SkillItem Skill { get; protected set; }
