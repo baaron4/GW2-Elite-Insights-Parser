@@ -18,7 +18,7 @@ namespace GW2EIParser
         private bool _anyRunning => _runningCount > 0;
         private readonly Queue<FormOperationController> _logQueue = new Queue<FormOperationController>();
 
-        private int _fileNameSorting = 1;
+        private int _fileNameSorting = 0;
         private MainForm()
         {
             InitializeComponent();
@@ -62,6 +62,10 @@ namespace GW2EIParser
                 {
                     QueueOrRunOperation(operation);
                 }
+            }
+            if (_fileNameSorting != 0)
+            {
+                SortDgvFiles();
             }
 
             btnParse.Enabled = !Properties.Settings.Default.AutoParse;
@@ -324,34 +328,39 @@ namespace GW2EIParser
             e.Effect = DragDropEffects.All;
         }
 
+        private void SortDgvFiles()
+        {
+            if (_fileNameSorting == 0)
+            {
+                _fileNameSorting = 1;
+            }
+            var auxList = new List<FormOperationController>();
+            foreach (FormOperationController val in operatorBindingSource)
+            {
+                auxList.Add(val);
+            }
+            auxList.Sort((form1, form2) => {
+                var right = new FileInfo(form2.InputFile).Name;
+                var left = new FileInfo(form1.InputFile).Name;
+                return _fileNameSorting * string.Compare(left, right);
+            });
+            operatorBindingSource.Clear();
+            foreach (FormOperationController val in auxList)
+            {
+                operatorBindingSource.Add(val);
+            }
+        }
+
         private void DgvFilesCellContentClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (e.RowIndex < 0)
             {
-                if (_anyRunning)
-                {
-                    return;
-                }
                 switch(e.ColumnIndex)
                 {
                     case 0:
-                        var auxList = new List<FormOperationController>();
-                        foreach (FormOperationController val in operatorBindingSource)
-                        {
-                            auxList.Add(val);
-                        }
-                        auxList.Sort((form1,form2) => {
-                            var right = new FileInfo(form2.InputFile).Name;
-                            var left = new FileInfo(form1.InputFile).Name;
-                            return _fileNameSorting * string.Compare(left, right);
-                        });
-                        locationDataGridViewTextBoxColumn.HeaderText = "Input File " + (_fileNameSorting < 0 ? "↓" : "↑");
-                        operatorBindingSource.Clear();
-                        foreach (FormOperationController val in auxList)
-                        {
-                            operatorBindingSource.Add(val);
-                        }
                         _fileNameSorting *= -1;
+                        SortDgvFiles();
+                        locationDataGridViewTextBoxColumn.HeaderText = "Input File " + (_fileNameSorting < 0 ? "↓" : "↑");
                         break;
                     default:
                         break;
