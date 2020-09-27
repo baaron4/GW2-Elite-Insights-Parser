@@ -17,7 +17,7 @@
 
 <script>
     Vue.component("personal-buff-table-component", {
-        props: ['phaseindex', 'playerindex', 'active'],
+        props: ['phaseindex', 'playerindex', 'activeduration'],
         template: `${template}`,
         data: function () {
             return {
@@ -59,7 +59,7 @@
                 return res;
             },
             data: function () {
-				var id = this.phaseindex + '-' + this.active;
+				var id = this.phaseindex + '-' + this.activeduration;
                 if (this.cache.has(id)) {
                     return this.cache.get(id);
                 }
@@ -70,7 +70,7 @@
                     for (var j = 0; j < spec.ids.length; j++) {
                         dataBySpec.push({
                             player: logData.players[spec.ids[j]],
-                            data: this.active ? this.phase.persBuffActiveStats[spec.ids[j]] : this.phase.persBuffStats[spec.ids[j]]
+                            data: this.activeduration ? this.phase.persBuffActiveStats[spec.ids[j]] : this.phase.persBuffStats[spec.ids[j]]
                         });
                     }
                     res.push(dataBySpec);

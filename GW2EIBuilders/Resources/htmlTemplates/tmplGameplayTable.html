@@ -314,10 +314,14 @@
                             groups[player.group].commons[j - commonOffset] = (groups[player.group].commons[j - commonOffset] || 0) + commons[j - commonOffset];
                             total.commons[j - commonOffset] = (total.commons[j - commonOffset] || 0) + commons[j - commonOffset];
                         } else {
-                            for (var k = 0; k < this.activetargets.length; k++) {
-                                var tar = this.phase.dmgStatsTargets[i][this.activetargets[k]];
-                                data[j] = (data[j] || 0) + tar[j];
-                            }
+                            if (this.activetargets.length > 0) {
+                                for (var k = 0; k < this.activetargets.length; k++) {
+                                    var tar = this.phase.dmgStatsTargets[i][this.activetargets[k]];
+                                    data[j] = (data[j] || 0) + tar[j];
+                                }
+                            } else {
+                                data[j] = (data[j] || 0);
+                            }             
                             groups[player.group].data[j] = (groups[player.group].data[j] || 0) + data[j];
                             total.data[j] = (total.data[j] || 0) + data[j];
                         }

@@ -151,6 +151,9 @@
   <data name="tmplBuffTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlTemplates\tmplBuffTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="tmplBuffTables" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\htmlTemplates\tmplBuffTables.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="tmplCombatReplayActorBuffStats" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\combatReplayTemplates\tmplCombatReplayActorBuffStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -244,9 +247,6 @@
   <data name="tmplGameplayTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlTemplates\tmplGameplayTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="tmplGeneralLayout" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\htmlTemplates\tmplGeneralLayout.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
   <data name="tmplGraphStats" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlTemplates\tmplGraphStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -282,6 +282,9 @@
   </data>
   <data name="tmplSimpleRotation" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlTemplates\tmplSimpleRotation.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="tmplStatTables" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\htmlTemplates\tmplStatTables.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="tmplSupportTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlTemplates\tmplSupportTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
