@@ -309,6 +309,31 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        protected static void AdjustTimeRefreshBuff(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long id)
+        {
+            if (buffsById.TryGetValue(id, out List<AbstractBuffEvent> buffList))
+            {
+                var agentsToSort = new HashSet<AgentItem>();
+                foreach (AbstractBuffEvent be in buffList)
+                {
+                    if (be is AbstractBuffRemoveEvent abre)
+                    {
+                        // to make sure remove events are before applications
+                        abre.OverrideTime(abre.Time - 1);
+                        agentsToSort.Add(abre.To);
+                    }
+                }
+                if (buffList.Count > 0)
+                {
+                    buffsById[id].Sort((x, y) => x.Time.CompareTo(y.Time));
+                }
+                foreach (AgentItem a in agentsToSort)
+                {
+                    buffsByDst[a].Sort((x, y) => x.Time.CompareTo(y.Time));
+                }
+            }
+        }
+
         internal virtual List<AbstractDamageEvent> SpecialDamageEventProcess(Dictionary<AgentItem, List<AbstractDamageEvent>> damageBySrc, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst, Dictionary<long, List<AbstractDamageEvent>> damageById, SkillData skillData)
         {
             return new List<AbstractDamageEvent>();

@@ -86,6 +86,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
+        {
+            var res = new List<AbstractBuffEvent>();
+            // Tidal Bargain, Cacophonous Mind and Crushing Guilt adjust
+            AdjustTimeRefreshBuff(buffsByDst, buffsById, 61512);
+            AdjustTimeRefreshBuff(buffsByDst, buffsById, 61208);
+            AdjustTimeRefreshBuff(buffsByDst, buffsById, 61435);
+            return res;
+        }
+
         protected override List<int> GetFightTargetsIDs()
         {
             return new List<int>
