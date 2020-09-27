@@ -17,6 +17,8 @@ namespace GW2EIParser
         private int _runningCount = 0;
         private bool _anyRunning => _runningCount > 0;
         private readonly Queue<FormOperationController> _logQueue = new Queue<FormOperationController>();
+
+        private int _fileNameSorting = 1;
         private MainForm()
         {
             InitializeComponent();
@@ -326,6 +328,33 @@ namespace GW2EIParser
         {
             if (e.RowIndex < 0)
             {
+                if (_anyRunning)
+                {
+                    return;
+                }
+                switch(e.ColumnIndex)
+                {
+                    case 0:
+                        var auxList = new List<FormOperationController>();
+                        foreach (FormOperationController val in operatorBindingSource)
+                        {
+                            auxList.Add(val);
+                        }
+                        auxList.Sort((form1,form2) => {
+                            var right = new FileInfo(form2.InputFile).Name;
+                            var left = new FileInfo(form1.InputFile).Name;
+                            return _fileNameSorting * string.Compare(left, right);
+                        });
+                        operatorBindingSource.Clear();
+                        foreach (FormOperationController val in auxList)
+                        {
+                            operatorBindingSource.Add(val);
+                        }
+                        _fileNameSorting *= -1;
+                        break;
+                    default:
+                        break;
+                }
                 return;
             }
             var operation = (FormOperationController)operatorBindingSource[e.RowIndex];
