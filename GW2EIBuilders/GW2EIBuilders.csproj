@@ -40,7 +40,6 @@
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayMechanicsList.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayPlayerSelect.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayAnimationControl.html" />
-    <None Include="Resources\htmlTemplates\tmplGeneralLayout.html" />
     <None Include="Resources\htmlTemplates\tmplBuffTable.html" />
     <None Include="Resources\htmlTemplates\tmplDamageDistTable.html" />
     <None Include="Resources\htmlTemplates\tmplEncounter.html" />

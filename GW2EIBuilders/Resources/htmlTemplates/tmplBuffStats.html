@@ -23,21 +23,21 @@
             </ul>
         </div>
         <keep-alive>
-            <buff-table-component v-if="datatype === datatypes.boonTable" :key="'boon-stats-table'" :condition="false"
+            <buff-table-component v-if="type === 0" :key="'boon-stats-table'" :condition="false"
                 :generation="mode > 0" :id="'boon-stats-table'" :buffs="boons" :playerdata="buffData.boonsData[mode]"
                 :sums="mode === 0 ? buffData.boonsData[5] : []" :playerindex="playerindex">
             </buff-table-component>
-            <buff-table-component v-if="datatype === datatypes.offensiveBuffTable" :key="'offensivebuff-stats-table'"
+            <buff-table-component v-if="type === 1" :key="'offensivebuff-stats-table'"
                 :condition="false" :generation="mode > 0" :id="'offensivebuff-stats-table'" :buffs="offs"
                 :playerdata="buffData.offsData[mode]" :sums="mode === 0 ? buffData.offsData[5] : []"
                 :playerindex="playerindex">
             </buff-table-component>
-            <buff-table-component v-if="datatype === datatypes.defensiveBuffTable" :key="'defensivebuff-stats-table'"
+            <buff-table-component v-if="type === 2" :key="'defensivebuff-stats-table'"
                 :condition="false" :generation="mode > 0" :id="'defensivebuff-stats-table'" :buffs="defs"
                 :playerdata="buffData.defsData[mode]" :sums="mode === 0 ? buffData.defsData[5] : []"
                 :playerindex="playerindex">
             </buff-table-component>
-            <buff-table-component v-if="datatype === datatypes.supportBuffTable" :key="'supportbuff-stats-table'"
+            <buff-table-component v-if="type === 3" :key="'supportbuff-stats-table'"
                 :condition="false" :generation="mode > 0" :id="'supportbuff-stats-table'" :buffs="sups"
                 :playerdata="buffData.supsData[mode]" :sums="mode === 0 ? buffData.supsData[5] : []"
                 :playerindex="playerindex">
@@ -48,7 +48,7 @@
 
 <script>
     Vue.component("buff-stats-component", {
-        props: ['datatypes', 'datatype', 'phaseindex', 'playerindex', 'active'],
+        props: ['type', 'phaseindex', 'playerindex', 'activeduration'],
         template: `${template}`,
         data: function () {
             return {
@@ -92,11 +92,11 @@
                 return data;
             },
             buffData: function () {
-                var id = this.phaseindex + '-' + this.active;
+                var id = this.phaseindex + '-' + this.activeduration;
                 if (this.cache.has(id)) {
                     return this.cache.get(id);
                 }
-                var active = this.active;
+                var activeduration = this.activeduration;
                 var activeTimes = this.phase.playerActiveTimes;
                 var getData = function (stats, genself, gengroup, genoffgr, gensquad) {
                     var uptimes = [],
@@ -137,7 +137,7 @@
                             player: player,
                             data: gensquad[i]
                         });
-                        if (active && activeTimes[i] < 1e-6) {
+                        if (activeduration && activeTimes[i] < 1e-6) {
                             continue;
                         }
                         if (!gravg[player.group]) {
@@ -177,7 +177,7 @@
                     return [uptimes, gens, gengr, genoff, gensq, avg];
                 };
                 var res;
-                if (this.active) {
+                if (this.activeduration) {
                     res = {
                         boonsData: getData(this.phase.boonActiveStats, this.phase.boonGenActiveSelfStats,
                             this.phase.boonGenActiveGroupStats, this.phase.boonGenActiveOGroupStats, this.phase.boonGenActiveSquadStats),

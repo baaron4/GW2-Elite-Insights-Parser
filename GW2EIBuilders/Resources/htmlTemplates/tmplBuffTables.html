@@ -1,0 +1,76 @@
+<template>
+    <div>
+        <ul class="nav nav-tabs">
+            <li>
+                <a class="nav-link" :class="{active: tab === 0}" @click="tab = 0">Boons</a>
+            </li>
+            <li v-if="hasOffBuffs">
+                <a class="nav-link" :class="{active: tab === 1}" @click="tab = 1">Offensive Buffs</a>
+            </li>
+            <li v-if="hasSupBuffs">
+                <a class="nav-link" :class="{active: tab === 2}" @click="tab = 2">Support Buffs</a>
+            </li>
+            <li v-if="hasDefBuffs">
+                <a class="nav-link" :class="{active: tab === 3}" @click="tab = 3">Defensive Buffs</a>
+            </li>
+            <li v-if="hasPersBuffs">
+                <a class="nav-link" :class="{active: tab === 4}" @click="tab = 4">Personal Buffs</a>
+            </li>
+        </ul>
+        <div :key="'activeduration'" class="d-flex flex-row justify-content-center mt-1 mb-1">
+            <ul class="nav nav-pills d-flex flex-row justify-content-center scale85">
+                <li class="nav-item">
+                    <a class="nav-link" @click="activeduration = 0" :class="{active: activeduration === 0}">Phase duration</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" @click="activeduration = 1" data-original-title="Removed dead time and dc time"
+                        :class="{active: activeduration === 1 }">Phase active duration</a>
+                </li>
+            </ul>
+        </div>   
+        <keep-alive>
+            <buff-stats-component v-if="tab < 4"
+                :key="'buffs'" :type="tab" :phaseindex="phaseindex"
+                :playerindex="playerindex" :activeduration="activeduration"></buff-stats-component>
+            <personal-buff-table-component v-if="tab === 4" :key="'persbuffs'"
+                :phaseindex="phaseindex" :playerindex="playerindex" :activeduration="activeduration">
+        </keep-alive>     
+    </div>
+    
+</template>
+
+<script>
+    Vue.component("buff-tables-component", {
+        props: ["phaseindex", "playerindex"],
+        template: `${template}`,
+        data: function () {
+            return {
+                activeduration: 0,
+                tab: 0,
+            };
+        },
+        computed: {
+            hasOffBuffs: function() {
+                return logData.offBuffs.length > 0;
+            },
+            hasDefBuffs: function() {
+                return logData.defBuffs.length > 0;
+            },
+            hasSupBuffs: function() {
+                return logData.supBuffs.length > 0;
+            },
+            hasPersBuffs: function () {
+                var hasPersBuffs = false;
+                if (logData.persBuffs) {
+                    for (var prop in logData.persBuffs) {
+                        if (logData.persBuffs.hasOwnProperty(prop) && logData.persBuffs[prop].length > 0) {
+                            hasPersBuffs = true;
+                            break;
+                        }
+                    }
+                }
+                return hasPersBuffs;
+            },
+        }
+    });
+</script>
