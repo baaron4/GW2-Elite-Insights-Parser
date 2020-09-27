@@ -345,6 +345,7 @@ namespace GW2EIParser
                             var left = new FileInfo(form1.InputFile).Name;
                             return _fileNameSorting * string.Compare(left, right);
                         });
+                        locationDataGridViewTextBoxColumn.HeaderText = "Input File " + (_fileNameSorting < 0 ? "↓" : "↑");
                         operatorBindingSource.Clear();
                         foreach (FormOperationController val in auxList)
                         {
