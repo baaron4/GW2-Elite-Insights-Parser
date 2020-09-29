@@ -29,9 +29,9 @@ namespace GW2EIEvtcParser.EIData
             {
                 foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(SkillId))
                 {
-                    if (c is BuffRemoveManualEvent rme && p.AgentItem == rme.To && Keep(rme, log))
+                    if (c is BuffRemoveAllEvent rae && p.AgentItem == rae.To && Keep(rae, log))
                     {
-                        mechanicLogs[this].Add(new MechanicEvent(rme.Time, this, p));
+                        mechanicLogs[this].Add(new MechanicEvent(rae.Time, this, p));
                     }
                 }
             }

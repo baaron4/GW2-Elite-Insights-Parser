@@ -5,11 +5,11 @@ namespace GW2EIEvtcParser.EIData
 
     internal abstract class BuffRemoveMechanic : Mechanic
     {
-        public delegate bool BuffRemoveChecker(BuffRemoveManualEvent rme, ParsedEvtcLog log);
+        public delegate bool BuffRemoveChecker(BuffRemoveAllEvent rme, ParsedEvtcLog log);
 
         private readonly BuffRemoveChecker _triggerCondition = null;
 
-        protected bool Keep(BuffRemoveManualEvent c, ParsedEvtcLog log)
+        protected bool Keep(BuffRemoveAllEvent c, ParsedEvtcLog log)
         {
             if (_triggerCondition != null)
             {

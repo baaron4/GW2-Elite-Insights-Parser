@@ -30,11 +30,11 @@ namespace GW2EIEvtcParser.EIData
             foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(SkillId))
             {
                 AbstractSingleActor amp = null;
-                if (c is BuffRemoveManualEvent rme && Keep(rme, log))
+                if (c is BuffRemoveAllEvent rea && Keep(rea, log))
                 {
-                    if (!regroupedMobs.TryGetValue(rme.To.ID, out amp))
+                    if (!regroupedMobs.TryGetValue(rea.To.ID, out amp))
                     {
-                        amp = log.FindActor(rme.To, false);
+                        amp = log.FindActor(rea.To, false);
                         if (amp == null)
                         {
                             continue;

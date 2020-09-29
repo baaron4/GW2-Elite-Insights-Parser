@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(61487, "Fulgor Sphere", new MechanicPlotlySetting("circle","rgb(255,0,255)"), "Flg.Sph.","Fulgor Sphere", "Fulgor Sphere",0),
             new HitOnPlayerMechanic(61565, "Fulgor Sphere", new MechanicPlotlySetting("circle","rgb(255,0,255)"), "Flg.Sph.","Fulgor Sphere", "Fulgor Sphere",0),
             new HitOnPlayerMechanic(61470, "Volatile Wind", new MechanicPlotlySetting("triangle-left","rgb(255,0,255)"), "Vlt.Wnd.","Volatile Wind", "Volatile Wind",0),
-            new HitOnPlayerMechanic(61205, "Wind Burst", new MechanicPlotlySetting("triangle-down-open","rgb(255,0,255)"), "Wnd.Burst","Wind Burst", "Wind Burst",0),
+            new HitOnPlayerMechanic(61205, "Wind Burst", new MechanicPlotlySetting("triangle-down-open","rgb(255,0,255)"), "Wnd.Brst.","Wind Burst", "Wind Burst",0),
             new HitOnPlayerMechanic(61205, "Wind Burst Launch", new MechanicPlotlySetting("triangle-down","rgb(255,0,255)"), "L.Wnd.Burst","Launched up by Wind Burst", "Wind Burst Launch",0,(de, log) => !de.To.HasBuff(log, 1122, de.Time)),
             new HitOnPlayerMechanic(61190 , "Call of Storms", new MechanicPlotlySetting("triangle-up","rgb(255,0,255)"), "Call Strs","Call of Storms", "Call of Storms",0),
             new EnemyBuffApplyMechanic(61224, "Whirlwind Shield",new MechanicPlotlySetting("asterisk-open","rgb(255,0,255)"), "W.Shield" ,"Whirlwind Shield","Whirlwind Shield",0),
@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(61582, "Roiling Flames", new MechanicPlotlySetting("circle","rgb(255,125,0)"), "Rlng.Flms.","Roiling Flames", "Roiling Flames",0),      
             new HitOnPlayerMechanic(61548, "Volatile Fire", new MechanicPlotlySetting("triangle-left","rgb(255,125,0)"), "Vlt.Fr.","Volatile Fire", "Volatile Fire",0),
             new SkillOnPlayerMechanic(61348, "Call Meteor", new MechanicPlotlySetting("hexagram","rgb(255,125,0)"), "Meteor.H","Hit by Meteor", "Meteor Hit",1000, (evt, log) => evt.HasDowned || evt.HasKilled),
-            new HitOnPlayerMechanic(61248, "Flame Burst", new MechanicPlotlySetting("triangle-down","rgb(255,125,0)"), "Flm.Burst","Flame Burst", "Flame Burst",0),
+            new HitOnPlayerMechanic(61248, "Flame Burst", new MechanicPlotlySetting("triangle-down","rgb(255,125,0)"), "Flm.Brst.","Flame Burst", "Flame Burst",0),
             new HitOnPlayerMechanic(61445, "Firestorm", new MechanicPlotlySetting("triangle-up","rgb(255,125,0)"), "Fr.Strm","Firestorm", "Firestorm",0),
             new EnemyCastStartMechanic(61439, "Call Meteor", new MechanicPlotlySetting("asterisk-open","rgb(255,125,0)"), "Smn.Meteor", "Summoned Meteor", "Summon Meteor", 0),
             // Water
@@ -45,8 +45,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(61556, "Torrential Bolt", new MechanicPlotlySetting("circle","rgb(0,125,255)"), "Tor.Bolt","Torrential Bolt", "Torrential Bolt",0),
             new HitOnPlayerMechanic(61177, "Torrential Bolt", new MechanicPlotlySetting("circle","rgb(0,125,255)"), "Tor.Bolt","Torrential Bolt", "Torrential Bolt",0),   
             new HitOnPlayerMechanic(61419, "Volatile Water", new MechanicPlotlySetting("triangle-left","rgb(0,125,255)"), "Vlt.Wtr.","Volatile Water", "Volatile Water",0),
-            new HitOnPlayerMechanic(61251, "Aquatic Burst", new MechanicPlotlySetting("triangle-down","rgb(0,125,255)"), "Aq.Burst","Aquatic Burst", "Aquatic Burst",0),
+            new HitOnPlayerMechanic(61251, "Aquatic Burst", new MechanicPlotlySetting("triangle-down","rgb(0,125,255)"), "Aq.Brst.","Aquatic Burst", "Aquatic Burst",0),
             new EnemyBuffApplyMechanic(61402, "Tidal Barrier", new MechanicPlotlySetting("asterisk-open","rgb(0,125,255)"), "Tid.Bar.", "Tidal Barrier", "Tidal Barrier", 0),
+            new PlayerBuffRemoveMechanic(61512, "Tidal Bargain", new MechanicPlotlySetting("star-open","rgb(0,125,255)"), "Tdl.Brgn.","Downed by Tidal Bargain", "Tidal Bargain",0, (evt, log) => evt.RemovedStacks == 10 && log.CombatData.GetDownEvents(evt.To).Exists(x => Math.Abs(x.Time - evt.Time) < 50)),
             // Dark
             new HitOnPlayerMechanic(61602, "Empathic Manipulation", new MechanicPlotlySetting("square","rgb(150,125,255)"), "Emp.Manip.","Empathic Manipulation", "Empathic Manipulation",0),
             new HitOnPlayerMechanic(61606, "Empathic Manipulation", new MechanicPlotlySetting("square","rgb(150,125,255)"), "Emp.Manip.","Empathic Manipulation", "Empathic Manipulation",0),
@@ -59,12 +60,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(61527, "Empathic Manipulation", new MechanicPlotlySetting("square","rgb(150,125,255)"), "Emp.Manip.","Empathic Manipulation", "Empathic Manipulation",0),
             new HitOnPlayerMechanic(61344, "Focused Wrath", new MechanicPlotlySetting("circle","rgb(150,125,255)"), "Fcsd.Wrth.","Focused Wrath", "Focused Wrath",0),
             new HitOnPlayerMechanic(61499, "Focused Wrath", new MechanicPlotlySetting("circle","rgb(150,125,255)"), "Fcsd.Wrth.","Focused Wrath", "Focused Wrath",0),
+            new HitOnPlayerMechanic(61289, "Negative Burst", new MechanicPlotlySetting("diamond-wide","rgb(150,125,255)"), "N.Brst.","Negative Burst", "Negative Burst",500),
+            new HitOnPlayerMechanic(61184, "Terrorstorm", new MechanicPlotlySetting("diamond-tall","rgb(150,125,255)"), "TrrStrm","Terrorstorm", "Terrorstorm",0),
+            new PlayerBuffRemoveMechanic(61208, "Crushing Guilt", new MechanicPlotlySetting("star-open","rgb(150,125,255)"), "Crsh.Glt.","Downed by Crushing Guilt", "Crushing Guilt",0, (evt, log) => evt.RemovedStacks == 10 && log.CombatData.GetDownEvents(evt.To).Exists(x => Math.Abs(x.Time - evt.Time) < 100)),
             new EnemyCastStartMechanic(61508, "Empathic Manipulation (Fear)", new MechanicPlotlySetting("triangle-up","rgb(150,125,255)"), "Fear Manip.", "Empathic Manipulation (Fear)", "Empathic Manipulation (Fear)", 0),
             new EnemyCastEndMechanic(61508, "Empathic Manipulation (Fear) Interrupt", new MechanicPlotlySetting("triangle-up-open","rgb(150,125,255)"), "IntFear Manip.", "Empathic Manipulation (Fear) Interrupt", "Empathic Manipulation (Fear) Interrupt", 0, (evt, log) => evt is AnimatedCastEvent ace && ace.Status == AbstractCastEvent.AnimationStatus.Interrupted),
             new EnemyCastStartMechanic(61606, "Empathic Manipulation (Sorrow)", new MechanicPlotlySetting("triangle-left","rgb(150,125,255)"), "Sor.Manip.", "Empathic Manipulation (Sorrow)", "Empathic Manipulation (Sorrow)", 0),
             new EnemyCastEndMechanic(61606, "Empathic Manipulation (Sorrow) Interrupt", new MechanicPlotlySetting("triangle-left-open","rgb(150,125,255)"), "IntSor.Manip.", "Empathic Manipulation (Sorrow) Interrupt", "Empathic Manipulation (Sorrow) Interrupt", 0, (evt, log) => evt is AnimatedCastEvent ace && ace.Status == AbstractCastEvent.AnimationStatus.Interrupted),
             new EnemyCastStartMechanic(61602, "Empathic Manipulation (Guilt)", new MechanicPlotlySetting("triangle-right","rgb(150,125,255)"), "Glt.Manip.", "Empathic Manipulation (Guilt)", "Empathic Manipulation (Guilt)", 0),
             new EnemyCastEndMechanic(61602, "Empathic Manipulation (Guilt) Interrupt", new MechanicPlotlySetting("triangle-right-open","rgb(150,125,255)"), "Int.Glt.Manip.", "Empathic Manipulation (Guilt) Interrupt", "Empathic Manipulation (Guilt) Interrupt", 0, (evt, log) => evt is AnimatedCastEvent ace && ace.Status == AbstractCastEvent.AnimationStatus.Interrupted),
+            new EnemyBuffApplyMechanic(61435, "Cacophonous Mind", new MechanicPlotlySetting("pentagon","rgb(150,125,255)"), "Ccphns.Mnd.","Cacophonous Mind", "Cacophonous Mind",0),
             });
             Extension = "ai";
             Icon = "https://i.imgur.com/3mlCdI9.png";
