@@ -53,8 +53,8 @@
                 shapes: [],
                 annotations: [],
                 autosize: true,
-                width: 1100,
-                height: 800,
+                width: 1200,
+                height: 850,
                 datarevision: new Date().getTime(),
             };
             computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, textColor);
@@ -346,12 +346,9 @@
                             pts = mech.points[this.phaseindex][j];
                             var tarId = this.phase.targets[j];
                             if (tarId >= 0) {
+                                var health = this.graph.targets[j].healthStates;
                                 for (k = 0; k < pts.length; k++) {
-                                    time = pts[k];
-                                    ftime = Math.floor(time);
-                                    y = hps[j][ftime];
-                                    yp1 = hps[j][ftime + 1];
-                                    chart.push(this.interpolatePoint(ftime, ftime + 1, y, yp1, time));
+                                    chart.push(findState(health, pts[k], 0, health.length - 1) * maxDPS / 100.0);
                                 }
                             } else {
                                 for (k = 0; k < pts.length; k++) {

@@ -269,6 +269,7 @@ namespace GW2EIEvtcParser
         private const int PyreGuardianStab = -5;
         private const int PyreGuardianRetal = -6;
         private const int QadimLamp = -7;
+        private const int AiKeeperOfThePeak2 = -8;
 
 
         //
@@ -500,6 +501,16 @@ namespace GW2EIEvtcParser
             DOC = 16657,
             CHOP = 16552,
             ProjectionArkk = 17613,
+            // Ai
+            EnrageWaterSprite = 23270,
+            SorrowDemon1 = 23265,
+            SorrowDemon2 = 23242,
+            SorrowDemon3 = 23279,
+            SorrowDemon4 = 23245,
+            SorrowDemon5 = 23256,
+            DoubtDemon = 23268,
+            FearDemon = 23264,
+            GuiltDemon = 23252,
             //
             Unknown
         };
@@ -562,6 +573,8 @@ namespace GW2EIEvtcParser
             Skorvald = 17632,
             Artsariiv = 17949,
             Arkk = 17759,
+            AiKeeperOfThePeak = 23254,
+            AiKeeperOfThePeak2 = ArcDPSEnums.AiKeeperOfThePeak2,
             // Golems
             MassiveGolem = 16202,
             AvgGolem = 16177,

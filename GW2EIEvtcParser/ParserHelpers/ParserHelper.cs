@@ -322,6 +322,10 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
                 case ArcDPSEnums.TargetID.Arkk:
                     return "https://i.imgur.com/u6vv8cW.png";
+                case ArcDPSEnums.TargetID.AiKeeperOfThePeak:
+                    return "https://i.imgur.com/eCXjoAS.png";
+                case ArcDPSEnums.TargetID.AiKeeperOfThePeak2:
+                    return "https://i.imgur.com/I8nwhAw.png";
                 case ArcDPSEnums.TargetID.LGolem:
                     return "https://wiki.guildwars2.com/images/4/47/Mini_Baron_von_Scrufflebutt.png";
                 case ArcDPSEnums.TargetID.AvgGolem:
@@ -341,6 +345,8 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.Spirit2:
                 case ArcDPSEnums.TrashID.ChargedSoul:
                 case ArcDPSEnums.TrashID.HollowedBomber:
+                case ArcDPSEnums.TrashID.GuiltDemon:
+                case ArcDPSEnums.TrashID.DoubtDemon:
                     return "https://i.imgur.com/sHmksvO.png";
                 case ArcDPSEnums.TrashID.Saul:
                     return "https://i.imgur.com/ck2IsoS.png";
@@ -456,6 +462,12 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.WhisperEcho:
                 case ArcDPSEnums.TrashID.CharrTank:
                 case ArcDPSEnums.TrashID.PropagandaBallon:
+                case ArcDPSEnums.TrashID.FearDemon:
+                case ArcDPSEnums.TrashID.SorrowDemon1:
+                case ArcDPSEnums.TrashID.SorrowDemon2:
+                case ArcDPSEnums.TrashID.SorrowDemon3:
+                case ArcDPSEnums.TrashID.SorrowDemon4:
+                case ArcDPSEnums.TrashID.SorrowDemon5:
                     return "https://i.imgur.com/k79t7ZA.png";
                 case ArcDPSEnums.TrashID.HandOfErosion:
                 case ArcDPSEnums.TrashID.HandOfEruption:

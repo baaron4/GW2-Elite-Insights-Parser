@@ -179,7 +179,10 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.Arkk:
                     Logic = new Arkk(id);
                     break;
-                    //
+                case ArcDPSEnums.TargetID.AiKeeperOfThePeak:
+                    Logic = new AiKeeperOfThePeak(id);
+                    break;
+                //
                 case ArcDPSEnums.TargetID.WorldVersusWorld:
                     Logic = new WvWFight(id);
                     break;
@@ -224,7 +227,14 @@ namespace GW2EIEvtcParser.ParsedData
                     throw new InvalidDataException("Breakbar phases can only have one target");
                 }
                 _phases.RemoveAll(x => x.DurationInMS < ParserHelper.PhaseTimeLimit);
-                _phases.Sort((x, y) => x.Start.CompareTo(y.Start));
+                _phases.Sort((x, y) => {
+                    var startCompare = x.Start.CompareTo(y.Start);
+                    if (startCompare == 0)
+                    {
+                        return -x.DurationInMS.CompareTo(y.DurationInMS);
+                    }
+                    return startCompare; 
+                });
             }
             return _phases;
         }
