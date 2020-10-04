@@ -22,6 +22,7 @@ var searchData=
   ['dodgecount',['DodgeCount',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_defenses_all.html#a6273477c07e77a37e8752145a937436c',1,'GW2EIBuilders::JsonModels::JsonStatistics::JsonDefensesAll']]],
   ['downcount',['DownCount',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_defenses_all.html#ad01e020291a7d1a39b7aedbfe17fe583',1,'GW2EIBuilders::JsonModels::JsonStatistics::JsonDefensesAll']]],
   ['downduration',['DownDuration',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_defenses_all.html#a077ea4dc2ec8989b744fe50c8962bca4',1,'GW2EIBuilders::JsonModels::JsonStatistics::JsonDefensesAll']]],
+  ['downed',['Downed',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html#a402c827eadea4c0b9170e33a1969f257',1,'GW2EIBuilders::JsonModels::JsonStatistics::JsonGameplayStats']]],
   ['dps',['Dps',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_d_p_s.html#a1d810f3fad1cec880c3ba42d7d28d68d',1,'GW2EIBuilders::JsonModels::JsonStatistics::JsonDPS']]],
   ['dpsall',['DpsAll',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#ad4b0d87aa1e7b4dd6985f1bdebab39d3',1,'GW2EIBuilders::JsonModels::JsonActor']]],
   ['dpstargets',['DpsTargets',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#af1ffa68ef691a1081b03ef7eb0a52e47',1,'GW2EIBuilders::JsonModels::JsonPlayer']]],

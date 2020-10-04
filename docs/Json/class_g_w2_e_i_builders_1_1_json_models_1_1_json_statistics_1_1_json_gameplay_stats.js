@@ -6,11 +6,13 @@ var class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gamepla
     [ "CriticalDmg", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html#acc3b352dc7f43eab128c012c0c0e05bb", null ],
     [ "CriticalRate", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html#a4d0ba448761b61985fee883b92646441", null ],
     [ "DirectDamageCount", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html#ada3d3e505de9ee6fcb6d0e498aace25e", null ],
+    [ "Downed", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html#a402c827eadea4c0b9170e33a1969f257", null ],
     [ "Evaded", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html#ab31e0235e28e72f5945b2bc582df5813", null ],
     [ "FlankingRate", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html#ad8646e5a33c7040c587c104bd36b2a80", null ],
     [ "GlanceRate", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html#a2c892c9a7410c555d41015b7aaed8303", null ],
     [ "Interrupts", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html#a2cc189db711fed132802b40e51db4894", null ],
     [ "Invulned", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html#a5722e4ecb6841e0733b7a6da9730e021", null ],
+    [ "Killed", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html#a910f205fd3de6399884497281d9e0de7", null ],
     [ "Missed", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html#ab0dc31aa284af4311a287a69126a3d75", null ],
     [ "TotalDamageCount", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html#a7b9030a4d1039187a0efa6ff24720345", null ]
 ];
