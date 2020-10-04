@@ -41,7 +41,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         // Only used for CSV files
         public NPC GetLegacyTarget()
         {
-            return Targets.Find(x => x.ID == GenericTriggerID);
+            return Targets.FirstOrDefault();
         }
 
         public MechanicData GetMechanicData()
