@@ -42,21 +42,25 @@ namespace GW2EIEvtcParser.ParsedData
                 }
                 Acceleration = Math.Max(Math.Min(Acceleration, 1.0), -1.0);
             }
-            switch (endItem.IsActivation)
+            if (SkillId != SkillItem.ResurrectId)
             {
-                case ArcDPSEnums.Activation.CancelCancel:
-                    Status = AnimationStatus.Interrupted;
-                    SavedDuration = -ActualDuration;
-                    break;
-                case ArcDPSEnums.Activation.Reset:
-                    Status = AnimationStatus.Full;
-                    break;
-                case ArcDPSEnums.Activation.CancelFire:
-                    int nonScaledExpectedDuration = (int)Math.Round(ExpectedDuration / nonScaledToScaledRatio);
-                    SavedDuration = Math.Max(nonScaledExpectedDuration - ActualDuration, 0);
-                    Status = AnimationStatus.Reduced;
-                    break;
+                switch (endItem.IsActivation)
+                {
+                    case ArcDPSEnums.Activation.CancelCancel:
+                        Status = AnimationStatus.Interrupted;
+                        SavedDuration = -ActualDuration;
+                        break;
+                    case ArcDPSEnums.Activation.Reset:
+                        Status = AnimationStatus.Full;
+                        break;
+                    case ArcDPSEnums.Activation.CancelFire:
+                        int nonScaledExpectedDuration = (int)Math.Round(ExpectedDuration / nonScaledToScaledRatio);
+                        SavedDuration = Math.Max(nonScaledExpectedDuration - ActualDuration, 0);
+                        Status = AnimationStatus.Reduced;
+                        break;
+                }
             }
+            
         }
 
         internal AnimatedCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData, long logEnd) : this(startItem, agentData, skillData)
