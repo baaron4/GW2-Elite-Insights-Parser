@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using GW2EIParser.Exceptions;
 
@@ -7,11 +8,28 @@ namespace GW2EIParser
 {
     internal class ConsoleProgram
     {
+        // https://stackoverflow.com/questions/11463734/split-a-list-into-smaller-lists-of-n-size
+        private static IEnumerable<List<T>> SplitList<T>(List<T> locations, int nSize)
+        {
+            for (int i = 0; i < locations.Count; i += nSize)
+            {
+                yield return locations.GetRange(i, Math.Min(nSize, locations.Count - i));
+            }
+        }
+
         public ConsoleProgram(IEnumerable<string> logFiles)
         {
             if (Properties.Settings.Default.ParseMultipleLogs)
             {
-                Parallel.ForEach(logFiles, file => ParseLog(file));
+                var logList = new List<string>(logFiles);
+                int splitSize = (int)Math.Ceiling((double)logList.Count / ProgramHelper.GetMaxParallelRunning());
+                IEnumerable<List<string>> splitLogFiles = SplitList(logList, splitSize);
+                Parallel.ForEach(splitLogFiles, files => {
+                    foreach(string file in files)
+                    {
+                        ParseLog(file);
+                    }
+                });
             }
             else
             {

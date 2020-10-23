@@ -27,6 +27,17 @@ namespace GW2EIParser
 
         private static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
 
+        internal static int GetMaxParallelRunning()
+        {
+            if (Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports)
+            {
+                return Environment.ProcessorCount / 2;
+            } else
+            {
+                return Environment.ProcessorCount;
+            }
+        }
+
         private static Embed BuildEmbed(ParsedEvtcLog log, string dpsReportPermalink)
         {
             var builder = new EmbedBuilder();
@@ -122,15 +133,11 @@ namespace GW2EIParser
 
                 var parser = new EvtcParser(new EvtcParserSettings(Properties.Settings.Default.Anonymous, Properties.Settings.Default.SkipFailedTries, Properties.Settings.Default.ParsePhases, Properties.Settings.Default.ParseCombatReplay, Properties.Settings.Default.ComputeDamageModifiers));
 
-                if (!HasFormat())
-                {
-                    throw new InvalidDataException("No output format has been selected");
-                }
                 //Process evtc here
                 ParsedEvtcLog log = parser.ParseLog(operation, fInfo);
                 var externalTraces = new List<string>();
                 string[] uploadresult = UploadOperation(externalTraces, fInfo);
-                if (Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.ParseMultipleLogs)
+                if (Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports)
                 {
                     var webhookSettings = new WebhookSettings(Properties.Settings.Default.WebhookURL, !Properties.Settings.Default.SendSimpleMessageToWebhook ? BuildEmbed(log, uploadresult[0]) : null);
                     WebhookController.SendMessage(externalTraces, uploadresult[0], webhookSettings);
@@ -244,7 +251,7 @@ namespace GW2EIParser
             fName = $"{fName}{PoVClassTerm}_{log.FightData.Logic.Extension}{encounterLengthTerm}_{result}";
 
             // parallel stuff
-            if (Properties.Settings.Default.MultiThreaded)
+            if (Properties.Settings.Default.MultiThreaded && HasFormat())
             {
                 log.FightData.GetPhases(log);
                 operation.UpdateProgressWithCancellationCheck("Multi threading");

@@ -148,7 +148,7 @@ namespace GW2EIParser
                     }
                 }
                 ProgramHelper.GenerateTraceFile(operation);
-                RunNextOperation();
+                _RunNextOperation();
             }, TaskScheduler.FromCurrentSynchronizationContext());
             operation.SetContext(cancelTokenSource, task);
         }
@@ -162,7 +162,7 @@ namespace GW2EIParser
             btnClearAll.Enabled = false;
             btnParse.Enabled = false;
             btnCancelAll.Enabled = true;
-            if (Properties.Settings.Default.ParseMultipleLogs)
+            if (Properties.Settings.Default.ParseMultipleLogs && _runningCount < ProgramHelper.GetMaxParallelRunning())
             {
                 _RunOperation(operation);
             }
@@ -184,9 +184,9 @@ namespace GW2EIParser
         /// <summary>
         /// Runs the next operation, if one is available
         /// </summary>
-        private void RunNextOperation()
+        private void _RunNextOperation()
         {
-            if (_logQueue.Count > 0 && _runningCount == 0)
+            if (_logQueue.Count > 0 && (Properties.Settings.Default.ParseMultipleLogs || !_anyRunning))
             {
                 _RunOperation(_logQueue.Dequeue());
             }
