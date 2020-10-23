@@ -140,43 +140,125 @@ Note it may take some time for each file to parse and they will not be ready to 
 ## HTML Overview
 
 ### Header
-![header](./docs/Images/header.PNG)
+
+<img src="./docs/Images/header.PNG" width="60%" height="60%">
+
+The header shows you the status of the fight and let's you swap themes and modules. Right now, only two modules are available: Statistics and Combat Replay.
+
 ### Footer
-![footer](./docs/Images/footer.PNG)
+
+<img src="./docs/Images/footer.PNG" width="60%" height="60%">
+
+On the footer you'll find meta data regarding the encounter and the parser.
+
 ### Statistics
 #### Selection
-![selection](./docs/Images/selection.PNG)
+
+<img src="./docs/Images/selection.PNG" width="60%" height="60%" >
+
+This panel is where the main navigation of the Statistics module will happen, you can select targets, players, phases and components. 
+
+The target selection will impact what you'll observe on every panel that has a "Target" section.
+
+On players, you can observe gear related scores (between 0 and 10, please check "question mark" for a detailled explanation on how this value is computed), used weapons and the commander tag (if applicable).
+
 #### General Stats
-![generalStats](./docs/Images/general.PNG)
+<img src="./docs/Images/general.PNG" width="60%" height="60%">
+
+On general stats you can see macro statistics regarding incoming/outgoing damage and player behavior:
+- "Damage Stats" contains outgoing damage related information.
+- "Gameplay Stats" contains secondary player information like critical hit rates, flaking rates, number of time one's attack was blocked/absorbed, etc...
+- "Defensive Stats" contains incoming damage related information.
+- "Support Stats" contains boon strip and condition removal related information.
+
 #### Buffs
-![buffs](./docs/Images/buff.PNG)
+
+<img src="./docs/Images/buff.PNG" width="60%" height="60%">
+
+This component will show you buff uptimes, ordered by categories, and generation information for each players.
+
+On generation tables, please check the "question mark" above for a detailled explanation of the meaning of the tooltips.
+
 #### Damage Modifiers
-![dmgMods](./docs/Images/damageMods.PNG)
+
+<img src="./docs/Images/damageMods.PNG" width="60%" height="60%">
+
+This component contains damage increases by modifiers, ordered once again by categories. 
+
+Please note that it is not possible to check traits or gear which means that Elite Insights will assume that every gear and trait based damage modifiers are present. Buff based damage modifiers are only shown if present.
+
 #### Mechanics
-![mechanics](./docs/Images/mechanics.PNG)
+
+<img src="./docs/Images/mechanics.PNG" width="60%" height="60%">
+
+A very straightforward component that contains a summary of important fight specific mechanics.
+
+Depending on the nature of the mechanic, the column can be considered just as informative, a success or a failure.
+
 #### Graph
-![graph](./docs/Images/graph.PNG)
+
+<img src="./docs/Images/graph.PNG" width="60%" height="60%">
+
+Damage graph that also contains enemy health, enemy breakbar and fight mechanics information. The graph is fully interactive and can be exported. Shown damage can also be customized:
+- The time interval in between the information is computed
+- The nature of the information:
+   - DPS in [x - interval, x].
+   - DPS in [x - interval / 2, x + interval / 2].
+   - Cumulative damage in [x - interval, x].
+
 #### Targets Summary
-![targetsSum](./docs/Images/targets.PNG)
+
+<img src="./docs/Images/targets.PNG" width="60%" height="60%">
+
+This component focuses on the selected target:
+- Outgoing damage distribution per skill for the target and its minions.
+- Incoming damage distribution per skill.
+- Graph that contains outgoing damage, health, breakbar, rotation and buff presences. The graph is fully interactive and can be exported. Damage related customizations on the main graph are also applicable here.
+- Buff status contains condition and boon uptimes on the boss. For conditions, it is also possible to see generation done by each player.
+
 #### Player Summary
-![playerSum](./docs/Images/players.PNG)
+
+<img src="./docs/Images/players.PNG" width="60%" height="60%">
+
+This component focuses on the selected target:
+- Outgoing damage distribution per skill for the player and their minions.
+- Incoming damage distribution per skill.
+- Customizable simple rotation component for a tidier look on skill ordering.
+- Graph that contains outgoing damage, health, rotation and buff presences. Information related to targets' health and breakbar can also be displayed. The graph is fully interactive and can be exported. Damage related customizations on the main graph are also applicable here.
+- Information on the consumables used by the player.
+- A succession of small graphs that details incoming damage before each death.
 
 ### Combat Replay
+
 #### Main Display
-![crMain](./docs/Images/mainCR.PNG)
+
+<img src="./docs/Images/mainCR.PNG" width="80%" height="80%">
+
 #### Damage Table
-![damageCR](./docs/Images/damageCR.PNG)
+
+<img src="./docs/Images/damageCR.PNG" width="30%" height="30%">
+
 #### Selection
-![selectionCR](./docs/Images/selectionCR.PNG)
+
+<img src="./docs/Images/selectionCR.PNG" width="30%" height="30%">
+
 #### Indicators
-![indicatorCR](./docs/Images/indicatorCR.PNG)
+
+<img src="./docs/Images/indicatorCR.PNG" width="45%" height="45%">
+
 #### Players
-![playersCR](./docs/Images/playersCR.PNG)
-![playersBuffCR](./docs/Images/playersBuffCR.PNG)
+
+<img src="./docs/Images/playersCR.PNG" width="30%" height="30%">
+
+<img src="./docs/Images/playersBuffCR.PNG" width="30%" height="30%">
+
 #### Targets
-![targetsCR](./docs/Images/targetsCR.PNG)
+
+<img src="./docs/Images/targetsCR.PNG" width="30%" height="30%">
+
 #### Mechanics
-![mechanicsCR](./docs/Images/mechanicsCR.PNG)
+
+<img src="./docs/Images/mechanicsCR.PNG" width="45%" height="45%">
 
 ## JSON Overview 
 
