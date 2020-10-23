@@ -37,6 +37,7 @@ namespace GW2EIEvtcParser
         internal const int TimeDigit = 3;
 
         internal const long ServerDelayConstant = 10;
+        internal const long BuffSimulatorDelayConstant = 50;
 
         internal const int PhaseTimeLimit = 1000;
 
