@@ -18,7 +18,7 @@ Our GitHub Page: https://baaron4.github.io/GW2-Elite-Insights-Parser/
 
 NOTE: ArcDPS log files are currently located within "C:\Users\<USERNAME>\Documents\Guild Wars 2\addons\arcdps\arcdps.cbtlogs"
 ## UI Usage
-![program](https://user-images.githubusercontent.com/30677999/38950127-284f2d10-430a-11e8-937b-67a325a2a296.PNG)
+![program](./docs/Images/EILook.PNG)
 
 1. Drag and drop 1 or multiple .evtc, .evtc.zip or .zevtc files into program.
 
@@ -54,7 +54,7 @@ GuildWars2EliteInsights.exe -c [config path] -ui [logs]
 Note it may take some time for each file to parse and they will not be ready to open the moment they are created.
 
 ## Settings
-
+![settings](./docs/Images/EISettings.PNG)
 ### Output Settings
 
 -__SaveAtOut__: if true, the generated files will be in the same location as the source file.
@@ -136,6 +136,45 @@ Note it may take some time for each file to parse and they will not be ready to 
 -__SendSimpleMessageToWebhook__: if true, only the dps.reports link will be sent to the webhook.
 
 ## HTML Overview
+
+### Header
+![header](./docs/Images/header.PNG)
+### Footer
+![footer](./docs/Images/footer.PNG)
+### Statistics
+#### Selection
+![selection](./docs/Images/selection.PNG)
+#### General Stats
+![generalStats](./docs/Images/general.PNG)
+#### Buffs
+![buffs](./docs/Images/buff.PNG)
+#### Damage Modifiers
+![dmgMods](./docs/Images/damageMods.PNG)
+#### Mechanics
+![mechanics](./docs/Images/mechanics.PNG)
+#### Graph
+![graph](./docs/Images/graph.PNG)
+#### Targets Summary
+![targetsSum](./docs/Images/targets.PNG)
+#### Player Summary
+![playerSum](./docs/Images/players.PNG)
+
+### Combat Replay
+#### Main Display
+![crMain](./docs/Images/mainCR.PNG)
+#### Damage Table
+![damageCR](./docs/Images/damageCR.PNG)
+#### Selection
+![selectionCR](./docs/Images/selectionCR.PNG)
+#### Indicators
+![indicatorCR](./docs/Images/indicatorCR.PNG)
+#### Players
+![playersCR](./docs/Images/playersCR.PNG)
+![playersBuffCR](./docs/Images/playersBuffCR.PNG)
+#### Targets
+![targetsCR](./docs/Images/targetsCR.PNG)
+#### Mechanics
+![mechanicsCR](./docs/Images/mechanicsCR.PNG)
 
 ## JSON Overview 
 
