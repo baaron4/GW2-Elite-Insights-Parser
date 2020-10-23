@@ -1,39 +1,34 @@
-## Contact
-For quick questions, discussions or other conversation that isn't an issue feel free to join an open discord channel: 
+# Contact
+The following discord is used for general ArcDPS related discussions and troubleshooting, whether we are talking about ArcDPS, ArcDPS addons or EVTC log parsing:
+
 https://discord.gg/dCDEPXx
 
-Our GitHub Page: https://baaron4.github.io/GW2-Elite-Insights-Parser/ 
+Our GitHub Page: https://baaron4.github.io/GW2-Elite-Insights-Parser/
 
 # GW2-Elite-Insights-Parser
 ## Set Up
 
-1. Go to Code tab
+1. Go to Release section.
 
-2. Go to Release section
+2. Download the GW2EI.zip file from the latest release. Don't forget to check regularly to stay updated (we have a channel that notifies new releases on our discord).
 
-3. Download the GW2EI.zip file
+3. Extract all files anywhere you like.
 
-4. Extract all files anywhere you like
-
-5. Open GW2EI.exe (feel free to make a shortcut and move to desktop)
-
-6. gg
+4. Launch GW2EI.exe (UI or console).
 
 NOTE: ArcDPS log files are currently located within "C:\Users\<USERNAME>\Documents\Guild Wars 2\addons\arcdps\arcdps.cbtlogs"
-## Usage
+## UI Usage
 ![program](https://user-images.githubusercontent.com/30677999/38950127-284f2d10-430a-11e8-937b-67a325a2a296.PNG)
 
-1. Drag and drop 1 or multiple .evtc, .evtc.zip or .zevtc files into program
+1. Drag and drop 1 or multiple .evtc, .evtc.zip or .zevtc files into program.
 
-2. Click parse
+2. Click parse.
 
-3. When done the .html will be located in the same location as the evtc, or at the desired output location, as "samename_boss_result.html"
+3. Click open when parsing done.
 
-![htmldisplay](https://user-images.githubusercontent.com/30677999/38950250-816c559e-430a-11e8-8159-1cf073a5fa44.PNG)
+You can change the settings at any time using the Settings window.
 
-## Console Parsing
-
-https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/24df62abfec74446a07816524a98b9d97d87d966/LuckParser/Program.cs#L15-L22
+## Console Usage
 
 ![how to](https://user-images.githubusercontent.com/30677999/40148954-6ec9215a-5936-11e8-94ad-d2520e7c4539.PNG)
 
@@ -51,7 +46,7 @@ To disable windows-specific commandline magic you can use -p:
 GuildWars2EliteInsights.exe -p [logs]
 ```
 
-You can start the application in GUI mode using -ui option:
+You can also start the application in GUI mode using -ui option:
 ```
 GuildWars2EliteInsights.exe -c [config path] -ui [logs]
 ```
@@ -98,7 +93,7 @@ Note it may take some time for each file to parse and they will not be ready to 
 
 -__ParseCombatReplay__: if true, combat replay will be computed.
 
--__ComputeDamageModifiers__: if true, damage modifiers will be computed ( forcefully disabled on WvW logs for now).
+-__ComputeDamageModifiers__: if true, damage modifiers will be computed.
 
 ### HTML settings
 
@@ -142,12 +137,14 @@ Note it may take some time for each file to parse and they will not be ready to 
 
 -__SendSimpleMessageToWebhook__: if true, only the dps.reports link will be sent to the webhook.
 
-## JSON Documentation
+## HTML Overview
+
+## JSON Overview 
 
 The Json documentation can be found [here](https://baaron4.github.io/GW2-Elite-Insights-Parser/Json/index.html)
 
-## Contributors
-### Developers
+# Contributors
+## Developers
 - baaron4
 - EliphasNUIT
 - cordbleibaum
@@ -159,7 +156,7 @@ The Json documentation can be found [here](https://baaron4.github.io/GW2-Elite-I
 - Stonos
 - Hobinjk
 
-### Other stuffs
+## Other stuffs
 - Linus (arena maps/ icons for combat replay)
 
 
