@@ -31,6 +31,14 @@ namespace GW2EIParser.Setting
         {
             ChkMultiThreaded.Enabled = !busy;
             ChkMultiLogs.Enabled = !busy;
+            ChkUploadDPSReports.Enabled = !busy;
+            ChkUploadDRRH.Enabled = !busy;
+            TxtDPSReportUserToken.Enabled = !busy;
+            BtnResetSkillList.Enabled = !busy;
+            BtnResetSpecList.Enabled = !busy;
+            BtnResetTraitList.Enabled = !busy;
+            BtnLoadSettings.Enabled = !busy;
+            GroupWebhookSettings.Enabled = !busy;
         }
 
         private void SetUIEnable()
@@ -40,8 +48,6 @@ namespace GW2EIParser.Setting
             PanelJson.Enabled = Properties.Settings.Default.SaveOutJSON;
             PanelXML.Enabled = Properties.Settings.Default.SaveOutXML;
             GroupRawSettings.Enabled = Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML;
-
-            GroupWebhookSettings.Enabled = Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.ParseMultipleLogs;
         }
 
         private void SetValues()
