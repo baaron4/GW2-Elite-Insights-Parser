@@ -19,7 +19,8 @@ namespace GW2EIEvtcParser.EIData
                 }
                 WeaponSwapEvent nextSwap = combatData.GetWeaponSwapData(swap.Caster).FirstOrDefault(x => x.Time > swap.Time + ParserHelper.ServerDelayConstant);
                 long nextSwapTime = nextSwap != null ? nextSwap.Time : long.MaxValue;
-                var castIds = new HashSet<long>(combatData.GetAnimatedCastData(swap.Caster).Where(x => x.Time >= swap.Time && x.Time <= nextSwapTime).Select(x => x.SkillId));
+                long postSwapDelay = 150;
+                var castIds = new HashSet<long>(combatData.GetAnimatedCastData(swap.Caster).Where(x => x.Time >= swap.Time + postSwapDelay && x.Time <= nextSwapTime).Select(x => x.SkillId));
                 return skill.ApiSkill.BundleSkills.Intersect(castIds).Any();
             })
             {
