@@ -367,7 +367,7 @@
             this.GroupWebhookSettings.TabIndex = 45;
             this.GroupWebhookSettings.TabStop = false;
             this.GroupWebhookSettings.Text = "Webhook Settings";
-            this.TlpSettings.SetToolTip(this.GroupWebhookSettings, "Disabled with Multiple Parse Logs and when not uploading to dps.reports");
+            this.TlpSettings.SetToolTip(this.GroupWebhookSettings, "Disabled when not uploading to dps.reports");
             // 
             // LblWebhookUrl
             // 
