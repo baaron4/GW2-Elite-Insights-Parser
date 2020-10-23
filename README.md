@@ -131,7 +131,7 @@ Note it may take some time for each file to parse and they will not be ready to 
 
 -__WebhookURL__: Webhook URL to send an embed or simple message to.
 
--__SendEmbedToWebhook__: if true, the Webhook URL will receive a small embed containing meta data + dps.reports link. (Does not work with ParseMultipleLogs for now)
+-__SendEmbedToWebhook__: if true, the Webhook URL will receive a small embed containing meta data + dps.reports link.
 
 -__SendSimpleMessageToWebhook__: if true, only the dps.reports link will be sent to the webhook.
 
