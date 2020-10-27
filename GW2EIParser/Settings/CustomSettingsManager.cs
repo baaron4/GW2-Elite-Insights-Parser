@@ -99,6 +99,18 @@ namespace GW2EIParser
             {
                 Properties.Settings.Default[name] = value;
             }
+            else if (type == typeof(long))
+            {
+                if (long.TryParse(value, out long res))
+                {
+                    Properties.Settings.Default[name] = res;
+                } 
+                else
+                {
+                    Console.WriteLine("Warning: Setting \"" + name + "\" expected type \"" + type.Name);
+                    Properties.Settings.Default[name] = -1;
+                }
+            }
             else
             {
                 Console.WriteLine("Warning: Setting \"" + name + "\" of type \"" + type.Name + "\" cannot be processed.");

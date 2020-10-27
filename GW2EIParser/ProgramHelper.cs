@@ -131,7 +131,7 @@ namespace GW2EIParser
                 sw.Start();
                 var fInfo = new FileInfo(operation.InputFile);
 
-                var parser = new EvtcParser(new EvtcParserSettings(Properties.Settings.Default.Anonymous, Properties.Settings.Default.SkipFailedTries, Properties.Settings.Default.ParsePhases, Properties.Settings.Default.ParseCombatReplay, Properties.Settings.Default.ComputeDamageModifiers));
+                var parser = new EvtcParser(new EvtcParserSettings(Properties.Settings.Default.Anonymous, Properties.Settings.Default.SkipFailedTries, Properties.Settings.Default.ParsePhases, Properties.Settings.Default.ParseCombatReplay, Properties.Settings.Default.ComputeDamageModifiers, Properties.Settings.Default.CustomTooShort));
 
                 //Process evtc here
                 ParsedEvtcLog log = parser.ParseLog(operation, fInfo);

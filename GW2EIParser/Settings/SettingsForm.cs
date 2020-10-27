@@ -55,6 +55,7 @@ namespace GW2EIParser.Setting
 
             ChkDefaultOutputLoc.Checked = Properties.Settings.Default.SaveAtOut;
             TxtCustomSaveLoc.Text = Properties.Settings.Default.OutLocation;
+            NumericCustomTooShort.Value = Properties.Settings.Default.CustomTooShort;
             ChkOutputHtml.Checked = Properties.Settings.Default.SaveOutHTML;
             ChkOutputCsv.Checked = Properties.Settings.Default.SaveOutCSV;
             ChkPhaseParsing.Checked = Properties.Settings.Default.ParsePhases;
@@ -117,6 +118,11 @@ namespace GW2EIParser.Setting
         private void TxtCustomSaveLocationTextChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.OutLocation = TxtCustomSaveLoc.Text;
+        }
+
+        private void NumericCustomTooShortValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.CustomTooShort = (long)NumericCustomTooShort.Value;
         }
 
         private void TxtWebhookURLChanged(object sender, EventArgs e)

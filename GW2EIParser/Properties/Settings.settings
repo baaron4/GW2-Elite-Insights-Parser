@@ -89,5 +89,8 @@
     <Setting Name="DPSReportUserToken" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="CustomTooShort" Type="System.Int64" Scope="User">
+      <Value Profile="(Default)">2200</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
