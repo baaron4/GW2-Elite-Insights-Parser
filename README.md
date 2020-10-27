@@ -152,7 +152,7 @@ The header shows you the status of the fight and let's you swap themes and modul
 On the footer you'll find meta data regarding the encounter and the parser.
 
 ### Statistics
-#### Selection
+#### Navigation
 
 <img src="./docs/Images/selection.PNG" width="60%" height="60%" >
 
@@ -232,19 +232,33 @@ This component focuses on the selected target:
 
 #### Main Display
 
-<img src="./docs/Images/mainCR.PNG" width="80%" height="80%">
+<img src="./docs/Images/mainCR.PNG" width="60%" height="60%">
+
+The main display is where the animation happens.
+
+It is possible to control animation speed and jump into specific fight phases.
+
+The display supports two manipulations: Pan and Zoom.
 
 #### Damage Table
 
 <img src="./docs/Images/damageCR.PNG" width="30%" height="30%">
 
+Displays damage/DPS in real time. The picture says it all.
+
 #### Selection
 
 <img src="./docs/Images/selectionCR.PNG" width="30%" height="30%">
 
+This component lets you select a specific player. Once a player is selected, they will appear with a green square around on the main display. 
+
+If "Highlight Selected Group" is checked, players on the same group as the selected player will have a blue square around them.
+
 #### Indicators
 
 <img src="./docs/Images/indicatorCR.PNG" width="45%" height="45%">
+
+With this panel you can customize the display further by adding range indicators and cone indicators on the selected player.
 
 #### Players
 
@@ -256,9 +270,20 @@ This component focuses on the selected target:
 
 <img src="./docs/Images/targetsCR.PNG" width="30%" height="30%">
 
+On this component you can observe the status of currently active targets. The status includes:
+- Health
+- Breakbar
+- Present buff/debuffs
+
 #### Mechanics
 
 <img src="./docs/Images/mechanicsCR.PNG" width="45%" height="45%">
+
+With this table, you can directly jump on the timestamp of a specific mechanic.
+
+It is possible to filter the table by:
+- The type of the mechanic
+- The actor involved
 
 ## JSON Overview 
 
