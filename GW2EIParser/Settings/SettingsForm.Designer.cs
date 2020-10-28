@@ -120,7 +120,7 @@
             // 
             this.LblSettingsInfoMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.LblSettingsInfoMsg.AutoSize = true;
-            this.LblSettingsInfoMsg.Location = new System.Drawing.Point(9, 393);
+            this.LblSettingsInfoMsg.Location = new System.Drawing.Point(9, 354);
             this.LblSettingsInfoMsg.Name = "LblSettingsInfoMsg";
             this.LblSettingsInfoMsg.Size = new System.Drawing.Size(251, 13);
             this.LblSettingsInfoMsg.TabIndex = 12;
@@ -151,12 +151,25 @@
             // NumericCustomTooShort
             // 
             this.NumericCustomTooShort.Location = new System.Drawing.Point(156, 134);
-            this.NumericCustomTooShort.Maximum = 86400000;
-            this.NumericCustomTooShort.Minimum = 2200;
+            this.NumericCustomTooShort.Maximum = new decimal(new int[] {
+            86400000,
+            0,
+            0,
+            0});
+            this.NumericCustomTooShort.Minimum = new decimal(new int[] {
+            2200,
+            0,
+            0,
+            0});
             this.NumericCustomTooShort.Name = "NumericCustomTooShort";
             this.NumericCustomTooShort.Size = new System.Drawing.Size(90, 20);
             this.NumericCustomTooShort.TabIndex = 15;
             this.NumericCustomTooShort.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.NumericCustomTooShort.Value = new decimal(new int[] {
+            2200,
+            0,
+            0,
+            0});
             this.NumericCustomTooShort.ValueChanged += new System.EventHandler(this.NumericCustomTooShortValueChanged);
             // 
             // LblCustomTooShort
@@ -490,7 +503,7 @@
             this.TabControl.Multiline = true;
             this.TabControl.Name = "TabControl";
             this.TabControl.SelectedIndex = 0;
-            this.TabControl.Size = new System.Drawing.Size(505, 378);
+            this.TabControl.Size = new System.Drawing.Size(479, 339);
             this.TabControl.TabIndex = 47;
             // 
             // TabGeneral
@@ -501,7 +514,7 @@
             this.TabGeneral.Location = new System.Drawing.Point(4, 22);
             this.TabGeneral.Name = "TabGeneral";
             this.TabGeneral.Padding = new System.Windows.Forms.Padding(3);
-            this.TabGeneral.Size = new System.Drawing.Size(497, 352);
+            this.TabGeneral.Size = new System.Drawing.Size(471, 313);
             this.TabGeneral.TabIndex = 0;
             this.TabGeneral.Text = "General";
             this.TabGeneral.UseVisualStyleBackColor = true;
@@ -515,7 +528,7 @@
             this.GroupParsing.Controls.Add(this.ChkSkipFailedTries);
             this.GroupParsing.Controls.Add(this.NumericCustomTooShort);
             this.GroupParsing.Controls.Add(this.LblCustomTooShort);
-            this.GroupParsing.Location = new System.Drawing.Point(240, 8);
+            this.GroupParsing.Location = new System.Drawing.Point(205, 8);
             this.GroupParsing.Name = "GroupParsing";
             this.GroupParsing.Size = new System.Drawing.Size(251, 160);
             this.GroupParsing.TabIndex = 41;
@@ -601,7 +614,7 @@
             this.GroupEncounter.Controls.Add(this.ChkDamageMods);
             this.GroupEncounter.Location = new System.Drawing.Point(12, 8);
             this.GroupEncounter.Name = "GroupEncounter";
-            this.GroupEncounter.Size = new System.Drawing.Size(216, 160);
+            this.GroupEncounter.Size = new System.Drawing.Size(187, 160);
             this.GroupEncounter.TabIndex = 36;
             this.GroupEncounter.TabStop = false;
             this.GroupEncounter.Text = "Encounter";
@@ -614,7 +627,7 @@
             this.TabHTML.Location = new System.Drawing.Point(4, 22);
             this.TabHTML.Name = "TabHTML";
             this.TabHTML.Padding = new System.Windows.Forms.Padding(3);
-            this.TabHTML.Size = new System.Drawing.Size(471, 309);
+            this.TabHTML.Size = new System.Drawing.Size(476, 335);
             this.TabHTML.TabIndex = 1;
             this.TabHTML.Text = "HTML";
             this.TabHTML.UseVisualStyleBackColor = true;
@@ -675,7 +688,7 @@
             this.TabCSV.Controls.Add(this.ChkOutputCsv);
             this.TabCSV.Location = new System.Drawing.Point(4, 22);
             this.TabCSV.Name = "TabCSV";
-            this.TabCSV.Size = new System.Drawing.Size(471, 309);
+            this.TabCSV.Size = new System.Drawing.Size(476, 335);
             this.TabCSV.TabIndex = 2;
             this.TabCSV.Text = "CSV";
             this.TabCSV.UseVisualStyleBackColor = true;
@@ -689,7 +702,7 @@
             this.TabRaw.Controls.Add(this.GroupRawSettings);
             this.TabRaw.Location = new System.Drawing.Point(4, 22);
             this.TabRaw.Name = "TabRaw";
-            this.TabRaw.Size = new System.Drawing.Size(471, 309);
+            this.TabRaw.Size = new System.Drawing.Size(476, 335);
             this.TabRaw.TabIndex = 3;
             this.TabRaw.Text = "Raw formats";
             this.TabRaw.UseVisualStyleBackColor = true;
@@ -764,7 +777,7 @@
             this.TabUpload.Controls.Add(this.GroupWebhookSettings);
             this.TabUpload.Location = new System.Drawing.Point(4, 22);
             this.TabUpload.Name = "TabUpload";
-            this.TabUpload.Size = new System.Drawing.Size(471, 309);
+            this.TabUpload.Size = new System.Drawing.Size(476, 335);
             this.TabUpload.TabIndex = 4;
             this.TabUpload.Text = "Upload";
             this.TabUpload.UseVisualStyleBackColor = true;
@@ -788,7 +801,7 @@
             this.TabAPI.Controls.Add(this.BtnResetSkillList);
             this.TabAPI.Location = new System.Drawing.Point(4, 22);
             this.TabAPI.Name = "TabAPI";
-            this.TabAPI.Size = new System.Drawing.Size(471, 309);
+            this.TabAPI.Size = new System.Drawing.Size(476, 335);
             this.TabAPI.TabIndex = 5;
             this.TabAPI.Text = "Maintenance";
             this.TabAPI.UseVisualStyleBackColor = true;
@@ -823,7 +836,7 @@
             // BtnClose
             // 
             this.BtnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnClose.Location = new System.Drawing.Point(438, 413);
+            this.BtnClose.Location = new System.Drawing.Point(412, 374);
             this.BtnClose.Name = "BtnClose";
             this.BtnClose.Size = new System.Drawing.Size(84, 24);
             this.BtnClose.TabIndex = 48;
@@ -834,7 +847,7 @@
             // BtnDumpSettings
             // 
             this.BtnDumpSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnDumpSettings.Location = new System.Drawing.Point(348, 413);
+            this.BtnDumpSettings.Location = new System.Drawing.Point(322, 374);
             this.BtnDumpSettings.Name = "BtnDumpSettings";
             this.BtnDumpSettings.Size = new System.Drawing.Size(84, 24);
             this.BtnDumpSettings.TabIndex = 49;
@@ -845,7 +858,7 @@
             // BtnLoadSettings
             // 
             this.BtnLoadSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnLoadSettings.Location = new System.Drawing.Point(258, 413);
+            this.BtnLoadSettings.Location = new System.Drawing.Point(232, 374);
             this.BtnLoadSettings.Name = "BtnLoadSettings";
             this.BtnLoadSettings.Size = new System.Drawing.Size(84, 24);
             this.BtnLoadSettings.TabIndex = 50;
@@ -858,7 +871,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(529, 449);
+            this.ClientSize = new System.Drawing.Size(503, 410);
             this.Controls.Add(this.BtnLoadSettings);
             this.Controls.Add(this.BtnDumpSettings);
             this.Controls.Add(this.BtnClose);
