@@ -31,7 +31,7 @@ namespace GW2EIParser
         {
             if (Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports)
             {
-                return Environment.ProcessorCount / 2;
+                return Math.Max(Environment.ProcessorCount / 2, 1);
             } else
             {
                 return Environment.ProcessorCount;
