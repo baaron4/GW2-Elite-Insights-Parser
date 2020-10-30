@@ -14,7 +14,7 @@ namespace GW2EIBuilders.HtmlModels
         public List<List<List<object>>> Points { get; internal set; }
         public bool Visible { get; internal set; }
 
-        private static List<List<object>> GetMechanicChartPoints(List<MechanicEvent> mechanicLogs, PhaseData phase, ParsedEvtcLog log, bool enemyMechanic)
+        private static List<List<object>> GetMechanicChartPoints(IReadOnlyList<MechanicEvent> mechanicLogs, PhaseData phase, ParsedEvtcLog log, bool enemyMechanic)
         {
             var res = new List<List<object>>();
             if (!enemyMechanic)
@@ -59,7 +59,7 @@ namespace GW2EIBuilders.HtmlModels
             return res;
         }
 
-        private static List<List<List<object>>> BuildMechanicGraphPointData(ParsedEvtcLog log, List<MechanicEvent> mechanicLogs, bool enemyMechanic)
+        private static List<List<List<object>>> BuildMechanicGraphPointData(ParsedEvtcLog log, IReadOnlyList<MechanicEvent> mechanicLogs, bool enemyMechanic)
         {
             var list = new List<List<List<object>>>();
             foreach (PhaseData phase in log.FightData.GetPhases(log))
@@ -74,7 +74,7 @@ namespace GW2EIBuilders.HtmlModels
             var mechanicsChart = new List<MechanicChartDataDto>();
             foreach (Mechanic mech in log.MechanicData.GetPresentMechanics(log, 0))
             {
-                List<MechanicEvent> mechanicLogs = log.MechanicData.GetMechanicLogs(log, mech);
+                IReadOnlyList<MechanicEvent> mechanicLogs = log.MechanicData.GetMechanicLogs(log, mech);
                 var dto = new MechanicChartDataDto
                 {
                     Color = mech.PlotlySetting.Color,

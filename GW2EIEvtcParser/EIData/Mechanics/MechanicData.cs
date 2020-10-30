@@ -106,13 +106,18 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public Dictionary<Mechanic, List<MechanicEvent>>.ValueCollection GetAllMechanics(ParsedEvtcLog log)
+        public Dictionary<Mechanic, IReadOnlyList<MechanicEvent>> GetAllMechanics(ParsedEvtcLog log)
         {
             ProcessMechanics(log);
-            return _mechanicLogs.Values;
+            var res = new Dictionary<Mechanic, IReadOnlyList<MechanicEvent>>();
+            foreach (Mechanic m in _mechanicLogs.Keys)
+            {
+                res[m] = _mechanicLogs[m];
+            }
+            return res;
         }
 
-        public List<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech)
+        public IReadOnlyList<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech)
         {
             ProcessMechanics(log);
             if (_mechanicLogs.TryGetValue(mech, out List<MechanicEvent> list))
@@ -122,7 +127,7 @@ namespace GW2EIEvtcParser.EIData
             return new List<MechanicEvent>();
         }
 
-        public List<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, long id)
+        public IReadOnlyList<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, long id)
         {
             ProcessMechanics(log);
             Mechanic mech = _mechanicLogs.Keys.FirstOrDefault(x => x.SkillId == id);
@@ -149,7 +154,7 @@ namespace GW2EIEvtcParser.EIData
             return _presentMechanics[phaseIndex];
         }
 
-        public List<AbstractActor> GetEnemyList(ParsedEvtcLog log, int phaseIndex)
+        public IReadOnlyList<AbstractActor> GetEnemyList(ParsedEvtcLog log, int phaseIndex)
         {
             ProcessMechanics(log);
             return _enemyList[phaseIndex];

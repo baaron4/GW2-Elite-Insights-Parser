@@ -18,7 +18,7 @@ namespace GW2EIBuilders.HtmlModels
         {
             CombatReplayMap map = log.FightData.Logic.GetCombatMap(log);
             Actors = GetCombatReplayActors(log, map);
-            Maps = map.Maps;
+            Maps = new List<CombatReplayMap.MapItem>(map.Maps);
             (int width, int height) = map.GetPixelMapSize();
             Sizes = new int[2] { width, height };
             Inch = map.GetInch();
