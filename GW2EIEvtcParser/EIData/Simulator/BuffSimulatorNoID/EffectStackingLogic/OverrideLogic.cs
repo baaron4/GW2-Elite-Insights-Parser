@@ -8,7 +8,7 @@ namespace GW2EIEvtcParser.EIData
     {
         public override void Sort(ParsedEvtcLog log, List<BuffStackItem> stacks)
         {
-            stacks.Sort((x, y) => x.TotalBoonDuration().CompareTo(y.TotalBoonDuration()));
+            stacks.Sort((x, y) => x.TotalDuration.CompareTo(y.TotalDuration));
         }
 
         public override bool StackEffect(ParsedEvtcLog log, BuffStackItem stackItem, List<BuffStackItem> stacks, List<BuffSimulationItemWasted> wastes)
@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.EIData
                 return false;
             }
             BuffStackItem stack = stacks[0];
-            if (stack.TotalBoonDuration() <= stackItem.TotalBoonDuration() + ParserHelper.BuffSimulatorDelayConstant)
+            if (stack.TotalDuration <= stackItem.TotalDuration + ParserHelper.BuffSimulatorDelayConstant)
             {
                 wastes.Add(new BuffSimulationItemWasted(stack.Src, stack.Duration, stack.Start));
                 if (stack.Extensions.Count > 0)
