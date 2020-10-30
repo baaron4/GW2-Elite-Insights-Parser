@@ -10,7 +10,7 @@ namespace GW2EIBuilders.HtmlModels
         public double Avg { get; internal set; }
         public List<List<object>> Data { get; internal set; } = new List<List<object>>();
 
-        private BuffData(Dictionary<long, FinalPlayerBuffs> boons, List<Buff> listToUse, double avg)
+        private BuffData(Dictionary<long, FinalPlayerBuffs> boons, IReadOnlyList<Buff> listToUse, double avg)
         {
             Avg = avg;
             foreach (Buff boon in listToUse)
@@ -29,7 +29,7 @@ namespace GW2EIBuilders.HtmlModels
             }
         }
 
-        private BuffData(Dictionary<long, FinalBuffs> boons, List<Buff> listToUse, double avg)
+        private BuffData(Dictionary<long, FinalBuffs> boons, IReadOnlyList<Buff> listToUse, double avg)
         {
             Avg = avg;
             foreach (Buff boon in listToUse)
@@ -48,7 +48,7 @@ namespace GW2EIBuilders.HtmlModels
             }
         }
 
-        private BuffData(Dictionary<long, FinalBuffsDictionary> boons, List<Buff> listToUse, Player player)
+        private BuffData(Dictionary<long, FinalBuffsDictionary> boons, IReadOnlyList<Buff> listToUse, Player player)
         {
             foreach (Buff boon in listToUse)
             {
@@ -78,7 +78,7 @@ namespace GW2EIBuilders.HtmlModels
             }
         }
 
-        private BuffData(List<Buff> listToUse, Dictionary<long, FinalPlayerBuffs> uptimes)
+        private BuffData(IReadOnlyList<Buff> listToUse, Dictionary<long, FinalPlayerBuffs> uptimes)
         {
             foreach (Buff boon in listToUse)
             {
@@ -131,7 +131,7 @@ namespace GW2EIBuilders.HtmlModels
         }
 
         //////
-        internal static List<BuffData> BuildBuffUptimeData(ParsedEvtcLog log, List<Buff> listToUse, int phaseIndex)
+        internal static List<BuffData> BuildBuffUptimeData(ParsedEvtcLog log, IReadOnlyList<Buff> listToUse, int phaseIndex)
         {
             IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             var list = new List<BuffData>();
@@ -149,7 +149,7 @@ namespace GW2EIBuilders.HtmlModels
             return list;
         }
 
-        internal static List<BuffData> BuildActiveBuffUptimeData(ParsedEvtcLog log, List<Buff> listToUse, int phaseIndex)
+        internal static List<BuffData> BuildActiveBuffUptimeData(ParsedEvtcLog log, IReadOnlyList<Buff> listToUse, int phaseIndex)
         {
             var list = new List<BuffData>();
             bool boonTable = listToUse.Select(x => x.Nature).Contains(Buff.BuffNature.Boon);
@@ -189,7 +189,7 @@ namespace GW2EIBuilders.HtmlModels
 
 
         //////
-        internal static List<BuffData> BuildBuffGenerationData(ParsedEvtcLog log, List<Buff> listToUse, int phaseIndex, BuffEnum target)
+        internal static List<BuffData> BuildBuffGenerationData(ParsedEvtcLog log, IReadOnlyList<Buff> listToUse, int phaseIndex, BuffEnum target)
         {
             var list = new List<BuffData>();
 
@@ -202,7 +202,7 @@ namespace GW2EIBuilders.HtmlModels
             return list;
         }
 
-        internal static List<BuffData> BuildActiveBuffGenerationData(ParsedEvtcLog log, List<Buff> listToUse, int phaseIndex, BuffEnum target)
+        internal static List<BuffData> BuildActiveBuffGenerationData(ParsedEvtcLog log, IReadOnlyList<Buff> listToUse, int phaseIndex, BuffEnum target)
         {
             var list = new List<BuffData>();
 

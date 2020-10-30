@@ -11,7 +11,7 @@ namespace GW2EIBuilders.HtmlModels
         public List<object[]> ToDown { get; internal set; } = null;
         public List<object[]> ToKill { get; internal set; } = null;
 
-        private static List<object[]> BuildDeathRecapItemList(List<DeathRecap.DeathRecapDamageItem> list)
+        private static List<object[]> BuildDeathRecapItemList(IReadOnlyList<DeathRecap.DeathRecapDamageItem> list)
         {
             var data = new List<object[]>();
             foreach (DeathRecap.DeathRecapDamageItem item in list)

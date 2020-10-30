@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (skillIDs.Contains(boon.ID))
                 {
-                    PresentBoons.Add(boon);
+                    _presentBoons.Add(boon);
                 }
             }
             // Main Conditions
@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (skillIDs.Contains(boon.ID))
                 {
-                    PresentConditions.Add(boon);
+                    _presentConditions.Add(boon);
                 }
             }
 
@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (skillIDs.Contains(boon.ID))
                 {
-                    PresentOffbuffs.Add(boon);
+                    _presentOffbuffs.Add(boon);
                 }
             }
 
@@ -43,7 +43,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (skillIDs.Contains(boon.ID))
                 {
-                    PresentSupbuffs.Add(boon);
+                    _presentSupbuffs.Add(boon);
                 }
             }
 
@@ -51,7 +51,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (skillIDs.Contains(boon.ID))
                 {
-                    PresentDefbuffs.Add(boon);
+                    _presentDefbuffs.Add(boon);
                 }
 
             }
@@ -60,7 +60,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (skillIDs.Contains(boon.ID))
                 {
-                    PresentFractalInstabilities.Add(boon);
+                    _presentFractalInstabilities.Add(boon);
                 }
             }
 
@@ -78,15 +78,21 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
         }
-
+        public IReadOnlyList<Buff> PresentBoons => _presentBoons;
+        public IReadOnlyList<Buff> PresentConditions => _presentConditions;
+        public IReadOnlyList<Buff> PresentOffbuffs => _presentOffbuffs;
+        public IReadOnlyList<Buff> PresentSupbuffs => _presentSupbuffs;
+        public IReadOnlyList<Buff> PresentDefbuffs => _presentDefbuffs;
+        public IReadOnlyList<Buff> PresentFractalInstabilities => _presentFractalInstabilities;
 
         // present buff
-        public List<Buff> PresentBoons { get; } = new List<Buff>();//Used only for Boon tables
-        public List<Buff> PresentConditions { get; } = new List<Buff>();//Used only for Condition tables
-        public List<Buff> PresentOffbuffs { get; } = new List<Buff>();//Used only for Off Buff tables
-        public List<Buff> PresentSupbuffs { get; } = new List<Buff>();//Used only for Off Buff tables
-        public List<Buff> PresentDefbuffs { get; } = new List<Buff>();//Used only for Def Buff tables
-        public List<Buff> PresentFractalInstabilities { get; } = new List<Buff>();
+        private List<Buff> _presentBoons { get; } = new List<Buff>();
+        private List<Buff> _presentConditions { get; } = new List<Buff>();
+        private List<Buff> _presentOffbuffs { get; } = new List<Buff>();
+        private List<Buff> _presentSupbuffs { get; } = new List<Buff>();
+        private List<Buff> _presentDefbuffs { get; } = new List<Buff>();
+        private List<Buff> _presentFractalInstabilities { get; } = new List<Buff>();
+
         public Dictionary<Player, HashSet<Buff>> PresentPersonalBuffs { get; } = new Dictionary<Player, HashSet<Buff>>();
 
         //Positions for group
