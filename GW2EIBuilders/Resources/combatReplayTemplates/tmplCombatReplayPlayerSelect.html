@@ -5,8 +5,8 @@
                 <h5 class="mt-2" style="min-width:80px;max-width:80px;">Group {{group.id}}</h5>
                 <div class="d-flex flex-row flex-wrap align-items-center ml-1" style="max-width:370px;">
                     <span v-for="player in group.players"
-                           @click="selectActor(player.combatReplayID);"
-                           class="btn btn-small ply-btn" :class="{'active': selectedplayerid === player.combatReplayID, 'btn-dark': !light, 'btn-light': light}" :title="player.name">
+                           @click="selectActor(player.uniqueID);"
+                           class="btn btn-small ply-btn" :class="{'active': selectedplayerid === player.uniqueID, 'btn-dark': !light, 'btn-light': light}" :title="player.name">
                         <img v-if="player.isCommander" src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png" alt="Commander" class="icon">
                         <img :src="player.icon" :alt="player.profession" class="icon">
                         {{ player.name }}

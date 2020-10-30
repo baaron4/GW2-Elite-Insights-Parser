@@ -26,7 +26,7 @@ namespace GW2EIBuilders.HtmlModels
         public string ColTotal { get; internal set; }
         public bool IsConjure { get; internal set; }
 
-        internal PlayerDto(Player player, ParsedEvtcLog log, bool cr, ActorDetailsDto details) : base(player, log, cr, details)
+        internal PlayerDto(Player player, ParsedEvtcLog log, ActorDetailsDto details) : base(player, log, details)
         {
             Group = player.Group;
             Acc = player.Account;

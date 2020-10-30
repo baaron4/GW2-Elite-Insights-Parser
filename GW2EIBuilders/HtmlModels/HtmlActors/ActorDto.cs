@@ -7,21 +7,18 @@ namespace GW2EIBuilders.HtmlModels
 
     public abstract class ActorDto
     {
-        public int CombatReplayID { get; internal set; }
+        public int UniqueID { get; internal set; }
         public string Name { get; internal set; }
         public uint Tough { get; internal set; }
         public List<MinionDto> Minions { get; } = new List<MinionDto>();
         public ActorDetailsDto Details { get; internal set; }
 
-        protected ActorDto(AbstractSingleActor actor, ParsedEvtcLog log, bool cr, ActorDetailsDto details)
+        protected ActorDto(AbstractSingleActor actor, ParsedEvtcLog log, ActorDetailsDto details)
         {
             Name = actor.Character;
             Tough = actor.Toughness;
             Details = details;
-            if (cr)
-            {
-                CombatReplayID = actor.CombatReplayID;
-            }
+            UniqueID = actor.UniqueID;
             foreach (KeyValuePair<long, Minions> pair in actor.GetMinions(log))
             {
                 Minions.Add(new MinionDto()

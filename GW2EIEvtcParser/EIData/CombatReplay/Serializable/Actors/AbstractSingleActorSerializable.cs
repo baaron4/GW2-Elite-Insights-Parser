@@ -12,7 +12,7 @@ namespace GW2EIEvtcParser.EIData
         internal AbstractSingleActorSerializable(AbstractSingleActor actor, ParsedEvtcLog log, CombatReplayMap map, CombatReplay replay, string type)
         {
             Img = actor.GetIcon();
-            ID = actor.CombatReplayID;
+            ID = actor.UniqueID;
             Positions = new List<double>();
             Type = type;
             foreach (Point3D pos in replay.PolledPositions)

@@ -13,7 +13,7 @@
             playerindex: function () {
                 if (this.selectedplayer) {
                     for (var i = 0; i < logData.players.length; i++) {
-                        if (logData.players[i].combatReplayID == this.selectedplayerid) {
+                        if (logData.players[i].uniqueID == this.selectedplayerid) {
                             return i;
                         }
                     }

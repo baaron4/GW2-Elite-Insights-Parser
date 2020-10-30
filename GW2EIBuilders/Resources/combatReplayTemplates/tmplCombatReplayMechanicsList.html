@@ -72,7 +72,7 @@
                             if (icd === 0 || (time - lastTime > icd)) {
                                 mechanicEvents.push({
                                     time: time,
-                                    actor: { name: player.name, enemy: false, id: player.combatReplayID },
+                                    actor: { name: player.name, enemy: false, id: player.uniqueID },
                                     mechanic: mechData,
                                 });
                             }

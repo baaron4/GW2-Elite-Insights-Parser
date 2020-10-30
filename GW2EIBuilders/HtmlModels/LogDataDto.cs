@@ -159,7 +159,7 @@ namespace GW2EIBuilders.HtmlModels
             foreach (Player player in log.PlayerList)
             {
                 logData.HasCommander = logData.HasCommander || player.HasCommanderTag;
-                logData.Players.Add(new PlayerDto(player, log, cr, ActorDetailsDto.BuildPlayerData(log, player, usedSkills, usedBuffs)));
+                logData.Players.Add(new PlayerDto(player, log, ActorDetailsDto.BuildPlayerData(log, player, usedSkills, usedBuffs)));
             }
 
             log.UpdateProgressWithCancellationCheck("HTML: building Enemies");
@@ -171,7 +171,7 @@ namespace GW2EIBuilders.HtmlModels
             log.UpdateProgressWithCancellationCheck("HTML: building Targets");
             foreach (NPC target in log.FightData.Logic.Targets)
             {
-                var targetDto = new TargetDto(target, log, cr, ActorDetailsDto.BuildTargetData(log, target, usedSkills, usedBuffs, cr));
+                var targetDto = new TargetDto(target, log, ActorDetailsDto.BuildTargetData(log, target, usedSkills, usedBuffs, cr));
                 logData.Targets.Add(targetDto);
             }
             //

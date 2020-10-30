@@ -11,7 +11,7 @@
 
         public override object GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
         {
-            return _agent.CombatReplayID;
+            return _agent.UniqueID;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EIData
 {
     public abstract class AbstractSingleActor : AbstractActor
     {
-        public int CombatReplayID => AgentItem.UniqueID;
+        public int UniqueID => AgentItem.UniqueID;
         // Boons
         public HashSet<Buff> TrackedBuffs { get; } = new HashSet<Buff>();
         private BuffDictionary _buffMap;

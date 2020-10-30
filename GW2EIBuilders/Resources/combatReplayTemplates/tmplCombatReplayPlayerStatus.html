@@ -37,7 +37,7 @@
                 return graphData.phases[0].players[this.playerindex].healthStates;
             },
             status: function () {
-                var crPData = animator.playerData.get(this.player.combatReplayID);
+                var crPData = animator.playerData.get(this.player.uniqueID);
                 var icon = crPData.getIcon(this.time);
                 return icon === deadIcon ? 0 : icon === downIcon ? 1 : icon === dcIcon ? 2 : 3;
             },

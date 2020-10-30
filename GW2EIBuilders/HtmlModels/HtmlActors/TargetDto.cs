@@ -16,7 +16,7 @@ namespace GW2EIBuilders.HtmlModels
         public double Percent { get; internal set; }
         public double HpLeft { get; internal set; }
 
-        internal TargetDto(NPC target, ParsedEvtcLog log, bool cr, ActorDetailsDto details) : base(target, log, cr, details)
+        internal TargetDto(NPC target, ParsedEvtcLog log, ActorDetailsDto details) : base(target, log, details)
         {
             Icon = target.GetIcon();
             Health = target.GetHealth(log.CombatData);
