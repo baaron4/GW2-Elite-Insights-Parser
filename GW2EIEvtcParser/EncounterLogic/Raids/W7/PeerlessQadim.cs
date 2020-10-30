@@ -99,7 +99,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     phaseEnds.Add(magmaDrop.Time);
                 }
             }
-            List<AbstractCastEvent> pushes = log.CombatData.GetCastData(56405);
+            IReadOnlyList<AbstractCastEvent> pushes = log.CombatData.GetCastData(56405);
             if (pushes.Count > 0)
             {
                 AbstractCastEvent push = pushes[0];

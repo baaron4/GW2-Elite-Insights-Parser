@@ -101,7 +101,7 @@ namespace GW2EIEvtcParser.EIData
             return _elementalSwaps.Contains(id);
         }
 
-        public static void RemoveDualBuffs(List<AbstractBuffEvent> buffsPerDst, SkillData skillData)
+        public static void RemoveDualBuffs(IReadOnlyList<AbstractBuffEvent> buffsPerDst, SkillData skillData)
         {
             var duals = new HashSet<long>
             {

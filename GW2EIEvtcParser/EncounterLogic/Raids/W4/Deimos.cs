@@ -144,7 +144,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     throw new InvalidOperationException("Deimos not found");
                 }
-                List<AttackTargetEvent> attackTargets = combatData.GetAttackTargetEvents(target.AgentItem);
+                IReadOnlyList<AttackTargetEvent> attackTargets = combatData.GetAttackTargetEvents(target.AgentItem);
                 if (attackTargets.Count == 0)
                 {
                     return;
@@ -292,7 +292,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return phases;
             }
             // Determined + additional data on inst change
-            AbstractBuffEvent invulDei = log.CombatData.GetBuffData(762).Find(x => x is BuffApplyEvent && x.To == mainTarget.AgentItem);
+            AbstractBuffEvent invulDei = log.CombatData.GetBuffData(762).FirstOrDefault(x => x is BuffApplyEvent && x.To == mainTarget.AgentItem);
             if (invulDei != null)
             {
                 end = invulDei.Time;

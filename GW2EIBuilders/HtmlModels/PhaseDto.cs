@@ -91,7 +91,7 @@ namespace GW2EIBuilders.HtmlModels
         public List<AreaLabelDto> MarkupAreas { get; internal set; }
         public List<int> SubPhases { get; internal set; }
 
-        internal PhaseDto(PhaseData phaseData, List<PhaseData> phases, ParsedEvtcLog log)
+        internal PhaseDto(PhaseData phaseData, IReadOnlyList<PhaseData> phases, ParsedEvtcLog log)
         {
             Name = phaseData.Name;
             Duration = phaseData.DurationInMS;

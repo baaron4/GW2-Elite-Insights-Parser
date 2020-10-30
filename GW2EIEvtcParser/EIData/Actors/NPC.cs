@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_health == -1)
             {
-                List<MaxHealthUpdateEvent> maxHpUpdates = combatData.GetMaxHealthUpdateEvents(AgentItem);
+                IReadOnlyList<MaxHealthUpdateEvent> maxHpUpdates = combatData.GetMaxHealthUpdateEvents(AgentItem);
                 _health = maxHpUpdates.Count > 0 ? maxHpUpdates.Max(x => x.MaxHealth) : 1;
             }
             return _health;
@@ -79,7 +79,7 @@ namespace GW2EIEvtcParser.EIData
         private void SetBuffs(ParsedEvtcLog log)
         {
             _buffs = new List<Dictionary<long, FinalBuffs>>();
-            List<PhaseData> phases = log.FightData.GetPhases(log);
+            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
             {
                 BuffDistribution buffDistribution = GetBuffDistribution(log, phaseIndex);

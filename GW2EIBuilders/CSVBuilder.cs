@@ -12,7 +12,7 @@ namespace GW2EIBuilders
     public class CSVBuilder
     {
         private readonly ParsedEvtcLog _log;
-        private readonly List<PhaseData> _phases;
+        private readonly IReadOnlyList<PhaseData> _phases;
         private readonly NPC _legacyTarget;
         private readonly GeneralStatistics _statistics;
         private StreamWriter _sw;
@@ -91,7 +91,7 @@ namespace GW2EIBuilders
             WriteLine(new[] { "Boss", _log.FightData.GetFightName(_log) });
             WriteLine(new[] { "Success", _log.FightData.Success.ToString() });
             WriteLine(new[] { "Total Boss Health", _legacyTarget.GetHealth(_log.CombatData).ToString() });
-            List<HealthUpdateEvent> hpUpdates = _log.CombatData.GetHealthUpdateEvents(_legacyTarget.AgentItem);
+            IReadOnlyList<HealthUpdateEvent> hpUpdates = _log.CombatData.GetHealthUpdateEvents(_legacyTarget.AgentItem);
             double hpLeft = hpUpdates.Count > 0
                 ? hpUpdates.Last().HPPercent
                 : 100.0;

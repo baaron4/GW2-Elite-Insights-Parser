@@ -44,7 +44,7 @@ namespace GW2EIBuilders.HtmlModels
         {
             var chartData = new ChartDataDto();
             var phaseChartData = new List<PhaseChartDataDto>();
-            List<PhaseData> phases = log.FightData.GetPhases(log);
+            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             for (int i = 0; i < phases.Count; i++)
             {
                 var phaseData = new PhaseChartDataDto()

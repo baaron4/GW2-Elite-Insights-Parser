@@ -72,7 +72,7 @@ namespace GW2EIEvtcParser.EIData
             if (_playerSupport == null)
             {
                 _playerSupport = new List<FinalPlayerSupport>();
-                List<PhaseData> phases = log.FightData.GetPhases(log);
+                IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
                 for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
                 {
                     var playerSup = new FinalPlayerSupport();
@@ -331,9 +331,9 @@ namespace GW2EIEvtcParser.EIData
         {
             _deathRecaps = new List<DeathRecap>();
             List<DeathRecap> res = _deathRecaps;
-            List<DeadEvent> deads = log.CombatData.GetDeadEvents(AgentItem);
-            List<DownEvent> downs = log.CombatData.GetDownEvents(AgentItem);
-            List<AliveEvent> ups = log.CombatData.GetAliveEvents(AgentItem);
+            IReadOnlyList<DeadEvent> deads = log.CombatData.GetDeadEvents(AgentItem);
+            IReadOnlyList<DownEvent> downs = log.CombatData.GetDownEvents(AgentItem);
+            IReadOnlyList<AliveEvent> ups = log.CombatData.GetAliveEvents(AgentItem);
             long lastDeathTime = 0;
             IReadOnlyList<AbstractDamageEvent> damageLogs = GetDamageTakenLogs(null, log, 0, log.FightData.FightEnd);
             foreach (DeadEvent dead in deads)

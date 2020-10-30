@@ -28,7 +28,7 @@ namespace GW2EIBuilders.HtmlModels
             }
             else
             {
-                List<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(target.AgentItem);
+                IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(target.AgentItem);
                 if (hpUpdates.Count > 0)
                 {
                     HpLeft = hpUpdates.Last().HPPercent;
