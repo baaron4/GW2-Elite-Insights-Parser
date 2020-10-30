@@ -9,7 +9,7 @@ namespace GW2EIBuilders.HtmlModels
     {
         public List<object> Actors { get; internal set; }
         public int[] Sizes { get; internal set; }
-        public int MaxTime { get; internal set; }
+        public long MaxTime { get; internal set; }
         public float Inch { get; internal set; }
         public int PollingRate { get; internal set; }
         public List<CombatReplayMap.MapItem> Maps { get; internal set; }
@@ -22,7 +22,7 @@ namespace GW2EIBuilders.HtmlModels
             (int width, int height) = map.GetPixelMapSize();
             Sizes = new int[2] { width, height };
             Inch = map.GetInch();
-            MaxTime = log.PlayerList.First().GetCombatReplayTimes(log).Last();
+            MaxTime = log.PlayerList.First().GetCombatReplayPolledPositions(log).Last().Time;
         }
 
 

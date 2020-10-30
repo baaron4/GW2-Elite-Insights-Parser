@@ -447,6 +447,35 @@ namespace GW2EIEvtcParser.EIData
             return new PlayerSerializable(this, log, map, CombatReplay);
         }
 
+        public List<Point3D> GetCombatReplayActivePositions(ParsedEvtcLog log)
+        {
+            if (CombatReplay == null)
+            {
+                InitCombatReplay(log);
+            }
+            (List<(long start, long end)> deads, _, List<(long start, long end)> dcs) = GetStatus(log);
+            var activePositions = new List<Point3D>(GetCombatReplayPolledPositions(log));
+            for (int i = 0; i < activePositions.Count; i++)
+            {
+                Point3D cur = activePositions[i];
+                foreach ((long start, long end) in deads)
+                {
+                    if (cur.Time >= start && cur.Time <= end)
+                    {
+                        activePositions[i] = null;
+                    }
+                }
+                foreach ((long start, long end) in dcs)
+                {
+                    if (cur.Time >= start && cur.Time <= end)
+                    {
+                        activePositions[i] = null;
+                    }
+                }
+            }
+            return activePositions;
+        }
+
         protected override void InitCombatReplay(ParsedEvtcLog log)
         {
             CombatReplay = new CombatReplay();
@@ -456,7 +485,7 @@ namespace GW2EIEvtcParser.EIData
                 return;
             }
             SetMovements(log);
-            CombatReplay.PollingRate(log.FightData.FightEnd, true);
+            CombatReplay.PollingRate(log.FightData.FightEnd);
         }
     }
 }

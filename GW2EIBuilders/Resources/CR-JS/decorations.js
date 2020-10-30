@@ -353,10 +353,12 @@ class BackgroundDrawable {
 
     getHeight() {
         // to override
+        return 0;
     }
 
     getPosition() {
         // to override
+        return null;
     }
 }
 

@@ -1,8 +1,8 @@
 <template>
-    <div class="d-flex flex-column justify-content-center flex-wrap" :style="{'width': Math.max(canvas.x, canvas.y) + 'px'}">
-        <div class="d-flex flex-column justify-content-center align-items-center" :style="{'width': '100%', 'min-width': canvas.x + 'px', 'height': canvas.y + 'px', 'position': 'relative'}">
-            <canvas :width="canvas.x + 'px'" :height="canvas.y + 'px'" id="main-canvas" class="replay"></canvas>
-            <canvas :width="canvas.x + 'px'" :height="canvas.y + 'px'" id="bg-canvas" class="replay"></canvas>
+    <div class="d-flex flex-column justify-content-center flex-wrap" :style="{'width': Math.max(canvasSize.x, canvasSize.y) + 'px'}">
+        <div class="d-flex flex-column justify-content-center align-items-center" :style="{'width': '100%', 'min-width': canvasSize.x + 'px', 'height': canvasSize.y + 'px', 'position': 'relative'}">
+            <canvas :width="canvasSize.x + 'px'" :height="canvasSize.y + 'px'" id="main-canvas" class="replay"></canvas>
+            <canvas :width="canvasSize.x + 'px'" :height="canvasSize.y + 'px'" id="bg-canvas" class="replay"></canvas>
         </div>
         <div class="animation-control">
             <div class="d-flex justify-content-center">
@@ -48,7 +48,7 @@
                 speeds: [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0],
                 selectedSpeed: 1,
                 backwards: false,
-                canvas: {
+                canvasSize: {
                     x: logData.crData.sizes[0],
                     y: logData.crData.sizes[1]
                 },

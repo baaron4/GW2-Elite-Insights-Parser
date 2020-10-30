@@ -79,6 +79,7 @@ class Animator {
         this.dragStart = null;
         this.dragged = false;
         this.scale = 1.0;
+        // options
         if (options) {
             if (options.inch) this.inch = options.inch;
             if (options.pollingRate) this.pollingRate = options.pollingRate;

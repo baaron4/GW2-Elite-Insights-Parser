@@ -130,7 +130,7 @@ namespace GW2EIEvtcParser.EIData
                 return;
             }
             SetMovements(log);
-            CombatReplay.PollingRate(log.FightData.FightEnd, log.FightData.GetMainTargets(log).Contains(this));
+            CombatReplay.PollingRate(log.FightData.FightEnd);
             TrimCombatReplay(log);
         }
     }

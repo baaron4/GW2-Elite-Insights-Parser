@@ -9,7 +9,6 @@ namespace GW2EIEvtcParser.EIData
         internal List<Point3D> Positions { get; } = new List<Point3D>();
         internal List<Point3D> PolledPositions { get; private set; } = new List<Point3D>();
         internal List<Point3D> Velocities { get; private set; } = new List<Point3D>();
-        internal List<int> Times => PolledPositions.Select(x => (int)x.Time).ToList();
         internal List<Point3D> Rotations { get; } = new List<Point3D>();
         internal List<Point3D> PolledRotations { get; private set; } = new List<Point3D>();
         private long _start = -1;
@@ -27,20 +26,11 @@ namespace GW2EIEvtcParser.EIData
             _end = Math.Max(_start, end);
         }
 
-        private void PositionPolling(int rate, long fightDuration, bool forceInterpolate)
+        private void PositionPolling(int rate, long fightDuration)
         {
-            if (forceInterpolate && Positions.Count == 0)
-            {
-                Positions.Add(new Point3D(int.MinValue, int.MinValue, 0, 0));
-            }
             if (Positions.Count == 0)
             {
-                return;
-            }
-            else if (Positions.Count == 1 && !forceInterpolate)
-            {
-                PolledPositions.Add(Positions[0]);
-                return;
+                Positions.Add(new Point3D(int.MinValue, int.MinValue, 0, 0));
             }
             int tablePos = 0;
             Point3D currentVelocity = null;
@@ -103,15 +93,10 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="rate"></param>
         /// <param name="fightDuration"></param>
         /// <param name="forceInterpolate"></param>
-        private void RotationPolling(int rate, long fightDuration, bool forceInterpolate)
+        private void RotationPolling(int rate, long fightDuration)
         {
             if (Rotations.Count == 0)
             {
-                return;
-            }
-            else if (Rotations.Count == 1 && !forceInterpolate)
-            {
-                PolledRotations.Add(Rotations[0]);
                 return;
             }
             int tablePos = 0;
@@ -146,34 +131,10 @@ namespace GW2EIEvtcParser.EIData
             PolledRotations = PolledRotations.Where(x => x.Time >= 0).ToList();
         }
 
-        internal void PollingRate(long fightDuration, bool forceInterpolate)
+        internal void PollingRate(long fightDuration)
         {
-            PositionPolling(ParserHelper.PollingRate, fightDuration, forceInterpolate);
-            RotationPolling(ParserHelper.PollingRate, fightDuration, forceInterpolate);
-        }
-
-        internal List<Point3D> GetActivePositions(List<(long start, long end)> deads, List<(long start, long end)> dcs)
-        {
-            var activePositions = new List<Point3D>(PolledPositions);
-            for (int i = 0; i < activePositions.Count; i++)
-            {
-                Point3D cur = activePositions[i];
-                foreach ((long start, long end) in deads)
-                {
-                    if (cur.Time >= start && cur.Time <= end)
-                    {
-                        activePositions[i] = null;
-                    }
-                }
-                foreach ((long start, long end) in dcs)
-                {
-                    if (cur.Time >= start && cur.Time <= end)
-                    {
-                        activePositions[i] = null;
-                    }
-                }
-            }
-            return activePositions;
+            PositionPolling(ParserHelper.PollingRate, fightDuration);
+            RotationPolling(ParserHelper.PollingRate, fightDuration);
         }
     }
 }

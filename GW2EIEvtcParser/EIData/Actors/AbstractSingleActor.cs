@@ -403,15 +403,6 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public List<int> GetCombatReplayTimes(ParsedEvtcLog log)
-        {
-            if (CombatReplay == null)
-            {
-                InitCombatReplay(log);
-            }
-            return CombatReplay.Times;
-        }
-
         public List<Point3D> GetCombatReplayPolledPositions(ParsedEvtcLog log)
         {
             if (CombatReplay == null)
@@ -419,16 +410,6 @@ namespace GW2EIEvtcParser.EIData
                 InitCombatReplay(log);
             }
             return CombatReplay.PolledPositions;
-        }
-
-        public List<Point3D> GetCombatReplayActivePositions(ParsedEvtcLog log)
-        {
-            if (CombatReplay == null)
-            {
-                InitCombatReplay(log);
-            }
-            (List<(long start, long end)> deads, _ , List<(long start, long end)> dcs) = GetStatus(log);
-            return CombatReplay.GetActivePositions(deads, dcs);
         }
 
         protected abstract void InitCombatReplay(ParsedEvtcLog log);
