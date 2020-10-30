@@ -26,93 +26,108 @@ namespace GW2EIEvtcParser.EIData
 
     public class BuffDistribution
     {
-        internal Dictionary<long, Dictionary<AgentItem, BuffDistributionItem>> Distributions = new Dictionary<long, Dictionary<AgentItem, BuffDistributionItem>>();
+        private Dictionary<long, Dictionary<AgentItem, BuffDistributionItem>> _distributions = new Dictionary<long, Dictionary<AgentItem, BuffDistributionItem>>();
 
-        public bool ContainsKey(long boonid)
+        internal Dictionary<AgentItem, BuffDistributionItem> GetDistribution(long buffID)
         {
-            return Distributions.ContainsKey(boonid);
+            if (!_distributions.TryGetValue(buffID, out Dictionary<AgentItem, BuffDistributionItem> distrib))
+            {
+                distrib = new Dictionary<AgentItem, BuffDistributionItem>();
+                _distributions.Add(buffID, distrib);
+            }
+            return distrib;
         }
 
-        public bool HasSrc(long boonid, AgentItem src)
+        public IReadOnlyCollection<long> PresentBuffIDs()
         {
-            return Distributions.ContainsKey(boonid) && Distributions[boonid].ContainsKey(src);
+            return _distributions.Keys;
         }
 
-        public IReadOnlyList<AbstractSingleActor> GetSrcs(long boonid, ParsedEvtcLog log)
+        public bool ContainsBuffID(long buffID)
         {
-            if (!Distributions.ContainsKey(boonid))
+            return _distributions.ContainsKey(buffID);
+        }
+
+        public bool HasSrc(long buffID, AgentItem src)
+        {
+            return _distributions.ContainsKey(buffID) && _distributions[buffID].ContainsKey(src);
+        }
+
+        public IReadOnlyList<AbstractSingleActor> GetSrcs(long buffID, ParsedEvtcLog log)
+        {
+            if (!_distributions.ContainsKey(buffID))
             {
                 return new List<AbstractSingleActor>();
             }
             var actors = new List<AbstractSingleActor>();
-            foreach (AgentItem agent in Distributions[boonid].Keys)
+            foreach (AgentItem agent in _distributions[buffID].Keys)
             {
                 actors.Add(log.FindActor(agent, true));
             }
             return actors;
         }
 
-        public long GetUptime(long boonid)
+        public long GetUptime(long buffID)
         {
-            if (!Distributions.ContainsKey(boonid))
+            if (!_distributions.ContainsKey(buffID))
             {
                 return 0;
             }
-            return Distributions[boonid].Sum(x => x.Value.Value);
+            return _distributions[buffID].Sum(x => x.Value.Value);
         }
 
-        public long GetGeneration(long boonid, AgentItem src)
+        public long GetGeneration(long buffID, AgentItem src)
         {
-            if (!Distributions.ContainsKey(boonid) || !Distributions[boonid].ContainsKey(src))
+            if (!_distributions.ContainsKey(buffID) || !_distributions[buffID].ContainsKey(src))
             {
                 return 0;
             }
-            return Distributions[boonid][src].Value;
+            return _distributions[buffID][src].Value;
         }
 
-        public long GetOverstack(long boonid, AgentItem src)
+        public long GetOverstack(long buffID, AgentItem src)
         {
-            if (!Distributions.ContainsKey(boonid) || !Distributions[boonid].ContainsKey(src))
+            if (!_distributions.ContainsKey(buffID) || !_distributions[buffID].ContainsKey(src))
             {
                 return 0;
             }
-            return Distributions[boonid][src].Overstack;
+            return _distributions[buffID][src].Overstack;
         }
 
-        public long GetWaste(long boonid, AgentItem src)
+        public long GetWaste(long buffID, AgentItem src)
         {
-            if (!Distributions.ContainsKey(boonid) || !Distributions[boonid].ContainsKey(src))
+            if (!_distributions.ContainsKey(buffID) || !_distributions[buffID].ContainsKey(src))
             {
                 return 0;
             }
-            return Distributions[boonid][src].Waste;
+            return _distributions[buffID][src].Waste;
         }
 
-        public long GetUnknownExtension(long boonid, AgentItem src)
+        public long GetUnknownExtension(long buffID, AgentItem src)
         {
-            if (!Distributions.ContainsKey(boonid) || !Distributions[boonid].ContainsKey(src))
+            if (!_distributions.ContainsKey(buffID) || !_distributions[buffID].ContainsKey(src))
             {
                 return 0;
             }
-            return Distributions[boonid][src].UnknownExtension;
+            return _distributions[buffID][src].UnknownExtension;
         }
 
-        public long GetExtension(long boonid, AgentItem src)
+        public long GetExtension(long buffID, AgentItem src)
         {
-            if (!Distributions.ContainsKey(boonid) || !Distributions[boonid].ContainsKey(src))
+            if (!_distributions.ContainsKey(buffID) || !_distributions[buffID].ContainsKey(src))
             {
                 return 0;
             }
-            return Distributions[boonid][src].Extension;
+            return _distributions[buffID][src].Extension;
         }
 
-        public long GetExtended(long boonid, AgentItem src)
+        public long GetExtended(long buffID, AgentItem src)
         {
-            if (!Distributions.ContainsKey(boonid) || !Distributions[boonid].ContainsKey(src))
+            if (!_distributions.ContainsKey(buffID) || !_distributions[buffID].ContainsKey(src))
             {
                 return 0;
             }
-            return Distributions[boonid][src].Extended;
+            return _distributions[buffID][src].Extended;
         }
     }
 }

@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser.EIData
                     boonDistributions[p] = p.GetBuffDistribution(log, phaseIndex);
                 }
 
-                var boonsToTrack = new HashSet<Buff>(boonDistributions.SelectMany(x => x.Value.Distributions).Select(x => log.Buffs.BuffsByIds[x.Key]));
+                var boonsToTrack = new HashSet<Buff>(boonDistributions.SelectMany(x => x.Value.PresentBuffIDs()).Select(x => log.Buffs.BuffsByIds[x]));
 
                 var final =
                     new Dictionary<long, FinalPlayerBuffs>();
@@ -62,7 +62,7 @@ namespace GW2EIEvtcParser.EIData
                     {
                         BuffDistribution boons = pair.Value;
                         long playerActiveDuration = phase.GetActorActiveDuration(pair.Key, log);
-                        if (boons.ContainsKey(boon.ID))
+                        if (boons.ContainsBuffID(boon.ID))
                         {
                             hasGeneration = hasGeneration || boons.HasSrc(boon.ID, agentItem);
                             double generation = boons.GetGeneration(boon.ID, agentItem);
@@ -171,7 +171,7 @@ namespace GW2EIEvtcParser.EIData
                 long playerActiveDuration = phase.GetActorActiveDuration(player, log);
                 foreach (Buff boon in player.TrackedBuffs)
                 {
-                    if (selfBoons.ContainsKey(boon.ID))
+                    if (selfBoons.ContainsBuffID(boon.ID))
                     {
                         var uptime = new FinalPlayerBuffs
                         {

@@ -9,7 +9,8 @@ namespace GW2EIEvtcParser.EIData
     {
         public int UniqueID => AgentItem.UniqueID;
         // Boons
-        public HashSet<Buff> TrackedBuffs { get; } = new HashSet<Buff>();
+        private HashSet<Buff> _trackedBuffs { get; } = new HashSet<Buff>();
+        public IReadOnlyCollection<Buff> TrackedBuffs => TrackedBuffs;
         private BuffDictionary _buffMap;
         protected Dictionary<long, BuffsGraphModel> BuffPoints { get; set; }
         private readonly List<BuffDistribution> _buffDistribution = new List<BuffDistribution>();
@@ -240,7 +241,7 @@ namespace GW2EIEvtcParser.EIData
                 _buffMap.Sort();
                 foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in _buffMap)
                 {
-                    TrackedBuffs.Add(log.Buffs.BuffsByIds[pair.Key]);
+                    _trackedBuffs.Add(log.Buffs.BuffsByIds[pair.Key]);
                 }
             }
         }
@@ -386,7 +387,7 @@ namespace GW2EIEvtcParser.EIData
 
                 foreach (Buff buff in TrackedBuffs)
                 {
-                    if (buffDistribution.ContainsKey(buff.ID))
+                    if (buffDistribution.ContainsBuffID(buff.ID))
                     {
                         (rates[buff.ID], ratesActive[buff.ID]) = FinalBuffsDictionary.GetFinalBuffsDictionary(log, buff, buffDistribution, phaseDuration, activePhaseDuration);
                     }
