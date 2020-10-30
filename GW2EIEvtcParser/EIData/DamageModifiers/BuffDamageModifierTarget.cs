@@ -89,7 +89,7 @@ namespace GW2EIEvtcParser.EIData
                     for (int i = 0; i < phases.Count; i++)
                     {
                         int totalDamage = GetTotalDamage(p, log, target, i);
-                        List<AbstractDamageEvent> typedHits = GetHitDamageLogs(p, log, target, phases[i]);
+                        IReadOnlyList<AbstractDamageEvent> typedHits = GetHitDamageLogs(p, log, target, phases[i]);
                         List<double> damages;
                         if (_trackerPlayer != null)
                         {

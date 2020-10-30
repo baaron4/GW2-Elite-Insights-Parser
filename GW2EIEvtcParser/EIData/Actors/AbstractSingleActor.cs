@@ -44,7 +44,7 @@ namespace GW2EIEvtcParser.EIData
 
         // Status
 
-        public (List<(long start, long end)>, List<(long start, long end)>, List<(long start, long end)>) GetStatus(ParsedEvtcLog log)
+        public (IReadOnlyList<(long start, long end)>, IReadOnlyList<(long start, long end)>, IReadOnlyList<(long start, long end)>) GetStatus(ParsedEvtcLog log)
         {
             if (_deads == null)
             {
@@ -58,7 +58,7 @@ namespace GW2EIEvtcParser.EIData
 
         public abstract string GetIcon();     
 
-        public List<Segment> GetHealthUpdates(ParsedEvtcLog log)
+        public IReadOnlyList<Segment> GetHealthUpdates(ParsedEvtcLog log)
         {
             if (_healthUpdates == null)
             {
@@ -123,7 +123,7 @@ namespace GW2EIEvtcParser.EIData
 
         // Graph
 
-        public List<int> Get1SDamageList(ParsedEvtcLog log, int phaseIndex, PhaseData phase, AbstractActor target)
+        public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, int phaseIndex, PhaseData phase, AbstractActor target)
         {
             ulong targetId = target != null ? target.Agent : 0;
             int id = (phaseIndex + "_" + targetId + "_1S").GetHashCode();
@@ -132,7 +132,7 @@ namespace GW2EIEvtcParser.EIData
                 return res;
             }
             var dmgList = new List<int>();
-            List<AbstractDamageEvent> damageLogs = GetDamageLogs(target, log, phase.Start, phase.End);
+            IReadOnlyList<AbstractDamageEvent> damageLogs = GetDamageLogs(target, log, phase.Start, phase.End);
             // fill the graph, full precision
             var dmgListFull = new List<int>();
             for (int i = 0; i <= phase.DurationInMS; i++)
@@ -403,7 +403,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public List<Point3D> GetCombatReplayPolledPositions(ParsedEvtcLog log)
+        public IReadOnlyList<Point3D> GetCombatReplayPolledPositions(ParsedEvtcLog log)
         {
             if (CombatReplay == null)
             {
@@ -433,7 +433,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public List<GenericDecoration> GetCombatReplayActors(ParsedEvtcLog log)
+        public IReadOnlyList<GenericDecoration> GetCombatReplayActors(ParsedEvtcLog log)
         {
             if (!log.CanCombatReplay)
             {
@@ -459,7 +459,7 @@ namespace GW2EIEvtcParser.EIData
         public abstract AbstractSingleActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedEvtcLog log);
 
         // Cast logs
-        public override List<AbstractCastEvent> GetCastLogs(ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractCastEvent> GetCastLogs(ParsedEvtcLog log, long start, long end)
         {
             if (CastLogs == null)
             {
@@ -468,7 +468,7 @@ namespace GW2EIEvtcParser.EIData
             return CastLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
 
         }
-        public override List<AbstractCastEvent> GetIntersectingCastLogs(ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractCastEvent> GetIntersectingCastLogs(ParsedEvtcLog log, long start, long end)
         {
             if (CastLogs == null)
             {
@@ -517,7 +517,7 @@ namespace GW2EIEvtcParser.EIData
             return GetDPSAll(log)[phaseIndex];
         }
 
-        public List<FinalDPS> GetDPSAll(ParsedEvtcLog log)
+        public IReadOnlyList<FinalDPS> GetDPSAll(ParsedEvtcLog log)
         {
             if (_dpsAll == null)
             {
@@ -535,7 +535,7 @@ namespace GW2EIEvtcParser.EIData
             return GetDPSTarget(log, target)[phaseIndex];
         }
 
-        public List<FinalDPS> GetDPSTarget(ParsedEvtcLog log, AbstractSingleActor target)
+        public IReadOnlyList<FinalDPS> GetDPSTarget(ParsedEvtcLog log, AbstractSingleActor target)
         {
             if (target == null)
             {
@@ -564,7 +564,7 @@ namespace GW2EIEvtcParser.EIData
             return GetDefenses(log)[phaseIndex];
         }
 
-        public List<FinalDefensesAll> GetDefenses(ParsedEvtcLog log)
+        public IReadOnlyList<FinalDefensesAll> GetDefenses(ParsedEvtcLog log)
         {
             if (_defenses == null)
             {
@@ -582,7 +582,7 @@ namespace GW2EIEvtcParser.EIData
             return GetDefenses(log, target)[phaseIndex];
         }
 
-        public List<FinalDefenses> GetDefenses(ParsedEvtcLog log, AbstractSingleActor target)
+        public IReadOnlyList<FinalDefenses> GetDefenses(ParsedEvtcLog log, AbstractSingleActor target)
         {
             if (_defensesTarget == null)
             {
@@ -621,7 +621,7 @@ namespace GW2EIEvtcParser.EIData
             return GetGameplayStats(log, target)[phaseIndex];
         }
 
-        public List<FinalGameplayStatsAll> GetGameplayStats(ParsedEvtcLog log)
+        public IReadOnlyList<FinalGameplayStatsAll> GetGameplayStats(ParsedEvtcLog log)
         {
             if (_statsAll == null)
             {
@@ -634,7 +634,7 @@ namespace GW2EIEvtcParser.EIData
             return _statsAll;
         }
 
-        public List<FinalGameplayStats> GetGameplayStats(ParsedEvtcLog log, AbstractSingleActor target)
+        public IReadOnlyList<FinalGameplayStats> GetGameplayStats(ParsedEvtcLog log, AbstractSingleActor target)
         {
             if (target == null)
             {
@@ -662,7 +662,7 @@ namespace GW2EIEvtcParser.EIData
             return GetSupport(log)[phaseIndex];
         }
 
-        public List<FinalSupportAll> GetSupport(ParsedEvtcLog log)
+        public IReadOnlyList<FinalSupportAll> GetSupport(ParsedEvtcLog log)
         {
             if (_supportAll == null)
             {
@@ -683,7 +683,7 @@ namespace GW2EIEvtcParser.EIData
             return GetSupport(log, target)[phaseIndex];
         }
 
-        public List<FinalSupport> GetSupport(ParsedEvtcLog log, AbstractSingleActor target)
+        public IReadOnlyList<FinalSupport> GetSupport(ParsedEvtcLog log, AbstractSingleActor target)
         {
             if (target == null)
             {
@@ -707,7 +707,7 @@ namespace GW2EIEvtcParser.EIData
 
 
         // Damage logs
-        public override List<AbstractDamageEvent> GetDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractDamageEvent> GetDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
             if (DamageLogs == null)
             {
@@ -735,12 +735,12 @@ namespace GW2EIEvtcParser.EIData
             return DamageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public List<AbstractDamageEvent> GetJustActorDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public IReadOnlyList<AbstractDamageEvent> GetJustActorDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
             return GetDamageLogs(target, log, start, end).Where(x => x.From == AgentItem).ToList();
         }
 
-        public override List<AbstractDamageEvent> GetDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractDamageEvent> GetDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
             if (DamageTakenlogs == null)
             {
@@ -767,7 +767,7 @@ namespace GW2EIEvtcParser.EIData
         /// <summary>
         /// cached method for damage modifiers
         /// </summary>
-        internal List<AbstractDamageEvent> GetJustActorHitDamageLogs(AbstractActor target, ParsedEvtcLog log, PhaseData phase)
+        internal IReadOnlyList<AbstractDamageEvent> GetJustActorHitDamageLogs(AbstractActor target, ParsedEvtcLog log, PhaseData phase)
         {
             if (!_selfDamageLogsPerPhasePerTarget.TryGetValue(phase, out Dictionary<AbstractActor, List<AbstractDamageEvent>> targetDict))
             {

@@ -19,13 +19,13 @@ namespace GW2EIBuilders.HtmlModels
             {
                 var pChar = new PlayerChartDataDto()
                 {
-                    Total = p.Get1SDamageList(log, phaseIndex, phase, null),
+                    Total = new List<int>(p.Get1SDamageList(log, phaseIndex, phase, null)),
                     Targets = new List<List<int>>(),
                     HealthStates = ChartDataDto.BuildHealthGraphStates(log, p, log.FightData.GetPhases(log)[phaseIndex], true)
                 };
                 foreach (NPC target in phase.Targets)
                 {
-                    pChar.Targets.Add(p.Get1SDamageList(log, phaseIndex, phase, target));
+                    pChar.Targets.Add(new List<int>(p.Get1SDamageList(log, phaseIndex, phase, target)));
                 }
                 list.Add(pChar);
             }

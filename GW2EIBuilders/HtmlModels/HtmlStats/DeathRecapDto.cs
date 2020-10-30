@@ -31,7 +31,7 @@ namespace GW2EIBuilders.HtmlModels
         internal static List<DeathRecapDto> BuildDeathRecap(ParsedEvtcLog log, Player p)
         {
             var res = new List<DeathRecapDto>();
-            List<DeathRecap> recaps = p.GetDeathRecaps(log);
+            IReadOnlyList<DeathRecap> recaps = p.GetDeathRecaps(log);
             if (!recaps.Any())
             {
                 return null;

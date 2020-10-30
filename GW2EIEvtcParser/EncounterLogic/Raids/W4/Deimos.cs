@@ -22,8 +22,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     return false;
                 }
-                (_, List<(long start, long end)> downs , _) = actor.GetStatus(log);
-                bool hitInDown = downs.Exists(x => x.start < ce.Time && ce.Time < x.end);
+                (_, IReadOnlyList<(long start, long end)> downs , _) = actor.GetStatus(log);
+                bool hitInDown = downs.Any(x => x.start < ce.Time && ce.Time < x.end);
                 return !hitInDown;
             }),
             new EnemyCastStartMechanic(37846, "Off Balance", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "TP CC","Off Balance (Saul TP Breakbar)", "Saul TP Start",0),
@@ -383,7 +383,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Deimos:

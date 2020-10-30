@@ -51,9 +51,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (19072, 15484, 20992, 16508));
         }
 
-        private static void ComputeFightPhases(List<PhaseData> phases, List<AbstractCastEvent> castLogs, long fightDuration, long start)
+        private static void ComputeFightPhases(List<PhaseData> phases, IReadOnlyList<AbstractCastEvent> castLogs, long fightDuration, long start)
         {
-            AbstractCastEvent shield = castLogs.Find(x => x.SkillId == 47396);
+            AbstractCastEvent shield = castLogs.FirstOrDefault(x => x.SkillId == 47396);
             // Dhuum brought down to 10%
             if (shield != null)
             {
@@ -70,7 +70,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static List<PhaseData> GetInBetweenSoulSplits(ParsedEvtcLog log, NPC dhuum, long mainStart, long mainEnd, bool hasRitual)
         {
-            List<AbstractCastEvent> cls = dhuum.GetCastLogs(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = dhuum.GetCastLogs(log, 0, log.FightData.FightEnd);
             var cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
             var gDeathmark = cls.Where(x => x.SkillId == 48210).ToList();
             if (gDeathmark.Count < cataCycle.Count)
@@ -107,8 +107,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return phases;
             }
             // Sometimes the pre event is not in the evtc
-            List<AbstractCastEvent> castLogs = dhuum.GetCastLogs(log, 0, log.FightData.FightEnd);
-            List<AbstractCastEvent> dhuumCast = dhuum.GetCastLogs(log, 0, 20000);
+            IReadOnlyList<AbstractCastEvent> castLogs = dhuum.GetCastLogs(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> dhuumCast = dhuum.GetCastLogs(log, 0, 20000);
             if (dhuumCast.Count > 0)
             {
                 // full fight does not contain the pre event
@@ -167,14 +167,14 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             // TODO: correct position
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Dhuum:
                     var deathmark = cls.Where(x => x.SkillId == 48176).ToList();
-                    AbstractCastEvent majorSplit = cls.Find(x => x.SkillId == 47396);
+                    AbstractCastEvent majorSplit = cls.FirstOrDefault(x => x.SkillId == 47396);
                     foreach (AbstractCastEvent c in deathmark)
                     {
                         start = (int)c.Time;

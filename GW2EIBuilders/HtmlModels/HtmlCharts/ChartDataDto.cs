@@ -13,7 +13,7 @@ namespace GW2EIBuilders.HtmlModels
 
         internal static List<object[]> BuildHealthGraphStates(ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase, bool nullable)
         {
-            List<Segment> segments = actor.GetHealthUpdates(log);
+            IReadOnlyList<Segment> segments = actor.GetHealthUpdates(log);
             if (!segments.Any())
             {
                 return nullable ? null : new List<object[]>()
@@ -29,7 +29,7 @@ namespace GW2EIBuilders.HtmlModels
         }
         internal static List<object[]> BuildBreakbarPercentStates(ParsedEvtcLog log, NPC npc, PhaseData phase)
         {
-            List<Segment> segments = npc.GetBreakbarPercentUpdates(log);
+            IReadOnlyList<Segment> segments = npc.GetBreakbarPercentUpdates(log);
             if (!segments.Any())
             {
                 return null;

@@ -183,7 +183,7 @@ namespace GW2EIBuilders.JsonModels
                 Damage1S = new List<int>[phases.Count];
                 for (int i = 0; i < phases.Count; i++)
                 {
-                    Damage1S[i] = actor.Get1SDamageList(log, i, phases[i], null);
+                    Damage1S[i] = new List<int>(actor.Get1SDamageList(log, i, phases[i], null));
                 }
             }
             //

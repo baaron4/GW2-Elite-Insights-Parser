@@ -47,7 +47,7 @@ namespace GW2EIBuilders.HtmlModels
             var list = new List<object[]>();
 
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
-            List<AbstractCastEvent> casting = p.GetIntersectingCastLogs(log, phase.Start, phase.End);
+            IReadOnlyList<AbstractCastEvent> casting = p.GetIntersectingCastLogs(log, phase.Start, phase.End);
             foreach (AbstractCastEvent cl in casting)
             {
                 if (!usedSkills.ContainsKey(cl.SkillId))
