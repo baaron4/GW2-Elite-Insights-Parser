@@ -58,7 +58,7 @@ namespace GW2EIEvtcParser.EIData
             CastLogs.Add(new CastLog(time, skillID, expDur, startActivation, actDur, endActivation, Agent, InstID));
         }*/
 
-        public Dictionary<long, FinalBuffs> GetBuffs(ParsedEvtcLog log, int phaseIndex)
+        public IReadOnlyDictionary<long, FinalBuffs> GetBuffs(ParsedEvtcLog log, int phaseIndex)
         {
             if (_buffs == null)
             {
@@ -85,7 +85,7 @@ namespace GW2EIEvtcParser.EIData
                 BuffDistribution buffDistribution = GetBuffDistribution(log, phaseIndex);
                 var rates = new Dictionary<long, FinalBuffs>();
                 _buffs.Add(rates);
-                Dictionary<long, long> buffPresence = GetBuffPresence(log, phaseIndex);
+                IReadOnlyDictionary<long, long> buffPresence = GetBuffPresence(log, phaseIndex);
 
                 PhaseData phase = phases[phaseIndex];
                 long phaseDuration = phase.DurationInMS;

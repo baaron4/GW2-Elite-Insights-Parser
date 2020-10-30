@@ -11,11 +11,11 @@ namespace GW2EIBuilders.HtmlModels
 
         private DamageModData(Player player, ParsedEvtcLog log, List<DamageModifier> listToUse, int phaseIndex)
         {
-            Dictionary<string, List<DamageModifierStat>> dModData = player.GetDamageModifierStats(log, null);
+            IReadOnlyDictionary<string, IReadOnlyList<DamageModifierStat>> dModData = player.GetDamageModifierStats(log, null);
             IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             foreach (DamageModifier dMod in listToUse)
             {
-                if (dModData.TryGetValue(dMod.Name, out List<DamageModifierStat> list))
+                if (dModData.TryGetValue(dMod.Name, out IReadOnlyList<DamageModifierStat> list))
                 {
                     DamageModifierStat data = list[phaseIndex];
                     Data.Add(new object[]
@@ -45,7 +45,7 @@ namespace GW2EIBuilders.HtmlModels
                 dModData = player.GetDamageModifierStats(log, target);
                 foreach (DamageModifier dMod in listToUse)
                 {
-                    if (dModData.TryGetValue(dMod.Name, out List<DamageModifierStat> list))
+                    if (dModData.TryGetValue(dMod.Name, out IReadOnlyList<DamageModifierStat> list))
                     {
                         DamageModifierStat data = list[phaseIndex];
                         pTarget.Add(new object[]

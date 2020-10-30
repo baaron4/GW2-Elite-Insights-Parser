@@ -63,7 +63,7 @@ namespace GW2EIBuilders.HtmlModels
                 {
                     for (int i = 0; i < log.FightData.GetPhases(log).Count; i++)
                     {
-                        Dictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(log, i, BuffEnum.Self);
+                        IReadOnlyDictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(log, i, BuffEnum.Self);
                         foreach (Buff boon in log.Statistics.PresentPersonalBuffs[player])
                         {
                             if (boons.TryGetValue(boon.ID, out FinalPlayerBuffs uptime))
@@ -122,7 +122,7 @@ namespace GW2EIBuilders.HtmlModels
 
         private static bool HasBoons(ParsedEvtcLog log, int phaseIndex, NPC target)
         {
-            Dictionary<long, FinalBuffs> conditions = target.GetBuffs(log, phaseIndex);
+            IReadOnlyDictionary<long, FinalBuffs> conditions = target.GetBuffs(log, phaseIndex);
             foreach (Buff boon in log.Statistics.PresentBoons)
             {
                 if (conditions.TryGetValue(boon.ID, out FinalBuffs uptime))

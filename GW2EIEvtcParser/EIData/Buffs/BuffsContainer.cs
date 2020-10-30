@@ -11,8 +11,10 @@ namespace GW2EIEvtcParser.EIData
     {
 
         public Dictionary<long, Buff> BuffsByIds { get; }
-        public Dictionary<BuffNature, IReadOnlyList<Buff>> BuffsByNature { get; }
-        public Dictionary<ParserHelper.Source, IReadOnlyList<Buff>> BuffsBySource { get; }
+        private Dictionary<BuffNature, List<Buff>> _buffsByNature { get; }
+        private Dictionary<ParserHelper.Source, List<Buff>> _buffsBySource { get; }
+        public IReadOnlyDictionary<BuffNature, IReadOnlyList<Buff>> BuffsByNature => (IReadOnlyDictionary < BuffNature, IReadOnlyList < Buff >> )_buffsByNature;
+        public IReadOnlyDictionary<ParserHelper.Source, IReadOnlyList<Buff>> BuffsBySource => (IReadOnlyDictionary < ParserHelper.Source, IReadOnlyList<Buff>>)_buffsBySource;
         private readonly Dictionary<string, Buff> _buffsByName;
 
         private readonly BuffSourceFinder _buffSourceFinder;
@@ -111,8 +113,8 @@ namespace GW2EIEvtcParser.EIData
                     }
                 }
             }
-            BuffsByNature = currentBuffs.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => (IReadOnlyList<Buff>)x.ToList());
-            BuffsBySource = currentBuffs.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => (IReadOnlyList<Buff>)x.ToList());
+            _buffsByNature = currentBuffs.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => x.ToList());
+            _buffsBySource = currentBuffs.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => x.ToList());
             //
             _buffSourceFinder = GetBuffSourceFinder(build, new HashSet<long>(BuffsByNature[BuffNature.Boon].Select(x => x.ID)));
         }

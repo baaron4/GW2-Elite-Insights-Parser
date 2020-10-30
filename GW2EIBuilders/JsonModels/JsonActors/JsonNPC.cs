@@ -97,7 +97,7 @@ namespace GW2EIBuilders.JsonModels
             }
         }
 
-        private static List<JsonBuffsUptime> GetNPCJsonBuffsUptime(NPC npc, IReadOnlyList<Dictionary<long, FinalBuffs>> buffs, IReadOnlyList<Dictionary<long, FinalBuffsDictionary>> buffsDictionary, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        private static List<JsonBuffsUptime> GetNPCJsonBuffsUptime(NPC npc, IReadOnlyList<IReadOnlyDictionary<long, FinalBuffs>> buffs, IReadOnlyList<IReadOnlyDictionary<long, FinalBuffsDictionary>> buffsDictionary, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
             var res = new List<JsonBuffsUptime>();
             IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);

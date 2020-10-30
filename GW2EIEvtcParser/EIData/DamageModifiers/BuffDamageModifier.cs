@@ -42,7 +42,7 @@ namespace GW2EIEvtcParser.EIData
         internal override void ComputeDamageModifier(Dictionary<string, List<DamageModifierStat>> data, Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>> dataTarget, Player p, ParsedEvtcLog log)
         {
             IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
-            Dictionary<long, BuffsGraphModel> bgms = p.GetBuffGraphs(log);
+            IReadOnlyDictionary<long, BuffsGraphModel> bgms = p.GetBuffGraphs(log);
             if (!Tracker.Has(bgms) && GainComputer != ByAbsence)
             {
                 return;

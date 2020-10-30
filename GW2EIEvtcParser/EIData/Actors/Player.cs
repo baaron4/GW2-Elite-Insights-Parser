@@ -127,7 +127,7 @@ namespace GW2EIEvtcParser.EIData
             return _playerSupport;
         }
 
-        public Dictionary<long, FinalPlayerBuffs> GetBuffs(ParsedEvtcLog log, int phaseIndex, BuffEnum type)
+        public IReadOnlyDictionary<long, FinalPlayerBuffs> GetBuffs(ParsedEvtcLog log, int phaseIndex, BuffEnum type)
         {
             if (_selfBuffs == null)
             {
@@ -147,7 +147,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public IReadOnlyList<Dictionary<long, FinalPlayerBuffs>> GetBuffs(ParsedEvtcLog log, BuffEnum type)
+        public IReadOnlyList<IReadOnlyDictionary<long, FinalPlayerBuffs>> GetBuffs(ParsedEvtcLog log, BuffEnum type)
         {
             if (_selfBuffs == null)
             {
@@ -167,7 +167,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public Dictionary<long, FinalPlayerBuffs> GetActiveBuffs(ParsedEvtcLog log, int phaseIndex, BuffEnum type)
+        public IReadOnlyDictionary<long, FinalPlayerBuffs> GetActiveBuffs(ParsedEvtcLog log, int phaseIndex, BuffEnum type)
         {
             if (_selfBuffsActive == null)
             {
@@ -187,7 +187,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public IReadOnlyList<Dictionary<long, FinalPlayerBuffs>> GetActiveBuffs(ParsedEvtcLog log, BuffEnum type)
+        public IReadOnlyList<IReadOnlyDictionary<long, FinalPlayerBuffs>> GetActiveBuffs(ParsedEvtcLog log, BuffEnum type)
         {
             if (_selfBuffsActive == null)
             {
@@ -261,7 +261,7 @@ namespace GW2EIEvtcParser.EIData
             return _consumeList.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public Dictionary<string, List<DamageModifierStat>> GetDamageModifierStats(ParsedEvtcLog log, NPC target)
+        public IReadOnlyDictionary<string, IReadOnlyList<DamageModifierStat>> GetDamageModifierStats(ParsedEvtcLog log, NPC target)
         {
             if (_damageModifiers == null)
             {
@@ -271,14 +271,14 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (_damageModifiersTargets.TryGetValue(target, out Dictionary<string, List<DamageModifierStat>> res))
                 {
-                    return res;
+                    return (IReadOnlyDictionary<string, IReadOnlyList<DamageModifierStat>>)res;
                 }
                 else
                 {
-                    return new Dictionary<string, List<DamageModifierStat>>();
+                    return new Dictionary<string, IReadOnlyList<DamageModifierStat>>();
                 }
             }
-            return _damageModifiers;
+            return (IReadOnlyDictionary<string, IReadOnlyList<DamageModifierStat>>)_damageModifiers;
         }
 
         public HashSet<string> GetPresentDamageModifier(ParsedEvtcLog log)

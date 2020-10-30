@@ -165,7 +165,7 @@ namespace GW2EIEvtcParser.EIData
                 PhaseData phase = phases[phaseIndex];
 
                 BuffDistribution selfBoons = player.GetBuffDistribution(log, phaseIndex);
-                Dictionary<long, long> buffPresence = player.GetBuffPresence(log, phaseIndex);
+                IReadOnlyDictionary<long, long> buffPresence = player.GetBuffPresence(log, phaseIndex);
 
                 long phaseDuration = phase.DurationInMS;
                 long playerActiveDuration = phase.GetActorActiveDuration(player, log);

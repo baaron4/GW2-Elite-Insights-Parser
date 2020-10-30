@@ -166,7 +166,7 @@ namespace GW2EIBuilders.JsonModels
             StatsAll = actor.GetGameplayStats(log).Select(x => new JsonStatistics.JsonGameplayStatsAll(x)).ToArray();
             Defenses = actor.GetDefenses(log).Select(x => new JsonStatistics.JsonDefensesAll(x)).ToArray();
             //
-            Dictionary<long, Minions> minionsList = actor.GetMinions(log);
+            IReadOnlyDictionary<long, Minions> minionsList = actor.GetMinions(log);
             if (minionsList.Values.Any())
             {
                 Minions = minionsList.Values.Select(x => new JsonMinions(x, log, skillDesc, buffDesc)).ToList();
@@ -192,7 +192,7 @@ namespace GW2EIBuilders.JsonModels
             //
             if (settings.RawFormatTimelineArrays)
             {
-                Dictionary<long, BuffsGraphModel> buffGraphs = actor.GetBuffGraphs(log);
+                IReadOnlyDictionary<long, BuffsGraphModel> buffGraphs = actor.GetBuffGraphs(log);
                 BoonsStates = JsonBuffsUptime.GetBuffStates(buffGraphs[Buff.NumberOfBoonsID]);
                 ConditionsStates = JsonBuffsUptime.GetBuffStates(buffGraphs[Buff.NumberOfConditionsID]);
                 if (buffGraphs.TryGetValue(Buff.NumberOfActiveCombatMinions, out BuffsGraphModel states))

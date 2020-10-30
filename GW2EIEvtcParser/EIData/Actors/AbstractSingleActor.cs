@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser.EIData
         }
 
         // Minions
-        public Dictionary<long, Minions> GetMinions(ParsedEvtcLog log)
+        public IReadOnlyDictionary<long, Minions> GetMinions(ParsedEvtcLog log)
         {
             if (_minions == null)
             {
@@ -182,7 +182,7 @@ namespace GW2EIEvtcParser.EIData
             return _buffDistribution[phaseIndex];
         }
 
-        public Dictionary<long, long> GetBuffPresence(ParsedEvtcLog log, int phaseIndex)
+        public IReadOnlyDictionary<long, long> GetBuffPresence(ParsedEvtcLog log, int phaseIndex)
         {
             if (BuffPoints == null)
             {
@@ -191,7 +191,7 @@ namespace GW2EIEvtcParser.EIData
             return _buffPresence[phaseIndex];
         }
 
-        public Dictionary<long, BuffsGraphModel> GetBuffGraphs(ParsedEvtcLog log)
+        public IReadOnlyDictionary<long, BuffsGraphModel> GetBuffGraphs(ParsedEvtcLog log)
         {
             if (BuffPoints == null)
             {
@@ -349,7 +349,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public Dictionary<long, FinalBuffsDictionary> GetBuffsDictionary(ParsedEvtcLog log, int phaseIndex)
+        public IReadOnlyDictionary<long, FinalBuffsDictionary> GetBuffsDictionary(ParsedEvtcLog log, int phaseIndex)
         {
             if (_buffsDictionary == null)
             {
@@ -358,7 +358,7 @@ namespace GW2EIEvtcParser.EIData
             return _buffsDictionary[phaseIndex];
         }
 
-        public List<Dictionary<long, FinalBuffsDictionary>> GetBuffsDictionary(ParsedEvtcLog log)
+        public IReadOnlyList<IReadOnlyDictionary<long, FinalBuffsDictionary>> GetBuffsDictionary(ParsedEvtcLog log)
         {
             if (_buffsDictionary == null)
             {
@@ -715,7 +715,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 DamageLogs = new List<AbstractDamageEvent>();
                 DamageLogs.AddRange(log.CombatData.GetDamageData(AgentItem).Where(x => x.IFF != ArcDPSEnums.IFF.Friend));
-                Dictionary<long, Minions> minionsList = GetMinions(log);
+                IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log);
                 foreach (Minions mins in minionsList.Values)
                 {
                     DamageLogs.AddRange(mins.GetDamageLogs(null, log, 0, log.FightData.FightEnd));

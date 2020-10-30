@@ -70,8 +70,8 @@ namespace GW2EIBuilders.HtmlModels
             {
                 foreach (NPC mainTarget in log.FightData.GetMainTargets(log))
                 {
-                    boonGraphData = mainTarget.GetBuffGraphs(log);
-                    foreach (BuffsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.Buff.Name == "Compromised" || x.Buff.Name == "Unnatural Signet" || x.Buff.Name == "Fractured - Enemy" || x.Buff.Name == "Erratic Energy"))
+                    IReadOnlyDictionary<long, BuffsGraphModel> boonGraphDataTarget = mainTarget.GetBuffGraphs(log);
+                    foreach (BuffsGraphModel bgm in boonGraphDataTarget.Values.Reverse().Where(x => x.Buff.Name == "Compromised" || x.Buff.Name == "Unnatural Signet" || x.Buff.Name == "Fractured - Enemy" || x.Buff.Name == "Erratic Energy"))
                     {
                         BuffChartDataDto graph = BuildBuffGraph(bgm, phase, usedBuffs);
                         if (graph != null)
