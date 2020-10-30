@@ -54,9 +54,9 @@ namespace GW2EIBuilders.HtmlModels
         {
             var boonsBySpec = new Dictionary<string, List<Buff>>();
             // Collect all personal buffs by spec
-            foreach (KeyValuePair<string, List<Player>> pair in log.PlayerListBySpec)
+            foreach (KeyValuePair<string, IReadOnlyList<Player>> pair in log.PlayerListBySpec)
             {
-                List<Player> players = pair.Value;
+                IReadOnlyList<Player> players = pair.Value;
                 var specBoonIds = new HashSet<long>(log.Buffs.GetRemainingBuffsList(pair.Key).Select(x => x.ID));
                 var boonToUse = new HashSet<Buff>();
                 foreach (Player player in players)
@@ -94,7 +94,7 @@ namespace GW2EIBuilders.HtmlModels
         {
             var damageModBySpecs = new Dictionary<string, List<DamageModifier>>();
             // Collect all personal damage mods by spec
-            foreach (KeyValuePair<string, List<Player>> pair in log.PlayerListBySpec)
+            foreach (KeyValuePair<string, IReadOnlyList<Player>> pair in log.PlayerListBySpec)
             {
                 var specDamageModsName = new HashSet<string>(log.DamageModifiers.GetModifiersPerProf(pair.Key).Select(x => x.Name));
                 var damageModsToUse = new HashSet<DamageModifier>();

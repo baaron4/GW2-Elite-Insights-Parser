@@ -87,7 +87,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static void RegroupTargetsByID(int id, AgentData agentData, List<CombatItem> combatItems)
         {
-            List<AgentItem> agents = agentData.GetNPCsByID(id);
+            IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
             if (agents.Count > 1)
             {
                 AgentItem firstItem = agents.First();
@@ -121,7 +121,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             List<int> ids = GetFightTargetsIDs();
             foreach (int id in ids)
             {
-                List<AgentItem> agents = agentData.GetNPCsByID(id);
+                IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
                 foreach (AgentItem agentItem in agents)
                 {
                     _targets.Add(new NPC(agentItem));

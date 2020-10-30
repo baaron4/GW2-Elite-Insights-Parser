@@ -50,7 +50,7 @@ namespace GW2EIEvtcParser.EIData
 
         private bool CouldBeImbuedMelodies(AgentItem agent, long time, long extension, ParsedEvtcLog log)
         {
-            if (extension == ImbuedMelodies && log.PlayerListBySpec.TryGetValue("Tempest", out List<Player> tempests))
+            if (extension == ImbuedMelodies && log.PlayerListBySpec.TryGetValue("Tempest", out IReadOnlyList<Player> tempests))
             {
                 var magAuraApplications = new HashSet<AgentItem>(log.CombatData.GetBuffData(5684).Where(x => x is BuffApplyEvent && Math.Abs(x.Time - time) < ParserHelper.ServerDelayConstant && x.By != agent).Select(x => x.By));
                 foreach (Player tempest in tempests)

@@ -10,7 +10,7 @@ namespace GW2EIEvtcParser.EIData
     /// </summary>
     public class GeneralStatistics
     {
-        internal GeneralStatistics(CombatData combatData, List<Player> players, BuffsContainer boons)
+        internal GeneralStatistics(CombatData combatData, IReadOnlyList<Player> players, BuffsContainer boons)
         {
             HashSet<long> skillIDs = combatData.GetSkills();
             // Main boons
