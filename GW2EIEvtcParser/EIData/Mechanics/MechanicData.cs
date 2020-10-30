@@ -106,15 +106,10 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public Dictionary<Mechanic, IReadOnlyList<MechanicEvent>> GetAllMechanics(ParsedEvtcLog log)
+        public IReadOnlyDictionary<Mechanic, IReadOnlyList<MechanicEvent>> GetAllMechanics(ParsedEvtcLog log)
         {
             ProcessMechanics(log);
-            var res = new Dictionary<Mechanic, IReadOnlyList<MechanicEvent>>();
-            foreach (Mechanic m in _mechanicLogs.Keys)
-            {
-                res[m] = _mechanicLogs[m];
-            }
-            return res;
+            return (IReadOnlyDictionary<Mechanic, IReadOnlyList<MechanicEvent>>)_mechanicLogs;
         }
 
         public IReadOnlyList<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech)
@@ -138,17 +133,17 @@ namespace GW2EIEvtcParser.EIData
             return new List<MechanicEvent>();
         }
 
-        public HashSet<Mechanic> GetPresentEnemyMechs(ParsedEvtcLog log, int phaseIndex)
+        public IReadOnlyCollection<Mechanic> GetPresentEnemyMechs(ParsedEvtcLog log, int phaseIndex)
         {
             ProcessMechanics(log);
             return _presentOnEnemyMechanics[phaseIndex];
         }
-        public HashSet<Mechanic> GetPresentPlayerMechs(ParsedEvtcLog log, int phaseIndex)
+        public IReadOnlyCollection<Mechanic> GetPresentPlayerMechs(ParsedEvtcLog log, int phaseIndex)
         {
             ProcessMechanics(log);
             return _presentOnPlayerMechanics[phaseIndex];
         }
-        public HashSet<Mechanic> GetPresentMechanics(ParsedEvtcLog log, int phaseIndex)
+        public IReadOnlyCollection<Mechanic> GetPresentMechanics(ParsedEvtcLog log, int phaseIndex)
         {
             ProcessMechanics(log);
             return _presentMechanics[phaseIndex];
