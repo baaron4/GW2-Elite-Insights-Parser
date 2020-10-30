@@ -15,6 +15,18 @@ namespace GW2EIEvtcParser.EIData
             public AgentItem SeedSrc { get; }
             public bool IsExtension { get; private set; }
 
+            public long TotalDuration {
+                get
+                {
+                    long res = Duration;
+                    foreach ((AgentItem src, long value) in Extensions)
+                    {
+                        res += value;
+                    }
+                    return res;
+                }
+            }
+
             public long StackID { get; protected set; } = 0;
 
             public List<(AgentItem src, long value)> Extensions { get; } = new List<(AgentItem src, long value)>();
@@ -51,16 +63,6 @@ namespace GW2EIEvtcParser.EIData
                     Duration = value;
                     IsExtension = true;
                 }
-            }
-
-            public long TotalBoonDuration()
-            {
-                long res = Duration;
-                foreach ((AgentItem src, long value) in Extensions)
-                {
-                    res += value;
-                }
-                return res;
             }
 
             public void Extend(long value, AgentItem src)
