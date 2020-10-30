@@ -4,7 +4,7 @@ using GW2EIEvtcParser.EIData;
 
 namespace GW2EIBuilders.HtmlModels
 {
-    public class PlayerChartDataDto
+    internal class PlayerChartDataDto
     {
         public List<List<int>> Targets { get; internal set; }
         public List<int> Total { get; internal set; }

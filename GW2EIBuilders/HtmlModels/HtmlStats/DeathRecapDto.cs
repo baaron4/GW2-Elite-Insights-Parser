@@ -5,7 +5,7 @@ using GW2EIEvtcParser.EIData;
 
 namespace GW2EIBuilders.HtmlModels
 {
-    public class DeathRecapDto
+    internal class DeathRecapDto
     {
         public long Time { get; internal set; }
         public List<object[]> ToDown { get; internal set; } = null;

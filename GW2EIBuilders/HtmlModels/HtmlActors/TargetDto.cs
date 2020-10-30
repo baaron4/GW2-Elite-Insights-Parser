@@ -7,7 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIBuilders.HtmlModels
 {
-    public class TargetDto : ActorDto
+    internal class TargetDto : ActorDto
     {
         public string Icon { get; internal set; }
         public long Health { get; internal set; }

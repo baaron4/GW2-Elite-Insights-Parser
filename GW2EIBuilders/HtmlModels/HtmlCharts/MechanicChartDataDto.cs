@@ -6,7 +6,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIBuilders.HtmlModels
 {
-    public class MechanicChartDataDto
+    internal class MechanicChartDataDto
     {
         public string Symbol { get; internal set; }
         public int Size { get; internal set; }

@@ -3,7 +3,7 @@ using GW2EIEvtcParser.EIData;
 
 namespace GW2EIBuilders.HtmlModels
 {
-    public class DamageModDto
+    internal class DamageModDto
     {
         public long Id { get; internal set; }
         public string Name { get; internal set; }

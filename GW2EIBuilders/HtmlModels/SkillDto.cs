@@ -5,7 +5,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIBuilders.HtmlModels
 {
-    public class SkillDto
+    internal class SkillDto
     {
         public long Id { get; internal set; }
         public string Name { get; internal set; }

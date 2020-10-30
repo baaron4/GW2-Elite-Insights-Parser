@@ -6,7 +6,7 @@ using GW2EIEvtcParser.EIData;
 
 namespace GW2EIBuilders.HtmlModels
 {
-    public class ChartDataDto
+    internal class ChartDataDto
     {
         public List<PhaseChartDataDto> Phases { get; internal set; } = new List<PhaseChartDataDto>();
         public List<MechanicChartDataDto> Mechanics { get; internal set; } = new List<MechanicChartDataDto>();

@@ -6,7 +6,7 @@ using GW2EIEvtcParser.EIData;
 namespace GW2EIBuilders.HtmlModels
 {
 
-    public class PhaseDto
+    internal class PhaseDto
     {
         public string Name { get; internal set; }
         public long Duration { get; internal set; }

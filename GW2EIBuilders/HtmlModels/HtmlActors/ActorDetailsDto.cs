@@ -5,7 +5,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIBuilders.HtmlModels
 {
-    public class ActorDetailsDto
+    internal class ActorDetailsDto
     {
         public List<DmgDistributionDto> DmgDistributions { get; internal set; }
         public List<List<DmgDistributionDto>> DmgDistributionsTargets { get; internal set; }

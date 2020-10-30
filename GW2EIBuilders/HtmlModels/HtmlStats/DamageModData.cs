@@ -4,7 +4,7 @@ using GW2EIEvtcParser.EIData;
 
 namespace GW2EIBuilders.HtmlModels
 {
-    public class DamageModData
+    internal class DamageModData
     {
         public List<object[]> Data { get; } = new List<object[]>();
         public List<List<object[]>> DataTarget { get; } = new List<List<object[]>>();

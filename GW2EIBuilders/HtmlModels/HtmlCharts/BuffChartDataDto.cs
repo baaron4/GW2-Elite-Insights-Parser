@@ -5,7 +5,7 @@ using GW2EIEvtcParser.EIData;
 
 namespace GW2EIBuilders.HtmlModels
 {
-    public class BuffChartDataDto
+    internal class BuffChartDataDto
     {
         public long Id { get; internal set; }
         public string Color { get; internal set; }

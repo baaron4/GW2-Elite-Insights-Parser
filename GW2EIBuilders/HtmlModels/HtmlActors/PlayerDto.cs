@@ -5,7 +5,7 @@ using GW2EIEvtcParser.EIData;
 namespace GW2EIBuilders.HtmlModels
 {
 
-    public class PlayerDto : ActorDto
+    internal class PlayerDto : ActorDto
     {
         public int Group { get; internal set; }
         public string Acc { get; internal set; }

@@ -1,6 +1,6 @@
 ﻿namespace GW2EIBuilders.HtmlModels
 {
-    public class AreaLabelDto
+    internal class AreaLabelDto
     {
         public double Start { get; internal set; }
         public double End { get; internal set; }

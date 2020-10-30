@@ -5,7 +5,7 @@ using GW2EIEvtcParser.EIData;
 
 namespace GW2EIBuilders.HtmlModels
 {
-    public class BuffData
+    internal class BuffData
     {
         public double Avg { get; internal set; }
         public List<List<object>> Data { get; internal set; } = new List<List<object>>();

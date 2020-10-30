@@ -7,7 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIBuilders.HtmlModels
 {
-    public class DmgDistributionDto
+    internal class DmgDistributionDto
     {
         public long ContributedDamage { get; internal set; }
         public long ContributedShieldDamage { get; internal set; }

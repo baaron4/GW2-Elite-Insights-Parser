@@ -7,7 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIBuilders.HtmlModels
 {
-    public class LogDataDto
+    internal class LogDataDto
     {
         public List<TargetDto> Targets { get; internal set; } = new List<TargetDto>();
         public List<PlayerDto> Players { get; } = new List<PlayerDto>();

@@ -4,7 +4,7 @@ using GW2EIEvtcParser.EIData;
 
 namespace GW2EIBuilders.HtmlModels
 {
-    public class FoodDto
+    internal class FoodDto
     {
         public double Time { get; internal set; }
         public double Duration { get; internal set; }

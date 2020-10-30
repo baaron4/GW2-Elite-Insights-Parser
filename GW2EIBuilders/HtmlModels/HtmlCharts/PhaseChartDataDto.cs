@@ -2,7 +2,7 @@
 
 namespace GW2EIBuilders.HtmlModels
 {
-    public class PhaseChartDataDto
+    internal class PhaseChartDataDto
     {
         public List<PlayerChartDataDto> Players { get; internal set; } = new List<PlayerChartDataDto>();
         public List<TargetChartDataDto> Targets { get; internal set; } = new List<TargetChartDataDto>();

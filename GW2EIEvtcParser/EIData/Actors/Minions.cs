@@ -7,18 +7,20 @@ namespace GW2EIEvtcParser.EIData
 {
     public class Minions : AbstractActor
     {
-        public List<NPC> MinionList { get; }
+        private List<NPC> _minionList { get; }
+
+        public IEnumerable<NPC> MinionList => _minionList.AsReadOnly();
         public AbstractSingleActor Master { get; }
 
         internal Minions(AbstractSingleActor master, NPC firstMinion) : base(firstMinion.AgentItem)
         {
-            MinionList = new List<NPC> { firstMinion };
+            _minionList = new List<NPC> { firstMinion };
             Master = master;
         }
 
         internal void AddMinion(NPC minion)
         {
-            MinionList.Add(minion);
+            _minionList.Add(minion);
         }
 
         public override List<AbstractDamageEvent> GetDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
@@ -26,7 +28,7 @@ namespace GW2EIEvtcParser.EIData
             if (DamageLogs == null)
             {
                 DamageLogs = new List<AbstractDamageEvent>();
-                foreach (NPC minion in MinionList)
+                foreach (NPC minion in _minionList)
                 {
                     DamageLogs.AddRange(minion.GetDamageLogs(null, log, 0, log.FightData.FightEnd));
                 }
@@ -54,7 +56,7 @@ namespace GW2EIEvtcParser.EIData
             if (DamageTakenlogs == null)
             {
                 DamageTakenlogs = new List<AbstractDamageEvent>();
-                foreach (NPC minion in MinionList)
+                foreach (NPC minion in _minionList)
                 {
                     DamageTakenlogs.AddRange(minion.GetDamageTakenLogs(null, log, 0, log.FightData.FightEnd));
                 }
@@ -70,7 +72,7 @@ namespace GW2EIEvtcParser.EIData
         private void InitCastLogs(ParsedEvtcLog log)
         {
             CastLogs = new List<AbstractCastEvent>();
-            foreach (NPC minion in MinionList)
+            foreach (NPC minion in _minionList)
             {
                 CastLogs.AddRange(minion.GetCastLogs(log, 0, log.FightData.FightEnd));
             }
@@ -99,7 +101,7 @@ namespace GW2EIEvtcParser.EIData
         {
             var minionsSegments = new List<List<Segment>>();
             var fightDur = log.FightData.FightEnd;
-            foreach (NPC minion in MinionList)
+            foreach (NPC minion in _minionList)
             {
                 var minionSegments = new List<Segment>();
                 long start = Math.Max(minion.FirstAware, 0);

@@ -5,7 +5,7 @@ using GW2EIEvtcParser.EIData;
 
 namespace GW2EIBuilders.HtmlModels
 {
-    public class CombatReplayDto
+    internal class CombatReplayDto
     {
         public List<object> Actors { get; internal set; }
         public int[] Sizes { get; internal set; }
