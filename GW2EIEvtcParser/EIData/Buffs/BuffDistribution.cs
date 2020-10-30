@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class BuffDistributionItem
+    internal class BuffDistributionItem
     {
         public long Value { get; set; }
         public long Overstack { get; set; }
@@ -24,21 +24,28 @@ namespace GW2EIEvtcParser.EIData
         }
     }
 
-    public class BuffDistribution : Dictionary<long, Dictionary<AgentItem, BuffDistributionItem>>
+    public class BuffDistribution
     {
-        public bool HasSrc(long boonid, AgentItem src)
+        internal Dictionary<long, Dictionary<AgentItem, BuffDistributionItem>> Distributions = new Dictionary<long, Dictionary<AgentItem, BuffDistributionItem>>();
+
+        public bool ContainsKey(long boonid)
         {
-            return ContainsKey(boonid) && this[boonid].ContainsKey(src);
+            return Distributions.ContainsKey(boonid);
         }
 
-        public List<AbstractSingleActor> GetSrcs(long boonid, ParsedEvtcLog log)
+        public bool HasSrc(long boonid, AgentItem src)
         {
-            if (!ContainsKey(boonid))
+            return Distributions.ContainsKey(boonid) && Distributions[boonid].ContainsKey(src);
+        }
+
+        public IReadOnlyList<AbstractSingleActor> GetSrcs(long boonid, ParsedEvtcLog log)
+        {
+            if (!Distributions.ContainsKey(boonid))
             {
                 return new List<AbstractSingleActor>();
             }
             var actors = new List<AbstractSingleActor>();
-            foreach (AgentItem agent in this[boonid].Keys)
+            foreach (AgentItem agent in Distributions[boonid].Keys)
             {
                 actors.Add(log.FindActor(agent, true));
             }
@@ -47,65 +54,65 @@ namespace GW2EIEvtcParser.EIData
 
         public long GetUptime(long boonid)
         {
-            if (!ContainsKey(boonid))
+            if (!Distributions.ContainsKey(boonid))
             {
                 return 0;
             }
-            return this[boonid].Sum(x => x.Value.Value);
+            return Distributions[boonid].Sum(x => x.Value.Value);
         }
 
         public long GetGeneration(long boonid, AgentItem src)
         {
-            if (!ContainsKey(boonid) || !this[boonid].ContainsKey(src))
+            if (!Distributions.ContainsKey(boonid) || !Distributions[boonid].ContainsKey(src))
             {
                 return 0;
             }
-            return this[boonid][src].Value;
+            return Distributions[boonid][src].Value;
         }
 
         public long GetOverstack(long boonid, AgentItem src)
         {
-            if (!ContainsKey(boonid) || !this[boonid].ContainsKey(src))
+            if (!Distributions.ContainsKey(boonid) || !Distributions[boonid].ContainsKey(src))
             {
                 return 0;
             }
-            return this[boonid][src].Overstack;
+            return Distributions[boonid][src].Overstack;
         }
 
         public long GetWaste(long boonid, AgentItem src)
         {
-            if (!ContainsKey(boonid) || !this[boonid].ContainsKey(src))
+            if (!Distributions.ContainsKey(boonid) || !Distributions[boonid].ContainsKey(src))
             {
                 return 0;
             }
-            return this[boonid][src].Waste;
+            return Distributions[boonid][src].Waste;
         }
 
         public long GetUnknownExtension(long boonid, AgentItem src)
         {
-            if (!ContainsKey(boonid) || !this[boonid].ContainsKey(src))
+            if (!Distributions.ContainsKey(boonid) || !Distributions[boonid].ContainsKey(src))
             {
                 return 0;
             }
-            return this[boonid][src].UnknownExtension;
+            return Distributions[boonid][src].UnknownExtension;
         }
 
         public long GetExtension(long boonid, AgentItem src)
         {
-            if (!ContainsKey(boonid) || !this[boonid].ContainsKey(src))
+            if (!Distributions.ContainsKey(boonid) || !Distributions[boonid].ContainsKey(src))
             {
                 return 0;
             }
-            return this[boonid][src].Extension;
+            return Distributions[boonid][src].Extension;
         }
 
         public long GetExtended(long boonid, AgentItem src)
         {
-            if (!ContainsKey(boonid) || !this[boonid].ContainsKey(src))
+            if (!Distributions.ContainsKey(boonid) || !Distributions[boonid].ContainsKey(src))
             {
                 return 0;
             }
-            return this[boonid][src].Extended;
+            return Distributions[boonid][src].Extended;
         }
     }
 }

@@ -392,7 +392,7 @@ namespace GW2EIEvtcParser.EIData
 
         private void SetConsumablesList(ParsedEvtcLog log)
         {
-            List<Buff> consumableList = log.Buffs.BuffsByNature[BuffNature.Consumable];
+            IReadOnlyList<Buff> consumableList = log.Buffs.BuffsByNature[BuffNature.Consumable];
             _consumeList = new List<Consumable>();
             long fightDuration = log.FightData.FightEnd;
             foreach (Buff consumable in consumableList)

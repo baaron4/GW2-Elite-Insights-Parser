@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser.EIData
                     boonDistributions[p] = p.GetBuffDistribution(log, phaseIndex);
                 }
 
-                var boonsToTrack = new HashSet<Buff>(boonDistributions.SelectMany(x => x.Value).Select(x => log.Buffs.BuffsByIds[x.Key]));
+                var boonsToTrack = new HashSet<Buff>(boonDistributions.SelectMany(x => x.Value.Distributions).Select(x => log.Buffs.BuffsByIds[x.Key]));
 
                 var final =
                     new Dictionary<long, FinalPlayerBuffs>();

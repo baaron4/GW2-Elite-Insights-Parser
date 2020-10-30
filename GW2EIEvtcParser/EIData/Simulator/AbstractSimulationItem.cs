@@ -8,10 +8,10 @@ namespace GW2EIEvtcParser.EIData
 
         protected static Dictionary<AgentItem, BuffDistributionItem> GetDistrib(BuffDistribution distribs, long boonid)
         {
-            if (!distribs.TryGetValue(boonid, out Dictionary<AgentItem, BuffDistributionItem> distrib))
+            if (!distribs.Distributions.TryGetValue(boonid, out Dictionary<AgentItem, BuffDistributionItem> distrib))
             {
                 distrib = new Dictionary<AgentItem, BuffDistributionItem>();
-                distribs.Add(boonid, distrib);
+                distribs.Distributions.Add(boonid, distrib);
             }
             return distrib;
         }
