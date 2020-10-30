@@ -229,7 +229,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             else
             {
-                phases[0].Targets.Add(elementalAi);
+                phases[0].AddTarget(elementalAi);
             }
             NPC darkAi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2);
             if (darkAi == null)
@@ -241,7 +241,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             else
             {
-                phases[0].Targets.Add(darkAi);
+                phases[0].AddTarget(darkAi);
             }
             if (!requirePhases)
             {
@@ -255,7 +255,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (_hasDarkMode)
                 {
                     var elePhase = new PhaseData(eleStart, eleEnd, "Elemental Phase");
-                    elePhase.Targets.Add(elementalAi);
+                    elePhase.AddTarget(elementalAi);
                     phases.Add(elePhase);
                 }
                 //
@@ -271,7 +271,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (i < invul762Losses.Count)
                     {
                         var subPhase = new PhaseData(subStart, subEnd, eleNames[i]);
-                        subPhase.Targets.Add(elementalAi);
+                        subPhase.AddTarget(elementalAi);
                         phases.Add(subPhase);
                         long invul762Loss = invul762Losses[i].Time;
                         AbstractCastEvent castEvt = elementalAi.GetCastLogs(log, eleStart, eleEnd).FirstOrDefault(x => x.SkillId == 61385 && x.Time >= invul762Loss);
@@ -284,7 +284,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     else
                     {
                         var subPhase = new PhaseData(subStart, subEnd, eleNames[i]);
-                        subPhase.Targets.Add(elementalAi);
+                        subPhase.AddTarget(elementalAi);
                         phases.Add(subPhase);
                         break;
                     }
@@ -299,7 +299,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (_hasElementalMode)
                 {
                     var darkPhase = new PhaseData(darkStart, darkEnd, "Dark Phase");
-                    darkPhase.Targets.Add(darkAi);
+                    darkPhase.AddTarget(darkAi);
                     phases.Add(darkPhase);
                 }
                 // sub phases
@@ -307,22 +307,22 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (fearToSorrow != null)
                 {
                     var fearPhase = new PhaseData(darkStart + 1, fearToSorrow.Time, "Fear");
-                    fearPhase.Targets.Add(darkAi);
+                    fearPhase.AddTarget(darkAi);
                     phases.Add(fearPhase);
                     AbstractCastEvent sorrowToGuilt = darkAi.GetCastLogs(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillId == 61602);
                     if (sorrowToGuilt != null)
                     {
                         var sorrowPhase = new PhaseData(fearToSorrow.Time + 1, sorrowToGuilt.Time, "Sorrow");
-                        sorrowPhase.Targets.Add(darkAi);
+                        sorrowPhase.AddTarget(darkAi);
                         phases.Add(sorrowPhase);
                         var guiltPhase = new PhaseData(sorrowToGuilt.Time + 1, darkEnd, "Guilt");
-                        guiltPhase.Targets.Add(darkAi);
+                        guiltPhase.AddTarget(darkAi);
                         phases.Add(guiltPhase);
                     }
                     else
                     {
                         var sorrowPhase = new PhaseData(fearToSorrow.Time + 1, darkEnd, "Sorrow");
-                        sorrowPhase.Targets.Add(darkAi);
+                        sorrowPhase.AddTarget(darkAi);
                         phases.Add(sorrowPhase);
                     }
                 }

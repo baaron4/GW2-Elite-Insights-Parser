@@ -89,7 +89,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new InvalidOperationException("Soulless Horror not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -100,14 +100,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AbstractCastEvent c in howling)
             {
                 var phase = new PhaseData(start, Math.Min(c.Time, fightDuration), "Pre-Breakbar " + i++);
-                phase.Targets.Add(mainTarget);
+                phase.AddTarget(mainTarget);
                 start = c.EndTime;
                 phases.Add(phase);
             }
             if (fightDuration - start > 3000)
             {
                 var lastPhase = new PhaseData(start, fightDuration, "Final");
-                lastPhase.Targets.Add(mainTarget);
+                lastPhase.AddTarget(mainTarget);
                 phases.Add(lastPhase);
             }
             return phases;

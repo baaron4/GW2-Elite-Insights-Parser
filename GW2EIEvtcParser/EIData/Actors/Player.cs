@@ -281,7 +281,7 @@ namespace GW2EIEvtcParser.EIData
             return (IReadOnlyDictionary<string, IReadOnlyList<DamageModifierStat>>)_damageModifiers;
         }
 
-        public HashSet<string> GetPresentDamageModifier(ParsedEvtcLog log)
+        public IReadOnlyCollection<string> GetPresentDamageModifier(ParsedEvtcLog log)
         {
             if (_presentDamageModifiers == null)
             {

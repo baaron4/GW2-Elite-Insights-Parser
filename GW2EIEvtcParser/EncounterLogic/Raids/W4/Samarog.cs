@@ -60,7 +60,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new InvalidOperationException("Samarog not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -87,7 +87,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 else
                 {
                     phase.Name = "Phase " + (i + 1) / 2;
-                    phase.Targets.Add(mainTarget);
+                    phase.AddTarget(mainTarget);
                 }
             }
             return phases;

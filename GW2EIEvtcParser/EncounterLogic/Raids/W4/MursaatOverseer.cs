@@ -52,7 +52,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new InvalidOperationException("Mursaat Overseer not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
                 return phases;

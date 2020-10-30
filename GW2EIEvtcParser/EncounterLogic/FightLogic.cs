@@ -160,14 +160,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 }
                 var phase = new PhaseData(start, Math.Min(evt.Time, fightDuration), (offset + thresholds[i]) + "% - " + thresholds[i] + "%");
-                phase.Targets.Add(mainTarget);
+                phase.AddTarget(mainTarget);
                 phases.Add(phase);
                 start = Math.Max(evt.Time, 0);
             }
             if (phases.Count > 0 && phases.Count < thresholds.Count)
             {
                 var lastPhase = new PhaseData(start, fightDuration, (offset + thresholds[phases.Count]) + "% -" + thresholds[phases.Count] + "%");
-                lastPhase.Targets.Add(mainTarget);
+                lastPhase.AddTarget(mainTarget);
                 phases.Add(lastPhase);
             }
             return phases;
@@ -262,7 +262,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         BreakbarPhase = true,
                         CanBeSubPhase = false
                     };
-                    phase.Targets.Add(target);
+                    phase.AddTarget(target);
                     breakbarPhases.Add(phase);
                 }
             }
@@ -277,7 +277,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             return phases;
         }
 
@@ -287,7 +287,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (ids.Contains(target.ID) && phase.InInterval(Math.Max(target.FirstAware, 0)))
                 {
-                    phase.Targets.Add(target);
+                    phase.AddTarget(target);
                 }
             }
             phase.OverrideTimes(log);

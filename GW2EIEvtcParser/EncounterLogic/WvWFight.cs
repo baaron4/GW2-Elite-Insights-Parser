@@ -29,7 +29,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -42,7 +42,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (tar != mainTarget)
                 {
-                    phases[1].Targets.Add(tar);
+                    phases[1].AddTarget(tar);
                 }
             }*/
             return phases;

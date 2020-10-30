@@ -60,7 +60,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new InvalidOperationException("Slothasor not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -71,12 +71,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AbstractCastEvent c in sleepy)
             {
                 var phase = new PhaseData(start, Math.Min(c.Time, fightDuration), "Phase " + i++);
-                phase.Targets.Add(mainTarget);
+                phase.AddTarget(mainTarget);
                 start = c.EndTime;
                 phases.Add(phase);
             }
             var lastPhase = new PhaseData(start, fightDuration, "Phase " + i++);
-            lastPhase.Targets.Add(mainTarget);
+            lastPhase.AddTarget(mainTarget);
             phases.Add(lastPhase);
             return phases;
         }

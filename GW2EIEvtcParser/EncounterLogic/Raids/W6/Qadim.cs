@@ -181,7 +181,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new InvalidOperationException("Qadim not found");
             }
-            phases[0].Targets.Add(qadim);
+            phases[0].AddTarget(qadim);
             if (!requirePhases)
             {
                 return phases;
@@ -209,7 +209,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         phase.OverrideStart(pyresFirstAware.Max());
                     }
-                    phase.Targets.Add(qadim);
+                    phase.AddTarget(qadim);
                 }
                 else
                 {

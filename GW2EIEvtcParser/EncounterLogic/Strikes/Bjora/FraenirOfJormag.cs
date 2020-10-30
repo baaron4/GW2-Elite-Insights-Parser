@@ -40,11 +40,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new InvalidOperationException("Fraenir of Jormag not found");
             }
-            phases[0].Targets.Add(fraenir);
+            phases[0].AddTarget(fraenir);
             NPC icebrood = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.IcebroodConstructFraenir);
             if (icebrood != null)
             {
-                phases[0].Targets.Add(icebrood);
+                phases[0].AddTarget(icebrood);
             }
             if (!requirePhases)
             {
@@ -97,10 +97,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 PhaseData phase = phases[i];
                 if (i == 1 || i == 5)
                 {
-                    phase.Targets.Add(fraenir);
+                    phase.AddTarget(fraenir);
                 } else
                 {
-                    phase.Targets.Add(icebrood);
+                    phase.AddTarget(icebrood);
                 }
             }
             return phases;

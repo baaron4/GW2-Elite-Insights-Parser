@@ -37,7 +37,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new InvalidOperationException("Whisper of Jormag not found");
             }
-            phases[0].Targets.Add(woj);
+            phases[0].AddTarget(woj);
             if (!requirePhases)
             {
                 return phases;
@@ -80,7 +80,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].Targets.Add(woj);
+                phases[i].AddTarget(woj);
             }
             return phases;
         }

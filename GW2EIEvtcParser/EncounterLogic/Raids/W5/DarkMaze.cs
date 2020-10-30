@@ -71,8 +71,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new InvalidOperationException("Eyes not found");
             }
-            phases[0].Targets.Add(eye2);
-            phases[0].Targets.Add(eye1);
+            phases[0].AddTarget(eye2);
+            phases[0].AddTarget(eye1);
             return phases;
         }
 

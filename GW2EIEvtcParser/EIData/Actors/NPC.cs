@@ -67,7 +67,7 @@ namespace GW2EIEvtcParser.EIData
             return _buffs[phaseIndex];
         }
 
-        public IReadOnlyList<Dictionary<long, FinalBuffs>> GetBuffs(ParsedEvtcLog log)
+        public IReadOnlyList<IReadOnlyDictionary<long, FinalBuffs>> GetBuffs(ParsedEvtcLog log)
         {
             if (_buffs == null)
             {

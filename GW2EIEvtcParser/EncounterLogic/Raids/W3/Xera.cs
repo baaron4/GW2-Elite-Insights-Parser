@@ -74,7 +74,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new InvalidOperationException("Xera not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -97,7 +97,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             for (int i = 1; i < phases.Count; i++)
             {
                 phases[i].Name = "Phase " + i;
-                phases[i].Targets.Add(mainTarget);
+                phases[i].AddTarget(mainTarget);
 
             }
             return phases;

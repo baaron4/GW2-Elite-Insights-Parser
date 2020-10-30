@@ -31,13 +31,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new InvalidOperationException("Varinia Stormsounder not found");
             }
-            phases[0].Targets.Add(varinia);
+            phases[0].AddTarget(varinia);
             //
             // TODO - add phases if applicable
             //
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].Targets.Add(varinia);
+                phases[i].AddTarget(varinia);
             }
             return phases;
         }

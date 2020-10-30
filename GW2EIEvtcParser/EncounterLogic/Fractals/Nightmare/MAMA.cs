@@ -55,7 +55,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new InvalidOperationException("MAMA not found");
             }
-            phases[0].Targets.Add(mama);
+            phases[0].AddTarget(mama);
             if (!requirePhases)
             {
                 return phases;
@@ -95,7 +95,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 else
                 {
                     phase.Name = "Phase " + (i + 1) / 2;
-                    phase.Targets.Add(mama);
+                    phase.AddTarget(mama);
                 }
             }
             return phases;

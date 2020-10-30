@@ -74,7 +74,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new InvalidOperationException("Golem not found");
             }
             phases[0].Name = "Final Number";
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -95,7 +95,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             CanBeSubPhase = false
                         };
-                        phase.Targets.Add(mainTarget);
+                        phase.AddTarget(mainTarget);
                         phases.Add(phase);
                     }
                 }

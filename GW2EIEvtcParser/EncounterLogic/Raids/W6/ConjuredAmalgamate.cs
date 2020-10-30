@@ -227,7 +227,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new InvalidOperationException("Conjured Amalgamate not found");
             }
-            phases[0].Targets.Add(ca);
+            phases[0].AddTarget(ca);
             if (!requirePhases)
             {
                 return phases;
@@ -244,7 +244,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 else
                 {
                     name = "Burn Phase";
-                    phase.Targets.Add(ca);
+                    phase.AddTarget(ca);
                 }
                 phase.Name = name;
             }
@@ -258,7 +258,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (targetables.Exists(x => phase.InInterval(x)))
                     {
                         phase.Name = "Left " + phase.Name;
-                        phase.Targets.Add(leftArm);
+                        phase.AddTarget(leftArm);
                     }
                 }
             }
@@ -279,7 +279,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             phase.Name = "Right " + phase.Name;
                         }
-                        phase.Targets.Add(rightArm);
+                        phase.AddTarget(rightArm);
                     }
                 }
             }
