@@ -6,11 +6,11 @@ namespace GW2EIBuilders.HtmlModels
 {
     internal class PlayerChartDataDto
     {
-        public List<List<int>> Targets { get; internal set; }
-        public List<int> Total { get; internal set; }
-        public List<object[]> HealthStates { get; internal set; }
+        public List<List<int>> Targets { get; set; }
+        public List<int> Total { get; set; }
+        public List<object[]> HealthStates { get; set; }
 
-        internal static List<PlayerChartDataDto> BuildPlayersGraphData(ParsedEvtcLog log, int phaseIndex)
+        public static List<PlayerChartDataDto> BuildPlayersGraphData(ParsedEvtcLog log, int phaseIndex)
         {
             var list = new List<PlayerChartDataDto>();
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];

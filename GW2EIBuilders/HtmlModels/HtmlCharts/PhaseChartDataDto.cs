@@ -4,10 +4,10 @@ namespace GW2EIBuilders.HtmlModels
 {
     internal class PhaseChartDataDto
     {
-        public List<PlayerChartDataDto> Players { get; internal set; } = new List<PlayerChartDataDto>();
-        public List<TargetChartDataDto> Targets { get; internal set; } = new List<TargetChartDataDto>();
+        public List<PlayerChartDataDto> Players { get; set; } = new List<PlayerChartDataDto>();
+        public List<TargetChartDataDto> Targets { get; set; } = new List<TargetChartDataDto>();
 
-        public List<List<object[]>> TargetsHealthStatesForCR { get; internal set; } = null;
-        public List<List<object[]>> TargetsBreakbarPercentStatesForCR { get; internal set; } = null;
+        public List<List<object[]>> TargetsHealthStatesForCR { get; set; } = null;
+        public List<List<object[]>> TargetsBreakbarPercentStatesForCR { get; set; } = null;
     }
 }
