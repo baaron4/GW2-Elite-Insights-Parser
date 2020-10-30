@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 
@@ -49,7 +50,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mama = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.MAMA);
+            NPC mama = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.MAMA);
             if (mama == null)
             {
                 throw new InvalidOperationException("MAMA not found");

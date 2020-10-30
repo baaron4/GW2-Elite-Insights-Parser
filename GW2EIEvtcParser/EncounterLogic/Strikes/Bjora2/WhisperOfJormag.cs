@@ -32,7 +32,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC woj = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.WhisperOfJormag);
+            NPC woj = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.WhisperOfJormag);
             if (woj == null)
             {
                 throw new InvalidOperationException("Whisper of Jormag not found");

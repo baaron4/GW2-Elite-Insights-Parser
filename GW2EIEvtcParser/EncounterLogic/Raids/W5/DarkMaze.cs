@@ -65,8 +65,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC eye1 = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfFate);
-            NPC eye2 = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfJudgement);
+            NPC eye1 = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfFate);
+            NPC eye2 = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfJudgement);
             if (eye2 == null || eye1 == null)
             {
                 throw new InvalidOperationException("Eyes not found");
@@ -78,8 +78,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private void HPCheck(CombatData combatData, FightData fightData)
         {
-            NPC eye1 = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfFate);
-            NPC eye2 = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfJudgement);
+            NPC eye1 = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfFate);
+            NPC eye2 = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfJudgement);
             if (eye2 == null || eye1 == null)
             {
                 throw new InvalidOperationException("Eyes not found");

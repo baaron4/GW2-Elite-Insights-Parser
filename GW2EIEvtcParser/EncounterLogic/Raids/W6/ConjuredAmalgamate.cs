@@ -165,9 +165,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
-                NPC leftArm = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.CALeftArm);
-                NPC rightArm = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.CARightArm);
+                NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
+                NPC leftArm = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.CALeftArm);
+                NPC rightArm = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.CARightArm);
                 if (target == null)
                 {
                     throw new InvalidOperationException("Conjured Amalgamate not found");
@@ -222,7 +222,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC ca = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
+            NPC ca = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
             if (ca == null)
             {
                 throw new InvalidOperationException("Conjured Amalgamate not found");
@@ -248,7 +248,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 phase.Name = name;
             }
-            NPC leftArm = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.CALeftArm);
+            NPC leftArm = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.CALeftArm);
             if (leftArm != null)
             {
                 List<long> targetables = GetTargetableTimes(log, leftArm);
@@ -262,7 +262,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
-            NPC rightArm = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.CARightArm);
+            NPC rightArm = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.CARightArm);
             if (rightArm != null)
             {
                 List<long> targetables = GetTargetableTimes(log, rightArm);
@@ -307,7 +307,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
+            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
             if (target == null)
             {
                 throw new InvalidOperationException("Conjured Amalgamate not found");

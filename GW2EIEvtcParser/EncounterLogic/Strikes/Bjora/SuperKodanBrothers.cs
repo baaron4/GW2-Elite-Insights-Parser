@@ -37,8 +37,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC voice = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.ClawOfTheFallen);
-            NPC claw = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.VoiceOfTheFallen);
+            NPC voice = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.ClawOfTheFallen);
+            NPC claw = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.VoiceOfTheFallen);
             if (voice == null || claw == null)
             {
                 throw new InvalidOperationException("Claw or Voice not found");
