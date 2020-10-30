@@ -6,11 +6,11 @@ namespace GW2EIBuilders.HtmlModels
 {
     internal class FoodDto
     {
-        public double Time { get; internal set; }
-        public double Duration { get; internal set; }
-        public long Id { get; internal set; }
-        public int Stack { get; internal set; }
-        public bool Dimished { get; internal set; }
+        public double Time { get; set; }
+        public double Duration { get; set; }
+        public long Id { get; set; }
+        public int Stack { get; set; }
+        public bool Dimished { get; set; }
 
         private FoodDto(Consumable consume)
         {
@@ -21,7 +21,7 @@ namespace GW2EIBuilders.HtmlModels
             Dimished = (consume.Buff.ID == 46587 || consume.Buff.ID == 46668);
         }
 
-        internal static List<FoodDto> BuildPlayerFoodData(ParsedEvtcLog log, Player p, Dictionary<long, Buff> usedBuffs)
+        public static List<FoodDto> BuildPlayerFoodData(ParsedEvtcLog log, Player p, Dictionary<long, Buff> usedBuffs)
         {
             var list = new List<FoodDto>();
             IReadOnlyList<Consumable> consume = p.GetConsumablesList(log, 0, log.FightData.FightEnd);

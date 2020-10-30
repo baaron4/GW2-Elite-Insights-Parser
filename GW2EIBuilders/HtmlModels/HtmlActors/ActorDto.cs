@@ -7,11 +7,11 @@ namespace GW2EIBuilders.HtmlModels
 
     internal abstract class ActorDto
     {
-        public int UniqueID { get; internal set; }
-        public string Name { get; internal set; }
-        public uint Tough { get; internal set; }
+        public int UniqueID { get;  set; }
+        public string Name { get;  set; }
+        public uint Tough { get;  set; }
         public List<MinionDto> Minions { get; } = new List<MinionDto>();
-        public ActorDetailsDto Details { get; internal set; }
+        public ActorDetailsDto Details { get;  set; }
 
         protected ActorDto(AbstractSingleActor actor, ParsedEvtcLog log, ActorDetailsDto details)
         {

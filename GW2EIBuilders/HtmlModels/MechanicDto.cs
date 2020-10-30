@@ -8,13 +8,13 @@ namespace GW2EIBuilders.HtmlModels
 {
     internal class MechanicDto
     {
-        public string Name { get; internal set; }
+        public string Name { get; set; }
 
-        public int Icd { get; internal set; }
-        public string ShortName { get; internal set; }
-        public string Description { get; internal set; }
-        public bool EnemyMech { get; internal set; }
-        public bool PlayerMech { get; internal set; }
+        public int Icd { get; set; }
+        public string ShortName { get; set; }
+        public string Description { get; set; }
+        public bool EnemyMech { get; set; }
+        public bool PlayerMech { get; set; }
 
         private static List<int[]> GetMechanicData(HashSet<Mechanic> presMech, ParsedEvtcLog log, AbstractActor actor, PhaseData phase)
         {
@@ -40,7 +40,7 @@ namespace GW2EIBuilders.HtmlModels
             return res;
         }
 
-        internal static void BuildMechanics(HashSet<Mechanic> mechs, List<MechanicDto> mechsDtos)
+        public static void BuildMechanics(HashSet<Mechanic> mechs, List<MechanicDto> mechsDtos)
         {
             foreach (Mechanic mech in mechs)
             {
@@ -57,7 +57,7 @@ namespace GW2EIBuilders.HtmlModels
             }
         }
 
-        internal static List<List<int[]>> BuildPlayerMechanicData(ParsedEvtcLog log, int phaseIndex)
+        public static List<List<int[]>> BuildPlayerMechanicData(ParsedEvtcLog log, int phaseIndex)
         {
             var list = new List<List<int[]>>();
             HashSet<Mechanic> presMech = log.MechanicData.GetPresentPlayerMechs(log, 0);
@@ -70,7 +70,7 @@ namespace GW2EIBuilders.HtmlModels
             return list;
         }
 
-        internal static List<List<int[]>> BuildEnemyMechanicData(ParsedEvtcLog log, int phaseIndex)
+        public static List<List<int[]>> BuildEnemyMechanicData(ParsedEvtcLog log, int phaseIndex)
         {
             var list = new List<List<int[]>>();
             HashSet<Mechanic> presMech = log.MechanicData.GetPresentEnemyMechs(log, 0);

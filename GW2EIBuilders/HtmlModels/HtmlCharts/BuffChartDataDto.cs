@@ -7,10 +7,10 @@ namespace GW2EIBuilders.HtmlModels
 {
     internal class BuffChartDataDto
     {
-        public long Id { get; internal set; }
-        public string Color { get; internal set; }
-        public bool Visible { get; internal set; }
-        public List<object[]> States { get; internal set; }    
+        public long Id { get; set; }
+        public string Color { get; set; }
+        public bool Visible { get; set; }
+        public List<object[]> States { get; set; }
 
         private BuffChartDataDto(BuffsGraphModel bgm, List<Segment> bChart, PhaseData phase)
         {
@@ -48,7 +48,7 @@ namespace GW2EIBuilders.HtmlModels
             }
         }
 
-        internal static List<BuffChartDataDto> BuildBoonGraphData(ParsedEvtcLog log, AbstractSingleActor p, int phaseIndex, Dictionary<long, Buff> usedBuffs)
+        public static List<BuffChartDataDto> BuildBoonGraphData(ParsedEvtcLog log, AbstractSingleActor p, int phaseIndex, Dictionary<long, Buff> usedBuffs)
         {
             var list = new List<BuffChartDataDto>();
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];

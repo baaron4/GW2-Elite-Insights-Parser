@@ -7,18 +7,18 @@ namespace GW2EIBuilders.HtmlModels
 {
     internal class ActorDetailsDto
     {
-        public List<DmgDistributionDto> DmgDistributions { get; internal set; }
-        public List<List<DmgDistributionDto>> DmgDistributionsTargets { get; internal set; }
-        public List<DmgDistributionDto> DmgDistributionsTaken { get; internal set; }
-        public List<List<object[]>> Rotation { get; internal set; }
-        public List<List<BuffChartDataDto>> BoonGraph { get; internal set; }
-        public List<FoodDto> Food { get; internal set; }
-        public List<ActorDetailsDto> Minions { get; internal set; }
-        public List<DeathRecapDto> DeathRecap { get; internal set; }
+        public List<DmgDistributionDto> DmgDistributions { get; set; }
+        public List<List<DmgDistributionDto>> DmgDistributionsTargets { get; set; }
+        public List<DmgDistributionDto> DmgDistributionsTaken { get; set; }
+        public List<List<object[]>> Rotation { get; set; }
+        public List<List<BuffChartDataDto>> BoonGraph { get; set; }
+        public List<FoodDto> Food { get; set; }
+        public List<ActorDetailsDto> Minions { get; set; }
+        public List<DeathRecapDto> DeathRecap { get; set; }
 
         // helpers
 
-        internal static ActorDetailsDto BuildPlayerData(ParsedEvtcLog log, Player player, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        public static ActorDetailsDto BuildPlayerData(ParsedEvtcLog log, Player player, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             var dto = new ActorDetailsDto
             {
@@ -72,7 +72,7 @@ namespace GW2EIBuilders.HtmlModels
             return dto;
         }
 
-        internal static ActorDetailsDto BuildTargetData(ParsedEvtcLog log, NPC target, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, bool cr)
+        public static ActorDetailsDto BuildTargetData(ParsedEvtcLog log, NPC target, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, bool cr)
         {
             var dto = new ActorDetailsDto
             {
@@ -91,7 +91,7 @@ namespace GW2EIBuilders.HtmlModels
                     dto.BoonGraph.Add(BuffChartDataDto.BuildBoonGraphData(log, target, i, usedBuffs));
                 }
                 // rotation + buff graph for CR
-                else if ( i == 0 && cr)
+                else if (i == 0 && cr)
                 {
                     dto.DmgDistributions.Add(new DmgDistributionDto());
                     dto.DmgDistributionsTaken.Add(new DmgDistributionDto());

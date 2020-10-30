@@ -2,9 +2,9 @@
 {
     internal class AreaLabelDto
     {
-        public double Start { get; internal set; }
-        public double End { get; internal set; }
-        public string Label { get; internal set; }
-        public bool Highlight { get; internal set; }
+        public double Start { get; set; }
+        public double End { get; set; }
+        public string Label { get; set; }
+        public bool Highlight { get; set; }
     }
 }
