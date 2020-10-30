@@ -51,7 +51,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return FightData.CMStatus.CMnoName;
         }
 
-        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             SetSuccessByBuffCount(combatData, fightData, playerAgents, Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Artsariiv), 762, 4);
         }

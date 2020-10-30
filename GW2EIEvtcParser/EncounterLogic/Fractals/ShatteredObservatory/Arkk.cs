@@ -86,7 +86,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Arkk);
             SetSuccessByBuffCount(combatData, fightData, playerAgents, target, 762, 10);

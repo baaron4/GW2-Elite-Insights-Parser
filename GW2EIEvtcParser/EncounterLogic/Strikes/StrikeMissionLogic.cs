@@ -12,12 +12,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             Mode = ParseMode.Instanced10;
         }
 
-        protected virtual void SetSuccessByDeath(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, bool all)
+        protected virtual void SetSuccessByDeath(CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all)
         {
             SetSuccessByDeath(combatData, fightData, playerAgents, all, GenericTriggerID);
         }
 
-        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             var strikeRewardIDs = new HashSet<ulong>
                 {

@@ -50,7 +50,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             // check reward
             NPC mainTarget = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);

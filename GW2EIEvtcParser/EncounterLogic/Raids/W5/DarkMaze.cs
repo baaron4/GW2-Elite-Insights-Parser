@@ -118,7 +118,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             // First check using hp, best
             HPCheck(combatData, fightData);
