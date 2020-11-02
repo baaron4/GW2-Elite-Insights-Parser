@@ -61,6 +61,8 @@ Note it may take some time for each file to parse and they will not be ready to 
 
 -__OutLocation__: secondary output path, will be used if SaveAtOut is false.
 
+-__SaveOutTrace__: if true, log files will be generated.
+
 -__Anonymous__: if true, player character and account names will be obfuscated.
 
 -__AddPoVProf__: if true, the profession of the pov will be added to the generated files' name.
@@ -72,8 +74,6 @@ Note it may take some time for each file to parse and they will not be ready to 
 -__MultiThreaded__: if true, multiple threads will be used for parsing a single log.
 
 -__ParseMultipleLogs__: if true, multiple logs will be parsed in parallel.
-
--__SaveOutTrace__: if true, log files will be generated.
 
 -__SkipFailedTries__: if true, failed encounters will not be parsed.
 
