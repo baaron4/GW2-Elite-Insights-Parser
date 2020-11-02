@@ -71,22 +71,29 @@ namespace GW2EIEvtcParser.EncounterLogic
         private static List<PhaseData> GetInBetweenSoulSplits(ParsedEvtcLog log, NPC dhuum, long mainStart, long mainEnd, bool hasRitual)
         {
             List<AbstractCastEvent> cls = dhuum.GetCastLogs(log, 0, log.FightData.FightEnd);
-            var cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
-            var gDeathmark = cls.Where(x => x.SkillId == 48210).ToList();
-            if (gDeathmark.Count < cataCycle.Count)
+            var cataCycles = cls.Where(x => x.SkillId == 48398).ToList();
+            var gDeathmarks = cls.Where(x => x.SkillId == 48210).ToList();
+            if (gDeathmarks.Count < cataCycles.Count)
             {
+                // anomaly, don't do sub phases
                 return new List<PhaseData>();
             }
             var phases = new List<PhaseData>();
             long start = mainStart;
             long end = 0;
             int i = 0;
-            foreach (AbstractCastEvent cl in cataCycle)
+            foreach (AbstractCastEvent cataCycle in cataCycles)
             {
-                AbstractCastEvent clDeathmark = gDeathmark[i];
-                end = Math.Min(clDeathmark.Time, mainEnd);
-                phases.Add(new PhaseData(start, end, "Pre-Soulsplit " + ++i));
-                start = cl.EndTime;
+                AbstractCastEvent gDeathmark = gDeathmarks[i];
+                end = Math.Min(gDeathmark.Time, mainEnd);
+                long soulsplitEnd = Math.Min(cataCycle.EndTime, mainEnd);
+                ++i;
+                phases.Add(new PhaseData(start, end, "Pre-Soulsplit " + i));
+                phases.Add(new PhaseData(end, soulsplitEnd, "Soulsplit " + i)
+                {
+                    CanBeSubPhase = false
+                });;
+                start = cataCycle.EndTime;
             }
             phases.Add(new PhaseData(start, mainEnd, hasRitual ? "Pre-Ritual" : "Pre-Wipe"));
             return phases;
