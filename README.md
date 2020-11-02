@@ -82,6 +82,8 @@ Note it may take some time for each file to parse and they will not be ready to 
 
 -__SkipFailedTries__: if true, failed encounters will not be parsed.
 
+-__CustomTooShort__: Customize encounter duration in ms below which logs will not be parsed.
+
 ### GUI only Parser Settings
 
 -__AutoAdd__: if true, EI will automatically add logs that appear in AutoAddPath.
