@@ -27,7 +27,7 @@
         props: ["phases"],
         template: `${template}`,
         computed: {
-			hasNormalPhases: function() {
+	    hasNormalPhases: function() {
                 return logData.phases.filter(phase => !phase.breakbarPhase).length > 0;
             },
             hasBreakbarPhases: function() {
