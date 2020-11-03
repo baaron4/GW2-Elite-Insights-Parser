@@ -1,24 +1,30 @@
 <template>
     <div v-if="phases.length > 1">
         <ul v-if="hasNormalPhases" class="nav nav-pills d-flex flex-row justify-content-center">
-            <li class="nav-item" v-for="(phase, id) in phases" v-show="!getPhaseData(id).breakbarPhase" :data-original-title="getPhaseData(id).durationS + ' seconds'">
+            <li class="nav-item" v-for="(phase, id) in phases" v-show="!getPhaseData(id).breakbarPhase"
+                :data-original-title="getPhaseData(id).durationS + ' seconds'">
                 <a class="nav-link" @click="select(phase)" :class="{active: phase.active}">{{getPhaseData(id).name}}</a>
             </li>
         </ul>
         <div v-if="hasBreakbarPhases" class="d-flex flew-row justify-content-center align-items-center">
             <span class="mr-1">Breakbar Phases: </span>
-            <div v-for="data in breakbarPhasesPerTarget" class="d-flex flew-row justify-content-center align-items-center mr-1 ml-1">               
-                <img class="icon-l mr-2" :src="getTargetData(data.targetId).icon" :alt="getTargetData(data.targetId).name"
-                :data-original-title="getTargetData(data.targetId).name" v-if="breakbarPhasesPerTarget.length > 1">
+            <div v-for="data in breakbarPhasesPerTarget"
+                class="d-flex flew-row justify-content-center align-items-center mr-1 ml-1">
+                <img class="icon-l mr-2" :src="getTargetData(data.targetId).icon"
+                    :alt="getTargetData(data.targetId).name" :data-original-title="getTargetData(data.targetId).name"
+                    v-if="breakbarPhasesPerTarget.length > 1">
                 <ul class="nav nav-pills d-flex flex-row justify-content-center">
-                    <li class="nav-item" v-for="(phaseId, id) in data.phaseIds" v-show="getPhaseData(phaseId).breakbarPhase" :data-original-title="getPhaseData(phaseId).durationS + ' seconds'">
-                        <a class="nav-link" @click="select(getReactivePhaseData(phaseId))" :class="{active: getReactivePhaseData(phaseId).active}">{{id + 1}}</a>
+                    <li class="nav-item" v-for="(phaseId, id) in data.phaseIds"
+                        v-show="getPhaseData(phaseId).breakbarPhase"
+                        :data-original-title="getPhaseData(phaseId).durationS + ' seconds'">
+                        <a class="nav-link" @click="select(getReactivePhaseData(phaseId))"
+                            :class="{active: getReactivePhaseData(phaseId).active}">{{id + 1}}</a>
                     </li>
                 </ul>
             </div>
-            
+
         </div>
-        
+
     </div>
 </template>
 
@@ -27,13 +33,13 @@
         props: ["phases"],
         template: `${template}`,
         computed: {
-			hasNormalPhases: function() {
+            hasNormalPhases: function () {
                 return logData.phases.filter(phase => !phase.breakbarPhase).length > 0;
             },
-            hasBreakbarPhases: function() {
+            hasBreakbarPhases: function () {
                 return this.breakbarPhasesPerTarget.length > 0;
             },
-            breakbarPhasesPerTarget: function() {
+            breakbarPhasesPerTarget: function () {
                 var res = [];
                 for (var targetId = 0; targetId < logData.targets.length; targetId++) {
                     var brPhases = logData.phases.filter(phase => phase.breakbarPhase && phase.targets.indexOf(targetId) > -1);
@@ -41,8 +47,8 @@
                     for (var brPhaseId = 0; brPhaseId < brPhases.length; brPhaseId++) {
                         phaseIds.push(logData.phases.indexOf(brPhases[brPhaseId]));
                     }
-                    if (phaseIds.length > 0) {                   
-                        res.push({targetId: targetId, phaseIds: phaseIds});
+                    if (phaseIds.length > 0) {
+                        res.push({ targetId: targetId, phaseIds: phaseIds });
                     }
                 }
                 return res;
@@ -55,13 +61,13 @@
                 }
                 phase.active = true;
             },
-            getPhaseData: function(id) {
+            getPhaseData: function (id) {
                 return logData.phases[id];
             },
-            getReactivePhaseData: function(id) {
+            getReactivePhaseData: function (id) {
                 return this.phases[id];
             },
-            getTargetData: function(id) {
+            getTargetData: function (id) {
                 return logData.targets[id];
             }
         }
