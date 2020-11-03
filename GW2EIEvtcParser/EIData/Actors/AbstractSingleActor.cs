@@ -386,7 +386,7 @@ namespace GW2EIEvtcParser.EIData
 
                 foreach (Buff buff in TrackedBuffs)
                 {
-                    if (buffDistribution.ContainsKey(buff.ID))
+                    if (buffDistribution.HasBuffID(buff.ID))
                     {
                         (rates[buff.ID], ratesActive[buff.ID]) = FinalBuffsDictionary.GetFinalBuffsDictionary(log, buff, buffDistribution, phaseDuration, activePhaseDuration);
                     }

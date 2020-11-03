@@ -33,9 +33,9 @@ namespace GW2EIEvtcParser.EIData
             return new List<AgentItem>() { _src };
         }
 
-        public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long boonid, ParsedEvtcLog log)
+        public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID, ParsedEvtcLog log)
         {
-            Dictionary<AgentItem, BuffDistributionItem> distrib = GetDistrib(distribs, boonid);
+            Dictionary<AgentItem, BuffDistributionItem> distrib = distribs.GetDistrib(buffID);
             long cDur = GetClampedDuration(start, end);
             if (cDur == 0)
             {
