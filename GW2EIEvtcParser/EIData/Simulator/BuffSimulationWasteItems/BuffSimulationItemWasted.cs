@@ -10,9 +10,9 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID, ParsedEvtcLog log)
+        public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long boonid, ParsedEvtcLog log)
         {
-            Dictionary<AgentItem, BuffDistributionItem> distrib = distribs.GetDistribution(buffID);
+            Dictionary<AgentItem, BuffDistributionItem> distrib = GetDistrib(distribs, boonid);
             AgentItem agent = Src;
             var value = GetValue(start, end);
             if (value == 0)

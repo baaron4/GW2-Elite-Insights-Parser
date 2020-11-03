@@ -12,7 +12,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
-        protected static void SetSuccessByBuffCount(CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, NPC target, long buffID, int count)
+        protected static void SetSuccessByBuffCount(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, NPC target, long buffID, int count)
         {
             if (target == null)
             {

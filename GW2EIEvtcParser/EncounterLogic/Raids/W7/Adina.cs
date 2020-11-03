@@ -98,12 +98,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Adina);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Adina);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Adina not found");
             }
-            phases[0].AddTarget(mainTarget);
+            phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -146,7 +146,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             foreach (PhaseData phase in mainPhases)
             {
-                phase.AddTarget(mainTarget);
+                phase.Targets.Add(mainTarget);
             }
             phases.AddRange(mainPhases);
             phases.Sort((x, y) => x.Start.CompareTo(y.Start));
@@ -173,7 +173,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Adina);
+            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Adina);
             if (target == null)
             {
                 throw new InvalidOperationException("Adina not found");

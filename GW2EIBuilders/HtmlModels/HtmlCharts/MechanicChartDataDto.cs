@@ -8,13 +8,13 @@ namespace GW2EIBuilders.HtmlModels
 {
     internal class MechanicChartDataDto
     {
-        public string Symbol { get; set; }
-        public int Size { get; set; }
-        public string Color { get; set; }
-        public List<List<List<object>>> Points { get; set; }
-        public bool Visible { get; set; }
+        public string Symbol { get; internal set; }
+        public int Size { get; internal set; }
+        public string Color { get; internal set; }
+        public List<List<List<object>>> Points { get; internal set; }
+        public bool Visible { get; internal set; }
 
-        private static List<List<object>> GetMechanicChartPoints(IReadOnlyList<MechanicEvent> mechanicLogs, PhaseData phase, ParsedEvtcLog log, bool enemyMechanic)
+        private static List<List<object>> GetMechanicChartPoints(List<MechanicEvent> mechanicLogs, PhaseData phase, ParsedEvtcLog log, bool enemyMechanic)
         {
             var res = new List<List<object>>();
             if (!enemyMechanic)
@@ -59,7 +59,7 @@ namespace GW2EIBuilders.HtmlModels
             return res;
         }
 
-        private static List<List<List<object>>> BuildMechanicGraphPointData(ParsedEvtcLog log, IReadOnlyList<MechanicEvent> mechanicLogs, bool enemyMechanic)
+        private static List<List<List<object>>> BuildMechanicGraphPointData(ParsedEvtcLog log, List<MechanicEvent> mechanicLogs, bool enemyMechanic)
         {
             var list = new List<List<List<object>>>();
             foreach (PhaseData phase in log.FightData.GetPhases(log))
@@ -69,12 +69,12 @@ namespace GW2EIBuilders.HtmlModels
             return list;
         }
 
-        public static List<MechanicChartDataDto> BuildMechanicsChartData(ParsedEvtcLog log)
+        internal static List<MechanicChartDataDto> BuildMechanicsChartData(ParsedEvtcLog log)
         {
             var mechanicsChart = new List<MechanicChartDataDto>();
             foreach (Mechanic mech in log.MechanicData.GetPresentMechanics(log, 0))
             {
-                IReadOnlyList<MechanicEvent> mechanicLogs = log.MechanicData.GetMechanicLogs(log, mech);
+                List<MechanicEvent> mechanicLogs = log.MechanicData.GetMechanicLogs(log, mech);
                 var dto = new MechanicChartDataDto
                 {
                     Color = mech.PlotlySetting.Color,

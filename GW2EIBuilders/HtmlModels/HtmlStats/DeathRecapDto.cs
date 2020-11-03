@@ -7,11 +7,11 @@ namespace GW2EIBuilders.HtmlModels
 {
     internal class DeathRecapDto
     {
-        public long Time { get; set; }
-        public List<object[]> ToDown { get; set; } = null;
-        public List<object[]> ToKill { get; set; } = null;
+        public long Time { get; internal set; }
+        public List<object[]> ToDown { get; internal set; } = null;
+        public List<object[]> ToKill { get; internal set; } = null;
 
-        private static List<object[]> BuildDeathRecapItemList(IReadOnlyList<DeathRecap.DeathRecapDamageItem> list)
+        private static List<object[]> BuildDeathRecapItemList(List<DeathRecap.DeathRecapDamageItem> list)
         {
             var data = new List<object[]>();
             foreach (DeathRecap.DeathRecapDamageItem item in list)
@@ -28,10 +28,10 @@ namespace GW2EIBuilders.HtmlModels
             return data;
         }
 
-        public static List<DeathRecapDto> BuildDeathRecap(ParsedEvtcLog log, Player p)
+        internal static List<DeathRecapDto> BuildDeathRecap(ParsedEvtcLog log, Player p)
         {
             var res = new List<DeathRecapDto>();
-            IReadOnlyList<DeathRecap> recaps = p.GetDeathRecaps(log);
+            List<DeathRecap> recaps = p.GetDeathRecaps(log);
             if (!recaps.Any())
             {
                 return null;

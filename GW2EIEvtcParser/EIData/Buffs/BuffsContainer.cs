@@ -11,10 +11,8 @@ namespace GW2EIEvtcParser.EIData
     {
 
         public Dictionary<long, Buff> BuffsByIds { get; }
-        private Dictionary<BuffNature, List<Buff>> _buffsByNature { get; }
-        private Dictionary<ParserHelper.Source, List<Buff>> _buffsBySource { get; }
-        public IReadOnlyDictionary<BuffNature, IReadOnlyList<Buff>> BuffsByNature => (IReadOnlyDictionary < BuffNature, IReadOnlyList < Buff >> )_buffsByNature;
-        public IReadOnlyDictionary<ParserHelper.Source, IReadOnlyList<Buff>> BuffsBySource => (IReadOnlyDictionary < ParserHelper.Source, IReadOnlyList<Buff>>)_buffsBySource;
+        public Dictionary<BuffNature, List<Buff>> BuffsByNature { get; }
+        public Dictionary<ParserHelper.Source, List<Buff>> BuffsBySource { get; }
         private readonly Dictionary<string, Buff> _buffsByName;
 
         private readonly BuffSourceFinder _buffSourceFinder;
@@ -113,8 +111,8 @@ namespace GW2EIEvtcParser.EIData
                     }
                 }
             }
-            _buffsByNature = currentBuffs.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => x.ToList());
-            _buffsBySource = currentBuffs.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => x.ToList());
+            BuffsByNature = currentBuffs.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => x.ToList());
+            BuffsBySource = currentBuffs.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => x.ToList());
             //
             _buffSourceFinder = GetBuffSourceFinder(build, new HashSet<long>(BuffsByNature[BuffNature.Boon].Select(x => x.ID)));
         }
@@ -134,12 +132,12 @@ namespace GW2EIEvtcParser.EIData
         }
 
         // Non shareable buffs
-        public IReadOnlyList<Buff> GetRemainingBuffsList(string source)
+        public List<Buff> GetRemainingBuffsList(string source)
         {
             var result = new List<Buff>();
             foreach (ParserHelper.Source src in ParserHelper.ProfToEnum(source))
             {
-                if (BuffsBySource.TryGetValue(src, out IReadOnlyList<Buff> list))
+                if (BuffsBySource.TryGetValue(src, out List<Buff> list))
                 {
                     result.AddRange(list.Where(x => x.Nature == BuffNature.GraphOnlyBuff));
                 }

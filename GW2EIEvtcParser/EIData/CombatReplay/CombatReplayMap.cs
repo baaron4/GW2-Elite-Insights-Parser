@@ -14,8 +14,7 @@ namespace GW2EIEvtcParser.EIData
             public long End { get; internal set; }
         }
 
-        private List<MapItem> _maps { get; } = new List<MapItem>();
-        public IReadOnlyList<MapItem> Maps => _maps;
+        public List<MapItem> Maps { get; } = new List<MapItem>();
         private (int width, int height) _size;
         private (int topX, int topY, int bottomX, int bottomY) _rect;
         private (int topX, int topY, int bottomX, int bottomY) _fullRect;
@@ -23,7 +22,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal CombatReplayMap(string link, (int width, int height) size, (int topX, int topY, int bottomX, int bottomY) rect, (int topX, int topY, int bottomX, int bottomY) fullRect, (int bottomX, int bottomY, int topX, int topY) worldRect)
         {
-            _maps.Add(new MapItem()
+            Maps.Add(new MapItem()
             {
                 Link = link,
                 Start = -1,
@@ -63,7 +62,7 @@ namespace GW2EIEvtcParser.EIData
                 _rect.bottomY = int.MinValue;
                 foreach (Player p in log.PlayerList)
                 {
-                    IReadOnlyList<Point3D> pos = p.GetCombatReplayPolledPositions(log);
+                    List<Point3D> pos = p.GetCombatReplayPolledPositions(log);
                     if (pos.Count == 0)
                     {
                         continue;
@@ -97,15 +96,15 @@ namespace GW2EIEvtcParser.EIData
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                _maps.Last().End = phase.Start;
-                _maps.Add(new MapItem()
+                Maps.Last().End = phase.Start;
+                Maps.Add(new MapItem()
                 {
                     Link = urls[i - 1],
                     Start = phase.Start
                 });
             }
-            _maps.Last().End = fightEnd;
-            _maps.RemoveAll(x => x.End - x.Start <= 0);
+            Maps.Last().End = fightEnd;
+            Maps.RemoveAll(x => x.End - x.Start <= 0);
         }
 
         public float GetInch()

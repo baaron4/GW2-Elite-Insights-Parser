@@ -8,15 +8,15 @@ namespace GW2EIBuilders.HtmlModels
 {
     internal class MechanicDto
     {
-        public string Name { get; set; }
+        public string Name { get; internal set; }
 
-        public int Icd { get; set; }
-        public string ShortName { get; set; }
-        public string Description { get; set; }
-        public bool EnemyMech { get; set; }
-        public bool PlayerMech { get; set; }
+        public int Icd { get; internal set; }
+        public string ShortName { get; internal set; }
+        public string Description { get; internal set; }
+        public bool EnemyMech { get; internal set; }
+        public bool PlayerMech { get; internal set; }
 
-        private static List<int[]> GetMechanicData(IReadOnlyCollection<Mechanic> presMech, ParsedEvtcLog log, AbstractActor actor, PhaseData phase)
+        private static List<int[]> GetMechanicData(HashSet<Mechanic> presMech, ParsedEvtcLog log, AbstractActor actor, PhaseData phase)
         {
             var res = new List<int[]>();
 
@@ -40,7 +40,7 @@ namespace GW2EIBuilders.HtmlModels
             return res;
         }
 
-        public static void BuildMechanics(IReadOnlyCollection<Mechanic> mechs, List<MechanicDto> mechsDtos)
+        internal static void BuildMechanics(HashSet<Mechanic> mechs, List<MechanicDto> mechsDtos)
         {
             foreach (Mechanic mech in mechs)
             {
@@ -57,10 +57,10 @@ namespace GW2EIBuilders.HtmlModels
             }
         }
 
-        public static List<List<int[]>> BuildPlayerMechanicData(ParsedEvtcLog log, int phaseIndex)
+        internal static List<List<int[]>> BuildPlayerMechanicData(ParsedEvtcLog log, int phaseIndex)
         {
             var list = new List<List<int[]>>();
-            IReadOnlyCollection<Mechanic> presMech = log.MechanicData.GetPresentPlayerMechs(log, 0);
+            HashSet<Mechanic> presMech = log.MechanicData.GetPresentPlayerMechs(log, 0);
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
 
             foreach (Player p in log.PlayerList)
@@ -70,10 +70,10 @@ namespace GW2EIBuilders.HtmlModels
             return list;
         }
 
-        public static List<List<int[]>> BuildEnemyMechanicData(ParsedEvtcLog log, int phaseIndex)
+        internal static List<List<int[]>> BuildEnemyMechanicData(ParsedEvtcLog log, int phaseIndex)
         {
             var list = new List<List<int[]>>();
-            IReadOnlyCollection<Mechanic> presMech = log.MechanicData.GetPresentEnemyMechs(log, 0);
+            HashSet<Mechanic> presMech = log.MechanicData.GetPresentEnemyMechs(log, 0);
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
             foreach (AbstractActor enemy in log.MechanicData.GetEnemyList(log, 0))
             {

@@ -8,12 +8,12 @@ namespace GW2EIBuilders.HtmlModels
 {
     internal class ChartDataDto
     {
-        public List<PhaseChartDataDto> Phases { get; set; } = new List<PhaseChartDataDto>();
-        public List<MechanicChartDataDto> Mechanics { get; set; } = new List<MechanicChartDataDto>();
+        public List<PhaseChartDataDto> Phases { get; internal set; } = new List<PhaseChartDataDto>();
+        public List<MechanicChartDataDto> Mechanics { get; internal set; } = new List<MechanicChartDataDto>();
 
-        public static List<object[]> BuildHealthGraphStates(ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase, bool nullable)
+        internal static List<object[]> BuildHealthGraphStates(ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase, bool nullable)
         {
-            IReadOnlyList<Segment> segments = actor.GetHealthUpdates(log);
+            List<Segment> segments = actor.GetHealthUpdates(log);
             if (!segments.Any())
             {
                 return nullable ? null : new List<object[]>()
@@ -27,9 +27,9 @@ namespace GW2EIBuilders.HtmlModels
             ).ToList();
             return Segment.ToObjectList(subSegments, phase.Start, phase.End);
         }
-        public static List<object[]> BuildBreakbarPercentStates(ParsedEvtcLog log, NPC npc, PhaseData phase)
+        internal static List<object[]> BuildBreakbarPercentStates(ParsedEvtcLog log, NPC npc, PhaseData phase)
         {
-            IReadOnlyList<Segment> segments = npc.GetBreakbarPercentUpdates(log);
+            List<Segment> segments = npc.GetBreakbarPercentUpdates(log);
             if (!segments.Any())
             {
                 return null;
@@ -40,11 +40,11 @@ namespace GW2EIBuilders.HtmlModels
             return Segment.ToObjectList(subSegments, phase.Start, phase.End);
         }
 
-        public static ChartDataDto BuildChartData(ParsedEvtcLog log)
+        internal static ChartDataDto BuildChartData(ParsedEvtcLog log)
         {
             var chartData = new ChartDataDto();
             var phaseChartData = new List<PhaseChartDataDto>();
-            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+            List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int i = 0; i < phases.Count; i++)
             {
                 var phaseData = new PhaseChartDataDto()

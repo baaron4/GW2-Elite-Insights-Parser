@@ -9,14 +9,14 @@ namespace GW2EIBuilders.HtmlModels
 {
     internal class TargetDto : ActorDto
     {
-        public string Icon { get; set; }
-        public long Health { get; set; }
-        public long HbWidth { get; set; }
-        public long HbHeight { get; set; }
-        public double Percent { get; set; }
-        public double HpLeft { get; set; }
+        public string Icon { get; internal set; }
+        public long Health { get; internal set; }
+        public long HbWidth { get; internal set; }
+        public long HbHeight { get; internal set; }
+        public double Percent { get; internal set; }
+        public double HpLeft { get; internal set; }
 
-        public TargetDto(NPC target, ParsedEvtcLog log, ActorDetailsDto details) : base(target, log, details)
+        internal TargetDto(NPC target, ParsedEvtcLog log, ActorDetailsDto details) : base(target, log, details)
         {
             Icon = target.GetIcon();
             Health = target.GetHealth(log.CombatData);
@@ -28,7 +28,7 @@ namespace GW2EIBuilders.HtmlModels
             }
             else
             {
-                IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(target.AgentItem);
+                List<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(target.AgentItem);
                 if (hpUpdates.Count > 0)
                 {
                     HpLeft = hpUpdates.Last().HPPercent;

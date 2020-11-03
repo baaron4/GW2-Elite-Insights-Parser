@@ -50,7 +50,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
         {
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Xera);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Xera);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Xera not found");
@@ -69,18 +69,18 @@ namespace GW2EIEvtcParser.EncounterLogic
             long start = 0;
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Xera);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Xera);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Xera not found");
             }
-            phases[0].AddTarget(mainTarget);
+            phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
             {
                 return phases;
             }
             long end = 0;
-            AbstractBuffEvent invulXera = log.CombatData.GetBuffData(762).FirstOrDefault(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent) ?? log.CombatData.GetBuffData(34113).FirstOrDefault(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent);
+            AbstractBuffEvent invulXera = log.CombatData.GetBuffData(762).Find(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent) ?? log.CombatData.GetBuffData(34113).Find(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent);
             if (invulXera != null)
             {
                 end = invulXera.Time;
@@ -97,7 +97,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             for (int i = 1; i < phases.Count; i++)
             {
                 phases[i].Name = "Phase " + i;
-                phases[i].AddTarget(mainTarget);
+                phases[i].Targets.Add(mainTarget);
 
             }
             return phases;
@@ -181,7 +181,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Xera:

@@ -22,8 +22,7 @@ namespace GW2EIEvtcParser.ParsedData
         public string LogStartStd { get; private set; } = DefaultTimeValue;
         public string LogEndStd { get; private set; } = DefaultTimeValue;
 
-        public IReadOnlyList<string> LogErrors => _logErrors;
-        private List<string> _logErrors { get; } = new List<string>();
+        public List<string> LogErrors { get; } = new List<string>();
 
         // Constructors
         internal LogData(string buildVersion, CombatData combatData, long evtcLogDuration, List<Player> playerList, ParserController operation)
@@ -91,7 +90,7 @@ namespace GW2EIEvtcParser.ParsedData
             foreach (ErrorEvent evt in combatData.GetErrorEvents())
             {
                 operation.UpdateProgressWithCancellationCheck("Error " + evt.Message);
-                _logErrors.Add(evt.Message);
+                LogErrors.Add(evt.Message);
             }
         }
 

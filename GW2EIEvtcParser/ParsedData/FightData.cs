@@ -214,7 +214,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
             return Logic.GetLogicName(log) + (_isCM == CMStatus.CM ? " CM" : "");
         }
-        public IReadOnlyList<PhaseData> GetPhases(ParsedEvtcLog log)
+        public List<PhaseData> GetPhases(ParsedEvtcLog log)
         {
 
             if (_phases.Count == 0)
@@ -239,7 +239,7 @@ namespace GW2EIEvtcParser.ParsedData
             return _phases;
         }
 
-        public IReadOnlyList<NPC> GetMainTargets(ParsedEvtcLog log)
+        public List<NPC> GetMainTargets(ParsedEvtcLog log)
         {
             return GetPhases(log)[0].Targets;
         }

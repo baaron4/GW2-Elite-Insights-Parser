@@ -47,12 +47,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.MursaatOverseer);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.MursaatOverseer);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Mursaat Overseer not found");
             }
-            phases[0].AddTarget(mainTarget);
+            phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -64,7 +64,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TrashID.Jade:
@@ -101,7 +101,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.MursaatOverseer);
+            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.MursaatOverseer);
             if (target == null)
             {
                 throw new InvalidOperationException("Mursaat Overseer not found");

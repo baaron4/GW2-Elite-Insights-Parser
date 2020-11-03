@@ -65,27 +65,27 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC eye1 = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfFate);
-            NPC eye2 = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfJudgement);
+            NPC eye1 = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfFate);
+            NPC eye2 = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfJudgement);
             if (eye2 == null || eye1 == null)
             {
                 throw new InvalidOperationException("Eyes not found");
             }
-            phases[0].AddTarget(eye2);
-            phases[0].AddTarget(eye1);
+            phases[0].Targets.Add(eye2);
+            phases[0].Targets.Add(eye1);
             return phases;
         }
 
         private void HPCheck(CombatData combatData, FightData fightData)
         {
-            NPC eye1 = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfFate);
-            NPC eye2 = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfJudgement);
+            NPC eye1 = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfFate);
+            NPC eye2 = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfJudgement);
             if (eye2 == null || eye1 == null)
             {
                 throw new InvalidOperationException("Eyes not found");
             }
-            IReadOnlyList<HealthUpdateEvent> eye1HPs = combatData.GetHealthUpdateEvents(eye1.AgentItem);
-            IReadOnlyList<HealthUpdateEvent> eye2HPs = combatData.GetHealthUpdateEvents(eye2.AgentItem);
+            List<HealthUpdateEvent> eye1HPs = combatData.GetHealthUpdateEvents(eye1.AgentItem);
+            List<HealthUpdateEvent> eye2HPs = combatData.GetHealthUpdateEvents(eye2.AgentItem);
             if (eye1HPs.Count == 0 || eye2HPs.Count == 0)
             {
                 return;
@@ -118,7 +118,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             // First check using hp, best
             HPCheck(combatData, fightData);

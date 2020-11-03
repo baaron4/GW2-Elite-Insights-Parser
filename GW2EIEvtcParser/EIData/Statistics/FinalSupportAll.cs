@@ -11,7 +11,7 @@ namespace GW2EIEvtcParser.EIData
 
         private static long[] GetReses(ParsedEvtcLog log, AbstractSingleActor actor, long start, long end)
         {
-            IReadOnlyList<AbstractCastEvent> cls = actor.GetCastLogs(log, start, end);
+            List<AbstractCastEvent> cls = actor.GetCastLogs(log, start, end);
             long[] reses = { 0, 0 };
             foreach (AbstractCastEvent cl in cls)
             {

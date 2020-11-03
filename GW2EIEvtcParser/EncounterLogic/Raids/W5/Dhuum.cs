@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(48172, "Hateful Ephemera", new MechanicPlotlySetting("square","rgb(255,140,0)"), "Golem","Hateful Ephemera (Golem AoE dmg)", "Golem Dmg",0),
             new HitOnPlayerMechanic(48121, "Arcing Affliction", new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Bomb dmg","Arcing Affliction (Bomb) hit", "Bomb dmg",0),
             new PlayerBuffApplyMechanic(47646, "Arcing Affliction", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Bomb","Arcing Affliction (Bomb) application", "Bomb",0),
-            new PlayerBuffRemoveMechanic(47646, "Arcing Affliction", new MechanicPlotlySetting("diamond","rgb(255,0,0)"), "Bomb Trig","Arcing Affliction (Bomb) manualy triggered", "Bomb Triggered",0, (br, log) => br.RemovedDuration > 50 && !log.CombatData.GetDamageData(48210).Any(x => Math.Abs(x.Time - br.Time) < 15 && x.To == br.To) && !br.To.HasBuff(log, 48281, br.Time)),
+            new PlayerBuffRemoveMechanic(47646, "Arcing Affliction", new MechanicPlotlySetting("diamond","rgb(255,0,0)"), "Bomb Trig","Arcing Affliction (Bomb) manualy triggered", "Bomb Triggered",0, (br, log) => br.RemovedDuration > 50 && !log.CombatData.GetDamageData(48210).Exists(x => Math.Abs(x.Time - br.Time) < 15 && x.To == br.To) && !br.To.HasBuff(log, 48281, br.Time)),
             //new Mechanic(47476, "Residual Affliction", ParseEnum.BossIDS.Dhuum, new MechanicPlotlySetting("star-diamond","rgb(255,200,0)"), "Bomb",0), //not needed, imho, applied at the same time as Arcing Affliction
             new PlayerOnPlayerMechanic(47335, "Soul Shackle", new MechanicPlotlySetting("diamond","rgb(0,255,255)"), "Shackles","Soul Shackle (Tether) application", "Shackles",0),//  //also used for removal.
             new HitOnPlayerMechanic(47164, "Soul Shackle", new MechanicPlotlySetting("diamond-open","rgb(0,255,255)"), "Shackles dmg","Soul Shackle (Tether) dmg ticks", "Shackles Dmg",0,   (de,log) => de.Damage > 0),
@@ -51,9 +51,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (19072, 15484, 20992, 16508));
         }
 
-        private static void ComputeFightPhases(List<PhaseData> phases, IReadOnlyList<AbstractCastEvent> castLogs, long fightDuration, long start)
+        private static void ComputeFightPhases(List<PhaseData> phases, List<AbstractCastEvent> castLogs, long fightDuration, long start)
         {
-            AbstractCastEvent shield = castLogs.FirstOrDefault(x => x.SkillId == 47396);
+            AbstractCastEvent shield = castLogs.Find(x => x.SkillId == 47396);
             // Dhuum brought down to 10%
             if (shield != null)
             {
@@ -70,8 +70,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static List<PhaseData> GetInBetweenSoulSplits(ParsedEvtcLog log, NPC dhuum, long mainStart, long mainEnd, bool hasRitual)
         {
-
-            IReadOnlyList<AbstractCastEvent> cls = dhuum.GetCastLogs(log, 0, log.FightData.FightEnd);
+            List<AbstractCastEvent> cls = dhuum.GetCastLogs(log, 0, log.FightData.FightEnd);
             var cataCycles = cls.Where(x => x.SkillId == 48398).ToList();
             var gDeathmarks = cls.Where(x => x.SkillId == 48210).ToList();
             if (gDeathmarks.Count < cataCycles.Count)
@@ -104,19 +103,19 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC dhuum = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
+            NPC dhuum = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
             if (dhuum == null)
             {
                 throw new InvalidOperationException("Dhuum not found");
             }
-            phases[0].AddTarget(dhuum);
+            phases[0].Targets.Add(dhuum);
             if (!requirePhases)
             {
                 return phases;
             }
             // Sometimes the pre event is not in the evtc
-            IReadOnlyList<AbstractCastEvent> castLogs = dhuum.GetCastLogs(log, 0, log.FightData.FightEnd);
-            IReadOnlyList<AbstractCastEvent> dhuumCast = dhuum.GetCastLogs(log, 0, 20000);
+            List<AbstractCastEvent> castLogs = dhuum.GetCastLogs(log, 0, log.FightData.FightEnd);
+            List<AbstractCastEvent> dhuumCast = dhuum.GetCastLogs(log, 0, 20000);
             if (dhuumCast.Count > 0)
             {
                 // full fight does not contain the pre event
@@ -154,7 +153,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].AddTarget(dhuum);
+                phases[i].Targets.Add(dhuum);
             }
             return phases;
         }
@@ -175,14 +174,14 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             // TODO: correct position
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Dhuum:
                     var deathmark = cls.Where(x => x.SkillId == 48176).ToList();
-                    AbstractCastEvent majorSplit = cls.FirstOrDefault(x => x.SkillId == 47396);
+                    AbstractCastEvent majorSplit = cls.Find(x => x.SkillId == 47396);
                     foreach (AbstractCastEvent c in deathmark)
                     {
                         start = (int)c.Time;
@@ -310,7 +309,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             // spirit transform
             var spiritTransform = log.CombatData.GetBuffData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Dhuum not found");
@@ -395,7 +394,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
+            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
             if (target == null)
             {
                 throw new InvalidOperationException("Dhuum not found");

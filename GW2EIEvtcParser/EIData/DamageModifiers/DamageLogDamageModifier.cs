@@ -17,9 +17,9 @@ namespace GW2EIEvtcParser.EIData
 
         internal override void ComputeDamageModifier(Dictionary<string, List<DamageModifierStat>> data, Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>> dataTarget, Player p, ParsedEvtcLog log)
         {
-            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+            List<PhaseData> phases = log.FightData.GetPhases(log);
             double gain = GainComputer.ComputeGain(GainPerStack, 1);
-            if (!p.GetHitDamageLogs(null, log, phases[0]).Any(x => DLChecker(x)))
+            if (!p.GetHitDamageLogs(null, log, phases[0]).Exists(x => DLChecker(x)))
             {
                 return;
             }
@@ -36,7 +36,7 @@ namespace GW2EIEvtcParser.EIData
                     for (int i = 0; i < phases.Count; i++)
                     {
                         int totalDamage = GetTotalDamage(p, log, target, i);
-                        IReadOnlyList<AbstractDamageEvent> typeHits = GetHitDamageLogs(p, log, target, phases[i]);
+                        List<AbstractDamageEvent> typeHits = GetHitDamageLogs(p, log, target, phases[i]);
                         var effect = typeHits.Where(x => DLChecker(x)).ToList();
                         extraDataList.Add(new DamageModifierStat(effect.Count, typeHits.Count, gain * effect.Sum(x => x.Damage), totalDamage));
                     }
@@ -47,7 +47,7 @@ namespace GW2EIEvtcParser.EIData
             for (int i = 0; i < phases.Count; i++)
             {
                 int totalDamage = GetTotalDamage(p, log, null, i);
-                IReadOnlyList<AbstractDamageEvent> typeHits = GetHitDamageLogs(p, log, null, phases[i]);
+                List<AbstractDamageEvent> typeHits = GetHitDamageLogs(p, log, null, phases[i]);
                 var effect = typeHits.Where(x => DLChecker(x)).ToList();
                 data[Name].Add(new DamageModifierStat(effect.Count, typeHits.Count, gain * effect.Sum(x => x.Damage), totalDamage));
             }

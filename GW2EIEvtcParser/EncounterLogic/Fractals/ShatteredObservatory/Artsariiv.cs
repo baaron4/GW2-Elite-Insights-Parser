@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 
@@ -51,9 +50,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             return FightData.CMStatus.CMnoName;
         }
 
-        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            SetSuccessByBuffCount(combatData, fightData, playerAgents, Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Artsariiv), 762, 4);
+            SetSuccessByBuffCount(combatData, fightData, playerAgents, Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Artsariiv), 762, 4);
         }
     }
 }

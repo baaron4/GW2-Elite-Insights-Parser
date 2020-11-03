@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace GW2EIEvtcParser.EIData
+﻿namespace GW2EIEvtcParser.EIData
 {
     public class NPCSerializable : AbstractSingleActorSerializable
     {

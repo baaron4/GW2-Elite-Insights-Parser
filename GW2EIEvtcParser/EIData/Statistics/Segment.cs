@@ -29,7 +29,7 @@ namespace GW2EIEvtcParser.EIData
             return minEnd - maxStart >= 0;
         }
 
-        public static List<Segment> FromStates(IReadOnlyList<(long start, double state)> states, long min, long max)
+        public static List<Segment> FromStates(List<(long start, double state)> states, long min, long max)
         {
             if (!states.Any())
             {
@@ -59,7 +59,7 @@ namespace GW2EIEvtcParser.EIData
         /// <summary>
         /// Fuse consecutive segments with same value
         /// </summary>
-        public static List<Segment> FuseSegments(IReadOnlyList<Segment> input)
+        public static List<Segment> FuseSegments(List<Segment> input)
         {
             var newChart = new List<Segment>();
             Segment last = null;
@@ -90,7 +90,7 @@ namespace GW2EIEvtcParser.EIData
             return newChart;
         }
 
-        public static List<object[]> ToObjectList(IReadOnlyList<Segment> segments, long start, long end)
+        public static List<object[]> ToObjectList(List<Segment> segments, long start, long end)
         {
             var res = new List<object[]>();
             foreach (Segment seg in segments)

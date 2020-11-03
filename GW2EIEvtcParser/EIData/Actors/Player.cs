@@ -67,12 +67,12 @@ namespace GW2EIEvtcParser.EIData
             return GetPlayerSupport(log)[phaseIndex];
         }
 
-        public IReadOnlyList<FinalPlayerSupport> GetPlayerSupport(ParsedEvtcLog log)
+        public List<FinalPlayerSupport> GetPlayerSupport(ParsedEvtcLog log)
         {
             if (_playerSupport == null)
             {
                 _playerSupport = new List<FinalPlayerSupport>();
-                IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+                List<PhaseData> phases = log.FightData.GetPhases(log);
                 for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
                 {
                     var playerSup = new FinalPlayerSupport();
@@ -127,7 +127,7 @@ namespace GW2EIEvtcParser.EIData
             return _playerSupport;
         }
 
-        public IReadOnlyDictionary<long, FinalPlayerBuffs> GetBuffs(ParsedEvtcLog log, int phaseIndex, BuffEnum type)
+        public Dictionary<long, FinalPlayerBuffs> GetBuffs(ParsedEvtcLog log, int phaseIndex, BuffEnum type)
         {
             if (_selfBuffs == null)
             {
@@ -147,7 +147,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public IReadOnlyList<IReadOnlyDictionary<long, FinalPlayerBuffs>> GetBuffs(ParsedEvtcLog log, BuffEnum type)
+        public List<Dictionary<long, FinalPlayerBuffs>> GetBuffs(ParsedEvtcLog log, BuffEnum type)
         {
             if (_selfBuffs == null)
             {
@@ -167,7 +167,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public IReadOnlyDictionary<long, FinalPlayerBuffs> GetActiveBuffs(ParsedEvtcLog log, int phaseIndex, BuffEnum type)
+        public Dictionary<long, FinalPlayerBuffs> GetActiveBuffs(ParsedEvtcLog log, int phaseIndex, BuffEnum type)
         {
             if (_selfBuffsActive == null)
             {
@@ -187,7 +187,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public IReadOnlyList<IReadOnlyDictionary<long, FinalPlayerBuffs>> GetActiveBuffs(ParsedEvtcLog log, BuffEnum type)
+        public List<Dictionary<long, FinalPlayerBuffs>> GetActiveBuffs(ParsedEvtcLog log, BuffEnum type)
         {
             if (_selfBuffsActive == null)
             {
@@ -234,7 +234,7 @@ namespace GW2EIEvtcParser.EIData
             Account = "Account " + index;
         }
 
-        public IReadOnlyList<DeathRecap> GetDeathRecaps(ParsedEvtcLog log)
+        public List<DeathRecap> GetDeathRecaps(ParsedEvtcLog log)
         {
             if (_deathRecaps == null)
             {
@@ -252,7 +252,7 @@ namespace GW2EIEvtcParser.EIData
             return _weaponsArray;
         }
 
-        public IReadOnlyList<Consumable> GetConsumablesList(ParsedEvtcLog log, long start, long end)
+        public List<Consumable> GetConsumablesList(ParsedEvtcLog log, long start, long end)
         {
             if (_consumeList == null)
             {
@@ -261,7 +261,7 @@ namespace GW2EIEvtcParser.EIData
             return _consumeList.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public IReadOnlyDictionary<string, IReadOnlyList<DamageModifierStat>> GetDamageModifierStats(ParsedEvtcLog log, NPC target)
+        public Dictionary<string, List<DamageModifierStat>> GetDamageModifierStats(ParsedEvtcLog log, NPC target)
         {
             if (_damageModifiers == null)
             {
@@ -271,17 +271,17 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (_damageModifiersTargets.TryGetValue(target, out Dictionary<string, List<DamageModifierStat>> res))
                 {
-                    return (IReadOnlyDictionary<string, IReadOnlyList<DamageModifierStat>>)res;
+                    return res;
                 }
                 else
                 {
-                    return new Dictionary<string, IReadOnlyList<DamageModifierStat>>();
+                    return new Dictionary<string, List<DamageModifierStat>>();
                 }
             }
-            return (IReadOnlyDictionary<string, IReadOnlyList<DamageModifierStat>>)_damageModifiers;
+            return _damageModifiers;
         }
 
-        public IReadOnlyCollection<string> GetPresentDamageModifier(ParsedEvtcLog log)
+        public HashSet<string> GetPresentDamageModifier(ParsedEvtcLog log)
         {
             if (_presentDamageModifiers == null)
             {
@@ -331,11 +331,11 @@ namespace GW2EIEvtcParser.EIData
         {
             _deathRecaps = new List<DeathRecap>();
             List<DeathRecap> res = _deathRecaps;
-            IReadOnlyList<DeadEvent> deads = log.CombatData.GetDeadEvents(AgentItem);
-            IReadOnlyList<DownEvent> downs = log.CombatData.GetDownEvents(AgentItem);
-            IReadOnlyList<AliveEvent> ups = log.CombatData.GetAliveEvents(AgentItem);
+            List<DeadEvent> deads = log.CombatData.GetDeadEvents(AgentItem);
+            List<DownEvent> downs = log.CombatData.GetDownEvents(AgentItem);
+            List<AliveEvent> ups = log.CombatData.GetAliveEvents(AgentItem);
             long lastDeathTime = 0;
-            IReadOnlyList<AbstractDamageEvent> damageLogs = GetDamageTakenLogs(null, log, 0, log.FightData.FightEnd);
+            List<AbstractDamageEvent> damageLogs = GetDamageTakenLogs(null, log, 0, log.FightData.FightEnd);
             foreach (DeadEvent dead in deads)
             {
                 res.Add(new DeathRecap(damageLogs, dead, downs, ups, lastDeathTime));
@@ -361,7 +361,7 @@ namespace GW2EIEvtcParser.EIData
                 return;
             }
             string[] weapons = new string[8];//first 2 for first set next 2 for second set, second sets of 4 for underwater
-            IReadOnlyList<AbstractCastEvent> casting = GetCastLogs(log, 0, log.FightData.FightEnd);
+            List<AbstractCastEvent> casting = GetCastLogs(log, 0, log.FightData.FightEnd);
             int swapped = -1;
             long swappedTime = 0;
             var swaps = casting.OfType<WeaponSwapEvent>().Select(x =>
@@ -392,7 +392,7 @@ namespace GW2EIEvtcParser.EIData
 
         private void SetConsumablesList(ParsedEvtcLog log)
         {
-            IReadOnlyList<Buff> consumableList = log.Buffs.BuffsByNature[BuffNature.Consumable];
+            List<Buff> consumableList = log.Buffs.BuffsByNature[BuffNature.Consumable];
             _consumeList = new List<Consumable>();
             long fightDuration = log.FightData.FightEnd;
             foreach (Buff consumable in consumableList)
@@ -447,13 +447,13 @@ namespace GW2EIEvtcParser.EIData
             return new PlayerSerializable(this, log, map, CombatReplay);
         }
 
-        public IReadOnlyList<Point3D> GetCombatReplayActivePositions(ParsedEvtcLog log)
+        public List<Point3D> GetCombatReplayActivePositions(ParsedEvtcLog log)
         {
             if (CombatReplay == null)
             {
                 InitCombatReplay(log);
             }
-            (IReadOnlyList<(long start, long end)> deads, _, IReadOnlyList<(long start, long end)> dcs) = GetStatus(log);
+            (List<(long start, long end)> deads, _, List<(long start, long end)> dcs) = GetStatus(log);
             var activePositions = new List<Point3D>(GetCombatReplayPolledPositions(log));
             for (int i = 0; i < activePositions.Count; i++)
             {

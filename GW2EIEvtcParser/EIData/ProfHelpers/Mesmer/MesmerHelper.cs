@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.EIData
         {
             new DamageCastFinder(10212, 10212, EIData.InstantCastFinder.DefaultICD), // Power spike
             new BuffLossCastFinder(10234, 10233, EIData.InstantCastFinder.DefaultICD, (brae, combatData) => {
-                return combatData.GetBuffData(brae.To).Any(x =>
+                return combatData.GetBuffData(brae.To).Exists(x =>
                                     x is BuffApplyEvent bae &&
                                     bae.BuffID == 13017 &&
                                     Math.Abs(bae.AppliedDuration - 2000) <= ParserHelper.ServerDelayConstant &&

@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData
     {
         private List<NPC> _minionList { get; }
 
-        public IReadOnlyList<NPC> MinionList => _minionList;
+        public IEnumerable<NPC> MinionList => _minionList.AsReadOnly();
         public AbstractSingleActor Master { get; }
 
         internal Minions(AbstractSingleActor master, NPC firstMinion) : base(firstMinion.AgentItem)
@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EIData
             _minionList.Add(minion);
         }
 
-        public override IReadOnlyList<AbstractDamageEvent> GetDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override List<AbstractDamageEvent> GetDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
             if (DamageLogs == null)
             {
@@ -51,7 +51,7 @@ namespace GW2EIEvtcParser.EIData
             return res;
         }*/
 
-        public override IReadOnlyList<AbstractDamageEvent> GetDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override List<AbstractDamageEvent> GetDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
             if (DamageTakenlogs == null)
             {
@@ -79,7 +79,7 @@ namespace GW2EIEvtcParser.EIData
             CastLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
         }
 
-        public override IReadOnlyList<AbstractCastEvent> GetCastLogs(ParsedEvtcLog log, long start, long end)
+        public override List<AbstractCastEvent> GetCastLogs(ParsedEvtcLog log, long start, long end)
         {
             if (CastLogs == null)
             {
@@ -88,7 +88,7 @@ namespace GW2EIEvtcParser.EIData
             return CastLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public override IReadOnlyList<AbstractCastEvent> GetIntersectingCastLogs(ParsedEvtcLog log, long start, long end)
+        public override List<AbstractCastEvent> GetIntersectingCastLogs(ParsedEvtcLog log, long start, long end)
         {
             if (CastLogs == null)
             {
@@ -97,7 +97,7 @@ namespace GW2EIEvtcParser.EIData
             return CastLogs.Where(x => KeepIntersectingCastLog(x, start, end)).ToList();
         }
 
-        public IReadOnlyList<IReadOnlyList<Segment>> GetLifeSpanSegments(ParsedEvtcLog log)
+        public List<List<Segment>> GetLifeSpanSegments(ParsedEvtcLog log)
         {
             var minionsSegments = new List<List<Segment>>();
             var fightDur = log.FightData.FightEnd;

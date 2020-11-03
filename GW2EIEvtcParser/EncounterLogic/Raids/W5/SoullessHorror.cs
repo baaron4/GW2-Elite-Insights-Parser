@@ -54,12 +54,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.SoullessHorror);
+                NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.SoullessHorror);
                 if (mainTarget == null)
                 {
                     throw new InvalidOperationException("Soulless Horror not found");
@@ -84,12 +84,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.SoullessHorror);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.SoullessHorror);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Soulless Horror not found");
             }
-            phases[0].AddTarget(mainTarget);
+            phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -100,14 +100,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AbstractCastEvent c in howling)
             {
                 var phase = new PhaseData(start, Math.Min(c.Time, fightDuration), "Pre-Breakbar " + i++);
-                phase.AddTarget(mainTarget);
+                phase.Targets.Add(mainTarget);
                 start = c.EndTime;
                 phases.Add(phase);
             }
             if (fightDuration - start > 3000)
             {
                 var lastPhase = new PhaseData(start, fightDuration, "Final");
-                lastPhase.AddTarget(mainTarget);
+                lastPhase.Targets.Add(mainTarget);
                 phases.Add(lastPhase);
             }
             return phases;
@@ -115,7 +115,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)

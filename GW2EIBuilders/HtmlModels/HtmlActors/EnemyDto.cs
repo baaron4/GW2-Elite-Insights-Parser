@@ -2,6 +2,6 @@
 {
     internal class EnemyDto
     {
-        public string Name { get; set; }
+        public string Name { get; internal set; }
     }
 }

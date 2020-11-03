@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using GW2EIEvtcParser.EIData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -16,13 +15,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Freezie);
-            NPC heartTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TrashID.FreeziesFrozenHeart);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Freezie);
+            NPC heartTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TrashID.FreeziesFrozenHeart);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Freezie not found");
             }
-            phases[0].AddTarget(mainTarget);
+            phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -34,12 +33,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (i%2 == 1)
                 {
                     phase.Name = "Phase " + (i + 1) / 2;
-                    phase.AddTarget(mainTarget);
+                    phase.Targets.Add(mainTarget);
                 }
                 else
                 {
                     phase.Name = "Heal " + (i) / 2;
-                    phase.AddTarget(heartTarget);
+                    phase.Targets.Add(heartTarget);
                 }
             }
             return phases;

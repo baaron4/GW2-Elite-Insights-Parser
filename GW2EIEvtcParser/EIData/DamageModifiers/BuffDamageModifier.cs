@@ -41,8 +41,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal override void ComputeDamageModifier(Dictionary<string, List<DamageModifierStat>> data, Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>> dataTarget, Player p, ParsedEvtcLog log)
         {
-            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
-            IReadOnlyDictionary<long, BuffsGraphModel> bgms = p.GetBuffGraphs(log);
+            List<PhaseData> phases = log.FightData.GetPhases(log);
+            Dictionary<long, BuffsGraphModel> bgms = p.GetBuffGraphs(log);
             if (!Tracker.Has(bgms) && GainComputer != ByAbsence)
             {
                 return;
@@ -60,7 +60,7 @@ namespace GW2EIEvtcParser.EIData
                     for (int i = 0; i < phases.Count; i++)
                     {
                         int totalDamage = GetTotalDamage(p, log, target, i);
-                        IReadOnlyList<AbstractDamageEvent> typeHits = GetHitDamageLogs(p, log, target, phases[i]);
+                        List<AbstractDamageEvent> typeHits = GetHitDamageLogs(p, log, target, phases[i]);
                         var damages = typeHits.Select(x => ComputeGain(Tracker.GetStack(bgms, x.Time), x)).Where(x => x != -1.0).ToList();
                         extraDataList.Add(new DamageModifierStat(damages.Count, typeHits.Count, damages.Sum(), totalDamage));
                     }
@@ -71,7 +71,7 @@ namespace GW2EIEvtcParser.EIData
             for (int i = 0; i < phases.Count; i++)
             {
                 int totalDamage = GetTotalDamage(p, log, null, i);
-                IReadOnlyList<AbstractDamageEvent> typeHits = GetHitDamageLogs(p, log, null, phases[i]);
+                List<AbstractDamageEvent> typeHits = GetHitDamageLogs(p, log, null, phases[i]);
                 var damages = typeHits.Select(x => ComputeGain(Tracker.GetStack(bgms, x.Time), x)).Where(x => x != -1.0).ToList();
                 data[Name].Add(new DamageModifierStat(damages.Count, typeHits.Count, damages.Sum(), totalDamage));
             }

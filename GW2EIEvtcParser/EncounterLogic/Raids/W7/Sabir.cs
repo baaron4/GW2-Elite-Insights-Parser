@@ -48,17 +48,17 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Sabir);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Sabir);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Sabir not found");
             }
-            phases[0].AddTarget(mainTarget);
+            phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
             {
                 return phases;
             }
-            IReadOnlyList<AbstractCastEvent> cls = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
+            List<AbstractCastEvent> cls = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
             var wallopingWinds = cls.Where(x => x.SkillId == 56094).ToList();
             long start = 0, end = 0;
             for (int i = 0; i < wallopingWinds.Count; i++)
@@ -66,7 +66,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AbstractCastEvent wallopinbWind = wallopingWinds[i];
                 end = wallopinbWind.Time;
                 var phase = new PhaseData(start, end, "Phase " + (i + 1));
-                phase.AddTarget(mainTarget);
+                phase.Targets.Add(mainTarget);
                 phases.Add(phase);
                 AbstractCastEvent nextAttack = cls.FirstOrDefault(x => x.Time >= wallopinbWind.EndTime && (x.SkillId == 56620 || x.SkillId == 56629 || x.SkillId == 56307));
                 if (nextAttack == null)
@@ -77,7 +77,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (i == wallopingWinds.Count - 1)
                 {
                     phase = new PhaseData(start, log.FightData.FightEnd, "Phase " + (i + 2));
-                    phase.AddTarget(mainTarget);
+                    phase.Targets.Add(mainTarget);
                     phases.Add(phase);
                 }
             }
@@ -118,7 +118,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Sabir);
+            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Sabir);
             if (target == null)
             {
                 throw new InvalidOperationException("Sabir not found");

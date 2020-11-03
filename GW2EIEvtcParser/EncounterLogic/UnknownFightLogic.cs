@@ -28,12 +28,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 agentItem = agentData.GetGadgetsByID(id).FirstOrDefault();
                 if (agentItem != null)
                 {
-                    AddTarget(new NPC(agentItem));
+                    Targets.Add(new NPC(agentItem));
                 }
             }
             else
             {
-                AddTarget(new NPC(agentItem));
+                Targets.Add(new NPC(agentItem));
             }
         }
     }

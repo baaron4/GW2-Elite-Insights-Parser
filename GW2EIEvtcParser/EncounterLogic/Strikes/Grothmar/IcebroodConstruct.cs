@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using GW2EIEvtcParser.EIData;
 
@@ -38,12 +37,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.IcebroodConstruct);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.IcebroodConstruct);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Icebrood Construct not found");
             }
-            phases[0].AddTarget(mainTarget);
+            phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -54,7 +53,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 PhaseData phase = phases[i];
                 phase.Name = "Phase " + i;
-                phase.AddTarget(mainTarget);
+                phase.Targets.Add(mainTarget);
             }
             return phases;
         }

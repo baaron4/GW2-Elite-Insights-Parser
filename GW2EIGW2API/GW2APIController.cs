@@ -101,7 +101,7 @@ namespace GW2EIGW2API
             }
             return _apiSkills;
         }
-        public static void WriteAPISkillsToFile()
+        public static List<int> WriteAPISkillsToFile()
         {
             FileStream fcreate = File.Open(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/SkillList.json", FileMode.Create);
@@ -115,7 +115,7 @@ namespace GW2EIGW2API
 
             var skillList = new List<GW2APISkill>();
             HttpResponseMessage response = APIClient.GetAsync(new Uri("/v2/skills", UriKind.Relative)).Result;
-            //var failedList = new List<int>();
+            var failedList = new List<int>();
             if (response.IsSuccessStatusCode)
             {
                 // Get Skill ID list           
@@ -134,7 +134,7 @@ namespace GW2EIGW2API
 
             }
             _apiSkills = new APISkills(skillList);
-            //return failedList;
+            return failedList;
         }
         private static void SetAPISkills()
         {
@@ -189,33 +189,17 @@ namespace GW2EIGW2API
             }
             return null;
         }
-        private static List<GW2APISpec> GetGW2APISpecs()
+        private static GW2APISpec GetGW2APISpec(string path)
         {
-            var spec_L = new List<GW2APISpec>();
-            bool maxPageSizeReached = false;
-            int page = 0;
-            int pagesize = 200;
-            while (!maxPageSizeReached)
+            GW2APISpec spec = null;
+            //path = "/v2/specializations/" + isElite
+            HttpResponseMessage response = APIClient.GetAsync(new Uri(path, UriKind.Relative)).Result;
+            if (response.IsSuccessStatusCode)
             {
-                string path = "/v2/specializations?page=" + page + "&page_size=" + pagesize;
-                HttpResponseMessage response = APIClient.GetAsync(new Uri(path, UriKind.Relative)).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    string data = response.Content.ReadAsStringAsync().Result;
-                    GW2APISpec[] responseArray = JsonConvert.DeserializeObject<GW2APISpec[]>(data, new JsonSerializerSettings
-                    {
-                        ContractResolver = DefaultJsonContractResolver
-                    });
-                    spec_L.AddRange(responseArray);
-                }
-                else
-                {
-                    maxPageSizeReached = true;
-                }
-                page++;
-            }
+                spec = JsonConvert.DeserializeObject<GW2APISpec>(response.Content.ReadAsStringAsync().Result);
 
-            return spec_L;
+            }
+            return spec;
         }
 
         private static APISpecs GetAPISpecs()
@@ -226,7 +210,7 @@ namespace GW2EIGW2API
             }
             return _apiSpecs;
         }
-        public static void WriteAPISpecsToFile()
+        public static List<int> WriteAPISpecsToFile()
         {
             FileStream fcreate = File.Open(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/SpecList.json", FileMode.Create);
@@ -240,25 +224,44 @@ namespace GW2EIGW2API
 
             var specList = new List<GW2APISpec>();
             HttpResponseMessage response = APIClient.GetAsync(new Uri("/v2/specializations", UriKind.Relative)).Result;
-            //var failedList = new List<int>();
+            int[] idArray;
+            var failedList = new List<int>();
             if (response.IsSuccessStatusCode)
             {
-                // Get Skill ID list           
-                specList.AddRange(GetGW2APISpecs());
+                // Get Skill ID list
+                idArray = JsonConvert.DeserializeObject<int[]>(response.Content.ReadAsStringAsync().Result);
+
+                foreach (int id in idArray)
+                {
+                    GW2APISpec curSpec = GetGW2APISpec("/v2/specializations/" + id);
+                    if (curSpec != null)
+                    {
+
+                        specList.Add(curSpec);
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("Failed to get response");//fail to retrieve
+                        failedList.Add(id);
+                    }
+
+                }
                 var writer = new StreamWriter(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/SpecList.json");
+
                 var serializer = new JsonSerializer
                 {
                     NullValueHandling = NullValueHandling.Ignore,
                     Formatting = Formatting.None,
-                    DefaultValueHandling = DefaultValueHandling.Ignore,
                     ContractResolver = DefaultJsonContractResolver
                 };
                 serializer.Serialize(writer, specList);
                 writer.Close();
+
             }
             _apiSpecs = new APISpecs(specList);
-            //return failedList;
+            return failedList;
         }
 
         private static void SetAPISpecs()
@@ -316,7 +319,7 @@ namespace GW2EIGW2API
             }
             return null;
         }
-        private static List<GW2APITrait> GetGW2APITraits()
+        private static List<GW2APITrait> GetListGW2APITraits()
         {
             var trait_L = new List<GW2APITrait>();
             bool maxPageSizeReached = false;
@@ -352,7 +355,7 @@ namespace GW2EIGW2API
             }
             return _apiTraits;
         }
-        public static void WriteAPITraitsToFile()
+        public static List<int> WriteAPITraitsToFile()
         {
             FileStream fcreate = File.Open(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/TraitList.json", FileMode.Create);
@@ -366,11 +369,11 @@ namespace GW2EIGW2API
 
             var traitList = new List<GW2APITrait>();
             HttpResponseMessage response = APIClient.GetAsync(new Uri("/v2/traits", UriKind.Relative)).Result;
-            //var failedList = new List<int>();
+            var failedList = new List<int>();
             if (response.IsSuccessStatusCode)
             {
                 // Get Skill ID list           
-                traitList.AddRange(GetGW2APITraits());
+                traitList.AddRange(GetListGW2APITraits());
                 var writer = new StreamWriter(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/TraitList.json");
                 var serializer = new JsonSerializer
@@ -385,7 +388,7 @@ namespace GW2EIGW2API
 
             }
             _apiTraits = new APITraits(traitList);
-            //return failedList;
+            return failedList;
         }
         private static void SetAPITraits()
         {

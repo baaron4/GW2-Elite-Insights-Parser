@@ -16,12 +16,10 @@ namespace GW2EIEvtcParser.EIData
         }
 
         public long DeathTime { get; }
-        public IReadOnlyList<DeathRecapDamageItem> ToDown => _toDown;
-        public IReadOnlyList<DeathRecapDamageItem> ToKill => _toKill;
-        private List<DeathRecapDamageItem> _toDown { get; }
-        private List<DeathRecapDamageItem> _toKill { get; }
+        public List<DeathRecapDamageItem> ToDown { get; }
+        public List<DeathRecapDamageItem> ToKill { get; }
 
-        internal DeathRecap(IReadOnlyList<AbstractDamageEvent> damageLogs, DeadEvent dead, IReadOnlyList<DownEvent> downs, IReadOnlyList<AliveEvent> ups, long lastDeathTime)
+        internal DeathRecap(List<AbstractDamageEvent> damageLogs, DeadEvent dead, List<DownEvent> downs, List<AliveEvent> ups, long lastDeathTime)
         {
             DeathTime = dead.Time;
             DownEvent downed;
@@ -37,7 +35,7 @@ namespace GW2EIEvtcParser.EIData
             if (downed != null)
             {
                 var damageToDown = damageLogs.Where(x => x.Time > lastDeathTime && x.Time <= downed.Time && x.HasHit && x.Damage > 0).ToList();
-                _toDown = damageToDown.Count > 0 ? new List<DeathRecapDamageItem>() : null;
+                ToDown = damageToDown.Count > 0 ? new List<DeathRecapDamageItem>() : null;
                 int damage = 0;
                 for (int i = damageToDown.Count - 1; i >= 0; i--)
                 {
@@ -52,14 +50,14 @@ namespace GW2EIEvtcParser.EIData
                         Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
                     };
                     damage += dl.Damage;
-                    _toDown.Add(item);
+                    ToDown.Add(item);
                     if (damage > 20000)
                     {
                         break;
                     }
                 }
                 var damageToKill = damageLogs.Where(x => x.Time > downed.Time && x.Time <= dead.Time && x.HasHit && x.Damage > 0).ToList();
-                _toKill = damageToKill.Count > 0 ? new List<DeathRecapDamageItem>() : null;
+                ToKill = damageToKill.Count > 0 ? new List<DeathRecapDamageItem>() : null;
                 for (int i = damageToKill.Count - 1; i >= 0; i--)
                 {
                     AbstractDamageEvent dl = damageToKill[i];
@@ -72,14 +70,14 @@ namespace GW2EIEvtcParser.EIData
                         Damage = dl.Damage,
                         Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
                     };
-                    _toKill.Add(item);
+                    ToKill.Add(item);
                 }
             }
             else
             {
-                _toDown = null;
+                ToDown = null;
                 var damageToKill = damageLogs.Where(x => x.Time > lastDeathTime && x.Time <= dead.Time && x.HasHit && x.Damage > 0).ToList();
-                _toKill = damageToKill.Count > 0 ? new List<DeathRecapDamageItem>() : null;
+                ToKill = damageToKill.Count > 0 ? new List<DeathRecapDamageItem>() : null;
                 int damage = 0;
                 for (int i = damageToKill.Count - 1; i >= 0; i--)
                 {
@@ -94,7 +92,7 @@ namespace GW2EIEvtcParser.EIData
                         Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
                     };
                     damage += dl.Damage;
-                    _toKill.Add(item);
+                    ToKill.Add(item);
                     if (damage > 20000)
                     {
                         break;

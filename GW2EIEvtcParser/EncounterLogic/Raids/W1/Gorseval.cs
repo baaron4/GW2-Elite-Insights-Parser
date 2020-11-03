@@ -38,12 +38,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Gorseval);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Gorseval);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Gorseval not found");
             }
-            phases[0].AddTarget(mainTarget);
+            phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -55,7 +55,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (i%2 == 1)
                 {
                     phase.Name = "Phase " + (i + 1) / 2;
-                    phase.AddTarget(mainTarget);
+                    phase.Targets.Add(mainTarget);
                 }
                 else
                 {
@@ -90,7 +90,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Gorseval:
@@ -102,7 +102,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, c.ExpectedDuration + start, 600, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(false, 0, 600, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
                     }
-                    IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+                    List<PhaseData> phases = log.FightData.GetPhases(log);
                     if (phases.Count > 1)
                     {
                         var rampage = cls.Where(x => x.SkillId == 31834).ToList();

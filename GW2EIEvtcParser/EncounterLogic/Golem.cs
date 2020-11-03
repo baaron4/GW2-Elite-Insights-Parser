@@ -68,18 +68,18 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);
+            NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Golem not found");
             }
             phases[0].Name = "Final Number";
-            phases[0].AddTarget(mainTarget);
+            phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
             {
                 return phases;
             }
-            IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem);
+            List<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem);
             if (hpUpdates.Count > 0)
             {
                 long fightDuration = log.FightData.FightEnd;
@@ -95,7 +95,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             CanBeSubPhase = false
                         };
-                        phase.AddTarget(mainTarget);
+                        phase.Targets.Add(mainTarget);
                         phases.Add(phase);
                     }
                 }
@@ -105,9 +105,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);
+            NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Golem not found");
@@ -119,7 +119,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 fightEndLogTime = lastDamageTaken.Time;
             }
-            IReadOnlyList<HealthUpdateEvent> hpUpdates = combatData.GetHealthUpdateEvents(mainTarget.AgentItem);
+            List<HealthUpdateEvent> hpUpdates = combatData.GetHealthUpdateEvents(mainTarget.AgentItem);
             if (hpUpdates.Count > 0)
             {
                 success = hpUpdates.Last().HPPercent < 2.00;

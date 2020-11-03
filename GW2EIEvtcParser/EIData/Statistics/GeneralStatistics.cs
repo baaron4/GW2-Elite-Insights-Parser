@@ -10,7 +10,7 @@ namespace GW2EIEvtcParser.EIData
     /// </summary>
     public class GeneralStatistics
     {
-        internal GeneralStatistics(CombatData combatData, IReadOnlyList<Player> players, BuffsContainer boons)
+        internal GeneralStatistics(CombatData combatData, List<Player> players, BuffsContainer boons)
         {
             HashSet<long> skillIDs = combatData.GetSkills();
             // Main boons
@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (skillIDs.Contains(boon.ID))
                 {
-                    _presentBoons.Add(boon);
+                    PresentBoons.Add(boon);
                 }
             }
             // Main Conditions
@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (skillIDs.Contains(boon.ID))
                 {
-                    _presentConditions.Add(boon);
+                    PresentConditions.Add(boon);
                 }
             }
 
@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (skillIDs.Contains(boon.ID))
                 {
-                    _presentOffbuffs.Add(boon);
+                    PresentOffbuffs.Add(boon);
                 }
             }
 
@@ -43,7 +43,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (skillIDs.Contains(boon.ID))
                 {
-                    _presentSupbuffs.Add(boon);
+                    PresentSupbuffs.Add(boon);
                 }
             }
 
@@ -51,7 +51,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (skillIDs.Contains(boon.ID))
                 {
-                    _presentDefbuffs.Add(boon);
+                    PresentDefbuffs.Add(boon);
                 }
 
             }
@@ -60,7 +60,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (skillIDs.Contains(boon.ID))
                 {
-                    _presentFractalInstabilities.Add(boon);
+                    PresentFractalInstabilities.Add(boon);
                 }
             }
 
@@ -78,21 +78,15 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
         }
-        public IReadOnlyList<Buff> PresentBoons => _presentBoons;
-        public IReadOnlyList<Buff> PresentConditions => _presentConditions;
-        public IReadOnlyList<Buff> PresentOffbuffs => _presentOffbuffs;
-        public IReadOnlyList<Buff> PresentSupbuffs => _presentSupbuffs;
-        public IReadOnlyList<Buff> PresentDefbuffs => _presentDefbuffs;
-        public IReadOnlyList<Buff> PresentFractalInstabilities => _presentFractalInstabilities;
+
 
         // present buff
-        private List<Buff> _presentBoons { get; } = new List<Buff>();
-        private List<Buff> _presentConditions { get; } = new List<Buff>();
-        private List<Buff> _presentOffbuffs { get; } = new List<Buff>();
-        private List<Buff> _presentSupbuffs { get; } = new List<Buff>();
-        private List<Buff> _presentDefbuffs { get; } = new List<Buff>();
-        private List<Buff> _presentFractalInstabilities { get; } = new List<Buff>();
-
+        public List<Buff> PresentBoons { get; } = new List<Buff>();//Used only for Boon tables
+        public List<Buff> PresentConditions { get; } = new List<Buff>();//Used only for Condition tables
+        public List<Buff> PresentOffbuffs { get; } = new List<Buff>();//Used only for Off Buff tables
+        public List<Buff> PresentSupbuffs { get; } = new List<Buff>();//Used only for Off Buff tables
+        public List<Buff> PresentDefbuffs { get; } = new List<Buff>();//Used only for Def Buff tables
+        public List<Buff> PresentFractalInstabilities { get; } = new List<Buff>();
         public Dictionary<Player, HashSet<Buff>> PresentPersonalBuffs { get; } = new Dictionary<Player, HashSet<Buff>>();
 
         //Positions for group
@@ -122,7 +116,7 @@ namespace GW2EIEvtcParser.EIData
             _stackCenterPositions = new List<Point3D>();
             if (log.CombatData.HasMovementData)
             {
-                var GroupsPosList = new List<IReadOnlyList<Point3D>>();
+                var GroupsPosList = new List<List<Point3D>>();
                 foreach (Player player in log.PlayerList)
                 {
                     if (player.IsFakeActor)

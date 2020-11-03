@@ -20,7 +20,7 @@ namespace GW2EIEvtcParser.EIData
         {
             long start = phase.Start;
             long end = phase.End;
-            IReadOnlyList<AbstractDamageEvent> damageLogs = actor.GetDamageTakenLogs(from, log, start, end);
+            List<AbstractDamageEvent> damageLogs = actor.GetDamageTakenLogs(from, log, start, end);
 
             DamageTaken = damageLogs.Sum(x => (long)x.Damage);
             BlockedCount = damageLogs.Count(x => x.IsBlocked);

@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if ((BuffStack.Count > 0 && oldValue > 0) || BuffStack.Count == Capacity)
             {
-                BuffStackItem minItem = BuffStack.MinBy(x => Math.Abs(x.TotalDuration - oldValue));
+                BuffStackItem minItem = BuffStack.MinBy(x => Math.Abs(x.TotalBoonDuration() - oldValue));
                 if (minItem != null)
                 {
                     minItem.Extend(extension, src);

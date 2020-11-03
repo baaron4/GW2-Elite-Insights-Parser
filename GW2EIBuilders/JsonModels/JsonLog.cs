@@ -363,7 +363,7 @@ namespace GW2EIBuilders.JsonModels
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Mechanics");
             MechanicData mechanicData = log.MechanicData;
             var mechanicLogs = new List<MechanicEvent>();
-            foreach (IReadOnlyList<MechanicEvent> mLog in mechanicData.GetAllMechanics(log).Values)
+            foreach (List<MechanicEvent> mLog in mechanicData.GetAllMechanics(log))
             {
                 mechanicLogs.AddRange(mLog);
             }

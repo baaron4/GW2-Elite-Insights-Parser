@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.EIData
             Dead = new List<long>();
             Down = new List<long>();
             Dc = new List<long>();
-            (IReadOnlyList<(long start, long end)> deads, IReadOnlyList<(long start, long end)> downs, IReadOnlyList<(long start, long end)> dcs) = player.GetStatus(log);
+            (List<(long start, long end)> deads, List<(long start, long end)> downs, List<(long start, long end)> dcs) = player.GetStatus(log);
 
             foreach ((long start, long end) in deads)
             {

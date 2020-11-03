@@ -177,9 +177,6 @@ dotnet_diagnostic.CA1801.severity = silent
 # CA1812:
 dotnet_diagnostic.CA1812.severity = silent
 
-# CA1826:
-dotnet_diagnostic.CA1826.severity = silent
-
 # CA1724:
 dotnet_diagnostic.CA1724.severity = silent
 

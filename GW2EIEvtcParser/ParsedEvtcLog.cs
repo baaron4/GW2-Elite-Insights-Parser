@@ -15,10 +15,10 @@ namespace GW2EIEvtcParser
         public AgentData AgentData { get; }
         public SkillData SkillData { get; }
         public CombatData CombatData { get; }
-        public IReadOnlyList<Player> PlayerList { get; }
-        internal IReadOnlyCollection<AgentItem> PlayerAgents { get; }
+        public List<Player> PlayerList { get; }
+        public HashSet<AgentItem> PlayerAgents { get; }
         public bool IsBenchmarkMode => FightData.Logic.Mode == FightLogic.ParseMode.Benchmark;
-        public IReadOnlyDictionary<string, IReadOnlyList<Player>> PlayerListBySpec { get; }
+        public Dictionary<string, List<Player>> PlayerListBySpec { get; }
         public DamageModifiersContainer DamageModifiers { get; }
         public BuffsContainer Buffs { get; }
         public EvtcParserSettings ParserSettings { get; }
@@ -42,7 +42,7 @@ namespace GW2EIEvtcParser
             ParserSettings = parserSettings;
             _operation = operation;
             //
-            PlayerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => (IReadOnlyList<Player>)x.ToList());
+            PlayerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
             PlayerAgents = new HashSet<AgentItem>(playerList.Select(x => x.AgentItem));
             _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Combat Events");
             CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList, operation);

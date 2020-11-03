@@ -49,12 +49,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (2688, 11906, 3712, 14210));
         }
 
-        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                IReadOnlyList<AgentItem> prisoners = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.Prisoner2);
+                List<AgentItem> prisoners = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.Prisoner2);
                 var prisonerDeaths = new List<DeadEvent>();
                 foreach (AgentItem prisoner in prisoners)
                 {
@@ -81,7 +81,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     end = phaseEnd.Time;
                 }
                 var phase = new PhaseData(start, Math.Min(end, log.FightData.FightEnd));
-                phase.AddTarget(target);
+                phase.Targets.Add(target);
                 switch (target.ID)
                 {
                     case (int)ArcDPSEnums.TargetID.Narella:
@@ -113,22 +113,22 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC berg = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Berg);
+            NPC berg = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Berg);
             if (berg == null)
             {
                 throw new InvalidOperationException("Berg not found");
             }
-            NPC zane = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Zane);
+            NPC zane = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Zane);
             if (zane == null)
             {
                 throw new InvalidOperationException("Zane not found");
             }
-            NPC narella = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Narella);
+            NPC narella = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Narella);
             if (narella == null)
             {
                 throw new InvalidOperationException("Narella not found");
             }
-            phases[0].AddTargets(Targets);
+            phases[0].Targets.AddRange(Targets);
             if (!requirePhases)
             {
                 return phases;
@@ -169,7 +169,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
+            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Berg:
