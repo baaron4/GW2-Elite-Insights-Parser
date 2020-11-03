@@ -32,14 +32,14 @@
                 :playerdata="buffData.offsData[mode]" :sums="mode === 0 ? buffData.offsData[5] : []"
                 :playerindex="playerindex">
             </buff-table-component>
-            <buff-table-component v-if="type === 2" :key="'defensivebuff-stats-table'"
-                :condition="false" :generation="mode > 0" :id="'defensivebuff-stats-table'" :buffs="defs"
-                :playerdata="buffData.defsData[mode]" :sums="mode === 0 ? buffData.defsData[5] : []"
-                :playerindex="playerindex">
-            </buff-table-component>
-            <buff-table-component v-if="type === 3" :key="'supportbuff-stats-table'"
+            <buff-table-component v-if="type === 2" :key="'supportbuff-stats-table'"
                 :condition="false" :generation="mode > 0" :id="'supportbuff-stats-table'" :buffs="sups"
                 :playerdata="buffData.supsData[mode]" :sums="mode === 0 ? buffData.supsData[5] : []"
+                :playerindex="playerindex">
+            </buff-table-component>
+            <buff-table-component v-if="type === 3" :key="'defensivebuff-stats-table'"
+                :condition="false" :generation="mode > 0" :id="'defensivebuff-stats-table'" :buffs="defs"
+                :playerdata="buffData.defsData[mode]" :sums="mode === 0 ? buffData.defsData[5] : []"
                 :playerindex="playerindex">
             </buff-table-component>
         </keep-alive>
