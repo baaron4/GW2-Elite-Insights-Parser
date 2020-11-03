@@ -63,7 +63,7 @@ namespace GW2EIBuilders.JsonModels
 
             }
 
-            private static Dictionary<string, double> ConvertKeys(Dictionary<AbstractSingleActor, double> toConvert)
+            private static Dictionary<string, double> ConvertKeys(IReadOnlyDictionary<AbstractSingleActor, double> toConvert)
             {
                 var res = new Dictionary<string, double>();
                 foreach (KeyValuePair<AbstractSingleActor, double> pair in toConvert)

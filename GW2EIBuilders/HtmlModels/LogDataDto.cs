@@ -9,7 +9,7 @@ namespace GW2EIBuilders.HtmlModels
 {
     internal class LogDataDto
     {
-        public List<TargetDto> Targets { get; internal set; } = new List<TargetDto>();
+        public List<TargetDto> Targets { get; set; } = new List<TargetDto>();
         public List<PlayerDto> Players { get; } = new List<PlayerDto>();
         public List<EnemyDto> Enemies { get; } = new List<EnemyDto>();
         public List<PhaseDto> Phases { get; } = new List<PhaseDto>();
@@ -26,44 +26,44 @@ namespace GW2EIBuilders.HtmlModels
         public Dictionary<string, SkillDto> SkillMap { get; } = new Dictionary<string, SkillDto>();
         public Dictionary<string, BuffDto> BuffMap { get; } = new Dictionary<string, BuffDto>();
         public Dictionary<string, DamageModDto> DamageModMap { get; } = new Dictionary<string, DamageModDto>();
-        public List<MechanicDto> MechanicMap { get; internal set; } = new List<MechanicDto>();
-        public CombatReplayDto CrData { get; internal set; } = null;
-        public string EncounterDuration { get; internal set; }
-        public bool Success { get; internal set; }
-        public bool Wvw { get; internal set; }
-        public bool HasCommander { get; internal set; }
-        public bool Targetless { get; internal set; }
-        public string FightName { get; internal set; }
-        public string FightIcon { get; internal set; }
-        public bool LightTheme { get; internal set; }
-        public bool NoMechanics { get; internal set; }
-        public bool SingleGroup { get; internal set; }
-        public List<string> LogErrors { get; internal set; }
+        public List<MechanicDto> MechanicMap { get; set; } = new List<MechanicDto>();
+        public CombatReplayDto CrData { get; set; } = null;
+        public string EncounterDuration { get; set; }
+        public bool Success { get; set; }
+        public bool Wvw { get; set; }
+        public bool HasCommander { get; set; }
+        public bool Targetless { get; set; }
+        public string FightName { get; set; }
+        public string FightIcon { get; set; }
+        public bool LightTheme { get; set; }
+        public bool NoMechanics { get; set; }
+        public bool SingleGroup { get; set; }
+        public List<string> LogErrors { get; set; }
 
-        public string EncounterStart { get; internal set; }
-        public string EncounterEnd { get; internal set; }
-        public string ArcVersion { get; internal set; }
-        public ulong Gw2Build { get; internal set; }
-        public long FightID { get; internal set; }
-        public string Parser { get; internal set; }
-        public string RecordedBy { get; internal set; }
-        public List<string> UploadLinks { get; internal set; }
+        public string EncounterStart { get; set; }
+        public string EncounterEnd { get; set; }
+        public string ArcVersion { get; set; }
+        public ulong Gw2Build { get; set; }
+        public long FightID { get; set; }
+        public string Parser { get; set; }
+        public string RecordedBy { get; set; }
+        public List<string> UploadLinks { get; set; }
 
 
         private static Dictionary<string, List<Buff>> BuildPersonalBoonData(ParsedEvtcLog log, Dictionary<string, List<long>> dict, Dictionary<long, Buff> usedBuffs)
         {
             var boonsBySpec = new Dictionary<string, List<Buff>>();
             // Collect all personal buffs by spec
-            foreach (KeyValuePair<string, List<Player>> pair in log.PlayerListBySpec)
+            foreach (KeyValuePair<string, IReadOnlyList<Player>> pair in log.PlayerListBySpec)
             {
-                List<Player> players = pair.Value;
+                IReadOnlyList<Player> players = pair.Value;
                 var specBoonIds = new HashSet<long>(log.Buffs.GetRemainingBuffsList(pair.Key).Select(x => x.ID));
                 var boonToUse = new HashSet<Buff>();
                 foreach (Player player in players)
                 {
                     for (int i = 0; i < log.FightData.GetPhases(log).Count; i++)
                     {
-                        Dictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(log, i, BuffEnum.Self);
+                        IReadOnlyDictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(log, i, BuffEnum.Self);
                         foreach (Buff boon in log.Statistics.PresentPersonalBuffs[player])
                         {
                             if (boons.TryGetValue(boon.ID, out FinalPlayerBuffs uptime))
@@ -94,7 +94,7 @@ namespace GW2EIBuilders.HtmlModels
         {
             var damageModBySpecs = new Dictionary<string, List<DamageModifier>>();
             // Collect all personal damage mods by spec
-            foreach (KeyValuePair<string, List<Player>> pair in log.PlayerListBySpec)
+            foreach (KeyValuePair<string, IReadOnlyList<Player>> pair in log.PlayerListBySpec)
             {
                 var specDamageModsName = new HashSet<string>(log.DamageModifiers.GetModifiersPerProf(pair.Key).Select(x => x.Name));
                 var damageModsToUse = new HashSet<DamageModifier>();
@@ -122,7 +122,7 @@ namespace GW2EIBuilders.HtmlModels
 
         private static bool HasBoons(ParsedEvtcLog log, int phaseIndex, NPC target)
         {
-            Dictionary<long, FinalBuffs> conditions = target.GetBuffs(log, phaseIndex);
+            IReadOnlyDictionary<long, FinalBuffs> conditions = target.GetBuffs(log, phaseIndex);
             foreach (Buff boon in log.Statistics.PresentBoons)
             {
                 if (conditions.TryGetValue(boon.ID, out FinalBuffs uptime))
@@ -136,7 +136,7 @@ namespace GW2EIBuilders.HtmlModels
             return false;
         }
 
-        internal static LogDataDto BuildLogData(ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills,Dictionary<long, Buff> usedBuffs, HashSet<DamageModifier> usedDamageMods, bool cr, bool light, string[] uploadLinks)
+        public static LogDataDto BuildLogData(ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills,Dictionary<long, Buff> usedBuffs, HashSet<DamageModifier> usedDamageMods, bool cr, bool light, string[] uploadLinks)
         {
             GeneralStatistics statistics = log.Statistics;
             log.UpdateProgressWithCancellationCheck("HTML: building Log Data");
@@ -253,7 +253,7 @@ namespace GW2EIBuilders.HtmlModels
             }
             //
             log.UpdateProgressWithCancellationCheck("HTML: building Phases");
-            List<PhaseData> phases = log.FightData.GetPhases(log);
+            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phaseData = phases[i];

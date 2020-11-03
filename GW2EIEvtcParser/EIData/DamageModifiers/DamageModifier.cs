@@ -139,7 +139,7 @@ namespace GW2EIEvtcParser.EIData
             return 0;
         }
 
-        public List<AbstractDamageEvent> GetHitDamageLogs(Player p, ParsedEvtcLog log, NPC t, PhaseData phase)
+        public IReadOnlyList<AbstractDamageEvent> GetHitDamageLogs(Player p, ParsedEvtcLog log, NPC t, PhaseData phase)
         {
             switch (_srcType)
             {

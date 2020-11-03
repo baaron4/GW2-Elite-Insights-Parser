@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using GW2EIEvtcParser.EIData;
 
@@ -25,18 +26,18 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC varinia = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.VariniaStormsounder);
+            NPC varinia = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.VariniaStormsounder);
             if (varinia == null)
             {
                 throw new InvalidOperationException("Varinia Stormsounder not found");
             }
-            phases[0].Targets.Add(varinia);
+            phases[0].AddTarget(varinia);
             //
             // TODO - add phases if applicable
             //
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].Targets.Add(varinia);
+                phases[i].AddTarget(varinia);
             }
             return phases;
         }

@@ -60,12 +60,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.ValeGuardian);
+            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.ValeGuardian);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Vale Guardian not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -93,7 +93,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 else
                 {
                     phase.Name = "Phase " + (i + 1) / 2;
-                    phase.Targets.Add(mainTarget);
+                    phase.AddTarget(mainTarget);
                 }
             }
             return phases;
@@ -109,7 +109,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
             switch (target.ID)
             {

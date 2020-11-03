@@ -39,12 +39,12 @@ namespace GW2EIEvtcParser.EIData
         }
         // Getters
         // Damage logs
-        public abstract List<AbstractDamageEvent> GetDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
+        public abstract IReadOnlyList<AbstractDamageEvent> GetDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
 
         /// <summary>
         /// cached method for damage modifiers
         /// </summary>
-        internal List<AbstractDamageEvent> GetHitDamageLogs(AbstractActor target, ParsedEvtcLog log, PhaseData phase)
+        internal IReadOnlyList<AbstractDamageEvent> GetHitDamageLogs(AbstractActor target, ParsedEvtcLog log, PhaseData phase)
         {
             if (!_damageLogsPerPhasePerTarget.TryGetValue(phase, out Dictionary<AbstractActor, List<AbstractDamageEvent>> targetDict))
             {
@@ -59,11 +59,11 @@ namespace GW2EIEvtcParser.EIData
             return dls;
         }
 
-        public abstract List<AbstractDamageEvent> GetDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
+        public abstract IReadOnlyList<AbstractDamageEvent> GetDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
 
         // Cast logs
-        public abstract List<AbstractCastEvent> GetCastLogs(ParsedEvtcLog log, long start, long end);
-        public abstract List<AbstractCastEvent> GetIntersectingCastLogs(ParsedEvtcLog log, long start, long end);
+        public abstract IReadOnlyList<AbstractCastEvent> GetCastLogs(ParsedEvtcLog log, long start, long end);
+        public abstract IReadOnlyList<AbstractCastEvent> GetIntersectingCastLogs(ParsedEvtcLog log, long start, long end);
         // privates
 
         protected static bool KeepIntersectingCastLog(AbstractCastEvent evt, long start, long end)

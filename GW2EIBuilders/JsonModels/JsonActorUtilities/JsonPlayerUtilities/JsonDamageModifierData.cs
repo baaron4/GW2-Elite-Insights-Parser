@@ -79,7 +79,7 @@ namespace GW2EIBuilders.JsonModels
         }
 
 
-        internal static List<JsonDamageModifierData> GetDamageModifiers(Dictionary<string, List<DamageModifierStat>> damageModDict, ParsedEvtcLog log, Dictionary<string, JsonLog.DamageModDesc> damageModDesc)
+        internal static List<JsonDamageModifierData> GetDamageModifiers(IReadOnlyDictionary<string, IReadOnlyList<DamageModifierStat>> damageModDict, ParsedEvtcLog log, Dictionary<string, JsonLog.DamageModDesc> damageModDesc)
         {
             var dict = new Dictionary<int, List<JsonDamageModifierItem>>();
             foreach (string key in damageModDict.Keys)

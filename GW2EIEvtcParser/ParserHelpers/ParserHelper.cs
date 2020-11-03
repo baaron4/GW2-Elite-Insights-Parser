@@ -72,36 +72,50 @@ namespace GW2EIEvtcParser
                 .Aggregate((max, next) => next.eval.CompareTo(max.eval) < 0 ? next : max).value;
         }
 
-        /*
-        public static string UppercaseFirst(string s)
+        internal static int IndexOf<T>(this IReadOnlyList<T> self, T elementToFind)
         {
-            if (string.IsNullOrEmpty(s))
+            int i = 0;
+            foreach (T element in self)
             {
-                return string.Empty;
+                if (Equals(element, elementToFind))
+                {
+                    return i;
+                }
+                i++;
             }
-            char[] a = s.ToCharArray();
-            a[0] = char.ToUpper(a[0]);
-            return new string(a);
+            return -1;
         }
 
-
-        public static string FindPattern(string source, string regex)
+    /*
+    public static string UppercaseFirst(string s)
+    {
+        if (string.IsNullOrEmpty(s))
         {
-            if (string.IsNullOrEmpty(source))
-            {
-                return null;
-            }
+            return string.Empty;
+        }
+        char[] a = s.ToCharArray();
+        a[0] = char.ToUpper(a[0]);
+        return new string(a);
+    }
 
-            Match match = Regex.Match(source, regex);
-            if (match.Success)
-            {
-                return match.Groups[1].Value;
-            }
 
+    public static string FindPattern(string source, string regex)
+    {
+        if (string.IsNullOrEmpty(source))
+        {
             return null;
         }
-        */
-        public static List<Source> ProfToEnum(string prof)
+
+        Match match = Regex.Match(source, regex);
+        if (match.Success)
+        {
+            return match.Groups[1].Value;
+        }
+
+        return null;
+    }
+    */
+    public static List<Source> ProfToEnum(string prof)
         {
             switch (prof)
             {

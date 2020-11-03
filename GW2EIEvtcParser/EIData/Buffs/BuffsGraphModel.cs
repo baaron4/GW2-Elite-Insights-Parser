@@ -5,7 +5,8 @@ namespace GW2EIEvtcParser.EIData
     public class BuffsGraphModel
     {
         public Buff Buff { get; }
-        public List<Segment> BuffChart { get; private set; } = new List<Segment>();
+        private List<Segment> _buffChart { get; set; } = new List<Segment>();
+        public IReadOnlyList<Segment> BuffChart => _buffChart;
 
         // Constructor
         internal BuffsGraphModel(Buff buff)
@@ -15,15 +16,15 @@ namespace GW2EIEvtcParser.EIData
         internal BuffsGraphModel(Buff buff, List<Segment> buffChartWithSource)
         {
             Buff = buff;
-            BuffChart = buffChartWithSource;
+            _buffChart = buffChartWithSource;
             FuseSegments();
         }
 
         public int GetStackCount(long time)
         {
-            for (int i = BuffChart.Count - 1; i >= 0; i--)
+            for (int i = _buffChart.Count - 1; i >= 0; i--)
             {
-                Segment seg = BuffChart[i];
+                Segment seg = _buffChart[i];
                 if (seg.Start <= time && time <= seg.End)
                 {
                     return (int)seg.Value;
@@ -36,7 +37,7 @@ namespace GW2EIEvtcParser.EIData
         public bool IsPresent(long time, long window)
         {
             int count = 0;
-            foreach (Segment seg in BuffChart)
+            foreach (Segment seg in _buffChart)
             {
                 if (seg.Intersect(time - window, time + window))
                 {
@@ -51,7 +52,7 @@ namespace GW2EIEvtcParser.EIData
         /// </summary>
         internal void FuseSegments()
         {
-            BuffChart = Segment.FuseSegments(BuffChart);
+            _buffChart = Segment.FuseSegments(_buffChart);
         }
 
         /// <summary>
@@ -60,9 +61,9 @@ namespace GW2EIEvtcParser.EIData
         /// </summary>
         /// <param name="from"></param> 
         /// <param name="to"></param>
-        internal void MergePresenceInto(List<Segment> from)
+        internal void MergePresenceInto(IReadOnlyList<Segment> from)
         {
-            List<Segment> segmentsToFill = BuffChart;
+            List<Segment> segmentsToFill = _buffChart;
             bool firstPass = segmentsToFill.Count == 0;
             foreach (Segment seg in from)
             {

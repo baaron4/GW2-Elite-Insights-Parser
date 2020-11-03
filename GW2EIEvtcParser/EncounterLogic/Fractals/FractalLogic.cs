@@ -23,12 +23,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             // generic method for fractals
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
+            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -37,7 +37,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             for (int i = 1; i < phases.Count; i++)
             {
                 phases[i].Name = "Phase " + i;
-                phases[i].Targets.Add(mainTarget);
+                phases[i].AddTarget(mainTarget);
             }
             return phases;
         }
@@ -50,10 +50,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             // check reward
-            NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
+            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");

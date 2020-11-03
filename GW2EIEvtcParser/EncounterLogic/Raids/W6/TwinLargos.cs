@@ -97,7 +97,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 PhaseData phase = targetPhases[i];
                 phase.Name = baseName + " P" + (i + 1);
-                phase.Targets.Add(target);
+                phase.AddTarget(target);
             }
             return targetPhases;
         }
@@ -113,7 +113,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static void FallBackPhases(NPC target, List<PhaseData> phases, ParsedEvtcLog log, bool firstPhaseAt0)
         {
-            HashSet<AgentItem> pAgents = log.PlayerAgents;
+            IReadOnlyCollection<AgentItem> pAgents = log.PlayerAgents;
             // clean Nikare related bugs
             switch (phases.Count)
             {
@@ -186,16 +186,16 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC nikare = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Nikare);
+            NPC nikare = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Nikare);
             if (nikare == null)
             {
                 throw new InvalidOperationException("Nikare not found");
             }
-            phases[0].Targets.Add(nikare);
-            NPC kenut = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Kenut);
+            phases[0].AddTarget(nikare);
+            NPC kenut = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Kenut);
             if (kenut != null)
             {
-                phases[0].Targets.Add(kenut);
+                phases[0].AddTarget(kenut);
             }
             if (!requirePhases)
             {
@@ -215,7 +215,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Nikare:
@@ -336,7 +336,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Nikare);
+            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Nikare);
             if (target == null)
             {
                 throw new InvalidOperationException("Nikare not found");

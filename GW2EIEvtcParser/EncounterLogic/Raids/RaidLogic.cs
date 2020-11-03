@@ -23,13 +23,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        protected void SetSuccessByCombatExit(HashSet<int> targetIds, CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
+        protected void SetSuccessByCombatExit(HashSet<int> targetIds, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             var targets = Targets.Where(x => targetIds.Contains(x.ID)).ToList();
             SetSuccessByCombatExit(targets, combatData, fightData, playerAgents);
         }
 
-        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             var raidRewardsTypes = new HashSet<int>
                 {
@@ -38,7 +38,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     914,
                     22797
                 };
-            List<RewardEvent> rewards = combatData.GetRewardEvents();
+            IReadOnlyList<RewardEvent> rewards = combatData.GetRewardEvents();
             RewardEvent reward = rewards.FirstOrDefault(x => raidRewardsTypes.Contains(x.RewardType));
             if (reward != null)
             {

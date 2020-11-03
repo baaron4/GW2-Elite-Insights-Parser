@@ -7,26 +7,26 @@ namespace GW2EIBuilders.HtmlModels
 
     internal class PlayerDto : ActorDto
     {
-        public int Group { get; internal set; }
-        public string Acc { get; internal set; }
-        public string Profession { get; internal set; }
-        public uint Condi { get; internal set; }
-        public uint Conc { get; internal set; }
-        public uint Heal { get; internal set; }
+        public int Group { get; set; }
+        public string Acc { get; set; }
+        public string Profession { get; set; }
+        public uint Condi { get; set; }
+        public uint Conc { get; set; }
+        public uint Heal { get; set; }
 
-        public bool IsPoV { get; internal set; }
+        public bool IsPoV { get; set; }
 
-        public bool IsCommander { get; internal set; }
+        public bool IsCommander { get; set; }
         public List<string> L1Set { get; } = new List<string>();
         public List<string> L2Set { get; } = new List<string>();
         public List<string> A1Set { get; } = new List<string>();
         public List<string> A2Set { get; } = new List<string>();
-        public string ColTarget { get; internal set; }
-        public string ColCleave { get; internal set; }
-        public string ColTotal { get; internal set; }
-        public bool IsConjure { get; internal set; }
+        public string ColTarget { get; set; }
+        public string ColCleave { get; set; }
+        public string ColTotal { get; set; }
+        public bool IsConjure { get; set; }
 
-        internal PlayerDto(Player player, ParsedEvtcLog log, ActorDetailsDto details) : base(player, log, details)
+        public PlayerDto(Player player, ParsedEvtcLog log, ActorDetailsDto details) : base(player, log, details)
         {
             Group = player.Group;
             Acc = player.Account;

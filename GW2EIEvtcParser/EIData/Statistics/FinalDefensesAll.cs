@@ -17,10 +17,7 @@ namespace GW2EIEvtcParser.EIData
 
         public FinalDefensesAll(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor) : base(log, phase, actor, null)
         {
-            var dead = new List<(long start, long end)>();
-            var down = new List<(long start, long end)>();
-            var dc = new List<(long start, long end)>();
-            (dead, down, dc) = actor.GetStatus(log);
+            (IReadOnlyList<(long start, long end)> dead, IReadOnlyList<(long start, long end)> down, IReadOnlyList<(long start, long end)> dc) = actor.GetStatus(log);
             long start = phase.Start;
             long end = phase.End;
 

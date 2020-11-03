@@ -53,7 +53,7 @@ namespace GW2EIEvtcParser.ParsedData
             return ParserHelper._unknownAgent;
         }
 
-        public List<AgentItem> GetNPCsByID(int id)
+        public IReadOnlyList<AgentItem> GetNPCsByID(int id)
         {
             if (id != 0)
             {
@@ -65,7 +65,7 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<AgentItem>();
         }
 
-        public List<AgentItem> GetGadgetsByID(int id)
+        public IReadOnlyList<AgentItem> GetGadgetsByID(int id)
         {
             if (id != 0)
             {
@@ -111,7 +111,7 @@ namespace GW2EIEvtcParser.ParsedData
             _allAgentsByName = _allAgentsList.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList());
         }
 
-        public List<AgentItem> GetAgentByType(AgentItem.AgentType type)
+        public IReadOnlyList<AgentItem> GetAgentByType(AgentItem.AgentType type)
         {
             if (_allAgentsByType.TryGetValue(type, out List<AgentItem> list))
             {

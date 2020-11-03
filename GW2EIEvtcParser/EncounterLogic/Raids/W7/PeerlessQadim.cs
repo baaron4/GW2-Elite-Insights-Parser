@@ -71,12 +71,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
+            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Peerless Qadim not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -99,7 +99,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     phaseEnds.Add(magmaDrop.Time);
                 }
             }
-            List<AbstractCastEvent> pushes = log.CombatData.GetCastData(56405);
+            IReadOnlyList<AbstractCastEvent> pushes = log.CombatData.GetCastData(56405);
             if (pushes.Count > 0)
             {
                 AbstractCastEvent push = pushes[0];
@@ -126,7 +126,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             for (int i = 0; i < phaseStarts.Count; i++)
             {
                 var phase = new PhaseData(phaseStarts[i], phaseEnds[i], "Phase " + (i + 1));
-                phase.Targets.Add(mainTarget);
+                phase.AddTarget(mainTarget);
                 phases.Add(phase);
             }
             return phases;
@@ -143,7 +143,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
@@ -171,7 +171,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         if (c is BuffApplyEvent)
                         {
-                            NPC qadim = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
+                            NPC qadim = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
                             surgeStart = (int)c.Time;
                             source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By) ?? qadim;
                         }
@@ -252,7 +252,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (c is BuffApplyEvent)
                 {
-                    NPC qadim = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
+                    NPC qadim = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
                     surgeStart = (int)c.Time;
                     source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By) ?? qadim;
                 }
@@ -290,7 +290,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
+            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
             if (target == null)
             {
                 throw new InvalidOperationException("Peerless Qadim not found");

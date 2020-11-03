@@ -62,8 +62,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal override void ComputeDamageModifier(Dictionary<string, List<DamageModifierStat>> data, Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>> dataTarget, Player p, ParsedEvtcLog log)
         {
-            List<PhaseData> phases = log.FightData.GetPhases(log);
-            Dictionary<long, BuffsGraphModel> bgmsP = p.GetBuffGraphs(log);
+            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+            IReadOnlyDictionary<long, BuffsGraphModel> bgmsP = p.GetBuffGraphs(log);
             if (_trackerPlayer != null)
             {
                 if (!_trackerPlayer.Has(bgmsP) && _gainComputerPlayer != ByAbsence)
@@ -73,7 +73,7 @@ namespace GW2EIEvtcParser.EIData
             }
             foreach (NPC target in log.FightData.Logic.Targets)
             {
-                Dictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
+                IReadOnlyDictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
                 if (!Tracker.Has(bgms) && GainComputer != ByAbsence)
                 {
                     continue;
@@ -89,7 +89,7 @@ namespace GW2EIEvtcParser.EIData
                     for (int i = 0; i < phases.Count; i++)
                     {
                         int totalDamage = GetTotalDamage(p, log, target, i);
-                        List<AbstractDamageEvent> typedHits = GetHitDamageLogs(p, log, target, phases[i]);
+                        IReadOnlyList<AbstractDamageEvent> typedHits = GetHitDamageLogs(p, log, target, phases[i]);
                         List<double> damages;
                         if (_trackerPlayer != null)
                         {

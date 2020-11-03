@@ -151,7 +151,7 @@ namespace GW2EIBuilders.JsonModels
 
         protected JsonActor(AbstractSingleActor actor, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
-            List<PhaseData> phases = log.FightData.GetPhases(log);
+            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             //
             Name = actor.Character;
             Toughness = actor.Toughness;
@@ -166,7 +166,7 @@ namespace GW2EIBuilders.JsonModels
             StatsAll = actor.GetGameplayStats(log).Select(x => new JsonStatistics.JsonGameplayStatsAll(x)).ToArray();
             Defenses = actor.GetDefenses(log).Select(x => new JsonStatistics.JsonDefensesAll(x)).ToArray();
             //
-            Dictionary<long, Minions> minionsList = actor.GetMinions(log);
+            IReadOnlyDictionary<long, Minions> minionsList = actor.GetMinions(log);
             if (minionsList.Values.Any())
             {
                 Minions = minionsList.Values.Select(x => new JsonMinions(x, log, skillDesc, buffDesc)).ToList();
@@ -183,7 +183,7 @@ namespace GW2EIBuilders.JsonModels
                 Damage1S = new List<int>[phases.Count];
                 for (int i = 0; i < phases.Count; i++)
                 {
-                    Damage1S[i] = actor.Get1SDamageList(log, i, phases[i], null);
+                    Damage1S[i] = new List<int>(actor.Get1SDamageList(log, i, phases[i], null));
                 }
             }
             //
@@ -192,7 +192,7 @@ namespace GW2EIBuilders.JsonModels
             //
             if (settings.RawFormatTimelineArrays)
             {
-                Dictionary<long, BuffsGraphModel> buffGraphs = actor.GetBuffGraphs(log);
+                IReadOnlyDictionary<long, BuffsGraphModel> buffGraphs = actor.GetBuffGraphs(log);
                 BoonsStates = JsonBuffsUptime.GetBuffStates(buffGraphs[Buff.NumberOfBoonsID]);
                 ConditionsStates = JsonBuffsUptime.GetBuffStates(buffGraphs[Buff.NumberOfConditionsID]);
                 if (buffGraphs.TryGetValue(Buff.NumberOfActiveCombatMinions, out BuffsGraphModel states))
@@ -201,14 +201,14 @@ namespace GW2EIBuilders.JsonModels
                 }
             }
             // Health
-            List<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(actor.AgentItem);
+            IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(actor.AgentItem);
             if (settings.RawFormatTimelineArrays)
             {
                 HealthPercents = hpUpdates.Select(x => new double[2] { x.Time, x.HPPercent }).ToList();
             }
         }
 
-        protected static List<JsonDamageDist>[] BuildDamageDistData(AbstractSingleActor actor, NPC target, List<PhaseData> phases, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        protected static List<JsonDamageDist>[] BuildDamageDistData(AbstractSingleActor actor, NPC target, IReadOnlyList<PhaseData> phases, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
             var res = new List<JsonDamageDist>[phases.Count];
             for (int i = 0; i < phases.Count; i++)
@@ -219,7 +219,7 @@ namespace GW2EIBuilders.JsonModels
             return res;
         }
 
-        protected static List<JsonDamageDist>[] BuildDamageTakenDistData(AbstractSingleActor actor, NPC target, List<PhaseData> phases, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        protected static List<JsonDamageDist>[] BuildDamageTakenDistData(AbstractSingleActor actor, NPC target, IReadOnlyList<PhaseData> phases, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
             var res = new List<JsonDamageDist>[phases.Count];
             for (int i = 0; i < phases.Count; i++)

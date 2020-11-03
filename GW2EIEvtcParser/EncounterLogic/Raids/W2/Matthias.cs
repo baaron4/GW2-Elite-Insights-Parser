@@ -56,12 +56,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Matthias);
+            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Matthias);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Matthias not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -71,12 +71,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (heatWave != null)
             {
                 phases.Add(new PhaseData(0, heatWave.Time - 1));
-                AbstractDamageEvent downPour = log.CombatData.GetDamageData(mainTarget.AgentItem).Find(x => x.SkillId == 34554);
+                AbstractDamageEvent downPour = log.CombatData.GetDamageData(mainTarget.AgentItem).FirstOrDefault(x => x.SkillId == 34554);
                 if (downPour != null)
                 {
                     phases.Add(new PhaseData(heatWave.Time, downPour.Time - 1));
-                    List<AbstractCastEvent> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
-                    AbstractCastEvent abo = castLogs.Find(x => x.SkillId == 34427);
+                    IReadOnlyList<AbstractCastEvent> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
+                    AbstractCastEvent abo = castLogs.FirstOrDefault(x => x.SkillId == 34427);
                     if (abo != null)
                     {
                         phases.Add(new PhaseData(downPour.Time, abo.Time - 1));
@@ -105,7 +105,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 phases[i].Name = namesMat[i - 1];
                 phases[i].DrawStart = i > 1;
-                phases[i].Targets.Add(mainTarget);
+                phases[i].AddTarget(mainTarget);
             }
             return phases;
         }
@@ -124,7 +124,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)

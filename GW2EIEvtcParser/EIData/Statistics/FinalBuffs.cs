@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.EIData
 
         }
 
-        internal FinalBuffs(Buff buff, BuffDistribution buffDistribution, Dictionary<long, long> buffPresence, long phaseDuration)
+        internal FinalBuffs(Buff buff, BuffDistribution buffDistribution, IReadOnlyDictionary<long, long> buffPresence, long phaseDuration)
         {
             if (buff.Type == BuffType.Duration)
             {

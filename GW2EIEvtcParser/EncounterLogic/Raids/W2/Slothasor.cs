@@ -55,12 +55,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Slothasor);
+            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Slothasor);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Slothasor not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -71,19 +71,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AbstractCastEvent c in sleepy)
             {
                 var phase = new PhaseData(start, Math.Min(c.Time, fightDuration), "Phase " + i++);
-                phase.Targets.Add(mainTarget);
+                phase.AddTarget(mainTarget);
                 start = c.EndTime;
                 phases.Add(phase);
             }
             var lastPhase = new PhaseData(start, fightDuration, "Phase " + i++);
-            lastPhase.Targets.Add(mainTarget);
+            lastPhase.AddTarget(mainTarget);
             phases.Add(lastPhase);
             return phases;
         }
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Slothasor:

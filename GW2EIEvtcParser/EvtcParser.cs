@@ -591,7 +591,7 @@ namespace GW2EIEvtcParser
         private void CompletePlayers()
         {
             //Fix Disconnected players
-            List<AgentItem> playerAgentList = _agentData.GetAgentByType(AgentItem.AgentType.Player);
+            IReadOnlyList<AgentItem> playerAgentList = _agentData.GetAgentByType(AgentItem.AgentType.Player);
             bool refresh = false;
             foreach (AgentItem playerAgent in playerAgentList)
             {

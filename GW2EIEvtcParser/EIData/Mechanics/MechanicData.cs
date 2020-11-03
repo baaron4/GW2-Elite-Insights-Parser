@@ -106,13 +106,13 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public Dictionary<Mechanic, List<MechanicEvent>>.ValueCollection GetAllMechanics(ParsedEvtcLog log)
+        public IReadOnlyDictionary<Mechanic, IReadOnlyList<MechanicEvent>> GetAllMechanics(ParsedEvtcLog log)
         {
             ProcessMechanics(log);
-            return _mechanicLogs.Values;
+            return (IReadOnlyDictionary<Mechanic, IReadOnlyList<MechanicEvent>>)_mechanicLogs;
         }
 
-        public List<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech)
+        public IReadOnlyList<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech)
         {
             ProcessMechanics(log);
             if (_mechanicLogs.TryGetValue(mech, out List<MechanicEvent> list))
@@ -122,7 +122,7 @@ namespace GW2EIEvtcParser.EIData
             return new List<MechanicEvent>();
         }
 
-        public List<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, long id)
+        public IReadOnlyList<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, long id)
         {
             ProcessMechanics(log);
             Mechanic mech = _mechanicLogs.Keys.FirstOrDefault(x => x.SkillId == id);
@@ -133,23 +133,23 @@ namespace GW2EIEvtcParser.EIData
             return new List<MechanicEvent>();
         }
 
-        public HashSet<Mechanic> GetPresentEnemyMechs(ParsedEvtcLog log, int phaseIndex)
+        public IReadOnlyCollection<Mechanic> GetPresentEnemyMechs(ParsedEvtcLog log, int phaseIndex)
         {
             ProcessMechanics(log);
             return _presentOnEnemyMechanics[phaseIndex];
         }
-        public HashSet<Mechanic> GetPresentPlayerMechs(ParsedEvtcLog log, int phaseIndex)
+        public IReadOnlyCollection<Mechanic> GetPresentPlayerMechs(ParsedEvtcLog log, int phaseIndex)
         {
             ProcessMechanics(log);
             return _presentOnPlayerMechanics[phaseIndex];
         }
-        public HashSet<Mechanic> GetPresentMechanics(ParsedEvtcLog log, int phaseIndex)
+        public IReadOnlyCollection<Mechanic> GetPresentMechanics(ParsedEvtcLog log, int phaseIndex)
         {
             ProcessMechanics(log);
             return _presentMechanics[phaseIndex];
         }
 
-        public List<AbstractActor> GetEnemyList(ParsedEvtcLog log, int phaseIndex)
+        public IReadOnlyList<AbstractActor> GetEnemyList(ParsedEvtcLog log, int phaseIndex)
         {
             ProcessMechanics(log);
             return _enemyList[phaseIndex];

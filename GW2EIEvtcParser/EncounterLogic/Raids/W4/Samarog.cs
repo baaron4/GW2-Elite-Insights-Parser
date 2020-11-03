@@ -55,12 +55,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Samarog);
+            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Samarog);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Samarog not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -87,7 +87,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 else
                 {
                     phase.Name = "Phase " + (i + 1) / 2;
-                    phase.Targets.Add(mainTarget);
+                    phase.AddTarget(mainTarget);
                 }
             }
             return phases;
@@ -213,7 +213,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Samarog);
+            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Samarog);
             if (target == null)
             {
                 throw new InvalidOperationException("Samarog not found");

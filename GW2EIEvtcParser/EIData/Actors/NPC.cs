@@ -19,13 +19,13 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_health == -1)
             {
-                List<MaxHealthUpdateEvent> maxHpUpdates = combatData.GetMaxHealthUpdateEvents(AgentItem);
+                IReadOnlyList<MaxHealthUpdateEvent> maxHpUpdates = combatData.GetMaxHealthUpdateEvents(AgentItem);
                 _health = maxHpUpdates.Count > 0 ? maxHpUpdates.Max(x => x.MaxHealth) : 1;
             }
             return _health;
         }
 
-        public List<Segment> GetBreakbarPercentUpdates(ParsedEvtcLog log)
+        public IReadOnlyList<Segment> GetBreakbarPercentUpdates(ParsedEvtcLog log)
         {
             if (_breakbarPercentUpdates == null)
             {
@@ -58,7 +58,7 @@ namespace GW2EIEvtcParser.EIData
             CastLogs.Add(new CastLog(time, skillID, expDur, startActivation, actDur, endActivation, Agent, InstID));
         }*/
 
-        public Dictionary<long, FinalBuffs> GetBuffs(ParsedEvtcLog log, int phaseIndex)
+        public IReadOnlyDictionary<long, FinalBuffs> GetBuffs(ParsedEvtcLog log, int phaseIndex)
         {
             if (_buffs == null)
             {
@@ -67,7 +67,7 @@ namespace GW2EIEvtcParser.EIData
             return _buffs[phaseIndex];
         }
 
-        public List<Dictionary<long, FinalBuffs>> GetBuffs(ParsedEvtcLog log)
+        public IReadOnlyList<IReadOnlyDictionary<long, FinalBuffs>> GetBuffs(ParsedEvtcLog log)
         {
             if (_buffs == null)
             {
@@ -79,20 +79,20 @@ namespace GW2EIEvtcParser.EIData
         private void SetBuffs(ParsedEvtcLog log)
         {
             _buffs = new List<Dictionary<long, FinalBuffs>>();
-            List<PhaseData> phases = log.FightData.GetPhases(log);
+            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
             {
                 BuffDistribution buffDistribution = GetBuffDistribution(log, phaseIndex);
                 var rates = new Dictionary<long, FinalBuffs>();
                 _buffs.Add(rates);
-                Dictionary<long, long> buffPresence = GetBuffPresence(log, phaseIndex);
+                IReadOnlyDictionary<long, long> buffPresence = GetBuffPresence(log, phaseIndex);
 
                 PhaseData phase = phases[phaseIndex];
                 long phaseDuration = phase.DurationInMS;
 
                 foreach (Buff buff in TrackedBuffs)
                 {
-                    if (buffDistribution.ContainsKey(buff.ID))
+                    if (buffDistribution.ContainsBuffID(buff.ID))
                     {
                         rates[buff.ID] = new FinalBuffs(buff, buffDistribution, buffPresence, phaseDuration);
                     }

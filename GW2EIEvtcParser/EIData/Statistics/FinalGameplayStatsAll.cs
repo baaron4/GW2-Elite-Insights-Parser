@@ -50,14 +50,13 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        internal FinalGameplayStatsAll(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor) : base(log, phase, actor, null)
+        internal FinalGameplayStatsAll(ParsedEvtcLog log, PhaseData phase, int phaseIndex, AbstractSingleActor actor) : base(log, phase, actor, null)
         {
             // If fake actor, stop
             if (actor.IsFakeActor)
             {
                 return;
             }
-            int phaseIndex = log.FightData.GetPhases(log).IndexOf(phase);
             foreach (AbstractCastEvent cl in actor.GetCastLogs(log, phase.Start, phase.End))
             {
                 switch (cl.Status)
