@@ -2,8 +2,13 @@
 {
     public abstract class AbstractMetaDataEvent
     {
-        protected AbstractMetaDataEvent(CombatItem evtcItem)
+        internal AbstractMetaDataEvent(CombatItem evtcItem)
         {
+        }
+
+        internal AbstractMetaDataEvent()
+        {
+
         }
 
     }

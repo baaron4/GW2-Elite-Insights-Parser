@@ -4,7 +4,7 @@
     {
         public long Time { get; protected set; }
 
-        protected AbstractTimeCombatEvent(long time)
+        internal AbstractTimeCombatEvent(long time)
         {
             Time = time;
         }

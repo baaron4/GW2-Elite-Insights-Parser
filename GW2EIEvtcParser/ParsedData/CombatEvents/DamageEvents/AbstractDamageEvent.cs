@@ -30,7 +30,7 @@ namespace GW2EIEvtcParser.ParsedData
         public bool IsBlocked { get; protected set; }
         public bool IsEvaded { get; protected set; }
 
-        protected AbstractDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem.Time)
+        internal AbstractDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem.Time)
         {
             From = agentData.GetAgent(evtcItem.SrcAgent);
             To = agentData.GetAgent(evtcItem.DstAgent);

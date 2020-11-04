@@ -21,13 +21,13 @@
 
         public double Acceleration { get; protected set; } = 0;
 
-        protected AbstractCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData) : base(startItem.Time)
+        internal AbstractCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData) : base(startItem.Time)
         {
             Skill = skillData.Get(startItem.SkillID);
             Caster = agentData.GetAgent(startItem.SrcAgent);
         }
 
-        protected AbstractCastEvent(long time, SkillItem skill, AgentItem caster) : base(time)
+        internal AbstractCastEvent(long time, SkillItem skill, AgentItem caster) : base(time)
         {
             Skill = skill;
             Caster = caster;

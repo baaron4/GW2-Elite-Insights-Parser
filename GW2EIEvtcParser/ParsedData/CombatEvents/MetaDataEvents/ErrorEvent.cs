@@ -37,5 +37,10 @@ namespace GW2EIEvtcParser.ParsedData
             Message = System.Text.Encoding.UTF8.GetString(bytes);
         }
 
+        internal ErrorEvent(string message)
+        {
+            Message = message;
+        }
+
     }
 }

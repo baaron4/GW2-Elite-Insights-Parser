@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.ParsedData
         private readonly ulong _dstAgent;
         private readonly int _value;
 
-        protected AbstractMovementEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem.Time)
+        internal AbstractMovementEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem.Time)
         {
             AgentItem = agentData.GetAgent(evtcItem.SrcAgent);
             _dstAgent = evtcItem.DstAgent;
