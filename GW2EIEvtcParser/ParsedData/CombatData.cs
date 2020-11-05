@@ -276,11 +276,8 @@ namespace GW2EIEvtcParser.ParsedData
                 {
                     _statusEvents.DownEvents[pair.Key] = agentDowns;
                 }
-                if (fightData.Logic.MissingConfusionDamage)
-                {
-                    _metaDataEvents.ErrorEvents.Add(new ErrorEvent("Missing confusion damage"));
-                }
             }
+            _metaDataEvents.ErrorEvents.AddRange(fightData.Logic.GetCustomWarningMessages());
         }
 
         private void EIExtraEventProcess(List<Player> players, SkillData skillData, AgentData agentData, FightData fightData, ParserController operation)

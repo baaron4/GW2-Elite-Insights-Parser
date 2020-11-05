@@ -29,7 +29,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             new EnemyCastEndMechanic(48662, "Howling Death", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC Fail","Howling Death (Breakbar failed) ", "CC Fail",0, (ce,log) => ce.ActualDuration > 6800),
 
             });
-            MissingConfusionDamage = true;
             Extension = "sh";
             GenericFallBackMethod = FallBackMethod.None;
             Icon = "https://wiki.guildwars2.com/images/d/d4/Mini_Desmina.png";
@@ -52,6 +51,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.TormentedDead,
                 ArcDPSEnums.TrashID.SurgingSoul,
                 ArcDPSEnums.TrashID.FleshWurm
+            };
+        }
+
+        internal override List<ErrorEvent> GetCustomWarningMessages()
+        {
+            return new List<ErrorEvent>()
+            {
+                new ErrorEvent("Missing confusion damage")
             };
         }
 

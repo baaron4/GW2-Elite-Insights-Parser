@@ -21,8 +21,6 @@ namespace GW2EIEvtcParser.EncounterLogic
         public List<NPC> TrashMobs { get; } = new List<NPC>();
         public List<NPC> Targets { get; } = new List<NPC>();
 
-        internal bool MissingConfusionDamage { get; set; } = false;
-
         public bool Targetless { get; protected set; } = false;
         protected int GenericTriggerID { get; }
 
@@ -273,6 +271,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             phases[0].Targets.Add(mainTarget);
             return phases;
+        }
+
+        internal virtual List<ErrorEvent> GetCustomWarningMessages()
+        {
+            return new List<ErrorEvent>();
         }
 
         protected void AddTargetsToPhase(PhaseData phase, List<int> ids, ParsedEvtcLog log)

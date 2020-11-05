@@ -22,7 +22,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             new EnemyBuffRemoveMechanic(38155, "Mursaat Overseer's Shield", new MechanicPlotlySetting("square-open","rgb(255,200,0)"), "Dispel","Dispelled Jade Soldier Shield", "Dispel",0),
             //new Mechanic(38184, "Enemy Tile", ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting("square-open","rgb(255,200,0)"), "Floor","Enemy Tile damage", "Tile dmg",0) //Fixed damage (3500), not trackable
             });
-            MissingConfusionDamage = true;
             Extension = "mo";
             Icon = "https://wiki.guildwars2.com/images/c/c8/Mini_Mursaat_Overseer.png";
         }
@@ -62,6 +61,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
+        internal override List<ErrorEvent> GetCustomWarningMessages()
+        {
+            return new List<ErrorEvent>()
+            {
+                new ErrorEvent("Missing confusion damage")
+            };
+        }
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
