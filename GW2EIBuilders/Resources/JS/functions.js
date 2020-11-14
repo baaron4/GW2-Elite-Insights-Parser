@@ -66,6 +66,10 @@ function getTargetCacheID(activetargets) {
     return id;
 }
 
+function getDPSGraphCacheID(dpsmode, graphmode, activetargets, phaseIndex, extra) {
+    return dpsmode + '-' + graphmode + '-' + getTargetCacheID(activetargets) + '-' + phaseIndex + (extra !== null ? '-' + extra : '');
+}
+
 const quickColor = {
     r: 220,
     g: 20,

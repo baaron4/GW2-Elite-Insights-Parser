@@ -82,22 +82,19 @@
             var i, cacheID;
             for (var j = 0; j < this.targets.length; j++) {
                 var activeTargets = [j];
-                cacheID = 0 + '-';
-                cacheID += getTargetCacheID(activeTargets);
+                cacheID = getDPSGraphCacheID(0, GraphType.DPS, activeTargets, 0, null);
                 // compute dps for all players
                 for (i = 0; i < logData.players.length; i++) {
-                    computePlayerDPS(logData.players[i], this.graph[i], 0, null, activeTargets, cacheID + '-' + 0, this.phase.times, GraphType.DPS);
+                    computePlayerDPS(logData.players[i], this.graph[i].damage, 0, null, activeTargets, cacheID, this.phase.times, GraphType.DPS);
                 }
             }
-            cacheID = 0 + '-';
-            cacheID += getTargetCacheID(this.targets);
+            cacheID = getDPSGraphCacheID(0, GraphType.DPS, this.targets, 0, null);
             // compute dps for all players
             for (i = 0; i < logData.players.length; i++) {
-                computePlayerDPS(logData.players[i], this.graph[i], 0, null, this.targets, cacheID + '-' + 0, this.phase.times, GraphType.DPS);
+                computePlayerDPS(logData.players[i], this.graph[i].damage, 0, null, this.targets, cacheID, this.phase.times, GraphType.DPS);
             }
         },
         mounted() {
-            var pageScrollPos;
             initTable("#combat-replay-dps-table", 2, "desc", null);
         },
         updated() {
@@ -138,9 +135,8 @@
                     // targets
                     for (j = 0; j < this.targets.length; j++) {
                         var activeTargets = [j];
-                        cacheID = 0 + '-';
-                        cacheID += getTargetCacheID(activeTargets);
-                        data = computePlayerDPS(player, graphData, 0, null, activeTargets, cacheID + '-' + 0, this.phase.times, GraphType.DPS).total.target;
+                        cacheID = getDPSGraphCacheID(0, GraphType.DPS, activeTargets, 0, null);
+                        data = computePlayerDPS(player, graphData.damage, 0, null, activeTargets, cacheID, this.phase.times, GraphType.DPS).total.target;
                         cur = data[curTime];
                         next = data[curTime + 1];
                         if (typeof next !== "undefined") {
@@ -150,9 +146,8 @@
                         }
                         dps[2 * j + 1] = dps[2 * j] / (Math.max(tS, 1));
                     }
-                    cacheID = 0 + '-';
-                    cacheID += getTargetCacheID(this.targets);
-                    data = computePlayerDPS(player, graphData, 0, null, this.targets, cacheID + '-' + 0, this.phase.times, GraphType.DPS).total.total;
+                    cacheID = getDPSGraphCacheID(0, GraphType.DPS, this.targets, 0, null);
+                    data = computePlayerDPS(player, graphData.damage, 0, null, this.targets, cacheID, this.phase.times, GraphType.DPS).total.total;
                     cur = data[curTime];
                     next = data[curTime + 1];
                     if (typeof next !== "undefined") {

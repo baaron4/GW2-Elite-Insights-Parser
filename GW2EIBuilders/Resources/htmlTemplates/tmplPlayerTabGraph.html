@@ -180,17 +180,16 @@
         },
         methods: {
             computeDPSData: function () {
-                var cacheID = this.graphdata.dpsmode + '-' + this.graphdata.graphmode + '-';
-                cacheID += getTargetCacheID(this.activetargets);
+                var cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.graphmode, this.activetargets, this.phaseindex, null);
                 if (this.dpsCache.has(cacheID)) {
                     return this.dpsCache.get(cacheID);
                 }
                 var data;
                 var graphData = this.graph.players[this.playerindex];
                 if (this.graphdata.dpsmode >= 0) {
-                    data = computePlayerDPS(this.player, graphData, this.graphdata.dpsmode, null, this.activetargets, cacheID + '-' + this.phaseindex, this.phase.times, this.graphdata.graphmode);
+                    data = computePlayerDPS(this.player, graphData.damage, this.graphdata.dpsmode, null, this.activetargets, cacheID, this.phase.times, this.graphdata.graphmode);
                 } else {
-                    data = computePlayerDPS(this.player, graphData, 0, this.computePhaseBreaks, this.activetargets, cacheID + '-' + this.phaseindex, this.phase.times, this.graphdata.graphmode);
+                    data = computePlayerDPS(this.player, graphData.damage, 0, this.computePhaseBreaks, this.activetargets, cacheID, this.phase.times, this.graphdata.graphmode);
                 }
                 var res = {
                     maxDPS: data.maxDPS.total,
@@ -200,8 +199,7 @@
                 return res;
             },
             computeDPSRelatedData: function () {
-                var cacheID = this.graphdata.dpsmode + '-' + this.graphdata.graphmode + '-';
-                cacheID += getTargetCacheID(this.activetargets);
+                var cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.graphmode, this.activetargets, this.phaseindex, null);
                 if (this.dataCache.has(cacheID)) {
                     return this.dataCache.get(cacheID);
                 }
