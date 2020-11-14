@@ -6,11 +6,9 @@ namespace GW2EIEvtcParser.ParsedData
     {
         private int _isCondi = -1;
 
-        internal NonDirectDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
+        internal NonDirectDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, ArcDPSEnums.ConditionResult result) : base(evtcItem, agentData, skillData)
         {
             Damage = evtcItem.BuffDmg;
-            ArcDPSEnums.ConditionResult result = ArcDPSEnums.GetConditionResult(evtcItem.Result);
-
             IsAbsorbed = result == ArcDPSEnums.ConditionResult.InvulByBuff ||
                 result == ArcDPSEnums.ConditionResult.InvulByPlayerSkill1 ||
                 result == ArcDPSEnums.ConditionResult.InvulByPlayerSkill2 ||

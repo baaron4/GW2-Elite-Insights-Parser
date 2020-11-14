@@ -295,21 +295,37 @@ namespace GW2EIEvtcParser.ParsedData
             return res;
         }
 
-        public static List<AbstractDamageEvent> CreateDamageEvents(List<CombatItem> damageEvents, AgentData agentData, SkillData skillData)
+        public static (List<AbstractDamageEvent>, List<BreakbarDamageEvent>) CreateDamageEvents(List<CombatItem> damageEvents, AgentData agentData, SkillData skillData)
         {
-            var res = new List<AbstractDamageEvent>();
+            var hpDamage = new List<AbstractDamageEvent>();
+            var brkBarDamage = new List<BreakbarDamageEvent>();
             foreach (CombatItem c in damageEvents)
             {
                 if ((c.IsBuff != 0 && c.Value == 0))
                 {
-                    res.Add(new NonDirectDamageEvent(c, agentData, skillData));
+                    ArcDPSEnums.ConditionResult result = ArcDPSEnums.GetConditionResult(c.Result);
+                    if (result != ArcDPSEnums.ConditionResult.Unknown)
+                    {
+                        hpDamage.Add(new NonDirectDamageEvent(c, agentData, skillData, result));
+                    }
                 }
                 else if (c.IsBuff == 0)
                 {
-                    res.Add(new DirectDamageEvent(c, agentData, skillData));
+                    ArcDPSEnums.PhysicalResult result = ArcDPSEnums.GetPhysicalResult(c.Result);
+                    switch (result)
+                    {
+                        case ArcDPSEnums.PhysicalResult.BreakbarDamage:
+                            brkBarDamage.Add(new BreakbarDamageEvent(c, agentData, skillData));
+                            break;
+                        case ArcDPSEnums.PhysicalResult.Unknown:
+                            break;
+                        default:
+                            hpDamage.Add(new DirectDamageEvent(c, agentData, skillData, result));
+                            break;
+                    }
                 }
             }
-            return res;
+            return (hpDamage, brkBarDamage);
         }
 
     }

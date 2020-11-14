@@ -2,22 +2,11 @@
 
 namespace GW2EIEvtcParser.ParsedData
 {
-    public abstract class AbstractDamageEvent : AbstractTimeCombatEvent
+    public abstract class AbstractDamageEvent : AbstractBaseDamageEvent
     {
-        public AgentItem From { get; }
-        public AgentItem To { get; }
-
-        public SkillItem Skill { get; }
-        public long SkillId => Skill.ID;
-        public ArcDPSEnums.IFF IFF { get; }
-
-        //private int _damage;
+        //
         public int Damage { get; protected set; }
         public int ShieldDamage { get; protected set; }
-        public bool IsOverNinety { get; }
-        public bool AgainstUnderFifty { get; }
-        public bool IsMoving { get; }
-        public bool IsFlanking { get; }
         public bool HasHit { get; protected set; }
         public bool DoubleProcHit { get; protected set; }
         public bool HasCrit { get; protected set; }
@@ -30,16 +19,8 @@ namespace GW2EIEvtcParser.ParsedData
         public bool IsBlocked { get; protected set; }
         public bool IsEvaded { get; protected set; }
 
-        internal AbstractDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem.Time)
+        internal AbstractDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
-            From = agentData.GetAgent(evtcItem.SrcAgent);
-            To = agentData.GetAgent(evtcItem.DstAgent);
-            Skill = skillData.Get(evtcItem.SkillID);
-            IsOverNinety = evtcItem.IsNinety > 0;
-            AgainstUnderFifty = evtcItem.IsFifty > 0;
-            IsMoving = evtcItem.IsMoving > 0;
-            IsFlanking = evtcItem.IsFlanking > 0;
-            IFF = evtcItem.IFF;
         }
 
         internal void NegateShieldDamage()

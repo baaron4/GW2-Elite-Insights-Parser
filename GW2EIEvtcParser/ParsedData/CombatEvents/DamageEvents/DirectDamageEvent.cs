@@ -2,10 +2,9 @@
 {
     public class DirectDamageEvent : AbstractDamageEvent
     {
-        internal DirectDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
+        internal DirectDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, ArcDPSEnums.PhysicalResult result) : base(evtcItem, agentData, skillData)
         {
             Damage = evtcItem.Value;
-            ArcDPSEnums.PhysicalResult result = ArcDPSEnums.GetPhysicalResult(evtcItem.Result);
             IsAbsorbed = result == ArcDPSEnums.PhysicalResult.Absorb;
             IsBlind = result == ArcDPSEnums.PhysicalResult.Blind;
             IsBlocked = result == ArcDPSEnums.PhysicalResult.Block;
