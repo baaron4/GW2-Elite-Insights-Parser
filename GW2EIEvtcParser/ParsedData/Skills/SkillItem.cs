@@ -205,7 +205,14 @@ namespace GW2EIEvtcParser.ParsedData
         internal GW2APISkill ApiSkill { get; }
         private SkillInfoEvent _skillInfo { get; set; }
 
+        public bool UnknownSkill { get; } = false;
+
         // Constructor
+
+        internal SkillItem(long ID) : this(ID, "UNKNOWN")
+        {
+            UnknownSkill = true;
+        }
 
         public SkillItem(long ID, string name)
         {
