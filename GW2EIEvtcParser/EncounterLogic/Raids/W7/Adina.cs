@@ -108,7 +108,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            var quantumQuakes = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == 56035 || x.SkillId == 56381).ToList();
             List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, 762, mainTarget, true);
             long start = 0, end = 0;
             for (int i = 0; i < invuls.Count; i++)
@@ -129,21 +128,32 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             var mainPhases = new List<PhaseData>();
-            start = 0;
+            var quantumQuakes = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == 56035 || x.SkillId == 56381).ToList();
+            AbstractCastEvent boulderBarrage = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd).FirstOrDefault(x => x.SkillId == 56648 && x.Time < 6000);
+            start = boulderBarrage == null ? 0 : boulderBarrage.EndTime;
             end = 0;
-            for (int i = 1; i < phases.Count; i++)
+            if (phases.Count > 1)
             {
-                AbstractCastEvent qQ = quantumQuakes[i - 1];
-                end = qQ.Time;
-                mainPhases.Add(new PhaseData(start, end, "Phase " + i ));
-                PhaseData split = phases[i];
-                AddTargetsToPhase(split, new List<int> { (int)ArcDPSEnums.TrashID.HandOfErosion, (int)ArcDPSEnums.TrashID.HandOfEruption }, log);
-                start = split.End;
-                if (i == phases.Count - 1 && start != log.FightData.FightEnd)
+                for (int i = 1; i < phases.Count; i++)
                 {
-                    mainPhases.Add(new PhaseData(start, log.FightData.FightEnd, "Phase " + (i + 1)));
+                    AbstractCastEvent qQ = quantumQuakes[i - 1];
+                    end = qQ.Time;
+                    mainPhases.Add(new PhaseData(start, end, "Phase " + i));
+                    PhaseData split = phases[i];
+                    AddTargetsToPhase(split, new List<int> { (int)ArcDPSEnums.TrashID.HandOfErosion, (int)ArcDPSEnums.TrashID.HandOfEruption }, log);
+                    start = split.End;
+                    if (i == phases.Count - 1 && start != log.FightData.FightEnd)
+                    {
+                        mainPhases.Add(new PhaseData(start, log.FightData.FightEnd, "Phase " + (i + 1)));
+                    }
                 }
             }
+            else if (start > 0)
+            {
+                // no split
+                mainPhases.Add(new PhaseData(start, log.FightData.FightEnd, "Phase 1"));
+            }
+            
             foreach (PhaseData phase in mainPhases)
             {
                 phase.Targets.Add(mainTarget);
