@@ -32,7 +32,7 @@ namespace GW2EIEvtcParser
         private Dictionary<AgentItem, AbstractSingleActor> _agentToActorDictionary;
         public Version ParserVersion => _operation.ParserVersion;
 
-        public ParsedEvtcLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData,
+        internal ParsedEvtcLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData,
                 List<CombatItem> combatItems, List<Player> playerList, long evtcLogDuration, EvtcParserSettings parserSettings, ParserController operation)
         {
             FightData = fightData;

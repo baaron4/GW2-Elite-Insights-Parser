@@ -109,7 +109,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected abstract HashSet<int> GetUniqueTargetIDs();
 
-        protected virtual void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems)
+        internal virtual void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems)
         {
             foreach (int id in GetUniqueTargetIDs())
             {

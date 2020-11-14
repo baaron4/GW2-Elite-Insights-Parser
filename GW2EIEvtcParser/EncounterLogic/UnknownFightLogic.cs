@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new HashSet<int>();
         }
 
-        protected override void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems)
+        internal override void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems)
         {
             int id = GetFightTargetsIDs().First();
             AgentItem agentItem = agentData.GetNPCsByID(id).FirstOrDefault();

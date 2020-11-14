@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser
 {
-    public class CombatItem
+    internal class CombatItem
     {
         public long Time { get; private set; }
         public ulong SrcAgent { get; private set; }
