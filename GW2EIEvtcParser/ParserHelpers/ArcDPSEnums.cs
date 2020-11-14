@@ -52,6 +52,7 @@ namespace GW2EIEvtcParser
             Blind = 7,
             KillingBlow = 8,
             Downed = 9,
+            BreakbarDamage = 10,
 
             Unknown
         };
