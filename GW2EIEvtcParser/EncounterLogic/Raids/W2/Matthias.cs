@@ -26,8 +26,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerBuffApplyMechanic(34416, "Corruption", new MechanicPlotlySetting("circle","rgb(255,140,0)"), "Corruption","Corruption Application", "Corruption",0),
             new HitOnPlayerMechanic(34473, "Corruption", new MechanicPlotlySetting("circle-open","rgb(255,140,0)"), "Corr. dmg","Hit by Corruption AoE", "Corruption dmg",0),
             new PlayerBuffApplyMechanic(34442, "Sacrifice", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "Sacrifice","Sacrifice (Breakbar)", "Sacrifice",0),
-            new PlayerBuffRemoveMechanic(34442, "Sacrifice", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CC.End","Sacrifice (Breakbar) ended", "Sacrifice End",0, (br,log) => br.RemovedDuration > 25),
-            new PlayerBuffRemoveMechanic(34442, "Sacrificed", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC.Fail","Sacrifice time ran out", "Sacrificed",0, (br,log) => br.RemovedDuration <= 25),
+            new PlayerBuffRemoveMechanic(34442, "Sacrifice", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CC.End","Sacrifice (Breakbar) ended", "Sacrifice End",0, (br,log) => br.RemovedDuration > 25 && !log.CombatData.GetDeadEvents(br.To).Any(x => Math.Abs(br.Time - x.Time) < ParserHelper.ServerDelayConstant)),
+            new PlayerBuffRemoveMechanic(34442, "Sacrificed", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC.Fail","Sacrifice time ran out", "Sacrificed",0, (br,log) => br.RemovedDuration <= 25 || log.CombatData.GetDeadEvents(br.To).Any(x => Math.Abs(br.Time - x.Time) < ParserHelper.ServerDelayConstant)),
             new PlayerBuffRemoveMechanic(34367, "Unbalanced", new MechanicPlotlySetting("square","rgb(200,140,255)"), "KD","Unbalanced (triggered Storm phase Debuff)", "Knockdown",0, (br,log) => br.RemovedDuration > 0 && !br.To.HasBuff(log, 1122, br.Time)),
             //new Mechanic(34367, "Unbalanced", Mechanic.MechType.PlayerOnPlayer, ParseEnum.BossIDS.Matthias, new MechanicPlotlySetting("square","rgb(0,140,0)"), "KD","Unbalanced (triggered Storm phase Debuff) only on successful interrupt", "Knockdown (interrupt)",0,(condition => condition.getCombatItem().Result == ParseEnum.Result.Interrupt)),
             //new Mechanic(34367, "Unbalanced", ParseEnum.BossIDS.Matthias, new MechanicPlotlySetting("square","rgb(0,140,0)"), "KD","Unbalanced (triggered Storm phase Debuff) only on successful interrupt", "Knockdown (interrupt)",0,(condition => condition.getDLog().GetResult() == ParseEnum.Result.Interrupt)),
@@ -112,65 +112,69 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
-            long sacrificeID = 34442;
-            var sacrificeList = combatData.Where(x => x.SkillID == sacrificeID && ((x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.IsBuff != 0) || (x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0 && x.IsStateChange == ArcDPSEnums.StateChange.None && x.IsActivation == ArcDPSEnums.Activation.None && x.IsBuffRemove == ArcDPSEnums.BuffRemove.None))).ToList();
-            var sacrificeStartList = sacrificeList.Where(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.None).ToList();
-            var sacrificeEndList = sacrificeList.Where(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All).ToList();
-            var copies = new List<CombatItem>();
-            for (int i = 0; i < sacrificeStartList.Count; i++)
+            // has breakbar state into
+            if (combatData.Any(x => x.IsStateChange == ArcDPSEnums.StateChange.BreakbarState))
             {
-                //
-                long sacrificeStartTime = sacrificeStartList[i].Time;
-                long sacrificeEndTime = i < sacrificeEndList.Count ? sacrificeEndList[i].Time : fightData.FightEnd;
-                //
-                Player sacrifice = playerList.FirstOrDefault(x => x.AgentItem == agentData.GetAgent(sacrificeStartList[i].DstAgent));
-                if (sacrifice == null)
+                long sacrificeID = 34442;
+                var sacrificeList = combatData.Where(x => x.SkillID == sacrificeID && ((x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.IsBuff != 0) || (x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0 && x.IsStateChange == ArcDPSEnums.StateChange.None && x.IsActivation == ArcDPSEnums.Activation.None && x.IsBuffRemove == ArcDPSEnums.BuffRemove.None))).ToList();
+                var sacrificeStartList = sacrificeList.Where(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.None).ToList();
+                var sacrificeEndList = sacrificeList.Where(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All).ToList();
+                var copies = new List<CombatItem>();
+                for (int i = 0; i < sacrificeStartList.Count; i++)
                 {
-                    continue;
-                }
-                AgentItem sacrificeCrystal = agentData.AddCustomAgent(sacrificeStartTime, sacrificeEndTime, AgentItem.AgentType.NPC, "Sacrificed " + (i + 1) + " " + sacrifice.Character  , sacrifice.Prof, (int)ArcDPSEnums.TrashID.MatthiasSacrificeCrystal);
-                foreach (CombatItem cbt in combatData)
-                {
-                    if (!sacrificeCrystal.InAwareTimes(cbt.Time))
+                    //
+                    long sacrificeStartTime = sacrificeStartList[i].Time;
+                    long sacrificeEndTime = i < sacrificeEndList.Count ? sacrificeEndList[i].Time : fightData.FightEnd;
+                    //
+                    Player sacrifice = playerList.FirstOrDefault(x => x.AgentItem == agentData.GetAgent(sacrificeStartList[i].DstAgent));
+                    if (sacrifice == null)
                     {
                         continue;
                     }
-                    bool skip = !((cbt.IsStateChange.DstIsAgent() && cbt.DstAgent == sacrifice.Agent) || (cbt.IsStateChange.SrcIsAgent() && cbt.SrcAgent == sacrifice.Agent));
-                    if (skip)
+                    AgentItem sacrificeCrystal = agentData.AddCustomAgent(sacrificeStartTime, sacrificeEndTime + 100, AgentItem.AgentType.NPC, "Sacrificed " + (i + 1) + " " + sacrifice.Character, sacrifice.Prof, (int)ArcDPSEnums.TrashID.MatthiasSacrificeCrystal);
+                    foreach (CombatItem cbt in combatData)
                     {
-                        continue;
-                    }
-                    bool isDamageEvent = cbt.IsStateChange == ArcDPSEnums.StateChange.None && cbt.IsActivation == ArcDPSEnums.Activation.None && cbt.IsBuffRemove == ArcDPSEnums.BuffRemove.None && ((cbt.IsBuff != 0 && cbt.Value == 0) || (cbt.IsBuff == 0));
-                    // redirect damage events
-                    if (isDamageEvent)
-                    {
-                        // only redirect incoming damage
-                        if (cbt.DstAgent == sacrifice.Agent)
+                        if (!sacrificeCrystal.InAwareTimes(cbt.Time))
                         {
-                            cbt.OverrideDstAgent(sacrificeCrystal.Agent);
+                            continue;
                         }
-                    }
-                    // copy the rest
-                    else
-                    {
-                        var copy = new CombatItem(cbt);
-                        if (cbt.IsStateChange.DstIsAgent() && cbt.DstAgent == sacrifice.Agent)
+                        bool skip = !((cbt.IsStateChange.DstIsAgent() && cbt.DstAgent == sacrifice.Agent) || (cbt.IsStateChange.SrcIsAgent() && cbt.SrcAgent == sacrifice.Agent));
+                        if (skip)
                         {
-                            cbt.OverrideDstAgent(sacrificeCrystal.Agent);
+                            continue;
                         }
-                        if (cbt.IsStateChange.SrcIsAgent() && cbt.SrcAgent == sacrifice.Agent)
+                        bool isDamageEvent = cbt.IsStateChange == ArcDPSEnums.StateChange.None && cbt.IsActivation == ArcDPSEnums.Activation.None && cbt.IsBuffRemove == ArcDPSEnums.BuffRemove.None && ((cbt.IsBuff != 0 && cbt.Value == 0) || (cbt.IsBuff == 0));
+                        // redirect damage events
+                        if (isDamageEvent)
                         {
-                            cbt.OverrideSrcAgent(sacrificeCrystal.Agent);
+                            // only redirect incoming damage
+                            if (cbt.DstAgent == sacrifice.Agent)
+                            {
+                                cbt.OverrideDstAgent(sacrificeCrystal.Agent);
+                            }
                         }
-                        copies.Add(copy);
+                        // copy the rest
+                        else
+                        {
+                            var copy = new CombatItem(cbt);
+                            if (cbt.IsStateChange.DstIsAgent() && cbt.DstAgent == sacrifice.Agent)
+                            {
+                                cbt.OverrideDstAgent(sacrificeCrystal.Agent);
+                            }
+                            if (cbt.IsStateChange.SrcIsAgent() && cbt.SrcAgent == sacrifice.Agent)
+                            {
+                                cbt.OverrideSrcAgent(sacrificeCrystal.Agent);
+                            }
+                            copies.Add(copy);
+                        }
                     }
                 }
-            }
-            if (copies.Any())
-            {
-                combatData.AddRange(copies);
-                combatData.Sort((x, y) => x.Time.CompareTo(y.Time));
-            }
+                if (copies.Any())
+                {
+                    combatData.AddRange(copies);
+                    combatData.Sort((x, y) => x.Time.CompareTo(y.Time));
+                }
+            }       
             ComputeFightTargets(agentData, combatData);
             Targets.ForEach(x =>
             {
