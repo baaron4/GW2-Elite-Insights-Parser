@@ -197,6 +197,11 @@ namespace GW2EIEvtcParser.ParsedData
             return cur;
         }
 
+        public bool InAwareTimes(long time)
+        {
+            return FirstAware <= time && LastAware >= time;
+        }
+
         /// <summary>
         /// Checks if a buff is present on the actor that corresponds to. Given buff id must be in the boon simulator
         /// </summary>

@@ -271,6 +271,7 @@ namespace GW2EIEvtcParser
         private const int PyreGuardianRetal = -6;
         private const int QadimLamp = -7;
         private const int AiKeeperOfThePeak2 = -8;
+        private const int MatthiasSacrifice = -9;
 
 
         //
@@ -320,6 +321,7 @@ namespace GW2EIEvtcParser
             IcePatch = 16139,
             Storm = 16108,
             Tornado = 16068,
+            MatthiasSacrifceCrystal = MatthiasSacrifice,
             // KC
             Olson = 16244,
             Engul = 16274,

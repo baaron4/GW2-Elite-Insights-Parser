@@ -110,6 +110,86 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
+        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        {
+            long sacrificeID = 34442;
+            var sacrificeList = combatData.Where(x => x.SkillID == sacrificeID && ((x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.IsBuff != 0) || (x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0 && x.IsStateChange == ArcDPSEnums.StateChange.None && x.IsActivation == ArcDPSEnums.Activation.None && x.IsBuffRemove == ArcDPSEnums.BuffRemove.None))).ToList();
+            var sacrificeStartList = sacrificeList.Where(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.None).ToList();
+            var sacrificeEndList = sacrificeList.Where(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All).ToList();
+            var copies = new List<CombatItem>();
+            for (int i = 0; i < sacrificeStartList.Count; i++)
+            {
+                //
+                long sacrificeStartTime = sacrificeStartList[i].Time;
+                long sacrificeEndTime = i < sacrificeEndList.Count ? sacrificeEndList[i].Time : fightData.FightEnd;
+                //
+                Player sacrifice = playerList.FirstOrDefault(x => x.AgentItem == agentData.GetAgent(sacrificeStartList[i].DstAgent));
+                if (sacrifice == null)
+                {
+                    continue;
+                }
+                AgentItem sacrificeCrystal = agentData.AddCustomAgent(sacrificeStartTime, sacrificeEndTime, AgentItem.AgentType.NPC, "Sacrificed " + (i + 1) + " " + sacrifice.Character  , sacrifice.Prof, (int)ArcDPSEnums.TrashID.MatthiasSacrifceCrystal);
+                foreach (CombatItem cbt in combatData)
+                {
+                    if (!sacrificeCrystal.InAwareTimes(cbt.Time))
+                    {
+                        continue;
+                    }
+                    bool skip = !((cbt.IsStateChange.DstIsAgent() && cbt.DstAgent == sacrifice.Agent) || (cbt.IsStateChange.SrcIsAgent() && cbt.SrcAgent == sacrifice.Agent));
+                    if (skip)
+                    {
+                        continue;
+                    }
+                    bool isDamageEvent = cbt.IsStateChange == ArcDPSEnums.StateChange.None && cbt.IsActivation == ArcDPSEnums.Activation.None && cbt.IsBuffRemove == ArcDPSEnums.BuffRemove.None && ((cbt.IsBuff != 0 && cbt.Value == 0) || (cbt.IsBuff == 0));
+                    // redirect damage events
+                    if (isDamageEvent)
+                    {
+                        // only redirect incoming damage
+                        if (cbt.DstAgent == sacrifice.Agent)
+                        {
+                            cbt.OverrideDstAgent(sacrificeCrystal.Agent);
+                        }
+                    }
+                    // copy the rest
+                    else
+                    {
+                        var copy = new CombatItem(cbt);
+                        if (cbt.IsStateChange.DstIsAgent() && cbt.DstAgent == sacrifice.Agent)
+                        {
+                            cbt.OverrideDstAgent(sacrificeCrystal.Agent);
+                        }
+                        if (cbt.IsStateChange.SrcIsAgent() && cbt.SrcAgent == sacrifice.Agent)
+                        {
+                            cbt.OverrideSrcAgent(sacrificeCrystal.Agent);
+                        }
+                        copies.Add(copy);
+                    }
+                }
+            }
+            if (copies.Any())
+            {
+                combatData.AddRange(copies);
+                combatData.Sort((x, y) => x.Time.CompareTo(y.Time));
+            }
+            ComputeFightTargets(agentData, combatData);
+            Targets.ForEach(x =>
+            {
+                if (x.ID == (int)ArcDPSEnums.TrashID.MatthiasSacrifceCrystal)
+                {
+                    x.SetManualHealth(100000);
+                }
+            });
+        }
+
+        protected override List<int> GetFightTargetsIDs()
+        {
+            return new List<int>
+            {
+                (int)ArcDPSEnums.TargetID.Matthias,
+                (int)ArcDPSEnums.TrashID.MatthiasSacrifceCrystal
+            };
+        }
+
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
             return new List<ArcDPSEnums.TrashID>
