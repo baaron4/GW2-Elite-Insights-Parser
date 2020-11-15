@@ -128,7 +128,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     continue;
                 }
-                AgentItem sacrificeCrystal = agentData.AddCustomAgent(sacrificeStartTime, sacrificeEndTime, AgentItem.AgentType.NPC, "Sacrificed " + (i + 1) + " " + sacrifice.Character  , sacrifice.Prof, (int)ArcDPSEnums.TrashID.MatthiasSacrifceCrystal);
+                AgentItem sacrificeCrystal = agentData.AddCustomAgent(sacrificeStartTime, sacrificeEndTime, AgentItem.AgentType.NPC, "Sacrificed " + (i + 1) + " " + sacrifice.Character  , sacrifice.Prof, (int)ArcDPSEnums.TrashID.MatthiasSacrificeCrystal);
                 foreach (CombatItem cbt in combatData)
                 {
                     if (!sacrificeCrystal.InAwareTimes(cbt.Time))
@@ -174,7 +174,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             ComputeFightTargets(agentData, combatData);
             Targets.ForEach(x =>
             {
-                if (x.ID == (int)ArcDPSEnums.TrashID.MatthiasSacrifceCrystal)
+                if (x.ID == (int)ArcDPSEnums.TrashID.MatthiasSacrificeCrystal)
                 {
                     x.SetManualHealth(100000);
                 }
@@ -186,7 +186,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<int>
             {
                 (int)ArcDPSEnums.TargetID.Matthias,
-                (int)ArcDPSEnums.TrashID.MatthiasSacrifceCrystal
+                (int)ArcDPSEnums.TrashID.MatthiasSacrificeCrystal
             };
         }
 

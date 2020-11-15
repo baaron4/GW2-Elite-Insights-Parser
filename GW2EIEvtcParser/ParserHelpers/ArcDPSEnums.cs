@@ -321,7 +321,7 @@ namespace GW2EIEvtcParser
             IcePatch = 16139,
             Storm = 16108,
             Tornado = 16068,
-            MatthiasSacrifceCrystal = MatthiasSacrifice,
+            MatthiasSacrificeCrystal = MatthiasSacrifice,
             // KC
             Olson = 16244,
             Engul = 16274,
