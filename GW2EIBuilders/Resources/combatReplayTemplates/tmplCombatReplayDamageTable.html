@@ -43,10 +43,10 @@
                             </span>
                         </td>
                         <td class="cr-dps-table-dps">
-                            {{talbleRound(row.dps[row.dps.length - 1])}}
+                            {{tableRound(row.dps[row.dps.length - 1])}}
                         </td>
                         <td class="cr-dps-table-dps" v-if="!targetless" v-for="(col, id) in tableData.cols">
-                            {{talbleRound(row.dps[id])}}
+                            {{tableRound(row.dps[id])}}
                         </td>
                     </tr>
                 </tbody>
@@ -57,10 +57,10 @@
                             {{sum.name}}
                         </td>
                         <td class="cr-dps-table-dps">
-                            {{talbleRound(sum.dps[sum.dps.length - 1])}}
+                            {{tableRound(sum.dps[sum.dps.length - 1])}}
                         </td>
                         <td class="cr-dps-table-dps" v-if="!targetless" v-for="(col, id) in tableData.cols">
-                            {{talbleRound(sum.dps[id])}}
+                            {{tableRound(sum.dps[id])}}
                         </td>
                     </tr>
                 </tfoot>
@@ -81,8 +81,8 @@
                 damageMode: 1
             };
         },
-        method: {
-            talbleRound: function(value) {
+        methods: {
+            tableRound: function(value) {
                 return this.graphMode == GraphType.BreakbarDamage ? this.round1(value) : this.round(value)
             }
         },

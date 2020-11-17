@@ -296,6 +296,7 @@ function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, c
     }
     var end = times.length;
     var left = 0, right = 0, targetid, k;
+    var roundingToUse = graphMode === GraphType.BreakbarDamage ? roundingComponent.methods.round1 : roundingComponent.methods.round;
     for (var j = 0; j < end; j++) {
         var time = times[j];
         if (lim > 0) {
@@ -325,9 +326,9 @@ function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, c
             targetid = activetargets[k];
             targetDamage += damageData.targets[targetid][right] - damageData.targets[targetid][left];
         }
-        totalDPS[j] = Math.round(totalDamage / div);
-        targetDPS[j] = Math.round(targetDamage / div);
-        cleaveDPS[j] = Math.round((totalDamage - targetDamage) / div);
+        totalDPS[j] = roundingToUse(totalDamage / div);
+        targetDPS[j] = roundingToUse(targetDamage / div);
+        cleaveDPS[j] = roundingToUse((totalDamage - targetDamage) / div);
         maxDPS.total = Math.max(maxDPS.total, totalDPS[j]);
         maxDPS.target = Math.max(maxDPS.target, targetDPS[j]);
         maxDPS.cleave = Math.max(maxDPS.cleave, cleaveDPS[j]);
