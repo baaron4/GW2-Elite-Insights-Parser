@@ -1,7 +1,7 @@
 <template>
     <div>     
         <dps-graph-mode-selector-component :data="graphdata"
-            :phaseduration="this.phase.end - this.phase.start" :phasehassubphases="!!this.phase.subPhases">
+            :phaseduration="this.phase.end - this.phase.start" :phasehassubphases="!!this.phase.subPhases" :ignorebreakbar="false">
         </dps-graph-mode-selector-component>
         <h3 class="text-center mt-1 mb-1">{{graphname}}</h3>
         <graph-component :id="graphid" :layout="layout" :data="computeData"></graph-component>
@@ -122,6 +122,9 @@
                     case GraphType.Damage:
                         name = "Damage " + name;
                         break;
+                    case GraphType.BreakbarDamage:
+                        name = "Breakbar Damage " + name;
+                        break;
                     default:
                         break;
                 }
@@ -161,6 +164,9 @@
                     case GraphType.Damage:
                         this.layout.yaxis3.title = "Damage";
                         break;
+                    case GraphType.BreakbarDamage:
+                        this.layout.yaxis3.title = "Breakbar Damage";
+                        break;
                     default:
                         break;
                 }
@@ -186,10 +192,11 @@
                 }
                 var data;
                 var graphData = this.graph.players[this.playerindex];
+                var damageArrayToUse = this.graphdata.graphmode === GraphType.BreakbarDamage ? "breakbarDamage" : "damage";
                 if (this.graphdata.dpsmode >= 0) {
-                    data = computePlayerDPS(this.player, graphData.damage, this.graphdata.dpsmode, null, this.activetargets, cacheID, this.phase.times, this.graphdata.graphmode);
+                    data = computePlayerDPS(this.player, graphData[damageArrayToUse], this.graphdata.dpsmode, null, this.activetargets, cacheID, this.phase.times, this.graphdata.graphmode);
                 } else {
-                    data = computePlayerDPS(this.player, graphData.damage, 0, this.computePhaseBreaks, this.activetargets, cacheID, this.phase.times, this.graphdata.graphmode);
+                    data = computePlayerDPS(this.player, graphData[damageArrayToUse], 0, this.computePhaseBreaks, this.activetargets, cacheID, this.phase.times, this.graphdata.graphmode);
                 }
                 var res = {
                     maxDPS: data.maxDPS.total,

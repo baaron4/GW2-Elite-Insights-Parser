@@ -2,12 +2,24 @@
     <div>
         <div v-if="actor !== null">
             <div v-if="isminion">
-                {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of its master's total
-                {{istarget ? 'Target' :''}} dps
+                <p>
+                    {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of its master's total
+                    {{istarget ? 'Target' :''}} damage ({{dmgdist.contributedDamage}})
+                </p>
+                <p v-if="hasBreakbarDamage && dmgdist.contributedBreakbarDamage > 0">
+                    {{actor.name}} did {{round3(100*dmgdist.contributedBreakbarDamage/dmgdist.totalBreakbarDamage)}}% of its master's total
+                    {{istarget ? 'Target' :''}} breakbar damage ({{dmgdist.contributedBreakbarDamage}})
+                </p>
             </div>
             <div v-else>
-                {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of its total {{istarget ?
-                'Target' :''}} dps
+                <p>
+                    {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of their total {{istarget ?
+                        'Target' :''}} damage ({{dmgdist.contributedDamage}})
+                </p>              
+                <p v-if="hasBreakbarDamage && dmgdist.contributedBreakbarDamage > 0">
+                    {{actor.name}} did {{round3(100*dmgdist.contributedBreakbarDamage/dmgdist.totalBreakbarDamage)}}% of their total
+                    {{istarget ? 'Target' :''}} breakbar damage ({{dmgdist.contributedBreakbarDamage}})
+                </p>
             </div>
         </div>
         <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
@@ -210,7 +222,10 @@
         computed: {
             phase: function () {
                 return logData.phases[this.phaseindex];
-            }
+            },
+            hasBreakbarDamage: function() {
+                return logData.hasBreakbarDamage;
+            },
         }
     });
 </script>

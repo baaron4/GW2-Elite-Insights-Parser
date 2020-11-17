@@ -11,10 +11,12 @@
                     <th v-show="!targetless" v-else>Target Damage</th>
                     <th v-show="!targetless">Power</th>
                     <th v-show="!targetless">Condi</th>
+                    <th v-show="!targetless" v-if="hasBreakbarDamage">Target Brk</th>
                     <th v-if="!showDamage">All DPS</th>
                     <th v-else>All Damage</th>
                     <th>Power</th>
                     <th>Condi</th>
+                    <th v-if="hasBreakbarDamage">All Brk</th>
                 </tr>
             </thead>
             <tbody>
@@ -44,12 +46,10 @@
                     <td v-show="!targetless" v-else
                         :data-original-title="round(row.dps[2]/phase.durationS) + ' dps'+ '<br>' + computeTotalContribution(2, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 2, row.dps,tableData.sums)">
                         {{row.dps[2]}}</td>
-                    <td v-if="!showDamage"
-                        :data-original-title="row.dps[3] + ' dmg'+ '<br>' + computeTotalContribution(3, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 3, row.dps,tableData.sums)">
-                        {{round(row.dps[3]/phase.durationS)}}</td>
-                    <td v-else
-                        :data-original-title="round(row.dps[3]/phase.durationS) + ' dps'+ '<br>' + computeTotalContribution(3, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 3, row.dps,tableData.sums)">
-                        {{row.dps[3]}}</td>
+                    <td v-show="!targetless" v-if="hasBreakbarDamage"
+                        :data-original-title="computeTotalContribution(3, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 3, row.dps,tableData.sums)">
+                        {{row.dps[3]}}
+                    </td>
                     <td v-if="!showDamage"
                         :data-original-title="row.dps[4] + ' dmg'+ '<br>' + computeTotalContribution(4, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 4, row.dps,tableData.sums)">
                         {{round(row.dps[4]/phase.durationS)}}</td>
@@ -62,6 +62,17 @@
                     <td v-else
                         :data-original-title="round(row.dps[5]/phase.durationS) + ' dps'+ '<br>' + computeTotalContribution(5, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 5, row.dps,tableData.sums)">
                         {{row.dps[5]}}</td>
+                    <td v-if="!showDamage"
+                        :data-original-title="row.dps[6] + ' dmg'+ '<br>' + computeTotalContribution(6, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 6, row.dps,tableData.sums)">
+                        {{round(row.dps[6]/phase.durationS)}}</td>
+                    <td v-else
+                        :data-original-title="round(row.dps[6]/phase.durationS) + ' dps'+ '<br>' + computeTotalContribution(6, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 6, row.dps,tableData.sums)">
+                        {{row.dps[6]}}</td>
+
+                    <td v-if="hasBreakbarDamage"
+                        :data-original-title="computeTotalContribution(7, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 7, row.dps,tableData.sums)">
+                        {{row.dps[7]}}
+                    </td>
                 </tr>
             </tbody>
             <tfoot>
@@ -82,15 +93,21 @@
                         {{round(sum.dps[2]/phase.durationS)}}</td>
                     <td v-show="!targetless" v-else :data-original-title="round(sum.dps[2]/phase.durationS) + ' dps'">
                         {{sum.dps[2]}}</td>
-                    <td v-if="!showDamage" :data-original-title="sum.dps[3] + ' dmg'">
-                        {{round(sum.dps[3]/phase.durationS)}}</td>
-                    <td v-else :data-original-title="round(sum.dps[3]/phase.durationS) + ' dps'">{{sum.dps[3]}}</td>
+                    <td v-show="!targetless" v-if="hasBreakbarDamage">
+                        {{sum.dps[3]}}
+                    </td>
                     <td v-if="!showDamage" :data-original-title="sum.dps[4] + ' dmg'">
                         {{round(sum.dps[4]/phase.durationS)}}</td>
                     <td v-else :data-original-title="round(sum.dps[4]/phase.durationS) + ' dps'">{{sum.dps[4]}}</td>
                     <td v-if="!showDamage" :data-original-title="sum.dps[5] + ' dmg'">
                         {{round(sum.dps[5]/phase.durationS)}}</td>
                     <td v-else :data-original-title="round(sum.dps[5]/phase.durationS) + ' dps'">{{sum.dps[5]}}</td>
+                    <td v-if="!showDamage" :data-original-title="sum.dps[6] + ' dmg'">
+                        {{round(sum.dps[6]/phase.durationS)}}</td>
+                    <td v-else :data-original-title="round(sum.dps[6]/phase.durationS) + ' dps'">{{sum.dps[6]}}</td>
+                    <td v-if="hasBreakbarDamage">
+                        {{sum.dps[7]}}
+                    </td>
                 </tr>
             </tfoot>
         </table>
@@ -133,6 +150,9 @@
             phase: function () {
                 return logData.phases[this.phaseindex];
             },
+            hasBreakbarDamage: function () {
+                return logData.hasBreakbarDamage;
+            },
             tableData: function () {
                 var cacheID = this.phaseindex + '-';
                 cacheID += getTargetCacheID(this.activetargets);
@@ -141,12 +161,12 @@
                 }
                 var rows = [];
                 var sums = [];
-                var total = [0, 0, 0, 0, 0, 0];
+                var total = [0, 0, 0, 0, 0, 0, 0, 0];
                 var groups = [];
                 var i, j;
                 for (i = 0; i < this.phase.dpsStats.length; i++) {
                     var dpsStat = this.phase.dpsStats[i];
-                    var dpsTargetStat = [0, 0, 0];
+                    var dpsTargetStat = [0, 0, 0, 0];
                     for (j = 0; j < this.activetargets.length; j++) {
                         var tar = this.phase.dpsStatsTargets[i][this.activetargets[j]];
                         for (var k = 0; k < dpsTargetStat.length; k++) {
@@ -155,7 +175,7 @@
                     }
                     var player = logData.players[i];
                     if (!groups[player.group]) {
-                        groups[player.group] = [0, 0, 0, 0, 0, 0];
+                        groups[player.group] = [0, 0, 0, 0, 0, 0, 0, 0];
                     }
                     var dps = dpsTargetStat.concat(dpsStat);
                     for (j = 0; j < dps.length; j++) {

@@ -1,7 +1,7 @@
 <template>
     <div>      
         <dps-graph-mode-selector-component :data="graphdata"
-            :phaseduration="this.phase.end - this.phase.start" :phasehassubphases="!!this.phase.subPhases">
+            :phaseduration="this.phase.end - this.phase.start" :phasehassubphases="!!this.phase.subPhases" :ignorebreakbar="false">
         </dps-graph-mode-selector-component>
         <h3 class="text-center mt-1 mb-1">{{graphname}}</h3>
         <graph-component :id="graphid" :layout="layout" :data="computeData"></graph-component>
@@ -196,6 +196,9 @@
                     case GraphType.Damage:
                         name = "Damage " + name;
                         break;
+                    case GraphType.BreakbarDamage:
+                        name = "Breakbar Damage " + name;
+                        break;
                     default:
                         break;
                 }
@@ -236,6 +239,9 @@
                     case GraphType.Damage:
                         this.layout.yaxis.title = "Damage";
                         break;
+                    case GraphType.BreakbarDamage:
+                        this.layout.yaxis.title = "Breakbar Damage";
+                        break;
                     default:
                         break;
                 }
@@ -260,8 +266,9 @@
                     target: []
                 };
                 var playerDPS = [];
+                var damageArrayToUse = this.graphdata.graphmode === GraphType.BreakbarDamage ? "breakbarDamage" : "damage";
                 for (var i = 0; i < logData.players.length; i++) {
-                    var data = computePlayerDPS(logData.players[i], this.graph.players[i].damage, lim, phasebreaks,
+                    var data = computePlayerDPS(logData.players[i], this.graph.players[i][damageArrayToUse], lim, phasebreaks,
                         this.activetargets, cacheID, this.phase.times, this.graphdata.graphmode);
                     playerDPS.push(data.dps);
                     maxDPS.total = Math.max(maxDPS.total, data.maxDPS.total);

@@ -1,7 +1,7 @@
 <template>
     <div>     
         <dps-graph-mode-selector-component :data="graphdata" 
-            :phaseduration="this.phase.end - this.phase.start" :phasehassubphases="!!this.phase.subPhases">
+            :phaseduration="this.phase.end - this.phase.start" :phasehassubphases="!!this.phase.subPhases" :ignorebreakbar="true">
         </dps-graph-mode-selector-component>
         <h3 class="text-center mt-1 mb-1">{{graphname}}</h3>
         <graph-component :id="graphid" :layout="layout" :data="computeData"></graph-component>
@@ -45,7 +45,7 @@
                     right = end - 1;
                 }
             }  
-            var div = graphMode !== GraphType.Damage ? Math.max(times[right] - times[left], 1) : 1;
+            var div = graphMode !== GraphType.Damage && graphMode !== GraphType.BreakbarDamage ? Math.max(times[right] - times[left], 1) : 1;
             totalDamage = damageData[right] - damageData[left];
             totalDPS[j] = Math.round(totalDamage / (div));
             maxDPS = Math.max(maxDPS, totalDPS[j]);

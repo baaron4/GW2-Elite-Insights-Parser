@@ -321,7 +321,7 @@ function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, c
                 right = end - 1;
             }
         }          
-        var div = graphMode !== GraphType.Damage ? Math.max(times[right] - times[left], 1) : 1;
+        var div = graphMode !== GraphType.Damage && graphMode !== GraphType.BreakbarDamage ? Math.max(times[right] - times[left], 1) : 1;
         totalDamage = damageData.total[right] - damageData.total[left];
         targetDamage = 0;
         for (k = 0; k < activetargets.length; k++) {
