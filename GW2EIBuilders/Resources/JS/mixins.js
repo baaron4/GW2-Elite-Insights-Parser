@@ -8,6 +8,13 @@ var roundingComponent = {
             }
             return Math.round(value);
         },
+        round1: function (value) {
+            if (isNaN(value)) {
+                return 0;
+            }
+            var mul = 10;
+            return Math.round(mul * value) / mul;
+        },
         round2: function (value) {
             if (isNaN(value)) {
                 return 0;
