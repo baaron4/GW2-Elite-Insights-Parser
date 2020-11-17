@@ -286,9 +286,6 @@ function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, c
     var totalDPS = [0];
     var cleaveDPS = [0];
     var targetDPS = [0];
-    var totalTotalDamage = [0];
-    var totalCleaveDamage = [0];
-    var totalTargetDamage = [0];
     var maxDPS = {
         total: 0,
         cleave: 0,
@@ -331,9 +328,6 @@ function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, c
         totalDPS[j] = Math.round(totalDamage / div);
         targetDPS[j] = Math.round(targetDamage / div);
         cleaveDPS[j] = Math.round((totalDamage - targetDamage) / div);
-        totalTotalDamage[j] = totalDamage;
-        totalTargetDamage[j] = targetDamage;
-        totalCleaveDamage[j] = (totalDamage - targetDamage);
         maxDPS.total = Math.max(maxDPS.total, totalDPS[j]);
         maxDPS.target = Math.max(maxDPS.target, targetDPS[j]);
         maxDPS.cleave = Math.max(maxDPS.cleave, cleaveDPS[j]);
@@ -352,11 +346,6 @@ function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, c
             total: totalDPS,
             target: targetDPS,
             cleave: cleaveDPS
-        },
-        total: {
-            total: totalTotalDamage,
-            target: totalTargetDamage,
-            cleave: totalCleaveDamage
         },
         maxDPS: maxDPS
     };
