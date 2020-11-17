@@ -5,6 +5,7 @@ namespace GW2EIEvtcParser.ParsedData
     public abstract class AbstractDamageEvent : AbstractBaseDamageEvent
     {
         //
+        public int Damage { get; protected set; }
         public int ShieldDamage { get; protected set; }
         public bool HasHit { get; protected set; }
         public bool DoubleProcHit { get; protected set; }

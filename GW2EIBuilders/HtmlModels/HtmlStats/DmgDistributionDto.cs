@@ -10,10 +10,10 @@ namespace GW2EIBuilders.HtmlModels
     internal class DmgDistributionDto
     {
         public long ContributedDamage { get; set; }
-        public long ContributedBreakbarDamage { get; set; }
+        public double ContributedBreakbarDamage { get; set; }
         public long ContributedShieldDamage { get; set; }
         public long TotalDamage { get; set; }
-        public long TotalBreakbarDamage { get; set; }
+        public double TotalBreakbarDamage { get; set; }
         public long TotalCasting { get; set; }
         public List<object[]> Distribution { get; set; }
 
@@ -255,7 +255,7 @@ namespace GW2EIBuilders.HtmlModels
             List<BreakbarDamageEvent> brkDamageLogs = minions.GetBreakbarDamageLogs(target, log, phase.Start, phase.End);
             dto.ContributedDamage = damageLogs.Sum(x => x.Damage);
             dto.ContributedShieldDamage = damageLogs.Sum(x => x.ShieldDamage);
-            dto.ContributedBreakbarDamage = brkDamageLogs.Sum(x => x.Damage);
+            dto.ContributedBreakbarDamage = brkDamageLogs.Sum(x => x.BreakbarDamage);
             dto.TotalDamage = dps.Damage;
             dto.TotalBreakbarDamage = dps.BreakbarDamage;
             dto.TotalCasting = casting.Sum(cl => Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start));

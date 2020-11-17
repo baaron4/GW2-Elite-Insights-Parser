@@ -18,6 +18,7 @@ namespace GW2EIEvtcParser.EIData
         private List<Dictionary<long, FinalBuffsDictionary>> _buffsActiveDictionary;
         // damage list
         private readonly Dictionary<int, List<int>> _damageList1S = new Dictionary<int, List<int>>();
+        private readonly Dictionary<int, List<double>> _breakbarDamageList1S = new Dictionary<int, List<double>>();
         private readonly Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>> _selfDamageLogsPerPhasePerTarget = new Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>>();
         //status
         private List<Segment> _healthUpdates { get; set; }
@@ -123,8 +124,15 @@ namespace GW2EIEvtcParser.EIData
 
         // Graph
 
-        private static List<int> Get1SList(PhaseData phase, IEnumerable<AbstractBaseDamageEvent> damageListToUse)
+        public List<int> Get1SDamageList(ParsedEvtcLog log, int phaseIndex, PhaseData phase, AbstractActor target)
         {
+            ulong targetId = target != null ? target.Agent : 0;
+            int id = (phaseIndex + "_" + targetId + "_1S").GetHashCode();
+            if (_damageList1S.TryGetValue(id, out List<int> res))
+            {
+                return res;
+            }
+            List<AbstractDamageEvent> damageList = GetDamageLogs(target, log, phase.Start, phase.End);
             // fill the graph, full precision
             var dmgList = new List<int>();
             var dmgListFull = new List<int>();
@@ -134,7 +142,7 @@ namespace GW2EIEvtcParser.EIData
             }
             int totalTime = 1;
             int totalDamage = 0;
-            foreach (AbstractBaseDamageEvent dl in damageListToUse)
+            foreach (AbstractDamageEvent dl in damageList)
             {
                 int time = (int)(dl.Time - phase.Start);
                 // fill
@@ -161,32 +169,56 @@ namespace GW2EIEvtcParser.EIData
                 int lastDamage = dmgListFull[(int)phase.DurationInMS];
                 dmgList.Add(lastDamage);
             }
-            return dmgList;
-        }
-
-        public List<int> Get1SDamageList(ParsedEvtcLog log, int phaseIndex, PhaseData phase, AbstractActor target)
-        {
-            ulong targetId = target != null ? target.Agent : 0;
-            int id = (phaseIndex + "_" + targetId + "_damage_1S").GetHashCode();
-            if (_damageList1S.TryGetValue(id, out List<int> res))
-            {
-                return res;
-            }
-            List<int> dmgList = Get1SList(phase, GetDamageLogs(target, log, phase.Start, phase.End));         
             _damageList1S[id] = dmgList;
             return dmgList;
         }
 
-        public List<int> Get1SBreakbarDamageList(ParsedEvtcLog log, int phaseIndex, PhaseData phase, AbstractActor target)
+        public List<double> Get1SBreakbarDamageList(ParsedEvtcLog log, int phaseIndex, PhaseData phase, AbstractActor target)
         {
             ulong targetId = target != null ? target.Agent : 0;
-            int id = (phaseIndex + "_" + targetId + "_breakbarDamage_1S").GetHashCode();
-            if (_damageList1S.TryGetValue(id, out List<int> res))
+            int id = (phaseIndex + "_" + targetId + "_1S").GetHashCode();
+            if (_breakbarDamageList1S.TryGetValue(id, out List<double> res))
             {
                 return res;
             }
-            List<int> dmgList = Get1SList(phase, GetBreakbarDamageLogs(target, log, phase.Start, phase.End));
-            _damageList1S[id] = dmgList;
+            List<BreakbarDamageEvent> damageList = GetBreakbarDamageLogs(target, log, phase.Start, phase.End);
+            // fill the graph, full precision
+            var dmgList = new List<double>();
+            var dmgListFull = new List<double>();
+            for (int i = 0; i <= phase.DurationInMS; i++)
+            {
+                dmgListFull.Add(0);
+            }
+            int totalTime = 1;
+            double totalDamage = 0;
+            foreach (BreakbarDamageEvent dl in damageList)
+            {
+                int time = (int)(dl.Time - phase.Start);
+                // fill
+                for (; totalTime < time; totalTime++)
+                {
+                    dmgListFull[totalTime] = totalDamage;
+                }
+                totalDamage += dl.BreakbarDamage;
+                dmgListFull[totalTime] = totalDamage;
+            }
+            // fill
+            for (; totalTime <= phase.DurationInMS; totalTime++)
+            {
+                dmgListFull[totalTime] = totalDamage;
+            }
+            //
+            dmgList.Add(0);
+            for (int i = 1; i <= phase.DurationInS; i++)
+            {
+                dmgList.Add(dmgListFull[1000 * i]);
+            }
+            if (phase.DurationInS * 1000 != phase.DurationInMS)
+            {
+                double lastDamage = dmgListFull[(int)phase.DurationInMS];
+                dmgList.Add(lastDamage);
+            }
+            _breakbarDamageList1S[id] = dmgList;
             return dmgList;
         }
 

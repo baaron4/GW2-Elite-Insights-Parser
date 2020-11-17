@@ -6,8 +6,8 @@ namespace GW2EIBuilders.HtmlModels
 {
     internal class PlayerChartDataDto
     {
-        public PlayerDamageChartDto Damage { get; set; }
-        public PlayerDamageChartDto BreakbarDamage { get; set; }
+        public PlayerDamageChartDto<int> Damage { get; set; }
+        public PlayerDamageChartDto<double> BreakbarDamage { get; set; }
         public List<object[]> HealthStates { get; set; }
 
         public static List<PlayerChartDataDto> BuildPlayersGraphData(ParsedEvtcLog log, int phaseIndex)
@@ -19,15 +19,15 @@ namespace GW2EIBuilders.HtmlModels
             {
                 var pChar = new PlayerChartDataDto()
                 {
-                    Damage = new PlayerDamageChartDto()
+                    Damage = new PlayerDamageChartDto<int>()
                     {
                         Total = p.Get1SDamageList(log, phaseIndex, phase, null),
                         Targets = new List<List<int>>()
                     },
-                    BreakbarDamage = new PlayerDamageChartDto()
+                    BreakbarDamage = new PlayerDamageChartDto<double>()
                     {
                         Total = p.Get1SBreakbarDamageList(log, phaseIndex, phase, null),
-                        Targets = new List<List<int>>()
+                        Targets = new List<List<double>>()
                     },
                     HealthStates = ChartDataDto.BuildHealthGraphStates(log, p, log.FightData.GetPhases(log)[phaseIndex], true)
                 };

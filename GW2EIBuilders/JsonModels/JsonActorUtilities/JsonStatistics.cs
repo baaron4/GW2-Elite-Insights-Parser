@@ -22,7 +22,7 @@ namespace GW2EIBuilders.JsonModels
             /// <summary>
             /// Total breakbar damage taken
             /// </summary>
-            public long BreakbarDamageTaken { get; internal set; }
+            public double BreakbarDamageTaken { get; internal set; }
             [JsonProperty]
             /// <summary>
             /// Number of blocks
@@ -154,7 +154,7 @@ namespace GW2EIBuilders.JsonModels
             /// <summary>
             /// Total breakbar damage
             /// </summary>
-            public int BreakbarDamage { get; internal set; }
+            public double BreakbarDamage { get; internal set; }
             [JsonProperty]
             /// <summary>
             /// Total actor only dps
@@ -189,7 +189,7 @@ namespace GW2EIBuilders.JsonModels
             /// <summary>
             /// Total actor only breakbar damage
             /// </summary>
-            public int ActorBreakbarDamage { get; internal set; }
+            public double ActorBreakbarDamage { get; internal set; }
 
             [JsonConstructor]
             internal JsonDPS()

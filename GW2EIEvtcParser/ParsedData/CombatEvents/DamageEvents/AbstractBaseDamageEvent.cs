@@ -12,7 +12,6 @@ namespace GW2EIEvtcParser.ParsedData
         public ArcDPSEnums.IFF IFF { get; }
 
         //private int _damage;
-        public int Damage { get; protected set; }
         public bool IsOverNinety { get; }
         public bool AgainstUnderFifty { get; }
         public bool IsMoving { get; }
