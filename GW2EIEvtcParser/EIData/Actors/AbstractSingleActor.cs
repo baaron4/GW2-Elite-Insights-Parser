@@ -132,9 +132,9 @@ namespace GW2EIEvtcParser.EIData
             {
                 return res;
             }
-            List<AbstractDamageEvent> damageList = GetDamageLogs(target, log, phase.Start, phase.End);
-            // fill the graph, full precision
             var dmgList = new List<int>();
+            List<AbstractDamageEvent> damageLogs = GetDamageLogs(target, log, phase.Start, phase.End);
+            // fill the graph, full precision
             var dmgListFull = new List<int>();
             for (int i = 0; i <= phase.DurationInMS; i++)
             {
@@ -142,7 +142,7 @@ namespace GW2EIEvtcParser.EIData
             }
             int totalTime = 1;
             int totalDamage = 0;
-            foreach (AbstractDamageEvent dl in damageList)
+            foreach (AbstractDamageEvent dl in damageLogs)
             {
                 int time = (int)(dl.Time - phase.Start);
                 // fill
@@ -181,45 +181,45 @@ namespace GW2EIEvtcParser.EIData
             {
                 return res;
             }
-            List<BreakbarDamageEvent> damageList = GetBreakbarDamageLogs(target, log, phase.Start, phase.End);
+            var brkDmgList = new List<double>();
+            List<BreakbarDamageEvent> breakbarDamageLogs = GetBreakbarDamageLogs(target, log, phase.Start, phase.End);
             // fill the graph, full precision
-            var dmgList = new List<double>();
-            var dmgListFull = new List<double>();
+            var brkDmgListFull = new List<double>();
             for (int i = 0; i <= phase.DurationInMS; i++)
             {
-                dmgListFull.Add(0);
+                brkDmgListFull.Add(0);
             }
             int totalTime = 1;
             double totalDamage = 0;
-            foreach (BreakbarDamageEvent dl in damageList)
+            foreach (BreakbarDamageEvent dl in breakbarDamageLogs)
             {
                 int time = (int)(dl.Time - phase.Start);
                 // fill
                 for (; totalTime < time; totalTime++)
                 {
-                    dmgListFull[totalTime] = totalDamage;
+                    brkDmgListFull[totalTime] = totalDamage;
                 }
                 totalDamage += dl.BreakbarDamage;
-                dmgListFull[totalTime] = totalDamage;
+                brkDmgListFull[totalTime] = totalDamage;
             }
             // fill
             for (; totalTime <= phase.DurationInMS; totalTime++)
             {
-                dmgListFull[totalTime] = totalDamage;
+                brkDmgListFull[totalTime] = totalDamage;
             }
             //
-            dmgList.Add(0);
+            brkDmgList.Add(0);
             for (int i = 1; i <= phase.DurationInS; i++)
             {
-                dmgList.Add(dmgListFull[1000 * i]);
+                brkDmgList.Add(brkDmgListFull[1000 * i]);
             }
             if (phase.DurationInS * 1000 != phase.DurationInMS)
             {
-                double lastDamage = dmgListFull[(int)phase.DurationInMS];
-                dmgList.Add(lastDamage);
+                double lastDamage = brkDmgListFull[(int)phase.DurationInMS];
+                brkDmgList.Add(lastDamage);
             }
-            _breakbarDamageList1S[id] = dmgList;
-            return dmgList;
+            _breakbarDamageList1S[id] = brkDmgList;
+            return brkDmgList;
         }
 
         // Buffs
