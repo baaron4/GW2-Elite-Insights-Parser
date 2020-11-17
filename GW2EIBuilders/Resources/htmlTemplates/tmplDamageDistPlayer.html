@@ -82,7 +82,9 @@
                         this.player.details.dmgDistributionsTargets[this.phaseindex][targetid] :
                         this.player.details.minions[this.distmode].dmgDistributionsTargets[this.phaseindex][targetid];
                     dist.contributedDamage += targetDist.contributedDamage;
+                    dist.contributedBreakbarDamage += targetDist.contributedBreakbarDamage;
                     dist.totalDamage += targetDist.totalDamage;
+                    dist.totalBreakbarDamage += targetDist.totalBreakbarDamage;
                     dist.contributedShieldDamage += targetDist.contributedShieldDamage;
                     dist.totalCasting += targetDist.totalCasting;
                     var distribution = targetDist.distribution;
