@@ -758,6 +758,11 @@ namespace GW2EIEvtcParser.EIData
             return GetDamageLogs(target, log, start, end).Where(x => x.From == AgentItem).ToList();
         }
 
+        public List<BreakbarDamageEvent> GetJustActorBreakbarDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        {
+            return GetBreakbarDamageLogs(target, log, start, end).Where(x => x.From == AgentItem).ToList();
+        }
+
         public override List<BreakbarDamageEvent> GetBreakbarDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
             if (BreakbarDamageLogs == null)
