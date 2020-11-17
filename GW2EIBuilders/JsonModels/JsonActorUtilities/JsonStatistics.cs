@@ -20,6 +20,11 @@ namespace GW2EIBuilders.JsonModels
             public long DamageTaken { get; internal set; }
             [JsonProperty]
             /// <summary>
+            /// Total breakbar damage taken
+            /// </summary>
+            public long BreakbarDamageTaken { get; internal set; }
+            [JsonProperty]
+            /// <summary>
             /// Number of blocks
             /// </summary>
             public int BlockedCount { get; internal set; }
@@ -93,6 +98,7 @@ namespace GW2EIBuilders.JsonModels
             internal JsonDefensesAll(FinalDefensesAll defenses)
             {
                 DamageTaken = defenses.DamageTaken;
+                BreakbarDamageTaken = defenses.BreakbarDamageTaken;
                 BlockedCount = defenses.BlockedCount;
                 DodgeCount = defenses.DodgeCount;
                 MissedCount = defenses.MissedCount;
@@ -146,6 +152,11 @@ namespace GW2EIBuilders.JsonModels
             public int PowerDamage { get; internal set; }
             [JsonProperty]
             /// <summary>
+            /// Total breakbar damage
+            /// </summary>
+            public int BreakbarDamage { get; internal set; }
+            [JsonProperty]
+            /// <summary>
             /// Total actor only dps
             /// </summary>
             public int ActorDps { get; internal set; }
@@ -174,6 +185,11 @@ namespace GW2EIBuilders.JsonModels
             /// Total actor only power damage
             /// </summary>
             public int ActorPowerDamage { get; internal set; }
+            [JsonProperty]
+            /// <summary>
+            /// Total actor only breakbar damage
+            /// </summary>
+            public int ActorBreakbarDamage { get; internal set; }
 
             [JsonConstructor]
             internal JsonDPS()
@@ -189,6 +205,7 @@ namespace GW2EIBuilders.JsonModels
                 CondiDamage = stats.CondiDamage;
                 PowerDps = stats.PowerDps;
                 PowerDamage = stats.PowerDamage;
+                BreakbarDamage = stats.BreakbarDamage;
 
                 ActorDps = stats.ActorDps;
                 ActorDamage = stats.ActorDamage;
@@ -196,6 +213,7 @@ namespace GW2EIBuilders.JsonModels
                 ActorCondiDamage = stats.ActorCondiDamage;
                 ActorPowerDps = stats.ActorPowerDps;
                 ActorPowerDamage = stats.ActorPowerDamage;
+                ActorBreakbarDamage = stats.ActorBreakbarDamage;
             }
 
         }

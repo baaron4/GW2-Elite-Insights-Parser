@@ -115,6 +115,16 @@ namespace GW2EIBuilders.JsonModels
         public List<int>[] Damage1S { get; internal set; }
         [JsonProperty]
         /// <summary>
+        /// Array of int representing 1S breakbar damage points \n
+        /// Length == # of phases
+        /// </summary>
+        /// <remarks>
+        /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
+        /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
+        /// </remarks>
+        public List<int>[] BreakbarDamage1S { get; internal set; }
+        [JsonProperty]
+        /// <summary>
         /// Array of int[2] that represents the number of conditions \n
         /// Array[i][0] will be the time, Array[i][1] will be the number of conditions present from Array[i][0] to Array[i+1][0] \n
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight \n
@@ -181,9 +191,11 @@ namespace GW2EIBuilders.JsonModels
             if (settings.RawFormatTimelineArrays)
             {
                 Damage1S = new List<int>[phases.Count];
+                BreakbarDamage1S = new List<int>[phases.Count];
                 for (int i = 0; i < phases.Count; i++)
                 {
                     Damage1S[i] = actor.Get1SDamageList(log, i, phases[i], null);
+                    BreakbarDamage1S[i] = actor.Get1SBreakbarDamageList(log, i, phases[i], null);
                 }
             }
             //
