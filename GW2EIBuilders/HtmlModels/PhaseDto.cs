@@ -212,6 +212,7 @@ namespace GW2EIBuilders.HtmlModels
                     dpsAll.Damage,
                     dpsAll.PowerDamage,
                     dpsAll.CondiDamage,
+                    dpsAll.BreakbarDamage,
                 };
             return data;
         }

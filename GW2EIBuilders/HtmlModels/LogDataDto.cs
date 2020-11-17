@@ -38,6 +38,7 @@ namespace GW2EIBuilders.HtmlModels
         public bool LightTheme { get; set; }
         public bool NoMechanics { get; set; }
         public bool SingleGroup { get; set; }
+        public bool HasBreakbarDamage { get; set; }
         public List<string> LogErrors { get; set; }
 
         public string EncounterStart { get; set; }
@@ -337,6 +338,7 @@ namespace GW2EIBuilders.HtmlModels
             logData.FightIcon = log.FightData.Logic.Icon;
             logData.LightTheme = light;
             logData.SingleGroup = log.PlayerList.Where(x => !x.IsFakeActor).Select(x => x.Group).Distinct().Count() == 1;
+            logData.HasBreakbarDamage = log.PlayerList.Any(x => x.GetBreakbarDamageLogs(null, log, 0, log.FightData.FightEnd).Any());
             logData.NoMechanics = log.FightData.Logic.HasNoFightSpecificMechanics;
             if (log.LogData.LogErrors.Count > 0)
             {
