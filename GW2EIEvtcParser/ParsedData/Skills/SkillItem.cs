@@ -10,7 +10,7 @@ namespace GW2EIEvtcParser.ParsedData
     public class SkillItem
     {
         public const long DodgeId = 65001;
-        public const long MirageCloakDodgeId = 65002;
+        public const long MirageCloakDodgeId = -17;
         public const long ResurrectId = 1066;
         public const long BandageId = 1175;
         public const long WeaponSwapId = -2;
@@ -211,7 +211,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal SkillItem(long ID) : this(ID, "UNKNOWN")
         {
-            UnknownSkill = true;
+            UnknownSkill = Name == "UNKNOWN";
         }
 
         public SkillItem(long ID, string name)
