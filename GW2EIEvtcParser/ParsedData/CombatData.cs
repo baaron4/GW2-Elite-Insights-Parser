@@ -19,12 +19,14 @@ namespace GW2EIEvtcParser.ParsedData
         private readonly Dictionary<long, List<BuffRemoveAllEvent>> _buffRemoveAllData;
         private readonly Dictionary<AgentItem, List<AbstractBuffEvent>> _buffDataByDst;
         private readonly Dictionary<AgentItem, List<AbstractDamageEvent>> _damageData;
+        private readonly Dictionary<AgentItem, List<BreakbarDamageEvent>> _breakbarDamageData;
         private readonly Dictionary<long, List<AbstractDamageEvent>> _damageDataById;
         private readonly Dictionary<AgentItem, List<AnimatedCastEvent>> _animatedCastData;
         private readonly Dictionary<AgentItem, List<InstantCastEvent>> _instantCastData;
         private readonly Dictionary<AgentItem, List<WeaponSwapEvent>> _weaponSwapData;
         private readonly Dictionary<long, List<AbstractCastEvent>> _castDataById;
         private readonly Dictionary<AgentItem, List<AbstractDamageEvent>> _damageTakenData;
+        private readonly Dictionary<AgentItem, List<BreakbarDamageEvent>> _breakbarDamageTakenData;
         private readonly Dictionary<AgentItem, List<AbstractMovementEvent>> _movementData;
         private readonly List<RewardEvent> _rewardEvents = new List<RewardEvent>();
 
@@ -342,6 +344,8 @@ namespace GW2EIEvtcParser.ParsedData
             _damageData = damageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             _damageTakenData = damageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             _damageDataById = damageData.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
+            _breakbarDamageData = brkDamageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+            _breakbarDamageTakenData = brkDamageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
 
             /*healing_data = allCombatItems.Where(x => x.getDstInstid() != 0 && x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                          ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
@@ -624,6 +628,20 @@ namespace GW2EIEvtcParser.ParsedData
         }
 
         /// <summary>
+        /// Returns list of breakbar damage events done by agent
+        /// </summary>
+        /// <param name="key"></param> Agent
+        /// <returns></returns>
+        public List<BreakbarDamageEvent> GetBreakbarDamageData(AgentItem key)
+        {
+            if (_breakbarDamageData.TryGetValue(key, out List<BreakbarDamageEvent> res))
+            {
+                return res;
+            }
+            return new List<BreakbarDamageEvent>(); ;
+        }
+
+        /// <summary>
         /// Returns list of damage events applied by a skill
         /// </summary>
         /// <param name="key"></param> Id of the skill
@@ -705,6 +723,20 @@ namespace GW2EIEvtcParser.ParsedData
                 return res;
             }
             return new List<AbstractDamageEvent>();
+        }
+
+        /// <summary>
+        /// Returns list of breakbar damage taken events by Agent
+        /// </summary>
+        /// <param name="key"></param> Agent
+        /// <returns></returns>
+        public List<BreakbarDamageEvent> GetBreakbarDamageTakenData(AgentItem key)
+        {
+            if (_breakbarDamageTakenData.TryGetValue(key, out List<BreakbarDamageEvent> res))
+            {
+                return res;
+            }
+            return new List<BreakbarDamageEvent>();
         }
 
         /*public List<CombatItem> getHealingData()
