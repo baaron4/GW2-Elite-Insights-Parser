@@ -14,6 +14,7 @@ namespace GW2EIEvtcParser.EIData
         public int CondiDamage { get; internal set; }
         public int PowerDps { get; internal set; }
         public int PowerDamage { get; internal set; }
+        public int BreakbarDamage { get; internal set; }
         // Actor only
         public int ActorDps { get; internal set; }
         public int ActorDamage { get; internal set; }
@@ -21,6 +22,7 @@ namespace GW2EIEvtcParser.EIData
         public int ActorCondiDamage { get; internal set; }
         public int ActorPowerDps { get; internal set; }
         public int ActorPowerDamage { get; internal set; }
+        public int ActorBreakbarDamage { get; internal set; }
 
 
         internal FinalDPS(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor, AbstractSingleActor target)
@@ -82,6 +84,10 @@ namespace GW2EIEvtcParser.EIData
             }
             ActorPowerDps = (int)Math.Round(dps);
             ActorPowerDamage = damage;
+
+            // Breakbar 
+            BreakbarDamage = actor.GetBreakbarDamageLogs(target, log, phase.Start, phase.End).Sum(x => x.Damage);
+            ActorBreakbarDamage = actor.GetJustActorBreakbarDamageLogs(target, log, phase.Start, phase.End).Sum(x => x.Damage);
         }
     }
 }
