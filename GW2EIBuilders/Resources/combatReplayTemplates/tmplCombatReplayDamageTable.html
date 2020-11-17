@@ -7,6 +7,9 @@
             <li class="nav-item">
                 <a class="nav-link" @click="damageMode = 1" :class="{active: damageMode === 1}">DPS</a>
             </li>
+            <li v-if="hasBreakbarDamage" class="nav-item">
+                <a class="nav-link" @click="damageMode = 2" :class="{active: damageMode === 2}">Breakbar Damage</a>
+            </li>
         </ul>
         <div class="scrollable-cr-dps-table">
             <table class="table table-sm table-striped table-hover"  cellspacing="0" width="100%" id="combat-replay-dps-table">
@@ -40,10 +43,10 @@
                             </span>
                         </td>
                         <td class="cr-dps-table-dps">
-                            {{Math.round(row.dps[2*tableData.cols.length+(damageMode === 1 ? 1 : 0)])}}
+                            {{talbleRound(row.dps[row.dps.length - 1])}}
                         </td>
                         <td class="cr-dps-table-dps" v-if="!targetless" v-for="(col, id) in tableData.cols">
-                            {{Math.round(row.dps[2*id +(damageMode === 1 ? 1 : 0)])}}
+                            {{talbleRound(row.dps[id])}}
                         </td>
                     </tr>
                 </tbody>
@@ -54,10 +57,10 @@
                             {{sum.name}}
                         </td>
                         <td class="cr-dps-table-dps">
-                            {{Math.round(sum.dps[2*tableData.cols.length+(damageMode === 1 ? 1 : 0)])}}
+                            {{talbleRound(sum.dps[sum.dps.length - 1])}}
                         </td>
                         <td class="cr-dps-table-dps" v-if="!targetless" v-for="(col, id) in tableData.cols">
-                            {{Math.round(sum.dps[2*id +(damageMode === 1 ? 1 : 0)])}}
+                            {{talbleRound(sum.dps[id])}}
                         </td>
                     </tr>
                 </tfoot>
@@ -69,7 +72,7 @@
 
 <script>
     Vue.component("combat-replay-damage-stats-component", {
-        mixins: [timeRefreshComponent],
+        mixins: [timeRefreshComponent, roundingComponent],
         props: ["playerindex"],
         template: `${template}`,
         data: function () {
@@ -77,6 +80,11 @@
                 targetless: logData.targetless,
                 damageMode: 1
             };
+        },
+        method: {
+            talbleRound: function(value) {
+                return this.graphMode == GraphType.BreakbarDamage ? this.round1(value) : this.round(value)
+            }
         },
         created() {
             var i, cacheID;
@@ -110,6 +118,20 @@
             graph: function () {
                 return graphData.phases[0].players;
             },
+            graphMode: function () {
+                switch (this.damageMode) {
+                    case 1:
+                        return GraphType.DPS;
+                    case 0:
+                        return GraphType.Damage;
+                    case 2:
+                        return GraphType.BreakbarDamage;
+                };
+                return GraphType.DPS;
+            },
+            hasBreakbarDamage: function() {
+                return logData.hasBreakbarDamage;
+            },
             tableData: function () {
                 var rows = [];
                 var cols = [];
@@ -127,6 +149,7 @@
                     var target = logData.targets[this.targets[j]];
                     cols.push(target);
                 }
+                var damageArrayToUse = this.graphMode === GraphType.BreakbarDamage ? "breakbarDamage" : "damage";
                 for (i = 0; i < this.graph.length; i++) {
                     var cacheID, data, cur, next;
                     var player = logData.players[i];
@@ -135,27 +158,25 @@
                     // targets
                     for (j = 0; j < this.targets.length; j++) {
                         var activeTargets = [j];
-                        cacheID = getDPSGraphCacheID(0, GraphType.DPS, activeTargets, 0, null);
-                        data = computePlayerDPS(player, graphData.damage, 0, null, activeTargets, cacheID, this.phase.times, GraphType.DPS).total.target;
+                        cacheID = getDPSGraphCacheID(0, this.graphMode, activeTargets, 0, null);
+                        data = computePlayerDPS(player, graphData[damageArrayToUse], 0, null, activeTargets, cacheID, this.phase.times, this.graphMode).dps.target;
                         cur = data[curTime];
                         next = data[curTime + 1];
                         if (typeof next !== "undefined") {
-                            dps[2 * j] = cur + (tS - curTime) * (next - cur)/(nextTime - curTime);
+                            dps[j] = cur + (tS - curTime) * (next - cur)/(nextTime - curTime);
                         } else {
-                            dps[2 * j] = cur;
+                            dps[j] = cur;
                         }
-                        dps[2 * j + 1] = dps[2 * j] / (Math.max(tS, 1));
                     }
-                    cacheID = getDPSGraphCacheID(0, GraphType.DPS, this.targets, 0, null);
-                    data = computePlayerDPS(player, graphData.damage, 0, null, this.targets, cacheID, this.phase.times, GraphType.DPS).total.total;
+                    cacheID = getDPSGraphCacheID(0, this.graphMode, this.targets, 0, null);
+                    data = computePlayerDPS(player, graphData[damageArrayToUse], 0, null, this.targets, cacheID, this.phase.times, this.graphMode).dps.total;
                     cur = data[curTime];
                     next = data[curTime + 1];
                     if (typeof next !== "undefined") {
-                        dps[2 * j] = cur + (tS - curTime) * (next - cur)/(nextTime - curTime);
+                        dps[j] = cur + (tS - curTime) * (next - cur)/(nextTime - curTime);
                     } else {
-                        dps[2 * j] = cur;
+                        dps[j] = cur;
                     }
-                    dps[2 * j + 1] = dps[2 * j] / (Math.max(tS, 1));
                     for (j = 0; j < dps.length; j++) {
                         total[j] = (total[j] || 0) + dps[j];
                     }
