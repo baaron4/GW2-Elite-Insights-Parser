@@ -28,6 +28,11 @@ namespace GW2EIEvtcParser.EIData
         private Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>> _damageLogsPerPhasePerTarget { get; } = new Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>>();
         protected List<AbstractDamageEvent> DamageTakenlogs { get; set; }
         protected Dictionary<AgentItem, List<AbstractDamageEvent>> DamageTakenLogsBySrc { get; set; }
+        // Breakbar Damage
+        protected List<BreakbarDamageEvent> BreakbarDamageLogs { get; set; }
+        protected Dictionary<AgentItem, List<BreakbarDamageEvent>> BreakbarDamageLogsByDst { get; set; }
+        protected List<BreakbarDamageEvent> BreakbarDamageTakenLogs { get; set; }
+        protected Dictionary<AgentItem, List<BreakbarDamageEvent>> BreakbarDamageTakenLogsBySrc { get; set; }
         // Cast
         protected List<AbstractCastEvent> CastLogs { get; set; }
 
@@ -40,6 +45,8 @@ namespace GW2EIEvtcParser.EIData
         // Getters
         // Damage logs
         public abstract List<AbstractDamageEvent> GetDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
+
+        public abstract List<BreakbarDamageEvent> GetBreakbarDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
 
         /// <summary>
         /// cached method for damage modifiers
@@ -60,6 +67,8 @@ namespace GW2EIEvtcParser.EIData
         }
 
         public abstract List<AbstractDamageEvent> GetDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
+
+        public abstract List<BreakbarDamageEvent> GetBreakbarDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
 
         // Cast logs
         public abstract List<AbstractCastEvent> GetCastLogs(ParsedEvtcLog log, long start, long end);
