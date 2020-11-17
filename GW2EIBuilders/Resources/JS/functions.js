@@ -61,7 +61,7 @@ function findSkill(isBuff, id) {
 function getTargetCacheID(activetargets) {
     var id = 0;
     for (var i = 0; i < activetargets.length; i++) {
-        id = id | Math.pow(2, activetargets[i]);
+        id |= 1 << activetargets[i];
     }
     return id;
 }
