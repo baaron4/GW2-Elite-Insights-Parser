@@ -198,6 +198,10 @@ namespace GW2EIBuilders.JsonModels
                     BreakbarDamage1S[i] = actor.Get1SBreakbarDamageList(log, i, phases[i], null);
                 }
             }
+            if (!log.CombatData.HasBreakbarDamageData)
+            {
+                BreakbarDamage1S = null;
+            }
             //
             TotalDamageDist = BuildDamageDistData(actor, null, phases, log, skillDesc, buffDesc);
             TotalDamageTaken = BuildDamageTakenDistData(actor, null, phases, log, skillDesc, buffDesc);

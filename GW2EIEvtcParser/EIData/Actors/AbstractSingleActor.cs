@@ -175,6 +175,10 @@ namespace GW2EIEvtcParser.EIData
 
         public List<double> Get1SBreakbarDamageList(ParsedEvtcLog log, int phaseIndex, PhaseData phase, AbstractActor target)
         {
+            if (!log.CombatData.HasBreakbarDamageData)
+            {
+                return null;
+            }
             ulong targetId = target != null ? target.Agent : 0;
             int id = (phaseIndex + "_" + targetId + "_1S").GetHashCode();
             if (_breakbarDamageList1S.TryGetValue(id, out List<double> res))

@@ -201,6 +201,7 @@ namespace GW2EIBuilders.JsonModels
             //
             Support = player.GetPlayerSupport(log).Select(x => new JsonStatistics.JsonPlayerSupport(x)).ToArray();
             TargetDamage1S = new List<int>[log.FightData.Logic.Targets.Count][];
+            TargetBreakbarDamage1S = new List<double>[log.FightData.Logic.Targets.Count][];
             DpsTargets = new JsonStatistics.JsonDPS[log.FightData.Logic.Targets.Count][];
             StatsTargets = new JsonStatistics.JsonGameplayStats[log.FightData.Logic.Targets.Count][];
             TargetDamageDist = new List<JsonDamageDist>[log.FightData.Logic.Targets.Count][];
@@ -228,6 +229,10 @@ namespace GW2EIBuilders.JsonModels
                 TargetDamageDist[j] = targetDamageDistList;
                 DpsTargets[j] = player.GetDPSTarget(log, target).Select(x => new JsonStatistics.JsonDPS(x)).ToArray();
                 StatsTargets[j] = player.GetGameplayStats(log, target).Select(x => new JsonStatistics.JsonGameplayStats(x)).ToArray();
+            }
+            if (!log.CombatData.HasBreakbarDamageData)
+            {
+                TargetBreakbarDamage1S = null;
             }
             //
             BuffUptimes = GetPlayerJsonBuffsUptime(player, player.GetBuffs(log, BuffEnum.Self), player.GetBuffsDictionary(log), log, settings, buffDesc, personalBuffs);

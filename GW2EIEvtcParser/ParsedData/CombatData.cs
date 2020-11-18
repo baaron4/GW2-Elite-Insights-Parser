@@ -32,6 +32,8 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal bool HasStackIDs { get; } = false;
 
+        public bool HasBreakbarDamageData { get; } = false;
+
         private void EIBuffParse(List<Player> players, SkillData skillData, FightData fightData)
         {
             var toAdd = new List<AbstractBuffEvent>();
@@ -346,7 +348,7 @@ namespace GW2EIEvtcParser.ParsedData
             _damageDataById = damageData.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             _breakbarDamageData = brkDamageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             _breakbarDamageTakenData = brkDamageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
-
+            HasBreakbarDamageData = brkDamageData.Any();
             /*healing_data = allCombatItems.Where(x => x.getDstInstid() != 0 && x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                          ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
                                          (x.isBuff() == 0 && x.getValue() > 0))).ToList();

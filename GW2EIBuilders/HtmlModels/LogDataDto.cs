@@ -338,7 +338,7 @@ namespace GW2EIBuilders.HtmlModels
             logData.FightIcon = log.FightData.Logic.Icon;
             logData.LightTheme = light;
             logData.SingleGroup = log.PlayerList.Where(x => !x.IsFakeActor).Select(x => x.Group).Distinct().Count() == 1;
-            logData.HasBreakbarDamage = log.PlayerList.Any(x => x.GetBreakbarDamageLogs(null, log, 0, log.FightData.FightEnd).Any());
+            logData.HasBreakbarDamage = log.CombatData.HasBreakbarDamageData;
             logData.NoMechanics = log.FightData.Logic.HasNoFightSpecificMechanics;
             if (log.LogData.LogErrors.Count > 0)
             {
