@@ -213,7 +213,7 @@
             },
             computeData: function () {
                 this.layout.datarevision = new Date().getTime();
-                this.layout.yaxis.title = getDamageAxisLabelName(this.graphdata.graphmode);
+                this.layout.yaxis.title = graphTypeEnumToString(this.graphdata.graphmode);
                 var points = this.computeDPSRelatedData();
                 var res = this.data;
                 for (var i = 0; i < points.length; i++) {

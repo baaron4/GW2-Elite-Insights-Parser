@@ -70,7 +70,7 @@ function getDPSGraphCacheID(dpsmode, graphmode, activetargets, phaseIndex, extra
     return dpsmode + '-' + graphmode + '-' + getTargetCacheID(activetargets) + '-' + phaseIndex + (extra !== null ? '-' + extra : '');
 }
 
-function getDamageAxisLabelName(mode) {
+function graphTypeEnumToString(mode) {
     var name = "";
     switch (mode) {
         case GraphType.DPS:
@@ -92,7 +92,7 @@ function getDamageAxisLabelName(mode) {
 }
 
 function getDamageGraphName(mode) {
-    return getDamageAxisLabelName(mode) + " Graph";
+    return graphTypeEnumToString(mode) + " Graph";
 }
 
 const quickColor = {
