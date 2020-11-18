@@ -23,11 +23,11 @@ namespace GW2EIEvtcParser.EIData
         public uint HitboxWidth => AgentItem.HitboxWidth;
         public bool IsFakeActor { get; protected set; }
         // Damage
-        protected List<AbstractDamageEvent> DamageLogs { get; set; }
-        protected Dictionary<AgentItem, List<AbstractDamageEvent>> DamageLogsByDst { get; set; }
-        private Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>> _damageLogsPerPhasePerTarget { get; } = new Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>>();
-        protected List<AbstractDamageEvent> DamageTakenlogs { get; set; }
-        protected Dictionary<AgentItem, List<AbstractDamageEvent>> DamageTakenLogsBySrc { get; set; }
+        protected List<AbstractHealthDamageEvent> DamageLogs { get; set; }
+        protected Dictionary<AgentItem, List<AbstractHealthDamageEvent>> DamageLogsByDst { get; set; }
+        private Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractHealthDamageEvent>>> _damageLogsPerPhasePerTarget { get; } = new Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractHealthDamageEvent>>>();
+        protected List<AbstractHealthDamageEvent> DamageTakenlogs { get; set; }
+        protected Dictionary<AgentItem, List<AbstractHealthDamageEvent>> DamageTakenLogsBySrc { get; set; }
         // Breakbar Damage
         protected List<BreakbarDamageEvent> BreakbarDamageLogs { get; set; }
         protected Dictionary<AgentItem, List<BreakbarDamageEvent>> BreakbarDamageLogsByDst { get; set; }
@@ -44,21 +44,21 @@ namespace GW2EIEvtcParser.EIData
         }
         // Getters
         // Damage logs
-        public abstract List<AbstractDamageEvent> GetDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
+        public abstract List<AbstractHealthDamageEvent> GetDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
 
         public abstract List<BreakbarDamageEvent> GetBreakbarDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
 
         /// <summary>
         /// cached method for damage modifiers
         /// </summary>
-        internal List<AbstractDamageEvent> GetHitDamageLogs(AbstractActor target, ParsedEvtcLog log, PhaseData phase)
+        internal List<AbstractHealthDamageEvent> GetHitDamageLogs(AbstractActor target, ParsedEvtcLog log, PhaseData phase)
         {
-            if (!_damageLogsPerPhasePerTarget.TryGetValue(phase, out Dictionary<AbstractActor, List<AbstractDamageEvent>> targetDict))
+            if (!_damageLogsPerPhasePerTarget.TryGetValue(phase, out Dictionary<AbstractActor, List<AbstractHealthDamageEvent>> targetDict))
             {
-                targetDict = new Dictionary<AbstractActor, List<AbstractDamageEvent>>();
+                targetDict = new Dictionary<AbstractActor, List<AbstractHealthDamageEvent>>();
                 _damageLogsPerPhasePerTarget[phase] = targetDict;
             }
-            if (!targetDict.TryGetValue(target ?? ParserHelper._nullActor, out List<AbstractDamageEvent> dls))
+            if (!targetDict.TryGetValue(target ?? ParserHelper._nullActor, out List<AbstractHealthDamageEvent> dls))
             {
                 dls = GetDamageLogs(target, log, phase.Start, phase.End).Where(x => x.HasHit).ToList();
                 targetDict[target ?? ParserHelper._nullActor] = dls;
@@ -66,7 +66,7 @@ namespace GW2EIEvtcParser.EIData
             return dls;
         }
 
-        public abstract List<AbstractDamageEvent> GetDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
+        public abstract List<AbstractHealthDamageEvent> GetDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
 
         public abstract List<BreakbarDamageEvent> GetBreakbarDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
 

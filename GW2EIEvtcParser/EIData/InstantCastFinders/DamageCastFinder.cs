@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class DamageCastFinder : InstantCastFinder
     {
-        public delegate bool DamageCastChecker(AbstractDamageEvent evt, CombatData combatData);
+        public delegate bool DamageCastChecker(AbstractHealthDamageEvent evt, CombatData combatData);
         private readonly DamageCastChecker _triggerCondition;
 
         private readonly long _damageSkillID;
@@ -28,10 +28,10 @@ namespace GW2EIEvtcParser.EIData
         {
             var res = new List<InstantCastEvent>();
             var damages = combatData.GetDamageData(_damageSkillID).GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
-            foreach (KeyValuePair<AgentItem, List<AbstractDamageEvent>> pair in damages)
+            foreach (KeyValuePair<AgentItem, List<AbstractHealthDamageEvent>> pair in damages)
             {
                 long lastTime = int.MinValue;
-                foreach (AbstractDamageEvent de in pair.Value)
+                foreach (AbstractHealthDamageEvent de in pair.Value)
                 {
                     if (de.Time - lastTime < ICD)
                     {

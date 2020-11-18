@@ -23,11 +23,11 @@ namespace GW2EIEvtcParser.EIData
             _minionList.Add(minion);
         }
 
-        public override List<AbstractDamageEvent> GetDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override List<AbstractHealthDamageEvent> GetDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
             if (DamageLogs == null)
             {
-                DamageLogs = new List<AbstractDamageEvent>();
+                DamageLogs = new List<AbstractHealthDamageEvent>();
                 foreach (NPC minion in _minionList)
                 {
                     DamageLogs.AddRange(minion.GetDamageLogs(null, log, 0, log.FightData.FightEnd));
@@ -36,13 +36,13 @@ namespace GW2EIEvtcParser.EIData
             }
             if (target != null)
             {
-                if (DamageLogsByDst.TryGetValue(target.AgentItem, out List<AbstractDamageEvent> list))
+                if (DamageLogsByDst.TryGetValue(target.AgentItem, out List<AbstractHealthDamageEvent> list))
                 {
                     return list.Where(x => x.Time >= start && x.Time <= end).ToList();
                 } 
                 else
                 {
-                    return new List<AbstractDamageEvent>();
+                    return new List<AbstractHealthDamageEvent>();
                 }
             }    
             return DamageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
@@ -84,18 +84,18 @@ namespace GW2EIEvtcParser.EIData
             return res;
         }*/
 
-        public override List<AbstractDamageEvent> GetDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override List<AbstractHealthDamageEvent> GetDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
             if (DamageTakenlogs == null)
             {
-                DamageTakenlogs = new List<AbstractDamageEvent>();
+                DamageTakenlogs = new List<AbstractHealthDamageEvent>();
                 foreach (NPC minion in _minionList)
                 {
                     DamageTakenlogs.AddRange(minion.GetDamageTakenLogs(null, log, 0, log.FightData.FightEnd));
                 }
                 DamageTakenLogsBySrc = DamageTakenlogs.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
-            if (target != null && DamageTakenLogsBySrc.TryGetValue(target.AgentItem, out List<AbstractDamageEvent> list))
+            if (target != null && DamageTakenLogsBySrc.TryGetValue(target.AgentItem, out List<AbstractHealthDamageEvent> list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end).ToList();
             }

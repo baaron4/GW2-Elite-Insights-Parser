@@ -5,11 +5,11 @@ namespace GW2EIEvtcParser.EIData
 
     internal abstract class SkillMechanic : Mechanic
     {
-        public delegate bool SkillChecker(AbstractDamageEvent d, ParsedEvtcLog log);
+        public delegate bool SkillChecker(AbstractHealthDamageEvent d, ParsedEvtcLog log);
 
         private readonly SkillChecker _triggerCondition = null;
 
-        protected virtual bool Keep(AbstractDamageEvent c, ParsedEvtcLog log)
+        protected virtual bool Keep(AbstractHealthDamageEvent c, ParsedEvtcLog log)
         {
             if (_triggerCondition != null)
             {

@@ -55,10 +55,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             return GetFightTargetsIDs();
         }
 
-        internal override List<AbstractDamageEvent> SpecialDamageEventProcess(Dictionary<AgentItem, List<AbstractDamageEvent>> damageBySrc, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst, Dictionary<long, List<AbstractDamageEvent>> damageById, SkillData skillData)
+        internal override List<AbstractHealthDamageEvent> SpecialDamageEventProcess(Dictionary<AgentItem, List<AbstractHealthDamageEvent>> damageBySrc, Dictionary<AgentItem, List<AbstractHealthDamageEvent>> damageByDst, Dictionary<long, List<AbstractHealthDamageEvent>> damageById, SkillData skillData)
         {
             NegateDamageAgainstBarrier(Targets.Select(x => x.AgentItem).ToList(), damageByDst);
-            return new List<AbstractDamageEvent>();
+            return new List<AbstractHealthDamageEvent>();
         }
 
         private static List<PhaseData> GetTargetPhases(ParsedEvtcLog log, NPC target, string baseName)
@@ -124,7 +124,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // P1 and P2 merged
                         if (p1.Start == p2.Start)
                         {
-                            AbstractDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p1.End + 5000 && pAgents.Contains(x.From.GetFinalMaster()) && x.Damage > 0 && x is DirectDamageEvent);
+                            AbstractHealthDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p1.End + 5000 && pAgents.Contains(x.From.GetFinalMaster()) && x.Damage > 0 && x is DirectDamageEvent);
                             if (hit != null)
                             {
                                 p2.OverrideStart(hit.Time);
@@ -144,7 +144,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // P1 and P2 merged
                         if (p1.Start == p2.Start)
                         {
-                            AbstractDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p1.End + 5000 && pAgents.Contains(x.From.GetFinalMaster()) && x.Damage > 0 && x is DirectDamageEvent);
+                            AbstractHealthDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p1.End + 5000 && pAgents.Contains(x.From.GetFinalMaster()) && x.Damage > 0 && x is DirectDamageEvent);
                             if (hit != null)
                             {
                                 p2.OverrideStart(hit.Time);
@@ -157,7 +157,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // P1/P2 and P3 are merged
                         if (p1.Start == p3.Start || p2.Start == p3.Start)
                         {
-                            AbstractDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p2.End + 5000 && pAgents.Contains(x.From.GetFinalMaster()) && x.Damage > 0 && x is DirectDamageEvent);
+                            AbstractHealthDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p2.End + 5000 && pAgents.Contains(x.From.GetFinalMaster()) && x.Damage > 0 && x is DirectDamageEvent);
                             if (hit != null)
                             {
                                 p3.OverrideStart(hit.Time);
@@ -175,7 +175,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (!firstPhaseAt0 && phases.Count > 0 && phases.First().Start == 0)
             {
                 PhaseData p1 = phases[0];
-                AbstractDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= 0 && pAgents.Contains(x.From.GetFinalMaster()) && x.Damage > 0 && x is DirectDamageEvent);
+                AbstractHealthDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= 0 && pAgents.Contains(x.From.GetFinalMaster()) && x.Damage > 0 && x is DirectDamageEvent);
                 if (hit != null)
                 {
                     p1.OverrideStart(hit.Time);

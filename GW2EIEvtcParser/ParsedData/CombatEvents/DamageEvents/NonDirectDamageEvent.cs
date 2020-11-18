@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.ParsedData
 {
-    public class NonDirectDamageEvent : AbstractDamageEvent
+    public class NonDirectDamageEvent : AbstractHealthDamageEvent
     {
         private int _isCondi = -1;
 

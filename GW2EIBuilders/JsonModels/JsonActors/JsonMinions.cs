@@ -94,14 +94,14 @@ namespace GW2EIBuilders.JsonModels
             {
                 int tot = 0;
                 int shdTot = 0;
-                foreach (AbstractDamageEvent de in minions.GetDamageLogs(null, log, phase.Start, phase.End))
+                foreach (AbstractHealthDamageEvent de in minions.GetDamageLogs(null, log, phase.Start, phase.End))
                 {
                     tot += de.Damage;
                     shdTot = de.ShieldDamage;
                 }
                 totalDamage.Add(tot);
                 totalShieldDamage.Add(shdTot);
-                totalBreakbarDamage.Add(minions.GetBreakbarDamageLogs(null, log, phase.Start, phase.End).Sum(x => x.BreakbarDamage));
+                totalBreakbarDamage.Add(minions.GetBreakbarDamageLogs(null, log, phase.Start, phase.End).Sum(x => x.Damage));
             }
             TotalDamage = totalDamage;
             TotalShieldDamage = totalShieldDamage;
@@ -121,14 +121,14 @@ namespace GW2EIBuilders.JsonModels
                     {
                         int tot = 0;
                         int shdTot = 0;
-                        foreach (AbstractDamageEvent de in minions.GetDamageLogs(tar, log, phase.Start, phase.End))
+                        foreach (AbstractHealthDamageEvent de in minions.GetDamageLogs(tar, log, phase.Start, phase.End))
                         {
                             tot += de.Damage;
                             shdTot = de.ShieldDamage;
                         }
                         totalTarDamage.Add(tot);
                         totalTarShieldDamage.Add(shdTot);
-                        totalTarBreakbarDamage.Add(minions.GetBreakbarDamageLogs(tar, log, phase.Start, phase.End).Sum(x => x.BreakbarDamage));
+                        totalTarBreakbarDamage.Add(minions.GetBreakbarDamageLogs(tar, log, phase.Start, phase.End).Sum(x => x.Damage));
                     }
                     totalTargetDamage[i] = totalTarDamage;
                     totalTargetShieldDamage[i] = totalTarShieldDamage;

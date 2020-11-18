@@ -18,14 +18,14 @@ namespace GW2EIEvtcParser.ParsedData
         private readonly Dictionary<long, List<AbstractBuffEvent>> _buffData;
         private readonly Dictionary<long, List<BuffRemoveAllEvent>> _buffRemoveAllData;
         private readonly Dictionary<AgentItem, List<AbstractBuffEvent>> _buffDataByDst;
-        private readonly Dictionary<AgentItem, List<AbstractDamageEvent>> _damageData;
+        private readonly Dictionary<AgentItem, List<AbstractHealthDamageEvent>> _damageData;
         private readonly Dictionary<AgentItem, List<BreakbarDamageEvent>> _breakbarDamageData;
-        private readonly Dictionary<long, List<AbstractDamageEvent>> _damageDataById;
+        private readonly Dictionary<long, List<AbstractHealthDamageEvent>> _damageDataById;
         private readonly Dictionary<AgentItem, List<AnimatedCastEvent>> _animatedCastData;
         private readonly Dictionary<AgentItem, List<InstantCastEvent>> _instantCastData;
         private readonly Dictionary<AgentItem, List<WeaponSwapEvent>> _weaponSwapData;
         private readonly Dictionary<long, List<AbstractCastEvent>> _castDataById;
-        private readonly Dictionary<AgentItem, List<AbstractDamageEvent>> _damageTakenData;
+        private readonly Dictionary<AgentItem, List<AbstractHealthDamageEvent>> _damageTakenData;
         private readonly Dictionary<AgentItem, List<BreakbarDamageEvent>> _breakbarDamageTakenData;
         private readonly Dictionary<AgentItem, List<AbstractMovementEvent>> _movementData;
         private readonly List<RewardEvent> _rewardEvents = new List<RewardEvent>();
@@ -90,44 +90,44 @@ namespace GW2EIEvtcParser.ParsedData
 
         private void EIDamageParse(SkillData skillData, FightData fightData)
         {
-            var toAdd = new List<AbstractDamageEvent>();
+            var toAdd = new List<AbstractHealthDamageEvent>();
             toAdd.AddRange(fightData.Logic.SpecialDamageEventProcess(_damageData, _damageTakenData, _damageDataById, skillData));
             var idsToSort = new HashSet<long>();
             var dstToSort = new HashSet<AgentItem>();
             var srcToSort = new HashSet<AgentItem>();
-            foreach (AbstractDamageEvent de in toAdd)
+            foreach (AbstractHealthDamageEvent de in toAdd)
             {
-                if (_damageTakenData.TryGetValue(de.To, out List<AbstractDamageEvent> list1))
+                if (_damageTakenData.TryGetValue(de.To, out List<AbstractHealthDamageEvent> list1))
                 {
                     list1.Add(de);
                 }
                 else
                 {
-                    _damageTakenData[de.To] = new List<AbstractDamageEvent>()
+                    _damageTakenData[de.To] = new List<AbstractHealthDamageEvent>()
                     {
                         de
                     };
                 }
                 dstToSort.Add(de.To);
-                if (_damageData.TryGetValue(de.From, out List<AbstractDamageEvent> list3))
+                if (_damageData.TryGetValue(de.From, out List<AbstractHealthDamageEvent> list3))
                 {
                     list1.Add(de);
                 }
                 else
                 {
-                    _damageData[de.From] = new List<AbstractDamageEvent>()
+                    _damageData[de.From] = new List<AbstractHealthDamageEvent>()
                     {
                         de
                     };
                 }
                 srcToSort.Add(de.To);
-                if (_damageDataById.TryGetValue(de.SkillId, out List<AbstractDamageEvent> list2))
+                if (_damageDataById.TryGetValue(de.SkillId, out List<AbstractHealthDamageEvent> list2))
                 {
                     list2.Add(de);
                 }
                 else
                 {
-                    _damageDataById[de.SkillId] = new List<AbstractDamageEvent>()
+                    _damageDataById[de.SkillId] = new List<AbstractHealthDamageEvent>()
                     {
                         de
                     };
@@ -236,7 +236,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         private void EIMetaAndStatusParse(FightData fightData)
         {
-            foreach (KeyValuePair<AgentItem, List<AbstractDamageEvent>> pair in _damageTakenData)
+            foreach (KeyValuePair<AgentItem, List<AbstractHealthDamageEvent>> pair in _damageTakenData)
             {
                 if (pair.Key.ID == (int)ArcDPSEnums.TargetID.WorldVersusWorld)
                 {
@@ -254,7 +254,7 @@ namespace GW2EIEvtcParser.ParsedData
                     agentDowns = new List<DownEvent>();
                     setDowns = true;
                 }
-                foreach (AbstractDamageEvent evt in pair.Value)
+                foreach (AbstractHealthDamageEvent evt in pair.Value)
                 {
                     if (evt.HasKilled)
                     {
@@ -342,7 +342,7 @@ namespace GW2EIEvtcParser.ParsedData
             _buffData = buffEvents.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
             // damage events
             operation.UpdateProgressWithCancellationCheck("Creating Damage Events");
-            (List<AbstractDamageEvent> damageData, List<BreakbarDamageEvent> brkDamageData) = CombatEventFactory.CreateDamageEvents(noStateActiBuffRem.Where(x => (x.IsBuff != 0 && x.Value == 0) || (x.IsBuff == 0)).ToList(), agentData, skillData);
+            (List<AbstractHealthDamageEvent> damageData, List<BreakbarDamageEvent> brkDamageData) = CombatEventFactory.CreateDamageEvents(noStateActiBuffRem.Where(x => (x.IsBuff != 0 && x.Value == 0) || (x.IsBuff == 0)).ToList(), agentData, skillData);
             _damageData = damageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             _damageTakenData = damageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             _damageDataById = damageData.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
@@ -620,13 +620,13 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="key"></param> Agent
         /// <returns></returns>
-        public List<AbstractDamageEvent> GetDamageData(AgentItem key)
+        public List<AbstractHealthDamageEvent> GetDamageData(AgentItem key)
         {
-            if (_damageData.TryGetValue(key, out List<AbstractDamageEvent> res))
+            if (_damageData.TryGetValue(key, out List<AbstractHealthDamageEvent> res))
             {
                 return res;
             }
-            return new List<AbstractDamageEvent>(); ;
+            return new List<AbstractHealthDamageEvent>(); ;
         }
 
         /// <summary>
@@ -648,13 +648,13 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="key"></param> Id of the skill
         /// <returns></returns>
-        public List<AbstractDamageEvent> GetDamageData(long key)
+        public List<AbstractHealthDamageEvent> GetDamageData(long key)
         {
-            if (_damageDataById.TryGetValue(key, out List<AbstractDamageEvent> res))
+            if (_damageDataById.TryGetValue(key, out List<AbstractHealthDamageEvent> res))
             {
                 return res;
             }
-            return new List<AbstractDamageEvent>(); ;
+            return new List<AbstractHealthDamageEvent>(); ;
         }
 
         /// <summary>
@@ -718,13 +718,13 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="key"></param> Agent
         /// <returns></returns>
-        public List<AbstractDamageEvent> GetDamageTakenData(AgentItem key)
+        public List<AbstractHealthDamageEvent> GetDamageTakenData(AgentItem key)
         {
-            if (_damageTakenData.TryGetValue(key, out List<AbstractDamageEvent> res))
+            if (_damageTakenData.TryGetValue(key, out List<AbstractHealthDamageEvent> res))
             {
                 return res;
             }
-            return new List<AbstractDamageEvent>();
+            return new List<AbstractHealthDamageEvent>();
         }
 
         /// <summary>

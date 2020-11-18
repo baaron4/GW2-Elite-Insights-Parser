@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EIData
         public List<DeathRecapDamageItem> ToDown { get; }
         public List<DeathRecapDamageItem> ToKill { get; }
 
-        internal DeathRecap(List<AbstractDamageEvent> damageLogs, DeadEvent dead, List<DownEvent> downs, List<AliveEvent> ups, long lastDeathTime)
+        internal DeathRecap(List<AbstractHealthDamageEvent> damageLogs, DeadEvent dead, List<DownEvent> downs, List<AliveEvent> ups, long lastDeathTime)
         {
             DeathTime = dead.Time;
             DownEvent downed;
@@ -39,7 +39,7 @@ namespace GW2EIEvtcParser.EIData
                 int damage = 0;
                 for (int i = damageToDown.Count - 1; i >= 0; i--)
                 {
-                    AbstractDamageEvent dl = damageToDown[i];
+                    AbstractHealthDamageEvent dl = damageToDown[i];
                     AgentItem ag = dl.From;
                     var item = new DeathRecapDamageItem()
                     {
@@ -60,7 +60,7 @@ namespace GW2EIEvtcParser.EIData
                 ToKill = damageToKill.Count > 0 ? new List<DeathRecapDamageItem>() : null;
                 for (int i = damageToKill.Count - 1; i >= 0; i--)
                 {
-                    AbstractDamageEvent dl = damageToKill[i];
+                    AbstractHealthDamageEvent dl = damageToKill[i];
                     AgentItem ag = dl.From;
                     var item = new DeathRecapDamageItem()
                     {
@@ -81,7 +81,7 @@ namespace GW2EIEvtcParser.EIData
                 int damage = 0;
                 for (int i = damageToKill.Count - 1; i >= 0; i--)
                 {
-                    AbstractDamageEvent dl = damageToKill[i];
+                    AbstractHealthDamageEvent dl = damageToKill[i];
                     AgentItem ag = dl.From;
                     var item = new DeathRecapDamageItem()
                     {

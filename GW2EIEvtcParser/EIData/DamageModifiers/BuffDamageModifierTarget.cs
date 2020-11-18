@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData
         private readonly BuffsTracker _trackerPlayer = null;
         private readonly GainComputer _gainComputerPlayer = null;
 
-        protected double ComputeGainPlayer(int stack, AbstractDamageEvent dl)
+        protected double ComputeGainPlayer(int stack, AbstractHealthDamageEvent dl)
         {
             if (DLChecker != null && !DLChecker(dl))
             {
@@ -89,7 +89,7 @@ namespace GW2EIEvtcParser.EIData
                     for (int i = 0; i < phases.Count; i++)
                     {
                         int totalDamage = GetTotalDamage(p, log, target, i);
-                        List<AbstractDamageEvent> typedHits = GetHitDamageLogs(p, log, target, phases[i]);
+                        List<AbstractHealthDamageEvent> typedHits = GetHitDamageLogs(p, log, target, phases[i]);
                         List<double> damages;
                         if (_trackerPlayer != null)
                         {

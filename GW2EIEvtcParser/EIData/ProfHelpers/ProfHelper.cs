@@ -57,12 +57,12 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        internal static HashSet<AgentItem> GetOffensiveGadgetAgents(Dictionary<long, List<AbstractDamageEvent>> damageData, long damageSkillID, HashSet<AgentItem> playerAgents)
+        internal static HashSet<AgentItem> GetOffensiveGadgetAgents(Dictionary<long, List<AbstractHealthDamageEvent>> damageData, long damageSkillID, HashSet<AgentItem> playerAgents)
         {
             var res = new HashSet<AgentItem>();
-            if (damageData.TryGetValue(damageSkillID, out List<AbstractDamageEvent> list))
+            if (damageData.TryGetValue(damageSkillID, out List<AbstractHealthDamageEvent> list))
             {
-                foreach (AbstractDamageEvent evt in list)
+                foreach (AbstractHealthDamageEvent evt in list)
                 {
                     // dst must no be a gadget nor a friendly player
                     // src must be a masterless gadget
@@ -83,7 +83,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        internal static void AttachMasterToRacialGadgets(List<Player> players, Dictionary<long, List<AbstractDamageEvent>> damageData, Dictionary<long, List<AbstractCastEvent>> castData)
+        internal static void AttachMasterToRacialGadgets(List<Player> players, Dictionary<long, List<AbstractHealthDamageEvent>> damageData, Dictionary<long, List<AbstractCastEvent>> castData)
         {
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
             // Sylvari stuff

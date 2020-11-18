@@ -295,9 +295,9 @@ namespace GW2EIEvtcParser.ParsedData
             return res;
         }
 
-        public static (List<AbstractDamageEvent>, List<BreakbarDamageEvent>) CreateDamageEvents(List<CombatItem> damageEvents, AgentData agentData, SkillData skillData)
+        public static (List<AbstractHealthDamageEvent>, List<BreakbarDamageEvent>) CreateDamageEvents(List<CombatItem> damageEvents, AgentData agentData, SkillData skillData)
         {
-            var hpDamage = new List<AbstractDamageEvent>();
+            var hpDamage = new List<AbstractHealthDamageEvent>();
             var brkBarDamage = new List<BreakbarDamageEvent>();
             foreach (CombatItem c in damageEvents)
             {

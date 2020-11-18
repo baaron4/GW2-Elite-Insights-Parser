@@ -295,17 +295,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<AbstractBuffEvent>();
         }
 
-        protected static void NegateDamageAgainstBarrier(List<AgentItem> agentItems, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst)
+        protected static void NegateDamageAgainstBarrier(List<AgentItem> agentItems, Dictionary<AgentItem, List<AbstractHealthDamageEvent>> damageByDst)
         {
-            var dmgEvts = new List<AbstractDamageEvent>();
+            var dmgEvts = new List<AbstractHealthDamageEvent>();
             foreach (AgentItem agentItem in agentItems)
             {
-                if (damageByDst.TryGetValue(agentItem, out List<AbstractDamageEvent> list))
+                if (damageByDst.TryGetValue(agentItem, out List<AbstractHealthDamageEvent> list))
                 {
                     dmgEvts.AddRange(list);
                 }
             }
-            foreach (AbstractDamageEvent de in dmgEvts)
+            foreach (AbstractHealthDamageEvent de in dmgEvts)
             {
                 if (de.ShieldDamage > 0)
                 {
@@ -339,9 +339,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal virtual List<AbstractDamageEvent> SpecialDamageEventProcess(Dictionary<AgentItem, List<AbstractDamageEvent>> damageBySrc, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst, Dictionary<long, List<AbstractDamageEvent>> damageById, SkillData skillData)
+        internal virtual List<AbstractHealthDamageEvent> SpecialDamageEventProcess(Dictionary<AgentItem, List<AbstractHealthDamageEvent>> damageBySrc, Dictionary<AgentItem, List<AbstractHealthDamageEvent>> damageByDst, Dictionary<long, List<AbstractHealthDamageEvent>> damageById, SkillData skillData)
         {
-            return new List<AbstractDamageEvent>();
+            return new List<AbstractHealthDamageEvent>();
         }
 
         internal virtual void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
@@ -388,7 +388,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     long time = killed.Time;
                     success++;
-                    AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
+                    AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
                     if (lastDamageTaken != null)
                     {
                         time = Math.Min(lastDamageTaken.Time, time);
@@ -410,7 +410,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             var playerExits = new List<ExitCombatEvent>();
             var targetExits = new List<ExitCombatEvent>();
-            var lastTargetDamages = new List<AbstractDamageEvent>();
+            var lastTargetDamages = new List<AbstractHealthDamageEvent>();
             foreach (AgentItem a in playerAgents)
             {
                 playerExits.AddRange(combatData.GetExitCombatEvents(a));
@@ -426,7 +426,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     targetExits.AddRange(combatData.GetExitCombatEvents(t.AgentItem));
                 }
-                AbstractDamageEvent lastDamage = combatData.GetDamageTakenData(t.AgentItem).LastOrDefault(x => (x.Damage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
+                AbstractHealthDamageEvent lastDamage = combatData.GetDamageTakenData(t.AgentItem).LastOrDefault(x => (x.Damage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
                 if (lastDamage != null)
                 {
                     lastTargetDamages.Add(lastDamage);
@@ -434,7 +434,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             ExitCombatEvent lastPlayerExit = playerExits.Count > 0 ? playerExits.MaxBy(x => x.Time) : null;
             ExitCombatEvent lastTargetExit = targetExits.Count > 0 ? targetExits.MaxBy(x => x.Time) : null;
-            AbstractDamageEvent lastDamageTaken = lastTargetDamages.Count > 0 ? lastTargetDamages.MaxBy(x => x.Time) : null;
+            AbstractHealthDamageEvent lastDamageTaken = lastTargetDamages.Count > 0 ? lastTargetDamages.MaxBy(x => x.Time) : null;
             if (lastTargetExit != null && lastDamageTaken != null)
             {
                 if (lastPlayerExit != null)

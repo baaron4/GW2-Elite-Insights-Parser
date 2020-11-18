@@ -71,7 +71,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (heatWave != null)
             {
                 phases.Add(new PhaseData(0, heatWave.Time - 1));
-                AbstractDamageEvent downPour = log.CombatData.GetDamageData(mainTarget.AgentItem).Find(x => x.SkillId == 34554);
+                AbstractHealthDamageEvent downPour = log.CombatData.GetDamageData(mainTarget.AgentItem).Find(x => x.SkillId == 34554);
                 if (downPour != null)
                 {
                     phases.Add(new PhaseData(heatWave.Time, downPour.Time - 1));

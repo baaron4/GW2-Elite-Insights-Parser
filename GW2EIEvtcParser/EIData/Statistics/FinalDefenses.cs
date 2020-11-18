@@ -21,10 +21,10 @@ namespace GW2EIEvtcParser.EIData
         {
             long start = phase.Start;
             long end = phase.End;
-            List<AbstractDamageEvent> damageLogs = actor.GetDamageTakenLogs(from, log, start, end);
+            List<AbstractHealthDamageEvent> damageLogs = actor.GetDamageTakenLogs(from, log, start, end);
 
             DamageTaken = damageLogs.Sum(x => (long)x.Damage);
-            BreakbarDamageTaken = actor.GetBreakbarDamageTakenLogs(from, log, start, end).Sum(x => x.BreakbarDamage);
+            BreakbarDamageTaken = actor.GetBreakbarDamageTakenLogs(from, log, start, end).Sum(x => x.Damage);
             BlockedCount = damageLogs.Count(x => x.IsBlocked);
             MissedCount = damageLogs.Count(x => x.IsBlind);
             InvulnedCount = damageLogs.Count(x => x.IsAbsorbed);

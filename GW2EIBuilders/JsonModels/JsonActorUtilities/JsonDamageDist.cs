@@ -108,7 +108,7 @@ namespace GW2EIBuilders.JsonModels
 
         }
 
-        protected JsonDamageDist(long id, List<AbstractDamageEvent> list, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        protected JsonDamageDist(long id, List<AbstractHealthDamageEvent> list, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
             IndirectDamage = list.Exists(x => x is NonDirectDamageEvent);
             if (IndirectDamage)
@@ -138,7 +138,7 @@ namespace GW2EIBuilders.JsonModels
             Id = id;
             Min = int.MaxValue;
             Max = int.MinValue;
-            foreach (AbstractDamageEvent dmgEvt in list)
+            foreach (AbstractHealthDamageEvent dmgEvt in list)
             {
                 Hits += dmgEvt.DoubleProcHit ? 0 : 1;
                 TotalDamage += dmgEvt.Damage;
@@ -166,10 +166,10 @@ namespace GW2EIBuilders.JsonModels
             Max = Max == int.MinValue ? 0 : Max;
         }
 
-        internal static List<JsonDamageDist> BuildJsonDamageDistList(Dictionary<long, List<AbstractDamageEvent>> dlsByID, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        internal static List<JsonDamageDist> BuildJsonDamageDistList(Dictionary<long, List<AbstractHealthDamageEvent>> dlsByID, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
             var res = new List<JsonDamageDist>();
-            foreach (KeyValuePair<long, List<AbstractDamageEvent>> pair in dlsByID)
+            foreach (KeyValuePair<long, List<AbstractHealthDamageEvent>> pair in dlsByID)
             {
                 res.Add(new JsonDamageDist(pair.Key, pair.Value, log, skillDesc, buffDesc));
             }

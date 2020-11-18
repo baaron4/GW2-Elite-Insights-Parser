@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData
 {
-    public class DirectDamageEvent : AbstractDamageEvent
+    public class DirectDamageEvent : AbstractHealthDamageEvent
     {
         internal DirectDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, ArcDPSEnums.PhysicalResult result) : base(evtcItem, agentData, skillData)
         {

@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EIData
         public string Name { get; }
         public int ID { get; }
         public string Tooltip { get; }
-        public delegate bool DamageLogChecker(AbstractDamageEvent dl);
+        public delegate bool DamageLogChecker(AbstractHealthDamageEvent dl);
 
         protected DamageModifierMode Mode { get; } = DamageModifierMode.All;
         protected DamageLogChecker DLChecker { get; }
@@ -139,7 +139,7 @@ namespace GW2EIEvtcParser.EIData
             return 0;
         }
 
-        public List<AbstractDamageEvent> GetHitDamageLogs(Player p, ParsedEvtcLog log, NPC t, PhaseData phase)
+        public List<AbstractHealthDamageEvent> GetHitDamageLogs(Player p, ParsedEvtcLog log, NPC t, PhaseData phase)
         {
             switch (_srcType)
             {

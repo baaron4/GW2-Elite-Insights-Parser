@@ -168,7 +168,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     playerExits.AddRange(combatData.GetExitCombatEvents(a));
                 }
                 ExitCombatEvent lastPlayerExit = playerExits.Count > 0 ? playerExits.MaxBy(x => x.Time) : null; 
-                AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
+                AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
                 if (lastDamageTaken != null && lastPlayerExit != null)
                 {
                     fightData.SetSuccess(lastPlayerExit.Time > notAttackableEvent.Time + 1000, lastDamageTaken.Time);

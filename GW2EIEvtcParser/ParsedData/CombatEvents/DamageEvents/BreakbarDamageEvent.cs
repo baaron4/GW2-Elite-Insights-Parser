@@ -2,12 +2,11 @@
 
 namespace GW2EIEvtcParser.ParsedData
 {
-    public class BreakbarDamageEvent : AbstractBaseDamageEvent
+    public class BreakbarDamageEvent : AbstractDamageEvent<double>
     {
-        public double BreakbarDamage { get; }
         internal BreakbarDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
-            BreakbarDamage = Math.Round(evtcItem.Value / 10.0, 1);
+            Damage = Math.Round(evtcItem.Value / 10.0, 1);
         }
     }
 }
