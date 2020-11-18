@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="LI.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Guild Wars 2 - Elite Insights
-   &#160;<span id="projectnumber">2.28+</span>
+   &#160;<span id="projectnumber">2.29+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -164,6 +164,10 @@ Length == # of phases  <a href="#adaee8022c2ffe9662936ae068ef409d1">More...</a><
 <tr class="memdesc:a93902aae44da9ab4bce40d28c171051e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int representing 1S damage points <br />
 Length == # of phases  <a href="#a93902aae44da9ab4bce40d28c171051e">More...</a><br /></td></tr>
 <tr class="separator:a93902aae44da9ab4bce40d28c171051e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6bac3f17312fe40df5be8a1d0d5af77"><td class="memItemLeft" align="right" valign="top">List&lt; double &gt; []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#aa6bac3f17312fe40df5be8a1d0d5af77">BreakbarDamage1S</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:aa6bac3f17312fe40df5be8a1d0d5af77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of double representing 1S breakbar damage points <br />
+Length == # of phases  <a href="#aa6bac3f17312fe40df5be8a1d0d5af77">More...</a><br /></td></tr>
+<tr class="separator:aa6bac3f17312fe40df5be8a1d0d5af77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40cebbc8225e18f9e63c7d3fb6f902ad"><td class="memItemLeft" align="right" valign="top">List&lt; int[]&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a40cebbc8225e18f9e63c7d3fb6f902ad">ConditionsStates</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a40cebbc8225e18f9e63c7d3fb6f902ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of conditions <br />
 Array[i][0] will be the time, Array[i][1] will be the number of conditions present from Array[i][0] to Array[i+1][0] <br />
@@ -240,6 +244,33 @@ If i corresponds to the last element that means the status did not change for th
 <p>Array of int[2] that represents the number of boons <br />
 Array[i][0] will be the time, Array[i][1] will be the number of boons present from Array[i][0] to Array[i+1][0] <br />
 If i corresponds to the last element that means the status did not change for the remainder of the fight </p>
+
+</div>
+</div>
+<a id="aa6bac3f17312fe40df5be8a1d0d5af77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6bac3f17312fe40df5be8a1d0d5af77">&#9670;&nbsp;</a></span>BreakbarDamage1S</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">List&lt;double&gt; [] GW2EIBuilders.JsonModels.JsonActor.BreakbarDamage1S</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Array of double representing 1S breakbar damage points <br />
+Length == # of phases </p>
+<p>If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point <br />
+ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250] </p>
 
 </div>
 </div>

@@ -42,7 +42,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats_all.html#a7a163543ba6adb7defe20bad7f405ac3"
+"class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats_all.html#a1b336c6a347ceecce8bff2320b1c7bf5"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

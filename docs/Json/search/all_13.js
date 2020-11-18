@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['targetbreakbardamage1s',['TargetBreakbarDamage1S',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#ab52f23933baa37ec78de27f06c1d62c4',1,'GW2EIBuilders::JsonModels::JsonPlayer']]],
   ['targetdamage1s',['TargetDamage1S',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a420b534b66e9a4e6a68b784229aa1357',1,'GW2EIBuilders::JsonModels::JsonPlayer']]],
   ['targetdamagedist',['TargetDamageDist',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_minions.html#ae916a1f8e191d243f4e78a75f8091762',1,'GW2EIBuilders.JsonModels.JsonMinions.TargetDamageDist()'],['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a2a84a3e84bca276b194e431b89d3f805',1,'GW2EIBuilders.JsonModels.JsonPlayer.TargetDamageDist()']]],
   ['targets',['Targets',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_log.html#af266afd136c62d5ce528bd789ac493a8',1,'GW2EIBuilders.JsonModels.JsonLog.Targets()'],['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_phase.html#a14a6390873e8378d51ac3e5093892289',1,'GW2EIBuilders.JsonModels.JsonPhase.Targets()']]],

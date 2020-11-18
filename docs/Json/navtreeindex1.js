@@ -1,5 +1,10 @@
 var NAVTREEINDEX1 =
 {
+"class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats_all.html#a1b336c6a347ceecce8bff2320b1c7bf5":[1,0,0,0,14,3,10],
+"class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats_all.html#a1b482e81141c146984bdce879df07517":[1,0,0,0,14,3,4],
+"class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats_all.html#a25e2505b80ba0bce8105f597c6951610":[1,0,0,0,14,3,2],
+"class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats_all.html#a5ee8d4e487b31f57160017eb95615edb":[1,0,0,0,14,3,6],
+"class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats_all.html#a69fd7ce0343990756e23aeb8c2aebf87":[1,0,0,0,14,3,5],
 "class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats_all.html#a7a163543ba6adb7defe20bad7f405ac3":[1,0,0,0,14,3,7],
 "class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats_all.html#a81907b6d620e240000add9925ef3de2e":[1,0,0,0,14,3,1],
 "class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats_all.html#a8c5451ca77df768c8b319e9a2791edc3":[1,0,0,0,14,3,8],
@@ -31,8 +36,8 @@ var NAVTREEINDEX1 =
 "functions_n.html":[1,3,0,12],
 "functions_o.html":[1,3,0,13],
 "functions_p.html":[1,3,0,14],
-"functions_prop.html":[1,3,1],
 "functions_prop.html":[1,3,1,0],
+"functions_prop.html":[1,3,1],
 "functions_prop_b.html":[1,3,1,1],
 "functions_prop_c.html":[1,3,1,2],
 "functions_prop_d.html":[1,3,1,3],
@@ -63,8 +68,8 @@ var NAVTREEINDEX1 =
 "index.html":[],
 "namespace_g_w2_e_i_builders.html":[1,0,0],
 "namespace_g_w2_e_i_builders.html":[0,0,0],
-"namespace_g_w2_e_i_builders_1_1_json_models.html":[0,0,0,0],
 "namespace_g_w2_e_i_builders_1_1_json_models.html":[1,0,0,0],
+"namespace_g_w2_e_i_builders_1_1_json_models.html":[0,0,0,0],
 "namespaces.html":[0,0],
 "pages.html":[]
 };

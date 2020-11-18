@@ -2,6 +2,7 @@ var class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor =
 [
     [ "ActiveCombatMinions", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a46bf9dd222bd3d86d66f65f23bdf1a8c", null ],
     [ "BoonsStates", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a6c591bb6bb5f774cbb48e0ba8d4bb078", null ],
+    [ "BreakbarDamage1S", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#aa6bac3f17312fe40df5be8a1d0d5af77", null ],
     [ "Concentration", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#aff4e6dc972529a41d08fc3a19557e687", null ],
     [ "Condition", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#aa94a02f1d37f6e6b1845b8e00c47e535", null ],
     [ "ConditionsStates", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a40cebbc8225e18f9e63c7d3fb6f902ad", null ],

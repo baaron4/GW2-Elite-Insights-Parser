@@ -4,6 +4,7 @@ var searchData=
   ['activecombatminions',['ActiveCombatMinions',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a46bf9dd222bd3d86d66f65f23bdf1a8c',1,'GW2EIBuilders::JsonModels::JsonActor']]],
   ['activetimes',['ActiveTimes',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#ae33d2d6e2e31d1bcbf50b0b722e5e105',1,'GW2EIBuilders::JsonModels::JsonPlayer']]],
   ['actor',['Actor',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_mechanics_1_1_json_mechanic.html#a1bc54da26cd87233787ecb6d8822d80c',1,'GW2EIBuilders::JsonModels::JsonMechanics::JsonMechanic']]],
+  ['actorbreakbardamage',['ActorBreakbarDamage',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_d_p_s.html#a095b15afce491cc76bdc010bf88e4f52',1,'GW2EIBuilders::JsonModels::JsonStatistics::JsonDPS']]],
   ['actorcondidamage',['ActorCondiDamage',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_d_p_s.html#a20bb834648e320cb085bbcf9c3aa810c',1,'GW2EIBuilders::JsonModels::JsonStatistics::JsonDPS']]],
   ['actorcondidps',['ActorCondiDps',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_d_p_s.html#a96a9910e841a3b60d021212d5401be8f',1,'GW2EIBuilders::JsonModels::JsonStatistics::JsonDPS']]],
   ['actordamage',['ActorDamage',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_d_p_s.html#a38e57042e517747aaecd86aca9ae57f4',1,'GW2EIBuilders::JsonModels::JsonStatistics::JsonDPS']]],

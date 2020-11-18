@@ -1,6 +1,7 @@
 var class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_defenses_all =
 [
     [ "BlockedCount", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_defenses_all.html#a0cc65cb8693cb139b6ec2966426383ad", null ],
+    [ "BreakbarDamageTaken", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_defenses_all.html#a8a8aff6f757290d4a035aa6f4e373ea3", null ],
     [ "DamageBarrier", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_defenses_all.html#a7e1561cfdd3b45c3c093f068d485d65d", null ],
     [ "DamageTaken", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_defenses_all.html#a21e7adc77aa641a7268d7c533e8ee8fb", null ],
     [ "DcCount", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_defenses_all.html#ae99962f8c053495a1cb4ff13d8876773", null ],

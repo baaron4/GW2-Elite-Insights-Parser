@@ -22,6 +22,7 @@ var class_g_w2_e_i_builders_1_1_json_models_1_1_json_player =
     [ "SquadBuffsActive", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a7ceddd7c36f00657734ee8d1e2788cb4", null ],
     [ "StatsTargets", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a25a251fbe92c3761bdf377bc6f71032e", null ],
     [ "Support", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#af9f4f59add19a982063b12a466a6424b", null ],
+    [ "TargetBreakbarDamage1S", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#ab52f23933baa37ec78de27f06c1d62c4", null ],
     [ "TargetDamage1S", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a420b534b66e9a4e6a68b784229aa1357", null ],
     [ "TargetDamageDist", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a2a84a3e84bca276b194e431b89d3f805", null ],
     [ "Weapons", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a1da09c10587e8eb7fe91a3476127f584", null ]
