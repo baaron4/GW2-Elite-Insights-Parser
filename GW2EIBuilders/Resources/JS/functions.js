@@ -70,6 +70,31 @@ function getDPSGraphCacheID(dpsmode, graphmode, activetargets, phaseIndex, extra
     return dpsmode + '-' + graphmode + '-' + getTargetCacheID(activetargets) + '-' + phaseIndex + (extra !== null ? '-' + extra : '');
 }
 
+function getDamageAxisLabelName(mode) {
+    var name = "";
+    switch (mode) {
+        case GraphType.DPS:
+            name = "DPS";
+            break;
+        case GraphType.CenteredDPS:
+            name = "Centered DPS";
+            break;
+        case GraphType.Damage:
+            name = "Damage";
+            break;
+        case GraphType.BreakbarDamage:
+            name = "Breakbar Damage";
+            break;
+        default:
+            break;
+    }
+    return name;
+}
+
+function getDamageGraphName(mode) {
+    return getDamageAxisLabelName(mode) + " Graph";
+}
+
 const quickColor = {
     r: 220,
     g: 20,

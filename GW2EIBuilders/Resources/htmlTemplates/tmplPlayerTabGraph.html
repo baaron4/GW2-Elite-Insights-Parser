@@ -111,23 +111,7 @@
                 return "playergraph-" + this.playerindex + '-' + this.phaseindex;
             },
             graphname: function () {
-                var name = "Graph";
-                switch (this.graphdata.graphmode) {
-                    case GraphType.DPS:
-                        name = "DPS " + name;
-                        break;
-                    case GraphType.CenteredDPS:
-                        name = "Centered DPS " + name;
-                        break;
-                    case GraphType.Damage:
-                        name = "Damage " + name;
-                        break;
-                    case GraphType.BreakbarDamage:
-                        name = "Breakbar Damage " + name;
-                        break;
-                    default:
-                        break;
-                }
+                var name = getDamageGraphName(this.graphdata.graphmode);
                 switch (this.graphdata.dpsmode) {
                     case 0:
                         name = "Full " + name;
@@ -154,22 +138,7 @@
             },
             computeData: function () {
                 this.layout.datarevision = new Date().getTime();
-                switch (this.graphdata.graphmode) {
-                    case GraphType.DPS:
-                        this.layout.yaxis3.title = "DPS";
-                        break;
-                    case GraphType.CenteredDPS:
-                        this.layout.yaxis3.title = "Centered DPS";
-                        break;
-                    case GraphType.Damage:
-                        this.layout.yaxis3.title = "Damage";
-                        break;
-                    case GraphType.BreakbarDamage:
-                        this.layout.yaxis3.title = "Breakbar Damage";
-                        break;
-                    default:
-                        break;
-                }
+                this.layout.yaxis3.title = getDamageAxisLabelName(this.graphdata.graphmode);
                 var res = this.data;
                 var data = this.computeDPSRelatedData();
                 this.data[this.playerOffset].y = data[0];

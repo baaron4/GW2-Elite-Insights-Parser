@@ -185,23 +185,7 @@
                 return graphData.phases[this.phaseindex];
             },
             graphname: function () {
-                var name = "Graph";
-                switch (this.graphdata.graphmode) {
-                    case GraphType.DPS:
-                        name = "DPS " + name;
-                        break;                   
-                    case GraphType.CenteredDPS:
-                        name = "Centered DPS " + name;
-                        break;
-                    case GraphType.Damage:
-                        name = "Damage " + name;
-                        break;
-                    case GraphType.BreakbarDamage:
-                        name = "Breakbar Damage " + name;
-                        break;
-                    default:
-                        break;
-                }
+                var name = getDamageGraphName(this.graphdata.graphmode);
                 switch (this.graphdata.dpsmode) {
                     case 0:
                         name = "Full " + name;
@@ -229,22 +213,7 @@
             },
             computeData: function () {
                 this.layout.datarevision = new Date().getTime();
-                switch (this.graphdata.graphmode) {
-                    case GraphType.DPS:
-                        this.layout.yaxis.title = "DPS";
-                        break;
-                    case GraphType.CenteredDPS:
-                        this.layout.yaxis.title = "Centered DPS";
-                        break;
-                    case GraphType.Damage:
-                        this.layout.yaxis.title = "Damage";
-                        break;
-                    case GraphType.BreakbarDamage:
-                        this.layout.yaxis.title = "Breakbar Damage";
-                        break;
-                    default:
-                        break;
-                }
+                this.layout.yaxis.title = getDamageAxisLabelName(this.graphdata.graphmode);
                 var points = this.computeDPSRelatedData();
                 var res = this.data;
                 for (var i = 0; i < points.length; i++) {
