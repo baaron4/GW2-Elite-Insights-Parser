@@ -338,6 +338,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Mistlock Instability: Toxic Trail", 36204, ParserHelper.Source.FractalInstability, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/df/Mistlock_Instability_Toxic_Trail.png"),
             new Buff("Mistlock Instability: Vengeance", 46865, ParserHelper.Source.FractalInstability, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/c6/Mistlock_Instability_Vengeance.png"),
             new Buff("Mistlock Instability: We Bleed Fire", 54719, ParserHelper.Source.FractalInstability, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/24/Mistlock_Instability_We_Bleed_Fire.png"),
+            new Buff("Mistlock Instability: Toxic Sickness", 47288, ParserHelper.Source.FractalInstability, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6f/Mistlock_Instability_Toxic_Sickness.png"),
         };
 
         internal static readonly List<Buff> FightSpecific = new List<Buff>
