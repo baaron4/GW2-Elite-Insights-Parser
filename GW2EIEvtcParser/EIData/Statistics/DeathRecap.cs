@@ -44,7 +44,7 @@ namespace GW2EIEvtcParser.EIData
                     var item = new DeathRecapDamageItem()
                     {
                         Time = (int)dl.Time,
-                        IndirectDamage = dl is NonDirectDamageEvent,
+                        IndirectDamage = dl is NonDirectHealthDamageEvent,
                         ID = dl.SkillId,
                         Damage = dl.Damage,
                         Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
@@ -65,7 +65,7 @@ namespace GW2EIEvtcParser.EIData
                     var item = new DeathRecapDamageItem()
                     {
                         Time = (int)dl.Time,
-                        IndirectDamage = dl is NonDirectDamageEvent,
+                        IndirectDamage = dl is NonDirectHealthDamageEvent,
                         ID = dl.SkillId,
                         Damage = dl.Damage,
                         Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
@@ -86,7 +86,7 @@ namespace GW2EIEvtcParser.EIData
                     var item = new DeathRecapDamageItem()
                     {
                         Time = (int)dl.Time,
-                        IndirectDamage = dl is NonDirectDamageEvent,
+                        IndirectDamage = dl is NonDirectHealthDamageEvent,
                         ID = dl.SkillId,
                         Damage = dl.Damage,
                         Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""

@@ -32,7 +32,7 @@ namespace GW2EIBuilders.HtmlModels
             bool IsIndirectDamage = false;
             foreach (AbstractHealthDamageEvent dl in entry.Value.Where(x => !x.DoubleProcHit))
             {
-                IsIndirectDamage = IsIndirectDamage || dl is NonDirectDamageEvent;
+                IsIndirectDamage = IsIndirectDamage || dl is NonDirectHealthDamageEvent;
                 int curdmg = dl.Damage;
                 totaldamage += curdmg;
                 hits++;
@@ -252,7 +252,7 @@ namespace GW2EIBuilders.HtmlModels
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
             List<AbstractCastEvent> casting = minions.GetIntersectingCastLogs(log, phase.Start, phase.End);
             List<AbstractHealthDamageEvent> damageLogs = minions.GetDamageLogs(target, log, phase.Start, phase.End);
-            List<BreakbarDamageEvent> brkDamageLogs = minions.GetBreakbarDamageLogs(target, log, phase.Start, phase.End);
+            List<AbstractBreakbarDamageEvent> brkDamageLogs = minions.GetBreakbarDamageLogs(target, log, phase.Start, phase.End);
             dto.ContributedDamage = damageLogs.Sum(x => x.Damage);
             dto.ContributedShieldDamage = damageLogs.Sum(x => x.ShieldDamage);
             dto.ContributedBreakbarDamage = brkDamageLogs.Sum(x => x.Damage);

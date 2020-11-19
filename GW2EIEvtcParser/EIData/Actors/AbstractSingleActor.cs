@@ -186,7 +186,7 @@ namespace GW2EIEvtcParser.EIData
                 return res;
             }
             var brkDmgList = new List<double>();
-            List<BreakbarDamageEvent> breakbarDamageLogs = GetBreakbarDamageLogs(target, log, phase.Start, phase.End);
+            List<AbstractBreakbarDamageEvent> breakbarDamageLogs = GetBreakbarDamageLogs(target, log, phase.Start, phase.End);
             // fill the graph, full precision
             var brkDmgListFull = new List<double>();
             for (int i = 0; i <= phase.DurationInMS; i++)
@@ -195,7 +195,7 @@ namespace GW2EIEvtcParser.EIData
             }
             int totalTime = 1;
             double totalDamage = 0;
-            foreach (BreakbarDamageEvent dl in breakbarDamageLogs)
+            foreach (DirectBreakbarDamageEvent dl in breakbarDamageLogs)
             {
                 int time = (int)(dl.Time - phase.Start);
                 // fill
@@ -794,16 +794,16 @@ namespace GW2EIEvtcParser.EIData
             return GetDamageLogs(target, log, start, end).Where(x => x.From == AgentItem).ToList();
         }
 
-        public List<BreakbarDamageEvent> GetJustActorBreakbarDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public List<AbstractBreakbarDamageEvent> GetJustActorBreakbarDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
             return GetBreakbarDamageLogs(target, log, start, end).Where(x => x.From == AgentItem).ToList();
         }
 
-        public override List<BreakbarDamageEvent> GetBreakbarDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override List<AbstractBreakbarDamageEvent> GetBreakbarDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
             if (BreakbarDamageLogs == null)
             {
-                BreakbarDamageLogs = new List<BreakbarDamageEvent>();
+                BreakbarDamageLogs = new List<AbstractBreakbarDamageEvent>();
                 BreakbarDamageLogs.AddRange(log.CombatData.GetBreakbarDamageData(AgentItem).Where(x => x.IFF != ArcDPSEnums.IFF.Friend));
                 Dictionary<long, Minions> minionsList = GetMinions(log);
                 foreach (Minions mins in minionsList.Values)
@@ -815,13 +815,13 @@ namespace GW2EIEvtcParser.EIData
             }
             if (target != null)
             {
-                if (BreakbarDamageLogsByDst.TryGetValue(target.AgentItem, out List<BreakbarDamageEvent> list))
+                if (BreakbarDamageLogsByDst.TryGetValue(target.AgentItem, out List<AbstractBreakbarDamageEvent> list))
                 {
                     return list.Where(x => x.Time >= start && x.Time <= end).ToList();
                 }
                 else
                 {
-                    return new List<BreakbarDamageEvent>();
+                    return new List<AbstractBreakbarDamageEvent>();
                 }
             }
             return BreakbarDamageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
@@ -851,17 +851,17 @@ namespace GW2EIEvtcParser.EIData
             return DamageTakenlogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public override List<BreakbarDamageEvent> GetBreakbarDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override List<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
             if (BreakbarDamageTakenLogs == null)
             {
-                BreakbarDamageTakenLogs = new List<BreakbarDamageEvent>();
+                BreakbarDamageTakenLogs = new List<AbstractBreakbarDamageEvent>();
                 BreakbarDamageTakenLogs.AddRange(log.CombatData.GetBreakbarDamageTakenData(AgentItem));
                 BreakbarDamageTakenLogsBySrc = BreakbarDamageTakenLogs.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
             {
-                if (BreakbarDamageTakenLogsBySrc.TryGetValue(target.AgentItem, out List<BreakbarDamageEvent> list))
+                if (BreakbarDamageTakenLogsBySrc.TryGetValue(target.AgentItem, out List<AbstractBreakbarDamageEvent> list))
                 {
                     long targetStart = target.FirstAware;
                     long targetEnd = target.LastAware;
@@ -869,7 +869,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 else
                 {
-                    return new List<BreakbarDamageEvent>();
+                    return new List<AbstractBreakbarDamageEvent>();
                 }
             }
             return BreakbarDamageTakenLogs.Where(x => x.Time >= start && x.Time <= end).ToList();

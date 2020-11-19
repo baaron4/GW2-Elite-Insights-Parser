@@ -110,7 +110,7 @@ namespace GW2EIBuilders.JsonModels
 
         protected JsonDamageDist(long id, List<AbstractHealthDamageEvent> list, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
-            IndirectDamage = list.Exists(x => x is NonDirectDamageEvent);
+            IndirectDamage = list.Exists(x => x is NonDirectHealthDamageEvent);
             if (IndirectDamage)
             {
                 if (!buffDesc.ContainsKey("b" + id))

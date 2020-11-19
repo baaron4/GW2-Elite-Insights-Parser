@@ -2,11 +2,11 @@
 
 namespace GW2EIEvtcParser.ParsedData
 {
-    public class NonDirectDamageEvent : AbstractHealthDamageEvent
+    public class NonDirectHealthDamageEvent : AbstractHealthDamageEvent
     {
         private int _isCondi = -1;
 
-        internal NonDirectDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, ArcDPSEnums.ConditionResult result) : base(evtcItem, agentData, skillData)
+        internal NonDirectHealthDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, ArcDPSEnums.ConditionResult result) : base(evtcItem, agentData, skillData)
         {
             Damage = evtcItem.BuffDmg;
             IsAbsorbed = result == ArcDPSEnums.ConditionResult.InvulByBuff ||

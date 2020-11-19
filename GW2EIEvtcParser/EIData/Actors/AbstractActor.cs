@@ -29,10 +29,10 @@ namespace GW2EIEvtcParser.EIData
         protected List<AbstractHealthDamageEvent> DamageTakenlogs { get; set; }
         protected Dictionary<AgentItem, List<AbstractHealthDamageEvent>> DamageTakenLogsBySrc { get; set; }
         // Breakbar Damage
-        protected List<BreakbarDamageEvent> BreakbarDamageLogs { get; set; }
-        protected Dictionary<AgentItem, List<BreakbarDamageEvent>> BreakbarDamageLogsByDst { get; set; }
-        protected List<BreakbarDamageEvent> BreakbarDamageTakenLogs { get; set; }
-        protected Dictionary<AgentItem, List<BreakbarDamageEvent>> BreakbarDamageTakenLogsBySrc { get; set; }
+        protected List<AbstractBreakbarDamageEvent> BreakbarDamageLogs { get; set; }
+        protected Dictionary<AgentItem, List<AbstractBreakbarDamageEvent>> BreakbarDamageLogsByDst { get; set; }
+        protected List<AbstractBreakbarDamageEvent> BreakbarDamageTakenLogs { get; set; }
+        protected Dictionary<AgentItem, List<AbstractBreakbarDamageEvent>> BreakbarDamageTakenLogsBySrc { get; set; }
         // Cast
         protected List<AbstractCastEvent> CastLogs { get; set; }
 
@@ -46,7 +46,7 @@ namespace GW2EIEvtcParser.EIData
         // Damage logs
         public abstract List<AbstractHealthDamageEvent> GetDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
 
-        public abstract List<BreakbarDamageEvent> GetBreakbarDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
+        public abstract List<AbstractBreakbarDamageEvent> GetBreakbarDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
 
         /// <summary>
         /// cached method for damage modifiers
@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser.EIData
 
         public abstract List<AbstractHealthDamageEvent> GetDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
 
-        public abstract List<BreakbarDamageEvent> GetBreakbarDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
+        public abstract List<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
 
         // Cast logs
         public abstract List<AbstractCastEvent> GetCastLogs(ParsedEvtcLog log, long start, long end);

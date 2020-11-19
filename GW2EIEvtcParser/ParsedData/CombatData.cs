@@ -19,14 +19,14 @@ namespace GW2EIEvtcParser.ParsedData
         private readonly Dictionary<long, List<BuffRemoveAllEvent>> _buffRemoveAllData;
         private readonly Dictionary<AgentItem, List<AbstractBuffEvent>> _buffDataByDst;
         private readonly Dictionary<AgentItem, List<AbstractHealthDamageEvent>> _damageData;
-        private readonly Dictionary<AgentItem, List<BreakbarDamageEvent>> _breakbarDamageData;
+        private readonly Dictionary<AgentItem, List<AbstractBreakbarDamageEvent>> _breakbarDamageData;
         private readonly Dictionary<long, List<AbstractHealthDamageEvent>> _damageDataById;
         private readonly Dictionary<AgentItem, List<AnimatedCastEvent>> _animatedCastData;
         private readonly Dictionary<AgentItem, List<InstantCastEvent>> _instantCastData;
         private readonly Dictionary<AgentItem, List<WeaponSwapEvent>> _weaponSwapData;
         private readonly Dictionary<long, List<AbstractCastEvent>> _castDataById;
         private readonly Dictionary<AgentItem, List<AbstractHealthDamageEvent>> _damageTakenData;
-        private readonly Dictionary<AgentItem, List<BreakbarDamageEvent>> _breakbarDamageTakenData;
+        private readonly Dictionary<AgentItem, List<AbstractBreakbarDamageEvent>> _breakbarDamageTakenData;
         private readonly Dictionary<AgentItem, List<AbstractMovementEvent>> _movementData;
         private readonly List<RewardEvent> _rewardEvents = new List<RewardEvent>();
 
@@ -342,7 +342,7 @@ namespace GW2EIEvtcParser.ParsedData
             _buffData = buffEvents.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
             // damage events
             operation.UpdateProgressWithCancellationCheck("Creating Damage Events");
-            (List<AbstractHealthDamageEvent> damageData, List<BreakbarDamageEvent> brkDamageData) = CombatEventFactory.CreateDamageEvents(noStateActiBuffRem.Where(x => (x.IsBuff != 0 && x.Value == 0) || (x.IsBuff == 0)).ToList(), agentData, skillData);
+            (List<AbstractHealthDamageEvent> damageData, List<AbstractBreakbarDamageEvent> brkDamageData) = CombatEventFactory.CreateDamageEvents(noStateActiBuffRem.Where(x => (x.IsBuff != 0 && x.Value == 0) || (x.IsBuff == 0)).ToList(), agentData, skillData);
             _damageData = damageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             _damageTakenData = damageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             _damageDataById = damageData.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
@@ -634,13 +634,13 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="key"></param> Agent
         /// <returns></returns>
-        public List<BreakbarDamageEvent> GetBreakbarDamageData(AgentItem key)
+        public List<AbstractBreakbarDamageEvent> GetBreakbarDamageData(AgentItem key)
         {
-            if (_breakbarDamageData.TryGetValue(key, out List<BreakbarDamageEvent> res))
+            if (_breakbarDamageData.TryGetValue(key, out List<AbstractBreakbarDamageEvent> res))
             {
                 return res;
             }
-            return new List<BreakbarDamageEvent>(); ;
+            return new List<AbstractBreakbarDamageEvent>(); ;
         }
 
         /// <summary>
@@ -732,13 +732,13 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="key"></param> Agent
         /// <returns></returns>
-        public List<BreakbarDamageEvent> GetBreakbarDamageTakenData(AgentItem key)
+        public List<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenData(AgentItem key)
         {
-            if (_breakbarDamageTakenData.TryGetValue(key, out List<BreakbarDamageEvent> res))
+            if (_breakbarDamageTakenData.TryGetValue(key, out List<AbstractBreakbarDamageEvent> res))
             {
                 return res;
             }
-            return new List<BreakbarDamageEvent>();
+            return new List<AbstractBreakbarDamageEvent>();
         }
 
         /*public List<CombatItem> getHealingData()

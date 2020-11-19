@@ -69,6 +69,7 @@ namespace GW2EIEvtcParser
             InvulByPlayerSkill1 = 2,
             InvulByPlayerSkill2 = 3,
             InvulByPlayerSkill3 = 4,
+            //BreakbarDamage = 5,
 
             Unknown
         };

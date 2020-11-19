@@ -32,7 +32,7 @@ namespace GW2EIEvtcParser.EIData
                 List<AbstractHealthDamageEvent> combatitems = combatData.GetDamageTakenData(a);
                 foreach (AbstractHealthDamageEvent c in combatitems)
                 {
-                    if (c is DirectDamageEvent && c.HasHit && Keep(c, log))
+                    if (c is DirectHealthDamageEvent && c.HasHit && Keep(c, log))
                     {
                         foreach (Player p in log.PlayerList)
                         {

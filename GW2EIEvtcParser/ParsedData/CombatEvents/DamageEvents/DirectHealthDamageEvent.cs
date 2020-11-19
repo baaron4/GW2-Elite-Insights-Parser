@@ -1,8 +1,8 @@
 ﻿namespace GW2EIEvtcParser.ParsedData
 {
-    public class DirectDamageEvent : AbstractHealthDamageEvent
+    public class DirectHealthDamageEvent : AbstractHealthDamageEvent
     {
-        internal DirectDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, ArcDPSEnums.PhysicalResult result) : base(evtcItem, agentData, skillData)
+        internal DirectHealthDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, ArcDPSEnums.PhysicalResult result) : base(evtcItem, agentData, skillData)
         {
             Damage = evtcItem.Value;
             IsAbsorbed = result == ArcDPSEnums.PhysicalResult.Absorb;

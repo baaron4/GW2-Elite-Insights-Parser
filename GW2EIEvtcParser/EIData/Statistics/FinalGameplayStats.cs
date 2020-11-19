@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EIData
             List<AbstractHealthDamageEvent> dls = actor.GetJustActorDamageLogs(target, log, phase.Start, phase.End);
             foreach (AbstractHealthDamageEvent dl in dls)
             {
-                if (!(dl is NonDirectDamageEvent))
+                if (!(dl is NonDirectHealthDamageEvent))
                 {
                     if (dl.HasHit) {
                         if (SkillItem.CanCrit(dl.SkillId, log.LogData.GW2Build))
