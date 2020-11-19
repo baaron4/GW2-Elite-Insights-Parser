@@ -59,11 +59,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 long end = shield.Time;
                 phases.Add(new PhaseData(start, end, "Dhuum Fight"));
-                AbstractCastEvent firstDamage = castLogs.FirstOrDefault(x => x.SkillId == 47304 && x.Time >= end);
+                AbstractCastEvent firstDamageable = castLogs.FirstOrDefault(x => x.SkillId == 47304 && x.Time >= end);
                 // ritual started
-                if (firstDamage != null)
+                if (firstDamageable != null)
                 {
-                    phases.Add(new PhaseData(firstDamage.Time, fightDuration, "Ritual" ));
+                    phases.Add(new PhaseData(end, firstDamageable.Time, "Pre-Ritual") { 
+                        CanBeSubPhase = false
+                    });
+                    phases.Add(new PhaseData(firstDamageable.Time, fightDuration, "Ritual" ));
                 }
             }
         }
