@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.ParsedData
     public abstract class AbstractHealthDamageEvent : AbstractDamageEvent
     {
         //
-        public int Damage { get; protected set; }
+        public int HealthDamage { get; protected set; }
         public int ShieldDamage { get; protected set; }
         public bool HasHit { get; protected set; }
         public bool DoubleProcHit { get; protected set; }
@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.ParsedData
         internal void NegateShieldDamage()
         {
             //_damage = Damage;
-            Damage = Math.Max(Damage - ShieldDamage, 0);
+            HealthDamage = Math.Max(HealthDamage - ShieldDamage, 0);
         }
     }
 }

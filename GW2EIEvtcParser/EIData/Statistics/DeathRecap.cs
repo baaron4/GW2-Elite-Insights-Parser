@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser.EIData
             }
             if (downed != null)
             {
-                var damageToDown = damageLogs.Where(x => x.Time > lastDeathTime && x.Time <= downed.Time && x.HasHit && x.Damage > 0).ToList();
+                var damageToDown = damageLogs.Where(x => x.Time > lastDeathTime && x.Time <= downed.Time && x.HasHit && x.HealthDamage > 0).ToList();
                 ToDown = damageToDown.Count > 0 ? new List<DeathRecapDamageItem>() : null;
                 int damage = 0;
                 for (int i = damageToDown.Count - 1; i >= 0; i--)
@@ -46,17 +46,17 @@ namespace GW2EIEvtcParser.EIData
                         Time = (int)dl.Time,
                         IndirectDamage = dl is NonDirectHealthDamageEvent,
                         ID = dl.SkillId,
-                        Damage = dl.Damage,
+                        Damage = dl.HealthDamage,
                         Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
                     };
-                    damage += dl.Damage;
+                    damage += dl.HealthDamage;
                     ToDown.Add(item);
                     if (damage > 20000)
                     {
                         break;
                     }
                 }
-                var damageToKill = damageLogs.Where(x => x.Time > downed.Time && x.Time <= dead.Time && x.HasHit && x.Damage > 0).ToList();
+                var damageToKill = damageLogs.Where(x => x.Time > downed.Time && x.Time <= dead.Time && x.HasHit && x.HealthDamage > 0).ToList();
                 ToKill = damageToKill.Count > 0 ? new List<DeathRecapDamageItem>() : null;
                 for (int i = damageToKill.Count - 1; i >= 0; i--)
                 {
@@ -67,7 +67,7 @@ namespace GW2EIEvtcParser.EIData
                         Time = (int)dl.Time,
                         IndirectDamage = dl is NonDirectHealthDamageEvent,
                         ID = dl.SkillId,
-                        Damage = dl.Damage,
+                        Damage = dl.HealthDamage,
                         Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
                     };
                     ToKill.Add(item);
@@ -76,7 +76,7 @@ namespace GW2EIEvtcParser.EIData
             else
             {
                 ToDown = null;
-                var damageToKill = damageLogs.Where(x => x.Time > lastDeathTime && x.Time <= dead.Time && x.HasHit && x.Damage > 0).ToList();
+                var damageToKill = damageLogs.Where(x => x.Time > lastDeathTime && x.Time <= dead.Time && x.HasHit && x.HealthDamage > 0).ToList();
                 ToKill = damageToKill.Count > 0 ? new List<DeathRecapDamageItem>() : null;
                 int damage = 0;
                 for (int i = damageToKill.Count - 1; i >= 0; i--)
@@ -88,10 +88,10 @@ namespace GW2EIEvtcParser.EIData
                         Time = (int)dl.Time,
                         IndirectDamage = dl is NonDirectHealthDamageEvent,
                         ID = dl.SkillId,
-                        Damage = dl.Damage,
+                        Damage = dl.HealthDamage,
                         Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
                     };
-                    damage += dl.Damage;
+                    damage += dl.HealthDamage;
                     ToKill.Add(item);
                     if (damage > 20000)
                     {

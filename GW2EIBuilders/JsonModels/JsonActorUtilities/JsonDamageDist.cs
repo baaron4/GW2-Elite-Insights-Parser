@@ -141,11 +141,11 @@ namespace GW2EIBuilders.JsonModels
             foreach (AbstractHealthDamageEvent dmgEvt in list)
             {
                 Hits += dmgEvt.DoubleProcHit ? 0 : 1;
-                TotalDamage += dmgEvt.Damage;
+                TotalDamage += dmgEvt.HealthDamage;
                 if (dmgEvt.HasHit)
                 {
-                    Min = Math.Min(Min, dmgEvt.Damage);
-                    Max = Math.Max(Max, dmgEvt.Damage);
+                    Min = Math.Min(Min, dmgEvt.HealthDamage);
+                    Max = Math.Max(Max, dmgEvt.HealthDamage);
                 }
                 if (!IndirectDamage)
                 {
@@ -154,7 +154,7 @@ namespace GW2EIBuilders.JsonModels
                         Flank += dmgEvt.IsFlanking ? 1 : 0;
                         Glance += dmgEvt.HasGlanced ? 1 : 0;
                         Crit += dmgEvt.HasCrit ? 1 : 0;
-                        CritDamage += dmgEvt.HasCrit ? dmgEvt.Damage : 0;
+                        CritDamage += dmgEvt.HasCrit ? dmgEvt.HealthDamage : 0;
                     }
                     Missed += dmgEvt.IsBlind ? 1 : 0;
                     Evaded += dmgEvt.IsEvaded ? 1 : 0;

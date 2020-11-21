@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.EIData
                             if (dl.HasCrit)
                             {
                                 CriticalCount++;
-                                CriticalDmg += dl.Damage;
+                                CriticalDmg += dl.HealthDamage;
                             }
                             CritableDirectDamageCount++;
                         }

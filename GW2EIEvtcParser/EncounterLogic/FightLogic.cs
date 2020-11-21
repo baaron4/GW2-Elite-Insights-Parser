@@ -388,7 +388,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     long time = killed.Time;
                     success++;
-                    AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
+                    AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
                     if (lastDamageTaken != null)
                     {
                         time = Math.Min(lastDamageTaken.Time, time);
@@ -426,7 +426,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     targetExits.AddRange(combatData.GetExitCombatEvents(t.AgentItem));
                 }
-                AbstractHealthDamageEvent lastDamage = combatData.GetDamageTakenData(t.AgentItem).LastOrDefault(x => (x.Damage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
+                AbstractHealthDamageEvent lastDamage = combatData.GetDamageTakenData(t.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
                 if (lastDamage != null)
                 {
                     lastTargetDamages.Add(lastDamage);

@@ -33,7 +33,7 @@ namespace GW2EIBuilders.HtmlModels
             foreach (AbstractHealthDamageEvent dl in entry.Value.Where(x => !x.DoubleProcHit))
             {
                 IsIndirectDamage = IsIndirectDamage || dl is NonDirectHealthDamageEvent;
-                int curdmg = dl.Damage;
+                int curdmg = dl.HealthDamage;
                 totaldamage += curdmg;
                 hits++;
                 if (dl.HasHit)
@@ -44,7 +44,7 @@ namespace GW2EIBuilders.HtmlModels
                     if (dl.HasCrit)
                     {
                         crit++;
-                        critDamage += dl.Damage;
+                        critDamage += dl.HealthDamage;
                     }
                     if (dl.HasGlanced)
                     {
@@ -137,7 +137,7 @@ namespace GW2EIBuilders.HtmlModels
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
             List<AbstractHealthDamageEvent> damageLogs = p.GetDamageTakenLogs(null, log, phase.Start, phase.End);
             var damageLogsBySkill = damageLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
-            dto.ContributedDamage = damageLogs.Sum(x => x.Damage);
+            dto.ContributedDamage = damageLogs.Sum(x => x.HealthDamage);
             dto.ContributedShieldDamage = damageLogs.Sum(x => x.ShieldDamage);
             var conditionsById = log.Statistics.PresentConditions.ToDictionary(x => x.ID);
             foreach (KeyValuePair<SkillItem, List<AbstractHealthDamageEvent>> entry in damageLogsBySkill)
@@ -253,7 +253,7 @@ namespace GW2EIBuilders.HtmlModels
             List<AbstractCastEvent> casting = minions.GetIntersectingCastLogs(log, phase.Start, phase.End);
             List<AbstractHealthDamageEvent> damageLogs = minions.GetDamageLogs(target, log, phase.Start, phase.End);
             List<AbstractBreakbarDamageEvent> brkDamageLogs = minions.GetBreakbarDamageLogs(target, log, phase.Start, phase.End);
-            dto.ContributedDamage = damageLogs.Sum(x => x.Damage);
+            dto.ContributedDamage = damageLogs.Sum(x => x.HealthDamage);
             dto.ContributedShieldDamage = damageLogs.Sum(x => x.ShieldDamage);
             dto.ContributedBreakbarDamage = brkDamageLogs.Sum(x => x.BreakbarDamage);
             dto.TotalDamage = dps.Damage;

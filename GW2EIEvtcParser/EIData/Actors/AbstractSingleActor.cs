@@ -150,7 +150,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     dmgListFull[totalTime] = totalDamage;
                 }
-                totalDamage += dl.Damage;
+                totalDamage += dl.HealthDamage;
                 dmgListFull[totalTime] = totalDamage;
             }
             // fill

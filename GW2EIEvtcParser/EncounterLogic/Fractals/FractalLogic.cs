@@ -59,7 +59,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new InvalidOperationException("Main target of the fight not found");
             }
             RewardEvent reward = combatData.GetRewardEvents().LastOrDefault();
-            AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => (x.Damage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
+            AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
             if (lastDamageTaken != null)
             {
                 if (reward != null && Math.Abs(lastDamageTaken.Time - reward.Time) < 100)

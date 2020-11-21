@@ -36,7 +36,7 @@ namespace GW2EIEvtcParser.EIData
                 return -1.0;
             }
             double gain = GainComputer.ComputeGain(GainPerStack, stack);
-            return gain > 0.0 ? gain * dl.Damage : -1.0;
+            return gain > 0.0 ? gain * dl.HealthDamage : -1.0;
         }
 
         internal override void ComputeDamageModifier(Dictionary<string, List<DamageModifierStat>> data, Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>> dataTarget, Player p, ParsedEvtcLog log)

@@ -8,13 +8,13 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal NonDirectHealthDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, ArcDPSEnums.ConditionResult result) : base(evtcItem, agentData, skillData)
         {
-            Damage = evtcItem.BuffDmg;
+            HealthDamage = evtcItem.BuffDmg;
             IsAbsorbed = result == ArcDPSEnums.ConditionResult.InvulByBuff ||
                 result == ArcDPSEnums.ConditionResult.InvulByPlayerSkill1 ||
                 result == ArcDPSEnums.ConditionResult.InvulByPlayerSkill2 ||
                 result == ArcDPSEnums.ConditionResult.InvulByPlayerSkill3;
             HasHit = result == ArcDPSEnums.ConditionResult.ExpectedToHit;
-            ShieldDamage = evtcItem.IsShields > 0 ? Damage : 0;
+            ShieldDamage = evtcItem.IsShields > 0 ? HealthDamage : 0;
         }
 
         public override bool IsCondi(ParsedEvtcLog log)

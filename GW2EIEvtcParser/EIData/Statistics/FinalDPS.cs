@@ -32,7 +32,7 @@ namespace GW2EIEvtcParser.EIData
             double dps = 0.0;
             List<AbstractHealthDamageEvent> damageLogs = actor.GetDamageLogs(target, log, phase.Start, phase.End);
             //DPS
-            damage = damageLogs.Sum(x => x.Damage);
+            damage = damageLogs.Sum(x => x.HealthDamage);
 
             if (phaseDuration > 0)
             {
@@ -41,7 +41,7 @@ namespace GW2EIEvtcParser.EIData
             Dps = (int)Math.Round(dps);
             Damage = damage;
             //Condi DPS
-            damage = damageLogs.Sum(x => x.IsCondi(log) ? x.Damage : 0);
+            damage = damageLogs.Sum(x => x.IsCondi(log) ? x.HealthDamage : 0);
 
             if (phaseDuration > 0)
             {
@@ -59,7 +59,7 @@ namespace GW2EIEvtcParser.EIData
             PowerDamage = damage;
             List<AbstractHealthDamageEvent> actorDamageLogs = actor.GetJustActorDamageLogs(target, log, phase.Start, phase.End);
             // Actor DPS
-            damage = actorDamageLogs.Sum(x => x.Damage);
+            damage = actorDamageLogs.Sum(x => x.HealthDamage);
 
             if (phaseDuration > 0)
             {
@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser.EIData
             ActorDps = (int)Math.Round(dps);
             ActorDamage = damage;
             //Actor Condi DPS
-            damage = actorDamageLogs.Sum(x => x.IsCondi(log) ? x.Damage : 0);
+            damage = actorDamageLogs.Sum(x => x.IsCondi(log) ? x.HealthDamage : 0);
 
             if (phaseDuration > 0)
             {
