@@ -321,7 +321,7 @@ function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, c
     }
     var end = times.length;
     var left = 0, right = 0, targetid, k;
-    var roundingToUse = graphMode === GraphType.BreakbarDamage ? roundingComponent.methods.round1 : roundingComponent.methods.round;
+    var roundingToUse = graphMode === GraphType.BreakbarDamage ? numberComponent.methods.round1 : numberComponent.methods.round;
     for (var j = 0; j < end; j++) {
         var time = times[j];
         if (lim > 0) {

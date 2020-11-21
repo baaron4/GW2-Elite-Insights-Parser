@@ -1,7 +1,11 @@
 "use strict";
 
-var roundingComponent = {
+var numberComponent = {
     methods: {
+        // https://stackoverflow.com/questions/16637051/adding-space-between-numbers
+        integerWithSpaces: function(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        },
         round: function (value) {
             if (isNaN(value)) {
                 return 0;

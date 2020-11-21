@@ -50,7 +50,7 @@
     Vue.component("deathrecap-component", {
         props: ["playerindex", "phaseindex"],
         template: `${template}`,
-        mixins: [roundingComponent],
+        mixins: [numberComponent],
         computed: {
             phase: function () {
                 return logData.phases[this.phaseindex];

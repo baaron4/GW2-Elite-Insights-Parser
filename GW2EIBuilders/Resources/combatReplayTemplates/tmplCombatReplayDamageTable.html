@@ -72,7 +72,7 @@
 
 <script>
     Vue.component("combat-replay-damage-stats-component", {
-        mixins: [timeRefreshComponent, roundingComponent],
+        mixins: [timeRefreshComponent, numberComponent],
         props: ["playerindex"],
         template: `${template}`,
         data: function () {

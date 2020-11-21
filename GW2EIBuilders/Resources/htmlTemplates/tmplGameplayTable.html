@@ -193,7 +193,7 @@
     Vue.component("gameplay-stats-component", {
         props: ["activetargets", "playerindex", "phaseindex"],
         template: `${template}`,
-        mixins: [roundingComponent],
+        mixins: [numberComponent],
         data: function () {
             return {
                 targetless: logData.targetless,

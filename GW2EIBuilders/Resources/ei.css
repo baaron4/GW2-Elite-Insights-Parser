@@ -221,6 +221,21 @@ body {
     cursor: pointer !important;
 }
 
+.player-cell {
+    width: 125px;
+    min-height: 90px;
+    border: 1px solid;
+}
+
+.player-cell-shorten {
+    display:block;
+    text-align: center;
+    white-space:nowrap;
+    width: 90px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 h1,
 h2,
 h3,
@@ -323,16 +338,6 @@ img.icon-xxl {
 img.icon-lg {
     width: 64px;
     height: 64px;
-}
-
-table.composition td {
-    max-width: 120px;
-    min-width: 120px;
-}
-
-table.composition .shorten {
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 img.icon-hover:hover,
