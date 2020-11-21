@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
@@ -101,7 +102,7 @@ namespace GW2EIBuilders.JsonModels
                 }
                 totalDamage.Add(tot);
                 totalShieldDamage.Add(shdTot);
-                totalBreakbarDamage.Add(minions.GetBreakbarDamageLogs(null, log, phase.Start, phase.End).Sum(x => x.BreakbarDamage));
+                totalBreakbarDamage.Add(Math.Round(minions.GetBreakbarDamageLogs(null, log, phase.Start, phase.End).Sum(x => x.BreakbarDamage), 1));
             }
             TotalDamage = totalDamage;
             TotalShieldDamage = totalShieldDamage;
@@ -128,7 +129,7 @@ namespace GW2EIBuilders.JsonModels
                         }
                         totalTarDamage.Add(tot);
                         totalTarShieldDamage.Add(shdTot);
-                        totalTarBreakbarDamage.Add(minions.GetBreakbarDamageLogs(tar, log, phase.Start, phase.End).Sum(x => x.BreakbarDamage));
+                        totalTarBreakbarDamage.Add(Math.Round(minions.GetBreakbarDamageLogs(tar, log, phase.Start, phase.End).Sum(x => x.BreakbarDamage), 1));
                     }
                     totalTargetDamage[i] = totalTarDamage;
                     totalTargetShieldDamage[i] = totalTarShieldDamage;

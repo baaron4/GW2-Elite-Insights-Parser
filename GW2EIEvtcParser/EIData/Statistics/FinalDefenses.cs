@@ -1,4 +1,5 @@
 ﻿using GW2EIEvtcParser.ParsedData;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,7 +25,7 @@ namespace GW2EIEvtcParser.EIData
             List<AbstractHealthDamageEvent> damageLogs = actor.GetDamageTakenLogs(from, log, start, end);
 
             DamageTaken = damageLogs.Sum(x => (long)x.HealthDamage);
-            BreakbarDamageTaken = actor.GetBreakbarDamageTakenLogs(from, log, start, end).Sum(x => x.BreakbarDamage);
+            BreakbarDamageTaken = Math.Round(actor.GetBreakbarDamageTakenLogs(from, log, start, end).Sum(x => x.BreakbarDamage), 1);
             BlockedCount = damageLogs.Count(x => x.IsBlocked);
             MissedCount = damageLogs.Count(x => x.IsBlind);
             InvulnedCount = damageLogs.Count(x => x.IsAbsorbed);

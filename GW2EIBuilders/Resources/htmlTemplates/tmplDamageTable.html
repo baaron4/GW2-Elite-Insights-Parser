@@ -48,7 +48,7 @@
                         {{row.dps[2]}}</td>
                     <td v-show="!targetless" v-if="hasBreakbarDamage"
                         :data-original-title="computeTotalContribution(3, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 3, row.dps,tableData.sums)">
-                        {{row.dps[3]}}
+                        {{round1(row.dps[3])}}
                     </td>
                     <td v-if="!showDamage"
                         :data-original-title="row.dps[4] + ' dmg'+ '<br>' + computeTotalContribution(4, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 4, row.dps,tableData.sums)">
@@ -71,7 +71,7 @@
 
                     <td v-if="hasBreakbarDamage"
                         :data-original-title="computeTotalContribution(7, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 7, row.dps,tableData.sums)">
-                        {{row.dps[7]}}
+                        {{round1(row.dps[7])}}
                     </td>
                 </tr>
             </tbody>
@@ -94,7 +94,7 @@
                     <td v-show="!targetless" v-else :data-original-title="round(sum.dps[2]/phase.durationS) + ' dps'">
                         {{sum.dps[2]}}</td>
                     <td v-show="!targetless" v-if="hasBreakbarDamage">
-                        {{sum.dps[3]}}
+                        {{round1(sum.dps[3])}}
                     </td>
                     <td v-if="!showDamage" :data-original-title="sum.dps[4] + ' dmg'">
                         {{round(sum.dps[4]/phase.durationS)}}</td>
@@ -106,7 +106,7 @@
                         {{round(sum.dps[6]/phase.durationS)}}</td>
                     <td v-else :data-original-title="round(sum.dps[6]/phase.durationS) + ' dps'">{{sum.dps[6]}}</td>
                     <td v-if="hasBreakbarDamage">
-                        {{sum.dps[7]}}
+                        {{round1(sum.dps[7])}}
                     </td>
                 </tr>
             </tfoot>

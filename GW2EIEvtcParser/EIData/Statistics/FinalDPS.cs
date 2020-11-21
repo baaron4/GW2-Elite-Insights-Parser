@@ -86,8 +86,8 @@ namespace GW2EIEvtcParser.EIData
             ActorPowerDamage = damage;
 
             // Breakbar 
-            BreakbarDamage = actor.GetBreakbarDamageLogs(target, log, phase.Start, phase.End).Sum(x => x.BreakbarDamage);
-            ActorBreakbarDamage = actor.GetJustActorBreakbarDamageLogs(target, log, phase.Start, phase.End).Sum(x => x.BreakbarDamage);
+            BreakbarDamage = Math.Round(actor.GetBreakbarDamageLogs(target, log, phase.Start, phase.End).Sum(x => x.BreakbarDamage), 1);
+            ActorBreakbarDamage = Math.Round(actor.GetJustActorBreakbarDamageLogs(target, log, phase.Start, phase.End).Sum(x => x.BreakbarDamage), 1);
         }
     }
 }
