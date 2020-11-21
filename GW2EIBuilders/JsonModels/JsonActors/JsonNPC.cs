@@ -90,10 +90,9 @@ namespace GW2EIBuilders.JsonModels
             //
             Buffs = GetNPCJsonBuffsUptime(npc, npc.GetBuffs(log), npc.GetBuffsDictionary(log), log, settings, buffDesc);
             // Breakbar
-            List<BreakbarPercentEvent> breakbarPercentUpdates = log.CombatData.GetBreakbarPercentEvents(npc.AgentItem);
             if (settings.RawFormatTimelineArrays)
             {
-                BreakbarPercents = breakbarPercentUpdates.Select(x => new double[2] { x.Time, x.BreakbarPercent }).ToList();
+                BreakbarPercents = npc.GetBreakbarPercentUpdates(log).Select(x => new double[2] { x.Start, x.Value }).ToList();
             }
         }
 

@@ -217,10 +217,9 @@ namespace GW2EIBuilders.JsonModels
                 }
             }
             // Health
-            List<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(actor.AgentItem);
             if (settings.RawFormatTimelineArrays)
             {
-                HealthPercents = hpUpdates.Select(x => new double[2] { x.Time, x.HPPercent }).ToList();
+                HealthPercents = actor.GetHealthUpdates(log).Select(x => new double[2] {x.Start, x.Value }).ToList();
             }
         }
 
