@@ -255,7 +255,7 @@ namespace GW2EIBuilders.HtmlModels
             List<AbstractBreakbarDamageEvent> brkDamageLogs = minions.GetBreakbarDamageLogs(target, log, phase.Start, phase.End);
             dto.ContributedDamage = damageLogs.Sum(x => x.Damage);
             dto.ContributedShieldDamage = damageLogs.Sum(x => x.ShieldDamage);
-            dto.ContributedBreakbarDamage = brkDamageLogs.Sum(x => x.Damage);
+            dto.ContributedBreakbarDamage = brkDamageLogs.Sum(x => x.BreakbarDamage);
             dto.TotalDamage = dps.Damage;
             dto.TotalBreakbarDamage = dps.BreakbarDamage;
             dto.TotalCasting = casting.Sum(cl => Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start));

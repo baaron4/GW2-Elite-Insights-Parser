@@ -8,7 +8,7 @@ namespace GW2EIEvtcParser.ParsedData
         private int _isCondi = -1;
         internal NonDirectBreakbarDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
-            Damage = Math.Round(evtcItem.BuffDmg / 10.0, 1);
+            BreakbarDamage = Math.Round(evtcItem.BuffDmg / 10.0, 1);
         }
 
         public override bool IsCondi(ParsedEvtcLog log)

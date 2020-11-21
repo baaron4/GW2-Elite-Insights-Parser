@@ -203,7 +203,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     brkDmgListFull[totalTime] = totalDamage;
                 }
-                totalDamage += dl.Damage;
+                totalDamage += dl.BreakbarDamage;
                 brkDmgListFull[totalTime] = totalDamage;
             }
             // fill

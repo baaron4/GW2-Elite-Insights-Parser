@@ -2,11 +2,10 @@
 
 namespace GW2EIEvtcParser.ParsedData
 {
-    public abstract class AbstractDamageEvent<T> : AbstractTimeCombatEvent
+    public abstract class AbstractDamageEvent : AbstractTimeCombatEvent
     {
         public AgentItem From { get; }
         public AgentItem To { get; }
-        public T Damage { get; protected set; }
 
         public SkillItem Skill { get; }
         public long SkillId => Skill.ID;
