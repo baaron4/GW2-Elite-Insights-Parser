@@ -1,4 +1,6 @@
-﻿namespace GW2EIEvtcParser.EIData
+﻿using System;
+
+namespace GW2EIEvtcParser.EIData
 {
     public class DamageModifierStat
     {
@@ -11,7 +13,7 @@
         {
             HitCount = hitCount;
             TotalHitCount = totalHitCount;
-            DamageGain = damageGain;
+            DamageGain = Math.Round(damageGain, ParserHelper.DamageModGainDigit);
             TotalDamage = totalDamage;
         }
     }

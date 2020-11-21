@@ -34,6 +34,7 @@ namespace GW2EIEvtcParser
         internal const int PollingRate = 150;
 
         internal const int BuffDigit = 3;
+        internal const int DamageModGainDigit = 3;
         internal const int TimeDigit = 3;
 
         internal const long ServerDelayConstant = 10;
