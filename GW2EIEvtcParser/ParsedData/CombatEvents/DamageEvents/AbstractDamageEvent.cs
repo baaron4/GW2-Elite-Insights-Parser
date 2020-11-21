@@ -29,5 +29,7 @@ namespace GW2EIEvtcParser.ParsedData
             IsFlanking = evtcItem.IsFlanking > 0;
             IFF = evtcItem.IFF;
         }
+
+        public abstract bool IsCondi(ParsedEvtcLog log);
     }
 }

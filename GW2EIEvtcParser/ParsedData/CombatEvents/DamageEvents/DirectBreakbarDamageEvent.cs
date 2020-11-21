@@ -8,5 +8,10 @@ namespace GW2EIEvtcParser.ParsedData
         {
             Damage = Math.Round(evtcItem.Value / 10.0, 1);
         }
+
+        public override bool IsCondi(ParsedEvtcLog log)
+        {
+            return false;
+        }
     }
 }

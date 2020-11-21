@@ -27,7 +27,5 @@ namespace GW2EIEvtcParser.ParsedData
             //_damage = Damage;
             Damage = Math.Max(Damage - ShieldDamage, 0);
         }
-
-        public abstract bool IsCondi(ParsedEvtcLog log);
     }
 }
