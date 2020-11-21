@@ -203,8 +203,8 @@ namespace GW2EIBuilders.JsonModels
                 BreakbarDamage1S = null;
             }
             //
-            TotalDamageDist = BuildDamageDistData(actor, null, phases, log, skillDesc, buffDesc);
-            TotalDamageTaken = BuildDamageTakenDistData(actor, null, phases, log, skillDesc, buffDesc);
+            TotalDamageDist = BuildDamageDistData(actor, phases, log, skillDesc, buffDesc);
+            TotalDamageTaken = BuildDamageTakenDistData(actor, phases, log, skillDesc, buffDesc);
             //
             if (settings.RawFormatTimelineArrays)
             {
@@ -223,24 +223,24 @@ namespace GW2EIBuilders.JsonModels
             }
         }
 
-        protected static List<JsonDamageDist>[] BuildDamageDistData(AbstractSingleActor actor, NPC target, List<PhaseData> phases, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        protected static List<JsonDamageDist>[] BuildDamageDistData(AbstractSingleActor actor, List<PhaseData> phases, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
             var res = new List<JsonDamageDist>[phases.Count];
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                res[i] = JsonDamageDist.BuildJsonDamageDistList(actor.GetDamageLogs(target, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
+                res[i] = JsonDamageDist.BuildJsonDamageDistList(actor.GetDamageLogs(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
             }
             return res;
         }
 
-        protected static List<JsonDamageDist>[] BuildDamageTakenDistData(AbstractSingleActor actor, NPC target, List<PhaseData> phases, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        protected static List<JsonDamageDist>[] BuildDamageTakenDistData(AbstractSingleActor actor, List<PhaseData> phases, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
             var res = new List<JsonDamageDist>[phases.Count];
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                res[i] = JsonDamageDist.BuildJsonDamageDistList(actor.GetDamageTakenLogs(target, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
+                res[i] = JsonDamageDist.BuildJsonDamageDistList(actor.GetDamageTakenLogs(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
             }
             return res;
         }

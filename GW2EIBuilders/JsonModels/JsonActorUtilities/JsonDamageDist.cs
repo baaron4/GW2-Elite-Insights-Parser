@@ -142,12 +142,15 @@ namespace GW2EIBuilders.JsonModels
             {
                 Hits += dmgEvt.DoubleProcHit ? 0 : 1;
                 TotalDamage += dmgEvt.Damage;
+                if (dmgEvt.HasHit)
+                {
+                    Min = Math.Min(Min, dmgEvt.Damage);
+                    Max = Math.Max(Max, dmgEvt.Damage);
+                }
                 if (!IndirectDamage)
                 {
                     if (dmgEvt.HasHit)
                     {
-                        Min = Math.Min(Min, dmgEvt.Damage);
-                        Max = Math.Max(Max, dmgEvt.Damage);
                         Flank += dmgEvt.IsFlanking ? 1 : 0;
                         Glance += dmgEvt.HasGlanced ? 1 : 0;
                         Crit += dmgEvt.HasCrit ? 1 : 0;
