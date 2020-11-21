@@ -44,7 +44,7 @@
 <script>
     Vue.component("dmgmodifier-table-component", {
         props: ['phaseindex', 'id', 'playerindex', 'playerindices', 'activetargets', 'modifiers', 'modifiersdata', 'mode', 'sum'],
-        mixins: [roundingComponent],
+        mixins: [numberComponent],
         template: `${template}`,
         data: function () {
             return {
