@@ -63,7 +63,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 // ritual started
                 if (firstDamageable != null)
                 {
-                    phases.Add(new PhaseData(end, firstDamageable.Time, "Pre-Ritual") { 
+                    phases.Add(new PhaseData(end, firstDamageable.Time, "Shielded Dhuum") { 
                         CanBeSubPhase = false
                     });
                     phases.Add(new PhaseData(firstDamageable.Time, fightDuration, "Ritual" ));
