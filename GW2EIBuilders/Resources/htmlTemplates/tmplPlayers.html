@@ -1,7 +1,7 @@
 <template>
     <div>
         <img class="icon mb-1" src="https://i.imgur.com/nSYuby8.png" :data-original-title="scoreExpl" />
-        <div class="d-flex flex-column" style="max-width: 650px;">
+        <div class="d-flex flex-column" style="max-width: 900px;">
             <div v-for="group in groups" class="d-flex flex-wrap mb-1">
                 <div v-for="player in group" class="player-cell d-flex flex-column align-items-center justify-content-center" :class="{active: player.id === playerindex}"
                     @click="select(player.id)">
