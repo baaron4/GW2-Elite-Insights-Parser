@@ -1,51 +1,44 @@
 <template>
     <div>
         <img class="icon mb-1" src="https://i.imgur.com/nSYuby8.png" :data-original-title="scoreExpl" />
-        <table class="table table-sm table-bordered composition">
-            <tbody>
-                <tr v-for="group in groups">
-                    <td v-for="player in group" class="player-cell" :class="{active: player.id === playerindex}"
-                        @click="select(player.id)">
-                        <div>
-                            <img :src="player.icon" :alt="player.profession" class="icon"
-                                 :data-original-title="player.profession">
-                            <img v-if="player.condi > 0"
-                                 src="https://wiki.guildwars2.com/images/5/54/Condition_Damage.png"
-                                 alt="Condition Damage" class="icon"
-                                 :data-original-title="'Condition Damage: ' + player.condi">
-                            <img v-if="player.conc > 0" src="https://wiki.guildwars2.com/images/4/44/Boon_Duration.png"
-                                 alt="Concentration" class="icon" :data-original-title="'Concentration: ' + player.conc">
-                            <img v-if="player.heal > 0" src="https://wiki.guildwars2.com/images/8/81/Healing_Power.png"
-                                 alt="Healing Power" class="icon" :data-original-title="'Healing Power: ' + player.heal">
-                            <img v-if="player.tough > 0" src="https://wiki.guildwars2.com/images/1/12/Toughness.png"
-                                 alt="Toughness" class="icon" :data-original-title="'Toughness: ' + player.tough">
-                        </div>
-                        <div v-if="player.l1Set.length > 0 || player.l2Set.length > 0">
-                            <img v-for="wep in player.l1Set" :src="getIcon(wep)" :data-original-title="wep"
-                                 class="icon">
-                            <span v-if="player.l1Set.length > 0 && player.l2Set.length > 0">/</span>
-                            <img v-for="wep in player.l2Set" :src="getIcon(wep)" :data-original-title="wep"
-                                 class="icon">
-                        </div>
-                        <div v-if="player.a1Set.length > 0 || player.a2Set.length > 0">
-                            <img v-for="wep in player.a1Set" :src="getIcon(wep)" :data-original-title="wep"
-                                 class="icon">
-                            <span v-if="player.a1Set.length > 0 && player.a2Set.length > 0">/</span>
-                            <img v-for="wep in player.a2Set" :src="getIcon(wep)" :data-original-title="wep"
-                                 class="icon">
-                        </div>
-                        <div class="shorten">
-                            <img v-if="player.isCommander"
-                                 src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png"
-                                 alt="Commander" class="icon" data-original-title="Commander">
-                            <span :data-original-title="player.acc">
-                                {{ player.name }}
-                            </span>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="d-flex flex-column" style="max-width: 650px;">
+            <div v-for="group in groups" class="d-flex flex-wrap mb-1">
+                <div v-for="player in group" class="player-cell d-flex flex-column align-items-center justify-content-center" :class="{active: player.id === playerindex}"
+                    @click="select(player.id)">
+                    <div>
+                        <img :src="player.icon" :alt="player.profession" class="icon"
+                            :data-original-title="player.profession">
+                        <img v-if="player.condi > 0" src="https://wiki.guildwars2.com/images/5/54/Condition_Damage.png"
+                            alt="Condition Damage" class="icon"
+                            :data-original-title="'Condition Damage: ' + player.condi">
+                        <img v-if="player.conc > 0" src="https://wiki.guildwars2.com/images/4/44/Boon_Duration.png"
+                            alt="Concentration" class="icon" :data-original-title="'Concentration: ' + player.conc">
+                        <img v-if="player.heal > 0" src="https://wiki.guildwars2.com/images/8/81/Healing_Power.png"
+                            alt="Healing Power" class="icon" :data-original-title="'Healing Power: ' + player.heal">
+                        <img v-if="player.tough > 0" src="https://wiki.guildwars2.com/images/1/12/Toughness.png"
+                            alt="Toughness" class="icon" :data-original-title="'Toughness: ' + player.tough">
+                    </div>
+                    <div v-if="player.l1Set.length > 0 || player.l2Set.length > 0">
+                        <img v-for="wep in player.l1Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
+                        <span v-if="player.l1Set.length > 0 && player.l2Set.length > 0">/</span>
+                        <img v-for="wep in player.l2Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
+                    </div>
+                    <div v-if="player.a1Set.length > 0 || player.a2Set.length > 0">
+                        <img v-for="wep in player.a1Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
+                        <span v-if="player.a1Set.length > 0 && player.a2Set.length > 0">/</span>
+                        <img v-for="wep in player.a2Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center">
+                        <img v-if="player.isCommander"
+                            src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png" alt="Commander"
+                            class="icon" data-original-title="Commander">
+                        <span class="player-cell-shorten" :data-original-title="player.acc">
+                            {{ player.name }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
