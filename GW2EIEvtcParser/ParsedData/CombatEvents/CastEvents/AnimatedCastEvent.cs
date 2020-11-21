@@ -60,7 +60,7 @@ namespace GW2EIEvtcParser.ParsedData
                         break;
                 }
             }
-            
+            Acceleration = Math.Round(Acceleration, ParserHelper.AccelerationDigit);
         }
 
         internal AnimatedCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData, long logEnd) : this(startItem, agentData, skillData)

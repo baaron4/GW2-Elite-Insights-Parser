@@ -35,6 +35,7 @@ namespace GW2EIEvtcParser
 
         internal const int BuffDigit = 3;
         internal const int DamageModGainDigit = 3;
+        internal const int AccelerationDigit = 3;
         internal const int TimeDigit = 3;
 
         internal const long ServerDelayConstant = 10;
