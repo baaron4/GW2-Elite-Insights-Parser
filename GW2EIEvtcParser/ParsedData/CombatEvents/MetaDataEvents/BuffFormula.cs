@@ -49,8 +49,8 @@ namespace GW2EIEvtcParser.ParsedData
                     return "Attack Speed";
                 case ConditionDurationIncrease:
                     return "Condition Duration Increase";
-                case BuffPowerDamageFormula:
-                case ConditionDamageFormula:
+                case DamageFormulaSquaredLevel:
+                case DamageFormula:
                     return "Damage Formula";
                 case GlancingBlow:
                     return "Glancing Blow";
@@ -60,9 +60,9 @@ namespace GW2EIEvtcParser.ParsedData
                     return "Physical Damage to Health";
                 case ConditionDamageToHP:
                     return "Condition Damage to Health";
-                case ConditionSkillActivationFormula:
+                case SkillActivationDamageFormula:
                     return "Damage Formula on Skill Activation";
-                case ConditionMovementActivationFormula:
+                case MovementActivationDamageFormula:
                     return "Damage Formula on Movement";
                 case EnduranceRegeneration:
                     return "Endurance Regeneration";
@@ -83,8 +83,8 @@ namespace GW2EIEvtcParser.ParsedData
                     return "Movement Speed";
                 case KarmaBonus:
                     return "Karma Bonus";
-                case SkillCooldownReduction:
-                    return "Skill Cooldown Reduction";
+                case SkillRechargeSpeedIncrease:
+                    return "Skill Recharge Speed Increase";
                 case MagicFind:
                     return "Magic Find";
                 case WXP:
@@ -96,16 +96,15 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        private static string GetVariableStat(ArcDPSEnums.BuffAttribute attribute)
+        private static string GetVariableStat(ArcDPSEnums.BuffAttribute attribute, int type)
         {
             switch (attribute)
             {
-                case BuffPowerDamageFormula:
-                    return "Power";
-                case ConditionDamageFormula:
-                case ConditionSkillActivationFormula:
-                case ConditionMovementActivationFormula:
-                    return "Condition Damage";
+                case DamageFormulaSquaredLevel:
+                case DamageFormula:
+                case SkillActivationDamageFormula:
+                case MovementActivationDamageFormula:
+                    return type > 10 ? "Power" : "Condition Damage";
                 case HealingOutputFormula:
                     return "Healing Power";
                 case Unknown:
@@ -143,13 +142,13 @@ namespace GW2EIEvtcParser.ParsedData
                 case GoldFind:
                 case MovementSpeed:
                 case KarmaBonus:
-                case SkillCooldownReduction:
+                case SkillRechargeSpeedIncrease:
                 case MagicFind:
                 case WXP:
                     return "%";
-                case ConditionMovementActivationFormula:
+                case MovementActivationDamageFormula:
                     return " adds";
-                case ConditionSkillActivationFormula:
+                case SkillActivationDamageFormula:
                     return " replaces";
                 case Unknown:
                     return "Unknown";
@@ -186,7 +185,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         private readonly BuffInfoEvent _buffInfoEvent;
 
-        private int Level => (_buffInfoEvent.Category == ArcDPSEnums.BuffCategory.Food || _buffInfoEvent.Category == ArcDPSEnums.BuffCategory.Enhancement) ? 0 : (Type == 12 ? 6400 : 80);
+        private int Level => (_buffInfoEvent.Category == ArcDPSEnums.BuffCategory.Food || _buffInfoEvent.Category == ArcDPSEnums.BuffCategory.Enhancement) ? 0 : (Attr1 == DamageFormulaSquaredLevel ? 6400 : 80);
 
         internal BuffFormula(CombatItem evtcItem, BuffInfoEvent buffInfoEvent)
         {
@@ -298,7 +297,7 @@ namespace GW2EIEvtcParser.ParsedData
             bool prefix = false;
             if (Variable != 0)
             {
-                _solvedDescription += Variable + " * " + GetVariableStat(Attr1);
+                _solvedDescription += Variable + " * " + GetVariableStat(Attr1, Type);
                 prefix = true;
             }
             if (totalOffset != 0)
