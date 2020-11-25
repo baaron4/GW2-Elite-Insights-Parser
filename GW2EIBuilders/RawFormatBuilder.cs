@@ -5,6 +5,7 @@ using GW2EIEvtcParser;
 using GW2EIBuilders.JsonModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System;
 
 namespace GW2EIBuilders
 {
@@ -18,13 +19,13 @@ namespace GW2EIBuilders
 
         //
 
-        public RawFormatBuilder(ParsedEvtcLog log, RawFormatSettings settings, string[] uploadLinks = null)
+        public RawFormatBuilder(ParsedEvtcLog log, RawFormatSettings settings, Version parserVersion, string[] uploadLinks = null)
         {
             if (settings == null)
             {
                 throw new InvalidDataException("Missing settings in RawFormatBuilder");
             }
-            JsonLog = new JsonLog(log, settings, uploadLinks);
+            JsonLog = new JsonLog(log, settings, parserVersion, uploadLinks);
         }
 
         public void CreateJSON(StreamWriter sw, bool indent)

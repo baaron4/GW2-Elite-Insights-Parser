@@ -6,6 +6,7 @@ using GW2EIEvtcParser.ParsedData;
 using GW2EIBuilders.HtmlModels;
 using Newtonsoft.Json;
 using System.Text;
+using System;
 
 namespace GW2EIBuilders
 {
@@ -20,6 +21,7 @@ namespace GW2EIBuilders
         private readonly int _scriptVersionRev;
 
         private readonly ParsedEvtcLog _log;
+        private readonly Version _parserVersion;
         private readonly bool _cr;
         private readonly bool _light;
         private readonly bool _externalScripts;
@@ -30,7 +32,7 @@ namespace GW2EIBuilders
         private readonly HashSet<DamageModifier> _usedDamageMods = new HashSet<DamageModifier>();
         private readonly Dictionary<long, SkillItem> _usedSkills = new Dictionary<long, SkillItem>();
 
-        public HTMLBuilder(ParsedEvtcLog log, HTMLSettings settings, HTMLAssets assets, string[] uploadString = null)
+        public HTMLBuilder(ParsedEvtcLog log, HTMLSettings settings, HTMLAssets assets, Version parserVersion, string[] uploadString = null)
         {
             if (settings == null)
             {
@@ -38,11 +40,12 @@ namespace GW2EIBuilders
             }
             _eiJS = assets.EIJavascriptCode;
             _eiCRJS = assets.EICRJavascriptCode;
-            _scriptVersion = log.ParserVersion.Major + "." + log.ParserVersion.Minor;
+            _parserVersion = parserVersion;
+            _scriptVersion = parserVersion.Major + "." + parserVersion.Minor;
 #if !DEBUG
-            _scriptVersion += "." + log.ParserVersion.Build;
+            _scriptVersion += "." + parserVersion.Build;
 #endif
-            _scriptVersionRev = log.ParserVersion.Revision;
+            _scriptVersionRev = parserVersion.Revision;
             _log = log;
 
             _uploadLink = uploadString ?? new string[] { "", "", "" };
@@ -71,7 +74,7 @@ namespace GW2EIBuilders
             _log.UpdateProgressWithCancellationCheck("HTML: building Combat Replay JS");
             html = html.Replace("<!--${CombatReplayJS}-->", BuildCombatReplayJS(path));
 
-            html = html.Replace("'${logDataJson}'", ToJson(LogDataDto.BuildLogData(_log, _usedSkills, _usedBuffs, _usedDamageMods, _cr, _light, _uploadLink)));
+            html = html.Replace("'${logDataJson}'", ToJson(LogDataDto.BuildLogData(_log, _usedSkills, _usedBuffs, _usedDamageMods, _cr, _light, _parserVersion, _uploadLink)));
 
             _log.UpdateProgressWithCancellationCheck("HTML: building Graph Data");
             html = html.Replace("'${graphDataJson}'", ToJson(ChartDataDto.BuildChartData(_log)));

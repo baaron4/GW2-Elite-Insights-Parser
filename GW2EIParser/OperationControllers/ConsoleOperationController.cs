@@ -5,7 +5,7 @@ namespace GW2EIParser
     internal class ConsoleOperationController : OperationController
     {
 
-        public ConsoleOperationController(Version parserVersion, string location, string status) : base(parserVersion, location, status)
+        public ConsoleOperationController(string location, string status) : base(location, status)
         {
         }
     }

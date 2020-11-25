@@ -37,7 +37,7 @@ namespace GW2EIParser
         /// </summary>
         public string Elapsed { get; set; } = "";
 
-        public OperationController(Version parserVersion, string location, string status) : base(parserVersion)
+        public OperationController(string location, string status)
         {
             Status = status;
             InputFile = location;

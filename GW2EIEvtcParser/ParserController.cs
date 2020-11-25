@@ -10,12 +10,9 @@ namespace GW2EIEvtcParser
 
         protected List<string> StatusList { get; }
 
-        public Version ParserVersion { get; }
-
-        public ParserController(Version parserVersion)
+        public ParserController()
         {
             StatusList = new List<string>();
-            ParserVersion = parserVersion;
         }
 
         protected virtual void ThrowIfCanceled()

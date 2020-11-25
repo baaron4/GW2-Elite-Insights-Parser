@@ -30,7 +30,6 @@ namespace GW2EIEvtcParser
         private readonly ParserController _operation;
 
         private Dictionary<AgentItem, AbstractSingleActor> _agentToActorDictionary;
-        public Version ParserVersion => _operation.ParserVersion;
 
         internal ParsedEvtcLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData,
                 List<CombatItem> combatItems, List<Player> playerList, long evtcLogDuration, EvtcParserSettings parserSettings, ParserController operation)

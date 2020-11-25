@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
@@ -326,14 +327,14 @@ namespace GW2EIBuilders.JsonModels
 
         }
 
-        internal JsonLog(ParsedEvtcLog log, RawFormatSettings settings, string[] uploadLinks)
+        internal JsonLog(ParsedEvtcLog log, RawFormatSettings settings, Version parserVersion, string[] uploadLinks)
         {
             //
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Meta Data");
             TriggerID = log.FightData.TriggerID;
             FightName = log.FightData.GetFightName(log);
             FightIcon = log.FightData.Logic.Icon;
-            EliteInsightsVersion = log.ParserVersion.ToString();
+            EliteInsightsVersion = parserVersion.ToString();
             ArcVersion = log.LogData.ArcVersion;
             RecordedBy = log.LogData.PoVName;
             TimeStart = log.LogData.LogStart;

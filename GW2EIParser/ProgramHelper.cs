@@ -297,7 +297,7 @@ namespace GW2EIParser
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs))
                 {
-                    var builder = new HTMLBuilder(log, new HTMLSettings(Properties.Settings.Default.LightTheme, Properties.Settings.Default.HtmlExternalScripts), htmlAssets, uploadresult);
+                    var builder = new HTMLBuilder(log, new HTMLSettings(Properties.Settings.Default.LightTheme, Properties.Settings.Default.HtmlExternalScripts), htmlAssets, ParserVersion, uploadresult);
                     builder.CreateHTML(sw, saveDirectory.FullName);
                 }
                 operation.UpdateProgressWithCancellationCheck("HTML created");
@@ -315,14 +315,14 @@ namespace GW2EIParser
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                 {
-                    var builder = new CSVBuilder(log, new CSVSettings(","), uploadresult);
+                    var builder = new CSVBuilder(log, new CSVSettings(","), ParserVersion, uploadresult);
                     builder.CreateCSV(sw);
                 }
                 operation.UpdateProgressWithCancellationCheck("CSV created");
             }
             if (Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML)
             {
-                var builder = new RawFormatBuilder(log, new RawFormatSettings(Properties.Settings.Default.RawTimelineArrays), uploadresult);
+                var builder = new RawFormatBuilder(log, new RawFormatSettings(Properties.Settings.Default.RawTimelineArrays), ParserVersion, uploadresult);
                 if (Properties.Settings.Default.SaveOutJSON)
                 {
                     operation.UpdateProgressWithCancellationCheck("Creating JSON");

@@ -17,6 +17,7 @@ namespace GW2EIParser.tst
         {
             NamingStrategy = new CamelCaseNamingStrategy()
         };
+        private static readonly Version Version = new Version(1, 0);
         private static readonly EvtcParserSettings parserSettings = new EvtcParserSettings(false, true, true, true, true, 2200);
         private static readonly HTMLSettings htmlSettings = new HTMLSettings(false, false);
         private static readonly RawFormatSettings rawSettings = new RawFormatSettings(true);
@@ -25,7 +26,7 @@ namespace GW2EIParser.tst
 
         private class TestOperationController : ParserController
         {
-            public TestOperationController() : base(new Version(1, 0))
+            public TestOperationController()
             {
 
             }
@@ -48,7 +49,7 @@ namespace GW2EIParser.tst
         {
             var ms = new MemoryStream();
             var sw = new StreamWriter(ms, NoBOMEncodingUTF8);
-            var builder = new RawFormatBuilder(log, rawSettings);
+            var builder = new RawFormatBuilder(log, rawSettings, Version);
 
             builder.CreateJSON(sw, false);
             sw.Close();
@@ -60,7 +61,7 @@ namespace GW2EIParser.tst
         {
             var ms = new MemoryStream();
             var sw = new StreamWriter(ms);
-            var builder = new CSVBuilder(log, csvSettings);
+            var builder = new CSVBuilder(log, csvSettings, Version);
 
             builder.CreateCSV(sw);
             sw.Close();
@@ -72,7 +73,7 @@ namespace GW2EIParser.tst
         {
             var ms = new MemoryStream();
             var sw = new StreamWriter(ms, NoBOMEncodingUTF8);
-            var builder = new HTMLBuilder(log, htmlSettings, htmlAssets);
+            var builder = new HTMLBuilder(log, htmlSettings, htmlAssets, Version);
 
             builder.CreateHTML(sw, null);
             sw.Close();
