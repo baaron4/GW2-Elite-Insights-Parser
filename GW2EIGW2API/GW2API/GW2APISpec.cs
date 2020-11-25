@@ -2,10 +2,8 @@
 
 namespace GW2EIGW2API.GW2API
 {
-    public class GW2APISpec
+    public class GW2APISpec : GW2APIBaseItem
     {
-        [JsonProperty]
-        public int Id { get; internal set; }
         [JsonProperty]
         public string Name { get; internal set; }
         [JsonProperty]

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using GW2EIGW2API.GW2API;
@@ -11,410 +10,100 @@ namespace GW2EIGW2API
 {
     public static class GW2APIController
     {
-        private static readonly DefaultContractResolver DefaultJsonContractResolver = new DefaultContractResolver
+       
+        /// <summary>
+        /// API Cache init with a cache file locations, 
+        /// If the files are present, the content will be used to initialize the API caches
+        /// Otherwise the caches will be built from GW2 API calls
+        /// </summary>
+        /// <param name="skillLocation"></param>
+        /// <param name="specLocation"></param>
+        /// <param name="traitLocation"></param>
+        public static void InitAPICache(string skillLocation, string specLocation, string traitLocation)
         {
-            NamingStrategy = new CamelCaseNamingStrategy()
-        };
-        private static HttpClient APIClient { get; set; }
-
-        private static void GetAPIClient()
-        {
-            if (APIClient == null)
-            {
-                APIClient = new HttpClient
-                {
-                    BaseAddress = new Uri("https://api.guildwars2.com")
-                };
-                APIClient.DefaultRequestHeaders.Accept.Clear();
-                APIClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-            }
-            return;
+            GW2SkillAPIController.GetAPISkills(skillLocation);
+            GW2SpecAPIController.GetAPISpecs(specLocation);
+            //GW2TraitAPIController.GetAPITraits(traitLocation);
         }
-        // INIT
 
+        /// <summary>
+        /// Cacheless API initialization
+        /// </summary>
         public static void InitAPICache()
         {
-            SetAPISkills();
-            //SetAPITraits();
-            SetAPISpecs();
+            GW2SkillAPIController.GetAPISkills(null);
+            GW2SpecAPIController.GetAPISpecs(null);
+            //GW2TraitAPIController.GetAPITraits(null);
         }
 
         //----------------------------------------------------------------------------- SKILLS
 
-        private class APISkills
-        {
-            public APISkills() { 
-                Items = new Dictionary<long, GW2APISkill>(); 
-            }
-
-            public APISkills(List<GW2APISkill> skills)
-            {
-                Items = skills.ToDictionary(x => x.Id);
-            }
-
-            public Dictionary<long, GW2APISkill> Items { get; }
-        }
-
-        private static APISkills _apiSkills = new APISkills();
-
+        /// <summary>
+        /// Returns GW2APISkill item
+        /// Warning: this method is not thread safe, 
+        /// Make sure to initialize the cache before hand if you intend to call this method from different threads
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public static GW2APISkill GetAPISkill(long id)
         {
-            if (GetAPISkills().Items.TryGetValue(id, out GW2APISkill skill))
+            if (GW2SkillAPIController.GetAPISkills(null).Items.TryGetValue(id, out GW2APISkill skill))
             {
                 return skill;
             }
             return null;
         }
-        private static List<GW2APISkill> GetGW2APISkills()
+
+        public static void WriteAPISkillsToFile(string filePath)
         {
-            var skill_L = new List<GW2APISkill>();
-            bool maxPageSizeReached = false;
-            int page = 0;
-            int pagesize = 200;
-            while (!maxPageSizeReached)
-            {
-                string path = "/v2/skills?page=" + page + "&page_size=" + pagesize;
-                HttpResponseMessage response = APIClient.GetAsync(new Uri(path, UriKind.Relative)).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    string data = response.Content.ReadAsStringAsync().Result;
-                    GW2APISkill[] responseArray = JsonConvert.DeserializeObject<GW2APISkill[]>(data, new JsonSerializerSettings
-                    {
-                        ContractResolver = DefaultJsonContractResolver
-                    });
-                    skill_L.AddRange(responseArray);
-                }
-                else
-                {
-                    maxPageSizeReached = true;
-                }
-                page++;
-            }
-
-            return skill_L;
+            GW2SkillAPIController.WriteAPISkillsToFile(filePath);
         }
-        private static APISkills GetAPISkills()
-        {
-            if (_apiSkills.Items.Count == 0)
-            {
-                throw new InvalidDataException("API Cache not initialized");
-            }
-            return _apiSkills;
-        }
-        public static void WriteAPISkillsToFile()
-        {
-            FileStream fcreate = File.Open(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-            + "/Content/SkillList.json", FileMode.Create);
 
-            fcreate.Close();
-
-
-            Console.WriteLine("Getting API");
-            //Get list from API
-            GetAPIClient();
-
-            var skillList = new List<GW2APISkill>();
-            HttpResponseMessage response = APIClient.GetAsync(new Uri("/v2/skills", UriKind.Relative)).Result;
-            //var failedList = new List<int>();
-            if (response.IsSuccessStatusCode)
-            {
-                // Get Skill ID list           
-                skillList.AddRange(GetGW2APISkills());
-                var writer = new StreamWriter(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-            + "/Content/SkillList.json");
-                var serializer = new JsonSerializer
-                {
-                    NullValueHandling = NullValueHandling.Ignore,
-                    Formatting = Formatting.None,
-                    DefaultValueHandling = DefaultValueHandling.Ignore,
-                    ContractResolver = DefaultJsonContractResolver
-                };
-                serializer.Serialize(writer, skillList);
-                writer.Close();
-
-            }
-            _apiSkills = new APISkills(skillList);
-            //return failedList;
-        }
-        private static void SetAPISkills()
-        {
-
-            if (_apiSkills.Items.Count == 0)
-            {
-                string path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-                + "/Content/SkillList.json";
-                if (File.Exists(path))
-                {
-                    if (new FileInfo(path).Length != 0)
-                    {
-                        Console.WriteLine("Reading Skilllist");
-                        using (var reader = new StreamReader(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-                        + "/Content/SkillList.json"))
-                        {
-                            var serializer = new JsonSerializer()
-                            {
-                                ContractResolver = DefaultJsonContractResolver
-                            };
-                            var skillList = (List<GW2APISkill>)serializer.Deserialize(reader, typeof(List<GW2APISkill>));
-                            _apiSkills = new APISkills(skillList);
-                            reader.Close();
-                        }
-                    }
-                }
-            }
-            return;
-        }
         //----------------------------------------------------------------------------- SPECS
-        private class APISpecs
-        {
-            public APISpecs() { 
-                Items = new Dictionary<int, GW2APISpec>(); 
-            }
-
-            public APISpecs(List<GW2APISpec> specs)
-            {
-                Items = specs.ToDictionary(x => x.Id);
-            }
-
-            public Dictionary<int, GW2APISpec> Items { get; }
-        }
-
-        private static APISpecs _apiSpecs = new APISpecs();
-
+        /// <summary>
+        /// Returns GW2APISpec item
+        /// Warning: this method is not thread safe, 
+        /// Make sure to initialize the cache before hand if you intend to call this method from different threads
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public static GW2APISpec GetAPISpec(int id)
         {
-            if (GetAPISpecs().Items.TryGetValue(id, out GW2APISpec spec))
+            if (GW2SpecAPIController.GetAPISpecs(null).Items.TryGetValue(id, out GW2APISpec spec))
             {
                 return spec;
             }
             return null;
         }
-        private static List<GW2APISpec> GetGW2APISpecs()
+
+        public static void WriteAPISpecsToFile(string filePath)
         {
-            var spec_L = new List<GW2APISpec>();
-            bool maxPageSizeReached = false;
-            int page = 0;
-            int pagesize = 200;
-            while (!maxPageSizeReached)
-            {
-                string path = "/v2/specializations?page=" + page + "&page_size=" + pagesize;
-                HttpResponseMessage response = APIClient.GetAsync(new Uri(path, UriKind.Relative)).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    string data = response.Content.ReadAsStringAsync().Result;
-                    GW2APISpec[] responseArray = JsonConvert.DeserializeObject<GW2APISpec[]>(data, new JsonSerializerSettings
-                    {
-                        ContractResolver = DefaultJsonContractResolver
-                    });
-                    spec_L.AddRange(responseArray);
-                }
-                else
-                {
-                    maxPageSizeReached = true;
-                }
-                page++;
-            }
-
-            return spec_L;
-        }
-
-        private static APISpecs GetAPISpecs()
-        {
-            if (_apiSpecs.Items.Count == 0)
-            {
-                throw new InvalidDataException("API Cache not initialized");
-            }
-            return _apiSpecs;
-        }
-        public static void WriteAPISpecsToFile()
-        {
-            FileStream fcreate = File.Open(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-            + "/Content/SpecList.json", FileMode.Create);
-
-            fcreate.Close();
-
-
-            Console.WriteLine("Getting API");
-            //Get list from API
-            GetAPIClient();
-
-            var specList = new List<GW2APISpec>();
-            HttpResponseMessage response = APIClient.GetAsync(new Uri("/v2/specializations", UriKind.Relative)).Result;
-            //var failedList = new List<int>();
-            if (response.IsSuccessStatusCode)
-            {
-                // Get Skill ID list           
-                specList.AddRange(GetGW2APISpecs());
-                var writer = new StreamWriter(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-            + "/Content/SpecList.json");
-                var serializer = new JsonSerializer
-                {
-                    NullValueHandling = NullValueHandling.Ignore,
-                    Formatting = Formatting.None,
-                    DefaultValueHandling = DefaultValueHandling.Ignore,
-                    ContractResolver = DefaultJsonContractResolver
-                };
-                serializer.Serialize(writer, specList);
-                writer.Close();
-            }
-            _apiSpecs = new APISpecs(specList);
-            //return failedList;
-        }
-
-        private static void SetAPISpecs()
-        {
-
-            if (_apiSpecs.Items.Count == 0)
-            {
-                string path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-                + "/Content/SpecList.json";
-                if (File.Exists(path))
-                {
-                    if (new FileInfo(path).Length != 0)
-                    {
-                        Console.WriteLine("Reading SpecList");
-                        using (var reader = new StreamReader(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-                        + "/Content/SpecList.json"))
-                        {
-                            var serializer = new JsonSerializer()
-                            {
-                                ContractResolver = DefaultJsonContractResolver
-                            };
-                            var specList = (List<GW2APISpec>)serializer.Deserialize(reader, typeof(List<GW2APISpec>));
-                            _apiSpecs = new APISpecs(specList);
-                            reader.Close();
-                        }
-                    }
-                }
-            }
-            return;
+            GW2SpecAPIController.WriteAPISpecsToFile(filePath);
         }
 
         //----------------------------------------------------------------------------- TRAITS
 
-        private class APITraits
-        {
-            public APITraits() { 
-                Items = new Dictionary<long, GW2APITrait>(); 
-            }
 
-            public APITraits(List<GW2APITrait> traits)
-            {
-                Items = traits.ToDictionary(x => x.Id);
-            }
-
-            public Dictionary<long, GW2APITrait> Items { get;}
-        }
-
-        private static APITraits _apiTraits = new APITraits();
-
+        /// <summary>
+        /// Returns GW2APITrait item
+        /// Warning: this method is not thread safe, 
+        /// Make sure to initialize the cache before hand if you intend to call this method from different threads
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public static GW2APITrait GetAPITrait(long id)
         {
-            if (GetAPITraits().Items.TryGetValue(id, out GW2APITrait trait))
+            if (GW2TraitAPIController.GetAPITraits(null).Items.TryGetValue(id, out GW2APITrait trait))
             {
                 return trait;
             }
             return null;
         }
-        private static List<GW2APITrait> GetGW2APITraits()
+        public static void WriteAPITraitsToFile(string filePath)
         {
-            var trait_L = new List<GW2APITrait>();
-            bool maxPageSizeReached = false;
-            int page = 0;
-            int pagesize = 200;
-            while (!maxPageSizeReached)
-            {
-                string path = "/v2/traits?page=" + page + "&page_size=" + pagesize;
-                HttpResponseMessage response = APIClient.GetAsync(new Uri(path, UriKind.Relative)).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    string data = response.Content.ReadAsStringAsync().Result;
-                    GW2APITrait[] responseArray = JsonConvert.DeserializeObject<GW2APITrait[]>(data, new JsonSerializerSettings
-                    {
-                        ContractResolver = DefaultJsonContractResolver
-                    });
-                    trait_L.AddRange(responseArray);
-                }
-                else
-                {
-                    maxPageSizeReached = true;
-                }
-                page++;
-            }
-
-            return trait_L;
+            GW2TraitAPIController.WriteAPITraitsToFile(filePath);
         }
-        private static APITraits GetAPITraits()
-        {
-            if (_apiTraits.Items.Count == 0)
-            {
-                throw new InvalidDataException("API Cache not initialized");
-            }
-            return _apiTraits;
-        }
-        public static void WriteAPITraitsToFile()
-        {
-            FileStream fcreate = File.Open(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-            + "/Content/TraitList.json", FileMode.Create);
 
-            fcreate.Close();
-
-
-            Console.WriteLine("Getting API");
-            //Get list from API
-            GetAPIClient();
-
-            var traitList = new List<GW2APITrait>();
-            HttpResponseMessage response = APIClient.GetAsync(new Uri("/v2/traits", UriKind.Relative)).Result;
-            //var failedList = new List<int>();
-            if (response.IsSuccessStatusCode)
-            {
-                // Get Skill ID list           
-                traitList.AddRange(GetGW2APITraits());
-                var writer = new StreamWriter(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-            + "/Content/TraitList.json");
-                var serializer = new JsonSerializer
-                {
-                    NullValueHandling = NullValueHandling.Ignore,
-                    Formatting = Formatting.None,
-                    DefaultValueHandling = DefaultValueHandling.Ignore,
-                    ContractResolver = DefaultJsonContractResolver
-                };
-                serializer.Serialize(writer, traitList);
-                writer.Close();
-
-            }
-            _apiTraits = new APITraits(traitList);
-            //return failedList;
-        }
-        private static void SetAPITraits()
-        {
-
-            if (_apiTraits.Items.Count == 0)
-            {
-                string path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-                + "/Content/TraitList.json";
-                if (File.Exists(path))
-                {
-                    if (new FileInfo(path).Length != 0)
-                    {
-                        Console.WriteLine("Reading Traitlist");
-                        using (var reader = new StreamReader(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-                        + "/Content/TraitList.json"))
-                        {
-                            var serializer = new JsonSerializer()
-                            {
-                                ContractResolver = DefaultJsonContractResolver
-                            };
-                            var traitList = (List<GW2APITrait>)serializer.Deserialize(reader, typeof(List<GW2APITrait>));
-                            _apiTraits = new APITraits(traitList);
-                            reader.Close();
-                        }
-                    }
-                }
-            }
-            return;
-        }
     }
 }
 

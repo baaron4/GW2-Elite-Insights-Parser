@@ -27,6 +27,10 @@ namespace GW2EIParser
 
         private static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
 
+        internal static readonly string SkillAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)+ "/Content/SkillList.json";
+        internal static readonly string SpecAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/SpecList.json";
+        internal static readonly string TraitAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/TraitList.json";
+
         internal static int GetMaxParallelRunning()
         {
             if (Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports)
