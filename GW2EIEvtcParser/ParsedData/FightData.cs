@@ -184,7 +184,7 @@ namespace GW2EIEvtcParser.ParsedData
                     break;
                 //
                 case ArcDPSEnums.TargetID.WorldVersusWorld:
-                    Logic = new WvWFight(id, parserSettings.ParseWvWAsGvG);
+                    Logic = new WvWFight(id, parserSettings.DetailedWvWParse);
                     break;
                     //
                 case ArcDPSEnums.TargetID.MassiveGolem:

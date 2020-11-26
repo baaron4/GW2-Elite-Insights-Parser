@@ -103,7 +103,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (Mode == DamageModifierMode.All)
             {
-                if (mode == FightLogic.ParseMode.WvW && !parserSettings.ParseWvWAsGvG)
+                if (mode == FightLogic.ParseMode.WvW && !parserSettings.DetailedWvWParse)
                 {
                     return !(this is BuffDamageModifierTarget);
                 }
@@ -117,7 +117,7 @@ namespace GW2EIEvtcParser.EIData
                 case FightLogic.ParseMode.Benchmark:
                     return Mode == DamageModifierMode.PvE;
                 case FightLogic.ParseMode.WvW:
-                    return !(!parserSettings.ParseWvWAsGvG && this is BuffDamageModifierTarget) && (Mode == DamageModifierMode.WvW || Mode == DamageModifierMode.sPvPWvW);
+                    return !(!parserSettings.DetailedWvWParse && this is BuffDamageModifierTarget) && (Mode == DamageModifierMode.WvW || Mode == DamageModifierMode.sPvPWvW);
                 case FightLogic.ParseMode.sPvP:
                     return Mode == DamageModifierMode.sPvP || Mode == DamageModifierMode.sPvPWvW;
             }

@@ -9,14 +9,14 @@ namespace GW2EIEvtcParser.EncounterLogic
     internal class WvWFight : FightLogic
     {
         private readonly string _defaultName;
-        private readonly bool _gvg;
-        public WvWFight(int triggerID, bool asGvG) : base(triggerID)
+        private readonly bool _detailed;
+        public WvWFight(int triggerID, bool detailed) : base(triggerID)
         {
             Mode = ParseMode.WvW;
             Icon = "https://wiki.guildwars2.com/images/3/35/WvW_Rank_up.png";
-            _gvg = asGvG;
-            Extension = _gvg ? "gvg" : "wvw";
-            _defaultName = _gvg ? "Guild vs Guild" : "World vs World";
+            _detailed = detailed;
+            Extension = _detailed ? "detailed_wvw" : "wvw";
+            _defaultName = _detailed ? "Detailed WvW" : "World vs World";
         }
 
         protected override HashSet<int> GetUniqueTargetIDs()
@@ -37,7 +37,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            if (_gvg)
+            if (_detailed)
             {
                 phases.Add(new PhaseData(phases[0].Start, phases[0].End)
                 {
@@ -106,11 +106,11 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
-            AgentItem dummyAgent = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, _gvg ? "Dummy GvG Agent" : "Enemy Players", "", (int)ArcDPSEnums.TargetID.WorldVersusWorld);
+            AgentItem dummyAgent = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, _detailed ? "Dummy WvW Agent" : "Enemy Players", "", (int)ArcDPSEnums.TargetID.WorldVersusWorld);
             ComputeFightTargets(agentData, combatData);
 
             var aList = agentData.GetAgentByType(AgentItem.AgentType.EnemyPlayer).ToList();
-            if (_gvg)
+            if (_detailed)
             {
                 foreach (AgentItem a in aList)
                 {
