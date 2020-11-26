@@ -54,6 +54,7 @@ namespace GW2EIEvtcParser.ParsedData
                     string[] splitStr = Name.Split('\0');
                     if (splitStr.Length < 2 || (splitStr[1].Length == 0 || splitStr[2].Length == 0 || splitStr[0].Contains("-")))
                     {
+                        Name = Prof + " " + Name;
                         Type = AgentType.EnemyPlayer;
                     }
                 }
