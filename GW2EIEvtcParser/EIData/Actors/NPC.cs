@@ -41,7 +41,7 @@ namespace GW2EIEvtcParser.EIData
 
         public override string GetIcon()
         {
-            return ParserHelper.GetNPCIcon(ID);
+            return AgentItem.Type == AgentItem.AgentType.EnemyPlayer ? ParserHelper.GetProfIcon(Prof) : ParserHelper.GetNPCIcon(ID);
         }
 
         internal void SetManualHealth(int health)
