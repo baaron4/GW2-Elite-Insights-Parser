@@ -107,13 +107,13 @@
                 return res;
             },
             hasDamageMods: function() {
-                return !logData.targetless;
+                return !logData.targetless && Object.keys(logData.damageModMap).length !== 0 ;
             },
             hasMechanics: function() {
                 return logData.mechanicMap.length > 0 && !logData.noMechanics;
             },
             hasTargets: function() {
-                return !logData.targetless && !logData.wvw;
+                return !logData.targetless;
             }
         }
     });
