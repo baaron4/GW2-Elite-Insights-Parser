@@ -290,7 +290,7 @@ namespace GW2EIEvtcParser.ParsedData
                     // if the first swap is not a water set that means the next time we get to a water set was the first set to begin with
                     if (firstSwap != FirstWaterSet && firstSwap != SecondWaterSet)
                     {
-                        swapped = swaps.Exists(x => x == FirstWaterSet || x == FirstWaterSet) ? swaps.First(x => x == FirstWaterSet || x == SecondWaterSet) : FirstWaterSet;
+                        swapped = swaps.Exists(x => x == FirstWaterSet || x == SecondWaterSet) ? swaps.First(x => x == FirstWaterSet || x == SecondWaterSet) : FirstWaterSet;
                     }
                     else
                     {
