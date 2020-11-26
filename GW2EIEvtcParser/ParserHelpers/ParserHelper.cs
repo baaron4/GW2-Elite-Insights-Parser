@@ -40,6 +40,7 @@ namespace GW2EIEvtcParser
 
         internal const long ServerDelayConstant = 10;
         internal const long BuffSimulatorDelayConstant = 50;
+        internal const long WeaponSwapDelayConstant = 75;
 
         internal const int PhaseTimeLimit = 1000;
 
