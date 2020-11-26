@@ -380,7 +380,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     swapped = skill.FindWeaponSlot(swaps);
                 }
-                if (!skill.EstimateWeapons(weapons, swapped, cl.Time > swappedTime) && cl is WeaponSwapEvent swe)
+                if (!skill.EstimateWeapons(weapons, swapped, cl.Time > swappedTime + ParserHelper.WeaponSwapDelayConstant) && cl is WeaponSwapEvent swe)
                 {
                     //wepswap  
                     swapped = swe.SwappedTo;
