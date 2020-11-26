@@ -12,7 +12,7 @@ namespace GW2EIEvtcParser.EIData
 
         public Dictionary<string, DamageModifier> DamageModifiersByName { get; }
 
-        internal DamageModifiersContainer(ulong build, FightLogic.ParseMode mode)
+        internal DamageModifiersContainer(ulong build, FightLogic.ParseMode mode, EvtcParserSettings parserSettings)
         {
             var AllDamageModifiers = new List<List<DamageModifier>>
             {
@@ -59,7 +59,7 @@ namespace GW2EIEvtcParser.EIData
             var currentDamageMods = new List<DamageModifier>();
             foreach (List<DamageModifier> boons in AllDamageModifiers)
             {
-                currentDamageMods.AddRange(boons.Where(x => x.Available(build) && x.Keep(mode)));
+                currentDamageMods.AddRange(boons.Where(x => x.Available(build) && x.Keep(mode, parserSettings))) ;
             }
             DamageModifiersPerSource = currentDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
             DamageModifiersByName = currentDamageMods.GroupBy(x => x.Name).ToDictionary(x => x.Key, x =>

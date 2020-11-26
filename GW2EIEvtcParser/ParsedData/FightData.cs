@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.ParsedData
         private CMStatus _isCM = CMStatus.NotSet;
         public bool IsCM => _isCM == CMStatus.CMnoName || _isCM == CMStatus.CM;
         // Constructors
-        internal FightData(int id, AgentData agentData, long start, long end)
+        internal FightData(int id, AgentData agentData, EvtcParserSettings parserSettings, long start, long end)
         {
             FightOffset = start;
             FightEnd = end - start;
@@ -184,7 +184,7 @@ namespace GW2EIEvtcParser.ParsedData
                     break;
                 //
                 case ArcDPSEnums.TargetID.WorldVersusWorld:
-                    Logic = new WvWFight(id);
+                    Logic = new WvWFight(id, parserSettings.ParseWvWAsGvG);
                     break;
                     //
                 case ArcDPSEnums.TargetID.MassiveGolem:

@@ -705,7 +705,7 @@ namespace GW2EIEvtcParser
             _allAgentsList.RemoveAll(x => !(x.InstID != 0 && x.LastAware - x.FirstAware >= 0 && x.FirstAware != 0 && x.LastAware != long.MaxValue) && (x.Type != AgentItem.AgentType.Player && x.Type != AgentItem.AgentType.EnemyPlayer));
             _agentData = new AgentData(_allAgentsList);
 
-            _fightData = new FightData(_id, _agentData, _logStartTime, _logEndTime);
+            _fightData = new FightData(_id, _agentData, _parserSettings, _logStartTime, _logEndTime);
 
             CompletePlayers();
 

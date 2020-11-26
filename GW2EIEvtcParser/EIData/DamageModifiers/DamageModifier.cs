@@ -99,11 +99,11 @@ namespace GW2EIEvtcParser.EIData
             return gw2Build < _maxBuild && gw2Build >= _minBuild;
         }
 
-        internal bool Keep(FightLogic.ParseMode mode)
+        internal bool Keep(FightLogic.ParseMode mode, EvtcParserSettings parserSettings)
         {
             if (Mode == DamageModifierMode.All)
             {
-                if (mode == FightLogic.ParseMode.WvW)
+                if (mode == FightLogic.ParseMode.WvW && !parserSettings.ParseWvWAsGvG)
                 {
                     return !(this is BuffDamageModifierTarget);
                 }
@@ -117,7 +117,7 @@ namespace GW2EIEvtcParser.EIData
                 case FightLogic.ParseMode.Benchmark:
                     return Mode == DamageModifierMode.PvE;
                 case FightLogic.ParseMode.WvW:
-                    return !(this is BuffDamageModifierTarget) && (Mode == DamageModifierMode.WvW || Mode == DamageModifierMode.sPvPWvW);
+                    return !(!parserSettings.ParseWvWAsGvG && this is BuffDamageModifierTarget) && (Mode == DamageModifierMode.WvW || Mode == DamageModifierMode.sPvPWvW);
                 case FightLogic.ParseMode.sPvP:
                     return Mode == DamageModifierMode.sPvP || Mode == DamageModifierMode.sPvPWvW;
             }

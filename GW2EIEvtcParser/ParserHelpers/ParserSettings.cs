@@ -10,6 +10,7 @@ namespace GW2EIEvtcParser
         public bool ParseCombatReplay { get; }
         public bool ComputeDamageModifiers { get; }
         public long CustomTooShort { get; }
+        public bool ParseWvWAsGvG { get; }
 
         public EvtcParserSettings(bool anonymousPlayer, bool skipFailedTries, bool parsePhases, bool parseCombatReplay, bool computeDamageModifiers, long customTooShort)
         {
@@ -19,6 +20,7 @@ namespace GW2EIEvtcParser
             ParseCombatReplay = parseCombatReplay;
             ComputeDamageModifiers = computeDamageModifiers;
             CustomTooShort = Math.Max(customTooShort, 2200);
+            ParseWvWAsGvG = false;
         }
     }
 }

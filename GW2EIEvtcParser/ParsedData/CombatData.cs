@@ -316,7 +316,7 @@ namespace GW2EIEvtcParser.ParsedData
                        x.IsStateChange == ArcDPSEnums.StateChange.Rotation).ToList(), agentData);
             HasMovementData = _movementData.Count > 1;
             // state change events
-            operation.UpdateProgressWithCancellationCheck("Creatint status and metadata events");
+            operation.UpdateProgressWithCancellationCheck("Creating status and metadata events");
             CombatEventFactory.CreateStateChangeEvents(allCombatItems, _metaDataEvents, _statusEvents, _rewardEvents, agentData);
             operation.UpdateProgressWithCancellationCheck("Combining SkillInfo with SkillData");
             skillData.CombineWithSkillInfo(_metaDataEvents.SkillInfoEvents);
