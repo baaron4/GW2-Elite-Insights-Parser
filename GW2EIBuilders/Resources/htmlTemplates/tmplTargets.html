@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex flex-row justify-content-center flex-wrap">
+    <div class="d-flex flex-row justify-content-center flex-wrap" style="max-width: 500px;">
         <div v-for="(target, id) in targets" v-show="show(id)">
             <img class="icon-lg mr-2 ml-2 target-cell" :src="getTargetData(id).icon" :alt="getTargetData(id).name"
                 :data-original-title="getTargetData(id).name" :class="{active: target.active}"
