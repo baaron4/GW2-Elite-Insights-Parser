@@ -96,7 +96,7 @@
             this.targetOffset += computeRotationData(this.target.details.rotation[this.phaseindex], images, this.data, this.phase);
             var oldOffset = this.targetOffset;
             this.targetOffset += computeBuffData(this.target.details.boonGraph[this.phaseindex], this.data);
-            var dpsY = oldOffset === this.targetOffset ? 'y2' : 'y3';
+            var hasBuffs = oldOffset !== this.targetOffset;
             if (this.hasBreakbarStates) {
                 var breakbarStates = this.graph.targets[this.phaseTargetIndex].breakbarPercentStates;
                 var breakbarTexts = [];
@@ -116,7 +116,7 @@
                     hoverinfo: 'text',
                     visible: this.phase.breakbarPhase ? true : 'legendonly',
                     name: this.target.name + ' breakbar',
-                    yaxis: dpsY
+                    yaxis: 'y3'
                 };
                 this.data.push(res);
                 this.targetOffset++;
@@ -139,7 +139,7 @@
                     },
                     hoverinfo: 'text',
                     name: this.target.name + ' health',
-                    yaxis: dpsY
+                    yaxis: 'y3'
                 };
                 this.data.push(res);
                 this.targetOffset++;
@@ -151,11 +151,11 @@
                 line: {
                     shape: 'spline'
                 },
-                yaxis: dpsY,
+                yaxis: 'y3',
                 hoverinfo: 'name+y+x',
                 name: 'Total'
             });
-            this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc');
+            this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc', hasBuffs);
             computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
         },
         computed: {

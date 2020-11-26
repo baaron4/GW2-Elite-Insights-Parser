@@ -46,12 +46,12 @@
             this.playerOffset += computeRotationData(this.player.details.rotation[this.phaseindex], images, this.data, this.phase);
             var oldOffset = this.playerOffset;
             this.playerOffset += computeBuffData(this.player.details.boonGraph[this.phaseindex], this.data);
-            var dpsY = oldOffset === this.playerOffset ? 'y2' : 'y3';
+            var hasBuffs = oldOffset !== this.playerOffset;
             this.graphOffset = this.playerOffset;
-            this.playerOffset += computeTargetBreakbarData(this.graph, logData.targets, this.phase, this.data, dpsY);
-            this.playerOffset += computeTargetHealthData(this.graph, logData.targets, this.phase, this.data, dpsY);
+            this.playerOffset += computeTargetBreakbarData(this.graph, logData.targets, this.phase, this.data, 'y3');
+            this.playerOffset += computeTargetHealthData(this.graph, logData.targets, this.phase, this.data, 'y3');
             if (this.healthGraph) {
-                this.playerOffset += computePlayerHealthData(this.healthGraph, this.data, dpsY);
+                this.playerOffset += computePlayerHealthData(this.healthGraph, this.data, 'y3');
             }
             this.data.push({
                 x: this.phase.times,
@@ -61,7 +61,7 @@
                     shape: 'spline',
                     color: this.player.colTotal,
                 },
-                yaxis: dpsY,
+                yaxis: 'y3',
                 hoverinfo: 'name+y+x',
                 name: 'Total'
             });
@@ -74,7 +74,7 @@
                         shape: 'spline',
                         color: this.player.colTarget,
                     },
-                    yaxis: dpsY,
+                    yaxis: 'y3',
                     hoverinfo: 'name+y+x',
                     name: 'Target'
                 });
@@ -86,12 +86,12 @@
                         shape: 'spline',
                         color: this.player.colCleave,
                     },
-                    yaxis: dpsY,
+                    yaxis: 'y3',
                     hoverinfo: 'name+y+x',
                     name: 'Cleave'
                 });
             }
-            this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc');
+            this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc', hasBuffs);
             computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
         },
         computed: {

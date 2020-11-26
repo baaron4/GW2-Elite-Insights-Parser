@@ -398,7 +398,7 @@ function findState(states, timeS, start, end) {
     }
 }
 
-function getActorGraphLayout(images, color) {
+function getActorGraphLayout(images, color, hasBuffs) {
     return {
         barmode: 'stack',
         yaxis: {
@@ -417,7 +417,7 @@ function getActorGraphLayout(images, color) {
         hoverdistance: 150,
         yaxis2: {
             title: 'Buffs',
-            domain: [0.11, 0.6],
+            domain: hasBuffs ? [0.11, 0.6] : [0.11, 0.11],
             color: color,
             gridcolor: color,
             fixedrange: true
@@ -426,7 +426,7 @@ function getActorGraphLayout(images, color) {
             title: 'DPS',
             color: color,
             gridcolor: color,
-            domain: [0.61, 1]
+            domain: hasBuffs ? [0.61, 1] : [0.11, 1]
         },
         images: images,
         font: {
