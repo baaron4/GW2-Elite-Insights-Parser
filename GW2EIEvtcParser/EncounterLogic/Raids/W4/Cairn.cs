@@ -57,6 +57,40 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (11774, 4480, 14078, 5376));
         }
 
+        internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+        {
+            List<PhaseData> phases = GetInitialPhase(log);
+            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Cairn);
+            if (mainTarget == null)
+            {
+                throw new InvalidOperationException("Cairn not found");
+            }
+            phases[0].Targets.Add(mainTarget);
+            if (!requirePhases)
+            {
+                return phases;
+            }
+            /*BuffApplyEvent enrageApply;
+            if (false)
+            {
+                var normalPhase = new PhaseData(0, enrageApply.Time)
+                {
+                    Name = "Normal"
+                };
+                normalPhase.Targets.Add(mainTarget);
+
+                var enragePhase = new PhaseData(enrageApply.Time + 1, log.FightData.FightEnd)
+                {
+                    Name = "Enrage"
+                };
+                enragePhase.Targets.Add(mainTarget);
+
+                phases.Add(normalPhase);
+                phases.Add(enragePhase);
+            }*/
+            return phases;
+        }
+
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
