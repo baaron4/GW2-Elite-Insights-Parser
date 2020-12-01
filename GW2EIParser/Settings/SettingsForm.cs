@@ -86,6 +86,7 @@ namespace GW2EIParser.Setting
             ChkDamageMods.Checked = Properties.Settings.Default.ComputeDamageModifiers;
             ChkMultiLogs.Checked = Properties.Settings.Default.ParseMultipleLogs;
             ChkRawTimelineArrays.Checked = Properties.Settings.Default.RawTimelineArrays;
+            ChkDetailledWvW.Checked = Properties.Settings.Default.DetailledWvW;
 
             ChkHtmlExternalScripts.Checked = Properties.Settings.Default.HtmlExternalScripts;
 
@@ -352,6 +353,11 @@ namespace GW2EIParser.Setting
         private void ChkAnonymousCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.Anonymous = ChkAnonymous.Checked;
+        }
+
+        private void ChkDetailledWvWCheckedChange(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.DetailledWvW = ChkDetailledWvW.Checked;
         }
 
         private void ChkSaveOutTraceCheckedChanged(object sender, EventArgs e)

@@ -457,5 +457,20 @@ namespace GW2EIParser.Properties {
                 this["CustomTooShort"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DetailledWvW
+        {
+            get
+            {
+                return ((bool)(this["DetailledWvW"]));
+            }
+            set
+            {
+                this["DetailledWvW"] = value;
+            }
+        }
     }
 }

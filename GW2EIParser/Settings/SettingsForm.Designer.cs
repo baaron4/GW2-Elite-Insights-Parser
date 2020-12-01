@@ -96,6 +96,7 @@
             this.BtnClose = new System.Windows.Forms.Button();
             this.BtnDumpSettings = new System.Windows.Forms.Button();
             this.BtnLoadSettings = new System.Windows.Forms.Button();
+            this.ChkDetailledWvW = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.NumericCustomTooShort)).BeginInit();
             this.GroupWebhookSettings.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -609,6 +610,7 @@
             // 
             // GroupEncounter
             // 
+            this.GroupEncounter.Controls.Add(this.ChkDetailledWvW);
             this.GroupEncounter.Controls.Add(this.ChkPhaseParsing);
             this.GroupEncounter.Controls.Add(this.ChkCombatReplay);
             this.GroupEncounter.Controls.Add(this.ChkDamageMods);
@@ -627,7 +629,7 @@
             this.TabHTML.Location = new System.Drawing.Point(4, 22);
             this.TabHTML.Name = "TabHTML";
             this.TabHTML.Padding = new System.Windows.Forms.Padding(3);
-            this.TabHTML.Size = new System.Drawing.Size(476, 335);
+            this.TabHTML.Size = new System.Drawing.Size(471, 313);
             this.TabHTML.TabIndex = 1;
             this.TabHTML.Text = "HTML";
             this.TabHTML.UseVisualStyleBackColor = true;
@@ -688,7 +690,7 @@
             this.TabCSV.Controls.Add(this.ChkOutputCsv);
             this.TabCSV.Location = new System.Drawing.Point(4, 22);
             this.TabCSV.Name = "TabCSV";
-            this.TabCSV.Size = new System.Drawing.Size(476, 335);
+            this.TabCSV.Size = new System.Drawing.Size(471, 313);
             this.TabCSV.TabIndex = 2;
             this.TabCSV.Text = "CSV";
             this.TabCSV.UseVisualStyleBackColor = true;
@@ -702,7 +704,7 @@
             this.TabRaw.Controls.Add(this.GroupRawSettings);
             this.TabRaw.Location = new System.Drawing.Point(4, 22);
             this.TabRaw.Name = "TabRaw";
-            this.TabRaw.Size = new System.Drawing.Size(476, 335);
+            this.TabRaw.Size = new System.Drawing.Size(471, 313);
             this.TabRaw.TabIndex = 3;
             this.TabRaw.Text = "Raw formats";
             this.TabRaw.UseVisualStyleBackColor = true;
@@ -777,7 +779,7 @@
             this.TabUpload.Controls.Add(this.GroupWebhookSettings);
             this.TabUpload.Location = new System.Drawing.Point(4, 22);
             this.TabUpload.Name = "TabUpload";
-            this.TabUpload.Size = new System.Drawing.Size(476, 335);
+            this.TabUpload.Size = new System.Drawing.Size(471, 313);
             this.TabUpload.TabIndex = 4;
             this.TabUpload.Text = "Upload";
             this.TabUpload.UseVisualStyleBackColor = true;
@@ -801,7 +803,7 @@
             this.TabAPI.Controls.Add(this.BtnResetSkillList);
             this.TabAPI.Location = new System.Drawing.Point(4, 22);
             this.TabAPI.Name = "TabAPI";
-            this.TabAPI.Size = new System.Drawing.Size(476, 335);
+            this.TabAPI.Size = new System.Drawing.Size(471, 313);
             this.TabAPI.TabIndex = 5;
             this.TabAPI.Text = "Maintenance";
             this.TabAPI.UseVisualStyleBackColor = true;
@@ -865,6 +867,18 @@
             this.BtnLoadSettings.Text = "Load Settings";
             this.BtnLoadSettings.UseVisualStyleBackColor = true;
             this.BtnLoadSettings.Click += new System.EventHandler(this.BtnLoadSettingsClicked);
+            // 
+            // ChkDetailledWvW
+            // 
+            this.ChkDetailledWvW.AutoSize = true;
+            this.ChkDetailledWvW.Location = new System.Drawing.Point(6, 88);
+            this.ChkDetailledWvW.Name = "ChkDetailledWvW";
+            this.ChkDetailledWvW.Size = new System.Drawing.Size(156, 17);
+            this.ChkDetailledWvW.TabIndex = 41;
+            this.ChkDetailledWvW.Text = "Detailled WvW Parsing";
+            this.TlpSettings.SetToolTip(this.ChkDetailledWvW, "Keep default value if unsure. Enabling this will make parsing significantly slower and the generated files bigger");
+            this.ChkDetailledWvW.UseVisualStyleBackColor = true;
+            this.ChkDetailledWvW.CheckedChanged += new System.EventHandler(this.ChkDetailledWvWCheckedChange);
             // 
             // SettingsForm
             // 
@@ -988,5 +1002,6 @@
         private System.Windows.Forms.CheckBox ChkRawTimelineArrays;
         private System.Windows.Forms.Label DPSReportUserTokenLabel;
         private System.Windows.Forms.Label LblWebhookUrl;
+        private System.Windows.Forms.CheckBox ChkDetailledWvW;
     }
 }
