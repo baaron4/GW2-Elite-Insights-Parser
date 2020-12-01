@@ -119,6 +119,7 @@ namespace GW2EIEvtcParser
             BreakbarPercent = 35,
             Error = 36,
             Tag = 37,
+            BarrierUpdate = 38,
             Unknown
         };
 

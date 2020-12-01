@@ -23,6 +23,7 @@ namespace GW2EIEvtcParser.EIData
         private readonly Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractHealthDamageEvent>>> _selfDamageLogsPerPhasePerTarget = new Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractHealthDamageEvent>>>();
         //status
         private List<Segment> _healthUpdates { get; set; }
+        private List<Segment> _barrierUpdates { get; set; }
         private List<(long start, long end)> _deads;
         private List<(long start, long end)> _downs;
         private List<(long start, long end)> _dcs;
@@ -67,6 +68,15 @@ namespace GW2EIEvtcParser.EIData
                 _healthUpdates = Segment.FromStates(log.CombatData.GetHealthUpdateEvents(AgentItem).Select(x => x.ToState()).ToList(), 0, log.FightData.FightEnd);
             }
             return _healthUpdates;
+        }
+
+        public List<Segment> GetBarrierUpdates(ParsedEvtcLog log)
+        {
+            if (_barrierUpdates == null)
+            {
+                _barrierUpdates = Segment.FromStates(log.CombatData.GetBarrierUpdateEvents(AgentItem).Select(x => x.ToState()).ToList(), 0, log.FightData.FightEnd);
+            }
+            return _barrierUpdates;
         }
 
         // Minions
