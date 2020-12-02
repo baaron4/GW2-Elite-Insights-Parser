@@ -103,7 +103,7 @@ namespace GW2EIParser
                         else
                         {
                             Exception ex = t.Exception.InnerExceptions[0];
-                            if (!(ex is EIException))
+                            if (!(ex is ProgramException))
                             {
                                 operation.UpdateProgress("Something terrible has happened");
                             }

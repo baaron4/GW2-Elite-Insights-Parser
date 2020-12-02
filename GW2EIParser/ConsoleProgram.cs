@@ -58,7 +58,7 @@ namespace GW2EIParser
                 ProgramHelper.DoWork(operation);
                 operation.FinalizeStatus("Parsing Successful - ");
             }
-            catch (EIException ex)
+            catch (ProgramException ex)
             {
                 operation.UpdateProgress(ex.InnerException.Message);
                 operation.FinalizeStatus("Parsing Failure - ");

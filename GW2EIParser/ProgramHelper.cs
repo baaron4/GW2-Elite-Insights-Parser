@@ -153,7 +153,7 @@ namespace GW2EIParser
             }
             catch (Exception ex)
             {
-                throw new EIException(ex);
+                throw new ProgramException(ex);
             }
             finally
             {
