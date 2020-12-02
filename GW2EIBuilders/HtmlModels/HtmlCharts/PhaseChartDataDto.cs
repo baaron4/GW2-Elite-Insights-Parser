@@ -9,5 +9,6 @@ namespace GW2EIBuilders.HtmlModels
 
         public List<List<object[]>> TargetsHealthStatesForCR { get; set; } = null;
         public List<List<object[]>> TargetsBreakbarPercentStatesForCR { get; set; } = null;
+        public List<List<object[]>> TargetsBarrierStatesForCR { get; set; } = null;
     }
 }

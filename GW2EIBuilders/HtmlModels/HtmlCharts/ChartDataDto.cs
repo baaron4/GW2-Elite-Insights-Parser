@@ -27,12 +27,12 @@ namespace GW2EIBuilders.HtmlModels
             return Segment.ToObjectList(subSegments, phase.Start, phase.End);
         }
 
-        public static List<object[]> BuildHealthGraphStates(ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase, bool nullable)
+        public static List<object[]> BuildHealthStates(ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase, bool nullable)
         {
             return BuildGraphStates(actor.GetHealthUpdates(log), phase, nullable, 100.0);
         }
 
-        public static List<object[]> BuildBarrierGraphStates(ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase)
+        public static List<object[]> BuildBarrierStates(ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase)
         {
             return BuildGraphStates(actor.GetBarrierUpdates(log), phase, true, 0.0);
         }
@@ -63,8 +63,9 @@ namespace GW2EIBuilders.HtmlModels
                     phaseData.TargetsBreakbarPercentStatesForCR = new List<List<object[]>>();
                     foreach (NPC target in log.FightData.Logic.Targets)
                     {
-                        phaseData.TargetsHealthStatesForCR.Add(BuildHealthGraphStates(log, target, phases[0], false));
+                        phaseData.TargetsHealthStatesForCR.Add(BuildHealthStates(log, target, phases[0], false));
                         phaseData.TargetsBreakbarPercentStatesForCR.Add(BuildBreakbarPercentStates(log, target, phases[0]));
+                        phaseData.TargetsBarrierStatesForCR.Add(BuildBarrierStates(log, target, phases[0]));
                     }
                 }
 
