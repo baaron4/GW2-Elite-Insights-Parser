@@ -26,7 +26,11 @@ namespace GW2EIEvtcParser.EIData
                 Conditions,
                 Commons,
                 Gear,
-                Consumables,
+                NormalFoods,
+                AscendedFood,
+                Utilities,
+                Potions,
+                Writs,
                 FightSpecific,
                 FractalInstabilities,
                 //
