@@ -138,7 +138,11 @@ namespace GW2EIParser
                 var parser = new EvtcParser(new EvtcParserSettings(Properties.Settings.Default.Anonymous, Properties.Settings.Default.SkipFailedTries, Properties.Settings.Default.ParsePhases, Properties.Settings.Default.ParseCombatReplay, Properties.Settings.Default.ComputeDamageModifiers, Properties.Settings.Default.CustomTooShort));
 
                 //Process evtc here
-                ParsedEvtcLog log = parser.ParseLog(operation, fInfo);
+                ParsedEvtcLog log = parser.ParseLog(operation, fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason);
+                if (failureReason != null)
+                {
+                    throw failureReason.Reason;
+                }
                 var externalTraces = new List<string>();
                 string[] uploadresult = UploadOperation(externalTraces, fInfo);
                 if (Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports)

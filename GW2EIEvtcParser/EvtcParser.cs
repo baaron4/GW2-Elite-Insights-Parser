@@ -7,6 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API.GW2API;
 using GW2EIGW2API;
 
@@ -48,45 +49,54 @@ namespace GW2EIEvtcParser
         /// <param name="operation">Operation object bound to the UI</param>
         /// <param name="evtc">The path to the log to parse</param>
         /// <returns>the ParsedEvtcLog</returns>
-        public ParsedEvtcLog ParseLog(ParserController operation, FileInfo evtc)
+        public ParsedEvtcLog ParseLog(ParserController operation, FileInfo evtc, out ParsingFailureReason reason)
         {
-            operation.UpdateProgressWithCancellationCheck("Reading Binary");
-            if (!evtc.Exists)
+            reason = null;
+            try
             {
-                throw new FileNotFoundException("File " + evtc.FullName + " does not exist");
-            }
-            if (!ParserHelper.IsSupportedFormat(evtc.Name))
-            {
-                throw new InvalidDataException("Not EVTC");
-            }
-            using (var fs = new FileStream(evtc.FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                if (ParserHelper.IsCompressedFormat(evtc.Name))
+                operation.UpdateProgressWithCancellationCheck("Reading Binary");
+                if (!evtc.Exists)
                 {
-                    using (var arch = new ZipArchive(fs, ZipArchiveMode.Read))
+                    throw new FileNotFoundException("File " + evtc.FullName + " does not exist");
+                }
+                if (!ParserHelper.IsSupportedFormat(evtc.Name))
+                {
+                    throw new InvalidDataException("Not EVTC");
+                }
+                using (var fs = new FileStream(evtc.FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
+                {
+                    if (ParserHelper.IsCompressedFormat(evtc.Name))
                     {
-                        if (arch.Entries.Count != 1)
+                        using (var arch = new ZipArchive(fs, ZipArchiveMode.Read))
                         {
-                            throw new InvalidDataException("Invalid Archive");
-                        }
-                        using (Stream data = arch.Entries[0].Open())
-                        {
-                            using (var ms = new MemoryStream())
+                            if (arch.Entries.Count != 1)
                             {
-                                data.CopyTo(ms);
-                                ms.Position = 0;
-                                ParseLog(operation, ms);
-                            };
+                                throw new InvalidDataException("Invalid Archive");
+                            }
+                            using (Stream data = arch.Entries[0].Open())
+                            {
+                                using (var ms = new MemoryStream())
+                                {
+                                    data.CopyTo(ms);
+                                    ms.Position = 0;
+                                    ParseLog(operation, ms);
+                                };
+                            }
                         }
                     }
+                    else
+                    {
+                        ParseLog(operation, fs);
+                    }
                 }
-                else
-                {
-                    ParseLog(operation, fs);
-                }
+                operation.UpdateProgressWithCancellationCheck("Data parsed");
+                return new ParsedEvtcLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _logEndTime - _logStartTime, _parserSettings, operation);
             }
-            operation.UpdateProgressWithCancellationCheck("Data parsed");
-            return new ParsedEvtcLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _logEndTime - _logStartTime, _parserSettings, operation);
+            catch (Exception ex)
+            {
+                reason = new ParsingFailureReason(ex);
+                return null;
+            }
         }
 
         private void ParseLog(ParserController operation, Stream stream)

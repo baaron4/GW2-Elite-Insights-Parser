@@ -41,8 +41,12 @@ namespace GW2EIParser.tst
             var parser = new EvtcParser(parserSettings);
 
             var fInfo = new FileInfo(location);
-
-            return parser.ParseLog(new TestOperationController(), fInfo);
+            ParsedEvtcLog parsedLog = parser.ParseLog(new TestOperationController(), fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason);
+            if (failureReason != null)
+            {
+                throw failureReason.Reason;
+            }
+            return parsedLog;
         }
 
         public static string JsonString(ParsedEvtcLog log)
