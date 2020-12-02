@@ -104,7 +104,7 @@ namespace GW2EIEvtcParser
             return null;
         }
         */
-        internal static Exception GetFinalException(this Exception ex)
+        public static Exception GetFinalException(Exception ex)
         {
             Exception final = ex;
             while (final.InnerException != null)

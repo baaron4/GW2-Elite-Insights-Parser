@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         public Exception Reason { get; }
         internal ParsingFailureReason(Exception ex)
         {
-            Reason = ex.GetFinalException();
+            Reason = ParserHelper.GetFinalException(ex);
         }
 
     }
