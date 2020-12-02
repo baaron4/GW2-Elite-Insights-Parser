@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.Exceptions
 {
-    public class IncompleteLogException : Exception
+    public class IncompleteLogException : EIException
     {
         internal IncompleteLogException(string message) : base("Log incomplete - " + message)
         {
