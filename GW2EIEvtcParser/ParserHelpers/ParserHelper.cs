@@ -104,6 +104,16 @@ namespace GW2EIEvtcParser
             return null;
         }
         */
+        internal static Exception GetFinalException(this Exception ex)
+        {
+            Exception final = ex;
+            while (final.InnerException != null)
+            {
+                final = final.InnerException;
+            }
+            return final;
+        }
+
         public static List<Source> ProfToEnum(string prof)
         {
             switch (prof)
