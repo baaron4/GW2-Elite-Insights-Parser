@@ -109,7 +109,7 @@ namespace GW2EIParser
                             }
                             if (!(ex.InnerException is OperationCanceledException))
                             {
-                                operation.UpdateProgress(ex.GetFinalException().Message);
+                                operation.UpdateProgress(ex.InnerException.Message);
                             }
                             else
                             {

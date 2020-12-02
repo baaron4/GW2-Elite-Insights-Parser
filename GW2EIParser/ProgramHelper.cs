@@ -80,16 +80,6 @@ namespace GW2EIParser
             return builder.Build();
         }
 
-        internal static Exception GetFinalException(this Exception ex)
-        {
-            Exception final = ex;
-            while (final.InnerException != null)
-            {
-                final = final.InnerException;
-            }
-            return final;
-        }
-
         private static bool HasFormat()
         {
             return Properties.Settings.Default.SaveOutCSV || Properties.Settings.Default.SaveOutHTML || Properties.Settings.Default.SaveOutXML || Properties.Settings.Default.SaveOutJSON;

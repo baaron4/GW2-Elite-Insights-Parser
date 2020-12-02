@@ -60,7 +60,7 @@ namespace GW2EIParser
             }
             catch (EIException ex)
             {
-                operation.UpdateProgress(ex.GetFinalException().Message);
+                operation.UpdateProgress(ex.InnerException.Message);
                 operation.FinalizeStatus("Parsing Failure - ");
             }
             catch (Exception)
