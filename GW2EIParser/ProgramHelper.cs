@@ -163,7 +163,7 @@ namespace GW2EIParser
             }
             catch (Exception ex)
             {
-                throw new EncompassException(ex);
+                throw new EIException(ex);
             }
             finally
             {

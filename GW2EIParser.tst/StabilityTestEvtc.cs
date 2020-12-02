@@ -27,7 +27,7 @@ namespace GW2EIParser.tst
                 TestHelper.HtmlString(log);
                 TestHelper.CsvString(log);
             }
-            catch (EncompassException canc)
+            catch (EIException canc)
             {
                 if (canc.InnerException == null || !(canc.InnerException is TooShortException || canc.InnerException is SkipException))
                 {
