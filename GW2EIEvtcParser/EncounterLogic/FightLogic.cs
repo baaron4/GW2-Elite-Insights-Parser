@@ -435,11 +435,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             ExitCombatEvent lastPlayerExit = playerExits.Count > 0 ? playerExits.MaxBy(x => x.Time) : null;
             ExitCombatEvent lastTargetExit = targetExits.Count > 0 ? targetExits.MaxBy(x => x.Time) : null;
             AbstractHealthDamageEvent lastDamageTaken = lastTargetDamages.Count > 0 ? lastTargetDamages.MaxBy(x => x.Time) : null;
+            // Make sure the last damage has been done before last combat exit
             if (lastTargetExit != null && lastDamageTaken != null && lastTargetExit.Time + 100 >= lastDamageTaken.Time)
             {
                 if (lastPlayerExit != null)
                 {
-                    if (lastPlayerExit.Time > lastTargetExit.Time + 1000)
+                    // Verify that players exited combat after target and also after last damage event
+                    if (lastPlayerExit.Time > lastTargetExit.Time + 500 && lastPlayerExit.Time > lastDamageTaken.Time + 500)
                     {
                         fightData.SetSuccess(true, lastDamageTaken.Time);
                     }
