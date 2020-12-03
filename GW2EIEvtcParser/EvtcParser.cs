@@ -525,9 +525,9 @@ namespace GW2EIEvtcParser
             {
                 throw new InvalidDataException("No combat events found");
             }
-            if (_logEndTime - _logStartTime < _parserSettings.CustomTooShort)
+            if (_logEndTime - _logStartTime < _parserSettings.TooShortLimit)
             {
-                throw new TooShortException(_logEndTime - _logStartTime, _parserSettings.CustomTooShort);
+                throw new TooShortException(_logEndTime - _logStartTime, _parserSettings.TooShortLimit);
             } 
             // 24 hours
             if (_logEndTime - _logStartTime > 86400000)
