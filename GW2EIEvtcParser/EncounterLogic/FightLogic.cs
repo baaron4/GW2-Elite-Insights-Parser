@@ -435,7 +435,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             ExitCombatEvent lastPlayerExit = playerExits.Count > 0 ? playerExits.MaxBy(x => x.Time) : null;
             ExitCombatEvent lastTargetExit = targetExits.Count > 0 ? targetExits.MaxBy(x => x.Time) : null;
             AbstractHealthDamageEvent lastDamageTaken = lastTargetDamages.Count > 0 ? lastTargetDamages.MaxBy(x => x.Time) : null;
-            if (lastTargetExit != null && lastDamageTaken != null && lastTargetExit.Time >= lastDamageTaken.Time)
+            if (lastTargetExit != null && lastDamageTaken != null && lastTargetExit.Time + 100 >= lastDamageTaken.Time)
             {
                 if (lastPlayerExit != null)
                 {
