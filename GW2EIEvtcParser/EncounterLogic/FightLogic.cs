@@ -439,7 +439,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (lastPlayerExit != null)
                 {
-                    fightData.SetSuccess(lastPlayerExit.Time > lastTargetExit.Time + 1000, lastDamageTaken.Time);
+                    if (lastPlayerExit.Time > lastTargetExit.Time + 1000)
+                    {
+                        fightData.SetSuccess(true, lastDamageTaken.Time);
+                    }
                 }
                 else if (fightData.FightEnd > targets.Max(x => x.LastAware) + 2000)
                 {
