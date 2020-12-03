@@ -135,7 +135,6 @@ namespace GW2EIParser
 
             }
             ProgramHelper.htmlAssets = new HTMLAssets();
-            GW2APIController.InitAPICache(ProgramHelper.SkillAPICacheLocation, ProgramHelper.SpecAPICacheLocation, ProgramHelper.TraitAPICacheLocation);
             if (uiMode)
             {
                 Application.EnableVisualStyles();
