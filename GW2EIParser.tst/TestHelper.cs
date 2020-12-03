@@ -18,7 +18,7 @@ namespace GW2EIParser.tst
             NamingStrategy = new CamelCaseNamingStrategy()
         };
         private static readonly Version Version = new Version(1, 0);
-        private static readonly EvtcParserSettings parserSettings = new EvtcParserSettings(false, true, true, true, true, 2200, false);
+        private static readonly EvtcParserSettings parserSettings = new EvtcParserSettings(false, true, true, true, true, 2200);
         private static readonly HTMLSettings htmlSettings = new HTMLSettings(false, false);
         private static readonly RawFormatSettings rawSettings = new RawFormatSettings(true);
         private static readonly CSVSettings csvSettings = new CSVSettings(",");
