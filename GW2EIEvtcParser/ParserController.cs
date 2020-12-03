@@ -37,7 +37,7 @@ namespace GW2EIEvtcParser
             UpdateProgress(status);
             ThrowIfCanceled();
         }
-        public void UpdateProgress(string status)
+        public virtual void UpdateProgress(string status)
         {
             StatusList.Add(status);
         }
