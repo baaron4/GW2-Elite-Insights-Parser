@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using GW2EIEvtcParser.ParsedData;
-using GW2EIEvtcParser.Exceptions;
 using System.IO;
 
 namespace GW2EIEvtcParser.EIData

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.Exceptions;
 
 namespace GW2EIEvtcParser.ParsedData
 {

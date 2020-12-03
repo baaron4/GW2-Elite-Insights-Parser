@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GW2EIEvtcParser.EncounterLogic;
-using GW2EIEvtcParser.Exceptions;
 
 namespace GW2EIEvtcParser.EIData
 {

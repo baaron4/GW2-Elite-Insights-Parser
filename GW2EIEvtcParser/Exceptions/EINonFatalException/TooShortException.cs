@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GW2EIEvtcParser.Exceptions
+﻿namespace GW2EIEvtcParser.Exceptions
 {
     public class TooShortException : EINonFatalException
     {
