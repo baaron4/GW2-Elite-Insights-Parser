@@ -91,7 +91,7 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="capacity">Maximun amount of buff in stack</param>
         /// <param name="nature">Nature of the buff, dictates in which category the buff will appear <see cref="BuffNature"/></param>
         /// <param name="link">URL to the icon of the buff</param>
-        public Buff(string name, long id, ParserHelper.Source source, BuffStackType type, int capacity, BuffNature nature, string link)
+        internal Buff(string name, long id, ParserHelper.Source source, BuffStackType type, int capacity, BuffNature nature, string link)
         {
             Name = name;
             ID = id;
@@ -102,17 +102,17 @@ namespace GW2EIEvtcParser.EIData
             Link = link;
         }
 
-        public Buff(string name, long id, ParserHelper.Source source, BuffNature nature, string link) : this(name, id, source, BuffStackType.Force, 1, nature, link)
+        internal Buff(string name, long id, ParserHelper.Source source, BuffNature nature, string link) : this(name, id, source, BuffStackType.Force, 1, nature, link)
         {
         }
 
-        public Buff(string name, long id, ParserHelper.Source source, BuffStackType type, int capacity, BuffNature nature, string link, ulong minBuild, ulong maxBuild) : this(name, id, source, type, capacity, nature, link)
+        internal Buff(string name, long id, ParserHelper.Source source, BuffStackType type, int capacity, BuffNature nature, string link, ulong minBuild, ulong maxBuild) : this(name, id, source, type, capacity, nature, link)
         {
             _maxBuild = maxBuild;
             _minBuild = minBuild;
         }
 
-        public Buff(string name, long id, ParserHelper.Source source, BuffNature nature, string link, ulong minBuild, ulong maxBuild) : this(name, id, source, BuffStackType.Force, 1, nature, link, minBuild, maxBuild)
+        internal Buff(string name, long id, ParserHelper.Source source, BuffNature nature, string link, ulong minBuild, ulong maxBuild) : this(name, id, source, BuffStackType.Force, 1, nature, link, minBuild, maxBuild)
         {
         }
 

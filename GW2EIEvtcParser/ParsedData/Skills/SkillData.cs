@@ -6,12 +6,12 @@ namespace GW2EIEvtcParser.ParsedData
     {
         // Fields
         private readonly Dictionary<long, SkillItem> _skills = new Dictionary<long, SkillItem>();
-
+        private readonly GW2EIGW2API.GW2APIController _apiController;
         // Public Methods
 
-        internal SkillData()
+        internal SkillData(GW2EIGW2API.GW2APIController apiController)
         {
-
+            _apiController = apiController;
         }
 
         public SkillItem Get(long ID)
@@ -20,9 +20,8 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return value;
             }
-            var item = new SkillItem(ID);
-            Add(item);
-            return item;
+            Add(ID, "UNKNOWN");
+            return _skills[ID];
         }
 
         internal HashSet<long> NotAccurate = new HashSet<long>();
@@ -32,11 +31,11 @@ namespace GW2EIEvtcParser.ParsedData
             return NotAccurate.Contains(ID);
         }
 
-        internal void Add(SkillItem skillItem)
+        internal void Add(long id, string name)
         {
-            if (!_skills.ContainsKey(skillItem.ID))
+            if (!_skills.ContainsKey(id))
             {
-                _skills.Add(skillItem.ID, skillItem);
+                _skills.Add(id, new SkillItem(id, name, _apiController));
             }
         }
 

@@ -18,11 +18,11 @@ namespace GW2EIParser.tst
     [TestFixture]
     public class StabilityTestEvtc
     {
-        private bool Loop(BlockingCollection<string> failed, BlockingCollection<string> messages, string file)
+        private bool Loop(BlockingCollection<string> failed, BlockingCollection<string> messages, string file, GW2APIController apiController)
         {
             try
             {
-                ParsedEvtcLog log = TestHelper.ParseLog(file);
+                ParsedEvtcLog log = TestHelper.ParseLog(file, apiController);
                 TestHelper.JsonString(log);
                 TestHelper.HtmlString(log);
                 TestHelper.CsvString(log);
@@ -100,8 +100,9 @@ namespace GW2EIParser.tst
         [Test]
         public void TestEvtc()
         {
-            GW2APIController.InitAPICache();
-            string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
+
+        var apiController = new GW2APIController();
+        string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
             if (!Directory.Exists(testLocation))
             {
                 Directory.CreateDirectory(testLocation);
@@ -111,7 +112,7 @@ namespace GW2EIParser.tst
             var failed = new BlockingCollection<string>();
             var messages = new BlockingCollection<string>();
             var toCheck = Directory.EnumerateFiles(testLocation, "*.evtc", SearchOption.AllDirectories).ToList();
-            Parallel.ForEach(toCheck, file => Loop(failed, messages, file));
+            Parallel.ForEach(toCheck, file => Loop(failed, messages, file, apiController));
 
             GenerateCrashData(failed, messages, "evtc", true);
 
@@ -121,7 +122,7 @@ namespace GW2EIParser.tst
         [Test]
         public void TestEvtcZip()
         {
-            GW2APIController.InitAPICache();
+            var apiController = new GW2APIController();
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
             if (!Directory.Exists(testLocation))
             {
@@ -131,7 +132,7 @@ namespace GW2EIParser.tst
             var failed = new BlockingCollection<string>();
             var messages = new BlockingCollection<string>();
             var toCheck = Directory.EnumerateFiles(testLocation, "*.evtc.zip", SearchOption.AllDirectories).ToList();
-            Parallel.ForEach(toCheck, file => Loop(failed, messages, file));
+            Parallel.ForEach(toCheck, file => Loop(failed, messages, file, apiController));
 
             GenerateCrashData(failed, messages, "evtczip", true);
 
@@ -141,7 +142,7 @@ namespace GW2EIParser.tst
         [Test]
         public void TestZevtc()
         {
-            GW2APIController.InitAPICache();
+            var apiController = new GW2APIController();
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
             if (!Directory.Exists(testLocation))
             {
@@ -152,7 +153,7 @@ namespace GW2EIParser.tst
             var failed = new BlockingCollection<string>();
             var messages = new BlockingCollection<string>();
             var toCheck = Directory.EnumerateFiles(testLocation, "*.zevtc", SearchOption.AllDirectories).ToList();
-            Parallel.ForEach(toCheck, file => Loop(failed, messages, file));
+            Parallel.ForEach(toCheck, file => Loop(failed, messages, file, apiController));
 
             GenerateCrashData(failed, messages, "zevtc", true);
 
@@ -162,7 +163,7 @@ namespace GW2EIParser.tst
         [Test]
         public void TestCrashed()
         {
-            GW2APIController.InitAPICache();
+            var apiController = new GW2APIController();
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/Crashes/Logs";
             if (!Directory.Exists(testLocation))
             {
@@ -174,7 +175,7 @@ namespace GW2EIParser.tst
             var toCheck = Directory.EnumerateFiles(testLocation, "*.zevtc", SearchOption.AllDirectories).ToList();
             foreach (string file in toCheck)
             {
-                if (Loop(failed, messages, file))
+                if (Loop(failed, messages, file, apiController))
                 {
                     File.Delete(file);
                 }
@@ -185,7 +186,7 @@ namespace GW2EIParser.tst
             toCheck = Directory.EnumerateFiles(testLocation, "*.evtc", SearchOption.AllDirectories).ToList();
             foreach (string file in toCheck)
             {
-                if (Loop(failed, messages, file))
+                if (Loop(failed, messages, file, apiController))
                 {
                     File.Delete(file);
                 }
@@ -196,7 +197,7 @@ namespace GW2EIParser.tst
             toCheck = Directory.EnumerateFiles(testLocation, "*.evtc.zip", SearchOption.AllDirectories).ToList();
             foreach (string file in toCheck)
             {
-                if (Loop(failed, messages, file))
+                if (Loop(failed, messages, file, apiController))
                 {
                     File.Delete(file);
                 }

@@ -7,12 +7,12 @@ using Newtonsoft.Json;
 
 namespace GW2EIGW2API
 {
-    internal static class GW2SpecAPIController
+    internal class GW2SpecAPIController
     {
 
         private const string APIPath = "/v2/specializations";
 
-        private static GW2APIUtilities.APIItems<GW2APISpec> _apiSpecs = new GW2APIUtilities.APIItems<GW2APISpec>();
+        private GW2APIUtilities.APIItems<GW2APISpec> _apiSpecs = new GW2APIUtilities.APIItems<GW2APISpec>();
 
         private static List<GW2APISpec> GetGW2APISpecs()
         {
@@ -20,7 +20,7 @@ namespace GW2EIGW2API
             return GW2APIUtilities.GetGW2APIItems<GW2APISpec>(APIPath);
         }
 
-        internal static GW2APIUtilities.APIItems<GW2APISpec> GetAPISpecs(string cachePath)
+        internal GW2APIUtilities.APIItems<GW2APISpec> GetAPISpecs(string cachePath)
         {
             if (_apiSpecs.Items.Count == 0)
             {
@@ -29,7 +29,7 @@ namespace GW2EIGW2API
             return _apiSpecs;
         }
 
-        internal static void WriteAPISpecsToFile(string filePath)
+        internal void WriteAPISpecsToFile(string filePath)
         {
             FileStream fcreate = File.Open(filePath, FileMode.Create);
             fcreate.Close();
@@ -43,7 +43,7 @@ namespace GW2EIGW2API
             _apiSpecs = new GW2APIUtilities.APIItems<GW2APISpec>(specList);
         }
 
-        private static void SetAPISpecs(string filePath)
+        private void SetAPISpecs(string filePath)
         {
             if (File.Exists(filePath) && new FileInfo(filePath).Length != 0)
             {

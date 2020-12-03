@@ -209,16 +209,11 @@ namespace GW2EIEvtcParser.ParsedData
 
         // Constructor
 
-        internal SkillItem(long ID) : this(ID, "UNKNOWN")
-        {
-            UnknownSkill = Name == "UNKNOWN";
-        }
-
-        public SkillItem(long ID, string name)
+        internal SkillItem(long ID, string name, GW2APIController apiController)
         {
             this.ID = ID;
             Name = name.Replace("\0", "");
-            ApiSkill = GW2APIController.GetAPISkill(ID);
+            ApiSkill = apiController.GetAPISkill(ID);
             //
             if (_overrideNames.TryGetValue(ID, out string overrideName))
             {

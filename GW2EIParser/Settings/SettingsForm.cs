@@ -134,21 +134,21 @@ namespace GW2EIParser.Setting
         private void BtnResetSkillListClick(object sender, EventArgs e)
         {
             //Update skill list
-            GW2APIController.WriteAPISkillsToFile(ProgramHelper.SkillAPICacheLocation);
+            ProgramHelper.APIController.WriteAPISkillsToFile(ProgramHelper.SkillAPICacheLocation);
             MessageBox.Show("Skill List has been redone");
         }
 
         private void BtnResetTraitListClick(object sender, EventArgs e)
         {
             //Update skill list
-            GW2APIController.WriteAPITraitsToFile(ProgramHelper.TraitAPICacheLocation);
+            ProgramHelper.APIController.WriteAPITraitsToFile(ProgramHelper.TraitAPICacheLocation);
             MessageBox.Show("Trait List has been redone");
         }
 
         private void BtnResetSpecListClick(object sender, EventArgs e)
         {
             //Update skill list
-            GW2APIController.WriteAPISpecsToFile(ProgramHelper.SpecAPICacheLocation);
+            ProgramHelper.APIController.WriteAPISpecsToFile(ProgramHelper.SpecAPICacheLocation);
             MessageBox.Show("Spec List has been redone");
         }
 
