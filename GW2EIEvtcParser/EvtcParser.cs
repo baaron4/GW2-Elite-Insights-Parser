@@ -56,7 +56,6 @@ namespace GW2EIEvtcParser
             parsingFailureReason = null;
             try
             {
-                operation.UpdateProgressWithCancellationCheck("Reading Binary");
                 if (!evtc.Exists)
                 {
                     throw new EvtcFileException("File " + evtc.FullName + " does not exist");
@@ -65,6 +64,7 @@ namespace GW2EIEvtcParser
                 {
                     throw new EvtcFileException("Not EVTC");
                 }
+                ParsedEvtcLog evtcLog;
                 using (var fs = new FileStream(evtc.FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     if (ParserHelper.IsCompressedFormat(evtc.Name))
@@ -81,18 +81,17 @@ namespace GW2EIEvtcParser
                                 {
                                     data.CopyTo(ms);
                                     ms.Position = 0;
-                                    ParseLog(operation, ms);
+                                    evtcLog = ParseLog(operation, ms, out parsingFailureReason);
                                 };
                             }
                         }
                     }
                     else
                     {
-                        ParseLog(operation, fs);
+                        evtcLog = ParseLog(operation, fs, out parsingFailureReason);
                     }
                 }
-                operation.UpdateProgressWithCancellationCheck("Data parsed");
-                return new ParsedEvtcLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _logEndTime - _logStartTime, _parserSettings, operation);
+                return evtcLog;
             }
             catch (Exception ex)
             {
@@ -101,20 +100,32 @@ namespace GW2EIEvtcParser
             }
         }
 
-        private void ParseLog(ParserController operation, Stream stream)
+        public ParsedEvtcLog ParseLog(ParserController operation, Stream evtcStream, out ParsingFailureReason parsingFailureReason)
         {
-            operation.UpdateProgressWithCancellationCheck("Parsing fight data");
-            ParseFightData(stream, operation);
-            operation.UpdateProgressWithCancellationCheck("Parsing agent data");
-            ParseAgentData(stream, operation);
-            operation.UpdateProgressWithCancellationCheck("Parsing skill data");
-            ParseSkillData(stream, operation);
-            operation.UpdateProgressWithCancellationCheck("Parsing combat list");
-            ParseCombatList(stream, operation);
-            operation.UpdateProgressWithCancellationCheck("Linking agents to combat list");
-            CompleteAgents();
-            operation.UpdateProgressWithCancellationCheck("Preparing data for log generation");
-            PreProcessEvtcData();
+            parsingFailureReason = null;
+            try
+            {
+                operation.UpdateProgressWithCancellationCheck("Reading Binary");
+                operation.UpdateProgressWithCancellationCheck("Parsing fight data");
+                ParseFightData(evtcStream, operation);
+                operation.UpdateProgressWithCancellationCheck("Parsing agent data");
+                ParseAgentData(evtcStream, operation);
+                operation.UpdateProgressWithCancellationCheck("Parsing skill data");
+                ParseSkillData(evtcStream, operation);
+                operation.UpdateProgressWithCancellationCheck("Parsing combat list");
+                ParseCombatList(evtcStream, operation);
+                operation.UpdateProgressWithCancellationCheck("Linking agents to combat list");
+                CompleteAgents();
+                operation.UpdateProgressWithCancellationCheck("Preparing data for log generation");
+                PreProcessEvtcData();
+                operation.UpdateProgressWithCancellationCheck("Data parsed");
+                return new ParsedEvtcLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _logEndTime - _logStartTime, _parserSettings, operation);
+            }
+            catch (Exception ex)
+            {
+                parsingFailureReason = new ParsingFailureReason(ex);
+                return null;
+            }
         }
 
         private static BinaryReader CreateReader(Stream stream)
