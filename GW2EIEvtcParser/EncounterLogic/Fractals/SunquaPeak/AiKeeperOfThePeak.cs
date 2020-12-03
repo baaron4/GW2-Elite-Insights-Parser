@@ -1,4 +1,5 @@
 ﻿using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using System;
 using System.Collections.Generic;
@@ -139,7 +140,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             AgentItem targetAgent = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.AiKeeperOfThePeak).FirstOrDefault();
             if (targetAgent == null)
             {
-                throw new InvalidOperationException("Ai not found");
+                throw new MissingKeyActorsException("Ai not found");
             }
             CombatItem darkModePhaseEvent = combatData.FirstOrDefault(x => x.SkillID == 53569);
             _hasDarkMode = combatData.Exists(x => x.SkillID == 61356);
@@ -224,7 +225,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (_hasElementalMode)
                 {
-                    throw new InvalidOperationException("Ai not found");
+                    throw new MissingKeyActorsException("Ai not found");
                 }
             }
             else
@@ -236,7 +237,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (_hasDarkMode)
                 {
-                    throw new InvalidOperationException("Ai not found");
+                    throw new MissingKeyActorsException("Ai not found");
                 }
             }
             else
@@ -360,7 +361,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case 0:
                 default:
-                    throw new InvalidOperationException("Ai not found");
+                    throw new MissingKeyActorsException("Ai not found");
             }
         }
     }

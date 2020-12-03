@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -52,7 +53,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC mama = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.MAMA);
             if (mama == null)
             {
-                throw new InvalidOperationException("MAMA not found");
+                throw new MissingKeyActorsException("MAMA not found");
             }
             phases[0].Targets.Add(mama);
             if (!requirePhases)
@@ -87,7 +88,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 phase.Name = "Blue Knight";
                                 break;
                             default:
-                                throw new InvalidOperationException("Unknown phase target in MAMA");
+                                throw new MissingKeyActorsException("Unknown phase target in MAMA");
                         }
                     }
                 }

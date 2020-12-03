@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -53,7 +54,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Xera);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Xera not found");
+                throw new MissingKeyActorsException("Xera not found");
             }
             var res = new List<AbstractBuffEvent>();
             if (_specialSplit != 0)
@@ -72,7 +73,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Xera);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Xera not found");
+                throw new MissingKeyActorsException("Xera not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
@@ -108,7 +109,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             AgentItem target = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Xera).FirstOrDefault();
             if (target == null)
             {
-                throw new InvalidOperationException("Xera not found");
+                throw new MissingKeyActorsException("Xera not found");
             }
             // enter combat
             CombatItem enterCombat = combatData.Find(x => x.SrcAgent == target.Agent && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat);
@@ -125,7 +126,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             AgentItem target = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Xera).FirstOrDefault();
             if (target == null)
             {
-                throw new InvalidOperationException("Xera not found");
+                throw new MissingKeyActorsException("Xera not found");
             }
             // find split
             foreach (AgentItem NPC in agentData.GetAgentByType(AgentItem.AgentType.NPC))

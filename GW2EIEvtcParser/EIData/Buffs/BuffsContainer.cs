@@ -4,6 +4,8 @@ using System.Linq;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.Exceptions;
+using System.IO;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -80,7 +82,7 @@ namespace GW2EIEvtcParser.EIData
                 var list = x.ToList();
                 if (list.Count > 1)
                 {
-                    throw new InvalidOperationException("Same name present multiple times in buffs - " + x.First().Name);
+                    throw new InvalidDataException("Same name present multiple times in buffs - " + x.First().Name);
                 }
                 return x.First();
             });
@@ -127,7 +129,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 return buff;
             }
-            throw new InvalidOperationException("Buff " + name + " does not exist");
+            throw new InvalidDataException("Buff " + name + " does not exist");
         }
 
         internal AgentItem TryFindSrc(AgentItem dst, long time, long extension, ParsedEvtcLog log, long buffID)

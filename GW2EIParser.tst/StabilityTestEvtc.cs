@@ -29,7 +29,7 @@ namespace GW2EIParser.tst
             }
             catch (ProgramException canc)
             {
-                if (canc.InnerException == null || !(canc.InnerException is EIException))
+                if (canc.InnerException == null || !(canc.InnerException is EINonFatalException))
                 {
                     failed.Add(file);
                     messages.Add(canc.Message);
@@ -39,7 +39,7 @@ namespace GW2EIParser.tst
             }
             catch (Exception ex)
             {
-                if (!(ex is EIException))
+                if (!(ex is EINonFatalException))
                 {
                     failed.Add(file);
                     messages.Add(ex.Message);

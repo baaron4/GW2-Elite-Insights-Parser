@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
@@ -65,7 +67,7 @@ namespace GW2EIEvtcParser.EIData
                     toRemove = BuffStack.Find(x => x.StackID == stackID);
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown remove type");
+                    throw new InvalidDataException("Unknown remove type");
             }
             if (toRemove == null)
             {

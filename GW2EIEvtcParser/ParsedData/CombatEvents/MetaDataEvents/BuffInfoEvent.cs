@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using GW2EIEvtcParser.Exceptions;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -42,7 +44,7 @@ namespace GW2EIEvtcParser.ParsedData
                     BuildFromBuffInfo(evtcItem);
                     break;
                 default:
-                    throw new InvalidOperationException("Invalid combat event in BuffDataEvent complete method");
+                    throw new InvalidDataException("Invalid combat event in BuffDataEvent complete method");
             }
         }
 

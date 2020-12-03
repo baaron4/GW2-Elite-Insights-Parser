@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.Buff;
 
@@ -38,11 +39,11 @@ namespace GW2EIEvtcParser.EIData
             string[] name = agent.Name.Split('\0');
             if (name.Length < 2)
             {
-                throw new InvalidOperationException("Name problem on Player");
+                throw new EvtcException("Name problem on Player");
             }
             if (name[1].Length == 0 || name[2].Length == 0 || Character.Contains("-"))
             {
-                throw new InvalidOperationException("Missing Group on Player");
+                throw new EvtcException("Missing Group on Player");
             }
             Account = name[1].TrimStart(':');
             Group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);

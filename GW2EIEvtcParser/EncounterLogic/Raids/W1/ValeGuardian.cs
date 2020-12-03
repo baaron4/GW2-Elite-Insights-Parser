@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -63,7 +64,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.ValeGuardian);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Vale Guardian not found");
+                throw new MissingKeyActorsException("Vale Guardian not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)

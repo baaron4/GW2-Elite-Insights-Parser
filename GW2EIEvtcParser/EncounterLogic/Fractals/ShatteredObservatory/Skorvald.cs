@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -51,7 +52,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Skorvald);
             if (target == null)
             {
-                throw new InvalidOperationException("Skorvald not found");
+                throw new MissingKeyActorsException("Skorvald not found");
             }
             if (combatData.GetBuildEvent().Build >= 106277)
             {

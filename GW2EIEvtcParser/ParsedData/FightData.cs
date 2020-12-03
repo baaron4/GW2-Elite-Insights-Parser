@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EncounterLogic;
+using GW2EIEvtcParser.Exceptions;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -224,7 +225,7 @@ namespace GW2EIEvtcParser.ParsedData
                 _phases.RemoveAll(x => x.Targets.Count == 0);
                 if (_phases.Exists(x => x.BreakbarPhase && x.Targets.Count != 1))
                 {
-                    throw new InvalidDataException("Breakbar phases can only have one target");
+                    throw new InvalidOperationException("Breakbar phases can only have one target");
                 }
                 _phases.RemoveAll(x => x.DurationInMS < ParserHelper.PhaseTimeLimit);
                 _phases.Sort((x, y) => {

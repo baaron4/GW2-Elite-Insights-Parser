@@ -57,11 +57,11 @@ namespace GW2EIEvtcParser
                 operation.UpdateProgressWithCancellationCheck("Reading Binary");
                 if (!evtc.Exists)
                 {
-                    throw new FileNotFoundException("File " + evtc.FullName + " does not exist");
+                    throw new EvtcException("File " + evtc.FullName + " does not exist");
                 }
                 if (!ParserHelper.IsSupportedFormat(evtc.Name))
                 {
-                    throw new InvalidDataException("Not EVTC");
+                    throw new EvtcException("Not EVTC");
                 }
                 using (var fs = new FileStream(evtc.FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
@@ -71,7 +71,7 @@ namespace GW2EIEvtcParser
                         {
                             if (arch.Entries.Count != 1)
                             {
-                                throw new InvalidDataException("Invalid Archive");
+                                throw new EvtcException("Invalid Archive");
                             }
                             using (Stream data = arch.Entries[0].Open())
                             {
@@ -231,7 +231,7 @@ namespace GW2EIEvtcParser
                 GW2APISpec spec = GW2APIController.GetAPISpec((int)elite);
                 if (spec == null)
                 {
-                    throw new InvalidOperationException("Missing or outdated GW2 API Cache");
+                    throw new InvalidDataException("Missing or outdated GW2 API Cache");
                 }
                 if (spec.Elite)
                 {
@@ -242,7 +242,7 @@ namespace GW2EIEvtcParser
                     return spec.Profession;
                 }
             }
-            throw new InvalidDataException("Unknown profession");
+            throw new EvtcException("Unknown profession");
         }
 
         /// <summary>
@@ -533,7 +533,7 @@ namespace GW2EIEvtcParser
             }
             if (!_combatItems.Any())
             {
-                throw new InvalidDataException("No combat events found");
+                throw new EvtcException("No combat events found");
             }
             if (_logEndTime - _logStartTime < _parserSettings.CustomTooShort)
             {
@@ -717,7 +717,7 @@ namespace GW2EIEvtcParser
 
             if (_agentData.GetAgentByType(AgentItem.AgentType.Player).Count == 0)
             {
-                throw new InvalidDataException("No players found");
+                throw new EvtcException("No players found");
             }
 
             _fightData = new FightData(_id, _agentData, _parserSettings, _logStartTime, _logEndTime);
@@ -760,7 +760,7 @@ namespace GW2EIEvtcParser
             _fightData.Logic.EIEvtcParse(_fightData, _agentData, _combatItems, _playerList);
             if (!_fightData.Logic.Targets.Any())
             {
-                throw new InvalidDataException("No Targets found");
+                throw new MissingKeyActorsException("No Targets found");
             }
         }
     }
