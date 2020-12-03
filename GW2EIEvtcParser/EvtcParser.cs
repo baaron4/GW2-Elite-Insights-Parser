@@ -59,11 +59,11 @@ namespace GW2EIEvtcParser
                 operation.UpdateProgressWithCancellationCheck("Reading Binary");
                 if (!evtc.Exists)
                 {
-                    throw new EvtcException("File " + evtc.FullName + " does not exist");
+                    throw new EvtcFileException("File " + evtc.FullName + " does not exist");
                 }
                 if (!ParserHelper.IsSupportedFormat(evtc.Name))
                 {
-                    throw new EvtcException("Not EVTC");
+                    throw new EvtcFileException("Not EVTC");
                 }
                 using (var fs = new FileStream(evtc.FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
@@ -73,7 +73,7 @@ namespace GW2EIEvtcParser
                         {
                             if (arch.Entries.Count != 1)
                             {
-                                throw new EvtcException("Invalid Archive");
+                                throw new EvtcFileException("Invalid Archive");
                             }
                             using (Stream data = arch.Entries[0].Open())
                             {
@@ -244,7 +244,7 @@ namespace GW2EIEvtcParser
                     return spec.Profession;
                 }
             }
-            throw new EvtcException("Unknown profession");
+            throw new EvtcAgentException("Unknown profession");
         }
 
         /// <summary>
@@ -535,7 +535,7 @@ namespace GW2EIEvtcParser
             }
             if (!_combatItems.Any())
             {
-                throw new EvtcException("No combat events found");
+                throw new EvtcCombatEventException("No combat events found");
             }
             if (_logEndTime - _logStartTime < _parserSettings.CustomTooShort)
             {
@@ -719,7 +719,7 @@ namespace GW2EIEvtcParser
 
             if (_agentData.GetAgentByType(AgentItem.AgentType.Player).Count == 0)
             {
-                throw new EvtcException("No players found");
+                throw new EvtcAgentException("No players found");
             }
 
             _fightData = new FightData(_id, _agentData, _parserSettings, _logStartTime, _logEndTime);

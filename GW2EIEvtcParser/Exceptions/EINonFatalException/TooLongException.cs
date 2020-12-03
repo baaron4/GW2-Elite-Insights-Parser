@@ -2,7 +2,7 @@
 {
     public class TooLongException : EINonFatalException
     {
-        internal TooLongException() : base("Fight is took longer than 24h - may be a broken evtc")
+        internal TooLongException() : base("Fight is longer than 24h")
         {
         }
 
