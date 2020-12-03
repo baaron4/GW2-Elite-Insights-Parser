@@ -131,7 +131,7 @@ namespace GW2EIParser
                 ParsedEvtcLog log = parser.ParseLog(operation, fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason);
                 if (failureReason != null)
                 {
-                    throw failureReason.Reason;
+                    failureReason.Throw();
                 }
                 var externalTraces = new List<string>();
                 string[] uploadresult = UploadOperation(externalTraces, fInfo);

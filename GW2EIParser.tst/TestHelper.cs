@@ -44,7 +44,7 @@ namespace GW2EIParser.tst
             ParsedEvtcLog parsedLog = parser.ParseLog(new TestOperationController(), fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason);
             if (failureReason != null)
             {
-                throw failureReason.Reason;
+                failureReason.Throw();
             }
             return parsedLog;
         }
