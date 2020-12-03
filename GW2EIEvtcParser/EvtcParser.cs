@@ -100,6 +100,14 @@ namespace GW2EIEvtcParser
             }
         }
 
+        /// <summary>
+        /// Parses from the given stream. On parsing failure, parsingFailureReason will be filled with the reason of the failure and the method will return null
+        /// <see cref="ParsingFailureReason"/>
+        /// </summary>
+        /// <param name="operation">Operation object bound to the UI</param>
+        /// <param name="evtcStream">The stream of the log</param>
+        /// <param name="parsingFailureReason">The reason why the parsing failed, if applicable</param>
+        /// <returns>the ParsedEvtcLog</returns>
         public ParsedEvtcLog ParseLog(ParserController operation, Stream evtcStream, out ParsingFailureReason parsingFailureReason)
         {
             parsingFailureReason = null;
