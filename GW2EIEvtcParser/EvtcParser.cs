@@ -44,14 +44,16 @@ namespace GW2EIEvtcParser
 
         //Main Parse method------------------------------------------------------------------------------------------------------------------------------------------------
         /// <summary>
-        /// Parses the given log
+        /// Parses the given log. On parsing failure, parsingFailureReason will be filled with the reason of the failure and the method will return null
+        /// <see cref="ParsingFailureReason"/>
         /// </summary>
         /// <param name="operation">Operation object bound to the UI</param>
         /// <param name="evtc">The path to the log to parse</param>
+        /// <param name="parsingFailureReason">The reason why the parsing failed, if applicable</param>
         /// <returns>the ParsedEvtcLog</returns>
-        public ParsedEvtcLog ParseLog(ParserController operation, FileInfo evtc, out ParsingFailureReason reason)
+        public ParsedEvtcLog ParseLog(ParserController operation, FileInfo evtc, out ParsingFailureReason parsingFailureReason)
         {
-            reason = null;
+            parsingFailureReason = null;
             try
             {
                 operation.UpdateProgressWithCancellationCheck("Reading Binary");
@@ -94,7 +96,7 @@ namespace GW2EIEvtcParser
             }
             catch (Exception ex)
             {
-                reason = new ParsingFailureReason(ex);
+                parsingFailureReason = new ParsingFailureReason(ex);
                 return null;
             }
         }
