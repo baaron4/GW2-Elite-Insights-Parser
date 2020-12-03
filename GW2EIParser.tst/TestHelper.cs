@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using GW2EIEvtcParser;
+using GW2EIParser;
 using GW2EIBuilders;
 using GW2EIBuilders.JsonModels;
 using Newtonsoft.Json.Linq;
@@ -36,9 +37,9 @@ namespace GW2EIParser.tst
             }
         }
 
-        public static ParsedEvtcLog ParseLog(string location)
+        public static ParsedEvtcLog ParseLog(string location,GW2EIGW2API.GW2APIController apiController)
         {
-            var parser = new EvtcParser(parserSettings);
+            var parser = new EvtcParser(parserSettings, apiController);
 
             var fInfo = new FileInfo(location);
 
