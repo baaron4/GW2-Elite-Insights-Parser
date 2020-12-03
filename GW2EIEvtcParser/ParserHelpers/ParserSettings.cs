@@ -12,6 +12,10 @@ namespace GW2EIEvtcParser
         public long CustomTooShort { get; }
         public bool DetailedWvWParse { get; }
 
+        public EvtcParserSettings(bool anonymousPlayer, bool skipFailedTries, bool parsePhases, bool parseCombatReplay, bool computeDamageModifiers, long customTooShort) : this(anonymousPlayer, skipFailedTries, parsePhases, parseCombatReplay, computeDamageModifiers, customTooShort, false)
+        {
+        }
+
         public EvtcParserSettings(bool anonymousPlayer, bool skipFailedTries, bool parsePhases, bool parseCombatReplay, bool computeDamageModifiers, long customTooShort, bool detailledWvW)
         {
             AnonymousPlayer = anonymousPlayer;
