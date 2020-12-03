@@ -159,7 +159,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem sanityCheckCast = combatData.FirstOrDefault(x => (x.SkillID == 52528 || x.SkillID == 52333 || x.SkillID == 58814) && x.IsActivation.StartCasting());
             if (startCast == null || sanityCheckCast == null)
             {
-                throw new IncompleteLogException("Missing encounter timer start event, either too short or log started mid fight");
+                throw new TooShortException("Qadim - Missing encounter timer start event, either too short or log started mid fight");
             }
             // sanity check
             if (sanityCheckCast.Time - startCast.Time > 0)

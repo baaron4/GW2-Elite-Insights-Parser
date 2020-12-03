@@ -8,5 +8,9 @@ namespace GW2EIEvtcParser.Exceptions
         {
         }
 
+        internal TooShortException(string message) : base(message)
+        {
+        }
+
     }
 }

@@ -29,7 +29,7 @@ namespace GW2EIParser.tst
             }
             catch (ProgramException canc)
             {
-                if (canc.InnerException == null || !(canc.InnerException is TooShortException || canc.InnerException is SkipException))
+                if (canc.InnerException == null || !(canc.InnerException is EIException))
                 {
                     failed.Add(file);
                     messages.Add(canc.Message);
@@ -39,7 +39,7 @@ namespace GW2EIParser.tst
             }
             catch (Exception ex)
             {
-                if (!(ex is TooShortException || ex is SkipException || ex is IncompleteLogException))
+                if (!(ex is EIException))
                 {
                     failed.Add(file);
                     messages.Add(ex.Message);
