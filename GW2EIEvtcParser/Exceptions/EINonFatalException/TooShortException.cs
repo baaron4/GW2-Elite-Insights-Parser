@@ -6,9 +6,5 @@
         {
         }
 
-        internal TooShortException(string message) : base(message)
-        {
-        }
-
     }
 }
