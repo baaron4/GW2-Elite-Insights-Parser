@@ -33,7 +33,7 @@ namespace GW2EIGW2API
             fcreate.Close();
 
             List<GW2APISkill> skills = GetGW2APISkills();
-            var writer = new StreamWriter(Path.GetDirectoryName(filePath));
+            var writer = new StreamWriter(filePath);
             GW2APIUtilities.Serializer.Serialize(writer, skills);
             writer.Close();
 
