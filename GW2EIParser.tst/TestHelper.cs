@@ -8,6 +8,7 @@ using GW2EIBuilders;
 using GW2EIBuilders.JsonModels;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+using GW2EIGW2API;
 
 namespace GW2EIParser.tst
 {
@@ -24,6 +25,12 @@ namespace GW2EIParser.tst
         private static readonly RawFormatSettings rawSettings = new RawFormatSettings(true);
         private static readonly CSVSettings csvSettings = new CSVSettings(",");
         private static readonly HTMLAssets htmlAssets = new HTMLAssets();
+
+        internal static readonly string SkillAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/SkillList.json";
+        internal static readonly string SpecAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/SpecList.json";
+        internal static readonly string TraitAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/TraitList.json";
+
+        internal static readonly GW2APIController APIController = new GW2APIController(SkillAPICacheLocation, SpecAPICacheLocation, TraitAPICacheLocation);
 
         private class TestOperationController : ParserController
         {
