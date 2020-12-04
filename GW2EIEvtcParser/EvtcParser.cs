@@ -7,6 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API.GW2API;
 using GW2EIGW2API;
 
@@ -45,66 +46,96 @@ namespace GW2EIEvtcParser
 
         //Main Parse method------------------------------------------------------------------------------------------------------------------------------------------------
         /// <summary>
-        /// Parses the given log
+        /// Parses the given log. On parsing failure, parsingFailureReason will be filled with the reason of the failure and the method will return null
+        /// <see cref="ParsingFailureReason"/>
         /// </summary>
         /// <param name="operation">Operation object bound to the UI</param>
         /// <param name="evtc">The path to the log to parse</param>
+        /// <param name="parsingFailureReason">The reason why the parsing failed, if applicable</param>
         /// <returns>the ParsedEvtcLog</returns>
-        public ParsedEvtcLog ParseLog(ParserController operation, FileInfo evtc)
+        public ParsedEvtcLog ParseLog(ParserController operation, FileInfo evtc, out ParsingFailureReason parsingFailureReason)
         {
-            operation.UpdateProgressWithCancellationCheck("Reading Binary");
-            if (!evtc.Exists)
+            parsingFailureReason = null;
+            try
             {
-                throw new FileNotFoundException("File " + evtc.FullName + " does not exist");
-            }
-            if (!ParserHelper.IsSupportedFormat(evtc.Name))
-            {
-                throw new InvalidDataException("Not EVTC");
-            }
-            using (var fs = new FileStream(evtc.FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                if (ParserHelper.IsCompressedFormat(evtc.Name))
+                if (!evtc.Exists)
                 {
-                    using (var arch = new ZipArchive(fs, ZipArchiveMode.Read))
+                    throw new EvtcFileException("File " + evtc.FullName + " does not exist");
+                }
+                if (!ParserHelper.IsSupportedFormat(evtc.Name))
+                {
+                    throw new EvtcFileException("Not EVTC");
+                }
+                ParsedEvtcLog evtcLog;
+                using (var fs = new FileStream(evtc.FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
+                {
+                    if (ParserHelper.IsCompressedFormat(evtc.Name))
                     {
-                        if (arch.Entries.Count != 1)
+                        using (var arch = new ZipArchive(fs, ZipArchiveMode.Read))
                         {
-                            throw new InvalidDataException("Invalid Archive");
-                        }
-                        using (Stream data = arch.Entries[0].Open())
-                        {
-                            using (var ms = new MemoryStream())
+                            if (arch.Entries.Count != 1)
                             {
-                                data.CopyTo(ms);
-                                ms.Position = 0;
-                                ParseLog(operation, ms);
-                            };
+                                throw new EvtcFileException("Invalid Archive");
+                            }
+                            using (Stream data = arch.Entries[0].Open())
+                            {
+                                using (var ms = new MemoryStream())
+                                {
+                                    data.CopyTo(ms);
+                                    ms.Position = 0;
+                                    evtcLog = ParseLog(operation, ms, out parsingFailureReason);
+                                };
+                            }
                         }
                     }
+                    else
+                    {
+                        evtcLog = ParseLog(operation, fs, out parsingFailureReason);
+                    }
                 }
-                else
-                {
-                    ParseLog(operation, fs);
-                }
+                return evtcLog;
             }
-            operation.UpdateProgressWithCancellationCheck("Data parsed");
-            return new ParsedEvtcLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _logEndTime - _logStartTime, _parserSettings, operation);
+            catch (Exception ex)
+            {
+                parsingFailureReason = new ParsingFailureReason(ex);
+                return null;
+            }
         }
 
-        private void ParseLog(ParserController operation, Stream stream)
+        /// <summary>
+        /// Parses from the given stream. On parsing failure, parsingFailureReason will be filled with the reason of the failure and the method will return null
+        /// <see cref="ParsingFailureReason"/>
+        /// </summary>
+        /// <param name="operation">Operation object bound to the UI</param>
+        /// <param name="evtcStream">The stream of the log</param>
+        /// <param name="parsingFailureReason">The reason why the parsing failed, if applicable</param>
+        /// <returns>the ParsedEvtcLog</returns>
+        public ParsedEvtcLog ParseLog(ParserController operation, Stream evtcStream, out ParsingFailureReason parsingFailureReason)
         {
-            operation.UpdateProgressWithCancellationCheck("Parsing fight data");
-            ParseFightData(stream, operation);
-            operation.UpdateProgressWithCancellationCheck("Parsing agent data");
-            ParseAgentData(stream, operation);
-            operation.UpdateProgressWithCancellationCheck("Parsing skill data");
-            ParseSkillData(stream, operation);
-            operation.UpdateProgressWithCancellationCheck("Parsing combat list");
-            ParseCombatList(stream, operation);
-            operation.UpdateProgressWithCancellationCheck("Linking agents to combat list");
-            CompleteAgents();
-            operation.UpdateProgressWithCancellationCheck("Preparing data for log generation");
-            PreProcessEvtcData();
+            parsingFailureReason = null;
+            try
+            {
+                operation.UpdateProgressWithCancellationCheck("Reading Binary");
+                operation.UpdateProgressWithCancellationCheck("Parsing fight data");
+                ParseFightData(evtcStream, operation);
+                operation.UpdateProgressWithCancellationCheck("Parsing agent data");
+                ParseAgentData(evtcStream, operation);
+                operation.UpdateProgressWithCancellationCheck("Parsing skill data");
+                ParseSkillData(evtcStream, operation);
+                operation.UpdateProgressWithCancellationCheck("Parsing combat list");
+                ParseCombatList(evtcStream, operation);
+                operation.UpdateProgressWithCancellationCheck("Linking agents to combat list");
+                CompleteAgents();
+                operation.UpdateProgressWithCancellationCheck("Preparing data for log generation");
+                PreProcessEvtcData();
+                operation.UpdateProgressWithCancellationCheck("Data parsed");
+                return new ParsedEvtcLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _logEndTime - _logStartTime, _parserSettings, operation);
+            }
+            catch (Exception ex)
+            {
+                parsingFailureReason = new ParsingFailureReason(ex);
+                return null;
+            }
         }
 
         private static BinaryReader CreateReader(Stream stream)
@@ -223,7 +254,7 @@ namespace GW2EIEvtcParser
                 GW2APISpec spec = _apiController.GetAPISpec((int)elite);
                 if (spec == null)
                 {
-                    throw new InvalidOperationException("Missing or outdated GW2 API Cache");
+                    throw new InvalidDataException("Missing or outdated GW2 API Cache");
                 }
                 if (spec.Elite)
                 {
@@ -234,7 +265,7 @@ namespace GW2EIEvtcParser
                     return spec.Profession;
                 }
             }
-            throw new InvalidDataException("Unknown profession");
+            throw new EvtcAgentException("Unknown profession");
         }
 
         /// <summary>
@@ -524,7 +555,7 @@ namespace GW2EIEvtcParser
             }
             if (!_combatItems.Any())
             {
-                throw new InvalidDataException("No combat events found");
+                throw new EvtcCombatEventException("No combat events found");
             }
             if (_logEndTime - _logStartTime < _parserSettings.TooShortLimit)
             {
@@ -708,7 +739,7 @@ namespace GW2EIEvtcParser
 
             if (_agentData.GetAgentByType(AgentItem.AgentType.Player).Count == 0)
             {
-                throw new InvalidDataException("No players found");
+                throw new EvtcAgentException("No players found");
             }
 
             _fightData = new FightData(_id, _agentData, _parserSettings, _logStartTime, _logEndTime);
@@ -751,7 +782,7 @@ namespace GW2EIEvtcParser
             _fightData.Logic.EIEvtcParse(_fightData, _agentData, _combatItems, _playerList);
             if (!_fightData.Logic.Targets.Any())
             {
-                throw new InvalidDataException("No Targets found");
+                throw new MissingKeyActorsException("No Targets found");
             }
         }
     }

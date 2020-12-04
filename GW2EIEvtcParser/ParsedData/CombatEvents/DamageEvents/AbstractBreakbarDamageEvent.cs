@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GW2EIEvtcParser.ParsedData
+﻿namespace GW2EIEvtcParser.ParsedData
 {
     public abstract class AbstractBreakbarDamageEvent : AbstractDamageEvent
     {

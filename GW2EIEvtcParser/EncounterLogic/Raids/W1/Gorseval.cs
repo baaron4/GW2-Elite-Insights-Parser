@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -41,7 +42,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Gorseval);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Gorseval not found");
+                throw new MissingKeyActorsException("Gorseval not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
@@ -176,7 +177,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                     patterns = new List<byte>();
                                     ticks = 0;
                                     break;
-                                    //throw new InvalidOperationException("Gorseval cast rampage during a split phase");
+                                    //throw new EIException("Gorseval cast rampage during a split phase");
                             }
                             start += 2200;
                             for (int i = 0; i < ticks; i++)

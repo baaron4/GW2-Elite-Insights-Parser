@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -105,7 +106,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
             if (target == null)
             {
-                throw new InvalidOperationException("Deimos not found");
+                throw new MissingKeyActorsException("Deimos not found");
             }
             var res = new List<AbstractBuffEvent>();
             if (buffsById.TryGetValue(38224, out List<AbstractBuffEvent> list))
@@ -142,7 +143,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
                 if (target == null)
                 {
-                    throw new InvalidOperationException("Deimos not found");
+                    throw new MissingKeyActorsException("Deimos not found");
                 }
                 List<AttackTargetEvent> attackTargets = combatData.GetAttackTargetEvents(target.AgentItem);
                 if (attackTargets.Count == 0)
@@ -238,7 +239,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
             if (target == null)
             {
-                throw new InvalidOperationException("Deimos not found");
+                throw new MissingKeyActorsException("Deimos not found");
             }
             // Remove deimos despawn events as they are useless and mess with combat replay
             combatData.RemoveAll(x => x.IsStateChange == ArcDPSEnums.StateChange.Despawn && x.SrcAgent == target.Agent);
@@ -284,7 +285,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Deimos not found");
+                throw new MissingKeyActorsException("Deimos not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
@@ -488,7 +489,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
             if (target == null)
             {
-                throw new InvalidOperationException("Deimos not found");
+                throw new MissingKeyActorsException("Deimos not found");
             }
             FightData.CMStatus res = (target.GetHealth(combatData) > 40e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
             if (_specialSplit > 0)

@@ -103,13 +103,13 @@ namespace GW2EIParser
                         else
                         {
                             Exception ex = t.Exception.InnerExceptions[0];
-                            if (!(ex is EncompassException))
+                            if (!(ex is ProgramException))
                             {
                                 operation.UpdateProgress("Something terrible has happened");
                             }
                             if (!(ex.InnerException is OperationCanceledException))
                             {
-                                operation.UpdateProgress(ex.GetFinalException().Message);
+                                operation.UpdateProgress(ex.InnerException.Message);
                             }
                             else
                             {

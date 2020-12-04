@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using GW2EIEvtcParser.EncounterLogic;
 
@@ -67,7 +67,7 @@ namespace GW2EIEvtcParser.EIData
                 var list = x.ToList();
                 if (list.Count > 1)
                 {
-                    throw new InvalidOperationException("Same name present multiple times in damage mods - " + x.First().Name);
+                    throw new InvalidDataException("Same name present multiple times in damage mods - " + x.First().Name);
                 }
                 return list.First();
             });

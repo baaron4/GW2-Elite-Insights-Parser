@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -41,7 +42,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC claw = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.VoiceOfTheFallen);
             if (voice == null || claw == null)
             {
-                throw new InvalidOperationException("Claw or Voice not found");
+                throw new MissingKeyActorsException("Claw or Voice not found");
             }
             phases[0].Targets.Add(voice);
             phases[0].Targets.Add(claw);

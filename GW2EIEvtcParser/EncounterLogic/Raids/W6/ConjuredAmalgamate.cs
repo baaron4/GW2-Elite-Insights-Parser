@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -170,7 +170,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 NPC rightArm = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.CARightArm);
                 if (target == null)
                 {
-                    throw new InvalidOperationException("Conjured Amalgamate not found");
+                    throw new MissingKeyActorsException("Conjured Amalgamate not found");
                 }
                 AgentItem zommoros = agentData.GetNPCsByID(21118).LastOrDefault();
                 if (zommoros == null)
@@ -229,7 +229,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC ca = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
             if (ca == null)
             {
-                throw new InvalidOperationException("Conjured Amalgamate not found");
+                throw new MissingKeyActorsException("Conjured Amalgamate not found");
             }
             phases[0].Targets.Add(ca);
             if (!requirePhases)
@@ -314,7 +314,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
             if (target == null)
             {
-                throw new InvalidOperationException("Conjured Amalgamate not found");
+                throw new MissingKeyActorsException("Conjured Amalgamate not found");
             }
             return combatData.GetBuffData(53075).Count > 0 ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
         }

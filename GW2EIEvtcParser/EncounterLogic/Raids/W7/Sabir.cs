@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -51,7 +51,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Sabir);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Sabir not found");
+                throw new MissingKeyActorsException("Sabir not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
@@ -121,7 +121,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Sabir);
             if (target == null)
             {
-                throw new InvalidOperationException("Sabir not found");
+                throw new MissingKeyActorsException("Sabir not found");
             }
             return (target.GetHealth(combatData) > 32e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
         }

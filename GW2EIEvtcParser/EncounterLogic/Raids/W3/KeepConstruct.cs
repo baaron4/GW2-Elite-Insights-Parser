@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -74,7 +75,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.KeepConstruct);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Keep Construct not found");
+                throw new MissingKeyActorsException("Keep Construct not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
@@ -348,7 +349,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.KeepConstruct);
                     if (mainTarget == null)
                     {
-                        throw new InvalidOperationException("Keep Construct not found");
+                        throw new MissingKeyActorsException("Keep Construct not found");
                     }
                     replay.Decorations.Add(new CircleDecoration(false, 0, 600, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     replay.Decorations.Add(new CircleDecoration(true, 0, 400, (start, end), "rgba(0, 125, 255, 0.5)", new AgentConnector(target)));

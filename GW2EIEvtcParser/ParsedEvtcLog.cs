@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.EIData;
@@ -126,7 +125,7 @@ namespace GW2EIEvtcParser
             {
                 actor = new NPC(a);
                 _agentToActorDictionary[a] = actor;
-                //throw new InvalidOperationException("Requested actor with id " + a.ID + " and name " + a.Name + " is missing");
+                //throw new EIException("Requested actor with id " + a.ID + " and name " + a.Name + " is missing");
             }
             if (a.Master != null && !searchPlayers && a.Master.Type == AgentItem.AgentType.Player)
             {

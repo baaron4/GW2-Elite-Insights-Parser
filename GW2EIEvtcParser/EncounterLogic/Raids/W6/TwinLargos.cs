@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -189,7 +190,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC nikare = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Nikare);
             if (nikare == null)
             {
-                throw new InvalidOperationException("Nikare not found");
+                throw new MissingKeyActorsException("Nikare not found");
             }
             phases[0].Targets.Add(nikare);
             NPC kenut = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Kenut);
@@ -339,7 +340,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Nikare);
             if (target == null)
             {
-                throw new InvalidOperationException("Nikare not found");
+                throw new MissingKeyActorsException("Nikare not found");
             }
             return (target.GetHealth(combatData) > 18e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM; //Health of Nikare
         }

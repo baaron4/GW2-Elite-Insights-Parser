@@ -83,16 +83,6 @@ namespace GW2EIParser
             return builder.Build();
         }
 
-        internal static Exception GetFinalException(this Exception ex)
-        {
-            Exception final = ex;
-            while (final.InnerException != null)
-            {
-                final = final.InnerException;
-            }
-            return final;
-        }
-
         private static bool HasFormat()
         {
             return Properties.Settings.Default.SaveOutCSV || Properties.Settings.Default.SaveOutHTML || Properties.Settings.Default.SaveOutXML || Properties.Settings.Default.SaveOutJSON;
@@ -148,7 +138,11 @@ namespace GW2EIParser
                                             APIController);
 
                 //Process evtc here
-                ParsedEvtcLog log = parser.ParseLog(operation, fInfo);
+                ParsedEvtcLog log = parser.ParseLog(operation, fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason);
+                if (failureReason != null)
+                {
+                    failureReason.Throw();
+                }
                 var externalTraces = new List<string>();
                 string[] uploadresult = UploadOperation(externalTraces, fInfo);
                 if (Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports)
@@ -169,7 +163,7 @@ namespace GW2EIParser
             }
             catch (Exception ex)
             {
-                throw new EncompassException(ex);
+                throw new ProgramException(ex);
             }
             finally
             {

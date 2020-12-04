@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -69,7 +70,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC eye2 = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfJudgement);
             if (eye2 == null || eye1 == null)
             {
-                throw new InvalidOperationException("Eyes not found");
+                throw new MissingKeyActorsException("Eyes not found");
             }
             phases[0].Targets.Add(eye2);
             phases[0].Targets.Add(eye1);
@@ -82,7 +83,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC eye2 = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfJudgement);
             if (eye2 == null || eye1 == null)
             {
-                throw new InvalidOperationException("Eyes not found");
+                throw new MissingKeyActorsException("Eyes not found");
             }
             List<HealthUpdateEvent> eye1HPs = combatData.GetHealthUpdateEvents(eye1.AgentItem);
             List<HealthUpdateEvent> eye2HPs = combatData.GetHealthUpdateEvents(eye2.AgentItem);

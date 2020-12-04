@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -28,7 +28,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC varinia = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.VariniaStormsounder);
             if (varinia == null)
             {
-                throw new InvalidOperationException("Varinia Stormsounder not found");
+                throw new MissingKeyActorsException("Varinia Stormsounder not found");
             }
             phases[0].Targets.Add(varinia);
             //

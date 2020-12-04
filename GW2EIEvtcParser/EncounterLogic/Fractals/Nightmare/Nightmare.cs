@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -19,7 +20,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             AgentItem target = agentData.GetNPCsByID(targetID).FirstOrDefault();
             if (target == null)
             {
-                throw new InvalidOperationException("Main target of the fight not found");
+                throw new MissingKeyActorsException("Main target of the fight not found");
             }
             // check invul gain at the start of the fight (initial or with a small threshold)
             CombatItem invulGain = combatData.FirstOrDefault(x => x.DstAgent == target.Agent && (x.IsStateChange == ArcDPSEnums.StateChange.None || x.IsStateChange == ArcDPSEnums.StateChange.BuffInitial) && x.IsBuffRemove == ArcDPSEnums.BuffRemove.None && x.IsBuff > 0 && x.SkillID == invulID);

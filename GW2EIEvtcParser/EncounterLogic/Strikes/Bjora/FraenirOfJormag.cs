@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -38,7 +38,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC fraenir = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.FraenirOfJormag);
             if (fraenir == null)
             {
-                throw new InvalidOperationException("Fraenir of Jormag not found");
+                throw new MissingKeyActorsException("Fraenir of Jormag not found");
             }
             phases[0].Targets.Add(fraenir);
             NPC icebrood = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.IcebroodConstructFraenir);

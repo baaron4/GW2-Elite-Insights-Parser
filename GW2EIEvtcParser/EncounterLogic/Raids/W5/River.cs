@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -51,7 +52,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 NPC desmina = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Desmina);
                 if (desmina == null)
                 {
-                    throw new InvalidOperationException("Desmina not found");
+                    throw new MissingKeyActorsException("Desmina not found");
                 }
                 ExitCombatEvent ooc = combatData.GetExitCombatEvents(desmina.AgentItem).LastOrDefault();
                 if (ooc != null)
@@ -115,7 +116,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC desmina = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Desmina);
             if (desmina == null)
             {
-                throw new InvalidOperationException("Desmina not found");
+                throw new MissingKeyActorsException("Desmina not found");
             }
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;

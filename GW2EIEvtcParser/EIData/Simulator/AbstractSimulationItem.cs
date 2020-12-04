@@ -1,7 +1,4 @@
-﻿using GW2EIEvtcParser.ParsedData;
-using System.Collections.Generic;
-
-namespace GW2EIEvtcParser.EIData
+﻿namespace GW2EIEvtcParser.EIData
 {
     internal abstract class AbstractSimulationItem
     {
