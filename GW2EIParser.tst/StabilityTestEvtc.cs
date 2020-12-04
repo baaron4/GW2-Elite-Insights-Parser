@@ -7,7 +7,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.Exceptions;
-using GW2EIGW2API;
 using GW2EIParser.Exceptions;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -22,7 +21,7 @@ namespace GW2EIParser.tst
         {
             try
             {
-                ParsedEvtcLog log = TestHelper.ParseLog(file);
+                ParsedEvtcLog log = TestHelper.ParseLog(file, TestHelper.APIController);
                 TestHelper.JsonString(log);
                 TestHelper.HtmlString(log);
                 TestHelper.CsvString(log);
@@ -100,8 +99,8 @@ namespace GW2EIParser.tst
         [Test]
         public void TestEvtc()
         {
-            GW2APIController.InitAPICache();
-            string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
+
+        string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
             if (!Directory.Exists(testLocation))
             {
                 Directory.CreateDirectory(testLocation);
@@ -121,7 +120,6 @@ namespace GW2EIParser.tst
         [Test]
         public void TestEvtcZip()
         {
-            GW2APIController.InitAPICache();
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
             if (!Directory.Exists(testLocation))
             {
@@ -141,7 +139,6 @@ namespace GW2EIParser.tst
         [Test]
         public void TestZevtc()
         {
-            GW2APIController.InitAPICache();
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
             if (!Directory.Exists(testLocation))
             {
@@ -162,7 +159,6 @@ namespace GW2EIParser.tst
         [Test]
         public void TestCrashed()
         {
-            GW2APIController.InitAPICache();
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/Crashes/Logs";
             if (!Directory.Exists(testLocation))
             {

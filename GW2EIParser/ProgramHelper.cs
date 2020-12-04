@@ -16,6 +16,7 @@ using GW2EIDiscord;
 using System.Windows.Forms;
 using GW2EIDPSReport.DPSReportJsons;
 using System.Diagnostics;
+using GW2EIGW2API;
 
 namespace GW2EIParser
 {
@@ -30,6 +31,8 @@ namespace GW2EIParser
         internal static readonly string SkillAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)+ "/Content/SkillList.json";
         internal static readonly string SpecAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/SpecList.json";
         internal static readonly string TraitAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/TraitList.json";
+
+        internal static readonly GW2APIController APIController = new GW2APIController(SkillAPICacheLocation, SpecAPICacheLocation, TraitAPICacheLocation);
 
         internal static int GetMaxParallelRunning()
         {
@@ -125,7 +128,14 @@ namespace GW2EIParser
                 sw.Start();
                 var fInfo = new FileInfo(operation.InputFile);
 
-                var parser = new EvtcParser(new EvtcParserSettings(Properties.Settings.Default.Anonymous, Properties.Settings.Default.SkipFailedTries, Properties.Settings.Default.ParsePhases, Properties.Settings.Default.ParseCombatReplay, Properties.Settings.Default.ComputeDamageModifiers, Properties.Settings.Default.CustomTooShort));
+                var parser = new EvtcParser(new EvtcParserSettings(Properties.Settings.Default.Anonymous,
+                                                Properties.Settings.Default.SkipFailedTries,
+                                                Properties.Settings.Default.ParsePhases,
+                                                Properties.Settings.Default.ParseCombatReplay,
+                                                Properties.Settings.Default.ComputeDamageModifiers,
+                                                Properties.Settings.Default.CustomTooShort,
+                                                Properties.Settings.Default.DetailledWvW), 
+                                            APIController);
 
                 //Process evtc here
                 ParsedEvtcLog log = parser.ParseLog(operation, fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason);

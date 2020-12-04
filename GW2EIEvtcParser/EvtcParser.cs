@@ -30,12 +30,14 @@ namespace GW2EIEvtcParser
         private long _logEndTime;
         private string _buildVersion;
         private readonly EvtcParserSettings _parserSettings;
+        private readonly GW2APIController _apiController;
 
-        public EvtcParser(EvtcParserSettings parserSettings)
+        public EvtcParser(EvtcParserSettings parserSettings, GW2EIGW2API.GW2APIController apiController)
         {
+            _apiController = apiController;
             _parserSettings = parserSettings;
             _allAgentsList = new List<AgentItem>();
-            _skillData = new SkillData(); 
+            _skillData = new SkillData(apiController); 
             _combatItems = new List<CombatItem>();
             _playerList = new List<Player>();
             _logStartTime = 0;
@@ -181,7 +183,7 @@ namespace GW2EIEvtcParser
                 ParserHelper.SafeSkip(stream, 1);
             }
         }
-        private static string GetAgentProfString(uint prof, uint elite)
+        private string GetAgentProfString(uint prof, uint elite)
         {
             // non player
             if (elite == 0xFFFFFFFF)
@@ -249,7 +251,7 @@ namespace GW2EIEvtcParser
             // new way
             else
             {
-                GW2APISpec spec = GW2APIController.GetAPISpec((int)elite);
+                GW2APISpec spec = _apiController.GetAPISpec((int)elite);
                 if (spec == null)
                 {
                     throw new InvalidDataException("Missing or outdated GW2 API Cache");
@@ -361,8 +363,7 @@ namespace GW2EIEvtcParser
                     // 64 bytes: name
                     string name = ParserHelper.GetString(stream, 64);
                     //Save
-                    var skill = new SkillItem(skillId, name);
-                    _skillData.Add(skill);
+                    _skillData.Add(skillId, name);
                 }
             }
         }
@@ -556,9 +557,9 @@ namespace GW2EIEvtcParser
             {
                 throw new EvtcCombatEventException("No combat events found");
             }
-            if (_logEndTime - _logStartTime < _parserSettings.CustomTooShort)
+            if (_logEndTime - _logStartTime < _parserSettings.TooShortLimit)
             {
-                throw new TooShortException(_logEndTime - _logStartTime, _parserSettings.CustomTooShort);
+                throw new TooShortException(_logEndTime - _logStartTime, _parserSettings.TooShortLimit);
             } 
             // 24 hours
             if (_logEndTime - _logStartTime > 86400000)
