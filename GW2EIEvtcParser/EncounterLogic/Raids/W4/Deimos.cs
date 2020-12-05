@@ -185,31 +185,25 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             long firstAware = targetable.Time;
             AgentItem targetAgent = agentData.GetAgent(targetable.SrcAgent);
-            if (targetAgent != ParserHelper._unknownAgent)
+            if (targetAgent == ParserHelper._unknownAgent)
             {
-                try
-                {
-                    string[] names = targetAgent.Name.Split('-');
-                    if (ushort.TryParse(names[2], out ushort masterInstid))
-                    {
-                        CombatItem structDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && x.IFF == ArcDPSEnums.IFF.Foe && x.DstInstid == masterInstid && x.IsStateChange == ArcDPSEnums.StateChange.None && x.IsBuffRemove == ArcDPSEnums.BuffRemove.None &&
-                                ((x.IsBuff == 1 && x.BuffDmg >= 0 && x.Value == 0) ||
-                                (x.IsBuff == 0 && x.Value >= 0)));
-                        if (structDeimosDamageEvent != null)
-                        {
-                            gadgetAgents.Add(structDeimosDamageEvent.DstAgent);
-                        }
-                        CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && (x.SkillID == 37980 || x.SkillID == 37982 || x.SkillID == 38046) && x.SrcAgent != 0 && x.SrcInstid != 0);
-                        if (armDeimosDamageEvent != null)
-                        {
-                            gadgetAgents.Add(armDeimosDamageEvent.SrcAgent);
-                        }
-                    };
-                }
-                catch
-                {
-                    // nothing to do
-                }
+                return 0;
+            }
+            CombatItem attackTargetEvent = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget && x.SrcAgent == targetAgent.Agent);
+            if (attackTargetEvent == null)
+            {
+                return 0;
+            }
+            AgentItem deimosStructBody = agentData.GetAgent(attackTargetEvent.DstAgent);
+            if (deimosStructBody == ParserHelper._unknownAgent)
+            {
+                return 0;
+            }
+            gadgetAgents.Add(deimosStructBody.Agent);
+            CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && (x.SkillID == 37980 || x.SkillID == 37982 || x.SkillID == 38046) && x.SrcAgent != 0 && x.SrcInstid != 0);
+            if (armDeimosDamageEvent != null)
+            {
+                gadgetAgents.Add(armDeimosDamageEvent.SrcAgent);
             }
             return firstAware;
         }
