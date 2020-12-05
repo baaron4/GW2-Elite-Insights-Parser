@@ -29,7 +29,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(36926, "Tormenting Blast", new MechanicPlotlySetting("diamond","rgb(255,255,0)"), "Quarter","Tormenting Blast (Two Quarter Circle attacks)", "Quarter circle",0),
             });
             Extension = "ensol";
-            Icon = "https://wiki.guildwars2.com/images/5/57/Champion_Toxic_Hybrid.jpg";
+            Icon = "https://i.imgur.com/pqRYRGi.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

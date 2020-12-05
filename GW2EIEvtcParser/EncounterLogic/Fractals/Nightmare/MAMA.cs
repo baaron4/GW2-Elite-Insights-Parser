@@ -29,7 +29,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             });
             Extension = "mama";
-            Icon = "http://dulfy.net/wp-content/uploads/2016/11/gw2-nightmare-fractal-teaser.jpg";
+            Icon = "https://i.imgur.com/9URW7wh.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

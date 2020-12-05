@@ -44,7 +44,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(35452, "Spinning Cut", new MechanicPlotlySetting("star-square-open","rgb(200,140,255)"), "Daze","Spinning Cut (3rd Gladiator Auto->Daze)", "Gladiator Daze",0), //
             });
             Extension = "arkk";
-            Icon = "https://wiki.guildwars2.com/images/5/5f/Arkk.jpg";
+            Icon = "https://i.imgur.com/glLH8n8.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
