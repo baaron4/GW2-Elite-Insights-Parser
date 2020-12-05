@@ -165,26 +165,26 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        public void GetAgentStatus(List<(long start, long end)> dead, List<(long start, long end)> down, List<(long start, long end)> dc, ParsedEvtcLog log)
+        internal void GetAgentStatus(List<(long start, long end)> dead, List<(long start, long end)> down, List<(long start, long end)> dc, CombatData combatData, FightData fightData)
         {
             var status = new List<AbstractStatusEvent>();
-            status.AddRange(log.CombatData.GetDownEvents(this));
-            status.AddRange(log.CombatData.GetAliveEvents(this));
-            status.AddRange(log.CombatData.GetDeadEvents(this));
-            status.AddRange(log.CombatData.GetSpawnEvents(this));
-            status.AddRange(log.CombatData.GetDespawnEvents(this));
+            status.AddRange(combatData.GetDownEvents(this));
+            status.AddRange(combatData.GetAliveEvents(this));
+            status.AddRange(combatData.GetDeadEvents(this));
+            status.AddRange(combatData.GetSpawnEvents(this));
+            status.AddRange(combatData.GetDespawnEvents(this));
             status = status.OrderBy(x => x.Time).ToList();
             for (int i = 0; i < status.Count - 1; i++)
             {
                 AbstractStatusEvent cur = status[i];
                 AbstractStatusEvent next = status[i + 1];
-                AddValueToStatusList(dead, down, dc, cur, next, log.FightData.FightEnd, i);
+                AddValueToStatusList(dead, down, dc, cur, next, fightData.FightEnd, i);
             }
             // check last value
             if (status.Count > 0)
             {
                 AbstractStatusEvent cur = status.Last();
-                AddValueToStatusList(dead, down, dc, cur, null, log.FightData.FightEnd, status.Count - 1);
+                AddValueToStatusList(dead, down, dc, cur, null, fightData.FightEnd, status.Count - 1);
             }
         }
 

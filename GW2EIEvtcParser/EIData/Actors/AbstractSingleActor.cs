@@ -53,7 +53,7 @@ namespace GW2EIEvtcParser.EIData
                 _deads = new List<(long start, long end)>();
                 _downs = new List<(long start, long end)>();
                 _dcs = new List<(long start, long end)>();
-                AgentItem.GetAgentStatus(_deads, _downs, _dcs, log);
+                AgentItem.GetAgentStatus(_deads, _downs, _dcs, log.CombatData, log.FightData);
             }
             return (_deads, _downs, _dcs);
         }
