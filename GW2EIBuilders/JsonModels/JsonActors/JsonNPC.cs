@@ -73,7 +73,7 @@ namespace GW2EIBuilders.JsonModels
             TotalHealth = npc.GetHealth(log.CombatData);
             FirstAware = (int)npc.FirstAware;
             LastAware = (int)npc.LastAware;
-            double hpLeft = 0.0;
+            double hpLeft = 100.0;
             if (log.FightData.Success)
             {
                 hpLeft = 0;

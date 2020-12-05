@@ -22,6 +22,7 @@ namespace GW2EIBuilders.HtmlModels
             Health = target.GetHealth(log.CombatData);
             HbHeight = target.HitboxHeight;
             HbWidth = target.HitboxWidth;
+            HpLeft = 100.0;
             if (log.FightData.Success)
             {
                 HpLeft = 0;
