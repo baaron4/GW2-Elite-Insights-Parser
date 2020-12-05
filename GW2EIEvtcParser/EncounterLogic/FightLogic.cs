@@ -414,7 +414,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             var lastTargetDamages = new List<AbstractHealthDamageEvent>();
             foreach (AgentItem a in playerAgents)
             {
-                playerExits.AddRange(combatData.GetExitCombatEvents(a));
+                var playerDeadDCTimes = new List<long>(combatData.GetDeadEvents(a).Select(x => x.Time));
+                playerDeadDCTimes.AddRange(combatData.GetDespawnEvents(a).Select(x => x.Time));
+                playerExits.AddRange(combatData.GetExitCombatEvents(a).Where(x => !playerDeadDCTimes.Any(y => y >= x.Time - ParserHelper.ServerDelayConstant)));
             }
             foreach (NPC t in targets)
             {
