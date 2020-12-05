@@ -58,16 +58,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (ooc != null)
                 {
                     long time = 0;
-                    foreach (NPC mob in TrashMobs.Where(x => x.ID == (int)ArcDPSEnums.TrashID.SpiritHorde3))
+                    foreach (NPC mob in TrashMobs)
                     {
-                        DespawnEvent dspwnHorde = combatData.GetDespawnEvents(mob.AgentItem).LastOrDefault();
-                        if (dspwnHorde != null)
-                        {
-                            time = Math.Max(dspwnHorde.Time, time);
-                        }
+                        time = Math.Max(mob.LastAware, time);
                     }
                     DespawnEvent dspwn = combatData.GetDespawnEvents(desmina.AgentItem).LastOrDefault();
-                    if (time != 0 && dspwn == null && time <= desmina.LastAware)
+                    if (time != 0 && dspwn == null && time + 500 <= desmina.LastAware)
                     {
                         fightData.SetSuccess(true, time);
                     }
