@@ -409,15 +409,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return;
             }
-            var playerExits = new List<ExitCombatEvent>();
             var targetExits = new List<ExitCombatEvent>();
             var lastTargetDamages = new List<AbstractHealthDamageEvent>();
-            foreach (AgentItem a in playerAgents)
-            {
-                var playerDeadDCTimes = new List<long>(combatData.GetDeadEvents(a).Select(x => x.Time));
-                playerDeadDCTimes.AddRange(combatData.GetDespawnEvents(a).Select(x => x.Time));
-                playerExits.AddRange(combatData.GetExitCombatEvents(a).Where(x => !playerDeadDCTimes.Any(y => y >= x.Time - ParserHelper.ServerDelayConstant)));
-            }
             foreach (NPC t in targets)
             {
                 EnterCombatEvent enterCombat = combatData.GetEnterCombatEvents(t.AgentItem).LastOrDefault();
@@ -435,24 +428,32 @@ namespace GW2EIEvtcParser.EncounterLogic
                     lastTargetDamages.Add(lastDamage);
                 }
             }
-            ExitCombatEvent lastPlayerExit = playerExits.Count > 0 ? playerExits.MaxBy(x => x.Time) : null;
             ExitCombatEvent lastTargetExit = targetExits.Count > 0 ? targetExits.MaxBy(x => x.Time) : null;
             AbstractHealthDamageEvent lastDamageTaken = lastTargetDamages.Count > 0 ? lastTargetDamages.MaxBy(x => x.Time) : null;
             // Make sure the last damage has been done before last combat exit
             if (lastTargetExit != null && lastDamageTaken != null && lastTargetExit.Time + 100 >= lastDamageTaken.Time)
             {
-                if (lastPlayerExit != null)
+                int playerDeadOrDCCount = 0;
+                foreach (AgentItem playerAgent in playerAgents)
                 {
-                    // Verify that players exited combat after target and also after last damage event
-                    if (lastPlayerExit.Time > lastTargetExit.Time + 500 && lastPlayerExit.Time > lastDamageTaken.Time + 500)
+                    var deads = new List<(long start, long end)>();
+                    var downs = new List<(long start, long end)>();
+                    var dcs = new List<(long start, long end)>();
+                    playerAgent.GetAgentStatus(deads, downs, dcs, combatData, fightData);
+                    if (deads.Any(x => x.start <= lastTargetExit.Time && x.end >= lastTargetExit.Time))
                     {
-                        fightData.SetSuccess(true, lastDamageTaken.Time);
+                        playerDeadOrDCCount++;
+                    }
+                    else if (dcs.Any(x => x.start <= lastTargetExit.Time && x.end >= lastTargetExit.Time))
+                    {
+                        playerDeadOrDCCount++;
                     }
                 }
-                else if (fightData.FightEnd > targets.Max(x => x.LastAware) + ParserHelper.MinimumInCombatDuration)
+                if (playerDeadOrDCCount == playerAgents.Count)
                 {
-                    fightData.SetSuccess(true, lastDamageTaken.Time);
+                    return;
                 }
+                fightData.SetSuccess(true, lastDamageTaken.Time);
             }
         }
 
