@@ -421,6 +421,9 @@ namespace GW2EIEvtcParser.EIData
                 // Trio
                 new Buff("Not the Bees!", 34434, ParserHelper.Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/0/08/Throw_Jar.png"),
                 new Buff("Targeted", 34392, ParserHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
+                // River
+                new Buff("Desmina's Protection", 47219, ParserHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/b3/Desmina%27s_Protection.png"),
+                new Buff("Follower's Asylum", 47122, ParserHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/b3/Desmina%27s_Protection.png"),
                 // Dhuum
                 new Buff("Spirit Transfrom", 48281, ParserHelper.Source.FightSpecific, BuffStackType.Stacking, 30, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/48/Compromised.png"),
                 new Buff("Fractured Spirit", 46950, ParserHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/c/c3/Fractured_Spirit.png"),
