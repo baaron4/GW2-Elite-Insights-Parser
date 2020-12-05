@@ -70,10 +70,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 else
                 {
                     SetSuccessByDeath(combatData, fightData, playerAgents, true, GenericTriggerID);
-                    if (fightData.Success)
-                    {
-                        fightData.SetSuccess(true, Math.Min(fightData.FightEnd, lastDamageTaken.Time));
-                    }
                 }
             }
         }
