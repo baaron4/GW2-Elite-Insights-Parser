@@ -12,11 +12,14 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
-        protected static void SetSuccessByBuffCount(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, NPC target, long buffID, int count)
+        /// <summary>
+        /// Returns true if the buff count was not reached so that another method can be called, if necessary
+        /// </summary>
+        protected static bool SetSuccessByBuffCount(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, NPC target, long buffID, int count)
         {
             if (target == null)
             {
-                return;
+                return false;
             }
             List<AbstractBuffEvent> invulsTarget = GetFilteredList(combatData, buffID, target, true);
             if (invulsTarget.Count == count)
@@ -25,8 +28,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (!(last is BuffApplyEvent))
                 {
                     SetSuccessByCombatExit(new List<NPC> { target }, combatData, fightData, playerAgents);
+                    return false;
                 }
             }
+            return true;
         }
     }
 }

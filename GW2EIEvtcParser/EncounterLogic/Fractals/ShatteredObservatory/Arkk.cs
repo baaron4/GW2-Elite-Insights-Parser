@@ -2,6 +2,7 @@
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.Exceptions;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -89,10 +90,14 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Arkk);
-            SetSuccessByBuffCount(combatData, fightData, playerAgents, target, 762, 10);
+            if (target == null)
+            {
+                throw new MissingKeyActorsException("Arkk not found");
+            }
+            var adjustedPlayers = new HashSet<AgentItem>(combatData.GetDamageTakenData(target.AgentItem).Where(x => playerAgents.Contains(x.From.GetFinalMaster())).Select(x => x.From.GetFinalMaster()));
             // missing buff apply events fallback, some phases will be missing
             // removes should be present
-            if (!fightData.Success)
+            if (SetSuccessByBuffCount(combatData, fightData, adjustedPlayers, target, 762, 10))
             {
                 if (target == null)
                 {
@@ -101,7 +106,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var invulsRemoveTarget = combatData.GetBuffData(762).OfType<BuffRemoveAllEvent>().Where(x => x.To == target.AgentItem).ToList();
                 if (invulsRemoveTarget.Count == 5)
                 {
-                    SetSuccessByCombatExit(new List<NPC> { target }, combatData, fightData, playerAgents);
+                    SetSuccessByCombatExit(new List<NPC> { target }, combatData, fightData, adjustedPlayers);
                 }
             }
         }
