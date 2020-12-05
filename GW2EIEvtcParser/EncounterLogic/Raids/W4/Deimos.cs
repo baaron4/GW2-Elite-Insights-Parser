@@ -140,12 +140,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success && _specialSplit > 0)
             {
-                NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
-                if (target == null)
+                NPC deimos = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
+                if (deimos == null)
                 {
                     throw new MissingKeyActorsException("Deimos not found");
                 }
-                List<AttackTargetEvent> attackTargets = combatData.GetAttackTargetEvents(target.AgentItem);
+                NPC saul = TrashMobs.LastOrDefault(x => x.ID == (int)ArcDPSEnums.TrashID.Saul);
+                if (saul == null)
+                {
+                    throw new MissingKeyActorsException("Saul not found");
+                }
+                if (combatData.GetDeadEvents(saul.AgentItem).Any())
+                {
+                    return;
+                }
+                List<AttackTargetEvent> attackTargets = combatData.GetAttackTargetEvents(deimos.AgentItem);
                 if (attackTargets.Count == 0)
                 {
                     return;
@@ -163,16 +172,30 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     return;
                 }
-                var playerExits = new List<ExitCombatEvent>();
-                foreach (AgentItem a in playerAgents)
+                AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(deimos.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && x.Time > specialSplitTime && playerAgents.Contains(x.From.GetFinalMaster()));
+                if (lastDamageTaken != null)
                 {
-                    playerExits.AddRange(combatData.GetExitCombatEvents(a));
-                }
-                ExitCombatEvent lastPlayerExit = playerExits.Count > 0 ? playerExits.MaxBy(x => x.Time) : null; 
-                AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
-                if (lastDamageTaken != null && lastPlayerExit != null)
-                {
-                    fightData.SetSuccess(lastPlayerExit.Time > notAttackableEvent.Time + 1000, lastDamageTaken.Time);
+                    int playerDeadOrDCCount = 0;
+                    foreach (AgentItem playerAgent in playerAgents)
+                    {
+                        var deads = new List<(long start, long end)>();
+                        var downs = new List<(long start, long end)>();
+                        var dcs = new List<(long start, long end)>();
+                        playerAgent.GetAgentStatus(deads, downs, dcs, combatData, fightData);
+                        if (deads.Any(x => x.start <= notAttackableEvent.Time && x.end >= notAttackableEvent.Time))
+                        {
+                            playerDeadOrDCCount++;
+                        }
+                        else if (dcs.Any(x => x.start <= notAttackableEvent.Time && x.end >= notAttackableEvent.Time))
+                        {
+                            playerDeadOrDCCount++;
+                        }
+                    }
+                    if (playerDeadOrDCCount == playerAgents.Count)
+                    {
+                        return;
+                    }
+                    fightData.SetSuccess(true, lastDamageTaken.Time);
                 }
             }
         }
