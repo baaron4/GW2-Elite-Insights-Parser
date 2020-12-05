@@ -87,7 +87,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 phase.Name = "Blue Knight";
                                 break;
                             default:
-                                throw new MissingKeyActorsException("Unknown phase target in MAMA");
+                                phase.Name = "Unknown";
+                                break;
                         }
                     }
                 }

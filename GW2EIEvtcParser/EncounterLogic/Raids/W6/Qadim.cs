@@ -238,7 +238,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 phase.Name = "Wyvern";
                                 break;
                             default:
-                                throw new MissingKeyActorsException("Unknown phase target in Qadim");
+                                phase.Name = "Unknown";
+                                break;
                         }
                     }
                 }
