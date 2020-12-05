@@ -449,7 +449,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         fightData.SetSuccess(true, lastDamageTaken.Time);
                     }
                 }
-                else if (fightData.FightEnd > targets.Max(x => x.LastAware) + 2000)
+                else if (fightData.FightEnd > targets.Max(x => x.LastAware) + ParserHelper.MinimumInCombatDuration)
                 {
                     fightData.SetSuccess(true, lastDamageTaken.Time);
                 }
