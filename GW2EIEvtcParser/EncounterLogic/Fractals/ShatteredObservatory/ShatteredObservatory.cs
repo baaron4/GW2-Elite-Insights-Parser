@@ -12,6 +12,15 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
+        protected static HashSet<AgentItem> GetParticipatingPlayerAgents(NPC target, CombatData combatData, HashSet<AgentItem> playerAgents)
+        {
+            if (target == null)
+            {
+                return new HashSet<AgentItem>();
+            }
+            return new HashSet<AgentItem>(combatData.GetDamageTakenData(target.AgentItem).Where(x => playerAgents.Contains(x.From.GetFinalMaster())).Select(x => x.From.GetFinalMaster()));
+        }
+
         /// <summary>
         /// Returns true if the buff count was not reached so that another method can be called, if necessary
         /// </summary>

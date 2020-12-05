@@ -59,8 +59,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Artsariiv not found");
             }
-            var adjustedPlayers = new HashSet<AgentItem>(combatData.GetDamageTakenData(target.AgentItem).Where(x => playerAgents.Contains(x.From.GetFinalMaster())).Select(x => x.From.GetFinalMaster()));
-            SetSuccessByBuffCount(combatData, fightData, adjustedPlayers, target, 762, 4);
+            SetSuccessByBuffCount(combatData, fightData, GetParticipatingPlayerAgents(target, combatData, playerAgents), target, 762, 4);
         }
     }
 }
