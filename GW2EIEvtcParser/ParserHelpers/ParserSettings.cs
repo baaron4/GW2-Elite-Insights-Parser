@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser
             ParsePhases = parsePhases;
             ParseCombatReplay = parseCombatReplay;
             ComputeDamageModifiers = computeDamageModifiers;
-            TooShortLimit = Math.Max(tooShortLimit, 2200);
+            TooShortLimit = Math.Max(tooShortLimit, ParserHelper.MinimumInCombatDuration);
             DetailedWvWParse = detailledWvW;
         }
     }

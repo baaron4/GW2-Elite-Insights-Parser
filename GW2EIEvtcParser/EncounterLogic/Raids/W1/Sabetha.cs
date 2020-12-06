@@ -103,7 +103,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 phase.Name = "Karde";
                                 break;
                             default:
-                                throw new MissingKeyActorsException("Unknown phase target in Sabetha");
+                                phase.Name = "Unknown";
+                                break;
                         }
                     }
                 }
