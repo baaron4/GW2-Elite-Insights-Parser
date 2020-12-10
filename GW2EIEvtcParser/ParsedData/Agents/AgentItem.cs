@@ -204,7 +204,7 @@ namespace GW2EIEvtcParser.ParsedData
         }
 
         /// <summary>
-        /// Checks if a buff is present on the actor that corresponds to. Given buff id must be in the boon simulator
+        /// Checks if a buff is present on the actor that corresponds to. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
         /// </summary>
         /// <param name="log"></param>
         /// <param name="buffId"></param>
@@ -212,20 +212,8 @@ namespace GW2EIEvtcParser.ParsedData
         /// <returns></returns>
         public bool HasBuff(ParsedEvtcLog log, long buffId, long time)
         {
-            if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
-            {
-                throw new InvalidOperationException("Buff id must be simulated");
-            }
-            AbstractSingleActor actor = log.FindActor(this, true);
-            Dictionary<long, BuffsGraphModel> bgms = actor.GetBuffGraphs(log);
-            if (bgms.TryGetValue(buffId, out BuffsGraphModel bgm))
-            {
-                return bgm.IsPresent(time, ParserHelper.ServerDelayConstant);
-            }
-            else
-            {
-                return false;
-            }
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.HasBuff(log, buffId, time);
         }
     }
 }

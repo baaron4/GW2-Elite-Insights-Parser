@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (!regroupedMobs.TryGetValue(a.ID, out AbstractSingleActor amp))
                 {
-                    amp = log.FindActor(a, false);
+                    amp = log.FindActor(a, true);
                     if (amp == null)
                     {
                         continue;

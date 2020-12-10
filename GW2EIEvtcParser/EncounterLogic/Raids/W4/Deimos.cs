@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
             new HitOnPlayerMechanic(37716, "Rapid Decay", new MechanicPlotlySetting("circle-open","rgb(0,0,0)"), "Oil","Rapid Decay (Black expanding oil)", "Black Oil",0),
             new FirstHitOnPlayerMechanic(37716, "Rapid Decay", new MechanicPlotlySetting("circle","rgb(0,0,0)"), "Oil T.","Rapid Decay Trigger (Black expanding oil)", "Black Oil Trigger",0, (ce, log) => {
-                AbstractSingleActor actor = log.FindActor(ce.To, true);
+                AbstractSingleActor actor = log.FindActor(ce.To);
                 if (actor == null)
                 {
                     return false;

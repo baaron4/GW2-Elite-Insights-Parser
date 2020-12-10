@@ -121,13 +121,9 @@ namespace GW2EIEvtcParser.EIData
             _buffSourceFinder = GetBuffSourceFinder(build, new HashSet<long>(BuffsByNature[BuffNature.Boon].Select(x => x.ID)));
         }
 
-        public Buff GetBuffByName(string name)
+        public bool TryGetBuffByName(string name, out Buff buff)
         {
-            if (_buffsByName.TryGetValue(name, out Buff buff))
-            {
-                return buff;
-            }
-            throw new InvalidDataException("Buff " + name + " does not exist");
+            return _buffsByName.TryGetValue(name, out buff);
         }
 
         internal AgentItem TryFindSrc(AgentItem dst, long time, long extension, ParsedEvtcLog log, long buffID)

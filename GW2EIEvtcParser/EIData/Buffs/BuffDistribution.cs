@@ -58,7 +58,7 @@ namespace GW2EIEvtcParser.EIData
             var actors = new List<AbstractSingleActor>();
             foreach (AgentItem agent in _distribution[buffID].Keys)
             {
-                actors.Add(log.FindActor(agent, true));
+                actors.Add(log.FindActor(agent));
             }
             return actors;
         }

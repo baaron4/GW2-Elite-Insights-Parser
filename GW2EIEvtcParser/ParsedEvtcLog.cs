@@ -112,24 +112,21 @@ namespace GW2EIEvtcParser
         /// <summary>
         /// Find the corresponding actor, creates one otherwise
         /// </summary>
-        /// <param name="a"></param>
+        /// <param name="agentItem"><see cref="AgentItem"/> to find an <see cref="AbstractSingleActor"/> for</param>
+        /// <param name="excludePlayers">returns null if true and agentItem is a player or has a player master</param>
         /// <returns></returns>
-        public AbstractSingleActor FindActor(AgentItem a, bool searchPlayers)
+        public AbstractSingleActor FindActor(AgentItem agentItem, bool excludePlayers = false)
         {
-            if (a == null || (!searchPlayers && a.Type == AgentItem.AgentType.Player))
+            if (agentItem == null || (excludePlayers && agentItem.GetFinalMaster().Type == AgentItem.AgentType.Player))
             {
                 return null;
             }
             InitActorDictionaries();
-            if (!_agentToActorDictionary.TryGetValue(a, out AbstractSingleActor actor))
+            if (!_agentToActorDictionary.TryGetValue(agentItem, out AbstractSingleActor actor))
             {
-                actor = new NPC(a);
-                _agentToActorDictionary[a] = actor;
+                actor = new NPC(agentItem);
+                _agentToActorDictionary[agentItem] = actor;
                 //throw new EIException("Requested actor with id " + a.ID + " and name " + a.Name + " is missing");
-            }
-            if (a.Master != null && !searchPlayers && a.Master.Type == AgentItem.AgentType.Player)
-            {
-                return null;
             }
             return actor;
         }

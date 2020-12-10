@@ -255,6 +255,30 @@ namespace GW2EIEvtcParser.EIData
             return BuffPoints;
         }
 
+        /// <summary>
+        /// Checks if a buff is present on the actor. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="buffId"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public bool HasBuff(ParsedEvtcLog log, long buffId, long time)
+        {
+            if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
+            {
+                throw new InvalidOperationException("Buff id must be simulated");
+            }
+            Dictionary<long, BuffsGraphModel> bgms = GetBuffGraphs(log);
+            if (bgms.TryGetValue(buffId, out BuffsGraphModel bgm))
+            {
+                return bgm.IsPresent(time, ParserHelper.ServerDelayConstant);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public void ComputeBuffMap(ParsedEvtcLog log)
         {
             if (_buffMap == null)
