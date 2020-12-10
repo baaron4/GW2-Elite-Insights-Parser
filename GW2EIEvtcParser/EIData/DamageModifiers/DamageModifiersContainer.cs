@@ -8,9 +8,9 @@ namespace GW2EIEvtcParser.EIData
     public class DamageModifiersContainer
     {
 
-        public Dictionary<ParserHelper.Source, List<DamageModifier>> DamageModifiersPerSource { get; }
+        public IReadOnlyDictionary<ParserHelper.Source, IReadOnlyList<DamageModifier>> DamageModifiersPerSource { get; }
 
-        public Dictionary<string, DamageModifier> DamageModifiersByName { get; }
+        public IReadOnlyDictionary<string, DamageModifier> DamageModifiersByName { get; }
 
         internal DamageModifiersContainer(ulong build, FightLogic.ParseMode mode, EvtcParserSettings parserSettings)
         {
@@ -61,7 +61,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 currentDamageMods.AddRange(boons.Where(x => x.Available(build) && x.Keep(mode, parserSettings))) ;
             }
-            DamageModifiersPerSource = currentDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
+            DamageModifiersPerSource = currentDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => (IReadOnlyList<DamageModifier>)x.ToList());
             DamageModifiersByName = currentDamageMods.GroupBy(x => x.Name).ToDictionary(x => x.Key, x =>
             {
                 var list = x.ToList();
@@ -73,13 +73,13 @@ namespace GW2EIEvtcParser.EIData
             });
         }
 
-        public List<DamageModifier> GetModifiersPerProf(string prof)
+        public IReadOnlyList<DamageModifier> GetModifiersPerProf(string prof)
         {
             var res = new List<DamageModifier>();
             List<ParserHelper.Source> srcs = ParserHelper.ProfToEnum(prof);
             foreach (ParserHelper.Source src in srcs)
             {
-                if (DamageModifiersPerSource.TryGetValue(src, out List<DamageModifier> list))
+                if (DamageModifiersPerSource.TryGetValue(src, out IReadOnlyList<DamageModifier> list))
                 {
                     res.AddRange(list);
                 }

@@ -10,9 +10,9 @@ namespace GW2EIEvtcParser.EIData
     public class BuffsContainer
     {
 
-        public Dictionary<long, Buff> BuffsByIds { get; }
-        public Dictionary<BuffNature, List<Buff>> BuffsByNature { get; }
-        public Dictionary<ParserHelper.Source, List<Buff>> BuffsBySource { get; }
+        public IReadOnlyDictionary<long, Buff> BuffsByIds { get; }
+        public IReadOnlyDictionary<BuffNature, IReadOnlyList<Buff>> BuffsByNature { get; }
+        public IReadOnlyDictionary<ParserHelper.Source, IReadOnlyList<Buff>> BuffsBySource { get; }
         private readonly Dictionary<string, Buff> _buffsByName;
 
         private readonly BuffSourceFinder _buffSourceFinder;
@@ -115,8 +115,8 @@ namespace GW2EIEvtcParser.EIData
                     }
                 }
             }
-            BuffsByNature = currentBuffs.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => x.ToList());
-            BuffsBySource = currentBuffs.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => x.ToList());
+            BuffsByNature = currentBuffs.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => (IReadOnlyList<Buff>)x.ToList());
+            BuffsBySource = currentBuffs.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => (IReadOnlyList<Buff>)x.ToList());
             //
             _buffSourceFinder = GetBuffSourceFinder(build, new HashSet<long>(BuffsByNature[BuffNature.Boon].Select(x => x.ID)));
         }
@@ -132,12 +132,12 @@ namespace GW2EIEvtcParser.EIData
         }
 
         // Non shareable buffs
-        public List<Buff> GetRemainingBuffsList(string source)
+        public IReadOnlyList<Buff> GetRemainingBuffsList(string source)
         {
             var result = new List<Buff>();
             foreach (ParserHelper.Source src in ParserHelper.ProfToEnum(source))
             {
-                if (BuffsBySource.TryGetValue(src, out List<Buff> list))
+                if (BuffsBySource.TryGetValue(src, out IReadOnlyList<Buff> list))
                 {
                     result.AddRange(list.Where(x => x.Nature == BuffNature.GraphOnlyBuff));
                 }

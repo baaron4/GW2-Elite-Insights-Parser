@@ -304,7 +304,7 @@ namespace GW2EIEvtcParser.EIData
                 return;
             }
             var damageMods = new List<DamageModifier>();
-            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(ParserHelper.Source.Item, out List<DamageModifier> list))
+            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(ParserHelper.Source.Item, out IReadOnlyList<DamageModifier> list))
             {
                 damageMods.AddRange(list);
             }
@@ -393,7 +393,7 @@ namespace GW2EIEvtcParser.EIData
 
         private void SetConsumablesList(ParsedEvtcLog log)
         {
-            List<Buff> consumableList = log.Buffs.BuffsByNature[BuffNature.Consumable];
+            IReadOnlyList<Buff> consumableList = log.Buffs.BuffsByNature[BuffNature.Consumable];
             _consumeList = new List<Consumable>();
             long fightDuration = log.FightData.FightEnd;
             foreach (Buff consumable in consumableList)

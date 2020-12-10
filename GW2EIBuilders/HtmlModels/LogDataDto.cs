@@ -186,7 +186,7 @@ namespace GW2EIBuilders.HtmlModels
                 allDamageMods.UnionWith(p.GetPresentDamageModifier(log));
             }
             var commonDamageModifiers = new List<DamageModifier>();
-            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(ParserHelper.Source.Common, out List<DamageModifier> list))
+            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(ParserHelper.Source.Common, out IReadOnlyList<DamageModifier> list))
             {
                 foreach (DamageModifier dMod in list)
                 {

@@ -250,7 +250,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        public string GetDescription(bool authorizeUnknowns, Dictionary<long, Buff> buffsByIds)
+        public string GetDescription(bool authorizeUnknowns, IReadOnlyDictionary<long, Buff> buffsByIds)
         {
             if (!authorizeUnknowns && (Attr1 == Unknown || Attr2 == Unknown))
             {
