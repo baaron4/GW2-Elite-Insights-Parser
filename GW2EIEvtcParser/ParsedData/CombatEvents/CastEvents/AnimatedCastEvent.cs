@@ -17,16 +17,8 @@ namespace GW2EIEvtcParser.ParsedData
             //_effectHappenedDuration = startItem.Value;
         }
 
-        internal AnimatedCastEvent(CombatItem startItem, CombatItem endItem, AgentData agentData, SkillData skillData) : this(startItem, agentData, skillData)
+        private void SetAcceleration(CombatItem endItem)
         {
-            ActualDuration = endItem.Value;
-            _scaledActualDuration = endItem.BuffDmg;
-            if (Skill.ID == SkillItem.DodgeId)
-            {
-                ExpectedDuration = 750;
-                ActualDuration = 750;
-                _scaledActualDuration = 0;
-            }
             double nonScaledToScaledRatio = 1.0;
             if (_scaledActualDuration > 0)
             {
@@ -63,16 +55,44 @@ namespace GW2EIEvtcParser.ParsedData
             Acceleration = Math.Round(Acceleration, ParserHelper.AccelerationDigit);
         }
 
-        internal AnimatedCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData, long logEnd) : this(startItem, agentData, skillData)
+        internal AnimatedCastEvent(AgentData agentData, SkillData skillData, CombatItem endItem) : base (endItem, agentData, skillData)
+        {
+            ActualDuration = endItem.Value;
+            ExpectedDuration = ActualDuration;
+            Time -= ActualDuration;
+            _scaledActualDuration = endItem.BuffDmg;
+            if (Skill.ID == SkillItem.DodgeId)
+            {
+                ExpectedDuration = 750;
+                ActualDuration = 750;
+                _scaledActualDuration = 0;
+            }
+            SetAcceleration(endItem);
+        }
+
+        internal AnimatedCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData, CombatItem endItem) : this(startItem, agentData, skillData)
+        {
+            ActualDuration = endItem.Value;
+            _scaledActualDuration = endItem.BuffDmg;
+            if (Skill.ID == SkillItem.DodgeId)
+            {
+                ExpectedDuration = 750;
+                ActualDuration = 750;
+                _scaledActualDuration = 0;
+            }
+            SetAcceleration(endItem);
+        }
+
+        internal AnimatedCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData, long maxEnd) : this(startItem, agentData, skillData)
         {
             if (Skill.ID == SkillItem.DodgeId)
             {
                 ExpectedDuration = 750;
             }
             ActualDuration = ExpectedDuration;
-            if (ActualDuration + Time > logEnd)
+            if (ActualDuration + Time > maxEnd)
             {
-                ActualDuration = (int)(logEnd - Time);
+                ActualDuration = (int)(maxEnd - Time);
             }
         }
     }
