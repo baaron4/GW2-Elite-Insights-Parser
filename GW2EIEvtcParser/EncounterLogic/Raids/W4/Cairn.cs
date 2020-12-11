@@ -60,34 +60,36 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Cairn);
-            if (mainTarget == null)
+            NPC cairn = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Cairn);
+            if (cairn == null)
             {
                 throw new InvalidOperationException("Cairn not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].Targets.Add(cairn);
+            List<AbstractHealthDamageEvent> test = log.PlayerList[0].GetDamageTakenLogs(null, log, 0, 6000);
+            List<EnterCombatEvent> test2 = log.CombatData.GetEnterCombatEvents(cairn.AgentItem);
             if (!requirePhases)
             {
                 return phases;
             }
-            /*BuffApplyEvent enrageApply;
-            if (false)
+            BuffApplyEvent enrageApply = log.CombatData.GetBuffData(37675).OfType<BuffApplyEvent>().FirstOrDefault(x => x.To == cairn.AgentItem);
+            if (enrageApply != null)
             {
                 var normalPhase = new PhaseData(0, enrageApply.Time)
                 {
-                    Name = "Normal"
+                    Name = "Calm"
                 };
-                normalPhase.Targets.Add(mainTarget);
+                normalPhase.Targets.Add(cairn);
 
                 var enragePhase = new PhaseData(enrageApply.Time + 1, log.FightData.FightEnd)
                 {
-                    Name = "Enrage"
+                    Name = "Angry"
                 };
-                enragePhase.Targets.Add(mainTarget);
+                enragePhase.Targets.Add(cairn);
 
                 phases.Add(normalPhase);
                 phases.Add(enragePhase);
-            }*/
+            }
             return phases;
         }
 
@@ -145,7 +147,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem spawnProtectionLoss = combatData.Find(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.IsBuff != 0 && x.SrcAgent == target.Agent && x.SkillID == 34113);
             if (spawnProtectionLoss != null)
             {
-                fightData.OverrideOffset(spawnProtectionLoss.Time);
+                fightData.OverrideOffset(spawnProtectionLoss.Time - 1);
             }
             return fightData.FightOffset;
         }
