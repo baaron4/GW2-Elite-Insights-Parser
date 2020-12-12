@@ -1,5 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using GW2EIEvtcParser.EIData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {

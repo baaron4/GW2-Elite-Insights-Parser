@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -63,10 +64,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 // ritual started
                 if (firstDamageable != null)
                 {
-                    phases.Add(new PhaseData(end, firstDamageable.Time, "Shielded Dhuum") { 
+                    phases.Add(new PhaseData(end, firstDamageable.Time, "Shielded Dhuum")
+                    {
                         CanBeSubPhase = false
                     });
-                    phases.Add(new PhaseData(firstDamageable.Time, fightDuration, "Ritual" ));
+                    phases.Add(new PhaseData(firstDamageable.Time, fightDuration, "Ritual"));
                 }
             }
         }
@@ -95,7 +97,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phases.Add(new PhaseData(end, soulsplitEnd, "Soulsplit " + i)
                 {
                     CanBeSubPhase = false
-                });;
+                }); ;
                 start = cataCycle.EndTime;
             }
             phases.Add(new PhaseData(start, mainEnd, hasRitual ? "Pre-Ritual" : "Pre-Wipe"));
@@ -109,7 +111,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC dhuum = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
             if (dhuum == null)
             {
-                throw new InvalidOperationException("Dhuum not found");
+                throw new MissingKeyActorsException("Dhuum not found");
             }
             phases[0].Targets.Add(dhuum);
             if (!requirePhases)
@@ -147,8 +149,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 mainFight.CanBeSubPhase = dhuumFight == null;
                 // from pre event end to 10% or fight end if 10% not achieved
-                phases.AddRange(GetInBetweenSoulSplits(log, dhuum, mainFight.Start, dhuumFight != null ? dhuumFight.End: mainFight.End, hasRitual));
-            } 
+                phases.AddRange(GetInBetweenSoulSplits(log, dhuum, mainFight.Start, dhuumFight != null ? dhuumFight.End : mainFight.End, hasRitual));
+            }
             else if (_isBugged)
             {
                 // from start to 10% or fight end if 10% not achieved
@@ -315,7 +317,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Dhuum not found");
+                throw new MissingKeyActorsException("Dhuum not found");
             }
             foreach (AbstractBuffEvent c in spiritTransform)
             {
@@ -400,7 +402,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
             if (target == null)
             {
-                throw new InvalidOperationException("Dhuum not found");
+                throw new MissingKeyActorsException("Dhuum not found");
             }
             return (target.GetHealth(combatData) > 35e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
         }

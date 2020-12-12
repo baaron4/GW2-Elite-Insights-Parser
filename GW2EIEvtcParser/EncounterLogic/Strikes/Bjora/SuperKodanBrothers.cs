@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -28,7 +29,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (-0, -0, 0, 0),
                             (0, 0, 0, 0));
         }
-        
+
         protected override void SetSuccessByDeath(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, bool all)
         {
             SetSuccessByDeath(combatData, fightData, playerAgents, all, (int)ArcDPSEnums.TargetID.ClawOfTheFallen, (int)ArcDPSEnums.TargetID.VoiceOfTheFallen);
@@ -41,7 +42,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC claw = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.VoiceOfTheFallen);
             if (voice == null || claw == null)
             {
-                throw new InvalidOperationException("Claw or Voice not found");
+                throw new MissingKeyActorsException("Claw or Voice not found");
             }
             phases[0].Targets.Add(voice);
             phases[0].Targets.Add(claw);
@@ -62,7 +63,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             //
             int voiceAndClawCount = 0;
             var offset = 1;
-            foreach (NPC voiceAndClaw in Targets.Where(x => x.ID == (int)ArcDPSEnums.TargetID.VoiceAndClaw)) 
+            foreach (NPC voiceAndClaw in Targets.Where(x => x.ID == (int)ArcDPSEnums.TargetID.VoiceAndClaw))
             {
                 EnterCombatEvent enterCombat = log.CombatData.GetEnterCombatEvents(voiceAndClaw.AgentItem).FirstOrDefault();
                 PhaseData nextUnmergedPhase = unmergedPhases.Count > offset + 1 ? unmergedPhases[offset] : null;

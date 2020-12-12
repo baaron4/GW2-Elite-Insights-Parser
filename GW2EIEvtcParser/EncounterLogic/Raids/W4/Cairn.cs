@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -105,7 +106,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             AgentItem target = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Cairn).FirstOrDefault();
             if (target == null)
             {
-                throw new InvalidOperationException("Cairn not found");
+                throw new MissingKeyActorsException("Cairn not found");
             }
             // spawn protection loss
             CombatItem spawnProtectionLoss = combatData.Find(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.IsBuff != 0 && x.SrcAgent == target.Agent && x.SkillID == 34113);

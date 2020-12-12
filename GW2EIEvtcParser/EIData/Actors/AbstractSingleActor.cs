@@ -54,12 +54,12 @@ namespace GW2EIEvtcParser.EIData
                 _deads = new List<(long start, long end)>();
                 _downs = new List<(long start, long end)>();
                 _dcs = new List<(long start, long end)>();
-                AgentItem.GetAgentStatus(_deads, _downs, _dcs, log);
+                AgentItem.GetAgentStatus(_deads, _downs, _dcs, log.CombatData, log.FightData);
             }
             return (_deads, _downs, _dcs);
         }
 
-        public abstract string GetIcon();     
+        public abstract string GetIcon();
 
         public List<Segment> GetHealthUpdates(ParsedEvtcLog log)
         {
@@ -265,6 +265,30 @@ namespace GW2EIEvtcParser.EIData
             return BuffPoints;
         }
 
+        /// <summary>
+        /// Checks if a buff is present on the actor. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="buffId"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public bool HasBuff(ParsedEvtcLog log, long buffId, long time)
+        {
+            if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
+            {
+                throw new InvalidOperationException("Buff id must be simulated");
+            }
+            Dictionary<long, BuffsGraphModel> bgms = GetBuffGraphs(log);
+            if (bgms.TryGetValue(buffId, out BuffsGraphModel bgm))
+            {
+                return bgm.IsPresent(time, ParserHelper.ServerDelayConstant);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public void ComputeBuffMap(ParsedEvtcLog log)
         {
             if (_buffMap == null)
@@ -394,16 +418,16 @@ namespace GW2EIEvtcParser.EIData
                     BuffPoints[boonid] = new BuffsGraphModel(buff, graphSegments);
                     if (updateBoonPresence || updateCondiPresence)
                     {
-                        (updateBoonPresence? boonPresenceGraph : condiPresenceGraph).MergePresenceInto(BuffPoints[boonid].BuffChart);
+                        (updateBoonPresence ? boonPresenceGraph : condiPresenceGraph).MergePresenceInto(BuffPoints[boonid].BuffChart);
                     }
 
                 }
             }
             BuffPoints[NumberOfBoonsID] = boonPresenceGraph;
             BuffPoints[NumberOfConditionsID] = condiPresenceGraph;
-            foreach(Minions minions in GetMinions(log).Values)
+            foreach (Minions minions in GetMinions(log).Values)
             {
-                foreach(List<Segment> minionsSegments in minions.GetLifeSpanSegments(log))
+                foreach (List<Segment> minionsSegments in minions.GetLifeSpanSegments(log))
                 {
                     activeCombatMinionsGraph.MergePresenceInto(minionsSegments);
                 }
@@ -791,7 +815,7 @@ namespace GW2EIEvtcParser.EIData
                 if (DamageLogsByDst.TryGetValue(target.AgentItem, out List<AbstractHealthDamageEvent> list))
                 {
                     return list.Where(x => x.Time >= start && x.Time <= end).ToList();
-                } 
+                }
                 else
                 {
                     return new List<AbstractHealthDamageEvent>();

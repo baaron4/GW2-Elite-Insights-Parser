@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -239,12 +240,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (deadEvent == null)
                         {
                             end = Math.Min(target.LastAware, log.FightData.FightEnd);
-                        } 
+                        }
                         else
                         {
                             end = Math.Min(deadEvent.Time, log.FightData.FightEnd);
                         }
-                    } 
+                    }
                     else
                     {
                         end = Math.Min(notActive.Time, log.FightData.FightEnd);
@@ -267,7 +268,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Main target of the fight not found");
+                throw new MissingKeyActorsException("Main target of the fight not found");
             }
             phases[0].Targets.Add(mainTarget);
             return phases;
@@ -408,13 +409,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return;
             }
-            var playerExits = new List<ExitCombatEvent>();
             var targetExits = new List<ExitCombatEvent>();
             var lastTargetDamages = new List<AbstractHealthDamageEvent>();
-            foreach (AgentItem a in playerAgents)
-            {
-                playerExits.AddRange(combatData.GetExitCombatEvents(a));
-            }
             foreach (NPC t in targets)
             {
                 EnterCombatEvent enterCombat = combatData.GetEnterCombatEvents(t.AgentItem).LastOrDefault();
@@ -432,19 +428,32 @@ namespace GW2EIEvtcParser.EncounterLogic
                     lastTargetDamages.Add(lastDamage);
                 }
             }
-            ExitCombatEvent lastPlayerExit = playerExits.Count > 0 ? playerExits.MaxBy(x => x.Time) : null;
             ExitCombatEvent lastTargetExit = targetExits.Count > 0 ? targetExits.MaxBy(x => x.Time) : null;
             AbstractHealthDamageEvent lastDamageTaken = lastTargetDamages.Count > 0 ? lastTargetDamages.MaxBy(x => x.Time) : null;
-            if (lastTargetExit != null && lastDamageTaken != null)
+            // Make sure the last damage has been done before last combat exit
+            if (lastTargetExit != null && lastDamageTaken != null && lastTargetExit.Time + 100 >= lastDamageTaken.Time)
             {
-                if (lastPlayerExit != null)
+                int playerDeadOrDCCount = 0;
+                foreach (AgentItem playerAgent in playerAgents)
                 {
-                    fightData.SetSuccess(lastPlayerExit.Time > lastTargetExit.Time + 1000, lastDamageTaken.Time);
+                    var deads = new List<(long start, long end)>();
+                    var downs = new List<(long start, long end)>();
+                    var dcs = new List<(long start, long end)>();
+                    playerAgent.GetAgentStatus(deads, downs, dcs, combatData, fightData);
+                    if (deads.Any(x => x.start <= lastTargetExit.Time && x.end >= lastTargetExit.Time))
+                    {
+                        playerDeadOrDCCount++;
+                    }
+                    else if (dcs.Any(x => x.start <= lastTargetExit.Time && x.end >= lastTargetExit.Time))
+                    {
+                        playerDeadOrDCCount++;
+                    }
                 }
-                else if (fightData.FightEnd > targets.Max(x => x.LastAware) + 2000)
+                if (playerDeadOrDCCount == playerAgents.Count)
                 {
-                    fightData.SetSuccess(true, lastDamageTaken.Time);
+                    return;
                 }
+                fightData.SetSuccess(true, lastDamageTaken.Time);
             }
         }
 

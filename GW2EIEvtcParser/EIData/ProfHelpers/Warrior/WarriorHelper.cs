@@ -1,6 +1,6 @@
-﻿using GW2EIEvtcParser.ParsedData;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
@@ -111,7 +111,7 @@ namespace GW2EIEvtcParser.EIData
                 defBanners = GetBannerAgents(buffData, 14543, playerAgents),
                 disBanners = GetBannerAgents(buffData, 14449, playerAgents),
                 tacBanners = GetBannerAgents(buffData, 14450, playerAgents);
-                //battleBanner = FindBattleStandards(buffData, playerAgents);
+            //battleBanner = FindBattleStandards(buffData, playerAgents);
             var warriors = players.Where(x => x.Prof == "Warrior" || x.Prof == "Spellbreaker" || x.Prof == "Berserker").ToList();
             // if only one warrior, could only be that one
             if (warriors.Count == 1)

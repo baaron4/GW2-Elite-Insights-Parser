@@ -146,7 +146,7 @@ namespace GW2EIBuilders.HtmlModels
                     };
                     MarkupAreas.Add(phaseArea);
                 }
-            }         
+            }
             if (MarkupAreas.Count == 0)
             {
                 MarkupAreas = null;

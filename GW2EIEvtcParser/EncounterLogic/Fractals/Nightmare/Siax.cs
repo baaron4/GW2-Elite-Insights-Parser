@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerBuffApplyMechanic(36998, "Fixated", new MechanicPlotlySetting("star-open","rgb(200,0,200)"), "Fixate", "Fixated by Volatile Hallucination", "Fixated",0),
             });
             Extension = "siax";
-            Icon = "https://wiki.guildwars2.com/images/d/dc/Siax_the_Corrupted.jpg";
+            Icon = "https://i.imgur.com/ar5ELOI.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

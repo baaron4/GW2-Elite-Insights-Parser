@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -71,7 +71,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Golem not found");
+                throw new MissingKeyActorsException("Golem not found");
             }
             phases[0].Name = "Final Number";
             phases[0].Targets.Add(mainTarget);
@@ -101,7 +101,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 phases.AddRange(GetPhasesByHealthPercent(log, mainTarget, thresholds));
             }
-            
+
             return phases;
         }
 
@@ -110,7 +110,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Golem not found");
+                throw new MissingKeyActorsException("Golem not found");
             }
             AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => x.HealthDamage > 0);
             long fightEndLogTime = fightData.FightEnd;

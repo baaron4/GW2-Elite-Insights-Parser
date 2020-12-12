@@ -15,7 +15,8 @@ namespace GW2EIEvtcParser.EIData
             public AgentItem SeedSrc { get; }
             public bool IsExtension { get; private set; }
 
-            public long TotalDuration {
+            public long TotalDuration
+            {
                 get
                 {
                     long res = Duration;

@@ -1,7 +1,7 @@
-﻿using GW2EIEvtcParser.ParsedData;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -102,7 +102,7 @@ namespace GW2EIEvtcParser.EIData
             var dead = new List<(long start, long end)>();
             var down = new List<(long start, long end)>();
             var dc = new List<(long start, long end)>();
-            p.AgentItem.GetAgentStatus(dead, down, dc, log);
+            p.AgentItem.GetAgentStatus(dead, down, dc, log.CombatData, log.FightData);
             return DurationInMS -
                 dead.Sum(x =>
                 {

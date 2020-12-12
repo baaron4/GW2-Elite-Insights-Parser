@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -51,22 +52,18 @@ namespace GW2EIEvtcParser.EncounterLogic
                 NPC desmina = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Desmina);
                 if (desmina == null)
                 {
-                    throw new InvalidOperationException("Desmina not found");
+                    throw new MissingKeyActorsException("Desmina not found");
                 }
                 ExitCombatEvent ooc = combatData.GetExitCombatEvents(desmina.AgentItem).LastOrDefault();
                 if (ooc != null)
                 {
                     long time = 0;
-                    foreach (NPC mob in TrashMobs.Where(x => x.ID == (int)ArcDPSEnums.TrashID.SpiritHorde3))
+                    foreach (NPC mob in TrashMobs)
                     {
-                        DespawnEvent dspwnHorde = combatData.GetDespawnEvents(mob.AgentItem).LastOrDefault();
-                        if (dspwnHorde != null)
-                        {
-                            time = Math.Max(dspwnHorde.Time, time);
-                        }
+                        time = Math.Max(mob.LastAware, time);
                     }
                     DespawnEvent dspwn = combatData.GetDespawnEvents(desmina.AgentItem).LastOrDefault();
-                    if (time != 0 && dspwn == null && time <= desmina.LastAware)
+                    if (time != 0 && dspwn == null && time + 500 <= desmina.LastAware)
                     {
                         fightData.SetSuccess(true, time);
                     }
@@ -115,7 +112,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC desmina = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Desmina);
             if (desmina == null)
             {
-                throw new InvalidOperationException("Desmina not found");
+                throw new MissingKeyActorsException("Desmina not found");
             }
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;

@@ -4,23 +4,27 @@ namespace GW2EIEvtcParser
 {
     public class EvtcParserSettings
     {
-        public bool AnonymousPlayer { get; }
-        public bool SkipFailedTries { get; }
-        public bool ParsePhases { get; }
-        public bool ParseCombatReplay { get; }
-        public bool ComputeDamageModifiers { get; }
-        public long CustomTooShort { get; }
-        public bool DetailedWvWParse { get; }
+        internal bool AnonymousPlayer { get; }
+        internal bool SkipFailedTries { get; }
+        internal bool ParsePhases { get; }
+        internal bool ParseCombatReplay { get; }
+        internal bool ComputeDamageModifiers { get; }
+        internal long TooShortLimit { get; }
+        internal bool DetailedWvWParse { get; }
 
-        public EvtcParserSettings(bool anonymousPlayer, bool skipFailedTries, bool parsePhases, bool parseCombatReplay, bool computeDamageModifiers, long customTooShort)
+        public EvtcParserSettings(bool anonymousPlayer, bool skipFailedTries, bool parsePhases, bool parseCombatReplay, bool computeDamageModifiers, long tooShortLimit) : this(anonymousPlayer, skipFailedTries, parsePhases, parseCombatReplay, computeDamageModifiers, tooShortLimit, false)
+        {
+        }
+
+        public EvtcParserSettings(bool anonymousPlayer, bool skipFailedTries, bool parsePhases, bool parseCombatReplay, bool computeDamageModifiers, long tooShortLimit, bool detailledWvW)
         {
             AnonymousPlayer = anonymousPlayer;
             SkipFailedTries = skipFailedTries;
             ParsePhases = parsePhases;
             ParseCombatReplay = parseCombatReplay;
             ComputeDamageModifiers = computeDamageModifiers;
-            CustomTooShort = Math.Max(customTooShort, 2200);
-            DetailedWvWParse = false;
+            TooShortLimit = Math.Max(tooShortLimit, ParserHelper.MinimumInCombatDuration);
+            DetailedWvWParse = detailledWvW;
         }
     }
 }

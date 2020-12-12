@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 bytes[offset++] = bt;
             }
-            BreakbarPercent = Math.Round(100.0 * BitConverter.ToSingle(bytes, 0), 2 );
+            BreakbarPercent = Math.Round(100.0 * BitConverter.ToSingle(bytes, 0), 2);
         }
 
         public (long start, double value) ToState()

@@ -87,7 +87,7 @@ namespace GW2EIEvtcParser.EIData
             { new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, ArcDPSEnums.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 30449 },
         };
 
-        public static void AdjustBuffs(CombatData combatData, Dictionary<long, Buff> buffsByID, ParserController operation)
+        public static void AdjustBuffs(CombatData combatData, IReadOnlyDictionary<long, Buff> buffsByID, ParserController operation)
         {
             var solved = new Dictionary<byte, ArcDPSEnums.BuffAttribute>();
             foreach (KeyValuePair<BuffFormulaDescriptor, long> pair in _recognizer)

@@ -139,7 +139,9 @@ namespace GW2EIEvtcParser.ParsedData
                         metaDataEvents.ShardEvents.Add(new ShardEvent(c));
                         break;
                     case ArcDPSEnums.StateChange.Reward:
+#if !NO_REWARDS
                         rewardEvents.Add(new RewardEvent(c));
+#endif
                         break;
                     case ArcDPSEnums.StateChange.TeamChange:
                         var tcEvt = new TeamChangeEvent(c, agentData);
@@ -165,7 +167,7 @@ namespace GW2EIEvtcParser.ParsedData
                         if (metaDataEvents.BuffInfoEvents.TryGetValue(c.SkillID, out BuffInfoEvent buffInfoEvent))
                         {
                             buffInfoEvent.CompleteBuffInfoEvent(c);
-                        } 
+                        }
                         else
                         {
                             buffInfoEvent = new BuffInfoEvent(c);

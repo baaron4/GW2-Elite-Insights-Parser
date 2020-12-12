@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -44,7 +45,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(35452, "Spinning Cut", new MechanicPlotlySetting("star-square-open","rgb(200,140,255)"), "Daze","Spinning Cut (3rd Gladiator Auto->Daze)", "Gladiator Daze",0), //
             });
             Extension = "arkk";
-            Icon = "https://wiki.guildwars2.com/images/5/5f/Arkk.jpg";
+            Icon = "https://i.imgur.com/glLH8n8.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -89,10 +90,14 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Arkk);
-            SetSuccessByBuffCount(combatData, fightData, playerAgents, target, 762, 10);
+            if (target == null)
+            {
+                throw new MissingKeyActorsException("Arkk not found");
+            }
+            HashSet<AgentItem> adjustedPlayers = GetParticipatingPlayerAgents(target, combatData, playerAgents);
             // missing buff apply events fallback, some phases will be missing
             // removes should be present
-            if (!fightData.Success)
+            if (SetSuccessByBuffCount(combatData, fightData, adjustedPlayers, target, 762, 10))
             {
                 if (target == null)
                 {
@@ -101,7 +106,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var invulsRemoveTarget = combatData.GetBuffData(762).OfType<BuffRemoveAllEvent>().Where(x => x.To == target.AgentItem).ToList();
                 if (invulsRemoveTarget.Count == 5)
                 {
-                    SetSuccessByCombatExit(new List<NPC> { target }, combatData, fightData, playerAgents);
+                    SetSuccessByCombatExit(new List<NPC> { target }, combatData, fightData, adjustedPlayers);
                 }
             }
         }

@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using GW2EIGW2API.GW2API;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+﻿using GW2EIGW2API.GW2API;
 
 namespace GW2EIGW2API
 {
-    public static class GW2APIController
+    public class GW2APIController
     {
-       
+        private readonly GW2SkillAPIController skillAPIController = new GW2SkillAPIController();
+        private readonly GW2SpecAPIController specAPIController = new GW2SpecAPIController();
+        private readonly GW2TraitAPIController traitAPIController = new GW2TraitAPIController();
         /// <summary>
         /// API Cache init with a cache file locations, 
         /// If the files are present, the content will be used to initialize the API caches
@@ -19,21 +15,21 @@ namespace GW2EIGW2API
         /// <param name="skillLocation"></param>
         /// <param name="specLocation"></param>
         /// <param name="traitLocation"></param>
-        public static void InitAPICache(string skillLocation, string specLocation, string traitLocation)
+        public GW2APIController(string skillLocation, string specLocation, string traitLocation)
         {
-            GW2SkillAPIController.GetAPISkills(skillLocation);
-            GW2SpecAPIController.GetAPISpecs(specLocation);
-            //GW2TraitAPIController.GetAPITraits(traitLocation);
+            skillAPIController.GetAPISkills(skillLocation);
+            specAPIController.GetAPISpecs(specLocation);
+            //traitAPIController.GetAPITraits(traitLocation);
         }
 
         /// <summary>
         /// Cacheless API initialization
         /// </summary>
-        public static void InitAPICache()
+        public GW2APIController()
         {
-            GW2SkillAPIController.GetAPISkills(null);
-            GW2SpecAPIController.GetAPISpecs(null);
-            //GW2TraitAPIController.GetAPITraits(null);
+            skillAPIController.GetAPISkills(null);
+            specAPIController.GetAPISpecs(null);
+            //traitAPIController.GetAPITraits(null);
         }
 
         //----------------------------------------------------------------------------- SKILLS
@@ -45,18 +41,18 @@ namespace GW2EIGW2API
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static GW2APISkill GetAPISkill(long id)
+        public GW2APISkill GetAPISkill(long id)
         {
-            if (GW2SkillAPIController.GetAPISkills(null).Items.TryGetValue(id, out GW2APISkill skill))
+            if (skillAPIController.GetAPISkills(null).Items.TryGetValue(id, out GW2APISkill skill))
             {
                 return skill;
             }
             return null;
         }
 
-        public static void WriteAPISkillsToFile(string filePath)
+        public void WriteAPISkillsToFile(string filePath)
         {
-            GW2SkillAPIController.WriteAPISkillsToFile(filePath);
+            skillAPIController.WriteAPISkillsToFile(filePath);
         }
 
         //----------------------------------------------------------------------------- SPECS
@@ -67,18 +63,18 @@ namespace GW2EIGW2API
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static GW2APISpec GetAPISpec(int id)
+        public GW2APISpec GetAPISpec(int id)
         {
-            if (GW2SpecAPIController.GetAPISpecs(null).Items.TryGetValue(id, out GW2APISpec spec))
+            if (specAPIController.GetAPISpecs(null).Items.TryGetValue(id, out GW2APISpec spec))
             {
                 return spec;
             }
             return null;
         }
 
-        public static void WriteAPISpecsToFile(string filePath)
+        public void WriteAPISpecsToFile(string filePath)
         {
-            GW2SpecAPIController.WriteAPISpecsToFile(filePath);
+            specAPIController.WriteAPISpecsToFile(filePath);
         }
 
         //----------------------------------------------------------------------------- TRAITS
@@ -91,17 +87,17 @@ namespace GW2EIGW2API
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static GW2APITrait GetAPITrait(long id)
+        public GW2APITrait GetAPITrait(long id)
         {
-            if (GW2TraitAPIController.GetAPITraits(null).Items.TryGetValue(id, out GW2APITrait trait))
+            if (traitAPIController.GetAPITraits(null).Items.TryGetValue(id, out GW2APITrait trait))
             {
                 return trait;
             }
             return null;
         }
-        public static void WriteAPITraitsToFile(string filePath)
+        public void WriteAPITraitsToFile(string filePath)
         {
-            GW2TraitAPIController.WriteAPITraitsToFile(filePath);
+            traitAPIController.WriteAPITraitsToFile(filePath);
         }
 
     }

@@ -1,5 +1,5 @@
-﻿using GW2EIEvtcParser.ParsedData;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.EIData
         public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID, ParsedEvtcLog log)
         {
             Dictionary<AgentItem, BuffDistributionItem> distrib = distribs.GetDistrib(buffID);
-            AgentItem agent = Src; 
+            AgentItem agent = Src;
             var value = GetValue(start, end);
             if (value == 0)
             {

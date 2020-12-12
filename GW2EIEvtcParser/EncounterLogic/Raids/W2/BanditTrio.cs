@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -94,7 +95,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         phase.Name = "Zane";
                         break;
                     default:
-                        throw new InvalidOperationException("Unknown target in Bandit Trio");
+                        throw new MissingKeyActorsException("Unknown target in Bandit Trio");
                 }
                 phases.Add(phase);
             }
@@ -116,17 +117,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC berg = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Berg);
             if (berg == null)
             {
-                throw new InvalidOperationException("Berg not found");
+                throw new MissingKeyActorsException("Berg not found");
             }
             NPC zane = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Zane);
             if (zane == null)
             {
-                throw new InvalidOperationException("Zane not found");
+                throw new MissingKeyActorsException("Zane not found");
             }
             NPC narella = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Narella);
             if (narella == null)
             {
-                throw new InvalidOperationException("Narella not found");
+                throw new MissingKeyActorsException("Narella not found");
             }
             phases[0].Targets.AddRange(Targets);
             if (!requirePhases)

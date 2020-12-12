@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC heartTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TrashID.FreeziesFrozenHeart);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Freezie not found");
+                throw new MissingKeyActorsException("Freezie not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
@@ -30,7 +30,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                if (i%2 == 1)
+                if (i % 2 == 1)
                 {
                     phase.Name = "Phase " + (i + 1) / 2;
                     phase.Targets.Add(mainTarget);

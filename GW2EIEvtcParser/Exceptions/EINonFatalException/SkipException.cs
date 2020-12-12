@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace GW2EIEvtcParser.Exceptions
+﻿namespace GW2EIEvtcParser.Exceptions
 {
-    public class SkipException : Exception
+    public class SkipException : EINonFatalException
     {
         internal SkipException() : base("Option enabled - Failed logs are skipped")
         {

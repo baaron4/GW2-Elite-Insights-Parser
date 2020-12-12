@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace GW2EIEvtcParser
@@ -38,7 +37,7 @@ namespace GW2EIEvtcParser
             UpdateProgress(status);
             ThrowIfCanceled();
         }
-        public void UpdateProgress(string status)
+        public virtual void UpdateProgress(string status)
         {
             StatusList.Add(status);
         }

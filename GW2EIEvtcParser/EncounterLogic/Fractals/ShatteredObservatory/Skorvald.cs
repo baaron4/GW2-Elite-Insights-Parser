@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(39133, "Wave of Mutilation", new MechanicPlotlySetting("triangle-sw","rgb(0,200,0)"), "KB Jump","Hit by KB Jump (player targeted)", "Knockback jump",0),
             });
             Extension = "skorv";
-            Icon = "https://wiki.guildwars2.com/images/c/c1/Skorvald_the_Shattered.jpg";
+            Icon = "https://i.imgur.com/B1nhJ9m.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -51,7 +51,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Skorvald);
             if (target == null)
             {
-                throw new InvalidOperationException("Skorvald not found");
+                throw new MissingKeyActorsException("Skorvald not found");
             }
             if (combatData.GetBuildEvent().Build >= 106277)
             {

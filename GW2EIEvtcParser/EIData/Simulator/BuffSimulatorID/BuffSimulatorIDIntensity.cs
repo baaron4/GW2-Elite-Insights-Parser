@@ -1,6 +1,6 @@
-﻿using GW2EIEvtcParser.ParsedData;
-using System;
+﻿using System;
 using System.Linq;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.EIData
         public override void Activate(uint stackID)
         {
             // nothing to do, all stack are active
-            //throw new InvalidOperationException("Activate on intensity buff??");
+            //throw new EIException("Activate on intensity buff??");
         }
 
         public override void Add(long duration, AgentItem src, long start, uint stackID, bool addedActive, uint overstackDuration)

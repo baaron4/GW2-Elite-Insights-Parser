@@ -81,7 +81,7 @@ namespace GW2EIBuilders.JsonModels
                 }
                 else
                 {
-                    dict[ml.ShortName] = (ml.Description, new List<JsonMechanic> { mech});
+                    dict[ml.ShortName] = (ml.Description, new List<JsonMechanic> { mech });
                 }
             }
             foreach (KeyValuePair<string, (string desc, List<JsonMechanic> data)> pair in dict)

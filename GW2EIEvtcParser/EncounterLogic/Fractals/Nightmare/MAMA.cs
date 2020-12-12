@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -29,7 +29,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             });
             Extension = "mama";
-            Icon = "http://dulfy.net/wp-content/uploads/2016/11/gw2-nightmare-fractal-teaser.jpg";
+            Icon = "https://i.imgur.com/9URW7wh.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -52,7 +52,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC mama = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.MAMA);
             if (mama == null)
             {
-                throw new InvalidOperationException("MAMA not found");
+                throw new MissingKeyActorsException("MAMA not found");
             }
             phases[0].Targets.Add(mama);
             if (!requirePhases)
@@ -63,7 +63,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                if (i%2 == 0)
+                if (i % 2 == 0)
                 {
                     var ids = new List<int>
                     {
@@ -87,7 +87,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 phase.Name = "Blue Knight";
                                 break;
                             default:
-                                throw new InvalidOperationException("Unknown phase target in MAMA");
+                                phase.Name = "Unknown";
+                                break;
                         }
                     }
                 }

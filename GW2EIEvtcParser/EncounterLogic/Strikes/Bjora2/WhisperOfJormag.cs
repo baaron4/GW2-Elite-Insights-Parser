@@ -63,7 +63,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     end = tpOutEvents.Min(x => x.Time);
                     tpOutEvents.Clear();
                     tpBackEvents.RemoveAll(x => x.Time <= end);
-                } 
+                }
                 // 25% tp did not happen
                 else
                 {

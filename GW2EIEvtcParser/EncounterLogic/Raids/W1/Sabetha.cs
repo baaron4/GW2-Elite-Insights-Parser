@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -66,7 +67,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Sabetha);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Sabetha not found");
+                throw new MissingKeyActorsException("Sabetha not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
@@ -84,7 +85,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                if (i%2 == 0)
+                if (i % 2 == 0)
                 {
                     AddTargetsToPhase(phase, ids, log);
                     if (phase.Targets.Count > 0)
@@ -102,13 +103,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 phase.Name = "Karde";
                                 break;
                             default:
-                                throw new InvalidOperationException("Unknown phase target in Sabetha");
+                                phase.Name = "Unknown";
+                                break;
                         }
                     }
                 }
                 else
                 {
-                    phase.Name = "Phase " + (i+1)/2;
+                    phase.Name = "Phase " + (i + 1) / 2;
                     phase.Targets.Add(mainTarget);
                     AddTargetsToPhase(phase, ids, log);
                 }

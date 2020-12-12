@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GW2EIParser
+﻿namespace GW2EIParser
 {
     internal class ConsoleOperationController : OperationController
     {

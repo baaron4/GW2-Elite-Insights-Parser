@@ -1,9 +1,9 @@
-﻿using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.ParsedData;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser
 {
@@ -41,6 +41,7 @@ namespace GW2EIEvtcParser
         internal const long ServerDelayConstant = 10;
         internal const long BuffSimulatorDelayConstant = 50;
         internal const long WeaponSwapDelayConstant = 75;
+        internal const long MinimumInCombatDuration = 2200;
 
         internal const int PhaseTimeLimit = 1000;
 
@@ -104,6 +105,16 @@ namespace GW2EIEvtcParser
             return null;
         }
         */
+        public static Exception GetFinalException(Exception ex)
+        {
+            Exception final = ex;
+            while (final.InnerException != null)
+            {
+                final = final.InnerException;
+            }
+            return final;
+        }
+
         public static List<Source> ProfToEnum(string prof)
         {
             switch (prof)

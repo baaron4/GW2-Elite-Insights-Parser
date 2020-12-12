@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.AbstractBuffSimulator;
 
@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (stacks.Count <= 1)
             {
-                throw new InvalidOperationException("Queue logic based must have a >1 capacity");
+                throw new InvalidDataException("Queue logic based must have a >1 capacity");
             }
             BuffStackItem first = stacks[0];
             stacks.RemoveAt(0);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -58,7 +59,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Samarog);
             if (mainTarget == null)
             {
-                throw new InvalidOperationException("Samarog not found");
+                throw new MissingKeyActorsException("Samarog not found");
             }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
@@ -70,15 +71,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                if (i%2 == 0)
+                if (i % 2 == 0)
                 {
-                    phase.Name = "Split " + i/2;
+                    phase.Name = "Split " + i / 2;
                     var ids = new List<int>
                     {
                        (int) ArcDPSEnums.TrashID.Rigom,
                        (int) ArcDPSEnums.TrashID.Guldhem
                     };
-                    AddTargetsToPhase(phase, ids, log); 
+                    AddTargetsToPhase(phase, ids, log);
                     foreach (NPC t in phase.Targets)
                     {
                         t.OverrideName(t.Character + " " + i / 2);
@@ -216,7 +217,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Samarog);
             if (target == null)
             {
-                throw new InvalidOperationException("Samarog not found");
+                throw new MissingKeyActorsException("Samarog not found");
             }
             return (target.GetHealth(combatData) > 30e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
         }

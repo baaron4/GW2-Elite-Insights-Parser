@@ -2,7 +2,6 @@
 using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.ParsedData;
 using Newtonsoft.Json;
 
 namespace GW2EIBuilders.JsonModels
@@ -225,7 +224,7 @@ namespace GW2EIBuilders.JsonModels
             // Health
             if (settings.RawFormatTimelineArrays)
             {
-                HealthPercents = actor.GetHealthUpdates(log).Select(x => new double[2] {x.Start, x.Value }).ToList();
+                HealthPercents = actor.GetHealthUpdates(log).Select(x => new double[2] { x.Start, x.Value }).ToList();
                 BarrierPercents = actor.GetBarrierUpdates(log).Select(x => new double[2] { x.Start, x.Value }).ToList();
             }
         }

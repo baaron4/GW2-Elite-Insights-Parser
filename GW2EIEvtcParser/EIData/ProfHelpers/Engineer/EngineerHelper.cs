@@ -1,6 +1,6 @@
-﻿using GW2EIEvtcParser.ParsedData;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
@@ -11,7 +11,8 @@ namespace GW2EIEvtcParser.EIData
     {
         private class EngineerKitFinder : WeaponSwapCastFinder
         {
-            public EngineerKitFinder(long skillID, long icd, ulong minBuild = ulong.MinValue, ulong maxBuild = ulong.MaxValue) : base(skillID, SkillItem.KitSet, icd, minBuild, maxBuild, (swap, combatData, skillData) => {
+            public EngineerKitFinder(long skillID, long icd, ulong minBuild = ulong.MinValue, ulong maxBuild = ulong.MaxValue) : base(skillID, SkillItem.KitSet, icd, minBuild, maxBuild, (swap, combatData, skillData) =>
+            {
                 SkillItem skill = skillData.Get(skillID);
                 if (skill.ApiSkill == null || skill.ApiSkill.BundleSkills == null)
                 {
@@ -56,7 +57,7 @@ namespace GW2EIEvtcParser.EIData
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
-        {  
+        {
                 new Buff("Static Shield",6055, ParserHelper.Source.Engineer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/90/Static_Shield.png"),
                 new Buff("Absorb",6056, ParserHelper.Source.Engineer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/8a/Absorb.png"),
                 new Buff("A.E.D.",21660, ParserHelper.Source.Engineer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e6/A.E.D..png"),

@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using Discord;
+using GW2EIBuilders;
+using GW2EIDiscord;
+using GW2EIDPSReport;
+using GW2EIDPSReport.DPSReportJsons;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
-using GW2EIBuilders;
+using GW2EIGW2API;
 using GW2EIParser.Exceptions;
-using Discord;
-using System.Linq;
-using GW2EIDPSReport;
-using GW2EIDiscord;
-using System.Windows.Forms;
-using GW2EIDPSReport.DPSReportJsons;
-using System.Diagnostics;
 
 namespace GW2EIParser
 {
@@ -27,16 +28,19 @@ namespace GW2EIParser
 
         private static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
 
-        internal static readonly string SkillAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)+ "/Content/SkillList.json";
+        internal static readonly string SkillAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/SkillList.json";
         internal static readonly string SpecAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/SpecList.json";
         internal static readonly string TraitAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/TraitList.json";
+
+        internal static readonly GW2APIController APIController = new GW2APIController(SkillAPICacheLocation, SpecAPICacheLocation, TraitAPICacheLocation);
 
         internal static int GetMaxParallelRunning()
         {
             if (Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports)
             {
                 return Math.Max(Environment.ProcessorCount / 2, 1);
-            } else
+            }
+            else
             {
                 return Environment.ProcessorCount;
             }
@@ -80,16 +84,6 @@ namespace GW2EIParser
             return builder.Build();
         }
 
-        internal static Exception GetFinalException(this Exception ex)
-        {
-            Exception final = ex;
-            while (final.InnerException != null)
-            {
-                final = final.InnerException;
-            }
-            return final;
-        }
-
         private static bool HasFormat()
         {
             return Properties.Settings.Default.SaveOutCSV || Properties.Settings.Default.SaveOutHTML || Properties.Settings.Default.SaveOutXML || Properties.Settings.Default.SaveOutJSON;
@@ -104,7 +98,7 @@ namespace GW2EIParser
             {
                 traces.Add("Uploading to DPSReports using EI");
                 DPSReportUploadObject response = DPSReportAPI.UploadUsingEI(fInfo, settings, traces);
-                uploadresult[0] =  response != null ? response.Permalink : "Upload process failed";
+                uploadresult[0] = response != null ? response.Permalink : "Upload process failed";
                 traces.Add("DPSReports using EI: " + uploadresult[0]);
             }
             if (Properties.Settings.Default.UploadToDPSReportsRH)
@@ -135,10 +129,21 @@ namespace GW2EIParser
                 sw.Start();
                 var fInfo = new FileInfo(operation.InputFile);
 
-                var parser = new EvtcParser(new EvtcParserSettings(Properties.Settings.Default.Anonymous, Properties.Settings.Default.SkipFailedTries, Properties.Settings.Default.ParsePhases, Properties.Settings.Default.ParseCombatReplay, Properties.Settings.Default.ComputeDamageModifiers, Properties.Settings.Default.CustomTooShort));
+                var parser = new EvtcParser(new EvtcParserSettings(Properties.Settings.Default.Anonymous,
+                                                Properties.Settings.Default.SkipFailedTries,
+                                                Properties.Settings.Default.ParsePhases,
+                                                Properties.Settings.Default.ParseCombatReplay,
+                                                Properties.Settings.Default.ComputeDamageModifiers,
+                                                Properties.Settings.Default.CustomTooShort,
+                                                Properties.Settings.Default.DetailledWvW),
+                                            APIController);
 
                 //Process evtc here
-                ParsedEvtcLog log = parser.ParseLog(operation, fInfo);
+                ParsedEvtcLog log = parser.ParseLog(operation, fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason);
+                if (failureReason != null)
+                {
+                    failureReason.Throw();
+                }
                 var externalTraces = new List<string>();
                 string[] uploadresult = UploadOperation(externalTraces, fInfo);
                 if (Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports)
@@ -159,7 +164,7 @@ namespace GW2EIParser
             }
             catch (Exception ex)
             {
-                throw new EncompassException(ex);
+                throw new ProgramException(ex);
             }
             finally
             {

@@ -7,7 +7,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.Exceptions;
-using GW2EIGW2API;
 using GW2EIParser.Exceptions;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -18,18 +17,18 @@ namespace GW2EIParser.tst
     [TestFixture]
     public class StabilityTestEvtc
     {
-        private bool Loop(BlockingCollection<string> failed, BlockingCollection<string> messages, string file)
+        private static bool Loop(BlockingCollection<string> failed, BlockingCollection<string> messages, string file)
         {
             try
             {
-                ParsedEvtcLog log = TestHelper.ParseLog(file);
+                ParsedEvtcLog log = TestHelper.ParseLog(file, TestHelper.APIController);
                 TestHelper.JsonString(log);
                 TestHelper.HtmlString(log);
                 TestHelper.CsvString(log);
             }
-            catch (EncompassException canc)
+            catch (ProgramException canc)
             {
-                if (canc.InnerException == null || !(canc.InnerException is TooShortException || canc.InnerException is SkipException))
+                if (canc.InnerException == null || !(canc.InnerException is EIException))
                 {
                     failed.Add(file);
                     messages.Add(canc.Message);
@@ -39,7 +38,7 @@ namespace GW2EIParser.tst
             }
             catch (Exception ex)
             {
-                if (!(ex is TooShortException || ex is SkipException || ex is IncompleteLogException))
+                if (!(ex is EIException))
                 {
                     failed.Add(file);
                     messages.Add(ex.Message);
@@ -54,7 +53,7 @@ namespace GW2EIParser.tst
             return true;
         }
 
-        private void GenerateCrashData(BlockingCollection<string> failed, BlockingCollection<string> messages, string type, bool copy)
+        private static void GenerateCrashData(BlockingCollection<string> failed, BlockingCollection<string> messages, string type, bool copy)
         {
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/Crashes/";
 
@@ -100,7 +99,7 @@ namespace GW2EIParser.tst
         [Test]
         public void TestEvtc()
         {
-            GW2APIController.InitAPICache();
+
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
             if (!Directory.Exists(testLocation))
             {
@@ -121,7 +120,6 @@ namespace GW2EIParser.tst
         [Test]
         public void TestEvtcZip()
         {
-            GW2APIController.InitAPICache();
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
             if (!Directory.Exists(testLocation))
             {
@@ -141,7 +139,6 @@ namespace GW2EIParser.tst
         [Test]
         public void TestZevtc()
         {
-            GW2APIController.InitAPICache();
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
             if (!Directory.Exists(testLocation))
             {
@@ -162,7 +159,6 @@ namespace GW2EIParser.tst
         [Test]
         public void TestCrashed()
         {
-            GW2APIController.InitAPICache();
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/Crashes/Logs";
             if (!Directory.Exists(testLocation))
             {

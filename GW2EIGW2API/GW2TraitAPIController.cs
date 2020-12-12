@@ -1,25 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Http;
 using GW2EIGW2API.GW2API;
-using Newtonsoft.Json;
 
 namespace GW2EIGW2API
 {
-    internal static class GW2TraitAPIController
+    internal class GW2TraitAPIController
     {
         private const string APIPath = "/v2/traits";
 
 
-        private static GW2APIUtilities.APIItems<GW2APITrait> _apiTraits = new GW2APIUtilities.APIItems<GW2APITrait>();
+        private GW2APIUtilities.APIItems<GW2APITrait> _apiTraits = new GW2APIUtilities.APIItems<GW2APITrait>();
         private static List<GW2APITrait> GetGW2APITraits()
         {
             Console.WriteLine("Getting traits from API");
             return GW2APIUtilities.GetGW2APIItems<GW2APITrait>(APIPath);
         }
 
-        internal static GW2APIUtilities.APIItems<GW2APITrait> GetAPITraits(string cachePath)
+        internal GW2APIUtilities.APIItems<GW2APITrait> GetAPITraits(string cachePath)
         {
             if (_apiTraits.Items.Count == 0)
             {
@@ -28,7 +26,7 @@ namespace GW2EIGW2API
             return _apiTraits;
         }
 
-        internal static void WriteAPITraitsToFile(string filePath)
+        internal void WriteAPITraitsToFile(string filePath)
         {
             FileStream fcreate = File.Open(filePath, FileMode.Create);
             fcreate.Close();
@@ -41,7 +39,7 @@ namespace GW2EIGW2API
             // refresh API cache
             _apiTraits = new GW2APIUtilities.APIItems<GW2APITrait>(traitList);
         }
-        private static void SetAPITraits(string filePath)
+        private void SetAPITraits(string filePath)
         {
             if (File.Exists(filePath) && new FileInfo(filePath).Length != 0)
             {

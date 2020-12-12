@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.Buff;
@@ -113,7 +114,7 @@ namespace GW2EIEvtcParser.EIData
             // removed the throw
             /*if (buffApplies.Select(x => x.BuffID).Distinct().Count() > 3)
             {
-                throw new InvalidOperationException("Too much buff apply events in TranslateWeaverAttunement");
+                throw new EIException("Too much buff apply events in TranslateWeaverAttunement");
             }*/
             var duals = new HashSet<long>
             {
@@ -146,7 +147,7 @@ namespace GW2EIEvtcParser.EIData
             IEnumerable<long> inter = major.Intersect(minor);
             if (inter.Count() != 1)
             {
-                throw new InvalidOperationException("Intersection incorrect in TranslateWeaverAttunement");
+                throw new InvalidDataException("Intersection incorrect in TranslateWeaverAttunement");
             }
             return inter.First();
         }

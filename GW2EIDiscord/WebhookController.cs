@@ -23,7 +23,7 @@ namespace GW2EIDiscord
                         if (settings.Embed == null)
                         {
                             _ = client.SendMessageAsync(text: dpsReportPermalink).Result;
-                        } 
+                        }
                         else
                         {
                             _ = client.SendMessageAsync(embeds: new[] { settings.Embed }).Result;
@@ -40,7 +40,7 @@ namespace GW2EIDiscord
                     traces.Add("Couldn't send embed: " + e.Message);
                 }
             }
-            
+
         }
 
     }

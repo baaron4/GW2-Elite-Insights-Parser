@@ -39,7 +39,7 @@ namespace GW2EIEvtcParser.EIData
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
-        {         
+        {
                 new Buff("Vengeful Hammers", 27273, ParserHelper.Source.Revenant, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/c/c8/Vengeful_Hammers.png"),
                 new Buff("Rite of the Great Dwarf", 26596, ParserHelper.Source.Revenant, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/6/69/Rite_of_the_Great_Dwarf.png"),
                 new Buff("Rite of the Great Dwarf (Traited)", 33330, ParserHelper.Source.Revenant, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/6/69/Rite_of_the_Great_Dwarf.png"),

@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using GW2EIEvtcParser;
 using GW2EIBuilders;
 using GW2EIBuilders.JsonModels;
+using GW2EIEvtcParser;
+using GW2EIGW2API;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 
@@ -24,6 +25,12 @@ namespace GW2EIParser.tst
         private static readonly CSVSettings csvSettings = new CSVSettings(",");
         private static readonly HTMLAssets htmlAssets = new HTMLAssets();
 
+        internal static readonly string SkillAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/SkillList.json";
+        internal static readonly string SpecAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/SpecList.json";
+        internal static readonly string TraitAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/TraitList.json";
+
+        internal static readonly GW2APIController APIController = new GW2APIController(SkillAPICacheLocation, SpecAPICacheLocation, TraitAPICacheLocation);
+
         private class TestOperationController : ParserController
         {
             public TestOperationController()
@@ -36,13 +43,17 @@ namespace GW2EIParser.tst
             }
         }
 
-        public static ParsedEvtcLog ParseLog(string location)
+        public static ParsedEvtcLog ParseLog(string location, GW2EIGW2API.GW2APIController apiController)
         {
-            var parser = new EvtcParser(parserSettings);
+            var parser = new EvtcParser(parserSettings, apiController);
 
             var fInfo = new FileInfo(location);
-
-            return parser.ParseLog(new TestOperationController(), fInfo);
+            ParsedEvtcLog parsedLog = parser.ParseLog(new TestOperationController(), fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason);
+            if (failureReason != null)
+            {
+                failureReason.Throw();
+            }
+            return parsedLog;
         }
 
         public static string JsonString(ParsedEvtcLog log)

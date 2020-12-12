@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -21,7 +22,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new SpawnMechanic(17630, "Spark", new MechanicPlotlySetting("star","rgb(0,255,255)"),"Spark","Spawned a Spark (missed marble)", "Spark",0),
             });
             Extension = "arts";
-            Icon = "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
+            Icon = "https://i.imgur.com/aFlYs1I.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -52,7 +53,12 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            SetSuccessByBuffCount(combatData, fightData, playerAgents, Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Artsariiv), 762, 4);
+            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Artsariiv);
+            if (target == null)
+            {
+                throw new MissingKeyActorsException("Artsariiv not found");
+            }
+            SetSuccessByBuffCount(combatData, fightData, GetParticipatingPlayerAgents(target, combatData, playerAgents), target, 762, 4);
         }
     }
 }

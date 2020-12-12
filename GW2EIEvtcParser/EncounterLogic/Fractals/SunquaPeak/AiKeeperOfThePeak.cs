@@ -1,8 +1,9 @@
-﻿using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.ParsedData;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -32,7 +33,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(61256, "Elemental Manipulation (Fire)", new MechanicPlotlySetting("square","rgb(255,125,0)"), "Fire Manip.","Elemental Manipulation (Fire)", "Elemental Manipulation (Fire)",0),
             new HitOnPlayerMechanic(61271, "Elemental Manipulation (Fire)", new MechanicPlotlySetting("square","rgb(255,125,0)"), "Fire Manip.","Elemental Manipulation (Fire)", "Elemental Manipulation (Fire)",0),
             new HitOnPlayerMechanic(61273, "Roiling Flames", new MechanicPlotlySetting("circle","rgb(255,125,0)"), "Rlng.Flms.","Roiling Flames", "Roiling Flames",0),
-            new HitOnPlayerMechanic(61582, "Roiling Flames", new MechanicPlotlySetting("circle","rgb(255,125,0)"), "Rlng.Flms.","Roiling Flames", "Roiling Flames",0),      
+            new HitOnPlayerMechanic(61582, "Roiling Flames", new MechanicPlotlySetting("circle","rgb(255,125,0)"), "Rlng.Flms.","Roiling Flames", "Roiling Flames",0),
             new HitOnPlayerMechanic(61548, "Volatile Fire", new MechanicPlotlySetting("triangle-left","rgb(255,125,0)"), "Vlt.Fr.","Volatile Fire", "Volatile Fire",0),
             new SkillOnPlayerMechanic(61348, "Call Meteor", new MechanicPlotlySetting("hexagram","rgb(255,125,0)"), "Meteor.H","Hit by Meteor", "Meteor Hit",1000, (evt, log) => evt.HasDowned || evt.HasKilled),
             new HitOnPlayerMechanic(61248, "Flame Burst", new MechanicPlotlySetting("triangle-down","rgb(255,125,0)"), "Flm.Brst.","Flame Burst", "Flame Burst",0),
@@ -43,7 +44,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(61207, "Elemental Manipulation (Water)", new MechanicPlotlySetting("square","rgb(0,125,255)"), "Water Manip.","Elemental Manipulation (Water)", "Elemental Manipulation (Water)",0),
             new HitOnPlayerMechanic(61556, "Elemental Manipulation (Water)", new MechanicPlotlySetting("square","rgb(0,125,255)"), "Water Manip.","Elemental Manipulation (Water)", "Elemental Manipulation (Water)",0),
             new HitOnPlayerMechanic(61556, "Torrential Bolt", new MechanicPlotlySetting("circle","rgb(0,125,255)"), "Tor.Bolt","Torrential Bolt", "Torrential Bolt",0),
-            new HitOnPlayerMechanic(61177, "Torrential Bolt", new MechanicPlotlySetting("circle","rgb(0,125,255)"), "Tor.Bolt","Torrential Bolt", "Torrential Bolt",0),   
+            new HitOnPlayerMechanic(61177, "Torrential Bolt", new MechanicPlotlySetting("circle","rgb(0,125,255)"), "Tor.Bolt","Torrential Bolt", "Torrential Bolt",0),
             new HitOnPlayerMechanic(61419, "Volatile Water", new MechanicPlotlySetting("triangle-left","rgb(0,125,255)"), "Vlt.Wtr.","Volatile Water", "Volatile Water",0),
             new HitOnPlayerMechanic(61251, "Aquatic Burst", new MechanicPlotlySetting("triangle-down","rgb(0,125,255)"), "Aq.Brst.","Aquatic Burst", "Aquatic Burst",0),
             new EnemyBuffApplyMechanic(61402, "Tidal Barrier", new MechanicPlotlySetting("asterisk-open","rgb(0,125,255)"), "Tid.Bar.", "Tidal Barrier", "Tidal Barrier", 0),
@@ -139,7 +140,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             AgentItem targetAgent = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.AiKeeperOfThePeak).FirstOrDefault();
             if (targetAgent == null)
             {
-                throw new InvalidOperationException("Ai not found");
+                throw new MissingKeyActorsException("Ai not found");
             }
             CombatItem darkModePhaseEvent = combatData.FirstOrDefault(x => x.SkillID == 53569);
             _hasDarkMode = combatData.Exists(x => x.SkillID == 61356);
@@ -224,7 +225,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (_hasElementalMode)
                 {
-                    throw new InvalidOperationException("Ai not found");
+                    throw new MissingKeyActorsException("Ai not found");
                 }
             }
             else
@@ -236,7 +237,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (_hasDarkMode)
                 {
-                    throw new InvalidOperationException("Ai not found");
+                    throw new MissingKeyActorsException("Ai not found");
                 }
             }
             else
@@ -360,7 +361,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case 0:
                 default:
-                    throw new InvalidOperationException("Ai not found");
+                    throw new MissingKeyActorsException("Ai not found");
             }
         }
     }

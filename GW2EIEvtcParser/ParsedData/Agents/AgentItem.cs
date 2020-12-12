@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.ParsedData
         public string Name { get; protected set; } = "UNKNOWN";
         public string Prof { get; } = "UNKNOWN";
         public uint Toughness { get; protected set; }
-        public uint Healing { get;}
+        public uint Healing { get; }
         public uint Condition { get; }
         public uint Concentration { get; }
         public uint HitboxWidth { get; }
@@ -65,7 +65,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        internal AgentItem(ulong agent, string name, string prof, int id, ushort instid, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight, long firstAware, long lastAware): this(agent, name, prof, id, type, toughness, healing, condition, concentration, hbWidth, hbHeight)
+        internal AgentItem(ulong agent, string name, string prof, int id, ushort instid, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight, long firstAware, long lastAware) : this(agent, name, prof, id, type, toughness, healing, condition, concentration, hbWidth, hbHeight)
         {
             InstID = instid;
             FirstAware = firstAware;
@@ -126,7 +126,7 @@ namespace GW2EIEvtcParser.ParsedData
             LastAware = lastAware;
         }
 
-        internal void SetMaster(AgentItem master )
+        internal void SetMaster(AgentItem master)
         {
             Master = master;
         }
@@ -165,26 +165,26 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        public void GetAgentStatus(List<(long start, long end)> dead, List<(long start, long end)> down, List<(long start, long end)> dc, ParsedEvtcLog log)
+        internal void GetAgentStatus(List<(long start, long end)> dead, List<(long start, long end)> down, List<(long start, long end)> dc, CombatData combatData, FightData fightData)
         {
             var status = new List<AbstractStatusEvent>();
-            status.AddRange(log.CombatData.GetDownEvents(this));
-            status.AddRange(log.CombatData.GetAliveEvents(this));
-            status.AddRange(log.CombatData.GetDeadEvents(this));
-            status.AddRange(log.CombatData.GetSpawnEvents(this));
-            status.AddRange(log.CombatData.GetDespawnEvents(this));
+            status.AddRange(combatData.GetDownEvents(this));
+            status.AddRange(combatData.GetAliveEvents(this));
+            status.AddRange(combatData.GetDeadEvents(this));
+            status.AddRange(combatData.GetSpawnEvents(this));
+            status.AddRange(combatData.GetDespawnEvents(this));
             status = status.OrderBy(x => x.Time).ToList();
             for (int i = 0; i < status.Count - 1; i++)
             {
                 AbstractStatusEvent cur = status[i];
                 AbstractStatusEvent next = status[i + 1];
-                AddValueToStatusList(dead, down, dc, cur, next, log.FightData.FightEnd, i);
+                AddValueToStatusList(dead, down, dc, cur, next, fightData.FightEnd, i);
             }
             // check last value
             if (status.Count > 0)
             {
                 AbstractStatusEvent cur = status.Last();
-                AddValueToStatusList(dead, down, dc, cur, null, log.FightData.FightEnd, status.Count - 1);
+                AddValueToStatusList(dead, down, dc, cur, null, fightData.FightEnd, status.Count - 1);
             }
         }
 
@@ -204,7 +204,7 @@ namespace GW2EIEvtcParser.ParsedData
         }
 
         /// <summary>
-        /// Checks if a buff is present on the actor that corresponds to. Given buff id must be in the boon simulator
+        /// Checks if a buff is present on the actor that corresponds to. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
         /// </summary>
         /// <param name="log"></param>
         /// <param name="buffId"></param>
@@ -212,20 +212,8 @@ namespace GW2EIEvtcParser.ParsedData
         /// <returns></returns>
         public bool HasBuff(ParsedEvtcLog log, long buffId, long time)
         {
-            if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
-            {
-                throw new InvalidOperationException("Buff id must be simulated");
-            }
-            AbstractSingleActor actor = log.FindActor(this, true);
-            Dictionary<long, BuffsGraphModel> bgms = actor.GetBuffGraphs(log);
-            if (bgms.TryGetValue(buffId, out BuffsGraphModel bgm))
-            {
-                return bgm.IsPresent(time, ParserHelper.ServerDelayConstant);
-            }
-            else
-            {
-                return false;
-            }
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.HasBuff(log, buffId, time);
         }
     }
 }

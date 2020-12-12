@@ -129,12 +129,13 @@ namespace GW2EIEvtcParser
         }
         // Breakbar State
 
-        public enum BreakbarState { 
-            Active, 
-            Recover, 
-            Immune, 
-            None, 
-            Unknown 
+        public enum BreakbarState
+        {
+            Active,
+            Recover,
+            Immune,
+            None,
+            Unknown
         };
         internal static BreakbarState GetBreakbarState(int value)
         {
@@ -247,6 +248,17 @@ namespace GW2EIEvtcParser
         internal static BuffCategory GetBuffCategory(byte bt)
         {
             return Enum.IsDefined(typeof(BuffCategory), bt) ? (BuffCategory)bt : BuffCategory.Unknown;
+        }
+        // WIP
+        public enum SkillAction : byte
+        {
+            EffectHappened = 4,
+            AnimationCompleted = 5,
+            Unknown
+        }
+        internal static SkillAction GetSkillAction(byte bt)
+        {
+            return Enum.IsDefined(typeof(SkillAction), bt) ? (SkillAction)bt : SkillAction.Unknown;
         }
 
         // Friend of for
@@ -462,8 +474,8 @@ namespace GW2EIEvtcParser
             SonsOfSvanirHighShaman = 22283,
             // to complete
             DoppelgangerNecro = 22713,
-            DoppelgangerWarrior= 22640,
-            DoppelgangerGuardian1= 22635,
+            DoppelgangerWarrior = 22640,
+            DoppelgangerGuardian1 = 22635,
             DoppelgangerGuardian2 = 22608,
             DoppelgangerThief1 = 22656,
             DoppelgangerThief2 = 22612,
@@ -634,7 +646,7 @@ namespace GW2EIEvtcParser
                 || state == ArcDPSEnums.StateChange.Velocity || state == ArcDPSEnums.StateChange.Rotation
                 || state == ArcDPSEnums.StateChange.TeamChange || state == ArcDPSEnums.StateChange.AttackTarget
                 || state == ArcDPSEnums.StateChange.Targetable || state == ArcDPSEnums.StateChange.StackActive
-                || state == ArcDPSEnums.StateChange.StackReset || state == ArcDPSEnums.StateChange.BreakbarState 
+                || state == ArcDPSEnums.StateChange.StackReset || state == ArcDPSEnums.StateChange.BreakbarState
                 || state == ArcDPSEnums.StateChange.BreakbarPercent;
         }
 
@@ -655,7 +667,7 @@ namespace GW2EIEvtcParser
                 || state == ArcDPSEnums.StateChange.Rotation || state == ArcDPSEnums.StateChange.TeamChange
                 || state == ArcDPSEnums.StateChange.AttackTarget || state == ArcDPSEnums.StateChange.Targetable
                 || state == ArcDPSEnums.StateChange.StackActive || state == ArcDPSEnums.StateChange.StackReset
-                || state == ArcDPSEnums.StateChange.Reward || state == ArcDPSEnums.StateChange.BreakbarState 
+                || state == ArcDPSEnums.StateChange.Reward || state == ArcDPSEnums.StateChange.BreakbarState
                 || state == ArcDPSEnums.StateChange.BreakbarPercent;
         }
     }

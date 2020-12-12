@@ -200,7 +200,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         public bool IsSwap => ID == WeaponSwapId || ElementalistHelper.IsElementalSwap(ID) || RevenantHelper.IsLegendSwap(ID);
         public string Name { get; }
-        public string Icon { get;}
+        public string Icon { get; }
         private readonly WeaponDescriptor _weaponDescriptor;
         internal GW2APISkill ApiSkill { get; }
         private SkillInfoEvent _skillInfo { get; set; }
@@ -209,16 +209,11 @@ namespace GW2EIEvtcParser.ParsedData
 
         // Constructor
 
-        internal SkillItem(long ID) : this(ID, "UNKNOWN")
-        {
-            UnknownSkill = Name == "UNKNOWN";
-        }
-
-        public SkillItem(long ID, string name)
+        internal SkillItem(long ID, string name, GW2APIController apiController)
         {
             this.ID = ID;
             Name = name.Replace("\0", "");
-            ApiSkill = GW2APIController.GetAPISkill(ID);
+            ApiSkill = apiController.GetAPISkill(ID);
             //
             if (_overrideNames.TryGetValue(ID, out string overrideName))
             {

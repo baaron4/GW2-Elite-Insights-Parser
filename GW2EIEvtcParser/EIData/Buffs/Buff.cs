@@ -35,15 +35,16 @@ namespace GW2EIEvtcParser.EIData
         public const long EarthDual = 44857;
 
         // Boon
-        public enum BuffNature { 
-            Condition, 
-            Boon, 
-            OffensiveBuffTable, 
+        public enum BuffNature
+        {
+            Condition,
+            Boon,
+            OffensiveBuffTable,
             DefensiveBuffTable,
             SupportBuffTable,
-            GraphOnlyBuff, 
-            Consumable, 
-            Unknow 
+            GraphOnlyBuff,
+            Consumable,
+            Unknow
         };
 
         public enum BuffType
@@ -59,8 +60,10 @@ namespace GW2EIEvtcParser.EIData
         public BuffNature Nature { get; }
         public ParserHelper.Source Source { get; }
         private BuffStackType _stackType { get; }
-        public BuffType Type {    
-            get {
+        public BuffType Type
+        {
+            get
+            {
                 switch (_stackType)
                 {
                     case BuffStackType.Queue:
@@ -91,7 +94,7 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="capacity">Maximun amount of buff in stack</param>
         /// <param name="nature">Nature of the buff, dictates in which category the buff will appear <see cref="BuffNature"/></param>
         /// <param name="link">URL to the icon of the buff</param>
-        public Buff(string name, long id, ParserHelper.Source source, BuffStackType type, int capacity, BuffNature nature, string link)
+        internal Buff(string name, long id, ParserHelper.Source source, BuffStackType type, int capacity, BuffNature nature, string link)
         {
             Name = name;
             ID = id;
@@ -102,17 +105,17 @@ namespace GW2EIEvtcParser.EIData
             Link = link;
         }
 
-        public Buff(string name, long id, ParserHelper.Source source, BuffNature nature, string link) : this(name, id, source, BuffStackType.Force, 1, nature, link)
+        internal Buff(string name, long id, ParserHelper.Source source, BuffNature nature, string link) : this(name, id, source, BuffStackType.Force, 1, nature, link)
         {
         }
 
-        public Buff(string name, long id, ParserHelper.Source source, BuffStackType type, int capacity, BuffNature nature, string link, ulong minBuild, ulong maxBuild) : this(name, id, source, type, capacity, nature, link)
+        internal Buff(string name, long id, ParserHelper.Source source, BuffStackType type, int capacity, BuffNature nature, string link, ulong minBuild, ulong maxBuild) : this(name, id, source, type, capacity, nature, link)
         {
             _maxBuild = maxBuild;
             _minBuild = minBuild;
         }
 
-        public Buff(string name, long id, ParserHelper.Source source, BuffNature nature, string link, ulong minBuild, ulong maxBuild) : this(name, id, source, BuffStackType.Force, 1, nature, link, minBuild, maxBuild)
+        internal Buff(string name, long id, ParserHelper.Source source, BuffNature nature, string link, ulong minBuild, ulong maxBuild) : this(name, id, source, BuffStackType.Force, 1, nature, link, minBuild, maxBuild)
         {
         }
 
@@ -193,9 +196,9 @@ namespace GW2EIEvtcParser.EIData
             }
             switch (type)
             {
-                case BuffType.Intensity: 
+                case BuffType.Intensity:
                     return new BuffSimulatorIDIntensity(log);
-                case BuffType.Duration: 
+                case BuffType.Duration:
                     return new BuffSimulatorIDDuration(log);
                 case BuffType.Unknown:
                 default:
@@ -278,7 +281,8 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Spawn Protection?", 34113, ParserHelper.Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Buff("Stun", 872, ParserHelper.Source.Common, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/97/Stun.png"),
                 new Buff("Daze", 833, ParserHelper.Source.Common, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/79/Daze.png"),
-                new Buff("Exposed", 48209, ParserHelper.Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/f/f4/Exposed_%28effect%29.png"),
+                new Buff("Exposed (48209)", 48209, ParserHelper.Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/f/f4/Exposed_%28effect%29.png"),
+                new Buff("Exposed (31589)", 31589, ParserHelper.Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/f/f4/Exposed_%28effect%29.png"),
                 new Buff("Unblockable",36781, ParserHelper.Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/f0/Unblockable_%28effect%29.png",102321 , ulong.MaxValue),
                 //Auras
                 new Buff("Chaos Aura", 10332, ParserHelper.Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/e/ec/Chaos_Aura.png"),
@@ -366,6 +370,8 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Timed Bomb", 31485, ParserHelper.Source.FightSpecific, BuffStackType.Queue, 1, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/91/Time_Bomb.png" ),
                 // Deimos
                 new Buff("Unnatural Signet",38224, ParserHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png"),
+                new Buff("Weak Minded",38187, ParserHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/38/Unseen_Burden_%28Deimos%29.png"),
+                new Buff("Tear Instability",37733, ParserHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/11/Tear_Instability.png"),
                 // KC
                 new Buff("Compromised",35096, ParserHelper.Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/48/Compromised.png"),
                 new Buff("Xera's Boon",35025, ParserHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/0/04/Xera%27s_Boon.png"),
@@ -421,6 +427,10 @@ namespace GW2EIEvtcParser.EIData
                 // Trio
                 new Buff("Not the Bees!", 34434, ParserHelper.Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/0/08/Throw_Jar.png"),
                 new Buff("Targeted", 34392, ParserHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
+                // River
+                new Buff("Soul Siphon", 47470, ParserHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/f/f7/Soul_Siphon.png"),
+                new Buff("Desmina's Protection", 47219, ParserHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/b3/Desmina%27s_Protection.png"),
+                new Buff("Follower's Asylum", 47122, ParserHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/b3/Desmina%27s_Protection.png"),
                 // Dhuum
                 new Buff("Spirit Transfrom", 48281, ParserHelper.Source.FightSpecific, BuffStackType.Stacking, 30, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/48/Compromised.png"),
                 new Buff("Fractured Spirit", 46950, ParserHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/c/c3/Fractured_Spirit.png"),
@@ -462,7 +472,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Tidal Bargain", 61512, ParserHelper.Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"),
         };
 
-        internal static readonly List<Buff> Consumables = new List<Buff>
+        internal static readonly List<Buff> NormalFoods = new List<Buff>
         {
                 new Buff("Malnourished",46587, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/6/67/Malnourished.png"),
                 new Buff("Plate of Truffle Steak",9769, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/4/4c/Plate_of_Truffle_Steak.png"),
@@ -498,6 +508,10 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Plate of Orrian Steak Frittes",9773, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/4/4d/Plate_of_Orrian_Steak_Frittes.png"),
                 new Buff("Spicier Flank Steak",9764, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/0/01/Spicier_Flank_Steak.png"),
                 new Buff("Mango Pie",9993, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/3/3d/Mango_Pie.png"),
+        };
+
+        internal static readonly List<Buff> Utilities = new List<Buff>
+        {     
                 // UTILITIES 
                 // 1h versions have the same ID as 30 min versions 
                 new Buff("Diminished",46668, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/7/71/Diminished.png"),
@@ -551,6 +565,13 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Sharpening Skull", 25630, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/e/ee/Sharpening_Skull.png"),
                 new Buff("Flask of Pumpkin Oil", 25632, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/7/71/Flask_of_Pumpkin_Oil.png"),
                 new Buff("Lump of Crystallized Nougat", 25631, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/8/8f/Lump_of_Crystallized_Nougat.png"),
+                new Buff("Skale Venom (Consumable)", 972, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/96/Skale_Venom_%28consumable%29.png"),
+                new Buff("Swift Moa Feather", 23239, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/f/f0/Swift_Moa_Feather.png"),
+        };
+
+        internal static readonly List<Buff> Writs = new List<Buff>
+        {
+
                 new Buff("Writ of Basic Strength", 33160, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/7/7e/Writ_of_Basic_Strength.png"),
                 new Buff("Writ of Strength", 32105, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/5/5e/Writ_of_Strength.png"),
                 new Buff("Writ of Studied Strength", 33647, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/2/23/Writ_of_Studied_Strength.png"),
@@ -572,9 +593,11 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Writ of Basic Speed", 33776, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/e/e6/Writ_of_Basic_Speed.png"),
                 new Buff("Writ of Studied Speed", 33005, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/d/d1/Recipe_sheet_fine_boots.png"),
                 new Buff("Writ of Masterful Speed", 33040, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/8/8e/Recipe_sheet_masterwork_boots.png"),
+        };
+
+        internal static readonly List<Buff> Potions = new List<Buff>
+        {
                 new Buff("Potion Of Karka Toughness", 18704, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/f/fb/Powerful_Potion_of_Inquest_Slaying.png"),
-                new Buff("Skale Venom (Consumable)", 972, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/96/Skale_Venom_%28consumable%29.png"),
-                new Buff("Swift Moa Feather", 23239, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/f/f0/Swift_Moa_Feather.png"),
                 // Slaying Potions
                 new Buff("Powerful Potion of Flame Legion Slaying",9925, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/e/e2/Powerful_Potion_of_Flame_Legion_Slaying.png"),
                 new Buff("Powerful Potion of Halloween Slaying",15279, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/f/fe/Powerful_Potion_of_Halloween_Slaying.png"),
@@ -597,6 +620,11 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Fractal Mobility", 33024, ParserHelper.Source.Item, BuffStackType.Stacking, 5, BuffNature.Consumable,"https://wiki.guildwars2.com/images/thumb/2/22/Mist_Mobility_Potion.png/40px-Mist_Mobility_Potion.png"),
                 new Buff("Fractal Defensive", 32134, ParserHelper.Source.Item, BuffStackType.Stacking, 5, BuffNature.Consumable,"https://wiki.guildwars2.com/images/thumb/e/e6/Mist_Defensive_Potion.png/40px-Mist_Defensive_Potion.png"),
                 new Buff("Fractal Offensive", 32473, ParserHelper.Source.Item, BuffStackType.Stacking, 5, BuffNature.Consumable,"https://wiki.guildwars2.com/images/thumb/8/8d/Mist_Offensive_Potion.png/40px-Mist_Offensive_Potion.png"),
+
+        };
+
+        internal static readonly List<Buff> AscendedFood = new List<Buff>
+        {
                 // Ascended Food
                 // Feasts with yet unknown IDs are also added with ID of -1, the IDs can be added later on demand
                 new Buff("Bowl of Fruit Salad with Cilantro Garnish", -1, ParserHelper.Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/0/08/Bowl_of_Fruit_Salad_with_Cilantro_Garnish.png"),

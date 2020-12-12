@@ -153,13 +153,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             AgentItem target = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Qadim).FirstOrDefault();
             if (target == null)
             {
-                throw new InvalidOperationException("Qadim not found");
+                throw new MissingKeyActorsException("Qadim not found");
             }
             CombatItem startCast = combatData.FirstOrDefault(x => x.SkillID == 52496 && x.IsActivation.StartCasting());
             CombatItem sanityCheckCast = combatData.FirstOrDefault(x => (x.SkillID == 52528 || x.SkillID == 52333 || x.SkillID == 58814) && x.IsActivation.StartCasting());
             if (startCast == null || sanityCheckCast == null)
             {
-                throw new IncompleteLogException();
+                return fightData.FightOffset;
             }
             // sanity check
             if (sanityCheckCast.Time - startCast.Time > 0)
@@ -179,7 +179,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC qadim = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Qadim);
             if (qadim == null)
             {
-                throw new InvalidOperationException("Qadim not found");
+                throw new MissingKeyActorsException("Qadim not found");
             }
             phases[0].Targets.Add(qadim);
             if (!requirePhases)
@@ -225,7 +225,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (phase.Targets.Count > 0)
                     {
                         NPC phaseTar = phase.Targets[0];
-                        switch(phaseTar.ID)
+                        switch (phaseTar.ID)
                         {
                             case (int)ArcDPSEnums.TrashID.AncientInvokedHydra:
                                 phase.Name = "Hydra";
@@ -238,7 +238,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 phase.Name = "Wyvern";
                                 break;
                             default:
-                                throw new InvalidOperationException("Unknown phase target in Qadim");
+                                phase.Name = "Unknown";
+                                break;
                         }
                     }
                 }
@@ -513,7 +514,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Qadim);
             if (target == null)
             {
-                throw new InvalidOperationException("Qadim not found");
+                throw new MissingKeyActorsException("Qadim not found");
             }
             return (target.GetHealth(combatData) > 21e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
         }

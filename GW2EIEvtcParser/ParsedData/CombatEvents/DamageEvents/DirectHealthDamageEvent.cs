@@ -11,7 +11,7 @@
             HasCrit = result == ArcDPSEnums.PhysicalResult.Crit;
             HasDowned = result == ArcDPSEnums.PhysicalResult.Downed;
             IsEvaded = result == ArcDPSEnums.PhysicalResult.Evade;
-            HasGlanced = result == ArcDPSEnums.PhysicalResult.Glance;        
+            HasGlanced = result == ArcDPSEnums.PhysicalResult.Glance;
             HasKilled = result == ArcDPSEnums.PhysicalResult.KillingBlow;
             HasInterrupted = result == ArcDPSEnums.PhysicalResult.Interrupt;
             ShieldDamage = evtcItem.IsShields > 0 ? (int)evtcItem.OverstackValue : 0;

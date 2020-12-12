@@ -103,13 +103,13 @@ namespace GW2EIParser
                         else
                         {
                             Exception ex = t.Exception.InnerExceptions[0];
-                            if (!(ex is EncompassException))
+                            if (!(ex is ProgramException))
                             {
                                 operation.UpdateProgress("Something terrible has happened");
                             }
                             if (!(ex.InnerException is OperationCanceledException))
                             {
-                                operation.UpdateProgress(ex.GetFinalException().Message);
+                                operation.UpdateProgress(ex.InnerException.Message);
                             }
                             else
                             {
@@ -339,7 +339,8 @@ namespace GW2EIParser
             {
                 auxList.Add(val);
             }
-            auxList.Sort((form1, form2) => {
+            auxList.Sort((form1, form2) =>
+            {
                 var right = new FileInfo(form2.InputFile).Name;
                 var left = new FileInfo(form1.InputFile).Name;
                 return _fileNameSorting * string.Compare(left, right);
@@ -355,7 +356,7 @@ namespace GW2EIParser
         {
             if (e.RowIndex < 0)
             {
-                switch(e.ColumnIndex)
+                switch (e.ColumnIndex)
                 {
                     case 0:
                         _fileNameSorting *= -1;

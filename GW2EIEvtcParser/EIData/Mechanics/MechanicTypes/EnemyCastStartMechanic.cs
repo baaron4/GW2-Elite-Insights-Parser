@@ -1,5 +1,5 @@
-﻿using GW2EIEvtcParser.ParsedData;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     if (!regroupedMobs.TryGetValue(c.Caster.ID, out amp))
                     {
-                        amp = log.FindActor(c.Caster, false);
+                        amp = log.FindActor(c.Caster, true);
                         if (amp == null)
                         {
                             continue;
