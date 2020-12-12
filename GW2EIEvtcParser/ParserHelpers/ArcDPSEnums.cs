@@ -247,7 +247,7 @@ namespace GW2EIEvtcParser
         {
             return Enum.IsDefined(typeof(BuffCategory), bt) ? (BuffCategory)bt : BuffCategory.Unknown;
         }
-
+        // WIP
         public enum SkillAction : byte
         {
             EffectHappened = 4,
