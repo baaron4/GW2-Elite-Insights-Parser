@@ -95,6 +95,8 @@ Note it may take some time for each file to parse and they will not be ready to 
 
 -__ComputeDamageModifiers__: if true, damage modifiers will be computed.
 
+-__DetailledWvW__: if true, enemy players will not be merged into one in WvW logs and they'll appear as standard targets. Warning: the generated files and the generation time will grow exponentially, use it only on organized sorties (Guild zergs, GvG, ...).
+
 ### HTML settings
 
 -__SaveOutHTML__: if true, html logs will be generated.
