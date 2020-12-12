@@ -173,6 +173,7 @@ namespace GW2EIEvtcParser.EIData
         };
         internal static readonly List<DamageModifier> CommonDamageModifiers = new List<DamageModifier>
         {
+            new BuffDamageModifierTarget(31589, "Exposed", "50%", DamageSource.All, 50.0, DamageType.All, DamageType.All, ParserHelper.Source.Common, ByPresence, "https://wiki.guildwars2.com/images/6/6b/Exposed.png", DamageModifierMode.All),
             new BuffDamageModifierTarget(738, "Vulnerability", "1% per Stack", DamageSource.All, 1.0, DamageType.All, DamageType.All, ParserHelper.Source.Common, ByStack, "https://wiki.guildwars2.com/images/a/af/Vulnerability.png", DamageModifierMode.All),
             new BuffDamageModifier(50421, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.All, ParserHelper.Source.Common, ByPresenceNonMulti, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png", 88541, ulong.MaxValue, DamageModifierMode.All),
             new DamageLogDamageModifier("Soulcleave's Summit", "per hit (no ICD)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, ParserHelper.Source.Common,"https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png", (x => x.SkillId == 45026), BySkill, DamageModifierMode.All),
