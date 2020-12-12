@@ -17,7 +17,7 @@ namespace GW2EIParser.tst
     [TestFixture]
     public class StabilityTestEvtc
     {
-        private bool Loop(BlockingCollection<string> failed, BlockingCollection<string> messages, string file)
+        private static bool Loop(BlockingCollection<string> failed, BlockingCollection<string> messages, string file)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace GW2EIParser.tst
             return true;
         }
 
-        private void GenerateCrashData(BlockingCollection<string> failed, BlockingCollection<string> messages, string type, bool copy)
+        private static void GenerateCrashData(BlockingCollection<string> failed, BlockingCollection<string> messages, string type, bool copy)
         {
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/Crashes/";
 
