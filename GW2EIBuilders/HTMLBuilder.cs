@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
+using GW2EIBuilders.HtmlModels;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
-using GW2EIBuilders.HtmlModels;
 using Newtonsoft.Json;
-using System.Text;
-using System;
 
 namespace GW2EIBuilders
 {

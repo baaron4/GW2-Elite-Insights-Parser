@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.ParsedData
         public string Name { get; protected set; } = "UNKNOWN";
         public string Prof { get; } = "UNKNOWN";
         public uint Toughness { get; protected set; }
-        public uint Healing { get;}
+        public uint Healing { get; }
         public uint Condition { get; }
         public uint Concentration { get; }
         public uint HitboxWidth { get; }
@@ -65,7 +65,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        internal AgentItem(ulong agent, string name, string prof, int id, ushort instid, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight, long firstAware, long lastAware): this(agent, name, prof, id, type, toughness, healing, condition, concentration, hbWidth, hbHeight)
+        internal AgentItem(ulong agent, string name, string prof, int id, ushort instid, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight, long firstAware, long lastAware) : this(agent, name, prof, id, type, toughness, healing, condition, concentration, hbWidth, hbHeight)
         {
             InstID = instid;
             FirstAware = firstAware;
@@ -126,7 +126,7 @@ namespace GW2EIEvtcParser.ParsedData
             LastAware = lastAware;
         }
 
-        internal void SetMaster(AgentItem master )
+        internal void SetMaster(AgentItem master)
         {
             Master = master;
         }

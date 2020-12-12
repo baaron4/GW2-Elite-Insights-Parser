@@ -139,7 +139,7 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.PeerlessQadim:
                     Logic = new PeerlessQadim(id);
                     break;
-                    //
+                //
                 case ArcDPSEnums.TargetID.IcebroodConstruct:
                     Logic = new IcebroodConstruct(id);
                     break;
@@ -185,7 +185,7 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.WorldVersusWorld:
                     Logic = new WvWFight(id, parserSettings.DetailedWvWParse);
                     break;
-                    //
+                //
                 case ArcDPSEnums.TargetID.MassiveGolem:
                 case ArcDPSEnums.TargetID.AvgGolem:
                 case ArcDPSEnums.TargetID.LGolem:
@@ -193,7 +193,7 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.StdGolem:
                     Logic = new Golem(id);
                     break;
-                    //
+                //
                 default:
                     switch (ArcDPSEnums.GetTrashID(id))
                     {
@@ -226,13 +226,14 @@ namespace GW2EIEvtcParser.ParsedData
                     throw new InvalidOperationException("Breakbar phases can only have one target");
                 }
                 _phases.RemoveAll(x => x.DurationInMS < ParserHelper.PhaseTimeLimit);
-                _phases.Sort((x, y) => {
+                _phases.Sort((x, y) =>
+                {
                     var startCompare = x.Start.CompareTo(y.Start);
                     if (startCompare == 0)
                     {
                         return -x.DurationInMS.CompareTo(y.DurationInMS);
                     }
-                    return startCompare; 
+                    return startCompare;
                 });
             }
             return _phases;

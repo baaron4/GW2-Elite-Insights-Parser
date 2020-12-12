@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using Discord;
+using GW2EIBuilders;
+using GW2EIDiscord;
+using GW2EIDPSReport;
+using GW2EIDPSReport.DPSReportJsons;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
-using GW2EIBuilders;
-using GW2EIParser.Exceptions;
-using Discord;
-using System.Linq;
-using GW2EIDPSReport;
-using GW2EIDiscord;
-using System.Windows.Forms;
-using GW2EIDPSReport.DPSReportJsons;
-using System.Diagnostics;
 using GW2EIGW2API;
+using GW2EIParser.Exceptions;
 
 namespace GW2EIParser
 {
@@ -28,7 +28,7 @@ namespace GW2EIParser
 
         private static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
 
-        internal static readonly string SkillAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)+ "/Content/SkillList.json";
+        internal static readonly string SkillAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/SkillList.json";
         internal static readonly string SpecAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/SpecList.json";
         internal static readonly string TraitAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/TraitList.json";
 
@@ -39,7 +39,8 @@ namespace GW2EIParser
             if (Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports)
             {
                 return Math.Max(Environment.ProcessorCount / 2, 1);
-            } else
+            }
+            else
             {
                 return Environment.ProcessorCount;
             }
@@ -97,7 +98,7 @@ namespace GW2EIParser
             {
                 traces.Add("Uploading to DPSReports using EI");
                 DPSReportUploadObject response = DPSReportAPI.UploadUsingEI(fInfo, settings, traces);
-                uploadresult[0] =  response != null ? response.Permalink : "Upload process failed";
+                uploadresult[0] = response != null ? response.Permalink : "Upload process failed";
                 traces.Add("DPSReports using EI: " + uploadresult[0]);
             }
             if (Properties.Settings.Default.UploadToDPSReportsRH)
@@ -134,7 +135,7 @@ namespace GW2EIParser
                                                 Properties.Settings.Default.ParseCombatReplay,
                                                 Properties.Settings.Default.ComputeDamageModifiers,
                                                 Properties.Settings.Default.CustomTooShort,
-                                                Properties.Settings.Default.DetailledWvW), 
+                                                Properties.Settings.Default.DetailledWvW),
                                             APIController);
 
                 //Process evtc here

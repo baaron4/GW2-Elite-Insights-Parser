@@ -101,7 +101,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 phases.AddRange(GetPhasesByHealthPercent(log, mainTarget, thresholds));
             }
-            
+
             return phases;
         }
 

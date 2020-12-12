@@ -98,7 +98,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (i == 1 || i == 5)
                 {
                     phase.Targets.Add(fraenir);
-                } else
+                }
+                else
                 {
                     phase.Targets.Add(icebrood);
                 }

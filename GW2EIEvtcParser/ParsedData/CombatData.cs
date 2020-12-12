@@ -257,7 +257,8 @@ namespace GW2EIEvtcParser.ParsedData
                 {
                     if (evt.HasKilled)
                     {
-                        if (!agentDeaths.Exists(x => Math.Abs(x.Time - evt.Time) < 500)) {
+                        if (!agentDeaths.Exists(x => Math.Abs(x.Time - evt.Time) < 500))
+                        {
                             agentDeaths.Add(new DeadEvent(pair.Key, evt.Time));
                         }
                     }
@@ -269,7 +270,7 @@ namespace GW2EIEvtcParser.ParsedData
                         }
                     }
                 }
-                agentDowns.Sort((x,y) => x.Time.CompareTo(y.Time));
+                agentDowns.Sort((x, y) => x.Time.CompareTo(y.Time));
                 agentDeaths.Sort((x, y) => x.Time.CompareTo(y.Time));
                 if (setDeads && agentDeaths.Count > 0)
                 {

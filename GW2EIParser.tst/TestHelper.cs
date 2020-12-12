@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using GW2EIEvtcParser;
-using GW2EIParser;
 using GW2EIBuilders;
 using GW2EIBuilders.JsonModels;
+using GW2EIEvtcParser;
+using GW2EIGW2API;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
-using GW2EIGW2API;
 
 namespace GW2EIParser.tst
 {
@@ -44,7 +43,7 @@ namespace GW2EIParser.tst
             }
         }
 
-        public static ParsedEvtcLog ParseLog(string location,GW2EIGW2API.GW2APIController apiController)
+        public static ParsedEvtcLog ParseLog(string location, GW2EIGW2API.GW2APIController apiController)
         {
             var parser = new EvtcParser(parserSettings, apiController);
 

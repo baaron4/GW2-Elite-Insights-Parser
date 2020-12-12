@@ -109,7 +109,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return true;
             }
-            switch(mode)
+            switch (mode)
             {
                 case FightLogic.ParseMode.Unknown:
                 case FightLogic.ParseMode.Instanced5:
@@ -188,6 +188,6 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifier(34422, "Blood Fueled", "10% per stack", DamageSource.NoPets, 10.0, DamageType.All, DamageType.All, ParserHelper.Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png", DamageModifierMode.PvE),
             new BuffDamageModifier(34428, "Blood Fueled Abo", "10% per stack", DamageSource.NoPets, 10.0, DamageType.All, DamageType.All, ParserHelper.Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png", DamageModifierMode.PvE),
         };
-   
+
     }
 }

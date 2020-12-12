@@ -85,7 +85,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                if (i%2 == 0)
+                if (i % 2 == 0)
                 {
                     AddTargetsToPhase(phase, ids, log);
                     if (phase.Targets.Count > 0)
@@ -110,7 +110,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 else
                 {
-                    phase.Name = "Phase " + (i+1)/2;
+                    phase.Name = "Phase " + (i + 1) / 2;
                     phase.Targets.Add(mainTarget);
                     AddTargetsToPhase(phase, ids, log);
                 }

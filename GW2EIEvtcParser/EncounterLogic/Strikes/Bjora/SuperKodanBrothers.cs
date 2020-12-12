@@ -29,7 +29,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (-0, -0, 0, 0),
                             (0, 0, 0, 0));
         }
-        
+
         protected override void SetSuccessByDeath(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, bool all)
         {
             SetSuccessByDeath(combatData, fightData, playerAgents, all, (int)ArcDPSEnums.TargetID.ClawOfTheFallen, (int)ArcDPSEnums.TargetID.VoiceOfTheFallen);
@@ -63,7 +63,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             //
             int voiceAndClawCount = 0;
             var offset = 1;
-            foreach (NPC voiceAndClaw in Targets.Where(x => x.ID == (int)ArcDPSEnums.TargetID.VoiceAndClaw)) 
+            foreach (NPC voiceAndClaw in Targets.Where(x => x.ID == (int)ArcDPSEnums.TargetID.VoiceAndClaw))
             {
                 EnterCombatEvent enterCombat = log.CombatData.GetEnterCombatEvents(voiceAndClaw.AgentItem).FirstOrDefault();
                 PhaseData nextUnmergedPhase = unmergedPhases.Count > offset + 1 ? unmergedPhases[offset] : null;

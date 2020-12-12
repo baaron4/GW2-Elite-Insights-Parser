@@ -28,13 +28,14 @@ namespace GW2EIParser
                     return xValue.CompareTo(yValue);
                 });
                 int index = 0;
-                foreach(string file in sizeSortedLogFiles)
+                foreach (string file in sizeSortedLogFiles)
                 {
                     splitLogFiles[index].Add(file);
                     index = (index + 1) % ProgramHelper.GetMaxParallelRunning();
                 }
-                Parallel.ForEach(splitLogFiles, files => {
-                    foreach(string file in files)
+                Parallel.ForEach(splitLogFiles, files =>
+                {
+                    foreach (string file in files)
                     {
                         ParseLog(file);
                     }

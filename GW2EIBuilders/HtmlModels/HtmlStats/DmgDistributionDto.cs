@@ -104,7 +104,7 @@ namespace GW2EIBuilders.HtmlModels
                         }
                     }
                     timeCasting += Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start);
-                    
+
                 }
             }
             object[] skillItem = {
@@ -193,12 +193,12 @@ namespace GW2EIBuilders.HtmlModels
                     timeCasting += Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start);
                 }
 
-                object[] skillData = { 
-                    false, 
-                    entry.Key.ID, 
-                    0, 
-                    -1, 
-                    0, 
+                object[] skillData = {
+                    false,
+                    entry.Key.ID,
+                    0,
+                    -1,
+                    0,
                     casts,
                     0,
                     0,
@@ -243,7 +243,7 @@ namespace GW2EIBuilders.HtmlModels
         public static DmgDistributionDto BuildTargetDMGDistData(ParsedEvtcLog log, NPC target, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             FinalDPS dps = target.GetDPSAll(log, phaseIndex);
-            return BuildDMGDistDataInternal(log ,dps, target, null, phaseIndex, usedSkills, usedBuffs);
+            return BuildDMGDistDataInternal(log, dps, target, null, phaseIndex, usedSkills, usedBuffs);
         }
 
         private static DmgDistributionDto BuildDMGDistDataMinionsInternal(ParsedEvtcLog log, FinalDPS dps, Minions minions, NPC target, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)

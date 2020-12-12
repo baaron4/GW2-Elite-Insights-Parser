@@ -154,7 +154,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 // no split
                 mainPhases.Add(new PhaseData(start, log.FightData.FightEnd, "Phase 1"));
             }
-            
+
             foreach (PhaseData phase in mainPhases)
             {
                 phase.Targets.Add(mainTarget);

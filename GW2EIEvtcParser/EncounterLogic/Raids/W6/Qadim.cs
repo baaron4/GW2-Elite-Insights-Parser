@@ -225,7 +225,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (phase.Targets.Count > 0)
                     {
                         NPC phaseTar = phase.Targets[0];
-                        switch(phaseTar.ID)
+                        switch (phaseTar.ID)
                         {
                             case (int)ArcDPSEnums.TrashID.AncientInvokedHydra:
                                 phase.Name = "Hydra";

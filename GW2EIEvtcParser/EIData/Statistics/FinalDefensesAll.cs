@@ -1,7 +1,7 @@
-﻿using GW2EIEvtcParser.ParsedData;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -12,7 +12,7 @@ namespace GW2EIEvtcParser.EIData
         public long DownDuration { get; }
         public int DeadCount { get; }
         public long DeadDuration { get; }
-        public int DcCount { get;  }
+        public int DcCount { get; }
         public long DcDuration { get; }
 
         public FinalDefensesAll(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor) : base(log, phase, actor, null)

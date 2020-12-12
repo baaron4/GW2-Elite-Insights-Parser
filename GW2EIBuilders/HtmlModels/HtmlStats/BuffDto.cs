@@ -26,7 +26,7 @@ namespace GW2EIBuilders.HtmlModels
             BuffInfoEvent buffInfoEvent = log.CombatData.GetBuffInfoEvent(buff.ID);
             if (buffInfoEvent != null)
             {
-                var descriptions = new List<string>() { 
+                var descriptions = new List<string>() {
                     "Max Stack(s) " + buff.Capacity
                 };
                 foreach (BuffFormula formula in buffInfoEvent.Formulas)

@@ -109,7 +109,7 @@ namespace GW2EIBuilders.JsonModels
                     {
                         var value = new JsonBuffsUptimeData(val, buffsDictionary[i][pair.Key]);
                         data.Add(value);
-                    } 
+                    }
                     else
                     {
                         var value = new JsonBuffsUptimeData();

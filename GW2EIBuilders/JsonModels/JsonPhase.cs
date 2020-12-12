@@ -80,7 +80,7 @@ namespace GW2EIBuilders.JsonModels
                     SubPhases.Add(j);
                 }
             }
-            
+
         }
     }
 }

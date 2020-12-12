@@ -64,10 +64,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 // ritual started
                 if (firstDamageable != null)
                 {
-                    phases.Add(new PhaseData(end, firstDamageable.Time, "Shielded Dhuum") { 
+                    phases.Add(new PhaseData(end, firstDamageable.Time, "Shielded Dhuum")
+                    {
                         CanBeSubPhase = false
                     });
-                    phases.Add(new PhaseData(firstDamageable.Time, fightDuration, "Ritual" ));
+                    phases.Add(new PhaseData(firstDamageable.Time, fightDuration, "Ritual"));
                 }
             }
         }
@@ -96,7 +97,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phases.Add(new PhaseData(end, soulsplitEnd, "Soulsplit " + i)
                 {
                     CanBeSubPhase = false
-                });;
+                }); ;
                 start = cataCycle.EndTime;
             }
             phases.Add(new PhaseData(start, mainEnd, hasRitual ? "Pre-Ritual" : "Pre-Wipe"));
@@ -148,8 +149,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 mainFight.CanBeSubPhase = dhuumFight == null;
                 // from pre event end to 10% or fight end if 10% not achieved
-                phases.AddRange(GetInBetweenSoulSplits(log, dhuum, mainFight.Start, dhuumFight != null ? dhuumFight.End: mainFight.End, hasRitual));
-            } 
+                phases.AddRange(GetInBetweenSoulSplits(log, dhuum, mainFight.Start, dhuumFight != null ? dhuumFight.End : mainFight.End, hasRitual));
+            }
             else if (_isBugged)
             {
                 // from start to 10% or fight end if 10% not achieved

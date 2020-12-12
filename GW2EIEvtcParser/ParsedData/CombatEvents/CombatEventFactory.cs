@@ -163,7 +163,7 @@ namespace GW2EIEvtcParser.ParsedData
                         if (metaDataEvents.BuffInfoEvents.TryGetValue(c.SkillID, out BuffInfoEvent buffInfoEvent))
                         {
                             buffInfoEvent.CompleteBuffInfoEvent(c);
-                        } 
+                        }
                         else
                         {
                             buffInfoEvent = new BuffInfoEvent(c);

@@ -240,12 +240,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (deadEvent == null)
                         {
                             end = Math.Min(target.LastAware, log.FightData.FightEnd);
-                        } 
+                        }
                         else
                         {
                             end = Math.Min(deadEvent.Time, log.FightData.FightEnd);
                         }
-                    } 
+                    }
                     else
                     {
                         end = Math.Min(notActive.Time, log.FightData.FightEnd);

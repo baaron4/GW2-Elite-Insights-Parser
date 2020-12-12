@@ -58,7 +58,7 @@ namespace GW2EIEvtcParser.EIData
             return (_deads, _downs, _dcs);
         }
 
-        public abstract string GetIcon();     
+        public abstract string GetIcon();
 
         public List<Segment> GetHealthUpdates(ParsedEvtcLog log)
         {
@@ -408,16 +408,16 @@ namespace GW2EIEvtcParser.EIData
                     BuffPoints[boonid] = new BuffsGraphModel(buff, graphSegments);
                     if (updateBoonPresence || updateCondiPresence)
                     {
-                        (updateBoonPresence? boonPresenceGraph : condiPresenceGraph).MergePresenceInto(BuffPoints[boonid].BuffChart);
+                        (updateBoonPresence ? boonPresenceGraph : condiPresenceGraph).MergePresenceInto(BuffPoints[boonid].BuffChart);
                     }
 
                 }
             }
             BuffPoints[NumberOfBoonsID] = boonPresenceGraph;
             BuffPoints[NumberOfConditionsID] = condiPresenceGraph;
-            foreach(Minions minions in GetMinions(log).Values)
+            foreach (Minions minions in GetMinions(log).Values)
             {
-                foreach(List<Segment> minionsSegments in minions.GetLifeSpanSegments(log))
+                foreach (List<Segment> minionsSegments in minions.GetLifeSpanSegments(log))
                 {
                     activeCombatMinionsGraph.MergePresenceInto(minionsSegments);
                 }
@@ -805,7 +805,7 @@ namespace GW2EIEvtcParser.EIData
                 if (DamageLogsByDst.TryGetValue(target.AgentItem, out List<AbstractHealthDamageEvent> list))
                 {
                     return list.Where(x => x.Time >= start && x.Time <= end).ToList();
-                } 
+                }
                 else
                 {
                     return new List<AbstractHealthDamageEvent>();

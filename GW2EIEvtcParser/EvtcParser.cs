@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using GW2EIGW2API.GW2API;
 using GW2EIGW2API;
+using GW2EIGW2API.GW2API;
 
 //recommend CTRL+M+O to collapse all
 namespace GW2EIEvtcParser
@@ -20,7 +20,7 @@ namespace GW2EIEvtcParser
         //Main data storage after binary parse
         private FightData _fightData;
         private AgentData _agentData;
-        private readonly List<AgentItem> _allAgentsList ;
+        private readonly List<AgentItem> _allAgentsList;
         private readonly SkillData _skillData;
         private readonly List<CombatItem> _combatItems;
         private List<Player> _playerList;
@@ -37,7 +37,7 @@ namespace GW2EIEvtcParser
             _apiController = apiController;
             _parserSettings = parserSettings;
             _allAgentsList = new List<AgentItem>();
-            _skillData = new SkillData(apiController); 
+            _skillData = new SkillData(apiController);
             _combatItems = new List<CombatItem>();
             _playerList = new List<Player>();
             _logStartTime = 0;
@@ -560,7 +560,7 @@ namespace GW2EIEvtcParser
             if (_logEndTime - _logStartTime < _parserSettings.TooShortLimit)
             {
                 throw new TooShortException(_logEndTime - _logStartTime, _parserSettings.TooShortLimit);
-            } 
+            }
             // 24 hours
             if (_logEndTime - _logStartTime > 86400000)
             {
@@ -609,7 +609,7 @@ namespace GW2EIEvtcParser
             if (master != ParserHelper._unknownAgent)
             {
                 AgentItem minion = _agentData.GetAgent(minionAgent);
-                if (minion != ParserHelper._unknownAgent && minion.Master == null) 
+                if (minion != ParserHelper._unknownAgent && minion.Master == null)
                 {
                     if (minion.FirstAware <= logTime && logTime <= minion.LastAware)
                     {
@@ -705,7 +705,7 @@ namespace GW2EIEvtcParser
             if (minToughness > 0)
             {
                 uint maxToughness = _playerList.Max(x => x.Toughness);
-                foreach(Player p in _playerList)
+                foreach (Player p in _playerList)
                 {
                     p.AgentItem.OverrideToughness((uint)Math.Round(10.0 * (p.AgentItem.Toughness - minToughness) / Math.Max(1.0, maxToughness - minToughness)));
                 }
