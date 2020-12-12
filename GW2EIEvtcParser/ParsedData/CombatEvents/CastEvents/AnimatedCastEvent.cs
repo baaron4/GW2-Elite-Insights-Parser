@@ -26,11 +26,11 @@ namespace GW2EIEvtcParser.ParsedData
                 if (nonScaledToScaledRatio > 1.0)
                 {
                     // faster
-                    Acceleration = (nonScaledToScaledRatio - 1.0) / 0.66;
+                    Acceleration = (nonScaledToScaledRatio - 1.0) / 0.5;
                 }
                 else
                 {
-                    Acceleration = -(1.0 - nonScaledToScaledRatio) / 0.5;
+                    Acceleration = -nonScaledToScaledRatio / 0.6;
                 }
                 Acceleration = Math.Max(Math.Min(Acceleration, 1.0), -1.0);
             }

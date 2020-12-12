@@ -66,8 +66,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new InvalidOperationException("Cairn not found");
             }
             phases[0].Targets.Add(cairn);
-            List<AbstractHealthDamageEvent> test = log.PlayerList[0].GetDamageTakenLogs(null, log, 0, 6000);
-            List<EnterCombatEvent> test2 = log.CombatData.GetEnterCombatEvents(cairn.AgentItem);
             if (!requirePhases)
             {
                 return phases;
@@ -143,11 +141,30 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new InvalidOperationException("Cairn not found");
             }
-            // spawn protection loss
+            // spawn protection loss -- most reliable
             CombatItem spawnProtectionLoss = combatData.Find(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.IsBuff != 0 && x.SrcAgent == target.Agent && x.SkillID == 34113);
             if (spawnProtectionLoss != null)
             {
                 fightData.OverrideOffset(spawnProtectionLoss.Time - 1);
+            }
+            else
+            {
+                CombatItem impactInitialEnd = combatData.Find(x => x.IsActivation.EndCasting() && (x.Time - fightData.FightOffset) < 2000 && x.SrcAgent == target.Agent && x.SkillID == 38102);
+                // Action 4 from skill dump for 38102
+                if (impactInitialEnd != null)
+                {
+                    // Adds around 10 to 15 ms diff compared to buff loss
+                    if (impactInitialEnd.BuffDmg > 0)
+                    {
+                        var nonScaledToScaledRatio = (double)impactInitialEnd.Value / impactInitialEnd.BuffDmg;
+                        fightData.OverrideOffset(impactInitialEnd.Time - impactInitialEnd.Value + (long)Math.Round(nonScaledToScaledRatio * 1025) - 1);
+                    }
+                    // Adds around 15 to 20 ms diff compared to buff loss
+                    else
+                    {
+                        fightData.OverrideOffset(impactInitialEnd.Time - impactInitialEnd.Value + 1025 - 1);
+                    }
+                }
             }
             return fightData.FightOffset;
         }
