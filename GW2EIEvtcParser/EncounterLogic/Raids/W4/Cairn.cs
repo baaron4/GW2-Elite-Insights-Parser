@@ -155,17 +155,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (firstCastEnd != null && firstCastEnd.SkillID == 38102)
                 {
                     // Action 4 from skill dump for 38102
-
+                    long actionHappened = 1025;
                     // Adds around 10 to 15 ms diff compared to buff loss
                     if (firstCastEnd.BuffDmg > 0)
                     {
                         var nonScaledToScaledRatio = (double)firstCastEnd.Value / firstCastEnd.BuffDmg;
-                        fightData.OverrideOffset(firstCastEnd.Time - firstCastEnd.Value + (long)Math.Round(nonScaledToScaledRatio * 1025) - 1);
+                        fightData.OverrideOffset(firstCastEnd.Time - firstCastEnd.Value + (long)Math.Round(nonScaledToScaledRatio * actionHappened) - 1);
                     }
                     // Adds around 15 to 20 ms diff compared to buff loss
                     else
                     {
-                        fightData.OverrideOffset(firstCastEnd.Time - firstCastEnd.Value + 1025 - 1);
+                        fightData.OverrideOffset(firstCastEnd.Time - firstCastEnd.Value + actionHappened - 1);
                     }
                 }
             }
