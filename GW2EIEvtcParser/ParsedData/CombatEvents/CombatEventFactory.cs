@@ -287,8 +287,13 @@ namespace GW2EIEvtcParser.ParsedData
                     {
                         if (startItem != null && startItem.SkillID == c.SkillID)
                         {
-                            res.Add(new AnimatedCastEvent(startItem, c, agentData, skillData));
+                            res.Add(new AnimatedCastEvent(startItem, agentData, skillData, c));
                             startItem = null;
+                        } 
+                        // missing start
+                        else
+                        {
+                            res.Add(new AnimatedCastEvent(agentData, skillData, c));
                         }
                     }
                 }
