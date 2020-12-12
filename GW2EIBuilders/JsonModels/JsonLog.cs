@@ -91,7 +91,7 @@ namespace GW2EIBuilders.JsonModels
                         {
                             continue;
                         }
-                        var desc = formula.GetDescription(false, log.Buffs.BuffsByIds);
+                        string desc = formula.GetDescription(false, log.Buffs.BuffsByIds);
                         if (desc.Length > 0)
                         {
                             Descriptions.Add(desc);

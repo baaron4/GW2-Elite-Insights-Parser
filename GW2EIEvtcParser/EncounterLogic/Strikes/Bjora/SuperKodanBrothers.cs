@@ -46,7 +46,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             phases[0].Targets.Add(voice);
             phases[0].Targets.Add(claw);
-            var fightEnd = log.FightData.FightEnd;
+            long fightEnd = log.FightData.FightEnd;
             if (!requirePhases)
             {
                 return phases;
@@ -62,7 +62,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             phases.AddRange(unmergedPhases);
             //
             int voiceAndClawCount = 0;
-            var offset = 1;
+            int offset = 1;
             foreach (NPC voiceAndClaw in Targets.Where(x => x.ID == (int)ArcDPSEnums.TargetID.VoiceAndClaw))
             {
                 EnterCombatEvent enterCombat = log.CombatData.GetEnterCombatEvents(voiceAndClaw.AgentItem).FirstOrDefault();

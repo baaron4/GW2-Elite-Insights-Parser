@@ -341,8 +341,8 @@ namespace GW2EIParser
             }
             auxList.Sort((form1, form2) =>
             {
-                var right = new FileInfo(form2.InputFile).Name;
-                var left = new FileInfo(form1.InputFile).Name;
+                string right = new FileInfo(form2.InputFile).Name;
+                string left = new FileInfo(form1.InputFile).Name;
                 return _fileNameSorting * string.Compare(left, right);
             });
             operatorBindingSource.Clear();

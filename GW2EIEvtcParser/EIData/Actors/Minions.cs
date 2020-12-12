@@ -151,7 +151,7 @@ namespace GW2EIEvtcParser.EIData
         public List<List<Segment>> GetLifeSpanSegments(ParsedEvtcLog log)
         {
             var minionsSegments = new List<List<Segment>>();
-            var fightDur = log.FightData.FightEnd;
+            long fightDur = log.FightData.FightEnd;
             foreach (NPC minion in _minionList)
             {
                 var minionSegments = new List<Segment>();

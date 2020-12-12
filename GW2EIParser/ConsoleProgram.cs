@@ -22,9 +22,9 @@ namespace GW2EIParser
                 sizeSortedLogFiles.Sort((x, y) =>
                 {
                     var fInfoX = new FileInfo(x);
-                    var xValue = fInfoX.Exists ? fInfoX.Length : 0;
+                    long xValue = fInfoX.Exists ? fInfoX.Length : 0;
                     var fInfoY = new FileInfo(y);
-                    var yValue = fInfoY.Exists ? fInfoY.Length : 0;
+                    long yValue = fInfoY.Exists ? fInfoY.Length : 0;
                     return xValue.CompareTo(yValue);
                 });
                 int index = 0;

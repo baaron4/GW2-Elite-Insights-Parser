@@ -365,7 +365,7 @@ namespace GW2EIEvtcParser.EIData
                         for (int i = 0; i < phases.Count; i++)
                         {
                             PhaseData phase = phases[i];
-                            var value = simul.GetClampedDuration(phase.Start, phase.End);
+                            long value = simul.GetClampedDuration(phase.Start, phase.End);
                             if (value == 0)
                             {
                                 continue;
@@ -573,7 +573,7 @@ namespace GW2EIEvtcParser.EIData
             }
             CastLogs.Sort((x, y) =>
             {
-                var compare = x.Time.CompareTo(y.Time);
+                int compare = x.Time.CompareTo(y.Time);
                 if (compare == 0 && x.SkillId != y.SkillId)
                 {
                     if (y.Skill.IsSwap)

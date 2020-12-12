@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.EIData
         {
             Dictionary<AgentItem, BuffDistributionItem> distrib = distribs.GetDistrib(buffID);
             AgentItem agent = Src;
-            var value = GetValue(start, end);
+            long value = GetValue(start, end);
             if (value == 0)
             {
                 return;
