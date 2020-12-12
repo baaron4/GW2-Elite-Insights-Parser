@@ -76,7 +76,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                if (i%2 == 0)
+                if (i % 2 == 0)
                 {
                     phase.Name = "Split " + (i) / 2;
                     var ids = new List<int>

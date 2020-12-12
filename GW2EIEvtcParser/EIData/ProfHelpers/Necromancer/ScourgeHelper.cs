@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.EIData
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
-        {    
+        {
                 new Buff("Sadistic Searing",43626, ParserHelper.Source.Scourge, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/dd/Sadistic_Searing.png"),
         };
     }

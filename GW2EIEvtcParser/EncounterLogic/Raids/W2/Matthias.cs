@@ -175,7 +175,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     combatData.AddRange(copies);
                     combatData.Sort((x, y) => x.Time.CompareTo(y.Time));
                 }
-            }       
+            }
             ComputeFightTargets(agentData, combatData);
             Targets.ForEach(x =>
             {

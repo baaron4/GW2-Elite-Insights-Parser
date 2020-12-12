@@ -52,7 +52,7 @@ namespace GW2EIEvtcParser.EIData
                     }
                 }
             }
-            
+
             return res;
         }
     }

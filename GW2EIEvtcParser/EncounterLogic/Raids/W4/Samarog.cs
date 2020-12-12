@@ -71,15 +71,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                if (i%2 == 0)
+                if (i % 2 == 0)
                 {
-                    phase.Name = "Split " + i/2;
+                    phase.Name = "Split " + i / 2;
                     var ids = new List<int>
                     {
                        (int) ArcDPSEnums.TrashID.Rigom,
                        (int) ArcDPSEnums.TrashID.Guldhem
                     };
-                    AddTargetsToPhase(phase, ids, log); 
+                    AddTargetsToPhase(phase, ids, log);
                     foreach (NPC t in phase.Targets)
                     {
                         t.OverrideName(t.Character + " " + i / 2);

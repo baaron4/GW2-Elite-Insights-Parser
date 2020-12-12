@@ -218,7 +218,7 @@ namespace GW2EIBuilders.JsonModels
             // Health
             if (settings.RawFormatTimelineArrays)
             {
-                HealthPercents = actor.GetHealthUpdates(log).Select(x => new double[2] {x.Start, x.Value }).ToList();
+                HealthPercents = actor.GetHealthUpdates(log).Select(x => new double[2] { x.Start, x.Value }).ToList();
             }
         }
 

@@ -104,7 +104,7 @@ namespace GW2EIParser
                 if (long.TryParse(value, out long res))
                 {
                     Properties.Settings.Default[name] = res;
-                } 
+                }
                 else
                 {
                     Console.WriteLine("Warning: Setting \"" + name + "\" expected type \"" + type.Name);

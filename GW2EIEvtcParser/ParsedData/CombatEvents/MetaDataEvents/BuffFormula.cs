@@ -265,7 +265,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return _solvedDescription;
             }
-            var stat1 = GetAttributeString(Attr1);
+            string stat1 = GetAttributeString(Attr1);
             if (Attr1 == Unknown)
             {
                 stat1 += " " + ByteAttr1;
@@ -277,7 +277,7 @@ namespace GW2EIEvtcParser.ParsedData
                     stat1 += " (" + buff.Name + ")";
                 }
             }
-            var stat2 = GetAttributeString(Attr2);
+            string stat2 = GetAttributeString(Attr2);
             if (Attr2 == Unknown)
             {
                 stat2 += " " + ByteAttr2;

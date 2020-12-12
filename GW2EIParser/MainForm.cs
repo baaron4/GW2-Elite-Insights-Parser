@@ -339,9 +339,10 @@ namespace GW2EIParser
             {
                 auxList.Add(val);
             }
-            auxList.Sort((form1, form2) => {
-                var right = new FileInfo(form2.InputFile).Name;
-                var left = new FileInfo(form1.InputFile).Name;
+            auxList.Sort((form1, form2) =>
+            {
+                string right = new FileInfo(form2.InputFile).Name;
+                string left = new FileInfo(form1.InputFile).Name;
                 return _fileNameSorting * string.Compare(left, right);
             });
             operatorBindingSource.Clear();
@@ -355,7 +356,7 @@ namespace GW2EIParser
         {
             if (e.RowIndex < 0)
             {
-                switch(e.ColumnIndex)
+                switch (e.ColumnIndex)
                 {
                     case 0:
                         _fileNameSorting *= -1;

@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EIData
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
-        { 
+        {
                 new Buff("Cooling Vapor",46444, ParserHelper.Source.Holosmith, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b1/Coolant_Blast.png"),
                 new Buff("Photon Wall Deployed",46094, ParserHelper.Source.Holosmith, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/ea/Photon_Wall.png"),
                 new Buff("Spectrum Shield",43066, ParserHelper.Source.Holosmith, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/29/Spectrum_Shield.png"),

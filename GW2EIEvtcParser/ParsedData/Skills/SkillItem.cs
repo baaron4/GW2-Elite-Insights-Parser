@@ -200,7 +200,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         public bool IsSwap => ID == WeaponSwapId || ElementalistHelper.IsElementalSwap(ID) || RevenantHelper.IsLegendSwap(ID);
         public string Name { get; }
-        public string Icon { get;}
+        public string Icon { get; }
         private readonly WeaponDescriptor _weaponDescriptor;
         internal GW2APISkill ApiSkill { get; }
         private SkillInfoEvent _skillInfo { get; set; }

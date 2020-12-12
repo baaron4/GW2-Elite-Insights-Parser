@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser;
+using GW2EIEvtcParser.ParsedData;
 using Newtonsoft.Json;
 
 namespace GW2EIBuilders.JsonModels

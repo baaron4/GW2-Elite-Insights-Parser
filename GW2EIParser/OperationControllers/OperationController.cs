@@ -61,7 +61,7 @@ namespace GW2EIParser
             Status = StatusList.LastOrDefault() ?? "";
             foreach (string generatedFile in GeneratedFiles)
             {
-                Console.WriteLine("Generated" +$": {generatedFile}" + Environment.NewLine);
+                Console.WriteLine("Generated" + $": {generatedFile}" + Environment.NewLine);
             }
             Console.WriteLine(prefix + $"{InputFile}: {Status}" + Environment.NewLine);
         }

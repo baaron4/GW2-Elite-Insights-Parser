@@ -84,7 +84,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 long fightDuration = log.FightData.FightEnd;
                 var thresholds = new List<double> { 80, 60, 40, 20, 0 };
-                var numberNames = new string[] { "First Number", "Second Number", "Third Number", "Fourth Number" };
+                string[] numberNames = new string[] { "First Number", "Second Number", "Third Number", "Fourth Number" };
                 // Fifth number would the equivalent of full fight phase
                 for (int j = 0; j < thresholds.Count - 1; j++)
                 {
@@ -101,7 +101,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 phases.AddRange(GetPhasesByHealthPercent(log, mainTarget, thresholds));
             }
-            
+
             return phases;
         }
 

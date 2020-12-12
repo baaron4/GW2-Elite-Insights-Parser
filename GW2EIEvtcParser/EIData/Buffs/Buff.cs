@@ -35,15 +35,16 @@ namespace GW2EIEvtcParser.EIData
         public const long EarthDual = 44857;
 
         // Boon
-        public enum BuffNature { 
-            Condition, 
-            Boon, 
-            OffensiveBuffTable, 
+        public enum BuffNature
+        {
+            Condition,
+            Boon,
+            OffensiveBuffTable,
             DefensiveBuffTable,
             SupportBuffTable,
-            GraphOnlyBuff, 
-            Consumable, 
-            Unknow 
+            GraphOnlyBuff,
+            Consumable,
+            Unknow
         };
 
         public enum BuffType
@@ -59,8 +60,10 @@ namespace GW2EIEvtcParser.EIData
         public BuffNature Nature { get; }
         public ParserHelper.Source Source { get; }
         private BuffStackType _stackType { get; }
-        public BuffType Type {    
-            get {
+        public BuffType Type
+        {
+            get
+            {
                 switch (_stackType)
                 {
                     case BuffStackType.Queue:
@@ -193,9 +196,9 @@ namespace GW2EIEvtcParser.EIData
             }
             switch (type)
             {
-                case BuffType.Intensity: 
+                case BuffType.Intensity:
                     return new BuffSimulatorIDIntensity(log);
-                case BuffType.Duration: 
+                case BuffType.Duration:
                     return new BuffSimulatorIDDuration(log);
                 case BuffType.Unknown:
                 default:

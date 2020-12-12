@@ -44,7 +44,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     res.Add(new Segment(0, end, lastValue));
                 }
-                else 
+                else
                 {
                     res.Add(new Segment(res.Last().End, end, lastValue));
                 }

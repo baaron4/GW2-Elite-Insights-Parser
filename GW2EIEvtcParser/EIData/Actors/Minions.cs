@@ -1,7 +1,7 @@
-﻿using GW2EIEvtcParser.ParsedData;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -39,12 +39,12 @@ namespace GW2EIEvtcParser.EIData
                 if (DamageLogsByDst.TryGetValue(target.AgentItem, out List<AbstractHealthDamageEvent> list))
                 {
                     return list.Where(x => x.Time >= start && x.Time <= end).ToList();
-                } 
+                }
                 else
                 {
                     return new List<AbstractHealthDamageEvent>();
                 }
-            }    
+            }
             return DamageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
@@ -64,13 +64,13 @@ namespace GW2EIEvtcParser.EIData
                 if (BreakbarDamageLogsByDst.TryGetValue(target.AgentItem, out List<AbstractBreakbarDamageEvent> list))
                 {
                     return list.Where(x => x.Time >= start && x.Time <= end).ToList();
-                } 
+                }
                 else
                 {
                     return new List<AbstractBreakbarDamageEvent>();
                 }
             }
-            
+
             return BreakbarDamageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
@@ -151,7 +151,7 @@ namespace GW2EIEvtcParser.EIData
         public List<List<Segment>> GetLifeSpanSegments(ParsedEvtcLog log)
         {
             var minionsSegments = new List<List<Segment>>();
-            var fightDur = log.FightData.FightEnd;
+            long fightDur = log.FightData.FightEnd;
             foreach (NPC minion in _minionList)
             {
                 var minionSegments = new List<Segment>();

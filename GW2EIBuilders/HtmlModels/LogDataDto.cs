@@ -138,7 +138,7 @@ namespace GW2EIBuilders.HtmlModels
             return false;
         }
 
-        public static LogDataDto BuildLogData(ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills,Dictionary<long, Buff> usedBuffs, HashSet<DamageModifier> usedDamageMods, bool cr, bool light, Version parserVersion, string[] uploadLinks)
+        public static LogDataDto BuildLogData(ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, HashSet<DamageModifier> usedDamageMods, bool cr, bool light, Version parserVersion, string[] uploadLinks)
         {
             GeneralStatistics statistics = log.Statistics;
             log.UpdateProgressWithCancellationCheck("HTML: building Log Data");

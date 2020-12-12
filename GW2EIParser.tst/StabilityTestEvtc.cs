@@ -100,7 +100,7 @@ namespace GW2EIParser.tst
         public void TestEvtc()
         {
 
-        string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
+            string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
             if (!Directory.Exists(testLocation))
             {
                 Directory.CreateDirectory(testLocation);
