@@ -248,6 +248,17 @@ namespace GW2EIEvtcParser
             return Enum.IsDefined(typeof(BuffCategory), bt) ? (BuffCategory)bt : BuffCategory.Unknown;
         }
 
+        public enum SkillAction : byte
+        {
+            EffectHappened = 4,
+            AnimationCompleted = 5,
+            Unknown
+        }
+        internal static SkillAction GetSkillAction(byte bt)
+        {
+            return Enum.IsDefined(typeof(SkillAction), bt) ? (SkillAction)bt : SkillAction.Unknown;
+        }
+
         // Friend of for
 
         public enum IFF : byte
