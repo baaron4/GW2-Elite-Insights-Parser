@@ -149,20 +149,23 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             else
             {
-                CombatItem impactInitialEnd = combatData.Find(x => x.IsActivation.EndCasting() && (x.Time - fightData.FightOffset) < 2000 && x.SrcAgent == target.Agent && x.SkillID == 38102);
-                // Action 4 from skill dump for 38102
-                if (impactInitialEnd != null)
+                // get first end casting
+                CombatItem firstCastEnd = combatData.FirstOrDefault(x => x.IsActivation.EndCasting() && (x.Time - fightData.FightOffset) < 2000 && x.SrcAgent == target.Agent);
+                // It has to Impact(38102), otherwise anomaly, player may have joined mid fight, do nothing
+                if (firstCastEnd != null && firstCastEnd.SkillID == 38102)
                 {
+                    // Action 4 from skill dump for 38102
+
                     // Adds around 10 to 15 ms diff compared to buff loss
-                    if (impactInitialEnd.BuffDmg > 0)
+                    if (firstCastEnd.BuffDmg > 0)
                     {
-                        var nonScaledToScaledRatio = (double)impactInitialEnd.Value / impactInitialEnd.BuffDmg;
-                        fightData.OverrideOffset(impactInitialEnd.Time - impactInitialEnd.Value + (long)Math.Round(nonScaledToScaledRatio * 1025) - 1);
+                        var nonScaledToScaledRatio = (double)firstCastEnd.Value / firstCastEnd.BuffDmg;
+                        fightData.OverrideOffset(firstCastEnd.Time - firstCastEnd.Value + (long)Math.Round(nonScaledToScaledRatio * 1025) - 1);
                     }
                     // Adds around 15 to 20 ms diff compared to buff loss
                     else
                     {
-                        fightData.OverrideOffset(impactInitialEnd.Time - impactInitialEnd.Value + 1025 - 1);
+                        fightData.OverrideOffset(firstCastEnd.Time - firstCastEnd.Value + 1025 - 1);
                     }
                 }
             }
