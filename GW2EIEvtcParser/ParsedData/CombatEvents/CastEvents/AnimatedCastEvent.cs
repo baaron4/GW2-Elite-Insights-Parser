@@ -46,8 +46,8 @@ namespace GW2EIEvtcParser.ParsedData
                         Status = AnimationStatus.Full;
                         break;
                     case ArcDPSEnums.Activation.CancelFire:
-                        int nonScaledExpectedDuration = (int)Math.Round(ExpectedDuration / nonScaledToScaledRatio);
-                        SavedDuration = Math.Max(nonScaledExpectedDuration - ActualDuration, 0);
+                        int scaledExpectedDuration = (int)Math.Round(ExpectedDuration / nonScaledToScaledRatio);
+                        SavedDuration = Math.Max(scaledExpectedDuration - ActualDuration, 0);
                         Status = AnimationStatus.Reduced;
                         break;
                 }
