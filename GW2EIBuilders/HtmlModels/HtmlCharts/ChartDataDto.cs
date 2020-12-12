@@ -61,6 +61,7 @@ namespace GW2EIBuilders.HtmlModels
                 {
                     phaseData.TargetsHealthStatesForCR = new List<List<object[]>>();
                     phaseData.TargetsBreakbarPercentStatesForCR = new List<List<object[]>>();
+                    phaseData.TargetsBarrierStatesForCR = new List<List<object[]>>();
                     foreach (NPC target in log.FightData.Logic.Targets)
                     {
                         phaseData.TargetsHealthStatesForCR.Add(BuildHealthStates(log, target, phases[0], false));
