@@ -58,6 +58,40 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (11774, 4480, 14078, 5376));
         }
 
+        internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+        {
+            List<PhaseData> phases = GetInitialPhase(log);
+            NPC cairn = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Cairn);
+            if (cairn == null)
+            {
+                throw new InvalidOperationException("Cairn not found");
+            }
+            phases[0].Targets.Add(cairn);
+            if (!requirePhases)
+            {
+                return phases;
+            }
+            BuffApplyEvent enrageApply = log.CombatData.GetBuffData(37675).OfType<BuffApplyEvent>().FirstOrDefault(x => x.To == cairn.AgentItem);
+            if (enrageApply != null)
+            {
+                var normalPhase = new PhaseData(0, enrageApply.Time)
+                {
+                    Name = "Calm"
+                };
+                normalPhase.Targets.Add(cairn);
+
+                var enragePhase = new PhaseData(enrageApply.Time + 1, log.FightData.FightEnd)
+                {
+                    Name = "Angry"
+                };
+                enragePhase.Targets.Add(cairn);
+
+                phases.Add(normalPhase);
+                phases.Add(enragePhase);
+            }
+            return phases;
+        }
+
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
@@ -108,11 +142,33 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Cairn not found");
             }
-            // spawn protection loss
+            // spawn protection loss -- most reliable
             CombatItem spawnProtectionLoss = combatData.Find(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.IsBuff != 0 && x.SrcAgent == target.Agent && x.SkillID == 34113);
             if (spawnProtectionLoss != null)
             {
-                fightData.OverrideOffset(spawnProtectionLoss.Time);
+                fightData.OverrideOffset(spawnProtectionLoss.Time - 1);
+            }
+            else
+            {
+                // get first end casting
+                CombatItem firstCastEnd = combatData.FirstOrDefault(x => x.IsActivation.EndCasting() && (x.Time - fightData.FightOffset) < 2000 && x.SrcAgent == target.Agent);
+                // It has to Impact(38102), otherwise anomaly, player may have joined mid fight, do nothing
+                if (firstCastEnd != null && firstCastEnd.SkillID == 38102)
+                {
+                    // Action 4 from skill dump for 38102
+                    long actionHappened = 1025;
+                    // Adds around 10 to 15 ms diff compared to buff loss
+                    if (firstCastEnd.BuffDmg > 0)
+                    {
+                        var nonScaledToScaledRatio = (double)firstCastEnd.Value / firstCastEnd.BuffDmg;
+                        fightData.OverrideOffset(firstCastEnd.Time - firstCastEnd.Value + (long)Math.Round(nonScaledToScaledRatio * actionHappened) - 1);
+                    }
+                    // Adds around 15 to 20 ms diff compared to buff loss
+                    else
+                    {
+                        fightData.OverrideOffset(firstCastEnd.Time - firstCastEnd.Value + actionHappened - 1);
+                    }
+                }
             }
             return fightData.FightOffset;
         }

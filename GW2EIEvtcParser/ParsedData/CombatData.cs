@@ -146,9 +146,9 @@ namespace GW2EIEvtcParser.ParsedData
                 _damageData[a].Sort((x, y) => x.Time.CompareTo(y.Time));
             }
         }
-        private void EICastParse(List<Player> players, SkillData skillData, AgentData agentData)
+        private void EICastParse(List<Player> players, SkillData skillData, FightData fightData, AgentData agentData)
         {
-            var toAdd = new List<AbstractCastEvent>();
+            List<AbstractCastEvent> toAdd = fightData.Logic.SpecialCastEventProcess(_animatedCastData, _weaponSwapData, _castDataById, skillData);
             toAdd.AddRange(ProfHelper.ComputeInstantCastEvents(players, this, skillData, agentData));
             //
             var castIDsToSort = new HashSet<long>();
@@ -291,7 +291,7 @@ namespace GW2EIEvtcParser.ParsedData
             operation.UpdateProgressWithCancellationCheck("Creating Custom Damage Events");
             EIDamageParse(skillData, fightData);
             operation.UpdateProgressWithCancellationCheck("Creating Custom Cast Events");
-            EICastParse(players, skillData, agentData);
+            EICastParse(players, skillData, fightData, agentData);
             operation.UpdateProgressWithCancellationCheck("Creating Custom Status Events");
             EIMetaAndStatusParse(fightData);
             // master attachements

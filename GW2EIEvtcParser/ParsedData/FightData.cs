@@ -228,7 +228,7 @@ namespace GW2EIEvtcParser.ParsedData
                 _phases.RemoveAll(x => x.DurationInMS < ParserHelper.PhaseTimeLimit);
                 _phases.Sort((x, y) =>
                 {
-                    var startCompare = x.Start.CompareTo(y.Start);
+                    int startCompare = x.Start.CompareTo(y.Start);
                     if (startCompare == 0)
                     {
                         return -x.DurationInMS.CompareTo(y.DurationInMS);

@@ -67,7 +67,7 @@ namespace GW2EIEvtcParser
             IsOffcycle = isOffcycle;
             Pad = pad;
             // break pad
-            var pads = BitConverter.GetBytes(Pad);
+            byte[] pads = BitConverter.GetBytes(Pad);
             Pad1 = pads[0];
             Pad2 = pads[1];
             Pad3 = pads[2];

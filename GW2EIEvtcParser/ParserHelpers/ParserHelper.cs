@@ -14,22 +14,6 @@ namespace GW2EIEvtcParser
         // use this for "null" in AbstractActor dictionaries
         internal static NPC _nullActor = new NPC(_unknownAgent);
 
-        internal static void SafeSkip(Stream stream, long bytesToSkip)
-        {
-            if (stream.CanSeek)
-            {
-                stream.Seek(bytesToSkip, SeekOrigin.Current);
-            }
-            else
-            {
-                while (bytesToSkip > 0)
-                {
-                    stream.ReadByte();
-                    --bytesToSkip;
-                }
-            }
-        }
-
 
         internal const int PollingRate = 150;
 
@@ -606,25 +590,6 @@ namespace GW2EIEvtcParser
                 }
             }
             return false;
-        }
-
-
-        internal static string GetString(Stream stream, int length, bool nullTerminated = true)
-        {
-            byte[] bytes = new byte[length];
-            stream.Read(bytes, 0, length);
-            if (nullTerminated)
-            {
-                for (int i = 0; i < length; ++i)
-                {
-                    if (bytes[i] == 0)
-                    {
-                        length = i;
-                        break;
-                    }
-                }
-            }
-            return System.Text.Encoding.UTF8.GetString(bytes, 0, length);
         }
     }
 }

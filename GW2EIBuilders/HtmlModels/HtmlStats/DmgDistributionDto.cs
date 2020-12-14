@@ -30,12 +30,12 @@ namespace GW2EIBuilders.HtmlModels
                     glance = 0,
                     shieldDamage = 0;
             bool IsIndirectDamage = false;
-            foreach (AbstractHealthDamageEvent dl in entry.Value.Where(x => !x.DoubleProcHit))
+            foreach (AbstractHealthDamageEvent dl in entry.Value)
             {
                 IsIndirectDamage = IsIndirectDamage || dl is NonDirectHealthDamageEvent;
                 int curdmg = dl.HealthDamage;
                 totaldamage += curdmg;
-                hits++;
+                hits += dl.DoubleProcHit ? 0 : 1;
                 if (dl.HasHit)
                 {
                     if (curdmg < mindamage) { mindamage = curdmg; }

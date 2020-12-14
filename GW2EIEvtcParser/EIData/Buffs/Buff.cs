@@ -459,6 +459,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Unbridled Chaos", 56467, ParserHelper.Source.FightSpecific, BuffStackType.Stacking, 3, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/74/Unbridled_Chaos.png"),
                 // Cairn        
                 new Buff("Shared Agony", 38049, ParserHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/53/Shared_Agony.png"),
+                new Buff("Enraged (Cairn)", 37675, ParserHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png"),
                 new Buff("Unseen Burden", 38153, ParserHelper.Source.FightSpecific, BuffStackType.Stacking , 99, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/b9/Unseen_Burden.png"),
                 // Ai, Keeper of the Peak
                 new Buff("Tidal Barrier", 61402, ParserHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b1/Primed_Bottle.png"),
