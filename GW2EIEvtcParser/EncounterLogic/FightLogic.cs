@@ -469,7 +469,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal virtual long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            return fightData.FightOffset;
+            return fightData.LogStart;
         }
 
         internal virtual void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)

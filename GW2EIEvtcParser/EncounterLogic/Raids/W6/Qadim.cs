@@ -10,7 +10,6 @@ namespace GW2EIEvtcParser.EncounterLogic
 {
     internal class Qadim : RaidLogic
     {
-        private int _startOffset = 0;
 
         public Qadim(int triggerID) : base(triggerID)
         {
@@ -159,15 +158,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem sanityCheckCast = combatData.FirstOrDefault(x => (x.SkillID == 52528 || x.SkillID == 52333 || x.SkillID == 58814) && x.IsActivation.StartCasting());
             if (startCast == null || sanityCheckCast == null)
             {
-                return fightData.FightOffset;
+                return fightData.LogStart;
             }
             // sanity check
             if (sanityCheckCast.Time - startCast.Time > 0)
             {
-                _startOffset = -(int)(startCast.Time - fightData.FightOffset);
-                fightData.OverrideOffset(startCast.Time);
+                return startCast.Time;
             }
-            return fightData.FightOffset;
+            return fightData.LogStart;
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -641,13 +639,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Proper skipping of phases (if even possible) is not implemented.
             // Right now transitioning to another state while still moving behaves weirdly.
             // Interpolating to find the position to stop in would be necessary.
-
+            int startOffset = -(int)log.FightData.FightStartOffset;
             (int start, int duration, (int x, int y, int z, double angle, double opacity)[] platforms)[] movements =
             {
                 (
                     // Initial position, all platforms tightly packed
 
-                    _startOffset, 0, new[]
+                    startOffset, 0, new[]
                     {
                         (xLeftLeftLeft, yMid, zDefault, 0.0, 1.0),
                         (xLeftLeft, yUpUp, zDefault, Math.PI, 1.0),
@@ -665,7 +663,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ),
                 (
                     // Hydra phase, all platforms have a small gap between them
-                    _startOffset, 12000, new[]
+                    startOffset, 12000, new[]
                     {
                         (xGapsLeftLeftLeft, yMid, zDefault, 0.0, 1.0),
                         (xGapsLeftLeft, yGapsUpUp, zDefault, Math.PI, 1.0),

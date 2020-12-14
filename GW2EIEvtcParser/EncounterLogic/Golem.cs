@@ -45,10 +45,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcAgent == pov.SrcAgent && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat);
                 if (enterCombat != null)
                 {
-                    fightData.OverrideOffset(enterCombat.Time);
+                    return enterCombat.Time;
                 }
             }
-            return fightData.FightOffset;
+            return fightData.LogStart;
         }
 
         internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)

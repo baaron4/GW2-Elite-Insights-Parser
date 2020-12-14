@@ -758,6 +758,7 @@ namespace GW2EIEvtcParser
             {
                 a.OverrideAwareTimes(a.FirstAware - offset, a.LastAware - offset);
             }
+            _fightData.ApplyOffset(offset);
         }
 
         /// <summary>

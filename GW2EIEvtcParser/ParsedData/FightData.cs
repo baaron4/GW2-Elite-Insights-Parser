@@ -11,9 +11,13 @@ namespace GW2EIEvtcParser.ParsedData
         private List<PhaseData> _phases = new List<PhaseData>();
         public int TriggerID { get; }
         public FightLogic Logic { get; }
-        public long FightOffset { get; private set; }
         public long FightStart { get; } = 0;
         public long FightEnd { get; private set; } = long.MaxValue;
+
+        public long LogStart { get; private set; }
+        public long LogEnd { get; private set; }
+
+        public long FightStartOffset => FightStart - LogStart;
         public string DurationString
         {
             get
@@ -36,7 +40,8 @@ namespace GW2EIEvtcParser.ParsedData
         // Constructors
         internal FightData(int id, AgentData agentData, EvtcParserSettings parserSettings, long start, long end)
         {
-            FightOffset = start;
+            LogStart = start;
+            LogEnd = end;
             FightEnd = end - start;
             TriggerID = id;
             switch (ArcDPSEnums.GetTargetID(id))
@@ -259,10 +264,11 @@ namespace GW2EIEvtcParser.ParsedData
             FightEnd = fightEnd;
         }
 
-        internal void OverrideOffset(long offset)
+        internal void ApplyOffset(long offset)
         {
-            FightEnd += FightOffset - offset;
-            FightOffset = offset;
+            FightEnd += LogStart - offset;
+            LogStart -= offset;
+            LogEnd -= offset;
         }
     }
 }

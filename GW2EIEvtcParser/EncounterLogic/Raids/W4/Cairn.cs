@@ -146,12 +146,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem spawnProtectionLoss = combatData.Find(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.IsBuff != 0 && x.SrcAgent == target.Agent && x.SkillID == 34113);
             if (spawnProtectionLoss != null)
             {
-                fightData.OverrideOffset(spawnProtectionLoss.Time - 1);
+                return spawnProtectionLoss.Time - 1;
             }
             else
             {
                 // get first end casting
-                CombatItem firstCastEnd = combatData.FirstOrDefault(x => x.IsActivation.EndCasting() && (x.Time - fightData.FightOffset) < 2000 && x.SrcAgent == target.Agent);
+                CombatItem firstCastEnd = combatData.FirstOrDefault(x => x.IsActivation.EndCasting() && (x.Time - fightData.LogStart) < 2000 && x.SrcAgent == target.Agent);
                 // It has to Impact(38102), otherwise anomaly, player may have joined mid fight, do nothing
                 if (firstCastEnd != null && firstCastEnd.SkillID == 38102)
                 {
@@ -161,16 +161,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (firstCastEnd.BuffDmg > 0)
                     {
                         var nonScaledToScaledRatio = (double)firstCastEnd.Value / firstCastEnd.BuffDmg;
-                        fightData.OverrideOffset(firstCastEnd.Time - firstCastEnd.Value + (long)Math.Round(nonScaledToScaledRatio * actionHappened) - 1);
+                        return firstCastEnd.Time - firstCastEnd.Value + (long)Math.Round(nonScaledToScaledRatio * actionHappened) - 1;
                     }
                     // Adds around 15 to 20 ms diff compared to buff loss
                     else
                     {
-                        fightData.OverrideOffset(firstCastEnd.Time - firstCastEnd.Value + actionHappened - 1);
+                        return firstCastEnd.Time - firstCastEnd.Value + actionHappened - 1;
                     }
                 }
             }
-            return fightData.FightOffset;
+            return fightData.LogStart;
         }
 
         internal override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
