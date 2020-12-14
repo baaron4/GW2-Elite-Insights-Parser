@@ -93,6 +93,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal AgentItem()
         {
+            UniqueID = AgentCount++;
         }
 
         internal void OverrideType(AgentType type)

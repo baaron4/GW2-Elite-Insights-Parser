@@ -139,17 +139,17 @@ namespace GW2EIEvtcParser.EIData
             return 0;
         }
 
-        public List<AbstractHealthDamageEvent> GetHitDamageLogs(Player p, ParsedEvtcLog log, NPC t, PhaseData phase)
+        public List<AbstractHealthDamageEvent> GetHitDamageLogs(Player p, ParsedEvtcLog log, NPC t, long start, long end)
         {
             switch (_srcType)
             {
                 case DamageType.All:
-                    return _dmgSrc == DamageSource.All ? p.GetHitDamageLogs(t, log, phase) : p.GetJustActorHitDamageLogs(t, log, phase);
+                    return _dmgSrc == DamageSource.All ? p.GetHitDamageLogs(t, log, start, end) : p.GetJustActorHitDamageLogs(t, log, start, end);
                 case DamageType.Condition:
-                    return (_dmgSrc == DamageSource.All ? p.GetHitDamageLogs(t, log, phase) : p.GetJustActorHitDamageLogs(t, log, phase)).Where(x => x.IsCondi(log)).ToList();
+                    return (_dmgSrc == DamageSource.All ? p.GetHitDamageLogs(t, log, start, end) : p.GetJustActorHitDamageLogs(t, log, start, end)).Where(x => x.IsCondi(log)).ToList();
                 case DamageType.Power:
                 default:
-                    return (_dmgSrc == DamageSource.All ? p.GetHitDamageLogs(t, log, phase) : p.GetJustActorHitDamageLogs(t, log, phase)).Where(x => !x.IsCondi(log)).ToList();
+                    return (_dmgSrc == DamageSource.All ? p.GetHitDamageLogs(t, log, start, end) : p.GetJustActorHitDamageLogs(t, log, start, end)).Where(x => !x.IsCondi(log)).ToList();
             }
         }
 

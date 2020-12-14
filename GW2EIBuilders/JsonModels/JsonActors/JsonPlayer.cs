@@ -216,8 +216,8 @@ namespace GW2EIBuilders.JsonModels
                     PhaseData phase = phases[i];
                     if (settings.RawFormatTimelineArrays)
                     {
-                        graph1SDamageList[i] = player.Get1SDamageList(log, i, phase, target);
-                        graph1SBreakbarDamageList[i] = player.Get1SBreakbarDamageList(log, i, phase, target);
+                        graph1SDamageList[i] = player.Get1SDamageList(log, phase.Start, phase.End, target);
+                        graph1SBreakbarDamageList[i] = player.Get1SBreakbarDamageList(log, phase.Start, phase.End, target);
                     }
                     targetDamageDistList[i] = JsonDamageDist.BuildJsonDamageDistList(player.GetDamageLogs(target, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
                 }

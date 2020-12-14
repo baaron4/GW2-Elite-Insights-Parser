@@ -25,7 +25,7 @@ namespace GW2EIEvtcParser.EIData
         // Damage
         protected List<AbstractHealthDamageEvent> DamageLogs { get; set; }
         protected Dictionary<AgentItem, List<AbstractHealthDamageEvent>> DamageLogsByDst { get; set; }
-        private Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractHealthDamageEvent>>> _damageLogsPerPhasePerTarget { get; } = new Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractHealthDamageEvent>>>();
+        private CachingCollection<List<AbstractHealthDamageEvent>> _hitDamageLogsPerPhasePerTarget;
         protected List<AbstractHealthDamageEvent> DamageTakenlogs { get; set; }
         protected Dictionary<AgentItem, List<AbstractHealthDamageEvent>> DamageTakenLogsBySrc { get; set; }
         // Breakbar Damage
@@ -51,17 +51,16 @@ namespace GW2EIEvtcParser.EIData
         /// <summary>
         /// cached method for damage modifiers
         /// </summary>
-        internal List<AbstractHealthDamageEvent> GetHitDamageLogs(AbstractActor target, ParsedEvtcLog log, PhaseData phase)
+        internal List<AbstractHealthDamageEvent> GetHitDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
-            if (!_damageLogsPerPhasePerTarget.TryGetValue(phase, out Dictionary<AbstractActor, List<AbstractHealthDamageEvent>> targetDict))
+            if(_hitDamageLogsPerPhasePerTarget == null)
             {
-                targetDict = new Dictionary<AbstractActor, List<AbstractHealthDamageEvent>>();
-                _damageLogsPerPhasePerTarget[phase] = targetDict;
+                _hitDamageLogsPerPhasePerTarget = new CachingCollection<List<AbstractHealthDamageEvent>>(log);
             }
-            if (!targetDict.TryGetValue(target ?? ParserHelper._nullActor, out List<AbstractHealthDamageEvent> dls))
+            if (!_hitDamageLogsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
             {
-                dls = GetDamageLogs(target, log, phase.Start, phase.End).Where(x => x.HasHit).ToList();
-                targetDict[target ?? ParserHelper._nullActor] = dls;
+                dls = GetDamageLogs(target, log, start, end).Where(x => x.HasHit).ToList();
+                _hitDamageLogsPerPhasePerTarget.Set(start, end, target, dls);
             }
             return dls;
         }

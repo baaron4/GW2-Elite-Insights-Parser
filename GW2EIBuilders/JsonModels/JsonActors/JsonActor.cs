@@ -199,8 +199,9 @@ namespace GW2EIBuilders.JsonModels
                 BreakbarDamage1S = new List<double>[phases.Count];
                 for (int i = 0; i < phases.Count; i++)
                 {
-                    Damage1S[i] = actor.Get1SDamageList(log, i, phases[i], null);
-                    BreakbarDamage1S[i] = actor.Get1SBreakbarDamageList(log, i, phases[i], null);
+                    PhaseData phase = phases[i];
+                    Damage1S[i] = actor.Get1SDamageList(log, phase.Start, phase.End, null);
+                    BreakbarDamage1S[i] = actor.Get1SBreakbarDamageList(log, phase.Start, phase.End, null);
                 }
             }
             if (!log.CombatData.HasBreakbarDamageData)

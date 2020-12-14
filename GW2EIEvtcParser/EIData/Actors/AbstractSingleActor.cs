@@ -18,9 +18,9 @@ namespace GW2EIEvtcParser.EIData
         private List<Dictionary<long, FinalBuffsDictionary>> _buffsDictionary;
         private List<Dictionary<long, FinalBuffsDictionary>> _buffsActiveDictionary;
         // damage list
-        private readonly Dictionary<int, List<int>> _damageList1S = new Dictionary<int, List<int>>();
-        private readonly Dictionary<int, List<double>> _breakbarDamageList1S = new Dictionary<int, List<double>>();
-        private readonly Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractHealthDamageEvent>>> _selfDamageLogsPerPhasePerTarget = new Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractHealthDamageEvent>>>();
+        private CachingCollection<List<int>> _damageList1S;
+        private CachingCollection<List<double>> _breakbarDamageList1S;
+        private CachingCollection<List<AbstractHealthDamageEvent>> _hitSelfDamageLogsPerPhasePerTarget;
         //status
         private List<Segment> _healthUpdates { get; set; }
         private List<Segment> _barrierUpdates { get; set; }
@@ -135,19 +135,23 @@ namespace GW2EIEvtcParser.EIData
 
         // Graph
 
-        public List<int> Get1SDamageList(ParsedEvtcLog log, int phaseIndex, PhaseData phase, AbstractActor target)
+        public List<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, AbstractActor target)
         {
-            ulong targetId = target != null ? target.Agent : 0;
-            int id = (phaseIndex + "_" + targetId + "_1S").GetHashCode();
-            if (_damageList1S.TryGetValue(id, out List<int> res))
+            if (_damageList1S == null)
+            {
+                _damageList1S = new CachingCollection<List<int>>(log);
+            }
+            if (_damageList1S.TryGetValue(start, end, target, out List<int> res))
             {
                 return res;
             }
             var dmgList = new List<int>();
-            List<AbstractHealthDamageEvent> damageLogs = GetDamageLogs(target, log, phase.Start, phase.End);
+            int durationInMS = (int)(end - start);
+            int durationInS = durationInMS / 1000;
+            List<AbstractHealthDamageEvent> damageLogs = GetDamageLogs(target, log, start, end);
             // fill the graph, full precision
             var dmgListFull = new List<int>();
-            for (int i = 0; i <= phase.DurationInMS; i++)
+            for (int i = 0; i <= durationInMS; i++)
             {
                 dmgListFull.Add(0);
             }
@@ -155,7 +159,7 @@ namespace GW2EIEvtcParser.EIData
             int totalDamage = 0;
             foreach (AbstractHealthDamageEvent dl in damageLogs)
             {
-                int time = (int)(dl.Time - phase.Start);
+                int time = (int)(dl.Time - start);
                 // fill
                 for (; totalTime < time; totalTime++)
                 {
@@ -165,42 +169,46 @@ namespace GW2EIEvtcParser.EIData
                 dmgListFull[totalTime] = totalDamage;
             }
             // fill
-            for (; totalTime <= phase.DurationInMS; totalTime++)
+            for (; totalTime <= durationInMS; totalTime++)
             {
                 dmgListFull[totalTime] = totalDamage;
             }
             //
             dmgList.Add(0);
-            for (int i = 1; i <= phase.DurationInS; i++)
+            for (int i = 1; i <= durationInS; i++)
             {
                 dmgList.Add(dmgListFull[1000 * i]);
             }
-            if (phase.DurationInS * 1000 != phase.DurationInMS)
+            if (durationInS * 1000 != durationInMS)
             {
-                int lastDamage = dmgListFull[(int)phase.DurationInMS];
+                int lastDamage = dmgListFull[durationInMS];
                 dmgList.Add(lastDamage);
             }
-            _damageList1S[id] = dmgList;
+            _damageList1S.Set(start, end, target, dmgList);
             return dmgList;
         }
 
-        public List<double> Get1SBreakbarDamageList(ParsedEvtcLog log, int phaseIndex, PhaseData phase, AbstractActor target)
+        public List<double> Get1SBreakbarDamageList(ParsedEvtcLog log,long start, long end, AbstractActor target)
         {
             if (!log.CombatData.HasBreakbarDamageData)
             {
                 return null;
             }
-            ulong targetId = target != null ? target.Agent : 0;
-            int id = (phaseIndex + "_" + targetId + "_1S").GetHashCode();
-            if (_breakbarDamageList1S.TryGetValue(id, out List<double> res))
+            if (_breakbarDamageList1S == null)
+            {
+                _breakbarDamageList1S = new CachingCollection<List<double>>(log);
+            }
+            if (_breakbarDamageList1S.TryGetValue(start, end, target, out List<double> res))
             {
                 return res;
             }
             var brkDmgList = new List<double>();
-            List<AbstractBreakbarDamageEvent> breakbarDamageLogs = GetBreakbarDamageLogs(target, log, phase.Start, phase.End);
+            int durationInMS = (int)(end - start);
+            int durationInS = durationInMS / 1000;     
+            List<AbstractBreakbarDamageEvent> breakbarDamageLogs = GetBreakbarDamageLogs(target, log, start, end);
             // fill the graph, full precision
             var brkDmgListFull = new List<double>();
-            for (int i = 0; i <= phase.DurationInMS; i++)
+            for (int i = 0; i <= durationInMS; i++)
             {
                 brkDmgListFull.Add(0);
             }
@@ -208,7 +216,7 @@ namespace GW2EIEvtcParser.EIData
             double totalDamage = 0;
             foreach (DirectBreakbarDamageEvent dl in breakbarDamageLogs)
             {
-                int time = (int)(dl.Time - phase.Start);
+                int time = (int)(dl.Time - start);
                 // fill
                 for (; totalTime < time; totalTime++)
                 {
@@ -218,22 +226,22 @@ namespace GW2EIEvtcParser.EIData
                 brkDmgListFull[totalTime] = totalDamage;
             }
             // fill
-            for (; totalTime <= phase.DurationInMS; totalTime++)
+            for (; totalTime <= durationInMS; totalTime++)
             {
                 brkDmgListFull[totalTime] = totalDamage;
             }
             //
             brkDmgList.Add(0);
-            for (int i = 1; i <= phase.DurationInS; i++)
+            for (int i = 1; i <= durationInS; i++)
             {
                 brkDmgList.Add(brkDmgListFull[1000 * i]);
             }
-            if (phase.DurationInS * 1000 != phase.DurationInMS)
+            if (durationInS * 1000 != durationInMS)
             {
-                double lastDamage = brkDmgListFull[(int)phase.DurationInMS];
+                double lastDamage = brkDmgListFull[durationInMS];
                 brkDmgList.Add(lastDamage);
             }
-            _breakbarDamageList1S[id] = brkDmgList;
+            _breakbarDamageList1S.Set(start, end, target,brkDmgList);
             return brkDmgList;
         }
 
@@ -913,17 +921,16 @@ namespace GW2EIEvtcParser.EIData
         /// <summary>
         /// cached method for damage modifiers
         /// </summary>
-        internal List<AbstractHealthDamageEvent> GetJustActorHitDamageLogs(AbstractActor target, ParsedEvtcLog log, PhaseData phase)
+        internal List<AbstractHealthDamageEvent> GetJustActorHitDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
-            if (!_selfDamageLogsPerPhasePerTarget.TryGetValue(phase, out Dictionary<AbstractActor, List<AbstractHealthDamageEvent>> targetDict))
+            if (_hitSelfDamageLogsPerPhasePerTarget == null)
             {
-                targetDict = new Dictionary<AbstractActor, List<AbstractHealthDamageEvent>>();
-                _selfDamageLogsPerPhasePerTarget[phase] = targetDict;
+                _hitSelfDamageLogsPerPhasePerTarget = new CachingCollection<List<AbstractHealthDamageEvent>>(log);
             }
-            if (!targetDict.TryGetValue(target ?? ParserHelper._nullActor, out List<AbstractHealthDamageEvent> dls))
+            if (!_hitSelfDamageLogsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
             {
-                dls = GetHitDamageLogs(target, log, phase).Where(x => x.From == AgentItem).ToList();
-                targetDict[target ?? ParserHelper._nullActor] = dls;
+                dls = GetHitDamageLogs(target, log, start, end).Where(x => x.From == AgentItem).ToList();
+                _hitSelfDamageLogsPerPhasePerTarget.Set(start, end, target, dls);
             }
             return dls;
         }

@@ -22,12 +22,12 @@ namespace GW2EIBuilders.HtmlModels
                 {
                     Damage = new PlayerDamageChartDto<int>()
                     {
-                        Total = p.Get1SDamageList(log, phaseIndex, phase, null),
+                        Total = p.Get1SDamageList(log, phase.Start, phase.End, null),
                         Targets = new List<List<int>>()
                     },
                     BreakbarDamage = new PlayerDamageChartDto<double>()
                     {
-                        Total = p.Get1SBreakbarDamageList(log, phaseIndex, phase, null),
+                        Total = p.Get1SBreakbarDamageList(log, phase.Start, phase.End, null),
                         Targets = new List<List<double>>()
                     },
                     HealthStates = ChartDataDto.BuildHealthStates(log, p, phase, true),
@@ -35,8 +35,8 @@ namespace GW2EIBuilders.HtmlModels
                 };
                 foreach (NPC target in phase.Targets)
                 {
-                    pChar.Damage.Targets.Add(p.Get1SDamageList(log, phaseIndex, phase, target));
-                    pChar.BreakbarDamage.Targets.Add(p.Get1SBreakbarDamageList(log, phaseIndex, phase, target));
+                    pChar.Damage.Targets.Add(p.Get1SDamageList(log, phase.Start, phase.End, target));
+                    pChar.BreakbarDamage.Targets.Add(p.Get1SBreakbarDamageList(log, phase.Start, phase.End, target));
                 }
                 list.Add(pChar);
             }
