@@ -129,8 +129,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             var mainPhases = new List<PhaseData>();
-            var quantumQuakes = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == 56035 || x.SkillId == 56381).ToList();
-            AbstractCastEvent boulderBarrage = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd).FirstOrDefault(x => x.SkillId == 56648 && x.Time < 6000);
+            var quantumQuakes = mainTarget.GetCastEvents(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == 56035 || x.SkillId == 56381).ToList();
+            AbstractCastEvent boulderBarrage = mainTarget.GetCastEvents(log, 0, log.FightData.FightEnd).FirstOrDefault(x => x.SkillId == 56648 && x.Time < 6000);
             start = boulderBarrage == null ? 0 : boulderBarrage.EndTime;
             end = 0;
             if (phases.Count > 1)

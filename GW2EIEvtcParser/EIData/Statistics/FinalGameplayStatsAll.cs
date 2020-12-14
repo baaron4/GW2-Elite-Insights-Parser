@@ -58,7 +58,7 @@ namespace GW2EIEvtcParser.EIData
                 return;
             }
             int phaseIndex = log.FightData.GetPhases(log).IndexOf(phase);
-            foreach (AbstractCastEvent cl in actor.GetCastLogs(log, phase.Start, phase.End))
+            foreach (AbstractCastEvent cl in actor.GetCastEvents(log, phase.Start, phase.End))
             {
                 switch (cl.Status)
                 {

@@ -144,12 +144,12 @@ namespace GW2EIEvtcParser.EIData
             switch (_srcType)
             {
                 case DamageType.All:
-                    return _dmgSrc == DamageSource.All ? p.GetHitDamageLogs(t, log, start, end) : p.GetJustActorHitDamageLogs(t, log, start, end);
+                    return _dmgSrc == DamageSource.All ? p.GetHitDamageEvents(t, log, start, end) : p.GetJustActorHitDamageEvents(t, log, start, end);
                 case DamageType.Condition:
-                    return _dmgSrc == DamageSource.All ? p.GetConditionHitDamageLogs(t, log, start, end) : p.GetJustActorConditionHitDamageLogs(t, log, start, end);
+                    return _dmgSrc == DamageSource.All ? p.GetConditionHitDamageEvents(t, log, start, end) : p.GetJustActorConditionHitDamageEvents(t, log, start, end);
                 case DamageType.Power:
                 default:
-                    return _dmgSrc == DamageSource.All ? p.GetPowerHitDamageLogs(t, log, start, end) : p.GetJustActorPowerHitDamageLogs(t, log, start, end);
+                    return _dmgSrc == DamageSource.All ? p.GetPowerHitDamageEvents(t, log, start, end) : p.GetJustActorPowerHitDamageEvents(t, log, start, end);
             }
         }
 

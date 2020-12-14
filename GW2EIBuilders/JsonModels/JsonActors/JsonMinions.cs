@@ -95,14 +95,14 @@ namespace GW2EIBuilders.JsonModels
             {
                 int tot = 0;
                 int shdTot = 0;
-                foreach (AbstractHealthDamageEvent de in minions.GetDamageLogs(null, log, phase.Start, phase.End))
+                foreach (AbstractHealthDamageEvent de in minions.GetDamageEvents(null, log, phase.Start, phase.End))
                 {
                     tot += de.HealthDamage;
                     shdTot = de.ShieldDamage;
                 }
                 totalDamage.Add(tot);
                 totalShieldDamage.Add(shdTot);
-                totalBreakbarDamage.Add(Math.Round(minions.GetBreakbarDamageLogs(null, log, phase.Start, phase.End).Sum(x => x.BreakbarDamage), 1));
+                totalBreakbarDamage.Add(Math.Round(minions.GetBreakbarDamageEvents(null, log, phase.Start, phase.End).Sum(x => x.BreakbarDamage), 1));
             }
             TotalDamage = totalDamage;
             TotalShieldDamage = totalShieldDamage;
@@ -122,14 +122,14 @@ namespace GW2EIBuilders.JsonModels
                     {
                         int tot = 0;
                         int shdTot = 0;
-                        foreach (AbstractHealthDamageEvent de in minions.GetDamageLogs(tar, log, phase.Start, phase.End))
+                        foreach (AbstractHealthDamageEvent de in minions.GetDamageEvents(tar, log, phase.Start, phase.End))
                         {
                             tot += de.HealthDamage;
                             shdTot = de.ShieldDamage;
                         }
                         totalTarDamage.Add(tot);
                         totalTarShieldDamage.Add(shdTot);
-                        totalTarBreakbarDamage.Add(Math.Round(minions.GetBreakbarDamageLogs(tar, log, phase.Start, phase.End).Sum(x => x.BreakbarDamage), 1));
+                        totalTarBreakbarDamage.Add(Math.Round(minions.GetBreakbarDamageEvents(tar, log, phase.Start, phase.End).Sum(x => x.BreakbarDamage), 1));
                     }
                     totalTargetDamage[i] = totalTarDamage;
                     totalTargetShieldDamage[i] = totalTarShieldDamage;
@@ -140,7 +140,7 @@ namespace GW2EIBuilders.JsonModels
                 TotalTargetBreakbarDamage = totalTargetBreakbarDamage;
             }
             //
-            var skillByID = minions.GetIntersectingCastLogs(log, 0, log.FightData.FightEnd).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
+            var skillByID = minions.GetIntersectingCastEvents(log, 0, log.FightData.FightEnd).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             if (skillByID.Any())
             {
                 Rotation = JsonRotation.BuildJsonRotationList(log, skillByID, skillDesc);
@@ -150,7 +150,7 @@ namespace GW2EIBuilders.JsonModels
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                TotalDamageDist[i] = JsonDamageDist.BuildJsonDamageDistList(minions.GetDamageLogs(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
+                TotalDamageDist[i] = JsonDamageDist.BuildJsonDamageDistList(minions.GetDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
             }
             if (!isNPCMinion)
             {
@@ -162,7 +162,7 @@ namespace GW2EIBuilders.JsonModels
                     for (int j = 0; j < phases.Count; j++)
                     {
                         PhaseData phase = phases[j];
-                        TargetDamageDist[i][j] = JsonDamageDist.BuildJsonDamageDistList(minions.GetDamageLogs(target, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
+                        TargetDamageDist[i][j] = JsonDamageDist.BuildJsonDamageDistList(minions.GetDamageEvents(target, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
                     }
                 }
             }

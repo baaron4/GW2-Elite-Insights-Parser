@@ -23,20 +23,20 @@ namespace GW2EIEvtcParser.EIData
             _minionList.Add(minion);
         }
 
-        public override List<AbstractHealthDamageEvent> GetDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override List<AbstractHealthDamageEvent> GetDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
-            if (DamageLogs == null)
+            if (DamageEvents == null)
             {
-                DamageLogs = new List<AbstractHealthDamageEvent>();
+                DamageEvents = new List<AbstractHealthDamageEvent>();
                 foreach (NPC minion in _minionList)
                 {
-                    DamageLogs.AddRange(minion.GetDamageLogs(null, log, 0, log.FightData.FightEnd));
+                    DamageEvents.AddRange(minion.GetDamageEvents(null, log, 0, log.FightData.FightEnd));
                 }
-                DamageLogsByDst = DamageLogs.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+                DamageEventByDst = DamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
             {
-                if (DamageLogsByDst.TryGetValue(target.AgentItem, out List<AbstractHealthDamageEvent> list))
+                if (DamageEventByDst.TryGetValue(target.AgentItem, out List<AbstractHealthDamageEvent> list))
                 {
                     return list.Where(x => x.Time >= start && x.Time <= end).ToList();
                 }
@@ -45,23 +45,23 @@ namespace GW2EIEvtcParser.EIData
                     return new List<AbstractHealthDamageEvent>();
                 }
             }
-            return DamageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
+            return DamageEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public override List<AbstractBreakbarDamageEvent> GetBreakbarDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override List<AbstractBreakbarDamageEvent> GetBreakbarDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
-            if (BreakbarDamageLogs == null)
+            if (BreakbarDamageEvents == null)
             {
-                BreakbarDamageLogs = new List<AbstractBreakbarDamageEvent>();
+                BreakbarDamageEvents = new List<AbstractBreakbarDamageEvent>();
                 foreach (NPC minion in _minionList)
                 {
-                    BreakbarDamageLogs.AddRange(minion.GetBreakbarDamageLogs(null, log, 0, log.FightData.FightEnd));
+                    BreakbarDamageEvents.AddRange(minion.GetBreakbarDamageEvents(null, log, 0, log.FightData.FightEnd));
                 }
-                BreakbarDamageLogsByDst = BreakbarDamageLogs.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+                BreakbarDamageEventsByDst = BreakbarDamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
             {
-                if (BreakbarDamageLogsByDst.TryGetValue(target.AgentItem, out List<AbstractBreakbarDamageEvent> list))
+                if (BreakbarDamageEventsByDst.TryGetValue(target.AgentItem, out List<AbstractBreakbarDamageEvent> list))
                 {
                     return list.Where(x => x.Time >= start && x.Time <= end).ToList();
                 }
@@ -71,7 +71,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
 
-            return BreakbarDamageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
+            return BreakbarDamageEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
         /*public List<DamageLog> getHealingLogs(ParsedEvtcLog log, long start, long end)
@@ -84,68 +84,68 @@ namespace GW2EIEvtcParser.EIData
             return res;
         }*/
 
-        public override List<AbstractHealthDamageEvent> GetDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override List<AbstractHealthDamageEvent> GetDamageTakenEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
-            if (DamageTakenlogs == null)
+            if (DamageTakenEvents == null)
             {
-                DamageTakenlogs = new List<AbstractHealthDamageEvent>();
+                DamageTakenEvents = new List<AbstractHealthDamageEvent>();
                 foreach (NPC minion in _minionList)
                 {
-                    DamageTakenlogs.AddRange(minion.GetDamageTakenLogs(null, log, 0, log.FightData.FightEnd));
+                    DamageTakenEvents.AddRange(minion.GetDamageTakenEvents(null, log, 0, log.FightData.FightEnd));
                 }
-                DamageTakenLogsBySrc = DamageTakenlogs.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+                DamageTakenEventsBySrc = DamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
-            if (target != null && DamageTakenLogsBySrc.TryGetValue(target.AgentItem, out List<AbstractHealthDamageEvent> list))
+            if (target != null && DamageTakenEventsBySrc.TryGetValue(target.AgentItem, out List<AbstractHealthDamageEvent> list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end).ToList();
             }
-            return DamageTakenlogs.Where(x => x.Time >= start && x.Time <= end).ToList();
+            return DamageTakenEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public override List<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override List<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
-            if (BreakbarDamageTakenLogs == null)
+            if (BreakbarDamageTakenEvents == null)
             {
-                BreakbarDamageTakenLogs = new List<AbstractBreakbarDamageEvent>();
+                BreakbarDamageTakenEvents = new List<AbstractBreakbarDamageEvent>();
                 foreach (NPC minion in _minionList)
                 {
-                    BreakbarDamageTakenLogs.AddRange(minion.GetBreakbarDamageTakenLogs(null, log, 0, log.FightData.FightEnd));
+                    BreakbarDamageTakenEvents.AddRange(minion.GetBreakbarDamageTakenEvents(null, log, 0, log.FightData.FightEnd));
                 }
-                BreakbarDamageTakenLogsBySrc = BreakbarDamageTakenLogs.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+                BreakbarDamageTakenEventsBySrc = BreakbarDamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
-            if (target != null && BreakbarDamageTakenLogsBySrc.TryGetValue(target.AgentItem, out List<AbstractBreakbarDamageEvent> list))
+            if (target != null && BreakbarDamageTakenEventsBySrc.TryGetValue(target.AgentItem, out List<AbstractBreakbarDamageEvent> list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end).ToList();
             }
-            return BreakbarDamageTakenLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
+            return BreakbarDamageTakenEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        private void InitCastLogs(ParsedEvtcLog log)
+        private void InitCastEvents(ParsedEvtcLog log)
         {
-            CastLogs = new List<AbstractCastEvent>();
+            CastEvents = new List<AbstractCastEvent>();
             foreach (NPC minion in _minionList)
             {
-                CastLogs.AddRange(minion.GetCastLogs(log, 0, log.FightData.FightEnd));
+                CastEvents.AddRange(minion.GetCastEvents(log, 0, log.FightData.FightEnd));
             }
-            CastLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
+            CastEvents.Sort((x, y) => x.Time.CompareTo(y.Time));
         }
 
-        public override List<AbstractCastEvent> GetCastLogs(ParsedEvtcLog log, long start, long end)
+        public override List<AbstractCastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end)
         {
-            if (CastLogs == null)
+            if (CastEvents == null)
             {
-                InitCastLogs(log);
+                InitCastEvents(log);
             }
-            return CastLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
+            return CastEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public override List<AbstractCastEvent> GetIntersectingCastLogs(ParsedEvtcLog log, long start, long end)
+        public override List<AbstractCastEvent> GetIntersectingCastEvents(ParsedEvtcLog log, long start, long end)
         {
-            if (CastLogs == null)
+            if (CastEvents == null)
             {
-                InitCastLogs(log);
+                InitCastEvents(log);
             }
-            return CastLogs.Where(x => KeepIntersectingCastLog(x, start, end)).ToList();
+            return CastEvents.Where(x => KeepIntersectingCastLog(x, start, end)).ToList();
         }
 
         public List<List<Segment>> GetLifeSpanSegments(ParsedEvtcLog log)

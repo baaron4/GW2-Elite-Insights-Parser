@@ -76,7 +76,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (downPour != null)
                 {
                     phases.Add(new PhaseData(heatWave.Time, downPour.Time - 1));
-                    List<AbstractCastEvent> castLogs = mainTarget.GetCastLogs(log, 0, log.FightData.FightEnd);
+                    List<AbstractCastEvent> castLogs = mainTarget.GetCastEvents(log, 0, log.FightData.FightEnd);
                     AbstractCastEvent abo = castLogs.Find(x => x.SkillId == 34427);
                     if (abo != null)
                     {
@@ -209,7 +209,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
+            List<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)

@@ -20,15 +20,15 @@ namespace GW2EIEvtcParser.EIData
 
         internal FinalDefenses(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor from)
         {
-            List<AbstractHealthDamageEvent> damageLogs = actor.GetDamageTakenLogs(from, log, start, end);
+            List<AbstractHealthDamageEvent> damageLogs = actor.GetDamageTakenEvents(from, log, start, end);
 
             DamageTaken = damageLogs.Sum(x => (long)x.HealthDamage);
-            BreakbarDamageTaken = Math.Round(actor.GetBreakbarDamageTakenLogs(from, log, start, end).Sum(x => x.BreakbarDamage), 1);
+            BreakbarDamageTaken = Math.Round(actor.GetBreakbarDamageTakenEvents(from, log, start, end).Sum(x => x.BreakbarDamage), 1);
             BlockedCount = damageLogs.Count(x => x.IsBlocked);
             MissedCount = damageLogs.Count(x => x.IsBlind);
             InvulnedCount = damageLogs.Count(x => x.IsAbsorbed);
             EvadedCount = damageLogs.Count(x => x.IsEvaded);
-            DodgeCount = actor.GetCastLogs(log, start, end).Count(x => x.SkillId == SkillItem.DodgeId || x.SkillId == SkillItem.MirageCloakDodgeId);
+            DodgeCount = actor.GetCastEvents(log, start, end).Count(x => x.SkillId == SkillItem.DodgeId || x.SkillId == SkillItem.MirageCloakDodgeId);
             DamageBarrier = damageLogs.Sum(x => x.ShieldDamage);
             InterruptedCount = damageLogs.Count(x => x.HasInterrupted);
         }

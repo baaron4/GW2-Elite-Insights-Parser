@@ -335,7 +335,7 @@ namespace GW2EIEvtcParser.EIData
             List<DownEvent> downs = log.CombatData.GetDownEvents(AgentItem);
             List<AliveEvent> ups = log.CombatData.GetAliveEvents(AgentItem);
             long lastDeathTime = 0;
-            List<AbstractHealthDamageEvent> damageLogs = GetDamageTakenLogs(null, log, 0, log.FightData.FightEnd);
+            List<AbstractHealthDamageEvent> damageLogs = GetDamageTakenEvents(null, log, 0, log.FightData.FightEnd);
             foreach (DeadEvent dead in deads)
             {
                 _deathRecaps.Add(new DeathRecap(damageLogs, dead, downs, ups, lastDeathTime));
@@ -361,7 +361,7 @@ namespace GW2EIEvtcParser.EIData
                 return;
             }
             string[] weapons = new string[8];//first 2 for first set next 2 for second set, second sets of 4 for underwater
-            List<AbstractCastEvent> casting = GetCastLogs(log, 0, log.FightData.FightEnd);
+            List<AbstractCastEvent> casting = GetCastEvents(log, 0, log.FightData.FightEnd);
             int swapped = -1;
             long swappedTime = 0;
             var swaps = casting.OfType<WeaponSwapEvent>().Select(x =>

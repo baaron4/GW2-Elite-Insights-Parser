@@ -275,7 +275,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         subPhase.Targets.Add(elementalAi);
                         phases.Add(subPhase);
                         long invul762Loss = invul762Losses[i].Time;
-                        AbstractCastEvent castEvt = elementalAi.GetCastLogs(log, eleStart, eleEnd).FirstOrDefault(x => x.SkillId == 61385 && x.Time >= invul762Loss);
+                        AbstractCastEvent castEvt = elementalAi.GetCastEvents(log, eleStart, eleEnd).FirstOrDefault(x => x.SkillId == 61385 && x.Time >= invul762Loss);
                         if (castEvt == null)
                         {
                             break;
@@ -304,13 +304,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                     phases.Add(darkPhase);
                 }
                 // sub phases
-                AbstractCastEvent fearToSorrow = darkAi.GetCastLogs(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillId == 61606);
+                AbstractCastEvent fearToSorrow = darkAi.GetCastEvents(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillId == 61606);
                 if (fearToSorrow != null)
                 {
                     var fearPhase = new PhaseData(darkStart + 1, fearToSorrow.Time, "Fear");
                     fearPhase.Targets.Add(darkAi);
                     phases.Add(fearPhase);
-                    AbstractCastEvent sorrowToGuilt = darkAi.GetCastLogs(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillId == 61602);
+                    AbstractCastEvent sorrowToGuilt = darkAi.GetCastEvents(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillId == 61602);
                     if (sorrowToGuilt != null)
                     {
                         var sorrowPhase = new PhaseData(fearToSorrow.Time + 1, sorrowToGuilt.Time, "Sorrow");

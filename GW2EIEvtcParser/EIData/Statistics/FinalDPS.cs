@@ -30,7 +30,7 @@ namespace GW2EIEvtcParser.EIData
             double phaseDuration = (end - start) / 1000.0;
             int damage;
             double dps = 0.0;
-            List<AbstractHealthDamageEvent> damageLogs = actor.GetDamageLogs(target, log, start, end);
+            List<AbstractHealthDamageEvent> damageLogs = actor.GetDamageEvents(target, log, start, end);
             //DPS
             damage = damageLogs.Sum(x => x.HealthDamage);
 
@@ -57,7 +57,7 @@ namespace GW2EIEvtcParser.EIData
             }
             PowerDps = (int)Math.Round(dps);
             PowerDamage = damage;
-            List<AbstractHealthDamageEvent> actorDamageLogs = actor.GetJustActorDamageLogs(target, log, start, end);
+            List<AbstractHealthDamageEvent> actorDamageLogs = actor.GetJustActorDamageEvents(target, log, start, end);
             // Actor DPS
             damage = actorDamageLogs.Sum(x => x.HealthDamage);
 
@@ -86,8 +86,8 @@ namespace GW2EIEvtcParser.EIData
             ActorPowerDamage = damage;
 
             // Breakbar 
-            BreakbarDamage = Math.Round(actor.GetBreakbarDamageLogs(target, log, start, end).Sum(x => x.BreakbarDamage), 1);
-            ActorBreakbarDamage = Math.Round(actor.GetJustActorBreakbarDamageLogs(target, log, start, end).Sum(x => x.BreakbarDamage), 1);
+            BreakbarDamage = Math.Round(actor.GetBreakbarDamageEvents(target, log, start, end).Sum(x => x.BreakbarDamage), 1);
+            ActorBreakbarDamage = Math.Round(actor.GetJustActorBreakbarDamageEvents(target, log, start, end).Sum(x => x.BreakbarDamage), 1);
         }
     }
 }
