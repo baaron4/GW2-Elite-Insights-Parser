@@ -26,6 +26,8 @@ namespace GW2EIEvtcParser.EIData
         protected List<AbstractHealthDamageEvent> DamageLogs { get; set; }
         protected Dictionary<AgentItem, List<AbstractHealthDamageEvent>> DamageLogsByDst { get; set; }
         private CachingCollection<List<AbstractHealthDamageEvent>> _hitDamageLogsPerPhasePerTarget;
+        private CachingCollection<List<AbstractHealthDamageEvent>> _powerHitDamageLogsPerPhasePerTarget;
+        private CachingCollection<List<AbstractHealthDamageEvent>> _conditionHitDamageLogsPerPhasePerTarget;
         protected List<AbstractHealthDamageEvent> DamageTakenlogs { get; set; }
         protected Dictionary<AgentItem, List<AbstractHealthDamageEvent>> DamageTakenLogsBySrc { get; set; }
         // Breakbar Damage
@@ -61,6 +63,34 @@ namespace GW2EIEvtcParser.EIData
             {
                 dls = GetDamageLogs(target, log, start, end).Where(x => x.HasHit).ToList();
                 _hitDamageLogsPerPhasePerTarget.Set(start, end, target, dls);
+            }
+            return dls;
+        }
+
+        internal List<AbstractHealthDamageEvent> GetConditionHitDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        {
+            if (_conditionHitDamageLogsPerPhasePerTarget == null)
+            {
+                _conditionHitDamageLogsPerPhasePerTarget = new CachingCollection<List<AbstractHealthDamageEvent>>(log);
+            }
+            if (!_conditionHitDamageLogsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
+            {
+                dls = GetHitDamageLogs(target, log, start, end).Where(x => x.IsCondi(log)).ToList();
+                _conditionHitDamageLogsPerPhasePerTarget.Set(start, end, target, dls);
+            }
+            return dls;
+        }
+
+        internal List<AbstractHealthDamageEvent> GetPowerHitDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        {
+            if (_powerHitDamageLogsPerPhasePerTarget == null)
+            {
+                _powerHitDamageLogsPerPhasePerTarget = new CachingCollection<List<AbstractHealthDamageEvent>>(log);
+            }
+            if (!_powerHitDamageLogsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
+            {
+                dls = GetHitDamageLogs(target, log, start, end).Where(x => !x.IsCondi(log)).ToList();
+                _powerHitDamageLogsPerPhasePerTarget.Set(start, end, target, dls);
             }
             return dls;
         }

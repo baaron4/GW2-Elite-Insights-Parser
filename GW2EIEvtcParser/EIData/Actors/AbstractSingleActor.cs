@@ -21,6 +21,8 @@ namespace GW2EIEvtcParser.EIData
         private CachingCollection<List<int>> _damageList1S;
         private CachingCollection<List<double>> _breakbarDamageList1S;
         private CachingCollection<List<AbstractHealthDamageEvent>> _hitSelfDamageLogsPerPhasePerTarget;
+        private CachingCollection<List<AbstractHealthDamageEvent>> _powerHitSelfDamageLogsPerPhasePerTarget;
+        private CachingCollection<List<AbstractHealthDamageEvent>> _conditionHitSelfDamageLogsPerPhasePerTarget;
         //status
         private List<Segment> _healthUpdates { get; set; }
         private List<Segment> _barrierUpdates { get; set; }
@@ -876,6 +878,34 @@ namespace GW2EIEvtcParser.EIData
             {
                 dls = GetHitDamageLogs(target, log, start, end).Where(x => x.From == AgentItem).ToList();
                 _hitSelfDamageLogsPerPhasePerTarget.Set(start, end, target, dls);
+            }
+            return dls;
+        }
+
+        internal List<AbstractHealthDamageEvent> GetJustActorConditionHitDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        {
+            if (_conditionHitSelfDamageLogsPerPhasePerTarget == null)
+            {
+                _conditionHitSelfDamageLogsPerPhasePerTarget = new CachingCollection<List<AbstractHealthDamageEvent>>(log);
+            }
+            if (!_conditionHitSelfDamageLogsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
+            {
+                dls = GetJustActorHitDamageLogs(target, log, start, end).Where(x => x.IsCondi(log)).ToList();
+                _conditionHitSelfDamageLogsPerPhasePerTarget.Set(start, end, target, dls);
+            }
+            return dls;
+        }
+
+        internal List<AbstractHealthDamageEvent> GetJustActorPowerHitDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        {
+            if (_powerHitSelfDamageLogsPerPhasePerTarget == null)
+            {
+                _powerHitSelfDamageLogsPerPhasePerTarget = new CachingCollection<List<AbstractHealthDamageEvent>>(log);
+            }
+            if (!_powerHitSelfDamageLogsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
+            {
+                dls = GetJustActorHitDamageLogs(target, log, start, end).Where(x => !x.IsCondi(log)).ToList();
+                _powerHitSelfDamageLogsPerPhasePerTarget.Set(start, end, target, dls);
             }
             return dls;
         }
