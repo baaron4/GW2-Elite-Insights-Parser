@@ -86,10 +86,10 @@ namespace GW2EIEvtcParser.EIData
                 if (!dict.TryGetValue(Name, out List<DamageModifierStat> list))
                 {
                     var extraDataList = new List<DamageModifierStat>();
-                    for (int i = 0; i < phases.Count; i++)
+                    foreach (PhaseData phase in phases)
                     {
-                        int totalDamage = GetTotalDamage(p, log, target, i);
-                        List<AbstractHealthDamageEvent> typedHits = GetHitDamageLogs(p, log, target, phases[i].Start, phases[i].End);
+                        int totalDamage = GetTotalDamage(p, log, target, phase.Start, phase.End);
+                        List<AbstractHealthDamageEvent> typedHits = GetHitDamageLogs(p, log, target, phase.Start, phase.End);
                         List<double> damages;
                         if (_trackerPlayer != null)
                         {

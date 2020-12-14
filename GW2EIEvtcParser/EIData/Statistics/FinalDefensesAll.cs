@@ -7,7 +7,6 @@ namespace GW2EIEvtcParser.EIData
 {
     public class FinalDefensesAll : FinalDefenses
     {
-        //public long allHealReceived;
         public int DownCount { get; }
         public long DownDuration { get; }
         public int DeadCount { get; }
@@ -15,15 +14,13 @@ namespace GW2EIEvtcParser.EIData
         public int DcCount { get; }
         public long DcDuration { get; }
 
-        public FinalDefensesAll(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor) : base(log, phase, actor, null)
+        public FinalDefensesAll(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor) : base(log, start, end, actor, null)
         {
+
             var dead = new List<(long start, long end)>();
             var down = new List<(long start, long end)>();
             var dc = new List<(long start, long end)>();
             (dead, down, dc) = actor.GetStatus(log);
-            long start = phase.Start;
-            long end = phase.End;
-
             DownCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DownId).Count(x => x.Actor == actor && x.Time >= start && x.Time <= end);
             DeadCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DeathId).Count(x => x.Actor == actor && x.Time >= start && x.Time <= end);
             DcCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DCId).Count(x => x.Actor == actor && x.Time >= start && x.Time <= end);

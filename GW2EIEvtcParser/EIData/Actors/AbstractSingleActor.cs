@@ -32,10 +32,8 @@ namespace GW2EIEvtcParser.EIData
         // Replay
         protected CombatReplay CombatReplay { get; set; }
         // Statistics
-        private List<FinalDPS> _dpsAll;
-        private Dictionary<AbstractSingleActor, List<FinalDPS>> _dpsTarget;
-        private List<FinalDefensesAll> _defenses;
-        private Dictionary<AbstractSingleActor, List<FinalDefenses>> _defensesTarget;
+        private CachingCollection<FinalDPS> _dps;
+        private CachingCollection<FinalDefenses> _defenses;
         private Dictionary<AbstractSingleActor, List<FinalGameplayStats>> _statsTarget;
         private List<FinalGameplayStatsAll> _statsAll;
         private List<FinalSupportAll> _supportAll;
@@ -609,100 +607,47 @@ namespace GW2EIEvtcParser.EIData
 
         // DPS Stats
 
-        public FinalDPS GetDPSAll(ParsedEvtcLog log, int phaseIndex)
+        public FinalDPS GetDPS(AbstractSingleActor target, ParsedEvtcLog log,  long start, long end)
         {
-            return GetDPSAll(log)[phaseIndex];
+            if (_dps == null)
+            {
+                _dps = new CachingCollection<FinalDPS>(log);
+            }
+            if (!_dps.TryGetValue(start, end, target, out FinalDPS value)) 
+            {
+                value = new FinalDPS(log, start, end, this, target);
+                _dps.Set(start, end, target, value);
+            }
+            return value;
         }
 
-        public List<FinalDPS> GetDPSAll(ParsedEvtcLog log)
+        public FinalDPS GetDPS(ParsedEvtcLog log, long start, long end)
         {
-            if (_dpsAll == null)
-            {
-                _dpsAll = new List<FinalDPS>();
-                foreach (PhaseData phase in log.FightData.GetPhases(log))
-                {
-                    _dpsAll.Add(new FinalDPS(log, phase, this, null));
-                }
-            }
-            return _dpsAll;
-        }
-
-        public FinalDPS GetDPSTarget(ParsedEvtcLog log, int phaseIndex, AbstractSingleActor target)
-        {
-            return GetDPSTarget(log, target)[phaseIndex];
-        }
-
-        public List<FinalDPS> GetDPSTarget(ParsedEvtcLog log, AbstractSingleActor target)
-        {
-            if (target == null)
-            {
-                return GetDPSAll(log);
-            }
-            if (_dpsTarget == null)
-            {
-                _dpsTarget = new Dictionary<AbstractSingleActor, List<FinalDPS>>();
-            }
-            if (_dpsTarget.TryGetValue(target, out List<FinalDPS> list))
-            {
-                return list;
-            }
-            _dpsTarget[target] = new List<FinalDPS>();
-            foreach (PhaseData phase in log.FightData.GetPhases(log))
-            {
-                _dpsTarget[target].Add(new FinalDPS(log, phase, this, target));
-            }
-            return _dpsTarget[target];
+            return GetDPS(null, log, start, end);
         }
 
         // Defense Stats
 
-        public FinalDefensesAll GetDefenses(ParsedEvtcLog log, int phaseIndex)
-        {
-            return GetDefenses(log)[phaseIndex];
-        }
-
-        public List<FinalDefensesAll> GetDefenses(ParsedEvtcLog log)
+        public FinalDefenses GetDefenses(AbstractSingleActor target, ParsedEvtcLog log,  long start, long end)
         {
             if (_defenses == null)
             {
-                _defenses = new List<FinalDefensesAll>();
-                foreach (PhaseData phase in log.FightData.GetPhases(log))
-                {
-                    _defenses.Add(new FinalDefensesAll(log, phase, this));
-                }
+                _defenses = new CachingCollection<FinalDefenses>(log);
             }
-            return _defenses;
+            if (!_defenses.TryGetValue(start, end, target, out FinalDefenses value))
+            {
+                value = target != null ? new FinalDefenses(log, start, end, this, target) : new FinalDefensesAll(log, start, end, this);
+                _defenses.Set(start, end, target, value);
+            }
+            return value;
         }
 
-        public FinalDefenses GetDefenses(ParsedEvtcLog log, AbstractSingleActor target, int phaseIndex)
+        public FinalDefensesAll GetDefenses(ParsedEvtcLog log, long start, long end)
         {
-            return GetDefenses(log, target)[phaseIndex];
-        }
-
-        public List<FinalDefenses> GetDefenses(ParsedEvtcLog log, AbstractSingleActor target)
-        {
-            if (_defensesTarget == null)
-            {
-                return new List<FinalDefenses>(GetDefenses(log));
-            }
-            if (_defensesTarget == null)
-            {
-                _defensesTarget = new Dictionary<AbstractSingleActor, List<FinalDefenses>>();
-            }
-            if (_defensesTarget.TryGetValue(target, out List<FinalDefenses> list))
-            {
-                return list;
-            }
-            _defensesTarget[target] = new List<FinalDefenses>();
-            foreach (PhaseData phase in log.FightData.GetPhases(log))
-            {
-                _defensesTarget[target].Add(new FinalDefenses(log, phase, this, target));
-            }
-            return _defensesTarget[target];
+            return GetDefenses(null, log, start, end) as FinalDefensesAll;
         }
 
         // Gameplay Stats
-
 
         public FinalGameplayStatsAll GetGameplayStats(ParsedEvtcLog log, int phaseIndex)
         {

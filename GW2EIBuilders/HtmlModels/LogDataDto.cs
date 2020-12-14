@@ -258,14 +258,14 @@ namespace GW2EIBuilders.HtmlModels
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int i = 0; i < phases.Count; i++)
             {
-                PhaseData phaseData = phases[i];
-                var phaseDto = new PhaseDto(phaseData, phases, log)
+                PhaseData phase = phases[i];
+                var phaseDto = new PhaseDto(phase, phases, log)
                 {
-                    DpsStats = PhaseDto.BuildDPSData(log, i),
-                    DpsStatsTargets = PhaseDto.BuildDPSTargetsData(log, i),
+                    DpsStats = PhaseDto.BuildDPSData(log, phase),
+                    DpsStatsTargets = PhaseDto.BuildDPSTargetsData(log, phase),
                     DmgStatsTargets = PhaseDto.BuildDMGStatsTargetsData(log, i),
                     DmgStats = PhaseDto.BuildDMGStatsData(log, i),
-                    DefStats = PhaseDto.BuildDefenseData(log, i),
+                    DefStats = PhaseDto.BuildDefenseData(log, phase),
                     SupportStats = PhaseDto.BuildSupportData(log, i),
                     //
                     BoonStats = BuffData.BuildBuffUptimeData(log, statistics.PresentBoons, i),
@@ -318,10 +318,10 @@ namespace GW2EIBuilders.HtmlModels
                     TargetsCondiStats = new List<List<BuffData>>(),
                     TargetsCondiTotals = new List<BuffData>(),
                     TargetsBoonTotals = new List<BuffData>(),
-                    MechanicStats = MechanicDto.BuildPlayerMechanicData(log, i),
-                    EnemyMechanicStats = MechanicDto.BuildEnemyMechanicData(log, i)
+                    MechanicStats = MechanicDto.BuildPlayerMechanicData(log, phase),
+                    EnemyMechanicStats = MechanicDto.BuildEnemyMechanicData(log, phase)
                 };
-                foreach (NPC target in phaseData.Targets)
+                foreach (NPC target in phase.Targets)
                 {
                     phaseDto.TargetsCondiStats.Add(BuffData.BuildTargetCondiData(log, i, target));
                     phaseDto.TargetsCondiTotals.Add(BuffData.BuildTargetCondiUptimeData(log, i, target));

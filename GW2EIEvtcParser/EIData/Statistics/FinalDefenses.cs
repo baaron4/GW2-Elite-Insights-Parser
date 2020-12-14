@@ -18,10 +18,8 @@ namespace GW2EIEvtcParser.EIData
         public int DamageBarrier { get; }
         public int InterruptedCount { get; }
 
-        internal FinalDefenses(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor, AbstractSingleActor from)
+        internal FinalDefenses(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor from)
         {
-            long start = phase.Start;
-            long end = phase.End;
             List<AbstractHealthDamageEvent> damageLogs = actor.GetDamageTakenLogs(from, log, start, end);
 
             DamageTaken = damageLogs.Sum(x => (long)x.HealthDamage);

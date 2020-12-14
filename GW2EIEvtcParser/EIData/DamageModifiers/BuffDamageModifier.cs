@@ -57,10 +57,10 @@ namespace GW2EIEvtcParser.EIData
                 if (!dict.TryGetValue(Name, out List<DamageModifierStat> list))
                 {
                     var extraDataList = new List<DamageModifierStat>();
-                    for (int i = 0; i < phases.Count; i++)
+                    foreach (PhaseData phase in phases)
                     {
-                        int totalDamage = GetTotalDamage(p, log, target, i);
-                        List<AbstractHealthDamageEvent> typeHits = GetHitDamageLogs(p, log, target, phases[i].Start, phases[i].End);
+                        int totalDamage = GetTotalDamage(p, log, target, phase.Start, phase.End);
+                        List<AbstractHealthDamageEvent> typeHits = GetHitDamageLogs(p, log, target, phase.Start, phase.End);
                         var damages = typeHits.Select(x => ComputeGain(Tracker.GetStack(bgms, x.Time), x)).Where(x => x != -1.0).ToList();
                         extraDataList.Add(new DamageModifierStat(damages.Count, typeHits.Count, damages.Sum(), totalDamage));
                     }
@@ -68,10 +68,10 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             data[Name] = new List<DamageModifierStat>();
-            for (int i = 0; i < phases.Count; i++)
+            foreach (PhaseData phase in phases)
             {
-                int totalDamage = GetTotalDamage(p, log, null, i);
-                List<AbstractHealthDamageEvent> typeHits = GetHitDamageLogs(p, log, null, phases[i].Start, phases[i].End);
+                int totalDamage = GetTotalDamage(p, log, null, phase.Start, phase.End);
+                List<AbstractHealthDamageEvent> typeHits = GetHitDamageLogs(p, log, null, phase.Start, phase.End);
                 var damages = typeHits.Select(x => ComputeGain(Tracker.GetStack(bgms, x.Time), x)).Where(x => x != -1.0).ToList();
                 data[Name].Add(new DamageModifierStat(damages.Count, typeHits.Count, damages.Sum(), totalDamage));
             }

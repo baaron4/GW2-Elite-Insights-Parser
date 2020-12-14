@@ -272,21 +272,20 @@ namespace GW2EIBuilders.HtmlModels
             }
             return data;
         }
-        public static List<List<object>> BuildDPSData(ParsedEvtcLog log, int phaseIndex)
+        public static List<List<object>> BuildDPSData(ParsedEvtcLog log, PhaseData phase)
         {
             var list = new List<List<object>>(log.PlayerList.Count);
             foreach (Player player in log.PlayerList)
             {
-                FinalDPS dpsAll = player.GetDPSAll(log, phaseIndex);
+                FinalDPS dpsAll = player.GetDPS(log, phase.Start, phase.End);
                 list.Add(GetDPSStatData(dpsAll));
             }
             return list;
         }
 
-        public static List<List<List<object>>> BuildDPSTargetsData(ParsedEvtcLog log, int phaseIndex)
+        public static List<List<List<object>>> BuildDPSTargetsData(ParsedEvtcLog log, PhaseData phase)
         {
             var list = new List<List<List<object>>>(log.PlayerList.Count);
-            PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
 
             foreach (Player player in log.PlayerList)
             {
@@ -294,7 +293,7 @@ namespace GW2EIBuilders.HtmlModels
 
                 foreach (NPC target in phase.Targets)
                 {
-                    playerData.Add(GetDPSStatData(player.GetDPSTarget(log, phaseIndex, target)));
+                    playerData.Add(GetDPSStatData(player.GetDPS(target, log, phase.Start, phase.End)));
                 }
                 list.Add(playerData);
             }
@@ -331,15 +330,13 @@ namespace GW2EIBuilders.HtmlModels
             return list;
         }
 
-        public static List<List<object>> BuildDefenseData(ParsedEvtcLog log, int phaseIndex)
+        public static List<List<object>> BuildDefenseData(ParsedEvtcLog log, PhaseData phase)
         {
             var list = new List<List<object>>();
 
-            PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
-
             foreach (Player player in log.PlayerList)
             {
-                FinalDefensesAll defenses = player.GetDefenses(log, phaseIndex);
+                FinalDefensesAll defenses = player.GetDefenses(log, phase.Start, phase.End);
                 list.Add(GetDefenseStatData(defenses, phase));
             }
 

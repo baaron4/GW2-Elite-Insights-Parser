@@ -13,6 +13,7 @@ namespace GW2EIBuilders.HtmlModels
         {
             Dictionary<string, List<DamageModifierStat>> dModData = player.GetDamageModifierStats(log, null);
             List<PhaseData> phases = log.FightData.GetPhases(log);
+            PhaseData phase = phases[phaseIndex];
             foreach (DamageModifier dMod in listToUse)
             {
                 if (dModData.TryGetValue(dMod.Name, out List<DamageModifierStat> list))
@@ -31,13 +32,12 @@ namespace GW2EIBuilders.HtmlModels
                     Data.Add(new object[]
                     {
                         0,
-                        dMod.GetHitDamageLogs(player, log, null, phases[phaseIndex].Start, phases[phaseIndex].End).Count,
+                        dMod.GetHitDamageLogs(player, log, null, phase.Start, phase.End).Count,
                         0,
-                        dMod.GetTotalDamage(player, log, null, phaseIndex)
+                        dMod.GetTotalDamage(player, log, null, phase.Start, phase.End)
                     });
                 }
             }
-            PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
             foreach (NPC target in phase.Targets)
             {
                 var pTarget = new List<object[]>();
@@ -61,9 +61,9 @@ namespace GW2EIBuilders.HtmlModels
                         pTarget.Add(new object[]
                         {
                             0,
-                            dMod.GetHitDamageLogs(player, log, target, phases[phaseIndex].Start, phases[phaseIndex].End).Count,
+                            dMod.GetHitDamageLogs(player, log, target, phase.Start, phase.End).Count,
                             0,
-                            dMod.GetTotalDamage(player, log, target, phaseIndex)
+                            dMod.GetTotalDamage(player, log, target, phase.Start, phase.End)
                         });
                     }
                 }

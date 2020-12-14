@@ -227,7 +227,7 @@ namespace GW2EIBuilders.JsonModels
                     TargetBreakbarDamage1S[j] = graph1SBreakbarDamageList;
                 }
                 TargetDamageDist[j] = targetDamageDistList;
-                DpsTargets[j] = player.GetDPSTarget(log, target).Select(x => new JsonStatistics.JsonDPS(x)).ToArray();
+                DpsTargets[j] = phases.Select(phase => new JsonStatistics.JsonDPS(player.GetDPS(target, log, phase.Start, phase.End))).ToArray();
                 StatsTargets[j] = player.GetGameplayStats(log, target).Select(x => new JsonStatistics.JsonGameplayStats(x)).ToArray();
             }
             if (!log.CombatData.HasBreakbarDamageData)

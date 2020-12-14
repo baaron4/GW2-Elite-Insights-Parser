@@ -48,10 +48,9 @@ namespace GW2EIBuilders.HtmlModels
             }
         }
 
-        public static List<BuffChartDataDto> BuildBoonGraphData(ParsedEvtcLog log, AbstractSingleActor p, int phaseIndex, Dictionary<long, Buff> usedBuffs)
+        public static List<BuffChartDataDto> BuildBoonGraphData(ParsedEvtcLog log, AbstractSingleActor p, PhaseData phase, Dictionary<long, Buff> usedBuffs)
         {
             var list = new List<BuffChartDataDto>();
-            PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
             var boonGraphData = p.GetBuffGraphs(log).ToDictionary(x => x.Key, x => x.Value);
             BuildBoonGraphData(list, log.Statistics.PresentBoons, boonGraphData, phase, usedBuffs);
             BuildBoonGraphData(list, log.Statistics.PresentConditions, boonGraphData, phase, usedBuffs);
