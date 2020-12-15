@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser
 
         internal static Activation GetActivation(byte bt)
         {
-            return Enum.IsDefined(typeof(Activation), bt) ? (Activation)bt : Activation.Unknown;
+            return bt < (byte)Activation.Unknown ? (Activation)bt : Activation.Unknown;
         }
 
         // Buff remove
@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser
 
         internal static BuffRemove GetBuffRemove(byte bt)
         {
-            return Enum.IsDefined(typeof(BuffRemove), bt) ? (BuffRemove)bt : BuffRemove.Unknown;
+            return bt < (byte)BuffRemove.Unknown ? (BuffRemove)bt : BuffRemove.Unknown;
         }
 
         // Result
@@ -59,7 +59,7 @@ namespace GW2EIEvtcParser
 
         internal static PhysicalResult GetPhysicalResult(byte bt)
         {
-            return Enum.IsDefined(typeof(PhysicalResult), bt) ? (PhysicalResult)bt : PhysicalResult.Unknown;
+            return bt < (byte)PhysicalResult.Unknown ? (PhysicalResult)bt : PhysicalResult.Unknown;
         }
 
         public enum ConditionResult : byte
@@ -75,7 +75,7 @@ namespace GW2EIEvtcParser
         };
         internal static ConditionResult GetConditionResult(byte bt)
         {
-            return Enum.IsDefined(typeof(ConditionResult), bt) ? (ConditionResult)bt : ConditionResult.Unknown;
+            return bt < (byte)ConditionResult.Unknown ? (ConditionResult)bt : ConditionResult.Unknown;
         }
 
         // State Change    
@@ -124,37 +124,37 @@ namespace GW2EIEvtcParser
 
         internal static StateChange GetStateChange(byte bt)
         {
-            return Enum.IsDefined(typeof(StateChange), bt) ? (StateChange)bt : StateChange.Unknown;
+            return bt < (byte)StateChange.Unknown ? (StateChange)bt : StateChange.Unknown;
         }
         // Breakbar State
 
-        public enum BreakbarState
+        public enum BreakbarState : byte
         {
-            Active,
-            Recover,
-            Immune,
-            None,
+            Active = 0,
+            Recover = 1,
+            Immune = 2,
+            None = 3,
             Unknown
         };
         internal static BreakbarState GetBreakbarState(int value)
         {
-            return Enum.IsDefined(typeof(BreakbarState), value) ? (BreakbarState)value : BreakbarState.Unknown;
+            return value < (int)BreakbarState.Unknown ? (BreakbarState)value : BreakbarState.Unknown;
         }
 
         // Buff Formula
 
-        public enum BuffStackType : short
+        public enum BuffStackType : byte
         {
             StackingConditionalLoss = 0, // the same thing as Stacking
             Queue = 1,
             Regeneration = 2,
             Stacking = 3,
             Force = 4,
-            Unknown = -1,
+            Unknown,
         };
-        internal static BuffStackType GetBuffStackType(short bt)
+        internal static BuffStackType GetBuffStackType(byte bt)
         {
-            return Enum.IsDefined(typeof(BuffStackType), bt) ? (BuffStackType)bt : BuffStackType.Unknown;
+            return bt < (byte)BuffStackType.Unknown ? (BuffStackType)bt : BuffStackType.Unknown;
         }
 
         public enum BuffAttribute : short
@@ -179,7 +179,7 @@ namespace GW2EIEvtcParser
             CondRec = 17,
             AttackSpeed = 18,
             //
-            Unknown = short.MinValue,
+            Unknown,
             //
             /*ConditionDurationIncrease = 24,
             RetaliationDamageOutput = 25,
@@ -272,7 +272,7 @@ namespace GW2EIEvtcParser
 
         internal static IFF GetIFF(byte bt)
         {
-            return Enum.IsDefined(typeof(IFF), bt) ? (IFF)bt : IFF.Unknown;
+            return bt < (byte)IFF.Unknown ? (IFF)bt : IFF.Unknown;
         }
 
         // Custom ids
