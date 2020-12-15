@@ -105,7 +105,7 @@ namespace GW2EIBuilders.HtmlModels
             PlayerActiveTimes = new List<long>();
             foreach (Player p in log.PlayerList)
             {
-                PlayerActiveTimes.Add(phaseData.GetActorActiveDuration(p, log));
+                PlayerActiveTimes.Add(p.GetActiveDuration(log, phaseData.Start, phaseData.End));
             }
             // add phase markup
             MarkupLines = new List<double>();
@@ -300,29 +300,27 @@ namespace GW2EIBuilders.HtmlModels
             return list;
         }
 
-        public static List<List<object>> BuildDMGStatsData(ParsedEvtcLog log, int phaseIndex)
+        public static List<List<object>> BuildDMGStatsData(ParsedEvtcLog log, PhaseData phase)
         {
             var list = new List<List<object>>();
             foreach (Player player in log.PlayerList)
             {
-                FinalGameplayStatsAll stats = player.GetGameplayStats(log, phaseIndex);
+                FinalGameplayStatsAll stats = player.GetGameplayStats(log, phase.Start, phase.End);
                 list.Add(GetDMGStatData(stats));
             }
             return list;
         }
 
-        public static List<List<List<object>>> BuildDMGStatsTargetsData(ParsedEvtcLog log, int phaseIndex)
+        public static List<List<List<object>>> BuildDMGStatsTargetsData(ParsedEvtcLog log, PhaseData phase)
         {
             var list = new List<List<List<object>>>();
-
-            PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
 
             foreach (Player player in log.PlayerList)
             {
                 var playerData = new List<List<object>>();
                 foreach (NPC target in phase.Targets)
                 {
-                    FinalGameplayStats statsTarget = player.GetGameplayStats(log, phaseIndex, target);
+                    FinalGameplayStats statsTarget = player.GetGameplayStats(target, log, phase.Start, phase.End);
                     playerData.Add(GetDMGTargetStatData(statsTarget));
                 }
                 list.Add(playerData);

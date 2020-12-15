@@ -263,8 +263,8 @@ namespace GW2EIBuilders.HtmlModels
                 {
                     DpsStats = PhaseDto.BuildDPSData(log, phase),
                     DpsStatsTargets = PhaseDto.BuildDPSTargetsData(log, phase),
-                    DmgStatsTargets = PhaseDto.BuildDMGStatsTargetsData(log, i),
-                    DmgStats = PhaseDto.BuildDMGStatsData(log, i),
+                    DmgStatsTargets = PhaseDto.BuildDMGStatsTargetsData(log, phase),
+                    DmgStats = PhaseDto.BuildDMGStatsData(log, phase),
                     DefStats = PhaseDto.BuildDefenseData(log, phase),
                     SupportStats = PhaseDto.BuildSupportData(log, i),
                     //

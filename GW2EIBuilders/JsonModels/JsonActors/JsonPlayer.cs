@@ -196,7 +196,7 @@ namespace GW2EIBuilders.JsonModels
             Weapons = player.GetWeaponsArray(log).Select(w => w ?? "Unknown").ToArray();
             Group = player.Group;
             Profession = player.Prof;
-            ActiveTimes = phases.Select(x => x.GetActorActiveDuration(player, log)).ToList();
+            ActiveTimes = phases.Select(x => player.GetActiveDuration(log, x.Start, x.End)).ToList();
             HasCommanderTag = player.HasCommanderTag;
             //
             Support = player.GetPlayerSupport(log).Select(x => new JsonStatistics.JsonPlayerSupport(x)).ToArray();
@@ -228,7 +228,7 @@ namespace GW2EIBuilders.JsonModels
                 }
                 TargetDamageDist[j] = targetDamageDistList;
                 DpsTargets[j] = phases.Select(phase => new JsonStatistics.JsonDPS(player.GetDPS(target, log, phase.Start, phase.End))).ToArray();
-                StatsTargets[j] = player.GetGameplayStats(log, target).Select(x => new JsonStatistics.JsonGameplayStats(x)).ToArray();
+                StatsTargets[j] = phases.Select(phase => new JsonStatistics.JsonGameplayStats(player.GetGameplayStats(target, log, phase.Start, phase.End))).ToArray();
             }
             if (!log.CombatData.HasBreakbarDamageData)
             {

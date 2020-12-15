@@ -61,7 +61,7 @@ namespace GW2EIEvtcParser.EIData
                     foreach (KeyValuePair<Player, BuffDistribution> pair in boonDistributions)
                     {
                         BuffDistribution boons = pair.Value;
-                        long playerActiveDuration = phase.GetActorActiveDuration(pair.Key, log);
+                        long playerActiveDuration = pair.Key.GetActiveDuration(log, phase.Start, phase.End);
                         if (boons.HasBuffID(boon.ID))
                         {
                             hasGeneration = hasGeneration || boons.HasSrc(boon.ID, agentItem);
@@ -168,7 +168,7 @@ namespace GW2EIEvtcParser.EIData
                 Dictionary<long, long> buffPresence = player.GetBuffPresence(log, phaseIndex);
 
                 long phaseDuration = phase.DurationInMS;
-                long playerActiveDuration = phase.GetActorActiveDuration(player, log);
+                long playerActiveDuration = player.GetActiveDuration(log, phase.Start, phase.End);
                 foreach (Buff boon in player.TrackedBuffs)
                 {
                     if (selfBoons.HasBuffID(boon.ID))

@@ -95,35 +95,6 @@ namespace GW2EIEvtcParser.EIData
             DurationInM = (End - Start) / 60000;
             DurationInMS = (End - Start);
             DurationInS = (End - Start) / 1000;
-        }
-
-        public long GetActorActiveDuration(AbstractSingleActor p, ParsedEvtcLog log)
-        {
-            List<(long start, long end)> dead;
-            List<(long start, long end)> down;
-            List<(long start, long end)> dc;
-            (dead, down, dc) = p.GetStatus(log);
-            return DurationInMS -
-                dead.Sum(x =>
-                {
-                    if (x.start <= End && x.end >= Start)
-                    {
-                        long s = Math.Max(x.start, Start);
-                        long e = Math.Min(x.end, End);
-                        return e - s;
-                    }
-                    return 0;
-                }) -
-                dc.Sum(x =>
-                {
-                    if (x.start <= End && x.end >= Start)
-                    {
-                        long s = Math.Max(x.start, Start);
-                        long e = Math.Min(x.end, End);
-                        return e - s;
-                    }
-                    return 0;
-                });
-        }
+        }      
     }
 }

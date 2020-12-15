@@ -25,10 +25,10 @@ namespace GW2EIEvtcParser.EIData
         // Counts
         public int SwapCount { get; internal set; }
 
-        private static double GetDistanceToTarget(Player player, ParsedEvtcLog log, PhaseData phase, List<Point3D> reference)
+        private static double GetDistanceToTarget(Player player, ParsedEvtcLog log, long start, long end, List<Point3D> reference)
         {
-            var positions = player.GetCombatReplayPolledPositions(log).Where(x => x.Time >= phase.Start && x.Time <= phase.End).ToList();
-            int offset = player.GetCombatReplayPolledPositions(log).Count(x => x.Time < phase.Start);
+            var positions = player.GetCombatReplayPolledPositions(log).Where(x => x.Time >= start && x.Time <= end).ToList();
+            int offset = player.GetCombatReplayPolledPositions(log).Count(x => x.Time < start);
             if (positions.Count > 1 && reference.Count > 0)
             {
                 var distances = new List<float>();
@@ -50,15 +50,15 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        internal FinalGameplayStatsAll(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor) : base(log, phase, actor, null)
+        internal FinalGameplayStatsAll(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor) : base(log, start, end, actor, null)
         {
             // If fake actor, stop
             if (actor.IsFakeActor)
             {
                 return;
             }
-            int phaseIndex = log.FightData.GetPhases(log).IndexOf(phase);
-            foreach (AbstractCastEvent cl in actor.GetCastEvents(log, phase.Start, phase.End))
+            long duration = end - start;
+            foreach (AbstractCastEvent cl in actor.GetCastEvents(log, start, end))
             {
                 switch (cl.Status)
                 {
@@ -80,26 +80,26 @@ namespace GW2EIEvtcParser.EIData
             TimeWasted = -Math.Round(TimeWasted / 1000.0, ParserHelper.TimeDigit);
 
             double avgBoons = 0;
-            foreach (long duration in actor.GetBuffPresence(log, phaseIndex).Where(x => log.Buffs.BuffsByIds[x.Key].Nature == BuffNature.Boon).Select(x => x.Value))
+            foreach (long boonDuration in actor.GetBuffPresence(log, 0).Where(x => log.Buffs.BuffsByIds[x.Key].Nature == BuffNature.Boon).Select(x => x.Value))
             {
-                avgBoons += duration;
+                avgBoons += boonDuration;
             }
-            AvgBoons = Math.Round(avgBoons / phase.DurationInMS, ParserHelper.BuffDigit);
-            long activeDuration = phase.GetActorActiveDuration(actor, log);
+            AvgBoons = Math.Round(avgBoons / duration, ParserHelper.BuffDigit);
+            long activeDuration = actor.GetActiveDuration(log, start, end);
             AvgActiveBoons = activeDuration > 0 ? Math.Round(avgBoons / activeDuration, ParserHelper.BuffDigit) : 0.0;
 
             double avgCondis = 0;
-            foreach (long duration in actor.GetBuffPresence(log, phaseIndex).Where(x => log.Buffs.BuffsByIds[x.Key].Nature == BuffNature.Condition).Select(x => x.Value))
+            foreach (long conditionDuration in actor.GetBuffPresence(log, 0).Where(x => log.Buffs.BuffsByIds[x.Key].Nature == BuffNature.Condition).Select(x => x.Value))
             {
-                avgCondis += duration;
+                avgCondis += conditionDuration;
             }
-            AvgConditions = Math.Round(avgCondis / phase.DurationInMS, ParserHelper.BuffDigit);
+            AvgConditions = Math.Round(avgCondis / duration, ParserHelper.BuffDigit);
             AvgActiveConditions = activeDuration > 0 ? Math.Round(avgCondis / activeDuration, ParserHelper.BuffDigit) : 0.0;
 
             if (log.CombatData.HasMovementData && actor is Player player)
             {
-                StackDist = GetDistanceToTarget(player, log, phase, log.Statistics.GetStackCenterPositions(log));
-                DistToCom = GetDistanceToTarget(player, log, phase, log.Statistics.GetStackCommanderPositions(log));
+                StackDist = GetDistanceToTarget(player, log, start, end, log.Statistics.GetStackCenterPositions(log));
+                DistToCom = GetDistanceToTarget(player, log, start, end, log.Statistics.GetStackCommanderPositions(log));
             }
         }
     }

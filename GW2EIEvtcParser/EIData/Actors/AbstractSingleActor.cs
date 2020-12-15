@@ -36,8 +36,7 @@ namespace GW2EIEvtcParser.EIData
         // Statistics
         private CachingCollection<FinalDPS> _dps;
         private CachingCollection<FinalDefenses> _defenses;
-        private Dictionary<AbstractSingleActor, List<FinalGameplayStats>> _statsTarget;
-        private List<FinalGameplayStatsAll> _statsAll;
+        private CachingCollection<FinalGameplayStats> _gameplayStats;
         private List<FinalSupportAll> _supportAll;
         private Dictionary<AbstractSingleActor, List<FinalSupport>> _supportTarget;
 
@@ -57,6 +56,35 @@ namespace GW2EIEvtcParser.EIData
                 AgentItem.GetAgentStatus(_deads, _downs, _dcs, log.CombatData, log.FightData);
             }
             return (_deads, _downs, _dcs);
+        }
+
+        public long GetActiveDuration(ParsedEvtcLog log, long start, long end)
+        {
+            List<(long start, long end)> dead;
+            List<(long start, long end)> down;
+            List<(long start, long end)> dc;
+            (dead, down, dc) = GetStatus(log);
+            return (end - start) -
+                dead.Sum(x =>
+                {
+                    if (x.start <= end && x.end >= start)
+                    {
+                        long s = Math.Max(x.start, start);
+                        long e = Math.Min(x.end, end);
+                        return e - s;
+                    }
+                    return 0;
+                }) -
+                dc.Sum(x =>
+                {
+                    if (x.start <= end && x.end >= start)
+                    {
+                        long s = Math.Max(x.start, start);
+                        long e = Math.Min(x.end, end);
+                        return e - s;
+                    }
+                    return 0;
+                });
         }
 
         public abstract string GetIcon();
@@ -471,7 +499,7 @@ namespace GW2EIEvtcParser.EIData
 
                 PhaseData phase = phases[phaseIndex];
                 long phaseDuration = phase.DurationInMS;
-                long activePhaseDuration = phase.GetActorActiveDuration(this, log);
+                long activePhaseDuration = GetActiveDuration(log, phase.Start, phase.End);
 
                 foreach (Buff buff in TrackedBuffs)
                 {
@@ -643,53 +671,23 @@ namespace GW2EIEvtcParser.EIData
 
         // Gameplay Stats
 
-        public FinalGameplayStatsAll GetGameplayStats(ParsedEvtcLog log, int phaseIndex)
+        public FinalGameplayStatsAll GetGameplayStats(ParsedEvtcLog log, long start, long end)
         {
-            return GetGameplayStats(log)[phaseIndex];
+            return GetGameplayStats(null, log, start, end) as FinalGameplayStatsAll;
         }
 
-        public FinalGameplayStats GetGameplayStats(ParsedEvtcLog log, int phaseIndex, AbstractSingleActor target)
+        public FinalGameplayStats GetGameplayStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
-            if (target == null)
+            if (_gameplayStats == null)
             {
-                return GetGameplayStats(log, phaseIndex);
+                _gameplayStats = new CachingCollection<FinalGameplayStats>(log);
             }
-            return GetGameplayStats(log, target)[phaseIndex];
-        }
-
-        public List<FinalGameplayStatsAll> GetGameplayStats(ParsedEvtcLog log)
-        {
-            if (_statsAll == null)
+            if (!_gameplayStats.TryGetValue(start, end, target, out FinalGameplayStats value))
             {
-                _statsAll = new List<FinalGameplayStatsAll>();
-                foreach (PhaseData phase in log.FightData.GetPhases(log))
-                {
-                    _statsAll.Add(new FinalGameplayStatsAll(log, phase, this));
-                }
+                value = target != null ? new FinalGameplayStats(log, start, end, this, target) : new FinalGameplayStatsAll(log, start, end, this);
+                _gameplayStats.Set(start, end, target, value);
             }
-            return _statsAll;
-        }
-
-        public List<FinalGameplayStats> GetGameplayStats(ParsedEvtcLog log, AbstractSingleActor target)
-        {
-            if (target == null)
-            {
-                return new List<FinalGameplayStats>(GetGameplayStats(log));
-            }
-            if (_statsTarget == null)
-            {
-                _statsTarget = new Dictionary<AbstractSingleActor, List<FinalGameplayStats>>();
-            }
-            if (_statsTarget.TryGetValue(target, out List<FinalGameplayStats> list))
-            {
-                return list;
-            }
-            _statsTarget[target] = new List<FinalGameplayStats>();
-            foreach (PhaseData phase in log.FightData.GetPhases(log))
-            {
-                _statsTarget[target].Add(new FinalGameplayStats(log, phase, this, target));
-            }
-            return _statsTarget[target];
+            return value;
         }
 
         // Support stats
