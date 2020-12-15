@@ -21,8 +21,7 @@ namespace GW2EIEvtcParser.EIData
             }
             if (distrib.TryGetValue(agent, out BuffDistributionItem toModify))
             {
-                toModify.Waste += value;
-                distrib[agent] = toModify;
+                toModify.IncrementWaste(value);
             }
             else
             {

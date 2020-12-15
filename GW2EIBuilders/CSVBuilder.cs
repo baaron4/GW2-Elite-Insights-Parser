@@ -15,7 +15,7 @@ namespace GW2EIBuilders
         private readonly Version _parserVersion;
         private readonly List<PhaseData> _phases;
         private readonly NPC _legacyTarget;
-        private readonly GeneralStatistics _statistics;
+        private readonly StatisticsHelper _statistics;
         private StreamWriter _sw;
         private readonly string _delimiter;
         private readonly string[] _uploadResult;
@@ -34,7 +34,7 @@ namespace GW2EIBuilders
             _phases = log.FightData.GetPhases(log);
             _noFakePlayers = log.PlayerList.Where(x => !x.IsFakeActor).ToList();
 
-            _statistics = log.Statistics;
+            _statistics = log.StatisticsHelper;
 
             _uploadResult = uploadresult ?? new string[] { "", "", "" };
             _legacyTarget = log.FightData.Logic.GetLegacyTarget();

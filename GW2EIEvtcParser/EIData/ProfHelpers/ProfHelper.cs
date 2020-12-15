@@ -14,13 +14,13 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(9428, 9428, 500), // Hydro Sigil
         };
 
-        internal static void AttachMasterToGadgetByCastData(Dictionary<long, List<AbstractCastEvent>> castData, HashSet<AgentItem> gadgets, List<long> castIDS, long castEndThreshold)
+        internal static void AttachMasterToGadgetByCastData(Dictionary<long, List<AnimatedCastEvent>> castData, HashSet<AgentItem> gadgets, List<long> castIDS, long castEndThreshold)
         {
             var possibleCandidates = new HashSet<AgentItem>();
-            var gadgetSpawnCastData = new List<AbstractCastEvent>();
+            var gadgetSpawnCastData = new List<AnimatedCastEvent>();
             foreach (long id in castIDS)
             {
-                if (castData.TryGetValue(id, out List<AbstractCastEvent> list))
+                if (castData.TryGetValue(id, out List<AnimatedCastEvent> list))
                 {
                     gadgetSpawnCastData.AddRange(list);
                 }
@@ -83,7 +83,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        internal static void AttachMasterToRacialGadgets(List<Player> players, Dictionary<long, List<AbstractHealthDamageEvent>> damageData, Dictionary<long, List<AbstractCastEvent>> castData)
+        internal static void AttachMasterToRacialGadgets(List<Player> players, Dictionary<long, List<AbstractHealthDamageEvent>> damageData, Dictionary<long, List<AnimatedCastEvent>> castData)
         {
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
             // Sylvari stuff

@@ -152,7 +152,7 @@ namespace GW2EIEvtcParser.EIData
             return inter.First();
         }
 
-        public static List<AbstractBuffEvent> TransformWeaverAttunements(List<AbstractBuffEvent> buffs, AgentItem a, SkillData skillData)
+        public static List<AbstractBuffEvent> TransformWeaverAttunements(List<AbstractBuffEvent> buffs, Dictionary<long, List<AbstractBuffEvent>> buffsByID, AgentItem a, SkillData skillData)
         {
             var res = new List<AbstractBuffEvent>();
             var attunements = new HashSet<long>
@@ -195,9 +195,11 @@ namespace GW2EIEvtcParser.EIData
                 airEarth,*/
             };
             // first we get rid of standard attunements
+            var toClean = new HashSet<long>();
             var attuns = buffs.Where(x => attunements.Contains(x.BuffID)).ToList();
             foreach (AbstractBuffEvent c in attuns)
             {
+                toClean.Add(c.BuffID);
                 c.Invalidate(skillData);
             }
             // get all weaver attunements ids and group them by time
@@ -229,6 +231,7 @@ namespace GW2EIEvtcParser.EIData
                 long curID = TranslateWeaverAttunement(applies);
                 foreach (AbstractBuffEvent c in pair.Value)
                 {
+                    toClean.Add(c.BuffID);
                     c.Invalidate(skillData);
                 }
                 if (curID == 0)
@@ -243,6 +246,10 @@ namespace GW2EIEvtcParser.EIData
                     res.Add(new BuffRemoveAllEvent(a, a, pair.Key, int.MaxValue, skillData.Get(prevID), 1, int.MaxValue));
                 }
                 prevID = curID;
+            }
+            foreach (long buffID in toClean)
+            {
+                buffsByID[buffID].RemoveAll(x => x.BuffID == NoBuff);
             }
             return res;
         }

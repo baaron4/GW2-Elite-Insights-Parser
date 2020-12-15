@@ -104,7 +104,7 @@ namespace GW2EIEvtcParser.EIData
             return new HashSet<AgentItem>();
         }*/
 
-        public static void AttachMasterToWarriorBanners(List<Player> players, Dictionary<long, List<AbstractBuffEvent>> buffData, Dictionary<long, List<AbstractCastEvent>> castData)
+        public static void AttachMasterToWarriorBanners(List<Player> players, Dictionary<long, List<AbstractBuffEvent>> buffData, Dictionary<long, List<AnimatedCastEvent>> castData)
         {
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
             HashSet<AgentItem> strBanners = GetBannerAgents(buffData, 14417, playerAgents),

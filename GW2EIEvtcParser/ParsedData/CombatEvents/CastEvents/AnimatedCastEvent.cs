@@ -30,7 +30,7 @@ namespace GW2EIEvtcParser.ParsedData
                 }
                 else
                 {
-                    Acceleration = -nonScaledToScaledRatio / 0.6;
+                    Acceleration = -(1.0 - nonScaledToScaledRatio) / 0.6;
                 }
                 Acceleration = Math.Max(Math.Min(Acceleration, 1.0), -1.0);
             }

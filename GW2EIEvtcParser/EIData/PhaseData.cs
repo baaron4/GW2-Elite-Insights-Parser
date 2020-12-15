@@ -99,10 +99,10 @@ namespace GW2EIEvtcParser.EIData
 
         public long GetActorActiveDuration(AbstractSingleActor p, ParsedEvtcLog log)
         {
-            var dead = new List<(long start, long end)>();
-            var down = new List<(long start, long end)>();
-            var dc = new List<(long start, long end)>();
-            p.AgentItem.GetAgentStatus(dead, down, dc, log.CombatData, log.FightData);
+            List<(long start, long end)> dead;
+            List<(long start, long end)> down;
+            List<(long start, long end)> dc;
+            (dead, down, dc) = p.GetStatus(log);
             return DurationInMS -
                 dead.Sum(x =>
                 {

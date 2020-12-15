@@ -340,7 +340,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal virtual List<AbstractCastEvent> SpecialCastEventProcess(Dictionary<AgentItem, List<AnimatedCastEvent>> animatedCastEvent, Dictionary<AgentItem, List<WeaponSwapEvent>> weaponSwapData, Dictionary<long, List<AbstractCastEvent>> _castDataById, SkillData skillData)
+        internal virtual List<AbstractCastEvent> SpecialCastEventProcess(Dictionary<AgentItem, List<AnimatedCastEvent>> animatedCastEvent, Dictionary<AgentItem, List<WeaponSwapEvent>> weaponSwapData, Dictionary<long, List<AnimatedCastEvent>> _castDataById, SkillData skillData)
         {
             return new List<AbstractCastEvent>();
         }
@@ -408,6 +408,31 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        protected static bool AtLeastOnePlayerAlive(CombatData combatData, FightData fightData, long timeToCheck, HashSet<AgentItem> playerAgents)
+        {
+            int playerDeadOrDCCount = 0;
+            foreach (AgentItem playerAgent in playerAgents)
+            {
+                var deads = new List<(long start, long end)>();
+                var downs = new List<(long start, long end)>();
+                var dcs = new List<(long start, long end)>();
+                playerAgent.GetAgentStatus(deads, downs, dcs, combatData, fightData);
+                if (deads.Any(x => x.start <= timeToCheck && x.end >= timeToCheck))
+                {
+                    playerDeadOrDCCount++;
+                }
+                else if (dcs.Any(x => x.start <= timeToCheck && x.end >= timeToCheck))
+                {
+                    playerDeadOrDCCount++;
+                }
+            }
+            if (playerDeadOrDCCount == playerAgents.Count)
+            {
+                return false;
+            }
+            return true;
+        }
+
         protected static void SetSuccessByCombatExit(List<NPC> targets, CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             if (targets.Count == 0)
@@ -438,23 +463,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Make sure the last damage has been done before last combat exit
             if (lastTargetExit != null && lastDamageTaken != null && lastTargetExit.Time + 100 >= lastDamageTaken.Time)
             {
-                int playerDeadOrDCCount = 0;
-                foreach (AgentItem playerAgent in playerAgents)
-                {
-                    var deads = new List<(long start, long end)>();
-                    var downs = new List<(long start, long end)>();
-                    var dcs = new List<(long start, long end)>();
-                    playerAgent.GetAgentStatus(deads, downs, dcs, combatData, fightData);
-                    if (deads.Any(x => x.start <= lastTargetExit.Time && x.end >= lastTargetExit.Time))
-                    {
-                        playerDeadOrDCCount++;
-                    }
-                    else if (dcs.Any(x => x.start <= lastTargetExit.Time && x.end >= lastTargetExit.Time))
-                    {
-                        playerDeadOrDCCount++;
-                    }
-                }
-                if (playerDeadOrDCCount == playerAgents.Count)
+                if (!AtLeastOnePlayerAlive(combatData, fightData, lastTargetExit.Time, playerAgents))
                 {
                     return;
                 }

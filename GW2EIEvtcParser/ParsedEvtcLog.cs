@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser
         public bool CanCombatReplay => ParserSettings.ParseCombatReplay && CombatData.HasMovementData;
 
         public MechanicData MechanicData { get; }
-        public GeneralStatistics Statistics { get; }
+        public StatisticsHelper StatisticsHelper { get; }
 
         private readonly ParserController _operation;
 
@@ -67,7 +67,7 @@ namespace GW2EIEvtcParser
             _operation.UpdateProgressWithCancellationCheck("Creating Mechanic Data");
             MechanicData = FightData.Logic.GetMechanicData();
             _operation.UpdateProgressWithCancellationCheck("Creating General Statistics Container");
-            Statistics = new GeneralStatistics(CombatData, PlayerList, Buffs);
+            StatisticsHelper = new StatisticsHelper(CombatData, PlayerList, Buffs);
         }
 
         public void UpdateProgressWithCancellationCheck(string status)

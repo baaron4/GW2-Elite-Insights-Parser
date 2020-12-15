@@ -53,9 +53,9 @@ namespace GW2EIParser
             //
             builder.AddField("Encounter Duration", log.FightData.DurationString);
             //
-            if (log.Statistics.PresentFractalInstabilities.Any())
+            if (log.StatisticsHelper.PresentFractalInstabilities.Any())
             {
-                builder.AddField("Instabilities", string.Join("\n", log.Statistics.PresentFractalInstabilities.Select(x => x.Name)));
+                builder.AddField("Instabilities", string.Join("\n", log.StatisticsHelper.PresentFractalInstabilities.Select(x => x.Name)));
             }
             //
             /*var playerByGroup = log.PlayerList.Where(x => !x.IsFakeActor).GroupBy(x => x.Group).ToDictionary(x => x.Key, x => x.ToList());
@@ -285,7 +285,9 @@ namespace GW2EIParser
                 Parallel.ForEach(playersAndTargets, actor => actor.GetBuffGraphs(log));
                 //
                 Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
-                // once simulation is done, computing buff stats is thread safe
+                // once simulation is done, computing buff stats is thread safe          
+                Parallel.ForEach(log.PlayerList, player => player.GetStatus(log));
+                Parallel.ForEach(log.FightData.Logic.Targets, target => target.GetStatus(log));
                 Parallel.ForEach(log.PlayerList, player => player.GetBuffs(log, BuffEnum.Self));
                 Parallel.ForEach(log.FightData.Logic.Targets, target => target.GetBuffs(log));
             }

@@ -75,7 +75,7 @@ namespace GW2EIEvtcParser.EIData
 
         };
 
-        public static void AttachMasterToEngineerTurrets(List<Player> players, Dictionary<long, List<AbstractHealthDamageEvent>> damageData, Dictionary<long, List<AbstractCastEvent>> castData)
+        public static void AttachMasterToEngineerTurrets(List<Player> players, Dictionary<long, List<AbstractHealthDamageEvent>> damageData, Dictionary<long, List<AnimatedCastEvent>> castData)
         {
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
 
