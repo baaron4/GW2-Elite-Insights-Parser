@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EIData
         {
             foreach (Player p in log.PlayerList)
             {
-                foreach (AbstractCastEvent c in log.CombatData.GetCastData(SkillId))
+                foreach (AbstractCastEvent c in log.CombatData.GetAnimatedCastData(SkillId))
                 {
                     if (c.Caster == p.AgentItem && Keep(c, log))
                     {

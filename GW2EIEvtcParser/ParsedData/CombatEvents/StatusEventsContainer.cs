@@ -18,6 +18,7 @@ namespace GW2EIEvtcParser.ParsedData
         public Dictionary<AgentItem, List<TeamChangeEvent>> TeamChangeEvents { get; } = new Dictionary<AgentItem, List<TeamChangeEvent>>();
         public Dictionary<AgentItem, List<BreakbarStateEvent>> BreakbarStateEvents { get; } = new Dictionary<AgentItem, List<BreakbarStateEvent>>();
         public Dictionary<AgentItem, List<BreakbarPercentEvent>> BreakbarPercentEvents { get; } = new Dictionary<AgentItem, List<BreakbarPercentEvent>>();
+        public Dictionary<AgentItem, List<AbstractMovementEvent>> MovementEvents { get; } = new Dictionary<AgentItem, List<AbstractMovementEvent>>();
         //public Dictionary<AgentItem, List<TagEvent>> TagEvents { get; } = new Dictionary<AgentItem, List<TagEvent>>();
 
     }
