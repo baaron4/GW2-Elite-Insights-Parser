@@ -12,17 +12,17 @@ namespace GW2EIEvtcParser.EIData
         // Boons
         public HashSet<Buff> TrackedBuffs { get; } = new HashSet<Buff>();
         private BuffDictionary _buffMap;
-        protected Dictionary<long, BuffsGraphModel> BuffPoints { get; set; }
-        private readonly List<BuffDistribution> _buffDistribution = new List<BuffDistribution>();
-        private readonly List<Dictionary<long, long>> _buffPresence = new List<Dictionary<long, long>>();
-        private List<Dictionary<long, FinalBuffsDictionary>> _buffsDictionary;
-        private List<Dictionary<long, FinalBuffsDictionary>> _buffsActiveDictionary;
+        protected Dictionary<long, BuffsGraphModel> BuffGraphs { get; set; }
+        private CachingCollection<BuffDistribution> _buffDistribution;
+        private CachingCollection<Dictionary<long, long>> _buffPresence;
+        private CachingCollection<(Dictionary<long, FinalBuffsDictionary>, Dictionary<long, FinalBuffsDictionary>)> _buffsDictionary;
+        private readonly Dictionary<long, AbstractBuffSimulator> _buffSimulators = new Dictionary<long, AbstractBuffSimulator>();
         // damage list
-        private CachingCollection<List<int>> _damageList1S;
-        private CachingCollection<List<double>> _breakbarDamageList1S;
-        private CachingCollection<List<AbstractHealthDamageEvent>> _hitSelfDamageEventsPerPhasePerTarget;
-        private CachingCollection<List<AbstractHealthDamageEvent>> _powerHitSelfDamageEventsPerPhasePerTarget;
-        private CachingCollection<List<AbstractHealthDamageEvent>> _conditionHitSelfDamageEventsPerPhasePerTarget;
+        private CachingCollectionWithTarget<List<int>> _damageList1S;
+        private CachingCollectionWithTarget<List<double>> _breakbarDamageList1S;
+        private CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> _hitSelfDamageEventsPerPhasePerTarget;
+        private CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> _powerHitSelfDamageEventsPerPhasePerTarget;
+        private CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> _conditionHitSelfDamageEventsPerPhasePerTarget;
         //status
         private List<Segment> _healthUpdates { get; set; }
         private List<Segment> _barrierUpdates { get; set; }
@@ -34,10 +34,10 @@ namespace GW2EIEvtcParser.EIData
         // Replay
         protected CombatReplay CombatReplay { get; set; }
         // Statistics
-        private CachingCollection<FinalDPS> _dpsStats;
-        private CachingCollection<FinalDefenses> _defenseStats;
-        private CachingCollection<FinalGameplayStats> _gameplayStats;
-        private CachingCollection<FinalSupport> _supportStats;
+        private CachingCollectionWithTarget<FinalDPS> _dpsStats;
+        private CachingCollectionWithTarget<FinalDefenses> _defenseStats;
+        private CachingCollectionWithTarget<FinalGameplayStats> _gameplayStats;
+        private CachingCollectionWithTarget<FinalSupport> _supportStats;
 
         protected AbstractSingleActor(AgentItem agent) : base(agent)
         {
@@ -166,7 +166,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_damageList1S == null)
             {
-                _damageList1S = new CachingCollection<List<int>>(log);
+                _damageList1S = new CachingCollectionWithTarget<List<int>>(log);
             }
             if (_damageList1S.TryGetValue(start, end, target, out List<int> res))
             {
@@ -219,7 +219,7 @@ namespace GW2EIEvtcParser.EIData
             }
             if (_breakbarDamageList1S == null)
             {
-                _breakbarDamageList1S = new CachingCollection<List<double>>(log);
+                _breakbarDamageList1S = new CachingCollectionWithTarget<List<double>>(log);
             }
             if (_breakbarDamageList1S.TryGetValue(start, end, target, out List<double> res))
             {
@@ -265,31 +265,80 @@ namespace GW2EIEvtcParser.EIData
         }
 
         // Buffs
-        public BuffDistribution GetBuffDistribution(ParsedEvtcLog log, int phaseIndex)
+        public BuffDistribution GetBuffDistribution(ParsedEvtcLog log, long start, long end)
         {
-            if (BuffPoints == null)
+            if (BuffGraphs == null)
             {
-                SetBuffStatus(log);
+                SetBuffGraphs(log);
             }
-            return _buffDistribution[phaseIndex];
+            if (!_buffDistribution.TryGetValue(start, end, out BuffDistribution value))
+            {
+                value = ComputeBuffDistribution(start, end);
+                _buffDistribution.Set(start, end, value);
+            }
+            return value;
         }
 
-        public Dictionary<long, long> GetBuffPresence(ParsedEvtcLog log, int phaseIndex)
+        private BuffDistribution ComputeBuffDistribution(long start, long end)
         {
-            if (BuffPoints == null)
+            var res = new BuffDistribution();
+            foreach (KeyValuePair<long, AbstractBuffSimulator> pair in _buffSimulators)
             {
-                SetBuffStatus(log);
+                foreach (BuffSimulationItem simul in pair.Value.GenerationSimulation)
+                {
+                    simul.SetBuffDistributionItem(res, start, end, pair.Key);
+                }
+                foreach (BuffSimulationItemWasted simul in pair.Value.WasteSimulationResult)
+                {
+                    simul.SetBuffDistributionItem(res, start, end, pair.Key);
+                }
+                foreach (BuffSimulationItemOverstack simul in pair.Value.OverstackSimulationResult)
+                {
+                    simul.SetBuffDistributionItem(res, start, end, pair.Key);
+                }
             }
-            return _buffPresence[phaseIndex];
+            return res;
+        }
+
+        public Dictionary<long, long> GetBuffPresence(ParsedEvtcLog log, long start, long end)
+        {
+            if (BuffGraphs == null)
+            {
+                SetBuffGraphs(log);
+            }
+            if (!_buffPresence.TryGetValue(start, end, out Dictionary<long, long> value))
+            {
+                value = ComputeBuffPresence(start, end);
+                _buffPresence.Set(start, end, value);
+            }
+            return value;
+        }
+
+        private Dictionary<long, long> ComputeBuffPresence(long start, long end)
+        {
+            var buffPresence = new Dictionary<long, long>();
+            foreach (KeyValuePair<long, AbstractBuffSimulator> pair in _buffSimulators)
+            {
+                foreach (BuffSimulationItem simul in pair.Value.GenerationSimulation)
+                {
+                    long value = simul.GetClampedDuration(start, end);
+                    if (value == 0)
+                    {
+                        continue;
+                    }
+                    Add(buffPresence, pair.Key, value);
+                }
+            }
+            return buffPresence;
         }
 
         public Dictionary<long, BuffsGraphModel> GetBuffGraphs(ParsedEvtcLog log)
         {
-            if (BuffPoints == null)
+            if (BuffGraphs == null)
             {
-                SetBuffStatus(log);
+                SetBuffGraphs(log);
             }
-            return BuffPoints;
+            return BuffGraphs;
         }
 
         /// <summary>
@@ -362,9 +411,9 @@ namespace GW2EIEvtcParser.EIData
         }
 
 
-        protected void SetBuffStatus(ParsedEvtcLog log)
+        private void SetBuffGraphs(ParsedEvtcLog log)
         {
-            BuffPoints = new Dictionary<long, BuffsGraphModel>();
+            BuffGraphs = new Dictionary<long, BuffsGraphModel>();
             ComputeBuffMap(log);
             BuffDictionary buffMap = _buffMap;
             long dur = log.FightData.FightEnd;
@@ -375,41 +424,21 @@ namespace GW2EIEvtcParser.EIData
             var boonIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Boon].Select(x => x.ID));
             var condiIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Condition].Select(x => x.ID));
             // Init status
-            List<PhaseData> phases = log.FightData.GetPhases(log);
-            for (int i = 0; i < phases.Count; i++)
-            {
-                _buffDistribution.Add(new BuffDistribution());
-                _buffPresence.Add(new Dictionary<long, long>());
-            }
+            _buffDistribution = new CachingCollection<BuffDistribution>(log);
+            _buffPresence = new CachingCollection<Dictionary<long, long>>(log);
             foreach (Buff buff in TrackedBuffs)
             {
-                long boonid = buff.ID;
-                if (buffMap.TryGetValue(boonid, out List<AbstractBuffEvent> logs) && logs.Count != 0)
+                long buffID = buff.ID;
+                if (buffMap.TryGetValue(buffID, out List<AbstractBuffEvent> buffEvents) && buffEvents.Count != 0 && !BuffGraphs.ContainsKey(buffID))
                 {
-                    if (BuffPoints.ContainsKey(boonid))
-                    {
-                        continue;
-                    }
                     AbstractBuffSimulator simulator = buff.CreateSimulator(log);
-                    simulator.Simulate(logs, dur);
-                    simulator.Trim(dur);
-                    bool updateBoonPresence = boonIds.Contains(boonid);
-                    bool updateCondiPresence = condiIds.Contains(boonid);
+                    _buffSimulators[buffID] = simulator;
+                    simulator.Simulate(buffEvents, dur);
+                    bool updateBoonPresence = boonIds.Contains(buffID);
+                    bool updateCondiPresence = condiIds.Contains(buffID);
                     var graphSegments = new List<Segment>();
                     foreach (BuffSimulationItem simul in simulator.GenerationSimulation)
                     {
-                        // Generation
-                        for (int i = 0; i < phases.Count; i++)
-                        {
-                            PhaseData phase = phases[i];
-                            long value = simul.GetClampedDuration(phase.Start, phase.End);
-                            if (value == 0)
-                            {
-                                continue;
-                            }
-                            Add(_buffPresence[i], boonid, value);
-                            simul.SetBuffDistributionItem(_buffDistribution[i], phase.Start, phase.End, boonid, log);
-                        }
                         // Graph
                         var segment = simul.ToSegment();
                         if (graphSegments.Count == 0)
@@ -422,17 +451,6 @@ namespace GW2EIEvtcParser.EIData
                         }
                         graphSegments.Add(segment);
                     }
-                    // Cleanse and Wastes
-                    var extraSimulations = new List<AbstractSimulationItem>(simulator.OverstackSimulationResult);
-                    extraSimulations.AddRange(simulator.WasteSimulationResult);
-                    foreach (AbstractSimulationItem simul in extraSimulations)
-                    {
-                        for (int i = 0; i < phases.Count; i++)
-                        {
-                            PhaseData phase = phases[i];
-                            simul.SetBuffDistributionItem(_buffDistribution[i], phase.Start, phase.End, boonid, log);
-                        }
-                    }
                     // Graph object creation
                     if (graphSegments.Count > 0)
                     {
@@ -442,16 +460,16 @@ namespace GW2EIEvtcParser.EIData
                     {
                         graphSegments.Add(new Segment(0, dur, 0));
                     }
-                    BuffPoints[boonid] = new BuffsGraphModel(buff, graphSegments);
+                    BuffGraphs[buffID] = new BuffsGraphModel(buff, graphSegments);
                     if (updateBoonPresence || updateCondiPresence)
                     {
-                        (updateBoonPresence ? boonPresenceGraph : condiPresenceGraph).MergePresenceInto(BuffPoints[boonid].BuffChart);
+                        (updateBoonPresence ? boonPresenceGraph : condiPresenceGraph).MergePresenceInto(BuffGraphs[buffID].BuffChart);
                     }
 
                 }
             }
-            BuffPoints[NumberOfBoonsID] = boonPresenceGraph;
-            BuffPoints[NumberOfConditionsID] = condiPresenceGraph;
+            BuffGraphs[NumberOfBoonsID] = boonPresenceGraph;
+            BuffGraphs[NumberOfConditionsID] = condiPresenceGraph;
             foreach (Minions minions in GetMinions(log).Values)
             {
                 foreach (List<Segment> minionsSegments in minions.GetLifeSpanSegments(log))
@@ -461,53 +479,40 @@ namespace GW2EIEvtcParser.EIData
             }
             if (activeCombatMinionsGraph.BuffChart.Any())
             {
-                BuffPoints[NumberOfActiveCombatMinions] = activeCombatMinionsGraph;
+                BuffGraphs[NumberOfActiveCombatMinions] = activeCombatMinionsGraph;
             }
         }
 
-        public Dictionary<long, FinalBuffsDictionary> GetBuffsDictionary(ParsedEvtcLog log, int phaseIndex)
+        public Dictionary<long, FinalBuffsDictionary> GetBuffsDictionary(ParsedEvtcLog log, long start, long end)
         {
             if (_buffsDictionary == null)
             {
-                SetBuffsDictionary(log);
+                _buffsDictionary = new CachingCollection<(Dictionary<long, FinalBuffsDictionary>, Dictionary<long, FinalBuffsDictionary>)>(log);
             }
-            return _buffsDictionary[phaseIndex];
+            if (!_buffsDictionary.TryGetValue(start, end, out (Dictionary<long, FinalBuffsDictionary>, Dictionary<long, FinalBuffsDictionary>) value))
+            {
+                value = ComputeBuffsDictionary(log, start, end);
+                _buffsDictionary.Set(start, end, value);
+            }
+            return value.Item1;
         }
 
-        public List<Dictionary<long, FinalBuffsDictionary>> GetBuffsDictionary(ParsedEvtcLog log)
+        private (Dictionary<long, FinalBuffsDictionary>, Dictionary<long, FinalBuffsDictionary>) ComputeBuffsDictionary(ParsedEvtcLog log, long start, long end)
         {
-            if (_buffsDictionary == null)
+            BuffDistribution buffDistribution = GetBuffDistribution(log, start, end);
+            var rates = new Dictionary<long, FinalBuffsDictionary>();
+            var ratesActive = new Dictionary<long, FinalBuffsDictionary>();
+            long duration = end - start;
+            long activeDuration = GetActiveDuration(log, start, end);
+
+            foreach (Buff buff in TrackedBuffs)
             {
-                SetBuffsDictionary(log);
-            }
-            return _buffsDictionary;
-        }
-
-        private void SetBuffsDictionary(ParsedEvtcLog log)
-        {
-            _buffsDictionary = new List<Dictionary<long, FinalBuffsDictionary>>();
-            _buffsActiveDictionary = new List<Dictionary<long, FinalBuffsDictionary>>();
-            List<PhaseData> phases = log.FightData.GetPhases(log);
-            for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
-            {
-                BuffDistribution buffDistribution = GetBuffDistribution(log, phaseIndex);
-                var rates = new Dictionary<long, FinalBuffsDictionary>();
-                var ratesActive = new Dictionary<long, FinalBuffsDictionary>();
-                _buffsDictionary.Add(rates);
-                _buffsActiveDictionary.Add(ratesActive);
-
-                PhaseData phase = phases[phaseIndex];
-                long phaseDuration = phase.DurationInMS;
-                long activePhaseDuration = GetActiveDuration(log, phase.Start, phase.End);
-
-                foreach (Buff buff in TrackedBuffs)
+                if (buffDistribution.HasBuffID(buff.ID))
                 {
-                    if (buffDistribution.HasBuffID(buff.ID))
-                    {
-                        (rates[buff.ID], ratesActive[buff.ID]) = FinalBuffsDictionary.GetFinalBuffsDictionary(log, buff, buffDistribution, phaseDuration, activePhaseDuration);
-                    }
+                    (rates[buff.ID], ratesActive[buff.ID]) = FinalBuffsDictionary.GetFinalBuffsDictionary(log, buff, buffDistribution, duration, activeDuration);
                 }
             }
+            return (rates, ratesActive);
         }
 
         //
@@ -632,7 +637,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_dpsStats == null)
             {
-                _dpsStats = new CachingCollection<FinalDPS>(log);
+                _dpsStats = new CachingCollectionWithTarget<FinalDPS>(log);
             }
             if (!_dpsStats.TryGetValue(start, end, target, out FinalDPS value)) 
             {
@@ -653,7 +658,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_defenseStats == null)
             {
-                _defenseStats = new CachingCollection<FinalDefenses>(log);
+                _defenseStats = new CachingCollectionWithTarget<FinalDefenses>(log);
             }
             if (!_defenseStats.TryGetValue(start, end, target, out FinalDefenses value))
             {
@@ -679,7 +684,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_gameplayStats == null)
             {
-                _gameplayStats = new CachingCollection<FinalGameplayStats>(log);
+                _gameplayStats = new CachingCollectionWithTarget<FinalGameplayStats>(log);
             }
             if (!_gameplayStats.TryGetValue(start, end, target, out FinalGameplayStats value))
             {
@@ -699,7 +704,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_supportStats == null)
             {
-                _supportStats = new CachingCollection<FinalSupport>(log);
+                _supportStats = new CachingCollectionWithTarget<FinalSupport>(log);
             }
             if (!_supportStats.TryGetValue(start, end, target, out FinalSupport value))
             {
@@ -832,7 +837,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_hitSelfDamageEventsPerPhasePerTarget == null)
             {
-                _hitSelfDamageEventsPerPhasePerTarget = new CachingCollection<List<AbstractHealthDamageEvent>>(log);
+                _hitSelfDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>(log);
             }
             if (!_hitSelfDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
             {
@@ -846,7 +851,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_conditionHitSelfDamageEventsPerPhasePerTarget == null)
             {
-                _conditionHitSelfDamageEventsPerPhasePerTarget = new CachingCollection<List<AbstractHealthDamageEvent>>(log);
+                _conditionHitSelfDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>(log);
             }
             if (!_conditionHitSelfDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
             {
@@ -860,7 +865,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_powerHitSelfDamageEventsPerPhasePerTarget == null)
             {
-                _powerHitSelfDamageEventsPerPhasePerTarget = new CachingCollection<List<AbstractHealthDamageEvent>>(log);
+                _powerHitSelfDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>(log);
             }
             if (!_powerHitSelfDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
             {

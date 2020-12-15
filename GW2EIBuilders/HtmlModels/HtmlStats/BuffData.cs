@@ -217,9 +217,9 @@ namespace GW2EIBuilders.HtmlModels
         }
 
         /////
-        public static List<BuffData> BuildTargetCondiData(ParsedEvtcLog log, int phaseIndex, NPC target)
+        public static List<BuffData> BuildTargetCondiData(ParsedEvtcLog log, long start, long end, NPC target)
         {
-            Dictionary<long, FinalBuffsDictionary> conditions = target.GetBuffsDictionary(log, phaseIndex);
+            Dictionary<long, FinalBuffsDictionary> conditions = target.GetBuffsDictionary(log, start, end);
             var list = new List<BuffData>();
 
             foreach (Player player in log.PlayerList)

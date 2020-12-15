@@ -69,10 +69,10 @@ namespace GW2EIEvtcParser.EIData
             {
                 _playerSupportStats = new CachingCollection<FinalPlayerSupport>(log);
             }
-            if (!_playerSupportStats.TryGetValue(start, end, null, out FinalPlayerSupport value))
+            if (!_playerSupportStats.TryGetValue(start, end, out FinalPlayerSupport value))
             {
                 value = ComputePlayerSupport(log, start, end);
-                _playerSupportStats.Set(start, end, null, value);
+                _playerSupportStats.Set(start, end, value);
             }
             return value;
         }

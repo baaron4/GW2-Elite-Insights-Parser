@@ -92,7 +92,7 @@ namespace GW2EIEvtcParser.EIData
         /// Make sure the last element does not overflow the fight
         /// </summary>
         /// <param name="fightDuration">Duration of the fight</param>
-        public void Trim(long fightDuration)
+        private void Trim(long fightDuration)
         {
             for (int i = GenerationSimulation.Count - 1; i >= 0; i--)
             {
@@ -111,6 +111,10 @@ namespace GW2EIEvtcParser.EIData
 
         public void Simulate(List<AbstractBuffEvent> logs, long fightDuration)
         {
+            if (GenerationSimulation.Any())
+            {
+                return;
+            }
             long firstTimeValue = logs.Count > 0 ? Math.Min(logs.First().Time, 0) : 0;
             long timeCur = firstTimeValue;
             long timePrev = firstTimeValue;
@@ -128,6 +132,7 @@ namespace GW2EIEvtcParser.EIData
             Update(fightDuration - timePrev);
             GenerationSimulation.RemoveAll(x => x.Duration <= 0);
             BuffStack.Clear();
+            Trim(fightDuration);
         }
 
         protected abstract void Update(long timePassed);

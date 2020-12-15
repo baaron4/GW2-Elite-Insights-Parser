@@ -25,9 +25,9 @@ namespace GW2EIEvtcParser.EIData
         // Damage
         protected List<AbstractHealthDamageEvent> DamageEvents { get; set; }
         protected Dictionary<AgentItem, List<AbstractHealthDamageEvent>> DamageEventByDst { get; set; }
-        private CachingCollection<List<AbstractHealthDamageEvent>> _hitDamageEventsPerPhasePerTarget;
-        private CachingCollection<List<AbstractHealthDamageEvent>> _powerHitDamageEventsPerPhasePerTarget;
-        private CachingCollection<List<AbstractHealthDamageEvent>> _conditionHitDamageEventsPerPhasePerTarget;
+        private CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> _hitDamageEventsPerPhasePerTarget;
+        private CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> _powerHitDamageEventsPerPhasePerTarget;
+        private CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> _conditionHitDamageEventsPerPhasePerTarget;
         protected List<AbstractHealthDamageEvent> DamageTakenEvents { get; set; }
         protected Dictionary<AgentItem, List<AbstractHealthDamageEvent>> DamageTakenEventsBySrc { get; set; }
         // Breakbar Damage
@@ -57,7 +57,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if(_hitDamageEventsPerPhasePerTarget == null)
             {
-                _hitDamageEventsPerPhasePerTarget = new CachingCollection<List<AbstractHealthDamageEvent>>(log);
+                _hitDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>(log);
             }
             if (!_hitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
             {
@@ -71,7 +71,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_conditionHitDamageEventsPerPhasePerTarget == null)
             {
-                _conditionHitDamageEventsPerPhasePerTarget = new CachingCollection<List<AbstractHealthDamageEvent>>(log);
+                _conditionHitDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>(log);
             }
             if (!_conditionHitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
             {
@@ -85,7 +85,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_powerHitDamageEventsPerPhasePerTarget == null)
             {
-                _powerHitDamageEventsPerPhasePerTarget = new CachingCollection<List<AbstractHealthDamageEvent>>(log);
+                _powerHitDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>(log);
             }
             if (!_powerHitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
             {

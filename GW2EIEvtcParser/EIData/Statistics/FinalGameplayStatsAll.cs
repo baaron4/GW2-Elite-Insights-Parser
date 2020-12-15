@@ -80,7 +80,7 @@ namespace GW2EIEvtcParser.EIData
             TimeWasted = -Math.Round(TimeWasted / 1000.0, ParserHelper.TimeDigit);
 
             double avgBoons = 0;
-            foreach (long boonDuration in actor.GetBuffPresence(log, 0).Where(x => log.Buffs.BuffsByIds[x.Key].Nature == BuffNature.Boon).Select(x => x.Value))
+            foreach (long boonDuration in actor.GetBuffPresence(log, start, end).Where(x => log.Buffs.BuffsByIds[x.Key].Nature == BuffNature.Boon).Select(x => x.Value))
             {
                 avgBoons += boonDuration;
             }
@@ -89,7 +89,7 @@ namespace GW2EIEvtcParser.EIData
             AvgActiveBoons = activeDuration > 0 ? Math.Round(avgBoons / activeDuration, ParserHelper.BuffDigit) : 0.0;
 
             double avgCondis = 0;
-            foreach (long conditionDuration in actor.GetBuffPresence(log, 0).Where(x => log.Buffs.BuffsByIds[x.Key].Nature == BuffNature.Condition).Select(x => x.Value))
+            foreach (long conditionDuration in actor.GetBuffPresence(log, start, end).Where(x => log.Buffs.BuffsByIds[x.Key].Nature == BuffNature.Condition).Select(x => x.Value))
             {
                 avgCondis += conditionDuration;
             }

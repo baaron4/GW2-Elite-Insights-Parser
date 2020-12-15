@@ -80,14 +80,13 @@ namespace GW2EIEvtcParser.EIData
         {
             _buffs = new List<Dictionary<long, FinalBuffs>>();
             List<PhaseData> phases = log.FightData.GetPhases(log);
-            for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+            foreach (PhaseData phase in phases)
             {
-                BuffDistribution buffDistribution = GetBuffDistribution(log, phaseIndex);
+                BuffDistribution buffDistribution = GetBuffDistribution(log, phase.Start, phase.End);
                 var rates = new Dictionary<long, FinalBuffs>();
                 _buffs.Add(rates);
-                Dictionary<long, long> buffPresence = GetBuffPresence(log, phaseIndex);
+                Dictionary<long, long> buffPresence = GetBuffPresence(log, phase.Start, phase.End);
 
-                PhaseData phase = phases[phaseIndex];
                 long phaseDuration = phase.DurationInMS;
 
                 foreach (Buff buff in TrackedBuffs)

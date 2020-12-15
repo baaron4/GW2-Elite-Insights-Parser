@@ -323,7 +323,7 @@ namespace GW2EIBuilders.HtmlModels
                 };
                 foreach (NPC target in phase.Targets)
                 {
-                    phaseDto.TargetsCondiStats.Add(BuffData.BuildTargetCondiData(log, i, target));
+                    phaseDto.TargetsCondiStats.Add(BuffData.BuildTargetCondiData(log, phase.Start, phase.End, target));
                     phaseDto.TargetsCondiTotals.Add(BuffData.BuildTargetCondiUptimeData(log, i, target));
                     phaseDto.TargetsBoonTotals.Add(HasBoons(log, i, target) ? BuffData.BuildTargetBoonData(log, i, target) : null);
                 }

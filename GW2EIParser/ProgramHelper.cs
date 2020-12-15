@@ -262,7 +262,7 @@ namespace GW2EIParser
             // parallel stuff
             if (Properties.Settings.Default.MultiThreaded && HasFormat())
             {
-                log.FightData.GetPhases(log);
+                List<PhaseData> phases = log.FightData.GetPhases(log);
                 operation.UpdateProgressWithCancellationCheck("Multi threading");
                 var playersAndTargets = new List<AbstractSingleActor>(log.PlayerList);
                 playersAndTargets.AddRange(log.FightData.Logic.Targets);
@@ -271,6 +271,7 @@ namespace GW2EIParser
                     // that part can't be //
                     actor.ComputeBuffMap(log);
                 }
+                Parallel.ForEach(playersAndTargets, actor => actor.GetStatus(log));
                 if (log.CanCombatReplay)
                 {
                     var playersAndTargetsAndMobs = new List<AbstractSingleActor>(log.FightData.Logic.TrashMobs);
@@ -283,13 +284,10 @@ namespace GW2EIParser
                     Parallel.ForEach(log.PlayerList, player => player.GetCombatReplayPolledPositions(log));
                 }
                 Parallel.ForEach(playersAndTargets, actor => actor.GetBuffGraphs(log));
+                Parallel.ForEach(playersAndTargets, actor => phases.ForEach(phase => actor.GetBuffDistribution(log, phase.Start, phase.End)));
+                Parallel.ForEach(playersAndTargets, actor => phases.ForEach(phase => actor.GetBuffPresence(log, phase.Start, phase.End)));
                 //
                 Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
-                // once simulation is done, computing buff stats is thread safe          
-                Parallel.ForEach(log.PlayerList, player => player.GetStatus(log));
-                Parallel.ForEach(log.FightData.Logic.Targets, target => target.GetStatus(log));
-                Parallel.ForEach(log.PlayerList, player => player.GetBuffs(log, BuffEnum.Self));
-                Parallel.ForEach(log.FightData.Logic.Targets, target => target.GetBuffs(log));
             }
             if (Properties.Settings.Default.SaveOutHTML)
             {

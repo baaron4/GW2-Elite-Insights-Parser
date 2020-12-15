@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Interfaces;
 using GW2EIEvtcParser.ParsedData;

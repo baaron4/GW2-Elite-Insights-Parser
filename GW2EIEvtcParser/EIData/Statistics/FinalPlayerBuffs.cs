@@ -23,15 +23,14 @@ namespace GW2EIEvtcParser.EIData
             var uptimesActiveByPhase = new List<Dictionary<long, FinalPlayerBuffs>>();
 
             List<PhaseData> phases = log.FightData.GetPhases(log);
-            for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+            foreach (PhaseData phase in phases)
             {
-                PhaseData phase = phases[phaseIndex];
                 long phaseDuration = phase.DurationInMS;
 
                 var boonDistributions = new Dictionary<Player, BuffDistribution>();
                 foreach (Player p in playerList)
                 {
-                    boonDistributions[p] = p.GetBuffDistribution(log, phaseIndex);
+                    boonDistributions[p] = p.GetBuffDistribution(log, phase.Start, phase.End);
                 }
 
                 var boonsToTrack = new HashSet<Buff>(boonDistributions.SelectMany(x => x.Value.BuffIDs).Select(x => log.Buffs.BuffsByIds[x]));
@@ -157,15 +156,13 @@ namespace GW2EIEvtcParser.EIData
             var selfBuffsActive = new List<Dictionary<long, FinalPlayerBuffs>>();
             var selfBuffs = new List<Dictionary<long, FinalPlayerBuffs>>();
             List<PhaseData> phases = log.FightData.GetPhases(log);
-            for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+            foreach (PhaseData phase in phases)
             {
                 var final = new Dictionary<long, FinalPlayerBuffs>();
                 var finalActive = new Dictionary<long, FinalPlayerBuffs>();
 
-                PhaseData phase = phases[phaseIndex];
-
-                BuffDistribution selfBoons = player.GetBuffDistribution(log, phaseIndex);
-                Dictionary<long, long> buffPresence = player.GetBuffPresence(log, phaseIndex);
+                BuffDistribution selfBoons = player.GetBuffDistribution(log, phase.Start, phase.End);
+                Dictionary<long, long> buffPresence = player.GetBuffPresence(log, phase.Start, phase.End);
 
                 long phaseDuration = phase.DurationInMS;
                 long playerActiveDuration = player.GetActiveDuration(log, phase.Start, phase.End);

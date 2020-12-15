@@ -1,30 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser
 {
-    internal class CachingCollection<T>
+    internal class CachingCollectionWithTarget<T> : AbstractCachingCollection<T>
     {
         private static readonly NPC _nullActor = new NPC(new AgentItem());
 
         private readonly Dictionary<long, Dictionary<long, Dictionary<AbstractActor, T>>> _cache = new Dictionary<long, Dictionary<long, Dictionary<AbstractActor, T>>>();
 
-        private readonly long _start;
-        private readonly long _end;
-
-        public CachingCollection(ParsedEvtcLog log)
+        public CachingCollectionWithTarget(ParsedEvtcLog log) : base(log)
         {
-            _start = log.FightData.LogStart;
-            _end = log.FightData.LogEnd;
-        }
-
-        private (long, long) SanitizeTimes(long start, long end)
-        {
-            long newStart = Math.Max(start, _start);
-            long newEnd = Math.Max(newStart, Math.Min(end, _end));
-            return (newStart, newEnd);
         }
 
         public bool TryGetValue(long start, long end, AbstractActor actor, out T value)
@@ -69,7 +56,7 @@ namespace GW2EIEvtcParser.EIData
             return TryGetValue(start, end, actor, out _);
         }
 
-        public void Clear()
+        public override void Clear()
         {
             _cache.Clear();
         }
