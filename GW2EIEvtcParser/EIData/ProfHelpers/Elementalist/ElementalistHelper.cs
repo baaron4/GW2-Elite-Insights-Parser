@@ -116,7 +116,6 @@ namespace GW2EIEvtcParser.EIData
                 toClean.Add(c.BuffID);
                 c.Invalidate(skillData);
             }
-            buffsPerDst.RemoveAll(x => x.BuffID == Buff.NoBuff);
             foreach (long buffID in toClean)
             {
                 buffsByID[buffID].RemoveAll(x => x.BuffID == NoBuff);

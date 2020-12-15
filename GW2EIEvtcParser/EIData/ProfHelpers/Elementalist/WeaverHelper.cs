@@ -247,7 +247,6 @@ namespace GW2EIEvtcParser.EIData
                 }
                 prevID = curID;
             }
-            buffs.RemoveAll(x => x.BuffID == NoBuff);
             foreach (long buffID in toClean)
             {
                 buffsByID[buffID].RemoveAll(x => x.BuffID == NoBuff);
