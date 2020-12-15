@@ -33,7 +33,7 @@ namespace GW2EIEvtcParser.EIData
             return new List<AgentItem>() { _src };
         }
 
-        public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID, ParsedEvtcLog log)
+        public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
         {
             Dictionary<AgentItem, BuffDistributionItem> distrib = distribs.GetDistrib(buffID);
             long cDur = GetClampedDuration(start, end);
@@ -45,8 +45,7 @@ namespace GW2EIEvtcParser.EIData
             AgentItem seedAgent = _seedSrc;
             if (distrib.TryGetValue(agent, out BuffDistributionItem toModify))
             {
-                toModify.Value += cDur;
-                distrib[agent] = toModify;
+                toModify.IncrementValue(cDur);
             }
             else
             {
@@ -58,8 +57,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (distrib.TryGetValue(agent, out toModify))
                 {
-                    toModify.Extension += cDur;
-                    distrib[agent] = toModify;
+                    toModify.IncrementExtension(cDur);
                 }
                 else
                 {
@@ -72,8 +70,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (distrib.TryGetValue(seedAgent, out toModify))
                 {
-                    toModify.Extended += cDur;
-                    distrib[seedAgent] = toModify;
+                    toModify.IncrementExtended(cDur);
                 }
                 else
                 {
@@ -86,8 +83,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (distrib.TryGetValue(seedAgent, out toModify))
                 {
-                    toModify.UnknownExtension += cDur;
-                    distrib[seedAgent] = toModify;
+                    toModify.IncrementUnknownExtension(cDur);
                 }
                 else
                 {

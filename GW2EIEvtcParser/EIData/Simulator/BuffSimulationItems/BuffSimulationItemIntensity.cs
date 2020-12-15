@@ -38,7 +38,7 @@ namespace GW2EIEvtcParser.EIData
             return _stacks.Count;
         }
 
-        public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long boonid, ParsedEvtcLog log)
+        public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long boonid)
         {
             long cDur = GetClampedDuration(start, end);
             if (cDur == 0)
@@ -47,7 +47,7 @@ namespace GW2EIEvtcParser.EIData
             }
             foreach (BuffSimulationItemDuration item in _stacks)
             {
-                item.SetBuffDistributionItem(distribs, start, end, boonid, log);
+                item.SetBuffDistributionItem(distribs, start, end, boonid);
             }
         }
 

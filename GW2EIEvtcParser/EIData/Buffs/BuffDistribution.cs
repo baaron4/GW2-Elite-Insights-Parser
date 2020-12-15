@@ -6,12 +6,12 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class BuffDistributionItem
     {
-        public long Value { get; set; }
-        public long Overstack { get; set; }
-        public long Waste { get; set; }
-        public long UnknownExtension { get; set; }
-        public long Extension { get; set; }
-        public long Extended { get; set; }
+        public long Value { get; private set; }
+        public long Overstack { get; private set; }
+        public long Waste { get; private set; }
+        public long UnknownExtension { get; private set; }
+        public long Extension { get; private set; }
+        public long Extended { get; private set; }
 
         internal BuffDistributionItem(long value, long overstack, long waste, long unknownExtension, long extension, long extended)
         {
@@ -21,6 +21,36 @@ namespace GW2EIEvtcParser.EIData
             UnknownExtension = unknownExtension;
             Extension = extension;
             Extended = extended;
+        }
+
+        internal void IncrementValue(long value)
+        {
+            Value += value;
+        }
+
+        internal void IncrementOverstack(long value)
+        {
+            Overstack += value;
+        }
+
+        internal void IncrementWaste(long value)
+        {
+            Waste += value;
+        }
+
+        internal void IncrementUnknownExtension(long value)
+        {
+            UnknownExtension += value;
+        }
+
+        internal void IncrementExtension(long value)
+        {
+            Extension += value;
+        }
+
+        internal void IncrementExtended(long value)
+        {
+            Extended += value;
         }
     }
 
