@@ -239,8 +239,6 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/8/8c/Guardian_tango_icon_20px.png";
                 case "Dragonhunter":
                     return "https://wiki.guildwars2.com/images/c/c9/Dragonhunter_tango_icon_20px.png";
-                case "DragonHunter":
-                    return "https://wiki.guildwars2.com/images/c/c9/Dragonhunter_tango_icon_20px.png";
                 case "Firebrand":
                     return "https://wiki.guildwars2.com/images/0/02/Firebrand_tango_icon_20px.png";
                 case "Revenant":
