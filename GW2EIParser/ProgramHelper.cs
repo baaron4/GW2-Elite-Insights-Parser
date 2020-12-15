@@ -53,9 +53,9 @@ namespace GW2EIParser
             //
             builder.AddField("Encounter Duration", log.FightData.DurationString);
             //
-            if (log.Statistics.PresentFractalInstabilities.Any())
+            if (log.StatisticsHelper.PresentFractalInstabilities.Any())
             {
-                builder.AddField("Instabilities", string.Join("\n", log.Statistics.PresentFractalInstabilities.Select(x => x.Name)));
+                builder.AddField("Instabilities", string.Join("\n", log.StatisticsHelper.PresentFractalInstabilities.Select(x => x.Name)));
             }
             //
             /*var playerByGroup = log.PlayerList.Where(x => !x.IsFakeActor).GroupBy(x => x.Group).ToDictionary(x => x.Key, x => x.ToList());

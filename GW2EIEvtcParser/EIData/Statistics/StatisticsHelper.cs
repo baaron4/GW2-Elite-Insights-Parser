@@ -8,9 +8,9 @@ namespace GW2EIEvtcParser.EIData
     /// <summary>
     /// Passes statistical information
     /// </summary>
-    public class GeneralStatistics
+    public class StatisticsHelper
     {
-        internal GeneralStatistics(CombatData combatData, List<Player> players, BuffsContainer boons)
+        internal StatisticsHelper(CombatData combatData, List<Player> players, BuffsContainer boons)
         {
             HashSet<long> skillIDs = combatData.GetSkills();
             // Main boons
@@ -68,12 +68,12 @@ namespace GW2EIEvtcParser.EIData
             var remainingBuffsByIds = boons.BuffsByNature[BuffNature.GraphOnlyBuff].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
             foreach (Player player in players)
             {
-                PresentPersonalBuffs[player] = new HashSet<Buff>();
+                PresentRemainingBuffsPerPlayer[player] = new HashSet<Buff>();
                 foreach (AbstractBuffEvent item in combatData.GetBuffData(player.AgentItem))
                 {
                     if (item is BuffApplyEvent && item.To == player.AgentItem && remainingBuffsByIds.TryGetValue(item.BuffID, out Buff boon))
                     {
-                        PresentPersonalBuffs[player].Add(boon);
+                        PresentRemainingBuffsPerPlayer[player].Add(boon);
                     }
                 }
             }
@@ -87,7 +87,7 @@ namespace GW2EIEvtcParser.EIData
         public List<Buff> PresentSupbuffs { get; } = new List<Buff>();//Used only for Off Buff tables
         public List<Buff> PresentDefbuffs { get; } = new List<Buff>();//Used only for Def Buff tables
         public List<Buff> PresentFractalInstabilities { get; } = new List<Buff>();
-        public Dictionary<Player, HashSet<Buff>> PresentPersonalBuffs { get; } = new Dictionary<Player, HashSet<Buff>>();
+        public Dictionary<Player, HashSet<Buff>> PresentRemainingBuffsPerPlayer { get; } = new Dictionary<Player, HashSet<Buff>>();
 
         //Positions for group
         private List<Point3D> _stackCenterPositions = null;

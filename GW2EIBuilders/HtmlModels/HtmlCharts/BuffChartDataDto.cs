@@ -53,11 +53,11 @@ namespace GW2EIBuilders.HtmlModels
             var list = new List<BuffChartDataDto>();
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
             var boonGraphData = p.GetBuffGraphs(log).ToDictionary(x => x.Key, x => x.Value);
-            BuildBoonGraphData(list, log.Statistics.PresentBoons, boonGraphData, phase, usedBuffs);
-            BuildBoonGraphData(list, log.Statistics.PresentConditions, boonGraphData, phase, usedBuffs);
-            BuildBoonGraphData(list, log.Statistics.PresentOffbuffs, boonGraphData, phase, usedBuffs);
-            BuildBoonGraphData(list, log.Statistics.PresentSupbuffs, boonGraphData, phase, usedBuffs);
-            BuildBoonGraphData(list, log.Statistics.PresentDefbuffs, boonGraphData, phase, usedBuffs);
+            BuildBoonGraphData(list, log.StatisticsHelper.PresentBoons, boonGraphData, phase, usedBuffs);
+            BuildBoonGraphData(list, log.StatisticsHelper.PresentConditions, boonGraphData, phase, usedBuffs);
+            BuildBoonGraphData(list, log.StatisticsHelper.PresentOffbuffs, boonGraphData, phase, usedBuffs);
+            BuildBoonGraphData(list, log.StatisticsHelper.PresentSupbuffs, boonGraphData, phase, usedBuffs);
+            BuildBoonGraphData(list, log.StatisticsHelper.PresentDefbuffs, boonGraphData, phase, usedBuffs);
             foreach (BuffsGraphModel bgm in boonGraphData.Values)
             {
                 BuffChartDataDto graph = BuildBuffGraph(bgm, phase, usedBuffs);

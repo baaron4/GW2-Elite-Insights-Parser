@@ -98,8 +98,8 @@ namespace GW2EIEvtcParser.EIData
 
             if (log.CombatData.HasMovementData && actor is Player player)
             {
-                StackDist = GetDistanceToTarget(player, log, phase, log.Statistics.GetStackCenterPositions(log));
-                DistToCom = GetDistanceToTarget(player, log, phase, log.Statistics.GetStackCommanderPositions(log));
+                StackDist = GetDistanceToTarget(player, log, phase, log.StatisticsHelper.GetStackCenterPositions(log));
+                DistToCom = GetDistanceToTarget(player, log, phase, log.StatisticsHelper.GetStackCommanderPositions(log));
             }
         }
     }
