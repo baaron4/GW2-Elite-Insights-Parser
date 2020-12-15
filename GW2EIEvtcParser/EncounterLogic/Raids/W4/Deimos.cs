@@ -175,23 +175,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(deimos.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && x.Time > specialSplitTime && playerAgents.Contains(x.From.GetFinalMaster()));
                 if (lastDamageTaken != null)
                 {
-                    int playerDeadOrDCCount = 0;
-                    foreach (AgentItem playerAgent in playerAgents)
-                    {
-                        var deads = new List<(long start, long end)>();
-                        var downs = new List<(long start, long end)>();
-                        var dcs = new List<(long start, long end)>();
-                        playerAgent.GetAgentStatus(deads, downs, dcs, combatData, fightData);
-                        if (deads.Any(x => x.start <= notAttackableEvent.Time && x.end >= notAttackableEvent.Time))
-                        {
-                            playerDeadOrDCCount++;
-                        }
-                        else if (dcs.Any(x => x.start <= notAttackableEvent.Time && x.end >= notAttackableEvent.Time))
-                        {
-                            playerDeadOrDCCount++;
-                        }
-                    }
-                    if (playerDeadOrDCCount == playerAgents.Count)
+                    if (!AtLeastOnePlayerAlive(combatData, fightData, notAttackableEvent.Time, playerAgents))
                     {
                         return;
                     }

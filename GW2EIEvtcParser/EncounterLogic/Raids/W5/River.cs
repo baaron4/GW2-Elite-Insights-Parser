@@ -65,6 +65,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                     DespawnEvent dspwn = combatData.GetDespawnEvents(desmina.AgentItem).LastOrDefault();
                     if (time != 0 && dspwn == null && time + 500 <= desmina.LastAware)
                     {
+                        if (!AtLeastOnePlayerAlive(combatData, fightData, time, playerAgents))
+                        {
+                            return;
+                        }
                         fightData.SetSuccess(true, time);
                     }
                 }

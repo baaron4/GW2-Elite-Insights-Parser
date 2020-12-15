@@ -40,11 +40,11 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 if (p.Prof == "Weaver")
                 {
-                    toAdd.AddRange(WeaverHelper.TransformWeaverAttunements(GetBuffData(p.AgentItem), p.AgentItem, skillData));
+                    toAdd.AddRange(WeaverHelper.TransformWeaverAttunements(GetBuffData(p.AgentItem), _buffData, p.AgentItem, skillData));
                 }
                 if (p.Prof == "Elementalist" || p.Prof == "Tempest")
                 {
-                    ElementalistHelper.RemoveDualBuffs(GetBuffData(p.AgentItem), skillData);
+                    ElementalistHelper.RemoveDualBuffs(GetBuffData(p.AgentItem), _buffData, skillData);
                 }
             }
             toAdd.AddRange(fightData.Logic.SpecialBuffEventProcess(_buffDataByDst, _buffData, skillData));
@@ -596,7 +596,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
             if (_buffData.TryGetValue(key, out List<AbstractBuffEvent> res))
             {
-                return res.Where(x => x.BuffID != Buff.NoBuff).ToList();
+                return res;
             }
             return new List<AbstractBuffEvent>(); ;
         }
@@ -605,7 +605,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
             if (_buffRemoveAllData.TryGetValue(key, out List<BuffRemoveAllEvent> res))
             {
-                return res.Where(x => x.BuffID != Buff.NoBuff).ToList();
+                return res;
             }
             return new List<BuffRemoveAllEvent>(); ;
         }
@@ -619,7 +619,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
             if (_buffDataByDst.TryGetValue(key, out List<AbstractBuffEvent> res))
             {
-                return res.Where(x => x.BuffID != Buff.NoBuff).ToList();
+                return res;
             }
             return new List<AbstractBuffEvent>(); ;
         }

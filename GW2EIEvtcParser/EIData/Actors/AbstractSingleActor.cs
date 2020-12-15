@@ -150,11 +150,7 @@ namespace GW2EIEvtcParser.EIData
             int durationInS = durationInMS / 1000;
             List<AbstractHealthDamageEvent> damageEvents = GetDamageEvents(target, log, start, end);
             // fill the graph, full precision
-            var dmgListFull = new List<int>();
-            for (int i = 0; i <= durationInMS; i++)
-            {
-                dmgListFull.Add(0);
-            }
+            var dmgListFull = new int[durationInMS + 1];
             int totalTime = 1;
             int totalDamage = 0;
             foreach (AbstractHealthDamageEvent dl in damageEvents)
@@ -207,11 +203,7 @@ namespace GW2EIEvtcParser.EIData
             int durationInS = durationInMS / 1000;     
             List<AbstractBreakbarDamageEvent> breakbarDamageEvents = GetBreakbarDamageEvents(target, log, start, end);
             // fill the graph, full precision
-            var brkDmgListFull = new List<double>();
-            for (int i = 0; i <= durationInMS; i++)
-            {
-                brkDmgListFull.Add(0);
-            }
+            var brkDmgListFull = new double[durationInMS + 1];
             int totalTime = 1;
             double totalDamage = 0;
             foreach (DirectBreakbarDamageEvent dl in breakbarDamageEvents)
