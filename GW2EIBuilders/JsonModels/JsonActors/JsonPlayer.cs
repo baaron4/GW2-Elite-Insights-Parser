@@ -199,7 +199,7 @@ namespace GW2EIBuilders.JsonModels
             ActiveTimes = phases.Select(x => player.GetActiveDuration(log, x.Start, x.End)).ToList();
             HasCommanderTag = player.HasCommanderTag;
             //
-            Support = player.GetPlayerSupport(log).Select(x => new JsonStatistics.JsonPlayerSupport(x)).ToArray();
+            Support = phases.Select(phase => new JsonStatistics.JsonPlayerSupport(player.GetPlayerSupportStats(log, phase.Start, phase.End))).ToArray();
             TargetDamage1S = new List<int>[log.FightData.Logic.Targets.Count][];
             TargetBreakbarDamage1S = new List<double>[log.FightData.Logic.Targets.Count][];
             DpsTargets = new JsonStatistics.JsonDPS[log.FightData.Logic.Targets.Count][];
@@ -227,7 +227,7 @@ namespace GW2EIBuilders.JsonModels
                     TargetBreakbarDamage1S[j] = graph1SBreakbarDamageList;
                 }
                 TargetDamageDist[j] = targetDamageDistList;
-                DpsTargets[j] = phases.Select(phase => new JsonStatistics.JsonDPS(player.GetDPS(target, log, phase.Start, phase.End))).ToArray();
+                DpsTargets[j] = phases.Select(phase => new JsonStatistics.JsonDPS(player.GetDPSStats(target, log, phase.Start, phase.End))).ToArray();
                 StatsTargets[j] = phases.Select(phase => new JsonStatistics.JsonGameplayStats(player.GetGameplayStats(target, log, phase.Start, phase.End))).ToArray();
             }
             if (!log.CombatData.HasBreakbarDamageData)

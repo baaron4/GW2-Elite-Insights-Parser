@@ -24,9 +24,9 @@ namespace GW2EIEvtcParser.EIData
             return reses;
         }
 
-        internal FinalSupportAll(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor) : base(log, phase, actor, null)
+        internal FinalSupportAll(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor) : base(log, start, end, actor, null)
         {
-            long[] resArray = GetReses(log, actor, phase.Start, phase.End);
+            long[] resArray = GetReses(log, actor, start, end);
             Resurrects = (int)resArray[0];
             ResurrectTime = resArray[1];
         }

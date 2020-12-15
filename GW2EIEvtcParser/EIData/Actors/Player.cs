@@ -21,7 +21,7 @@ namespace GW2EIEvtcParser.EIData
         private HashSet<string> _presentDamageModifiers;
         private Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>> _damageModifiersTargets;
         // statistics
-        private List<FinalPlayerSupport> _playerSupport;
+        private CachingCollection<FinalPlayerSupport> _playerSupportStats;
         private List<Dictionary<long, FinalPlayerBuffs>> _selfBuffs;
         private List<Dictionary<long, FinalPlayerBuffs>> _groupBuffs;
         private List<Dictionary<long, FinalPlayerBuffs>> _offGroupBuffs;
@@ -63,69 +63,69 @@ namespace GW2EIEvtcParser.EIData
 
         // Public methods
 
-        public FinalPlayerSupport GetPlayerSupport(ParsedEvtcLog log, int phaseIndex)
+        public FinalPlayerSupport GetPlayerSupportStats(ParsedEvtcLog log, long start, long end)
         {
-            return GetPlayerSupport(log)[phaseIndex];
+            if(_playerSupportStats == null)
+            {
+                _playerSupportStats = new CachingCollection<FinalPlayerSupport>(log);
+            }
+            if (!_playerSupportStats.TryGetValue(start, end, null, out FinalPlayerSupport value))
+            {
+                value = ComputePlayerSupport(log, start, end);
+                _playerSupportStats.Set(start, end, null, value);
+            }
+            return value;
         }
 
-        public List<FinalPlayerSupport> GetPlayerSupport(ParsedEvtcLog log)
+        private FinalPlayerSupport ComputePlayerSupport(ParsedEvtcLog log, long start, long end)
         {
-            if (_playerSupport == null)
+            var playerSup = new FinalPlayerSupport();
+            FinalSupportAll totals = GetSupportStats(log, start, end);
+            playerSup.Resurrects = totals.Resurrects;
+            playerSup.ResurrectTime = Math.Round(totals.ResurrectTime / 1000.0, ParserHelper.TimeDigit);
+            FinalSupport self = GetSupportStats(this, log, start, end);
+            foreach (Buff boon in log.Buffs.BuffsByNature[BuffNature.Boon])
             {
-                _playerSupport = new List<FinalPlayerSupport>();
-                List<PhaseData> phases = log.FightData.GetPhases(log);
-                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+                // add everything from total
+                if (totals.Removals.TryGetValue(boon.ID, out (int count, long time) item))
                 {
-                    var playerSup = new FinalPlayerSupport();
-                    _playerSupport.Add(playerSup);
-                    FinalSupportAll totals = GetSupport(log, phaseIndex);
-                    playerSup.Resurrects = totals.Resurrects;
-                    playerSup.ResurrectTime = Math.Round(totals.ResurrectTime / 1000.0, ParserHelper.TimeDigit);
-                    FinalSupport self = GetSupport(log, this, phaseIndex);
-                    foreach (Buff boon in log.Buffs.BuffsByNature[BuffNature.Boon])
-                    {
-                        // add everything from total
-                        if (totals.Removals.TryGetValue(boon.ID, out (int count, long time) item))
-                        {
-                            playerSup.BoonStrips += item.count;
-                            playerSup.BoonStripsTime += item.time;
-                        }
-                        // remove everything from self
-                        if (self.Removals.TryGetValue(boon.ID, out item))
-                        {
-                            playerSup.BoonStrips -= item.count;
-                            playerSup.BoonStripsTime -= item.time;
-                        }
-                    }
-                    foreach (Buff condition in log.Buffs.BuffsByNature[BuffNature.Condition])
-                    {
-                        // add everything from self
-                        if (self.Removals.TryGetValue(condition.ID, out (int count, long time) item))
-                        {
-                            playerSup.CondiCleanseSelf += item.count;
-                            playerSup.CondiCleanseTimeSelf += item.time;
-                        }
-                        foreach (Player p in log.PlayerList)
-                        {
-                            if (p == this)
-                            {
-                                continue;
-                            }
-                            FinalSupport other = GetSupport(log, p, phaseIndex);
-                            // Add everything from other
-                            if (other.Removals.TryGetValue(condition.ID, out item))
-                            {
-                                playerSup.CondiCleanse += item.count;
-                                playerSup.CondiCleanseTime += item.time;
-                            }
-                        }
-                    }
-                    playerSup.CondiCleanseTime = Math.Round(playerSup.CondiCleanseTime / 1000.0, ParserHelper.TimeDigit);
-                    playerSup.CondiCleanseTimeSelf = Math.Round(playerSup.CondiCleanseTimeSelf / 1000.0, ParserHelper.TimeDigit);
-                    playerSup.BoonStripsTime = Math.Round(playerSup.BoonStripsTime / 1000.0, ParserHelper.TimeDigit);
+                    playerSup.BoonStrips += item.count;
+                    playerSup.BoonStripsTime += item.time;
+                }
+                // remove everything from self
+                if (self.Removals.TryGetValue(boon.ID, out item))
+                {
+                    playerSup.BoonStrips -= item.count;
+                    playerSup.BoonStripsTime -= item.time;
                 }
             }
-            return _playerSupport;
+            foreach (Buff condition in log.Buffs.BuffsByNature[BuffNature.Condition])
+            {
+                // add everything from self
+                if (self.Removals.TryGetValue(condition.ID, out (int count, long time) item))
+                {
+                    playerSup.CondiCleanseSelf += item.count;
+                    playerSup.CondiCleanseTimeSelf += item.time;
+                }
+                foreach (Player p in log.PlayerList)
+                {
+                    if (p == this)
+                    {
+                        continue;
+                    }
+                    FinalSupport other = GetSupportStats(p, log, start, end);
+                    // Add everything from other
+                    if (other.Removals.TryGetValue(condition.ID, out item))
+                    {
+                        playerSup.CondiCleanse += item.count;
+                        playerSup.CondiCleanseTime += item.time;
+                    }
+                }
+            }
+            playerSup.CondiCleanseTime = Math.Round(playerSup.CondiCleanseTime / 1000.0, ParserHelper.TimeDigit);
+            playerSup.CondiCleanseTimeSelf = Math.Round(playerSup.CondiCleanseTimeSelf / 1000.0, ParserHelper.TimeDigit);
+            playerSup.BoonStripsTime = Math.Round(playerSup.BoonStripsTime / 1000.0, ParserHelper.TimeDigit);
+            return playerSup;
         }
 
         public Dictionary<long, FinalPlayerBuffs> GetBuffs(ParsedEvtcLog log, int phaseIndex, BuffEnum type)

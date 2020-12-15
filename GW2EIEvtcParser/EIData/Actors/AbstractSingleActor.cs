@@ -34,11 +34,10 @@ namespace GW2EIEvtcParser.EIData
         // Replay
         protected CombatReplay CombatReplay { get; set; }
         // Statistics
-        private CachingCollection<FinalDPS> _dps;
-        private CachingCollection<FinalDefenses> _defenses;
+        private CachingCollection<FinalDPS> _dpsStats;
+        private CachingCollection<FinalDefenses> _defenseStats;
         private CachingCollection<FinalGameplayStats> _gameplayStats;
-        private List<FinalSupportAll> _supportAll;
-        private Dictionary<AbstractSingleActor, List<FinalSupport>> _supportTarget;
+        private CachingCollection<FinalSupport> _supportStats;
 
         protected AbstractSingleActor(AgentItem agent) : base(agent)
         {
@@ -629,44 +628,44 @@ namespace GW2EIEvtcParser.EIData
 
         // DPS Stats
 
-        public FinalDPS GetDPS(AbstractSingleActor target, ParsedEvtcLog log,  long start, long end)
+        public FinalDPS GetDPSStats(AbstractSingleActor target, ParsedEvtcLog log,  long start, long end)
         {
-            if (_dps == null)
+            if (_dpsStats == null)
             {
-                _dps = new CachingCollection<FinalDPS>(log);
+                _dpsStats = new CachingCollection<FinalDPS>(log);
             }
-            if (!_dps.TryGetValue(start, end, target, out FinalDPS value)) 
+            if (!_dpsStats.TryGetValue(start, end, target, out FinalDPS value)) 
             {
                 value = new FinalDPS(log, start, end, this, target);
-                _dps.Set(start, end, target, value);
+                _dpsStats.Set(start, end, target, value);
             }
             return value;
         }
 
-        public FinalDPS GetDPS(ParsedEvtcLog log, long start, long end)
+        public FinalDPS GetDPSStats(ParsedEvtcLog log, long start, long end)
         {
-            return GetDPS(null, log, start, end);
+            return GetDPSStats(null, log, start, end);
         }
 
         // Defense Stats
 
-        public FinalDefenses GetDefenses(AbstractSingleActor target, ParsedEvtcLog log,  long start, long end)
+        public FinalDefenses GetDefenseStats(AbstractSingleActor target, ParsedEvtcLog log,  long start, long end)
         {
-            if (_defenses == null)
+            if (_defenseStats == null)
             {
-                _defenses = new CachingCollection<FinalDefenses>(log);
+                _defenseStats = new CachingCollection<FinalDefenses>(log);
             }
-            if (!_defenses.TryGetValue(start, end, target, out FinalDefenses value))
+            if (!_defenseStats.TryGetValue(start, end, target, out FinalDefenses value))
             {
                 value = target != null ? new FinalDefenses(log, start, end, this, target) : new FinalDefensesAll(log, start, end, this);
-                _defenses.Set(start, end, target, value);
+                _defenseStats.Set(start, end, target, value);
             }
             return value;
         }
 
-        public FinalDefensesAll GetDefenses(ParsedEvtcLog log, long start, long end)
+        public FinalDefensesAll GetDefenseStats(ParsedEvtcLog log, long start, long end)
         {
-            return GetDefenses(null, log, start, end) as FinalDefensesAll;
+            return GetDefenseStats(null, log, start, end) as FinalDefensesAll;
         }
 
         // Gameplay Stats
@@ -691,52 +690,23 @@ namespace GW2EIEvtcParser.EIData
         }
 
         // Support stats
-        public FinalSupportAll GetSupport(ParsedEvtcLog log, int phaseIndex)
+        public FinalSupportAll GetSupportStats(ParsedEvtcLog log, long start, long end)
         {
-            return GetSupport(log)[phaseIndex];
+            return GetSupportStats(null, log, start, end) as FinalSupportAll;
         }
 
-        public List<FinalSupportAll> GetSupport(ParsedEvtcLog log)
+        public FinalSupport GetSupportStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
-            if (_supportAll == null)
+            if (_supportStats == null)
             {
-                _supportAll = new List<FinalSupportAll>();
-                List<PhaseData> phases = log.FightData.GetPhases(log);
-                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
-                {
-                    PhaseData phase = phases[phaseIndex];
-                    var final = new FinalSupportAll(log, phase, this);
-                    _supportAll.Add(final);
-                }
+                _supportStats = new CachingCollection<FinalSupport>(log);
             }
-            return _supportAll;
-        }
-
-        public FinalSupport GetSupport(ParsedEvtcLog log, AbstractSingleActor target, int phaseIndex)
-        {
-            return GetSupport(log, target)[phaseIndex];
-        }
-
-        public List<FinalSupport> GetSupport(ParsedEvtcLog log, AbstractSingleActor target)
-        {
-            if (target == null)
+            if (!_supportStats.TryGetValue(start, end, target, out FinalSupport value))
             {
-                return new List<FinalSupport>(GetSupport(log));
+                value = target != null ? new FinalSupport(log, start, end, this, target) : new FinalSupportAll(log, start, end, this);
+                _supportStats.Set(start, end, target, value);
             }
-            if (_supportTarget == null)
-            {
-                _supportTarget = new Dictionary<AbstractSingleActor, List<FinalSupport>>();
-            }
-            if (_supportTarget.TryGetValue(target, out List<FinalSupport> list))
-            {
-                return list;
-            }
-            _supportTarget[target] = new List<FinalSupport>();
-            foreach (PhaseData phase in log.FightData.GetPhases(log))
-            {
-                _supportTarget[target].Add(new FinalSupport(log, phase, this, target));
-            }
-            return _supportTarget[target];
+            return value;
         }
 
 

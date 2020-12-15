@@ -177,9 +177,9 @@ namespace GW2EIBuilders.JsonModels
             HitboxWidth = actor.HitboxWidth;
             InstanceID = actor.InstID;
             //
-            DpsAll = phases.Select(phase => new JsonStatistics.JsonDPS(actor.GetDPS(log, phase.Start, phase.End))).ToArray();
+            DpsAll = phases.Select(phase => new JsonStatistics.JsonDPS(actor.GetDPSStats(log, phase.Start, phase.End))).ToArray();
             StatsAll = phases.Select(phase => new JsonStatistics.JsonGameplayStatsAll(actor.GetGameplayStats(log, phase.Start, phase.End))).ToArray();
-            Defenses = phases.Select(phase => new JsonStatistics.JsonDefensesAll(actor.GetDefenses(log, phase.Start, phase.End))).ToArray();
+            Defenses = phases.Select(phase => new JsonStatistics.JsonDefensesAll(actor.GetDefenseStats(log, phase.Start, phase.End))).ToArray();
             //
             Dictionary<long, Minions> minionsList = actor.GetMinions(log);
             if (minionsList.Values.Any())

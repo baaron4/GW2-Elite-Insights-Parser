@@ -126,7 +126,7 @@ namespace GW2EIEvtcParser.EIData
 
         public int GetTotalDamage(Player p, ParsedEvtcLog log, NPC t, long start, long end)
         {
-            FinalDPS damageData = p.GetDPS(t, log, start, end);
+            FinalDPS damageData = p.GetDPSStats(t, log, start, end);
             switch (_compareType)
             {
                 case DamageType.All:

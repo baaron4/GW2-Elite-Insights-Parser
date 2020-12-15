@@ -232,14 +232,14 @@ namespace GW2EIBuilders.HtmlModels
 
         public static DmgDistributionDto BuildPlayerDMGDistData(ParsedEvtcLog log, Player p, NPC target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
-            FinalDPS dps = p.GetDPS(target, log, phase.Start, phase.End);
+            FinalDPS dps = p.GetDPSStats(target, log, phase.Start, phase.End);
             return BuildDMGDistDataInternal(log, dps, p, target, phase, usedSkills, usedBuffs);
         }
 
 
         public static DmgDistributionDto BuildTargetDMGDistData(ParsedEvtcLog log, NPC npc, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
-            FinalDPS dps = npc.GetDPS(log, phase.Start, phase.End);
+            FinalDPS dps = npc.GetDPSStats(log, phase.Start, phase.End);
             return BuildDMGDistDataInternal(log, dps, npc, null, phase, usedSkills, usedBuffs);
         }
 
@@ -261,7 +261,7 @@ namespace GW2EIBuilders.HtmlModels
 
         public static DmgDistributionDto BuildPlayerMinionDMGDistData(ParsedEvtcLog log, Player p, Minions minions, NPC target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
-            FinalDPS dps = p.GetDPS(target, log, phase.Start, phase.End);
+            FinalDPS dps = p.GetDPSStats(target, log, phase.Start, phase.End);
 
             return BuildDMGDistDataMinionsInternal(log, dps, minions, target, phase, usedSkills, usedBuffs);
         }
@@ -269,7 +269,7 @@ namespace GW2EIBuilders.HtmlModels
 
         public static DmgDistributionDto BuildTargetMinionDMGDistData(ParsedEvtcLog log, NPC target, Minions minions, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
-            FinalDPS dps = target.GetDPS(log, phase.Start, phase.End);
+            FinalDPS dps = target.GetDPSStats(log, phase.Start, phase.End);
             return BuildDMGDistDataMinionsInternal(log, dps, minions, null, phase, usedSkills, usedBuffs);
         }
     }

@@ -277,7 +277,7 @@ namespace GW2EIBuilders.HtmlModels
             var list = new List<List<object>>(log.PlayerList.Count);
             foreach (Player player in log.PlayerList)
             {
-                FinalDPS dpsAll = player.GetDPS(log, phase.Start, phase.End);
+                FinalDPS dpsAll = player.GetDPSStats(log, phase.Start, phase.End);
                 list.Add(GetDPSStatData(dpsAll));
             }
             return list;
@@ -293,7 +293,7 @@ namespace GW2EIBuilders.HtmlModels
 
                 foreach (NPC target in phase.Targets)
                 {
-                    playerData.Add(GetDPSStatData(player.GetDPS(target, log, phase.Start, phase.End)));
+                    playerData.Add(GetDPSStatData(player.GetDPSStats(target, log, phase.Start, phase.End)));
                 }
                 list.Add(playerData);
             }
@@ -334,20 +334,20 @@ namespace GW2EIBuilders.HtmlModels
 
             foreach (Player player in log.PlayerList)
             {
-                FinalDefensesAll defenses = player.GetDefenses(log, phase.Start, phase.End);
+                FinalDefensesAll defenses = player.GetDefenseStats(log, phase.Start, phase.End);
                 list.Add(GetDefenseStatData(defenses, phase));
             }
 
             return list;
         }
 
-        public static List<List<object>> BuildSupportData(ParsedEvtcLog log, int phaseIndex)
+        public static List<List<object>> BuildSupportData(ParsedEvtcLog log, PhaseData phase)
         {
             var list = new List<List<object>>();
 
             foreach (Player player in log.PlayerList)
             {
-                FinalPlayerSupport support = player.GetPlayerSupport(log, phaseIndex);
+                FinalPlayerSupport support = player.GetPlayerSupportStats(log, phase.Start, phase.End);
                 list.Add(GetSupportStatData(support));
             }
             return list;

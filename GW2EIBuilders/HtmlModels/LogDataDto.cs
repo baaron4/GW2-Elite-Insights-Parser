@@ -266,7 +266,7 @@ namespace GW2EIBuilders.HtmlModels
                     DmgStatsTargets = PhaseDto.BuildDMGStatsTargetsData(log, phase),
                     DmgStats = PhaseDto.BuildDMGStatsData(log, phase),
                     DefStats = PhaseDto.BuildDefenseData(log, phase),
-                    SupportStats = PhaseDto.BuildSupportData(log, i),
+                    SupportStats = PhaseDto.BuildSupportData(log, phase),
                     //
                     BoonStats = BuffData.BuildBuffUptimeData(log, statistics.PresentBoons, i),
                     OffBuffStats = BuffData.BuildBuffUptimeData(log, statistics.PresentOffbuffs, i),
