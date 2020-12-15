@@ -285,7 +285,9 @@ namespace GW2EIParser
                 Parallel.ForEach(playersAndTargets, actor => actor.GetBuffGraphs(log));
                 //
                 Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
-                // once simulation is done, computing buff stats is thread safe
+                // once simulation is done, computing buff stats is thread safe          
+                Parallel.ForEach(log.PlayerList, player => player.GetStatus(log));
+                Parallel.ForEach(log.FightData.Logic.Targets, target => target.GetStatus(log));
                 Parallel.ForEach(log.PlayerList, player => player.GetBuffs(log, BuffEnum.Self));
                 Parallel.ForEach(log.FightData.Logic.Targets, target => target.GetBuffs(log));
             }
