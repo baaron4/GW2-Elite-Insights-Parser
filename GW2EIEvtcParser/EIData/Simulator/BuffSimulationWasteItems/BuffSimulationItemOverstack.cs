@@ -21,8 +21,7 @@ namespace GW2EIEvtcParser.EIData
             }
             if (distrib.TryGetValue(agent, out BuffDistributionItem toModify))
             {
-                toModify.Overstack += value;
-                distrib[agent] = toModify;
+                toModify.IncrementOverstack(value);
             }
             else
             {
