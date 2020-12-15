@@ -114,6 +114,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 c.Invalidate(skillData);
             }
+            buffsPerDst.RemoveAll(x => x.BuffID == Buff.NoBuff);
         }
     }
 }
