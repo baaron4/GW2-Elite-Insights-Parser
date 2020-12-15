@@ -340,7 +340,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal virtual List<AbstractCastEvent> SpecialCastEventProcess(Dictionary<AgentItem, List<AnimatedCastEvent>> animatedCastEvent, Dictionary<AgentItem, List<WeaponSwapEvent>> weaponSwapData, Dictionary<long, List<AbstractCastEvent>> _castDataById, SkillData skillData)
+        internal virtual List<AbstractCastEvent> SpecialCastEventProcess(Dictionary<AgentItem, List<AnimatedCastEvent>> animatedCastEvent, Dictionary<AgentItem, List<WeaponSwapEvent>> weaponSwapData, Dictionary<long, List<AnimatedCastEvent>> _castDataById, SkillData skillData)
         {
             return new List<AbstractCastEvent>();
         }

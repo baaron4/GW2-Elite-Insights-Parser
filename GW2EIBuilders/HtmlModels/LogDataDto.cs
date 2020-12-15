@@ -66,7 +66,7 @@ namespace GW2EIBuilders.HtmlModels
                     for (int i = 0; i < log.FightData.GetPhases(log).Count; i++)
                     {
                         Dictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(log, i, BuffEnum.Self);
-                        foreach (Buff boon in log.Statistics.PresentPersonalBuffs[player])
+                        foreach (Buff boon in log.StatisticsHelper.PresentRemainingBuffsPerPlayer[player])
                         {
                             if (boons.TryGetValue(boon.ID, out FinalPlayerBuffs uptime))
                             {
@@ -125,7 +125,7 @@ namespace GW2EIBuilders.HtmlModels
         private static bool HasBoons(ParsedEvtcLog log, int phaseIndex, NPC target)
         {
             Dictionary<long, FinalBuffs> conditions = target.GetBuffs(log, phaseIndex);
-            foreach (Buff boon in log.Statistics.PresentBoons)
+            foreach (Buff boon in log.StatisticsHelper.PresentBoons)
             {
                 if (conditions.TryGetValue(boon.ID, out FinalBuffs uptime))
                 {
@@ -140,7 +140,7 @@ namespace GW2EIBuilders.HtmlModels
 
         public static LogDataDto BuildLogData(ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, HashSet<DamageModifier> usedDamageMods, bool cr, bool light, Version parserVersion, string[] uploadLinks)
         {
-            GeneralStatistics statistics = log.Statistics;
+            StatisticsHelper statistics = log.StatisticsHelper;
             log.UpdateProgressWithCancellationCheck("HTML: building Log Data");
             var logData = new LogDataDto
             {

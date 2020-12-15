@@ -3,15 +3,13 @@ using GW2EIEvtcParser.EIData;
 
 namespace GW2EIEvtcParser.ParsedData
 {
-    public abstract class AbstractMovementEvent : AbstractTimeCombatEvent
+    public abstract class AbstractMovementEvent : AbstractStatusEvent
     {
-        public AgentItem AgentItem { get; }
         private readonly ulong _dstAgent;
         private readonly int _value;
 
-        internal AbstractMovementEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem.Time)
+        internal AbstractMovementEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
-            AgentItem = agentData.GetAgent(evtcItem.SrcAgent);
             _dstAgent = evtcItem.DstAgent;
             _value = evtcItem.Value;
         }

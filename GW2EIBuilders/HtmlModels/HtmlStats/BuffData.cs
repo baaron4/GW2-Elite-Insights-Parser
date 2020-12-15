@@ -224,7 +224,7 @@ namespace GW2EIBuilders.HtmlModels
 
             foreach (Player player in log.PlayerList)
             {
-                list.Add(new BuffData(conditions, log.Statistics.PresentConditions, player));
+                list.Add(new BuffData(conditions, log.StatisticsHelper.PresentConditions, player));
             }
             return list;
         }
@@ -233,14 +233,14 @@ namespace GW2EIBuilders.HtmlModels
         {
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
             Dictionary<long, FinalBuffs> buffs = target.GetBuffs(log, phaseIndex);
-            return new BuffData(buffs, log.Statistics.PresentConditions, target.GetGameplayStats(log, phase.Start, phase.End).AvgConditions);
+            return new BuffData(buffs, log.StatisticsHelper.PresentConditions, target.GetGameplayStats(log, phase.Start, phase.End).AvgConditions);
         }
 
         public static BuffData BuildTargetBoonData(ParsedEvtcLog log, int phaseIndex, NPC target)
         {
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
             Dictionary<long, FinalBuffs> buffs = target.GetBuffs(log, phaseIndex);
-            return new BuffData(buffs, log.Statistics.PresentBoons, target.GetGameplayStats(log, phase.Start, phase.End).AvgBoons);
+            return new BuffData(buffs, log.StatisticsHelper.PresentBoons, target.GetGameplayStats(log, phase.Start, phase.End).AvgBoons);
         }
     }
 }

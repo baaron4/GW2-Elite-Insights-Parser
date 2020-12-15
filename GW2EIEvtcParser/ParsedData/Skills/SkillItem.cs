@@ -231,7 +231,11 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 Icon = ApiSkill != null ? ApiSkill.Icon : DefaultIcon;
             }
-            if (ApiSkill != null && ApiSkill.Type == "Weapon" && ApiSkill.WeaponType != "None" && ApiSkill.Professions.Count > 0 && (ApiSkill.Categories == null || (ApiSkill.Categories.Contains("Phantasm") || ApiSkill.Categories.Contains("DualWield"))))
+            if (ApiSkill != null && ApiSkill.Type == "Weapon" 
+                && ApiSkill.WeaponType != "None" && ApiSkill.Professions.Count > 0 
+                && (ApiSkill.Categories == null || ApiSkill.Categories.Count == 0 
+                    || ApiSkill.Categories.Contains("Clone") || ApiSkill.Categories.Contains("Phantasm") 
+                    || ApiSkill.Categories.Contains("DualWield")))
             {
                 _weaponDescriptor = new WeaponDescriptor(ApiSkill);
             }
