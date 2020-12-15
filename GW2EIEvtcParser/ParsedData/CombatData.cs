@@ -40,11 +40,11 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 if (p.Prof == "Weaver")
                 {
-                    toAdd.AddRange(WeaverHelper.TransformWeaverAttunements(GetBuffData(p.AgentItem), p.AgentItem, skillData));
+                    toAdd.AddRange(WeaverHelper.TransformWeaverAttunements(GetBuffData(p.AgentItem), _buffData, p.AgentItem, skillData));
                 }
                 if (p.Prof == "Elementalist" || p.Prof == "Tempest")
                 {
-                    ElementalistHelper.RemoveDualBuffs(GetBuffData(p.AgentItem), skillData);
+                    ElementalistHelper.RemoveDualBuffs(GetBuffData(p.AgentItem), _buffData, skillData);
                 }
             }
             toAdd.AddRange(fightData.Logic.SpecialBuffEventProcess(_buffDataByDst, _buffData, skillData));
