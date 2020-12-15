@@ -122,7 +122,7 @@ namespace GW2EIEvtcParser.EIData
             return new List<MechanicEvent>();
         }
 
-        public List<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, long id)
+        internal List<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, long id)
         {
             ProcessMechanics(log);
             Mechanic mech = _mechanicLogs.Keys.FirstOrDefault(x => x.SkillId == id);
