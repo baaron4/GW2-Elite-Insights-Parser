@@ -161,7 +161,7 @@ namespace GW2EIEvtcParser
             return new List<Source> { Source.Unknown };
         }
 
-        internal static string GetProfIcon(string prof)
+        internal static string GetHighResolutionProfIcon(string prof)
         {
             switch (prof)
             {
@@ -224,6 +224,71 @@ namespace GW2EIEvtcParser
             }
             return "";
         }
+
+        internal static string GetProfIcon(string prof)
+        {
+            switch (prof)
+            {
+                case "Warrior":
+                    return "https://wiki.guildwars2.com/images/4/43/Warrior_tango_icon_20px.png";
+                case "Berserker":
+                    return "https://wiki.guildwars2.com/images/d/da/Berserker_tango_icon_20px.png";
+                case "Spellbreaker":
+                    return "https://wiki.guildwars2.com/images/e/ed/Spellbreaker_tango_icon_20px.png";
+                case "Guardian":
+                    return "https://wiki.guildwars2.com/images/8/8c/Guardian_tango_icon_20px.png";
+                case "Dragonhunter":
+                    return "https://wiki.guildwars2.com/images/c/c9/Dragonhunter_tango_icon_20px.png";
+                case "Firebrand":
+                    return "https://wiki.guildwars2.com/images/0/02/Firebrand_tango_icon_20px.png";
+                case "Revenant":
+                    return "https://wiki.guildwars2.com/images/b/b5/Revenant_tango_icon_20px.png";
+                case "Herald":
+                    return "https://wiki.guildwars2.com/images/6/67/Herald_tango_icon_20px.png";
+                case "Renegade":
+                    return "https://wiki.guildwars2.com/images/7/7c/Renegade_tango_icon_20px.png";
+                case "Engineer":
+                    return "https://wiki.guildwars2.com/images/2/27/Engineer_tango_icon_20px.png";
+                case "Scrapper":
+                    return "https://wiki.guildwars2.com/images/3/3a/Scrapper_tango_icon_200px.png";
+                case "Holosmith":
+                    return "https://wiki.guildwars2.com/images/2/28/Holosmith_tango_icon_20px.png";
+                case "Ranger":
+                    return "https://wiki.guildwars2.com/images/4/43/Ranger_tango_icon_20px.png";
+                case "Druid":
+                    return "https://wiki.guildwars2.com/images/d/d2/Druid_tango_icon_20px.png";
+                case "Soulbeast":
+                    return "https://wiki.guildwars2.com/images/7/7c/Soulbeast_tango_icon_20px.png";
+                case "Thief":
+                    return "https://wiki.guildwars2.com/images/7/7a/Thief_tango_icon_20px.png";
+                case "Daredevil":
+                    return "https://wiki.guildwars2.com/images/e/e1/Daredevil_tango_icon_20px.png";
+                case "Deadeye":
+                    return "https://wiki.guildwars2.com/images/c/c9/Deadeye_tango_icon_20px.png";
+                case "Elementalist":
+                    return "https://wiki.guildwars2.com/images/a/aa/Elementalist_tango_icon_20px.png";
+                case "Tempest":
+                    return "https://wiki.guildwars2.com/images/4/4a/Tempest_tango_icon_20px.png";
+                case "Weaver":
+                    return "https://wiki.guildwars2.com/images/f/fc/Weaver_tango_icon_20px.png";
+                case "Mesmer":
+                    return "https://wiki.guildwars2.com/images/6/60/Mesmer_tango_icon_20px.png";
+                case "Chronomancer":
+                    return "https://wiki.guildwars2.com/images/f/f4/Chronomancer_tango_icon_20px.png";
+                case "Mirage":
+                    return "https://wiki.guildwars2.com/images/d/df/Mirage_tango_icon_20px.png";
+                case "Necromancer":
+                    return "https://wiki.guildwars2.com/images/4/43/Necromancer_tango_icon_20px.png";
+                case "Reaper":
+                    return "https://wiki.guildwars2.com/images/1/11/Reaper_tango_icon_20px.png";
+                case "Scourge":
+                    return "https://wiki.guildwars2.com/images/0/06/Scourge_tango_icon_20px.png";
+                case "Sword":
+                    return "https://wiki.guildwars2.com/images/0/07/Crimson_Antique_Blade.png";
+            }
+            return "";
+        }
+
         internal static string GetNPCIcon(int id)
         {
             switch (ArcDPSEnums.GetTargetID(id))
