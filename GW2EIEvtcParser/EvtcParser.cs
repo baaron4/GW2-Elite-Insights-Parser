@@ -611,7 +611,6 @@ namespace GW2EIEvtcParser
         {
             //Fix Disconnected players
             List<AgentItem> playerAgentList = _agentData.GetAgentByType(AgentItem.AgentType.Player);
-            bool refresh = false;
             foreach (AgentItem playerAgent in playerAgentList)
             {
                 if (playerAgent.InstID == 0 || playerAgent.FirstAware == 0 || playerAgent.LastAware == long.MaxValue)
@@ -625,12 +624,10 @@ namespace GW2EIEvtcParser
                             continue;
                         }
                         playerAgent.SetInstid(tst.DstInstid);
-                        refresh = true;
                     }
                     else
                     {
                         playerAgent.SetInstid(tst.SrcInstid);
-                        refresh = true;
                     }
                     playerAgent.OverrideAwareTimes(_logStartTime, _logEndTime);
                 }
@@ -683,10 +680,6 @@ namespace GW2EIEvtcParser
             if (_playerList.Exists(x => x.Group == 0))
             {
                 _playerList.ForEach(x => x.MakeSquadless());
-            }
-            if (refresh)
-            {
-                _agentData.Refresh();
             }
             uint minToughness = _playerList.Min(x => x.Toughness);
             if (minToughness > 0)
