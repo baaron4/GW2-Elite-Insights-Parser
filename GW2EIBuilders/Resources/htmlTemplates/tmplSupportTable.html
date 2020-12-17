@@ -3,23 +3,23 @@
         <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" id="sup-table">
             <thead>
                 <tr>
-                    <th>Sub</th>
-                    <th></th>
+                    <th class="sub-cell">Sub</th>
+                    <th class="prof-cell"></th>
                     <th class="text-left">Name</th>
                     <th>Account</th>
-                    <th data-original-title="Condition Cleanse on Others" >
+                    <th class="stat-cell" data-original-title="Condition Cleanse on Others" >
                         <img src="https://wiki.guildwars2.com/images/1/12/Healing_Spring.png" alt="Condition Cleanse on Others"
                             class="icon icon-hover">
                     </th>
-                    <th data-original-title="Condition Cleanse on Self" >
+                    <th class="stat-cell" data-original-title="Condition Cleanse on Self" >
                         <img src="https://wiki.guildwars2.com/images/e/ec/Mending.png" alt="Condition Cleanse on Self"
                             class="icon icon-hover">
                     </th>
-                    <th data-original-title="Boon Strips" >
+                    <th class="stat-cell" data-original-title="Boon Strips" >
                         <img src="https://wiki.guildwars2.com/images/e/ec/Banish_Enchantment.png" alt="Boon Strips"
                             class="icon icon-hover">
                     </th>
-                    <th data-original-title="Resurrects" >
+                    <th class="stat-cell" data-original-title="Resurrects" >
                         <img src="https://wiki.guildwars2.com/images/3/3d/Downed_ally.png" alt="Resurrects"
                             class="icon icon-hover">
                     </th>
@@ -66,7 +66,7 @@
         },
         mixins: [numberComponent],
         mounted() {
-            initTable("#sup-table", 4, "desc");
+            initTable("#sup-table", 1, "desc");
         },
         updated() {
             updateTable("#sup-table");

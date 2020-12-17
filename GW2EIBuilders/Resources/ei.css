@@ -394,6 +394,26 @@ table.dataTable thead .sorting_desc_disabled:after {
     display: none;
 }
 
+.sub-cell { 
+    width: 20px ;
+}
+
+.prof-cell {
+    width: 5px;
+}
+
+.damage-cell {
+    width: 150px;
+}
+
+.stat-cell {
+    width: 120px;
+}
+
+.damage-dist-cell {
+    width: 100px;
+}
+
 table.dataTable thead .sorting_asc:before,
 table.dataTable thead .sorting_desc:after {
     right: 0.3em;
