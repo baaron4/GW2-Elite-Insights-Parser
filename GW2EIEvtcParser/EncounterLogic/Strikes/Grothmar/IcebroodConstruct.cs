@@ -29,9 +29,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new CombatReplayMap("https://i.imgur.com/sXvx6AL.png",
                             (729, 581),
-                            (-32118, -11470, -28924, -8274),
+                            (-32118, -11470, -28924, -8274)/*,
                             (-0, -0, 0, 0),
-                            (0, 0, 0, 0));
+                            (0, 0, 0, 0)*/);
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

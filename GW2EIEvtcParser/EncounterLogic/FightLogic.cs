@@ -52,7 +52,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected virtual CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("", (800, 800), (0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0));
+            return new CombatReplayMap("", (800, 800), (0, 0, 0, 0)/*, (0, 0, 0, 0), (0, 0, 0, 0)*/);
         }
 
         public CombatReplayMap GetCombatMap(ParsedEvtcLog log)
