@@ -3,39 +3,39 @@
         <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" id="dps-table">
             <thead>
                 <tr>
-                    <th>Sub</th>
-                    <th></th>
+                    <th class="sub-cell">Sub</th>
+                    <th class="prof-cell"></th>
                     <th class="text-left">Name</th>
                     <th>Account</th>
-                    <th v-show="!targetless" data-original-title="All">
+                    <th v-show="!targetless" data-original-title="All" class="damage-cell">
                         Target <img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="All"
                             class="icon">
                     </th>
-                    <th v-show="!targetless" data-original-title="Power">
+                    <th v-show="!targetless" data-original-title="Power" class="damage-cell">
                         Target <img src="https://wiki.guildwars2.com/images/2/23/Power.png" alt="Power"
                              class="icon">
                     </th>
-                    <th v-show="!targetless" data-original-title="Condition">
+                    <th v-show="!targetless" data-original-title="Condition" class="damage-cell">
                         Target <img src="https://wiki.guildwars2.com/images/5/54/Condition_Damage.png" alt="Condition"
                         class="icon">
                     </th>
-                    <th v-show="!targetless" v-if="hasBreakbarDamage" data-original-title="Breakbar">
+                    <th v-show="!targetless" v-if="hasBreakbarDamage" data-original-title="Breakbar" class="damage-cell">
                         Target <img src="https://wiki.guildwars2.com/images/a/ae/Unshakable.png" alt="Breakbar"
                         class="icon">
                     </th>
-                    <th data-original-title="All">
+                    <th data-original-title="All" class="damage-cell">
                         All <img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="All"
                         class="icon">
                     </th>
-                    <th data-original-title="Power">
+                    <th data-original-title="Power" class="damage-cell">
                         All <img src="https://wiki.guildwars2.com/images/2/23/Power.png" alt="Power"
                         class="icon">
                     </th>
-                    <th data-original-title="Condition">
+                    <th data-original-title="Condition" class="damage-cell">
                         All <img src="https://wiki.guildwars2.com/images/5/54/Condition_Damage.png" alt="Condition"
                         class="icon">
                     </th>
-                    <th v-if="hasBreakbarDamage" data-original-title="Breakbar">
+                    <th v-if="hasBreakbarDamage" data-original-title="Breakbar" class="damage-cell">
                         All <img src="https://wiki.guildwars2.com/images/a/ae/Unshakable.png" alt="Breakbar"
                         class="icon">
                     </th>

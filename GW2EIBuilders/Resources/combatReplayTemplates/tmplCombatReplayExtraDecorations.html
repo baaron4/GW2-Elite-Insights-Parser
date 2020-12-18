@@ -1,8 +1,18 @@
 <template>
-    <div class="d-flex flex-column justify-content-center align-items-center">
-        <div class="form-check mb-2">
-            <input type="checkbox" class="form-check-input" id="subgroupCheck" checked v-on:change="getAnimator().toggleHighlightSelectedGroup()">
-            <label class="form-check-label" for="subgroupCheck">Highlight Selected Group</label>
+    <div class="d-flex flex-column justify-content-center align-items-center">     
+        <div class="d-flex flex-row justify-content-center">
+            <div class="form-check mb-2 mr-3">
+                <input type="checkbox" class="form-check-input" id="subgroupCheck" checked v-on:change="getAnimator().toggleHighlightSelectedGroup()">
+                <label class="form-check-label" for="subgroupCheck">Highlight Selected Group</label>
+            </div>
+            <div class="form-check mb-2 mr-3">
+                <input type="checkbox" class="form-check-input" id="trashCheck" checked v-on:change="getAnimator().toggleTrashMobs()">
+                <label class="form-check-label" for="trashCheck">Secondary NPCs</label>
+            </div>
+            <div class="form-check mb-2">
+                <input type="checkbox" class="form-check-input" id="mechanicsCheck" checked v-on:change="getAnimator().toggleMechanics()">
+                <label class="form-check-label" for="mechanicsCheck">Mechanics</label>
+            </div>
         </div>
         <div class="d-flex flex-row justify-content-center">
             <div class="mr-3">
