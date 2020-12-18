@@ -158,7 +158,7 @@ namespace GW2EIEvtcParser
                 case "Revenant":
                     return new List<Source> { Source.Revenant };
             }
-            return new List<Source> { Source.Unknown };
+            return new List<Source> { };
         }
 
         internal static string GetHighResolutionProfIcon(string prof)
