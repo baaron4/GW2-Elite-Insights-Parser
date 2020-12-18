@@ -22,6 +22,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             Icon = "https://i.imgur.com/r9b2oww.png";
         }
 
+        /*protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+        {
+            return new CombatReplayMap("https://i.imgur.com/sXvx6AL.png",
+                            (729, 581),
+                            (-32118, -11470, -28924, -8274),
+                            (-0, -0, 0, 0),
+                            (0, 0, 0, 0));
+        }*/
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);

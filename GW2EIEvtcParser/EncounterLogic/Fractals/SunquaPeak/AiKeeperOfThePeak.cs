@@ -92,6 +92,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        /*protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+        {
+            return new CombatReplayMap("https://i.imgur.com/ARht2dC.png",
+                            (1334, 1621),
+                            (-32118, -11470, -28924, -8274),
+                            (-0, -0, 0, 0),
+                            (0, 0, 0, 0));
+        }*/
+
         internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
         {
             var res = new List<AbstractBuffEvent>();
