@@ -8,10 +8,10 @@ namespace GW2EIEvtcParser.EIData
     {
         private readonly Dictionary<Mechanic, List<MechanicEvent>> _mechanicLogs = new Dictionary<Mechanic, List<MechanicEvent>>();
 
-        private List<HashSet<Mechanic>> _presentOnPlayerMechanics;
-        private List<HashSet<Mechanic>> _presentOnEnemyMechanics;
-        private List<HashSet<Mechanic>> _presentMechanics;
-        private List<List<AbstractActor>> _enemyList;
+        private CachingCollection<HashSet<Mechanic>> _presentOnPlayerMechanics;
+        private CachingCollection<HashSet<Mechanic>> _presentOnEnemyMechanics;
+        private CachingCollection<HashSet<Mechanic>> _presentMechanics;
+        private CachingCollection<List<AbstractSingleActor>> _enemyList;
 
         internal MechanicData(List<Mechanic> fightMechanics)
         {
@@ -21,7 +21,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        private void CheckMechanics(ParsedEvtcLog log)
+        private void ComputeMechanics(ParsedEvtcLog log)
         {
             var regroupedMobs = new Dictionary<int, AbstractSingleActor>();
             foreach (Mechanic mech in _mechanicLogs.Keys)
@@ -55,50 +55,11 @@ namespace GW2EIEvtcParser.EIData
             {
                 return;
             }
-            _presentOnPlayerMechanics = new List<HashSet<Mechanic>>();
-            _presentOnEnemyMechanics = new List<HashSet<Mechanic>>();
-            _presentMechanics = new List<HashSet<Mechanic>>();
-            _enemyList = new List<List<AbstractActor>>();
-            foreach (PhaseData phase in log.FightData.GetPhases(log))
-            {
-                _presentOnPlayerMechanics.Add(new HashSet<Mechanic>());
-                _presentOnEnemyMechanics.Add(new HashSet<Mechanic>());
-                _presentMechanics.Add(new HashSet<Mechanic>());
-                _enemyList.Add(new List<AbstractActor>());
-            }
-            CheckMechanics(log);
-            // ready present mechanics
-            int i = 0;
-            foreach (PhaseData phase in log.FightData.GetPhases(log))
-            {
-                foreach (KeyValuePair<Mechanic, List<MechanicEvent>> pair in _mechanicLogs)
-                {
-                    if (pair.Value.Any(x => phase.InInterval(x.Time)))
-                    {
-                        _presentMechanics[i].Add(pair.Key);
-                        if (pair.Key.IsEnemyMechanic)
-                        {
-                            _presentOnEnemyMechanics[i].Add(pair.Key);
-                        }
-                        else if (pair.Key.ShowOnTable)
-                        {
-                            _presentOnPlayerMechanics[i].Add(pair.Key);
-                        }
-                    }
-                }
-                // ready enemy list
-                foreach (Mechanic m in _mechanicLogs.Keys.Where(x => x.IsEnemyMechanic))
-                {
-                    foreach (AbstractActor p in _mechanicLogs[m].Where(x => phase.InInterval(x.Time)).Select(x => x.Actor).Distinct())
-                    {
-                        if (_enemyList[i].FirstOrDefault(x => x.AgentItem == p.AgentItem) == null)
-                        {
-                            _enemyList[i].Add(p);
-                        }
-                    }
-                }
-                i++;
-            }
+            _presentOnPlayerMechanics = new CachingCollection<HashSet<Mechanic>>(log);
+            _presentOnEnemyMechanics = new CachingCollection<HashSet<Mechanic>>(log);
+            _presentMechanics = new CachingCollection<HashSet<Mechanic>>(log);
+            _enemyList = new CachingCollection<List<AbstractSingleActor>>(log);
+            ComputeMechanics(log);
             var emptyMechanic = _mechanicLogs.Where(pair => pair.Value.Count == 0).Select(pair => pair.Key).ToList();
             foreach (Mechanic m in emptyMechanic)
             {
@@ -133,26 +94,77 @@ namespace GW2EIEvtcParser.EIData
             return new List<MechanicEvent>();
         }
 
-        public HashSet<Mechanic> GetPresentEnemyMechs(ParsedEvtcLog log, int phaseIndex)
+        private void ComputeMechanicData(long start, long end)
         {
-            ProcessMechanics(log);
-            return _presentOnEnemyMechanics[phaseIndex];
-        }
-        public HashSet<Mechanic> GetPresentPlayerMechs(ParsedEvtcLog log, int phaseIndex)
-        {
-            ProcessMechanics(log);
-            return _presentOnPlayerMechanics[phaseIndex];
-        }
-        public HashSet<Mechanic> GetPresentMechanics(ParsedEvtcLog log, int phaseIndex)
-        {
-            ProcessMechanics(log);
-            return _presentMechanics[phaseIndex];
+            var presentMechanics = new HashSet<Mechanic>();
+            var presentOnEnemyMechanics = new HashSet<Mechanic>();
+            var presentOnPlayerMechanics = new HashSet<Mechanic>();
+            var enemyHash = new HashSet<AbstractSingleActor>();
+            foreach (KeyValuePair<Mechanic, List<MechanicEvent>> pair in _mechanicLogs)
+            {
+                if (pair.Value.Any(x => x.Time >= start && x.Time <= end))
+                {
+                    presentMechanics.Add(pair.Key);
+                    if (pair.Key.IsEnemyMechanic)
+                    {
+                        presentOnEnemyMechanics.Add(pair.Key);
+                    }
+                    else if (pair.Key.ShowOnTable)
+                    {
+                        presentOnPlayerMechanics.Add(pair.Key);
+                    }
+                }
+            }
+            // ready enemy list
+            foreach (Mechanic m in _mechanicLogs.Keys.Where(x => x.IsEnemyMechanic))
+            {
+                foreach (MechanicEvent mechanicEvent in _mechanicLogs[m].Where(x => x.Time >= start && x.Time <= end))
+                {
+                   enemyHash.Add(mechanicEvent.Actor);
+                }
+            }
+            _presentMechanics.Set(start, end, presentMechanics);
+            _presentOnEnemyMechanics.Set(start, end, presentOnEnemyMechanics);
+            _presentOnPlayerMechanics.Set(start, end, presentOnPlayerMechanics);
+            _enemyList.Set(start, end, new List<AbstractSingleActor>(enemyHash));
         }
 
-        public List<AbstractActor> GetEnemyList(ParsedEvtcLog log, int phaseIndex)
+        public HashSet<Mechanic> GetPresentEnemyMechs(ParsedEvtcLog log, long start, long end)
         {
             ProcessMechanics(log);
-            return _enemyList[phaseIndex];
+            if (!_presentOnEnemyMechanics.HasKeys(start, end))
+            {
+                ComputeMechanicData(start, end);
+            }
+            return _presentOnEnemyMechanics.Get(start, end);
+        }
+        public HashSet<Mechanic> GetPresentPlayerMechs(ParsedEvtcLog log, long start, long end)
+        {
+            ProcessMechanics(log);
+            if (!_presentOnPlayerMechanics.HasKeys(start, end))
+            {
+                ComputeMechanicData(start, end);
+            }
+            return _presentOnPlayerMechanics.Get(start, end);
+        }
+        public HashSet<Mechanic> GetPresentMechanics(ParsedEvtcLog log, long start, long end)
+        {
+            ProcessMechanics(log);
+            if (!_presentMechanics.HasKeys(start, end))
+            {
+                ComputeMechanicData(start, end);
+            }
+            return _presentMechanics.Get(start, end);
+        }
+
+        public List<AbstractSingleActor> GetEnemyList(ParsedEvtcLog log, long start, long end)
+        {
+            ProcessMechanics(log);
+            if (!_enemyList.HasKeys(start, end))
+            {
+                ComputeMechanicData(start, end);
+            }
+            return _enemyList.Get(start, end);
         }
     }
 }

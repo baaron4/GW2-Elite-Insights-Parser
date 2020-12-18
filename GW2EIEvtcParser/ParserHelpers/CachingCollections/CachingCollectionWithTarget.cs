@@ -56,6 +56,15 @@ namespace GW2EIEvtcParser
             return TryGetValue(start, end, actor, out _);
         }
 
+        public T Get(long start, long end, AbstractActor actor)
+        {
+            if (TryGetValue(start, end, actor, out T value))
+            {
+                return value;
+            }
+            return default;
+        }
+
         public override void Clear()
         {
             _cache.Clear();

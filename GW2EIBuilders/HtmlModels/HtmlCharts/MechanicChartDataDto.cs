@@ -72,7 +72,7 @@ namespace GW2EIBuilders.HtmlModels
         public static List<MechanicChartDataDto> BuildMechanicsChartData(ParsedEvtcLog log)
         {
             var mechanicsChart = new List<MechanicChartDataDto>();
-            foreach (Mechanic mech in log.MechanicData.GetPresentMechanics(log, 0))
+            foreach (Mechanic mech in log.MechanicData.GetPresentMechanics(log, log.FightData.FightStart, log.FightData.FightEnd))
             {
                 List<MechanicEvent> mechanicLogs = log.MechanicData.GetMechanicLogs(log, mech);
                 var dto = new MechanicChartDataDto

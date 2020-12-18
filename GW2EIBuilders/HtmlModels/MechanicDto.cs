@@ -60,7 +60,7 @@ namespace GW2EIBuilders.HtmlModels
         public static List<List<int[]>> BuildPlayerMechanicData(ParsedEvtcLog log, PhaseData phase)
         {
             var list = new List<List<int[]>>();
-            HashSet<Mechanic> presMech = log.MechanicData.GetPresentPlayerMechs(log, 0);
+            HashSet<Mechanic> presMech = log.MechanicData.GetPresentPlayerMechs(log, log.FightData.FightStart, log.FightData.FightEnd);
 
             foreach (Player p in log.PlayerList)
             {
@@ -72,8 +72,8 @@ namespace GW2EIBuilders.HtmlModels
         public static List<List<int[]>> BuildEnemyMechanicData(ParsedEvtcLog log, PhaseData phase)
         {
             var list = new List<List<int[]>>();
-            HashSet<Mechanic> presMech = log.MechanicData.GetPresentEnemyMechs(log, 0);
-            foreach (AbstractActor enemy in log.MechanicData.GetEnemyList(log, 0))
+            HashSet<Mechanic> presMech = log.MechanicData.GetPresentEnemyMechs(log, log.FightData.FightStart, log.FightData.FightEnd);
+            foreach (AbstractSingleActor enemy in log.MechanicData.GetEnemyList(log, log.FightData.FightStart, log.FightData.FightEnd))
             {
                 list.Add(GetMechanicData(presMech, log, enemy, phase));
             }

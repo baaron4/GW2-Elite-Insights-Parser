@@ -621,9 +621,9 @@ namespace GW2EIBuilders
         }
         private void CreateMechanicTable(int phaseIndex)
         {
-            HashSet<Mechanic> presMech = _log.MechanicData.GetPresentPlayerMechs(_log, phaseIndex);
-            //Dictionary<string, HashSet<Mechanic>> presEnemyMech = log.MechanicData.getPresentEnemyMechs(phaseIndex);
             PhaseData phase = _phases[phaseIndex];
+            HashSet<Mechanic> presMech = _log.MechanicData.GetPresentPlayerMechs(_log, phase.Start, phase.End);
+            //Dictionary<string, HashSet<Mechanic>> presEnemyMech = log.MechanicData.getPresentEnemyMechs(phaseIndex);
             //List<AbstractMasterPlayer> enemyList = log.MechanicData.getEnemyList(phaseIndex);
             int countLines = 0;
             if (presMech.Count > 0)
