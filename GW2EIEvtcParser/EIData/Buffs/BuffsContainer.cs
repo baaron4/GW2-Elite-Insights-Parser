@@ -132,7 +132,7 @@ namespace GW2EIEvtcParser.EIData
         }
 
         // Non shareable buffs
-        public IReadOnlyList<Buff> GetRemainingBuffsList(string source)
+        public IReadOnlyList<Buff> GetPersonalBuffsList(string source)
         {
             var result = new List<Buff>();
             foreach (ParserHelper.Source src in ParserHelper.ProfToEnum(source))
