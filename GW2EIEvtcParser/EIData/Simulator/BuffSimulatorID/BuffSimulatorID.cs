@@ -7,11 +7,17 @@ namespace GW2EIEvtcParser.EIData
 {
     internal abstract class BuffSimulatorID : AbstractBuffSimulator
     {
+        protected List<BuffStackItemID> BuffStack { get; set; } = new List<BuffStackItemID>();
         protected List<(long duration, AgentItem src)> OverrideCandidates { get; } = new List<(long duration, AgentItem src)>();
 
         // Constructor
         protected BuffSimulatorID(ParsedEvtcLog log) : base(log)
         {
+        }
+
+        protected override void Clear()
+        {
+            BuffStack.Clear();
         }
 
         public override void Extend(long extension, long oldValue, AgentItem src, long time, uint stackID)
@@ -27,7 +33,7 @@ namespace GW2EIEvtcParser.EIData
 
         public override void Remove(AgentItem by, long removedDuration, int removedStacks, long time, ArcDPSEnums.BuffRemove removeType, uint stackID)
         {
-            BuffStackItem toRemove;
+            BuffStackItemID toRemove;
             switch (removeType)
             {
                 case ArcDPSEnums.BuffRemove.All:
@@ -75,7 +81,7 @@ namespace GW2EIEvtcParser.EIData
             }
             BuffStack.Remove(toRemove);
             // Removed due to override
-            (long duration, AgentItem src)? candidate = OverrideCandidates.Find(x => Math.Abs(x.duration - removedDuration) < ParserHelper.BuffSimulatorDelayConstant);
+            (long duration, AgentItem src)? candidate = OverrideCandidates.Find(x => Math.Abs(x.duration - removedDuration) < ParserHelper.BuffSimulatorDelayConstant && x.src == by);
             if (candidate.Value.src != null)
             {
                 (long duration, AgentItem candSrc) = candidate.Value;
@@ -103,9 +109,14 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public override void Reset(uint id, long toDuration)
+        public override void Reset(uint stackID, long toDuration)
         {
-            // nothing to do? an activate should always accompany this
+            BuffStackItemID toDisable = BuffStack.Find(x => x.StackID == stackID);
+            if (toDisable == null)
+            {
+                throw new InvalidOperationException("Reset has failed");
+            }
+            toDisable.Disable();
         }
 
     }

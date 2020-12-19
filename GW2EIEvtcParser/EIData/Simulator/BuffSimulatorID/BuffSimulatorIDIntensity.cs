@@ -13,13 +13,17 @@ namespace GW2EIEvtcParser.EIData
 
         public override void Activate(uint stackID)
         {
-            // nothing to do, all stack are active
-            //throw new EIException("Activate on intensity buff??");
+            BuffStackItemID active = BuffStack.Find(x => x.StackID == stackID);
+            if (active == null)
+            {
+                throw new InvalidOperationException("Activate has failed");
+            }
+            active.Activate();
         }
 
         public override void Add(long duration, AgentItem src, long start, uint stackID, bool addedActive, uint overstackDuration)
         {
-            var toAdd = new BuffStackItem(start, duration, src, stackID);
+            var toAdd = new BuffStackItemID(start, duration, src, addedActive, stackID);
             BuffStack.Add(toAdd);
             //AddedSimulationResult.Add(new BuffCreationItem(src, duration, start, toAdd.ID));
             if (overstackDuration > 0)

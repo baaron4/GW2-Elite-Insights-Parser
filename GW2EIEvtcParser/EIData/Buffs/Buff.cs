@@ -151,7 +151,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
         }
-        internal AbstractBuffSimulator CreateSimulator(ParsedEvtcLog log)
+        internal AbstractBuffSimulator CreateSimulator(ParsedEvtcLog log, bool forceNoId)
         {
             BuffStackType stackType = _stackType;
             BuffType type = Type;
@@ -164,7 +164,7 @@ namespace GW2EIEvtcParser.EIData
                     capacity = buffInfo.MaxStacks;
                 }
             }
-            if (!log.CombatData.HasStackIDs)
+            if (!log.CombatData.HasStackIDs || forceNoId)
             {
                 StackingLogic logicToUse;
                 switch (stackType)

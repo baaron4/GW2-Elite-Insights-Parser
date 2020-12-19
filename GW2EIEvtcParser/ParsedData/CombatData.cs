@@ -340,6 +340,7 @@ namespace GW2EIEvtcParser.ParsedData
                     if (combatItem.IsBuff != 0 && combatItem.BuffDmg == 0 && combatItem.Value > 0)
                     {
                         CombatEventFactory.AddBuffApplyEvent(combatItem, buffEvents, agentData, skillData);
+                        HasStackIDs = HasStackIDs || combatItem.Pad > 0;
                     }
                     else if (combatItem.IsBuff == 0)
                     {
