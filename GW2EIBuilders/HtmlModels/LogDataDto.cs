@@ -255,7 +255,7 @@ namespace GW2EIBuilders.HtmlModels
             }
             //
             log.UpdateProgressWithCancellationCheck("HTML: building Phases");
-            List<PhaseData> phases = log.FightData.GetPhases(log);
+            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phaseData = phases[i];

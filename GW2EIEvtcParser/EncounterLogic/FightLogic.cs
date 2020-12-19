@@ -144,7 +144,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             long fightDuration = log.FightData.FightEnd;
             long start = 0;
             double offset = 100.0 / thresholds.Count;
-            List<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem);
+            IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem);
             for (int i = 0; i < thresholds.Count; i++)
             {
                 HealthUpdateEvent evt = hpUpdates.FirstOrDefault(x => x.HPPercent <= thresholds[i]);
@@ -225,8 +225,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (NPC target in Targets)
             {
                 int i = 0;
-                List<BreakbarStateEvent> breakbarStateEvents = log.CombatData.GetBreakbarStateEvents(target.AgentItem);
-                List<BreakbarPercentEvent> breakbarPercentEvents = log.CombatData.GetBreakbarPercentEvents(target.AgentItem);
+                IReadOnlyList<BreakbarStateEvent> breakbarStateEvents = log.CombatData.GetBreakbarStateEvents(target.AgentItem);
+                IReadOnlyList<BreakbarPercentEvent> breakbarPercentEvents = log.CombatData.GetBreakbarPercentEvents(target.AgentItem);
                 var breakbarActiveEvents = breakbarStateEvents.Where(x => x.State == ArcDPSEnums.BreakbarState.Active).ToList();
                 var breakbarNotActiveEvents = breakbarStateEvents.Where(x => x.State != ArcDPSEnums.BreakbarState.Active).ToList();
                 foreach (BreakbarStateEvent active in breakbarActiveEvents)

@@ -103,7 +103,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, c.ExpectedDuration + start, 600, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(false, 0, 600, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
                     }
-                    List<PhaseData> phases = log.FightData.GetPhases(log);
+                    IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
                     if (phases.Count > 1)
                     {
                         var rampage = cls.Where(x => x.SkillId == 31834).ToList();

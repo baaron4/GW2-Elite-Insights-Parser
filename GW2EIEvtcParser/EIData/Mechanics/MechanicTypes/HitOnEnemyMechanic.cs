@@ -29,7 +29,7 @@ namespace GW2EIEvtcParser.EIData
             IEnumerable<AgentItem> agents = log.AgentData.GetNPCsByID((int)SkillId);
             foreach (AgentItem a in agents)
             {
-                List<AbstractHealthDamageEvent> combatitems = combatData.GetDamageTakenData(a);
+                IReadOnlyList<AbstractHealthDamageEvent> combatitems = combatData.GetDamageTakenData(a);
                 foreach (AbstractHealthDamageEvent c in combatitems)
                 {
                     if (c is DirectHealthDamageEvent && c.HasHit && Keep(c, log))

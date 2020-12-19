@@ -80,7 +80,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return phases;
             }
             long end = 0;
-            AbstractBuffEvent invulXera = log.CombatData.GetBuffData(762).Find(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent) ?? log.CombatData.GetBuffData(34113).Find(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent);
+            AbstractBuffEvent invulXera = log.CombatData.GetBuffData(762).FirstOrDefault(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent) ?? log.CombatData.GetBuffData(34113).FirstOrDefault(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent);
             if (invulXera != null)
             {
                 end = invulXera.Time;

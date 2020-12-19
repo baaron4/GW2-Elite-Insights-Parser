@@ -79,7 +79,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            List<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem);
+            IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem);
             if (hpUpdates.Count > 0)
             {
                 long fightDuration = log.FightData.FightEnd;
@@ -119,7 +119,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 fightEndLogTime = lastDamageTaken.Time;
             }
-            List<HealthUpdateEvent> hpUpdates = combatData.GetHealthUpdateEvents(mainTarget.AgentItem);
+            IReadOnlyList<HealthUpdateEvent> hpUpdates = combatData.GetHealthUpdateEvents(mainTarget.AgentItem);
             if (hpUpdates.Count > 0)
             {
                 success = hpUpdates.Last().HPPercent < 2.00;

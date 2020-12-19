@@ -217,7 +217,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var targetables = new List<long>();
             foreach (AgentItem attackTarget in attackTargets)
             {
-                List<TargetableEvent> aux = log.CombatData.GetTargetableEvents(attackTarget);
+                IReadOnlyList<TargetableEvent> aux = log.CombatData.GetTargetableEvents(attackTarget);
                 targetables.AddRange(aux.Where(x => x.Targetable).Select(x => x.Time));
             }
             return targetables;
