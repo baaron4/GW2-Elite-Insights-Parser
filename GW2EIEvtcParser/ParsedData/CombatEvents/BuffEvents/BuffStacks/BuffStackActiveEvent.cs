@@ -15,10 +15,6 @@ namespace GW2EIEvtcParser.ParsedData
             simulator.Activate(BuffInstance);
         }
 
-        internal override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
-        {
-            return BuffID != Buff.NoBuff && hasStackIDs && BuffInstance != 0;
-        }
         internal override int CompareTo(AbstractBuffEvent abe)
         {
             if (abe is BuffStackActiveEvent)
