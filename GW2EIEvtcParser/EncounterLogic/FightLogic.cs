@@ -85,7 +85,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static void RegroupTargetsByID(int id, AgentData agentData, List<CombatItem> combatItems)
         {
-            List<AgentItem> agents = agentData.GetNPCsByID(id);
+            IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
             if (agents.Count > 1)
             {
                 AgentItem firstItem = agents.First();
@@ -119,7 +119,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             List<int> ids = GetFightTargetsIDs();
             foreach (int id in ids)
             {
-                List<AgentItem> agents = agentData.GetNPCsByID(id);
+                IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
                 foreach (AgentItem agentItem in agents)
                 {
                     Targets.Add(new NPC(agentItem));
@@ -153,14 +153,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 }
                 var phase = new PhaseData(start, Math.Min(evt.Time, fightDuration), (offset + thresholds[i]) + "% - " + thresholds[i] + "%");
-                phase.Targets.Add(mainTarget);
+                phase.AddTarget(mainTarget);
                 phases.Add(phase);
                 start = Math.Max(evt.Time, 0);
             }
             if (phases.Count > 0 && phases.Count < thresholds.Count)
             {
                 var lastPhase = new PhaseData(start, fightDuration, (offset + thresholds[phases.Count]) + "% -" + thresholds[phases.Count] + "%");
-                lastPhase.Targets.Add(mainTarget);
+                lastPhase.AddTarget(mainTarget);
                 phases.Add(lastPhase);
             }
             return phases;
@@ -255,7 +255,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         BreakbarPhase = true,
                         CanBeSubPhase = false
                     };
-                    phase.Targets.Add(target);
+                    phase.AddTarget(target);
                     breakbarPhases.Add(phase);
                 }
             }
@@ -270,7 +270,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Main target of the fight not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             return phases;
         }
 
@@ -285,7 +285,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (ids.Contains(target.ID) && phase.InInterval(Math.Max(target.FirstAware, 0)))
                 {
-                    phase.Targets.Add(target);
+                    phase.AddTarget(target);
                 }
             }
             phase.OverrideTimes(log);

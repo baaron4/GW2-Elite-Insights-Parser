@@ -113,7 +113,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Dhuum not found");
             }
-            phases[0].Targets.Add(dhuum);
+            phases[0].AddTarget(dhuum);
             if (!requirePhases)
             {
                 return phases;
@@ -158,7 +158,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].Targets.Add(dhuum);
+                phases[i].AddTarget(dhuum);
             }
             return phases;
         }

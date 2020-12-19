@@ -217,7 +217,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            List<AgentItem> deimosAgents = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Deimos);
+            IReadOnlyList<AgentItem> deimosAgents = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Deimos);
             long offset = fightData.FightOffset;
             foreach (AgentItem deimos in deimosAgents)
             {
@@ -288,7 +288,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Deimos not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -317,7 +317,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             for (int i = 1; i < phases.Count; i++)
             {
                 phases[i].Name = names[i - 1];
-                phases[i].Targets.Add(mainTarget);
+                phases[i].AddTarget(mainTarget);
             }
             foreach (NPC tar in Targets)
             {
@@ -326,10 +326,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                     string name = (tar.ID == (int)ArcDPSEnums.TrashID.Thief ? "Thief" : (tar.ID == (int)ArcDPSEnums.TrashID.Drunkard ? "Drunkard" : (tar.ID == (int)ArcDPSEnums.TrashID.Gambler ? "Gambler" : "")));
                     tar.OverrideName(name);
                     var tarPhase = new PhaseData(tar.FirstAware - 1000, Math.Min(tar.LastAware + 1000, fightDuration), name);
-                    tarPhase.Targets.Add(tar);
+                    tarPhase.AddTarget(tar);
                     tarPhase.OverrideTimes(log);
                     // override first then add Deimos so that it does not disturb the override process
-                    tarPhase.Targets.Add(mainTarget);
+                    tarPhase.AddTarget(mainTarget);
                     phases.Add(tarPhase);
                 }
             }
@@ -348,7 +348,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     sigEnd = Math.Min(signet.Time - 1, fightDuration);
                     var burstPhase = new PhaseData(sigStart, sigEnd, "Burst " + burstID++);
-                    burstPhase.Targets.Add(mainTarget);
+                    burstPhase.AddTarget(mainTarget);
                     phases.Add(burstPhase);
                 }
             }

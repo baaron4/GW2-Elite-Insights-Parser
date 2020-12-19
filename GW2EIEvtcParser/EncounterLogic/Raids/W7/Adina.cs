@@ -104,7 +104,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Adina not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -157,7 +157,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             foreach (PhaseData phase in mainPhases)
             {
-                phase.Targets.Add(mainTarget);
+                phase.AddTarget(mainTarget);
             }
             phases.AddRange(mainPhases);
             phases.Sort((x, y) => x.Start.CompareTo(y.Start));

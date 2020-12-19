@@ -77,7 +77,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Peerless Qadim not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -127,7 +127,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             for (int i = 0; i < phaseStarts.Count; i++)
             {
                 var phase = new PhaseData(phaseStarts[i], phaseEnds[i], "Phase " + (i + 1));
-                phase.Targets.Add(mainTarget);
+                phase.AddTarget(mainTarget);
                 phases.Add(phase);
             }
             return phases;

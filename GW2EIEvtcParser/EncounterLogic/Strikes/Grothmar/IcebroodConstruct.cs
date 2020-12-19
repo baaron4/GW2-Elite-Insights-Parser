@@ -42,7 +42,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Icebrood Construct not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -53,7 +53,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 PhaseData phase = phases[i];
                 phase.Name = "Phase " + i;
-                phase.Targets.Add(mainTarget);
+                phase.AddTarget(mainTarget);
             }
             return phases;
         }

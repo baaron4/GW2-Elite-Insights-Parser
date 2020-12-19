@@ -62,7 +62,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Matthias not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -106,7 +106,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 phases[i].Name = namesMat[i - 1];
                 phases[i].DrawStart = i > 1;
-                phases[i].Targets.Add(mainTarget);
+                phases[i].AddTarget(mainTarget);
             }
             return phases;
         }

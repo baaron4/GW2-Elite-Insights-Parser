@@ -77,7 +77,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Keep Construct not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -104,7 +104,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             for (int i = 1; i < phases.Count; i++)
             {
                 phases[i].Name = "Phase " + i;
-                phases[i].Targets.Add(mainTarget);
+                phases[i].AddTarget(mainTarget);
             }
             // add burn phases
             int offset = phases.Count;
@@ -134,7 +134,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (Segment seg in segments)
             {
                 var phase = new PhaseData(seg.Start, seg.End, "Burn " + burnCount++ + " (" + seg.Value + " orbs)");
-                phase.Targets.Add(mainTarget);
+                phase.AddTarget(mainTarget);
                 phases.Add(phase);
             }
             phases.Sort((x, y) => x.Start.CompareTo(y.Start));
@@ -154,7 +154,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (end - start > 1000)
                         {
                             var phase = new PhaseData(start, end, "Pre-Burn " + preBurnCount++);
-                            phase.Targets.Add(mainTarget);
+                            phase.AddTarget(mainTarget);
                             preBurnPhase.Add(phase);
                         }
                     }
@@ -180,7 +180,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (cur.End >= phase.End + 5000 && (i == phases.Count - 1 || phases[i + 1].Name.Contains("%")))
                         {
                             var leftOverPhase = new PhaseData(phase.End + 1, cur.End, "Leftover " + leftOverCount++);
-                            leftOverPhase.Targets.Add(mainTarget);
+                            leftOverPhase.AddTarget(mainTarget);
                             leftOverPhases.Add(leftOverPhase);
                         }
                     }

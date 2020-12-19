@@ -66,7 +66,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new InvalidOperationException("Cairn not found");
             }
-            phases[0].Targets.Add(cairn);
+            phases[0].AddTarget(cairn);
             if (!requirePhases)
             {
                 return phases;
@@ -78,13 +78,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     Name = "Calm"
                 };
-                normalPhase.Targets.Add(cairn);
+                normalPhase.AddTarget(cairn);
 
                 var enragePhase = new PhaseData(enrageApply.Time + 1, log.FightData.FightEnd)
                 {
                     Name = "Angry"
                 };
-                enragePhase.Targets.Add(cairn);
+                enragePhase.AddTarget(cairn);
 
                 phases.Add(normalPhase);
                 phases.Add(enragePhase);

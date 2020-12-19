@@ -53,7 +53,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Sabir not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -66,7 +66,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AbstractCastEvent wallopinbWind = wallopingWinds[i];
                 end = wallopinbWind.Time;
                 var phase = new PhaseData(start, end, "Phase " + (i + 1));
-                phase.Targets.Add(mainTarget);
+                phase.AddTarget(mainTarget);
                 phases.Add(phase);
                 AbstractCastEvent nextAttack = cls.FirstOrDefault(x => x.Time >= wallopinbWind.EndTime && (x.SkillId == 56620 || x.SkillId == 56629 || x.SkillId == 56307));
                 if (nextAttack == null)
@@ -77,7 +77,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (i == wallopingWinds.Count - 1)
                 {
                     phase = new PhaseData(start, log.FightData.FightEnd, "Phase " + (i + 2));
-                    phase.Targets.Add(mainTarget);
+                    phase.AddTarget(mainTarget);
                     phases.Add(phase);
                 }
             }

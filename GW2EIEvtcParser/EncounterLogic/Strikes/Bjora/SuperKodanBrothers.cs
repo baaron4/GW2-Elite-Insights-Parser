@@ -44,8 +44,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Claw or Voice not found");
             }
-            phases[0].Targets.Add(voice);
-            phases[0].Targets.Add(claw);
+            phases[0].AddTarget(voice);
+            phases[0].AddTarget(claw);
             long fightEnd = log.FightData.FightEnd;
             if (!requirePhases)
             {
@@ -56,8 +56,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             for (int i = 0; i < unmergedPhases.Count; i++)
             {
                 unmergedPhases[i].Name = "Phase " + (i + 1);
-                unmergedPhases[i].Targets.Add(claw);
-                unmergedPhases[i].Targets.Add(voice);
+                unmergedPhases[i].AddTarget(claw);
+                unmergedPhases[i].AddTarget(voice);
             }
             phases.AddRange(unmergedPhases);
             //
@@ -70,7 +70,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (enterCombat != null)
                 {
                     var phase = new PhaseData(enterCombat.Time, nextUnmergedPhase != null ? nextUnmergedPhase.Start : Math.Min(fightEnd, voiceAndClaw.LastAware), "Voice and Claw " + ++voiceAndClawCount);
-                    phase.Targets.Add(voiceAndClaw);
+                    phase.AddTarget(voiceAndClaw);
                     phases.Add(phase);
                     offset++;
                 }
@@ -80,7 +80,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (enrage != null)
             {
                 var phase = new PhaseData(enrage.Time, log.FightData.FightEnd, "Enrage");
-                phase.Targets.Add(claw.AgentItem == enrage.To ? claw : voice);
+                phase.AddTarget(claw.AgentItem == enrage.To ? claw : voice);
                 phases.Add(phase);
             }
             return phases;

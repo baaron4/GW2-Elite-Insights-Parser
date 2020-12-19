@@ -32,7 +32,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Main target of the fight not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -44,8 +44,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     Name = "Detailed Full Fight",
                     CanBeSubPhase = false
                 });
-                phases[1].Targets.AddRange(Targets);
-                phases[1].Targets.Remove(mainTarget);
+                phases[1].AddTargets(Targets);
+                phases[1].RemoveTarget(mainTarget);
             }
             return phases;
         }

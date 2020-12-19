@@ -239,7 +239,7 @@ namespace GW2EIEvtcParser.ParsedData
             return _phases;
         }
 
-        public List<NPC> GetMainTargets(ParsedEvtcLog log)
+        public IReadOnlyList<NPC> GetMainTargets(ParsedEvtcLog log)
         {
             return GetPhases(log)[0].Targets;
         }

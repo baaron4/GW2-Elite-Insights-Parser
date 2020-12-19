@@ -98,7 +98,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 PhaseData phase = targetPhases[i];
                 phase.Name = baseName + " P" + (i + 1);
-                phase.Targets.Add(target);
+                phase.AddTarget(target);
             }
             return targetPhases;
         }
@@ -192,11 +192,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Nikare not found");
             }
-            phases[0].Targets.Add(nikare);
+            phases[0].AddTarget(nikare);
             NPC kenut = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Kenut);
             if (kenut != null)
             {
-                phases[0].Targets.Add(kenut);
+                phases[0].AddTarget(kenut);
             }
             if (!requirePhases)
             {
