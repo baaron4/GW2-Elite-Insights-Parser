@@ -103,7 +103,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
+            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Deimos not found");
@@ -140,7 +140,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success && _specialSplit > 0)
             {
-                NPC deimos = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
+                NPC deimos = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
                 if (deimos == null)
                 {
                     throw new MissingKeyActorsException("Deimos not found");
@@ -237,7 +237,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             ComputeFightTargets(agentData, combatData);
             // Find target
-            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
+            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Deimos not found");
@@ -283,7 +283,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             long end = 0;
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
+            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Deimos not found");
@@ -487,7 +487,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
+            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Deimos not found");

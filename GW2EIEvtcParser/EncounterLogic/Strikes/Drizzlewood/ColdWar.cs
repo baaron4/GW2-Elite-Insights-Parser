@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 
@@ -25,7 +26,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC varinia = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.VariniaStormsounder);
+            NPC varinia = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.VariniaStormsounder);
             if (varinia == null)
             {
                 throw new MissingKeyActorsException("Varinia Stormsounder not found");

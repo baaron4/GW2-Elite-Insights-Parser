@@ -176,7 +176,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // If changing phase detection, combat replay platform timings may have to be updated.
 
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC qadim = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Qadim);
+            NPC qadim = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Qadim);
             if (qadim == null)
             {
                 throw new MissingKeyActorsException("Qadim not found");
@@ -511,7 +511,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Qadim);
+            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Qadim);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Qadim not found");

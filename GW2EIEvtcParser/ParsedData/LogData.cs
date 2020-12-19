@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.ParsedData
         public string LogStartStd { get; private set; } = DefaultTimeValue;
         public string LogEndStd { get; private set; } = DefaultTimeValue;
 
-        public IReadOnlyList<string> LogErrors => LogErrors;
+        public IReadOnlyList<string> LogErrors => _logErrors;
         private readonly List<string> _logErrors = new List<string>();
 
         // Constructors

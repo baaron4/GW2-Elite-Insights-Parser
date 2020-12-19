@@ -207,7 +207,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 CombatItem aiMaxHP = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && x.SrcAgent == targetAgent.Agent);
                 if (aiMaxHP != null)
                 {
-                    Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2).SetManualHealth((int)aiMaxHP.DstAgent);
+                    Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2).SetManualHealth((int)aiMaxHP.DstAgent);
                 }
             }
         }
@@ -220,7 +220,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC elementalAi = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak);
+            NPC elementalAi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak);
             if (elementalAi == null)
             {
                 if (_hasElementalMode)
@@ -232,7 +232,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 phases[0].AddTarget(elementalAi);
             }
-            NPC darkAi = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2);
+            NPC darkAi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2);
             if (darkAi == null)
             {
                 if (_hasDarkMode)
@@ -353,7 +353,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case 3:
-                    BuffApplyEvent darkInvul895Gain = combatData.GetBuffData(895).OfType<BuffApplyEvent>().Where(x => x.To == Targets.Find(y => y.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2).AgentItem).FirstOrDefault();
+                    BuffApplyEvent darkInvul895Gain = combatData.GetBuffData(895).OfType<BuffApplyEvent>().Where(x => x.To == Targets.FirstOrDefault(y => y.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2).AgentItem).FirstOrDefault();
                     if (darkInvul895Gain != null)
                     {
                         fightData.SetSuccess(true, darkInvul895Gain.Time);

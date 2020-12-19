@@ -114,17 +114,17 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC berg = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Berg);
+            NPC berg = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Berg);
             if (berg == null)
             {
                 throw new MissingKeyActorsException("Berg not found");
             }
-            NPC zane = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Zane);
+            NPC zane = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Zane);
             if (zane == null)
             {
                 throw new MissingKeyActorsException("Zane not found");
             }
-            NPC narella = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Narella);
+            NPC narella = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Narella);
             if (narella == null)
             {
                 throw new MissingKeyActorsException("Narella not found");

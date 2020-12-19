@@ -49,7 +49,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                NPC desmina = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Desmina);
+                NPC desmina = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Desmina);
                 if (desmina == null)
                 {
                     throw new MissingKeyActorsException("Desmina not found");
@@ -113,7 +113,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            NPC desmina = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Desmina);
+            NPC desmina = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Desmina);
             if (desmina == null)
             {
                 throw new MissingKeyActorsException("Desmina not found");

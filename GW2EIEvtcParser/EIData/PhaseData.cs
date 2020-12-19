@@ -52,7 +52,7 @@ namespace GW2EIEvtcParser.EIData
             _targets.Remove(target);
         }
 
-        internal void AddTargets(ICollection<NPC> targets)
+        internal void AddTargets(IEnumerable<NPC> targets)
         {
             _targets.AddRange(targets);
         }

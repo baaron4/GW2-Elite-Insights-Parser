@@ -72,7 +72,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             long end = 0;
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.KeepConstruct);
+            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.KeepConstruct);
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Keep Construct not found");
@@ -346,7 +346,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.Henley:
                 case (int)ArcDPSEnums.TrashID.Galletta:
                 case (int)ArcDPSEnums.TrashID.Ianim:
-                    NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.KeepConstruct);
+                    NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.KeepConstruct);
                     if (mainTarget == null)
                     {
                         throw new MissingKeyActorsException("Keep Construct not found");

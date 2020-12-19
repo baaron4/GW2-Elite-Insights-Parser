@@ -57,7 +57,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Matthias);
+            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Matthias);
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Matthias not found");
@@ -177,13 +177,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             ComputeFightTargets(agentData, combatData);
-            Targets.ForEach(x =>
+            foreach (NPC target in Targets)
             {
-                if (x.ID == (int)ArcDPSEnums.TrashID.MatthiasSacrificeCrystal)
+                if (target.ID == (int)ArcDPSEnums.TrashID.MatthiasSacrificeCrystal)
                 {
-                    x.SetManualHealth(100000);
+                    target.SetManualHealth(100000);
                 }
-            });
+            }
         }
 
         protected override List<int> GetFightTargetsIDs()

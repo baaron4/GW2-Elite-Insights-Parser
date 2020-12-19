@@ -19,8 +19,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         public string Icon { get; protected set; }
         private readonly int _basicMechanicsCount;
         public bool HasNoFightSpecificMechanics => MechanicList.Count == _basicMechanicsCount;
-        public List<NPC> TrashMobs { get; } = new List<NPC>();
-        public List<NPC> Targets { get; } = new List<NPC>();
+        public IReadOnlyList<NPC> TrashMobs => _trashMobs;
+        public IReadOnlyList<NPC> Targets => _targets;
+        protected readonly List<NPC> _trashMobs = new List<NPC>();
+        protected readonly List<NPC> _targets = new List<NPC>();
 
         public bool Targetless { get; protected set; } = false;
         protected int GenericTriggerID { get; }
@@ -75,7 +77,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal virtual string GetLogicName(ParsedEvtcLog log)
         {
-            NPC target = Targets.Find(x => x.ID == GenericTriggerID);
+            NPC target = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);
             if (target == null)
             {
                 return "UNKNOWN";
@@ -122,7 +124,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
                 foreach (AgentItem agentItem in agents)
                 {
-                    Targets.Add(new NPC(agentItem));
+                    _targets.Add(new NPC(agentItem));
                 }
             }
             List<ArcDPSEnums.TrashID> ids2 = GetTrashMobsIDS();
@@ -130,7 +132,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             //aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
             foreach (AgentItem a in aList)
             {
-                TrashMobs.Add(new NPC(a));
+                _trashMobs.Add(new NPC(a));
             }
         }
 
@@ -265,7 +267,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal virtual List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
+            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Main target of the fight not found");
@@ -384,7 +386,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             long maxTime = long.MinValue;
             foreach (int id in idsToUse)
             {
-                NPC target = Targets.Find(x => x.ID == id);
+                NPC target = Targets.FirstOrDefault(x => x.ID == id);
                 if (target == null)
                 {
                     return;

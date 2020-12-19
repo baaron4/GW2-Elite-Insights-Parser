@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.SoullessHorror);
+                NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.SoullessHorror);
                 if (mainTarget == null)
                 {
                     throw new MissingKeyActorsException("Soulless Horror not found");
@@ -93,7 +93,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.SoullessHorror);
+            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.SoullessHorror);
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Soulless Horror not found");
