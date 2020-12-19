@@ -75,7 +75,7 @@ namespace GW2EIEvtcParser.EIData
             }
             BuffStack.Remove(toRemove);
             // Removed due to override
-            (long duration, AgentItem src)? candidate = OverrideCandidates.Find(x => Math.Abs(x.duration - removedDuration) < 15);
+            (long duration, AgentItem src)? candidate = OverrideCandidates.Find(x => Math.Abs(x.duration - removedDuration) < ParserHelper.BuffSimulatorDelayConstant);
             if (candidate.Value.src != null)
             {
                 (long duration, AgentItem candSrc) = candidate.Value;
@@ -90,7 +90,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Removed due to a cleanse
-            else if (removedDuration > 50 && by != ParserHelper._unknownAgent)
+            else if (removedDuration > ParserHelper.BuffSimulatorDelayConstant && by != ParserHelper._unknownAgent)
             {
                 WasteSimulationResult.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, time));
                 if (toRemove.Extensions.Count > 0)

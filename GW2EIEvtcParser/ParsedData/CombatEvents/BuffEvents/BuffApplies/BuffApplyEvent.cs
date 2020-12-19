@@ -24,11 +24,6 @@ namespace GW2EIEvtcParser.ParsedData
             _addedActive = addedActive;
         }
 
-        internal override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
-        {
-            return BuffID != Buff.NoBuff;
-        }
-
         internal override void TryFindSrc(ParsedEvtcLog log)
         {
         }
