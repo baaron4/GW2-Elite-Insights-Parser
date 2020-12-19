@@ -12,7 +12,7 @@ namespace GW2EIBuilders.HtmlModels
         public long MaxTime { get; set; }
         public float Inch { get; set; }
         public int PollingRate { get; set; }
-        public List<CombatReplayMap.MapItem> Maps { get; set; }
+        public IReadOnlyList<CombatReplayMap.MapItem> Maps { get; set; }
 
         public CombatReplayDto(ParsedEvtcLog log)
         {
