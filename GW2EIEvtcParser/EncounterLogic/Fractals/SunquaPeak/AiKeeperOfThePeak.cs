@@ -146,15 +146,15 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
-            AgentItem targetAgent = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.AiKeeperOfThePeak).FirstOrDefault();
-            if (targetAgent == null)
+            AgentItem aiAgent = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.AiKeeperOfThePeak).FirstOrDefault();
+            if (aiAgent == null)
             {
                 throw new MissingKeyActorsException("Ai not found");
             }
             CombatItem darkModePhaseEvent = combatData.FirstOrDefault(x => x.SkillID == 53569);
             _hasDarkMode = combatData.Exists(x => x.SkillID == 61356);
             _hasElementalMode = !_hasDarkMode || darkModePhaseEvent != null;
-            targetAgent.OverrideName("Elemental Ai");
+            aiAgent.OverrideName("Elemental Ai");
             if (_hasDarkMode)
             {
                 if (_hasElementalMode)
@@ -162,54 +162,54 @@ namespace GW2EIEvtcParser.EncounterLogic
                     long darkModeStart = combatData.FirstOrDefault(x => x.SkillID == 61277 && x.Time >= darkModePhaseEvent.Time).Time;
                     CombatItem invul895Loss = combatData.FirstOrDefault(x => x.Time <= darkModeStart && x.SkillID == 895 && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All);
                     long lastAwareTime = (invul895Loss != null ? invul895Loss.Time : darkModeStart);
-                    AgentItem targetAgent2 = agentData.AddCustomAgent(lastAwareTime + 1, targetAgent.LastAware, AgentItem.AgentType.NPC, "Dark Ai", "", (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2, targetAgent.Toughness, targetAgent.Healing, targetAgent.Condition, targetAgent.Concentration, targetAgent.HitboxWidth, targetAgent.HitboxHeight);
-                    targetAgent.OverrideAwareTimes(targetAgent.FirstAware, lastAwareTime);
+                    AgentItem darkAiAgent = agentData.AddCustomAgent(lastAwareTime + 1, aiAgent.LastAware, AgentItem.AgentType.NPC, "Dark Ai", "", (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2, aiAgent.Toughness, aiAgent.Healing, aiAgent.Condition, aiAgent.Concentration, aiAgent.HitboxWidth, aiAgent.HitboxHeight);
+                    aiAgent.OverrideAwareTimes(aiAgent.FirstAware, lastAwareTime);
                     // Redirect combat events
                     foreach (CombatItem evt in combatData)
                     {
-                        if (evt.Time >= targetAgent2.FirstAware && evt.Time <= targetAgent2.LastAware)
+                        if (evt.Time >= darkAiAgent.FirstAware && evt.Time <= darkAiAgent.LastAware)
                         {
-                            if (evt.IsStateChange.SrcIsAgent() && evt.SrcAgent == targetAgent.Agent)
+                            if (evt.IsStateChange.SrcIsAgent() && evt.SrcAgent == aiAgent.Agent)
                             {
-                                evt.OverrideSrcAgent(targetAgent2.Agent);
+                                evt.OverrideSrcAgent(darkAiAgent.Agent);
                             }
-                            if (evt.IsStateChange.DstIsAgent() && evt.DstAgent == targetAgent.Agent)
+                            if (evt.IsStateChange.DstIsAgent() && evt.DstAgent == aiAgent.Agent)
                             {
-                                evt.OverrideDstAgent(targetAgent2.Agent);
+                                evt.OverrideDstAgent(darkAiAgent.Agent);
                             }
                         }
                     }
-                    CombatItem toCopy = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcAgent == targetAgent.Agent && x.Time <= lastAwareTime - 1);
+                    CombatItem toCopy = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcAgent == aiAgent.Agent && x.Time <= lastAwareTime - 1);
                     if (toCopy != null)
                     {
                         var copied = new CombatItem(toCopy);
                         copied.OverrideDstAgent(0);
-                        copied.OverrideTime(copied.Time + 1);
+                        copied.OverrideTime(lastAwareTime);
                         combatData.Add(copied);
                         combatData.Sort((x, y) => x.Time.CompareTo(y.Time));
                     }
                     // Redirect NPC masters
                     foreach (AgentItem ag in agentData.GetAgentByType(AgentItem.AgentType.NPC))
                     {
-                        if (ag.Master == targetAgent && ag.FirstAware >= targetAgent.LastAware)
+                        if (ag.Master == aiAgent && ag.FirstAware >= aiAgent.LastAware)
                         {
-                            ag.SetMaster(targetAgent2);
+                            ag.SetMaster(darkAiAgent);
                         }
                     }
                     // Redirect Gadget masters
                     foreach (AgentItem ag in agentData.GetAgentByType(AgentItem.AgentType.Gadget))
                     {
-                        if (ag.Master == targetAgent && ag.FirstAware >= targetAgent.LastAware)
+                        if (ag.Master == aiAgent && ag.FirstAware >= aiAgent.LastAware)
                         {
-                            ag.SetMaster(targetAgent2);
+                            ag.SetMaster(darkAiAgent);
                         }
                     }
                 }
                 else
                 {
                     Extension = "drkai";
-                    targetAgent.OverrideName("Dark Ai");
-                    targetAgent.OverrideID((int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2);
+                    aiAgent.OverrideName("Dark Ai");
+                    aiAgent.OverrideID((int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2);
                     agentData.Refresh();
                 }
             }
@@ -222,7 +222,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Manually set HP
             if (_hasElementalMode && _hasDarkMode)
             {
-                CombatItem aiMaxHP = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && x.SrcAgent == targetAgent.Agent);
+                CombatItem aiMaxHP = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && x.SrcAgent == aiAgent.Agent);
                 if (aiMaxHP != null)
                 {
                     Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2).SetManualHealth((int)aiMaxHP.DstAgent);
