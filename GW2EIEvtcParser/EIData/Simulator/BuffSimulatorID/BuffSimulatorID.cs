@@ -121,10 +121,6 @@ namespace GW2EIEvtcParser.EIData
 
         public override void Reset(uint stackID, long toDuration)
         {
-            if (!BuffStack.Any())
-            {
-                return;
-            }
             BuffStackItemID toDisable = BuffStack.FirstOrDefault(x => x.StackID == stackID);
             if (toDisable == null)
             {

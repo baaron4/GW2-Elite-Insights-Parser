@@ -13,10 +13,6 @@ namespace GW2EIEvtcParser.EIData
 
         public override void Activate(uint stackID)
         {
-            if (!BuffStack.Any())
-            {
-                return;
-            }
             BuffStackItemID active = BuffStack.FirstOrDefault(x => x.StackID == stackID);
             if (active == null)
             {
