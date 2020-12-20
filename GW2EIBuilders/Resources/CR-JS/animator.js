@@ -1,4 +1,7 @@
 /*jshint esversion: 6 */
+/* jshint node: true */
+/*jslint browser: true */
+/* global logData*/
 // const images
 "use strict";
 const noUpdateTime = -1;
@@ -64,7 +67,7 @@ class Animator {
             enabled: false,
             openingAngle: 90,
             radius: 360,
-        }
+        };
         // actors
         this.targetData = new Map();
         this.playerData = new Map();
@@ -109,12 +112,12 @@ class Animator {
         }
     }
 
-    attachDOM() {
+    attachDOM(mainCanvasID, bgCanvasID, timeRangeID, timeRangeDisplayID) {
         // animation
-        this.timeSlider = document.getElementById('timeRange');
-        this.timeSliderDisplay = document.getElementById('timeRangeDisplay');
+        this.timeSlider = document.getElementById(timeRangeID);
+        this.timeSliderDisplay = document.getElementById(timeRangeDisplayID);
         // main canvas
-        this.mainCanvas = document.getElementById('main-canvas');
+        this.mainCanvas = document.getElementById(mainCanvasID);
         this.mainCanvas.style.width = this.mainCanvas.width + "px";
         this.mainCanvas.style.height = this.mainCanvas.height + "px";
         this.mainCanvas.width *= resolutionMultiplier;
@@ -122,7 +125,7 @@ class Animator {
         this.mainContext = this.mainCanvas.getContext('2d');
         this.mainContext.imageSmoothingEnabled = true;
         // bg canvas
-        this.bgCanvas = document.getElementById('bg-canvas');
+        this.bgCanvas = document.getElementById(bgCanvasID);
         this.bgCanvas.style.width = this.bgCanvas.width + "px";
         this.bgCanvas.style.height = this.bgCanvas.height + "px";
         this.bgCanvas.width *= resolutionMultiplier;
@@ -513,7 +516,7 @@ class Animator {
             ctx.restore();
 
 
-            ctx.drawImage(this._getBackgroundImage(), 0, 0, canvas.width / resolutionMultiplier, canvas.height / resolutionMultiplier);
+            ctx.drawImage(imgToDraw, 0, 0, canvas.width / resolutionMultiplier, canvas.height / resolutionMultiplier);
 
             //ctx.globalCompositeOperation = "color-burn";
             ctx.save();

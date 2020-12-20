@@ -1,3 +1,8 @@
+/*jshint esversion: 6 */
+/* jshint node: true */
+/*jslint browser: true */
+/*global animator, ToRadians, facingIcon, animateCanvas, noUpdateTime*/
+"use strict";
 //// BASE MECHANIC
 class MechanicDrawable {
     constructor(start, end, connectedTo) {

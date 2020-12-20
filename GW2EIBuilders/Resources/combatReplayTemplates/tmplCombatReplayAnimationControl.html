@@ -1,36 +1,41 @@
 <template>
-    <div class="d-flex flex-column justify-content-center flex-wrap" :style="{'width': Math.max(canvasSize.x, canvasSize.y) + 'px'}">
-        <div class="d-flex flex-column justify-content-center align-items-center" :style="{'width': '100%', 'min-width': canvasSize.x + 'px', 'height': canvasSize.y + 'px', 'position': 'relative'}">
-            <canvas :width="canvasSize.x + 'px'" :height="canvasSize.y + 'px'" id="main-canvas" class="replay"></canvas>
-            <canvas :width="canvasSize.x + 'px'" :height="canvasSize.y + 'px'" id="bg-canvas" class="replay"></canvas>
+    <div class="d-flex flex-column justify-content-center flex-wrap"
+        :style="{'width': Math.max(canvasSize.x, canvasSize.y) + 'px'}">
+        <div class="d-flex flex-column justify-content-center align-items-center"
+            :style="{'width': '100%', 'min-width': canvasSize.x + 'px', 'height': canvasSize.y + 'px', 'position': 'relative'}">
+            <canvas :width="canvasSize.x + 'px'" :height="canvasSize.y + 'px'" :id="htmlElementIDs.mainCanvasID"
+                class="replay"></canvas>
+            <canvas :width="canvasSize.x + 'px'" :height="canvasSize.y + 'px'" :id="htmlElementIDs.bgCanvasID" class="replay"></canvas>
         </div>
         <div class="animation-control">
             <div class="d-flex justify-content-center">
-                <div @click="toggleAnimate();"
-                     class="btn btn-small" :class="{'btn-dark': !light, 'btn-light': light}" style="width: 50px;">{{animated ? "Pause" : "Play"}}</div>
+                <div @click="toggleAnimate();" class="btn btn-small" :class="{'btn-dark': !light, 'btn-light': light}"
+                    style="width: 50px;">{{animated ? "Pause" : "Play"}}</div>
                 <div @click="restartAnimate();" class="btn btn-small" :class="{'btn-dark': !light, 'btn-light': light}">
                     Restart
                 </div>
-                <div @click="toggleBackwards();"
-                     class="btn btn-small" :class="{'active': backwards, 'btn-dark': !light, 'btn-light': light}">Backwards</div>
+                <div @click="toggleBackwards();" class="btn btn-small"
+                    :class="{'active': backwards, 'btn-dark': !light, 'btn-light': light}">Backwards</div>
             </div>
-                <div class="d-flex flex-row flex-wrap justify-content-center mt-1 mb-1">
-                    <div class="btn btn-ssmall" :class="{'active': backwards, 'btn-dark': !light, 'btn-light': light}"
-                        v-for="phase in phases" @click="updatePhaseTime(phase.start * 1000, phase.end * 1000, phase.name)"
-                        :data-original-title="phase.durationS + ' seconds'">
-                        {{phase.name}}
-                    </div>
+            <div class="d-flex flex-row flex-wrap justify-content-center mt-1 mb-1">
+                <div class="btn btn-ssmall" :class="{'active': backwards, 'btn-dark': !light, 'btn-light': light}"
+                    v-for="phase in phases" @click="updatePhaseTime(phase.start * 1000, phase.end * 1000, phase.name)"
+                    :data-original-title="phase.durationS + ' seconds'">
+                    {{phase.name}}
                 </div>
+            </div>
             <div class="d-flex justify-content-center slidercontainer">
                 <input style="min-width: 400px;" @input="updateTime($event.target.value)" type="range" min="0"
-                       :max="maxTime" value="0" class="slider" id="timeRange" :style="{'background': getSliderGradient()}">
+                    :max="maxTime" value="0" class="slider" :id="htmlElementIDs.timeRangeID"
+                    :style="{'background': getSliderGradient()}">
                 <p style="position: absolute; color: black; pointer-events:none;">{{sliderDelimiter.name}}</p>
-                <input style="width: 70px; text-align: right;" class="ml-3 mr-1" type="text" id="timeRangeDisplay" value="0"
-                       @input="updateInputTime($event.target.value);">
+                <input style="width: 70px; text-align: right;" class="ml-3 mr-1" type="text" :id="htmlElementIDs.timeRangeDisplayID"
+                    value="0" @input="updateInputTime($event.target.value);">
             </div>
             <div class="d-flex justify-content-center">
-                <label v-for="speed in speeds" @click="setSpeed(speed)" :class="{'active': speed === selectedSpeed, 'btn-dark': !light, 'btn-light': light}"
-                       class="btn btn-ssmall">
+                <label v-for="speed in speeds" @click="setSpeed(speed)"
+                    :class="{'active': speed === selectedSpeed, 'btn-dark': !light, 'btn-light': light}"
+                    class="btn btn-ssmall">
                     {{speed}}x
                 </label>
             </div>
@@ -45,20 +50,37 @@
         template: `${template}`,
         data: function () {
             return {
-                speeds: [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0],
                 selectedSpeed: 1,
                 backwards: false,
-                canvasSize: {
-                    x: logData.crData.sizes[0],
-                    y: logData.crData.sizes[1]
-                },
-                maxTime: logData.crData.maxTime,
-                sliderDelimiter: sliderDelimiter
+                sliderDelimiter: sliderDelimiter,
             };
         },
+        mounted() {
+            animator.attachDOM(this.htmlElementIDs.mainCanvasID, this.htmlElementIDs.bgCanvasID, this.htmlElementIDs.timeRangeID, this.htmlElementIDs.timeRangeDisplayID);
+        },
         computed: {
-            phases: function() {
+            phases: function () {
                 return logData.phases.filter(phase => !phase.breakbarPhase);
+            },
+            speeds: function () {
+                return [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0];
+            },
+            maxTime: function () {
+                return logData.crData.maxTime;
+            },
+            canvasSize: function () {
+                return {
+                    x: logData.crData.sizes[0],
+                    y: logData.crData.sizes[1]
+                };
+            },
+            htmlElementIDs: function () {
+                return {
+                    mainCanvasID: "main-canvas",
+                    bgCanvasID: "bg-canvas",
+                    timeRangeID: "timeRange",
+                    timeRangeDisplayID: "timeRangeDisplay",
+                };
             }
         },
         methods: {

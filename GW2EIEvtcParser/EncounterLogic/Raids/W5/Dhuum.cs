@@ -47,9 +47,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new CombatReplayMap("https://i.imgur.com/CLTwWBJ.png",
                             (3763, 3383),
-                            (13524, -1334, 18039, 2735),
+                            (13524, -1334, 18039, 2735)/*,
                             (-21504, -12288, 24576, 12288),
-                            (19072, 15484, 20992, 16508));
+                            (19072, 15484, 20992, 16508)*/);
         }
 
         private static void ComputeFightPhases(List<PhaseData> phases, List<AbstractCastEvent> castLogs, long fightDuration, long start)

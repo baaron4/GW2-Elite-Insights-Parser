@@ -54,9 +54,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new CombatReplayMap("https://i.imgur.com/GCwOVVE.png",
                             (4400, 5753),
-                            (-9542, 1932, -7004, 5250),
+                            (-9542, 1932, -7004, 5250)/*,
                             (-27648, -9216, 27648, 12288),
-                            (11774, 4480, 14078, 5376));
+                            (11774, 4480, 14078, 5376)*/);
         }
 
         protected override HashSet<int> GetUniqueTargetIDs()

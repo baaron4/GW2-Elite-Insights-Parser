@@ -1,3 +1,7 @@
+/*jshint esversion: 6 */
+/* jshint node: true */
+/*jslint browser: true */
+/*global animator, animateCanvas, noUpdateTime, deadIcon, dcIcon, downIcon*/
 "use strict";
 //// ACTORS
 class IconDrawable {

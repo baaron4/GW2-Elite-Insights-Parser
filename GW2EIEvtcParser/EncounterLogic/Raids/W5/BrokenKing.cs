@@ -25,9 +25,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new CombatReplayMap("https://i.imgur.com/JRPskkX.png",
                             (999, 890),
-                            (2497, 5388, 7302, 9668),
+                            (2497, 5388, 7302, 9668)/*,
                             (-21504, -12288, 24576, 12288),
-                            (19072, 15484, 20992, 16508));
+                            (19072, 15484, 20992, 16508)*/);
         }
 
         internal override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)

@@ -37,9 +37,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new CombatReplayMap("https://i.imgur.com/JOoJRXM.png",
                             (3205, 4191),
-                            (10846, -3878, 18086, 5622),
+                            (10846, -3878, 18086, 5622)/*,
                             (-21504, -21504, 24576, 24576),
-                            (13440, 14336, 15360, 16256));
+                            (13440, 14336, 15360, 16256)*/);
         }
 
         protected override List<int> GetFightTargetsIDs()

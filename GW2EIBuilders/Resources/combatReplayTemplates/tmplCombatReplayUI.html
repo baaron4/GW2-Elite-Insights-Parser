@@ -28,9 +28,6 @@
         created() {
             animator = new Animator(logData.crData);
         },
-        mounted() {
-            animator.attachDOM();
-        },
         activated() {
             if (this.animationStatus.animated && animator != null) {
                 animator.startAnimate(false);

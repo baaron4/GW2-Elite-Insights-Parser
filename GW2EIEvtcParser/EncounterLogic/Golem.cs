@@ -36,6 +36,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+        {
+            var width = 895;
+            var height = 629;
+            return new CombatReplayMap("https://i.imgur.com/gmnSuz7.png",
+                            (width, height),
+                            ComputeSimpleMapRect(width, height, 19568.6, -12874.75, 0.406, 0.4385, 5.5));
+        }
+
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             CombatItem pov = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.PointOfView);
