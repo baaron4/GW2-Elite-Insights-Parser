@@ -55,8 +55,8 @@ namespace GW2EIEvtcParser.EIData
                 {
                     toAdd.OverrideEnd(toAdd.Start + diff);
                 }
-                // Subtract from each
-                foreach (BuffStackItemID buffStackItem in BuffStackToUse)
+                // Subtract from each from the original stack so that everyone's time start are shifted
+                foreach (BuffStackItemID buffStackItem in BuffStack)
                 {
                     buffStackItem.Shift(diff, diff);
                 }

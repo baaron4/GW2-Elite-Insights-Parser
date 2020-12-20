@@ -33,7 +33,8 @@ namespace GW2EIEvtcParser.EIData
 
             public override void Shift(long startShift, long durationShift)
             {
-                if (!Active)
+                // Only time shift if not active or duration is 0
+                if (!Active || Duration == 0)
                 {
                     base.Shift(startShift, 0);
                     return;
