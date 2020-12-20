@@ -9,10 +9,10 @@ namespace GW2EIEvtcParser.EIData
     internal abstract class BuffSimulatorID : AbstractBuffSimulator
     {
         protected List<BuffStackItemID> BuffStack { get; set; } = new List<BuffStackItemID>();
-        protected List<(long duration, AgentItem src)> OverrideCandidates { get; } = new List<(long duration, AgentItem src)>();
+        //protected List<(long duration, AgentItem src)> OverrideCandidates { get; } = new List<(long duration, AgentItem src)>();
 
         // Constructor
-        protected BuffSimulatorID(ParsedEvtcLog log) : base(log)
+        protected BuffSimulatorID(ParsedEvtcLog log, Buff buff) : base(log, buff)
         {
         }
 
@@ -81,12 +81,18 @@ namespace GW2EIEvtcParser.EIData
                 throw new InvalidOperationException("Remove has failed");
             }
             BuffStack.Remove(toRemove);
-            // Removed due to override
-            (long duration, AgentItem src)? candidate = OverrideCandidates.FirstOrDefault(x => Math.Abs(x.duration - removedDuration) < ParserHelper.BuffSimulatorDelayConstant);
-            if (candidate.Value.src != null)
+            // safe checking, this can happen when an inactive stack is being removed but it was actually active
+            if (Math.Abs(removedDuration - toRemove.TotalDuration) > ParserHelper.BuffSimulatorDelayConstant && !toRemove.Active)
             {
-                (long duration, AgentItem candSrc) = candidate.Value;
-                OverrideCandidates.Remove(candidate.Value);
+                toRemove.Activate();
+                toRemove.Shift(0, Math.Abs(removedDuration - toRemove.TotalDuration));
+            }
+            // Removed due to override
+            //(long duration, AgentItem src)? candidate = OverrideCandidates.FirstOrDefault(x => Math.Abs(x.duration - removedDuration) < ParserHelper.BuffSimulatorDelayConstant);
+            if (by == ParserHelper._unknownAgent && removedDuration != 0)
+            {
+                //(long duration, AgentItem candSrc) = candidate.Value;
+                //OverrideCandidates.Remove(candidate.Value);
                 WasteSimulationResult.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, toRemove.Start));
                 if (toRemove.Extensions.Any())
                 {

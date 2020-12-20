@@ -12,11 +12,14 @@ namespace GW2EIEvtcParser.EIData
         public List<BuffSimulationItemOverstack> OverstackSimulationResult { get; } = new List<BuffSimulationItemOverstack>();
         public List<BuffSimulationItemWasted> WasteSimulationResult { get; } = new List<BuffSimulationItemWasted>();
 
+        public Buff Buff { get; }
+
         protected ParsedEvtcLog Log { get; }
 
         // Constructor
-        protected AbstractBuffSimulator(ParsedEvtcLog log)
+        protected AbstractBuffSimulator(ParsedEvtcLog log, Buff buff)
         {
+            Buff = buff;
             Log = log;
         }
 

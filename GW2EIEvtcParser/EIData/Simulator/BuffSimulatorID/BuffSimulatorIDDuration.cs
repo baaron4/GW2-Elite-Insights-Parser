@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData
         private BuffStackItemID _activeStack;
 
         // Constructor
-        public BuffSimulatorIDDuration(ParsedEvtcLog log) : base(log)
+        public BuffSimulatorIDDuration(ParsedEvtcLog log, Buff buff) : base(log, buff)
         {
         }
 
@@ -32,10 +32,10 @@ namespace GW2EIEvtcParser.EIData
             var toAdd = new BuffStackItemID(start, duration, src, addedActive, stackID);
             BuffStack.Add(toAdd);
             //AddedSimulationResult.Add(new BuffCreationItem(src, duration, start, toAdd.ID));
-            if (overstackDuration > 0)
+            /*if (overstackDuration > 0)
             {
                 OverrideCandidates.Add((overstackDuration, src));
-            }
+            }*/
             if (addedActive)
             {
                 _activeStack = toAdd;

@@ -12,7 +12,7 @@ namespace GW2EIEvtcParser.EIData
         private readonly StackingLogic _logic;
 
         // Constructor
-        protected BuffSimulator(int capacity, ParsedEvtcLog log, StackingLogic logic) : base(log)
+        protected BuffSimulator(int capacity, ParsedEvtcLog log, StackingLogic logic, Buff buff) : base(log, buff)
         {
             Capacity = Math.Max(capacity, 1);
             _logic = logic;
