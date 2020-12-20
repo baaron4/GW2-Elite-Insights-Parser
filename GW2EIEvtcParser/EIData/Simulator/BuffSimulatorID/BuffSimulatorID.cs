@@ -8,6 +8,40 @@ namespace GW2EIEvtcParser.EIData
 {
     internal abstract class BuffSimulatorID : AbstractBuffSimulator
     {
+        protected class BuffStackItemID : BuffStackItem
+        {
+
+            public long StackID { get; protected set; } = 0;
+
+            public bool Active { get; set; } = false;
+
+            public BuffStackItemID(long start, long boonDuration, AgentItem src, bool active, long stackID) : base(start, boonDuration, src)
+            {
+                Active = active;
+                StackID = stackID;
+            }
+
+            public void Activate()
+            {
+                Active = true;
+            }
+
+            public void Disable()
+            {
+                Active = false;
+            }
+
+            public override void Shift(long startShift, long durationShift)
+            {
+                if (!Active)
+                {
+                    base.Shift(startShift, 0);
+                    return;
+                }
+                base.Shift(startShift, durationShift);
+            }
+        }
+
         protected List<BuffStackItemID> BuffStack { get; set; } = new List<BuffStackItemID>();
         //protected List<(long duration, AgentItem src)> OverrideCandidates { get; } = new List<(long duration, AgentItem src)>();
 
