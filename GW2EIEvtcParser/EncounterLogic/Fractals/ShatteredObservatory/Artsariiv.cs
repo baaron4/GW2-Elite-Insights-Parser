@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
@@ -53,7 +54,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Artsariiv);
+            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Artsariiv);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Artsariiv not found");

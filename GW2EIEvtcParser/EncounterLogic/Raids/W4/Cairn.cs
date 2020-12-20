@@ -61,12 +61,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC cairn = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Cairn);
+            NPC cairn = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Cairn);
             if (cairn == null)
             {
                 throw new InvalidOperationException("Cairn not found");
             }
-            phases[0].Targets.Add(cairn);
+            phases[0].AddTarget(cairn);
             if (!requirePhases)
             {
                 return phases;
@@ -78,13 +78,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     Name = "Calm"
                 };
-                normalPhase.Targets.Add(cairn);
+                normalPhase.AddTarget(cairn);
 
                 var enragePhase = new PhaseData(enrageApply.Time + 1, log.FightData.FightEnd)
                 {
                     Name = "Angry"
                 };
-                enragePhase.Targets.Add(cairn);
+                enragePhase.AddTarget(cairn);
 
                 phases.Add(normalPhase);
                 phases.Add(enragePhase);

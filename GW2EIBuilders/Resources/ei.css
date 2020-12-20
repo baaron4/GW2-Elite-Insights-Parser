@@ -221,10 +221,28 @@ body {
     cursor: pointer !important;
 }
 
+
 .player-cell {
     width: 125px;
     min-height: 90px;
-    border: 1px solid;
+}
+
+.theme-yeti .player-cell{
+    box-shadow: 
+    1px 0 0 0 #dee2e6, 
+    0 1px 0 0 #dee2e6, 
+    1px 1px 0 0 #dee2e6,
+    1px 0 0 0 #dee2e6 inset, 
+    0 1px 0 0 #dee2e6 inset;
+}
+
+.theme-slate .player-cell {
+    box-shadow: 
+    1px 0 0 0 rgb(10, 10, 10), 
+    0 1px 0 0 rgb(10, 10, 10), 
+    1px 1px 0 0 rgb(10, 10, 10),
+    1px 0 0 0 rgb(10, 10, 10) inset, 
+    0 1px 0 0 rgb(10, 10, 10) inset;
 }
 
 .player-cell-shorten {
@@ -374,6 +392,26 @@ table.dataTable thead .sorting_desc_disabled:before,
 table.dataTable thead .sorting_desc_disabled:after {
     right: 0.3em;
     display: none;
+}
+
+.sub-cell { 
+    width: 20px ;
+}
+
+.prof-cell {
+    width: 5px;
+}
+
+.damage-cell {
+    width: 150px;
+}
+
+.stat-cell {
+    width: 120px;
+}
+
+.damage-dist-cell {
+    width: 100px;
 }
 
 table.dataTable thead .sorting_asc:before,

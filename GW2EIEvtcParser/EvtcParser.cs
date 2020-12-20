@@ -610,7 +610,7 @@ namespace GW2EIEvtcParser
         private void CompletePlayers()
         {
             //Fix Disconnected players
-            List<AgentItem> playerAgentList = _agentData.GetAgentByType(AgentItem.AgentType.Player);
+            IReadOnlyList<AgentItem> playerAgentList = _agentData.GetAgentByType(AgentItem.AgentType.Player);
             foreach (AgentItem playerAgent in playerAgentList)
             {
                 if (playerAgent.InstID == 0 || playerAgent.FirstAware == 0 || playerAgent.LastAware == long.MaxValue)

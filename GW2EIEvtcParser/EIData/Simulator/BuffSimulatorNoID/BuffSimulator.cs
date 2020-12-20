@@ -1,24 +1,31 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
     internal abstract class BuffSimulator : AbstractBuffSimulator
     {
+        protected List<BuffStackItem> BuffStack { get; set; } = new List<BuffStackItem>();
         protected int Capacity { get; }
         private readonly StackingLogic _logic;
-        protected long ID { get; set; } = 0;
 
         // Constructor
-        protected BuffSimulator(int capacity, ParsedEvtcLog log, StackingLogic logic) : base(log)
+        protected BuffSimulator(int capacity, ParsedEvtcLog log, StackingLogic logic, Buff buff) : base(log, buff)
         {
             Capacity = Math.Max(capacity, 1);
             _logic = logic;
         }
 
-        public override void Add(long duration, AgentItem src, long start, uint id, bool addedActive, uint overstackDuration)
+        protected override void Clear()
         {
-            var toAdd = new BuffStackItem(start, duration, src, ++ID);
+            BuffStack.Clear();
+        }
+
+        public override void Add(long duration, AgentItem src, long start, uint stackID, bool addedActive, uint overstackDuration)
+        {
+            var toAdd = new BuffStackItem(start, duration, src);
             // Find empty slot
             if (BuffStack.Count < Capacity)
             {
@@ -38,7 +45,7 @@ namespace GW2EIEvtcParser.EIData
 
         protected void Add(long duration, AgentItem src, AgentItem seedSrc, long time, bool atFirst, bool isExtension)
         {
-            var toAdd = new BuffStackItem(time, duration, src, seedSrc, ++ID, isExtension);
+            var toAdd = new BuffStackItem(time, duration, src, seedSrc, isExtension);
             // Find empty slot
             if (BuffStack.Count < Capacity)
             {
@@ -64,7 +71,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public override void Remove(AgentItem by, long removedDuration, int removedStacks, long time, ArcDPSEnums.BuffRemove removeType, uint id)
+        public override void Remove(AgentItem by, long removedDuration, int removedStacks, long time, ArcDPSEnums.BuffRemove removeType, uint stackID)
         {
             switch (removeType)
             {
@@ -72,7 +79,7 @@ namespace GW2EIEvtcParser.EIData
                     foreach (BuffStackItem stackItem in BuffStack)
                     {
                         WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.Duration, time));
-                        if (stackItem.Extensions.Count > 0)
+                        if (stackItem.Extensions.Any())
                         {
                             foreach ((AgentItem src, long value) in stackItem.Extensions)
                             {
@@ -89,7 +96,7 @@ namespace GW2EIEvtcParser.EIData
                         if (Math.Abs(removedDuration - stackItem.TotalDuration) < ParserHelper.BuffSimulatorDelayConstant)
                         {
                             WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.Duration, time));
-                            if (stackItem.Extensions.Count > 0)
+                            if (stackItem.Extensions.Any())
                             {
                                 foreach ((AgentItem src, long value) in stackItem.Extensions)
                                 {

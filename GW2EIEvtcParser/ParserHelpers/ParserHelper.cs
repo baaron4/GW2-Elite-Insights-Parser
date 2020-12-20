@@ -158,7 +158,7 @@ namespace GW2EIEvtcParser
                 case "Revenant":
                     return new List<Source> { Source.Revenant };
             }
-            return new List<Source> { Source.Unknown };
+            return new List<Source> { };
         }
 
         internal static string GetHighResolutionProfIcon(string prof)
@@ -643,6 +643,21 @@ namespace GW2EIEvtcParser
                 }
             }
             return false;
+        }
+
+        public static int IndexOf<T>(this IReadOnlyList<T> self, T elementToFind)
+        {
+            int i = 0;
+            foreach (T element in self)
+            {
+                if (Equals(element, elementToFind))
+                {
+                    return i;
+                }
+
+                i++;
+            }
+            return -1;
         }
 
         public static bool IsTemporaryFormat(string fileName)

@@ -77,18 +77,18 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
+            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Golem not found");
             }
             phases[0].Name = "Final Number";
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
                 return phases;
             }
-            List<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem);
+            IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem);
             if (hpUpdates.Count > 0)
             {
                 long fightDuration = log.FightData.FightEnd;
@@ -104,7 +104,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             CanBeSubPhase = false
                         };
-                        phase.Targets.Add(mainTarget);
+                        phase.AddTarget(mainTarget);
                         phases.Add(phase);
                     }
                 }
@@ -116,7 +116,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
+            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Golem not found");
@@ -128,7 +128,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 fightEndLogTime = lastDamageTaken.Time;
             }
-            List<HealthUpdateEvent> hpUpdates = combatData.GetHealthUpdateEvents(mainTarget.AgentItem);
+            IReadOnlyList<HealthUpdateEvent> hpUpdates = combatData.GetHealthUpdateEvents(mainTarget.AgentItem);
             if (hpUpdates.Count > 0)
             {
                 success = hpUpdates.Last().HPPercent < 2.00;

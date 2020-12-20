@@ -19,8 +19,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         public string Icon { get; protected set; }
         private readonly int _basicMechanicsCount;
         public bool HasNoFightSpecificMechanics => MechanicList.Count == _basicMechanicsCount;
-        public List<NPC> TrashMobs { get; } = new List<NPC>();
-        public List<NPC> Targets { get; } = new List<NPC>();
+        public IReadOnlyList<NPC> TrashMobs => _trashMobs;
+        public IReadOnlyList<NPC> Targets => _targets;
+        protected readonly List<NPC> _trashMobs = new List<NPC>();
+        protected readonly List<NPC> _targets = new List<NPC>();
 
         public bool Targetless { get; protected set; } = false;
         protected int GenericTriggerID { get; }
@@ -88,7 +90,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal virtual string GetLogicName(ParsedEvtcLog log)
         {
-            NPC target = Targets.Find(x => x.ID == GenericTriggerID);
+            NPC target = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);
             if (target == null)
             {
                 return "UNKNOWN";
@@ -98,7 +100,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static void RegroupTargetsByID(int id, AgentData agentData, List<CombatItem> combatItems)
         {
-            List<AgentItem> agents = agentData.GetNPCsByID(id);
+            IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
             if (agents.Count > 1)
             {
                 AgentItem firstItem = agents.First();
@@ -132,10 +134,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             List<int> ids = GetFightTargetsIDs();
             foreach (int id in ids)
             {
-                List<AgentItem> agents = agentData.GetNPCsByID(id);
+                IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
                 foreach (AgentItem agentItem in agents)
                 {
-                    Targets.Add(new NPC(agentItem));
+                    _targets.Add(new NPC(agentItem));
                 }
             }
             List<ArcDPSEnums.TrashID> ids2 = GetTrashMobsIDS();
@@ -143,7 +145,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             //aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
             foreach (AgentItem a in aList)
             {
-                TrashMobs.Add(new NPC(a));
+                _trashMobs.Add(new NPC(a));
             }
         }
 
@@ -157,7 +159,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             long fightDuration = log.FightData.FightEnd;
             long start = 0;
             double offset = 100.0 / thresholds.Count;
-            List<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem);
+            IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem);
             for (int i = 0; i < thresholds.Count; i++)
             {
                 HealthUpdateEvent evt = hpUpdates.FirstOrDefault(x => x.HPPercent <= thresholds[i]);
@@ -166,14 +168,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 }
                 var phase = new PhaseData(start, Math.Min(evt.Time, fightDuration), (offset + thresholds[i]) + "% - " + thresholds[i] + "%");
-                phase.Targets.Add(mainTarget);
+                phase.AddTarget(mainTarget);
                 phases.Add(phase);
                 start = Math.Max(evt.Time, 0);
             }
             if (phases.Count > 0 && phases.Count < thresholds.Count)
             {
                 var lastPhase = new PhaseData(start, fightDuration, (offset + thresholds[phases.Count]) + "% -" + thresholds[phases.Count] + "%");
-                lastPhase.Targets.Add(mainTarget);
+                lastPhase.AddTarget(mainTarget);
                 phases.Add(lastPhase);
             }
             return phases;
@@ -238,8 +240,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (NPC target in Targets)
             {
                 int i = 0;
-                List<BreakbarStateEvent> breakbarStateEvents = log.CombatData.GetBreakbarStateEvents(target.AgentItem);
-                List<BreakbarPercentEvent> breakbarPercentEvents = log.CombatData.GetBreakbarPercentEvents(target.AgentItem);
+                IReadOnlyList<BreakbarStateEvent> breakbarStateEvents = log.CombatData.GetBreakbarStateEvents(target.AgentItem);
+                IReadOnlyList<BreakbarPercentEvent> breakbarPercentEvents = log.CombatData.GetBreakbarPercentEvents(target.AgentItem);
                 var breakbarActiveEvents = breakbarStateEvents.Where(x => x.State == ArcDPSEnums.BreakbarState.Active).ToList();
                 var breakbarNotActiveEvents = breakbarStateEvents.Where(x => x.State != ArcDPSEnums.BreakbarState.Active).ToList();
                 foreach (BreakbarStateEvent active in breakbarActiveEvents)
@@ -268,7 +270,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         BreakbarPhase = true,
                         CanBeSubPhase = false
                     };
-                    phase.Targets.Add(target);
+                    phase.AddTarget(target);
                     breakbarPhases.Add(phase);
                 }
             }
@@ -278,12 +280,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal virtual List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == GenericTriggerID);
+            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Main target of the fight not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             return phases;
         }
 
@@ -298,7 +300,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (ids.Contains(target.ID) && phase.InInterval(Math.Max(target.FirstAware, 0)))
                 {
-                    phase.Targets.Add(target);
+                    phase.AddTarget(target);
                 }
             }
             phase.OverrideTimes(log);
@@ -397,7 +399,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             long maxTime = long.MinValue;
             foreach (int id in idsToUse)
             {
-                NPC target = Targets.Find(x => x.ID == id);
+                NPC target = Targets.FirstOrDefault(x => x.ID == id);
                 if (target == null)
                 {
                     return;

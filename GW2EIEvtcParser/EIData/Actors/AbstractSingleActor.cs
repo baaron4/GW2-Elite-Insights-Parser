@@ -330,7 +330,7 @@ namespace GW2EIEvtcParser.EIData
             var boonIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Boon].Select(x => x.ID));
             var condiIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Condition].Select(x => x.ID));
             // Init status
-            List<PhaseData> phases = log.FightData.GetPhases(log);
+            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             for (int i = 0; i < phases.Count; i++)
             {
                 _buffDistribution.Add(new BuffDistribution());
@@ -345,9 +345,19 @@ namespace GW2EIEvtcParser.EIData
                     {
                         continue;
                     }
-                    AbstractBuffSimulator simulator = buff.CreateSimulator(log);
-                    simulator.Simulate(logs, dur);
-                    simulator.Trim(dur);
+                    AbstractBuffSimulator simulator;
+                    try 
+                    {
+                        simulator = buff.CreateSimulator(log, false);
+                        simulator.Simulate(logs, dur);
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        // get rid of logs invalid for HasStackIDs false
+                        logs.RemoveAll(x => !x.IsBuffSimulatorCompliant(log.FightData.FightEnd, false));
+                        simulator = buff.CreateSimulator(log, true);
+                        simulator.Simulate(logs, dur);
+                    }   
                     bool updateBoonPresence = boonIds.Contains(boonid);
                     bool updateCondiPresence = condiIds.Contains(boonid);
                     var graphSegments = new List<Segment>();
@@ -442,7 +452,7 @@ namespace GW2EIEvtcParser.EIData
         {
             _buffsDictionary = new List<Dictionary<long, FinalBuffsDictionary>>();
             _buffsActiveDictionary = new List<Dictionary<long, FinalBuffsDictionary>>();
-            List<PhaseData> phases = log.FightData.GetPhases(log);
+            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
             {
                 BuffDistribution buffDistribution = GetBuffDistribution(log, phaseIndex);
@@ -738,7 +748,7 @@ namespace GW2EIEvtcParser.EIData
             if (_supportAll == null)
             {
                 _supportAll = new List<FinalSupportAll>();
-                List<PhaseData> phases = log.FightData.GetPhases(log);
+                IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
                 for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
                 {
                     PhaseData phase = phases[phaseIndex];

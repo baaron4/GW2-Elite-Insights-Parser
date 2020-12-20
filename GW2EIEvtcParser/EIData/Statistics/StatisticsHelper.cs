@@ -12,7 +12,7 @@ namespace GW2EIEvtcParser.EIData
     {
         internal StatisticsHelper(CombatData combatData, List<Player> players, BuffsContainer boons)
         {
-            HashSet<long> skillIDs = combatData.GetSkills();
+            IReadOnlyCollection<long> skillIDs = combatData.GetSkills();
             // Main boons
             foreach (Buff boon in boons.BuffsByNature[BuffNature.Boon])
             {

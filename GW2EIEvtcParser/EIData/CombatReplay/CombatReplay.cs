@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EIData
         internal (long start, long end) TimeOffsets => (_start, _end);
         // actors
         internal bool NoActors { get; set; } = true;
-        public List<GenericDecoration> Decorations { get; } = new List<GenericDecoration>();
+        internal List<GenericDecoration> Decorations { get; } = new List<GenericDecoration>();
 
         internal void Trim(long start, long end)
         {

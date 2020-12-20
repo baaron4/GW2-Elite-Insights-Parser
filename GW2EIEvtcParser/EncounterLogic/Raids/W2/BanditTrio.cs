@@ -55,7 +55,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                List<AgentItem> prisoners = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.Prisoner2);
+                IReadOnlyList<AgentItem> prisoners = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.Prisoner2);
                 var prisonerDeaths = new List<DeadEvent>();
                 foreach (AgentItem prisoner in prisoners)
                 {
@@ -82,7 +82,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     end = phaseEnd.Time;
                 }
                 var phase = new PhaseData(start, Math.Min(end, log.FightData.FightEnd));
-                phase.Targets.Add(target);
+                phase.AddTarget(target);
                 switch (target.ID)
                 {
                     case (int)ArcDPSEnums.TargetID.Narella:
@@ -114,22 +114,22 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC berg = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Berg);
+            NPC berg = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Berg);
             if (berg == null)
             {
                 throw new MissingKeyActorsException("Berg not found");
             }
-            NPC zane = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Zane);
+            NPC zane = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Zane);
             if (zane == null)
             {
                 throw new MissingKeyActorsException("Zane not found");
             }
-            NPC narella = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Narella);
+            NPC narella = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Narella);
             if (narella == null)
             {
                 throw new MissingKeyActorsException("Narella not found");
             }
-            phases[0].Targets.AddRange(Targets);
+            phases[0].AddTargets(Targets);
             if (!requirePhases)
             {
                 return phases;

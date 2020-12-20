@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EIData.AbstractBuffSimulator;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -10,7 +9,7 @@ namespace GW2EIEvtcParser.EIData
         private readonly List<BuffSimulationItemDuration> _stacks = new List<BuffSimulationItemDuration>();
         private readonly List<AgentItem> _sources;
 
-        public BuffSimulationItemIntensity(List<BuffStackItem> stacks) : base(stacks[0].Start, 0)
+        public BuffSimulationItemIntensity(IEnumerable<BuffStackItem> stacks) : base(stacks.First().Start, 0)
         {
             foreach (BuffStackItem stack in stacks)
             {

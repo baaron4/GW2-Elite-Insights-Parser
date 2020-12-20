@@ -3,10 +3,10 @@
         <table v-if="playerMechHeader.length > 0" class="table table-sm table-striped table-hover" cellspacing="0" id="playermechs">
             <thead>
                 <tr>
-                    <th width="30px">Sub</th>
-                    <th width="30px"></th>
+                    <th class="sub-cell">Sub</th>
+                    <th class="prof-cell"></th>
                     <th class="text-left">Player</th>
-                    <th v-for="mech in playerMechHeader" :data-original-title="mech.description">
+                    <th class="stat-cell" v-for="mech in playerMechHeader" :data-original-title="mech.description">
                         {{ mech.shortName}}
                     </th>
                 </tr>

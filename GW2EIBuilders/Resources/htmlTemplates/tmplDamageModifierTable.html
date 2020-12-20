@@ -3,10 +3,10 @@
         <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="id">
             <thead>
                 <tr>
-                    <th>Sub</th>
-                    <th></th>
+                    <th class="sub-cell">Sub</th>
+                    <th class="prof-cell"></th>
                     <th class="text-left">Name</th>
-                    <th v-for="modifier in modifiers" :data-original-title="modifier.name + '<br>' + modifier.tooltip">
+                    <th class="stat-cell" v-for="modifier in modifiers" :data-original-title="modifier.name + '<br>' + modifier.tooltip">
                         <img :src="modifier.icon" :alt="modifier.name" class="icon icon-hover">
                     </th>
                 </tr>

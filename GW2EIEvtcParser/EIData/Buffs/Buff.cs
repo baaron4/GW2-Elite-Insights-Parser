@@ -59,12 +59,12 @@ namespace GW2EIEvtcParser.EIData
         public long ID { get; }
         public BuffNature Nature { get; }
         public ParserHelper.Source Source { get; }
-        private BuffStackType _stackType { get; }
+        public BuffStackType StackType { get; }
         public BuffType Type
         {
             get
             {
-                switch (_stackType)
+                switch (StackType)
                 {
                     case BuffStackType.Queue:
                     case BuffStackType.Regeneration:
@@ -99,7 +99,7 @@ namespace GW2EIEvtcParser.EIData
             Name = name;
             ID = id;
             Source = source;
-            _stackType = type;
+            StackType = type;
             Capacity = capacity;
             Nature = nature;
             Link = link;
@@ -124,7 +124,7 @@ namespace GW2EIEvtcParser.EIData
             Name = name;
             ID = id;
             Source = ParserHelper.Source.Unknown;
-            _stackType = BuffStackType.Unknown;
+            StackType = BuffStackType.Unknown;
             Capacity = 1;
             Nature = BuffNature.Unknow;
             Link = link;
@@ -144,16 +144,16 @@ namespace GW2EIEvtcParser.EIData
             if (Capacity != buffInfoEvent.MaxStacks)
             {
                 operation.UpdateProgressWithCancellationCheck("Adjusted capacity for " + Name + " from " + Capacity + " to " + buffInfoEvent.MaxStacks);
-                if (buffInfoEvent.StackingType != _stackType)
+                if (buffInfoEvent.StackingType != StackType)
                 {
                     //_stackType = buffInfoEvent.StackingType; // might be unreliable due to its absence on some logs
-                    operation.UpdateProgressWithCancellationCheck("Incoherent stack type for " + Name + ": is " + _stackType + " but expected " + buffInfoEvent.StackingType);
+                    operation.UpdateProgressWithCancellationCheck("Incoherent stack type for " + Name + ": is " + StackType + " but expected " + buffInfoEvent.StackingType);
                 }
             }
         }
-        internal AbstractBuffSimulator CreateSimulator(ParsedEvtcLog log)
+        internal AbstractBuffSimulator CreateSimulator(ParsedEvtcLog log, bool forceNoId)
         {
-            BuffStackType stackType = _stackType;
+            BuffStackType stackType = StackType;
             BuffType type = Type;
             int capacity = Capacity;
             BuffInfoEvent buffInfo = log.CombatData.GetBuffInfoEvent(ID);
@@ -164,7 +164,7 @@ namespace GW2EIEvtcParser.EIData
                     capacity = buffInfo.MaxStacks;
                 }
             }
-            if (!log.CombatData.HasStackIDs)
+            if (!log.CombatData.HasStackIDs || forceNoId)
             {
                 StackingLogic logicToUse;
                 switch (stackType)
@@ -188,8 +188,8 @@ namespace GW2EIEvtcParser.EIData
                 }
                 switch (type)
                 {
-                    case BuffType.Intensity: return new BuffSimulatorIntensity(capacity, log, logicToUse);
-                    case BuffType.Duration: return new BuffSimulatorDuration(capacity, log, logicToUse);
+                    case BuffType.Intensity: return new BuffSimulatorIntensity(capacity, log, logicToUse, this);
+                    case BuffType.Duration: return new BuffSimulatorDuration(capacity, log, logicToUse, this);
                     case BuffType.Unknown:
                         throw new InvalidDataException("Buffs can not be stackless");
                 }
@@ -197,9 +197,9 @@ namespace GW2EIEvtcParser.EIData
             switch (type)
             {
                 case BuffType.Intensity:
-                    return new BuffSimulatorIDIntensity(log);
+                    return new BuffSimulatorIDIntensity(log, this);
                 case BuffType.Duration:
-                    return new BuffSimulatorIDDuration(log);
+                    return new BuffSimulatorIDDuration(log, this);
                 case BuffType.Unknown:
                 default:
                     throw new InvalidDataException("Buffs can not be stackless");

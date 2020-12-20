@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Skorvald);
+            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Skorvald);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Skorvald not found");

@@ -14,7 +14,8 @@ namespace GW2EIEvtcParser.EIData
             public long End { get; internal set; }
         }
 
-        public List<MapItem> Maps { get; } = new List<MapItem>();
+        public IReadOnlyList<MapItem> Maps => _maps;
+        private readonly List<MapItem> _maps = new List<MapItem>();
         private (int width, int height) _urlPixelSize;
         private (double topX, double topY, double bottomX, double bottomY) _rectInMap;
         //private (int topX, int topY, int bottomX, int bottomY) _fullRect;
@@ -40,7 +41,7 @@ namespace GW2EIEvtcParser.EIData
 
         /*/internal CombatReplayMap(string link, (int width, int height) size, (int topX, int topY, int bottomX, int bottomY) rect, (int topX, int topY, int bottomX, int bottomY) fullRect, (int bottomX, int bottomY, int topX, int topY) worldRect)
         {
-            Maps.Add(new MapItem()
+            _maps.Add(new MapItem()
             {
                 Link = link,
                 Start = -1,
@@ -115,20 +116,20 @@ namespace GW2EIEvtcParser.EIData
             {
                 return;
             }
-            MapItem originalMap = Maps[0];
+            MapItem originalMap = _maps[0];
             originalMap.Start = 0;
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                Maps.Last().End = phase.Start;
-                Maps.Add(new MapItem()
+                _maps.Last().End = phase.Start;
+                _maps.Add(new MapItem()
                 {
                     Link = urls[i - 1],
                     Start = phase.Start
                 });
             }
-            Maps.Last().End = fightEnd;
-            Maps.RemoveAll(x => x.End - x.Start <= 0);
+            _maps.Last().End = fightEnd;
+            _maps.RemoveAll(x => x.End - x.Start <= 0);
         }
 
         public float GetInch()

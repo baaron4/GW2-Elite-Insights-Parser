@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(48172, "Hateful Ephemera", new MechanicPlotlySetting("square","rgb(255,140,0)"), "Golem","Hateful Ephemera (Golem AoE dmg)", "Golem Dmg",0),
             new HitOnPlayerMechanic(48121, "Arcing Affliction", new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Bomb dmg","Arcing Affliction (Bomb) hit", "Bomb dmg",0),
             new PlayerBuffApplyMechanic(47646, "Arcing Affliction", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Bomb","Arcing Affliction (Bomb) application", "Bomb",0),
-            new PlayerBuffRemoveMechanic(47646, "Arcing Affliction", new MechanicPlotlySetting("diamond","rgb(255,0,0)"), "Bomb Trig","Arcing Affliction (Bomb) manualy triggered", "Bomb Triggered",0, (br, log) => br.RemovedDuration > 50 && !log.CombatData.GetDamageData(48210).Exists(x => Math.Abs(x.Time - br.Time) < 15 && x.To == br.To) && !br.To.HasBuff(log, 48281, br.Time)),
+            new PlayerBuffRemoveMechanic(47646, "Arcing Affliction", new MechanicPlotlySetting("diamond","rgb(255,0,0)"), "Bomb Trig","Arcing Affliction (Bomb) manualy triggered", "Bomb Triggered",0, (br, log) => br.RemovedDuration > 50 && !log.CombatData.GetDamageData(48210).Any(x => Math.Abs(x.Time - br.Time) < 15 && x.To == br.To) && !br.To.HasBuff(log, 48281, br.Time)),
             //new Mechanic(47476, "Residual Affliction", ParseEnum.BossIDS.Dhuum, new MechanicPlotlySetting("star-diamond","rgb(255,200,0)"), "Bomb",0), //not needed, imho, applied at the same time as Arcing Affliction
             new PlayerOnPlayerMechanic(47335, "Soul Shackle", new MechanicPlotlySetting("diamond","rgb(0,255,255)"), "Shackles","Soul Shackle (Tether) application", "Shackles",0),//  //also used for removal.
             new HitOnPlayerMechanic(47164, "Soul Shackle", new MechanicPlotlySetting("diamond-open","rgb(0,255,255)"), "Shackles dmg","Soul Shackle (Tether) dmg ticks", "Shackles Dmg",0,   (de,log) => de.HealthDamage > 0),
@@ -108,12 +108,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC dhuum = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
+            NPC dhuum = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
             if (dhuum == null)
             {
                 throw new MissingKeyActorsException("Dhuum not found");
             }
-            phases[0].Targets.Add(dhuum);
+            phases[0].AddTarget(dhuum);
             if (!requirePhases)
             {
                 return phases;
@@ -158,7 +158,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].Targets.Add(dhuum);
+                phases[i].AddTarget(dhuum);
             }
             return phases;
         }
@@ -314,7 +314,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             // spirit transform
             var spiritTransform = log.CombatData.GetBuffData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
+            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Dhuum not found");
@@ -399,7 +399,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
+            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Dhuum not found");

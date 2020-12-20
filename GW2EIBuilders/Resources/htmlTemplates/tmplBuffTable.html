@@ -5,10 +5,10 @@
         <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="id">
             <thead>
                 <tr>
-                    <th>Sub</th>
-                    <th></th>
+                    <th class="sub-cell">Sub</th>
+                    <th class="prof-cell"></th>
                     <th>Name</th>
-                    <th v-for="buff in buffs"
+                    <th class="stat-cell" v-for="buff in buffs"
                         :data-original-title="buff.name + (buff.description ? '<br> ' + buff.description : '')">
                         <img :src="buff.icon" :alt="buff.name" class="icon icon-hover">
                     </th>

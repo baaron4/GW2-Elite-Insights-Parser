@@ -60,6 +60,8 @@ class Animator {
         this.backwards = false;
         this.rangeControl = [{ enabled: false, radius: 180 }, { enabled: false, radius: 360 }, { enabled: false, radius: 720 }];
         this.highlightSelectedGroup = true;
+        this.displayMechanics = true;
+        this.displayTrashMobs = true;
         this.selectedGroup = -1;
         this.coneControl = {
             enabled: false,
@@ -283,6 +285,16 @@ class Animator {
 
     toggleHighlightSelectedGroup() {
         this.highlightSelectedGroup = !this.highlightSelectedGroup;
+        animateCanvas(noUpdateTime);
+    }
+
+    toggleTrashMobs() {
+        this.displayTrashMobs = !this.displayTrashMobs;
+        animateCanvas(noUpdateTime);
+    }
+
+    toggleMechanics() {
+        this.displayMechanics = !this.displayMechanics;
         animateCanvas(noUpdateTime);
     }
 
@@ -559,9 +571,12 @@ class Animator {
         for (let i = 0; i < animator.backgroundActorData.length; i++) {
             animator.backgroundActorData[i].draw();
         }
-        for (let i = 0; i < this.mechanicActorData.length; i++) {
-            this.mechanicActorData[i].draw();
+        if (this.displayMechanics) {
+            for (let i = 0; i < this.mechanicActorData.length; i++) {
+                this.mechanicActorData[i].draw();
+            }
         }
+        
         this.playerData.forEach(function (value, key, map) {
             if (!value.selected) {
                 value.draw();
@@ -570,12 +585,16 @@ class Animator {
                 }
             }
         });
-        this.trashMobData.forEach(function (value, key, map) {
-            value.draw();
-            if (_this.attachedActorData.has(key)) {
-                _this.attachedActorData.get(key).draw();
-            }
-        });
+        
+        if (this.displayTrashMobs) {
+            this.trashMobData.forEach(function (value, key, map) {
+                value.draw();
+                if (_this.attachedActorData.has(key)) {
+                    _this.attachedActorData.get(key).draw();
+                }
+            });
+        }
+        
         this.targetData.forEach(function (value, key, map) {
             value.draw();
             if (_this.attachedActorData.has(key)) {

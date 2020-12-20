@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(61419, "Volatile Water", new MechanicPlotlySetting("triangle-left","rgb(0,125,255)"), "Vlt.Wtr.","Volatile Water", "Volatile Water",0),
             new HitOnPlayerMechanic(61251, "Aquatic Burst", new MechanicPlotlySetting("triangle-down","rgb(0,125,255)"), "Aq.Brst.","Aquatic Burst", "Aquatic Burst",0),
             new EnemyBuffApplyMechanic(61402, "Tidal Barrier", new MechanicPlotlySetting("asterisk-open","rgb(0,125,255)"), "Tid.Bar.", "Tidal Barrier", "Tidal Barrier", 0),
-            new PlayerBuffRemoveMechanic(61512, "Tidal Bargain", new MechanicPlotlySetting("star-open","rgb(0,125,255)"), "Tdl.Brgn.","Downed by Tidal Bargain", "Tidal Bargain",0, (evt, log) => evt.RemovedStacks == 10 && log.CombatData.GetDownEvents(evt.To).Exists(x => Math.Abs(x.Time - evt.Time) < 50)),
+            new PlayerBuffRemoveMechanic(61512, "Tidal Bargain", new MechanicPlotlySetting("star-open","rgb(0,125,255)"), "Tdl.Brgn.","Downed by Tidal Bargain", "Tidal Bargain",0, (evt, log) => evt.RemovedStacks == 10 && log.CombatData.GetDownEvents(evt.To).Any(x => Math.Abs(x.Time - evt.Time) < 50)),
             // Dark
             new HitOnPlayerMechanic(61602, "Empathic Manipulation", new MechanicPlotlySetting("square","rgb(150,125,255)"), "Emp.Manip.","Empathic Manipulation", "Empathic Manipulation",0),
             new HitOnPlayerMechanic(61606, "Empathic Manipulation", new MechanicPlotlySetting("square","rgb(150,125,255)"), "Emp.Manip.","Empathic Manipulation", "Empathic Manipulation",0),
@@ -63,7 +63,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(61499, "Focused Wrath", new MechanicPlotlySetting("circle","rgb(150,125,255)"), "Fcsd.Wrth.","Focused Wrath", "Focused Wrath",0),
             new HitOnPlayerMechanic(61289, "Negative Burst", new MechanicPlotlySetting("diamond-wide","rgb(150,125,255)"), "N.Brst.","Negative Burst", "Negative Burst",500),
             new HitOnPlayerMechanic(61184, "Terrorstorm", new MechanicPlotlySetting("diamond-tall","rgb(150,125,255)"), "TrrStrm","Terrorstorm", "Terrorstorm",0),
-            new PlayerBuffRemoveMechanic(61208, "Crushing Guilt", new MechanicPlotlySetting("star-open","rgb(150,125,255)"), "Crsh.Glt.","Downed by Crushing Guilt", "Crushing Guilt",0, (evt, log) => evt.RemovedStacks == 10 && log.CombatData.GetDownEvents(evt.To).Exists(x => Math.Abs(x.Time - evt.Time) < 100)),
+            new PlayerBuffRemoveMechanic(61208, "Crushing Guilt", new MechanicPlotlySetting("star-open","rgb(150,125,255)"), "Crsh.Glt.","Downed by Crushing Guilt", "Crushing Guilt",0, (evt, log) => evt.RemovedStacks == 10 && log.CombatData.GetDownEvents(evt.To).Any(x => Math.Abs(x.Time - evt.Time) < 100)),
             new EnemyCastStartMechanic(61508, "Empathic Manipulation (Fear)", new MechanicPlotlySetting("triangle-up","rgb(150,125,255)"), "Fear Manip.", "Empathic Manipulation (Fear)", "Empathic Manipulation (Fear)", 0),
             new EnemyCastEndMechanic(61508, "Empathic Manipulation (Fear) Interrupt", new MechanicPlotlySetting("triangle-up-open","rgb(150,125,255)"), "IntFear Manip.", "Empathic Manipulation (Fear) Interrupt", "Empathic Manipulation (Fear) Interrupt", 0, (evt, log) => evt is AnimatedCastEvent ace && ace.Status == AbstractCastEvent.AnimationStatus.Interrupted),
             new EnemyCastStartMechanic(61606, "Empathic Manipulation (Sorrow)", new MechanicPlotlySetting("triangle-left","rgb(150,125,255)"), "Sor.Manip.", "Empathic Manipulation (Sorrow)", "Empathic Manipulation (Sorrow)", 0),
@@ -225,7 +225,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 CombatItem aiMaxHP = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && x.SrcAgent == targetAgent.Agent);
                 if (aiMaxHP != null)
                 {
-                    Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2).SetManualHealth((int)aiMaxHP.DstAgent);
+                    Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2).SetManualHealth((int)aiMaxHP.DstAgent);
                 }
             }
         }
@@ -238,7 +238,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC elementalAi = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak);
+            NPC elementalAi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak);
             if (elementalAi == null)
             {
                 if (_hasElementalMode)
@@ -248,9 +248,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             else
             {
-                phases[0].Targets.Add(elementalAi);
+                phases[0].AddTarget(elementalAi);
             }
-            NPC darkAi = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2);
+            NPC darkAi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2);
             if (darkAi == null)
             {
                 if (_hasDarkMode)
@@ -260,7 +260,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             else
             {
-                phases[0].Targets.Add(darkAi);
+                phases[0].AddTarget(darkAi);
             }
             if (!requirePhases)
             {
@@ -274,7 +274,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (_hasDarkMode)
                 {
                     var elePhase = new PhaseData(eleStart, eleEnd, "Elemental Phase");
-                    elePhase.Targets.Add(elementalAi);
+                    elePhase.AddTarget(elementalAi);
                     phases.Add(elePhase);
                 }
                 //
@@ -290,7 +290,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (i < invul762Losses.Count)
                     {
                         var subPhase = new PhaseData(subStart, subEnd, eleNames[i]);
-                        subPhase.Targets.Add(elementalAi);
+                        subPhase.AddTarget(elementalAi);
                         phases.Add(subPhase);
                         long invul762Loss = invul762Losses[i].Time;
                         AbstractCastEvent castEvt = elementalAi.GetCastLogs(log, eleStart, eleEnd).FirstOrDefault(x => x.SkillId == 61385 && x.Time >= invul762Loss);
@@ -303,7 +303,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     else
                     {
                         var subPhase = new PhaseData(subStart, subEnd, eleNames[i]);
-                        subPhase.Targets.Add(elementalAi);
+                        subPhase.AddTarget(elementalAi);
                         phases.Add(subPhase);
                         break;
                     }
@@ -318,7 +318,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (_hasElementalMode)
                 {
                     var darkPhase = new PhaseData(darkStart, darkEnd, "Dark Phase");
-                    darkPhase.Targets.Add(darkAi);
+                    darkPhase.AddTarget(darkAi);
                     phases.Add(darkPhase);
                 }
                 // sub phases
@@ -326,22 +326,22 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (fearToSorrow != null)
                 {
                     var fearPhase = new PhaseData(darkStart + 1, fearToSorrow.Time, "Fear");
-                    fearPhase.Targets.Add(darkAi);
+                    fearPhase.AddTarget(darkAi);
                     phases.Add(fearPhase);
                     AbstractCastEvent sorrowToGuilt = darkAi.GetCastLogs(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillId == 61602);
                     if (sorrowToGuilt != null)
                     {
                         var sorrowPhase = new PhaseData(fearToSorrow.Time + 1, sorrowToGuilt.Time, "Sorrow");
-                        sorrowPhase.Targets.Add(darkAi);
+                        sorrowPhase.AddTarget(darkAi);
                         phases.Add(sorrowPhase);
                         var guiltPhase = new PhaseData(sorrowToGuilt.Time + 1, darkEnd, "Guilt");
-                        guiltPhase.Targets.Add(darkAi);
+                        guiltPhase.AddTarget(darkAi);
                         phases.Add(guiltPhase);
                     }
                     else
                     {
                         var sorrowPhase = new PhaseData(fearToSorrow.Time + 1, darkEnd, "Sorrow");
-                        sorrowPhase.Targets.Add(darkAi);
+                        sorrowPhase.AddTarget(darkAi);
                         phases.Add(sorrowPhase);
                     }
                 }
@@ -371,7 +371,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case 3:
-                    BuffApplyEvent darkInvul895Gain = combatData.GetBuffData(895).OfType<BuffApplyEvent>().Where(x => x.To == Targets.Find(y => y.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2).AgentItem).FirstOrDefault();
+                    BuffApplyEvent darkInvul895Gain = combatData.GetBuffData(895).OfType<BuffApplyEvent>().Where(x => x.To == Targets.FirstOrDefault(y => y.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2).AgentItem).FirstOrDefault();
                     if (darkInvul895Gain != null)
                     {
                         fightData.SetSuccess(true, darkInvul895Gain.Time);
