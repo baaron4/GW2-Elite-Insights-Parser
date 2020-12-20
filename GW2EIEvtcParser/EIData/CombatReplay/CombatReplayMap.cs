@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EIData
 
         public List<MapItem> Maps { get; } = new List<MapItem>();
         private (int width, int height) _urlPixelSize;
-        private (int topX, int topY, int bottomX, int bottomY) _rectInMap;
+        private (double topX, double topY, double bottomX, double bottomY) _rectInMap;
         //private (int topX, int topY, int bottomX, int bottomY) _fullRect;
         //private (int bottomX, int bottomY, int topX, int topY) _worldRect;
 
@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="link">Url to the image</param>
         /// <param name="urlPixelSize">Width and Height of the image in pixel</param>
         /// <param name="rectInMap">The map rectangle region corresponding to the image in map coordinates</param>
-        internal CombatReplayMap(string link, (int width, int height) urlPixelSize, (int topX, int topY, int bottomX, int bottomY) rectInMap)
+        internal CombatReplayMap(string link, (int width, int height) urlPixelSize, (double topX, double topY, double bottomX, double bottomY) rectInMap)
         {
             Maps.Add(new MapItem()
             {
@@ -85,10 +85,10 @@ namespace GW2EIEvtcParser.EIData
                     {
                         continue;
                     }
-                    _rectInMap.topX = Math.Min((int)Math.Floor(pos.Min(x => x.X)) - 500, _rectInMap.topX);
-                    _rectInMap.topY = Math.Min((int)Math.Floor(pos.Min(x => x.Y)) - 500, _rectInMap.topY);
-                    _rectInMap.bottomX = Math.Max((int)Math.Floor(pos.Max(x => x.X)) + 500, _rectInMap.bottomX);
-                    _rectInMap.bottomY = Math.Max((int)Math.Floor(pos.Max(x => x.Y)) + 500, _rectInMap.bottomY);
+                    _rectInMap.topX = Math.Min(Math.Floor(pos.Min(x => x.X)) - 250, _rectInMap.topX);
+                    _rectInMap.topY = Math.Min(Math.Floor(pos.Min(x => x.Y)) - 250, _rectInMap.topY);
+                    _rectInMap.bottomX = Math.Max(Math.Floor(pos.Max(x => x.X)) + 250, _rectInMap.bottomX);
+                    _rectInMap.bottomY = Math.Max(Math.Floor(pos.Max(x => x.Y)) + 250, _rectInMap.bottomY);
                 }
             }
         }
