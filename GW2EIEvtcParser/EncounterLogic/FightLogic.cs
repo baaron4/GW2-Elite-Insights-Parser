@@ -47,19 +47,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             return Targets.FirstOrDefault();
         }
 
-        protected static (double TopX, double TopY, double bottomX, double bottomY) ComputeSimpleMapRect(double width, double height, double offsetX, double offsetY, double centerXPercent, double centerYPercent, double scale)
-        {
-            var centerOffsetX = centerXPercent * width;
-            var centerOffsetY = centerYPercent * height;
-            var fixedX = offsetX + centerOffsetX;
-            var fixedY = offsetY + centerOffsetY;
-            var topX = fixedX - centerOffsetX * scale;
-            var topY = fixedY - centerOffsetY * scale;
-            var bottomX = topX + width * scale;
-            var bottomY = topY + height * scale;
-            return (topX, topY, bottomX, bottomY);
-        }
-
         public MechanicData GetMechanicData()
         {
             return new MechanicData(MechanicList);
