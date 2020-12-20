@@ -98,7 +98,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var height = 1621;
             return new CombatReplayMap("https://i.imgur.com/ARht2dC.png",
                             (width, height),
-                            ComputeMapRect(width, height, 6245, 739, 0.5, 0.5 * width / height, 2.2));
+                            ComputeSimpleMapRect(width, height, 6245, 739, 0.5, 0.5 * width / height, 2.2));
         }
 
         internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)

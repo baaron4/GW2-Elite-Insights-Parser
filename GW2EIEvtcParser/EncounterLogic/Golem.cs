@@ -42,7 +42,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var height = 629;
             return new CombatReplayMap("https://i.imgur.com/gmnSuz7.png",
                             (width, height),
-                            ComputeMapRect(width, height, 19568.6, -12874.75, 0.406, 0.4385, 5.5));
+                            ComputeSimpleMapRect(width, height, 19568.6, -12874.75, 0.406, 0.4385, 5.5));
         }
 
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)

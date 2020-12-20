@@ -47,7 +47,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return Targets.FirstOrDefault();
         }
 
-        protected static (double TopX, double TopY, double bottomX, double bottomY) ComputeMapRect(double width, double height, double offsetX, double offsetY, double centerXPercent, double centerYPercent, double scale)
+        protected static (double TopX, double TopY, double bottomX, double bottomY) ComputeSimpleMapRect(double width, double height, double offsetX, double offsetY, double centerXPercent, double centerYPercent, double scale)
         {
             var centerOffsetX = centerXPercent * width;
             var centerOffsetY = centerYPercent * height;
