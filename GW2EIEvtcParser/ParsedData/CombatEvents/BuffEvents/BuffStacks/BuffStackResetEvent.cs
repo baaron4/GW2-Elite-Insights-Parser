@@ -15,18 +15,6 @@ namespace GW2EIEvtcParser.ParsedData
         {
             simulator.Reset(BuffInstance, _resetToDuration);
         }
-        internal override int CompareTo(AbstractBuffEvent abe)
-        {
-            if (abe is BuffStackActiveEvent || abe is BuffApplyEvent)
-            {
-                return 1;
-            }
-            if (abe is BuffStackResetEvent)
-            {
-                return 0;
-            }
-            return -1;
-        }
     }
 }
 

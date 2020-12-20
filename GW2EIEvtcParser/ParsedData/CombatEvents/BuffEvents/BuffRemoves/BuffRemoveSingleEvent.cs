@@ -47,7 +47,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return 0;
             }
-            if (abe is BuffRemoveAllEvent || abe is AbstractBuffStackEvent)
+            if (abe is BuffRemoveAllEvent)
             {
                 return -1;
             }
