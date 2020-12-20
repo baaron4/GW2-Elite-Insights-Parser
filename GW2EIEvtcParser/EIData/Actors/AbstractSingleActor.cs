@@ -354,7 +354,7 @@ namespace GW2EIEvtcParser.EIData
                     catch (InvalidOperationException)
                     {
                         // get rid of logs invalid for HasStackIDs false
-                        logs.RemoveAll(x => x.IsBuffSimulatorCompliant(log.FightData.FightEnd, false));
+                        logs.RemoveAll(x => !x.IsBuffSimulatorCompliant(log.FightData.FightEnd, false));
                         simulator = buff.CreateSimulator(log, true);
                         simulator.Simulate(logs, dur);
                     }   
