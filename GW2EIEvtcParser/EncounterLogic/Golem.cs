@@ -40,20 +40,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             var width = 895;
             var height = 629;
-            var offsetX = 19568.6;
-            var offsetY = -12874.75;
-            var centerOffsetX = 0.406 * width;
-            var centerOffsetY = 0.4385* height;
-            var fixedX = offsetX + centerOffsetX;
-            var fixedY = offsetY + centerOffsetY;
-            var scale = 5.5;
-            var topX = fixedX - centerOffsetX * scale;
-            var topY = fixedY - centerOffsetY * scale;
-            var bottomX = topX + width * scale;
-            var bottomY = topY + height * scale;
             return new CombatReplayMap("https://i.imgur.com/gmnSuz7.png",
                             (width, height),
-                            (topX, topY, bottomX, bottomY));
+                            ComputeMapRect(width, height, 19568.6, -12874.75, 0.406, 0.4385, 5.5));
         }
 
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
