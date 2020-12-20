@@ -44,10 +44,6 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal override int CompareTo(AbstractBuffEvent abe)
         {
-            if (abe is AbstractBuffStackEvent)
-            {
-                return -1;
-            }
             if (abe is BuffRemoveAllEvent)
             {
                 return 0;
