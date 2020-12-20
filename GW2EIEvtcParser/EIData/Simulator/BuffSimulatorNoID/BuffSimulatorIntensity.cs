@@ -53,12 +53,12 @@ namespace GW2EIEvtcParser.EIData
                     toAdd.OverrideEnd(toAdd.Start + diff);
                 }
                 // Subtract from each
-                for (int i = BuffStack.Count - 1; i >= 0; i--)
+                foreach (BuffStackItemID buffStackItem in BuffStack)
                 {
-                    BuffStack[i].Shift(diff, diff);
-                    if (BuffStack[i].Duration == 0)
+                    buffStackItem.Shift(diff, diff);
+                    if (buffStackItem.Duration == 0)
                     {
-                        _lastSrcRemoves.Add((BuffStack[i].SeedSrc, BuffStack[i].IsExtension));
+                        _lastSrcRemoves.Add((buffStackItem.SeedSrc, buffStackItem.IsExtension));
                     }
                 }
                 BuffStack.RemoveAll(x => x.Duration == 0);

@@ -56,9 +56,9 @@ namespace GW2EIEvtcParser.EIData
                     toAdd.OverrideEnd(toAdd.Start + diff);
                 }
                 // Subtract from each
-                for (int i = BuffStackToUse.Count - 1; i >= 0; i--)
+                foreach (BuffStackItemID buffStackItem in BuffStack)
                 {
-                    BuffStackToUse[i].Shift(diff, diff);
+                    buffStackItem.Shift(diff, diff);
                 }
                 Update(leftOver);
             }

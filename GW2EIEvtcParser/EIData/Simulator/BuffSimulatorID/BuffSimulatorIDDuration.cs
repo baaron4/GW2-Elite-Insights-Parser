@@ -58,14 +58,11 @@ namespace GW2EIEvtcParser.EIData
                     {
                         toAdd.OverrideEnd(toAdd.Start + diff);
                     }
-                    _activeStack.Shift(diff, diff);
-                }             
-                for (int i = 0; i < BuffStack.Count; i++)
+                    _activeStack.Shift(0, diff);
+                }
+                foreach (BuffStackItemID buffStackItem in BuffStack)
                 {
-                    if (BuffStack[i] != _activeStack)
-                    {
-                        BuffStack[i].Shift(diff, 0);
-                    }
+                    buffStackItem.Shift(diff, 0);
                 }
                 Update(leftOver);
             }
