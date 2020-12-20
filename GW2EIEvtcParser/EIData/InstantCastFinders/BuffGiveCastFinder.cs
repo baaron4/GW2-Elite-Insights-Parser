@@ -28,10 +28,6 @@ namespace GW2EIEvtcParser.EIData
                 long lastTime = int.MinValue;
                 foreach (BuffApplyEvent bae in pair.Value)
                 {
-                    if (bae.Initial)
-                    {
-                        continue;
-                    }
                     if (bae.Time - lastTime < ICD)
                     {
                         lastTime = bae.Time;
