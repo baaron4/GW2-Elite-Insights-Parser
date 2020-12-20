@@ -92,14 +92,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        /*protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+        protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
+            var width = 1334;
+            var height = 1621;
             return new CombatReplayMap("https://i.imgur.com/ARht2dC.png",
-                            (1334, 1621),
-                            (-32118, -11470, -28924, -8274),
-                            (-0, -0, 0, 0),
-                            (0, 0, 0, 0));
-        }*/
+                            (width, height),
+                            ComputeMapRect(width, height, 6245, 739, 0.5, 0.5 * width / height, 2.2));
+        }
 
         internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
         {
@@ -178,6 +178,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 evt.OverrideDstAgent(targetAgent2.Agent);
                             }
                         }
+                    }
+                    CombatItem toCopy = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcAgent == targetAgent.Agent && x.Time <= lastAwareTime - 1);
+                    if (toCopy != null)
+                    {
+                        var copied = new CombatItem(toCopy);
+                        copied.OverrideDstAgent(0);
+                        copied.OverrideTime(copied.Time + 1);
+                        combatData.Add(copied);
+                        combatData.Sort((x, y) => x.Time.CompareTo(y.Time));
                     }
                     // Redirect NPC masters
                     foreach (AgentItem ag in agentData.GetAgentByType(AgentItem.AgentType.NPC))
