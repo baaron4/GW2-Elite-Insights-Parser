@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.ParsedData;
+﻿using System.Linq;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -12,7 +13,7 @@ namespace GW2EIEvtcParser.EIData
 
         public override void Extend(long extension, long oldValue, AgentItem src, long start, uint stackID)
         {
-            if ((BuffStack.Count > 0 && oldValue > 0) || BuffStack.Count == Capacity)
+            if ((BuffStack.Any() && oldValue > 0) || BuffStack.Count == Capacity)
             {
                 BuffStack[0].Extend(extension, src);
             }
@@ -26,7 +27,7 @@ namespace GW2EIEvtcParser.EIData
 
         protected override void Update(long timePassed)
         {
-            if (BuffStack.Count > 0 && timePassed > 0)
+            if (BuffStack.Any() && timePassed > 0)
             {
                 _lastSrcRemove = (ParserHelper._unknownAgent, false);
                 var toAdd = new BuffSimulationItemDuration(BuffStack[0]);

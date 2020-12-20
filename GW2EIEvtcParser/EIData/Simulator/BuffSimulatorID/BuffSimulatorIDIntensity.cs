@@ -13,7 +13,11 @@ namespace GW2EIEvtcParser.EIData
 
         public override void Activate(uint stackID)
         {
-            BuffStackItemID active = BuffStack.Find(x => x.StackID == stackID);
+            if (!BuffStack.Any())
+            {
+                return;
+            }
+            BuffStackItemID active = BuffStack.FirstOrDefault(x => x.StackID == stackID);
             if (active == null)
             {
                 throw new InvalidOperationException("Activate has failed");
@@ -34,7 +38,7 @@ namespace GW2EIEvtcParser.EIData
 
         protected override void Update(long timePassed)
         {
-            if (BuffStack.Count > 0 && timePassed > 0)
+            if (BuffStack.Any() && timePassed > 0)
             {
                 var toAdd = new BuffSimulationItemIntensity(BuffStack);
                 GenerationSimulation.Add(toAdd);

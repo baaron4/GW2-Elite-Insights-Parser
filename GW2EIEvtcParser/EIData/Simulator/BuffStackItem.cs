@@ -50,7 +50,7 @@ namespace GW2EIEvtcParser.EIData
         {
             Start += startShift;
             Duration -= durationShift;
-            if (Duration == 0 && Extensions.Count > 0 && durationShift > 0)
+            if (Duration == 0 && Extensions.Any() && durationShift > 0)
             {
                 (AgentItem src, long value) = Extensions.First();
                 Extensions.RemoveAt(0);

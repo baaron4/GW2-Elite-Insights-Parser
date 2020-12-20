@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
@@ -14,7 +15,11 @@ namespace GW2EIEvtcParser.EIData
 
         public override void Activate(uint stackID)
         {
-            BuffStackItemID _activeStack = BuffStack.Find(x => x.StackID == stackID);
+            if (!BuffStack.Any())
+            {
+                return;
+            }
+            BuffStackItemID _activeStack = BuffStack.FirstOrDefault(x => x.StackID == stackID);
             if (_activeStack == null)
             {
                 throw new InvalidOperationException("Activate has failed");
@@ -39,7 +44,7 @@ namespace GW2EIEvtcParser.EIData
 
         protected override void Update(long timePassed)
         {
-            if (BuffStack.Count > 0 && timePassed > 0 && _activeStack != null)
+            if (BuffStack.Any() && timePassed > 0 && _activeStack != null)
             {
                 var toAdd = new BuffSimulationItemDuration(_activeStack);
                 GenerationSimulation.Add(toAdd);

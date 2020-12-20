@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
@@ -22,7 +23,7 @@ namespace GW2EIEvtcParser.EIData
 
         public override void Extend(long extension, long oldValue, AgentItem src, long time, uint stackID)
         {
-            BuffStackItem toExtend = BuffStack.Find(x => x.StackID == stackID);
+            BuffStackItem toExtend = BuffStack.FirstOrDefault(x => x.StackID == stackID);
             if (toExtend == null)
             {
                 throw new InvalidOperationException("Extend has failed");
@@ -55,7 +56,7 @@ namespace GW2EIEvtcParser.EIData
                         {
                             BuffStackItem stackItem = BuffStack[i];
                             WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.Duration, time));
-                            if (stackItem.Extensions.Count > 0)
+                            if (stackItem.Extensions.Any())
                             {
                                 foreach ((AgentItem src, long value) in stackItem.Extensions)
                                 {
@@ -69,7 +70,7 @@ namespace GW2EIEvtcParser.EIData
                     toRemove = BuffStack[0];
                     break;
                 case ArcDPSEnums.BuffRemove.Single:
-                    toRemove = BuffStack.Find(x => x.StackID == stackID);
+                    toRemove = BuffStack.FirstOrDefault(x => x.StackID == stackID);
                     break;
                 default:
                     throw new InvalidDataException("Unknown remove type");
@@ -81,13 +82,13 @@ namespace GW2EIEvtcParser.EIData
             }
             BuffStack.Remove(toRemove);
             // Removed due to override
-            (long duration, AgentItem src)? candidate = OverrideCandidates.Find(x => Math.Abs(x.duration - removedDuration) < ParserHelper.BuffSimulatorDelayConstant && x.src == by);
+            (long duration, AgentItem src)? candidate = OverrideCandidates.FirstOrDefault(x => Math.Abs(x.duration - removedDuration) < ParserHelper.BuffSimulatorDelayConstant && x.src == by);
             if (candidate.Value.src != null)
             {
                 (long duration, AgentItem candSrc) = candidate.Value;
                 OverrideCandidates.Remove(candidate.Value);
                 WasteSimulationResult.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, toRemove.Start));
-                if (toRemove.Extensions.Count > 0)
+                if (toRemove.Extensions.Any())
                 {
                     foreach ((AgentItem src, long value) in toRemove.Extensions)
                     {
@@ -99,7 +100,7 @@ namespace GW2EIEvtcParser.EIData
             else if (removedDuration > ParserHelper.BuffSimulatorDelayConstant && by != ParserHelper._unknownAgent)
             {
                 WasteSimulationResult.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, time));
-                if (toRemove.Extensions.Count > 0)
+                if (toRemove.Extensions.Any())
                 {
                     foreach ((AgentItem src, long value) in toRemove.Extensions)
                     {
@@ -111,7 +112,11 @@ namespace GW2EIEvtcParser.EIData
 
         public override void Reset(uint stackID, long toDuration)
         {
-            BuffStackItemID toDisable = BuffStack.Find(x => x.StackID == stackID);
+            if (!BuffStack.Any())
+            {
+                return;
+            }
+            BuffStackItemID toDisable = BuffStack.FirstOrDefault(x => x.StackID == stackID);
             if (toDisable == null)
             {
                 throw new InvalidOperationException("Reset has failed");

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
@@ -78,7 +79,7 @@ namespace GW2EIEvtcParser.EIData
                     foreach (BuffStackItem stackItem in BuffStack)
                     {
                         WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.Duration, time));
-                        if (stackItem.Extensions.Count > 0)
+                        if (stackItem.Extensions.Any())
                         {
                             foreach ((AgentItem src, long value) in stackItem.Extensions)
                             {
@@ -95,7 +96,7 @@ namespace GW2EIEvtcParser.EIData
                         if (Math.Abs(removedDuration - stackItem.TotalDuration) < ParserHelper.BuffSimulatorDelayConstant)
                         {
                             WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.Duration, time));
-                            if (stackItem.Extensions.Count > 0)
+                            if (stackItem.Extensions.Any())
                             {
                                 foreach ((AgentItem src, long value) in stackItem.Extensions)
                                 {
