@@ -29,7 +29,7 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="rectInMap">The map rectangle region corresponding to the image in map coordinates</param>
         internal CombatReplayMap(string link, (int width, int height) urlPixelSize, (double topX, double topY, double bottomX, double bottomY) rectInMap)
         {
-            Maps.Add(new MapItem()
+            _maps.Add(new MapItem()
             {
                 Link = link,
                 Start = -1,
