@@ -36,14 +36,25 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        /*protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+        protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
+            var width = 895;
+            var height = 629;
+            var offsetX = 19568.6;
+            var offsetY = -12874.75;
+            var centerOffsetX = 0.406 * width;
+            var centerOffsetY = 0.4385* height;
+            var fixedX = offsetX + centerOffsetX;
+            var fixedY = offsetY + centerOffsetY;
+            var scale = 5.5;
+            var topX = fixedX - centerOffsetX * scale;
+            var topY = fixedY - centerOffsetY * scale;
+            var bottomX = topX + width * scale;
+            var bottomY = topY + height * scale;
             return new CombatReplayMap("https://i.imgur.com/gmnSuz7.png",
-                            (895, 629),
-                            (-32118, -11470, -28924, -8274),
-                            (-0, -0, 0, 0),
-                            (0, 0, 0, 0));
-        }*/
+                            (width, height),
+                            (topX, topY, bottomX, bottomY));
+        }
 
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
