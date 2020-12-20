@@ -81,36 +81,39 @@ namespace GW2EIEvtcParser.EIData
                 throw new InvalidOperationException("Remove has failed");
             }
             BuffStack.Remove(toRemove);
-            // safe checking, this can happen when an inactive stack is being removed but it was actually active
-            if (Math.Abs(removedDuration - toRemove.TotalDuration) > ParserHelper.BuffSimulatorDelayConstant && !toRemove.Active)
+            if (removedDuration > ParserHelper.BuffSimulatorDelayConstant)
             {
-                toRemove.Activate();
-                toRemove.Shift(0, Math.Abs(removedDuration - toRemove.TotalDuration));
-            }
-            // Removed due to override
-            //(long duration, AgentItem src)? candidate = OverrideCandidates.FirstOrDefault(x => Math.Abs(x.duration - removedDuration) < ParserHelper.BuffSimulatorDelayConstant);
-            if (by == ParserHelper._unknownAgent && removedDuration != 0)
-            {
-                //(long duration, AgentItem candSrc) = candidate.Value;
-                //OverrideCandidates.Remove(candidate.Value);
-                WasteSimulationResult.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, toRemove.Start));
-                if (toRemove.Extensions.Any())
+                // safe checking, this can happen when an inactive stack is being removed but it was actually active
+                if (Math.Abs(removedDuration - toRemove.TotalDuration) > ParserHelper.BuffSimulatorDelayConstant && !toRemove.Active)
                 {
-                    foreach ((AgentItem src, long value) in toRemove.Extensions)
+                    toRemove.Activate();
+                    toRemove.Shift(0, Math.Abs(removedDuration - toRemove.TotalDuration));
+                }
+                // Removed due to override
+                //(long duration, AgentItem src)? candidate = OverrideCandidates.FirstOrDefault(x => Math.Abs(x.duration - removedDuration) < ParserHelper.BuffSimulatorDelayConstant);
+                if (by == ParserHelper._unknownAgent)
+                {
+                    //(long duration, AgentItem candSrc) = candidate.Value;
+                    //OverrideCandidates.Remove(candidate.Value);
+                    WasteSimulationResult.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, toRemove.Start));
+                    if (toRemove.Extensions.Any())
                     {
-                        WasteSimulationResult.Add(new BuffSimulationItemWasted(src, value, toRemove.Start));
+                        foreach ((AgentItem src, long value) in toRemove.Extensions)
+                        {
+                            WasteSimulationResult.Add(new BuffSimulationItemWasted(src, value, toRemove.Start));
+                        }
                     }
                 }
-            }
-            // Removed due to a cleanse
-            else if (removedDuration > ParserHelper.BuffSimulatorDelayConstant && by != ParserHelper._unknownAgent)
-            {
-                WasteSimulationResult.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, time));
-                if (toRemove.Extensions.Any())
+                // Removed due to a cleanse
+                else
                 {
-                    foreach ((AgentItem src, long value) in toRemove.Extensions)
+                    WasteSimulationResult.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, time));
+                    if (toRemove.Extensions.Any())
                     {
-                        WasteSimulationResult.Add(new BuffSimulationItemWasted(src, value, time));
+                        foreach ((AgentItem src, long value) in toRemove.Extensions)
+                        {
+                            WasteSimulationResult.Add(new BuffSimulationItemWasted(src, value, time));
+                        }
                     }
                 }
             }
