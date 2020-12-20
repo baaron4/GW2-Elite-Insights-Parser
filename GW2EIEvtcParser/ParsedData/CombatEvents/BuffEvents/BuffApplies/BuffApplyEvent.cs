@@ -30,7 +30,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            simulator.Add(AppliedDuration, By, Time, BuffInstance, _addedActive, _overstackDuration);
+            simulator.Add(AppliedDuration, By, Time, BuffInstance, _addedActive || simulator.Buff.StackType == ArcDPSEnums.BuffStackType.StackingConditionalLoss, _overstackDuration);
         }
 
         internal override int CompareTo(AbstractBuffEvent abe)
