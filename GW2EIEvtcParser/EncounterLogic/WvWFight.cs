@@ -27,12 +27,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.WorldVersusWorld);
+            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.WorldVersusWorld);
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Main target of the fight not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -44,8 +44,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     Name = "Detailed Full Fight",
                     CanBeSubPhase = false
                 });
-                phases[1].Targets.AddRange(Targets);
-                phases[1].Targets.Remove(mainTarget);
+                phases[1].AddTargets(Targets);
+                phases[1].RemoveTarget(mainTarget);
             }
             return phases;
         }
@@ -114,7 +114,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (AgentItem a in aList)
                 {
-                    Targets.Add(new NPC(a));
+                    _targets.Add(new NPC(a));
                 }
             }
             else

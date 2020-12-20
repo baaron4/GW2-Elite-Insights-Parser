@@ -26,60 +26,60 @@
             <thead>
                 <tr>
                     <th class="text-left">Skill</th>
-                    <th>
+                    <th class="damage-dist-cell">
                         %
                     </th>
-                    <th data-original-title="Damage">
+                    <th class="damage-dist-cell" data-original-title="Damage">
                         <img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="Damage"
                             class="icon icon-hover">
                     </th>
-                    <th data-original-title="Damage against barrier. Not necessarily included in total damage">
+                    <th class="damage-dist-cell" data-original-title="Damage against barrier. Not necessarily included in total damage">
                         <img src="https://wiki.guildwars2.com/images/thumb/c/cc/Barrier.png/30px-Barrier.png"
                             alt="Barrier Damage" class="icon icon-hover">
                     </th>
-                    <th data-original-title="Minimum">
+                    <th class="damage-dist-cell" data-original-title="Minimum">
                         Min
                     </th>
-                    <th data-original-title="Average">
+                    <th class="damage-dist-cell" data-original-title="Average">
                         Avg
                     </th>
-                    <th data-original-title="Maximum">
+                    <th class="damage-dist-cell" data-original-title="Maximum">
                         Max
                     </th>
-                    <th v-if="actor !== null">
+                    <th class="damage-dist-cell" v-if="actor !== null">
                         Cast
                     </th>
-                    <th>
+                    <th class="damage-dist-cell">
                         Hits
                     </th>
-                    <th v-if="actor !== null" data-original-title="Hits per Cast">
+                    <th class="damage-dist-cell" v-if="actor !== null" data-original-title="Hits per Cast">
                         <img src="https://wiki.guildwars2.com/images/thumb/5/53/Number_of_targets.png/20px-Number_of_targets.png"
                             alt="Hits per Cast" class="icon icon-hover">
                     </th>
-                    <th v-if="actor !== null" data-original-title="Damage divided by time spent in animation">
+                    <th class="damage-dist-cell" v-if="actor !== null" data-original-title="Damage divided by time spent in animation">
                         <img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="Damage"
                             class="icon">
                         /
                         <img src="https://wiki.guildwars2.com/images/6/6e/Activation.png" alt="Activation Time"
                             class="icon">
                     </th>
-                    <th data-original-title="Percent time hits critical">
+                    <th class="damage-dist-cell" data-original-title="Percent time hits critical">
                         <img src="https://wiki.guildwars2.com/images/9/95/Critical_Chance.png" alt="Crits"
                             class="icon icon-hover">
                     </th>
-                    <th data-original-title="Percent time hits while flanking">
+                    <th class="damage-dist-cell" data-original-title="Percent time hits while flanking">
                         <img src="https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png" alt="Flank"
                             class="icon icon-hover">
                     </th>
-                    <th data-original-title="Percent time hits while glancing">
+                    <th class="damage-dist-cell" data-original-title="Percent time hits while glancing">
                         <img src="https://wiki.guildwars2.com/images/f/f9/Weakness.png" alt="Glance"
                             class="icon icon-hover">
                     </th>
-                    <th v-if="actor !== null" data-original-title="Time wasted interupting skill casts">
+                    <th class="damage-dist-cell" v-if="actor !== null" data-original-title="Time wasted interupting skill casts">
                         <img src="https://wiki.guildwars2.com/images/b/b3/Out_Of_Health_Potions.png" alt="Wasted"
                             class="icon icon-hover">
                     </th>
-                    <th v-if="actor !== null" data-original-title="Time saved(in seconds) interupting skill casts">
+                    <th class="damage-dist-cell" v-if="actor !== null" data-original-title="Time saved(in seconds) interupting skill casts">
                         <img src="https://wiki.guildwars2.com/images/e/eb/Ready.png" alt="Saved"
                             class="icon icon-hover">
                     </th>

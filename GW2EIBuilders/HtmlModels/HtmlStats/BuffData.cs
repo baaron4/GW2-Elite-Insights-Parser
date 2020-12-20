@@ -133,7 +133,7 @@ namespace GW2EIBuilders.HtmlModels
         //////
         public static List<BuffData> BuildBuffUptimeData(ParsedEvtcLog log, List<Buff> listToUse, int phaseIndex)
         {
-            List<PhaseData> phases = log.FightData.GetPhases(log);
+            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             var list = new List<BuffData>();
             bool boonTable = listToUse.Select(x => x.Nature).Contains(Buff.BuffNature.Boon);
 

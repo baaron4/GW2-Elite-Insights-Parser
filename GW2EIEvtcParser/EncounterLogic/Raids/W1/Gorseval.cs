@@ -39,12 +39,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Gorseval);
+            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Gorseval);
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Gorseval not found");
             }
-            phases[0].Targets.Add(mainTarget);
+            phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (i % 2 == 1)
                 {
                     phase.Name = "Phase " + (i + 1) / 2;
-                    phase.Targets.Add(mainTarget);
+                    phase.AddTarget(mainTarget);
                 }
                 else
                 {
@@ -103,7 +103,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, c.ExpectedDuration + start, 600, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(false, 0, 600, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
                     }
-                    List<PhaseData> phases = log.FightData.GetPhases(log);
+                    IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
                     if (phases.Count > 1)
                     {
                         var rampage = cls.Where(x => x.SkillId == 31834).ToList();

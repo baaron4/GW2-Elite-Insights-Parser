@@ -12,7 +12,7 @@ namespace GW2EIBuilders.HtmlModels
         private DamageModData(Player player, ParsedEvtcLog log, List<DamageModifier> listToUse, int phaseIndex)
         {
             Dictionary<string, List<DamageModifierStat>> dModData = player.GetDamageModifierStats(log, null);
-            List<PhaseData> phases = log.FightData.GetPhases(log);
+            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             foreach (DamageModifier dMod in listToUse)
             {
                 if (dModData.TryGetValue(dMod.Name, out List<DamageModifierStat> list))

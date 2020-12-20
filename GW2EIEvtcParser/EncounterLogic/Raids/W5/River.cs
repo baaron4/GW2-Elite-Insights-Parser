@@ -49,7 +49,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                NPC desmina = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Desmina);
+                NPC desmina = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Desmina);
                 if (desmina == null)
                 {
                     throw new MissingKeyActorsException("Desmina not found");
@@ -78,7 +78,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
             // The walls and bombers spawn at the start of the encounter, we fix it by overriding their first aware to the first velocity change event
-            List<AgentItem> agentsToOverrideFirstAware = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.RiverOfSouls);
+            var agentsToOverrideFirstAware = new List<AgentItem>(agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.RiverOfSouls));
             agentsToOverrideFirstAware.AddRange(agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.HollowedBomber));
             bool sortCombatList = false;
             foreach (AgentItem agentToOverrideFirstAware in agentsToOverrideFirstAware)
@@ -113,7 +113,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            NPC desmina = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Desmina);
+            NPC desmina = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Desmina);
             if (desmina == null)
             {
                 throw new MissingKeyActorsException("Desmina not found");

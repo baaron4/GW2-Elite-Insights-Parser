@@ -2,7 +2,7 @@
 {
     public abstract class GenericDecoration
     {
-        public (int start, int end) Lifespan { get; }
+        internal (int start, int end) Lifespan { get; }
 
         protected GenericDecoration((int start, int end) lifespan)
         {

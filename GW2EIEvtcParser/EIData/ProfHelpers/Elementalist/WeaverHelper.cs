@@ -152,7 +152,7 @@ namespace GW2EIEvtcParser.EIData
             return inter.First();
         }
 
-        public static List<AbstractBuffEvent> TransformWeaverAttunements(List<AbstractBuffEvent> buffs, Dictionary<long, List<AbstractBuffEvent>> buffsByID, AgentItem a, SkillData skillData)
+        public static List<AbstractBuffEvent> TransformWeaverAttunements(IReadOnlyList<AbstractBuffEvent> buffs, Dictionary<long, List<AbstractBuffEvent>> buffsByID, AgentItem a, SkillData skillData)
         {
             var res = new List<AbstractBuffEvent>();
             var attunements = new HashSet<long>

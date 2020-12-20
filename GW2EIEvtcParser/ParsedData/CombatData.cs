@@ -340,6 +340,7 @@ namespace GW2EIEvtcParser.ParsedData
                     if (combatItem.IsBuff != 0 && combatItem.BuffDmg == 0 && combatItem.Value > 0)
                     {
                         CombatEventFactory.AddBuffApplyEvent(combatItem, buffEvents, agentData, skillData);
+                        //HasStackIDs = HasStackIDs || combatItem.Pad > 0;
                     }
                     else if (combatItem.IsBuff == 0)
                     {
@@ -388,12 +389,12 @@ namespace GW2EIEvtcParser.ParsedData
 
         // getters
 
-        public HashSet<long> GetSkills()
+        public IReadOnlyCollection<long> GetSkills()
         {
             return _skillIds;
         }
 
-        public List<AliveEvent> GetAliveEvents(AgentItem key)
+        public IReadOnlyList<AliveEvent> GetAliveEvents(AgentItem key)
         {
             if (_statusEvents.AliveEvents.TryGetValue(key, out List<AliveEvent> list))
             {
@@ -402,7 +403,7 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<AliveEvent>();
         }
 
-        public List<AttackTargetEvent> GetAttackTargetEvents(AgentItem key)
+        public IReadOnlyList<AttackTargetEvent> GetAttackTargetEvents(AgentItem key)
         {
             if (_statusEvents.AttackTargetEvents.TryGetValue(key, out List<AttackTargetEvent> list))
             {
@@ -411,7 +412,7 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<AttackTargetEvent>();
         }
 
-        public List<DeadEvent> GetDeadEvents(AgentItem key)
+        public IReadOnlyList<DeadEvent> GetDeadEvents(AgentItem key)
         {
             if (_statusEvents.DeadEvents.TryGetValue(key, out List<DeadEvent> list))
             {
@@ -420,7 +421,7 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<DeadEvent>();
         }
 
-        public List<DespawnEvent> GetDespawnEvents(AgentItem key)
+        public IReadOnlyList<DespawnEvent> GetDespawnEvents(AgentItem key)
         {
             if (_statusEvents.DespawnEvents.TryGetValue(key, out List<DespawnEvent> list))
             {
@@ -429,7 +430,7 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<DespawnEvent>();
         }
 
-        public List<DownEvent> GetDownEvents(AgentItem key)
+        public IReadOnlyList<DownEvent> GetDownEvents(AgentItem key)
         {
             if (_statusEvents.DownEvents.TryGetValue(key, out List<DownEvent> list))
             {
@@ -438,7 +439,7 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<DownEvent>();
         }
 
-        public List<EnterCombatEvent> GetEnterCombatEvents(AgentItem key)
+        public IReadOnlyList<EnterCombatEvent> GetEnterCombatEvents(AgentItem key)
         {
             if (_statusEvents.EnterCombatEvents.TryGetValue(key, out List<EnterCombatEvent> list))
             {
@@ -447,7 +448,7 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<EnterCombatEvent>();
         }
 
-        public List<ExitCombatEvent> GetExitCombatEvents(AgentItem key)
+        public IReadOnlyList<ExitCombatEvent> GetExitCombatEvents(AgentItem key)
         {
             if (_statusEvents.ExitCombatEvents.TryGetValue(key, out List<ExitCombatEvent> list))
             {
@@ -456,7 +457,7 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<ExitCombatEvent>();
         }
 
-        public List<GuildEvent> GetGuildEvents(AgentItem key)
+        public IReadOnlyList<GuildEvent> GetGuildEvents(AgentItem key)
         {
             if (_metaDataEvents.GuildEvents.TryGetValue(key, out List<GuildEvent> list))
             {
@@ -465,7 +466,7 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<GuildEvent>();
         }
 
-        public List<HealthUpdateEvent> GetHealthUpdateEvents(AgentItem key)
+        public IReadOnlyList<HealthUpdateEvent> GetHealthUpdateEvents(AgentItem key)
         {
             if (_statusEvents.HealthUpdateEvents.TryGetValue(key, out List<HealthUpdateEvent> list))
             {
@@ -474,7 +475,7 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<HealthUpdateEvent>();
         }
 
-        public List<BarrierUpdateEvent> GetBarrierUpdateEvents(AgentItem key)
+        public IReadOnlyList<BarrierUpdateEvent> GetBarrierUpdateEvents(AgentItem key)
         {
             if (_statusEvents.BarrierUpdateEvents.TryGetValue(key, out List<BarrierUpdateEvent> list))
             {
@@ -483,7 +484,7 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<BarrierUpdateEvent>();
         }
 
-        public List<MaxHealthUpdateEvent> GetMaxHealthUpdateEvents(AgentItem key)
+        public IReadOnlyList<MaxHealthUpdateEvent> GetMaxHealthUpdateEvents(AgentItem key)
         {
             if (_statusEvents.MaxHealthUpdateEvents.TryGetValue(key, out List<MaxHealthUpdateEvent> list))
             {
@@ -497,7 +498,7 @@ namespace GW2EIEvtcParser.ParsedData
             return _metaDataEvents.PointOfViewEvent;
         }
 
-        public List<SpawnEvent> GetSpawnEvents(AgentItem key)
+        public IReadOnlyList<SpawnEvent> GetSpawnEvents(AgentItem key)
         {
             if (_statusEvents.SpawnEvents.TryGetValue(key, out List<SpawnEvent> list))
             {
@@ -506,7 +507,7 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<SpawnEvent>();
         }
 
-        public List<TargetableEvent> GetTargetableEvents(AgentItem key)
+        public IReadOnlyList<TargetableEvent> GetTargetableEvents(AgentItem key)
         {
             if (_statusEvents.TargetableEvents.TryGetValue(key, out List<TargetableEvent> list))
             {
@@ -515,7 +516,7 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<TargetableEvent>();
         }
 
-        /*public List<TagEvent> GetTagEvents(AgentItem key)
+        /*public IReadOnlyList<TagEvent> GetTagEvents(AgentItem key)
         {
             if (_statusEvents.TagEvents.TryGetValue(key, out List<TagEvent> list))
             {
@@ -524,7 +525,7 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<TagEvent>();
         }*/
 
-        public List<TeamChangeEvent> GetTeamChangeEvents(AgentItem key)
+        public IReadOnlyList<TeamChangeEvent> GetTeamChangeEvents(AgentItem key)
         {
             if (_statusEvents.TeamChangeEvents.TryGetValue(key, out List<TeamChangeEvent> list))
             {
@@ -533,7 +534,7 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<TeamChangeEvent>();
         }
 
-        public List<BreakbarStateEvent> GetBreakbarStateEvents(AgentItem key)
+        public IReadOnlyList<BreakbarStateEvent> GetBreakbarStateEvents(AgentItem key)
         {
             if (_statusEvents.BreakbarStateEvents.TryGetValue(key, out List<BreakbarStateEvent> list))
             {
@@ -542,7 +543,7 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<BreakbarStateEvent>();
         }
 
-        public List<BreakbarPercentEvent> GetBreakbarPercentEvents(AgentItem key)
+        public IReadOnlyList<BreakbarPercentEvent> GetBreakbarPercentEvents(AgentItem key)
         {
             if (_statusEvents.BreakbarPercentEvents.TryGetValue(key, out List<BreakbarPercentEvent> list))
             {
@@ -571,22 +572,22 @@ namespace GW2EIEvtcParser.ParsedData
             return _metaDataEvents.LogEndEvent;
         }
 
-        public List<MapIDEvent> GetMapIDEvents()
+        public IReadOnlyList<MapIDEvent> GetMapIDEvents()
         {
             return _metaDataEvents.MapIDEvents;
         }
 
-        public List<RewardEvent> GetRewardEvents()
+        public IReadOnlyList<RewardEvent> GetRewardEvents()
         {
             return _rewardEvents;
         }
 
-        public List<ErrorEvent> GetErrorEvents()
+        public IReadOnlyList<ErrorEvent> GetErrorEvents()
         {
             return _metaDataEvents.ErrorEvents;
         }
 
-        public List<ShardEvent> GetShardEvents()
+        public IReadOnlyList<ShardEvent> GetShardEvents()
         {
             return _metaDataEvents.ShardEvents;
         }
@@ -600,7 +601,7 @@ namespace GW2EIEvtcParser.ParsedData
             return null;
         }
 
-        public List<BuffInfoEvent> GetBuffInfoEvent(ArcDPSEnums.BuffCategory category)
+        public IReadOnlyList<BuffInfoEvent> GetBuffInfoEvent(ArcDPSEnums.BuffCategory category)
         {
             if (_metaDataEvents.BuffInfoEventsByCategory.TryGetValue(category, out List<BuffInfoEvent> evts))
             {
@@ -618,7 +619,7 @@ namespace GW2EIEvtcParser.ParsedData
             return null;
         }
 
-        public List<AbstractBuffEvent> GetBuffData(long key)
+        public IReadOnlyList<AbstractBuffEvent> GetBuffData(long key)
         {
             if (_buffData.TryGetValue(key, out List<AbstractBuffEvent> res))
             {
@@ -627,7 +628,7 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<AbstractBuffEvent>(); ;
         }
 
-        public List<BuffRemoveAllEvent> GetBuffRemoveAllData(long key)
+        public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllData(long key)
         {
             if (_buffRemoveAllData.TryGetValue(key, out List<BuffRemoveAllEvent> res))
             {
@@ -641,7 +642,7 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="key"></param> Agent
         /// <returns></returns>
-        public List<AbstractBuffEvent> GetBuffData(AgentItem key)
+        public IReadOnlyList<AbstractBuffEvent> GetBuffData(AgentItem key)
         {
             if (_buffDataByDst.TryGetValue(key, out List<AbstractBuffEvent> res))
             {
@@ -655,7 +656,7 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="key"></param> Agent
         /// <returns></returns>
-        public List<AbstractHealthDamageEvent> GetDamageData(AgentItem key)
+        public IReadOnlyList<AbstractHealthDamageEvent> GetDamageData(AgentItem key)
         {
             if (_damageData.TryGetValue(key, out List<AbstractHealthDamageEvent> res))
             {
@@ -669,7 +670,7 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="key"></param> Agent
         /// <returns></returns>
-        public List<AbstractBreakbarDamageEvent> GetBreakbarDamageData(AgentItem key)
+        public IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageData(AgentItem key)
         {
             if (_breakbarDamageData.TryGetValue(key, out List<AbstractBreakbarDamageEvent> res))
             {
@@ -683,7 +684,7 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="key"></param> Id of the skill
         /// <returns></returns>
-        public List<AbstractHealthDamageEvent> GetDamageData(long key)
+        public IReadOnlyList<AbstractHealthDamageEvent> GetDamageData(long key)
         {
             if (_damageDataById.TryGetValue(key, out List<AbstractHealthDamageEvent> res))
             {
@@ -697,7 +698,7 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="key"></param> Agent
         /// <returns></returns>
-        public List<AnimatedCastEvent> GetAnimatedCastData(AgentItem key)
+        public IReadOnlyList<AnimatedCastEvent> GetAnimatedCastData(AgentItem key)
         {
             if (_animatedCastData.TryGetValue(key, out List<AnimatedCastEvent> res))
             {
@@ -711,7 +712,7 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="key"></param> Agent
         /// <returns></returns>
-        public List<InstantCastEvent> GetInstantCastData(AgentItem key)
+        public IReadOnlyList<InstantCastEvent> GetInstantCastData(AgentItem key)
         {
             if (_instantCastData.TryGetValue(key, out List<InstantCastEvent> res))
             {
@@ -725,7 +726,7 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="key"></param> Agent
         /// <returns></returns>
-        public List<WeaponSwapEvent> GetWeaponSwapData(AgentItem key)
+        public IReadOnlyList<WeaponSwapEvent> GetWeaponSwapData(AgentItem key)
         {
             if (_weaponSwapData.TryGetValue(key, out List<WeaponSwapEvent> res))
             {
@@ -739,7 +740,7 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="key"></param> ID of the skill
         /// <returns></returns>
-        public List<AnimatedCastEvent> GetAnimatedCastData(long key)
+        public IReadOnlyList<AnimatedCastEvent> GetAnimatedCastData(long key)
         {
             if (_animatedCastDataById.TryGetValue(key, out List<AnimatedCastEvent> res))
             {
@@ -753,7 +754,7 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="key"></param> Agent
         /// <returns></returns>
-        public List<AbstractHealthDamageEvent> GetDamageTakenData(AgentItem key)
+        public IReadOnlyList<AbstractHealthDamageEvent> GetDamageTakenData(AgentItem key)
         {
             if (_damageTakenData.TryGetValue(key, out List<AbstractHealthDamageEvent> res))
             {
@@ -767,7 +768,7 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="key"></param> Agent
         /// <returns></returns>
-        public List<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenData(AgentItem key)
+        public IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenData(AgentItem key)
         {
             if (_breakbarDamageTakenData.TryGetValue(key, out List<AbstractBreakbarDamageEvent> res))
             {
@@ -776,18 +777,18 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<AbstractBreakbarDamageEvent>();
         }
 
-        /*public List<CombatItem> getHealingData()
+        /*public IReadOnlyList<CombatItem> getHealingData()
         {
             return _healingData;
         }
 
-        public List<CombatItem> getHealingReceivedData()
+        public IReadOnlyList<CombatItem> getHealingReceivedData()
         {
             return _healingReceivedData;
         }*/
 
 
-        public List<AbstractMovementEvent> GetMovementData(AgentItem key)
+        public IReadOnlyList<AbstractMovementEvent> GetMovementData(AgentItem key)
         {
             if (_statusEvents.MovementEvents.TryGetValue(key, out List<AbstractMovementEvent> res))
             {

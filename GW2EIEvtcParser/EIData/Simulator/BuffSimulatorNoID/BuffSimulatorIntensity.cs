@@ -9,13 +9,13 @@ namespace GW2EIEvtcParser.EIData
     {
         private readonly List<(AgentItem agent, bool extension)> _lastSrcRemoves = new List<(AgentItem agent, bool extension)>();
         // Constructor
-        public BuffSimulatorIntensity(int capacity, ParsedEvtcLog log, StackingLogic logic) : base(capacity, log, logic)
+        public BuffSimulatorIntensity(int capacity, ParsedEvtcLog log, StackingLogic logic, Buff buff) : base(capacity, log, logic, buff)
         {
         }
 
         public override void Extend(long extension, long oldValue, AgentItem src, long start, uint stackID)
         {
-            if ((BuffStack.Count > 0 && oldValue > 0) || BuffStack.Count == Capacity)
+            if ((BuffStack.Any() && oldValue > 0) || BuffStack.Count == Capacity)
             {
                 BuffStackItem minItem = BuffStack.MinBy(x => Math.Abs(x.TotalDuration - oldValue));
                 if (minItem != null)
@@ -25,7 +25,7 @@ namespace GW2EIEvtcParser.EIData
             }
             else
             {
-                if (_lastSrcRemoves.Count > 0)
+                if (_lastSrcRemoves.Any())
                 {
                     Add(oldValue + extension, src, _lastSrcRemoves.First().agent, start, false, _lastSrcRemoves.First().extension);
                     _lastSrcRemoves.RemoveAt(0);
@@ -41,7 +41,7 @@ namespace GW2EIEvtcParser.EIData
 
         protected override void Update(long timePassed)
         {
-            if (BuffStack.Count > 0 && timePassed > 0)
+            if (BuffStack.Any() && timePassed > 0)
             {
                 _lastSrcRemoves.Clear();
                 var toAdd = new BuffSimulationItemIntensity(BuffStack);
@@ -53,12 +53,12 @@ namespace GW2EIEvtcParser.EIData
                     toAdd.OverrideEnd(toAdd.Start + diff);
                 }
                 // Subtract from each
-                for (int i = BuffStack.Count - 1; i >= 0; i--)
+                foreach (BuffStackItem buffStackItem in BuffStack)
                 {
-                    BuffStack[i].Shift(diff, diff);
-                    if (BuffStack[i].Duration == 0)
+                    buffStackItem.Shift(diff, diff);
+                    if (buffStackItem.Duration == 0)
                     {
-                        _lastSrcRemoves.Add((BuffStack[i].SeedSrc, BuffStack[i].IsExtension));
+                        _lastSrcRemoves.Add((buffStackItem.SeedSrc, buffStackItem.IsExtension));
                     }
                 }
                 BuffStack.RemoveAll(x => x.Duration == 0);

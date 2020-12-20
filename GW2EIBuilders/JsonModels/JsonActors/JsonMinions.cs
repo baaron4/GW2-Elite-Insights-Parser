@@ -83,7 +83,7 @@ namespace GW2EIBuilders.JsonModels
 
         internal JsonMinions(Minions minions, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
-            List<PhaseData> phases = log.FightData.GetPhases(log);
+            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             bool isNPCMinion = minions.Master is NPC;
             //
             Name = minions.Character;

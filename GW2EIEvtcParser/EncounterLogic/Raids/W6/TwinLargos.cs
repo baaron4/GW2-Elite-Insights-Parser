@@ -98,7 +98,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 PhaseData phase = targetPhases[i];
                 phase.Name = baseName + " P" + (i + 1);
-                phase.Targets.Add(target);
+                phase.AddTarget(target);
             }
             return targetPhases;
         }
@@ -187,16 +187,16 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC nikare = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Nikare);
+            NPC nikare = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Nikare);
             if (nikare == null)
             {
                 throw new MissingKeyActorsException("Nikare not found");
             }
-            phases[0].Targets.Add(nikare);
-            NPC kenut = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Kenut);
+            phases[0].AddTarget(nikare);
+            NPC kenut = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Kenut);
             if (kenut != null)
             {
-                phases[0].Targets.Add(kenut);
+                phases[0].AddTarget(kenut);
             }
             if (!requirePhases)
             {
@@ -337,7 +337,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.Nikare);
+            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Nikare);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Nikare not found");

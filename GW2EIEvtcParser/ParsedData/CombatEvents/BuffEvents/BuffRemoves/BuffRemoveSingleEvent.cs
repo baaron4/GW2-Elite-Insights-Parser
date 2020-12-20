@@ -6,6 +6,9 @@ namespace GW2EIEvtcParser.ParsedData
     {
         private readonly ArcDPSEnums.IFF _iff;
         public uint BuffInstance { get; protected set; }
+        private bool _overstackOrNaturalEnd => (_iff == ArcDPSEnums.IFF.Unknown && By == ParserHelper._unknownAgent);
+        private bool _lowValueRemove => (RemovedDuration <= ParserHelper.BuffSimulatorDelayConstant && RemovedDuration != 0);
+
         internal BuffRemoveSingleEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
             _iff = evtcItem.IFF;
@@ -20,12 +23,18 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
         {
-            return BuffID != Buff.NoBuff &&
-                    (hasStackIDs ||
-                        (!(_iff == ArcDPSEnums.IFF.Unknown && By == ParserHelper._unknownAgent && !hasStackIDs) && // overstack or natural end removals
-                        !(RemovedDuration <= 50 && RemovedDuration != 0 && !hasStackIDs) &&// low value single stack remove that can mess up with the simulator if server delay
-                        Time <= fightEnd - 50)); // don't take into account removal that are close to the end of the fight));
-
+            if (BuffID == Buff.NoBuff || Time > fightEnd - ParserHelper.BuffSimulatorDelayConstant)
+            {
+                // don't take into account removal that are close to the end of the fight
+                return false;
+            }
+            if (hasStackIDs)
+            {
+                return true;
+            }
+            // overstack or natural end removals
+            // low value single stack remove that can mess up with the simulator if server delay
+            return !_overstackOrNaturalEnd && !_lowValueRemove;
         }
 
         internal override void UpdateSimulator(AbstractBuffSimulator simulator)
@@ -38,7 +47,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return 0;
             }
-            if (abe is BuffRemoveAllEvent || abe is AbstractBuffStackEvent)
+            if (abe is BuffRemoveAllEvent)
             {
                 return -1;
             }
