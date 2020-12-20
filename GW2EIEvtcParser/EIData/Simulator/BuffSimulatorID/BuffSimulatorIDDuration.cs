@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 return;
             }
-            BuffStackItemID _activeStack = BuffStack.FirstOrDefault(x => x.StackID == stackID);
+            _activeStack = BuffStack.FirstOrDefault(x => x.StackID == stackID);
             if (_activeStack == null)
             {
                 throw new InvalidOperationException("Activate has failed");

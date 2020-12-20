@@ -82,7 +82,7 @@ namespace GW2EIEvtcParser.EIData
             }
             BuffStack.Remove(toRemove);
             // Removed due to override
-            (long duration, AgentItem src)? candidate = OverrideCandidates.FirstOrDefault(x => Math.Abs(x.duration - removedDuration) < ParserHelper.BuffSimulatorDelayConstant && x.src == by);
+            (long duration, AgentItem src)? candidate = OverrideCandidates.FirstOrDefault(x => Math.Abs(x.duration - removedDuration) < ParserHelper.BuffSimulatorDelayConstant);
             if (candidate.Value.src != null)
             {
                 (long duration, AgentItem candSrc) = candidate.Value;
