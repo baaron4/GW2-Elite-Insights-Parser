@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
@@ -36,25 +37,28 @@ namespace GW2EIEvtcParser.EIData
         {
             if (BuffStack.Any() && timePassed > 0)
             {
-                var toAdd = new BuffSimulationItemIntensity(BuffStack);
+                List<BuffStackItemID> BuffStackToUse = BuffStack;
+                long diff = Math.Min(BuffStackToUse.Min(x => x.Duration), timePassed);
+                if (diff == 0)
+                {
+                    BuffStackToUse = BuffStack.Where(x => x.Duration > 0).ToList();
+                    if (!BuffStackToUse.Any())
+                    {
+                        return;
+                    }
+                    diff = Math.Min(BuffStackToUse.Min(x => x.Duration), timePassed);
+                }
+                var toAdd = new BuffSimulationItemIntensity(BuffStackToUse);
                 GenerationSimulation.Add(toAdd);
-                long diff = Math.Min(BuffStack.Min(x => x.Duration), timePassed);
                 long leftOver = timePassed - diff;
                 if (toAdd.End > toAdd.Start + diff)
                 {
                     toAdd.OverrideEnd(toAdd.Start + diff);
                 }
                 // Subtract from each
-                for (int i = BuffStack.Count - 1; i >= 0; i--)
+                for (int i = BuffStackToUse.Count - 1; i >= 0; i--)
                 {
-                    BuffStack[i].Shift(diff, diff);
-                }
-                for (int i = BuffStack.Count - 1; i >= 0; i--)
-                {
-                    if (BuffStack[i].Duration == 0)
-                    {
-                        BuffStack[i].Shift(0, -leftOver);
-                    }
+                    BuffStackToUse[i].Shift(diff, diff);
                 }
                 Update(leftOver);
             }

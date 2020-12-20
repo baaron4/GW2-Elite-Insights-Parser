@@ -40,38 +40,32 @@ namespace GW2EIEvtcParser.EIData
 
         protected override void Update(long timePassed)
         {
-            if (BuffStack.Any() && timePassed > 0 && _activeStack != null)
+            if (BuffStack.Any() && timePassed > 0)
             {
-                var toAdd = new BuffSimulationItemDuration(_activeStack);
-                GenerationSimulation.Add(toAdd);
-                long timeDiff = _activeStack.Duration - timePassed;
-                long diff;
+                long diff = timePassed;
                 long leftOver = 0;
-                if (timeDiff < 0)
+                if (_activeStack != null && _activeStack.Duration > 0)
                 {
-                    diff = _activeStack.Duration;
-                    leftOver = timePassed - diff;
-                }
-                else
-                {
-                    diff = timePassed;
-                }
-                if (toAdd.End > toAdd.Start + diff)
-                {
-                    toAdd.OverrideEnd(toAdd.Start + diff);
-                }
-                _activeStack.Shift(diff, diff);
+                    var toAdd = new BuffSimulationItemDuration(_activeStack);
+                    GenerationSimulation.Add(toAdd);
+                    long timeDiff = _activeStack.Duration - timePassed;
+                    if (timeDiff < 0)
+                    {
+                        diff = _activeStack.Duration;
+                        leftOver = timePassed - diff;
+                    }
+                    if (toAdd.End > toAdd.Start + diff)
+                    {
+                        toAdd.OverrideEnd(toAdd.Start + diff);
+                    }
+                    _activeStack.Shift(diff, diff);
+                }             
                 for (int i = 0; i < BuffStack.Count; i++)
                 {
                     if (BuffStack[i] != _activeStack)
                     {
                         BuffStack[i].Shift(diff, 0);
                     }
-                }
-                // that means the stack was not an extension, extend duration to match time passed
-                if (_activeStack.Duration == 0)
-                {
-                    _activeStack.Shift(0, -leftOver);
                 }
                 Update(leftOver);
             }

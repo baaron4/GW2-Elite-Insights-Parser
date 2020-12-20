@@ -95,12 +95,12 @@ namespace GW2EIEvtcParser.EIData
                 {
                     //(long duration, AgentItem candSrc) = candidate.Value;
                     //OverrideCandidates.Remove(candidate.Value);
-                    WasteSimulationResult.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, toRemove.Start));
+                    WasteSimulationResult.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, time));
                     if (toRemove.Extensions.Any())
                     {
                         foreach ((AgentItem src, long value) in toRemove.Extensions)
                         {
-                            WasteSimulationResult.Add(new BuffSimulationItemWasted(src, value, toRemove.Start));
+                            WasteSimulationResult.Add(new BuffSimulationItemWasted(src, value, time));
                         }
                     }
                 }
