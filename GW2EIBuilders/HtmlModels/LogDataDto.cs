@@ -59,7 +59,7 @@ namespace GW2EIBuilders.HtmlModels
             foreach (KeyValuePair<string, List<Player>> pair in log.PlayerListBySpec)
             {
                 List<Player> players = pair.Value;
-                var specBoonIds = new HashSet<long>(log.Buffs.GetRemainingBuffsList(pair.Key).Select(x => x.ID));
+                var specBoonIds = new HashSet<long>(log.Buffs.GetPersonalBuffsList(pair.Key).Select(x => x.ID));
                 var boonToUse = new HashSet<Buff>();
                 foreach (Player player in players)
                 {
@@ -255,7 +255,7 @@ namespace GW2EIBuilders.HtmlModels
             }
             //
             log.UpdateProgressWithCancellationCheck("HTML: building Phases");
-            List<PhaseData> phases = log.FightData.GetPhases(log);
+            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];

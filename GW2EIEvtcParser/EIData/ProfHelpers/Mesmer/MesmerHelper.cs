@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
@@ -13,7 +14,7 @@ namespace GW2EIEvtcParser.EIData
         {
             new DamageCastFinder(10212, 10212, EIData.InstantCastFinder.DefaultICD), // Power spike
             new BuffLossCastFinder(10234, 10233, EIData.InstantCastFinder.DefaultICD, (brae, combatData) => {
-                return combatData.GetBuffData(brae.To).Exists(x =>
+                return combatData.GetBuffData(brae.To).Any(x =>
                                     x is BuffApplyEvent bae &&
                                     bae.BuffID == 13017 &&
                                     Math.Abs(bae.AppliedDuration - 2000) <= ParserHelper.ServerDelayConstant &&

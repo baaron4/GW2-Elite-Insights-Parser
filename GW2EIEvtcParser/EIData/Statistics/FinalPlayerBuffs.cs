@@ -22,8 +22,7 @@ namespace GW2EIEvtcParser.EIData
             var uptimesByPhase = new List<Dictionary<long, FinalPlayerBuffs>>();
             var uptimesActiveByPhase = new List<Dictionary<long, FinalPlayerBuffs>>();
 
-            List<PhaseData> phases = log.FightData.GetPhases(log);
-            foreach (PhaseData phase in phases)
+            foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
                 long phaseDuration = phase.DurationInMS;
 
@@ -155,8 +154,7 @@ namespace GW2EIEvtcParser.EIData
         {
             var selfBuffsActive = new List<Dictionary<long, FinalPlayerBuffs>>();
             var selfBuffs = new List<Dictionary<long, FinalPlayerBuffs>>();
-            List<PhaseData> phases = log.FightData.GetPhases(log);
-            foreach (PhaseData phase in phases)
+            foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
                 var final = new Dictionary<long, FinalPlayerBuffs>();
                 var finalActive = new Dictionary<long, FinalPlayerBuffs>();

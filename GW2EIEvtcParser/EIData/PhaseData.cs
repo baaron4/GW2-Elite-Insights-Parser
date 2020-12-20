@@ -20,7 +20,8 @@ namespace GW2EIEvtcParser.EIData
         public bool CanBeSubPhase { get; internal set; } = true;
 
         public bool BreakbarPhase { get; internal set; } = false;
-        public List<NPC> Targets { get; } = new List<NPC>();
+        public IReadOnlyList<NPC> Targets => _targets;
+        private readonly List<NPC> _targets = new List<NPC>();
 
         internal PhaseData(long start, long end)
         {
@@ -39,6 +40,21 @@ namespace GW2EIEvtcParser.EIData
         public bool InInterval(long time)
         {
             return Start <= time && time <= End;
+        }
+
+        internal void AddTarget(NPC target)
+        {
+            _targets.Add(target);
+        }
+
+        internal void RemoveTarget(NPC target)
+        {
+            _targets.Remove(target);
+        }
+
+        internal void AddTargets(IEnumerable<NPC> targets)
+        {
+            _targets.AddRange(targets);
         }
 
         internal void OverrideStart(long start)

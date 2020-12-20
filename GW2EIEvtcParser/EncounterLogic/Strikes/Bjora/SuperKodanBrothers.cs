@@ -38,14 +38,14 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC voice = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.ClawOfTheFallen);
-            NPC claw = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.VoiceOfTheFallen);
+            NPC voice = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.ClawOfTheFallen);
+            NPC claw = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.VoiceOfTheFallen);
             if (voice == null || claw == null)
             {
                 throw new MissingKeyActorsException("Claw or Voice not found");
             }
-            phases[0].Targets.Add(voice);
-            phases[0].Targets.Add(claw);
+            phases[0].AddTarget(voice);
+            phases[0].AddTarget(claw);
             long fightEnd = log.FightData.FightEnd;
             if (!requirePhases)
             {
@@ -56,8 +56,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             for (int i = 0; i < unmergedPhases.Count; i++)
             {
                 unmergedPhases[i].Name = "Phase " + (i + 1);
-                unmergedPhases[i].Targets.Add(claw);
-                unmergedPhases[i].Targets.Add(voice);
+                unmergedPhases[i].AddTarget(claw);
+                unmergedPhases[i].AddTarget(voice);
             }
             phases.AddRange(unmergedPhases);
             //
@@ -70,7 +70,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (enterCombat != null)
                 {
                     var phase = new PhaseData(enterCombat.Time, nextUnmergedPhase != null ? nextUnmergedPhase.Start : Math.Min(fightEnd, voiceAndClaw.LastAware), "Voice and Claw " + ++voiceAndClawCount);
-                    phase.Targets.Add(voiceAndClaw);
+                    phase.AddTarget(voiceAndClaw);
                     phases.Add(phase);
                     offset++;
                 }
@@ -80,7 +80,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (enrage != null)
             {
                 var phase = new PhaseData(enrage.Time, log.FightData.FightEnd, "Enrage");
-                phase.Targets.Add(claw.AgentItem == enrage.To ? claw : voice);
+                phase.AddTarget(claw.AgentItem == enrage.To ? claw : voice);
                 phases.Add(phase);
             }
             return phases;

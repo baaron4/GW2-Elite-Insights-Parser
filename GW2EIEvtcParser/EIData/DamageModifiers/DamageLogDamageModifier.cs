@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal override void ComputeDamageModifier(Dictionary<string, List<DamageModifierStat>> data, Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>> dataTarget, Player p, ParsedEvtcLog log)
         {
-            List<PhaseData> phases = log.FightData.GetPhases(log);
+            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             double gain = GainComputer.ComputeGain(GainPerStack, 1);
             if (!p.GetHitDamageEvents(null, log, phases[0].Start, phases[0].End).Exists(x => DLChecker(x)))
             {

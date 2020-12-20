@@ -13,72 +13,72 @@
         <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" id="dmg-table">
             <thead>
                 <tr>
-                    <th>Sub</th>
-                    <th></th>
+                    <th class="sub-cell">Sub</th>
+                    <th class="prof-cell"></th>
                     <th class="text-left">Name</th>
                     <th>Account</th>
-                    <th data-original-title="Percent time hits critical">
+                    <th class="stat-cell" data-original-title="Percent time hits critical">
                         <img src="https://wiki.guildwars2.com/images/9/95/Critical_Chance.png" alt="Crits"
                              class="icon icon-hover">
                     </th>
-                    <th data-original-title="Percent time hits while flanking">
+                    <th class="stat-cell" data-original-title="Percent time hits while flanking">
                         <img src="https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png" alt="Flank"
                              class="icon icon-hover">
                     </th>
-                    <th data-original-title="Percent time hits while glancing">
+                    <th class="stat-cell" data-original-title="Percent time hits while glancing">
                         <img src="https://wiki.guildwars2.com/images/f/f9/Weakness.png" alt="Glance"
                              class="icon icon-hover">
                     </th>
-                    <th data-original-title="Number of hits while blinded">
+                    <th class="stat-cell" data-original-title="Number of hits while blinded">
                         <img src="https://wiki.guildwars2.com/images/3/33/Blinded.png" alt="Miss"
                              class="icon icon-hover">
                     </th>
-                    <th data-original-title="Number of hits used to interupt">
+                    <th class="stat-cell" data-original-title="Number of hits used to interupt">
                         <img src="https://wiki.guildwars2.com/images/7/79/Daze.png" alt="Interupts"
                             
                             class="icon icon-hover">
                     </th>
-                    <th data-original-title="Times the enemy was invulnerable to attacks">
+                    <th class="stat-cell" data-original-title="Times the enemy was invulnerable to attacks">
                         <img src="https://wiki.guildwars2.com/images/e/eb/Determined.png" alt="Ivuln"
                              class="icon icon-hover">
                     </th>
-                    <th data-original-title="Times the enemy evaded an attack">
+                    <th class="stat-cell" data-original-title="Times the enemy evaded an attack">
                         <img src="https://wiki.guildwars2.com/images/e/e2/Evade.png" alt="Evaded"
                              class="icon icon-hover">
                     </th>
-                    <th data-original-title="Times the enemy blocked an attack">
+                    <th class="stat-cell" data-original-title="Times the enemy blocked an attack">
                         <img src="https://wiki.guildwars2.com/images/e/e5/Aegis.png" alt="Blocked"
                              class="icon icon-hover">
                     </th>                  
-                    <th v-if="wvw" data-original-title="Number of times downed target">
+                    <th class="stat-cell" v-if="wvw" data-original-title="Number of times downed target">
                         <img src="https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png"
                             alt="Downed" 
                             class="icon icon-hover">
                     </th>             
-                    <th v-if="wvw" data-original-title="Number of times killed target">
+                    <th class="stat-cell" v-if="wvw" data-original-title="Number of times killed target">
                         <img src="https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png"
                             alt="Killed" 
                             class="icon icon-hover">
                     </th>
-                    <th data-original-title="Time wasted(in seconds) interupting skill casts">
+                    <th class="stat-cell" data-original-title="Time wasted(in seconds) interupting skill casts">
                         <img src="https://wiki.guildwars2.com/images/b/b3/Out_Of_Health_Potions.png" alt="Wasted"
                             
                             class="icon icon-hover">
                     </th>
-                    <th data-original-title="Time saved(in seconds) interupting skill casts">
+                    <th class="stat-cell" data-original-title="Time saved(in seconds) interupting skill casts">
                         <img src="https://wiki.guildwars2.com/images/e/eb/Ready.png" alt="Saved"
                             
                             class="icon icon-hover">
                     </th>
-                    <th data-original-title="Times weapon swapped">
+                    <th class="stat-cell" data-original-title="Times weapon swapped">
                         <img src="https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png" alt="Swap"
                              class="icon icon-hover">
                     </th>
-                    <th  data-original-title="Average Distance to the center of the squad">
+                    <th class="stat-cell" data-original-title="Average Distance to the center of the squad">
                         <img src="https://wiki.guildwars2.com/images/e/ef/Commander_arrow_marker.png" alt="Stack Center"
                             class="icon icon-hover">
                     </th>
-                    <th v-if="hasCommander" data-original-title="Average Distance to the commander">
+                    <th class="stat-cell" v-if="hasCommander" data-original-title="Average Distance to the commander">
                         <img src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png"
                             alt="Stack Commander" 
                             class="icon icon-hover">

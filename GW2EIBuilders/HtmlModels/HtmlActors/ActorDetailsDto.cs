@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
@@ -81,7 +82,7 @@ namespace GW2EIBuilders.HtmlModels
                 BoonGraph = new List<List<BuffChartDataDto>>(),
                 Rotation = new List<List<object[]>>()
             };
-            List<PhaseData> phases = log.FightData.GetPhases(log);
+            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];

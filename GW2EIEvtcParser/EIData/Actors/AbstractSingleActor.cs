@@ -431,9 +431,20 @@ namespace GW2EIEvtcParser.EIData
                 long buffID = buff.ID;
                 if (buffMap.TryGetValue(buffID, out List<AbstractBuffEvent> buffEvents) && buffEvents.Count != 0 && !BuffGraphs.ContainsKey(buffID))
                 {
-                    AbstractBuffSimulator simulator = buff.CreateSimulator(log);
+                    AbstractBuffSimulator simulator;
+                    try 
+                    {
+                        simulator = buff.CreateSimulator(log, false);
+                        simulator.Simulate(buffEvents, dur);
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        // get rid of logs invalid for HasStackIDs false
+                        buffEvents.RemoveAll(x => !x.IsBuffSimulatorCompliant(log.FightData.FightEnd, false));
+                        simulator = buff.CreateSimulator(log, true);
+                        simulator.Simulate(buffEvents, dur);
+                    } 
                     _buffSimulators[buffID] = simulator;
-                    simulator.Simulate(buffEvents, dur);
                     bool updateBoonPresence = boonIds.Contains(buffID);
                     bool updateCondiPresence = condiIds.Contains(buffID);
                     var graphSegments = new List<Segment>();

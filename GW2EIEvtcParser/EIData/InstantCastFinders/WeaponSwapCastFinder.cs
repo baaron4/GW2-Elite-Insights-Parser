@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EIData
             var res = new List<InstantCastEvent>();
             foreach (AgentItem playerAgent in agentData.GetAgentByType(AgentItem.AgentType.Player))
             {
-                List<WeaponSwapEvent> swaps = combatData.GetWeaponSwapData(playerAgent);
+                IReadOnlyList<WeaponSwapEvent> swaps = combatData.GetWeaponSwapData(playerAgent);
                 long lastTime = int.MinValue;
                 foreach (WeaponSwapEvent swap in swaps)
                 {

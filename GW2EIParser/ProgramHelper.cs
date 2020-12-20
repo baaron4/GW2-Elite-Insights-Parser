@@ -262,7 +262,7 @@ namespace GW2EIParser
             // parallel stuff
             if (Properties.Settings.Default.MultiThreaded && HasFormat())
             {
-                List<PhaseData> phases = log.FightData.GetPhases(log);
+                IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
                 operation.UpdateProgressWithCancellationCheck("Multi threading");
                 var playersAndTargets = new List<AbstractSingleActor>(log.PlayerList);
                 playersAndTargets.AddRange(log.FightData.Logic.Targets);
@@ -284,8 +284,20 @@ namespace GW2EIParser
                     Parallel.ForEach(log.PlayerList, player => player.GetCombatReplayPolledPositions(log));
                 }
                 Parallel.ForEach(playersAndTargets, actor => actor.GetBuffGraphs(log));
-                Parallel.ForEach(playersAndTargets, actor => phases.ForEach(phase => actor.GetBuffDistribution(log, phase.Start, phase.End)));
-                Parallel.ForEach(playersAndTargets, actor => phases.ForEach(phase => actor.GetBuffPresence(log, phase.Start, phase.End)));
+                Parallel.ForEach(playersAndTargets, actor =>
+                {
+                    foreach (PhaseData phase in phases)
+                    {
+                        actor.GetBuffDistribution(log, phase.Start, phase.End);
+                    }
+                });
+                Parallel.ForEach(playersAndTargets, actor =>
+                {
+                    foreach (PhaseData phase in phases)
+                    {
+                        actor.GetBuffPresence(log, phase.Start, phase.End);
+                    }
+                });
                 //
                 Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
             }

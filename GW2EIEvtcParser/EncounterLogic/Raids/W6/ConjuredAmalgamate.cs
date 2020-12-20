@@ -63,9 +63,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
             // make those into npcs
-            List<AgentItem> cas = agentData.GetGadgetsByID((int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
-            List<AgentItem> leftArms = agentData.GetGadgetsByID((int)ArcDPSEnums.TargetID.CALeftArm);
-            List<AgentItem> rightArms = agentData.GetGadgetsByID((int)ArcDPSEnums.TargetID.CARightArm);
+            IReadOnlyList<AgentItem> cas = agentData.GetGadgetsByID((int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
+            IReadOnlyList<AgentItem> leftArms = agentData.GetGadgetsByID((int)ArcDPSEnums.TargetID.CALeftArm);
+            IReadOnlyList<AgentItem> rightArms = agentData.GetGadgetsByID((int)ArcDPSEnums.TargetID.CARightArm);
             foreach (AgentItem ca in cas)
             {
                 ca.OverrideType(AgentItem.AgentType.NPC);
@@ -165,9 +165,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
-                NPC leftArm = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.CALeftArm);
-                NPC rightArm = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.CARightArm);
+                NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
+                NPC leftArm = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.CALeftArm);
+                NPC rightArm = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.CARightArm);
                 if (target == null)
                 {
                     throw new MissingKeyActorsException("Conjured Amalgamate not found");
@@ -217,7 +217,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var targetables = new List<long>();
             foreach (AgentItem attackTarget in attackTargets)
             {
-                List<TargetableEvent> aux = log.CombatData.GetTargetableEvents(attackTarget);
+                IReadOnlyList<TargetableEvent> aux = log.CombatData.GetTargetableEvents(attackTarget);
                 targetables.AddRange(aux.Where(x => x.Targetable).Select(x => x.Time));
             }
             return targetables;
@@ -226,12 +226,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC ca = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
+            NPC ca = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
             if (ca == null)
             {
                 throw new MissingKeyActorsException("Conjured Amalgamate not found");
             }
-            phases[0].Targets.Add(ca);
+            phases[0].AddTarget(ca);
             if (!requirePhases)
             {
                 return phases;
@@ -248,11 +248,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 else
                 {
                     name = "Burn Phase";
-                    phase.Targets.Add(ca);
+                    phase.AddTarget(ca);
                 }
                 phase.Name = name;
             }
-            NPC leftArm = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.CALeftArm);
+            NPC leftArm = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.CALeftArm);
             if (leftArm != null)
             {
                 List<long> targetables = GetTargetableTimes(log, leftArm);
@@ -262,11 +262,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (targetables.Exists(x => phase.InInterval(x)))
                     {
                         phase.Name = "Left " + phase.Name;
-                        phase.Targets.Add(leftArm);
+                        phase.AddTarget(leftArm);
                     }
                 }
             }
-            NPC rightArm = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.CARightArm);
+            NPC rightArm = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.CARightArm);
             if (rightArm != null)
             {
                 List<long> targetables = GetTargetableTimes(log, rightArm);
@@ -283,7 +283,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             phase.Name = "Right " + phase.Name;
                         }
-                        phase.Targets.Add(rightArm);
+                        phase.AddTarget(rightArm);
                     }
                 }
             }
@@ -311,7 +311,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.Find(x => x.ID == (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
+            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Conjured Amalgamate not found");

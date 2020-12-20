@@ -331,9 +331,9 @@ namespace GW2EIEvtcParser.EIData
         private void SetDeathRecaps(ParsedEvtcLog log)
         {
             _deathRecaps = new List<DeathRecap>();
-            List<DeadEvent> deads = log.CombatData.GetDeadEvents(AgentItem);
-            List<DownEvent> downs = log.CombatData.GetDownEvents(AgentItem);
-            List<AliveEvent> ups = log.CombatData.GetAliveEvents(AgentItem);
+            IReadOnlyList<DeadEvent> deads = log.CombatData.GetDeadEvents(AgentItem);
+            IReadOnlyList<DownEvent> downs = log.CombatData.GetDownEvents(AgentItem);
+            IReadOnlyList<AliveEvent> ups = log.CombatData.GetAliveEvents(AgentItem);
             long lastDeathTime = 0;
             List<AbstractHealthDamageEvent> damageLogs = GetDamageTakenEvents(null, log, 0, log.FightData.FightEnd);
             foreach (DeadEvent dead in deads)
