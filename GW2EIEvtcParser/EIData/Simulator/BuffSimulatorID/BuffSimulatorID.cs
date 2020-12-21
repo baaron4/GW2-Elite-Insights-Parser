@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
@@ -61,7 +62,7 @@ namespace GW2EIEvtcParser.EIData
             BuffStackItem toExtend = BuffStack.FirstOrDefault(x => x.StackID == stackID);
             if (toExtend == null)
             {
-                throw new InvalidOperationException("Extend has failed");
+                throw new EIBuffSimulatorIDException("Extend has failed");
             }
             toExtend.Extend(extension, src);
             //ExtendedSimulationResult.Add(new BuffCreationItem(src, extension, time, toExtend.ID));
@@ -84,7 +85,7 @@ namespace GW2EIEvtcParser.EIData
                         if (BuffStack.Count < removedStacks)
                         {
                             //removedStacks = BuffStack.Count;
-                            throw new InvalidOperationException("Remove all failed");
+                            throw new EIBuffSimulatorIDException("Remove all failed");
                         }
                         // buff cleanse all
                         for (int i = 0; i < removedStacks; i++)
@@ -113,7 +114,7 @@ namespace GW2EIEvtcParser.EIData
             if (toRemove == null)
             {
                 //return;
-                throw new InvalidOperationException("Remove has failed");
+                throw new EIBuffSimulatorIDException("Remove has failed");
             }
             BuffStack.Remove(toRemove);
             if (removedDuration > ParserHelper.BuffSimulatorDelayConstant)
@@ -159,7 +160,7 @@ namespace GW2EIEvtcParser.EIData
             BuffStackItemID toDisable = BuffStack.FirstOrDefault(x => x.StackID == stackID);
             if (toDisable == null)
             {
-                throw new InvalidOperationException("Reset has failed");
+                throw new EIBuffSimulatorIDException("Reset has failed");
             }
             toDisable.Disable();
         }
