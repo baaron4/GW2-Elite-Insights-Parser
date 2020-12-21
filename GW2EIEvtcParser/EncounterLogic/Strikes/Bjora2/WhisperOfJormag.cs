@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -44,7 +45,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC woj = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.WhisperOfJormag);
             if (woj == null)
             {
-                throw new InvalidOperationException("Whisper of Jormag not found");
+                throw new MissingKeyActorsException("Whisper of Jormag not found");
             }
             phases[0].AddTarget(woj);
             if (!requirePhases)

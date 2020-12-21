@@ -64,7 +64,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC cairn = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Cairn);
             if (cairn == null)
             {
-                throw new InvalidOperationException("Cairn not found");
+                throw new MissingKeyActorsException("Cairn not found");
             }
             phases[0].AddTarget(cairn);
             if (!requirePhases)
