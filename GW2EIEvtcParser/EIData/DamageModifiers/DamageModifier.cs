@@ -27,10 +27,10 @@ namespace GW2EIEvtcParser.EIData
         public string Name { get; }
         public int ID { get; }
         public string Tooltip { get; }
-        public delegate bool DamageLogChecker(AbstractHealthDamageEvent dl);
+        internal delegate bool DamageLogChecker(AbstractHealthDamageEvent dl);
 
         protected DamageModifierMode Mode { get; } = DamageModifierMode.All;
-        protected DamageLogChecker DLChecker { get; }
+        internal DamageLogChecker DLChecker { get; }
 
 
         internal static readonly GainComputerByPresence ByPresence = new GainComputerByPresence();
