@@ -3,48 +3,39 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class BuffDictionary : Dictionary<long, List<AbstractBuffEvent>>
+    internal class BuffDictionary
     {
+        private readonly Dictionary<long, List<AbstractBuffEvent>> _dict = new Dictionary<long, List<AbstractBuffEvent>>();
         // Constructors
         public BuffDictionary()
         {
         }
-        public BuffDictionary(Buff buff)
-        {
-            this[buff.ID] = new List<AbstractBuffEvent>();
-        }
 
-        public BuffDictionary(IEnumerable<Buff> buffs)
+        public bool TryGetValue(long buffID, out List<AbstractBuffEvent> list)
         {
-            foreach (Buff boon in buffs)
+            if (_dict.TryGetValue(buffID, out list))
             {
-                this[boon.ID] = new List<AbstractBuffEvent>();
+                return true;
             }
+            return false;
         }
 
-
-        public void Add(IEnumerable<Buff> buffs)
+        public void Add(ParsedEvtcLog log, Buff buff, AbstractBuffEvent buffEvent) 
         {
-            foreach (Buff buff in buffs)
-            {
-                if (ContainsKey(buff.ID))
-                {
-                    continue;
-                }
-                this[buff.ID] = new List<AbstractBuffEvent>();
-            }
-        }
-
-        public void Add(Buff buff)
-        {
-            if (ContainsKey(buff.ID))
+            if (!buffEvent.IsBuffSimulatorCompliant(log.FightData.FightEnd, log.CombatData.HasStackIDs))
             {
                 return;
             }
-            this[buff.ID] = new List<AbstractBuffEvent>();
+            buffEvent.TryFindSrc(log);
+            if (_dict.TryGetValue(buff.ID, out List<AbstractBuffEvent> list))
+            {
+                list.Add(buffEvent);
+                return;
+            }
+            _dict[buff.ID] = new List<AbstractBuffEvent>() { buffEvent };
         }
 
-        private int CompareApplicationType(AbstractBuffEvent x, AbstractBuffEvent y)
+        private static int CompareBuffEventType(AbstractBuffEvent x, AbstractBuffEvent y)
         {
             if (x.Time < y.Time)
             {
@@ -61,11 +52,21 @@ namespace GW2EIEvtcParser.EIData
         }
 
 
-        public void Sort()
+        public void Finalize(ParsedEvtcLog log, AgentItem agentItem, out HashSet<Buff> trackedBuffs)
         {
-            foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in this)
+            // add buff remove all for each despawn events
+            foreach (DespawnEvent dsp in log.CombatData.GetDespawnEvents(agentItem))
             {
-                pair.Value.Sort(CompareApplicationType);
+                foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in _dict)
+                {
+                    pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, dsp.Time, int.MaxValue, log.SkillData.Get(pair.Key), BuffRemoveAllEvent.FullRemoval, int.MaxValue));
+                }
+            }
+            trackedBuffs = new HashSet<Buff>();
+            foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in _dict)
+            {
+                trackedBuffs.Add(log.Buffs.BuffsByIds[pair.Key]);
+                pair.Value.Sort(CompareBuffEventType);
             }
         }
 

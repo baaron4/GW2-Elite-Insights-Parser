@@ -11,7 +11,7 @@ namespace GW2EIEvtcParser.EIData
     {
         public int UniqueID => AgentItem.UniqueID;
         // Boons
-        public HashSet<Buff> TrackedBuffs { get; } = new HashSet<Buff>();
+        private HashSet<Buff> _trackedBuffs;
         private BuffDictionary _buffMap;
         protected Dictionary<long, BuffsGraphModel> BuffPoints { get; set; }
         private readonly List<BuffDistribution> _buffDistribution = new List<BuffDistribution>();
@@ -272,56 +272,44 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public void ComputeBuffMap(ParsedEvtcLog log)
+        public IReadOnlyCollection<Buff> GetTrackedBuffs(ParsedEvtcLog log)
         {
             if (_buffMap == null)
             {
-                //
-                _buffMap = new BuffDictionary();
-                // Fill in Boon Map
-#if DEBUG
-                var test = log.CombatData.GetBuffData(AgentItem).Where(x => !log.Buffs.BuffsByIds.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
-#endif
-                foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(AgentItem))
-                {
-                    long boonId = c.BuffID;
-                    if (!_buffMap.ContainsKey(boonId))
-                    {
-                        if (!log.Buffs.BuffsByIds.ContainsKey(boonId))
-                        {
-                            continue;
-                        }
-                        _buffMap.Add(log.Buffs.BuffsByIds[boonId]);
-                    }
-                    if (!c.IsBuffSimulatorCompliant(log.FightData.FightEnd, log.CombatData.HasStackIDs))
-                    {
-                        continue;
-                    }
-                    List<AbstractBuffEvent> loglist = _buffMap[boonId];
-                    c.TryFindSrc(log);
-                    loglist.Add(c);
-                }
-                // add buff remove all for each despawn events
-                foreach (DespawnEvent dsp in log.CombatData.GetDespawnEvents(AgentItem))
-                {
-                    foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in _buffMap)
-                    {
-                        pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, AgentItem, dsp.Time, int.MaxValue, log.SkillData.Get(pair.Key), BuffRemoveAllEvent.FullRemoval, int.MaxValue));
-                    }
-                }
-                _buffMap.Sort();
-                foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in _buffMap)
-                {
-                    TrackedBuffs.Add(log.Buffs.BuffsByIds[pair.Key]);
-                }
+                ComputeBuffMap(log);
             }
+            return _trackedBuffs;
+        }
+
+        private void ComputeBuffMap(ParsedEvtcLog log)
+        {
+            //
+            _buffMap = new BuffDictionary();
+            // Fill in Boon Map
+#if DEBUG
+            var test = log.CombatData.GetBuffData(AgentItem).Where(x => !log.Buffs.BuffsByIds.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
+#endif
+            foreach (AbstractBuffEvent buffEvent in log.CombatData.GetBuffData(AgentItem))
+            {
+                long buffID = buffEvent.BuffID;
+                if (!log.Buffs.BuffsByIds.ContainsKey(buffID))
+                {
+                    continue;
+                }
+                Buff buff = log.Buffs.BuffsByIds[buffID];
+                _buffMap.Add(log, buff, buffEvent);
+            }
+            _buffMap.Finalize(log, AgentItem, out _trackedBuffs);
         }
 
 
-        protected void SetBuffStatus(ParsedEvtcLog log)
+        private void SetBuffStatus(ParsedEvtcLog log)
         {
             BuffPoints = new Dictionary<long, BuffsGraphModel>();
-            ComputeBuffMap(log);
+            if (_buffMap == null)
+            {
+                ComputeBuffMap(log);
+            }
             BuffDictionary buffMap = _buffMap;
             long dur = log.FightData.FightEnd;
             int fightDuration = (int)(dur) / 1000;
@@ -337,7 +325,7 @@ namespace GW2EIEvtcParser.EIData
                 _buffDistribution.Add(new BuffDistribution());
                 _buffPresence.Add(new Dictionary<long, long>());
             }
-            foreach (Buff buff in TrackedBuffs)
+            foreach (Buff buff in GetTrackedBuffs(log))
             {
                 long boonid = buff.ID;
                 if (buffMap.TryGetValue(boonid, out List<AbstractBuffEvent> logs) && logs.Count != 0)
@@ -466,7 +454,7 @@ namespace GW2EIEvtcParser.EIData
                 long phaseDuration = phase.DurationInMS;
                 long activePhaseDuration = phase.GetActorActiveDuration(this, log);
 
-                foreach (Buff buff in TrackedBuffs)
+                foreach (Buff buff in GetTrackedBuffs(log))
                 {
                     if (buffDistribution.HasBuffID(buff.ID))
                     {
