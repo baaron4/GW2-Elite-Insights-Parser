@@ -75,6 +75,6 @@ namespace GW2EIBuilders.JsonModels
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonBuffsGenerationData"/>
-        public List<JsonBuffsGenerationData> BuffData { get; internal set; }
+        public IReadOnlyList<JsonBuffsGenerationData> BuffData { get; internal set; }
     }
 }

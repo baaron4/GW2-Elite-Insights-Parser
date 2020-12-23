@@ -64,7 +64,7 @@ namespace GW2EIBuilders.JsonModels
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonDamageModifierItem"/>
-        public List<JsonDamageModifierItem> DamageModifiers { get; internal set; }
+        public IReadOnlyList<JsonDamageModifierItem> DamageModifiers { get; internal set; }
 
         [JsonConstructor]
         internal JsonDamageModifierData()

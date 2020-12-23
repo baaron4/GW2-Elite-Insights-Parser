@@ -309,7 +309,7 @@ namespace GW2EIBuilders.JsonModels
         /// Dictionary of personal buffs. The key is the profession, the value is a list of buff ids
         /// </summary>
         /// <seealso cref="BuffMap"/>
-        public IReadOnlyDictionary<string, HashSet<long>> PersonalBuffs { get; internal set; }
+        public IReadOnlyDictionary<string, IReadOnlyCollection<long>> PersonalBuffs { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// List of present fractal instabilities, the values are buff ids
@@ -350,13 +350,9 @@ namespace GW2EIBuilders.JsonModels
             LanguageID = (byte)log.LogData.LanguageID;
             IsCM = log.FightData.IsCM;
             var personalBuffs = new Dictionary<string, HashSet<long>>();
-            PersonalBuffs = personalBuffs;
             var skillMap = new Dictionary<string, SkillDesc>();
-            SkillMap = skillMap;
             var buffMap = new Dictionary<string, BuffDesc>();
-            BuffMap = buffMap;
             var damageModMap = new Dictionary<string, DamageModDesc>();
-            DamageModMap = damageModMap;
 
             if (log.StatisticsHelper.PresentFractalInstabilities.Any())
             {
@@ -397,6 +393,11 @@ namespace GW2EIBuilders.JsonModels
             {
                 LogErrors = new List<string>(log.LogData.LogErrors);
             }
+            //
+            PersonalBuffs = personalBuffs.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>) x.Value);
+            SkillMap = skillMap;
+            BuffMap = buffMap;
+            DamageModMap = damageModMap;
         }
 
     }
