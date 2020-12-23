@@ -25,7 +25,7 @@ namespace GW2EIEvtcParser.EIData
             return _health;
         }
 
-        public List<Segment> GetBreakbarPercentUpdates(ParsedEvtcLog log)
+        public IReadOnlyList<Segment> GetBreakbarPercentUpdates(ParsedEvtcLog log)
         {
             if (_breakbarPercentUpdates == null)
             {

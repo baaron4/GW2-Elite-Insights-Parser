@@ -58,7 +58,7 @@ namespace GW2EIBuilders.JsonModels
         /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
-        public List<int>[][] TargetDamage1S { get; internal set; }
+        public IReadOnlyList<int>[][] TargetDamage1S { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Array of double representing 1S breakbar damage points \n
@@ -68,7 +68,7 @@ namespace GW2EIBuilders.JsonModels
         /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
-        public List<double>[][] TargetBreakbarDamage1S { get; internal set; }
+        public IReadOnlyList<double>[][] TargetBreakbarDamage1S { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Per Target Damage distribution array \n
@@ -208,8 +208,8 @@ namespace GW2EIBuilders.JsonModels
             for (int j = 0; j < log.FightData.Logic.Targets.Count; j++)
             {
                 NPC target = log.FightData.Logic.Targets[j];
-                var graph1SDamageList = new List<int>[phases.Count];
-                var graph1SBreakbarDamageList = new List<double>[phases.Count];
+                var graph1SDamageList = new IReadOnlyList<int>[phases.Count];
+                var graph1SBreakbarDamageList = new IReadOnlyList<double>[phases.Count];
                 var targetDamageDistList = new List<JsonDamageDist>[phases.Count];
                 for (int i = 0; i < phases.Count; i++)
                 {
@@ -247,7 +247,7 @@ namespace GW2EIBuilders.JsonModels
             OffGroupBuffsActive = GetPlayerBuffGenerations(player.GetActiveBuffs(log, BuffEnum.OffGroup), log, buffDesc);
             SquadBuffsActive = GetPlayerBuffGenerations(player.GetActiveBuffs(log, BuffEnum.Squad), log, buffDesc);
             //
-            List<Consumable> consumables = player.GetConsumablesList(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<Consumable> consumables = player.GetConsumablesList(log, 0, log.FightData.FightEnd);
             if (consumables.Any())
             {
                 Consumables = new List<JsonConsumable>();
@@ -261,7 +261,7 @@ namespace GW2EIBuilders.JsonModels
                 }
             }
             //
-            List<DeathRecap> deathRecaps = player.GetDeathRecaps(log);
+            IReadOnlyList<DeathRecap> deathRecaps = player.GetDeathRecaps(log);
             if (deathRecaps.Any())
             {
                 DeathRecap = deathRecaps.Select(x => new JsonDeathRecap(x)).ToList();

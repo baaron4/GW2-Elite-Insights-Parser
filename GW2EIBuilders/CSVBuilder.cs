@@ -208,7 +208,7 @@ namespace GW2EIBuilders
                     var deathDuration = TimeSpan.FromMilliseconds(defense.DeadDuration);
                     deadthTooltip = deathDuration.TotalSeconds + " seconds dead, " + (100.0 - Math.Round((deathDuration.TotalMilliseconds / phase.DurationInMS) * 100, 1)) + "% Alive";
                 }
-                string[] wep = player.GetWeaponsArray(_log);
+                IReadOnlyList<string> wep = player.GetWeaponsArray(_log);
                 string build = "";
                 if (player.Condition > 0)
                 {

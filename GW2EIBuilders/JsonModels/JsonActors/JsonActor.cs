@@ -111,7 +111,7 @@ namespace GW2EIBuilders.JsonModels
         /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
-        public List<int>[] Damage1S { get; internal set; }
+        public IReadOnlyList<int>[] Damage1S { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Array of double representing 1S breakbar damage points \n
@@ -121,7 +121,7 @@ namespace GW2EIBuilders.JsonModels
         /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
-        public List<double>[] BreakbarDamage1S { get; internal set; }
+        public IReadOnlyList<double>[] BreakbarDamage1S { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Array of int[2] that represents the number of conditions \n
