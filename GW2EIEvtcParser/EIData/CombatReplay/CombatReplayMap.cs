@@ -16,12 +16,43 @@ namespace GW2EIEvtcParser.EIData
 
         public IReadOnlyList<MapItem> Maps => _maps;
         private readonly List<MapItem> _maps = new List<MapItem>();
-        private (int width, int height) _size;
-        private (int topX, int topY, int bottomX, int bottomY) _rect;
-        private (int topX, int topY, int bottomX, int bottomY) _fullRect;
-        private (int bottomX, int bottomY, int topX, int topY) _worldRect;
+        private (int width, int height) _urlPixelSize;
+        private (double topX, double topY, double bottomX, double bottomY) _rectInMap;
+        //private (int topX, int topY, int bottomX, int bottomY) _fullRect;
+        //private (int bottomX, int bottomY, int topX, int topY) _worldRect;
 
-        internal CombatReplayMap(string link, (int width, int height) size, (int topX, int topY, int bottomX, int bottomY) rect, (int topX, int topY, int bottomX, int bottomY) fullRect, (int bottomX, int bottomY, int topX, int topY) worldRect)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="link">Url to the image</param>
+        /// <param name="urlPixelSize">Width and Height of the image in pixel</param>
+        /// <param name="rectInMap">The map rectangle region corresponding to the image in map coordinates</param>
+        internal CombatReplayMap(string link, (int width, int height) urlPixelSize, (double topX, double topY, double bottomX, double bottomY) rectInMap)
+        {
+            _maps.Add(new MapItem()
+            {
+                Link = link,
+                Start = -1,
+                End = -1
+            });
+            _urlPixelSize = urlPixelSize;
+            _rectInMap = rectInMap;
+        }
+
+        internal static (double TopX, double TopY, double bottomX, double bottomY) ComputeSimpleMapRect(double width, double height, double offsetX, double offsetY, double centerXPercent, double centerYPercent, double scale)
+        {
+            var centerOffsetX = centerXPercent * width;
+            var centerOffsetY = centerYPercent * height;
+            var fixedX = offsetX + centerOffsetX;
+            var fixedY = offsetY + centerOffsetY;
+            var topX = fixedX - centerOffsetX * scale;
+            var topY = fixedY - centerOffsetY * scale;
+            var bottomX = topX + width * scale;
+            var bottomY = topY + height * scale;
+            return (topX, topY, bottomX, bottomY);
+        }
+
+        /*/internal CombatReplayMap(string link, (int width, int height) size, (int topX, int topY, int bottomX, int bottomY) rect, (int topX, int topY, int bottomX, int bottomY) fullRect, (int bottomX, int bottomY, int topX, int topY) worldRect)
         {
             _maps.Add(new MapItem()
             {
@@ -33,11 +64,11 @@ namespace GW2EIEvtcParser.EIData
             _rect = rect;
             _fullRect = fullRect;
             _worldRect = worldRect;
-        }
+        }*/
 
         public (int width, int height) GetPixelMapSize()
         {
-            double ratio = (double)_size.width / _size.height;
+            double ratio = (double)_urlPixelSize.width / _urlPixelSize.height;
             const int pixelSize = 750;
             if (ratio > 1.0)
             {
@@ -55,12 +86,12 @@ namespace GW2EIEvtcParser.EIData
 
         internal void ComputeBoundingBox(ParsedEvtcLog log)
         {
-            if (log.CanCombatReplay && _rect.topX == _rect.bottomX)
+            if (log.CanCombatReplay && _rectInMap.topX == _rectInMap.bottomX)
             {
-                _rect.topX = int.MaxValue;
-                _rect.topY = int.MaxValue;
-                _rect.bottomX = int.MinValue;
-                _rect.bottomY = int.MinValue;
+                _rectInMap.topX = int.MaxValue;
+                _rectInMap.topY = int.MaxValue;
+                _rectInMap.bottomX = int.MinValue;
+                _rectInMap.bottomY = int.MinValue;
                 foreach (Player p in log.PlayerList)
                 {
                     List<Point3D> pos = p.GetCombatReplayPolledPositions(log);
@@ -68,10 +99,10 @@ namespace GW2EIEvtcParser.EIData
                     {
                         continue;
                     }
-                    _rect.topX = Math.Min((int)Math.Floor(pos.Min(x => x.X)) - 500, _rect.topX);
-                    _rect.topY = Math.Min((int)Math.Floor(pos.Min(x => x.Y)) - 500, _rect.topY);
-                    _rect.bottomX = Math.Max((int)Math.Floor(pos.Max(x => x.X)) + 500, _rect.bottomX);
-                    _rect.bottomY = Math.Max((int)Math.Floor(pos.Max(x => x.Y)) + 500, _rect.bottomY);
+                    _rectInMap.topX = Math.Min(Math.Floor(pos.Min(x => x.X)) - 250, _rectInMap.topX);
+                    _rectInMap.topY = Math.Min(Math.Floor(pos.Min(x => x.Y)) - 250, _rectInMap.topY);
+                    _rectInMap.bottomX = Math.Max(Math.Floor(pos.Max(x => x.X)) + 250, _rectInMap.bottomX);
+                    _rectInMap.bottomY = Math.Max(Math.Floor(pos.Max(x => x.Y)) + 250, _rectInMap.bottomY);
                 }
             }
         }
@@ -79,13 +110,19 @@ namespace GW2EIEvtcParser.EIData
         internal (double x, double y) GetMapCoord(float realX, float realY)
         {
             (int width, int height) = GetPixelMapSize();
-            double scaleX = (double)width / _size.width;
-            double scaleY = (double)height / _size.height;
-            double x = (realX - _rect.topX) / (_rect.bottomX - _rect.topX);
-            double y = (realY - _rect.topY) / (_rect.bottomY - _rect.topY);
-            return (Math.Round(scaleX * _size.width * x, 2), Math.Round(scaleY * (_size.height - _size.height * y), 2));
+            double scaleX = (double)width / _urlPixelSize.width;
+            double scaleY = (double)height / _urlPixelSize.height;
+            double x = (realX - _rectInMap.topX) / (_rectInMap.bottomX - _rectInMap.topX);
+            double y = (realY - _rectInMap.topY) / (_rectInMap.bottomY - _rectInMap.topY);
+            return (Math.Round(scaleX * _urlPixelSize.width * x, 2), Math.Round(scaleY * (_urlPixelSize.height - _urlPixelSize.height * y), 2));
         }
 
+        /// <summary>
+        /// This assumes that all urls are of the same size (or at least size ratio) and that they have the same map rectangle
+        /// </summary>
+        /// <param name="urls"></param>
+        /// <param name="phases"></param>
+        /// <param name="fightEnd"></param>
         internal void MatchMapsToPhases(List<string> urls, List<PhaseData> phases, long fightEnd)
         {
             if (phases.Count - 1 > urls.Count)
@@ -110,7 +147,7 @@ namespace GW2EIEvtcParser.EIData
 
         public float GetInch()
         {
-            float ratio = (float)(_rect.bottomX - _rect.topX) / GetPixelMapSize().width;
+            float ratio = (float)(_rectInMap.bottomX - _rectInMap.topX) / GetPixelMapSize().width;
             return (float)Math.Round(1.0f / ratio, 3);
         }
 

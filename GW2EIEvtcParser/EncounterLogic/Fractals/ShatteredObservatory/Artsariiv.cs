@@ -30,9 +30,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new CombatReplayMap("https://i.imgur.com/4wmuc8B.png",
                             (914, 914),
-                            (8991, 112, 11731, 2812),
+                            (8991, 112, 11731, 2812)/*,
                             (-24576, -24576, 24576, 24576),
-                            (11204, 4414, 13252, 6462));
+                            (11204, 4414, 13252, 6462)*/);
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
