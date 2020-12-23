@@ -95,92 +95,92 @@ namespace GW2EIBuilders.JsonModels
         /// Damage modifiers against all
         /// </summary>
         /// <seealso cref="JsonDamageModifierData"/>
-        public List<JsonDamageModifierData> DamageModifiers { get; internal set; }
+        public IReadOnlyList<JsonDamageModifierData> DamageModifiers { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Damage modifiers against targets \n
         /// Length == # of targets
         /// </summary>
         /// <seealso cref="JsonDamageModifierData"/>
-        public List<JsonDamageModifierData>[] DamageModifiersTarget { get; internal set; }
+        public IReadOnlyList<JsonDamageModifierData>[] DamageModifiersTarget { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// List of buff status
         /// </summary>
         /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsUptime> BuffUptimes { get; internal set; }
+        public IReadOnlyList<JsonBuffsUptime> BuffUptimes { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// List of buff status on self generation  \n
         /// Key is "'b' + id"
         /// </summary>
         /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonPlayerBuffsGeneration> SelfBuffs { get; internal set; }
+        public IReadOnlyList<JsonPlayerBuffsGeneration> SelfBuffs { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// List of buff status on group generation
         /// </summary>
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
-        public List<JsonPlayerBuffsGeneration> GroupBuffs { get; internal set; }
+        public IReadOnlyList<JsonPlayerBuffsGeneration> GroupBuffs { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// List of buff status on off group generation
         /// </summary>
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
-        public List<JsonPlayerBuffsGeneration> OffGroupBuffs { get; internal set; }
+        public IReadOnlyList<JsonPlayerBuffsGeneration> OffGroupBuffs { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// List of buff status on squad generation
         /// </summary>
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
-        public List<JsonPlayerBuffsGeneration> SquadBuffs { get; internal set; }
+        public IReadOnlyList<JsonPlayerBuffsGeneration> SquadBuffs { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// List of buff status on active time
         /// </summary>
         /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsUptime> BuffUptimesActive { get; internal set; }
+        public IReadOnlyList<JsonBuffsUptime> BuffUptimesActive { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// List of buff status on self generation on active time
         /// </summary>
         /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonPlayerBuffsGeneration> SelfBuffsActive { get; internal set; }
+        public IReadOnlyList<JsonPlayerBuffsGeneration> SelfBuffsActive { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// List of buff status on group generation on active time
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
-        public List<JsonPlayerBuffsGeneration> GroupBuffsActive { get; internal set; }
+        public IReadOnlyList<JsonPlayerBuffsGeneration> GroupBuffsActive { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// List of buff status on off group generation on active time
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
-        public List<JsonPlayerBuffsGeneration> OffGroupBuffsActive { get; internal set; }
+        public IReadOnlyList<JsonPlayerBuffsGeneration> OffGroupBuffsActive { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// List of buff status on squad generation on active time
         /// </summary>
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
-        public List<JsonPlayerBuffsGeneration> SquadBuffsActive { get; internal set; }
+        public IReadOnlyList<JsonPlayerBuffsGeneration> SquadBuffsActive { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// List of death recaps \n
         /// Length == number of death
         /// </summary>
         /// <seealso cref="JsonDeathRecap"/>
-        public List<JsonDeathRecap> DeathRecap { get; internal set; }
+        public IReadOnlyList<JsonDeathRecap> DeathRecap { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// List of used consumables
         /// </summary>
         /// <seealso cref="JsonConsumable"/>
-        public List<JsonConsumable> Consumables { get; internal set; }
+        public IReadOnlyList<JsonConsumable> Consumables { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// List of time during which the player was active (not dead and not dc) \n
         /// Length == number of phases
         /// </summary>
-        public List<long> ActiveTimes { get; internal set; }
+        public IReadOnlyList<long> ActiveTimes { get; internal set; }
 
         [JsonConstructor]
         internal JsonPlayer()
@@ -250,15 +250,16 @@ namespace GW2EIBuilders.JsonModels
             IReadOnlyList<Consumable> consumables = player.GetConsumablesList(log, 0, log.FightData.FightEnd);
             if (consumables.Any())
             {
-                Consumables = new List<JsonConsumable>();
+                var consumablesJSON = new List<JsonConsumable>();
                 foreach (Consumable food in consumables)
                 {
                     if (!buffDesc.ContainsKey("b" + food.Buff.ID))
                     {
                         buffDesc["b" + food.Buff.ID] = new JsonLog.BuffDesc(food.Buff, log);
                     }
-                    Consumables.Add(new JsonConsumable(food));
+                    consumablesJSON.Add(new JsonConsumable(food));
                 }
+                Consumables = consumablesJSON;
             }
             //
             IReadOnlyList<DeathRecap> deathRecaps = player.GetDeathRecaps(log);

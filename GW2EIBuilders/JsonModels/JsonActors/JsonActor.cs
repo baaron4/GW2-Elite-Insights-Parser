@@ -59,7 +59,7 @@ namespace GW2EIBuilders.JsonModels
         /// List of minions
         /// </summary>
         /// <seealso cref="JsonMinions"/>
-        public List<JsonMinions> Minions { get; internal set; }
+        public IReadOnlyList<JsonMinions> Minions { get; internal set; }
         [JsonProperty]
 
         /// <summary>
@@ -88,20 +88,20 @@ namespace GW2EIBuilders.JsonModels
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonDamageDist"/>
-        public List<JsonDamageDist>[] TotalDamageDist { get; internal set; }
+        public IReadOnlyList<JsonDamageDist>[] TotalDamageDist { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Damage taken array
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonDamageDist"/>
-        public List<JsonDamageDist>[] TotalDamageTaken { get; internal set; }
+        public IReadOnlyList<JsonDamageDist>[] TotalDamageTaken { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Rotation data
         /// </summary>
         /// <seealso cref="JsonRotation"/>
-        public List<JsonRotation> Rotation { get; internal set; }
+        public IReadOnlyList<JsonRotation> Rotation { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Array of int representing 1S damage points \n
@@ -128,28 +128,28 @@ namespace GW2EIBuilders.JsonModels
         /// Array[i][0] will be the time, Array[i][1] will be the number of conditions present from Array[i][0] to Array[i+1][0] \n
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight \n
         /// </summary>
-        public List<int[]> ConditionsStates { get; internal set; }
+        public IReadOnlyList<int[]> ConditionsStates { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Array of int[2] that represents the number of boons \n
         /// Array[i][0] will be the time, Array[i][1] will be the number of boons present from Array[i][0] to Array[i+1][0] \n
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight
         /// </summary>
-        public List<int[]> BoonsStates { get; internal set; }
+        public IReadOnlyList<int[]> BoonsStates { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Array of int[2] that represents the number of active combat minions \n
         /// Array[i][0] will be the time, Array[i][1] will be the number of active combat minions present from Array[i][0] to Array[i+1][0] \n
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight
         /// </summary>
-        public List<int[]> ActiveCombatMinions { get; internal set; }
+        public IReadOnlyList<int[]> ActiveCombatMinions { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Array of double[2] that represents the health status of the actor \n
         /// Array[i][0] will be the time, Array[i][1] will be health % \n
         /// If i corresponds to the last element that means the health did not change for the remainder of the fight \n
         /// </summary>
-        public List<double[]> HealthPercents { get; internal set; }
+        public IReadOnlyList<double[]> HealthPercents { get; internal set; }
 
 
         [JsonConstructor]

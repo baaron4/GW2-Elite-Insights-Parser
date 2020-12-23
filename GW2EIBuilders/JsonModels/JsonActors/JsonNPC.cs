@@ -49,14 +49,14 @@ namespace GW2EIBuilders.JsonModels
         /// List of buff status
         /// </summary>
         /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsUptime> Buffs { get; internal set; }
+        public IReadOnlyList<JsonBuffsUptime> Buffs { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Array of double[2] that represents the breakbar percent of the actor \n
         /// Value[i][0] will be the time, value[i][1] will be breakbar % \n
         /// If i corresponds to the last element that means the breakbar did not change for the remainder of the fight \n
         /// </summary>
-        public List<double[]> BreakbarPercents { get; internal set; }
+        public IReadOnlyList<double[]> BreakbarPercents { get; internal set; }
 
         [JsonConstructor]
         internal JsonNPC()
