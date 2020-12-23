@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData
     {
         private List<NPC> _minionList { get; }
 
-        public IEnumerable<NPC> MinionList => _minionList.AsReadOnly();
+        public IReadOnlyList<NPC> MinionList => _minionList;
         public AbstractSingleActor Master { get; }
 
         internal Minions(AbstractSingleActor master, NPC firstMinion) : base(firstMinion.AgentItem)
