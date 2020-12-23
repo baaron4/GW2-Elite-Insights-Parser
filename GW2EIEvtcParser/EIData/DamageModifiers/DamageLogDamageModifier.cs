@@ -36,7 +36,7 @@ namespace GW2EIEvtcParser.EIData
                     foreach (PhaseData phase in phases)
                     {
                         int totalDamage = GetTotalDamage(p, log, target, phase.Start, phase.End);
-                        IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageLogs(p, log, target, phase.Start, phase.End);
+                        IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageEvents(p, log, target, phase.Start, phase.End);
                         var effect = typeHits.Where(x => DLChecker(x)).ToList();
                         extraDataList.Add(new DamageModifierStat(effect.Count, typeHits.Count, gain * effect.Sum(x => x.HealthDamage), totalDamage));
                     }
@@ -47,7 +47,7 @@ namespace GW2EIEvtcParser.EIData
             foreach (PhaseData phase in phases)
             {
                 int totalDamage = GetTotalDamage(p, log, null, phase.Start, phase.End);
-                IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageLogs(p, log, null, phase.Start, phase.End);
+                IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageEvents(p, log, null, phase.Start, phase.End);
                 var effect = typeHits.Where(x => DLChecker(x)).ToList();
                 data[Name].Add(new DamageModifierStat(effect.Count, typeHits.Count, gain * effect.Sum(x => x.HealthDamage), totalDamage));
             }

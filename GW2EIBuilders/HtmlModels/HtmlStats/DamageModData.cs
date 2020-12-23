@@ -32,7 +32,7 @@ namespace GW2EIBuilders.HtmlModels
                     Data.Add(new object[]
                     {
                         0,
-                        dMod.GetHitDamageLogs(player, log, null, phase.Start, phase.End).Count,
+                        dMod.GetHitDamageEvents(player, log, null, phase.Start, phase.End).Count,
                         0,
                         dMod.GetTotalDamage(player, log, null, phase.Start, phase.End)
                     });
@@ -61,7 +61,7 @@ namespace GW2EIBuilders.HtmlModels
                         pTarget.Add(new object[]
                         {
                             0,
-                            dMod.GetHitDamageLogs(player, log, target, phase.Start, phase.End).Count,
+                            dMod.GetHitDamageEvents(player, log, target, phase.Start, phase.End).Count,
                             0,
                             dMod.GetTotalDamage(player, log, target, phase.Start, phase.End)
                         });
