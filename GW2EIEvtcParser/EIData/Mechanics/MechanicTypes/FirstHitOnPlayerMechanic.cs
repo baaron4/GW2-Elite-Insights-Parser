@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData
     {
         protected override bool Keep(AbstractHealthDamageEvent c, ParsedEvtcLog log)
         {
-            if (!base.Keep(c, log) || GetFirstHit(c.From, log) != c)
+            if (c.From == ParserHelper._unknownAgent || !base.Keep(c, log) || GetFirstHit(c.From, log) != c)
             {
                 return false;
             }
