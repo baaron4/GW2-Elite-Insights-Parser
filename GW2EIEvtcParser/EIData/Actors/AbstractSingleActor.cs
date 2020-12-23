@@ -71,7 +71,7 @@ namespace GW2EIEvtcParser.EIData
         }
 
         // Minions
-        public Dictionary<long, Minions> GetMinions(ParsedEvtcLog log)
+        public IReadOnlyDictionary<long, Minions> GetMinions(ParsedEvtcLog log)
         {
             if (_minions == null)
             {
@@ -795,7 +795,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 DamageLogs = new List<AbstractHealthDamageEvent>();
                 DamageLogs.AddRange(log.CombatData.GetDamageData(AgentItem).Where(x => x.IFF != ArcDPSEnums.IFF.Friend));
-                Dictionary<long, Minions> minionsList = GetMinions(log);
+                IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log);
                 foreach (Minions mins in minionsList.Values)
                 {
                     DamageLogs.AddRange(mins.GetDamageLogs(null, log, 0, log.FightData.FightEnd));
@@ -833,7 +833,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 BreakbarDamageLogs = new List<AbstractBreakbarDamageEvent>();
                 BreakbarDamageLogs.AddRange(log.CombatData.GetBreakbarDamageData(AgentItem).Where(x => x.IFF != ArcDPSEnums.IFF.Friend));
-                Dictionary<long, Minions> minionsList = GetMinions(log);
+                IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log);
                 foreach (Minions mins in minionsList.Values)
                 {
                     BreakbarDamageLogs.AddRange(mins.GetBreakbarDamageLogs(null, log, 0, log.FightData.FightEnd));
