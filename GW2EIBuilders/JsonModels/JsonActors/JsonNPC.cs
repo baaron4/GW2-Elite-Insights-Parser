@@ -56,7 +56,7 @@ namespace GW2EIBuilders.JsonModels
         /// Value[i][0] will be the time, value[i][1] will be breakbar % \n
         /// If i corresponds to the last element that means the breakbar did not change for the remainder of the fight \n
         /// </summary>
-        public IReadOnlyList<double[]> BreakbarPercents { get; internal set; }
+        public IReadOnlyList<IReadOnlyList<double>> BreakbarPercents { get; internal set; }
 
         [JsonConstructor]
         internal JsonNPC()

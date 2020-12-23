@@ -41,14 +41,14 @@ namespace GW2EIBuilders.JsonModels
         /// When unknown, 'Unknown' value will appear \n
         /// If 2 handed weapon even indices will have "2Hand" as value
         /// </summary>
-        public string[] Weapons { get; internal set; }
+        public IReadOnlyList<string> Weapons { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Array of Total DPS stats \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
         /// </summary>
         /// <seealso cref="JsonStatistics.JsonDPS"/>
-        public JsonStatistics.JsonDPS[][] DpsTargets { get; internal set; }
+        public IReadOnlyList<IReadOnlyList<JsonStatistics.JsonDPS>> DpsTargets { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Array of int representing 1S damage points \n
@@ -58,7 +58,7 @@ namespace GW2EIBuilders.JsonModels
         /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
-        public IReadOnlyList<int>[][] TargetDamage1S { get; internal set; }
+        public IReadOnlyList<IReadOnlyList<IReadOnlyList<int>>> TargetDamage1S { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Array of double representing 1S breakbar damage points \n
@@ -68,28 +68,28 @@ namespace GW2EIBuilders.JsonModels
         /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
-        public IReadOnlyList<double>[][] TargetBreakbarDamage1S { get; internal set; }
+        public IReadOnlyList<IReadOnlyList<IReadOnlyList<double>>> TargetBreakbarDamage1S { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Per Target Damage distribution array \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
         /// </summary>
         /// <seealso cref="JsonDamageDist"/>
-        public List<JsonDamageDist>[][] TargetDamageDist { get; internal set; }
+        public IReadOnlyList<IReadOnlyList<List<JsonDamageDist>>> TargetDamageDist { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Stats against targets  \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
         /// </summary>
         /// <seealso cref="JsonStatistics.JsonGameplayStats"/>
-        public JsonStatistics.JsonGameplayStats[][] StatsTargets { get; internal set; }
+        public IReadOnlyList<IReadOnlyList<JsonStatistics.JsonGameplayStats>> StatsTargets { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Support stats \n
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonStatistics.JsonPlayerSupport"/>
-        public JsonStatistics.JsonPlayerSupport[] Support { get; internal set; }
+        public IReadOnlyList<JsonStatistics.JsonPlayerSupport> Support { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Damage modifiers against all
@@ -102,7 +102,7 @@ namespace GW2EIBuilders.JsonModels
         /// Length == # of targets
         /// </summary>
         /// <seealso cref="JsonDamageModifierData"/>
-        public IReadOnlyList<JsonDamageModifierData>[] DamageModifiersTarget { get; internal set; }
+        public IReadOnlyList<IReadOnlyList<JsonDamageModifierData>> DamageModifiersTarget { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// List of buff status
@@ -200,11 +200,11 @@ namespace GW2EIBuilders.JsonModels
             HasCommanderTag = player.HasCommanderTag;
             //
             Support = player.GetPlayerSupport(log).Select(x => new JsonStatistics.JsonPlayerSupport(x)).ToArray();
-            TargetDamage1S = new List<int>[log.FightData.Logic.Targets.Count][];
-            TargetBreakbarDamage1S = new List<double>[log.FightData.Logic.Targets.Count][];
-            DpsTargets = new JsonStatistics.JsonDPS[log.FightData.Logic.Targets.Count][];
-            StatsTargets = new JsonStatistics.JsonGameplayStats[log.FightData.Logic.Targets.Count][];
-            TargetDamageDist = new List<JsonDamageDist>[log.FightData.Logic.Targets.Count][];
+            IReadOnlyList<int>[][] targetDamage1S = new List<int>[log.FightData.Logic.Targets.Count][];
+            IReadOnlyList<double>[][] targetBreakbarDamage1S = new List<double>[log.FightData.Logic.Targets.Count][];
+            var dpsTargets = new JsonStatistics.JsonDPS[log.FightData.Logic.Targets.Count][];
+            var statsTargets = new JsonStatistics.JsonGameplayStats[log.FightData.Logic.Targets.Count][];
+            var targetDamageDist = new List<JsonDamageDist>[log.FightData.Logic.Targets.Count][];
             for (int j = 0; j < log.FightData.Logic.Targets.Count; j++)
             {
                 NPC target = log.FightData.Logic.Targets[j];
@@ -223,13 +223,18 @@ namespace GW2EIBuilders.JsonModels
                 }
                 if (settings.RawFormatTimelineArrays)
                 {
-                    TargetDamage1S[j] = graph1SDamageList;
-                    TargetBreakbarDamage1S[j] = graph1SBreakbarDamageList;
+                    targetDamage1S[j] = graph1SDamageList;
+                    targetBreakbarDamage1S[j] = graph1SBreakbarDamageList;
                 }
-                TargetDamageDist[j] = targetDamageDistList;
-                DpsTargets[j] = player.GetDPSTarget(log, target).Select(x => new JsonStatistics.JsonDPS(x)).ToArray();
-                StatsTargets[j] = player.GetGameplayStats(log, target).Select(x => new JsonStatistics.JsonGameplayStats(x)).ToArray();
+                targetDamageDist[j] = targetDamageDistList;
+                dpsTargets[j] = player.GetDPSTarget(log, target).Select(x => new JsonStatistics.JsonDPS(x)).ToArray();
+                statsTargets[j] = player.GetGameplayStats(log, target).Select(x => new JsonStatistics.JsonGameplayStats(x)).ToArray();
             }
+            TargetDamage1S = targetDamage1S;
+            TargetBreakbarDamage1S = targetBreakbarDamage1S;
+            TargetDamageDist = targetDamageDist;
+            DpsTargets = dpsTargets;
+            StatsTargets = statsTargets;
             if (!log.CombatData.HasBreakbarDamageData)
             {
                 TargetBreakbarDamage1S = null;
