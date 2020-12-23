@@ -32,7 +32,7 @@ namespace GW2EIBuilders.HtmlModels
             return new BuffChartDataDto(bgm, bChart, phase);
         }
 
-        private static void BuildBoonGraphData(List<BuffChartDataDto> list, List<Buff> listToUse, Dictionary<long, BuffsGraphModel> boonGraphData, PhaseData phase, Dictionary<long, Buff> usedBuffs)
+        private static void BuildBoonGraphData(List<BuffChartDataDto> list, IReadOnlyList<Buff> listToUse, Dictionary<long, BuffsGraphModel> boonGraphData, PhaseData phase, Dictionary<long, Buff> usedBuffs)
         {
             foreach (Buff buff in listToUse)
             {

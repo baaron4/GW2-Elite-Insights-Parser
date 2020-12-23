@@ -369,7 +369,7 @@ namespace GW2EIBuilders
                 count++;
             }
         }
-        private void CreateUptimeTable(List<Buff> listToUse, int phaseIndex)
+        private void CreateUptimeTable(IReadOnlyList<Buff> listToUse, int phaseIndex)
         {
             //generate Uptime Table table
 
@@ -416,7 +416,7 @@ namespace GW2EIBuilders
                 count++;
             }
         }
-        private void CreateGenSelfTable(List<Buff> listToUse, int phaseIndex)
+        private void CreateGenSelfTable(IReadOnlyList<Buff> listToUse, int phaseIndex)
         {
             //generate Uptime Table table
             WriteCell("Name");
@@ -465,7 +465,7 @@ namespace GW2EIBuilders
                 count++;
             }
         }
-        private void CreateGenGroupTable(List<Buff> listToUse, int phaseIndex)
+        private void CreateGenGroupTable(IReadOnlyList<Buff> listToUse, int phaseIndex)
         {
             //generate Uptime Table table
             WriteCell("Name");
@@ -515,7 +515,7 @@ namespace GW2EIBuilders
                 count++;
             }
         }
-        private void CreateGenOGroupTable(List<Buff> listToUse, int phaseIndex)
+        private void CreateGenOGroupTable(IReadOnlyList<Buff> listToUse, int phaseIndex)
         {
             //generate Uptime Table table
             WriteCell("Name");
@@ -565,7 +565,7 @@ namespace GW2EIBuilders
                 count++;
             }
         }
-        private void CreateGenSquadTable(List<Buff> listToUse, int phaseIndex)
+        private void CreateGenSquadTable(IReadOnlyList<Buff> listToUse, int phaseIndex)
         {
             //generate Uptime Table table
             WriteCell("Name");
