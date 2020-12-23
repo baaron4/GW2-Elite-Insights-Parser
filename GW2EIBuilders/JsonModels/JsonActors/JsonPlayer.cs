@@ -75,7 +75,7 @@ namespace GW2EIBuilders.JsonModels
         /// Length == # of targets and the length of each sub array is equal to # of phases
         /// </summary>
         /// <seealso cref="JsonDamageDist"/>
-        public IReadOnlyList<IReadOnlyList<List<JsonDamageDist>>> TargetDamageDist { get; internal set; }
+        public IReadOnlyList<IReadOnlyList<IReadOnlyList<JsonDamageDist>>> TargetDamageDist { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Stats against targets  \n
@@ -200,17 +200,17 @@ namespace GW2EIBuilders.JsonModels
             HasCommanderTag = player.HasCommanderTag;
             //
             Support = player.GetPlayerSupport(log).Select(x => new JsonStatistics.JsonPlayerSupport(x)).ToArray();
-            IReadOnlyList<int>[][] targetDamage1S = new List<int>[log.FightData.Logic.Targets.Count][];
-            IReadOnlyList<double>[][] targetBreakbarDamage1S = new List<double>[log.FightData.Logic.Targets.Count][];
+            var targetDamage1S = new IReadOnlyList<int>[log.FightData.Logic.Targets.Count][];
+            var targetBreakbarDamage1S = new IReadOnlyList<double>[log.FightData.Logic.Targets.Count][];
             var dpsTargets = new JsonStatistics.JsonDPS[log.FightData.Logic.Targets.Count][];
             var statsTargets = new JsonStatistics.JsonGameplayStats[log.FightData.Logic.Targets.Count][];
-            var targetDamageDist = new List<JsonDamageDist>[log.FightData.Logic.Targets.Count][];
+            var targetDamageDist = new IReadOnlyList<JsonDamageDist>[log.FightData.Logic.Targets.Count][];
             for (int j = 0; j < log.FightData.Logic.Targets.Count; j++)
             {
                 NPC target = log.FightData.Logic.Targets[j];
                 var graph1SDamageList = new IReadOnlyList<int>[phases.Count];
                 var graph1SBreakbarDamageList = new IReadOnlyList<double>[phases.Count];
-                var targetDamageDistList = new List<JsonDamageDist>[phases.Count];
+                var targetDamageDistList = new IReadOnlyList<JsonDamageDist>[phases.Count];
                 for (int i = 0; i < phases.Count; i++)
                 {
                     PhaseData phase = phases[i];

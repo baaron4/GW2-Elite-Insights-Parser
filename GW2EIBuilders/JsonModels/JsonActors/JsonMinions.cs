@@ -109,9 +109,9 @@ namespace GW2EIBuilders.JsonModels
             TotalBreakbarDamage = totalBreakbarDamage;
             if (!isNPCMinion)
             {
-                var totalTargetDamage = new List<int>[log.FightData.Logic.Targets.Count];
-                var totalTargetShieldDamage = new List<int>[log.FightData.Logic.Targets.Count];
-                var totalTargetBreakbarDamage = new List<double>[log.FightData.Logic.Targets.Count];
+                var totalTargetDamage = new IReadOnlyList<int>[log.FightData.Logic.Targets.Count];
+                var totalTargetShieldDamage = new IReadOnlyList<int>[log.FightData.Logic.Targets.Count];
+                var totalTargetBreakbarDamage = new IReadOnlyList<double>[log.FightData.Logic.Targets.Count];
                 for (int i = 0; i < log.FightData.Logic.Targets.Count; i++)
                 {
                     NPC tar = log.FightData.Logic.Targets[i];
@@ -146,7 +146,7 @@ namespace GW2EIBuilders.JsonModels
                 Rotation = JsonRotation.BuildJsonRotationList(log, skillByID, skillDesc);
             }
             //
-            var totalDamageDist = new List<JsonDamageDist>[phases.Count];
+            var totalDamageDist = new IReadOnlyList<JsonDamageDist>[phases.Count];
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
@@ -155,11 +155,11 @@ namespace GW2EIBuilders.JsonModels
             TotalDamageDist = totalDamageDist;
             if (!isNPCMinion)
             {
-                var targetDamageDist = new List<JsonDamageDist>[log.FightData.Logic.Targets.Count][];
+                var targetDamageDist = new IReadOnlyList<JsonDamageDist>[log.FightData.Logic.Targets.Count][];
                 for (int i = 0; i < log.FightData.Logic.Targets.Count; i++)
                 {
                     NPC target = log.FightData.Logic.Targets[i];
-                    targetDamageDist[i] = new List<JsonDamageDist>[phases.Count];
+                    targetDamageDist[i] = new IReadOnlyList<JsonDamageDist>[phases.Count];
                     for (int j = 0; j < phases.Count; j++)
                     {
                         PhaseData phase = phases[j];
