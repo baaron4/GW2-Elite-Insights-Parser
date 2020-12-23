@@ -230,8 +230,11 @@ namespace GW2EIBuilders.JsonModels
                 dpsTargets[j] = player.GetDPSTarget(log, target).Select(x => new JsonStatistics.JsonDPS(x)).ToArray();
                 statsTargets[j] = player.GetGameplayStats(log, target).Select(x => new JsonStatistics.JsonGameplayStats(x)).ToArray();
             }
-            TargetDamage1S = targetDamage1S;
-            TargetBreakbarDamage1S = targetBreakbarDamage1S;
+            if (settings.RawFormatTimelineArrays)
+            {
+                TargetDamage1S = targetDamage1S;
+                TargetBreakbarDamage1S = targetBreakbarDamage1S;
+            }
             TargetDamageDist = targetDamageDist;
             DpsTargets = dpsTargets;
             StatsTargets = statsTargets;

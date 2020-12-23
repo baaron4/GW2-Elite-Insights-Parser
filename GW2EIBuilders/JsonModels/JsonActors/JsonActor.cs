@@ -216,10 +216,7 @@ namespace GW2EIBuilders.JsonModels
                 {
                     ActiveCombatMinions = JsonBuffsUptime.GetBuffStates(states);
                 }
-            }
-            // Health
-            if (settings.RawFormatTimelineArrays)
-            {
+                // Health
                 HealthPercents = actor.GetHealthUpdates(log).Select(x => new double[2] { x.Start, x.Value }).ToList();
             }
         }
