@@ -5,7 +5,9 @@ namespace GW2EIEvtcParser.EIData
     public class BuffsGraphModel
     {
         public Buff Buff { get; }
-        public List<Segment> BuffChart { get; private set; } = new List<Segment>();
+
+        public IReadOnlyList<Segment> BuffChart => _buffChart;
+        private List<Segment> _buffChart { get; set; } = new List<Segment>();
 
         // Constructor
         internal BuffsGraphModel(Buff buff)
@@ -15,7 +17,7 @@ namespace GW2EIEvtcParser.EIData
         internal BuffsGraphModel(Buff buff, List<Segment> buffChartWithSource)
         {
             Buff = buff;
-            BuffChart = buffChartWithSource;
+            _buffChart = buffChartWithSource;
             FuseSegments();
         }
 
@@ -51,7 +53,7 @@ namespace GW2EIEvtcParser.EIData
         /// </summary>
         internal void FuseSegments()
         {
-            BuffChart = Segment.FuseSegments(BuffChart);
+            _buffChart = Segment.FuseSegments(_buffChart);
         }
 
         /// <summary>
@@ -60,9 +62,9 @@ namespace GW2EIEvtcParser.EIData
         /// </summary>
         /// <param name="from"></param> 
         /// <param name="to"></param>
-        internal void MergePresenceInto(List<Segment> from)
+        internal void MergePresenceInto(IReadOnlyList<Segment> from)
         {
-            List<Segment> segmentsToFill = BuffChart;
+            List<Segment> segmentsToFill = _buffChart;
             bool firstPass = segmentsToFill.Count == 0;
             foreach (Segment seg in from)
             {

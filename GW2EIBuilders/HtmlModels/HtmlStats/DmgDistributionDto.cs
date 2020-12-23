@@ -135,7 +135,7 @@ namespace GW2EIBuilders.HtmlModels
                 Distribution = new List<object[]>()
             };
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
-            List<AbstractHealthDamageEvent> damageLogs = p.GetDamageTakenLogs(null, log, phase.Start, phase.End);
+            IReadOnlyList<AbstractHealthDamageEvent> damageLogs = p.GetDamageTakenLogs(null, log, phase.Start, phase.End);
             var damageLogsBySkill = damageLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
             dto.ContributedDamage = damageLogs.Sum(x => x.HealthDamage);
             dto.ContributedShieldDamage = damageLogs.Sum(x => x.ShieldDamage);
@@ -148,7 +148,7 @@ namespace GW2EIBuilders.HtmlModels
         }
 
 
-        private static List<object[]> BuildDMGDistBodyData(ParsedEvtcLog log, List<AbstractCastEvent> casting, List<AbstractHealthDamageEvent> damageLogs, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, int phaseIndex)
+        private static List<object[]> BuildDMGDistBodyData(ParsedEvtcLog log, IReadOnlyList<AbstractCastEvent> casting, IReadOnlyList<AbstractHealthDamageEvent> damageLogs, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, int phaseIndex)
         {
             var list = new List<object[]>();
             var castLogsBySkill = casting.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
@@ -220,8 +220,8 @@ namespace GW2EIBuilders.HtmlModels
         {
             var dto = new DmgDistributionDto();
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
-            List<AbstractCastEvent> casting = p.GetIntersectingCastLogs(log, phase.Start, phase.End);
-            List<AbstractHealthDamageEvent> damageLogs = p.GetJustActorDamageLogs(target, log, phase.Start, phase.End);
+            IReadOnlyList<AbstractCastEvent> casting = p.GetIntersectingCastLogs(log, phase.Start, phase.End);
+            IReadOnlyList<AbstractHealthDamageEvent> damageLogs = p.GetJustActorDamageLogs(target, log, phase.Start, phase.End);
             dto.ContributedDamage = dps.ActorDamage;
             dto.ContributedShieldDamage = damageLogs.Sum(x => x.ShieldDamage);
             dto.ContributedBreakbarDamage = dps.ActorBreakbarDamage;
@@ -250,9 +250,9 @@ namespace GW2EIBuilders.HtmlModels
         {
             var dto = new DmgDistributionDto();
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
-            List<AbstractCastEvent> casting = minions.GetIntersectingCastLogs(log, phase.Start, phase.End);
-            List<AbstractHealthDamageEvent> damageLogs = minions.GetDamageLogs(target, log, phase.Start, phase.End);
-            List<AbstractBreakbarDamageEvent> brkDamageLogs = minions.GetBreakbarDamageLogs(target, log, phase.Start, phase.End);
+            IReadOnlyList<AbstractCastEvent> casting = minions.GetIntersectingCastLogs(log, phase.Start, phase.End);
+            IReadOnlyList<AbstractHealthDamageEvent> damageLogs = minions.GetDamageLogs(target, log, phase.Start, phase.End);
+            IReadOnlyList<AbstractBreakbarDamageEvent> brkDamageLogs = minions.GetBreakbarDamageLogs(target, log, phase.Start, phase.End);
             dto.ContributedDamage = damageLogs.Sum(x => x.HealthDamage);
             dto.ContributedShieldDamage = damageLogs.Sum(x => x.ShieldDamage);
             dto.ContributedBreakbarDamage = Math.Round(brkDamageLogs.Sum(x => x.BreakbarDamage), 1);

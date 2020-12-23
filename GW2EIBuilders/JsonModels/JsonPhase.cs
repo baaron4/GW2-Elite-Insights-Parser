@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using Newtonsoft.Json;
@@ -30,13 +31,13 @@ namespace GW2EIBuilders.JsonModels
         /// Index of targets tracked during the phase
         /// </summary>
         /// <seealso cref="JsonLog.Targets"/>
-        public List<int> Targets { get; internal set; }
+        public IReadOnlyList<int> Targets { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Index of sub phases
         /// </summary>
         /// <seealso cref="JsonLog.Phases"/>
-        public List<int> SubPhases { get; internal set; }
+        public IReadOnlyList<int> SubPhases { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Indicates that the phase is a breakbar phase \n
@@ -56,15 +57,17 @@ namespace GW2EIBuilders.JsonModels
             Start = phase.Start;
             End = phase.End;
             Name = phase.Name;
-            Targets = new List<int>();
+            var targets = new List<int>();
             BreakbarPhase = phase.BreakbarPhase;
             foreach (NPC tar in phase.Targets)
             {
-                Targets.Add(log.FightData.Logic.Targets.IndexOf(tar));
+                targets.Add(log.FightData.Logic.Targets.IndexOf(tar));
             }
+            Targets = targets;
             IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             if (!BreakbarPhase)
             {
+                var subPhases = new List<int>();
                 for (int j = 1; j < phases.Count; j++)
                 {
                     PhaseData curPhase = phases[j];
@@ -73,11 +76,11 @@ namespace GW2EIBuilders.JsonModels
                     {
                         continue;
                     }
-                    if (SubPhases == null)
-                    {
-                        SubPhases = new List<int>();
-                    }
-                    SubPhases.Add(j);
+                    subPhases.Add(j);
+                }
+                if (subPhases.Any())
+                {
+                    SubPhases = subPhases;
                 }
             }
 

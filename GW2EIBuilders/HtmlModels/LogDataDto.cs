@@ -66,7 +66,7 @@ namespace GW2EIBuilders.HtmlModels
                     for (int i = 0; i < log.FightData.GetPhases(log).Count; i++)
                     {
                         Dictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(log, i, BuffEnum.Self);
-                        foreach (Buff boon in log.StatisticsHelper.PresentRemainingBuffsPerPlayer[player])
+                        foreach (Buff boon in log.StatisticsHelper.GetPresentRaminingBuffsOnPlayer(player))
                         {
                             if (boons.TryGetValue(boon.ID, out FinalPlayerBuffs uptime))
                             {

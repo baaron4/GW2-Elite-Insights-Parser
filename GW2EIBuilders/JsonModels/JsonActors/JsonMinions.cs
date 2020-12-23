@@ -23,57 +23,57 @@ namespace GW2EIBuilders.JsonModels
         /// Total Damage done by minions \n
         /// Length == # of phases
         /// </summary>
-        public List<int> TotalDamage { get; internal set; }
+        public IReadOnlyList<int> TotalDamage { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Damage done by minions against targets \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
         /// </summary>
-        public List<int>[] TotalTargetDamage { get; internal set; }
+        public IReadOnlyList<IReadOnlyList<int>> TotalTargetDamage { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Total Breakbar Damage done by minions \n
         /// Length == # of phases
         /// </summary>
-        public List<double> TotalBreakbarDamage { get; internal set; }
+        public IReadOnlyList<double> TotalBreakbarDamage { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Breakbar Damage done by minions against targets \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
         /// </summary>
-        public List<double>[] TotalTargetBreakbarDamage { get; internal set; }
+        public IReadOnlyList<IReadOnlyList<double>> TotalTargetBreakbarDamage { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Total Shield Damage done by minions \n
         /// Length == # of phases
         /// </summary>
-        public List<int> TotalShieldDamage { get; internal set; }
+        public IReadOnlyList<int> TotalShieldDamage { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Shield Damage done by minions against targets \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
         /// </summary>
-        public List<int>[] TotalTargetShieldDamage { get; internal set; }
+        public IReadOnlyList<IReadOnlyList<int>> TotalTargetShieldDamage { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Total Damage distribution array \n
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonDamageDist"/>
-        public List<JsonDamageDist>[] TotalDamageDist { get; internal set; }
+        public IReadOnlyList<IReadOnlyList<JsonDamageDist>> TotalDamageDist { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Per Target Damage distribution array \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
         /// </summary>
         /// <seealso cref="JsonDamageDist"/>
-        public List<JsonDamageDist>[][] TargetDamageDist { get; internal set; }
+        public IReadOnlyList<IReadOnlyList<IReadOnlyList<JsonDamageDist>>> TargetDamageDist { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Rotation data
         /// </summary>
         /// <seealso cref="JsonRotation"/>
-        public List<JsonRotation> Rotation { get; internal set; }
+        public IReadOnlyList<JsonRotation> Rotation { get; internal set; }
 
         [JsonConstructor]
         internal JsonMinions()
@@ -109,9 +109,9 @@ namespace GW2EIBuilders.JsonModels
             TotalBreakbarDamage = totalBreakbarDamage;
             if (!isNPCMinion)
             {
-                var totalTargetDamage = new List<int>[log.FightData.Logic.Targets.Count];
-                var totalTargetShieldDamage = new List<int>[log.FightData.Logic.Targets.Count];
-                var totalTargetBreakbarDamage = new List<double>[log.FightData.Logic.Targets.Count];
+                var totalTargetDamage = new IReadOnlyList<int>[log.FightData.Logic.Targets.Count];
+                var totalTargetShieldDamage = new IReadOnlyList<int>[log.FightData.Logic.Targets.Count];
+                var totalTargetBreakbarDamage = new IReadOnlyList<double>[log.FightData.Logic.Targets.Count];
                 for (int i = 0; i < log.FightData.Logic.Targets.Count; i++)
                 {
                     NPC tar = log.FightData.Logic.Targets[i];
@@ -146,25 +146,27 @@ namespace GW2EIBuilders.JsonModels
                 Rotation = JsonRotation.BuildJsonRotationList(log, skillByID, skillDesc);
             }
             //
-            TotalDamageDist = new List<JsonDamageDist>[phases.Count];
+            var totalDamageDist = new IReadOnlyList<JsonDamageDist>[phases.Count];
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                TotalDamageDist[i] = JsonDamageDist.BuildJsonDamageDistList(minions.GetDamageLogs(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
+                totalDamageDist[i] = JsonDamageDist.BuildJsonDamageDistList(minions.GetDamageLogs(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
             }
+            TotalDamageDist = totalDamageDist;
             if (!isNPCMinion)
             {
-                TargetDamageDist = new List<JsonDamageDist>[log.FightData.Logic.Targets.Count][];
+                var targetDamageDist = new IReadOnlyList<JsonDamageDist>[log.FightData.Logic.Targets.Count][];
                 for (int i = 0; i < log.FightData.Logic.Targets.Count; i++)
                 {
                     NPC target = log.FightData.Logic.Targets[i];
-                    TargetDamageDist[i] = new List<JsonDamageDist>[phases.Count];
+                    targetDamageDist[i] = new IReadOnlyList<JsonDamageDist>[phases.Count];
                     for (int j = 0; j < phases.Count; j++)
                     {
                         PhaseData phase = phases[j];
-                        TargetDamageDist[i][j] = JsonDamageDist.BuildJsonDamageDistList(minions.GetDamageLogs(target, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
+                        targetDamageDist[i][j] = JsonDamageDist.BuildJsonDamageDistList(minions.GetDamageLogs(target, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
                     }
                 }
+                TargetDamageDist = targetDamageDist;
             }
         }
 

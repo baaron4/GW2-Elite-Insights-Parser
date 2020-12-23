@@ -27,10 +27,10 @@ namespace GW2EIEvtcParser.EIData
         public string Name { get; }
         public int ID { get; }
         public string Tooltip { get; }
-        public delegate bool DamageLogChecker(AbstractHealthDamageEvent dl);
+        internal delegate bool DamageLogChecker(AbstractHealthDamageEvent dl);
 
         protected DamageModifierMode Mode { get; } = DamageModifierMode.All;
-        protected DamageLogChecker DLChecker { get; }
+        internal DamageLogChecker DLChecker { get; }
 
 
         internal static readonly GainComputerByPresence ByPresence = new GainComputerByPresence();
@@ -139,7 +139,7 @@ namespace GW2EIEvtcParser.EIData
             return 0;
         }
 
-        public List<AbstractHealthDamageEvent> GetHitDamageLogs(Player p, ParsedEvtcLog log, NPC t, PhaseData phase)
+        public IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageLogs(Player p, ParsedEvtcLog log, NPC t, PhaseData phase)
         {
             switch (_srcType)
             {

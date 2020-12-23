@@ -18,15 +18,15 @@ namespace GW2EIGW2API.GW2API
         [JsonProperty(PropertyName = "weapon_type")]
         public string WeaponType { get; internal set; }
         [JsonProperty]
-        public List<string> Professions { get; internal set; }
+        public IReadOnlyList<string> Professions { get; internal set; }
         [JsonProperty]
         public string Slot { get; internal set; }
         [JsonProperty]
-        public List<GW2APIFact> Facts { get; internal set; }
+        public IReadOnlyList<GW2APIFact> Facts { get; internal set; }
         [JsonProperty(PropertyName = "traited_facts")]
-        public List<GW2APITraitedFact> TraitedFacts { get; internal set; }
+        public IReadOnlyList<GW2APITraitedFact> TraitedFacts { get; internal set; }
         [JsonProperty]
-        public List<string> Categories { get; internal set; }
+        public IReadOnlyList<string> Categories { get; internal set; }
         [JsonProperty]
         public string Attunement { get; internal set; }
         [JsonProperty]
@@ -42,9 +42,9 @@ namespace GW2EIGW2API.GW2API
         [JsonProperty(PropertyName = "prev_chain")]
         public int PrevChain { get; internal set; }
         [JsonProperty(PropertyName = "transform_skills")]
-        public List<long> TransformSkills { get; internal set; }
+        public IReadOnlyList<long> TransformSkills { get; internal set; }
         [JsonProperty(PropertyName = "bundle_skills")]
-        public List<long> BundleSkills { get; internal set; }
+        public IReadOnlyList<long> BundleSkills { get; internal set; }
 
         [JsonProperty(PropertyName = "toolbelt_skill")]
         public int ToolbeltSkill { get; internal set; }

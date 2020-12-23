@@ -67,12 +67,12 @@ namespace GW2EIBuilders.JsonModels
         /// <summary>
         /// List of damaging events to put into downstate
         /// </summary>
-        public List<JsonDeathRecapDamageItem> ToDown { get; internal set; }
+        public IReadOnlyList<JsonDeathRecapDamageItem> ToDown { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// List of damaging events to put into deadstate
         /// </summary>
-        public List<JsonDeathRecapDamageItem> ToKill { get; internal set; }
+        public IReadOnlyList<JsonDeathRecapDamageItem> ToKill { get; internal set; }
 
         [JsonConstructor]
         internal JsonDeathRecap()

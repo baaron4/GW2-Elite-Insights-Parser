@@ -11,7 +11,7 @@ namespace GW2EIBuilders.HtmlModels
         public List<PhaseChartDataDto> Phases { get; set; } = new List<PhaseChartDataDto>();
         public List<MechanicChartDataDto> Mechanics { get; set; } = new List<MechanicChartDataDto>();
 
-        private static List<object[]> BuildGraphStates(List<Segment> segments, PhaseData phase, bool nullable, double defaultState)
+        private static List<object[]> BuildGraphStates(IReadOnlyList<Segment> segments, PhaseData phase, bool nullable, double defaultState)
         {
             if (!segments.Any())
             {

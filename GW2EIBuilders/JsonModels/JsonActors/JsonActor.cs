@@ -59,7 +59,7 @@ namespace GW2EIBuilders.JsonModels
         /// List of minions
         /// </summary>
         /// <seealso cref="JsonMinions"/>
-        public List<JsonMinions> Minions { get; internal set; }
+        public IReadOnlyList<JsonMinions> Minions { get; internal set; }
         [JsonProperty]
 
         /// <summary>
@@ -67,41 +67,41 @@ namespace GW2EIBuilders.JsonModels
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonDPS"/>
-        public JsonStatistics.JsonDPS[] DpsAll { get; internal set; }
+        public IReadOnlyList<JsonStatistics.JsonDPS> DpsAll { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Stats against all  \n
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonGameplayStatsAll"/>
-        public JsonStatistics.JsonGameplayStatsAll[] StatsAll { get; internal set; }
+        public IReadOnlyList<JsonStatistics.JsonGameplayStatsAll> StatsAll { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Defensive stats \n
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonDefensesAll"/>
-        public JsonStatistics.JsonDefensesAll[] Defenses { get; internal set; }
+        public IReadOnlyList<JsonStatistics.JsonDefensesAll> Defenses { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Total Damage distribution array \n
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonDamageDist"/>
-        public List<JsonDamageDist>[] TotalDamageDist { get; internal set; }
+        public IReadOnlyList<IReadOnlyList<JsonDamageDist>> TotalDamageDist { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Damage taken array
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonDamageDist"/>
-        public List<JsonDamageDist>[] TotalDamageTaken { get; internal set; }
+        public IReadOnlyList<IReadOnlyList<JsonDamageDist>> TotalDamageTaken { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Rotation data
         /// </summary>
         /// <seealso cref="JsonRotation"/>
-        public List<JsonRotation> Rotation { get; internal set; }
+        public IReadOnlyList<JsonRotation> Rotation { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Array of int representing 1S damage points \n
@@ -111,7 +111,7 @@ namespace GW2EIBuilders.JsonModels
         /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
-        public List<int>[] Damage1S { get; internal set; }
+        public IReadOnlyList<IReadOnlyList<int>> Damage1S { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Array of double representing 1S breakbar damage points \n
@@ -121,41 +121,41 @@ namespace GW2EIBuilders.JsonModels
         /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
-        public List<double>[] BreakbarDamage1S { get; internal set; }
+        public IReadOnlyList<IReadOnlyList<double>> BreakbarDamage1S { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Array of int[2] that represents the number of conditions \n
         /// Array[i][0] will be the time, Array[i][1] will be the number of conditions present from Array[i][0] to Array[i+1][0] \n
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight \n
         /// </summary>
-        public List<int[]> ConditionsStates { get; internal set; }
+        public IReadOnlyList<IReadOnlyList<int>> ConditionsStates { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Array of int[2] that represents the number of boons \n
         /// Array[i][0] will be the time, Array[i][1] will be the number of boons present from Array[i][0] to Array[i+1][0] \n
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight
         /// </summary>
-        public List<int[]> BoonsStates { get; internal set; }
+        public IReadOnlyList<IReadOnlyList<int>> BoonsStates { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Array of int[2] that represents the number of active combat minions \n
         /// Array[i][0] will be the time, Array[i][1] will be the number of active combat minions present from Array[i][0] to Array[i+1][0] \n
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight
         /// </summary>
-        public List<int[]> ActiveCombatMinions { get; internal set; }
+        public IReadOnlyList<IReadOnlyList<int>> ActiveCombatMinions { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Array of double[2] that represents the health status of the actor \n
         /// Array[i][0] will be the time, Array[i][1] will be health % \n
         /// If i corresponds to the last element that means the health did not change for the remainder of the fight \n
         /// </summary>
-        public List<double[]> HealthPercents { get; internal set; }
+        public IReadOnlyList<IReadOnlyList<double>> HealthPercents { get; internal set; }
         /// <summary>
         /// Array of double[2] that represents the barrier status of the actor \n
         /// Array[i][0] will be the time, Array[i][1] will be barrier % \n
         /// If i corresponds to the last element that means the health did not change for the remainder of the fight \n
         /// </summary>
-        public List<double[]> BarrierPercents { get; internal set; }
+        public IReadOnlyList<IReadOnlyList<double>> BarrierPercents { get; internal set; }
 
 
         [JsonConstructor]
@@ -181,7 +181,7 @@ namespace GW2EIBuilders.JsonModels
             StatsAll = actor.GetGameplayStats(log).Select(x => new JsonStatistics.JsonGameplayStatsAll(x)).ToArray();
             Defenses = actor.GetDefenses(log).Select(x => new JsonStatistics.JsonDefensesAll(x)).ToArray();
             //
-            Dictionary<long, Minions> minionsList = actor.GetMinions(log);
+            IReadOnlyDictionary<long, Minions> minionsList = actor.GetMinions(log);
             if (minionsList.Values.Any())
             {
                 Minions = minionsList.Values.Select(x => new JsonMinions(x, log, skillDesc, buffDesc)).ToList();
@@ -195,13 +195,15 @@ namespace GW2EIBuilders.JsonModels
             //
             if (settings.RawFormatTimelineArrays)
             {
-                Damage1S = new List<int>[phases.Count];
-                BreakbarDamage1S = new List<double>[phases.Count];
+                IReadOnlyList<int>[] damage1S = new List<int>[phases.Count];
+                IReadOnlyList<double>[] breakbarDamage1S = new List<double>[phases.Count];
                 for (int i = 0; i < phases.Count; i++)
                 {
-                    Damage1S[i] = actor.Get1SDamageList(log, i, phases[i], null);
-                    BreakbarDamage1S[i] = actor.Get1SBreakbarDamageList(log, i, phases[i], null);
+                    damage1S[i] = actor.Get1SDamageList(log, i, phases[i], null);
+                    breakbarDamage1S[i] = actor.Get1SBreakbarDamageList(log, i, phases[i], null);
                 }
+                Damage1S = damage1S;
+                BreakbarDamage1S = breakbarDamage1S;
             }
             if (!log.CombatData.HasBreakbarDamageData)
             {
@@ -220,10 +222,7 @@ namespace GW2EIBuilders.JsonModels
                 {
                     ActiveCombatMinions = JsonBuffsUptime.GetBuffStates(states);
                 }
-            }
-            // Health
-            if (settings.RawFormatTimelineArrays)
-            {
+                // Health
                 HealthPercents = actor.GetHealthUpdates(log).Select(x => new double[2] { x.Start, x.Value }).ToList();
                 BarrierPercents = actor.GetBarrierUpdates(log).Select(x => new double[2] { x.Start, x.Value }).ToList();
             }
