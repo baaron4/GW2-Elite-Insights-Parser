@@ -24,7 +24,7 @@ namespace GW2EIBuilders.HtmlModels
         public static List<FoodDto> BuildPlayerFoodData(ParsedEvtcLog log, Player p, Dictionary<long, Buff> usedBuffs)
         {
             var list = new List<FoodDto>();
-            List<Consumable> consume = p.GetConsumablesList(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<Consumable> consume = p.GetConsumablesList(log, 0, log.FightData.FightEnd);
 
             foreach (Consumable entry in consume)
             {

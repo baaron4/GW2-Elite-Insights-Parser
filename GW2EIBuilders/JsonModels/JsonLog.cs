@@ -82,7 +82,7 @@ namespace GW2EIBuilders.JsonModels
                 BuffInfoEvent buffInfoEvent = log.CombatData.GetBuffInfoEvent(item.ID);
                 if (buffInfoEvent != null)
                 {
-                    Descriptions = new List<string>(){
+                    var descriptions = new List<string>(){
                         "Max Stack(s) " + item.Capacity
                     };
                     foreach (BuffFormula formula in buffInfoEvent.Formulas)
@@ -94,9 +94,10 @@ namespace GW2EIBuilders.JsonModels
                         string desc = formula.GetDescription(false, log.Buffs.BuffsByIds);
                         if (desc.Length > 0)
                         {
-                            Descriptions.Add(desc);
+                            descriptions.Add(desc);
                         }
                     }
+                    Descriptions = descriptions;
                 }
             }
 
@@ -119,7 +120,7 @@ namespace GW2EIBuilders.JsonModels
             /// <summary>
             /// Descriptions of the buffs (no traits)
             /// </summary>
-            public List<string> Descriptions { get; internal set; }
+            public IReadOnlyList<string> Descriptions { get; internal set; }
         }
 
         /// <summary>
@@ -261,65 +262,65 @@ namespace GW2EIBuilders.JsonModels
         /// The list of targets
         /// </summary>
         /// <seealso cref="JsonNPC"/>
-        public List<JsonNPC> Targets { get; internal set; }
+        public IReadOnlyList<JsonNPC> Targets { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// The list of players
         /// </summary>
         /// <seealso cref="JsonPlayer"/>
-        public List<JsonPlayer> Players { get; internal set; }
+        public IReadOnlyList<JsonPlayer> Players { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// The list of phases
         /// </summary>
         /// <seealso cref="JsonPhase"/>
-        public List<JsonPhase> Phases { get; internal set; }
+        public IReadOnlyList<JsonPhase> Phases { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// List of mechanics
         /// </summary>
         /// <seealso cref="JsonMechanics"/>
-        public List<JsonMechanics> Mechanics { get; internal set; }
+        public IReadOnlyList<JsonMechanics> Mechanics { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Upload links to dps.reports/raidar
         /// </summary>
-        public string[] UploadLinks { get; internal set; }
+        public IReadOnlyList<string> UploadLinks { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Dictionary of skills' description, the key is in "'s' + id" format
         /// </summary>
         /// <seealso cref="SkillDesc"/>
-        public Dictionary<string, SkillDesc> SkillMap { get; internal set; } = new Dictionary<string, SkillDesc>();
+        public IReadOnlyDictionary<string, SkillDesc> SkillMap { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Dictionary of buffs' description, the key is in "'b' + id" format
         /// </summary>
         /// <seealso cref="BuffDesc"/>
-        public Dictionary<string, BuffDesc> BuffMap { get; internal set; } = new Dictionary<string, BuffDesc>();
+        public IReadOnlyDictionary<string, BuffDesc> BuffMap { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Dictionary of damage modifiers' description, the key is in "'d' + id" format
         /// </summary>
         /// <seealso cref="DamageModDesc"/>
-        public Dictionary<string, DamageModDesc> DamageModMap { get; internal set; } = new Dictionary<string, DamageModDesc>();
+        public IReadOnlyDictionary<string, DamageModDesc> DamageModMap { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Dictionary of personal buffs. The key is the profession, the value is a list of buff ids
         /// </summary>
         /// <seealso cref="BuffMap"/>
-        public Dictionary<string, HashSet<long>> PersonalBuffs { get; internal set; } = new Dictionary<string, HashSet<long>>();
+        public IReadOnlyDictionary<string, IReadOnlyCollection<long>> PersonalBuffs { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// List of present fractal instabilities, the values are buff ids
         /// </summary>
         /// <seealso cref="BuffMap"/>
-        public List<long> PresentFractalInstabilities { get; internal set; }
+        public IReadOnlyList<long> PresentFractalInstabilities { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// List of error messages given by ArcDPS
         /// </summary>
-        public List<string> LogErrors { get; internal set; }
+        public IReadOnlyList<string> LogErrors { get; internal set; }
 
         [JsonConstructor]
         internal JsonLog()
@@ -348,17 +349,23 @@ namespace GW2EIBuilders.JsonModels
             Language = log.LogData.Language;
             LanguageID = (byte)log.LogData.LanguageID;
             IsCM = log.FightData.IsCM;
+            var personalBuffs = new Dictionary<string, HashSet<long>>();
+            var skillMap = new Dictionary<string, SkillDesc>();
+            var buffMap = new Dictionary<string, BuffDesc>();
+            var damageModMap = new Dictionary<string, DamageModDesc>();
+
             if (log.StatisticsHelper.PresentFractalInstabilities.Any())
             {
-                PresentFractalInstabilities = new List<long>();
+                var presentFractalInstabilities = new List<long>();
                 foreach (Buff fractalInstab in log.StatisticsHelper.PresentFractalInstabilities)
                 {
-                    PresentFractalInstabilities.Add(fractalInstab.ID);
+                    presentFractalInstabilities.Add(fractalInstab.ID);
                     if (!BuffMap.ContainsKey("b" + fractalInstab.ID))
                     {
-                        BuffMap["b" + fractalInstab.ID] = new BuffDesc(fractalInstab, log);
+                        buffMap["b" + fractalInstab.ID] = new BuffDesc(fractalInstab, log);
                     }
                 }
+                PresentFractalInstabilities = presentFractalInstabilities;
             }
             //
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Mechanics");
@@ -377,15 +384,20 @@ namespace GW2EIBuilders.JsonModels
             Phases = log.FightData.GetPhases(log).Select(x => new JsonPhase(x, log)).ToList();
             //
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Targets");
-            Targets = log.FightData.Logic.Targets.Select(x => new JsonNPC(x, log, settings, SkillMap, BuffMap)).ToList();
+            Targets = log.FightData.Logic.Targets.Select(x => new JsonNPC(x, log, settings, skillMap, buffMap)).ToList();
             //
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Players");
-            Players = log.PlayerList.Select(x => new JsonPlayer(x, log, settings, SkillMap, BuffMap, DamageModMap, PersonalBuffs)).ToList();
+            Players = log.PlayerList.Select(x => new JsonPlayer(x, log, settings, skillMap, buffMap, damageModMap, personalBuffs)).ToList();
             //
             if (log.LogData.LogErrors.Count > 0)
             {
                 LogErrors = new List<string>(log.LogData.LogErrors);
             }
+            //
+            PersonalBuffs = personalBuffs.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>) x.Value);
+            SkillMap = skillMap;
+            BuffMap = buffMap;
+            DamageModMap = damageModMap;
         }
 
     }

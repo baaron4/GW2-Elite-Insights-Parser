@@ -58,7 +58,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            List<AbstractCastEvent> cls = mainTarget.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = mainTarget.GetCastEvents(log, 0, log.FightData.FightEnd);
             var wallopingWinds = cls.Where(x => x.SkillId == 56094).ToList();
             long start = 0, end = 0;
             for (int i = 0; i < wallopingWinds.Count; i++)
@@ -89,9 +89,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new CombatReplayMap("https://i.imgur.com/zs9yPuG.png",
                             (4365, 3972),
-                            (-14122, 142, -9199, 4640),
+                            (-14122, 142, -9199, 4640)/*,
                             (-21504, -21504, 24576, 24576),
-                            (33530, 34050, 35450, 35970));
+                            (33530, 34050, 35450, 35970)*/);
         }
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)

@@ -70,9 +70,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new CombatReplayMap("https://i.imgur.com/gHq0j79.png",
                             (3903, 3878),
-                            (-11676, 8825, -3870, 16582),
+                            (-11676, 8825, -3870, 16582)/*,
                             (-21504, -21504, 24576, 24576),
-                            (13440, 14336, 15360, 16256));
+                            (13440, 14336, 15360, 16256)*/);
         }
 
 
@@ -270,7 +270,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
             int ccRadius = 200;
             switch (target.ID)
             {

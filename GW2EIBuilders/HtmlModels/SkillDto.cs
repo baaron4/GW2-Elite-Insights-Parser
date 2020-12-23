@@ -45,7 +45,7 @@ namespace GW2EIBuilders.HtmlModels
         public static List<object[]> BuildRotationData(ParsedEvtcLog log, AbstractActor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills)
         {
             var list = new List<object[]>();
-            List<AbstractCastEvent> casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End);
+            IReadOnlyList<AbstractCastEvent> casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End);
             foreach (AbstractCastEvent cl in casting)
             {
                 if (!usedSkills.ContainsKey(cl.SkillId))

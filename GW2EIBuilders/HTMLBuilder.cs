@@ -44,6 +44,8 @@ namespace GW2EIBuilders
             _scriptVersion = parserVersion.Major + "." + parserVersion.Minor;
 #if !DEBUG
             _scriptVersion += "." + parserVersion.Build;
+#else
+            _scriptVersion += "-debug";
 #endif
             _scriptVersionRev = parserVersion.Revision;
             _log = log;

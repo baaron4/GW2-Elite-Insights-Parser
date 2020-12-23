@@ -43,9 +43,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new CombatReplayMap("https://i.imgur.com/BoHwwY6.png",
                             (7112, 6377),
-                            (-5992, -5992, 69, -522),
+                            (-5992, -5992, 69, -522)/*,
                             (-12288, -27648, 12288, 27648),
-                            (1920, 12160, 2944, 14464));
+                            (1920, 12160, 2944, 14464)*/);
         }
 
         internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
@@ -181,7 +181,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Xera:

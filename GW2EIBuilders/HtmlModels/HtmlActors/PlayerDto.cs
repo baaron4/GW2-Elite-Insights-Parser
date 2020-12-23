@@ -43,7 +43,7 @@ namespace GW2EIBuilders.HtmlModels
             BuildWeaponSets(player, log);
         }
 
-        private static void BuildWeaponSets(string[] weps, int offset, List<string> set1, List<string> set2)
+        private static void BuildWeaponSets(IReadOnlyList<string> weps, int offset, List<string> set1, List<string> set2)
         {
 
             for (int j = 0; j < 4; j++)
@@ -87,7 +87,7 @@ namespace GW2EIBuilders.HtmlModels
 
         private void BuildWeaponSets(Player player, ParsedEvtcLog log)
         {
-            string[] weps = player.GetWeaponsArray(log);
+            IReadOnlyList<string> weps = player.GetWeaponsArray(log);
             BuildWeaponSets(weps, 0, L1Set, L2Set);
             BuildWeaponSets(weps, 4, A1Set, A2Set);
         }

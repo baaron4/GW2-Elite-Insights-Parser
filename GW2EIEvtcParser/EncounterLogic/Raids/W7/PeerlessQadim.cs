@@ -137,14 +137,14 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new CombatReplayMap("https://i.imgur.com/PgkZMYE.png",
                             (6822, 6822),
-                            (-968, 7480, 4226, 12676),
+                            (-968, 7480, 4226, 12676)/*,
                             (-21504, -21504, 24576, 24576),
-                            (33530, 34050, 35450, 35970));
+                            (33530, 34050, 35450, 35970)*/);
         }
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)

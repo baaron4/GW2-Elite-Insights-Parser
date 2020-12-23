@@ -23,8 +23,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     return false;
                 }
-                (_, List<(long start, long end)> downs , _) = actor.GetStatus(log);
-                bool hitInDown = downs.Exists(x => x.start < ce.Time && ce.Time < x.end);
+                (_, IReadOnlyList<(long start, long end)> downs , _) = actor.GetStatus(log);
+                bool hitInDown = downs.Any(x => x.start < ce.Time && ce.Time < x.end);
                 return !hitInDown;
             }),
             new EnemyCastStartMechanic(37846, "Off Balance", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "TP CC","Off Balance (Saul TP Breakbar)", "Saul TP Start",0),
@@ -54,9 +54,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new CombatReplayMap("https://i.imgur.com/GCwOVVE.png",
                             (4400, 5753),
-                            (-9542, 1932, -7004, 5250),
+                            (-9542, 1932, -7004, 5250)/*,
                             (-27648, -9216, 27648, 12288),
-                            (11774, 4480, 14078, 5376));
+                            (11774, 4480, 14078, 5376)*/);
         }
 
         protected override HashSet<int> GetUniqueTargetIDs()
@@ -384,7 +384,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
-            List<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Deimos:

@@ -164,7 +164,7 @@ namespace GW2EIEvtcParser.EIData
 
                 long phaseDuration = phase.DurationInMS;
                 long playerActiveDuration = player.GetActiveDuration(log, phase.Start, phase.End);
-                foreach (Buff boon in player.TrackedBuffs)
+                foreach (Buff boon in player.GetTrackedBuffs(log))
                 {
                     if (selfBoons.HasBuffID(boon.ID))
                     {

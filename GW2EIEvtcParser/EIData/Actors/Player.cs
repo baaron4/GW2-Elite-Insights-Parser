@@ -235,7 +235,7 @@ namespace GW2EIEvtcParser.EIData
             Account = "Account " + index;
         }
 
-        public List<DeathRecap> GetDeathRecaps(ParsedEvtcLog log)
+        public IReadOnlyList<DeathRecap> GetDeathRecaps(ParsedEvtcLog log)
         {
             if (_deathRecaps == null)
             {
@@ -244,7 +244,7 @@ namespace GW2EIEvtcParser.EIData
             return _deathRecaps;
         }
 
-        public string[] GetWeaponsArray(ParsedEvtcLog log)
+        public IReadOnlyList<string> GetWeaponsArray(ParsedEvtcLog log)
         {
             if (_weaponsArray == null)
             {
@@ -253,7 +253,7 @@ namespace GW2EIEvtcParser.EIData
             return _weaponsArray;
         }
 
-        public List<Consumable> GetConsumablesList(ParsedEvtcLog log, long start, long end)
+        public IReadOnlyList<Consumable> GetConsumablesList(ParsedEvtcLog log, long start, long end)
         {
             if (_consumeList == null)
             {
@@ -282,7 +282,7 @@ namespace GW2EIEvtcParser.EIData
             return _damageModifiers;
         }
 
-        public HashSet<string> GetPresentDamageModifier(ParsedEvtcLog log)
+        public IReadOnlyCollection<string> GetPresentDamageModifier(ParsedEvtcLog log)
         {
             if (_presentDamageModifiers == null)
             {
@@ -335,7 +335,7 @@ namespace GW2EIEvtcParser.EIData
             IReadOnlyList<DownEvent> downs = log.CombatData.GetDownEvents(AgentItem);
             IReadOnlyList<AliveEvent> ups = log.CombatData.GetAliveEvents(AgentItem);
             long lastDeathTime = 0;
-            List<AbstractHealthDamageEvent> damageLogs = GetDamageTakenEvents(null, log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractHealthDamageEvent> damageLogs = GetDamageTakenEvents(null, log, 0, log.FightData.FightEnd);
             foreach (DeadEvent dead in deads)
             {
                 _deathRecaps.Add(new DeathRecap(damageLogs, dead, downs, ups, lastDeathTime));
@@ -361,7 +361,7 @@ namespace GW2EIEvtcParser.EIData
                 return;
             }
             string[] weapons = new string[8];//first 2 for first set next 2 for second set, second sets of 4 for underwater
-            List<AbstractCastEvent> casting = GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> casting = GetCastEvents(log, 0, log.FightData.FightEnd);
             int swapped = -1;
             long swappedTime = 0;
             var swaps = casting.OfType<WeaponSwapEvent>().Select(x =>
@@ -453,7 +453,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 InitCombatReplay(log);
             }
-            (List<(long start, long end)> deads, _, List<(long start, long end)> dcs) = GetStatus(log);
+            (IReadOnlyList<(long start, long end)> deads, _, IReadOnlyList<(long start, long end)> dcs) = GetStatus(log);
             var activePositions = new List<Point3D>(GetCombatReplayPolledPositions(log));
             for (int i = 0; i < activePositions.Count; i++)
             {

@@ -269,7 +269,7 @@ namespace GW2EIParser
                 foreach (AbstractSingleActor actor in playersAndTargets)
                 {
                     // that part can't be //
-                    actor.ComputeBuffMap(log);
+                    actor.GetTrackedBuffs(log);
                 }
                 Parallel.ForEach(playersAndTargets, actor => actor.GetStatus(log));
                 if (log.CanCombatReplay)

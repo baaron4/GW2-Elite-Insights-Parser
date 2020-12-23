@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EIData
         {
             IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             double gain = GainComputer.ComputeGain(GainPerStack, 1);
-            if (!p.GetHitDamageEvents(null, log, phases[0].Start, phases[0].End).Exists(x => DLChecker(x)))
+            if (!p.GetHitDamageEvents(null, log, phases[0].Start, phases[0].End).Any(x => DLChecker(x)))
             {
                 return;
             }
@@ -36,7 +36,7 @@ namespace GW2EIEvtcParser.EIData
                     foreach (PhaseData phase in phases)
                     {
                         int totalDamage = GetTotalDamage(p, log, target, phase.Start, phase.End);
-                        List<AbstractHealthDamageEvent> typeHits = GetHitDamageLogs(p, log, target, phase.Start, phase.End);
+                        IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageLogs(p, log, target, phase.Start, phase.End);
                         var effect = typeHits.Where(x => DLChecker(x)).ToList();
                         extraDataList.Add(new DamageModifierStat(effect.Count, typeHits.Count, gain * effect.Sum(x => x.HealthDamage), totalDamage));
                     }
@@ -47,7 +47,7 @@ namespace GW2EIEvtcParser.EIData
             foreach (PhaseData phase in phases)
             {
                 int totalDamage = GetTotalDamage(p, log, null, phase.Start, phase.End);
-                List<AbstractHealthDamageEvent> typeHits = GetHitDamageLogs(p, log, null, phase.Start, phase.End);
+                IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageLogs(p, log, null, phase.Start, phase.End);
                 var effect = typeHits.Where(x => DLChecker(x)).ToList();
                 data[Name].Add(new DamageModifierStat(effect.Count, typeHits.Count, gain * effect.Sum(x => x.HealthDamage), totalDamage));
             }

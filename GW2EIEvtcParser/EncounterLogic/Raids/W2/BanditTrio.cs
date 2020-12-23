@@ -45,9 +45,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new CombatReplayMap("https://i.imgur.com/cVuaOc5.png",
                             (2494, 2277),
-                            (-2900, -12251, 2561, -7265),
+                            (-2900, -12251, 2561, -7265)/*,
                             (-12288, -27648, 12288, 27648),
-                            (2688, 11906, 3712, 14210));
+                            (2688, 11906, 3712, 14210)*/);
         }
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
@@ -170,7 +170,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Berg:

@@ -25,7 +25,7 @@ namespace GW2EIEvtcParser.EIData
             return _health;
         }
 
-        public List<Segment> GetBreakbarPercentUpdates(ParsedEvtcLog log)
+        public IReadOnlyList<Segment> GetBreakbarPercentUpdates(ParsedEvtcLog log)
         {
             if (_breakbarPercentUpdates == null)
             {
@@ -88,7 +88,7 @@ namespace GW2EIEvtcParser.EIData
 
                 long phaseDuration = phase.DurationInMS;
 
-                foreach (Buff buff in TrackedBuffs)
+                foreach (Buff buff in GetTrackedBuffs(log))
                 {
                     if (buffDistribution.HasBuffID(buff.ID))
                     {

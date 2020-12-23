@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal FinalGameplayStats(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor target)
         {
-            List<AbstractHealthDamageEvent> dls = actor.GetJustActorDamageEvents(target, log, start, end);
+            IReadOnlyList<AbstractHealthDamageEvent> dls = actor.GetJustActorDamageEvents(target, log, start, end);
             foreach (AbstractHealthDamageEvent dl in dls)
             {
                 if (!(dl is NonDirectHealthDamageEvent))

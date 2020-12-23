@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.Buff;
 
@@ -10,7 +11,7 @@ namespace GW2EIEvtcParser.EIData
     {
         public int UniqueID => AgentItem.UniqueID;
         // Boons
-        public HashSet<Buff> TrackedBuffs { get; } = new HashSet<Buff>();
+        private HashSet<Buff> _trackedBuffs;
         private BuffDictionary _buffMap;
         protected Dictionary<long, BuffsGraphModel> BuffGraphs { get; set; }
         private CachingCollection<BuffDistribution> _buffDistribution;
@@ -45,7 +46,7 @@ namespace GW2EIEvtcParser.EIData
 
         // Status
 
-        public (List<(long start, long end)>, List<(long start, long end)>, List<(long start, long end)>) GetStatus(ParsedEvtcLog log)
+        public (IReadOnlyList<(long start, long end)>, IReadOnlyList<(long start, long end)>, IReadOnlyList<(long start, long end)>) GetStatus(ParsedEvtcLog log)
         {
             if (_deads == null)
             {
@@ -59,10 +60,7 @@ namespace GW2EIEvtcParser.EIData
 
         public long GetActiveDuration(ParsedEvtcLog log, long start, long end)
         {
-            List<(long start, long end)> dead;
-            List<(long start, long end)> down;
-            List<(long start, long end)> dc;
-            (dead, down, dc) = GetStatus(log);
+            (IReadOnlyList<(long start, long end)> dead, IReadOnlyList<(long start, long end)> down, IReadOnlyList<(long start, long end)> dc) = GetStatus(log);
             return (end - start) -
                 dead.Sum(x =>
                 {
@@ -88,7 +86,7 @@ namespace GW2EIEvtcParser.EIData
 
         public abstract string GetIcon();
 
-        public List<Segment> GetHealthUpdates(ParsedEvtcLog log)
+        public IReadOnlyList<Segment> GetHealthUpdates(ParsedEvtcLog log)
         {
             if (_healthUpdates == null)
             {
@@ -107,7 +105,7 @@ namespace GW2EIEvtcParser.EIData
         }
 
         // Minions
-        public Dictionary<long, Minions> GetMinions(ParsedEvtcLog log)
+        public IReadOnlyDictionary<long, Minions> GetMinions(ParsedEvtcLog log)
         {
             if (_minions == null)
             {
@@ -162,7 +160,7 @@ namespace GW2EIEvtcParser.EIData
 
         // Graph
 
-        public List<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, AbstractActor target)
+        public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, AbstractActor target)
         {
             if (_damageList1S == null)
             {
@@ -175,7 +173,7 @@ namespace GW2EIEvtcParser.EIData
             var dmgList = new List<int>();
             int durationInMS = (int)(end - start);
             int durationInS = durationInMS / 1000;
-            List<AbstractHealthDamageEvent> damageEvents = GetDamageEvents(target, log, start, end);
+            IReadOnlyList<AbstractHealthDamageEvent> damageEvents = GetDamageEvents(target, log, start, end);
             // fill the graph, full precision
             var dmgListFull = new int[durationInMS + 1];
             int totalTime = 1;
@@ -211,7 +209,7 @@ namespace GW2EIEvtcParser.EIData
             return dmgList;
         }
 
-        public List<double> Get1SBreakbarDamageList(ParsedEvtcLog log,long start, long end, AbstractActor target)
+        public IReadOnlyList<double> Get1SBreakbarDamageList(ParsedEvtcLog log,long start, long end, AbstractActor target)
         {
             if (!log.CombatData.HasBreakbarDamageData)
             {
@@ -228,7 +226,7 @@ namespace GW2EIEvtcParser.EIData
             var brkDmgList = new List<double>();
             int durationInMS = (int)(end - start);
             int durationInS = durationInMS / 1000;     
-            List<AbstractBreakbarDamageEvent> breakbarDamageEvents = GetBreakbarDamageEvents(target, log, start, end);
+            IReadOnlyList<AbstractBreakbarDamageEvent> breakbarDamageEvents = GetBreakbarDamageEvents(target, log, start, end);
             // fill the graph, full precision
             var brkDmgListFull = new double[durationInMS + 1];
             int totalTime = 1;
@@ -365,56 +363,44 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public void ComputeBuffMap(ParsedEvtcLog log)
+        public IReadOnlyCollection<Buff> GetTrackedBuffs(ParsedEvtcLog log)
         {
             if (_buffMap == null)
             {
-                //
-                _buffMap = new BuffDictionary();
-                // Fill in Boon Map
-#if DEBUG
-                var test = log.CombatData.GetBuffData(AgentItem).Where(x => !log.Buffs.BuffsByIds.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
-#endif
-                foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(AgentItem))
-                {
-                    long boonId = c.BuffID;
-                    if (!_buffMap.ContainsKey(boonId))
-                    {
-                        if (!log.Buffs.BuffsByIds.ContainsKey(boonId))
-                        {
-                            continue;
-                        }
-                        _buffMap.Add(log.Buffs.BuffsByIds[boonId]);
-                    }
-                    if (!c.IsBuffSimulatorCompliant(log.FightData.FightEnd, log.CombatData.HasStackIDs))
-                    {
-                        continue;
-                    }
-                    List<AbstractBuffEvent> loglist = _buffMap[boonId];
-                    c.TryFindSrc(log);
-                    loglist.Add(c);
-                }
-                // add buff remove all for each despawn events
-                foreach (DespawnEvent dsp in log.CombatData.GetDespawnEvents(AgentItem))
-                {
-                    foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in _buffMap)
-                    {
-                        pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, AgentItem, dsp.Time, int.MaxValue, log.SkillData.Get(pair.Key), BuffRemoveAllEvent.FullRemoval, int.MaxValue));
-                    }
-                }
-                _buffMap.Sort();
-                foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in _buffMap)
-                {
-                    TrackedBuffs.Add(log.Buffs.BuffsByIds[pair.Key]);
-                }
+                ComputeBuffMap(log);
             }
+            return _trackedBuffs;
+        }
+
+        private void ComputeBuffMap(ParsedEvtcLog log)
+        {
+            //
+            _buffMap = new BuffDictionary();
+            // Fill in Boon Map
+#if DEBUG
+            var test = log.CombatData.GetBuffData(AgentItem).Where(x => !log.Buffs.BuffsByIds.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
+#endif
+            foreach (AbstractBuffEvent buffEvent in log.CombatData.GetBuffData(AgentItem))
+            {
+                long buffID = buffEvent.BuffID;
+                if (!log.Buffs.BuffsByIds.ContainsKey(buffID))
+                {
+                    continue;
+                }
+                Buff buff = log.Buffs.BuffsByIds[buffID];
+                _buffMap.Add(log, buff, buffEvent);
+            }
+            _buffMap.Finalize(log, AgentItem, out _trackedBuffs);
         }
 
 
         private void SetBuffGraphs(ParsedEvtcLog log)
         {
             BuffGraphs = new Dictionary<long, BuffsGraphModel>();
-            ComputeBuffMap(log);
+            if (_buffMap == null)
+            {
+                ComputeBuffMap(log);
+            }
             BuffDictionary buffMap = _buffMap;
             long dur = log.FightData.FightEnd;
             int fightDuration = (int)(dur) / 1000;
@@ -426,7 +412,7 @@ namespace GW2EIEvtcParser.EIData
             // Init status
             _buffDistribution = new CachingCollection<BuffDistribution>(log);
             _buffPresence = new CachingCollection<Dictionary<long, long>>(log);
-            foreach (Buff buff in TrackedBuffs)
+            foreach (Buff buff in GetTrackedBuffs(log))
             {
                 long buffID = buff.ID;
                 if (buffMap.TryGetValue(buffID, out List<AbstractBuffEvent> buffEvents) && buffEvents.Count != 0 && !BuffGraphs.ContainsKey(buffID))
@@ -437,7 +423,7 @@ namespace GW2EIEvtcParser.EIData
                         simulator = buff.CreateSimulator(log, false);
                         simulator.Simulate(buffEvents, dur);
                     }
-                    catch (InvalidOperationException)
+                    catch (EIBuffSimulatorIDException)
                     {
                         // get rid of logs invalid for HasStackIDs false
                         buffEvents.RemoveAll(x => !x.IsBuffSimulatorCompliant(log.FightData.FightEnd, false));
@@ -516,7 +502,7 @@ namespace GW2EIEvtcParser.EIData
             long duration = end - start;
             long activeDuration = GetActiveDuration(log, start, end);
 
-            foreach (Buff buff in TrackedBuffs)
+            foreach (Buff buff in GetTrackedBuffs(log))
             {
                 if (buffDistribution.HasBuffID(buff.ID))
                 {
@@ -535,7 +521,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public List<Point3D> GetCombatReplayPolledPositions(ParsedEvtcLog log)
+        public IReadOnlyList<Point3D> GetCombatReplayPolledPositions(ParsedEvtcLog log)
         {
             if (CombatReplay == null)
             {
@@ -565,7 +551,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public List<GenericDecoration> GetCombatReplayActors(ParsedEvtcLog log)
+        public IReadOnlyList<GenericDecoration> GetCombatReplayActors(ParsedEvtcLog log)
         {
             if (!log.CanCombatReplay)
             {
@@ -591,7 +577,7 @@ namespace GW2EIEvtcParser.EIData
         public abstract AbstractSingleActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedEvtcLog log);
 
         // Cast logs
-        public override List<AbstractCastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractCastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end)
         {
             if (CastEvents == null)
             {
@@ -600,7 +586,7 @@ namespace GW2EIEvtcParser.EIData
             return CastEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
 
         }
-        public override List<AbstractCastEvent> GetIntersectingCastEvents(ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractCastEvent> GetIntersectingCastEvents(ParsedEvtcLog log, long start, long end)
         {
             if (CastEvents == null)
             {
@@ -727,13 +713,13 @@ namespace GW2EIEvtcParser.EIData
 
 
         // Damage logs
-        public override List<AbstractHealthDamageEvent> GetDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractHealthDamageEvent> GetDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
             if (DamageEvents == null)
             {
                 DamageEvents = new List<AbstractHealthDamageEvent>();
                 DamageEvents.AddRange(log.CombatData.GetDamageData(AgentItem).Where(x => x.IFF != ArcDPSEnums.IFF.Friend));
-                Dictionary<long, Minions> minionsList = GetMinions(log);
+                IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log);
                 foreach (Minions mins in minionsList.Values)
                 {
                     DamageEvents.AddRange(mins.GetDamageEvents(null, log, 0, log.FightData.FightEnd));
@@ -755,23 +741,23 @@ namespace GW2EIEvtcParser.EIData
             return DamageEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public List<AbstractHealthDamageEvent> GetJustActorDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public IReadOnlyList<AbstractHealthDamageEvent> GetJustActorDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
             return GetDamageEvents(target, log, start, end).Where(x => x.From == AgentItem).ToList();
         }
 
-        public List<AbstractBreakbarDamageEvent> GetJustActorBreakbarDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public IReadOnlyList<AbstractBreakbarDamageEvent> GetJustActorBreakbarDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
             return GetBreakbarDamageEvents(target, log, start, end).Where(x => x.From == AgentItem).ToList();
         }
 
-        public override List<AbstractBreakbarDamageEvent> GetBreakbarDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
             if (BreakbarDamageEvents == null)
             {
                 BreakbarDamageEvents = new List<AbstractBreakbarDamageEvent>();
                 BreakbarDamageEvents.AddRange(log.CombatData.GetBreakbarDamageData(AgentItem).Where(x => x.IFF != ArcDPSEnums.IFF.Friend));
-                Dictionary<long, Minions> minionsList = GetMinions(log);
+                IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log);
                 foreach (Minions mins in minionsList.Values)
                 {
                     BreakbarDamageEvents.AddRange(mins.GetBreakbarDamageEvents(null, log, 0, log.FightData.FightEnd));
@@ -793,7 +779,7 @@ namespace GW2EIEvtcParser.EIData
             return BreakbarDamageEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public override List<AbstractHealthDamageEvent> GetDamageTakenEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractHealthDamageEvent> GetDamageTakenEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
             if (DamageTakenEvents == null)
             {
@@ -817,7 +803,7 @@ namespace GW2EIEvtcParser.EIData
             return DamageTakenEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public override List<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
             if (BreakbarDamageTakenEvents == null)
             {
@@ -844,7 +830,7 @@ namespace GW2EIEvtcParser.EIData
         /// <summary>
         /// cached method for damage modifiers
         /// </summary>
-        internal List<AbstractHealthDamageEvent> GetJustActorHitDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorHitDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
             if (_hitSelfDamageEventsPerPhasePerTarget == null)
             {
@@ -858,7 +844,7 @@ namespace GW2EIEvtcParser.EIData
             return dls;
         }
 
-        internal List<AbstractHealthDamageEvent> GetJustActorConditionHitDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorConditionHitDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
             if (_conditionHitSelfDamageEventsPerPhasePerTarget == null)
             {
@@ -872,7 +858,7 @@ namespace GW2EIEvtcParser.EIData
             return dls;
         }
 
-        internal List<AbstractHealthDamageEvent> GetJustActorPowerHitDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorPowerHitDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
             if (_powerHitSelfDamageEventsPerPhasePerTarget == null)
             {

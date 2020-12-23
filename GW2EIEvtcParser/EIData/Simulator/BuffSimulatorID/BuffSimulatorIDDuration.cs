@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
@@ -18,7 +19,7 @@ namespace GW2EIEvtcParser.EIData
             _activeStack = BuffStack.FirstOrDefault(x => x.StackID == stackID);
             if (_activeStack == null)
             {
-                throw new InvalidOperationException("Activate has failed");
+                throw new EIBuffSimulatorIDException("Activate has failed");
             }
             _activeStack.Activate();
         }

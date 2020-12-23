@@ -48,9 +48,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new CombatReplayMap("https://i.imgur.com/3X0YveK.png",
                             (880, 880),
-                            (-7248, 4585, -4625, 7207),
+                            (-7248, 4585, -4625, 7207)/*,
                             (-12288, -27648, 12288, 27648),
-                            (2688, 11906, 3712, 14210));
+                            (2688, 11906, 3712, 14210)*/);
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -76,8 +76,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (downPour != null)
                 {
                     phases.Add(new PhaseData(heatWave.Time, downPour.Time - 1));
-                    List<AbstractCastEvent> castLogs = mainTarget.GetCastEvents(log, 0, log.FightData.FightEnd);
-                    AbstractCastEvent abo = castLogs.Find(x => x.SkillId == 34427);
+                    IReadOnlyList<AbstractCastEvent> castLogs = mainTarget.GetCastEvents(log, 0, log.FightData.FightEnd);
+                    AbstractCastEvent abo = castLogs.FirstOrDefault(x => x.SkillId == 34427);
                     if (abo != null)
                     {
                         phases.Add(new PhaseData(downPour.Time, abo.Time - 1));
@@ -209,7 +209,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)

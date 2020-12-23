@@ -24,9 +24,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new CombatReplayMap("https://i.imgur.com/Owo34RS.png",
                             (710, 709),
-                            (1306, -9381, 4720, -5968),
+                            (1306, -9381, 4720, -5968)/*,
                             (-21504, -12288, 24576, 12288),
-                            (19072, 15484, 20992, 16508));
+                            (19072, 15484, 20992, 16508)*/);
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
@@ -44,7 +44,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)

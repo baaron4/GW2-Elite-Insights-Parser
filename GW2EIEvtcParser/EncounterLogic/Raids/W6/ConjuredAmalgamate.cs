@@ -36,9 +36,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new CombatReplayMap("https://i.imgur.com/9PJB5Ky.png",
                             (1414, 2601),
-                            (-5064, -15030, -2864, -10830),
+                            (-5064, -15030, -2864, -10830)/*,
                             (-21504, -21504, 24576, 24576),
-                            (13440, 14336, 15360, 16256));
+                            (13440, 14336, 15360, 16256)*/);
         }
 
         protected override List<int> GetFightTargetsIDs()
@@ -292,7 +292,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = p.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = p.GetCastEvents(log, 0, log.FightData.FightEnd);
             var shieldCast = cls.Where(x => x.SkillId == 52780).ToList();
             foreach (AbstractCastEvent c in shieldCast)
             {

@@ -177,9 +177,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new CombatReplayMap("https://i.imgur.com/3IBkNM6.png",
                             (1436, 1659),
-                            (13840, -2698, 15971, -248),
+                            (13840, -2698, 15971, -248)/*,
                             (-21504, -21504, 24576, 24576),
-                            (33530, 34050, 35450, 35970));
+                            (33530, 34050, 35450, 35970)*/);
         }
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)

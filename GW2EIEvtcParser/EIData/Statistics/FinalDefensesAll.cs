@@ -16,11 +16,8 @@ namespace GW2EIEvtcParser.EIData
 
         public FinalDefensesAll(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor) : base(log, start, end, actor, null)
         {
+            (IReadOnlyList<(long start, long end)>  dead, IReadOnlyList<(long start, long end)>  down, IReadOnlyList<(long start, long end)>  dc) = actor.GetStatus(log);
 
-            var dead = new List<(long start, long end)>();
-            var down = new List<(long start, long end)>();
-            var dc = new List<(long start, long end)>();
-            (dead, down, dc) = actor.GetStatus(log);
             DownCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DownId).Count(x => x.Actor == actor && x.Time >= start && x.Time <= end);
             DeadCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DeathId).Count(x => x.Actor == actor && x.Time >= start && x.Time <= end);
             DcCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DCId).Count(x => x.Actor == actor && x.Time >= start && x.Time <= end);

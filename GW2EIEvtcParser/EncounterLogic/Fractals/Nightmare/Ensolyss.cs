@@ -36,9 +36,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new CombatReplayMap("https://i.imgur.com/kjelZ4t.png",
                             (366, 366),
-                            (252, 1, 2892, 2881),
+                            (252, 1, 2892, 2881)/*,
                             (-6144, -6144, 9216, 9216),
-                            (11804, 4414, 12444, 5054));
+                            (11804, 4414, 12444, 5054)*/);
         }
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {

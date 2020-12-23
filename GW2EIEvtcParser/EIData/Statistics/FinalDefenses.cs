@@ -20,7 +20,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal FinalDefenses(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor from)
         {
-            List<AbstractHealthDamageEvent> damageLogs = actor.GetDamageTakenEvents(from, log, start, end);
+            IReadOnlyList<AbstractHealthDamageEvent> damageLogs = actor.GetDamageTakenEvents(from, log, start, end);
 
             DamageTaken = damageLogs.Sum(x => (long)x.HealthDamage);
             BreakbarDamageTaken = Math.Round(actor.GetBreakbarDamageTakenEvents(from, log, start, end).Sum(x => x.BreakbarDamage), 1);

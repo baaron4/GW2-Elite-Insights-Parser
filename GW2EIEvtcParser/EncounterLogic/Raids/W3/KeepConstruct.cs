@@ -61,9 +61,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new CombatReplayMap("https://i.imgur.com/RZbs21b.png",
                             (1099, 1114),
-                            (-5467, 8069, -2282, 11297),
+                            (-5467, 8069, -2282, 11297)/*,
                             (-12288, -27648, 12288, 27648),
-                            (1920, 12160, 2944, 14464));
+                            (1920, 12160, 2944, 14464)*/);
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -214,7 +214,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)

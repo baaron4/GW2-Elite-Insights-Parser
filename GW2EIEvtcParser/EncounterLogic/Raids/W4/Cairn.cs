@@ -53,9 +53,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new CombatReplayMap("https://i.imgur.com/NlpsLZa.png",
                             (607, 607),
-                            (12981, 642, 15725, 3386),
+                            (12981, 642, 15725, 3386)/*,
                             (-27648, -9216, 27648, 12288),
-                            (11774, 4480, 14078, 5376));
+                            (11774, 4480, 14078, 5376)*/);
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -64,7 +64,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             NPC cairn = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Cairn);
             if (cairn == null)
             {
-                throw new InvalidOperationException("Cairn not found");
+                throw new MissingKeyActorsException("Cairn not found");
             }
             phases[0].AddTarget(cairn);
             if (!requirePhases)
@@ -94,7 +94,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Cairn:
