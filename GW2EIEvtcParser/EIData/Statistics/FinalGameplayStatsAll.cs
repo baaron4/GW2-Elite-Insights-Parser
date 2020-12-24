@@ -25,7 +25,7 @@ namespace GW2EIEvtcParser.EIData
         // Counts
         public int SwapCount { get; internal set; }
 
-        private static double GetDistanceToTarget(Player player, ParsedEvtcLog log, PhaseData phase, List<Point3D> reference)
+        private static double GetDistanceToTarget(Player player, ParsedEvtcLog log, PhaseData phase, IReadOnlyList<Point3D> reference)
         {
             var positions = player.GetCombatReplayPolledPositions(log).Where(x => x.Time >= phase.Start && x.Time <= phase.End).ToList();
             int offset = player.GetCombatReplayPolledPositions(log).Count(x => x.Time < phase.Start);

@@ -18,11 +18,11 @@ namespace GW2EIGW2API.GW2API
         [JsonProperty]
         public string Slot { get; internal set; }
         [JsonProperty]
-        public List<GW2APIFact> Facts { get; internal set; }
+        public IReadOnlyList<GW2APIFact> Facts { get; internal set; }
         [JsonProperty(PropertyName = "traited_facts")]
-        public List<GW2APITraitedFact> TraitedFacts { get; internal set; }
+        public IReadOnlyList<GW2APITraitedFact> TraitedFacts { get; internal set; }
         [JsonProperty]
-        public List<GW2APISkill> Skills { get; internal set; }
+        public IReadOnlyList<GW2APISkill> Skills { get; internal set; }
     }
 
 }

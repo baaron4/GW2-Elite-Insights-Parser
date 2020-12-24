@@ -47,7 +47,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return Targets.FirstOrDefault();
         }
 
-        public MechanicData GetMechanicData()
+        internal MechanicData GetMechanicData()
         {
             return new MechanicData(MechanicList);
         }

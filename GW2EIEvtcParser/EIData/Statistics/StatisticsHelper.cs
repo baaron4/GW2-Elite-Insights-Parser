@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (skillIDs.Contains(boon.ID))
                 {
-                    PresentBoons.Add(boon);
+                    _presentBoons.Add(boon);
                 }
             }
             // Main Conditions
@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (skillIDs.Contains(boon.ID))
                 {
-                    PresentConditions.Add(boon);
+                    _presentConditions.Add(boon);
                 }
             }
 
@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (skillIDs.Contains(boon.ID))
                 {
-                    PresentOffbuffs.Add(boon);
+                    _presentOffbuffs.Add(boon);
                 }
             }
 
@@ -43,7 +43,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (skillIDs.Contains(boon.ID))
                 {
-                    PresentSupbuffs.Add(boon);
+                    _presentSupbuffs.Add(boon);
                 }
             }
 
@@ -51,7 +51,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (skillIDs.Contains(boon.ID))
                 {
-                    PresentDefbuffs.Add(boon);
+                    _presentDefbuffs.Add(boon);
                 }
 
             }
@@ -60,7 +60,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (skillIDs.Contains(boon.ID))
                 {
-                    PresentFractalInstabilities.Add(boon);
+                    _presentFractalInstabilities.Add(boon);
                 }
             }
 
@@ -68,12 +68,12 @@ namespace GW2EIEvtcParser.EIData
             var remainingBuffsByIds = boons.BuffsByNature[BuffNature.GraphOnlyBuff].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
             foreach (Player player in players)
             {
-                PresentRemainingBuffsPerPlayer[player] = new HashSet<Buff>();
+                _presentRemainingBuffsPerPlayer[player] = new HashSet<Buff>();
                 foreach (AbstractBuffEvent item in combatData.GetBuffData(player.AgentItem))
                 {
                     if (item is BuffApplyEvent && item.To == player.AgentItem && remainingBuffsByIds.TryGetValue(item.BuffID, out Buff boon))
                     {
-                        PresentRemainingBuffsPerPlayer[player].Add(boon);
+                        _presentRemainingBuffsPerPlayer[player].Add(boon);
                     }
                 }
             }
@@ -81,19 +81,38 @@ namespace GW2EIEvtcParser.EIData
 
 
         // present buff
-        public List<Buff> PresentBoons { get; } = new List<Buff>();//Used only for Boon tables
-        public List<Buff> PresentConditions { get; } = new List<Buff>();//Used only for Condition tables
-        public List<Buff> PresentOffbuffs { get; } = new List<Buff>();//Used only for Off Buff tables
-        public List<Buff> PresentSupbuffs { get; } = new List<Buff>();//Used only for Off Buff tables
-        public List<Buff> PresentDefbuffs { get; } = new List<Buff>();//Used only for Def Buff tables
-        public List<Buff> PresentFractalInstabilities { get; } = new List<Buff>();
-        public Dictionary<Player, HashSet<Buff>> PresentRemainingBuffsPerPlayer { get; } = new Dictionary<Player, HashSet<Buff>>();
+        public IReadOnlyList<Buff> PresentBoons => _presentBoons;//Used only for Boon tables
+        public IReadOnlyList<Buff> PresentConditions => _presentConditions;//Used only for Condition tables
+        public IReadOnlyList<Buff> PresentOffbuffs => _presentOffbuffs;//Used only for Off Buff tables
+        public IReadOnlyList<Buff> PresentSupbuffs => _presentSupbuffs;//Used only for Off Buff tables
+        public IReadOnlyList<Buff> PresentDefbuffs => _presentDefbuffs;//Used only for Def Buff tables
+        public IReadOnlyList<Buff> PresentFractalInstabilities => _presentFractalInstabilities;
+
+        public IReadOnlyCollection<Buff> GetPresentRemainingBuffsOnPlayer(Player p)
+        {
+            if (_presentRemainingBuffsPerPlayer.TryGetValue(p, out HashSet<Buff> buffs))
+            {
+                return buffs;
+            }
+            return new HashSet<Buff>();
+        }
+
+        //
+
+        private readonly List<Buff> _presentBoons = new List<Buff>();//Used only for Boon tables
+        private readonly List<Buff> _presentConditions  = new List<Buff>();//Used only for Condition tables
+        private readonly List<Buff> _presentOffbuffs  = new List<Buff>();//Used only for Off Buff tables
+        private readonly List<Buff> _presentSupbuffs  = new List<Buff>();//Used only for Off Buff tables
+        private readonly List<Buff> _presentDefbuffs = new List<Buff>();//Used only for Def Buff tables
+        private readonly List<Buff> _presentFractalInstabilities = new List<Buff>();
+        private readonly Dictionary<Player, HashSet<Buff>> _presentRemainingBuffsPerPlayer  = new Dictionary<Player, HashSet<Buff>>();
+
 
         //Positions for group
         private List<Point3D> _stackCenterPositions = null;
         private List<Point3D> _stackCommanderPositions = null;
 
-        public List<Point3D> GetStackCenterPositions(ParsedEvtcLog log)
+        public IReadOnlyList<Point3D> GetStackCenterPositions(ParsedEvtcLog log)
         {
             if (_stackCenterPositions == null)
             {
@@ -102,7 +121,7 @@ namespace GW2EIEvtcParser.EIData
             return _stackCenterPositions;
         }
 
-        public List<Point3D> GetStackCommanderPositions(ParsedEvtcLog log)
+        public IReadOnlyList<Point3D> GetStackCommanderPositions(ParsedEvtcLog log)
         {
             if (_stackCommanderPositions == null)
             {

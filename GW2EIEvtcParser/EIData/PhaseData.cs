@@ -115,9 +115,9 @@ namespace GW2EIEvtcParser.EIData
 
         public long GetActorActiveDuration(AbstractSingleActor p, ParsedEvtcLog log)
         {
-            List<(long start, long end)> dead;
-            List<(long start, long end)> down;
-            List<(long start, long end)> dc;
+            IReadOnlyList<(long start, long end)> dead;
+            IReadOnlyList<(long start, long end)> down;
+            IReadOnlyList<(long start, long end)> dc;
             (dead, down, dc) = p.GetStatus(log);
             return DurationInMS -
                 dead.Sum(x =>

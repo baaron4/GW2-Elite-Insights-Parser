@@ -44,14 +44,14 @@ namespace GW2EIEvtcParser.EIData
         }
         // Getters
         // Damage logs
-        public abstract List<AbstractHealthDamageEvent> GetDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
+        public abstract IReadOnlyList<AbstractHealthDamageEvent> GetDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
 
-        public abstract List<AbstractBreakbarDamageEvent> GetBreakbarDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
+        public abstract IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
 
         /// <summary>
         /// cached method for damage modifiers
         /// </summary>
-        internal List<AbstractHealthDamageEvent> GetHitDamageLogs(AbstractActor target, ParsedEvtcLog log, PhaseData phase)
+        internal IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageLogs(AbstractActor target, ParsedEvtcLog log, PhaseData phase)
         {
             if (!_damageLogsPerPhasePerTarget.TryGetValue(phase, out Dictionary<AbstractActor, List<AbstractHealthDamageEvent>> targetDict))
             {
@@ -66,13 +66,13 @@ namespace GW2EIEvtcParser.EIData
             return dls;
         }
 
-        public abstract List<AbstractHealthDamageEvent> GetDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
+        public abstract IReadOnlyList<AbstractHealthDamageEvent> GetDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
 
-        public abstract List<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
+        public abstract IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end);
 
         // Cast logs
-        public abstract List<AbstractCastEvent> GetCastLogs(ParsedEvtcLog log, long start, long end);
-        public abstract List<AbstractCastEvent> GetIntersectingCastLogs(ParsedEvtcLog log, long start, long end);
+        public abstract IReadOnlyList<AbstractCastEvent> GetCastLogs(ParsedEvtcLog log, long start, long end);
+        public abstract IReadOnlyList<AbstractCastEvent> GetIntersectingCastLogs(ParsedEvtcLog log, long start, long end);
         // privates
 
         protected static bool KeepIntersectingCastLog(AbstractCastEvent evt, long start, long end)

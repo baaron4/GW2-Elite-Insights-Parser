@@ -43,7 +43,7 @@ namespace GW2EIBuilders.JsonModels
         /// <summary>
         /// List of mechanics application
         /// </summary>
-        public List<JsonMechanic> MechanicsData { get; internal set; }
+        public IReadOnlyList<JsonMechanic> MechanicsData { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Name of the mechanic

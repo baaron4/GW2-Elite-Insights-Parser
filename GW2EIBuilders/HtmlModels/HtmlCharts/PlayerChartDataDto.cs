@@ -22,12 +22,12 @@ namespace GW2EIBuilders.HtmlModels
                     Damage = new PlayerDamageChartDto<int>()
                     {
                         Total = p.Get1SDamageList(log, phaseIndex, phase, null),
-                        Targets = new List<List<int>>()
+                        Targets = new List<IReadOnlyList<int>>()
                     },
                     BreakbarDamage = new PlayerDamageChartDto<double>()
                     {
                         Total = p.Get1SBreakbarDamageList(log, phaseIndex, phase, null),
-                        Targets = new List<List<double>>()
+                        Targets = new List<IReadOnlyList<double>>()
                     },
                     HealthStates = ChartDataDto.BuildHealthGraphStates(log, p, log.FightData.GetPhases(log)[phaseIndex], true)
                 };

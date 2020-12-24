@@ -64,7 +64,7 @@ namespace GW2EIBuilders.JsonModels
         /// List of casted skills
         /// </summary>
         /// <seealso cref="JsonSkill"/>
-        public List<JsonSkill> Skills { get; internal set; }
+        public IReadOnlyList<JsonSkill> Skills { get; internal set; }
 
         [JsonConstructor]
         internal JsonRotation()
