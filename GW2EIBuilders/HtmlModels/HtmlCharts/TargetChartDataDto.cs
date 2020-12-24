@@ -6,7 +6,7 @@ namespace GW2EIBuilders.HtmlModels
 {
     internal class TargetChartDataDto
     {
-        public List<int> Total { get; set; }
+        public IReadOnlyList<int> Total { get; set; }
         public List<object[]> HealthStates { get; set; }
         public List<object[]> BreakbarPercentStates { get; set; }
 

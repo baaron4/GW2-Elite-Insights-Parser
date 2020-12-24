@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EIData
         {
             foreach (Player p in log.PlayerList)
             {
-                List<AbstractHealthDamageEvent> combatitems = p.GetDamageTakenLogs(null, log, 0, log.FightData.FightEnd);
+                IReadOnlyList<AbstractHealthDamageEvent> combatitems = p.GetDamageTakenLogs(null, log, 0, log.FightData.FightEnd);
                 foreach (AbstractHealthDamageEvent c in combatitems)
                 {
                     if (c.SkillId == SkillId && Keep(c, log))

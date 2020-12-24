@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData
     {
         private List<NPC> _minionList { get; }
 
-        public IEnumerable<NPC> MinionList => _minionList.AsReadOnly();
+        public IReadOnlyList<NPC> MinionList => _minionList;
         public AbstractSingleActor Master { get; }
 
         internal Minions(AbstractSingleActor master, NPC firstMinion) : base(firstMinion.AgentItem)
@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EIData
             _minionList.Add(minion);
         }
 
-        public override List<AbstractHealthDamageEvent> GetDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractHealthDamageEvent> GetDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
             if (DamageLogs == null)
             {
@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.EIData
             return DamageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public override List<AbstractBreakbarDamageEvent> GetBreakbarDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
             if (BreakbarDamageLogs == null)
             {
@@ -84,7 +84,7 @@ namespace GW2EIEvtcParser.EIData
             return res;
         }*/
 
-        public override List<AbstractHealthDamageEvent> GetDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractHealthDamageEvent> GetDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
             if (DamageTakenlogs == null)
             {
@@ -109,7 +109,7 @@ namespace GW2EIEvtcParser.EIData
             return DamageTakenlogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public override List<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
             if (BreakbarDamageTakenLogs == null)
             {
@@ -144,7 +144,7 @@ namespace GW2EIEvtcParser.EIData
             CastLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
         }
 
-        public override List<AbstractCastEvent> GetCastLogs(ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractCastEvent> GetCastLogs(ParsedEvtcLog log, long start, long end)
         {
             if (CastLogs == null)
             {
@@ -153,7 +153,7 @@ namespace GW2EIEvtcParser.EIData
             return CastLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public override List<AbstractCastEvent> GetIntersectingCastLogs(ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractCastEvent> GetIntersectingCastLogs(ParsedEvtcLog log, long start, long end)
         {
             if (CastLogs == null)
             {
@@ -162,7 +162,7 @@ namespace GW2EIEvtcParser.EIData
             return CastLogs.Where(x => KeepIntersectingCastLog(x, start, end)).ToList();
         }
 
-        public List<List<Segment>> GetLifeSpanSegments(ParsedEvtcLog log)
+        internal List<List<Segment>> GetLifeSpanSegments(ParsedEvtcLog log)
         {
             var minionsSegments = new List<List<Segment>>();
             long fightDur = log.FightData.FightEnd;

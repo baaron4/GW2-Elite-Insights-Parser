@@ -30,7 +30,7 @@ namespace GW2EIEvtcParser.EIData
             double phaseDuration = (phase.DurationInMS) / 1000.0;
             int damage;
             double dps = 0.0;
-            List<AbstractHealthDamageEvent> damageLogs = actor.GetDamageLogs(target, log, phase.Start, phase.End);
+            IReadOnlyList<AbstractHealthDamageEvent> damageLogs = actor.GetDamageLogs(target, log, phase.Start, phase.End);
             //DPS
             damage = damageLogs.Sum(x => x.HealthDamage);
 
@@ -57,7 +57,7 @@ namespace GW2EIEvtcParser.EIData
             }
             PowerDps = (int)Math.Round(dps);
             PowerDamage = damage;
-            List<AbstractHealthDamageEvent> actorDamageLogs = actor.GetJustActorDamageLogs(target, log, phase.Start, phase.End);
+            IReadOnlyList<AbstractHealthDamageEvent> actorDamageLogs = actor.GetJustActorDamageLogs(target, log, phase.Start, phase.End);
             // Actor DPS
             damage = actorDamageLogs.Sum(x => x.HealthDamage);
 

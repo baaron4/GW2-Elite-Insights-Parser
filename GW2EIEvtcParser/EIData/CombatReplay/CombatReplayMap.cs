@@ -94,7 +94,7 @@ namespace GW2EIEvtcParser.EIData
                 _rectInMap.bottomY = int.MinValue;
                 foreach (Player p in log.PlayerList)
                 {
-                    List<Point3D> pos = p.GetCombatReplayPolledPositions(log);
+                    IReadOnlyList<Point3D> pos = p.GetCombatReplayPolledPositions(log);
                     if (pos.Count == 0)
                     {
                         continue;
