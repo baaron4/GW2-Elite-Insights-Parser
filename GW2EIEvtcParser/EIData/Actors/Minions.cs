@@ -95,9 +95,16 @@ namespace GW2EIEvtcParser.EIData
                 }
                 DamageTakenLogsBySrc = DamageTakenlogs.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
-            if (target != null && DamageTakenLogsBySrc.TryGetValue(target.AgentItem, out List<AbstractHealthDamageEvent> list))
+            if (target != null)
             {
-                return list.Where(x => x.Time >= start && x.Time <= end).ToList();
+                if (DamageTakenLogsBySrc.TryGetValue(target.AgentItem, out List<AbstractHealthDamageEvent> list))
+                {
+                    return list.Where(x => x.Time >= start && x.Time <= end).ToList();
+                }
+                else
+                {
+                    return new List<AbstractHealthDamageEvent>();
+                }
             }
             return DamageTakenlogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
@@ -113,9 +120,16 @@ namespace GW2EIEvtcParser.EIData
                 }
                 BreakbarDamageTakenLogsBySrc = BreakbarDamageTakenLogs.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
-            if (target != null && BreakbarDamageTakenLogsBySrc.TryGetValue(target.AgentItem, out List<AbstractBreakbarDamageEvent> list))
+            if (target != null)
             {
-                return list.Where(x => x.Time >= start && x.Time <= end).ToList();
+                if (BreakbarDamageTakenLogsBySrc.TryGetValue(target.AgentItem, out List<AbstractBreakbarDamageEvent> list))
+                {
+                    return list.Where(x => x.Time >= start && x.Time <= end).ToList();
+                } 
+                else
+                {
+                    return new List<AbstractBreakbarDamageEvent>();
+                }
             }
             return BreakbarDamageTakenLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
