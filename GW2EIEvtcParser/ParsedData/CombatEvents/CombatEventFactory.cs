@@ -56,6 +56,10 @@ namespace GW2EIEvtcParser.ParsedData
                     var healthEvt = new HealthUpdateEvent(stateChangeEvent, agentData);
                     Add(statusEvents.HealthUpdateEvents, healthEvt.Src, healthEvt);
                     break;
+                case ArcDPSEnums.StateChange.BarrierUpdate:
+                    var barrierEvt = new BarrierUpdateEvent(stateChangeEvent, agentData);
+                    Add(statusEvents.BarrierUpdateEvents, barrierEvt.Src, barrierEvt);
+                    break;
                 case ArcDPSEnums.StateChange.LogStart:
                     if (stateChangeEvent.Value == 0 || stateChangeEvent.BuffDmg == 0)
                     {

@@ -9,6 +9,7 @@ namespace GW2EIBuilders.HtmlModels
         public IReadOnlyList<int> Total { get; set; }
         public List<object[]> HealthStates { get; set; }
         public List<object[]> BreakbarPercentStates { get; set; }
+        public List<object[]> BarrierStates { get; set; }
 
         public static TargetChartDataDto BuildTargetGraphData(ParsedEvtcLog log, int phaseIndex, NPC target)
         {
@@ -16,8 +17,9 @@ namespace GW2EIBuilders.HtmlModels
             return new TargetChartDataDto
             {
                 Total = target.Get1SDamageList(log, phaseIndex, phase, null),
-                HealthStates = ChartDataDto.BuildHealthGraphStates(log, target, log.FightData.GetPhases(log)[phaseIndex], false),
-                BreakbarPercentStates = ChartDataDto.BuildBreakbarPercentStates(log, target, log.FightData.GetPhases(log)[phaseIndex]),
+                HealthStates = ChartDataDto.BuildHealthStates(log, target, phase, false),
+                BreakbarPercentStates = ChartDataDto.BuildBreakbarPercentStates(log, target, phase),
+                BarrierStates = ChartDataDto.BuildBarrierStates(log, target, phase),
             };
         }
     }

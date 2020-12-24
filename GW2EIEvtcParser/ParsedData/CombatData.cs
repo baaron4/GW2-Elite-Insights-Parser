@@ -475,6 +475,15 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<HealthUpdateEvent>();
         }
 
+        public IReadOnlyList<BarrierUpdateEvent> GetBarrierUpdateEvents(AgentItem key)
+        {
+            if (_statusEvents.BarrierUpdateEvents.TryGetValue(key, out List<BarrierUpdateEvent> list))
+            {
+                return list;
+            }
+            return new List<BarrierUpdateEvent>();
+        }
+
         public IReadOnlyList<MaxHealthUpdateEvent> GetMaxHealthUpdateEvents(AgentItem key)
         {
             if (_statusEvents.MaxHealthUpdateEvents.TryGetValue(key, out List<MaxHealthUpdateEvent> list))

@@ -12,6 +12,7 @@ namespace GW2EIEvtcParser.ParsedData
         public Dictionary<AgentItem, List<EnterCombatEvent>> EnterCombatEvents { get; } = new Dictionary<AgentItem, List<EnterCombatEvent>>();
         public Dictionary<AgentItem, List<ExitCombatEvent>> ExitCombatEvents { get; } = new Dictionary<AgentItem, List<ExitCombatEvent>>();
         public Dictionary<AgentItem, List<HealthUpdateEvent>> HealthUpdateEvents { get; } = new Dictionary<AgentItem, List<HealthUpdateEvent>>();
+        public Dictionary<AgentItem, List<BarrierUpdateEvent>> BarrierUpdateEvents { get; } = new Dictionary<AgentItem, List<BarrierUpdateEvent>>();
         public Dictionary<AgentItem, List<MaxHealthUpdateEvent>> MaxHealthUpdateEvents { get; } = new Dictionary<AgentItem, List<MaxHealthUpdateEvent>>();
         public Dictionary<AgentItem, List<SpawnEvent>> SpawnEvents { get; } = new Dictionary<AgentItem, List<SpawnEvent>>();
         public Dictionary<AgentItem, List<TargetableEvent>> TargetableEvents { get; } = new Dictionary<AgentItem, List<TargetableEvent>>();

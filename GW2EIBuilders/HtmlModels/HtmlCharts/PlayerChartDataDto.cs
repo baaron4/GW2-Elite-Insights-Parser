@@ -9,6 +9,7 @@ namespace GW2EIBuilders.HtmlModels
         public PlayerDamageChartDto<int> Damage { get; set; }
         public PlayerDamageChartDto<double> BreakbarDamage { get; set; }
         public List<object[]> HealthStates { get; set; }
+        public List<object[]> BarrierStates { get; set; }
 
         public static List<PlayerChartDataDto> BuildPlayersGraphData(ParsedEvtcLog log, int phaseIndex)
         {
@@ -29,7 +30,8 @@ namespace GW2EIBuilders.HtmlModels
                         Total = p.Get1SBreakbarDamageList(log, phaseIndex, phase, null),
                         Targets = new List<IReadOnlyList<double>>()
                     },
-                    HealthStates = ChartDataDto.BuildHealthGraphStates(log, p, log.FightData.GetPhases(log)[phaseIndex], true)
+                    HealthStates = ChartDataDto.BuildHealthStates(log, p, phase, true),
+                    BarrierStates = ChartDataDto.BuildBarrierStates(log, p, phase)
                 };
                 foreach (NPC target in phase.Targets)
                 {

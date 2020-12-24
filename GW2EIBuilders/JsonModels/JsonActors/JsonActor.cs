@@ -150,6 +150,12 @@ namespace GW2EIBuilders.JsonModels
         /// If i corresponds to the last element that means the health did not change for the remainder of the fight \n
         /// </summary>
         public IReadOnlyList<IReadOnlyList<double>> HealthPercents { get; internal set; }
+        /// <summary>
+        /// Array of double[2] that represents the barrier status of the actor \n
+        /// Array[i][0] will be the time, Array[i][1] will be barrier % \n
+        /// If i corresponds to the last element that means the health did not change for the remainder of the fight \n
+        /// </summary>
+        public IReadOnlyList<IReadOnlyList<double>> BarrierPercents { get; internal set; }
 
 
         [JsonConstructor]
@@ -218,6 +224,7 @@ namespace GW2EIBuilders.JsonModels
                 }
                 // Health
                 HealthPercents = actor.GetHealthUpdates(log).Select(x => new double[2] { x.Start, x.Value }).ToList();
+                BarrierPercents = actor.GetBarrierUpdates(log).Select(x => new double[2] { x.Start, x.Value }).ToList();
             }
         }
 

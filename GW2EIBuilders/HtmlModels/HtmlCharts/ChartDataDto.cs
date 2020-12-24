@@ -11,15 +11,14 @@ namespace GW2EIBuilders.HtmlModels
         public List<PhaseChartDataDto> Phases { get; set; } = new List<PhaseChartDataDto>();
         public List<MechanicChartDataDto> Mechanics { get; set; } = new List<MechanicChartDataDto>();
 
-        public static List<object[]> BuildHealthGraphStates(ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase, bool nullable)
+        private static List<object[]> BuildGraphStates(IReadOnlyList<Segment> segments, PhaseData phase, bool nullable, double defaultState)
         {
-            IReadOnlyList<Segment> segments = actor.GetHealthUpdates(log);
             if (!segments.Any())
             {
                 return nullable ? null : new List<object[]>()
                 {
-                    new object[] { Math.Round(phase.Start/1000.0, 3), 100.0},
-                    new object[] { Math.Round(phase.End/1000.0, 3), 100.0},
+                    new object[] { Math.Round(phase.Start/1000.0, 3), defaultState},
+                    new object[] { Math.Round(phase.End/1000.0, 3), defaultState},
                 };
             }
             var res = new List<object[]>();
@@ -27,17 +26,20 @@ namespace GW2EIBuilders.HtmlModels
             ).ToList();
             return Segment.ToObjectList(subSegments, phase.Start, phase.End);
         }
+
+        public static List<object[]> BuildHealthStates(ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase, bool nullable)
+        {
+            return BuildGraphStates(actor.GetHealthUpdates(log), phase, nullable, 100.0);
+        }
+
+        public static List<object[]> BuildBarrierStates(ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase)
+        {
+            return BuildGraphStates(actor.GetBarrierUpdates(log), phase, true, 0.0);
+        }
+
         public static List<object[]> BuildBreakbarPercentStates(ParsedEvtcLog log, NPC npc, PhaseData phase)
         {
-            IReadOnlyList<Segment> segments = npc.GetBreakbarPercentUpdates(log);
-            if (!segments.Any())
-            {
-                return null;
-            }
-            var res = new List<object[]>();
-            var subSegments = segments.Where(x => x.End >= phase.Start && x.Start <= phase.End
-            ).ToList();
-            return Segment.ToObjectList(subSegments, phase.Start, phase.End);
+            return BuildGraphStates(npc.GetBreakbarPercentUpdates(log), phase, true, 100.0);
         }
 
         public static ChartDataDto BuildChartData(ParsedEvtcLog log)
@@ -59,10 +61,12 @@ namespace GW2EIBuilders.HtmlModels
                 {
                     phaseData.TargetsHealthStatesForCR = new List<List<object[]>>();
                     phaseData.TargetsBreakbarPercentStatesForCR = new List<List<object[]>>();
+                    phaseData.TargetsBarrierStatesForCR = new List<List<object[]>>();
                     foreach (NPC target in log.FightData.Logic.Targets)
                     {
-                        phaseData.TargetsHealthStatesForCR.Add(BuildHealthGraphStates(log, target, phases[0], false));
+                        phaseData.TargetsHealthStatesForCR.Add(BuildHealthStates(log, target, phases[0], false));
                         phaseData.TargetsBreakbarPercentStatesForCR.Add(BuildBreakbarPercentStates(log, target, phases[0]));
+                        phaseData.TargetsBarrierStatesForCR.Add(BuildBarrierStates(log, target, phases[0]));
                     }
                 }
 

@@ -119,6 +119,7 @@ namespace GW2EIEvtcParser
             BreakbarPercent = 35,
             Error = 36,
             Tag = 37,
+            BarrierUpdate = 38,
             Unknown
         };
 
@@ -646,7 +647,8 @@ namespace GW2EIEvtcParser
                 || state == ArcDPSEnums.StateChange.TeamChange || state == ArcDPSEnums.StateChange.AttackTarget
                 || state == ArcDPSEnums.StateChange.Targetable || state == ArcDPSEnums.StateChange.StackActive
                 || state == ArcDPSEnums.StateChange.StackReset || state == ArcDPSEnums.StateChange.BreakbarState
-                || state == ArcDPSEnums.StateChange.BreakbarPercent;
+                || state == ArcDPSEnums.StateChange.BreakbarPercent || state == ArcDPSEnums.StateChange.Tag 
+                || state == ArcDPSEnums.StateChange.BarrierUpdate;
         }
 
         public static bool DstIsAgent(this ArcDPSEnums.StateChange state)
@@ -667,7 +669,7 @@ namespace GW2EIEvtcParser
                 || state == ArcDPSEnums.StateChange.AttackTarget || state == ArcDPSEnums.StateChange.Targetable
                 || state == ArcDPSEnums.StateChange.StackActive || state == ArcDPSEnums.StateChange.StackReset
                 || state == ArcDPSEnums.StateChange.Reward || state == ArcDPSEnums.StateChange.BreakbarState
-                || state == ArcDPSEnums.StateChange.BreakbarPercent;
+                || state == ArcDPSEnums.StateChange.BreakbarPercent || state == ArcDPSEnums.StateChange.BarrierUpdate;
         }
     }
 
