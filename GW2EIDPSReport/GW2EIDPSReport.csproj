@@ -15,6 +15,10 @@
 
   <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <Version>1.1.0</Version>
+    <Authors>EliphasNUIT</Authors>
+    <Company>GW2 Elite Insights</Company>
+    <Product>GW2 Elite Insights</Product>
   </PropertyGroup>
 
   <ItemGroup>

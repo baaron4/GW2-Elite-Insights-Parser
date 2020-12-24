@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>GW2EIGW2API</RootNamespace>
-    <Version>2.0.0</Version>
+    <Version>2.1.0</Version>
     <Configurations>Debug;Release;NoRewards</Configurations>
   </PropertyGroup>
 
@@ -13,6 +13,9 @@
 
   <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <Product>GW2 Elite Insights</Product>
+    <Company>GW2 Elite Insights</Company>
+    <Authors>EliphasNUIT</Authors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NoRewards|AnyCPU'">

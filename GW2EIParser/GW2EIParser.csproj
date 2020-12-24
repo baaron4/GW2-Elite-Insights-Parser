@@ -62,6 +62,8 @@
   </PropertyGroup>
   <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <Authors>EliphasNUIT, Baaron</Authors>
+    <PackageId>GW2EIParser</PackageId>
   </PropertyGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
