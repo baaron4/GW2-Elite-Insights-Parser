@@ -95,7 +95,7 @@ namespace GW2EIEvtcParser.EIData
             return _healthUpdates;
         }
 
-        public List<Segment> GetBarrierUpdates(ParsedEvtcLog log)
+        public IReadOnlyList<Segment> GetBarrierUpdates(ParsedEvtcLog log)
         {
             if (_barrierUpdates == null)
             {

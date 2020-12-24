@@ -9,7 +9,7 @@
     <TestProjectType>UnitTest</TestProjectType>
     <AssemblyTitle>EliteInsights</AssemblyTitle>
     <OutputPath>..\GW2EI.bin\$(Configuration).tst\</OutputPath>
-    <Product>EliteInsights</Product>
+    <Product>GW2 Elite Insights</Product>
     <Copyright>Copyright ©  2020</Copyright>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <Configurations>Debug;Release;NoRewards</Configurations>
@@ -29,6 +29,8 @@
   </PropertyGroup>
   <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <Company>GW2 Elite Insights</Company>
+    <Authors>EliphasNUIT</Authors>
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <ItemGroup>

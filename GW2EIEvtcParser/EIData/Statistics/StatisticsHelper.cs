@@ -88,7 +88,7 @@ namespace GW2EIEvtcParser.EIData
         public IReadOnlyList<Buff> PresentDefbuffs => _presentDefbuffs;//Used only for Def Buff tables
         public IReadOnlyList<Buff> PresentFractalInstabilities => _presentFractalInstabilities;
 
-        public IReadOnlyCollection<Buff> GetPresentRaminingBuffsOnPlayer(Player p)
+        public IReadOnlyCollection<Buff> GetPresentRemainingBuffsOnPlayer(Player p)
         {
             if (_presentRemainingBuffsPerPlayer.TryGetValue(p, out HashSet<Buff> buffs))
             {
