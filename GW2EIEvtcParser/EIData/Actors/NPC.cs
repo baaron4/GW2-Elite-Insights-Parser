@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.EIData
 {
     public class NPC : AbstractSingleActor
     {
-        private List<Dictionary<long, FinalBuffs>> _buffs;
+        private CachingCollection<Dictionary<long, FinalBuffs>> _buffs;
         private List<Segment> _breakbarPercentUpdates { get; set; }
         // Constructors
         internal NPC(AgentItem agent) : base(agent)
@@ -49,53 +49,36 @@ namespace GW2EIEvtcParser.EIData
             _health = health;
         }
 
-        /*public void AddCustomCastLog(long time, long skillID, int expDur, ParseEnum.Activation startActivation, int actDur, ParseEnum.Activation endActivation, ParsedEvtcLog log)
-        {
-            if (CastLogs.Count == 0)
-            {
-                GetCastLogs(log, 0, log.FightData.FightEnd);
-            }
-            CastLogs.Add(new CastLog(time, skillID, expDur, startActivation, actDur, endActivation, Agent, InstID));
-        }*/
-
-        public Dictionary<long, FinalBuffs> GetBuffs(ParsedEvtcLog log, int phaseIndex)
+        public IReadOnlyDictionary<long, FinalBuffs> GetBuffs(ParsedEvtcLog log, long start, long end)
         {
             if (_buffs == null)
             {
-                SetBuffs(log);
+                _buffs = new CachingCollection<Dictionary<long, FinalBuffs>>(log);
             }
-            return _buffs[phaseIndex];
+            if (!_buffs.TryGetValue(start, end, out Dictionary<long, FinalBuffs> value))
+            {
+                value = ComputeBuffs(log, start, end);
+                _buffs.Set(start, end, value);
+            }
+            return value;
         }
 
-        public List<Dictionary<long, FinalBuffs>> GetBuffs(ParsedEvtcLog log)
+        private Dictionary<long, FinalBuffs> ComputeBuffs(ParsedEvtcLog log, long start, long end)
         {
-            if (_buffs == null)
+            BuffDistribution buffDistribution = GetBuffDistribution(log, start, end);
+            var rates = new Dictionary<long, FinalBuffs>();
+            Dictionary<long, long> buffPresence = GetBuffPresence(log, start, end);
+
+            long phaseDuration = end - start;
+
+            foreach (Buff buff in GetTrackedBuffs(log))
             {
-                SetBuffs(log);
-            }
-            return _buffs;
-        }
-
-        private void SetBuffs(ParsedEvtcLog log)
-        {
-            _buffs = new List<Dictionary<long, FinalBuffs>>();
-            foreach (PhaseData phase in log.FightData.GetPhases(log))
-            {
-                BuffDistribution buffDistribution = GetBuffDistribution(log, phase.Start, phase.End);
-                var rates = new Dictionary<long, FinalBuffs>();
-                _buffs.Add(rates);
-                Dictionary<long, long> buffPresence = GetBuffPresence(log, phase.Start, phase.End);
-
-                long phaseDuration = phase.DurationInMS;
-
-                foreach (Buff buff in GetTrackedBuffs(log))
+                if (buffDistribution.HasBuffID(buff.ID))
                 {
-                    if (buffDistribution.HasBuffID(buff.ID))
-                    {
-                        rates[buff.ID] = new FinalBuffs(buff, buffDistribution, buffPresence, phaseDuration);
-                    }
+                    rates[buff.ID] = new FinalBuffs(buff, buffDistribution, buffPresence, phaseDuration);
                 }
             }
+            return rates;
         }
 
         protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log)

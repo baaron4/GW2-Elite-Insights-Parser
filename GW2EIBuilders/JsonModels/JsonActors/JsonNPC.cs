@@ -88,7 +88,7 @@ namespace GW2EIBuilders.JsonModels
             HealthPercentBurned = 100.0 - hpLeft;
             FinalHealth = (int)Math.Round(TotalHealth * hpLeft / 100.0);
             //
-            Buffs = GetNPCJsonBuffsUptime(npc, npc.GetBuffs(log), log, settings, buffDesc);
+            Buffs = GetNPCJsonBuffsUptime(npc, log, settings, buffDesc);
             // Breakbar
             if (settings.RawFormatTimelineArrays)
             {
@@ -96,10 +96,11 @@ namespace GW2EIBuilders.JsonModels
             }
         }
 
-        private static List<JsonBuffsUptime> GetNPCJsonBuffsUptime(NPC npc, List<Dictionary<long, FinalBuffs>> buffs, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        private static List<JsonBuffsUptime> GetNPCJsonBuffsUptime(NPC npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
             var res = new List<JsonBuffsUptime>();
             IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+            var buffs = phases.Select(x => npc.GetBuffs(log, x.Start, x.End)).ToList();
             foreach (KeyValuePair<long, FinalBuffs> pair in buffs[0])
             {
                 var data = new List<JsonBuffsUptimeData>();

@@ -696,7 +696,7 @@ namespace GW2EIBuilders
         {
             NPC boss = _legacyTarget;
             PhaseData phase = _phases[phaseIndex];
-            Dictionary<long, FinalBuffs> conditions = _legacyTarget.GetBuffs(_log, phaseIndex);
+            IReadOnlyDictionary<long, FinalBuffs> conditions = _legacyTarget.GetBuffs(_log, phase.Start, phase.End);
 
             WriteCell("Name");
             WriteCell("Avg");
@@ -738,7 +738,8 @@ namespace GW2EIBuilders
         private void CreateBossBoonUptime(int phaseIndex)
         {
             NPC boss = _legacyTarget;
-            Dictionary<long, FinalBuffs> conditions = _legacyTarget.GetBuffs(_log, phaseIndex);
+            PhaseData phase = _phases[phaseIndex];
+            IReadOnlyDictionary<long, FinalBuffs> conditions = _legacyTarget.GetBuffs(_log, phase.Start, phase.End);
             WriteCell("Name");
             WriteCell("Avg");
             foreach (Buff boon in _statistics.PresentBoons)

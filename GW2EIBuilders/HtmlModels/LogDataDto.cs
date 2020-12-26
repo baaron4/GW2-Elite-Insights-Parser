@@ -122,9 +122,9 @@ namespace GW2EIBuilders.HtmlModels
             return damageModBySpecs;
         }
 
-        private static bool HasBoons(ParsedEvtcLog log, int phaseIndex, NPC target)
+        private static bool HasBoons(ParsedEvtcLog log, PhaseData phase, NPC target)
         {
-            Dictionary<long, FinalBuffs> conditions = target.GetBuffs(log, phaseIndex);
+            IReadOnlyDictionary<long, FinalBuffs> conditions = target.GetBuffs(log, phase.Start, phase.End);
             foreach (Buff boon in log.StatisticsHelper.PresentBoons)
             {
                 if (conditions.TryGetValue(boon.ID, out FinalBuffs uptime))
@@ -324,8 +324,8 @@ namespace GW2EIBuilders.HtmlModels
                 foreach (NPC target in phase.Targets)
                 {
                     phaseDto.TargetsCondiStats.Add(BuffData.BuildTargetCondiData(log, phase.Start, phase.End, target));
-                    phaseDto.TargetsCondiTotals.Add(BuffData.BuildTargetCondiUptimeData(log, i, target));
-                    phaseDto.TargetsBoonTotals.Add(HasBoons(log, i, target) ? BuffData.BuildTargetBoonData(log, i, target) : null);
+                    phaseDto.TargetsCondiTotals.Add(BuffData.BuildTargetCondiUptimeData(log, phase, target));
+                    phaseDto.TargetsBoonTotals.Add(HasBoons(log, phase, target) ? BuffData.BuildTargetBoonData(log, phase, target) : null);
                 }
                 logData.Phases.Add(phaseDto);
             }
