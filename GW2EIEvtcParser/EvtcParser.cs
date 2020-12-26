@@ -305,11 +305,7 @@ namespace GW2EIEvtcParser
                 {
                     case "NPC":
                         // NPC
-                        try
-                        {
-                            ID = ushort.Parse(prof.ToString().PadLeft(5, '0'));
-                        }
-                        catch (FormatException)
+                        if (!ushort.TryParse(prof.ToString().PadLeft(5, '0'), out ID))
                         {
                             ID = 0;
                         }
@@ -317,11 +313,7 @@ namespace GW2EIEvtcParser
                         break;
                     case "GDG":
                         // Gadget
-                        try
-                        {
-                            ID = ushort.Parse((prof & 0x0000ffff).ToString().PadLeft(5, '0'));
-                        }
-                        catch (FormatException)
+                        if (!ushort.TryParse((prof & 0x0000ffff).ToString().PadLeft(5, '0'), out ID))
                         {
                             ID = 0;
                         }
