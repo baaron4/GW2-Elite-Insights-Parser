@@ -284,17 +284,17 @@ namespace GW2EIEvtcParser
                 uint isElite = reader.ReadUInt32();
 
                 // 2 bytes: toughness
-                uint toughness = reader.ReadUInt16();
+                ushort toughness = reader.ReadUInt16();
                 // 2 bytes: healing
-                uint concentration = reader.ReadUInt16();
+                ushort concentration = reader.ReadUInt16();
                 // 2 bytes: healing
-                uint healing = reader.ReadUInt16();
+                ushort healing = reader.ReadUInt16();
                 // 2 bytes: hitbox width
-                uint hbWidth = (uint)2 * reader.ReadUInt16();
+                uint hbWidth = (uint)(2 * reader.ReadUInt16());
                 // 2 bytes: condition
-                uint condition = reader.ReadUInt16();
+                ushort condition = reader.ReadUInt16();
                 // 2 bytes: hitbox height
-                uint hbHeight = (uint)2 * reader.ReadUInt16();
+                uint hbHeight = (uint)(2 * reader.ReadUInt16());
                 // 68 bytes: name
                 string name = GetString(reader, 68, false);
                 //Save
@@ -679,7 +679,7 @@ namespace GW2EIEvtcParser
                 uint maxToughness = _playerList.Max(x => x.Toughness);
                 foreach (Player p in _playerList)
                 {
-                    p.AgentItem.OverrideToughness((uint)Math.Round(10.0 * (p.AgentItem.Toughness - minToughness) / Math.Max(1.0, maxToughness - minToughness)));
+                    p.AgentItem.OverrideToughness((ushort)Math.Round(10.0 * (p.AgentItem.Toughness - minToughness) / Math.Max(1.0, maxToughness - minToughness)));
                 }
             }
         }

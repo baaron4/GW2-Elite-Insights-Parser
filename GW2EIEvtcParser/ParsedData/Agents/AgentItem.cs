@@ -22,17 +22,17 @@ namespace GW2EIEvtcParser.ParsedData
         public long LastAware { get; protected set; } = long.MaxValue;
         public string Name { get; protected set; } = "UNKNOWN";
         public string Prof { get; } = "UNKNOWN";
-        public uint Toughness { get; protected set; }
-        public uint Healing { get; }
-        public uint Condition { get; }
-        public uint Concentration { get; }
+        public ushort Toughness { get; protected set; }
+        public ushort Healing { get; }
+        public ushort Condition { get; }
+        public ushort Concentration { get; }
         public uint HitboxWidth { get; }
         public uint HitboxHeight { get; }
 
         public bool HasCommanderTag { get; protected set; }
 
         // Constructors
-        internal AgentItem(ulong agent, string name, string prof, int id, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight)
+        internal AgentItem(ulong agent, string name, string prof, int id, AgentType type, ushort toughness, ushort healing, ushort condition, ushort concentration, uint hbWidth, uint hbHeight)
         {
             UniqueID = AgentCount++;
             Agent = agent;
@@ -65,7 +65,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        internal AgentItem(ulong agent, string name, string prof, int id, ushort instid, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight, long firstAware, long lastAware) : this(agent, name, prof, id, type, toughness, healing, condition, concentration, hbWidth, hbHeight)
+        internal AgentItem(ulong agent, string name, string prof, int id, ushort instid, AgentType type, ushort toughness, ushort healing, ushort condition, ushort concentration, uint hbWidth, uint hbHeight, long firstAware, long lastAware) : this(agent, name, prof, id, type, toughness, healing, condition, concentration, hbWidth, hbHeight)
         {
             InstID = instid;
             FirstAware = firstAware;
@@ -115,7 +115,7 @@ namespace GW2EIEvtcParser.ParsedData
             Name = name;
         }
 
-        internal void OverrideToughness(uint toughness)
+        internal void OverrideToughness(ushort toughness)
         {
             Toughness = toughness;
         }
