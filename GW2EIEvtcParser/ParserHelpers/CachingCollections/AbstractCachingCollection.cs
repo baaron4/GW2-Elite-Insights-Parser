@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser
 {
-    internal abstract class AbstractCachingCollection<T>
+    public abstract class AbstractCachingCollection<T>
     {
 
         private readonly long _start;

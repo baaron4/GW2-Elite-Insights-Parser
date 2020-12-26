@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser
 {
-    internal class CachingCollection<T> : AbstractCachingCollection<T>
+    public class CachingCollection<T> : AbstractCachingCollection<T>
     {
 
         private readonly Dictionary<long, Dictionary<long, T>> _cache = new Dictionary<long, Dictionary<long, T>>();
