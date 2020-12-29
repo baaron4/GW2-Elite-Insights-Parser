@@ -137,7 +137,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Xera not found");
             }
             // find split
-            AgentItem secondXera = agentData.GetAgentByType(AgentItem.AgentType.NPC).FirstOrDefault(x => x.ID == 16286);
+            AgentItem secondXera = agentData.GetNPCsByID(16286).FirstOrDefault();
             if (secondXera != null)
             {
                 CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcAgent == secondXera.Agent && x.Time >= secondXera.FirstAware + 500);
