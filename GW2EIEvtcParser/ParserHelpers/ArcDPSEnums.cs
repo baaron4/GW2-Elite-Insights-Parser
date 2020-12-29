@@ -593,11 +593,16 @@ namespace GW2EIEvtcParser
             AiKeeperOfThePeak = 23254,
             AiKeeperOfThePeak2 = ArcDPSEnums.AiKeeperOfThePeak2,
             // Golems
-            MassiveGolem = 16202,
+            MassiveGolem10M = 16169,
+            MassiveGolem4M = 16202,
+            MassiveGolem1M = 16178,
+            VitalGolem = 16198,
             AvgGolem = 16177,
+            StdGolem = 16199,
             LGolem = 19676,
             MedGolem = 19645,
-            StdGolem = 16199,
+            ConditionGolem = 16174,
+            PowerGolem = 16176,
             //
             Unknown
         };

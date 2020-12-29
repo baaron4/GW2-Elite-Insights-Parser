@@ -389,13 +389,18 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TargetID.AiKeeperOfThePeak2:
                     return "https://i.imgur.com/I8nwhAw.png";
                 case ArcDPSEnums.TargetID.LGolem:
+                case ArcDPSEnums.TargetID.VitalGolem:
                     return "https://wiki.guildwars2.com/images/4/47/Mini_Baron_von_Scrufflebutt.png";
                 case ArcDPSEnums.TargetID.AvgGolem:
                     return "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
                 case ArcDPSEnums.TargetID.StdGolem:
                     return "https://wiki.guildwars2.com/images/8/8f/Mini_Professor_Mew.png";
-                case ArcDPSEnums.TargetID.MassiveGolem:
+                case ArcDPSEnums.TargetID.MassiveGolem10M:
+                case ArcDPSEnums.TargetID.MassiveGolem4M:
+                case ArcDPSEnums.TargetID.MassiveGolem1M:
                     return "https://wiki.guildwars2.com/images/3/33/Mini_Snuggles.png";
+                case ArcDPSEnums.TargetID.PowerGolem:
+                case ArcDPSEnums.TargetID.ConditionGolem:
                 case ArcDPSEnums.TargetID.MedGolem:
                     return "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
                 case ArcDPSEnums.TargetID.TwistedCastle:
