@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EncounterLogic
     internal class Xera : RaidLogic
     {
 
-        private long _specialSplit = 0;
+        private long _xeraSecondPhaseStartTime = 0;
 
         public Xera(int triggerID) : base(triggerID)
         {
@@ -56,12 +56,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Xera not found");
             }
             var res = new List<AbstractBuffEvent>();
-            if (_specialSplit != 0)
+            if (_xeraSecondPhaseStartTime != 0)
             {
-                res.Add(new BuffRemoveAllEvent(mainTarget.AgentItem, mainTarget.AgentItem, _specialSplit, int.MaxValue, skillData.Get(762), 1, int.MaxValue));
-                res.Add(new BuffRemoveManualEvent(mainTarget.AgentItem, mainTarget.AgentItem, _specialSplit, int.MaxValue, skillData.Get(762)));
+                res.Add(new BuffRemoveAllEvent(mainTarget.AgentItem, mainTarget.AgentItem, _xeraSecondPhaseStartTime, int.MaxValue, skillData.Get(762), 1, int.MaxValue));
+                res.Add(new BuffRemoveManualEvent(mainTarget.AgentItem, mainTarget.AgentItem, _xeraSecondPhaseStartTime, int.MaxValue, skillData.Get(762)));
             }
             return res;
+        }
+
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        {
+            if (_xeraSecondPhaseStartTime == 0)
+            {
+                return;
+            }
+            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -86,10 +95,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 end = invulXera.Time;
                 phases.Add(new PhaseData(start, end));
                 // split happened
-                if (_specialSplit > 0)
+                if (_xeraSecondPhaseStartTime > 0)
                 {
                     mainTarget.SetManualHealth(24085950);
-                    start = _specialSplit;
+                    start = _xeraSecondPhaseStartTime;
                     //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
                     phases.Add(new PhaseData(start, fightDuration));
                 }
@@ -128,35 +137,31 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Xera not found");
             }
             // find split
-            foreach (AgentItem NPC in agentData.GetAgentByType(AgentItem.AgentType.NPC))
+            AgentItem secondXera = agentData.GetNPCsByID(16286).FirstOrDefault();
+            if (secondXera != null)
             {
-                if (NPC.ID == 16286)
+                CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcAgent == secondXera.Agent && x.Time >= secondXera.FirstAware + 500);
+                if (move != null)
                 {
-                    CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcAgent == NPC.Agent && x.Time >= NPC.FirstAware + 500);
-                    if (move != null)
+                    _xeraSecondPhaseStartTime = move.Time;
+                }
+                else
+                {
+                    _xeraSecondPhaseStartTime = secondXera.FirstAware;
+                }
+                target.OverrideAwareTimes(target.FirstAware, secondXera.LastAware);
+                agentData.SwapMasters(secondXera, target);
+                // update combat data
+                foreach (CombatItem c in combatData)
+                {
+                    if (c.SrcAgent == secondXera.Agent && c.IsStateChange.SrcIsAgent())
                     {
-                        _specialSplit = move.Time;
+                        c.OverrideSrcAgent(target.Agent);
                     }
-                    else
+                    if (c.DstAgent == secondXera.Agent && c.IsStateChange.DstIsAgent())
                     {
-                        _specialSplit = NPC.FirstAware;
+                        c.OverrideDstAgent(target.Agent);
                     }
-                    target.OverrideAwareTimes(target.FirstAware, NPC.LastAware);
-                    agentData.SwapMasters(NPC, target);
-                    var agents = new HashSet<ulong>() { NPC.Agent, target.Agent };
-                    // update combat data
-                    foreach (CombatItem c in combatData)
-                    {
-                        if (agents.Contains(c.SrcAgent) && c.IsStateChange.SrcIsAgent())
-                        {
-                            c.OverrideSrcAgent(target.Agent);
-                        }
-                        if (agents.Contains(c.DstAgent) && c.IsStateChange.DstIsAgent())
-                        {
-                            c.OverrideDstAgent(target.Agent);
-                        }
-                    }
-                    break;
                 }
             }
             ComputeFightTargets(agentData, combatData);

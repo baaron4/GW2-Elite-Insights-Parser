@@ -186,11 +186,16 @@ namespace GW2EIEvtcParser.ParsedData
                     Logic = new WvWFight(id, parserSettings.DetailedWvWParse);
                     break;
                 //
-                case ArcDPSEnums.TargetID.MassiveGolem:
+                case ArcDPSEnums.TargetID.MassiveGolem10M:
+                case ArcDPSEnums.TargetID.MassiveGolem4M:
+                case ArcDPSEnums.TargetID.MassiveGolem1M:
+                case ArcDPSEnums.TargetID.VitalGolem:
                 case ArcDPSEnums.TargetID.AvgGolem:
+                case ArcDPSEnums.TargetID.StdGolem:
+                case ArcDPSEnums.TargetID.ConditionGolem:
+                case ArcDPSEnums.TargetID.PowerGolem:
                 case ArcDPSEnums.TargetID.LGolem:
                 case ArcDPSEnums.TargetID.MedGolem:
-                case ArcDPSEnums.TargetID.StdGolem:
                     Logic = new Golem(id);
                     break;
                 //
