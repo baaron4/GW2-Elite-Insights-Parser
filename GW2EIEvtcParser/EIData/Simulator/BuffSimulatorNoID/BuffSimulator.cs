@@ -111,7 +111,6 @@ namespace GW2EIEvtcParser.EIData
                 default:
                     break;
             }
-            _logic.Sort(Log, BuffStack);
         }
 
         public override void Activate(uint id)
