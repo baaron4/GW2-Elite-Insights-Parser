@@ -29,8 +29,7 @@ namespace GW2EIEvtcParser.EIData
             // Find empty slot
             if (BuffStack.Count < Capacity)
             {
-                BuffStack.Add(toAdd);
-                _logic.Sort(Log, BuffStack);
+                _logic.Add(Log, BuffStack, toAdd);
             }
             // Replace lowest value
             else
@@ -55,10 +54,8 @@ namespace GW2EIEvtcParser.EIData
                 }
                 else
                 {
-
-                    BuffStack.Add(toAdd);
+                    _logic.Add(Log, BuffStack, toAdd);
                 }
-                _logic.Sort(Log, BuffStack);
             }
             // Replace lowest value
             else
