@@ -8,10 +8,6 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class OverrideLogic : StackingLogic
     {
-        public OverrideLogic(int capacity) : base(capacity)
-        {
-
-        }
 
         // Prefer using Add, to insert to the list in a sorted manner
         protected override void Sort(ParsedEvtcLog log, List<BuffStackItem> stacks)

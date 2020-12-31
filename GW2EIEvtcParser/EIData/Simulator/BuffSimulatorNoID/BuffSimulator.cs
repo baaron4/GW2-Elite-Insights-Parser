@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -11,10 +13,30 @@ namespace GW2EIEvtcParser.EIData
         protected StackingLogic Logic { get; }
 
         // Constructor
-        protected BuffSimulator(ParsedEvtcLog log, StackingLogic logic, Buff buff) : base(log, buff)
+        protected BuffSimulator(ParsedEvtcLog log, Buff buff) : base(log, buff)
         {
-            Logic = logic;
+            switch (buff.StackType)
+            {
+                case BuffStackType.Queue:
+                    Logic = new QueueLogic();
+                    break;
+                case BuffStackType.Regeneration:
+                    Logic = new HealingLogic();
+                    break;
+                case BuffStackType.Force:
+                    Logic = new ForceOverrideLogic();
+                    break;
+                case BuffStackType.Stacking:
+                case BuffStackType.StackingConditionalLoss:
+                    Logic = new OverrideLogic();
+                    break;
+                case BuffStackType.Unknown:
+                default:
+                    throw new InvalidDataException("Buffs can not be typless");
+            }
         }
+
+        protected bool IsFull => Buff.Capacity == BuffStack.Count;
 
         protected override void Clear()
         {
@@ -25,7 +47,7 @@ namespace GW2EIEvtcParser.EIData
         {
             var toAdd = new BuffStackItem(start, duration, src);
             // Find empty slot
-            if (!Logic.IsFull(BuffStack))
+            if (!IsFull)
             {
                 Logic.Add(Log, BuffStack, toAdd);
             }
@@ -44,7 +66,7 @@ namespace GW2EIEvtcParser.EIData
         {
             var toAdd = new BuffStackItem(time, duration, src, seedSrc, isExtension);
             // Find empty slot
-            if (!Logic.IsFull(BuffStack))
+            if (!IsFull)
             {
                 if (atFirst)
                 {

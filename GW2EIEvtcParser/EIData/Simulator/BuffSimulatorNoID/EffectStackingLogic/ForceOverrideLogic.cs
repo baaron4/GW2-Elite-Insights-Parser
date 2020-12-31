@@ -7,10 +7,6 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class ForceOverrideLogic : StackingLogic
     {
-        public ForceOverrideLogic() : base(1)
-        {
-
-        }
 
         protected override void Sort(ParsedEvtcLog log, List<BuffStackItem> stacks)
         {

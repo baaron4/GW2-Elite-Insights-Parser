@@ -9,13 +9,13 @@ namespace GW2EIEvtcParser.EIData
     {
         private readonly List<(AgentItem agent, bool extension)> _lastSrcRemoves = new List<(AgentItem agent, bool extension)>();
         // Constructor
-        public BuffSimulatorIntensity(ParsedEvtcLog log, StackingLogic logic, Buff buff) : base(log, logic, buff)
+        public BuffSimulatorIntensity(ParsedEvtcLog log, Buff buff) : base(log, buff)
         {
         }
 
         public override void Extend(long extension, long oldValue, AgentItem src, long start, uint stackID)
         {
-            if ((BuffStack.Any() && oldValue > 0) || Logic.IsFull(BuffStack))
+            if ((BuffStack.Any() && oldValue > 0) || IsFull)
             {
                 BuffStackItem minItem = BuffStack.MinBy(x => Math.Abs(x.TotalDuration - oldValue));
                 if (minItem != null)

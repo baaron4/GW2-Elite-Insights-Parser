@@ -7,13 +7,13 @@ namespace GW2EIEvtcParser.EIData
     {
         private (AgentItem agent, bool extension) _lastSrcRemove = (ParserHelper._unknownAgent, false);
         // Constructor
-        public BuffSimulatorDuration(ParsedEvtcLog log, StackingLogic logic, Buff buff) : base(log, logic, buff)
+        public BuffSimulatorDuration(ParsedEvtcLog log, Buff buff) : base(log, buff)
         {
         }
 
         public override void Extend(long extension, long oldValue, AgentItem src, long start, uint stackID)
         {
-            if ((BuffStack.Any() && oldValue > 0) || Logic.IsFull(BuffStack))
+            if ((BuffStack.Any() && oldValue > 0) || IsFull)
             {
                 BuffStack[0].Extend(extension, src);
             }

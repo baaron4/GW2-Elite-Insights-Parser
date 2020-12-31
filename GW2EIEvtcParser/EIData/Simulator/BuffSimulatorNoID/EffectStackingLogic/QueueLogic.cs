@@ -8,11 +8,6 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class QueueLogic : StackingLogic
     {
-        public QueueLogic(int capacity) : base(capacity)
-        {
-
-        }
-
         protected override void Sort(ParsedEvtcLog log, List<BuffStackItem> stacks)
         {
             // no sort
