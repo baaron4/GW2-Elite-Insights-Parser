@@ -12,23 +12,28 @@ namespace GW2EIEvtcParser.EIData
         protected List<BuffStackItem> BuffStack { get; set; } = new List<BuffStackItem>();
         protected StackingLogic Logic { get; }
 
+        private static readonly QueueLogic _queueLogic = new QueueLogic();
+        private static readonly HealingLogic _healingLogic = new HealingLogic();
+        private static readonly ForceOverrideLogic _forceOverrideLogic = new ForceOverrideLogic();
+        private static readonly OverrideLogic _overrideLogic = new OverrideLogic();
+
         // Constructor
         protected BuffSimulator(ParsedEvtcLog log, Buff buff) : base(log, buff)
         {
             switch (buff.StackType)
             {
                 case BuffStackType.Queue:
-                    Logic = new QueueLogic();
+                    Logic = _queueLogic;
                     break;
                 case BuffStackType.Regeneration:
-                    Logic = new HealingLogic();
+                    Logic = _healingLogic;
                     break;
                 case BuffStackType.Force:
-                    Logic = new ForceOverrideLogic();
+                    Logic = _forceOverrideLogic;
                     break;
                 case BuffStackType.Stacking:
                 case BuffStackType.StackingConditionalLoss:
-                    Logic = new OverrideLogic();
+                    Logic = _overrideLogic;
                     break;
                 case BuffStackType.Unknown:
                 default:
