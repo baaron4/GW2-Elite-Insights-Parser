@@ -492,25 +492,17 @@ namespace GW2EIEvtcParser.EIData
             return CombatReplay.PolledPositions;
         }
 
-        protected abstract void InitCombatReplay(ParsedEvtcLog log);
-
-        protected void TrimCombatReplay(ParsedEvtcLog log)
+        protected virtual bool InitCombatReplay(ParsedEvtcLog log)
         {
-            DespawnEvent despawnCheck = log.CombatData.GetDespawnEvents(AgentItem).LastOrDefault();
-            SpawnEvent spawnCheck = log.CombatData.GetSpawnEvents(AgentItem).LastOrDefault();
-            DeadEvent deathCheck = log.CombatData.GetDeadEvents(AgentItem).LastOrDefault();
-            if (deathCheck != null)
+            CombatReplay = new CombatReplay();
+            if (!log.CombatData.HasMovementData)
             {
-                CombatReplay.Trim(AgentItem.FirstAware, deathCheck.Time);
+                // no combat replay support on fight
+                return false;
             }
-            else if (despawnCheck != null && (spawnCheck == null || spawnCheck.Time < despawnCheck.Time))
-            {
-                CombatReplay.Trim(AgentItem.FirstAware, despawnCheck.Time);
-            }
-            else
-            {
-                CombatReplay.Trim(AgentItem.FirstAware, AgentItem.LastAware);
-            }
+            SetMovements(log);
+            CombatReplay.PollingRate(log.FightData.FightEnd);
+            return true;
         }
 
         public IReadOnlyList<GenericDecoration> GetCombatReplayActors(ParsedEvtcLog log)

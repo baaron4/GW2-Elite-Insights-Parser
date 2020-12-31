@@ -121,17 +121,30 @@ namespace GW2EIEvtcParser.EIData
             return new NPCSerializable(this, log, map, CombatReplay);
         }
 
-        protected override void InitCombatReplay(ParsedEvtcLog log)
+        protected override bool InitCombatReplay(ParsedEvtcLog log)
         {
-            CombatReplay = new CombatReplay();
-            if (!log.CombatData.HasMovementData)
+            if (base.InitCombatReplay(log))
             {
-                // no combat replay support on fight
-                return;
+                // Trim
+                DespawnEvent despawnCheck = log.CombatData.GetDespawnEvents(AgentItem).LastOrDefault();
+                SpawnEvent spawnCheck = log.CombatData.GetSpawnEvents(AgentItem).LastOrDefault();
+                DeadEvent deathCheck = log.CombatData.GetDeadEvents(AgentItem).LastOrDefault();
+                AliveEvent aliveCheck = log.CombatData.GetAliveEvents(AgentItem).LastOrDefault();
+                if (AgentItem.Type != AgentItem.AgentType.EnemyPlayer && deathCheck != null && (aliveCheck == null || aliveCheck.Time < deathCheck.Time))
+                {
+                    CombatReplay.Trim(AgentItem.FirstAware, deathCheck.Time);
+                }
+                else if (despawnCheck != null && (spawnCheck == null || spawnCheck.Time < despawnCheck.Time))
+                {
+                    CombatReplay.Trim(AgentItem.FirstAware, despawnCheck.Time);
+                }
+                else
+                {
+                    CombatReplay.Trim(AgentItem.FirstAware, AgentItem.LastAware);
+                }
+                return true;
             }
-            SetMovements(log);
-            CombatReplay.PollingRate(log.FightData.FightEnd);
-            TrimCombatReplay(log);
+            return false;
         }
     }
 }

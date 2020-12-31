@@ -476,17 +476,5 @@ namespace GW2EIEvtcParser.EIData
             }
             return activePositions;
         }
-
-        protected override void InitCombatReplay(ParsedEvtcLog log)
-        {
-            CombatReplay = new CombatReplay();
-            if (!log.CombatData.HasMovementData)
-            {
-                // no combat replay support on fight
-                return;
-            }
-            SetMovements(log);
-            CombatReplay.PollingRate(log.FightData.FightEnd);
-        }
     }
 }
