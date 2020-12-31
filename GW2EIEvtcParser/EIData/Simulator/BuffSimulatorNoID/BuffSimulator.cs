@@ -8,14 +8,12 @@ namespace GW2EIEvtcParser.EIData
     internal abstract class BuffSimulator : AbstractBuffSimulator
     {
         protected List<BuffStackItem> BuffStack { get; set; } = new List<BuffStackItem>();
-        protected int Capacity { get; }
-        private readonly StackingLogic _logic;
+        protected StackingLogic Logic { get; }
 
         // Constructor
-        protected BuffSimulator(int capacity, ParsedEvtcLog log, StackingLogic logic, Buff buff) : base(log, buff)
+        protected BuffSimulator(ParsedEvtcLog log, StackingLogic logic, Buff buff) : base(log, buff)
         {
-            Capacity = Math.Max(capacity, 1);
-            _logic = logic;
+            Logic = logic;
         }
 
         protected override void Clear()
@@ -27,14 +25,14 @@ namespace GW2EIEvtcParser.EIData
         {
             var toAdd = new BuffStackItem(start, duration, src);
             // Find empty slot
-            if (BuffStack.Count < Capacity)
+            if (!Logic.IsFull(BuffStack))
             {
-                _logic.Add(Log, BuffStack, toAdd);
+                Logic.Add(Log, BuffStack, toAdd);
             }
             // Replace lowest value
             else
             {
-                bool found = _logic.StackEffect(Log, toAdd, BuffStack, WasteSimulationResult);
+                bool found = Logic.StackEffect(Log, toAdd, BuffStack, WasteSimulationResult);
                 if (!found)
                 {
                     OverstackSimulationResult.Add(new BuffSimulationItemOverstack(src, duration, start));
@@ -46,7 +44,7 @@ namespace GW2EIEvtcParser.EIData
         {
             var toAdd = new BuffStackItem(time, duration, src, seedSrc, isExtension);
             // Find empty slot
-            if (BuffStack.Count < Capacity)
+            if (!Logic.IsFull(BuffStack))
             {
                 if (atFirst)
                 {
@@ -54,13 +52,13 @@ namespace GW2EIEvtcParser.EIData
                 }
                 else
                 {
-                    _logic.Add(Log, BuffStack, toAdd);
+                    Logic.Add(Log, BuffStack, toAdd);
                 }
             }
             // Replace lowest value
             else
             {
-                bool found = _logic.StackEffect(Log, toAdd, BuffStack, WasteSimulationResult);
+                bool found = Logic.StackEffect(Log, toAdd, BuffStack, WasteSimulationResult);
                 if (!found)
                 {
                     OverstackSimulationResult.Add(new BuffSimulationItemOverstack(src, duration, time));

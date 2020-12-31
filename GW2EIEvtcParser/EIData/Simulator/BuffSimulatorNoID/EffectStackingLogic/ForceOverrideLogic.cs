@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.AbstractBuffSimulator;
 
@@ -6,6 +7,11 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class ForceOverrideLogic : StackingLogic
     {
+        public ForceOverrideLogic() : base(1)
+        {
+
+        }
+
         protected override void Sort(ParsedEvtcLog log, List<BuffStackItem> stacks)
         {
             // no sort
@@ -13,7 +19,7 @@ namespace GW2EIEvtcParser.EIData
 
         public override bool StackEffect(ParsedEvtcLog log, BuffStackItem stackItem, List<BuffStackItem> stacks, List<BuffSimulationItemWasted> wastes)
         {
-            if (stacks.Count == 0)
+            if (!stacks.Any())
             {
                 return false;
             }

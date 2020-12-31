@@ -81,7 +81,7 @@ namespace GW2EIEvtcParser.EIData
 
         private ulong _maxBuild { get; } = ulong.MaxValue;
         private ulong _minBuild { get; } = ulong.MinValue;
-        public int Capacity { get; }
+        private int _capacity { get; }
         public string Link { get; }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace GW2EIEvtcParser.EIData
             ID = id;
             Source = source;
             StackType = type;
-            Capacity = capacity;
+            _capacity = capacity;
             Nature = nature;
             Link = link;
         }
@@ -125,7 +125,7 @@ namespace GW2EIEvtcParser.EIData
             ID = id;
             Source = ParserHelper.Source.Unknown;
             StackType = BuffStackType.Unknown;
-            Capacity = 1;
+            _capacity = 1;
             Nature = BuffNature.Unknow;
             Link = link;
         }
@@ -141,9 +141,9 @@ namespace GW2EIEvtcParser.EIData
             {
                 return;
             }
-            if (Capacity != buffInfoEvent.MaxStacks)
+            if (_capacity != buffInfoEvent.MaxStacks)
             {
-                operation.UpdateProgressWithCancellationCheck("Adjusted capacity for " + Name + " from " + Capacity + " to " + buffInfoEvent.MaxStacks);
+                operation.UpdateProgressWithCancellationCheck("Adjusted capacity for " + Name + " from " + _capacity + " to " + buffInfoEvent.MaxStacks);
                 if (buffInfoEvent.StackingType != StackType)
                 {
                     //_stackType = buffInfoEvent.StackingType; // might be unreliable due to its absence on some logs
@@ -155,11 +155,11 @@ namespace GW2EIEvtcParser.EIData
         {
             BuffStackType stackType = StackType;
             BuffType type = Type;
-            int capacity = Capacity;
+            int capacity = _capacity;
             BuffInfoEvent buffInfo = log.CombatData.GetBuffInfoEvent(ID);
             if (buffInfo != null)
             {
-                if (Capacity != buffInfo.MaxStacks)
+                if (_capacity != buffInfo.MaxStacks)
                 {
                     capacity = buffInfo.MaxStacks;
                 }
@@ -170,17 +170,17 @@ namespace GW2EIEvtcParser.EIData
                 switch (stackType)
                 {
                     case BuffStackType.Queue:
-                        logicToUse = new QueueLogic();
+                        logicToUse = new QueueLogic(capacity);
                         break;
                     case BuffStackType.Regeneration:
-                        logicToUse = new HealingLogic();
+                        logicToUse = new HealingLogic(capacity);
                         break;
                     case BuffStackType.Force:
                         logicToUse = new ForceOverrideLogic();
                         break;
                     case BuffStackType.Stacking:
                     case BuffStackType.StackingConditionalLoss:
-                        logicToUse = new OverrideLogic();
+                        logicToUse = new OverrideLogic(capacity);
                         break;
                     case BuffStackType.Unknown:
                     default:
@@ -188,8 +188,8 @@ namespace GW2EIEvtcParser.EIData
                 }
                 switch (type)
                 {
-                    case BuffType.Intensity: return new BuffSimulatorIntensity(capacity, log, logicToUse, this);
-                    case BuffType.Duration: return new BuffSimulatorDuration(capacity, log, logicToUse, this);
+                    case BuffType.Intensity: return new BuffSimulatorIntensity(log, logicToUse, this);
+                    case BuffType.Duration: return new BuffSimulatorDuration(log, logicToUse, this);
                     case BuffType.Unknown:
                         throw new InvalidDataException("Buffs can not be stackless");
                 }

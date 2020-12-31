@@ -5,6 +5,10 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class HealingLogic : QueueLogic
     {
+        public HealingLogic(int capacity) : base(capacity)
+        {
+
+        }
 
         private struct CompareHealing
         {

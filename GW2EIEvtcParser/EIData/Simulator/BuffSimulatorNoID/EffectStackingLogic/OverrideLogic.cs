@@ -8,6 +8,11 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class OverrideLogic : StackingLogic
     {
+        public OverrideLogic(int capacity) : base(capacity)
+        {
+
+        }
+
         // Prefer using Add, to insert to the list in a sorted manner
         protected override void Sort(ParsedEvtcLog log, List<BuffStackItem> stacks)
         {
@@ -42,34 +47,34 @@ namespace GW2EIEvtcParser.EIData
         }
 
         // https://www.c-sharpcorner.com/blogs/binary-search-implementation-using-c-sharp1
-        private static int BinarySearchRecursive(List<BuffStackItem> stacks, long key, int min, int max)
+        private static int BinarySearchRecursive(List<BuffStackItem> stacks, long totalDuration, int minIndex, int maxIndex)
         {
-            if (stacks[min].TotalDuration > key)
+            if (stacks[minIndex].TotalDuration > totalDuration)
             {
-                return min;
+                return minIndex;
             }
-            if (stacks[max].TotalDuration < key)
+            if (stacks[maxIndex].TotalDuration < totalDuration)
             {
-                return max + 1;
+                return maxIndex + 1;
             }
-            if (min > max)
+            if (minIndex > maxIndex)
             {
-               return min;
+               return minIndex;
             }
             else
             {
-                int mid = (min + max) / 2;
-                if (key == stacks[mid].TotalDuration)
+                int midIndex = (minIndex + maxIndex) / 2;
+                if (totalDuration == stacks[midIndex].TotalDuration)
                 {
-                    return ++mid;
+                    return ++midIndex;
                 }
-                else if (key < stacks[mid].TotalDuration)
+                else if (totalDuration < stacks[midIndex].TotalDuration)
                 {
-                    return BinarySearchRecursive(stacks, key, min, mid - 1);
+                    return BinarySearchRecursive(stacks, totalDuration, minIndex, midIndex - 1);
                 }
                 else
                 {
-                    return BinarySearchRecursive(stacks, key, mid + 1, max);
+                    return BinarySearchRecursive(stacks, totalDuration, midIndex + 1, maxIndex);
                 }
             }
         }
