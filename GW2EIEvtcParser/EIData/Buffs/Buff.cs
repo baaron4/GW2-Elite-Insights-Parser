@@ -154,18 +154,20 @@ namespace GW2EIEvtcParser.EIData
         }
         internal AbstractBuffSimulator CreateSimulator(ParsedEvtcLog log, bool forceNoId)
         {
-            BuffType type = Type;
             if (!log.CombatData.HasStackIDs || forceNoId)
             {               
-                switch (type)
+                switch (Type)
                 {
-                    case BuffType.Intensity: return new BuffSimulatorIntensity(log, this);
-                    case BuffType.Duration: return new BuffSimulatorDuration(log, this);
+                    case BuffType.Intensity: 
+                        return new BuffSimulatorIntensity(log, this);
+                    case BuffType.Duration: 
+                        return new BuffSimulatorDuration(log, this);
                     case BuffType.Unknown:
+                    default:
                         throw new InvalidDataException("Buffs can not be stackless");
                 }
             }
-            switch (type)
+            switch (Type)
             {
                 case BuffType.Intensity:
                     return new BuffSimulatorIDIntensity(log, this);
