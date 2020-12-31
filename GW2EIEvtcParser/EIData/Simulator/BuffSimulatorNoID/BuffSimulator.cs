@@ -10,7 +10,7 @@ namespace GW2EIEvtcParser.EIData
     internal abstract class BuffSimulator : AbstractBuffSimulator
     {
         protected List<BuffStackItem> BuffStack { get; set; } = new List<BuffStackItem>();
-        protected StackingLogic Logic { get; }
+        private StackingLogic _logic { get; }
 
         private static readonly QueueLogic _queueLogic = new QueueLogic();
         private static readonly HealingLogic _healingLogic = new HealingLogic();
@@ -23,17 +23,17 @@ namespace GW2EIEvtcParser.EIData
             switch (buff.StackType)
             {
                 case BuffStackType.Queue:
-                    Logic = _queueLogic;
+                    _logic = _queueLogic;
                     break;
                 case BuffStackType.Regeneration:
-                    Logic = _healingLogic;
+                    _logic = _healingLogic;
                     break;
                 case BuffStackType.Force:
-                    Logic = _forceOverrideLogic;
+                    _logic = _forceOverrideLogic;
                     break;
                 case BuffStackType.Stacking:
                 case BuffStackType.StackingConditionalLoss:
-                    Logic = _overrideLogic;
+                    _logic = _overrideLogic;
                     break;
                 case BuffStackType.Unknown:
                 default:
@@ -54,12 +54,12 @@ namespace GW2EIEvtcParser.EIData
             // Find empty slot
             if (!IsFull)
             {
-                Logic.Add(Log, BuffStack, toAdd);
+                _logic.Add(Log, BuffStack, toAdd);
             }
             // Replace lowest value
             else
             {
-                bool found = Logic.StackEffect(Log, toAdd, BuffStack, WasteSimulationResult);
+                bool found = _logic.StackEffect(Log, toAdd, BuffStack, WasteSimulationResult);
                 if (!found)
                 {
                     OverstackSimulationResult.Add(new BuffSimulationItemOverstack(src, duration, start));
@@ -79,13 +79,13 @@ namespace GW2EIEvtcParser.EIData
                 }
                 else
                 {
-                    Logic.Add(Log, BuffStack, toAdd);
+                    _logic.Add(Log, BuffStack, toAdd);
                 }
             }
             // Replace lowest value
             else
             {
-                bool found = Logic.StackEffect(Log, toAdd, BuffStack, WasteSimulationResult);
+                bool found = _logic.StackEffect(Log, toAdd, BuffStack, WasteSimulationResult);
                 if (!found)
                 {
                     OverstackSimulationResult.Add(new BuffSimulationItemOverstack(src, duration, time));
