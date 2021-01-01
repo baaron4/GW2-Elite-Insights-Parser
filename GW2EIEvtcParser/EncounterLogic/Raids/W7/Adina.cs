@@ -162,21 +162,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             phases.AddRange(mainPhases);
             phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             GetCombatMap(log).MatchMapsToPhases(new List<string> {
-                "https://i.imgur.com/3IBkNM6.png",
-                "https://i.imgur.com/iMrhTt6.png",
-                "https://i.imgur.com/zaZftSk.png",
-                "https://i.imgur.com/KkYdspd.png",
-                "https://i.imgur.com/wqgFO7Z.png",
-                "https://i.imgur.com/DroFhFc.png",
-                "https://i.imgur.com/QsEFkNO.png"
+                "https://i.imgur.com/IQn2RJV.png",
+                "https://i.imgur.com/gJ55jKy.png",
+                "https://i.imgur.com/3pO7eCB.png",
+                "https://i.imgur.com/c2Oz5bj.png",
+                "https://i.imgur.com/ZFw590w.png",
+                "https://i.imgur.com/P4SGbrc.png",
+                "https://i.imgur.com/2P7UE8q.png"
             }, phases, log.FightData.FightEnd);
             return phases;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/3IBkNM6.png",
-                            (1436, 1659),
+            return new CombatReplayMap("https://i.imgur.com/IQn2RJV.png",
+                            (866, 1000),
                             (13840, -2698, 15971, -248)/*,
                             (-21504, -21504, 24576, 24576),
                             (33530, 34050, 35450, 35970)*/);
