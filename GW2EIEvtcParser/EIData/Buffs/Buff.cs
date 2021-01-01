@@ -81,7 +81,7 @@ namespace GW2EIEvtcParser.EIData
 
         private ulong _maxBuild { get; } = ulong.MaxValue;
         private ulong _minBuild { get; } = ulong.MinValue;
-        public int Capacity { get; }
+        public int Capacity { get; private set; }
         public string Link { get; }
 
         /// <summary>
@@ -144,6 +144,7 @@ namespace GW2EIEvtcParser.EIData
             if (Capacity != buffInfoEvent.MaxStacks)
             {
                 operation.UpdateProgressWithCancellationCheck("Adjusted capacity for " + Name + " from " + Capacity + " to " + buffInfoEvent.MaxStacks);
+                Capacity = buffInfoEvent.MaxStacks;
                 if (buffInfoEvent.StackingType != StackType)
                 {
                     //_stackType = buffInfoEvent.StackingType; // might be unreliable due to its absence on some logs
@@ -153,48 +154,20 @@ namespace GW2EIEvtcParser.EIData
         }
         internal AbstractBuffSimulator CreateSimulator(ParsedEvtcLog log, bool forceNoId)
         {
-            BuffStackType stackType = StackType;
-            BuffType type = Type;
-            int capacity = Capacity;
-            BuffInfoEvent buffInfo = log.CombatData.GetBuffInfoEvent(ID);
-            if (buffInfo != null)
-            {
-                if (Capacity != buffInfo.MaxStacks)
-                {
-                    capacity = buffInfo.MaxStacks;
-                }
-            }
             if (!log.CombatData.HasStackIDs || forceNoId)
-            {
-                StackingLogic logicToUse;
-                switch (stackType)
+            {               
+                switch (Type)
                 {
-                    case BuffStackType.Queue:
-                        logicToUse = new QueueLogic();
-                        break;
-                    case BuffStackType.Regeneration:
-                        logicToUse = new HealingLogic();
-                        break;
-                    case BuffStackType.Force:
-                        logicToUse = new ForceOverrideLogic();
-                        break;
-                    case BuffStackType.Stacking:
-                    case BuffStackType.StackingConditionalLoss:
-                        logicToUse = new OverrideLogic();
-                        break;
-                    case BuffStackType.Unknown:
-                    default:
-                        throw new InvalidDataException("Buffs can not be typless");
-                }
-                switch (type)
-                {
-                    case BuffType.Intensity: return new BuffSimulatorIntensity(capacity, log, logicToUse, this);
-                    case BuffType.Duration: return new BuffSimulatorDuration(capacity, log, logicToUse, this);
+                    case BuffType.Intensity: 
+                        return new BuffSimulatorIntensity(log, this);
+                    case BuffType.Duration: 
+                        return new BuffSimulatorDuration(log, this);
                     case BuffType.Unknown:
+                    default:
                         throw new InvalidDataException("Buffs can not be stackless");
                 }
             }
-            switch (type)
+            switch (Type)
             {
                 case BuffType.Intensity:
                     return new BuffSimulatorIDIntensity(log, this);

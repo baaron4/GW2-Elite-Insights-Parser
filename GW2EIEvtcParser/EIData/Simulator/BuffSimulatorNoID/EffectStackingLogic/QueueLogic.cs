@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.AbstractBuffSimulator;
 
@@ -7,7 +8,7 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class QueueLogic : StackingLogic
     {
-        public override void Sort(ParsedEvtcLog log, List<BuffStackItem> stacks)
+        protected override void Sort(ParsedEvtcLog log, List<BuffStackItem> stacks)
         {
             // no sort
         }
@@ -27,7 +28,7 @@ namespace GW2EIEvtcParser.EIData
                 return false;
             }
             wastes.Add(new BuffSimulationItemWasted(minItem.Src, minItem.Duration, minItem.Start));
-            if (minItem.Extensions.Count > 0)
+            if (minItem.Extensions.Any())
             {
                 foreach ((AgentItem src, long value) in minItem.Extensions)
                 {
