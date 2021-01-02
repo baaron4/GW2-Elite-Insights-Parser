@@ -19,8 +19,8 @@ namespace GW2EIEvtcParser.EIData
         private CachingCollection<(Dictionary<long, FinalBuffsDictionary>, Dictionary<long, FinalBuffsDictionary>)> _buffsDictionary;
         private readonly Dictionary<long, AbstractBuffSimulator> _buffSimulators = new Dictionary<long, AbstractBuffSimulator>();
         // damage list
-        private CachingCollectionWithTarget<List<int>> _damageList1S;
-        private CachingCollectionWithTarget<List<double>> _breakbarDamageList1S;
+        private CachingCollectionWithTarget<int[]> _damageList1S;
+        private CachingCollectionWithTarget<double[]> _breakbarDamageList1S;
         private CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> _hitSelfDamageEventsPerPhasePerTarget;
         private CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> _powerHitSelfDamageEventsPerPhasePerTarget;
         private CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> _conditionHitSelfDamageEventsPerPhasePerTarget;
@@ -164,47 +164,36 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_damageList1S == null)
             {
-                _damageList1S = new CachingCollectionWithTarget<List<int>>(log);
+                _damageList1S = new CachingCollectionWithTarget<int[]>(log);
             }
-            if (_damageList1S.TryGetValue(start, end, target, out List<int> res))
+            if (_damageList1S.TryGetValue(start, end, target, out int[] res))
             {
                 return res;
             }
-            var dmgList = new List<int>();
             int durationInMS = (int)(end - start);
             int durationInS = durationInMS / 1000;
+            var dmgList = durationInS * 1000 != durationInMS ? new int[durationInS + 2] : new int[durationInS + 1];
             IReadOnlyList<AbstractHealthDamageEvent> damageEvents = GetDamageEvents(target, log, start, end);
-            // fill the graph, full precision
-            var dmgListFull = new int[durationInMS + 1];
-            int totalTime = 1;
-            int totalDamage = 0;
+            // fill the graph
+            int previousTime = 0;
             foreach (AbstractHealthDamageEvent dl in damageEvents)
             {
-                int time = (int)(dl.Time - start);
-                // fill
-                for (; totalTime < time; totalTime++)
+                int time = (int)Math.Ceiling((dl.Time - start)/1000.0);
+                if (time != previousTime)
                 {
-                    dmgListFull[totalTime] = totalDamage;
+                    for (int i = previousTime + 1; i <= time; i++)
+                    {
+                        dmgList[i] = dmgList[previousTime];
+                    }
                 }
-                totalDamage += dl.HealthDamage;
-                dmgListFull[totalTime] = totalDamage;
+                previousTime = time;
+                dmgList[time] += dl.HealthDamage;
             }
-            // fill
-            for (; totalTime <= durationInMS; totalTime++)
+            for (int i = previousTime + 1; i < dmgList.Length; i++)
             {
-                dmgListFull[totalTime] = totalDamage;
+                dmgList[i] = dmgList[previousTime];
             }
             //
-            dmgList.Add(0);
-            for (int i = 1; i <= durationInS; i++)
-            {
-                dmgList.Add(dmgListFull[1000 * i]);
-            }
-            if (durationInS * 1000 != durationInMS)
-            {
-                int lastDamage = dmgListFull[durationInMS];
-                dmgList.Add(lastDamage);
-            }
             _damageList1S.Set(start, end, target, dmgList);
             return dmgList;
         }
@@ -217,46 +206,34 @@ namespace GW2EIEvtcParser.EIData
             }
             if (_breakbarDamageList1S == null)
             {
-                _breakbarDamageList1S = new CachingCollectionWithTarget<List<double>>(log);
+                _breakbarDamageList1S = new CachingCollectionWithTarget<double[]>(log);
             }
-            if (_breakbarDamageList1S.TryGetValue(start, end, target, out List<double> res))
+            if (_breakbarDamageList1S.TryGetValue(start, end, target, out double[] res))
             {
                 return res;
             }
-            var brkDmgList = new List<double>();
             int durationInMS = (int)(end - start);
-            int durationInS = durationInMS / 1000;     
+            int durationInS = durationInMS / 1000;
+            var brkDmgList = durationInS * 1000 != durationInMS ? new double[durationInS + 2] : new double[durationInS + 1];
             IReadOnlyList<AbstractBreakbarDamageEvent> breakbarDamageEvents = GetBreakbarDamageEvents(target, log, start, end);
-            // fill the graph, full precision
-            var brkDmgListFull = new double[durationInMS + 1];
-            int totalTime = 1;
-            double totalDamage = 0;
-            foreach (DirectBreakbarDamageEvent dl in breakbarDamageEvents)
+            // fill the graph
+            int previousTime = 0;
+            foreach (AbstractBreakbarDamageEvent dl in breakbarDamageEvents)
             {
-                int time = (int)(dl.Time - start);
-                // fill
-                for (; totalTime < time; totalTime++)
+                int time = (int)Math.Ceiling((dl.Time - start) / 1000.0);
+                if (time != previousTime)
                 {
-                    brkDmgListFull[totalTime] = totalDamage;
+                    for (int i = previousTime + 1; i <= time; i++)
+                    {
+                        brkDmgList[i] = brkDmgList[previousTime];
+                    }
                 }
-                totalDamage = Math.Round(totalDamage + dl.BreakbarDamage, 1);
-                brkDmgListFull[totalTime] = totalDamage;
+                previousTime = time;
+                brkDmgList[time] += dl.BreakbarDamage;
             }
-            // fill
-            for (; totalTime <= durationInMS; totalTime++)
+            for (int i = previousTime + 1; i < brkDmgList.Length; i++)
             {
-                brkDmgListFull[totalTime] = totalDamage;
-            }
-            //
-            brkDmgList.Add(0);
-            for (int i = 1; i <= durationInS; i++)
-            {
-                brkDmgList.Add(brkDmgListFull[1000 * i]);
-            }
-            if (durationInS * 1000 != durationInMS)
-            {
-                double lastDamage = brkDmgListFull[durationInMS];
-                brkDmgList.Add(lastDamage);
+                brkDmgList[i] = brkDmgList[previousTime];
             }
             _breakbarDamageList1S.Set(start, end, target,brkDmgList);
             return brkDmgList;
