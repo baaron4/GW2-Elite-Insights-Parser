@@ -54,8 +54,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/FwpMbYf.png",
-                            (2790, 2763),
+            return new CombatReplayMap("https://i.imgur.com/HXjxqlu.png",
+                            (1000, 990),
                             (-8587, -162, -1601, 6753)/*,
                             (-15360, -36864, 15360, 39936),
                             (3456, 11012, 4736, 14212)*/);

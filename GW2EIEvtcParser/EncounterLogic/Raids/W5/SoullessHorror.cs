@@ -37,8 +37,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/A45pVJy.png",
-                            (3657, 3657),
+            return new CombatReplayMap("https://i.imgur.com/xjPq9vq.png",
+                            (1000, 1000),
                             (-12223, -771, -8932, 2420)/*,
                             (-21504, -12288, 24576, 12288),
                             (19072, 15484, 20992, 16508)*/);
@@ -130,6 +130,47 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.SoullessHorror:
+                    // arena reduction
+                    var center = new Point3D(-10581, 825, -817, 0);
+                    string destroyedRingColor = "rgba(255, 120, 30, 0.3)";
+                    if (center != null)
+                    {
+                        List<(double, int, int)> destroyedRings;
+                        if (log.FightData.IsCM)
+                        {
+                            destroyedRings = new List<(double, int, int)>()
+                            {
+                                (100, 1330, 1550),
+                                (90, 1120, 1330),
+                                (66, 910, 1120),
+                                (33, 720, 910)
+                            };
+                        } 
+                        else
+                        {
+                            destroyedRings = new List<(double, int, int)>()
+                            {
+                                (90, 1330, 1550),
+                                (66, 1120, 1330),
+                                (33, 910, 1120),
+                            };
+                        }
+                        foreach ((double hpVal, int innerRadius, int outerRadius) in destroyedRings)
+                        {
+                            Segment hpUpdate = target.GetHealthUpdates(log).FirstOrDefault(x => x.Value <= hpVal);
+                            if (hpUpdate != null)
+                            {
+                                replay.Decorations.Add(new DoughnutDecoration(true, (int)hpUpdate.Start + 3000, innerRadius, outerRadius, ((int)hpUpdate.Start, (int)log.FightData.FightEnd), destroyedRingColor, new PositionConnector(center)));
+                                replay.Decorations.Add(new DoughnutDecoration(true, 0, innerRadius, outerRadius, ((int)hpUpdate.Start, (int)log.FightData.FightEnd), destroyedRingColor, new PositionConnector(center)));
+                            } 
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    }
+
+                    //
                     var howling = cls.Where(x => x.SkillId == 48662).ToList();
                     foreach (AbstractCastEvent c in howling)
                     {
