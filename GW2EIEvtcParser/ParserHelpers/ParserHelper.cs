@@ -43,6 +43,9 @@ namespace GW2EIEvtcParser
             Unknown
         };
 
+        public enum DamageType { All, Power, Condition };
+        public enum BuffEnum { Self, Group, OffGroup, Squad };
+
         internal static T MaxBy<T, TComparable>(this IEnumerable<T> en, Func<T, TComparable> evaluate) where TComparable : IComparable<TComparable>
         {
             return en.Select(t => (value: t, eval: evaluate(t)))

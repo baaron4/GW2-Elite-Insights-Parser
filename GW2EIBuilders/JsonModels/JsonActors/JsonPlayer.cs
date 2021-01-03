@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using Newtonsoft.Json;
 using static GW2EIBuilders.JsonModels.JsonBuffsUptime;
 using static GW2EIBuilders.JsonModels.JsonPlayerBuffsGeneration;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIBuilders.JsonModels
 {

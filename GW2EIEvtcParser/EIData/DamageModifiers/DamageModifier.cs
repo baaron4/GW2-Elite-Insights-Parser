@@ -2,6 +2,7 @@
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Interfaces;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -9,7 +10,6 @@ namespace GW2EIEvtcParser.EIData
     {
 
         public enum DamageModifierMode { PvE, sPvP, WvW, All, sPvPWvW };
-        public enum DamageType { All, Power, Condition };
         public enum DamageSource { All, NoPets };
 
         private DamageType _compareType { get; }
