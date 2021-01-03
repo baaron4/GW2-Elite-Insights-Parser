@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using static GW2EIEvtcParser.EIData.AbstractBuffSimulator;
+﻿using System;
+using System.Collections.Generic;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -7,6 +7,12 @@ namespace GW2EIEvtcParser.EIData
     {
         public abstract bool StackEffect(ParsedEvtcLog log, BuffStackItem stackItem, List<BuffStackItem> stacks, List<BuffSimulationItemWasted> wastes);
 
-        public abstract void Sort(ParsedEvtcLog log, List<BuffStackItem> stacks);
+        protected abstract void Sort(ParsedEvtcLog log, List<BuffStackItem> stacks);
+        public virtual void Add(ParsedEvtcLog log, List<BuffStackItem> stacks, BuffStackItem stackItem)
+        {
+            stacks.Add(stackItem);
+            Sort(log, stacks);
+        }
+
     }
 }

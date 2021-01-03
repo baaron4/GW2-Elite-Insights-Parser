@@ -6,6 +6,8 @@ namespace GW2EIEvtcParser.ParsedData
     {
         private readonly ArcDPSEnums.IFF _iff;
         public uint BuffInstance { get; protected set; }
+
+        private readonly bool _removedActive;
         private bool _overstackOrNaturalEnd => (_iff == ArcDPSEnums.IFF.Unknown && By == ParserHelper._unknownAgent);
         private bool _lowValueRemove => (RemovedDuration <= ParserHelper.BuffSimulatorDelayConstant && RemovedDuration != 0);
 
@@ -13,12 +15,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
             _iff = evtcItem.IFF;
             BuffInstance = evtcItem.Pad;
-        }
-
-        internal BuffRemoveSingleEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill, uint id, ArcDPSEnums.IFF iff) : base(by, to, time, removedDuration, buffSkill)
-        {
-            _iff = iff;
-            BuffInstance = id;
+            _removedActive = evtcItem.IsShields > 0;
         }
 
         internal override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)

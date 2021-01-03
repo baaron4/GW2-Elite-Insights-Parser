@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.ParsedData
             Refresh();
         }
 
-        internal AgentItem AddCustomAgent(long start, long end, AgentItem.AgentType type, string name, string prof, int ID, uint toughness = 0, uint healing = 0, uint condition = 0, uint concentration = 0, uint hitboxWidth = 0, uint hitboxHeight = 0)
+        internal AgentItem AddCustomAgent(long start, long end, AgentItem.AgentType type, string name, string prof, int ID, ushort toughness = 0, ushort healing = 0, ushort condition = 0, ushort concentration = 0, uint hitboxWidth = 0, uint hitboxHeight = 0)
         {
             var rnd = new Random();
             ulong agentValue = 0;

@@ -4,11 +4,6 @@
     {
         protected Point3D Position { get; set; }
 
-        public PositionConnector()
-        {
-
-        }
-
         public PositionConnector(Point3D position)
         {
             Position = position;

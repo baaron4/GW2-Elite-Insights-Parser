@@ -20,7 +20,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public override void Sort(ParsedEvtcLog log, List<BuffStackItem> stacks)
+        protected override void Sort(ParsedEvtcLog log, List<BuffStackItem> stacks)
         {
             stacks.Sort(CompareHealing.Compare);
         }

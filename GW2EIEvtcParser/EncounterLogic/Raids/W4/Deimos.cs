@@ -10,7 +10,7 @@ namespace GW2EIEvtcParser.EncounterLogic
     internal class Deimos : RaidLogic
     {
 
-        private long _specialSplit = 0;
+        private long _deimos10PercentTime = 0;
 
         public Deimos(int triggerID) : base(triggerID)
         {
@@ -52,8 +52,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/GCwOVVE.png",
-                            (4400, 5753),
+            return new CombatReplayMap("https://i.imgur.com/FFs9cFq.png",
+                            (765, 1000),
                             (-9542, 1932, -7004, 5250)/*,
                             (-27648, -9216, 27648, 12288),
                             (11774, 4480, 14078, 5376)*/);
@@ -138,7 +138,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-            if (!fightData.Success && _specialSplit > 0)
+            if (!fightData.Success && _deimos10PercentTime > 0)
             {
                 NPC deimos = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
                 if (deimos == null)
@@ -159,10 +159,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     return;
                 }
-                long specialSplitTime = _specialSplit;
                 AgentItem attackTarget = attackTargets.Last().AttackTarget;
                 // sanity check
-                TargetableEvent attackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => x.Targetable && x.Time > specialSplitTime - ParserHelper.ServerDelayConstant);
+                TargetableEvent attackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => x.Targetable && x.Time > _deimos10PercentTime - ParserHelper.ServerDelayConstant);
                 if (attackableEvent == null)
                 {
                     return;
@@ -172,7 +171,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     return;
                 }
-                AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(deimos.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && x.Time > specialSplitTime && playerAgents.Contains(x.From.GetFinalMaster()));
+                AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(deimos.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && x.Time > _deimos10PercentTime && playerAgents.Contains(x.From.GetFinalMaster()));
                 if (lastDamageTaken != null)
                 {
                     if (!AtLeastOnePlayerAlive(combatData, fightData, notAttackableEvent.Time, playerAgents))
@@ -269,7 +268,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             if (gadgetAgents.Count > 0)
             {
-                _specialSplit = (firstAware >= target.LastAware ? firstAware : target.LastAware);
+                _deimos10PercentTime = (firstAware >= target.LastAware ? firstAware : target.LastAware);
                 MergeWithGadgets(target.AgentItem, gadgetAgents, combatData);
             }
             target.AgentItem.OverrideAwareTimes(target.FirstAware, fightData.FightEnd);
@@ -298,15 +297,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 end = invulDei.Time;
                 phases.Add(new PhaseData(start, end));
-                start = _specialSplit > 0 ? _specialSplit : fightDuration;
+                start = _deimos10PercentTime > 0 ? _deimos10PercentTime : fightDuration;
                 //mainTarget.AddCustomCastLog(end, -6, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
             }
-            else if (_specialSplit > 0)
+            else if (_deimos10PercentTime > 0)
             {
-                long specialTime = _specialSplit;
-                end = specialTime;
+                end = _deimos10PercentTime;
                 phases.Add(new PhaseData(start, end));
-                start = specialTime;
+                start = _deimos10PercentTime;
             }
             if (fightDuration - start > ParserHelper.PhaseTimeLimit && start >= phases.Last().End)
             {
@@ -492,7 +490,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Deimos not found");
             }
             FightData.CMStatus res = (target.GetHealth(combatData) > 40e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
-            if (_specialSplit > 0)
+            if (_deimos10PercentTime > 0)
             {
                 target.SetManualHealth(res > 0 ? 42804900 : 37388210);
             }

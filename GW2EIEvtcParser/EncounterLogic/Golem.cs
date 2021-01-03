@@ -11,27 +11,47 @@ namespace GW2EIEvtcParser.EncounterLogic
         public Golem(int id) : base(id)
         {
             Mode = ParseMode.Benchmark;
-            switch (id)
+            switch (ArcDPSEnums.GetTargetID(id))
             {
-                case 16202:
-                    Extension = "MassiveGolem";
+                case ArcDPSEnums.TargetID.MassiveGolem10M:
+                    Extension = "MassiveGolem10M";
                     Icon = "https://wiki.guildwars2.com/images/3/33/Mini_Snuggles.png";
                     break;
-                case 16177:
+                case ArcDPSEnums.TargetID.MassiveGolem4M:
+                    Extension = "MassiveGolem4M";
+                    Icon = "https://wiki.guildwars2.com/images/3/33/Mini_Snuggles.png";
+                    break;
+                case ArcDPSEnums.TargetID.MassiveGolem1M:
+                    Extension = "MassiveGolem1M";
+                    Icon = "https://wiki.guildwars2.com/images/3/33/Mini_Snuggles.png";
+                    break;
+                case ArcDPSEnums.TargetID.VitalGolem:
+                    Extension = "VitalGolem";
+                    Icon = "https://wiki.guildwars2.com/images/4/47/Mini_Baron_von_Scrufflebutt.png";
+                    break;
+                case ArcDPSEnums.TargetID.AvgGolem:
                     Extension = "AvgGolem";
                     Icon = "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
                     break;
-                case 19676:
+                case ArcDPSEnums.TargetID.StdGolem:
+                    Extension = "StdGolem";
+                    Icon = "https://wiki.guildwars2.com/images/8/8f/Mini_Professor_Mew.png";
+                    break;
+                case ArcDPSEnums.TargetID.ConditionGolem:
+                    Extension = "ToughGolem";
+                    Icon = "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
+                    break;
+                case ArcDPSEnums.TargetID.PowerGolem:
+                    Extension = "ResGolem";
+                    Icon = "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
+                    break;
+                case ArcDPSEnums.TargetID.LGolem:
                     Extension = "LGolem";
                     Icon = "https://wiki.guildwars2.com/images/4/47/Mini_Baron_von_Scrufflebutt.png";
                     break;
-                case 19645:
+                case ArcDPSEnums.TargetID.MedGolem:
                     Extension = "MedGolem";
                     Icon = "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
-                    break;
-                case 16199:
-                    Extension = "StdGolem";
-                    Icon = "https://wiki.guildwars2.com/images/8/8f/Mini_Professor_Mew.png";
                     break;
             }
         }

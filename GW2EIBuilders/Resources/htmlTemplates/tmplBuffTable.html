@@ -68,24 +68,27 @@
             getCellTooltip: function (buff, val, uptime) {
                 if (val instanceof Array) {
                     if (!uptime && this.generation && (val[1] > 0 || val[2] > 0 || val[3] > 0 || val[4] > 0)) {
-                        var res = (val[1] || 0) + (buff.stacking ? "" : "%") + " with overstack";
+                        var res = '';
+                        if (val[1] !== val[0]) {
+                            res += (val[1] || 0) + (buff.stacking ? "" : "%") + " with overstack";
+                        }
                         if (val[4] > 0) {
-                            res += "<br>";
+                            res += res.length > 0 ? "<br>" : '';
                             res += val[4] + (buff.stacking ? "" : "%") + " by extension";
                         }
                         if (val[2] > 0) {
-                            res += "<br>";
+                            res += res.length > 0 ? "<br>" : '';
                             res += val[2] + (buff.stacking ? "" : "%") + " wasted";
                         }
                         if (val[5] > 0) {
-                            res += "<br>";
+                            res += res.length > 0 ? "<br>" : '';
                             res += val[5] + (buff.stacking ? "" : "%") + " extended";
                         }
                         if (val[3] > 0) {
-                            res += "<br>";
+                            res += res.length > 0 ? "<br>" : '';
                             res += val[3] + (buff.stacking ? "" : "%") + " extended by unknown source";
                         }
-                        return res;
+                        return res.length > 0 ? res : false;
                     } else if (buff.stacking && val[1] > 0) {
                         return "Uptime: " + val[1] + "%";
                     } else {

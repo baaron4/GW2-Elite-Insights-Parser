@@ -1,22 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EIData
 {
     internal abstract class BuffSimulator : AbstractBuffSimulator
     {
         protected List<BuffStackItem> BuffStack { get; set; } = new List<BuffStackItem>();
-        protected int Capacity { get; }
-        private readonly StackingLogic _logic;
+        private StackingLogic _logic { get; }
+
+        private static readonly QueueLogic _queueLogic = new QueueLogic();
+        private static readonly HealingLogic _healingLogic = new HealingLogic();
+        private static readonly ForceOverrideLogic _forceOverrideLogic = new ForceOverrideLogic();
+        private static readonly OverrideLogic _overrideLogic = new OverrideLogic();
 
         // Constructor
-        protected BuffSimulator(int capacity, ParsedEvtcLog log, StackingLogic logic, Buff buff) : base(log, buff)
+        protected BuffSimulator(ParsedEvtcLog log, Buff buff) : base(log, buff)
         {
-            Capacity = Math.Max(capacity, 1);
-            _logic = logic;
+            switch (buff.StackType)
+            {
+                case BuffStackType.Queue:
+                    _logic = _queueLogic;
+                    break;
+                case BuffStackType.Regeneration:
+                    _logic = _healingLogic;
+                    break;
+                case BuffStackType.Force:
+                    _logic = _forceOverrideLogic;
+                    break;
+                case BuffStackType.Stacking:
+                case BuffStackType.StackingConditionalLoss:
+                    _logic = _overrideLogic;
+                    break;
+                case BuffStackType.Unknown:
+                default:
+                    throw new InvalidDataException("Buffs can not be typless");
+            }
         }
+
+        protected bool IsFull => Buff.Capacity == BuffStack.Count;
 
         protected override void Clear()
         {
@@ -27,10 +52,9 @@ namespace GW2EIEvtcParser.EIData
         {
             var toAdd = new BuffStackItem(start, duration, src);
             // Find empty slot
-            if (BuffStack.Count < Capacity)
+            if (!IsFull)
             {
-                BuffStack.Add(toAdd);
-                _logic.Sort(Log, BuffStack);
+                _logic.Add(Log, BuffStack, toAdd);
             }
             // Replace lowest value
             else
@@ -47,7 +71,7 @@ namespace GW2EIEvtcParser.EIData
         {
             var toAdd = new BuffStackItem(time, duration, src, seedSrc, isExtension);
             // Find empty slot
-            if (BuffStack.Count < Capacity)
+            if (!IsFull)
             {
                 if (atFirst)
                 {
@@ -55,10 +79,8 @@ namespace GW2EIEvtcParser.EIData
                 }
                 else
                 {
-
-                    BuffStack.Add(toAdd);
+                    _logic.Add(Log, BuffStack, toAdd);
                 }
-                _logic.Sort(Log, BuffStack);
             }
             // Replace lowest value
             else
@@ -111,7 +133,6 @@ namespace GW2EIEvtcParser.EIData
                 default:
                     break;
             }
-            _logic.Sort(Log, BuffStack);
         }
 
         public override void Activate(uint id)
