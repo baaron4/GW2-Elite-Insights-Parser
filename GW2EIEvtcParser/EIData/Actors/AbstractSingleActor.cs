@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EIData
         private CachingCollection<(Dictionary<long, FinalBuffsDictionary>, Dictionary<long, FinalBuffsDictionary>)> _buffsDictionary;
         private readonly Dictionary<long, AbstractBuffSimulator> _buffSimulators = new Dictionary<long, AbstractBuffSimulator>();
         // damage list
-        private CachingCollectionWithTarget<int[]> _damageList1S;
+        private CachingCollectionWithTarget<Dictionary<ParserHelper.DamageType, int[]>> _damageList1S;
         private CachingCollectionWithTarget<double[]> _breakbarDamageList1S;
         private CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> _hitSelfDamageEventsPerPhasePerTarget;
         private CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> _powerHitSelfDamageEventsPerPhasePerTarget;
@@ -160,45 +160,64 @@ namespace GW2EIEvtcParser.EIData
 
         // Graph
 
-        public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, AbstractActor target)
+        public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, AbstractActor target, ParserHelper.DamageType damageType = ParserHelper.DamageType.All)
         {
             if (_damageList1S == null)
             {
-                _damageList1S = new CachingCollectionWithTarget<int[]>(log);
+                _damageList1S = new CachingCollectionWithTarget<Dictionary<ParserHelper.DamageType, int[]>>(log);
             }
-            if (_damageList1S.TryGetValue(start, end, target, out int[] res))
+            if (_damageList1S.TryGetValue(start, end, target, out Dictionary<ParserHelper.DamageType, int[]> res))
             {
-                return res;
+                return res[damageType];
             }
             int durationInMS = (int)(end - start);
             int durationInS = durationInMS / 1000;
             var dmgList = durationInS * 1000 != durationInMS ? new int[durationInS + 2] : new int[durationInS + 1];
+            var dmgListPower = new int[dmgList.Length];
+            var dmgListCondition = new int[dmgList.Length];
             IReadOnlyList<AbstractHealthDamageEvent> damageEvents = GetDamageEvents(target, log, start, end);
             // fill the graph
             int previousTime = 0;
             foreach (AbstractHealthDamageEvent dl in damageEvents)
             {
-                int time = (int)Math.Ceiling((dl.Time - start)/1000.0);
+                int time = (int)Math.Ceiling((dl.Time - start) / 1000.0);
                 if (time != previousTime)
                 {
                     for (int i = previousTime + 1; i <= time; i++)
                     {
                         dmgList[i] = dmgList[previousTime];
+                        dmgListPower[i] = dmgListPower[previousTime];
+                        dmgListCondition[i] = dmgListCondition[previousTime];
                     }
                 }
                 previousTime = time;
                 dmgList[time] += dl.HealthDamage;
+                if (dl.IsCondi(log))
+                {
+                    dmgListCondition[time] += dl.HealthDamage;
+                }
+                else
+                {
+                    dmgListPower[time] += dl.HealthDamage;
+                }
             }
             for (int i = previousTime + 1; i < dmgList.Length; i++)
             {
                 dmgList[i] = dmgList[previousTime];
+                dmgListPower[i] = dmgListPower[previousTime];
+                dmgListCondition[i] = dmgListCondition[previousTime];
             }
             //
-            _damageList1S.Set(start, end, target, dmgList);
-            return dmgList;
+            res = new Dictionary<ParserHelper.DamageType, int[]> {
+                {ParserHelper.DamageType.All, dmgList },
+                { ParserHelper.DamageType.Power,dmgListPower },
+                { ParserHelper.DamageType.Condition,dmgListCondition }
+            };
+            _damageList1S.Set(start, end, target, res);
+            return res[damageType];
         }
 
-        public IReadOnlyList<double> Get1SBreakbarDamageList(ParsedEvtcLog log,long start, long end, AbstractActor target)
+        public IReadOnlyList<double> Get1SBreakbarDamageList(ParsedEvtcLog log, long start, long end, AbstractActor target)
         {
             if (!log.CombatData.HasBreakbarDamageData)
             {
@@ -235,7 +254,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 brkDmgList[i] = brkDmgList[previousTime];
             }
-            _breakbarDamageList1S.Set(start, end, target,brkDmgList);
+            _breakbarDamageList1S.Set(start, end, target, brkDmgList);
             return brkDmgList;
         }
 
@@ -395,7 +414,7 @@ namespace GW2EIEvtcParser.EIData
                 if (buffMap.TryGetValue(buffID, out List<AbstractBuffEvent> buffEvents) && buffEvents.Count != 0 && !BuffGraphs.ContainsKey(buffID))
                 {
                     AbstractBuffSimulator simulator;
-                    try 
+                    try
                     {
                         simulator = buff.CreateSimulator(log, false);
                         simulator.Simulate(buffEvents, dur);
@@ -406,7 +425,7 @@ namespace GW2EIEvtcParser.EIData
                         buffEvents.RemoveAll(x => !x.IsBuffSimulatorCompliant(log.FightData.FightEnd, false));
                         simulator = buff.CreateSimulator(log, true);
                         simulator.Simulate(buffEvents, dur);
-                    } 
+                    }
                     _buffSimulators[buffID] = simulator;
                     bool updateBoonPresence = boonIds.Contains(buffID);
                     bool updateCondiPresence = condiIds.Contains(buffID);
@@ -599,13 +618,13 @@ namespace GW2EIEvtcParser.EIData
 
         // DPS Stats
 
-        public FinalDPS GetDPSStats(AbstractSingleActor target, ParsedEvtcLog log,  long start, long end)
+        public FinalDPS GetDPSStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (_dpsStats == null)
             {
                 _dpsStats = new CachingCollectionWithTarget<FinalDPS>(log);
             }
-            if (!_dpsStats.TryGetValue(start, end, target, out FinalDPS value)) 
+            if (!_dpsStats.TryGetValue(start, end, target, out FinalDPS value))
             {
                 value = new FinalDPS(log, start, end, this, target);
                 _dpsStats.Set(start, end, target, value);
@@ -620,7 +639,7 @@ namespace GW2EIEvtcParser.EIData
 
         // Defense Stats
 
-        public FinalDefenses GetDefenseStats(AbstractSingleActor target, ParsedEvtcLog log,  long start, long end)
+        public FinalDefenses GetDefenseStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (_defenseStats == null)
             {
