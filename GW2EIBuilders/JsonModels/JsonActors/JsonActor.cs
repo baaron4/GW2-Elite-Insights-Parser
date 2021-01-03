@@ -112,6 +112,24 @@ namespace GW2EIBuilders.JsonModels
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
         public IReadOnlyList<IReadOnlyList<int>> Damage1S { get; internal set; }
+        /// <summary>
+        /// Array of int representing 1S power damage points \n
+        /// Length == # of phases
+        /// </summary>
+        /// <remarks>
+        /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
+        /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
+        /// </remarks>
+        public IReadOnlyList<IReadOnlyList<int>> PowerDamage1S { get; internal set; }
+        /// <summary>
+        /// Array of int representing 1S condition damage points \n
+        /// Length == # of phases
+        /// </summary>
+        /// <remarks>
+        /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
+        /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
+        /// </remarks>
+        public IReadOnlyList<IReadOnlyList<int>> ConditionDamage1S { get; internal set; }
         [JsonProperty]
         /// <summary>
         /// Array of double representing 1S breakbar damage points \n
@@ -196,14 +214,20 @@ namespace GW2EIBuilders.JsonModels
             if (settings.RawFormatTimelineArrays)
             {
                 IReadOnlyList<int>[] damage1S = new List<int>[phases.Count];
+                IReadOnlyList<int>[] powerDamage1S = new List<int>[phases.Count];
+                IReadOnlyList<int>[] conditionDamage1S = new List<int>[phases.Count];
                 IReadOnlyList<double>[] breakbarDamage1S = new List<double>[phases.Count];
                 for (int i = 0; i < phases.Count; i++)
                 {
                     PhaseData phase = phases[i];
-                    damage1S[i] = actor.Get1SDamageList(log, phase.Start, phase.End, null);
+                    damage1S[i] = actor.Get1SDamageList(log, phase.Start, phase.End, null, ParserHelper.DamageType.All);
+                    powerDamage1S[i] = actor.Get1SDamageList(log, phase.Start, phase.End, null, ParserHelper.DamageType.Power);
+                    conditionDamage1S[i] = actor.Get1SDamageList(log, phase.Start, phase.End, null, ParserHelper.DamageType.Condition);
                     breakbarDamage1S[i] = actor.Get1SBreakbarDamageList(log, phase.Start, phase.End, null);
                 }
                 Damage1S = damage1S;
+                PowerDamage1S = powerDamage1S;
+                ConditionDamage1S = conditionDamage1S;
                 BreakbarDamage1S = breakbarDamage1S;
             }
             if (!log.CombatData.HasBreakbarDamageData)
