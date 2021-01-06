@@ -146,10 +146,10 @@ namespace GW2EIEvtcParser.EIData
                 case DamageType.All:
                     return _dmgSrc == DamageSource.All ? p.GetHitDamageLogs(t, log, phase) : p.GetJustActorHitDamageLogs(t, log, phase);
                 case DamageType.Condition:
-                    return (_dmgSrc == DamageSource.All ? p.GetHitDamageLogs(t, log, phase) : p.GetJustActorHitDamageLogs(t, log, phase)).Where(x => x.IsCondi(log)).ToList();
+                    return (_dmgSrc == DamageSource.All ? p.GetHitDamageLogs(t, log, phase) : p.GetJustActorHitDamageLogs(t, log, phase)).Where(x => x.ConditionDamageBased(log)).ToList();
                 case DamageType.Power:
                 default:
-                    return (_dmgSrc == DamageSource.All ? p.GetHitDamageLogs(t, log, phase) : p.GetJustActorHitDamageLogs(t, log, phase)).Where(x => !x.IsCondi(log)).ToList();
+                    return (_dmgSrc == DamageSource.All ? p.GetHitDamageLogs(t, log, phase) : p.GetJustActorHitDamageLogs(t, log, phase)).Where(x => !x.ConditionDamageBased(log)).ToList();
             }
         }
 

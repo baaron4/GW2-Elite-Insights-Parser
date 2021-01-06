@@ -27,6 +27,6 @@
             IFF = evtcItem.IFF;
         }
 
-        public abstract bool IsCondi(ParsedEvtcLog log);
+        public abstract bool ConditionDamageBased(ParsedEvtcLog log);
     }
 }

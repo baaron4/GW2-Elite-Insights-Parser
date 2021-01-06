@@ -19,7 +19,7 @@
             DoubleProcHit = HasDowned || HasInterrupted || HasKilled;
         }
 
-        public override bool IsCondi(ParsedEvtcLog log)
+        public override bool ConditionDamageBased(ParsedEvtcLog log)
         {
             return false;
         }

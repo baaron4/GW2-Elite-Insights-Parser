@@ -10,7 +10,7 @@ namespace GW2EIEvtcParser.ParsedData
             BreakbarDamage = evtcItem.BuffDmg / 10.0;
         }
 
-        public override bool IsCondi(ParsedEvtcLog log)
+        public override bool ConditionDamageBased(ParsedEvtcLog log)
         {
             if (_isCondi == -1 && log.Buffs.BuffsByIds.TryGetValue(SkillId, out Buff b))
             {

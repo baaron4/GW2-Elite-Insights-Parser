@@ -7,7 +7,7 @@
             BreakbarDamage = evtcItem.Value / 10.0;
         }
 
-        public override bool IsCondi(ParsedEvtcLog log)
+        public override bool ConditionDamageBased(ParsedEvtcLog log)
         {
             return false;
         }
