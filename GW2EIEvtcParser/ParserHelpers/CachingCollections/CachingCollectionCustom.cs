@@ -52,13 +52,11 @@ namespace GW2EIEvtcParser
 
         public bool HasKeys(long start, long end, Q q)
         {
-            q = q == null ? _nullValue : q;
             return TryGetValue(start, end, q, out _);
         }
 
         public T Get(long start, long end, Q q)
         {
-            q = q == null ? _nullValue : q;
             if (TryGetValue(start, end, q, out T value))
             {
                 return value;
