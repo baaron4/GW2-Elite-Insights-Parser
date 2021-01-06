@@ -132,9 +132,8 @@ namespace GW2EIBuilders.HtmlModels
         }
 
         //////
-        public static List<BuffData> BuildBuffUptimeData(ParsedEvtcLog log, IReadOnlyList<Buff> listToUse, int phaseIndex)
+        public static List<BuffData> BuildBuffUptimeData(ParsedEvtcLog log, IReadOnlyList<Buff> listToUse, PhaseData phase)
         {
-            PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
             var list = new List<BuffData>();
             bool boonTable = listToUse.Any(x => x.Nature == Buff.BuffNature.Boon);
 
@@ -145,14 +144,13 @@ namespace GW2EIBuilders.HtmlModels
                 {
                     avg = player.GetGameplayStats(log, phase.Start, phase.End).AvgBoons;
                 }
-                list.Add(new BuffData(player.GetBuffs(log, phaseIndex, BuffEnum.Self), listToUse, avg));
+                list.Add(new BuffData(player.GetBuffs(log, phase.Start, phase.End, BuffEnum.Self), listToUse, avg));
             }
             return list;
         }
 
-        public static List<BuffData> BuildActiveBuffUptimeData(ParsedEvtcLog log, IReadOnlyList<Buff> listToUse, int phaseIndex)
+        public static List<BuffData> BuildActiveBuffUptimeData(ParsedEvtcLog log, IReadOnlyList<Buff> listToUse, PhaseData phase)
         {
-            PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
             var list = new List<BuffData>();
             bool boonTable = listToUse.Any(x => x.Nature == Buff.BuffNature.Boon);
 
@@ -163,56 +161,52 @@ namespace GW2EIBuilders.HtmlModels
                 {
                     avg = player.GetGameplayStats(log, phase.Start, phase.End).AvgActiveBoons;
                 }
-                list.Add(new BuffData(player.GetActiveBuffs(log, phaseIndex, BuffEnum.Self), listToUse, avg));
+                list.Add(new BuffData(player.GetActiveBuffs(log, phase.Start, phase.End, BuffEnum.Self), listToUse, avg));
             }
             return list;
         }
 
         //////
-        public static List<BuffData> BuildPersonalBuffUptimeData(ParsedEvtcLog log, IReadOnlyDictionary<string, List<Buff>> buffsBySpec, int phaseIndex)
+        public static List<BuffData> BuildPersonalBuffUptimeData(ParsedEvtcLog log, IReadOnlyDictionary<string, List<Buff>> buffsBySpec, PhaseData phase)
         {
             var list = new List<BuffData>();
             foreach (Player player in log.PlayerList)
             {
-                list.Add(new BuffData(player.Prof, buffsBySpec, player.GetBuffs(log, phaseIndex, BuffEnum.Self)));
+                list.Add(new BuffData(player.Prof, buffsBySpec, player.GetBuffs(log, phase.Start, phase.End, BuffEnum.Self)));
             }
             return list;
         }
 
-        public static List<BuffData> BuildActivePersonalBuffUptimeData(ParsedEvtcLog log, IReadOnlyDictionary<string, List<Buff>> buffsBySpec, int phaseIndex)
+        public static List<BuffData> BuildActivePersonalBuffUptimeData(ParsedEvtcLog log, IReadOnlyDictionary<string, List<Buff>> buffsBySpec, PhaseData phase)
         {
             var list = new List<BuffData>();
             foreach (Player player in log.PlayerList)
             {
-                list.Add(new BuffData(player.Prof, buffsBySpec, player.GetActiveBuffs(log, phaseIndex, BuffEnum.Self)));
+                list.Add(new BuffData(player.Prof, buffsBySpec, player.GetActiveBuffs(log, phase.Start, phase.End, BuffEnum.Self)));
             }
             return list;
         }
 
 
         //////
-        public static List<BuffData> BuildBuffGenerationData(ParsedEvtcLog log, IReadOnlyList<Buff> listToUse, int phaseIndex, BuffEnum type)
+        public static List<BuffData> BuildBuffGenerationData(ParsedEvtcLog log, IReadOnlyList<Buff> listToUse, PhaseData phase, BuffEnum type)
         {
             var list = new List<BuffData>();
 
             foreach (Player player in log.PlayerList)
             {
-                Dictionary<long, FinalPlayerBuffs> uptimes;
-                uptimes = player.GetBuffs(log, phaseIndex, type);
-                list.Add(new BuffData(listToUse, uptimes));
+                list.Add(new BuffData(listToUse, player.GetBuffs(log, phase.Start, phase.End, type)));
             }
             return list;
         }
 
-        public static List<BuffData> BuildActiveBuffGenerationData(ParsedEvtcLog log, IReadOnlyList<Buff> listToUse, int phaseIndex, BuffEnum type)
+        public static List<BuffData> BuildActiveBuffGenerationData(ParsedEvtcLog log, IReadOnlyList<Buff> listToUse, PhaseData phase, BuffEnum type)
         {
             var list = new List<BuffData>();
 
             foreach (Player player in log.PlayerList)
             {
-                Dictionary<long, FinalPlayerBuffs> uptimes;
-                uptimes = player.GetActiveBuffs(log, phaseIndex, type);
-                list.Add(new BuffData(listToUse, uptimes));
+                list.Add(new BuffData(listToUse, player.GetActiveBuffs(log, phase.Start, phase.End, type)));
             }
             return list;
         }
