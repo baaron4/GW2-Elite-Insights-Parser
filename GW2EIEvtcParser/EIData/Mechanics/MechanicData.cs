@@ -73,7 +73,7 @@ namespace GW2EIEvtcParser.EIData
             return _mechanicLogs.Values;
         }
 
-        public List<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech)
+        public IReadOnlyList<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech)
         {
             ProcessMechanics(log);
             if (_mechanicLogs.TryGetValue(mech, out List<MechanicEvent> list))
@@ -83,7 +83,7 @@ namespace GW2EIEvtcParser.EIData
             return new List<MechanicEvent>();
         }
 
-        internal List<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, long id)
+        internal IReadOnlyList<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, long id)
         {
             ProcessMechanics(log);
             Mechanic mech = _mechanicLogs.Keys.FirstOrDefault(x => x.SkillId == id);
@@ -129,7 +129,7 @@ namespace GW2EIEvtcParser.EIData
             _enemyList.Set(start, end, new List<AbstractSingleActor>(enemyHash));
         }
 
-        public HashSet<Mechanic> GetPresentEnemyMechs(ParsedEvtcLog log, long start, long end)
+        public IReadOnlyCollection<Mechanic> GetPresentEnemyMechs(ParsedEvtcLog log, long start, long end)
         {
             ProcessMechanics(log);
             if (!_presentOnEnemyMechanics.HasKeys(start, end))
@@ -138,7 +138,7 @@ namespace GW2EIEvtcParser.EIData
             }
             return _presentOnEnemyMechanics.Get(start, end);
         }
-        public HashSet<Mechanic> GetPresentPlayerMechs(ParsedEvtcLog log, long start, long end)
+        public IReadOnlyCollection<Mechanic> GetPresentPlayerMechs(ParsedEvtcLog log, long start, long end)
         {
             ProcessMechanics(log);
             if (!_presentOnPlayerMechanics.HasKeys(start, end))
@@ -147,7 +147,7 @@ namespace GW2EIEvtcParser.EIData
             }
             return _presentOnPlayerMechanics.Get(start, end);
         }
-        public HashSet<Mechanic> GetPresentMechanics(ParsedEvtcLog log, long start, long end)
+        public IReadOnlyCollection<Mechanic> GetPresentMechanics(ParsedEvtcLog log, long start, long end)
         {
             ProcessMechanics(log);
             if (!_presentMechanics.HasKeys(start, end))
@@ -157,7 +157,7 @@ namespace GW2EIEvtcParser.EIData
             return _presentMechanics.Get(start, end);
         }
 
-        public List<AbstractSingleActor> GetEnemyList(ParsedEvtcLog log, long start, long end)
+        public IReadOnlyList<AbstractSingleActor> GetEnemyList(ParsedEvtcLog log, long start, long end)
         {
             ProcessMechanics(log);
             if (!_enemyList.HasKeys(start, end))
