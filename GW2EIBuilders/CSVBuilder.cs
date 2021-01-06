@@ -389,7 +389,7 @@ namespace GW2EIBuilders
             int count = 0;
             foreach (Player player in _noFakePlayers)
             {
-                IReadOnlyDictionary<long, FinalPlayerBuffs> uptimes = player.GetBuffs(_log, phase.Start, phase.End, BuffEnum.Self);
+                IReadOnlyDictionary<long, FinalPlayerBuffs> uptimes = player.GetBuffs(BuffEnum.Self, _log, phase.Start, phase.End);
 
                 WriteCell(player.Character);
                 WriteCell(player.GetGameplayStats(_log, phase.Start, phase.End).AvgBoons.ToString());
@@ -435,7 +435,7 @@ namespace GW2EIBuilders
             int count = 0;
             foreach (Player player in _noFakePlayers)
             {
-                IReadOnlyDictionary<long, FinalPlayerBuffs> uptimes = player.GetBuffs(_log, phase.Start, phase.End, BuffEnum.Self);
+                IReadOnlyDictionary<long, FinalPlayerBuffs> uptimes = player.GetBuffs(BuffEnum.Self, _log, phase.Start, phase.End);
 
                 WriteCell(player.Character);
                 foreach (Buff boon in listToUse)
@@ -485,7 +485,7 @@ namespace GW2EIBuilders
             PhaseData phase = _phases[phaseIndex];
             foreach (Player player in _noFakePlayers)
             {
-                IReadOnlyDictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(_log, phase.Start, phase.End, BuffEnum.Group);
+                IReadOnlyDictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(BuffEnum.Group, _log, phase.Start, phase.End);
 
                 WriteCell(player.Character);
                 foreach (Buff boon in listToUse)
@@ -536,7 +536,7 @@ namespace GW2EIBuilders
             PhaseData phase = _phases[phaseIndex];
             foreach (Player player in _noFakePlayers)
             {
-                IReadOnlyDictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(_log, phase.Start, phase.End, BuffEnum.OffGroup);
+                IReadOnlyDictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(BuffEnum.OffGroup, _log, phase.Start, phase.End);
 
                 WriteCell(player.Character);
                 foreach (Buff boon in listToUse)
@@ -587,7 +587,7 @@ namespace GW2EIBuilders
             PhaseData phase = _phases[phaseIndex];
             foreach (Player player in _noFakePlayers)
             {
-                IReadOnlyDictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(_log, phase.Start, phase.End, BuffEnum.Squad);
+                IReadOnlyDictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(BuffEnum.Squad, _log, phase.Start, phase.End);
                 WriteCell(player.Character);
                 foreach (Buff boon in listToUse)
                 {

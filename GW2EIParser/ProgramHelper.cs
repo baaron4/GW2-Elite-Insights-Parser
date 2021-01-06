@@ -304,28 +304,28 @@ namespace GW2EIParser
                 {
                     foreach (PhaseData phase in phases)
                     {
-                        actor.GetBuffs(log, phase.Start, phase.End, BuffEnum.Self);
+                        actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
                     }
                 });
                 Parallel.ForEach(log.PlayerList, actor =>
                 {
                     foreach (PhaseData phase in phases)
                     {
-                        actor.GetBuffs(log, phase.Start, phase.End, BuffEnum.Group);
+                        actor.GetBuffs(BuffEnum.Group, log, phase.Start, phase.End);
                     }
                 });
                 Parallel.ForEach(log.PlayerList, actor =>
                 {
                     foreach (PhaseData phase in phases)
                     {
-                        actor.GetBuffs(log, phase.Start, phase.End, BuffEnum.OffGroup);
+                        actor.GetBuffs(BuffEnum.OffGroup, log, phase.Start, phase.End);
                     }
                 });
                 Parallel.ForEach(log.PlayerList, actor =>
                 {
                     foreach (PhaseData phase in phases)
                     {
-                        actor.GetBuffs(log, phase.Start, phase.End, BuffEnum.Squad);
+                        actor.GetBuffs(BuffEnum.Squad, log, phase.Start, phase.End);
                     }
                 });
                 Parallel.ForEach(log.FightData.Logic.Targets, actor =>

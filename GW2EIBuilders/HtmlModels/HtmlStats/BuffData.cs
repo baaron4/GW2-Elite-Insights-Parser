@@ -144,7 +144,7 @@ namespace GW2EIBuilders.HtmlModels
                 {
                     avg = player.GetGameplayStats(log, phase.Start, phase.End).AvgBoons;
                 }
-                list.Add(new BuffData(player.GetBuffs(log, phase.Start, phase.End, BuffEnum.Self), listToUse, avg));
+                list.Add(new BuffData(player.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End), listToUse, avg));
             }
             return list;
         }
@@ -161,7 +161,7 @@ namespace GW2EIBuilders.HtmlModels
                 {
                     avg = player.GetGameplayStats(log, phase.Start, phase.End).AvgActiveBoons;
                 }
-                list.Add(new BuffData(player.GetActiveBuffs(log, phase.Start, phase.End, BuffEnum.Self), listToUse, avg));
+                list.Add(new BuffData(player.GetActiveBuffs(BuffEnum.Self, log, phase.Start, phase.End), listToUse, avg));
             }
             return list;
         }
@@ -172,7 +172,7 @@ namespace GW2EIBuilders.HtmlModels
             var list = new List<BuffData>();
             foreach (Player player in log.PlayerList)
             {
-                list.Add(new BuffData(player.Prof, buffsBySpec, player.GetBuffs(log, phase.Start, phase.End, BuffEnum.Self)));
+                list.Add(new BuffData(player.Prof, buffsBySpec, player.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End)));
             }
             return list;
         }
@@ -182,7 +182,7 @@ namespace GW2EIBuilders.HtmlModels
             var list = new List<BuffData>();
             foreach (Player player in log.PlayerList)
             {
-                list.Add(new BuffData(player.Prof, buffsBySpec, player.GetActiveBuffs(log, phase.Start, phase.End, BuffEnum.Self)));
+                list.Add(new BuffData(player.Prof, buffsBySpec, player.GetActiveBuffs(BuffEnum.Self, log, phase.Start, phase.End)));
             }
             return list;
         }
@@ -195,7 +195,7 @@ namespace GW2EIBuilders.HtmlModels
 
             foreach (Player player in log.PlayerList)
             {
-                list.Add(new BuffData(listToUse, player.GetBuffs(log, phase.Start, phase.End, type)));
+                list.Add(new BuffData(listToUse, player.GetBuffs(type, log, phase.Start, phase.End)));
             }
             return list;
         }
@@ -206,7 +206,7 @@ namespace GW2EIBuilders.HtmlModels
 
             foreach (Player player in log.PlayerList)
             {
-                list.Add(new BuffData(listToUse, player.GetActiveBuffs(log, phase.Start, phase.End, type)));
+                list.Add(new BuffData(listToUse, player.GetActiveBuffs(type, log, phase.Start, phase.End)));
             }
             return list;
         }

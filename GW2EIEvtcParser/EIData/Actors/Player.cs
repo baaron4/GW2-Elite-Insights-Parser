@@ -70,7 +70,7 @@ namespace GW2EIEvtcParser.EIData
             return value;
         }
 
-        public IReadOnlyDictionary<long, FinalPlayerBuffs> GetBuffs(ParsedEvtcLog log, long start, long end, BuffEnum type)
+        public IReadOnlyDictionary<long, FinalPlayerBuffs> GetBuffs(BuffEnum type, ParsedEvtcLog log, long start, long end)
         {
             if (_buffStats == null)
             {
@@ -84,7 +84,7 @@ namespace GW2EIEvtcParser.EIData
             return value[0];
         }
 
-        public IReadOnlyDictionary<long, FinalPlayerBuffs> GetActiveBuffs(ParsedEvtcLog log, long start, long end, BuffEnum type)
+        public IReadOnlyDictionary<long, FinalPlayerBuffs> GetActiveBuffs(BuffEnum type, ParsedEvtcLog log, long start, long end)
         {
             if (_buffStats == null)
             {
