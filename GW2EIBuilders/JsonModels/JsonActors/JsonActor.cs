@@ -195,8 +195,8 @@ namespace GW2EIBuilders.JsonModels
             //
             if (settings.RawFormatTimelineArrays)
             {
-                IReadOnlyList<int>[] damage1S = new List<int>[phases.Count];
-                IReadOnlyList<double>[] breakbarDamage1S = new List<double>[phases.Count];
+                var damage1S = new IReadOnlyList<int>[phases.Count];
+                var breakbarDamage1S = new IReadOnlyList<double>[phases.Count];
                 for (int i = 0; i < phases.Count; i++)
                 {
                     PhaseData phase = phases[i];

@@ -7,7 +7,7 @@ using static GW2EIEvtcParser.EIData.Buff;
 namespace GW2EIEvtcParser.EIData
 {
 
-    public enum BuffEnum { Self, Group, OffGroup, Squad, Unknown };
+    public enum BuffEnum { Self, Group, OffGroup, Squad };
     public class FinalPlayerBuffs : FinalBuffs
     {
         public double Generation { get; internal set; }
