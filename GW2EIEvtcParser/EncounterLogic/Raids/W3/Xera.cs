@@ -50,7 +50,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
         {
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Xera);
+            NPC mainTarget = GetMainTarget();
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Xera not found");
@@ -75,41 +75,57 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
-            long start = 0;
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Xera);
+            NPC mainTarget = GetMainTarget();
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Xera not found");
             }
             phases[0].AddTarget(mainTarget);
-            if (!requirePhases)
+            if (requirePhases)
             {
-                return phases;
-            }
-            long end = 0;
-            AbstractBuffEvent invulXera = log.CombatData.GetBuffData(762).FirstOrDefault(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent) ?? log.CombatData.GetBuffData(34113).FirstOrDefault(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent);
-            if (invulXera != null)
-            {
-                end = invulXera.Time;
-                phases.Add(new PhaseData(start, end));
+                AbstractBuffEvent invulXera = GetInvulXeraEvent(log, mainTarget);
                 // split happened
-                if (_xeraSecondPhaseStartTime > 0)
+                if (invulXera != null)
                 {
-                    mainTarget.SetManualHealth(24085950);
-                    start = _xeraSecondPhaseStartTime;
-                    //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
-                    phases.Add(new PhaseData(start, fightDuration));
+                    var phase1 = new PhaseData(0, invulXera.Time, "Phase 1");
+                    phase1.AddTarget(mainTarget);
+                    phases.Add(phase1);
+
+                    var glidingEndTime = _xeraSecondPhaseStartTime > 0 ? _xeraSecondPhaseStartTime : fightDuration;
+                    var glidingPhase = new PhaseData(invulXera.Time, glidingEndTime, "Gliding");
+                    glidingPhase.AddTargets(GetGlidingShards());
+                    phases.Add(glidingPhase);
+
+                    if (_xeraSecondPhaseStartTime > 0)
+                    {
+                        var phase2 = new PhaseData(_xeraSecondPhaseStartTime, fightDuration, "Phase 2");
+                        mainTarget.SetManualHealth(24085950);
+                        phase2.AddTarget(mainTarget);
+                        //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
+                        phases.Add(phase2);
+                    }
                 }
             }
-            for (int i = 1; i < phases.Count; i++)
-            {
-                phases[i].Name = "Phase " + i;
-                phases[i].AddTarget(mainTarget);
-
-            }
             return phases;
+        }
+
+        private NPC GetMainTarget() => Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Xera);
+
+        private AbstractBuffEvent GetInvulXeraEvent(ParsedEvtcLog log, NPC xera)
+        {
+            AbstractBuffEvent determined = log.CombatData.GetBuffData(762).FirstOrDefault(x => x.To == xera.AgentItem && x is BuffApplyEvent);
+            if (determined == null)
+            {
+                determined = log.CombatData.GetBuffData(34113).FirstOrDefault(x => x.To == xera.AgentItem && x is BuffApplyEvent);
+            }
+            return determined;
+        }
+
+        private IEnumerable<NPC> GetGlidingShards()
+        {
+            return Targets.Where(t => t.ID == (int)ArcDPSEnums.TrashID.ChargedBloodstone);
         }
 
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
