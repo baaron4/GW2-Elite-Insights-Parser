@@ -42,7 +42,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/mGOHGwN.png",
-                            (897, 1000),
+                            (1000, 897),
                             (-5992, -5992, 69, -522)/*,
                             (-12288, -27648, 12288, 27648),
                             (1920, 12160, 2944, 14464)*/);
@@ -131,10 +131,36 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
             // find target
-            AgentItem target = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Xera).FirstOrDefault();
-            if (target == null)
+            AgentItem firstXera = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Xera).FirstOrDefault();
+            if (firstXera == null)
             {
                 throw new MissingKeyActorsException("Xera not found");
+            }
+
+            var maxHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && x.DstAgent > 0).ToList();
+            var bloodstoneFragments = maxHPUpdates.Where(x => x.DstAgent == 104580).Select(x => agentData.GetAgent(x.SrcAgent)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+            foreach (AgentItem gadget in bloodstoneFragments)
+            {
+                gadget.OverrideType(AgentItem.AgentType.NPC);
+                gadget.OverrideID(ArcDPSEnums.TrashID.BloodstoneFragment);
+            }
+            var bloodstoneShards = maxHPUpdates.Where(x => x.DstAgent == 343620).Select(x => agentData.GetAgent(x.SrcAgent)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+            foreach (AgentItem gadget in bloodstoneShards)
+            {
+                gadget.OverrideType(AgentItem.AgentType.NPC);
+                gadget.OverrideID(ArcDPSEnums.TrashID.BloodstoneShard);
+            }
+            var chargedBloodStones = maxHPUpdates.Where(x => x.DstAgent == 74700).Select(x => agentData.GetAgent(x.SrcAgent)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.LastAware > firstXera.LastAware).ToList();
+            foreach (AgentItem gadget in chargedBloodStones)
+            {
+                gadget.OverrideType(AgentItem.AgentType.NPC);
+                gadget.OverrideID(ArcDPSEnums.TrashID.ChargedBloodstone);
+                // they are actually present from start to finish
+                gadget.OverrideAwareTimes(firstXera.LastAware + 15000, gadget.LastAware);
+            }
+            if (bloodstoneFragments.Any() || bloodstoneShards.Any() || chargedBloodStones.Any())
+            {
+                agentData.Refresh();
             }
             // find split
             AgentItem secondXera = agentData.GetNPCsByID(16286).FirstOrDefault();
@@ -149,22 +175,31 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     _xeraSecondPhaseStartTime = secondXera.FirstAware;
                 }
-                target.OverrideAwareTimes(target.FirstAware, secondXera.LastAware);
-                agentData.SwapMasters(secondXera, target);
+                firstXera.OverrideAwareTimes(firstXera.FirstAware, secondXera.LastAware);
+                agentData.SwapMasters(secondXera, firstXera);
                 // update combat data
                 foreach (CombatItem c in combatData)
                 {
                     if (c.SrcAgent == secondXera.Agent && c.IsStateChange.SrcIsAgent())
                     {
-                        c.OverrideSrcAgent(target.Agent);
+                        c.OverrideSrcAgent(firstXera.Agent);
                     }
                     if (c.DstAgent == secondXera.Agent && c.IsStateChange.DstIsAgent())
                     {
-                        c.OverrideDstAgent(target.Agent);
+                        c.OverrideDstAgent(firstXera.Agent);
                     }
                 }
             }
             ComputeFightTargets(agentData, combatData);
+        }
+
+        protected override List<int> GetFightTargetsIDs()
+        {
+            return new List<int> {
+                (int)ArcDPSEnums.TargetID.Xera,
+                (int)ArcDPSEnums.TrashID.BloodstoneShard,
+                (int)ArcDPSEnums.TrashID.ChargedBloodstone,
+            };
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
@@ -177,9 +212,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.WhiteMantleKnight2,
                 ArcDPSEnums.TrashID.WhiteMantleBattleMage1,
                 ArcDPSEnums.TrashID.WhiteMantleBattleMage2,
-                ArcDPSEnums.TrashID.ExquisiteConjunction,
-                ArcDPSEnums.TrashID.ChargedBloodstone,
                 ArcDPSEnums.TrashID.BloodstoneFragment,
+                ArcDPSEnums.TrashID.ExquisiteConjunction,
                 ArcDPSEnums.TrashID.XerasPhantasm,
             };
         }

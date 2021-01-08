@@ -287,8 +287,8 @@ namespace GW2EIEvtcParser
         private const int AiKeeperOfThePeak2 = -8;
         private const int MatthiasSacrifice = -9;
         private const int BloodstoneFragment = -10;
-        private const int ChargedBloodstone = -11;
-        private const int XeraLeyRift = -11;
+        private const int BloodstoneShard = -11;
+        private const int ChargedBloodstone = -12;
 
 
         //
@@ -359,9 +359,9 @@ namespace GW2EIEvtcParser
             HauntingStatue = 16247,
             //CastleFountain = 32951,
             // Xera
+            BloodstoneShard = ArcDPSEnums.BloodstoneShard,
             ChargedBloodstone = ArcDPSEnums.ChargedBloodstone,
             BloodstoneFragment = ArcDPSEnums.BloodstoneFragment,
-            XeraLeyRift = ArcDPSEnums.XeraLeyRift,
             XerasPhantasm = 16225,
             WhiteMantleSeeker1 = 16238,
             WhiteMantleSeeker2 = 16283,
