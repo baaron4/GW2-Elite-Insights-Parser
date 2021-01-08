@@ -209,7 +209,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     Extension = "drkai";
                     aiAgent.OverrideName("Dark Ai");
-                    aiAgent.OverrideID((int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2);
+                    aiAgent.OverrideID(ArcDPSEnums.TargetID.AiKeeperOfThePeak2);
                     agentData.Refresh();
                 }
             }
