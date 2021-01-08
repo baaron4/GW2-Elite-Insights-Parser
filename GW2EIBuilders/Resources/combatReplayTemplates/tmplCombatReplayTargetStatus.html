@@ -9,7 +9,7 @@
                 {{(Math.round(100*getPercent(time))/100).toFixed(2)}} %
             </p>
         </div>
-        <div v-if="hasBreakbarPercent" class="cr-breakbar-display">
+        <div v-if="hasBreakbarPercent" class="cr-breakbar-display mb-4">
             <div class="cr-breakbar-bar" :style="{'background': getBreakbarGradient(time)}">
                 <p class="text-center">
                     {{(Math.round(100*getBreakbarPercent(time))/100).toFixed(2)}} %
