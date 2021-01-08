@@ -177,9 +177,9 @@ namespace GW2EIBuilders.JsonModels
             HitboxWidth = actor.HitboxWidth;
             InstanceID = actor.InstID;
             //
-            DpsAll = actor.GetDPSAll(log).Select(x => new JsonStatistics.JsonDPS(x)).ToArray();
-            StatsAll = actor.GetGameplayStats(log).Select(x => new JsonStatistics.JsonGameplayStatsAll(x)).ToArray();
-            Defenses = actor.GetDefenses(log).Select(x => new JsonStatistics.JsonDefensesAll(x)).ToArray();
+            DpsAll = phases.Select(phase => new JsonStatistics.JsonDPS(actor.GetDPSStats(log, phase.Start, phase.End))).ToArray();
+            StatsAll = phases.Select(phase => new JsonStatistics.JsonGameplayStatsAll(actor.GetGameplayStats(log, phase.Start, phase.End))).ToArray();
+            Defenses = phases.Select(phase => new JsonStatistics.JsonDefensesAll(actor.GetDefenseStats(log, phase.Start, phase.End))).ToArray();
             //
             IReadOnlyDictionary<long, Minions> minionsList = actor.GetMinions(log);
             if (minionsList.Values.Any())
@@ -187,7 +187,7 @@ namespace GW2EIBuilders.JsonModels
                 Minions = minionsList.Values.Select(x => new JsonMinions(x, log, skillDesc, buffDesc)).ToList();
             }
             //
-            var skillByID = actor.GetIntersectingCastLogs(log, 0, log.FightData.FightEnd).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
+            var skillByID = actor.GetIntersectingCastEvents(log, 0, log.FightData.FightEnd).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             if (skillByID.Any())
             {
                 Rotation = JsonRotation.BuildJsonRotationList(log, skillByID, skillDesc);
@@ -195,12 +195,13 @@ namespace GW2EIBuilders.JsonModels
             //
             if (settings.RawFormatTimelineArrays)
             {
-                IReadOnlyList<int>[] damage1S = new List<int>[phases.Count];
-                IReadOnlyList<double>[] breakbarDamage1S = new List<double>[phases.Count];
+                var damage1S = new IReadOnlyList<int>[phases.Count];
+                var breakbarDamage1S = new IReadOnlyList<double>[phases.Count];
                 for (int i = 0; i < phases.Count; i++)
                 {
-                    damage1S[i] = actor.Get1SDamageList(log, i, phases[i], null);
-                    breakbarDamage1S[i] = actor.Get1SBreakbarDamageList(log, i, phases[i], null);
+                    PhaseData phase = phases[i];
+                    damage1S[i] = actor.Get1SDamageList(log, phase.Start, phase.End, null);
+                    breakbarDamage1S[i] = actor.Get1SBreakbarDamageList(log, phase.Start, phase.End, null);
                 }
                 Damage1S = damage1S;
                 BreakbarDamage1S = breakbarDamage1S;
@@ -234,7 +235,7 @@ namespace GW2EIBuilders.JsonModels
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                res[i] = JsonDamageDist.BuildJsonDamageDistList(actor.GetDamageLogs(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
+                res[i] = JsonDamageDist.BuildJsonDamageDistList(actor.GetDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
             }
             return res;
         }
@@ -245,7 +246,7 @@ namespace GW2EIBuilders.JsonModels
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                res[i] = JsonDamageDist.BuildJsonDamageDistList(actor.GetDamageTakenLogs(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
+                res[i] = JsonDamageDist.BuildJsonDamageDistList(actor.GetDamageTakenEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
             }
             return res;
         }

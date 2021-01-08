@@ -16,7 +16,7 @@ namespace GW2EIBuilders.HtmlModels
         public bool EnemyMech { get; set; }
         public bool PlayerMech { get; set; }
 
-        private static List<int[]> GetMechanicData(HashSet<Mechanic> presMech, ParsedEvtcLog log, AbstractActor actor, PhaseData phase)
+        private static List<int[]> GetMechanicData(IReadOnlyCollection<Mechanic> presMech, ParsedEvtcLog log, AbstractActor actor, PhaseData phase)
         {
             var res = new List<int[]>();
 
@@ -40,7 +40,7 @@ namespace GW2EIBuilders.HtmlModels
             return res;
         }
 
-        public static void BuildMechanics(HashSet<Mechanic> mechs, List<MechanicDto> mechsDtos)
+        public static void BuildMechanics(IReadOnlyCollection<Mechanic> mechs, List<MechanicDto> mechsDtos)
         {
             foreach (Mechanic mech in mechs)
             {
@@ -57,27 +57,23 @@ namespace GW2EIBuilders.HtmlModels
             }
         }
 
-        public static List<List<int[]>> BuildPlayerMechanicData(ParsedEvtcLog log, int phaseIndex)
+        public static List<List<int[]>> BuildPlayerMechanicData(ParsedEvtcLog log, PhaseData phase)
         {
             var list = new List<List<int[]>>();
-            HashSet<Mechanic> presMech = log.MechanicData.GetPresentPlayerMechs(log, 0);
-            PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
 
             foreach (Player p in log.PlayerList)
             {
-                list.Add(GetMechanicData(presMech, log, p, phase));
+                list.Add(GetMechanicData(log.MechanicData.GetPresentPlayerMechs(log, log.FightData.FightStart, log.FightData.FightEnd), log, p, phase));
             }
             return list;
         }
 
-        public static List<List<int[]>> BuildEnemyMechanicData(ParsedEvtcLog log, int phaseIndex)
+        public static List<List<int[]>> BuildEnemyMechanicData(ParsedEvtcLog log, PhaseData phase)
         {
             var list = new List<List<int[]>>();
-            HashSet<Mechanic> presMech = log.MechanicData.GetPresentEnemyMechs(log, 0);
-            PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
-            foreach (AbstractActor enemy in log.MechanicData.GetEnemyList(log, 0))
+            foreach (AbstractSingleActor enemy in log.MechanicData.GetEnemyList(log, log.FightData.FightStart, log.FightData.FightEnd))
             {
-                list.Add(GetMechanicData(presMech, log, enemy, phase));
+                list.Add(GetMechanicData(log.MechanicData.GetPresentEnemyMechs(log, log.FightData.FightStart, log.FightData.FightEnd), log, enemy, phase));
             }
             return list;
         }

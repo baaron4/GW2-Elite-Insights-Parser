@@ -48,6 +48,10 @@ namespace GW2EIEvtcParser.EIData
 
         public void Simulate(List<AbstractBuffEvent> logs, long fightDuration)
         {
+            if (GenerationSimulation.Any())
+            {
+                return;
+            }
             long firstTimeValue = logs.Count > 0 ? Math.Min(logs.First().Time, 0) : 0;
             long timeCur = firstTimeValue;
             long timePrev = firstTimeValue;

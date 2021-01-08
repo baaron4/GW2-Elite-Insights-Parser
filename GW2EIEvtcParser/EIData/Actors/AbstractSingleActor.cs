@@ -13,15 +13,17 @@ namespace GW2EIEvtcParser.EIData
         // Boons
         private HashSet<Buff> _trackedBuffs;
         private BuffDictionary _buffMap;
-        protected Dictionary<long, BuffsGraphModel> BuffPoints { get; set; }
-        private readonly List<BuffDistribution> _buffDistribution = new List<BuffDistribution>();
-        private readonly List<Dictionary<long, long>> _buffPresence = new List<Dictionary<long, long>>();
-        private List<Dictionary<long, FinalBuffsDictionary>> _buffsDictionary;
-        private List<Dictionary<long, FinalBuffsDictionary>> _buffsActiveDictionary;
+        protected Dictionary<long, BuffsGraphModel> BuffGraphs { get; set; }
+        private CachingCollection<BuffDistribution> _buffDistribution;
+        private CachingCollection<Dictionary<long, long>> _buffPresence;
+        private CachingCollection<(Dictionary<long, FinalBuffsDictionary>, Dictionary<long, FinalBuffsDictionary>)> _buffsDictionary;
+        private readonly Dictionary<long, AbstractBuffSimulator> _buffSimulators = new Dictionary<long, AbstractBuffSimulator>();
         // damage list
-        private readonly Dictionary<int, List<int>> _damageList1S = new Dictionary<int, List<int>>();
-        private readonly Dictionary<int, List<double>> _breakbarDamageList1S = new Dictionary<int, List<double>>();
-        private readonly Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractHealthDamageEvent>>> _selfDamageLogsPerPhasePerTarget = new Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractHealthDamageEvent>>>();
+        private CachingCollectionWithTarget<int[]> _damageList1S;
+        private CachingCollectionWithTarget<double[]> _breakbarDamageList1S;
+        private CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> _hitSelfDamageEventsPerPhasePerTarget;
+        private CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> _powerHitSelfDamageEventsPerPhasePerTarget;
+        private CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> _conditionHitSelfDamageEventsPerPhasePerTarget;
         //status
         private List<Segment> _healthUpdates { get; set; }
         private List<Segment> _barrierUpdates { get; set; }
@@ -33,14 +35,10 @@ namespace GW2EIEvtcParser.EIData
         // Replay
         protected CombatReplay CombatReplay { get; set; }
         // Statistics
-        private List<FinalDPS> _dpsAll;
-        private Dictionary<AbstractSingleActor, List<FinalDPS>> _dpsTarget;
-        private List<FinalDefensesAll> _defenses;
-        private Dictionary<AbstractSingleActor, List<FinalDefenses>> _defensesTarget;
-        private Dictionary<AbstractSingleActor, List<FinalGameplayStats>> _statsTarget;
-        private List<FinalGameplayStatsAll> _statsAll;
-        private List<FinalSupportAll> _supportAll;
-        private Dictionary<AbstractSingleActor, List<FinalSupport>> _supportTarget;
+        private CachingCollectionWithTarget<FinalDPS> _dpsStats;
+        private CachingCollectionWithTarget<FinalDefenses> _defenseStats;
+        private CachingCollectionWithTarget<FinalGameplayStats> _gameplayStats;
+        private CachingCollectionWithTarget<FinalSupport> _supportStats;
 
         protected AbstractSingleActor(AgentItem agent) : base(agent)
         {
@@ -58,6 +56,32 @@ namespace GW2EIEvtcParser.EIData
                 AgentItem.GetAgentStatus(_deads, _downs, _dcs, log.CombatData, log.FightData);
             }
             return (_deads, _downs, _dcs);
+        }
+
+        public long GetActiveDuration(ParsedEvtcLog log, long start, long end)
+        {
+            (IReadOnlyList<(long start, long end)> dead, IReadOnlyList<(long start, long end)> down, IReadOnlyList<(long start, long end)> dc) = GetStatus(log);
+            return (end - start) -
+                dead.Sum(x =>
+                {
+                    if (x.start <= end && x.end >= start)
+                    {
+                        long s = Math.Max(x.start, start);
+                        long e = Math.Min(x.end, end);
+                        return e - s;
+                    }
+                    return 0;
+                }) -
+                dc.Sum(x =>
+                {
+                    if (x.start <= end && x.end >= start)
+                    {
+                        long s = Math.Max(x.start, start);
+                        long e = Math.Min(x.end, end);
+                        return e - s;
+                    }
+                    return 0;
+                });
         }
 
         public abstract string GetIcon();
@@ -103,7 +127,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 foreach (KeyValuePair<long, Minions> pair in auxMinions)
                 {
-                    if (pair.Value.GetDamageLogs(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastLogs(log, 0, log.FightData.FightEnd).Any(x => x.SkillId != SkillItem.WeaponSwapId && x.SkillId != SkillItem.MirageCloakDodgeId))
+                    if (pair.Value.GetDamageEvents(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastEvents(log, 0, log.FightData.FightEnd).Any(x => x.SkillId != SkillItem.WeaponSwapId && x.SkillId != SkillItem.MirageCloakDodgeId))
                     {
                         _minions[pair.Value.AgentItem.UniqueID] = pair.Value;
                     }
@@ -125,7 +149,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 foreach (KeyValuePair<string, Minions> pair in auxGadgetMinions)
                 {
-                    if (pair.Value.GetDamageLogs(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastLogs(log, 0, log.FightData.FightEnd).Any(x => x.SkillId != SkillItem.WeaponSwapId && x.SkillId != SkillItem.MirageCloakDodgeId))
+                    if (pair.Value.GetDamageEvents(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastEvents(log, 0, log.FightData.FightEnd).Any(x => x.SkillId != SkillItem.WeaponSwapId && x.SkillId != SkillItem.MirageCloakDodgeId))
                     {
                         _minions[pair.Value.AgentItem.UniqueID] = pair.Value;
                     }
@@ -136,126 +160,160 @@ namespace GW2EIEvtcParser.EIData
 
         // Graph
 
-        public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, int phaseIndex, PhaseData phase, AbstractActor target)
+        public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, AbstractActor target)
         {
-            ulong targetId = target != null ? target.Agent : 0;
-            int id = (phaseIndex + "_" + targetId + "_1S").GetHashCode();
-            if (_damageList1S.TryGetValue(id, out List<int> res))
+            if (_damageList1S == null)
+            {
+                _damageList1S = new CachingCollectionWithTarget<int[]>(log);
+            }
+            if (_damageList1S.TryGetValue(start, end, target, out int[] res))
             {
                 return res;
             }
-            var dmgList = new List<int>();
-            IReadOnlyList<AbstractHealthDamageEvent> damageLogs = GetDamageLogs(target, log, phase.Start, phase.End);
-            // fill the graph, full precision
-            var dmgListFull = new int[phase.DurationInMS + 1];
-            int totalTime = 1;
-            int totalDamage = 0;
-            foreach (AbstractHealthDamageEvent dl in damageLogs)
+            int durationInMS = (int)(end - start);
+            int durationInS = durationInMS / 1000;
+            var dmgList = durationInS * 1000 != durationInMS ? new int[durationInS + 2] : new int[durationInS + 1];
+            IReadOnlyList<AbstractHealthDamageEvent> damageEvents = GetDamageEvents(target, log, start, end);
+            // fill the graph
+            int previousTime = 0;
+            foreach (AbstractHealthDamageEvent dl in damageEvents)
             {
-                int time = (int)(dl.Time - phase.Start);
-                // fill
-                for (; totalTime < time; totalTime++)
+                int time = (int)Math.Ceiling((dl.Time - start)/1000.0);
+                if (time != previousTime)
                 {
-                    dmgListFull[totalTime] = totalDamage;
+                    for (int i = previousTime + 1; i <= time; i++)
+                    {
+                        dmgList[i] = dmgList[previousTime];
+                    }
                 }
-                totalDamage += dl.HealthDamage;
-                dmgListFull[totalTime] = totalDamage;
+                previousTime = time;
+                dmgList[time] += dl.HealthDamage;
             }
-            // fill
-            for (; totalTime <= phase.DurationInMS; totalTime++)
+            for (int i = previousTime + 1; i < dmgList.Length; i++)
             {
-                dmgListFull[totalTime] = totalDamage;
+                dmgList[i] = dmgList[previousTime];
             }
             //
-            dmgList.Add(0);
-            for (int i = 1; i <= phase.DurationInS; i++)
-            {
-                dmgList.Add(dmgListFull[1000 * i]);
-            }
-            if (phase.DurationInS * 1000 != phase.DurationInMS)
-            {
-                int lastDamage = dmgListFull[(int)phase.DurationInMS];
-                dmgList.Add(lastDamage);
-            }
-            _damageList1S[id] = dmgList;
+            _damageList1S.Set(start, end, target, dmgList);
             return dmgList;
         }
 
-        public IReadOnlyList<double> Get1SBreakbarDamageList(ParsedEvtcLog log, int phaseIndex, PhaseData phase, AbstractActor target)
+        public IReadOnlyList<double> Get1SBreakbarDamageList(ParsedEvtcLog log,long start, long end, AbstractActor target)
         {
             if (!log.CombatData.HasBreakbarDamageData)
             {
                 return null;
             }
-            ulong targetId = target != null ? target.Agent : 0;
-            int id = (phaseIndex + "_" + targetId + "_1S").GetHashCode();
-            if (_breakbarDamageList1S.TryGetValue(id, out List<double> res))
+            if (_breakbarDamageList1S == null)
+            {
+                _breakbarDamageList1S = new CachingCollectionWithTarget<double[]>(log);
+            }
+            if (_breakbarDamageList1S.TryGetValue(start, end, target, out double[] res))
             {
                 return res;
             }
-            var brkDmgList = new List<double>();
-            IReadOnlyList<AbstractBreakbarDamageEvent> breakbarDamageLogs = GetBreakbarDamageLogs(target, log, phase.Start, phase.End);
-            // fill the graph, full precision
-            var brkDmgListFull = new double[phase.DurationInMS + 1];
-            int totalTime = 1;
-            double totalDamage = 0;
-            foreach (DirectBreakbarDamageEvent dl in breakbarDamageLogs)
+            int durationInMS = (int)(end - start);
+            int durationInS = durationInMS / 1000;
+            var brkDmgList = durationInS * 1000 != durationInMS ? new double[durationInS + 2] : new double[durationInS + 1];
+            IReadOnlyList<AbstractBreakbarDamageEvent> breakbarDamageEvents = GetBreakbarDamageEvents(target, log, start, end);
+            // fill the graph
+            int previousTime = 0;
+            foreach (AbstractBreakbarDamageEvent dl in breakbarDamageEvents)
             {
-                int time = (int)(dl.Time - phase.Start);
-                // fill
-                for (; totalTime < time; totalTime++)
+                int time = (int)Math.Ceiling((dl.Time - start) / 1000.0);
+                if (time != previousTime)
                 {
-                    brkDmgListFull[totalTime] = totalDamage;
+                    for (int i = previousTime + 1; i <= time; i++)
+                    {
+                        brkDmgList[i] = brkDmgList[previousTime];
+                    }
                 }
-                totalDamage = Math.Round(totalDamage + dl.BreakbarDamage, 1);
-                brkDmgListFull[totalTime] = totalDamage;
+                previousTime = time;
+                brkDmgList[time] += dl.BreakbarDamage;
             }
-            // fill
-            for (; totalTime <= phase.DurationInMS; totalTime++)
+            for (int i = previousTime + 1; i < brkDmgList.Length; i++)
             {
-                brkDmgListFull[totalTime] = totalDamage;
+                brkDmgList[i] = brkDmgList[previousTime];
             }
-            //
-            brkDmgList.Add(0);
-            for (int i = 1; i <= phase.DurationInS; i++)
-            {
-                brkDmgList.Add(brkDmgListFull[1000 * i]);
-            }
-            if (phase.DurationInS * 1000 != phase.DurationInMS)
-            {
-                double lastDamage = brkDmgListFull[(int)phase.DurationInMS];
-                brkDmgList.Add(lastDamage);
-            }
-            _breakbarDamageList1S[id] = brkDmgList;
+            _breakbarDamageList1S.Set(start, end, target,brkDmgList);
             return brkDmgList;
         }
 
         // Buffs
-        public BuffDistribution GetBuffDistribution(ParsedEvtcLog log, int phaseIndex)
+        public BuffDistribution GetBuffDistribution(ParsedEvtcLog log, long start, long end)
         {
-            if (BuffPoints == null)
+            if (BuffGraphs == null)
             {
-                SetBuffStatus(log);
+                SetBuffGraphs(log);
             }
-            return _buffDistribution[phaseIndex];
+            if (!_buffDistribution.TryGetValue(start, end, out BuffDistribution value))
+            {
+                value = ComputeBuffDistribution(start, end);
+                _buffDistribution.Set(start, end, value);
+            }
+            return value;
         }
 
-        public Dictionary<long, long> GetBuffPresence(ParsedEvtcLog log, int phaseIndex)
+        private BuffDistribution ComputeBuffDistribution(long start, long end)
         {
-            if (BuffPoints == null)
+            var res = new BuffDistribution();
+            foreach (KeyValuePair<long, AbstractBuffSimulator> pair in _buffSimulators)
             {
-                SetBuffStatus(log);
+                foreach (BuffSimulationItem simul in pair.Value.GenerationSimulation)
+                {
+                    simul.SetBuffDistributionItem(res, start, end, pair.Key);
+                }
+                foreach (BuffSimulationItemWasted simul in pair.Value.WasteSimulationResult)
+                {
+                    simul.SetBuffDistributionItem(res, start, end, pair.Key);
+                }
+                foreach (BuffSimulationItemOverstack simul in pair.Value.OverstackSimulationResult)
+                {
+                    simul.SetBuffDistributionItem(res, start, end, pair.Key);
+                }
             }
-            return _buffPresence[phaseIndex];
+            return res;
+        }
+
+        public Dictionary<long, long> GetBuffPresence(ParsedEvtcLog log, long start, long end)
+        {
+            if (BuffGraphs == null)
+            {
+                SetBuffGraphs(log);
+            }
+            if (!_buffPresence.TryGetValue(start, end, out Dictionary<long, long> value))
+            {
+                value = ComputeBuffPresence(start, end);
+                _buffPresence.Set(start, end, value);
+            }
+            return value;
+        }
+
+        private Dictionary<long, long> ComputeBuffPresence(long start, long end)
+        {
+            var buffPresence = new Dictionary<long, long>();
+            foreach (KeyValuePair<long, AbstractBuffSimulator> pair in _buffSimulators)
+            {
+                foreach (BuffSimulationItem simul in pair.Value.GenerationSimulation)
+                {
+                    long value = simul.GetClampedDuration(start, end);
+                    if (value == 0)
+                    {
+                        continue;
+                    }
+                    Add(buffPresence, pair.Key, value);
+                }
+            }
+            return buffPresence;
         }
 
         public Dictionary<long, BuffsGraphModel> GetBuffGraphs(ParsedEvtcLog log)
         {
-            if (BuffPoints == null)
+            if (BuffGraphs == null)
             {
-                SetBuffStatus(log);
+                SetBuffGraphs(log);
             }
-            return BuffPoints;
+            return BuffGraphs;
         }
 
         /// <summary>
@@ -313,9 +371,9 @@ namespace GW2EIEvtcParser.EIData
         }
 
 
-        private void SetBuffStatus(ParsedEvtcLog log)
+        private void SetBuffGraphs(ParsedEvtcLog log)
         {
-            BuffPoints = new Dictionary<long, BuffsGraphModel>();
+            BuffGraphs = new Dictionary<long, BuffsGraphModel>();
             if (_buffMap == null)
             {
                 ComputeBuffMap(log);
@@ -329,51 +387,32 @@ namespace GW2EIEvtcParser.EIData
             var boonIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Boon].Select(x => x.ID));
             var condiIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Condition].Select(x => x.ID));
             // Init status
-            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
-            for (int i = 0; i < phases.Count; i++)
-            {
-                _buffDistribution.Add(new BuffDistribution());
-                _buffPresence.Add(new Dictionary<long, long>());
-            }
+            _buffDistribution = new CachingCollection<BuffDistribution>(log);
+            _buffPresence = new CachingCollection<Dictionary<long, long>>(log);
             foreach (Buff buff in GetTrackedBuffs(log))
             {
-                long boonid = buff.ID;
-                if (buffMap.TryGetValue(boonid, out List<AbstractBuffEvent> logs) && logs.Count != 0)
+                long buffID = buff.ID;
+                if (buffMap.TryGetValue(buffID, out List<AbstractBuffEvent> buffEvents) && buffEvents.Count != 0 && !BuffGraphs.ContainsKey(buffID))
                 {
-                    if (BuffPoints.ContainsKey(boonid))
-                    {
-                        continue;
-                    }
                     AbstractBuffSimulator simulator;
                     try 
                     {
                         simulator = buff.CreateSimulator(log, false);
-                        simulator.Simulate(logs, dur);
+                        simulator.Simulate(buffEvents, dur);
                     }
                     catch (EIBuffSimulatorIDException)
                     {
                         // get rid of logs invalid for HasStackIDs false
-                        logs.RemoveAll(x => !x.IsBuffSimulatorCompliant(log.FightData.FightEnd, false));
+                        buffEvents.RemoveAll(x => !x.IsBuffSimulatorCompliant(log.FightData.FightEnd, false));
                         simulator = buff.CreateSimulator(log, true);
-                        simulator.Simulate(logs, dur);
-                    }   
-                    bool updateBoonPresence = boonIds.Contains(boonid);
-                    bool updateCondiPresence = condiIds.Contains(boonid);
+                        simulator.Simulate(buffEvents, dur);
+                    } 
+                    _buffSimulators[buffID] = simulator;
+                    bool updateBoonPresence = boonIds.Contains(buffID);
+                    bool updateCondiPresence = condiIds.Contains(buffID);
                     var graphSegments = new List<Segment>();
                     foreach (BuffSimulationItem simul in simulator.GenerationSimulation)
                     {
-                        // Generation
-                        for (int i = 0; i < phases.Count; i++)
-                        {
-                            PhaseData phase = phases[i];
-                            long value = simul.GetClampedDuration(phase.Start, phase.End);
-                            if (value == 0)
-                            {
-                                continue;
-                            }
-                            Add(_buffPresence[i], boonid, value);
-                            simul.SetBuffDistributionItem(_buffDistribution[i], phase.Start, phase.End, boonid, log);
-                        }
                         // Graph
                         var segment = simul.ToSegment();
                         if (graphSegments.Count == 0)
@@ -386,17 +425,6 @@ namespace GW2EIEvtcParser.EIData
                         }
                         graphSegments.Add(segment);
                     }
-                    // Cleanse and Wastes
-                    var extraSimulations = new List<AbstractSimulationItem>(simulator.OverstackSimulationResult);
-                    extraSimulations.AddRange(simulator.WasteSimulationResult);
-                    foreach (AbstractSimulationItem simul in extraSimulations)
-                    {
-                        for (int i = 0; i < phases.Count; i++)
-                        {
-                            PhaseData phase = phases[i];
-                            simul.SetBuffDistributionItem(_buffDistribution[i], phase.Start, phase.End, boonid, log);
-                        }
-                    }
                     // Graph object creation
                     if (graphSegments.Count > 0)
                     {
@@ -406,16 +434,16 @@ namespace GW2EIEvtcParser.EIData
                     {
                         graphSegments.Add(new Segment(0, dur, 0));
                     }
-                    BuffPoints[boonid] = new BuffsGraphModel(buff, graphSegments);
+                    BuffGraphs[buffID] = new BuffsGraphModel(buff, graphSegments);
                     if (updateBoonPresence || updateCondiPresence)
                     {
-                        (updateBoonPresence ? boonPresenceGraph : condiPresenceGraph).MergePresenceInto(BuffPoints[boonid].BuffChart);
+                        (updateBoonPresence ? boonPresenceGraph : condiPresenceGraph).MergePresenceInto(BuffGraphs[buffID].BuffChart);
                     }
 
                 }
             }
-            BuffPoints[NumberOfBoonsID] = boonPresenceGraph;
-            BuffPoints[NumberOfConditionsID] = condiPresenceGraph;
+            BuffGraphs[NumberOfBoonsID] = boonPresenceGraph;
+            BuffGraphs[NumberOfConditionsID] = condiPresenceGraph;
             foreach (Minions minions in GetMinions(log).Values)
             {
                 foreach (List<Segment> minionsSegments in minions.GetLifeSpanSegments(log))
@@ -425,53 +453,40 @@ namespace GW2EIEvtcParser.EIData
             }
             if (activeCombatMinionsGraph.BuffChart.Any())
             {
-                BuffPoints[NumberOfActiveCombatMinions] = activeCombatMinionsGraph;
+                BuffGraphs[NumberOfActiveCombatMinions] = activeCombatMinionsGraph;
             }
         }
 
-        public Dictionary<long, FinalBuffsDictionary> GetBuffsDictionary(ParsedEvtcLog log, int phaseIndex)
+        public Dictionary<long, FinalBuffsDictionary> GetBuffsDictionary(ParsedEvtcLog log, long start, long end)
         {
             if (_buffsDictionary == null)
             {
-                SetBuffsDictionary(log);
+                _buffsDictionary = new CachingCollection<(Dictionary<long, FinalBuffsDictionary>, Dictionary<long, FinalBuffsDictionary>)>(log);
             }
-            return _buffsDictionary[phaseIndex];
+            if (!_buffsDictionary.TryGetValue(start, end, out (Dictionary<long, FinalBuffsDictionary>, Dictionary<long, FinalBuffsDictionary>) value))
+            {
+                value = ComputeBuffsDictionary(log, start, end);
+                _buffsDictionary.Set(start, end, value);
+            }
+            return value.Item1;
         }
 
-        public List<Dictionary<long, FinalBuffsDictionary>> GetBuffsDictionary(ParsedEvtcLog log)
+        private (Dictionary<long, FinalBuffsDictionary>, Dictionary<long, FinalBuffsDictionary>) ComputeBuffsDictionary(ParsedEvtcLog log, long start, long end)
         {
-            if (_buffsDictionary == null)
+            BuffDistribution buffDistribution = GetBuffDistribution(log, start, end);
+            var rates = new Dictionary<long, FinalBuffsDictionary>();
+            var ratesActive = new Dictionary<long, FinalBuffsDictionary>();
+            long duration = end - start;
+            long activeDuration = GetActiveDuration(log, start, end);
+
+            foreach (Buff buff in GetTrackedBuffs(log))
             {
-                SetBuffsDictionary(log);
-            }
-            return _buffsDictionary;
-        }
-
-        private void SetBuffsDictionary(ParsedEvtcLog log)
-        {
-            _buffsDictionary = new List<Dictionary<long, FinalBuffsDictionary>>();
-            _buffsActiveDictionary = new List<Dictionary<long, FinalBuffsDictionary>>();
-            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
-            for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
-            {
-                BuffDistribution buffDistribution = GetBuffDistribution(log, phaseIndex);
-                var rates = new Dictionary<long, FinalBuffsDictionary>();
-                var ratesActive = new Dictionary<long, FinalBuffsDictionary>();
-                _buffsDictionary.Add(rates);
-                _buffsActiveDictionary.Add(ratesActive);
-
-                PhaseData phase = phases[phaseIndex];
-                long phaseDuration = phase.DurationInMS;
-                long activePhaseDuration = phase.GetActorActiveDuration(this, log);
-
-                foreach (Buff buff in GetTrackedBuffs(log))
+                if (buffDistribution.HasBuffID(buff.ID))
                 {
-                    if (buffDistribution.HasBuffID(buff.ID))
-                    {
-                        (rates[buff.ID], ratesActive[buff.ID]) = FinalBuffsDictionary.GetFinalBuffsDictionary(log, buff, buffDistribution, phaseDuration, activePhaseDuration);
-                    }
+                    (rates[buff.ID], ratesActive[buff.ID]) = FinalBuffsDictionary.GetFinalBuffsDictionary(log, buff, buffDistribution, duration, activeDuration);
                 }
             }
+            return (rates, ratesActive);
         }
 
         //
@@ -531,40 +546,40 @@ namespace GW2EIEvtcParser.EIData
         public abstract AbstractSingleActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedEvtcLog log);
 
         // Cast logs
-        public override IReadOnlyList<AbstractCastEvent> GetCastLogs(ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractCastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end)
         {
-            if (CastLogs == null)
+            if (CastEvents == null)
             {
-                SetCastLogs(log);
+                SetCastEvents(log);
             }
-            return CastLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
+            return CastEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
 
         }
-        public override IReadOnlyList<AbstractCastEvent> GetIntersectingCastLogs(ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractCastEvent> GetIntersectingCastEvents(ParsedEvtcLog log, long start, long end)
         {
-            if (CastLogs == null)
+            if (CastEvents == null)
             {
-                SetCastLogs(log);
+                SetCastEvents(log);
             }
-            return CastLogs.Where(x => KeepIntersectingCastLog(x, start, end)).ToList();
+            return CastEvents.Where(x => KeepIntersectingCastLog(x, start, end)).ToList();
 
         }
-        protected void SetCastLogs(ParsedEvtcLog log)
+        protected void SetCastEvents(ParsedEvtcLog log)
         {
-            CastLogs = new List<AbstractCastEvent>(log.CombatData.GetAnimatedCastData(AgentItem));
-            CastLogs.AddRange(log.CombatData.GetInstantCastData(AgentItem));
+            CastEvents = new List<AbstractCastEvent>(log.CombatData.GetAnimatedCastData(AgentItem));
+            CastEvents.AddRange(log.CombatData.GetInstantCastData(AgentItem));
             foreach (WeaponSwapEvent wepSwap in log.CombatData.GetWeaponSwapData(AgentItem))
             {
-                if (CastLogs.Count > 0 && (wepSwap.Time - CastLogs.Last().Time) < ParserHelper.ServerDelayConstant && CastLogs.Last().SkillId == SkillItem.WeaponSwapId)
+                if (CastEvents.Count > 0 && (wepSwap.Time - CastEvents.Last().Time) < ParserHelper.ServerDelayConstant && CastEvents.Last().SkillId == SkillItem.WeaponSwapId)
                 {
-                    CastLogs[CastLogs.Count - 1] = wepSwap;
+                    CastEvents[CastEvents.Count - 1] = wepSwap;
                 }
                 else
                 {
-                    CastLogs.Add(wepSwap);
+                    CastEvents.Add(wepSwap);
                 }
             }
-            CastLogs.Sort((x, y) =>
+            CastEvents.Sort((x, y) =>
             {
                 int compare = x.Time.CompareTo(y.Time);
                 if (compare == 0 && x.SkillId != y.SkillId)
@@ -584,218 +599,106 @@ namespace GW2EIEvtcParser.EIData
 
         // DPS Stats
 
-        public FinalDPS GetDPSAll(ParsedEvtcLog log, int phaseIndex)
+        public FinalDPS GetDPSStats(AbstractSingleActor target, ParsedEvtcLog log,  long start, long end)
         {
-            return GetDPSAll(log)[phaseIndex];
+            if (_dpsStats == null)
+            {
+                _dpsStats = new CachingCollectionWithTarget<FinalDPS>(log);
+            }
+            if (!_dpsStats.TryGetValue(start, end, target, out FinalDPS value)) 
+            {
+                value = new FinalDPS(log, start, end, this, target);
+                _dpsStats.Set(start, end, target, value);
+            }
+            return value;
         }
 
-        public List<FinalDPS> GetDPSAll(ParsedEvtcLog log)
+        public FinalDPS GetDPSStats(ParsedEvtcLog log, long start, long end)
         {
-            if (_dpsAll == null)
-            {
-                _dpsAll = new List<FinalDPS>();
-                foreach (PhaseData phase in log.FightData.GetPhases(log))
-                {
-                    _dpsAll.Add(new FinalDPS(log, phase, this, null));
-                }
-            }
-            return _dpsAll;
-        }
-
-        public FinalDPS GetDPSTarget(ParsedEvtcLog log, int phaseIndex, AbstractSingleActor target)
-        {
-            return GetDPSTarget(log, target)[phaseIndex];
-        }
-
-        public List<FinalDPS> GetDPSTarget(ParsedEvtcLog log, AbstractSingleActor target)
-        {
-            if (target == null)
-            {
-                return GetDPSAll(log);
-            }
-            if (_dpsTarget == null)
-            {
-                _dpsTarget = new Dictionary<AbstractSingleActor, List<FinalDPS>>();
-            }
-            if (_dpsTarget.TryGetValue(target, out List<FinalDPS> list))
-            {
-                return list;
-            }
-            _dpsTarget[target] = new List<FinalDPS>();
-            foreach (PhaseData phase in log.FightData.GetPhases(log))
-            {
-                _dpsTarget[target].Add(new FinalDPS(log, phase, this, target));
-            }
-            return _dpsTarget[target];
+            return GetDPSStats(null, log, start, end);
         }
 
         // Defense Stats
 
-        public FinalDefensesAll GetDefenses(ParsedEvtcLog log, int phaseIndex)
+        public FinalDefenses GetDefenseStats(AbstractSingleActor target, ParsedEvtcLog log,  long start, long end)
         {
-            return GetDefenses(log)[phaseIndex];
+            if (_defenseStats == null)
+            {
+                _defenseStats = new CachingCollectionWithTarget<FinalDefenses>(log);
+            }
+            if (!_defenseStats.TryGetValue(start, end, target, out FinalDefenses value))
+            {
+                value = target != null ? new FinalDefenses(log, start, end, this, target) : new FinalDefensesAll(log, start, end, this);
+                _defenseStats.Set(start, end, target, value);
+            }
+            return value;
         }
 
-        public List<FinalDefensesAll> GetDefenses(ParsedEvtcLog log)
+        public FinalDefensesAll GetDefenseStats(ParsedEvtcLog log, long start, long end)
         {
-            if (_defenses == null)
-            {
-                _defenses = new List<FinalDefensesAll>();
-                foreach (PhaseData phase in log.FightData.GetPhases(log))
-                {
-                    _defenses.Add(new FinalDefensesAll(log, phase, this));
-                }
-            }
-            return _defenses;
-        }
-
-        public FinalDefenses GetDefenses(ParsedEvtcLog log, AbstractSingleActor target, int phaseIndex)
-        {
-            return GetDefenses(log, target)[phaseIndex];
-        }
-
-        public List<FinalDefenses> GetDefenses(ParsedEvtcLog log, AbstractSingleActor target)
-        {
-            if (_defensesTarget == null)
-            {
-                return new List<FinalDefenses>(GetDefenses(log));
-            }
-            if (_defensesTarget == null)
-            {
-                _defensesTarget = new Dictionary<AbstractSingleActor, List<FinalDefenses>>();
-            }
-            if (_defensesTarget.TryGetValue(target, out List<FinalDefenses> list))
-            {
-                return list;
-            }
-            _defensesTarget[target] = new List<FinalDefenses>();
-            foreach (PhaseData phase in log.FightData.GetPhases(log))
-            {
-                _defensesTarget[target].Add(new FinalDefenses(log, phase, this, target));
-            }
-            return _defensesTarget[target];
+            return GetDefenseStats(null, log, start, end) as FinalDefensesAll;
         }
 
         // Gameplay Stats
 
-
-        public FinalGameplayStatsAll GetGameplayStats(ParsedEvtcLog log, int phaseIndex)
+        public FinalGameplayStatsAll GetGameplayStats(ParsedEvtcLog log, long start, long end)
         {
-            return GetGameplayStats(log)[phaseIndex];
+            return GetGameplayStats(null, log, start, end) as FinalGameplayStatsAll;
         }
 
-        public FinalGameplayStats GetGameplayStats(ParsedEvtcLog log, int phaseIndex, AbstractSingleActor target)
+        public FinalGameplayStats GetGameplayStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
-            if (target == null)
+            if (_gameplayStats == null)
             {
-                return GetGameplayStats(log, phaseIndex);
+                _gameplayStats = new CachingCollectionWithTarget<FinalGameplayStats>(log);
             }
-            return GetGameplayStats(log, target)[phaseIndex];
-        }
-
-        public List<FinalGameplayStatsAll> GetGameplayStats(ParsedEvtcLog log)
-        {
-            if (_statsAll == null)
+            if (!_gameplayStats.TryGetValue(start, end, target, out FinalGameplayStats value))
             {
-                _statsAll = new List<FinalGameplayStatsAll>();
-                foreach (PhaseData phase in log.FightData.GetPhases(log))
-                {
-                    _statsAll.Add(new FinalGameplayStatsAll(log, phase, this));
-                }
+                value = target != null ? new FinalGameplayStats(log, start, end, this, target) : new FinalGameplayStatsAll(log, start, end, this);
+                _gameplayStats.Set(start, end, target, value);
             }
-            return _statsAll;
-        }
-
-        public List<FinalGameplayStats> GetGameplayStats(ParsedEvtcLog log, AbstractSingleActor target)
-        {
-            if (target == null)
-            {
-                return new List<FinalGameplayStats>(GetGameplayStats(log));
-            }
-            if (_statsTarget == null)
-            {
-                _statsTarget = new Dictionary<AbstractSingleActor, List<FinalGameplayStats>>();
-            }
-            if (_statsTarget.TryGetValue(target, out List<FinalGameplayStats> list))
-            {
-                return list;
-            }
-            _statsTarget[target] = new List<FinalGameplayStats>();
-            foreach (PhaseData phase in log.FightData.GetPhases(log))
-            {
-                _statsTarget[target].Add(new FinalGameplayStats(log, phase, this, target));
-            }
-            return _statsTarget[target];
+            return value;
         }
 
         // Support stats
-        public FinalSupportAll GetSupport(ParsedEvtcLog log, int phaseIndex)
+        public FinalSupportAll GetSupportStats(ParsedEvtcLog log, long start, long end)
         {
-            return GetSupport(log)[phaseIndex];
+            return GetSupportStats(null, log, start, end) as FinalSupportAll;
         }
 
-        public List<FinalSupportAll> GetSupport(ParsedEvtcLog log)
+        public FinalSupport GetSupportStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
-            if (_supportAll == null)
+            if (_supportStats == null)
             {
-                _supportAll = new List<FinalSupportAll>();
-                IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
-                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
-                {
-                    PhaseData phase = phases[phaseIndex];
-                    var final = new FinalSupportAll(log, phase, this);
-                    _supportAll.Add(final);
-                }
+                _supportStats = new CachingCollectionWithTarget<FinalSupport>(log);
             }
-            return _supportAll;
-        }
-
-        public FinalSupport GetSupport(ParsedEvtcLog log, AbstractSingleActor target, int phaseIndex)
-        {
-            return GetSupport(log, target)[phaseIndex];
-        }
-
-        public List<FinalSupport> GetSupport(ParsedEvtcLog log, AbstractSingleActor target)
-        {
-            if (target == null)
+            if (!_supportStats.TryGetValue(start, end, target, out FinalSupport value))
             {
-                return new List<FinalSupport>(GetSupport(log));
+                value = target != null ? new FinalSupport(log, start, end, this, target) : new FinalSupportAll(log, start, end, this);
+                _supportStats.Set(start, end, target, value);
             }
-            if (_supportTarget == null)
-            {
-                _supportTarget = new Dictionary<AbstractSingleActor, List<FinalSupport>>();
-            }
-            if (_supportTarget.TryGetValue(target, out List<FinalSupport> list))
-            {
-                return list;
-            }
-            _supportTarget[target] = new List<FinalSupport>();
-            foreach (PhaseData phase in log.FightData.GetPhases(log))
-            {
-                _supportTarget[target].Add(new FinalSupport(log, phase, this, target));
-            }
-            return _supportTarget[target];
+            return value;
         }
 
 
         // Damage logs
-        public override IReadOnlyList<AbstractHealthDamageEvent> GetDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractHealthDamageEvent> GetDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
-            if (DamageLogs == null)
+            if (DamageEvents == null)
             {
-                DamageLogs = new List<AbstractHealthDamageEvent>();
-                DamageLogs.AddRange(log.CombatData.GetDamageData(AgentItem).Where(x => x.IFF != ArcDPSEnums.IFF.Friend));
+                DamageEvents = new List<AbstractHealthDamageEvent>();
+                DamageEvents.AddRange(log.CombatData.GetDamageData(AgentItem).Where(x => x.IFF != ArcDPSEnums.IFF.Friend));
                 IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log);
                 foreach (Minions mins in minionsList.Values)
                 {
-                    DamageLogs.AddRange(mins.GetDamageLogs(null, log, 0, log.FightData.FightEnd));
+                    DamageEvents.AddRange(mins.GetDamageEvents(null, log, 0, log.FightData.FightEnd));
                 }
-                DamageLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
-                DamageLogsByDst = DamageLogs.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+                DamageEvents.Sort((x, y) => x.Time.CompareTo(y.Time));
+                DamageEventByDst = DamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
             {
-                if (DamageLogsByDst.TryGetValue(target.AgentItem, out List<AbstractHealthDamageEvent> list))
+                if (DamageEventByDst.TryGetValue(target.AgentItem, out List<AbstractHealthDamageEvent> list))
                 {
                     return list.Where(x => x.Time >= start && x.Time <= end).ToList();
                 }
@@ -804,36 +707,36 @@ namespace GW2EIEvtcParser.EIData
                     return new List<AbstractHealthDamageEvent>();
                 }
             }
-            return DamageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
+            return DamageEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public IReadOnlyList<AbstractHealthDamageEvent> GetJustActorDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public IReadOnlyList<AbstractHealthDamageEvent> GetJustActorDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
-            return GetDamageLogs(target, log, start, end).Where(x => x.From == AgentItem).ToList();
+            return GetDamageEvents(target, log, start, end).Where(x => x.From == AgentItem).ToList();
         }
 
-        public IReadOnlyList<AbstractBreakbarDamageEvent> GetJustActorBreakbarDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public IReadOnlyList<AbstractBreakbarDamageEvent> GetJustActorBreakbarDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
-            return GetBreakbarDamageLogs(target, log, start, end).Where(x => x.From == AgentItem).ToList();
+            return GetBreakbarDamageEvents(target, log, start, end).Where(x => x.From == AgentItem).ToList();
         }
 
-        public override IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
-            if (BreakbarDamageLogs == null)
+            if (BreakbarDamageEvents == null)
             {
-                BreakbarDamageLogs = new List<AbstractBreakbarDamageEvent>();
-                BreakbarDamageLogs.AddRange(log.CombatData.GetBreakbarDamageData(AgentItem).Where(x => x.IFF != ArcDPSEnums.IFF.Friend));
+                BreakbarDamageEvents = new List<AbstractBreakbarDamageEvent>();
+                BreakbarDamageEvents.AddRange(log.CombatData.GetBreakbarDamageData(AgentItem).Where(x => x.IFF != ArcDPSEnums.IFF.Friend));
                 IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log);
                 foreach (Minions mins in minionsList.Values)
                 {
-                    BreakbarDamageLogs.AddRange(mins.GetBreakbarDamageLogs(null, log, 0, log.FightData.FightEnd));
+                    BreakbarDamageEvents.AddRange(mins.GetBreakbarDamageEvents(null, log, 0, log.FightData.FightEnd));
                 }
-                BreakbarDamageLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
-                BreakbarDamageLogsByDst = BreakbarDamageLogs.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+                BreakbarDamageEvents.Sort((x, y) => x.Time.CompareTo(y.Time));
+                BreakbarDamageEventsByDst = BreakbarDamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
             {
-                if (BreakbarDamageLogsByDst.TryGetValue(target.AgentItem, out List<AbstractBreakbarDamageEvent> list))
+                if (BreakbarDamageEventsByDst.TryGetValue(target.AgentItem, out List<AbstractBreakbarDamageEvent> list))
                 {
                     return list.Where(x => x.Time >= start && x.Time <= end).ToList();
                 }
@@ -842,20 +745,20 @@ namespace GW2EIEvtcParser.EIData
                     return new List<AbstractBreakbarDamageEvent>();
                 }
             }
-            return BreakbarDamageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
+            return BreakbarDamageEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public override IReadOnlyList<AbstractHealthDamageEvent> GetDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractHealthDamageEvent> GetDamageTakenEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
-            if (DamageTakenlogs == null)
+            if (DamageTakenEvents == null)
             {
-                DamageTakenlogs = new List<AbstractHealthDamageEvent>();
-                DamageTakenlogs.AddRange(log.CombatData.GetDamageTakenData(AgentItem));
-                DamageTakenLogsBySrc = DamageTakenlogs.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+                DamageTakenEvents = new List<AbstractHealthDamageEvent>();
+                DamageTakenEvents.AddRange(log.CombatData.GetDamageTakenData(AgentItem));
+                DamageTakenEventsBySrc = DamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
             {
-                if (DamageTakenLogsBySrc.TryGetValue(target.AgentItem, out List<AbstractHealthDamageEvent> list))
+                if (DamageTakenEventsBySrc.TryGetValue(target.AgentItem, out List<AbstractHealthDamageEvent> list))
                 {
                     long targetStart = target.FirstAware;
                     long targetEnd = target.LastAware;
@@ -866,20 +769,20 @@ namespace GW2EIEvtcParser.EIData
                     return new List<AbstractHealthDamageEvent>();
                 }
             }
-            return DamageTakenlogs.Where(x => x.Time >= start && x.Time <= end).ToList();
+            return DamageTakenEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public override IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenLogs(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
-            if (BreakbarDamageTakenLogs == null)
+            if (BreakbarDamageTakenEvents == null)
             {
-                BreakbarDamageTakenLogs = new List<AbstractBreakbarDamageEvent>();
-                BreakbarDamageTakenLogs.AddRange(log.CombatData.GetBreakbarDamageTakenData(AgentItem));
-                BreakbarDamageTakenLogsBySrc = BreakbarDamageTakenLogs.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+                BreakbarDamageTakenEvents = new List<AbstractBreakbarDamageEvent>();
+                BreakbarDamageTakenEvents.AddRange(log.CombatData.GetBreakbarDamageTakenData(AgentItem));
+                BreakbarDamageTakenEventsBySrc = BreakbarDamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
             {
-                if (BreakbarDamageTakenLogsBySrc.TryGetValue(target.AgentItem, out List<AbstractBreakbarDamageEvent> list))
+                if (BreakbarDamageTakenEventsBySrc.TryGetValue(target.AgentItem, out List<AbstractBreakbarDamageEvent> list))
                 {
                     long targetStart = target.FirstAware;
                     long targetEnd = target.LastAware;
@@ -890,23 +793,50 @@ namespace GW2EIEvtcParser.EIData
                     return new List<AbstractBreakbarDamageEvent>();
                 }
             }
-            return BreakbarDamageTakenLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
+            return BreakbarDamageTakenEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
         /// <summary>
         /// cached method for damage modifiers
         /// </summary>
-        internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorHitDamageLogs(AbstractActor target, ParsedEvtcLog log, PhaseData phase)
+        internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorHitDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
         {
-            if (!_selfDamageLogsPerPhasePerTarget.TryGetValue(phase, out Dictionary<AbstractActor, List<AbstractHealthDamageEvent>> targetDict))
+            if (_hitSelfDamageEventsPerPhasePerTarget == null)
             {
-                targetDict = new Dictionary<AbstractActor, List<AbstractHealthDamageEvent>>();
-                _selfDamageLogsPerPhasePerTarget[phase] = targetDict;
+                _hitSelfDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>(log);
             }
-            if (!targetDict.TryGetValue(target ?? ParserHelper._nullActor, out List<AbstractHealthDamageEvent> dls))
+            if (!_hitSelfDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
             {
-                dls = GetHitDamageLogs(target, log, phase).Where(x => x.From == AgentItem).ToList();
-                targetDict[target ?? ParserHelper._nullActor] = dls;
+                dls = GetHitDamageEvents(target, log, start, end).Where(x => x.From == AgentItem).ToList();
+                _hitSelfDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
+            }
+            return dls;
+        }
+
+        internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorConditionHitDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        {
+            if (_conditionHitSelfDamageEventsPerPhasePerTarget == null)
+            {
+                _conditionHitSelfDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>(log);
+            }
+            if (!_conditionHitSelfDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
+            {
+                dls = GetJustActorHitDamageEvents(target, log, start, end).Where(x => x.IsCondi(log)).ToList();
+                _conditionHitSelfDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
+            }
+            return dls;
+        }
+
+        internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorPowerHitDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        {
+            if (_powerHitSelfDamageEventsPerPhasePerTarget == null)
+            {
+                _powerHitSelfDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>(log);
+            }
+            if (!_powerHitSelfDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
+            {
+                dls = GetJustActorHitDamageEvents(target, log, start, end).Where(x => !x.IsCondi(log)).ToList();
+                _powerHitSelfDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
             }
             return dls;
         }

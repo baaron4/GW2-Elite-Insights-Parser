@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EIData
                 _extensionSkills = new List<AbstractCastEvent>();
                 foreach (Player p in log.PlayerList)
                 {
-                    _extensionSkills.AddRange(p.GetIntersectingCastLogs(log, 0, log.FightData.FightEnd).Where(x => ExtensionIDS.Contains(x.SkillId) && x.Status != AbstractCastEvent.AnimationStatus.Interrupted));
+                    _extensionSkills.AddRange(p.GetIntersectingCastEvents(log, 0, log.FightData.FightEnd).Where(x => ExtensionIDS.Contains(x.SkillId) && x.Status != AbstractCastEvent.AnimationStatus.Interrupted));
                 }
             }
             return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillId) && x.Time <= time && time <= x.EndTime + ParserHelper.ServerDelayConstant).ToList();

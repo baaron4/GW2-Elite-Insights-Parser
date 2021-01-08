@@ -128,14 +128,13 @@ namespace GW2EIBuilders.HtmlModels
             return skillItem;
         }
 
-        public static DmgDistributionDto BuildDMGTakenDistData(ParsedEvtcLog log, AbstractSingleActor p, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        public static DmgDistributionDto BuildDMGTakenDistData(ParsedEvtcLog log, AbstractSingleActor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             var dto = new DmgDistributionDto
             {
                 Distribution = new List<object[]>()
             };
-            PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
-            IReadOnlyList<AbstractHealthDamageEvent> damageLogs = p.GetDamageTakenLogs(null, log, phase.Start, phase.End);
+            IReadOnlyList<AbstractHealthDamageEvent> damageLogs = p.GetDamageTakenEvents(null, log, phase.Start, phase.End);
             var damageLogsBySkill = damageLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
             dto.ContributedDamage = damageLogs.Sum(x => x.HealthDamage);
             dto.ContributedShieldDamage = damageLogs.Sum(x => x.ShieldDamage);
@@ -148,13 +147,12 @@ namespace GW2EIBuilders.HtmlModels
         }
 
 
-        private static List<object[]> BuildDMGDistBodyData(ParsedEvtcLog log, IReadOnlyList<AbstractCastEvent> casting, IReadOnlyList<AbstractHealthDamageEvent> damageLogs, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, int phaseIndex)
+        private static List<object[]> BuildDMGDistBodyData(ParsedEvtcLog log, IReadOnlyList<AbstractCastEvent> casting, IReadOnlyList<AbstractHealthDamageEvent> damageLogs, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, PhaseData phase)
         {
             var list = new List<object[]>();
             var castLogsBySkill = casting.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
             var damageLogsBySkill = damageLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
             var conditionsById = log.StatisticsHelper.PresentConditions.ToDictionary(x => x.ID);
-            PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
             foreach (KeyValuePair<SkillItem, List<AbstractHealthDamageEvent>> entry in damageLogsBySkill)
             {
                 list.Add(GetDMGDtoItem(entry, castLogsBySkill, usedSkills, usedBuffs, log.Buffs, phase));
@@ -216,65 +214,63 @@ namespace GW2EIBuilders.HtmlModels
             return list;
         }
 
-        private static DmgDistributionDto BuildDMGDistDataInternal(ParsedEvtcLog log, FinalDPS dps, AbstractSingleActor p, NPC target, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        private static DmgDistributionDto BuildDMGDistDataInternal(ParsedEvtcLog log, FinalDPS dps, AbstractSingleActor p, NPC target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             var dto = new DmgDistributionDto();
-            PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
-            IReadOnlyList<AbstractCastEvent> casting = p.GetIntersectingCastLogs(log, phase.Start, phase.End);
-            IReadOnlyList<AbstractHealthDamageEvent> damageLogs = p.GetJustActorDamageLogs(target, log, phase.Start, phase.End);
+            IReadOnlyList<AbstractCastEvent> casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End);
+            IReadOnlyList<AbstractHealthDamageEvent> damageLogs = p.GetJustActorDamageEvents(target, log, phase.Start, phase.End);
             dto.ContributedDamage = dps.ActorDamage;
             dto.ContributedShieldDamage = damageLogs.Sum(x => x.ShieldDamage);
             dto.ContributedBreakbarDamage = dps.ActorBreakbarDamage;
             dto.TotalDamage = dps.Damage;
             dto.TotalBreakbarDamage = dps.BreakbarDamage;
             dto.TotalCasting = casting.Sum(cl => Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start));
-            dto.Distribution = BuildDMGDistBodyData(log, casting, damageLogs, usedSkills, usedBuffs, phaseIndex);
+            dto.Distribution = BuildDMGDistBodyData(log, casting, damageLogs, usedSkills, usedBuffs, phase);
             return dto;
         }
 
 
-        public static DmgDistributionDto BuildPlayerDMGDistData(ParsedEvtcLog log, Player p, NPC target, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        public static DmgDistributionDto BuildPlayerDMGDistData(ParsedEvtcLog log, Player p, NPC target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
-            FinalDPS dps = p.GetDPSTarget(log, phaseIndex, target);
-            return BuildDMGDistDataInternal(log, dps, p, target, phaseIndex, usedSkills, usedBuffs);
+            FinalDPS dps = p.GetDPSStats(target, log, phase.Start, phase.End);
+            return BuildDMGDistDataInternal(log, dps, p, target, phase, usedSkills, usedBuffs);
         }
 
 
-        public static DmgDistributionDto BuildTargetDMGDistData(ParsedEvtcLog log, NPC target, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        public static DmgDistributionDto BuildTargetDMGDistData(ParsedEvtcLog log, NPC npc, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
-            FinalDPS dps = target.GetDPSAll(log, phaseIndex);
-            return BuildDMGDistDataInternal(log, dps, target, null, phaseIndex, usedSkills, usedBuffs);
+            FinalDPS dps = npc.GetDPSStats(log, phase.Start, phase.End);
+            return BuildDMGDistDataInternal(log, dps, npc, null, phase, usedSkills, usedBuffs);
         }
 
-        private static DmgDistributionDto BuildDMGDistDataMinionsInternal(ParsedEvtcLog log, FinalDPS dps, Minions minions, NPC target, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        private static DmgDistributionDto BuildDMGDistDataMinionsInternal(ParsedEvtcLog log, FinalDPS dps, Minions minions, NPC target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             var dto = new DmgDistributionDto();
-            PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
-            IReadOnlyList<AbstractCastEvent> casting = minions.GetIntersectingCastLogs(log, phase.Start, phase.End);
-            IReadOnlyList<AbstractHealthDamageEvent> damageLogs = minions.GetDamageLogs(target, log, phase.Start, phase.End);
-            IReadOnlyList<AbstractBreakbarDamageEvent> brkDamageLogs = minions.GetBreakbarDamageLogs(target, log, phase.Start, phase.End);
+            IReadOnlyList<AbstractCastEvent> casting = minions.GetIntersectingCastEvents(log, phase.Start, phase.End);
+            IReadOnlyList<AbstractHealthDamageEvent> damageLogs = minions.GetDamageEvents(target, log, phase.Start, phase.End);
+            IReadOnlyList<AbstractBreakbarDamageEvent> brkDamageLogs = minions.GetBreakbarDamageEvents(target, log, phase.Start, phase.End);
             dto.ContributedDamage = damageLogs.Sum(x => x.HealthDamage);
             dto.ContributedShieldDamage = damageLogs.Sum(x => x.ShieldDamage);
             dto.ContributedBreakbarDamage = Math.Round(brkDamageLogs.Sum(x => x.BreakbarDamage), 1);
             dto.TotalDamage = dps.Damage;
             dto.TotalBreakbarDamage = dps.BreakbarDamage;
             dto.TotalCasting = casting.Sum(cl => Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start));
-            dto.Distribution = BuildDMGDistBodyData(log, casting, damageLogs, usedSkills, usedBuffs, phaseIndex);
+            dto.Distribution = BuildDMGDistBodyData(log, casting, damageLogs, usedSkills, usedBuffs, phase);
             return dto;
         }
 
-        public static DmgDistributionDto BuildPlayerMinionDMGDistData(ParsedEvtcLog log, Player p, Minions minions, NPC target, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        public static DmgDistributionDto BuildPlayerMinionDMGDistData(ParsedEvtcLog log, Player p, Minions minions, NPC target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
-            FinalDPS dps = p.GetDPSTarget(log, phaseIndex, target);
+            FinalDPS dps = p.GetDPSStats(target, log, phase.Start, phase.End);
 
-            return BuildDMGDistDataMinionsInternal(log, dps, minions, target, phaseIndex, usedSkills, usedBuffs);
+            return BuildDMGDistDataMinionsInternal(log, dps, minions, target, phase, usedSkills, usedBuffs);
         }
 
 
-        public static DmgDistributionDto BuildTargetMinionDMGDistData(ParsedEvtcLog log, NPC target, Minions minions, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        public static DmgDistributionDto BuildTargetMinionDMGDistData(ParsedEvtcLog log, NPC target, Minions minions, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
-            FinalDPS dps = target.GetDPSAll(log, phaseIndex);
-            return BuildDMGDistDataMinionsInternal(log, dps, minions, null, phaseIndex, usedSkills, usedBuffs);
+            FinalDPS dps = target.GetDPSStats(log, phase.Start, phase.End);
+            return BuildDMGDistDataMinionsInternal(log, dps, minions, null, phase, usedSkills, usedBuffs);
         }
     }
 }

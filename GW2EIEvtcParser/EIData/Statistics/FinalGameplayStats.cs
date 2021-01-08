@@ -22,9 +22,9 @@ namespace GW2EIEvtcParser.EIData
         public int Downed { get; internal set; }
 
 
-        internal FinalGameplayStats(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor, AbstractSingleActor target)
+        internal FinalGameplayStats(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor target)
         {
-            IReadOnlyList<AbstractHealthDamageEvent> dls = actor.GetJustActorDamageLogs(target, log, phase.Start, phase.End);
+            IReadOnlyList<AbstractHealthDamageEvent> dls = actor.GetJustActorDamageEvents(target, log, start, end);
             foreach (AbstractHealthDamageEvent dl in dls)
             {
                 if (!(dl is NonDirectHealthDamageEvent))
