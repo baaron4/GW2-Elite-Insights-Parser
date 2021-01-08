@@ -85,7 +85,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                        (int) ArcDPSEnums.TrashID.GreenGuardian,
                        (int) ArcDPSEnums.TrashID.RedGuardian
                     };
-                    AddTargetsToPhase(phase, ids, log);
+                    AddTargetsToPhaseAndFit(phase, ids, log);
                     foreach (NPC t in phase.Targets)
                     {
                         t.OverrideName(t.Character + " " + Math.Log(i, 2));

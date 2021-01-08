@@ -219,7 +219,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                            (int) ArcDPSEnums.TrashID.ApocalypseBringer,
                            (int) ArcDPSEnums.TrashID.QadimLamp
                         };
-                    AddTargetsToPhase(phase, ids, log);
+                    AddTargetsToPhaseAndFit(phase, ids, log);
                     if (phase.Targets.Count > 0)
                     {
                         NPC phaseTar = phase.Targets[0];

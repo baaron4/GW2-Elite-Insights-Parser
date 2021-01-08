@@ -141,7 +141,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     end = qQ.Time;
                     mainPhases.Add(new PhaseData(start, end, "Phase " + i));
                     PhaseData split = phases[i];
-                    AddTargetsToPhase(split, new List<int> { (int)ArcDPSEnums.TrashID.HandOfErosion, (int)ArcDPSEnums.TrashID.HandOfEruption }, log);
+                    AddTargetsToPhaseAndFit(split, new List<int> { (int)ArcDPSEnums.TrashID.HandOfErosion, (int)ArcDPSEnums.TrashID.HandOfEruption }, log);
                     start = split.End;
                     if (i == phases.Count - 1 && start != log.FightData.FightEnd)
                     {
