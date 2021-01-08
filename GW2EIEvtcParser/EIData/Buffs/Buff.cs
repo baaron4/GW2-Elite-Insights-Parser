@@ -353,6 +353,13 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Crimson Attunement (Orb)",35091, ParserHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/3e/Crimson_Attunement.png"),
                 new Buff("Radiant Attunement (Orb)",35109, ParserHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/68/Radiant_Attunement.png"),
                 new Buff("Magic Blast",35119, ParserHelper.Source.FightSpecific, BuffStackType.Stacking, 35, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a9/Magic_Blast_Intensity.png"),
+                // Xera      
+                new Buff("Derangement",34965, ParserHelper.Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/ca/Derangement.png"),
+                new Buff("Bending Chaos",35084, ParserHelper.Source.FightSpecific, BuffStackType.Stacking, 11, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/39/Target%21.png"),
+                new Buff("Shifting Chaos",35162, ParserHelper.Source.FightSpecific, BuffStackType.Stacking, 11, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/0/04/Shifting_Chaos.png"),
+                new Buff("Twisting Chaos",35032, ParserHelper.Source.FightSpecific, BuffStackType.Stacking, 11, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/60/Twisting_Chaos.png"),
+                new Buff("Intervention",35000, ParserHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a2/Intervention_%28effect%29.png"),
+                new Buff("Bloodstone Protection",35168, ParserHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/4e/Bloodstone_Protection.png"),
                 // Gorseval
                 new Buff("Spirited Fusion",31722, ParserHelper.Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/eb/Spirited_Fusion.png"),
                 new Buff("Protective Shadow", 31877, ParserHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/87/Protective_Shadow.png"),
