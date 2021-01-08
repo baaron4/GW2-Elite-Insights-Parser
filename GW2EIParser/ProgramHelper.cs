@@ -300,6 +300,41 @@ namespace GW2EIParser
                 });
                 //
                 Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
+                Parallel.ForEach(log.PlayerList, actor =>
+                {
+                    foreach (PhaseData phase in phases)
+                    {
+                        actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
+                    }
+                });
+                Parallel.ForEach(log.PlayerList, actor =>
+                {
+                    foreach (PhaseData phase in phases)
+                    {
+                        actor.GetBuffs(BuffEnum.Group, log, phase.Start, phase.End);
+                    }
+                });
+                Parallel.ForEach(log.PlayerList, actor =>
+                {
+                    foreach (PhaseData phase in phases)
+                    {
+                        actor.GetBuffs(BuffEnum.OffGroup, log, phase.Start, phase.End);
+                    }
+                });
+                Parallel.ForEach(log.PlayerList, actor =>
+                {
+                    foreach (PhaseData phase in phases)
+                    {
+                        actor.GetBuffs(BuffEnum.Squad, log, phase.Start, phase.End);
+                    }
+                });
+                Parallel.ForEach(log.FightData.Logic.Targets, actor =>
+                {
+                    foreach (PhaseData phase in phases)
+                    {
+                        actor.GetBuffs(log, phase.Start, phase.End);
+                    }
+                });
             }
             if (Properties.Settings.Default.SaveOutHTML)
             {

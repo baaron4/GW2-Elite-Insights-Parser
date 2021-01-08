@@ -23,14 +23,7 @@ namespace GW2EIEvtcParser.EIData
         private Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>> _damageModifiersTargets;
         // statistics
         private CachingCollection<FinalPlayerSupport> _playerSupportStats;
-        private List<Dictionary<long, FinalPlayerBuffs>> _selfBuffs;
-        private List<Dictionary<long, FinalPlayerBuffs>> _groupBuffs;
-        private List<Dictionary<long, FinalPlayerBuffs>> _offGroupBuffs;
-        private List<Dictionary<long, FinalPlayerBuffs>> _squadBuffs;
-        private List<Dictionary<long, FinalPlayerBuffs>> _selfBuffsActive;
-        private List<Dictionary<long, FinalPlayerBuffs>> _groupActiveBuffs;
-        private List<Dictionary<long, FinalPlayerBuffs>> _offGroupActiveBuffs;
-        private List<Dictionary<long, FinalPlayerBuffs>> _squadActiveBuffs;
+        private CachingCollectionCustom<BuffEnum, Dictionary<long, FinalPlayerBuffs>[]> _buffStats;
         //weaponslist
         private string[] _weaponsArray;
 
@@ -78,105 +71,53 @@ namespace GW2EIEvtcParser.EIData
             return value;
         }
 
-        public Dictionary<long, FinalPlayerBuffs> GetBuffs(ParsedEvtcLog log, int phaseIndex, BuffEnum type)
+        public IReadOnlyDictionary<long, FinalPlayerBuffs> GetBuffs(BuffEnum type, ParsedEvtcLog log, long start, long end)
         {
-            if (_selfBuffs == null)
+            if (_buffStats == null)
             {
-                SetBuffs(log);
+                _buffStats = new CachingCollectionCustom<BuffEnum, Dictionary<long, FinalPlayerBuffs>[]>(log, BuffEnum.Self);
             }
-            switch (type)
+            if (!_buffStats.TryGetValue(start, end, type, out Dictionary<long, FinalPlayerBuffs>[] value))
             {
-                case BuffEnum.Group:
-                    return _groupBuffs[phaseIndex];
-                case BuffEnum.OffGroup:
-                    return _offGroupBuffs[phaseIndex];
-                case BuffEnum.Squad:
-                    return _squadBuffs[phaseIndex];
-                case BuffEnum.Self:
-                default:
-                    return _selfBuffs[phaseIndex];
+                value = SetBuffs(log, start, end, type);
+                _buffStats.Set(start, end, type, value);
             }
+            return value[0];
         }
 
-        public List<Dictionary<long, FinalPlayerBuffs>> GetBuffs(ParsedEvtcLog log, BuffEnum type)
+        public IReadOnlyDictionary<long, FinalPlayerBuffs> GetActiveBuffs(BuffEnum type, ParsedEvtcLog log, long start, long end)
         {
-            if (_selfBuffs == null)
+            if (_buffStats == null)
             {
-                SetBuffs(log);
+                _buffStats = new CachingCollectionCustom<BuffEnum, Dictionary<long, FinalPlayerBuffs>[]>(log, BuffEnum.Self);
             }
-            switch (type)
+            if (!_buffStats.TryGetValue(start, end, type, out Dictionary<long, FinalPlayerBuffs>[] value))
             {
-                case BuffEnum.Group:
-                    return _groupBuffs;
-                case BuffEnum.OffGroup:
-                    return _offGroupBuffs;
-                case BuffEnum.Squad:
-                    return _squadBuffs;
-                case BuffEnum.Self:
-                default:
-                    return _selfBuffs;
+                value = SetBuffs(log, start, end, type);
+                _buffStats.Set(start, end, type, value);
             }
+            return value[1];
         }
 
-        public Dictionary<long, FinalPlayerBuffs> GetActiveBuffs(ParsedEvtcLog log, int phaseIndex, BuffEnum type)
+        private Dictionary<long, FinalPlayerBuffs>[] SetBuffs(ParsedEvtcLog log, long start, long end, BuffEnum type)
         {
-            if (_selfBuffsActive == null)
-            {
-                SetBuffs(log);
-            }
-            switch (type)
+            switch(type)
             {
                 case BuffEnum.Group:
-                    return _groupActiveBuffs[phaseIndex];
+                    var otherPlayersInGroup = log.PlayerList
+                        .Where(p => p.Group == Group && Agent != p.Agent)
+                        .ToList();
+                    return FinalPlayerBuffs.GetBuffsForPlayers(otherPlayersInGroup, log, AgentItem, start, end);
                 case BuffEnum.OffGroup:
-                    return _offGroupActiveBuffs[phaseIndex];
+                    var offGroupPlayers = log.PlayerList.Where(p => p.Group != Group).ToList();
+                    return FinalPlayerBuffs.GetBuffsForPlayers(offGroupPlayers, log, AgentItem, start, end);
                 case BuffEnum.Squad:
-                    return _squadActiveBuffs[phaseIndex];
+                    var otherPlayers = log.PlayerList.Where(p => p.Agent != Agent).ToList();
+                    return FinalPlayerBuffs.GetBuffsForPlayers(otherPlayers, log, AgentItem, start, end);
                 case BuffEnum.Self:
                 default:
-                    return _selfBuffsActive[phaseIndex];
+                    return FinalPlayerBuffs.GetBuffsForSelf(log, this, start, end);
             }
-        }
-
-        public List<Dictionary<long, FinalPlayerBuffs>> GetActiveBuffs(ParsedEvtcLog log, BuffEnum type)
-        {
-            if (_selfBuffsActive == null)
-            {
-                SetBuffs(log);
-            }
-            switch (type)
-            {
-                case BuffEnum.Group:
-                    return _groupActiveBuffs;
-                case BuffEnum.OffGroup:
-                    return _offGroupActiveBuffs;
-                case BuffEnum.Squad:
-                    return _squadActiveBuffs;
-                case BuffEnum.Self:
-                default:
-                    return _selfBuffsActive;
-            }
-        }
-
-        private void SetBuffs(ParsedEvtcLog log)
-        {
-            // Boons applied to self
-
-            (_selfBuffs, _selfBuffsActive) = FinalPlayerBuffs.GetBuffsForSelf(log, this);
-
-            // Boons applied to player's group
-            var otherPlayersInGroup = log.PlayerList
-                .Where(p => p.Group == Group && Agent != p.Agent)
-                .ToList();
-            (_groupBuffs, _groupActiveBuffs) = FinalPlayerBuffs.GetBuffsForPlayers(otherPlayersInGroup, log, AgentItem);
-
-            // Boons applied to other groups
-            var offGroupPlayers = log.PlayerList.Where(p => p.Group != Group).ToList();
-            (_offGroupBuffs, _offGroupActiveBuffs) = FinalPlayerBuffs.GetBuffsForPlayers(offGroupPlayers, log, AgentItem);
-
-            // Boons applied to squad
-            var otherPlayers = log.PlayerList.Where(p => p.Agent != Agent).ToList();
-            (_squadBuffs, _squadActiveBuffs) = FinalPlayerBuffs.GetBuffsForPlayers(otherPlayers, log, AgentItem);
         }
 
         internal void Anonymize(int index)

@@ -390,7 +390,7 @@ namespace GW2EIBuilders
             int count = 0;
             foreach (Player player in _noFakePlayers)
             {
-                Dictionary<long, FinalPlayerBuffs> uptimes = player.GetBuffs(_log, phaseIndex, BuffEnum.Self);
+                IReadOnlyDictionary<long, FinalPlayerBuffs> uptimes = player.GetBuffs(BuffEnum.Self, _log, phase.Start, phase.End);
 
                 WriteCell(player.Character);
                 WriteCell(player.GetGameplayStats(_log, phase.Start, phase.End).AvgBoons.ToString());
@@ -432,11 +432,11 @@ namespace GW2EIBuilders
                 WriteCell(boon.Name + " Overstack");
             }
             NewLine();
-
+            PhaseData phase = _phases[phaseIndex];
             int count = 0;
             foreach (Player player in _noFakePlayers)
             {
-                Dictionary<long, FinalPlayerBuffs> uptimes = player.GetBuffs(_log, phaseIndex, BuffEnum.Self);
+                IReadOnlyDictionary<long, FinalPlayerBuffs> uptimes = player.GetBuffs(BuffEnum.Self, _log, phase.Start, phase.End);
 
                 WriteCell(player.Character);
                 foreach (Buff boon in listToUse)
@@ -483,9 +483,10 @@ namespace GW2EIBuilders
             NewLine();
 
             int count = 0;
+            PhaseData phase = _phases[phaseIndex];
             foreach (Player player in _noFakePlayers)
             {
-                Dictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(_log, phaseIndex, BuffEnum.Group);
+                IReadOnlyDictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(BuffEnum.Group, _log, phase.Start, phase.End);
 
                 WriteCell(player.Character);
                 foreach (Buff boon in listToUse)
@@ -533,9 +534,10 @@ namespace GW2EIBuilders
             NewLine();
 
             int count = 0;
+            PhaseData phase = _phases[phaseIndex];
             foreach (Player player in _noFakePlayers)
             {
-                Dictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(_log, phaseIndex, BuffEnum.OffGroup);
+                IReadOnlyDictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(BuffEnum.OffGroup, _log, phase.Start, phase.End);
 
                 WriteCell(player.Character);
                 foreach (Buff boon in listToUse)
@@ -583,9 +585,10 @@ namespace GW2EIBuilders
             NewLine();
 
             int count = 0;
+            PhaseData phase = _phases[phaseIndex];
             foreach (Player player in _noFakePlayers)
             {
-                Dictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(_log, phaseIndex, BuffEnum.Squad);
+                IReadOnlyDictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(BuffEnum.Squad, _log, phase.Start, phase.End);
                 WriteCell(player.Character);
                 foreach (Buff boon in listToUse)
                 {
@@ -623,7 +626,7 @@ namespace GW2EIBuilders
         private void CreateMechanicTable(int phaseIndex)
         {
             PhaseData phase = _phases[phaseIndex];
-            HashSet<Mechanic> presMech = _log.MechanicData.GetPresentPlayerMechs(_log, phase.Start, phase.End);
+            IReadOnlyCollection<Mechanic> presMech = _log.MechanicData.GetPresentPlayerMechs(_log, phase.Start, phase.End);
             //Dictionary<string, HashSet<Mechanic>> presEnemyMech = log.MechanicData.getPresentEnemyMechs(phaseIndex);
             //List<AbstractMasterPlayer> enemyList = log.MechanicData.getEnemyList(phaseIndex);
             int countLines = 0;
