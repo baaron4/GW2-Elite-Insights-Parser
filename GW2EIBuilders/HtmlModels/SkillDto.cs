@@ -42,12 +42,10 @@ namespace GW2EIBuilders.HtmlModels
             return rotEntry;
         }
 
-        public static List<object[]> BuildRotationData(ParsedEvtcLog log, AbstractActor p, int phaseIndex, Dictionary<long, SkillItem> usedSkills)
+        public static List<object[]> BuildRotationData(ParsedEvtcLog log, AbstractActor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills)
         {
             var list = new List<object[]>();
-
-            PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
-            IReadOnlyList<AbstractCastEvent> casting = p.GetIntersectingCastLogs(log, phase.Start, phase.End);
+            IReadOnlyList<AbstractCastEvent> casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End);
             foreach (AbstractCastEvent cl in casting)
             {
                 if (!usedSkills.ContainsKey(cl.SkillId))

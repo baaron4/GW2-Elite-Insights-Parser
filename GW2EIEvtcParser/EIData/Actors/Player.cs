@@ -21,15 +21,8 @@ namespace GW2EIEvtcParser.EIData
         private HashSet<string> _presentDamageModifiers;
         private Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>> _damageModifiersTargets;
         // statistics
-        private List<FinalPlayerSupport> _playerSupport;
-        private List<Dictionary<long, FinalPlayerBuffs>> _selfBuffs;
-        private List<Dictionary<long, FinalPlayerBuffs>> _groupBuffs;
-        private List<Dictionary<long, FinalPlayerBuffs>> _offGroupBuffs;
-        private List<Dictionary<long, FinalPlayerBuffs>> _squadBuffs;
-        private List<Dictionary<long, FinalPlayerBuffs>> _selfBuffsActive;
-        private List<Dictionary<long, FinalPlayerBuffs>> _groupActiveBuffs;
-        private List<Dictionary<long, FinalPlayerBuffs>> _offGroupActiveBuffs;
-        private List<Dictionary<long, FinalPlayerBuffs>> _squadActiveBuffs;
+        private CachingCollection<FinalPlayerSupport> _playerSupportStats;
+        private CachingCollectionCustom<BuffEnum, Dictionary<long, FinalPlayerBuffs>[]> _buffStats;
         //weaponslist
         private string[] _weaponsArray;
 
@@ -63,170 +56,67 @@ namespace GW2EIEvtcParser.EIData
 
         // Public methods
 
-        public FinalPlayerSupport GetPlayerSupport(ParsedEvtcLog log, int phaseIndex)
+        public FinalPlayerSupport GetPlayerSupportStats(ParsedEvtcLog log, long start, long end)
         {
-            return GetPlayerSupport(log)[phaseIndex];
+            if(_playerSupportStats == null)
+            {
+                _playerSupportStats = new CachingCollection<FinalPlayerSupport>(log);
+            }
+            if (!_playerSupportStats.TryGetValue(start, end, out FinalPlayerSupport value))
+            {
+                value = new FinalPlayerSupport(log, this, start, end);
+                _playerSupportStats.Set(start, end, value);
+            }
+            return value;
         }
 
-        public List<FinalPlayerSupport> GetPlayerSupport(ParsedEvtcLog log)
+        public IReadOnlyDictionary<long, FinalPlayerBuffs> GetBuffs(BuffEnum type, ParsedEvtcLog log, long start, long end)
         {
-            if (_playerSupport == null)
+            if (_buffStats == null)
             {
-                _playerSupport = new List<FinalPlayerSupport>();
-                IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
-                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
-                {
-                    var playerSup = new FinalPlayerSupport();
-                    _playerSupport.Add(playerSup);
-                    FinalSupportAll totals = GetSupport(log, phaseIndex);
-                    playerSup.Resurrects = totals.Resurrects;
-                    playerSup.ResurrectTime = Math.Round(totals.ResurrectTime / 1000.0, ParserHelper.TimeDigit);
-                    FinalSupport self = GetSupport(log, this, phaseIndex);
-                    foreach (Buff boon in log.Buffs.BuffsByNature[BuffNature.Boon])
-                    {
-                        // add everything from total
-                        if (totals.Removals.TryGetValue(boon.ID, out (int count, long time) item))
-                        {
-                            playerSup.BoonStrips += item.count;
-                            playerSup.BoonStripsTime += item.time;
-                        }
-                        // remove everything from self
-                        if (self.Removals.TryGetValue(boon.ID, out item))
-                        {
-                            playerSup.BoonStrips -= item.count;
-                            playerSup.BoonStripsTime -= item.time;
-                        }
-                    }
-                    foreach (Buff condition in log.Buffs.BuffsByNature[BuffNature.Condition])
-                    {
-                        // add everything from self
-                        if (self.Removals.TryGetValue(condition.ID, out (int count, long time) item))
-                        {
-                            playerSup.CondiCleanseSelf += item.count;
-                            playerSup.CondiCleanseTimeSelf += item.time;
-                        }
-                        foreach (Player p in log.PlayerList)
-                        {
-                            if (p == this)
-                            {
-                                continue;
-                            }
-                            FinalSupport other = GetSupport(log, p, phaseIndex);
-                            // Add everything from other
-                            if (other.Removals.TryGetValue(condition.ID, out item))
-                            {
-                                playerSup.CondiCleanse += item.count;
-                                playerSup.CondiCleanseTime += item.time;
-                            }
-                        }
-                    }
-                    playerSup.CondiCleanseTime = Math.Round(playerSup.CondiCleanseTime / 1000.0, ParserHelper.TimeDigit);
-                    playerSup.CondiCleanseTimeSelf = Math.Round(playerSup.CondiCleanseTimeSelf / 1000.0, ParserHelper.TimeDigit);
-                    playerSup.BoonStripsTime = Math.Round(playerSup.BoonStripsTime / 1000.0, ParserHelper.TimeDigit);
-                }
+                _buffStats = new CachingCollectionCustom<BuffEnum, Dictionary<long, FinalPlayerBuffs>[]>(log, BuffEnum.Self);
             }
-            return _playerSupport;
+            if (!_buffStats.TryGetValue(start, end, type, out Dictionary<long, FinalPlayerBuffs>[] value))
+            {
+                value = SetBuffs(log, start, end, type);
+                _buffStats.Set(start, end, type, value);
+            }
+            return value[0];
         }
 
-        public Dictionary<long, FinalPlayerBuffs> GetBuffs(ParsedEvtcLog log, int phaseIndex, BuffEnum type)
+        public IReadOnlyDictionary<long, FinalPlayerBuffs> GetActiveBuffs(BuffEnum type, ParsedEvtcLog log, long start, long end)
         {
-            if (_selfBuffs == null)
+            if (_buffStats == null)
             {
-                SetBuffs(log);
+                _buffStats = new CachingCollectionCustom<BuffEnum, Dictionary<long, FinalPlayerBuffs>[]>(log, BuffEnum.Self);
             }
-            switch (type)
+            if (!_buffStats.TryGetValue(start, end, type, out Dictionary<long, FinalPlayerBuffs>[] value))
+            {
+                value = SetBuffs(log, start, end, type);
+                _buffStats.Set(start, end, type, value);
+            }
+            return value[1];
+        }
+
+        private Dictionary<long, FinalPlayerBuffs>[] SetBuffs(ParsedEvtcLog log, long start, long end, BuffEnum type)
+        {
+            switch(type)
             {
                 case BuffEnum.Group:
-                    return _groupBuffs[phaseIndex];
+                    var otherPlayersInGroup = log.PlayerList
+                        .Where(p => p.Group == Group && Agent != p.Agent)
+                        .ToList();
+                    return FinalPlayerBuffs.GetBuffsForPlayers(otherPlayersInGroup, log, AgentItem, start, end);
                 case BuffEnum.OffGroup:
-                    return _offGroupBuffs[phaseIndex];
+                    var offGroupPlayers = log.PlayerList.Where(p => p.Group != Group).ToList();
+                    return FinalPlayerBuffs.GetBuffsForPlayers(offGroupPlayers, log, AgentItem, start, end);
                 case BuffEnum.Squad:
-                    return _squadBuffs[phaseIndex];
+                    var otherPlayers = log.PlayerList.Where(p => p.Agent != Agent).ToList();
+                    return FinalPlayerBuffs.GetBuffsForPlayers(otherPlayers, log, AgentItem, start, end);
                 case BuffEnum.Self:
                 default:
-                    return _selfBuffs[phaseIndex];
+                    return FinalPlayerBuffs.GetBuffsForSelf(log, this, start, end);
             }
-        }
-
-        public List<Dictionary<long, FinalPlayerBuffs>> GetBuffs(ParsedEvtcLog log, BuffEnum type)
-        {
-            if (_selfBuffs == null)
-            {
-                SetBuffs(log);
-            }
-            switch (type)
-            {
-                case BuffEnum.Group:
-                    return _groupBuffs;
-                case BuffEnum.OffGroup:
-                    return _offGroupBuffs;
-                case BuffEnum.Squad:
-                    return _squadBuffs;
-                case BuffEnum.Self:
-                default:
-                    return _selfBuffs;
-            }
-        }
-
-        public Dictionary<long, FinalPlayerBuffs> GetActiveBuffs(ParsedEvtcLog log, int phaseIndex, BuffEnum type)
-        {
-            if (_selfBuffsActive == null)
-            {
-                SetBuffs(log);
-            }
-            switch (type)
-            {
-                case BuffEnum.Group:
-                    return _groupActiveBuffs[phaseIndex];
-                case BuffEnum.OffGroup:
-                    return _offGroupActiveBuffs[phaseIndex];
-                case BuffEnum.Squad:
-                    return _squadActiveBuffs[phaseIndex];
-                case BuffEnum.Self:
-                default:
-                    return _selfBuffsActive[phaseIndex];
-            }
-        }
-
-        public List<Dictionary<long, FinalPlayerBuffs>> GetActiveBuffs(ParsedEvtcLog log, BuffEnum type)
-        {
-            if (_selfBuffsActive == null)
-            {
-                SetBuffs(log);
-            }
-            switch (type)
-            {
-                case BuffEnum.Group:
-                    return _groupActiveBuffs;
-                case BuffEnum.OffGroup:
-                    return _offGroupActiveBuffs;
-                case BuffEnum.Squad:
-                    return _squadActiveBuffs;
-                case BuffEnum.Self:
-                default:
-                    return _selfBuffsActive;
-            }
-        }
-
-        private void SetBuffs(ParsedEvtcLog log)
-        {
-            // Boons applied to self
-
-            (_selfBuffs, _selfBuffsActive) = FinalPlayerBuffs.GetBuffsForSelf(log, this);
-
-            // Boons applied to player's group
-            var otherPlayersInGroup = log.PlayerList
-                .Where(p => p.Group == Group && Agent != p.Agent)
-                .ToList();
-            (_groupBuffs, _groupActiveBuffs) = FinalPlayerBuffs.GetBuffsForPlayers(otherPlayersInGroup, log, AgentItem);
-
-            // Boons applied to other groups
-            var offGroupPlayers = log.PlayerList.Where(p => p.Group != Group).ToList();
-            (_offGroupBuffs, _offGroupActiveBuffs) = FinalPlayerBuffs.GetBuffsForPlayers(offGroupPlayers, log, AgentItem);
-
-            // Boons applied to squad
-            var otherPlayers = log.PlayerList.Where(p => p.Agent != Agent).ToList();
-            (_squadBuffs, _squadActiveBuffs) = FinalPlayerBuffs.GetBuffsForPlayers(otherPlayers, log, AgentItem);
         }
 
         internal void Anonymize(int index)
@@ -331,15 +221,14 @@ namespace GW2EIEvtcParser.EIData
         private void SetDeathRecaps(ParsedEvtcLog log)
         {
             _deathRecaps = new List<DeathRecap>();
-            List<DeathRecap> res = _deathRecaps;
             IReadOnlyList<DeadEvent> deads = log.CombatData.GetDeadEvents(AgentItem);
             IReadOnlyList<DownEvent> downs = log.CombatData.GetDownEvents(AgentItem);
             IReadOnlyList<AliveEvent> ups = log.CombatData.GetAliveEvents(AgentItem);
             long lastDeathTime = 0;
-            IReadOnlyList<AbstractHealthDamageEvent> damageLogs = GetDamageTakenLogs(null, log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractHealthDamageEvent> damageLogs = GetDamageTakenEvents(null, log, 0, log.FightData.FightEnd);
             foreach (DeadEvent dead in deads)
             {
-                res.Add(new DeathRecap(damageLogs, dead, downs, ups, lastDeathTime));
+                _deathRecaps.Add(new DeathRecap(log, damageLogs, dead, downs, ups, lastDeathTime));
                 lastDeathTime = dead.Time;
             }
         }
@@ -362,7 +251,7 @@ namespace GW2EIEvtcParser.EIData
                 return;
             }
             string[] weapons = new string[8];//first 2 for first set next 2 for second set, second sets of 4 for underwater
-            IReadOnlyList<AbstractCastEvent> casting = GetCastLogs(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> casting = GetCastEvents(log, 0, log.FightData.FightEnd);
             int swapped = -1;
             long swappedTime = 0;
             var swaps = casting.OfType<WeaponSwapEvent>().Select(x =>

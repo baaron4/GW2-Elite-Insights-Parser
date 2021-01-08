@@ -217,19 +217,18 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             IReadOnlyList<AgentItem> deimosAgents = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Deimos);
-            long offset = fightData.FightOffset;
+            long start = fightData.LogStart;
             foreach (AgentItem deimos in deimosAgents)
             {
                 // enter combat
                 CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcAgent == deimos.Agent && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat);
                 if (enterCombat != null)
                 {
-                    offset = Math.Max(offset, enterCombat.Time);
+                    start = Math.Max(start, enterCombat.Time);
 
                 }
             }
-            fightData.OverrideOffset(offset);
-            return fightData.FightOffset;
+            return start;
         }
 
         internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
@@ -383,7 +382,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Deimos:

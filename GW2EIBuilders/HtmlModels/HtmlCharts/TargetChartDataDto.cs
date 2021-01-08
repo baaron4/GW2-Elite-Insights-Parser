@@ -16,7 +16,7 @@ namespace GW2EIBuilders.HtmlModels
             PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
             return new TargetChartDataDto
             {
-                Total = target.Get1SDamageList(log, phaseIndex, phase, null),
+                Total = target.Get1SDamageList(log, phase.Start, phase.End, null),
                 HealthStates = ChartDataDto.BuildHealthStates(log, target, phase, false),
                 BreakbarPercentStates = ChartDataDto.BuildBreakbarPercentStates(log, target, phase),
                 BarrierStates = ChartDataDto.BuildBarrierStates(log, target, phase),

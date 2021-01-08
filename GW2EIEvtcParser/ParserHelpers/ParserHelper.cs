@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser
@@ -10,10 +8,7 @@ namespace GW2EIEvtcParser
     public static class ParserHelper
     {
 
-        internal static AgentItem _unknownAgent = new AgentItem();
-        // use this for "null" in AbstractActor dictionaries
-        internal static NPC _nullActor = new NPC(_unknownAgent);
-
+        internal static readonly AgentItem _unknownAgent = new AgentItem();
 
         internal const int PollingRate = 150;
 

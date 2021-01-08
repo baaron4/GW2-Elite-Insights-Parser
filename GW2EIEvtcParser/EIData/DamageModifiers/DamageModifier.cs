@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Interfaces;
 using GW2EIEvtcParser.ParsedData;
@@ -124,9 +123,9 @@ namespace GW2EIEvtcParser.EIData
             return false;
         }
 
-        public int GetTotalDamage(Player p, ParsedEvtcLog log, NPC t, int phaseIndex)
+        public int GetTotalDamage(Player p, ParsedEvtcLog log, NPC t, long start, long end)
         {
-            FinalDPS damageData = p.GetDPSTarget(log, phaseIndex, t);
+            FinalDPS damageData = p.GetDPSStats(t, log, start, end);
             switch (_compareType)
             {
                 case DamageType.All:
@@ -139,17 +138,17 @@ namespace GW2EIEvtcParser.EIData
             return 0;
         }
 
-        public IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageLogs(Player p, ParsedEvtcLog log, NPC t, PhaseData phase)
+        public IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageEvents(Player p, ParsedEvtcLog log, NPC t, long start, long end)
         {
             switch (_srcType)
             {
                 case DamageType.All:
-                    return _dmgSrc == DamageSource.All ? p.GetHitDamageLogs(t, log, phase) : p.GetJustActorHitDamageLogs(t, log, phase);
+                    return _dmgSrc == DamageSource.All ? p.GetHitDamageEvents(t, log, start, end) : p.GetJustActorHitDamageEvents(t, log, start, end);
                 case DamageType.Condition:
-                    return (_dmgSrc == DamageSource.All ? p.GetHitDamageLogs(t, log, phase) : p.GetJustActorHitDamageLogs(t, log, phase)).Where(x => x.ConditionDamageBased(log)).ToList();
+                    return _dmgSrc == DamageSource.All ? p.GetConditionHitDamageEvents(t, log, start, end) : p.GetJustActorConditionHitDamageEvents(t, log, start, end);
                 case DamageType.Power:
                 default:
-                    return (_dmgSrc == DamageSource.All ? p.GetHitDamageLogs(t, log, phase) : p.GetJustActorHitDamageLogs(t, log, phase)).Where(x => !x.ConditionDamageBased(log)).ToList();
+                    return _dmgSrc == DamageSource.All ? p.GetPowerHitDamageEvents(t, log, start, end) : p.GetJustActorPowerHitDamageEvents(t, log, start, end);
             }
         }
 

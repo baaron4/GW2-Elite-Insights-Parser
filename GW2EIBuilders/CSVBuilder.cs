@@ -198,9 +198,9 @@ namespace GW2EIBuilders
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                FinalDPS dps = player.GetDPSAll(_log, phaseIndex);
-                FinalDefensesAll defense = player.GetDefenses(_log, phaseIndex);
-                FinalDPS dpsBoss = player.GetDPSTarget(_log, phaseIndex, _legacyTarget);
+                FinalDPS dps = player.GetDPSStats(_log, phase.Start, phase.End);
+                FinalDefensesAll defense = player.GetDefenseStats(_log, phase.Start, phase.End);
+                FinalDPS dpsBoss = player.GetDPSStats(_legacyTarget, _log, phase.Start, phase.End);
                 string deathString = defense.DeadCount.ToString();
                 string deadthTooltip = "";
                 if (defense.DeadCount > 0)
@@ -251,10 +251,11 @@ namespace GW2EIBuilders
                 "Total Hits",
                 "Hits to Interupt","Hits Invulned","Time wasted","Time saved","Weapon Swaps"});
             int count = 0;
+            PhaseData phase = _phases[phaseIndex];
             foreach (Player player in _noFakePlayers)
             {
-                FinalGameplayStatsAll stats = player.GetGameplayStats(_log, phaseIndex);
-                FinalGameplayStats statsBoss = player.GetGameplayStats(_log, phaseIndex, _legacyTarget);
+                FinalGameplayStatsAll stats = player.GetGameplayStats(_log, phase.Start, phase.End);
+                FinalGameplayStats statsBoss = player.GetGameplayStats(_legacyTarget, _log, phase.Start, phase.End);
                 Dictionary<string, List<DamageModifierStat>> damageMods = player.GetDamageModifierStats(_log, _legacyTarget);
                 var scholar = new DamageModifierStat(0, 0, 0, 0);
                 var moving = new DamageModifierStat(0, 0, 0, 0);
@@ -297,9 +298,10 @@ namespace GW2EIBuilders
                 "Total Hits",
                 "Hits to Interupt","Hits Invulned","Time wasted","Time saved","Weapon Swaps"});
             int count = 0;
+            PhaseData phase = _phases[phaseIndex];
             foreach (Player player in _noFakePlayers)
             {
-                FinalGameplayStatsAll stats = player.GetGameplayStats(_log, phaseIndex);
+                FinalGameplayStatsAll stats = player.GetGameplayStats(_log, phase.Start, phase.End);
                 Dictionary<string, List<DamageModifierStat>> damageMods = player.GetDamageModifierStats(_log, null);
                 var scholar = new DamageModifierStat(0, 0, 0, 0);
                 var moving = new DamageModifierStat(0, 0, 0, 0);
@@ -335,9 +337,10 @@ namespace GW2EIBuilders
             WriteLine(new[] { "Sub Group", "Profession", "Name" ,
                 "DMG Taken","DMG Barrier","Blocked","Invulned","Evaded","Dodges" });
             int count = 0;
+            PhaseData phase = _phases[phaseIndex];
             foreach (Player player in _noFakePlayers)
             {
-                FinalDefenses defenses = player.GetDefenses(_log, phaseIndex);
+                FinalDefensesAll defenses = player.GetDefenseStats(_log, phase.Start, phase.End);
 
                 WriteLine(new[] { player.Group.ToString(), player.Prof, player.Character,
                 defenses.DamageTaken.ToString(),defenses.DamageBarrier.ToString(),defenses.BlockedCount.ToString(),defenses.InvulnedCount.ToString(),defenses.EvadedCount.ToString(),defenses.DodgeCount.ToString() });
@@ -351,13 +354,14 @@ namespace GW2EIBuilders
         }
         private void CreateSupTable(int phaseIndex)
         {
+            PhaseData phase = _phases[phaseIndex];
             //generate supstats table
             WriteLine(new[] { "Sub Group", "Profession", "Name" ,
                 "Condi Cleanse","Condi Cleanse time", "Condi Cleanse Self","Condi Cleanse time self", "Boon Strips","Boon Strips time","Resurrects","Time Resurecting" });
             int count = 0;
             foreach (Player player in _noFakePlayers)
             {
-                FinalPlayerSupport support = player.GetPlayerSupport(_log, phaseIndex);
+                FinalPlayerSupport support = player.GetPlayerSupportStats(_log, phase.Start, phase.End);
 
                 WriteLine(new[] { player.Group.ToString(), player.Prof, player.Character,
                 support.CondiCleanse.ToString(),support.CondiCleanseTime.ToString(), support.CondiCleanseSelf.ToString(), support.CondiCleanseTimeSelf.ToString(), support.BoonStrips.ToString(), support.BoonStripsTime.ToString(), support.Resurrects.ToString(),support.ResurrectTime.ToString() });
@@ -381,13 +385,14 @@ namespace GW2EIBuilders
             }
             NewLine();
 
+            PhaseData phase = _phases[phaseIndex];
             int count = 0;
             foreach (Player player in _noFakePlayers)
             {
-                Dictionary<long, FinalPlayerBuffs> uptimes = player.GetBuffs(_log, phaseIndex, BuffEnum.Self);
+                IReadOnlyDictionary<long, FinalPlayerBuffs> uptimes = player.GetBuffs(BuffEnum.Self, _log, phase.Start, phase.End);
 
                 WriteCell(player.Character);
-                WriteCell(player.GetGameplayStats(_log, phaseIndex).AvgBoons.ToString());
+                WriteCell(player.GetGameplayStats(_log, phase.Start, phase.End).AvgBoons.ToString());
                 foreach (Buff boon in listToUse)
                 {
                     if (uptimes.TryGetValue(boon.ID, out FinalPlayerBuffs value))
@@ -426,11 +431,11 @@ namespace GW2EIBuilders
                 WriteCell(boon.Name + " Overstack");
             }
             NewLine();
-
+            PhaseData phase = _phases[phaseIndex];
             int count = 0;
             foreach (Player player in _noFakePlayers)
             {
-                Dictionary<long, FinalPlayerBuffs> uptimes = player.GetBuffs(_log, phaseIndex, BuffEnum.Self);
+                IReadOnlyDictionary<long, FinalPlayerBuffs> uptimes = player.GetBuffs(BuffEnum.Self, _log, phase.Start, phase.End);
 
                 WriteCell(player.Character);
                 foreach (Buff boon in listToUse)
@@ -477,9 +482,10 @@ namespace GW2EIBuilders
             NewLine();
 
             int count = 0;
+            PhaseData phase = _phases[phaseIndex];
             foreach (Player player in _noFakePlayers)
             {
-                Dictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(_log, phaseIndex, BuffEnum.Group);
+                IReadOnlyDictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(BuffEnum.Group, _log, phase.Start, phase.End);
 
                 WriteCell(player.Character);
                 foreach (Buff boon in listToUse)
@@ -527,9 +533,10 @@ namespace GW2EIBuilders
             NewLine();
 
             int count = 0;
+            PhaseData phase = _phases[phaseIndex];
             foreach (Player player in _noFakePlayers)
             {
-                Dictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(_log, phaseIndex, BuffEnum.OffGroup);
+                IReadOnlyDictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(BuffEnum.OffGroup, _log, phase.Start, phase.End);
 
                 WriteCell(player.Character);
                 foreach (Buff boon in listToUse)
@@ -577,9 +584,10 @@ namespace GW2EIBuilders
             NewLine();
 
             int count = 0;
+            PhaseData phase = _phases[phaseIndex];
             foreach (Player player in _noFakePlayers)
             {
-                Dictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(_log, phaseIndex, BuffEnum.Squad);
+                IReadOnlyDictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(BuffEnum.Squad, _log, phase.Start, phase.End);
                 WriteCell(player.Character);
                 foreach (Buff boon in listToUse)
                 {
@@ -616,9 +624,9 @@ namespace GW2EIBuilders
         }
         private void CreateMechanicTable(int phaseIndex)
         {
-            HashSet<Mechanic> presMech = _log.MechanicData.GetPresentPlayerMechs(_log, phaseIndex);
-            //Dictionary<string, HashSet<Mechanic>> presEnemyMech = log.MechanicData.getPresentEnemyMechs(phaseIndex);
             PhaseData phase = _phases[phaseIndex];
+            IReadOnlyCollection<Mechanic> presMech = _log.MechanicData.GetPresentPlayerMechs(_log, phase.Start, phase.End);
+            //Dictionary<string, HashSet<Mechanic>> presEnemyMech = log.MechanicData.getPresentEnemyMechs(phaseIndex);
             //List<AbstractMasterPlayer> enemyList = log.MechanicData.getEnemyList(phaseIndex);
             int countLines = 0;
             if (presMech.Count > 0)
@@ -690,7 +698,8 @@ namespace GW2EIBuilders
         private void CreateBossCondiUptime(int phaseIndex)
         {
             NPC boss = _legacyTarget;
-            Dictionary<long, FinalBuffs> conditions = _legacyTarget.GetBuffs(_log, phaseIndex);
+            PhaseData phase = _phases[phaseIndex];
+            IReadOnlyDictionary<long, FinalBuffs> conditions = _legacyTarget.GetBuffs(_log, phase.Start, phase.End);
 
             WriteCell("Name");
             WriteCell("Avg");
@@ -702,7 +711,7 @@ namespace GW2EIBuilders
             NewLine();
             int count = 0;
             WriteCell(boss.Character);
-            WriteCell(Math.Round(_legacyTarget.GetGameplayStats(_log, phaseIndex).AvgConditions, 1).ToString());
+            WriteCell(Math.Round(_legacyTarget.GetGameplayStats(_log, phase.Start, phase.End).AvgConditions, 1).ToString());
             foreach (Buff boon in _statistics.PresentConditions)
             {
                 if (conditions.TryGetValue(boon.ID, out FinalBuffs uptime))
@@ -732,7 +741,8 @@ namespace GW2EIBuilders
         private void CreateBossBoonUptime(int phaseIndex)
         {
             NPC boss = _legacyTarget;
-            Dictionary<long, FinalBuffs> conditions = _legacyTarget.GetBuffs(_log, phaseIndex);
+            PhaseData phase = _phases[phaseIndex];
+            IReadOnlyDictionary<long, FinalBuffs> conditions = _legacyTarget.GetBuffs(_log, phase.Start, phase.End);
             WriteCell("Name");
             WriteCell("Avg");
             foreach (Buff boon in _statistics.PresentBoons)
@@ -771,7 +781,8 @@ namespace GW2EIBuilders
         }
         private void CreateCondiGen(int phaseIndex)
         {
-            Dictionary<long, FinalBuffsDictionary> conditions = _legacyTarget.GetBuffsDictionary(_log, phaseIndex);
+            PhaseData phase = _phases[phaseIndex];
+            Dictionary<long, FinalBuffsDictionary> conditions = _legacyTarget.GetBuffsDictionary(_log, phase.Start, phase.End);
             //bool hasBoons = false;
             int count = 0;
             WriteCell("Name");
