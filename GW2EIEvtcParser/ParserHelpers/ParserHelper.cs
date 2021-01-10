@@ -414,8 +414,10 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/ck2IsoS.png";
                 case ArcDPSEnums.TrashID.GamblerClones:
                     return "https://i.imgur.com/zMsBWEx.png";
-                case ArcDPSEnums.TrashID.BloodstoneShard:
+                case ArcDPSEnums.TrashID.BloodstoneFragment:
                 case ArcDPSEnums.TrashID.ChargedBloodstone:
+                    return "https://i.imgur.com/PZ2VNAN.png";
+                case ArcDPSEnums.TrashID.BloodstoneShard:
                 case ArcDPSEnums.TrashID.GamblerReal:
                     return "https://i.imgur.com/J6oMITN.png";
                 case ArcDPSEnums.TrashID.Pride:
@@ -532,7 +534,6 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.SorrowDemon3:
                 case ArcDPSEnums.TrashID.SorrowDemon4:
                 case ArcDPSEnums.TrashID.SorrowDemon5:
-                case ArcDPSEnums.TrashID.BloodstoneFragment:
                     return "https://i.imgur.com/k79t7ZA.png";
                 case ArcDPSEnums.TrashID.HandOfErosion:
                 case ArcDPSEnums.TrashID.HandOfEruption:
