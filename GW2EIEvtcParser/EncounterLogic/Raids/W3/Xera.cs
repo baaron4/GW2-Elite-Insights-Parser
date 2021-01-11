@@ -42,7 +42,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/mGOHGwN.png",
-                            (897, 1000),
+                            (1000, 897),
                             (-5992, -5992, 69, -522)/*,
                             (-12288, -27648, 12288, 27648),
                             (1920, 12160, 2944, 14464)*/);
@@ -50,7 +50,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
         {
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Xera);
+            NPC mainTarget = GetMainTarget();
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Xera not found");
@@ -75,41 +75,57 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
-            long start = 0;
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Xera);
+            NPC mainTarget = GetMainTarget();
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Xera not found");
             }
             phases[0].AddTarget(mainTarget);
-            if (!requirePhases)
+            if (requirePhases)
             {
-                return phases;
-            }
-            long end = 0;
-            AbstractBuffEvent invulXera = log.CombatData.GetBuffData(762).FirstOrDefault(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent) ?? log.CombatData.GetBuffData(34113).FirstOrDefault(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent);
-            if (invulXera != null)
-            {
-                end = invulXera.Time;
-                phases.Add(new PhaseData(start, end));
+                AbstractBuffEvent invulXera = GetInvulXeraEvent(log, mainTarget);
                 // split happened
-                if (_xeraSecondPhaseStartTime > 0)
+                if (invulXera != null)
                 {
-                    mainTarget.SetManualHealth(24085950);
-                    start = _xeraSecondPhaseStartTime;
-                    //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
-                    phases.Add(new PhaseData(start, fightDuration));
+                    var phase1 = new PhaseData(0, invulXera.Time, "Phase 1");
+                    phase1.AddTarget(mainTarget);
+                    phases.Add(phase1);
+
+                    var glidingEndTime = _xeraSecondPhaseStartTime > 0 ? _xeraSecondPhaseStartTime : fightDuration;
+                    var glidingPhase = new PhaseData(invulXera.Time, glidingEndTime, "Gliding");
+                    glidingPhase.AddTargets(GetGlidingShards());
+                    phases.Add(glidingPhase);
+
+                    if (_xeraSecondPhaseStartTime > 0)
+                    {
+                        var phase2 = new PhaseData(_xeraSecondPhaseStartTime, fightDuration, "Phase 2");
+                        mainTarget.SetManualHealth(24085950);
+                        phase2.AddTarget(mainTarget);
+                        //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
+                        phases.Add(phase2);
+                    }
                 }
             }
-            for (int i = 1; i < phases.Count; i++)
-            {
-                phases[i].Name = "Phase " + i;
-                phases[i].AddTarget(mainTarget);
-
-            }
             return phases;
+        }
+
+        private NPC GetMainTarget() => Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Xera);
+
+        private AbstractBuffEvent GetInvulXeraEvent(ParsedEvtcLog log, NPC xera)
+        {
+            AbstractBuffEvent determined = log.CombatData.GetBuffData(762).FirstOrDefault(x => x.To == xera.AgentItem && x is BuffApplyEvent);
+            if (determined == null)
+            {
+                determined = log.CombatData.GetBuffData(34113).FirstOrDefault(x => x.To == xera.AgentItem && x is BuffApplyEvent);
+            }
+            return determined;
+        }
+
+        private IEnumerable<NPC> GetGlidingShards()
+        {
+            return Targets.Where(t => t.ID == (int)ArcDPSEnums.TrashID.ChargedBloodstone);
         }
 
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
@@ -131,10 +147,36 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
             // find target
-            AgentItem target = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Xera).FirstOrDefault();
-            if (target == null)
+            AgentItem firstXera = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Xera).FirstOrDefault();
+            if (firstXera == null)
             {
                 throw new MissingKeyActorsException("Xera not found");
+            }
+
+            var maxHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && x.DstAgent > 0).ToList();
+            var bloodstoneFragments = maxHPUpdates.Where(x => x.DstAgent == 104580).Select(x => agentData.GetAgent(x.SrcAgent)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+            foreach (AgentItem gadget in bloodstoneFragments)
+            {
+                gadget.OverrideType(AgentItem.AgentType.NPC);
+                gadget.OverrideID(ArcDPSEnums.TrashID.BloodstoneFragment);
+            }
+            var bloodstoneShards = maxHPUpdates.Where(x => x.DstAgent == 343620).Select(x => agentData.GetAgent(x.SrcAgent)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+            foreach (AgentItem gadget in bloodstoneShards)
+            {
+                gadget.OverrideType(AgentItem.AgentType.NPC);
+                gadget.OverrideID(ArcDPSEnums.TrashID.BloodstoneShard);
+            }
+            var chargedBloodStones = maxHPUpdates.Where(x => x.DstAgent == 74700).Select(x => agentData.GetAgent(x.SrcAgent)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.LastAware > firstXera.LastAware).ToList();
+            foreach (AgentItem gadget in chargedBloodStones)
+            {
+                gadget.OverrideType(AgentItem.AgentType.NPC);
+                gadget.OverrideID(ArcDPSEnums.TrashID.ChargedBloodstone);
+                // they are actually present from start to finish
+                gadget.OverrideAwareTimes(firstXera.LastAware + 15000, gadget.LastAware);
+            }
+            if (bloodstoneFragments.Any() || bloodstoneShards.Any() || chargedBloodStones.Any())
+            {
+                agentData.Refresh();
             }
             // find split
             AgentItem secondXera = agentData.GetNPCsByID(16286).FirstOrDefault();
@@ -149,22 +191,31 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     _xeraSecondPhaseStartTime = secondXera.FirstAware;
                 }
-                target.OverrideAwareTimes(target.FirstAware, secondXera.LastAware);
-                agentData.SwapMasters(secondXera, target);
+                firstXera.OverrideAwareTimes(firstXera.FirstAware, secondXera.LastAware);
+                agentData.SwapMasters(secondXera, firstXera);
                 // update combat data
                 foreach (CombatItem c in combatData)
                 {
                     if (c.SrcAgent == secondXera.Agent && c.IsStateChange.SrcIsAgent())
                     {
-                        c.OverrideSrcAgent(target.Agent);
+                        c.OverrideSrcAgent(firstXera.Agent);
                     }
                     if (c.DstAgent == secondXera.Agent && c.IsStateChange.DstIsAgent())
                     {
-                        c.OverrideDstAgent(target.Agent);
+                        c.OverrideDstAgent(firstXera.Agent);
                     }
                 }
             }
             ComputeFightTargets(agentData, combatData);
+        }
+
+        protected override List<int> GetFightTargetsIDs()
+        {
+            return new List<int> {
+                (int)ArcDPSEnums.TargetID.Xera,
+                (int)ArcDPSEnums.TrashID.BloodstoneShard,
+                (int)ArcDPSEnums.TrashID.ChargedBloodstone,
+            };
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
@@ -177,9 +228,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.WhiteMantleKnight2,
                 ArcDPSEnums.TrashID.WhiteMantleBattleMage1,
                 ArcDPSEnums.TrashID.WhiteMantleBattleMage2,
-                ArcDPSEnums.TrashID.ExquisiteConjunction,
-                ArcDPSEnums.TrashID.ChargedBloodstone,
                 ArcDPSEnums.TrashID.BloodstoneFragment,
+                ArcDPSEnums.TrashID.ExquisiteConjunction,
                 ArcDPSEnums.TrashID.XerasPhantasm,
             };
         }

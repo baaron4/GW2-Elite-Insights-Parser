@@ -281,7 +281,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<ErrorEvent>();
         }
 
-        protected void AddTargetsToPhase(PhaseData phase, List<int> ids, ParsedEvtcLog log)
+        protected void AddTargetsToPhaseAndFit(PhaseData phase, List<int> ids, ParsedEvtcLog log)
         {
             foreach (NPC target in Targets)
             {

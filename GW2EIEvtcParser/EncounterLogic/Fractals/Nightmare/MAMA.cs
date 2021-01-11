@@ -72,7 +72,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                        (int) ArcDPSEnums.TrashID.RedKnight,
                        (int) ArcDPSEnums.TrashID.BlueKnight,
                     };
-                    AddTargetsToPhase(phase, ids, log);
+                    AddTargetsToPhaseAndFit(phase, ids, log);
                     if (phase.Targets.Count > 0)
                     {
                         NPC phaseTar = phase.Targets[0];

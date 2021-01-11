@@ -87,7 +87,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 PhaseData phase = phases[i];
                 if (i % 2 == 0)
                 {
-                    AddTargetsToPhase(phase, ids, log);
+                    AddTargetsToPhaseAndFit(phase, ids, log);
                     if (phase.Targets.Count > 0)
                     {
                         NPC phaseTar = phase.Targets[0];
@@ -112,7 +112,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     phase.Name = "Phase " + (i + 1) / 2;
                     phase.AddTarget(mainTarget);
-                    AddTargetsToPhase(phase, ids, log);
+                    AddTargetsToPhaseAndFit(phase, ids, log);
                 }
             }
             return phases;

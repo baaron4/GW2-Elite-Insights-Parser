@@ -109,7 +109,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AgentItem lamp in lampAgents)
             {
                 lamp.OverrideType(AgentItem.AgentType.NPC);
-                lamp.OverrideID((int)ArcDPSEnums.TrashID.QadimLamp);
+                lamp.OverrideID(ArcDPSEnums.TrashID.QadimLamp);
             }
             bool refresh = lampAgents.Count > 0;
             // Pyres
@@ -121,19 +121,19 @@ namespace GW2EIEvtcParser.EncounterLogic
                     (float x, float y, _) = AbstractMovementEvent.UnpackMovementData(position.DstAgent, 0);
                     if ((Math.Abs(x + 8947) < 10 && Math.Abs(y - 14728) < 10) || (Math.Abs(x + 10834) < 10 && Math.Abs(y - 12477) < 10))
                     {
-                        pyre.OverrideID((int)ArcDPSEnums.TrashID.PyreGuardianProtect);
+                        pyre.OverrideID(ArcDPSEnums.TrashID.PyreGuardianProtect);
                         refresh = true;
                         pyre.OverrideName(pyre.Name.Insert(0, "Protect "));
                     }
                     else if ((Math.Abs(x + 4356) < 10 && Math.Abs(y - 12076) < 10) || (Math.Abs(x + 5889) < 10 && Math.Abs(y - 14723) < 10) || (Math.Abs(x + 7851) < 10 && Math.Abs(y - 13550) < 10))
                     {
-                        pyre.OverrideID((int)ArcDPSEnums.TrashID.PyreGuardianStab);
+                        pyre.OverrideID(ArcDPSEnums.TrashID.PyreGuardianStab);
                         refresh = true;
                         pyre.OverrideName(pyre.Name.Insert(0, "Stab "));
                     }
                     else if ((Math.Abs(x + 8951) < 10 && Math.Abs(y - 9429) < 10) || (Math.Abs(x + 5716) < 10 && Math.Abs(y - 9325) < 10) || (Math.Abs(x + 7846) < 10 && Math.Abs(y - 10612) < 10))
                     {
-                        pyre.OverrideID((int)ArcDPSEnums.TrashID.PyreGuardianRetal);
+                        pyre.OverrideID(ArcDPSEnums.TrashID.PyreGuardianRetal);
                         refresh = true;
                         pyre.OverrideName(pyre.Name.Insert(0, "Retal "));
                     }
@@ -219,7 +219,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                            (int) ArcDPSEnums.TrashID.ApocalypseBringer,
                            (int) ArcDPSEnums.TrashID.QadimLamp
                         };
-                    AddTargetsToPhase(phase, ids, log);
+                    AddTargetsToPhaseAndFit(phase, ids, log);
                     if (phase.Targets.Count > 0)
                     {
                         NPC phaseTar = phase.Targets[0];

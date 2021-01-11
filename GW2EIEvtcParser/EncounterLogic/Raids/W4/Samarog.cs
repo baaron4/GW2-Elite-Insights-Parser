@@ -79,7 +79,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                        (int) ArcDPSEnums.TrashID.Rigom,
                        (int) ArcDPSEnums.TrashID.Guldhem
                     };
-                    AddTargetsToPhase(phase, ids, log);
+                    AddTargetsToPhaseAndFit(phase, ids, log);
                     foreach (NPC t in phase.Targets)
                     {
                         t.OverrideName(t.Character + " " + i / 2);

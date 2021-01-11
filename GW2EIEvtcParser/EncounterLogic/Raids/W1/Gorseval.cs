@@ -65,7 +65,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                        (int) ArcDPSEnums.TrashID.ChargedSoul
                     };
-                    AddTargetsToPhase(phase, ids, log);
+                    AddTargetsToPhaseAndFit(phase, ids, log);
                 }
             }
             return phases;

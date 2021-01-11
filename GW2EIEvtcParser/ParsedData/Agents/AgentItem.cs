@@ -111,6 +111,16 @@ namespace GW2EIEvtcParser.ParsedData
             ID = id;
         }
 
+        internal void OverrideID(ArcDPSEnums.TrashID id)
+        {
+            ID = (int)id;
+        }
+
+        internal void OverrideID(ArcDPSEnums.TargetID id)
+        {
+            ID = (int)id;
+        }
+
         internal void OverrideName(string name)
         {
             Name = name;
