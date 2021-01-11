@@ -10,6 +10,7 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffGainCastFinder(31869,31508,EIData.InstantCastFinder.DefaultICD), // Celestial Avatar
             new BuffLossCastFinder(31411,31508,EIData.InstantCastFinder.DefaultICD), // Release Celestial Avatar
+            new DamageCastFinder(31658, 31658, EIData.InstantCastFinder.DefaultICD), // Glyph of Equality (non-CA)
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
