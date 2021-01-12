@@ -33,6 +33,10 @@ namespace GW2EIParser
         /// </summary>
         public string DPSReportLink { get; set; }
         /// <summary>
+        /// Parsed evtc log
+        /// </summary>
+        public ParsedEvtcLog Log { get; set; }
+        /// <summary>
         /// Time elapsed parsing
         /// </summary>
         public string Elapsed { get; set; } = "";
@@ -48,6 +52,7 @@ namespace GW2EIParser
         public override void Reset()
         {
             base.Reset();
+            Log = null;
             DPSReportLink = null;
             OutLocation = null;
             Elapsed = "";
