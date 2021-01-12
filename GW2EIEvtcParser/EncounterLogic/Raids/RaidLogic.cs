@@ -13,6 +13,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected RaidLogic(int triggerID) : base(triggerID)
         {
             Mode = ParseMode.Instanced10;
+            EncounterCategory = FightCategory.Raid;
         }
 
         protected virtual List<int> GetSuccessCheckIds()

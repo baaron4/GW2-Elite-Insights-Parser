@@ -12,6 +12,9 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         public enum ParseMode { Instanced10, Instanced5, Benchmark, WvW, sPvP, Unknown };
 
+        public enum FightCategory { Fractal, Strike, Raid, WvW, Golem, Unknown};
+        public enum SubFightCategory { Wing1, Wing2, Wing3, Wing4, Wing5, Wing6, Wing7, Nightmare, ShatteredObservatory, SunquaPeak, None };
+
         private CombatReplayMap _map;
         protected List<Mechanic> MechanicList { get; }//Resurrects (start), Resurrect
         public ParseMode Mode { get; protected set; } = ParseMode.Unknown;
@@ -27,6 +30,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         public bool Targetless { get; protected set; } = false;
         protected int GenericTriggerID { get; }
 
+        public FightCategory EncounterCategory { get; protected set; }
+        public SubFightCategory EncounterSubCategory { get; protected set; }
+
         protected FightLogic(int triggerID)
         {
             GenericTriggerID = triggerID;
@@ -39,6 +45,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerStatusMechanic(SkillItem.RespawnId, "Respawn", new MechanicPlotlySetting("cross","rgb(120,120,255)"), "Resp",0)
             };
             _basicMechanicsCount = MechanicList.Count;
+            EncounterCategory = FightCategory.Unknown;
+            EncounterSubCategory = SubFightCategory.None;
         }
 
         // Only used for CSV files

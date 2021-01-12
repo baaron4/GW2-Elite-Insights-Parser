@@ -10,6 +10,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected StrikeMissionLogic(int triggerID) : base(triggerID)
         {
             Mode = ParseMode.Instanced10;
+            EncounterCategory = FightCategory.Strike;
         }
 
         protected virtual void SetSuccessByDeath(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, bool all)
