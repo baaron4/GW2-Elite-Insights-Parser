@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
@@ -12,8 +13,39 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         public enum ParseMode { Instanced10, Instanced5, Benchmark, WvW, sPvP, Unknown };
 
-        public enum FightCategory { Fractal, Strike, Raid, WvW, Golem, Unknown};
-        public enum SubFightCategory { SpiritVale, SalvationPass, StrongholdOfTheFaithful, BastionOfThePenitent, HallOfChains, MythwrightGambit, TheKeyOfAhdashim, Nightmare, ShatteredObservatory, SunquaPeak, None, Unknown };
+        public enum FightCategory { 
+            Fractal,
+            Strike,
+            Raid,
+            [Description("Wold vs World")]
+            WvW, 
+            Golem, 
+            Unknown
+        };
+
+        public enum SubFightCategory {
+            [Description("Spirit Vale")]
+            SpiritVale,
+            [Description("Salvation Pass")]
+            SalvationPass,
+            [Description("Stronghold of the Faithful")]
+            StrongholdOfTheFaithful,
+            [Description("Bastion of the Penitent")]
+            BastionOfThePenitent,
+            [Description("Hall of Chains")]
+            HallOfChains,
+            [Description("Mythwright Gambit")]
+            MythwrightGambit,
+            [Description("The Key of Ahdashim")]
+            TheKeyOfAhdashim, 
+            Nightmare,
+            [Description("Shattered Observatory")]
+            ShatteredObservatory,
+            [Description("Sunqua Peak")]
+            SunquaPeak, 
+            None, 
+            Unknown 
+        };
 
         private CombatReplayMap _map;
         protected List<Mechanic> MechanicList { get; }//Resurrects (start), Resurrect

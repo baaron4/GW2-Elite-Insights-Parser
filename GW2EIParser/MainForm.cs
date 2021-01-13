@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -257,75 +259,6 @@ namespace GW2EIParser
             BtnClearAll.Enabled = true;
             BtnParse.Enabled = true;
             BtnCancelAll.Enabled = false;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BtnDiscordBatchClick(object sender, EventArgs e)
-        {
-            EmbedBuilder embedBuilder = ProgramHelper.GetEmbedBuilder();
-            embedBuilder.WithCurrentTimestamp();
-            var categories = new Dictionary<FightLogic.FightCategory, List<FormOperationController>>();
-            foreach (FormOperationController operation in OperatorBindingSource)
-            {
-                if (operation.DPSReportLink != null && operation.DPSReportLink.Contains("https"))
-                {
-                    if (categories.TryGetValue(operation.BasicMetaData.FightCategory.EncounterCategory, out List<FormOperationController> list))
-                    {
-                        list.Add(operation);
-                    } 
-                    else
-                    {
-                        categories[operation.BasicMetaData.FightCategory.EncounterCategory] = new List<FormOperationController>()
-                        {
-                            operation
-                        };
-                    }
-                }
-            }
-            foreach (KeyValuePair<FightLogic.FightCategory, List<FormOperationController>> pair in categories)
-            {
-                pair.Value.Sort((x, y) => {
-                    var categoryCompare = x.BasicMetaData.FightCategory.CompareTo(y.BasicMetaData.FightCategory);
-                    if (categoryCompare == 0)
-                    {
-                        return DateTime.Parse(x.BasicMetaData.LogStart).CompareTo(DateTime.Parse(y.BasicMetaData.LogStart));
-                    }
-                    return categoryCompare;
-                    });
-                FightLogic.SubFightCategory currentSubCategory = FightLogic.SubFightCategory.Unknown;
-                var embedFieldBuilder = new EmbedFieldBuilder();
-                var fieldValue = "hue hue hue";
-                foreach(FormOperationController controller in pair.Value)
-                {
-                    if (controller.BasicMetaData.FightCategory.EncounterSubCategory != currentSubCategory)
-                    {
-                        embedFieldBuilder.WithValue(fieldValue);
-                        embedFieldBuilder = new EmbedFieldBuilder();
-                        fieldValue = "";
-                        embedBuilder.AddField(embedFieldBuilder);
-                        currentSubCategory = controller.BasicMetaData.FightCategory.EncounterSubCategory;
-                        embedFieldBuilder.WithName(currentSubCategory.ToString());
-                    } else
-                    {
-                        fieldValue += "\r\n";
-                    }
-                    fieldValue += "[" + controller.BasicMetaData.FightName + "](" + controller.DPSReportLink + ") " + (controller.BasicMetaData.FightSuccess ? " :white_check_mark: " : " :x: ") + ": " + controller.BasicMetaData.FightDuration;
-                }
-                embedFieldBuilder.WithValue(fieldValue);
-            }
-            if (categories.Any())
-            {
-                if (Properties.Settings.Default.WebhookURL == null)
-                {
-                    MessageBox.Show("Set a discord webhook url first");
-                    return;
-                }
-                new WebhookController(Properties.Settings.Default.WebhookURL, embedBuilder.Build()).SendMessage();
-            }
         }
 
         /// <summary>
@@ -625,6 +558,105 @@ namespace GW2EIParser
             if (ParserHelper.IsTemporaryFormat(e.OldFullPath) && ParserHelper.IsCompressedFormat(e.FullPath))
             {
                 AddDelayed(e.FullPath);
+            }
+        }
+
+        ///
+
+        // https://stackoverflow.com/questions/479410/enum-tostring-with-user-friendly-strings
+        private static string GetDescription<T>(T enumerationValue)
+    where T : struct
+        {
+            Type type = enumerationValue.GetType();
+            if (!type.IsEnum)
+            {
+                throw new ArgumentException("EnumerationValue must be of Enum type", "enumerationValue");
+            }
+
+            //Tries to find a DescriptionAttribute for a potential friendly name
+            //for the enum
+            MemberInfo[] memberInfo = type.GetMember(enumerationValue.ToString());
+            if (memberInfo != null && memberInfo.Length > 0)
+            {
+                object[] attrs = memberInfo[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
+
+                if (attrs != null && attrs.Length > 0)
+                {
+                    //Pull out the description value
+                    return ((DescriptionAttribute)attrs[0]).Description;
+                }
+            }
+            //If we have no description attribute, just return the ToString of the enum
+            return enumerationValue.ToString();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnDiscordBatchClick(object sender, EventArgs e)
+        {
+            EmbedBuilder embedBuilder = ProgramHelper.GetEmbedBuilder();
+            embedBuilder.WithCurrentTimestamp();
+            var categories = new Dictionary<FightLogic.FightCategory, List<FormOperationController>>();
+            foreach (FormOperationController operation in OperatorBindingSource)
+            {
+                if (operation.DPSReportLink != null && operation.DPSReportLink.Contains("https"))
+                {
+                    if (categories.TryGetValue(operation.BasicMetaData.FightCategory.EncounterCategory, out List<FormOperationController> list))
+                    {
+                        list.Add(operation);
+                    }
+                    else
+                    {
+                        categories[operation.BasicMetaData.FightCategory.EncounterCategory] = new List<FormOperationController>()
+                        {
+                            operation
+                        };
+                    }
+                }
+            }
+            foreach (KeyValuePair<FightLogic.FightCategory, List<FormOperationController>> pair in categories)
+            {
+                pair.Value.Sort((x, y) => {
+                    var categoryCompare = x.BasicMetaData.FightCategory.CompareTo(y.BasicMetaData.FightCategory);
+                    if (categoryCompare == 0)
+                    {
+                        return DateTime.Parse(x.BasicMetaData.LogStart).CompareTo(DateTime.Parse(y.BasicMetaData.LogStart));
+                    }
+                    return categoryCompare;
+                });
+                FightLogic.SubFightCategory currentSubCategory = FightLogic.SubFightCategory.Unknown;
+                var embedFieldBuilder = new EmbedFieldBuilder();
+                var fieldValue = "hue hue hue";
+                foreach (FormOperationController controller in pair.Value)
+                {
+                    if (controller.BasicMetaData.FightCategory.EncounterSubCategory != currentSubCategory)
+                    {
+                        embedFieldBuilder.WithValue(fieldValue);
+                        embedFieldBuilder = new EmbedFieldBuilder();
+                        fieldValue = "";
+                        embedBuilder.AddField(embedFieldBuilder);
+                        currentSubCategory = controller.BasicMetaData.FightCategory.EncounterSubCategory;
+                        embedFieldBuilder.WithName(GetDescription(currentSubCategory));
+                    }
+                    else
+                    {
+                        fieldValue += "\r\n";
+                    }
+                    fieldValue += "[" + controller.BasicMetaData.FightName + "](" + controller.DPSReportLink + ") " + (controller.BasicMetaData.FightSuccess ? " :white_check_mark: " : " :x: ") + ": " + controller.BasicMetaData.FightDuration;
+                }
+                embedFieldBuilder.WithValue(fieldValue);
+            }
+            if (categories.Any())
+            {
+                if (Properties.Settings.Default.WebhookURL == null)
+                {
+                    MessageBox.Show("Set a discord webhook url in settings first");
+                    return;
+                }
+                new WebhookController(Properties.Settings.Default.WebhookURL, embedBuilder.Build()).SendMessage();
             }
         }
     }
