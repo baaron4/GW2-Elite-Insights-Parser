@@ -147,11 +147,11 @@ namespace GW2EIParser
 
                 //Process evtc here
                 ParsedEvtcLog log = parser.ParseLog(operation, fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason);
-                operation.Log = log;
                 if (failureReason != null)
                 {
                     failureReason.Throw();
                 }
+                operation.BasicMetaData = new OperationController.OperationBasicMetaData(log);
                 var externalTraces = new List<string>();
                 string[] uploadresult = UploadOperation(externalTraces, fInfo);
                 if (Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports)
