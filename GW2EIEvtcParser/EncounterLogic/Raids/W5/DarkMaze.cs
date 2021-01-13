@@ -7,7 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class DarkMaze : RaidLogic
+    internal class DarkMaze : HallOfChains
     {
         // TODO - add CR icons and some mechanics
         public DarkMaze(int triggerID) : base(triggerID)
@@ -24,6 +24,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             );
             Extension = "eyes";
             Icon = "https://wiki.guildwars2.com/images/thumb/a/a7/Eye_of_Fate.jpg/188px-Eye_of_Fate.jpg";
+            EncounterCategoryInformation.InSubCategoryOrder = 2;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

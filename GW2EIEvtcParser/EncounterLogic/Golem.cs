@@ -54,7 +54,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     Icon = "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
                     break;
             }
-            EncounterCategory = FightCategory.Golem;
+            EncounterCategoryInformation.EncounterCategory = FightCategory.Golem;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

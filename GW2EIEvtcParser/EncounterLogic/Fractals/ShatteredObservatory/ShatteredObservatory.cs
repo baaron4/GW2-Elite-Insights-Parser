@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EncounterLogic
     {
         public ShatteredObservatory(int triggerID) : base(triggerID)
         {
-
+            EncounterCategoryInformation.EncounterSubCategory = SubFightCategory.ShatteredObservatory;
         }
 
         protected static HashSet<AgentItem> GetParticipatingPlayerAgents(NPC target, CombatData combatData, HashSet<AgentItem> playerAgents)

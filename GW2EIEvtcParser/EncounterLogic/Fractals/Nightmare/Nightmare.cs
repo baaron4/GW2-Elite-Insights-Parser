@@ -11,7 +11,7 @@ namespace GW2EIEvtcParser.EncounterLogic
     {
         public Nightmare(int triggerID) : base(triggerID)
         {
-
+            EncounterCategoryInformation.EncounterSubCategory = SubFightCategory.Nightmare;
         }
 
         protected static long GetFightOffsetByFirstInvulFilter(FightData fightData, AgentData agentData, List<CombatItem> combatData, int targetID, long invulID, long invulGainOffset)

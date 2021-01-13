@@ -7,7 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Gorseval : RaidLogic
+    internal class Gorseval : SpiritVale
     {
         public Gorseval(int triggerID) : base(triggerID)
         {
@@ -25,6 +25,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "gors";
             Icon = "https://wiki.guildwars2.com/images/d/d1/Mini_Gorseval_the_Multifarious.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 1;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

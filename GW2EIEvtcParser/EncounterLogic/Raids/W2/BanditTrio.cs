@@ -7,7 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class BanditTrio : RaidLogic
+    internal class BanditTrio : SalvationPass
     {
         public BanditTrio(int triggerID) : base(triggerID)
         {
@@ -21,6 +21,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "trio";
             GenericFallBackMethod = FallBackMethod.None;
             Icon = "https://i.imgur.com/UZZQUdf.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 2;
         }
 
         protected override List<int> GetSuccessCheckIds()

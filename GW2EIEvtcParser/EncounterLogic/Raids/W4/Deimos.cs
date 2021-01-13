@@ -7,7 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Deimos : RaidLogic
+    internal class Deimos : BastionOfThePenitent
     {
 
         private long _deimos10PercentTime = 0;
@@ -48,6 +48,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "dei";
             GenericFallBackMethod = FallBackMethod.None;
             Icon = "https://wiki.guildwars2.com/images/e/e0/Mini_Ragged_White_Mantle_Figurehead.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 3;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

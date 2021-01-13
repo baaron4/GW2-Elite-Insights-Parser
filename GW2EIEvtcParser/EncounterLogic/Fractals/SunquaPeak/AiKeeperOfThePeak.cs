@@ -74,6 +74,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "ai";
             Icon = "https://i.imgur.com/3mlCdI9.png";
+            EncounterCategoryInformation.EncounterSubCategory = SubFightCategory.SunquaPeak;
         }
 
         internal override string GetLogicName(ParsedEvtcLog log)

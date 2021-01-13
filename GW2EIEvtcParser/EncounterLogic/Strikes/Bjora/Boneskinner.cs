@@ -21,6 +21,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             );
             Extension = "boneskin";
             Icon = "https://i.imgur.com/meYwQmA.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 3;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

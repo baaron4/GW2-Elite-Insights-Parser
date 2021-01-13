@@ -35,6 +35,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "skorv";
             Icon = "https://i.imgur.com/B1nhJ9m.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 0;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

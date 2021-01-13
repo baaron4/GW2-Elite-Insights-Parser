@@ -19,6 +19,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             );
             Extension = "supkodbros";
             Icon = "https://i.imgur.com/lNXXbnC.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 2;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

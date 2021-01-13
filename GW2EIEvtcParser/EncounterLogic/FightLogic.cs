@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         public enum ParseMode { Instanced10, Instanced5, Benchmark, WvW, sPvP, Unknown };
 
         public enum FightCategory { Fractal, Strike, Raid, WvW, Golem, Unknown};
-        public enum SubFightCategory { Wing1, Wing2, Wing3, Wing4, Wing5, Wing6, Wing7, Nightmare, ShatteredObservatory, SunquaPeak, None };
+        public enum SubFightCategory { SpiritVale, SalvationPass, StrongholdOfTheFaithful, BastionOfThePenitent, HallOfChains, MythwrightGambit, TheKeyOfAhdashim, Nightmare, ShatteredObservatory, SunquaPeak, None, Unknown };
 
         private CombatReplayMap _map;
         protected List<Mechanic> MechanicList { get; }//Resurrects (start), Resurrect
@@ -30,8 +30,32 @@ namespace GW2EIEvtcParser.EncounterLogic
         public bool Targetless { get; protected set; } = false;
         protected int GenericTriggerID { get; }
 
-        public FightCategory EncounterCategory { get; protected set; }
-        public SubFightCategory EncounterSubCategory { get; protected set; }
+        public class EncounterCategories
+        {
+            public FightCategory EncounterCategory { get; internal set; } = FightCategory.Unknown;
+            public SubFightCategory EncounterSubCategory { get; internal set; } = SubFightCategory.Unknown;
+
+            public int InSubCategoryOrder { get; internal set; } = 0;
+
+            public int CompareTo(EncounterCategories other)
+            {
+                int catCompare = EncounterCategory.CompareTo(other.EncounterCategory);
+                if (catCompare == 0)
+                {
+                    int subCatCompare = EncounterSubCategory.CompareTo(other.EncounterSubCategory);
+                    if (subCatCompare == 0)
+                    {
+                        return InSubCategoryOrder.CompareTo(other.InSubCategoryOrder);
+                    }
+                    return subCatCompare;
+                }
+                return catCompare;
+            }
+
+        }
+
+        public EncounterCategories EncounterCategoryInformation { get; protected set; }
+
 
         protected FightLogic(int triggerID)
         {
@@ -45,8 +69,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerStatusMechanic(SkillItem.RespawnId, "Respawn", new MechanicPlotlySetting("cross","rgb(120,120,255)"), "Resp",0)
             };
             _basicMechanicsCount = MechanicList.Count;
-            EncounterCategory = FightCategory.Unknown;
-            EncounterSubCategory = SubFightCategory.None;
+            EncounterCategoryInformation = new EncounterCategories();
         }
 
         // Only used for CSV files

@@ -7,7 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Dhuum : RaidLogic
+    internal class Dhuum : HallOfChains
     {
         private bool _isBugged;
         private short _reapersSeen;
@@ -41,6 +41,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "dhuum";
             Icon = "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 3;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

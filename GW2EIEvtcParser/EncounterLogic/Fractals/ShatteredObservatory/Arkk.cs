@@ -46,6 +46,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "arkk";
             Icon = "https://i.imgur.com/glLH8n8.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 2;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

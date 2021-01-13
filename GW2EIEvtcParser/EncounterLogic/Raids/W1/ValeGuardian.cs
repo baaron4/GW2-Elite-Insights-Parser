@@ -7,7 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class ValeGuardian : RaidLogic
+    internal class ValeGuardian : SpiritVale
     {
         public ValeGuardian(int triggerID) : base(triggerID)
         {
@@ -36,6 +36,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "vg";
             Icon = "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 0;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

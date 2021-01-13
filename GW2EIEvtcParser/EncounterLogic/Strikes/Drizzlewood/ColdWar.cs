@@ -21,6 +21,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             );
             Extension = "coldwar";
             Icon = "https://i.imgur.com/r9b2oww.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 5;
         }
 
         /*protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

@@ -8,7 +8,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Qadim : RaidLogic
+    internal class Qadim : MythwrightGambit
     {
 
         public Qadim(int triggerID) : base(triggerID)
@@ -64,6 +64,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "qadim";
             Icon = "https://wiki.guildwars2.com/images/f/f2/Mini_Qadim.png";
             GenericFallBackMethod = FallBackMethod.CombatExit;
+            EncounterCategoryInformation.InSubCategoryOrder = 2;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

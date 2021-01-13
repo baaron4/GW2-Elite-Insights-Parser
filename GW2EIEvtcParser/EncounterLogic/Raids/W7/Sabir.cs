@@ -6,7 +6,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Sabir : RaidLogic
+    internal class Sabir : TheKeyOfAhdashim
     {
         public Sabir(int triggerID) : base(triggerID)
         {
@@ -25,6 +25,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // interesting stuff 56372 (big AoE?)
             Extension = "sabir";
             Icon = "https://wiki.guildwars2.com/images/f/fc/Mini_Air_Djinn.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 0;
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()

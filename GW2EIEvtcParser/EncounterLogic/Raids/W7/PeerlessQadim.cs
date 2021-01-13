@@ -7,7 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class PeerlessQadim : RaidLogic
+    internal class PeerlessQadim : TheKeyOfAhdashim
     {
         public PeerlessQadim(int triggerID) : base(triggerID)
         {
@@ -32,6 +32,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "prlqadim";
             Icon = "https://wiki.guildwars2.com/images/8/8b/Mini_Qadim_the_Peerless.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 1;
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()

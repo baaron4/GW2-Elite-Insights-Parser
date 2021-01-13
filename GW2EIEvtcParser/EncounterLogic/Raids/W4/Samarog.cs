@@ -7,7 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Samarog : RaidLogic
+    internal class Samarog : BastionOfThePenitent
     {
         public Samarog(int triggerID) : base(triggerID)
         {
@@ -42,6 +42,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "sam";
             Icon = "https://wiki.guildwars2.com/images/f/f0/Mini_Samarog.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 2;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

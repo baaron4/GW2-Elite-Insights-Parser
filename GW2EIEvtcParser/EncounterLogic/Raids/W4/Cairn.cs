@@ -7,7 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Cairn : RaidLogic
+    internal class Cairn : BastionOfThePenitent
     {
         public Cairn(int triggerID) : base(triggerID)
         {
@@ -47,6 +47,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "cairn";
             Icon = "https://wiki.guildwars2.com/images/b/b8/Mini_Cairn_the_Indomitable.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 0;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

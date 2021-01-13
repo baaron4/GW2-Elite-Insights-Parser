@@ -23,6 +23,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "siax";
             Icon = "https://i.imgur.com/ar5ELOI.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 1;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

@@ -5,7 +5,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class BrokenKing : RaidLogic
+    internal class BrokenKing : HallOfChains
     {
         // TODO - add CR icons and some mechanics
         public BrokenKing(int triggerID) : base(triggerID)
@@ -19,6 +19,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             );
             Extension = "brokenking";
             Icon = "https://wiki.guildwars2.com/images/3/37/Mini_Broken_King.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 2;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
