@@ -8,7 +8,7 @@ namespace GW2EIEvtcParser.ParsedData
         public uint BuffInstance { get; protected set; }
 
         private readonly bool _removedActive;
-        private bool _overstackOrNaturalEnd => (_iff == ArcDPSEnums.IFF.Unknown && By == ParserHelper._unknownAgent);
+        private bool _overstackOrNaturalEnd => (_iff == ArcDPSEnums.IFF.Unknown && CreditedBy == ParserHelper._unknownAgent);
         private bool _lowValueRemove => (RemovedDuration <= ParserHelper.BuffSimulatorDelayConstant && RemovedDuration != 0);
 
         internal BuffRemoveSingleEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
@@ -36,7 +36,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            simulator.Remove(By, RemovedDuration, 1, Time, ArcDPSEnums.BuffRemove.Single, BuffInstance);
+            simulator.Remove(CreditedBy, RemovedDuration, 1, Time, ArcDPSEnums.BuffRemove.Single, BuffInstance);
         }
         internal override int CompareTo(AbstractBuffEvent abe)
         {

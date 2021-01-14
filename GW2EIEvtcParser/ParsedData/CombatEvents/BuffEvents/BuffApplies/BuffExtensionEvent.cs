@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            simulator.Extend(_durationChange, _oldValue, By, Time, BuffInstance);
+            simulator.Extend(_durationChange, _oldValue, CreditedBy, Time, BuffInstance);
         }
 
         internal override int CompareTo(AbstractBuffEvent abe)

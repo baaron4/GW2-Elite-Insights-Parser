@@ -60,8 +60,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         AbstractBuffEvent ba = pair.Value.LastOrDefault(x => x is BuffApplyEvent && Math.Abs(x.Time - sglRemoval.Time) < 5);
                         if (ba != null)
                         {
-                            res.Add(new BuffRemoveAllEvent(sglRemoval.By, pair.Key, ba.Time - 1, int.MaxValue, ba.BuffSkill, 0, int.MaxValue));
-                            res.Add(new BuffRemoveManualEvent(sglRemoval.By, pair.Key, ba.Time - 1, int.MaxValue, ba.BuffSkill));
+                            res.Add(new BuffRemoveAllEvent(sglRemoval.CreditedBy, pair.Key, ba.Time - 1, int.MaxValue, ba.BuffSkill, 0, int.MaxValue));
+                            res.Add(new BuffRemoveManualEvent(sglRemoval.CreditedBy, pair.Key, ba.Time - 1, int.MaxValue, ba.BuffSkill));
                         }
                     }
                 }
@@ -174,7 +174,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             NPC qadim = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
                             surgeStart = (int)c.Time;
-                            source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By) ?? qadim;
+                            source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.CreditedBy) ?? qadim;
                         }
                         else
                         {
@@ -255,7 +255,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     NPC qadim = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
                     surgeStart = (int)c.Time;
-                    source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By) ?? qadim;
+                    source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.CreditedBy) ?? qadim;
                 }
                 else
                 {
@@ -276,7 +276,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     kinStart = (int)c.Time;
                     //kinSource = log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By);
-                    kinSource = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By) ?? TrashMobs.FirstOrDefault(x => x.AgentItem == c.By);
+                    kinSource = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.CreditedBy) ?? TrashMobs.FirstOrDefault(x => x.AgentItem == c.CreditedBy);
                 }
                 else
                 {

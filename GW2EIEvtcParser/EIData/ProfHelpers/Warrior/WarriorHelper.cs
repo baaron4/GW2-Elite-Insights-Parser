@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (buffData.TryGetValue(id, out List<AbstractBuffEvent> list))
             {
-                return new HashSet<AgentItem>(list.Where(x => x is BuffApplyEvent && x.By.Type == AgentItem.AgentType.Gadget && x.By.Master == null && playerAgents.Contains(x.To.GetFinalMaster())).Select(x => x.By));
+                return new HashSet<AgentItem>(list.Where(x => x is BuffApplyEvent && x.CreditedBy.Type == AgentItem.AgentType.Gadget && x.CreditedBy.Master == null && playerAgents.Contains(x.To.GetFinalMaster())).Select(x => x.CreditedBy));
             }
             return new HashSet<AgentItem>();
         }

@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser.EIData
                     if (c is BuffApplyEvent ba && p.AgentItem == ba.To && Keep(ba, log))
                     {
                         mechanicLogs[this].Add(new MechanicEvent(ba.Time, this, p));
-                        mechanicLogs[this].Add(new MechanicEvent(ba.Time, this, log.PlayerList.FirstOrDefault(x => x.AgentItem == ba.By)));
+                        mechanicLogs[this].Add(new MechanicEvent(ba.Time, this, log.PlayerList.FirstOrDefault(x => x.AgentItem == ba.CreditedBy)));
                     }
 
                 }

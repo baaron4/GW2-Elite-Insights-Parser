@@ -362,7 +362,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (c is BuffApplyEvent)
                 {
                     shacklesStart = (int)c.Time;
-                    shacklesTarget = log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By);
+                    shacklesTarget = log.PlayerList.FirstOrDefault(x => x.AgentItem == c.CreditedBy);
                 }
                 else
                 {
@@ -384,7 +384,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (c is BuffApplyEvent)
                 {
                     shacklesDmgStart = (int)c.Time;
-                    shacklesDmgTarget = log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By);
+                    shacklesDmgTarget = log.PlayerList.FirstOrDefault(x => x.AgentItem == c.CreditedBy);
                 }
                 else
                 {

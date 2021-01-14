@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EIData
                 long time = 0;
                 foreach (BuffRemoveAllEvent brae in log.CombatData.GetBuffRemoveAllData(buffID))
                 {
-                    if (brae.Time >= start && brae.Time <= end && brae.By == actor.AgentItem)
+                    if (brae.Time >= start && brae.Time <= end && brae.CreditedBy == actor.AgentItem)
                     {
                         if (to != null && brae.To != to.AgentItem)
                         {

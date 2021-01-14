@@ -399,7 +399,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (c is BuffApplyEvent)
                 {
                     fixationStatueStart = (int)c.Time;
-                    statue = TrashMobs.FirstOrDefault(x => x.AgentItem == c.By);
+                    statue = TrashMobs.FirstOrDefault(x => x.AgentItem == c.CreditedBy);
                 }
                 else
                 {
