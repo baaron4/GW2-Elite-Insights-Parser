@@ -156,17 +156,17 @@ namespace GW2EIParser
                 string[] uploadresult = UploadOperation(externalTraces, fInfo);
                 foreach (string trace in externalTraces)
                 {
-                    operation.UpdateProgress(trace);
+                    operation.UpdateProgressWithCancellationCheck(trace);
                 }
                 if (Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports)
                 {
                     if (Properties.Settings.Default.SendSimpleMessageToWebhook)
                     {
-                        operation.UpdateProgress(new WebhookController(Properties.Settings.Default.WebhookURL, uploadresult[0]).SendMessage());
+                        operation.UpdateProgressWithCancellationCheck(new WebhookController(Properties.Settings.Default.WebhookURL, uploadresult[0]).SendMessage());
                     } 
                     else
                     {
-                        operation.UpdateProgress(new WebhookController(Properties.Settings.Default.WebhookURL, BuildEmbed(log, uploadresult[0])).SendMessage());
+                        operation.UpdateProgressWithCancellationCheck(new WebhookController(Properties.Settings.Default.WebhookURL, BuildEmbed(log, uploadresult[0])).SendMessage());
                     }
                 }
                 if (uploadresult[0].Contains("https"))
@@ -454,7 +454,7 @@ namespace GW2EIParser
                     operation.UpdateProgressWithCancellationCheck("XML created");
                 }
             }
-            operation.UpdateProgress($"Completed parsing for {result}ed {log.FightData.Logic.Extension}");
+            operation.UpdateProgressWithCancellationCheck($"Completed parsing for {result}ed {log.FightData.Logic.Extension}");
         }
 
     }
