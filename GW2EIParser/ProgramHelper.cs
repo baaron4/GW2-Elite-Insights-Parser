@@ -154,20 +154,20 @@ namespace GW2EIParser
                 operation.BasicMetaData = new OperationController.OperationBasicMetaData(log);
                 var externalTraces = new List<string>();
                 string[] uploadresult = UploadOperation(externalTraces, fInfo);
+                foreach (string trace in externalTraces)
+                {
+                    operation.UpdateProgress(trace);
+                }
                 if (Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports)
                 {
                     if (Properties.Settings.Default.SendSimpleMessageToWebhook)
                     {
-                        new WebhookController(Properties.Settings.Default.WebhookURL, uploadresult[0]).SendMessage();
+                        operation.UpdateProgress(new WebhookController(Properties.Settings.Default.WebhookURL, uploadresult[0]).SendMessage());
                     } 
                     else
                     {
-                        new WebhookController(Properties.Settings.Default.WebhookURL, BuildEmbed(log, uploadresult[0])).SendMessage();
+                        operation.UpdateProgress(new WebhookController(Properties.Settings.Default.WebhookURL, BuildEmbed(log, uploadresult[0])).SendMessage());
                     }
-                }
-                foreach (string trace in externalTraces)
-                {
-                    operation.UpdateProgress(trace);
                 }
                 if (uploadresult[0].Contains("https"))
                 {
