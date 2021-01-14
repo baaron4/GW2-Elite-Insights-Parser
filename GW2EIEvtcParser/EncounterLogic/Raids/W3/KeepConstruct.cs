@@ -371,6 +371,11 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
+        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            return combatData.GetSkills().Contains(34958) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+        }
+
         internal override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
         {
             // Bombs
