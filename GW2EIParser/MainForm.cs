@@ -153,6 +153,10 @@ namespace GW2EIParser
                     }
                 }
                 ProgramHelper.GenerateTraceFile(operation);
+                if (operation.State != OperationState.Complete)
+                {
+                    operation.Reset();
+                }
                 _RunNextOperation();
             }, TaskScheduler.FromCurrentSynchronizationContext());
             operation.SetContext(cancelTokenSource, task);
@@ -167,6 +171,7 @@ namespace GW2EIParser
             BtnClearAll.Enabled = false;
             BtnParse.Enabled = false;
             BtnCancelAll.Enabled = true;
+            BtnDiscordBatch.Enabled = false;
             if (Properties.Settings.Default.ParseMultipleLogs && _runningCount < ProgramHelper.GetMaxParallelRunning())
             {
                 _RunOperation(operation);
@@ -202,6 +207,7 @@ namespace GW2EIParser
                     BtnParse.Enabled = true;
                     BtnClearAll.Enabled = true;
                     BtnCancelAll.Enabled = false;
+                    BtnDiscordBatch.Enabled = true;
                     _settingsForm.ConditionalSettingDisable(_anyRunning);
                 }
             }
@@ -259,6 +265,7 @@ namespace GW2EIParser
             BtnClearAll.Enabled = true;
             BtnParse.Enabled = true;
             BtnCancelAll.Enabled = false;
+            BtnDiscordBatch.Enabled = true;
         }
 
         /// <summary>
@@ -597,6 +604,8 @@ namespace GW2EIParser
         /// <param name="e"></param>
         private void BtnDiscordBatchClick(object sender, EventArgs e)
         {
+            BtnDiscordBatch.Enabled = false;
+            BtnParse.Enabled = false;
             EmbedBuilder embedBuilder = ProgramHelper.GetEmbedBuilder();
             embedBuilder.WithCurrentTimestamp();
             var categories = new Dictionary<FightLogic.FightCategory, List<FormOperationController>>();
@@ -656,7 +665,13 @@ namespace GW2EIParser
                     MessageBox.Show("Set a discord webhook url in settings first");
                     return;
                 }
-                new WebhookController(Properties.Settings.Default.WebhookURL, embedBuilder.Build()).SendMessage();
+                MessageBox.Show(new WebhookController(Properties.Settings.Default.WebhookURL, embedBuilder.Build()).SendMessage());
+                BtnDiscordBatch.Enabled = !_anyRunning;
+                BtnParse.Enabled = !_anyRunning;
+            } 
+            else
+            {
+                MessageBox.Show("Nothing to send");
             }
         }
     }
