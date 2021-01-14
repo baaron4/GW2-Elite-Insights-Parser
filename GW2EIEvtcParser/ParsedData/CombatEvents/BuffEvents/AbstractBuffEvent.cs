@@ -8,10 +8,8 @@ namespace GW2EIEvtcParser.ParsedData
         public long BuffID => BuffSkill.ID;
         //private long _originalBuffID;
 
-        protected AgentItem InternalBy { get; set; }
-        public AgentItem CreditedBy => InternalBy?.GetFinalMaster();
-
-        public AgentItem By => InternalBy;
+        public AgentItem By { get; protected set; }
+        public AgentItem CreditedBy => By.GetFinalMaster();
 
         public AgentItem To { get; protected set; }
 

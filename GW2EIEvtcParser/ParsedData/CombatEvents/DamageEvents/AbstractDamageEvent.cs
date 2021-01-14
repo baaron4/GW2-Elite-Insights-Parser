@@ -3,6 +3,7 @@
     public abstract class AbstractDamageEvent : AbstractTimeCombatEvent
     {
         public AgentItem From { get; }
+        public AgentItem CreditedFrom => From.GetFinalMaster();
         public AgentItem To { get; }
 
         public SkillItem Skill { get; }

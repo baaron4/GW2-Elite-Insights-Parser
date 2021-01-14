@@ -6,22 +6,20 @@ namespace GW2EIEvtcParser.ParsedData
     {
         private readonly long _oldValue;
         private readonly long _durationChange;
+        private bool _sourceFinderRan = false;
 
         internal BuffExtensionEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
-            if (InternalBy == ParserHelper._unknownAgent)
-            {
-                InternalBy = null;
-            }
             _oldValue = evtcItem.OverstackValue - evtcItem.Value;
             _durationChange = evtcItem.Value;
         }
 
         internal override void TryFindSrc(ParsedEvtcLog log)
         {
-            if (InternalBy == null)
+            if (!_sourceFinderRan && By == ParserHelper._unknownAgent)
             {
-                InternalBy = log.Buffs.TryFindSrc(To, Time, _durationChange, log, BuffID);
+                _sourceFinderRan = true;
+                By = log.Buffs.TryFindSrc(To, Time, _durationChange, log, BuffID);
             }
         }
 
