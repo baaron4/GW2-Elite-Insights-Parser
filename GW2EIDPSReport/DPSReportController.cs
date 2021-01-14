@@ -13,9 +13,9 @@ namespace GW2EIDPSReport
 {
     public class DPSReportController
     {
-        public string UserToken { get; }
+        private string _userToken { get; }
 
-        internal bool UserTokenValid => UserToken != null && UserToken.Length > 0;
+        private bool _userTokenValid => _userToken != null && _userToken.Length > 0;
 
         public DPSReportController()
         {
@@ -24,7 +24,7 @@ namespace GW2EIDPSReport
 
         public DPSReportController(string userToken)
         {
-            UserToken = userToken;
+            _userToken = userToken;
         }
 
         private static readonly DefaultContractResolver DefaultJsonContractResolver = new DefaultContractResolver
@@ -46,9 +46,9 @@ namespace GW2EIDPSReport
         private string GetURL(string baseURL)
         {
             string url = baseURL;
-            if (UserTokenValid)
+            if (_userTokenValid)
             {
-                url += "&userToken=" + UserToken;
+                url += "&userToken=" + _userToken;
             }
             return url;
         }
@@ -65,7 +65,7 @@ namespace GW2EIDPSReport
 
         public DPSReportGetUploadsObject GetUploads(List<string> traces, int page = 1)
         {
-            if (!UserTokenValid)
+            if (!_userTokenValid)
             {
                 throw new InvalidDataException("Missing User Token for GetUploads end point");
             }

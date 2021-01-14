@@ -7,39 +7,39 @@ namespace GW2EIDiscord
 {
     public class WebhookController
     {
-        public string WebhookURL { get; }
-        public Embed Embed { get; }
-        public string Message { get; }
+        private string _webhookURL { get; }
+        private Embed _embed { get; }
+        private string _message { get; }
 
-        internal bool WebhookURLValid => WebhookURL != null && WebhookURL.Length > 0;
+        private bool _webhookURLValid => _webhookURL != null && _webhookURL.Length > 0;
 
         public WebhookController(string webhookURL, Embed embed)
         {
-            WebhookURL = webhookURL;
-            Embed = embed;
+            _webhookURL = webhookURL;
+            _embed = embed;
         }
         public WebhookController(string webhookURL, string message)
         {
-            WebhookURL = webhookURL;
-            Message = message;
+            _webhookURL = webhookURL;
+            _message = message;
         }
 
         public string SendMessage()
         {
-            if (WebhookURLValid)
+            if (_webhookURLValid)
             {
                 try
                 {
-                    var client = new DiscordWebhookClient(WebhookURL);
+                    var client = new DiscordWebhookClient(_webhookURL);
                     try
                     {
-                        if (Embed == null)
+                        if (_embed == null)
                         {
-                            _ = client.SendMessageAsync(text: Message).Result;
+                            _ = client.SendMessageAsync(text: _message).Result;
                         }
                         else
                         {
-                            _ = client.SendMessageAsync(embeds: new[] { Embed }).Result;
+                            _ = client.SendMessageAsync(embeds: new[] { _embed }).Result;
                         }
                     }
                     finally
