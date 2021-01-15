@@ -6,7 +6,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class FraenirOfJormag : StrikeMissionLogic
+    internal class FraenirOfJormag : Bjora
     {
         public FraenirOfJormag(int triggerID) : base(triggerID)
         {

@@ -4,7 +4,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Boneskinner : StrikeMissionLogic
+    internal class Boneskinner : Bjora
     {
         public Boneskinner(int triggerID) : base(triggerID)
         {
