@@ -38,7 +38,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     return true;
                }
             }),*/
-            new HitOnPlayerMechanic(31332, "Firestorm", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Flamewall","Firestorm (killed by Flamewall)", "Flamewall",0),
+            new SkillOnPlayerMechanic(31332, "Firestorm", new MechanicPlotlySetting("square","rgb(255,0,0)"), "Flamewall","Firestorm (killed by Flamewall)", "Flamewall",0, (de, log) => de.HasKilled),
             new HitOnPlayerMechanic(31544, "Flak Shot", new MechanicPlotlySetting("hexagram-open","rgb(255,140,0)"), "Flak","Flak Shot (Fire Patches)", "Flak Shot",0),
             new HitOnPlayerMechanic(31643, "Cannon Barrage", new MechanicPlotlySetting("circle","rgb(255,200,0)"), "Cannon","Cannon Barrage (stood in AoE)", "Cannon Shot",0),
             new HitOnPlayerMechanic(31761, "Flame Blast", new MechanicPlotlySetting("triangle-left-open","rgb(255,200,0)"), "Karde Flame","Flame Blast (Karde's Flamethrower)", "Flamethrower (Karde)",0),
