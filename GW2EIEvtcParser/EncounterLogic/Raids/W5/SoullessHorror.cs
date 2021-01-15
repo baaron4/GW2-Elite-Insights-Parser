@@ -7,7 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class SoullessHorror : RaidLogic
+    internal class SoullessHorror : HallOfChains
     {
         public SoullessHorror(int triggerID) : base(triggerID)
         {
@@ -33,6 +33,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "sh";
             GenericFallBackMethod = FallBackMethod.None;
             Icon = "https://wiki.guildwars2.com/images/d/d4/Mini_Desmina.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 0;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

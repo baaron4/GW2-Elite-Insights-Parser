@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -10,6 +11,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected StrikeMissionLogic(int triggerID) : base(triggerID)
         {
             Mode = ParseMode.Instanced10;
+            EncounterCategoryInformation.Category = FightCategory.Strike;
         }
 
         protected virtual void SetSuccessByDeath(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, bool all)

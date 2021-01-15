@@ -6,7 +6,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Xera : RaidLogic
+    internal class Xera : StrongholdOfTheFaithful
     {
 
         private long _xeraSecondPhaseStartTime = 0;
@@ -37,6 +37,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "xera";
             GenericFallBackMethod = FallBackMethod.CombatExit;
             Icon = "https://wiki.guildwars2.com/images/4/4b/Mini_Xera.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 3;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

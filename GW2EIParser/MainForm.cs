@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Discord;
+using GW2EIDiscord;
 using GW2EIEvtcParser;
 using GW2EIParser.Exceptions;
 using GW2EIParser.Setting;
@@ -25,10 +27,10 @@ namespace GW2EIParser
             InitializeComponent();
             //display version
             string version = Application.ProductVersion;
-            VersionLabel.Text = version;
+            LblVersion.Text = version;
             _logsFiles = new List<string>();
-            btnCancelAll.Enabled = false;
-            btnParse.Enabled = false;
+            BtnCancelAll.Enabled = false;
+            BtnParse.Enabled = false;
             UpdateWatchDirectory();
             _settingsForm = new SettingsForm();
             _settingsForm.SettingsClosedEvent += EnableSettingsWatcher;
@@ -56,8 +58,8 @@ namespace GW2EIParser
 
                 _logsFiles.Add(file);
 
-                var operation = new FormOperationController(file, "Ready to parse", dgvFiles);
-                operatorBindingSource.Add(operation);
+                var operation = new FormOperationController(file, "Ready to parse", DgvFiles);
+                OperatorBindingSource.Add(operation);
 
                 if (Properties.Settings.Default.AutoParse)
                 {
@@ -69,12 +71,12 @@ namespace GW2EIParser
                 SortDgvFiles();
             }
 
-            btnParse.Enabled = !_anyRunning && filesArray.Any();
+            BtnParse.Enabled = !_anyRunning && filesArray.Any();
         }
 
         private void EnableSettingsWatcher(object sender, EventArgs e)
         {
-            btnSettings.Enabled = true;
+            BtnSettings.Enabled = true;
         }
 
         private void _RunOperation(FormOperationController operation)
@@ -124,7 +126,7 @@ namespace GW2EIParser
                 }
                 if (operation.State == OperationState.ClearOnCancel)
                 {
-                    operatorBindingSource.Remove(operation);
+                    OperatorBindingSource.Remove(operation);
                 }
                 else
                 {
@@ -148,6 +150,10 @@ namespace GW2EIParser
                     }
                 }
                 ProgramHelper.GenerateTraceFile(operation);
+                if (operation.State != OperationState.Complete)
+                {
+                    operation.Reset();
+                }
                 _RunNextOperation();
             }, TaskScheduler.FromCurrentSynchronizationContext());
             operation.SetContext(cancelTokenSource, task);
@@ -159,9 +165,10 @@ namespace GW2EIParser
         /// <param name="operation"></param>
         private void QueueOrRunOperation(FormOperationController operation)
         {
-            btnClearAll.Enabled = false;
-            btnParse.Enabled = false;
-            btnCancelAll.Enabled = true;
+            BtnClearAll.Enabled = false;
+            BtnParse.Enabled = false;
+            BtnCancelAll.Enabled = true;
+            BtnDiscordBatch.Enabled = false;
             if (Properties.Settings.Default.ParseMultipleLogs && _runningCount < ProgramHelper.GetMaxParallelRunning())
             {
                 _RunOperation(operation);
@@ -194,9 +201,10 @@ namespace GW2EIParser
             {
                 if (!_anyRunning)
                 {
-                    btnParse.Enabled = true;
-                    btnClearAll.Enabled = true;
-                    btnCancelAll.Enabled = false;
+                    BtnParse.Enabled = true;
+                    BtnClearAll.Enabled = true;
+                    BtnCancelAll.Enabled = false;
+                    BtnDiscordBatch.Enabled = true;
                     _settingsForm.ConditionalSettingDisable(_anyRunning);
                 }
             }
@@ -214,10 +222,10 @@ namespace GW2EIParser
 
             if (_logsFiles.Count > 0)
             {
-                btnParse.Enabled = false;
-                btnCancelAll.Enabled = true;
+                BtnParse.Enabled = false;
+                BtnCancelAll.Enabled = true;
 
-                foreach (FormOperationController operation in operatorBindingSource)
+                foreach (FormOperationController operation in OperatorBindingSource)
                 {
                     if (!operation.IsBusy())
                     {
@@ -239,7 +247,7 @@ namespace GW2EIParser
             _logQueue.Clear();
 
             //Cancel all workers
-            foreach (FormOperationController operation in operatorBindingSource)
+            foreach (FormOperationController operation in OperatorBindingSource)
             {
                 if (operation.IsBusy())
                 {
@@ -251,9 +259,10 @@ namespace GW2EIParser
                 }
             }
 
-            btnClearAll.Enabled = true;
-            btnParse.Enabled = true;
-            btnCancelAll.Enabled = false;
+            BtnClearAll.Enabled = true;
+            BtnParse.Enabled = true;
+            BtnCancelAll.Enabled = false;
+            BtnDiscordBatch.Enabled = true;
         }
 
         /// <summary>
@@ -264,7 +273,7 @@ namespace GW2EIParser
         private void BtnSettingsClick(object sender, EventArgs e)
         {
             _settingsForm.Show();
-            btnSettings.Enabled = false;
+            BtnSettings.Enabled = false;
         }
 
         /// <summary>
@@ -274,35 +283,35 @@ namespace GW2EIParser
         /// <param name="e"></param>
         private void BtnClearAllClick(object sender, EventArgs e)
         {
-            btnCancelAll.Enabled = false;
-            btnParse.Enabled = false;
+            BtnCancelAll.Enabled = false;
+            BtnParse.Enabled = false;
 
             //Clear the queue so that cancelled workers don't invoke queued workers
             _logQueue.Clear();
             _logsFiles.Clear();
 
-            for (int i = operatorBindingSource.Count - 1; i >= 0; i--)
+            for (int i = OperatorBindingSource.Count - 1; i >= 0; i--)
             {
-                var operation = operatorBindingSource[i] as FormOperationController;
+                var operation = OperatorBindingSource[i] as FormOperationController;
                 if (operation.IsBusy())
                 {
                     operation.ToCancelAndClearState();
                 }
                 else
                 {
-                    operatorBindingSource.RemoveAt(i);
+                    OperatorBindingSource.RemoveAt(i);
                 }
             }
         }
 
         private void BtnClearFailedClick(object sender, EventArgs e)
         {
-            for (int i = operatorBindingSource.Count - 1; i >= 0; i--)
+            for (int i = OperatorBindingSource.Count - 1; i >= 0; i--)
             {
-                var operation = operatorBindingSource[i] as FormOperationController;
+                var operation = OperatorBindingSource[i] as FormOperationController;
                 if (!operation.IsBusy() && operation.State == OperationState.UnComplete)
                 {
-                    operatorBindingSource.RemoveAt(i);
+                    OperatorBindingSource.RemoveAt(i);
                 }
             }
         }
@@ -335,7 +344,7 @@ namespace GW2EIParser
                 _fileNameSorting = 1;
             }
             var auxList = new List<FormOperationController>();
-            foreach (FormOperationController val in operatorBindingSource)
+            foreach (FormOperationController val in OperatorBindingSource)
             {
                 auxList.Add(val);
             }
@@ -345,10 +354,10 @@ namespace GW2EIParser
                 string left = new FileInfo(form1.InputFile).Name;
                 return _fileNameSorting * string.Compare(left, right);
             });
-            operatorBindingSource.Clear();
+            OperatorBindingSource.Clear();
             foreach (FormOperationController val in auxList)
             {
-                operatorBindingSource.Add(val);
+                OperatorBindingSource.Add(val);
             }
         }
 
@@ -361,14 +370,14 @@ namespace GW2EIParser
                     case 0:
                         _fileNameSorting *= -1;
                         SortDgvFiles();
-                        locationDataGridViewTextBoxColumn.HeaderText = "Input File " + (_fileNameSorting < 0 ? "↓" : "↑");
+                        LocationDataGridViewTextBoxColumn.HeaderText = "Input File " + (_fileNameSorting < 0 ? "↓" : "↑");
                         break;
                     default:
                         break;
                 }
                 return;
             }
-            var operation = (FormOperationController)operatorBindingSource[e.RowIndex];
+            var operation = (FormOperationController)OperatorBindingSource[e.RowIndex];
             switch (e.ColumnIndex)
             {
                 case 2:
@@ -384,7 +393,7 @@ namespace GW2EIParser
                             case OperationState.Ready:
                             case OperationState.UnComplete:
                                 QueueOrRunOperation(operation);
-                                btnCancelAll.Enabled = true;
+                                BtnCancelAll.Enabled = true;
                                 break;
 
                             case OperationState.Parsing:
@@ -445,7 +454,7 @@ namespace GW2EIParser
             {
                 return;
             }
-            var operation = (FormOperationController)operatorBindingSource[e.RowIndex];
+            var operation = (FormOperationController)OperatorBindingSource[e.RowIndex];
             switch (e.ColumnIndex)
             {
                 case 0:
@@ -502,16 +511,16 @@ namespace GW2EIParser
         {
             if (Properties.Settings.Default.AutoAdd && Directory.Exists(Properties.Settings.Default.AutoAddPath))
             {
-                logFileWatcher.Path = Properties.Settings.Default.AutoAddPath;
-                labWatchingDir.Text = "Watching for log files in " + Properties.Settings.Default.AutoAddPath;
-                logFileWatcher.EnableRaisingEvents = true;
-                labWatchingDir.Visible = true;
+                LogFileWatcher.Path = Properties.Settings.Default.AutoAddPath;
+                LblWatchingDir.Text = "Watching for log files in " + Properties.Settings.Default.AutoAddPath;
+                LogFileWatcher.EnableRaisingEvents = true;
+                LblWatchingDir.Visible = true;
             }
             else
             {
                 Properties.Settings.Default.AutoAdd = false;
-                labWatchingDir.Visible = false;
-                logFileWatcher.EnableRaisingEvents = false;
+                LblWatchingDir.Visible = false;
+                LogFileWatcher.EnableRaisingEvents = false;
             }
         }
 
@@ -529,9 +538,9 @@ namespace GW2EIParser
             await Task.Delay(3000).ConfigureAwait(false);
             if (File.Exists(path))
             {
-                if (dgvFiles.InvokeRequired)
+                if (DgvFiles.InvokeRequired)
                 {
-                    dgvFiles.Invoke(new Action(() => AddLogFiles(new string[] { path })));
+                    DgvFiles.Invoke(new Action(() => AddLogFiles(new string[] { path })));
                 }
                 else
                 {
@@ -554,6 +563,121 @@ namespace GW2EIParser
             {
                 AddDelayed(e.FullPath);
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnDiscordBatchClick(object sender, EventArgs e)
+        {
+            if (Properties.Settings.Default.WebhookURL == null)
+            {
+                MessageBox.Show("Set a discord webhook url in settings first");
+                return;
+            }
+            var fullDpsReportLogs = new List<FormOperationController>();         
+            foreach (FormOperationController operation in OperatorBindingSource)
+            {
+                if (operation.DPSReportLink != null && operation.DPSReportLink.Contains("https"))
+                {
+                    fullDpsReportLogs.Add(operation);
+                }
+            }
+            if (!fullDpsReportLogs.Any())
+            {
+                MessageBox.Show("Nothing to send");
+                return;
+            }
+            BtnDiscordBatch.Enabled = false;
+            BtnParse.Enabled = false;
+            // first sort by time
+            fullDpsReportLogs.Sort((x, y) =>
+            {
+                return DateTime.Parse(x.BasicMetaData.LogStart).CompareTo(DateTime.Parse(y.BasicMetaData.LogStart));
+            });
+            var fullDpsReportsLogsByDate = fullDpsReportLogs.GroupBy(x => DateTime.Parse(x.BasicMetaData.LogStart).Date).ToDictionary(x => x.Key, x => x.ToList());
+            // split the logs so that a single embed does not reach the discord embed limit and also keep a reasonable size by embed
+            string message = "";
+            bool start = true;
+            foreach (KeyValuePair<DateTime, List<FormOperationController>> pair in fullDpsReportsLogsByDate)
+            {
+                if (!start)
+                {
+                    message += "\r\n";
+                }
+                start = false;
+                var splitDpsReportLogs = new List<List<FormOperationController>>() { new List<FormOperationController>() };
+                message += pair.Key.ToString("yyyy-MM-dd") + " - ";
+                List<FormOperationController> curListToFill = splitDpsReportLogs.First();
+                foreach (FormOperationController controller in pair.Value)
+                {
+                    if (curListToFill.Count < 40)
+                    {
+                        curListToFill.Add(controller);
+                    }
+                    else
+                    {
+                        curListToFill = new List<FormOperationController>()
+                    {
+                        controller
+                    };
+                        splitDpsReportLogs.Add(curListToFill);
+                    }
+                }
+                foreach (List<FormOperationController> dpsReportLogs in splitDpsReportLogs)
+                {
+                    EmbedBuilder embedBuilder = ProgramHelper.GetEmbedBuilder();
+                    embedBuilder.WithCurrentTimestamp();
+                    embedBuilder.WithFooter(pair.Key.ToString("yyyy-MM-dd"));
+                    dpsReportLogs.Sort((x, y) =>
+                    {
+                        var categoryCompare = x.BasicMetaData.FightCategory.CompareTo(y.BasicMetaData.FightCategory);
+                        if (categoryCompare == 0)
+                        {
+                            return DateTime.Parse(x.BasicMetaData.LogStart).CompareTo(DateTime.Parse(y.BasicMetaData.LogStart));
+                        }
+                        return categoryCompare;
+                    });
+                    string currentSubCategory = "";
+                    var embedFieldBuilder = new EmbedFieldBuilder();
+                    var fieldValue = "I can not be empty";
+                    foreach (FormOperationController controller in dpsReportLogs)
+                    {
+                        string subCategory = controller.BasicMetaData.FightCategory.GetSubCategoryName();
+                        string toAdd = "[" + controller.BasicMetaData.FightName + "](" + controller.DPSReportLink + ") " + (controller.BasicMetaData.FightSuccess ? " :white_check_mark: " : " :x: ") + ": " + controller.BasicMetaData.FightDuration;
+                        if (subCategory != currentSubCategory)
+                        {
+                            embedFieldBuilder.WithValue(fieldValue);
+                            embedFieldBuilder = new EmbedFieldBuilder();
+                            fieldValue = "";
+                            embedBuilder.AddField(embedFieldBuilder);
+                            embedFieldBuilder.WithName(subCategory);
+                            currentSubCategory = subCategory;
+                        }
+                        else if (fieldValue.Length + toAdd.Length > 1024)
+                        {
+                            embedFieldBuilder.WithValue(fieldValue);
+                            embedFieldBuilder = new EmbedFieldBuilder();
+                            fieldValue = "";
+                            embedBuilder.AddField(embedFieldBuilder);
+                        }
+                        else
+                        {
+                            fieldValue += "\r\n";
+                        }
+                        fieldValue += toAdd;
+                    }
+                    embedFieldBuilder.WithValue(fieldValue);
+                    message += new WebhookController(Properties.Settings.Default.WebhookURL, embedBuilder.Build()).SendMessage() + " - ";
+                }
+            }
+           
+            MessageBox.Show(message);
+            //    
+            BtnDiscordBatch.Enabled = !_anyRunning;
+            BtnParse.Enabled = !_anyRunning;
         }
     }
 }

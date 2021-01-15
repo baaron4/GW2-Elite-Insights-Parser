@@ -7,7 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class WhisperOfJormag : StrikeMissionLogic
+    internal class WhisperOfJormag : Bjora
     {
         public WhisperOfJormag(int triggerID) : base(triggerID)
         {
@@ -28,6 +28,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             );
             Extension = "woj";
             Icon = "https://i.imgur.com/8GLwgfL.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 3;
         }
 
         /*protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

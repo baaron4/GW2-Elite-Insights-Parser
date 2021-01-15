@@ -3,6 +3,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -54,6 +55,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     Icon = "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
                     break;
             }
+            EncounterCategoryInformation.Category = FightCategory.Golem;
+            EncounterCategoryInformation.SubCategory = SubFightCategory.Golem;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

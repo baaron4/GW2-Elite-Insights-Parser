@@ -3,7 +3,7 @@ using GW2EIEvtcParser.EIData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Escort : RaidLogic
+    internal class Escort : StrongholdOfTheFaithful
     {
         public Escort(int triggerID) : base(triggerID)
         {
@@ -14,6 +14,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             );
             Extension = "escort";
             Icon = "https://wiki.guildwars2.com/images/b/b5/Mini_McLeod_the_Silent.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 0;
         }
 
         /*protected override CombatReplayMap GetCombatMapInternal()

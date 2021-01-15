@@ -6,7 +6,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class ConjuredAmalgamate : RaidLogic
+    internal class ConjuredAmalgamate : MythwrightGambit
     {
         public ConjuredAmalgamate(int triggerID) : base(triggerID)
         {
@@ -30,6 +30,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "ca";
             GenericFallBackMethod = FallBackMethod.None;
             Icon = "https://i.imgur.com/eLyIWd2.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 0;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

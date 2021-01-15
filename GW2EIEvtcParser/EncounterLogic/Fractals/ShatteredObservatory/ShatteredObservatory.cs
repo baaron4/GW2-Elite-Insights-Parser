@@ -2,6 +2,7 @@
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -9,7 +10,7 @@ namespace GW2EIEvtcParser.EncounterLogic
     {
         public ShatteredObservatory(int triggerID) : base(triggerID)
         {
-
+            EncounterCategoryInformation.SubCategory = SubFightCategory.ShatteredObservatory;
         }
 
         protected static HashSet<AgentItem> GetParticipatingPlayerAgents(NPC target, CombatData combatData, HashSet<AgentItem> playerAgents)

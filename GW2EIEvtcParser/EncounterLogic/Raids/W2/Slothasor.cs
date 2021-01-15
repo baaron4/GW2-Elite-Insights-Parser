@@ -7,7 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Slothasor : RaidLogic
+    internal class Slothasor : SalvationPass
     {
         public Slothasor(int triggerID) : base(triggerID)
         {
@@ -30,6 +30,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "sloth";
             Icon = "https://wiki.guildwars2.com/images/e/ed/Mini_Slubling.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 0;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

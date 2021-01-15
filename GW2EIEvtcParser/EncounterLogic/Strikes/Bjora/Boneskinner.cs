@@ -4,7 +4,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Boneskinner : StrikeMissionLogic
+    internal class Boneskinner : Bjora
     {
         public Boneskinner(int triggerID) : base(triggerID)
         {
@@ -21,6 +21,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             );
             Extension = "boneskin";
             Icon = "https://i.imgur.com/meYwQmA.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 2;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

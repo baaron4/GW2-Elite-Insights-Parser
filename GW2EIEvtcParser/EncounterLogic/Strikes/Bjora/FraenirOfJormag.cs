@@ -6,7 +6,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class FraenirOfJormag : StrikeMissionLogic
+    internal class FraenirOfJormag : Bjora
     {
         public FraenirOfJormag(int triggerID) : base(triggerID)
         {
@@ -21,6 +21,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             );
             Extension = "fraenir";
             Icon = "https://wiki.guildwars2.com/images/thumb/6/67/Fraenir_of_Jormag.jpg/208px-Fraenir_of_Jormag.jpg";
+            EncounterCategoryInformation.InSubCategoryOrder = 0;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

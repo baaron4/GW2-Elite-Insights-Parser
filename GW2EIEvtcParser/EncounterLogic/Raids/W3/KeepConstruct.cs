@@ -7,7 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class KeepConstruct : RaidLogic
+    internal class KeepConstruct : StrongholdOfTheFaithful
     {
         public KeepConstruct(int triggerID) : base(triggerID)
         {
@@ -55,6 +55,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "kc";
             Icon = "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 1;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

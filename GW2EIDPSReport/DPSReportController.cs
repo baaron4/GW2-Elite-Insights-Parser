@@ -11,8 +11,22 @@ using Newtonsoft.Json.Serialization;
 
 namespace GW2EIDPSReport
 {
-    public static class DPSReportAPI
+    public class DPSReportController
     {
+        private string _userToken { get; }
+
+        private bool _userTokenValid => _userToken != null && _userToken.Length > 0;
+
+        public DPSReportController()
+        {
+
+        }
+
+        public DPSReportController(string userToken)
+        {
+            _userToken = userToken;
+        }
+
         private static readonly DefaultContractResolver DefaultJsonContractResolver = new DefaultContractResolver
         {
             NamingStrategy = new CamelCaseNamingStrategy()
@@ -29,35 +43,35 @@ namespace GW2EIDPSReport
         private static string BaseGetUploadMetadataURL { get; } = "https://dps.report/getUploadMetadata?";
         private static string BaseGetJsonURL { get; } = "https://dps.report/getJson?";
 
-        private static string GetURL(string baseURL, DPSReportSettings settings)
+        private string GetURL(string baseURL)
         {
             string url = baseURL;
-            if (settings.UserToken != null && settings.UserToken.Length > 0)
+            if (_userTokenValid)
             {
-                url += "&userToken=" + settings.UserToken;
+                url += "&userToken=" + _userToken;
             }
             return url;
         }
 
-        public static DPSReportUploadObject UploadUsingEI(FileInfo fi, DPSReportSettings settings, List<string> traces)
+        public DPSReportUploadObject UploadUsingEI(FileInfo fi, List<string> traces)
         {
-            return UploadToDPSR(fi, GetURL(BaseUploadContentURL, settings) + "&generator=ei", traces);
+            return UploadToDPSR(fi, GetURL(BaseUploadContentURL) + "&generator=ei", traces);
         }
 
-        public static DPSReportUploadObject UploadUsingRH(FileInfo fi, DPSReportSettings settings, List<string> traces)
+        public DPSReportUploadObject UploadUsingRH(FileInfo fi, List<string> traces)
         {
-            return UploadToDPSR(fi, GetURL(BaseUploadContentURL, settings) + "&generator=rh", traces);
+            return UploadToDPSR(fi, GetURL(BaseUploadContentURL) + "&generator=rh", traces);
         }
 
-        public static DPSReportGetUploadsObject GetUploads(DPSReportSettings settings, List<string> traces, int page = 1)
+        public DPSReportGetUploadsObject GetUploads(List<string> traces, int page = 1)
         {
-            if (settings.UserToken == null || settings.UserToken.Length == 0)
+            if (!_userTokenValid)
             {
                 throw new InvalidDataException("Missing User Token for GetUploads end point");
             }
-            return GetDPSReportResponse<DPSReportGetUploadsObject>("GetUploads", GetURL(BaseGetUploadsURL + page, settings), traces);
+            return GetDPSReportResponse<DPSReportGetUploadsObject>("GetUploads", GetURL(BaseGetUploadsURL + page), traces);
         }
-        public static string GenerateUserToken(List<string> traces)
+        public string GenerateUserToken(List<string> traces)
         {
             DPSReportUserTokenResponse responseItem = GetDPSReportResponse<DPSReportUserTokenResponse>("GenerateUserToken", BaseGetUserTokenURL, traces);
             if (responseItem != null)
@@ -66,7 +80,7 @@ namespace GW2EIDPSReport
             }
             return "";
         }
-        public static DPSReportUploadObject GetUploadMetaDataWithID(string id, List<string> traces)
+        public DPSReportUploadObject GetUploadMetaDataWithID(string id, List<string> traces)
         {
             if (id == null || id.Length == 0)
             {
@@ -74,7 +88,7 @@ namespace GW2EIDPSReport
             }
             return GetDPSReportResponse<DPSReportUploadObject>("GetUploadMetaDataWithID", BaseGetUploadMetadataURL + "id=" + id, traces);
         }
-        public static DPSReportUploadObject GetUploadMetaDataWithPermalink(string permalink, List<string> traces)
+        public DPSReportUploadObject GetUploadMetaDataWithPermalink(string permalink, List<string> traces)
         {
             if (permalink == null || permalink.Length == 0)
             {
@@ -83,7 +97,7 @@ namespace GW2EIDPSReport
             return GetDPSReportResponse<DPSReportUploadObject>("GetUploadMetaDataWithPermalink", BaseGetUploadMetadataURL + "permalink=" + permalink, traces);
         }
 
-        public static T GetJsonWithID<T>(string id, List<string> traces)
+        public T GetJsonWithID<T>(string id, List<string> traces)
         {
             if (id == null || id.Length == 0)
             {
@@ -91,7 +105,7 @@ namespace GW2EIDPSReport
             }
             return GetDPSReportResponse<T>("GetJsonWithID", BaseGetJsonURL + "id=" + id, traces);
         }
-        public static T GetJsonWithPermalink<T>(string permalink, List<string> traces)
+        public T GetJsonWithPermalink<T>(string permalink, List<string> traces)
         {
             if (permalink == null || permalink.Length == 0)
             {
@@ -141,7 +155,7 @@ namespace GW2EIDPSReport
             //}
             return "";
         }*/
-        private static T GetDPSReportResponse<T>(string requestName, string URI, List<string> traces)
+        private T GetDPSReportResponse<T>(string requestName, string URI, List<string> traces)
         {
             const int tentatives = 5;
             for (int i = 0; i < tentatives; i++)
@@ -189,7 +203,7 @@ namespace GW2EIDPSReport
             }
             return default;
         }
-        private static DPSReportUploadObject UploadToDPSR(FileInfo fi, string URI, List<string> traces)
+        private DPSReportUploadObject UploadToDPSR(FileInfo fi, string URI, List<string> traces)
         {
             string fileName = fi.Name;
             byte[] fileContents = File.ReadAllBytes(fi.FullName);

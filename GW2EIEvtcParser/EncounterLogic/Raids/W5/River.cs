@@ -7,7 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class River : RaidLogic
+    internal class River : HallOfChains
     {
         public River(int triggerID) : base(triggerID)
         {
@@ -20,6 +20,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             GenericFallBackMethod = FallBackMethod.None;
             Extension = "river";
             Icon = "https://wiki.guildwars2.com/images/thumb/7/7b/Gold_River_of_Souls_Trophy.jpg/220px-Gold_River_of_Souls_Trophy.jpg";
+            EncounterCategoryInformation.InSubCategoryOrder = 1;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

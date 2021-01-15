@@ -7,7 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Matthias : RaidLogic
+    internal class Matthias : SalvationPass
     {
         public Matthias(int triggerID) : base(triggerID)
         {
@@ -42,6 +42,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "matt";
             Icon = "https://wiki.guildwars2.com/images/5/5d/Mini_Matthias_Abomination.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 2;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

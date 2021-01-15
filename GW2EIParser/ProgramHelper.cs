@@ -47,9 +47,16 @@ namespace GW2EIParser
             }
         }
 
-        private static Embed BuildEmbed(ParsedEvtcLog log, string dpsReportPermalink)
+        internal static EmbedBuilder GetEmbedBuilder()
         {
             var builder = new EmbedBuilder();
+            builder.WithAuthor("Elite Insights " + ParserVersion.ToString(), "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EIParser/Content/LI.png?raw=true", "https://github.com/baaron4/GW2-Elite-Insights-Parser");
+            return builder;
+        }
+
+        private static Embed BuildEmbed(ParsedEvtcLog log, string dpsReportPermalink)
+        {
+            EmbedBuilder builder = GetEmbedBuilder();
             builder.WithThumbnailUrl(log.FightData.Logic.Icon);
             //
             builder.AddField("Encounter Duration", log.FightData.DurationString);
@@ -75,7 +82,6 @@ namespace GW2EIParser
             //
             builder.WithTitle(log.FightData.GetFightName(log));
             //builder.WithTimestamp(DateTime.Now);
-            builder.WithAuthor("Elite Insights " + ParserVersion.ToString(), "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EIParser/Content/LI.png?raw=true", "https://github.com/baaron4/GW2-Elite-Insights-Parser");
             builder.WithFooter(log.LogData.LogStartStd + " / " + log.LogData.LogEndStd);
             builder.WithColor(log.FightData.Success ? Color.Green : Color.Red);
             if (dpsReportPermalink.Length > 0)
@@ -92,20 +98,20 @@ namespace GW2EIParser
 
         private static string[] UploadOperation(List<string> traces, FileInfo fInfo)
         {
-            var settings = new DPSReportSettings(Properties.Settings.Default.DPSReportUserToken);
+            var controller = new DPSReportController(Properties.Settings.Default.DPSReportUserToken);
             //Upload Process
             string[] uploadresult = new string[3] { "", "", "" };
             if (Properties.Settings.Default.UploadToDPSReports)
             {
                 traces.Add("Uploading to DPSReports using EI");
-                DPSReportUploadObject response = DPSReportAPI.UploadUsingEI(fInfo, settings, traces);
+                DPSReportUploadObject response = controller.UploadUsingEI(fInfo, traces);
                 uploadresult[0] = response != null ? response.Permalink : "Upload process failed";
                 traces.Add("DPSReports using EI: " + uploadresult[0]);
             }
             if (Properties.Settings.Default.UploadToDPSReportsRH)
             {
                 traces.Add("Uploading to DPSReports using RH");
-                DPSReportUploadObject response = DPSReportAPI.UploadUsingRH(fInfo, settings, traces);
+                DPSReportUploadObject response = controller.UploadUsingRH(fInfo, traces);
                 uploadresult[1] = response != null ? response.Permalink : "Upload process failed";
                 traces.Add("DPSReports using RH: " + uploadresult[1]);
             }
@@ -145,16 +151,23 @@ namespace GW2EIParser
                 {
                     failureReason.Throw();
                 }
+                operation.BasicMetaData = new OperationController.OperationBasicMetaData(log);
                 var externalTraces = new List<string>();
                 string[] uploadresult = UploadOperation(externalTraces, fInfo);
-                if (Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports)
-                {
-                    var webhookSettings = new WebhookSettings(Properties.Settings.Default.WebhookURL, !Properties.Settings.Default.SendSimpleMessageToWebhook ? BuildEmbed(log, uploadresult[0]) : null);
-                    WebhookController.SendMessage(externalTraces, uploadresult[0], webhookSettings);
-                }
                 foreach (string trace in externalTraces)
                 {
-                    operation.UpdateProgress(trace);
+                    operation.UpdateProgressWithCancellationCheck(trace);
+                }
+                if (Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports)
+                {
+                    if (Properties.Settings.Default.SendSimpleMessageToWebhook)
+                    {
+                        operation.UpdateProgressWithCancellationCheck(new WebhookController(Properties.Settings.Default.WebhookURL, uploadresult[0]).SendMessage());
+                    } 
+                    else
+                    {
+                        operation.UpdateProgressWithCancellationCheck(new WebhookController(Properties.Settings.Default.WebhookURL, BuildEmbed(log, uploadresult[0])).SendMessage());
+                    }
                 }
                 if (uploadresult[0].Contains("https"))
                 {
@@ -441,7 +454,7 @@ namespace GW2EIParser
                     operation.UpdateProgressWithCancellationCheck("XML created");
                 }
             }
-            operation.UpdateProgress($"Completed parsing for {result}ed {log.FightData.Logic.Extension}");
+            operation.UpdateProgressWithCancellationCheck($"Completed parsing for {result}ed {log.FightData.Logic.Extension}");
         }
 
     }

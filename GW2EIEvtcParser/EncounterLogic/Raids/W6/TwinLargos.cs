@@ -7,7 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class TwinLargos : RaidLogic
+    internal class TwinLargos : MythwrightGambit
     {
         public TwinLargos(int triggerID) : base(triggerID)
         {
@@ -31,6 +31,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "twinlargos";
             Icon = "https://i.imgur.com/6O5MT7v.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 1;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

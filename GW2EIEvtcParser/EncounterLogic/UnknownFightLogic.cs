@@ -2,6 +2,7 @@
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -11,6 +12,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             Extension = "boss";
             Icon = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
+            EncounterCategoryInformation.Category = FightCategory.UnknownEncounter;
+            EncounterCategoryInformation.SubCategory = SubFightCategory.UnknownEncounter;
         }
 
         protected override HashSet<int> GetUniqueTargetIDs()

@@ -3,6 +3,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -17,6 +18,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             _detailed = detailed;
             Extension = _detailed ? "detailed_wvw" : "wvw";
             _defaultName = _detailed ? "Detailed WvW" : "World vs World";
+            EncounterCategoryInformation.Category = FightCategory.WvW;
         }
 
         protected override HashSet<int> GetUniqueTargetIDs()
@@ -84,16 +86,22 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (mapID.MapID)
             {
                 case 38:
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.EternalBattlegrounds;
                     return _defaultName + " - Eternal Battlegrounds";
                 case 95:
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.GreenAlpineBorderlands;
                     return _defaultName + " - Green Alpine Borderlands";
                 case 96:
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.BlueAlpineBorderlands;
                     return _defaultName + " - Blue Alpine Borderlands";
                 case 1099:
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.RedDesertBorderlands;
                     return _defaultName + " - Red Desert Borderlands";
                 case 899:
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.ObsidianSanctum;
                     return _defaultName + " - Obsidian Sanctum";
                 case 968:
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.EdgeOfTheMists;
                     return _defaultName + " - Edge of the Mists";
             }
             return _defaultName;

@@ -7,7 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class SuperKodanBrothers : StrikeMissionLogic
+    internal class SuperKodanBrothers : Bjora
     {
         public SuperKodanBrothers(int triggerID) : base(triggerID)
         {
@@ -19,6 +19,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             );
             Extension = "supkodbros";
             Icon = "https://i.imgur.com/lNXXbnC.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 1;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

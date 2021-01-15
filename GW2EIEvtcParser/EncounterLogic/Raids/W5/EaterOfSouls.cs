@@ -5,7 +5,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class EaterOfSouls : RaidLogic
+    internal class EaterOfSouls : HallOfChains
     {
         // TODO - add CR icons/indicators (vomit, greens, etc) and some mechanics
         public EaterOfSouls(int triggerID) : base(triggerID)
@@ -18,6 +18,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             );
             Extension = "souleater";
             Icon = "https://wiki.guildwars2.com/images/thumb/2/24/Eater_of_Souls_%28Hall_of_Chains%29.jpg/194px-Eater_of_Souls_%28Hall_of_Chains%29.jpg";
+            EncounterCategoryInformation.InSubCategoryOrder = 2;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

@@ -2,12 +2,35 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser;
+using GW2EIEvtcParser.EncounterLogic;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIParser
 {
 
     internal abstract class OperationController : ParserController
     {
+
+        public class OperationBasicMetaData
+        {
+            public OperationBasicMetaData(ParsedEvtcLog log)
+            {
+                FightDuration = log.FightData.DurationString;
+                FightName = log.FightData.GetFightName(log);
+                FightSuccess = log.FightData.Success;
+                FightCategory = log.FightData.Logic.EncounterCategoryInformation;
+                Icon = log.FightData.Logic.Icon;
+                LogStart = log.LogData.LogStartStd;
+            }
+
+            public string FightDuration { get; }
+            public string FightName { get; }
+            public bool FightSuccess { get; set; }
+            public EncounterCategory FightCategory { get; }
+            public string Icon { get; }
+            public string LogStart { get;  }
+        }
+
         /// <summary>
         /// Status of the parse operation
         /// </summary>
@@ -32,6 +55,9 @@ namespace GW2EIParser
         /// Link to dps.report
         /// </summary>
         public string DPSReportLink { get; set; }
+
+        public OperationBasicMetaData BasicMetaData { get; set; }
+
         /// <summary>
         /// Time elapsed parsing
         /// </summary>
@@ -48,6 +74,7 @@ namespace GW2EIParser
         public override void Reset()
         {
             base.Reset();
+            BasicMetaData = null;
             DPSReportLink = null;
             OutLocation = null;
             Elapsed = "";

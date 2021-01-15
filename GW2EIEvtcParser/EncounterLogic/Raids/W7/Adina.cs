@@ -7,7 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Adina : RaidLogic
+    internal class Adina : TheKeyOfAhdashim
     {
         public Adina(int triggerID) : base(triggerID)
         {
@@ -24,6 +24,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "adina";
             Icon = "https://wiki.guildwars2.com/images/a/a0/Mini_Earth_Djinn.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 0;
         }
 
         internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)

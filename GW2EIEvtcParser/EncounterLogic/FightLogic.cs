@@ -27,6 +27,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         public bool Targetless { get; protected set; } = false;
         protected int GenericTriggerID { get; }
 
+        public EncounterCategory EncounterCategoryInformation { get; protected set; }
+
+
         protected FightLogic(int triggerID)
         {
             GenericTriggerID = triggerID;
@@ -39,6 +42,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerStatusMechanic(SkillItem.RespawnId, "Respawn", new MechanicPlotlySetting("cross","rgb(120,120,255)"), "Resp",0)
             };
             _basicMechanicsCount = MechanicList.Count;
+            EncounterCategoryInformation = new EncounterCategory();
         }
 
         // Only used for CSV files

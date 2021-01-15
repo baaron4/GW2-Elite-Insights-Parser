@@ -7,7 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Sabetha : RaidLogic
+    internal class Sabetha : SpiritVale
     {
         public Sabetha(int triggerID) : base(triggerID)
         {
@@ -50,6 +50,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "sab";
             Icon = "https://wiki.guildwars2.com/images/5/54/Mini_Sabetha.png";
+            EncounterCategoryInformation.InSubCategoryOrder = 2;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

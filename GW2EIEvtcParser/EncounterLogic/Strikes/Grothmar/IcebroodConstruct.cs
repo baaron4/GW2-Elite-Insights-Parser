@@ -24,6 +24,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             );
             Extension = "icebrood";
             Icon = "https://wiki.guildwars2.com/images/thumb/0/07/Icebrood_Construct_%28partially_buried%29.jpg/320px-Icebrood_Construct_%28partially_buried%29.jpg";
+            EncounterCategoryInformation.SubCategory = EncounterCategory.SubFightCategory.Grothmar;
+            EncounterCategoryInformation.InSubCategoryOrder = 0;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

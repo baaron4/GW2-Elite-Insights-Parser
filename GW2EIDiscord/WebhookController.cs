@@ -1,46 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
+using Discord;
 using Discord.Webhook;
 
 namespace GW2EIDiscord
 {
-    public static class WebhookController
+    public class WebhookController
     {
-        public static void SendMessage(List<string> traces, string dpsReportPermalink, WebhookSettings settings)
+        private string _webhookURL { get; }
+        private Embed _embed { get; }
+        private string _message { get; }
+
+        private bool _webhookURLValid => _webhookURL != null && _webhookURL.Length > 0;
+
+        public WebhookController(string webhookURL, Embed embed)
         {
-            if (settings.WebhookURL != null && settings.WebhookURL.Length > 0)
+            _webhookURL = webhookURL;
+            _embed = embed;
+        }
+        public WebhookController(string webhookURL, string message)
+        {
+            _webhookURL = webhookURL;
+            _message = message;
+        }
+
+        public string SendMessage()
+        {
+            if (_webhookURLValid)
             {
-                if (!dpsReportPermalink.Contains("https"))
-                {
-                    traces.Add("Nothing to send to Webhook");
-                    return;
-                }
                 try
                 {
-                    var client = new DiscordWebhookClient(settings.WebhookURL);
+                    var client = new DiscordWebhookClient(_webhookURL);
                     try
                     {
-                        if (settings.Embed == null)
+                        if (_embed == null)
                         {
-                            _ = client.SendMessageAsync(text: dpsReportPermalink).Result;
+                            _ = client.SendMessageAsync(text: _message).Result;
                         }
                         else
                         {
-                            _ = client.SendMessageAsync(embeds: new[] { settings.Embed }).Result;
+                            _ = client.SendMessageAsync(embeds: new[] { _embed }).Result;
                         }
-                        traces.Add("Sent Embed");
                     }
                     finally
                     {
                         client.Dispose();
                     }
+                    return "Sent Embed";
                 }
                 catch (Exception e)
                 {
-                    traces.Add("Couldn't send embed: " + e.Message);
+                    return "Couldn't send embed: " + e.Message;
                 }
             }
-
+            return "Webhook url invalid";
         }
 
     }

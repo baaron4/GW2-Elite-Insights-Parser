@@ -3,7 +3,7 @@
     internal class ConsoleOperationController : OperationController
     {
 
-        public ConsoleOperationController(string location, string status) : base(location, status)
+        public ConsoleOperationController(string location) : base(location, "Ready to parse")
         {
         }
     }
