@@ -55,10 +55,10 @@
             if (catCompare == 0)
             {
                 int subCatCompare = SubCategory.CompareTo(other.SubCategory);
-                if (subCatCompare == 0)
+                /*if (subCatCompare == 0)
                 {
                     return InSubCategoryOrder.CompareTo(other.InSubCategoryOrder);
-                }
+                }*/
                 return subCatCompare;
             }
             return catCompare;
