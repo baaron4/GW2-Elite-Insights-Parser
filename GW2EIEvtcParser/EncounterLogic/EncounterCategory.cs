@@ -106,6 +106,8 @@
                 case SubFightCategory.UnknownEncounter:
                     return "Unknown Encounter";
                 //
+                case SubFightCategory.EternalBattlegrounds:
+                    return "Eternal Battlegrounds";
                 case SubFightCategory.ObsidianSanctum:
                     return "Obsidian Sanctum";
                 case SubFightCategory.RedDesertBorderlands:
