@@ -624,7 +624,7 @@ namespace GW2EIParser
                 {
                     EmbedBuilder embedBuilder = ProgramHelper.GetEmbedBuilder();
                     embedBuilder.WithCurrentTimestamp();
-                    embedBuilder.WithFooter(pair.Key.ToString());
+                    embedBuilder.WithFooter(pair.Key.ToString("yyyy-MM-dd"));
                     dpsReportLogs.Sort((x, y) =>
                     {
                         var categoryCompare = x.BasicMetaData.FightCategory.CompareTo(y.BasicMetaData.FightCategory);
