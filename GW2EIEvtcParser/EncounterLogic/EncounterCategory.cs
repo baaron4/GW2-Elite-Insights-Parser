@@ -31,6 +31,12 @@
             Strike,
             //
             WvW,
+            EdgeOfTheMists,
+            EternalBattlegrounds,
+            GreenAlpineBorderlands,
+            BlueAlpineBorderlands,
+            RedDesertBorderlands,
+            ObsidianSanctum,
             //
             Golem,
             //
@@ -88,14 +94,27 @@
                     return "Mythwright Gambit";
                 case SubFightCategory.TheKeyOfAhdashim:
                     return "The Key of Ahdashim";
+                // 
                 case SubFightCategory.ShatteredObservatory:
                     return "Shattered Observatory";
                 case SubFightCategory.SunquaPeak:
                     return "Sunqua Peak";
+                // 
                 case SubFightCategory.UnknownEncounter:
                     return "Unknown Encounter";
+                //
                 case SubFightCategory.WvW:
                     return "World vs World";
+                case SubFightCategory.ObsidianSanctum:
+                    return "Obsidian Sanctum";
+                case SubFightCategory.RedDesertBorderlands:
+                    return "Red Desert Borderlands";
+                case SubFightCategory.GreenAlpineBorderlands:
+                    return "Green Alpine Borderlands";
+                case SubFightCategory.BlueAlpineBorderlands:
+                    return "Blue Alpine Borderlands";
+                case SubFightCategory.EdgeOfTheMists:
+                    return "Edge of the Mists";
                 default:
                     return Category.ToString();
             }

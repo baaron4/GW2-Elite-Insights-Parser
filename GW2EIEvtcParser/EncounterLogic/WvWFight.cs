@@ -87,16 +87,22 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (mapID.MapID)
             {
                 case 38:
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.EternalBattlegrounds;
                     return _defaultName + " - Eternal Battlegrounds";
                 case 95:
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.GreenAlpineBorderlands;
                     return _defaultName + " - Green Alpine Borderlands";
                 case 96:
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.BlueAlpineBorderlands;
                     return _defaultName + " - Blue Alpine Borderlands";
                 case 1099:
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.RedDesertBorderlands;
                     return _defaultName + " - Red Desert Borderlands";
                 case 899:
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.ObsidianSanctum;
                     return _defaultName + " - Obsidian Sanctum";
                 case 968:
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.EdgeOfTheMists;
                     return _defaultName + " - Edge of the Mists";
             }
             return _defaultName;
