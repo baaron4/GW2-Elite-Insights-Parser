@@ -600,10 +600,16 @@ namespace GW2EIParser
             var fullDpsReportsLogsByDate = fullDpsReportLogs.GroupBy(x => DateTime.Parse(x.BasicMetaData.LogStart).Date).ToDictionary(x => x.Key, x => x.ToList());
             // split the logs so that a single embed does not reach the discord embed limit and also keep a reasonable size by embed
             string message = "";
+            bool start = true;
             foreach (KeyValuePair<DateTime, List<FormOperationController>> pair in fullDpsReportsLogsByDate)
             {
+                if (!start)
+                {
+                    message += "\r\n";
+                }
+                start = false;
                 var splitDpsReportLogs = new List<List<FormOperationController>>() { new List<FormOperationController>() };
-                message += pair.Key.ToString("yyyy-MM-dd") + ": ";
+                message += pair.Key.ToString("yyyy-MM-dd") + " - ";
                 List<FormOperationController> curListToFill = splitDpsReportLogs.First();
                 foreach (FormOperationController controller in pair.Value)
                 {
@@ -664,9 +670,8 @@ namespace GW2EIParser
                         fieldValue += toAdd;
                     }
                     embedFieldBuilder.WithValue(fieldValue);
-                    message += new WebhookController(Properties.Settings.Default.WebhookURL, embedBuilder.Build()).SendMessage() + ", ";
+                    message += new WebhookController(Properties.Settings.Default.WebhookURL, embedBuilder.Build()).SendMessage() + " - ";
                 }
-                message +="\r\n";
             }
            
             MessageBox.Show(message);
