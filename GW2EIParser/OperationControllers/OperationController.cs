@@ -26,7 +26,7 @@ namespace GW2EIParser
             public string FightDuration { get; }
             public string FightName { get; }
             public bool FightSuccess { get; set; }
-            public FightLogic.EncounterCategories FightCategory { get; }
+            public EncounterCategory FightCategory { get; }
             public string Icon { get; }
             public string LogStart { get;  }
         }

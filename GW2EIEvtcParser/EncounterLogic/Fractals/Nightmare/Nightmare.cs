@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -11,7 +12,7 @@ namespace GW2EIEvtcParser.EncounterLogic
     {
         public Nightmare(int triggerID) : base(triggerID)
         {
-            EncounterCategoryInformation.EncounterSubCategory = SubFightCategory.Nightmare;
+            EncounterCategoryInformation.SubCategory = SubFightCategory.Nightmare;
         }
 
         protected static long GetFightOffsetByFirstInvulFilter(FightData fightData, AgentData agentData, List<CombatItem> combatData, int targetID, long invulID, long invulGainOffset)

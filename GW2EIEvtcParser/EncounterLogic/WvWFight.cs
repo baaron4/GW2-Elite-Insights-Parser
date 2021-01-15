@@ -3,6 +3,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -17,7 +18,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             _detailed = detailed;
             Extension = _detailed ? "detailed_wvw" : "wvw";
             _defaultName = _detailed ? "Detailed WvW" : "World vs World";
-            EncounterCategoryInformation.EncounterCategory = FightCategory.WvW;
+            EncounterCategoryInformation.Category = FightCategory.WvW;
+            EncounterCategoryInformation.SubCategory = SubFightCategory.WvW;
         }
 
         protected override HashSet<int> GetUniqueTargetIDs()

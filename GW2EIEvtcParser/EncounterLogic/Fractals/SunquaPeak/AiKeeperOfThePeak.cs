@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -74,7 +75,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "ai";
             Icon = "https://i.imgur.com/3mlCdI9.png";
-            EncounterCategoryInformation.EncounterSubCategory = SubFightCategory.SunquaPeak;
+            EncounterCategoryInformation.SubCategory = SubFightCategory.SunquaPeak;
         }
 
         internal override string GetLogicName(ParsedEvtcLog log)
