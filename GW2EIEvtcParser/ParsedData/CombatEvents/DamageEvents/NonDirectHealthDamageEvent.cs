@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.ParsedData
             ShieldDamage = evtcItem.IsShields > 0 ? HealthDamage : 0;
         }
 
-        public override bool IsCondi(ParsedEvtcLog log)
+        public override bool ConditionDamageBased(ParsedEvtcLog log)
         {
             if (_isCondi == -1 && log.Buffs.BuffsByIds.TryGetValue(SkillId, out Buff b))
             {

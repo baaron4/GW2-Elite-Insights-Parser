@@ -840,7 +840,7 @@ namespace GW2EIEvtcParser.EIData
             }
             if (!_conditionHitSelfDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
             {
-                dls = GetJustActorHitDamageEvents(target, log, start, end).Where(x => x.IsCondi(log)).ToList();
+                dls = GetJustActorHitDamageEvents(target, log, start, end).Where(x => x.ConditionDamageBased(log)).ToList();
                 _conditionHitSelfDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
             }
             return dls;
@@ -854,7 +854,7 @@ namespace GW2EIEvtcParser.EIData
             }
             if (!_powerHitSelfDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
             {
-                dls = GetJustActorHitDamageEvents(target, log, start, end).Where(x => !x.IsCondi(log)).ToList();
+                dls = GetJustActorHitDamageEvents(target, log, start, end).Where(x => !x.ConditionDamageBased(log)).ToList();
                 _powerHitSelfDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
             }
             return dls;

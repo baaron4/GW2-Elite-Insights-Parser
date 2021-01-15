@@ -15,11 +15,11 @@
             HasKilled = result == ArcDPSEnums.PhysicalResult.KillingBlow;
             HasInterrupted = result == ArcDPSEnums.PhysicalResult.Interrupt;
             ShieldDamage = evtcItem.IsShields > 0 ? (int)evtcItem.OverstackValue : 0;
-            HasHit = result == ArcDPSEnums.PhysicalResult.Normal || HasGlanced || HasCrit || HasKilled; //Downed and Interrupt omitted for now due to double procing mechanics || result == ParseEnum.PhysicalResult.Downed || result == ParseEnum.PhysicalResult.Interrupt;
-            DoubleProcHit = HasDowned || HasInterrupted;
+            HasHit = result == ArcDPSEnums.PhysicalResult.Normal || HasGlanced || HasCrit; //Downed and Interrupt omitted for now due to double procing mechanics || result == ParseEnum.PhysicalResult.Downed || result == ParseEnum.PhysicalResult.Interrupt;
+            DoubleProcHit = HasDowned || HasInterrupted || HasKilled;
         }
 
-        public override bool IsCondi(ParsedEvtcLog log)
+        public override bool ConditionDamageBased(ParsedEvtcLog log)
         {
             return false;
         }

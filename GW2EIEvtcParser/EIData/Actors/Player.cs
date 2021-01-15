@@ -229,7 +229,7 @@ namespace GW2EIEvtcParser.EIData
             IReadOnlyList<AbstractHealthDamageEvent> damageLogs = GetDamageTakenEvents(null, log, 0, log.FightData.FightEnd);
             foreach (DeadEvent dead in deads)
             {
-                _deathRecaps.Add(new DeathRecap(damageLogs, dead, downs, ups, lastDeathTime));
+                _deathRecaps.Add(new DeathRecap(log, damageLogs, dead, downs, ups, lastDeathTime));
                 lastDeathTime = dead.Time;
             }
         }

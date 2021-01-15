@@ -41,7 +41,7 @@ namespace GW2EIEvtcParser.EIData
             Dps = (int)Math.Round(dps);
             Damage = damage;
             //Condi DPS
-            damage = damageLogs.Sum(x => x.IsCondi(log) ? x.HealthDamage : 0);
+            damage = damageLogs.Sum(x => x.ConditionDamageBased(log) ? x.HealthDamage : 0);
 
             if (phaseDuration > 0)
             {
@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser.EIData
             ActorDps = (int)Math.Round(dps);
             ActorDamage = damage;
             //Actor Condi DPS
-            damage = actorDamageLogs.Sum(x => x.IsCondi(log) ? x.HealthDamage : 0);
+            damage = actorDamageLogs.Sum(x => x.ConditionDamageBased(log) ? x.HealthDamage : 0);
 
             if (phaseDuration > 0)
             {
