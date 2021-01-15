@@ -95,7 +95,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
                     var glidingEndTime = _xeraSecondPhaseStartTime > 0 ? _xeraSecondPhaseStartTime : fightDuration;
                     var glidingPhase = new PhaseData(invulXera.Time, glidingEndTime, "Gliding");
-                    glidingPhase.AddTargets(GetGlidingShards());
+                    glidingPhase.AddTargets(Targets.Where(t => t.ID == (int)ArcDPSEnums.TrashID.ChargedBloodstone));
                     phases.Add(glidingPhase);
 
                     if (_xeraSecondPhaseStartTime > 0)
@@ -103,6 +103,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         var phase2 = new PhaseData(_xeraSecondPhaseStartTime, fightDuration, "Phase 2");
                         mainTarget.SetManualHealth(24085950);
                         phase2.AddTarget(mainTarget);
+                        phase2.AddTargets(Targets.Where(t => t.ID == (int)ArcDPSEnums.TrashID.BloodstoneShard));
                         //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
                         phases.Add(phase2);
                     }
@@ -121,11 +122,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 determined = log.CombatData.GetBuffData(34113).FirstOrDefault(x => x.To == xera.AgentItem && x is BuffApplyEvent);
             }
             return determined;
-        }
-
-        private IEnumerable<NPC> GetGlidingShards()
-        {
-            return Targets.Where(t => t.ID == (int)ArcDPSEnums.TrashID.ChargedBloodstone);
         }
 
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
