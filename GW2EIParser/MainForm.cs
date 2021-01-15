@@ -572,64 +572,107 @@ namespace GW2EIParser
         /// <param name="e"></param>
         private void BtnDiscordBatchClick(object sender, EventArgs e)
         {
-            BtnDiscordBatch.Enabled = false;
-            BtnParse.Enabled = false;
-            EmbedBuilder embedBuilder = ProgramHelper.GetEmbedBuilder();
-            embedBuilder.WithCurrentTimestamp();
-            var dpsReportLogs = new List<FormOperationController>();
+            if (Properties.Settings.Default.WebhookURL == null)
+            {
+                MessageBox.Show("Set a discord webhook url in settings first");
+                return;
+            }
+            var fullDpsReportLogs = new List<FormOperationController>();         
             foreach (FormOperationController operation in OperatorBindingSource)
             {
                 if (operation.DPSReportLink != null && operation.DPSReportLink.Contains("https"))
                 {
-                    dpsReportLogs.Add(operation);
+                    fullDpsReportLogs.Add(operation);
                 }
             }
-            dpsReportLogs.Sort((x, y) =>
-            {
-                var categoryCompare = x.BasicMetaData.FightCategory.CompareTo(y.BasicMetaData.FightCategory);
-                if (categoryCompare == 0)
-                {
-                    return DateTime.Parse(x.BasicMetaData.LogStart).CompareTo(DateTime.Parse(y.BasicMetaData.LogStart));
-                }
-                return categoryCompare;
-            });
-            string currentSubCategory = "";
-            var embedFieldBuilder = new EmbedFieldBuilder();
-            var fieldValue = "hue hue hue";
-            foreach (FormOperationController controller in dpsReportLogs)
-            {
-                string subCategory = controller.BasicMetaData.FightCategory.GetSubCategoryName();
-                if (subCategory != currentSubCategory)
-                {
-                    embedFieldBuilder.WithValue(fieldValue);
-                    embedFieldBuilder = new EmbedFieldBuilder();
-                    fieldValue = "";
-                    embedBuilder.AddField(embedFieldBuilder);
-                    currentSubCategory = subCategory;
-                    embedFieldBuilder.WithName(subCategory);
-                }
-                else
-                {
-                    fieldValue += "\r\n";
-                }
-                fieldValue += "[" + controller.BasicMetaData.FightName + "](" + controller.DPSReportLink + ") " + (controller.BasicMetaData.FightSuccess ? " :white_check_mark: " : " :x: ") + ": " + controller.BasicMetaData.FightDuration;
-            }
-            embedFieldBuilder.WithValue(fieldValue);
-            if (dpsReportLogs.Any())
-            {
-                if (Properties.Settings.Default.WebhookURL == null)
-                {
-                    MessageBox.Show("Set a discord webhook url in settings first");
-                    return;
-                }
-                MessageBox.Show(new WebhookController(Properties.Settings.Default.WebhookURL, embedBuilder.Build()).SendMessage());
-                BtnDiscordBatch.Enabled = !_anyRunning;
-                BtnParse.Enabled = !_anyRunning;
-            }
-            else
+            if (!fullDpsReportLogs.Any())
             {
                 MessageBox.Show("Nothing to send");
+                return;
             }
+            BtnDiscordBatch.Enabled = false;
+            BtnParse.Enabled = false;
+            // first sort by time
+            fullDpsReportLogs.Sort((x, y) =>
+            {
+                return DateTime.Parse(x.BasicMetaData.LogStart).CompareTo(DateTime.Parse(y.BasicMetaData.LogStart));
+            });
+            var fullDpsReportsLogsByDate = fullDpsReportLogs.GroupBy(x => DateTime.Parse(x.BasicMetaData.LogStart).Date).ToDictionary(x => x.Key, x => x.ToList());
+            // split the logs so that a single embed does not reach the discord embed limit and also keep a reasonable size by embed
+            string message = "";
+            foreach (KeyValuePair<DateTime, List<FormOperationController>> pair in fullDpsReportsLogsByDate)
+            {
+                var splitDpsReportLogs = new List<List<FormOperationController>>() { new List<FormOperationController>() };
+                message += pair.Key.ToString("yyyy-MM-dd") + ": ";
+                List<FormOperationController> curListToFill = splitDpsReportLogs.First();
+                foreach (FormOperationController controller in pair.Value)
+                {
+                    if (curListToFill.Count < 40)
+                    {
+                        curListToFill.Add(controller);
+                    }
+                    else
+                    {
+                        curListToFill = new List<FormOperationController>()
+                    {
+                        controller
+                    };
+                        splitDpsReportLogs.Add(curListToFill);
+                    }
+                }
+                foreach (List<FormOperationController> dpsReportLogs in splitDpsReportLogs)
+                {
+                    EmbedBuilder embedBuilder = ProgramHelper.GetEmbedBuilder();
+                    embedBuilder.WithCurrentTimestamp();
+                    embedBuilder.WithFooter(pair.Key.ToString());
+                    dpsReportLogs.Sort((x, y) =>
+                    {
+                        var categoryCompare = x.BasicMetaData.FightCategory.CompareTo(y.BasicMetaData.FightCategory);
+                        if (categoryCompare == 0)
+                        {
+                            return DateTime.Parse(x.BasicMetaData.LogStart).CompareTo(DateTime.Parse(y.BasicMetaData.LogStart));
+                        }
+                        return categoryCompare;
+                    });
+                    string currentSubCategory = "";
+                    var embedFieldBuilder = new EmbedFieldBuilder();
+                    var fieldValue = "I can not be empty";
+                    foreach (FormOperationController controller in dpsReportLogs)
+                    {
+                        string subCategory = controller.BasicMetaData.FightCategory.GetSubCategoryName();
+                        string toAdd = "[" + controller.BasicMetaData.FightName + "](" + controller.DPSReportLink + ") " + (controller.BasicMetaData.FightSuccess ? " :white_check_mark: " : " :x: ") + ": " + controller.BasicMetaData.FightDuration;
+                        if (subCategory != currentSubCategory)
+                        {
+                            embedFieldBuilder.WithValue(fieldValue);
+                            embedFieldBuilder = new EmbedFieldBuilder();
+                            fieldValue = "";
+                            embedBuilder.AddField(embedFieldBuilder);
+                            embedFieldBuilder.WithName(subCategory);
+                            currentSubCategory = subCategory;
+                        }
+                        else if (fieldValue.Length + toAdd.Length > 1024)
+                        {
+                            embedFieldBuilder.WithValue(fieldValue);
+                            embedFieldBuilder = new EmbedFieldBuilder();
+                            fieldValue = "";
+                            embedBuilder.AddField(embedFieldBuilder);
+                        }
+                        else
+                        {
+                            fieldValue += "\r\n";
+                        }
+                        fieldValue += toAdd;
+                    }
+                    embedFieldBuilder.WithValue(fieldValue);
+                    message += new WebhookController(Properties.Settings.Default.WebhookURL, embedBuilder.Build()).SendMessage() + ", ";
+                }
+                message +="\r\n";
+            }
+           
+            MessageBox.Show(message);
+            //    
+            BtnDiscordBatch.Enabled = !_anyRunning;
+            BtnParse.Enabled = !_anyRunning;
         }
     }
 }
