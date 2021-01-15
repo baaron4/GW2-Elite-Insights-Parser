@@ -21,7 +21,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             );
             Extension = "fraenir";
             Icon = "https://wiki.guildwars2.com/images/thumb/6/67/Fraenir_of_Jormag.jpg/208px-Fraenir_of_Jormag.jpg";
-            EncounterCategoryInformation.InSubCategoryOrder = 1;
+            EncounterCategoryInformation.InSubCategoryOrder = 0;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

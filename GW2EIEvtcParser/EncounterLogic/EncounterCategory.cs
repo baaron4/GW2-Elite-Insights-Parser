@@ -28,14 +28,15 @@
             ShatteredObservatory,
             SunquaPeak,
             // 
-            Strike,
+            Grothmar,
+            Bjora,
+            Drizzlewood,
             //
-            WvW,
-            EdgeOfTheMists,
-            EternalBattlegrounds,
             GreenAlpineBorderlands,
             BlueAlpineBorderlands,
             RedDesertBorderlands,
+            EternalBattlegrounds,
+            EdgeOfTheMists,
             ObsidianSanctum,
             //
             Golem,
@@ -67,6 +68,8 @@
         {
             switch(Category)
             {
+                case FightCategory.Strike:
+                    return "Strike Mission";
                 case FightCategory.WvW:
                     return "World vs Word";
                 case FightCategory.UnknownEncounter:
@@ -103,8 +106,6 @@
                 case SubFightCategory.UnknownEncounter:
                     return "Unknown Encounter";
                 //
-                case SubFightCategory.WvW:
-                    return "World vs World";
                 case SubFightCategory.ObsidianSanctum:
                     return "Obsidian Sanctum";
                 case SubFightCategory.RedDesertBorderlands:
@@ -115,6 +116,13 @@
                     return "Blue Alpine Borderlands";
                 case SubFightCategory.EdgeOfTheMists:
                     return "Edge of the Mists";
+                //
+                case SubFightCategory.Grothmar:
+                    return "Grothmar Valley";
+                case SubFightCategory.Bjora:
+                    return "Bjora Marches";
+                case SubFightCategory.Drizzlewood:
+                    return "Drizzlewood Coast";
                 default:
                     return Category.ToString();
             }

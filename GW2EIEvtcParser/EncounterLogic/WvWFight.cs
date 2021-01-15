@@ -19,7 +19,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = _detailed ? "detailed_wvw" : "wvw";
             _defaultName = _detailed ? "Detailed WvW" : "World vs World";
             EncounterCategoryInformation.Category = FightCategory.WvW;
-            EncounterCategoryInformation.SubCategory = SubFightCategory.WvW;
         }
 
         protected override HashSet<int> GetUniqueTargetIDs()
