@@ -192,7 +192,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 previousTime = time;
                 dmgList[time] += dl.HealthDamage;
-                if (dl.IsCondi(log))
+                if (dl.ConditionDamageBased(log))
                 {
                     dmgListCondition[time] += dl.HealthDamage;
                 }
