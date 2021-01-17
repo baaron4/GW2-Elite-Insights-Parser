@@ -4,14 +4,12 @@ using GW2EIEvtcParser.EIData;
 
 namespace GW2EIBuilders.HtmlModels
 {
-    internal class PlayerChartDataDto
+    internal class PlayerChartDataDto : ActorChartDataDto
     {
         public PlayerDamageChartDto<int> Damage { get;}
         public PlayerDamageChartDto<double> BreakbarDamage { get; }
-        public List<object[]> HealthStates { get; }
-        public List<object[]> BarrierStates { get; }
 
-        private PlayerChartDataDto(ParsedEvtcLog log, PhaseData phase, Player p)
+        private PlayerChartDataDto(ParsedEvtcLog log, PhaseData phase, Player p) : base(log, phase, p, true)
         {
             Damage = new PlayerDamageChartDto<int>()
             {
@@ -23,8 +21,6 @@ namespace GW2EIBuilders.HtmlModels
                 Total = p.Get1SBreakbarDamageList(log, phase.Start, phase.End, null),
                 Targets = new List<IReadOnlyList<double>>()
             };
-            HealthStates = ChartDataDto.BuildHealthStates(log, p, phase, true);
-            BarrierStates = ChartDataDto.BuildBarrierStates(log, p, phase);
             foreach (NPC target in phase.Targets)
             {
                 Damage.Targets.Add(p.Get1SDamageList(log, phase.Start, phase.End, target));
