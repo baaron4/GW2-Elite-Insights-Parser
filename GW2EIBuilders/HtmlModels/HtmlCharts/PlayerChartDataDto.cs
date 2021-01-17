@@ -6,39 +6,39 @@ namespace GW2EIBuilders.HtmlModels
 {
     internal class PlayerChartDataDto
     {
-        public PlayerDamageChartDto<int> Damage { get; set; }
-        public PlayerDamageChartDto<double> BreakbarDamage { get; set; }
-        public List<object[]> HealthStates { get; set; }
-        public List<object[]> BarrierStates { get; set; }
+        public PlayerDamageChartDto<int> Damage { get;}
+        public PlayerDamageChartDto<double> BreakbarDamage { get; }
+        public List<object[]> HealthStates { get; }
+        public List<object[]> BarrierStates { get; }
 
-        public static List<PlayerChartDataDto> BuildPlayersGraphData(ParsedEvtcLog log, int phaseIndex)
+        private PlayerChartDataDto(ParsedEvtcLog log, PhaseData phase, Player p)
+        {
+            Damage = new PlayerDamageChartDto<int>()
+            {
+                Total = p.Get1SDamageList(log, phase.Start, phase.End, null),
+                Targets = new List<IReadOnlyList<int>>()
+            };
+            BreakbarDamage = new PlayerDamageChartDto<double>()
+            {
+                Total = p.Get1SBreakbarDamageList(log, phase.Start, phase.End, null),
+                Targets = new List<IReadOnlyList<double>>()
+            };
+            HealthStates = ChartDataDto.BuildHealthStates(log, p, phase, true);
+            BarrierStates = ChartDataDto.BuildBarrierStates(log, p, phase);
+            foreach (NPC target in phase.Targets)
+            {
+                Damage.Targets.Add(p.Get1SDamageList(log, phase.Start, phase.End, target));
+                BreakbarDamage.Targets.Add(p.Get1SBreakbarDamageList(log, phase.Start, phase.End, target));
+            }
+        }
+
+        public static List<PlayerChartDataDto> BuildPlayersGraphData(ParsedEvtcLog log, PhaseData phase)
         {
             var list = new List<PlayerChartDataDto>();
-            PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
 
             foreach (Player p in log.PlayerList)
             {
-                var pChar = new PlayerChartDataDto()
-                {
-                    Damage = new PlayerDamageChartDto<int>()
-                    {
-                        Total = p.Get1SDamageList(log, phase.Start, phase.End, null),
-                        Targets = new List<IReadOnlyList<int>>()
-                    },
-                    BreakbarDamage = new PlayerDamageChartDto<double>()
-                    {
-                        Total = p.Get1SBreakbarDamageList(log, phase.Start, phase.End, null),
-                        Targets = new List<IReadOnlyList<double>>()
-                    },
-                    HealthStates = ChartDataDto.BuildHealthStates(log, p, phase, true),
-                    BarrierStates = ChartDataDto.BuildBarrierStates(log, p, phase)
-                };
-                foreach (NPC target in phase.Targets)
-                {
-                    pChar.Damage.Targets.Add(p.Get1SDamageList(log, phase.Start, phase.End, target));
-                    pChar.BreakbarDamage.Targets.Add(p.Get1SBreakbarDamageList(log, phase.Start, phase.End, target));
-                }
-                list.Add(pChar);
+                list.Add(new PlayerChartDataDto(log, phase, p));
             }
             return list;
         }

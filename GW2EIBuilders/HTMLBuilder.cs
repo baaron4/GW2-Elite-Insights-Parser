@@ -79,7 +79,7 @@ namespace GW2EIBuilders
             html = html.Replace("'${logDataJson}'", ToJson(LogDataDto.BuildLogData(_log, _usedSkills, _usedBuffs, _usedDamageMods, _cr, _light, _parserVersion, _uploadLink)));
 
             _log.UpdateProgressWithCancellationCheck("HTML: building Graph Data");
-            html = html.Replace("'${graphDataJson}'", ToJson(ChartDataDto.BuildChartData(_log)));
+            html = html.Replace("'${graphDataJson}'", ToJson(new ChartDataDto(_log)));
 
             sw.Write(html);
             return;
