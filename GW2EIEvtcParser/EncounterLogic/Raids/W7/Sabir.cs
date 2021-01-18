@@ -116,6 +116,17 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             }
         }
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            // Find target
+            AgentItem target = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Sabir).FirstOrDefault();
+            if (target == null)
+            {
+                throw new MissingKeyActorsException("Sabir not found");
+            }
+            CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcAgent == target.Agent);
+            return enterCombat != null ? enterCombat.Time : fightData.LogStart;
+        }
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
