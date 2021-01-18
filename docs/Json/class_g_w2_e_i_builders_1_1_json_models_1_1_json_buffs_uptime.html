@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="LI.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Guild Wars 2 - Elite Insights
-   &#160;<span id="projectnumber">2.29+</span>
+   &#160;<span id="projectnumber">2.31+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -111,21 +111,21 @@ Properties</h2></td></tr>
 <tr class="memitem:ae9163c41985ed33a9d626c022ede6056"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_buffs_uptime.html#ae9163c41985ed33a9d626c022ede6056">Id</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:ae9163c41985ed33a9d626c022ede6056"><td class="mdescLeft">&#160;</td><td class="mdescRight">ID of the buff  <a href="#ae9163c41985ed33a9d626c022ede6056">More...</a><br /></td></tr>
 <tr class="separator:ae9163c41985ed33a9d626c022ede6056"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aacf91b8d9ebd5216f993093d9df2c63f"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_buffs_uptime_1_1_json_buffs_uptime_data.html">JsonBuffsUptimeData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_buffs_uptime.html#aacf91b8d9ebd5216f993093d9df2c63f">BuffData</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:aacf91b8d9ebd5216f993093d9df2c63f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of buff data <br />
-Length == # of phases  <a href="#aacf91b8d9ebd5216f993093d9df2c63f">More...</a><br /></td></tr>
-<tr class="separator:aacf91b8d9ebd5216f993093d9df2c63f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a188ae0b392c5598631b01f335440b2ae"><td class="memItemLeft" align="right" valign="top">List&lt; int[]&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_buffs_uptime.html#a188ae0b392c5598631b01f335440b2ae">States</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a188ae0b392c5598631b01f335440b2ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of buff <br />
+<tr class="memitem:a0b405174982f1d765dac5b7079214cf1"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_buffs_uptime_1_1_json_buffs_uptime_data.html">JsonBuffsUptimeData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_buffs_uptime.html#a0b405174982f1d765dac5b7079214cf1">BuffData</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a0b405174982f1d765dac5b7079214cf1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of buff data <br />
+Length == # of phases  <a href="#a0b405174982f1d765dac5b7079214cf1">More...</a><br /></td></tr>
+<tr class="separator:a0b405174982f1d765dac5b7079214cf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad27b45c47303d202858ea31b195a5624"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_buffs_uptime.html#ad27b45c47303d202858ea31b195a5624">States</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:ad27b45c47303d202858ea31b195a5624"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of buff <br />
 Array[i][0] will be the time, Array[i][1] will be the number of buff present from Array[i][0] to Array[i+1][0] <br />
-If i corresponds to the last element that means the status did not change for the remainder of the fight  <a href="#a188ae0b392c5598631b01f335440b2ae">More...</a><br /></td></tr>
-<tr class="separator:a188ae0b392c5598631b01f335440b2ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+If i corresponds to the last element that means the status did not change for the remainder of the fight  <a href="#ad27b45c47303d202858ea31b195a5624">More...</a><br /></td></tr>
+<tr class="separator:ad27b45c47303d202858ea31b195a5624"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class representing buff on targets </p>
 </div><h2 class="groupheader">Property Documentation</h2>
-<a id="aacf91b8d9ebd5216f993093d9df2c63f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aacf91b8d9ebd5216f993093d9df2c63f">&#9670;&nbsp;</a></span>BuffData</h2>
+<a id="a0b405174982f1d765dac5b7079214cf1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b405174982f1d765dac5b7079214cf1">&#9670;&nbsp;</a></span>BuffData</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -134,7 +134,7 @@ If i corresponds to the last element that means the status did not change for th
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">List&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_buffs_uptime_1_1_json_buffs_uptime_data.html">JsonBuffsUptimeData</a>&gt; GW2EIBuilders.JsonModels.JsonBuffsUptime.BuffData</td>
+          <td class="memname">IReadOnlyList&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_buffs_uptime_1_1_json_buffs_uptime_data.html">JsonBuffsUptimeData</a>&gt; GW2EIBuilders.JsonModels.JsonBuffsUptime.BuffData</td>
         </tr>
       </table>
   </td>
@@ -171,12 +171,12 @@ Length == # of phases </p>
 </div><div class="memdoc">
 
 <p>ID of the buff </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_log.html#a935254835c28e60126951979bdd8c1b7" title="Dictionary of buffs&#39; description, the key is in &quot;&#39;b&#39; + id&quot; format">JsonLog.BuffMap</a></dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_log.html#a413847c6b1747295cf89a760b5cb1f8e" title="Dictionary of buffs&#39; description, the key is in &quot;&#39;b&#39; + id&quot; format">JsonLog.BuffMap</a></dd></dl>
 
 </div>
 </div>
-<a id="a188ae0b392c5598631b01f335440b2ae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a188ae0b392c5598631b01f335440b2ae">&#9670;&nbsp;</a></span>States</h2>
+<a id="ad27b45c47303d202858ea31b195a5624"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad27b45c47303d202858ea31b195a5624">&#9670;&nbsp;</a></span>States</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -185,7 +185,7 @@ Length == # of phases </p>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">List&lt;int[]&gt; GW2EIBuilders.JsonModels.JsonBuffsUptime.States</td>
+          <td class="memname">IReadOnlyList&lt;IReadOnlyList&lt;int&gt; &gt; GW2EIBuilders.JsonModels.JsonBuffsUptime.States</td>
         </tr>
       </table>
   </td>

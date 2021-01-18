@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="LI.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Guild Wars 2 - Elite Insights
-   &#160;<span id="projectnumber">2.29+</span>
+   &#160;<span id="projectnumber">2.31+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -122,90 +122,98 @@ Properties</h2></td></tr>
 <tr class="memitem:a6ec5c5d23da523e98390ffa96b0eee3c"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a6ec5c5d23da523e98390ffa96b0eee3c">Profession</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a6ec5c5d23da523e98390ffa96b0eee3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Profession of the player  <a href="#a6ec5c5d23da523e98390ffa96b0eee3c">More...</a><br /></td></tr>
 <tr class="separator:a6ec5c5d23da523e98390ffa96b0eee3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1da09c10587e8eb7fe91a3476127f584"><td class="memItemLeft" align="right" valign="top">string []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a1da09c10587e8eb7fe91a3476127f584">Weapons</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a1da09c10587e8eb7fe91a3476127f584"><td class="mdescLeft">&#160;</td><td class="mdescRight">Weapons of the player <br />
+<tr class="memitem:ae2597e3ed0f9cfdf17726207b30acf5d"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#ae2597e3ed0f9cfdf17726207b30acf5d">Weapons</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:ae2597e3ed0f9cfdf17726207b30acf5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Weapons of the player <br />
 0-1 are the first land set, 1-2 are the second land set <br />
 3-4 are the first aquatic set, 5-6 are the second aquatic set <br />
 When unknown, 'Unknown' value will appear <br />
-If 2 handed weapon even indices will have "2Hand" as value  <a href="#a1da09c10587e8eb7fe91a3476127f584">More...</a><br /></td></tr>
-<tr class="separator:a1da09c10587e8eb7fe91a3476127f584"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1ffa68ef691a1081b03ef7eb0a52e47"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_d_p_s.html">JsonStatistics.JsonDPS</a> [][]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#af1ffa68ef691a1081b03ef7eb0a52e47">DpsTargets</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:af1ffa68ef691a1081b03ef7eb0a52e47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of Total DPS stats <br />
-Length == # of targets and the length of each sub array is equal to # of phases  <a href="#af1ffa68ef691a1081b03ef7eb0a52e47">More...</a><br /></td></tr>
-<tr class="separator:af1ffa68ef691a1081b03ef7eb0a52e47"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a420b534b66e9a4e6a68b784229aa1357"><td class="memItemLeft" align="right" valign="top">List&lt; int &gt; [][]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a420b534b66e9a4e6a68b784229aa1357">TargetDamage1S</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a420b534b66e9a4e6a68b784229aa1357"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int representing 1S damage points <br />
-Length == # of targets and the length of each sub array is equal to # of phases  <a href="#a420b534b66e9a4e6a68b784229aa1357">More...</a><br /></td></tr>
-<tr class="separator:a420b534b66e9a4e6a68b784229aa1357"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab52f23933baa37ec78de27f06c1d62c4"><td class="memItemLeft" align="right" valign="top">List&lt; double &gt; [][]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#ab52f23933baa37ec78de27f06c1d62c4">TargetBreakbarDamage1S</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:ab52f23933baa37ec78de27f06c1d62c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of double representing 1S breakbar damage points <br />
-Length == # of targets and the length of each sub array is equal to # of phases  <a href="#ab52f23933baa37ec78de27f06c1d62c4">More...</a><br /></td></tr>
-<tr class="separator:ab52f23933baa37ec78de27f06c1d62c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a84a3e84bca276b194e431b89d3f805"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_damage_dist.html">JsonDamageDist</a> &gt; [][]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a2a84a3e84bca276b194e431b89d3f805">TargetDamageDist</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a2a84a3e84bca276b194e431b89d3f805"><td class="mdescLeft">&#160;</td><td class="mdescRight">Per Target Damage distribution array <br />
-Length == # of targets and the length of each sub array is equal to # of phases  <a href="#a2a84a3e84bca276b194e431b89d3f805">More...</a><br /></td></tr>
-<tr class="separator:a2a84a3e84bca276b194e431b89d3f805"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a25a251fbe92c3761bdf377bc6f71032e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html">JsonStatistics.JsonGameplayStats</a> [][]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a25a251fbe92c3761bdf377bc6f71032e">StatsTargets</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a25a251fbe92c3761bdf377bc6f71032e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stats against targets <br />
-Length == # of targets and the length of each sub array is equal to # of phases  <a href="#a25a251fbe92c3761bdf377bc6f71032e">More...</a><br /></td></tr>
-<tr class="separator:a25a251fbe92c3761bdf377bc6f71032e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af9f4f59add19a982063b12a466a6424b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_player_support.html">JsonStatistics.JsonPlayerSupport</a> []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#af9f4f59add19a982063b12a466a6424b">Support</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:af9f4f59add19a982063b12a466a6424b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Support stats <br />
-Length == # of phases  <a href="#af9f4f59add19a982063b12a466a6424b">More...</a><br /></td></tr>
-<tr class="separator:af9f4f59add19a982063b12a466a6424b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af9f92fb44a3246606d38957229f46c68"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_damage_modifier_data.html">JsonDamageModifierData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#af9f92fb44a3246606d38957229f46c68">DamageModifiers</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:af9f92fb44a3246606d38957229f46c68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Damage modifiers against all  <a href="#af9f92fb44a3246606d38957229f46c68">More...</a><br /></td></tr>
-<tr class="separator:af9f92fb44a3246606d38957229f46c68"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad0488d938684b721a213ca8fe424e321"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_damage_modifier_data.html">JsonDamageModifierData</a> &gt; []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#ad0488d938684b721a213ca8fe424e321">DamageModifiersTarget</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:ad0488d938684b721a213ca8fe424e321"><td class="mdescLeft">&#160;</td><td class="mdescRight">Damage modifiers against targets <br />
-Length == # of targets  <a href="#ad0488d938684b721a213ca8fe424e321">More...</a><br /></td></tr>
-<tr class="separator:ad0488d938684b721a213ca8fe424e321"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac896dfafdae96ecb6a3eb35912b72596"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_buffs_uptime.html">JsonBuffsUptime</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#ac896dfafdae96ecb6a3eb35912b72596">BuffUptimes</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:ac896dfafdae96ecb6a3eb35912b72596"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of buff status  <a href="#ac896dfafdae96ecb6a3eb35912b72596">More...</a><br /></td></tr>
-<tr class="separator:ac896dfafdae96ecb6a3eb35912b72596"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a71c9cafde613440706bccaef9069e998"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a71c9cafde613440706bccaef9069e998">SelfBuffs</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a71c9cafde613440706bccaef9069e998"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of buff status on self generation <br />
-Key is "'b' + id"  <a href="#a71c9cafde613440706bccaef9069e998">More...</a><br /></td></tr>
-<tr class="separator:a71c9cafde613440706bccaef9069e998"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ce9d4f84091e792baeafbb07cc9e519"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a6ce9d4f84091e792baeafbb07cc9e519">GroupBuffs</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a6ce9d4f84091e792baeafbb07cc9e519"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of buff status on group generation  <a href="#a6ce9d4f84091e792baeafbb07cc9e519">More...</a><br /></td></tr>
-<tr class="separator:a6ce9d4f84091e792baeafbb07cc9e519"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a516b348fa0470b0fb9f6c57a8584a82c"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a516b348fa0470b0fb9f6c57a8584a82c">OffGroupBuffs</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a516b348fa0470b0fb9f6c57a8584a82c"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of buff status on off group generation  <a href="#a516b348fa0470b0fb9f6c57a8584a82c">More...</a><br /></td></tr>
-<tr class="separator:a516b348fa0470b0fb9f6c57a8584a82c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d834695fd45527d39a1bec6f5909c89"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a5d834695fd45527d39a1bec6f5909c89">SquadBuffs</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a5d834695fd45527d39a1bec6f5909c89"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of buff status on squad generation  <a href="#a5d834695fd45527d39a1bec6f5909c89">More...</a><br /></td></tr>
-<tr class="separator:a5d834695fd45527d39a1bec6f5909c89"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43257fcc0eac7be58e1993fbd7243693"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_buffs_uptime.html">JsonBuffsUptime</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a43257fcc0eac7be58e1993fbd7243693">BuffUptimesActive</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a43257fcc0eac7be58e1993fbd7243693"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of buff status on active time  <a href="#a43257fcc0eac7be58e1993fbd7243693">More...</a><br /></td></tr>
-<tr class="separator:a43257fcc0eac7be58e1993fbd7243693"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac9a03cbb204a9412480ceb296183185e"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#ac9a03cbb204a9412480ceb296183185e">SelfBuffsActive</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:ac9a03cbb204a9412480ceb296183185e"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of buff status on self generation on active time  <a href="#ac9a03cbb204a9412480ceb296183185e">More...</a><br /></td></tr>
-<tr class="separator:ac9a03cbb204a9412480ceb296183185e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a95e490edf576c9a3c5939ce132e1402a"><td class="memItemLeft" align="right" valign="top"><a id="a95e490edf576c9a3c5939ce132e1402a"></a>
-List&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a95e490edf576c9a3c5939ce132e1402a">GroupBuffsActive</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a95e490edf576c9a3c5939ce132e1402a"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of buff status on group generation on active time </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html" title="Class representing buffs generation by player actors">JsonPlayerBuffsGeneration</a></dd></dl>
+If 2 handed weapon even indices will have "2Hand" as value  <a href="#ae2597e3ed0f9cfdf17726207b30acf5d">More...</a><br /></td></tr>
+<tr class="separator:ae2597e3ed0f9cfdf17726207b30acf5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1dbc95be3a49c3552c1c3dd24c080f7"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_d_p_s.html">JsonStatistics.JsonDPS</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#ac1dbc95be3a49c3552c1c3dd24c080f7">DpsTargets</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:ac1dbc95be3a49c3552c1c3dd24c080f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of Total DPS stats <br />
+Length == # of targets and the length of each sub array is equal to # of phases  <a href="#ac1dbc95be3a49c3552c1c3dd24c080f7">More...</a><br /></td></tr>
+<tr class="separator:ac1dbc95be3a49c3552c1c3dd24c080f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16955bd083cdceeecaf39feb70a4bf26"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; IReadOnlyList&lt; int &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a16955bd083cdceeecaf39feb70a4bf26">TargetDamage1S</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a16955bd083cdceeecaf39feb70a4bf26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int representing 1S damage points <br />
+Length == # of targets and the length of each sub array is equal to # of phases  <a href="#a16955bd083cdceeecaf39feb70a4bf26">More...</a><br /></td></tr>
+<tr class="separator:a16955bd083cdceeecaf39feb70a4bf26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5ef8e2645294845801ff59da4ad60f2"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; IReadOnlyList&lt; int &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#af5ef8e2645294845801ff59da4ad60f2">TargetPowerDamage1S</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:af5ef8e2645294845801ff59da4ad60f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int representing 1S power damage points <br />
+Length == # of targets and the length of each sub array is equal to # of phases  <a href="#af5ef8e2645294845801ff59da4ad60f2">More...</a><br /></td></tr>
+<tr class="separator:af5ef8e2645294845801ff59da4ad60f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a296c206fd3bbf1a4e6917efd27664959"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; IReadOnlyList&lt; int &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a296c206fd3bbf1a4e6917efd27664959">TargetConditionDamage1S</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a296c206fd3bbf1a4e6917efd27664959"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int representing 1S condition damage points <br />
+Length == # of targets and the length of each sub array is equal to # of phases  <a href="#a296c206fd3bbf1a4e6917efd27664959">More...</a><br /></td></tr>
+<tr class="separator:a296c206fd3bbf1a4e6917efd27664959"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad342b1caa909b1b2ce321fc68e7a8db5"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; IReadOnlyList&lt; double &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#ad342b1caa909b1b2ce321fc68e7a8db5">TargetBreakbarDamage1S</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:ad342b1caa909b1b2ce321fc68e7a8db5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of double representing 1S breakbar damage points <br />
+Length == # of targets and the length of each sub array is equal to # of phases  <a href="#ad342b1caa909b1b2ce321fc68e7a8db5">More...</a><br /></td></tr>
+<tr class="separator:ad342b1caa909b1b2ce321fc68e7a8db5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5bafae5675e64b0aee0578c8eec4bb7b"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_damage_dist.html">JsonDamageDist</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a5bafae5675e64b0aee0578c8eec4bb7b">TargetDamageDist</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a5bafae5675e64b0aee0578c8eec4bb7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Per Target Damage distribution array <br />
+Length == # of targets and the length of each sub array is equal to # of phases  <a href="#a5bafae5675e64b0aee0578c8eec4bb7b">More...</a><br /></td></tr>
+<tr class="separator:a5bafae5675e64b0aee0578c8eec4bb7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ded4a5ed04fdc35f66a6826cd9ffe8e"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html">JsonStatistics.JsonGameplayStats</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a9ded4a5ed04fdc35f66a6826cd9ffe8e">StatsTargets</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a9ded4a5ed04fdc35f66a6826cd9ffe8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stats against targets <br />
+Length == # of targets and the length of each sub array is equal to # of phases  <a href="#a9ded4a5ed04fdc35f66a6826cd9ffe8e">More...</a><br /></td></tr>
+<tr class="separator:a9ded4a5ed04fdc35f66a6826cd9ffe8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f9ee906cc545c08708cdaf497aac34e"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_player_support.html">JsonStatistics.JsonPlayerSupport</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a1f9ee906cc545c08708cdaf497aac34e">Support</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a1f9ee906cc545c08708cdaf497aac34e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Support stats <br />
+Length == # of phases  <a href="#a1f9ee906cc545c08708cdaf497aac34e">More...</a><br /></td></tr>
+<tr class="separator:a1f9ee906cc545c08708cdaf497aac34e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcf3a2a5d2d7b16dcf35dc887bed2a98"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_damage_modifier_data.html">JsonDamageModifierData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#afcf3a2a5d2d7b16dcf35dc887bed2a98">DamageModifiers</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:afcf3a2a5d2d7b16dcf35dc887bed2a98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Damage modifiers against all  <a href="#afcf3a2a5d2d7b16dcf35dc887bed2a98">More...</a><br /></td></tr>
+<tr class="separator:afcf3a2a5d2d7b16dcf35dc887bed2a98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1fcb7379e9566225353b2869d254344"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_damage_modifier_data.html">JsonDamageModifierData</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#aa1fcb7379e9566225353b2869d254344">DamageModifiersTarget</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:aa1fcb7379e9566225353b2869d254344"><td class="mdescLeft">&#160;</td><td class="mdescRight">Damage modifiers against targets <br />
+Length == # of targets  <a href="#aa1fcb7379e9566225353b2869d254344">More...</a><br /></td></tr>
+<tr class="separator:aa1fcb7379e9566225353b2869d254344"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1315b7d737f1a2c6a7352da417191f6e"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_buffs_uptime.html">JsonBuffsUptime</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a1315b7d737f1a2c6a7352da417191f6e">BuffUptimes</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a1315b7d737f1a2c6a7352da417191f6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of buff status  <a href="#a1315b7d737f1a2c6a7352da417191f6e">More...</a><br /></td></tr>
+<tr class="separator:a1315b7d737f1a2c6a7352da417191f6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49a7505614939ad502d83ab1160ded65"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a49a7505614939ad502d83ab1160ded65">SelfBuffs</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a49a7505614939ad502d83ab1160ded65"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of buff status on self generation <br />
+Key is "'b' + id"  <a href="#a49a7505614939ad502d83ab1160ded65">More...</a><br /></td></tr>
+<tr class="separator:a49a7505614939ad502d83ab1160ded65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6fe42510512666bdd2b6c0acbb40f62d"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a6fe42510512666bdd2b6c0acbb40f62d">GroupBuffs</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a6fe42510512666bdd2b6c0acbb40f62d"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of buff status on group generation  <a href="#a6fe42510512666bdd2b6c0acbb40f62d">More...</a><br /></td></tr>
+<tr class="separator:a6fe42510512666bdd2b6c0acbb40f62d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a849768040033c555988a359ae736f9b2"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a849768040033c555988a359ae736f9b2">OffGroupBuffs</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a849768040033c555988a359ae736f9b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of buff status on off group generation  <a href="#a849768040033c555988a359ae736f9b2">More...</a><br /></td></tr>
+<tr class="separator:a849768040033c555988a359ae736f9b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15ba889f0d3261a36cd355d64787606f"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a15ba889f0d3261a36cd355d64787606f">SquadBuffs</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a15ba889f0d3261a36cd355d64787606f"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of buff status on squad generation  <a href="#a15ba889f0d3261a36cd355d64787606f">More...</a><br /></td></tr>
+<tr class="separator:a15ba889f0d3261a36cd355d64787606f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6252634e299669abf0eeefb35ec9696"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_buffs_uptime.html">JsonBuffsUptime</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#aa6252634e299669abf0eeefb35ec9696">BuffUptimesActive</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:aa6252634e299669abf0eeefb35ec9696"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of buff status on active time  <a href="#aa6252634e299669abf0eeefb35ec9696">More...</a><br /></td></tr>
+<tr class="separator:aa6252634e299669abf0eeefb35ec9696"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad89b1b06fa2d5493141923a31c2235c8"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#ad89b1b06fa2d5493141923a31c2235c8">SelfBuffsActive</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:ad89b1b06fa2d5493141923a31c2235c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of buff status on self generation on active time  <a href="#ad89b1b06fa2d5493141923a31c2235c8">More...</a><br /></td></tr>
+<tr class="separator:ad89b1b06fa2d5493141923a31c2235c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30e510777c749000967bb6e612d3942a"><td class="memItemLeft" align="right" valign="top"><a id="a30e510777c749000967bb6e612d3942a"></a>
+IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a30e510777c749000967bb6e612d3942a">GroupBuffsActive</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a30e510777c749000967bb6e612d3942a"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of buff status on group generation on active time </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html" title="Class representing buffs generation by player actors">JsonPlayerBuffsGeneration</a></dd></dl>
 <br /></td></tr>
-<tr class="separator:a95e490edf576c9a3c5939ce132e1402a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00b577f96848fd8cbf6b08c79872274a"><td class="memItemLeft" align="right" valign="top"><a id="a00b577f96848fd8cbf6b08c79872274a"></a>
-List&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a00b577f96848fd8cbf6b08c79872274a">OffGroupBuffsActive</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a00b577f96848fd8cbf6b08c79872274a"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of buff status on off group generation on active time </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html" title="Class representing buffs generation by player actors">JsonPlayerBuffsGeneration</a></dd></dl>
+<tr class="separator:a30e510777c749000967bb6e612d3942a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9354616c704440595c68990cd990c03"><td class="memItemLeft" align="right" valign="top"><a id="af9354616c704440595c68990cd990c03"></a>
+IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#af9354616c704440595c68990cd990c03">OffGroupBuffsActive</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:af9354616c704440595c68990cd990c03"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of buff status on off group generation on active time </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html" title="Class representing buffs generation by player actors">JsonPlayerBuffsGeneration</a></dd></dl>
 <br /></td></tr>
-<tr class="separator:a00b577f96848fd8cbf6b08c79872274a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ceddd7c36f00657734ee8d1e2788cb4"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a7ceddd7c36f00657734ee8d1e2788cb4">SquadBuffsActive</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a7ceddd7c36f00657734ee8d1e2788cb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of buff status on squad generation on active time  <a href="#a7ceddd7c36f00657734ee8d1e2788cb4">More...</a><br /></td></tr>
-<tr class="separator:a7ceddd7c36f00657734ee8d1e2788cb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a03ef99397c6385819b5ebf24d3149935"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_death_recap.html">JsonDeathRecap</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a03ef99397c6385819b5ebf24d3149935">DeathRecap</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a03ef99397c6385819b5ebf24d3149935"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of death recaps <br />
-Length == number of death  <a href="#a03ef99397c6385819b5ebf24d3149935">More...</a><br /></td></tr>
-<tr class="separator:a03ef99397c6385819b5ebf24d3149935"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa46a5ec0d413c06cb4b0d476cdc6acc9"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_consumable.html">JsonConsumable</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#aa46a5ec0d413c06cb4b0d476cdc6acc9">Consumables</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:aa46a5ec0d413c06cb4b0d476cdc6acc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of used consumables  <a href="#aa46a5ec0d413c06cb4b0d476cdc6acc9">More...</a><br /></td></tr>
-<tr class="separator:aa46a5ec0d413c06cb4b0d476cdc6acc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae33d2d6e2e31d1bcbf50b0b722e5e105"><td class="memItemLeft" align="right" valign="top">List&lt; long &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#ae33d2d6e2e31d1bcbf50b0b722e5e105">ActiveTimes</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:ae33d2d6e2e31d1bcbf50b0b722e5e105"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of time during which the player was active (not dead and not dc) <br />
-Length == number of phases  <a href="#ae33d2d6e2e31d1bcbf50b0b722e5e105">More...</a><br /></td></tr>
-<tr class="separator:ae33d2d6e2e31d1bcbf50b0b722e5e105"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:af9354616c704440595c68990cd990c03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3486c9aac75894bea872993fc2976b57"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a3486c9aac75894bea872993fc2976b57">SquadBuffsActive</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a3486c9aac75894bea872993fc2976b57"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of buff status on squad generation on active time  <a href="#a3486c9aac75894bea872993fc2976b57">More...</a><br /></td></tr>
+<tr class="separator:a3486c9aac75894bea872993fc2976b57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c8cafcb4e119f3d0e6f1d963c1cf9ce"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_death_recap.html">JsonDeathRecap</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a0c8cafcb4e119f3d0e6f1d963c1cf9ce">DeathRecap</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a0c8cafcb4e119f3d0e6f1d963c1cf9ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of death recaps <br />
+Length == number of death  <a href="#a0c8cafcb4e119f3d0e6f1d963c1cf9ce">More...</a><br /></td></tr>
+<tr class="separator:a0c8cafcb4e119f3d0e6f1d963c1cf9ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ed8a06ebc1d66bbb09c5b55b4b8b404"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_consumable.html">JsonConsumable</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a8ed8a06ebc1d66bbb09c5b55b4b8b404">Consumables</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a8ed8a06ebc1d66bbb09c5b55b4b8b404"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of used consumables  <a href="#a8ed8a06ebc1d66bbb09c5b55b4b8b404">More...</a><br /></td></tr>
+<tr class="separator:a8ed8a06ebc1d66bbb09c5b55b4b8b404"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a807b83000ab81290af5652219d466fe3"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; long &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a807b83000ab81290af5652219d466fe3">ActiveTimes</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a807b83000ab81290af5652219d466fe3"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of time during which the player was active (not dead and not dc) <br />
+Length == number of phases  <a href="#a807b83000ab81290af5652219d466fe3">More...</a><br /></td></tr>
+<tr class="separator:a807b83000ab81290af5652219d466fe3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td colspan="2" onclick="javascript:toggleInherit('properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor')"><img src="closed.png" alt="-"/>&#160;Properties inherited from <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html">GW2EIBuilders.JsonModels.JsonActor</a></td></tr>
 <tr class="memitem:adf63c10fdd5d61c8016e509a3056df69 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#adf63c10fdd5d61c8016e509a3056df69">Name</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:adf63c10fdd5d61c8016e509a3056df69 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name of the actor  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#adf63c10fdd5d61c8016e509a3056df69">More...</a><br /></td></tr>
@@ -231,61 +239,75 @@ Length == number of phases  <a href="#ae33d2d6e2e31d1bcbf50b0b722e5e105">More...
 <tr class="memitem:acb0c1f7a365ccec73384829d0037c114 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">ushort&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#acb0c1f7a365ccec73384829d0037c114">InstanceID</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:acb0c1f7a365ccec73384829d0037c114 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">ID of the actor in the instance  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#acb0c1f7a365ccec73384829d0037c114">More...</a><br /></td></tr>
 <tr class="separator:acb0c1f7a365ccec73384829d0037c114 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7a5044129032d5e042fc00f031ca0b7 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_minions.html">JsonMinions</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#aa7a5044129032d5e042fc00f031ca0b7">Minions</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:aa7a5044129032d5e042fc00f031ca0b7 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of minions  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#aa7a5044129032d5e042fc00f031ca0b7">More...</a><br /></td></tr>
-<tr class="separator:aa7a5044129032d5e042fc00f031ca0b7 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad4b0d87aa1e7b4dd6985f1bdebab39d3 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_d_p_s.html">JsonStatistics.JsonDPS</a> []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#ad4b0d87aa1e7b4dd6985f1bdebab39d3">DpsAll</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:ad4b0d87aa1e7b4dd6985f1bdebab39d3 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of Total DPS stats <br />
-Length == # of phases  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#ad4b0d87aa1e7b4dd6985f1bdebab39d3">More...</a><br /></td></tr>
-<tr class="separator:ad4b0d87aa1e7b4dd6985f1bdebab39d3 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a13cc9a2945808fe61b80434b8dfe5adc inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats_all.html">JsonStatistics.JsonGameplayStatsAll</a> []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a13cc9a2945808fe61b80434b8dfe5adc">StatsAll</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a13cc9a2945808fe61b80434b8dfe5adc inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stats against all <br />
-Length == # of phases  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a13cc9a2945808fe61b80434b8dfe5adc">More...</a><br /></td></tr>
-<tr class="separator:a13cc9a2945808fe61b80434b8dfe5adc inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8abc33c475eba1be48035b9428ad38eb inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_defenses_all.html">JsonStatistics.JsonDefensesAll</a> []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a8abc33c475eba1be48035b9428ad38eb">Defenses</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a8abc33c475eba1be48035b9428ad38eb inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defensive stats <br />
-Length == # of phases  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a8abc33c475eba1be48035b9428ad38eb">More...</a><br /></td></tr>
-<tr class="separator:a8abc33c475eba1be48035b9428ad38eb inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adaee8022c2ffe9662936ae068ef409d1 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_damage_dist.html">JsonDamageDist</a> &gt; []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#adaee8022c2ffe9662936ae068ef409d1">TotalDamageDist</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:adaee8022c2ffe9662936ae068ef409d1 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Total Damage distribution array <br />
-Length == # of phases  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#adaee8022c2ffe9662936ae068ef409d1">More...</a><br /></td></tr>
-<tr class="separator:adaee8022c2ffe9662936ae068ef409d1 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9312be6f7d3942344bdcafd1fa9f94a7 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_damage_dist.html">JsonDamageDist</a> &gt; []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a9312be6f7d3942344bdcafd1fa9f94a7">TotalDamageTaken</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a9312be6f7d3942344bdcafd1fa9f94a7 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Damage taken array Length == # of phases  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a9312be6f7d3942344bdcafd1fa9f94a7">More...</a><br /></td></tr>
-<tr class="separator:a9312be6f7d3942344bdcafd1fa9f94a7 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e1f728e576b0ab2e4de4a3a166d4e13 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_rotation.html">JsonRotation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a0e1f728e576b0ab2e4de4a3a166d4e13">Rotation</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a0e1f728e576b0ab2e4de4a3a166d4e13 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rotation data  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a0e1f728e576b0ab2e4de4a3a166d4e13">More...</a><br /></td></tr>
-<tr class="separator:a0e1f728e576b0ab2e4de4a3a166d4e13 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a93902aae44da9ab4bce40d28c171051e inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">List&lt; int &gt; []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a93902aae44da9ab4bce40d28c171051e">Damage1S</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a93902aae44da9ab4bce40d28c171051e inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int representing 1S damage points <br />
-Length == # of phases  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a93902aae44da9ab4bce40d28c171051e">More...</a><br /></td></tr>
-<tr class="separator:a93902aae44da9ab4bce40d28c171051e inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa6bac3f17312fe40df5be8a1d0d5af77 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">List&lt; double &gt; []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#aa6bac3f17312fe40df5be8a1d0d5af77">BreakbarDamage1S</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:aa6bac3f17312fe40df5be8a1d0d5af77 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of double representing 1S breakbar damage points <br />
-Length == # of phases  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#aa6bac3f17312fe40df5be8a1d0d5af77">More...</a><br /></td></tr>
-<tr class="separator:aa6bac3f17312fe40df5be8a1d0d5af77 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40cebbc8225e18f9e63c7d3fb6f902ad inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">List&lt; int[]&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a40cebbc8225e18f9e63c7d3fb6f902ad">ConditionsStates</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a40cebbc8225e18f9e63c7d3fb6f902ad inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of conditions <br />
+<tr class="memitem:a859e930160fc449b44a5d86995a987f2 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_minions.html">JsonMinions</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a859e930160fc449b44a5d86995a987f2">Minions</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a859e930160fc449b44a5d86995a987f2 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of minions  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a859e930160fc449b44a5d86995a987f2">More...</a><br /></td></tr>
+<tr class="separator:a859e930160fc449b44a5d86995a987f2 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f33d0e8afc3af1d624786768cb48462 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_d_p_s.html">JsonStatistics.JsonDPS</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a5f33d0e8afc3af1d624786768cb48462">DpsAll</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a5f33d0e8afc3af1d624786768cb48462 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of Total DPS stats <br />
+Length == # of phases  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a5f33d0e8afc3af1d624786768cb48462">More...</a><br /></td></tr>
+<tr class="separator:a5f33d0e8afc3af1d624786768cb48462 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb7a78404130f164ccf56b900add2200 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats_all.html">JsonStatistics.JsonGameplayStatsAll</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#aeb7a78404130f164ccf56b900add2200">StatsAll</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:aeb7a78404130f164ccf56b900add2200 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stats against all <br />
+Length == # of phases  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#aeb7a78404130f164ccf56b900add2200">More...</a><br /></td></tr>
+<tr class="separator:aeb7a78404130f164ccf56b900add2200 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38862a8f99249403b4053d6a4a5baeb9 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_defenses_all.html">JsonStatistics.JsonDefensesAll</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a38862a8f99249403b4053d6a4a5baeb9">Defenses</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a38862a8f99249403b4053d6a4a5baeb9 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defensive stats <br />
+Length == # of phases  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a38862a8f99249403b4053d6a4a5baeb9">More...</a><br /></td></tr>
+<tr class="separator:a38862a8f99249403b4053d6a4a5baeb9 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb0f9ed68c515788e40302c5b042060c inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_damage_dist.html">JsonDamageDist</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#aeb0f9ed68c515788e40302c5b042060c">TotalDamageDist</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:aeb0f9ed68c515788e40302c5b042060c inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Total Damage distribution array <br />
+Length == # of phases  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#aeb0f9ed68c515788e40302c5b042060c">More...</a><br /></td></tr>
+<tr class="separator:aeb0f9ed68c515788e40302c5b042060c inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad47ab8db514c084f3d747da23624e0b6 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_damage_dist.html">JsonDamageDist</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#ad47ab8db514c084f3d747da23624e0b6">TotalDamageTaken</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:ad47ab8db514c084f3d747da23624e0b6 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Damage taken array Length == # of phases  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#ad47ab8db514c084f3d747da23624e0b6">More...</a><br /></td></tr>
+<tr class="separator:ad47ab8db514c084f3d747da23624e0b6 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11a3d89982cdcb90b39bff8aa05810a2 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_rotation.html">JsonRotation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a11a3d89982cdcb90b39bff8aa05810a2">Rotation</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a11a3d89982cdcb90b39bff8aa05810a2 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rotation data  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a11a3d89982cdcb90b39bff8aa05810a2">More...</a><br /></td></tr>
+<tr class="separator:a11a3d89982cdcb90b39bff8aa05810a2 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58d9622613211d274b5ca5fe85c9fee6 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a58d9622613211d274b5ca5fe85c9fee6">Damage1S</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a58d9622613211d274b5ca5fe85c9fee6 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int representing 1S damage points <br />
+Length == # of phases  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a58d9622613211d274b5ca5fe85c9fee6">More...</a><br /></td></tr>
+<tr class="separator:a58d9622613211d274b5ca5fe85c9fee6 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8007e2bcaa0ec5bdc51fb08f342c64fb inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a8007e2bcaa0ec5bdc51fb08f342c64fb">PowerDamage1S</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a8007e2bcaa0ec5bdc51fb08f342c64fb inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int representing 1S power damage points <br />
+Length == # of phases  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a8007e2bcaa0ec5bdc51fb08f342c64fb">More...</a><br /></td></tr>
+<tr class="separator:a8007e2bcaa0ec5bdc51fb08f342c64fb inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc7ee97a626413926dd94785050cb96c inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#abc7ee97a626413926dd94785050cb96c">ConditionDamage1S</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:abc7ee97a626413926dd94785050cb96c inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int representing 1S condition damage points <br />
+Length == # of phases  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#abc7ee97a626413926dd94785050cb96c">More...</a><br /></td></tr>
+<tr class="separator:abc7ee97a626413926dd94785050cb96c inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a608d3a3e3cac3bbd6667e6c4c920d8fb inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a608d3a3e3cac3bbd6667e6c4c920d8fb">BreakbarDamage1S</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a608d3a3e3cac3bbd6667e6c4c920d8fb inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of double representing 1S breakbar damage points <br />
+Length == # of phases  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a608d3a3e3cac3bbd6667e6c4c920d8fb">More...</a><br /></td></tr>
+<tr class="separator:a608d3a3e3cac3bbd6667e6c4c920d8fb inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7f91f7ba969197d222be97bc8dac64c inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#af7f91f7ba969197d222be97bc8dac64c">ConditionsStates</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:af7f91f7ba969197d222be97bc8dac64c inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of conditions <br />
 Array[i][0] will be the time, Array[i][1] will be the number of conditions present from Array[i][0] to Array[i+1][0] <br />
 If i corresponds to the last element that means the status did not change for the remainder of the fight <br />
- <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a40cebbc8225e18f9e63c7d3fb6f902ad">More...</a><br /></td></tr>
-<tr class="separator:a40cebbc8225e18f9e63c7d3fb6f902ad inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c591bb6bb5f774cbb48e0ba8d4bb078 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">List&lt; int[]&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a6c591bb6bb5f774cbb48e0ba8d4bb078">BoonsStates</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a6c591bb6bb5f774cbb48e0ba8d4bb078 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of boons <br />
+ <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#af7f91f7ba969197d222be97bc8dac64c">More...</a><br /></td></tr>
+<tr class="separator:af7f91f7ba969197d222be97bc8dac64c inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac38c6613a5b91d92d38fff92e92e147f inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#ac38c6613a5b91d92d38fff92e92e147f">BoonsStates</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:ac38c6613a5b91d92d38fff92e92e147f inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of boons <br />
 Array[i][0] will be the time, Array[i][1] will be the number of boons present from Array[i][0] to Array[i+1][0] <br />
-If i corresponds to the last element that means the status did not change for the remainder of the fight  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a6c591bb6bb5f774cbb48e0ba8d4bb078">More...</a><br /></td></tr>
-<tr class="separator:a6c591bb6bb5f774cbb48e0ba8d4bb078 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46bf9dd222bd3d86d66f65f23bdf1a8c inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">List&lt; int[]&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a46bf9dd222bd3d86d66f65f23bdf1a8c">ActiveCombatMinions</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a46bf9dd222bd3d86d66f65f23bdf1a8c inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of active combat minions <br />
+If i corresponds to the last element that means the status did not change for the remainder of the fight  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#ac38c6613a5b91d92d38fff92e92e147f">More...</a><br /></td></tr>
+<tr class="separator:ac38c6613a5b91d92d38fff92e92e147f inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7ebb2dfb078ea10e9a42c62d09ca0f0 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#ac7ebb2dfb078ea10e9a42c62d09ca0f0">ActiveCombatMinions</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:ac7ebb2dfb078ea10e9a42c62d09ca0f0 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of active combat minions <br />
 Array[i][0] will be the time, Array[i][1] will be the number of active combat minions present from Array[i][0] to Array[i+1][0] <br />
-If i corresponds to the last element that means the status did not change for the remainder of the fight  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a46bf9dd222bd3d86d66f65f23bdf1a8c">More...</a><br /></td></tr>
-<tr class="separator:a46bf9dd222bd3d86d66f65f23bdf1a8c inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44002c9375ba47b6e90aa0363d2c4c28 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">List&lt; double[]&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a44002c9375ba47b6e90aa0363d2c4c28">HealthPercents</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a44002c9375ba47b6e90aa0363d2c4c28 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of double[2] that represents the health status of the actor <br />
+If i corresponds to the last element that means the status did not change for the remainder of the fight  <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#ac7ebb2dfb078ea10e9a42c62d09ca0f0">More...</a><br /></td></tr>
+<tr class="separator:ac7ebb2dfb078ea10e9a42c62d09ca0f0 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13c84092f8ce27b2795db2d4f105ff92 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a13c84092f8ce27b2795db2d4f105ff92">HealthPercents</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a13c84092f8ce27b2795db2d4f105ff92 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of double[2] that represents the health status of the actor <br />
 Array[i][0] will be the time, Array[i][1] will be health % <br />
 If i corresponds to the last element that means the health did not change for the remainder of the fight <br />
- <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a44002c9375ba47b6e90aa0363d2c4c28">More...</a><br /></td></tr>
-<tr class="separator:a44002c9375ba47b6e90aa0363d2c4c28 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+ <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a13c84092f8ce27b2795db2d4f105ff92">More...</a><br /></td></tr>
+<tr class="separator:a13c84092f8ce27b2795db2d4f105ff92 inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7aefce3df1b8f7ae781a19b1bdbcfac inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#ac7aefce3df1b8f7ae781a19b1bdbcfac">BarrierPercents</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:ac7aefce3df1b8f7ae781a19b1bdbcfac inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of double[2] that represents the barrier status of the actor <br />
+Array[i][0] will be the time, Array[i][1] will be barrier % <br />
+If i corresponds to the last element that means the health did not change for the remainder of the fight <br />
+ <a href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#ac7aefce3df1b8f7ae781a19b1bdbcfac">More...</a><br /></td></tr>
+<tr class="separator:ac7aefce3df1b8f7ae781a19b1bdbcfac inherit properties_class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class representing a player </p>
@@ -314,8 +336,8 @@ If i corresponds to the last element that means the health did not change for th
 
 </div>
 </div>
-<a id="ae33d2d6e2e31d1bcbf50b0b722e5e105"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae33d2d6e2e31d1bcbf50b0b722e5e105">&#9670;&nbsp;</a></span>ActiveTimes</h2>
+<a id="a807b83000ab81290af5652219d466fe3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a807b83000ab81290af5652219d466fe3">&#9670;&nbsp;</a></span>ActiveTimes</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -324,7 +346,7 @@ If i corresponds to the last element that means the health did not change for th
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">List&lt;long&gt; GW2EIBuilders.JsonModels.JsonPlayer.ActiveTimes</td>
+          <td class="memname">IReadOnlyList&lt;long&gt; GW2EIBuilders.JsonModels.JsonPlayer.ActiveTimes</td>
         </tr>
       </table>
   </td>
@@ -339,8 +361,8 @@ Length == number of phases </p>
 
 </div>
 </div>
-<a id="ac896dfafdae96ecb6a3eb35912b72596"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac896dfafdae96ecb6a3eb35912b72596">&#9670;&nbsp;</a></span>BuffUptimes</h2>
+<a id="a1315b7d737f1a2c6a7352da417191f6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1315b7d737f1a2c6a7352da417191f6e">&#9670;&nbsp;</a></span>BuffUptimes</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -349,7 +371,7 @@ Length == number of phases </p>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">List&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_buffs_uptime.html">JsonBuffsUptime</a>&gt; GW2EIBuilders.JsonModels.JsonPlayer.BuffUptimes</td>
+          <td class="memname">IReadOnlyList&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_buffs_uptime.html">JsonBuffsUptime</a>&gt; GW2EIBuilders.JsonModels.JsonPlayer.BuffUptimes</td>
         </tr>
       </table>
   </td>
@@ -364,8 +386,8 @@ Length == number of phases </p>
 
 </div>
 </div>
-<a id="a43257fcc0eac7be58e1993fbd7243693"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a43257fcc0eac7be58e1993fbd7243693">&#9670;&nbsp;</a></span>BuffUptimesActive</h2>
+<a id="aa6252634e299669abf0eeefb35ec9696"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6252634e299669abf0eeefb35ec9696">&#9670;&nbsp;</a></span>BuffUptimesActive</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -374,7 +396,7 @@ Length == number of phases </p>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">List&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_buffs_uptime.html">JsonBuffsUptime</a>&gt; GW2EIBuilders.JsonModels.JsonPlayer.BuffUptimesActive</td>
+          <td class="memname">IReadOnlyList&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_buffs_uptime.html">JsonBuffsUptime</a>&gt; GW2EIBuilders.JsonModels.JsonPlayer.BuffUptimesActive</td>
         </tr>
       </table>
   </td>
@@ -389,8 +411,8 @@ Length == number of phases </p>
 
 </div>
 </div>
-<a id="aa46a5ec0d413c06cb4b0d476cdc6acc9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa46a5ec0d413c06cb4b0d476cdc6acc9">&#9670;&nbsp;</a></span>Consumables</h2>
+<a id="a8ed8a06ebc1d66bbb09c5b55b4b8b404"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ed8a06ebc1d66bbb09c5b55b4b8b404">&#9670;&nbsp;</a></span>Consumables</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -399,7 +421,7 @@ Length == number of phases </p>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">List&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_consumable.html">JsonConsumable</a>&gt; GW2EIBuilders.JsonModels.JsonPlayer.Consumables</td>
+          <td class="memname">IReadOnlyList&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_consumable.html">JsonConsumable</a>&gt; GW2EIBuilders.JsonModels.JsonPlayer.Consumables</td>
         </tr>
       </table>
   </td>
@@ -414,8 +436,8 @@ Length == number of phases </p>
 
 </div>
 </div>
-<a id="af9f92fb44a3246606d38957229f46c68"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af9f92fb44a3246606d38957229f46c68">&#9670;&nbsp;</a></span>DamageModifiers</h2>
+<a id="afcf3a2a5d2d7b16dcf35dc887bed2a98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afcf3a2a5d2d7b16dcf35dc887bed2a98">&#9670;&nbsp;</a></span>DamageModifiers</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -424,7 +446,7 @@ Length == number of phases </p>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">List&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_damage_modifier_data.html">JsonDamageModifierData</a>&gt; GW2EIBuilders.JsonModels.JsonPlayer.DamageModifiers</td>
+          <td class="memname">IReadOnlyList&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_damage_modifier_data.html">JsonDamageModifierData</a>&gt; GW2EIBuilders.JsonModels.JsonPlayer.DamageModifiers</td>
         </tr>
       </table>
   </td>
@@ -439,8 +461,8 @@ Length == number of phases </p>
 
 </div>
 </div>
-<a id="ad0488d938684b721a213ca8fe424e321"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad0488d938684b721a213ca8fe424e321">&#9670;&nbsp;</a></span>DamageModifiersTarget</h2>
+<a id="aa1fcb7379e9566225353b2869d254344"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa1fcb7379e9566225353b2869d254344">&#9670;&nbsp;</a></span>DamageModifiersTarget</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -449,7 +471,7 @@ Length == number of phases </p>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">List&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_damage_modifier_data.html">JsonDamageModifierData</a>&gt; [] GW2EIBuilders.JsonModels.JsonPlayer.DamageModifiersTarget</td>
+          <td class="memname">IReadOnlyList&lt;IReadOnlyList&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_damage_modifier_data.html">JsonDamageModifierData</a>&gt; &gt; GW2EIBuilders.JsonModels.JsonPlayer.DamageModifiersTarget</td>
         </tr>
       </table>
   </td>
@@ -465,8 +487,8 @@ Length == # of targets </p>
 
 </div>
 </div>
-<a id="a03ef99397c6385819b5ebf24d3149935"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a03ef99397c6385819b5ebf24d3149935">&#9670;&nbsp;</a></span>DeathRecap</h2>
+<a id="a0c8cafcb4e119f3d0e6f1d963c1cf9ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c8cafcb4e119f3d0e6f1d963c1cf9ce">&#9670;&nbsp;</a></span>DeathRecap</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -475,7 +497,7 @@ Length == # of targets </p>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">List&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_death_recap.html">JsonDeathRecap</a>&gt; GW2EIBuilders.JsonModels.JsonPlayer.DeathRecap</td>
+          <td class="memname">IReadOnlyList&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_death_recap.html">JsonDeathRecap</a>&gt; GW2EIBuilders.JsonModels.JsonPlayer.DeathRecap</td>
         </tr>
       </table>
   </td>
@@ -491,8 +513,8 @@ Length == number of death </p>
 
 </div>
 </div>
-<a id="af1ffa68ef691a1081b03ef7eb0a52e47"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af1ffa68ef691a1081b03ef7eb0a52e47">&#9670;&nbsp;</a></span>DpsTargets</h2>
+<a id="ac1dbc95be3a49c3552c1c3dd24c080f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1dbc95be3a49c3552c1c3dd24c080f7">&#9670;&nbsp;</a></span>DpsTargets</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -501,7 +523,7 @@ Length == number of death </p>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_d_p_s.html">JsonStatistics.JsonDPS</a> [][] GW2EIBuilders.JsonModels.JsonPlayer.DpsTargets</td>
+          <td class="memname">IReadOnlyList&lt;IReadOnlyList&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_d_p_s.html">JsonStatistics.JsonDPS</a>&gt; &gt; GW2EIBuilders.JsonModels.JsonPlayer.DpsTargets</td>
         </tr>
       </table>
   </td>
@@ -541,8 +563,8 @@ Length == # of targets and the length of each sub array is equal to # of phases 
 
 </div>
 </div>
-<a id="a6ce9d4f84091e792baeafbb07cc9e519"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6ce9d4f84091e792baeafbb07cc9e519">&#9670;&nbsp;</a></span>GroupBuffs</h2>
+<a id="a6fe42510512666bdd2b6c0acbb40f62d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6fe42510512666bdd2b6c0acbb40f62d">&#9670;&nbsp;</a></span>GroupBuffs</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -551,7 +573,7 @@ Length == # of targets and the length of each sub array is equal to # of phases 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">List&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a>&gt; GW2EIBuilders.JsonModels.JsonPlayer.GroupBuffs</td>
+          <td class="memname">IReadOnlyList&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a>&gt; GW2EIBuilders.JsonModels.JsonPlayer.GroupBuffs</td>
         </tr>
       </table>
   </td>
@@ -590,8 +612,8 @@ Length == # of targets and the length of each sub array is equal to # of phases 
 
 </div>
 </div>
-<a id="a516b348fa0470b0fb9f6c57a8584a82c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a516b348fa0470b0fb9f6c57a8584a82c">&#9670;&nbsp;</a></span>OffGroupBuffs</h2>
+<a id="a849768040033c555988a359ae736f9b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a849768040033c555988a359ae736f9b2">&#9670;&nbsp;</a></span>OffGroupBuffs</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -600,7 +622,7 @@ Length == # of targets and the length of each sub array is equal to # of phases 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">List&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a>&gt; GW2EIBuilders.JsonModels.JsonPlayer.OffGroupBuffs</td>
+          <td class="memname">IReadOnlyList&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a>&gt; GW2EIBuilders.JsonModels.JsonPlayer.OffGroupBuffs</td>
         </tr>
       </table>
   </td>
@@ -639,8 +661,8 @@ Length == # of targets and the length of each sub array is equal to # of phases 
 
 </div>
 </div>
-<a id="a71c9cafde613440706bccaef9069e998"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a71c9cafde613440706bccaef9069e998">&#9670;&nbsp;</a></span>SelfBuffs</h2>
+<a id="a49a7505614939ad502d83ab1160ded65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49a7505614939ad502d83ab1160ded65">&#9670;&nbsp;</a></span>SelfBuffs</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -649,7 +671,7 @@ Length == # of targets and the length of each sub array is equal to # of phases 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">List&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a>&gt; GW2EIBuilders.JsonModels.JsonPlayer.SelfBuffs</td>
+          <td class="memname">IReadOnlyList&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a>&gt; GW2EIBuilders.JsonModels.JsonPlayer.SelfBuffs</td>
         </tr>
       </table>
   </td>
@@ -665,8 +687,8 @@ Key is "'b' + id" </p>
 
 </div>
 </div>
-<a id="ac9a03cbb204a9412480ceb296183185e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac9a03cbb204a9412480ceb296183185e">&#9670;&nbsp;</a></span>SelfBuffsActive</h2>
+<a id="ad89b1b06fa2d5493141923a31c2235c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad89b1b06fa2d5493141923a31c2235c8">&#9670;&nbsp;</a></span>SelfBuffsActive</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -675,7 +697,7 @@ Key is "'b' + id" </p>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">List&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a>&gt; GW2EIBuilders.JsonModels.JsonPlayer.SelfBuffsActive</td>
+          <td class="memname">IReadOnlyList&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a>&gt; GW2EIBuilders.JsonModels.JsonPlayer.SelfBuffsActive</td>
         </tr>
       </table>
   </td>
@@ -690,8 +712,8 @@ Key is "'b' + id" </p>
 
 </div>
 </div>
-<a id="a5d834695fd45527d39a1bec6f5909c89"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5d834695fd45527d39a1bec6f5909c89">&#9670;&nbsp;</a></span>SquadBuffs</h2>
+<a id="a15ba889f0d3261a36cd355d64787606f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15ba889f0d3261a36cd355d64787606f">&#9670;&nbsp;</a></span>SquadBuffs</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -700,7 +722,7 @@ Key is "'b' + id" </p>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">List&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a>&gt; GW2EIBuilders.JsonModels.JsonPlayer.SquadBuffs</td>
+          <td class="memname">IReadOnlyList&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a>&gt; GW2EIBuilders.JsonModels.JsonPlayer.SquadBuffs</td>
         </tr>
       </table>
   </td>
@@ -715,8 +737,8 @@ Key is "'b' + id" </p>
 
 </div>
 </div>
-<a id="a7ceddd7c36f00657734ee8d1e2788cb4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ceddd7c36f00657734ee8d1e2788cb4">&#9670;&nbsp;</a></span>SquadBuffsActive</h2>
+<a id="a3486c9aac75894bea872993fc2976b57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3486c9aac75894bea872993fc2976b57">&#9670;&nbsp;</a></span>SquadBuffsActive</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -725,7 +747,7 @@ Key is "'b' + id" </p>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">List&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a>&gt; GW2EIBuilders.JsonModels.JsonPlayer.SquadBuffsActive</td>
+          <td class="memname">IReadOnlyList&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_player_buffs_generation.html">JsonPlayerBuffsGeneration</a>&gt; GW2EIBuilders.JsonModels.JsonPlayer.SquadBuffsActive</td>
         </tr>
       </table>
   </td>
@@ -740,8 +762,8 @@ Key is "'b' + id" </p>
 
 </div>
 </div>
-<a id="a25a251fbe92c3761bdf377bc6f71032e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a25a251fbe92c3761bdf377bc6f71032e">&#9670;&nbsp;</a></span>StatsTargets</h2>
+<a id="a9ded4a5ed04fdc35f66a6826cd9ffe8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ded4a5ed04fdc35f66a6826cd9ffe8e">&#9670;&nbsp;</a></span>StatsTargets</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -750,7 +772,7 @@ Key is "'b' + id" </p>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html">JsonStatistics.JsonGameplayStats</a> [][] GW2EIBuilders.JsonModels.JsonPlayer.StatsTargets</td>
+          <td class="memname">IReadOnlyList&lt;IReadOnlyList&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html">JsonStatistics.JsonGameplayStats</a>&gt; &gt; GW2EIBuilders.JsonModels.JsonPlayer.StatsTargets</td>
         </tr>
       </table>
   </td>
@@ -766,8 +788,8 @@ Length == # of targets and the length of each sub array is equal to # of phases 
 
 </div>
 </div>
-<a id="af9f4f59add19a982063b12a466a6424b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af9f4f59add19a982063b12a466a6424b">&#9670;&nbsp;</a></span>Support</h2>
+<a id="a1f9ee906cc545c08708cdaf497aac34e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f9ee906cc545c08708cdaf497aac34e">&#9670;&nbsp;</a></span>Support</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -776,7 +798,7 @@ Length == # of targets and the length of each sub array is equal to # of phases 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_player_support.html">JsonStatistics.JsonPlayerSupport</a> [] GW2EIBuilders.JsonModels.JsonPlayer.Support</td>
+          <td class="memname">IReadOnlyList&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_player_support.html">JsonStatistics.JsonPlayerSupport</a>&gt; GW2EIBuilders.JsonModels.JsonPlayer.Support</td>
         </tr>
       </table>
   </td>
@@ -792,8 +814,8 @@ Length == # of phases </p>
 
 </div>
 </div>
-<a id="ab52f23933baa37ec78de27f06c1d62c4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab52f23933baa37ec78de27f06c1d62c4">&#9670;&nbsp;</a></span>TargetBreakbarDamage1S</h2>
+<a id="ad342b1caa909b1b2ce321fc68e7a8db5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad342b1caa909b1b2ce321fc68e7a8db5">&#9670;&nbsp;</a></span>TargetBreakbarDamage1S</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -802,7 +824,7 @@ Length == # of phases </p>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">List&lt;double&gt; [][] GW2EIBuilders.JsonModels.JsonPlayer.TargetBreakbarDamage1S</td>
+          <td class="memname">IReadOnlyList&lt;IReadOnlyList&lt;IReadOnlyList&lt;double&gt; &gt; &gt; GW2EIBuilders.JsonModels.JsonPlayer.TargetBreakbarDamage1S</td>
         </tr>
       </table>
   </td>
@@ -819,8 +841,8 @@ ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,152
 
 </div>
 </div>
-<a id="a420b534b66e9a4e6a68b784229aa1357"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a420b534b66e9a4e6a68b784229aa1357">&#9670;&nbsp;</a></span>TargetDamage1S</h2>
+<a id="a296c206fd3bbf1a4e6917efd27664959"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a296c206fd3bbf1a4e6917efd27664959">&#9670;&nbsp;</a></span>TargetConditionDamage1S</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -829,7 +851,34 @@ ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,152
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">List&lt;int&gt; [][] GW2EIBuilders.JsonModels.JsonPlayer.TargetDamage1S</td>
+          <td class="memname">IReadOnlyList&lt;IReadOnlyList&lt;IReadOnlyList&lt;int&gt; &gt; &gt; GW2EIBuilders.JsonModels.JsonPlayer.TargetConditionDamage1S</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Array of int representing 1S condition damage points <br />
+Length == # of targets and the length of each sub array is equal to # of phases </p>
+<p>If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point <br />
+ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250] </p>
+
+</div>
+</div>
+<a id="a16955bd083cdceeecaf39feb70a4bf26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16955bd083cdceeecaf39feb70a4bf26">&#9670;&nbsp;</a></span>TargetDamage1S</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyList&lt;IReadOnlyList&lt;IReadOnlyList&lt;int&gt; &gt; &gt; GW2EIBuilders.JsonModels.JsonPlayer.TargetDamage1S</td>
         </tr>
       </table>
   </td>
@@ -846,8 +895,8 @@ ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,152
 
 </div>
 </div>
-<a id="a2a84a3e84bca276b194e431b89d3f805"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2a84a3e84bca276b194e431b89d3f805">&#9670;&nbsp;</a></span>TargetDamageDist</h2>
+<a id="a5bafae5675e64b0aee0578c8eec4bb7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5bafae5675e64b0aee0578c8eec4bb7b">&#9670;&nbsp;</a></span>TargetDamageDist</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -856,7 +905,7 @@ ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,152
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">List&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_damage_dist.html">JsonDamageDist</a>&gt; [][] GW2EIBuilders.JsonModels.JsonPlayer.TargetDamageDist</td>
+          <td class="memname">IReadOnlyList&lt;IReadOnlyList&lt;IReadOnlyList&lt;<a class="el" href="class_g_w2_e_i_builders_1_1_json_models_1_1_json_damage_dist.html">JsonDamageDist</a>&gt; &gt; &gt; GW2EIBuilders.JsonModels.JsonPlayer.TargetDamageDist</td>
         </tr>
       </table>
   </td>
@@ -872,8 +921,8 @@ Length == # of targets and the length of each sub array is equal to # of phases 
 
 </div>
 </div>
-<a id="a1da09c10587e8eb7fe91a3476127f584"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1da09c10587e8eb7fe91a3476127f584">&#9670;&nbsp;</a></span>Weapons</h2>
+<a id="af5ef8e2645294845801ff59da4ad60f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5ef8e2645294845801ff59da4ad60f2">&#9670;&nbsp;</a></span>TargetPowerDamage1S</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -882,7 +931,34 @@ Length == # of targets and the length of each sub array is equal to # of phases 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">string [] GW2EIBuilders.JsonModels.JsonPlayer.Weapons</td>
+          <td class="memname">IReadOnlyList&lt;IReadOnlyList&lt;IReadOnlyList&lt;int&gt; &gt; &gt; GW2EIBuilders.JsonModels.JsonPlayer.TargetPowerDamage1S</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Array of int representing 1S power damage points <br />
+Length == # of targets and the length of each sub array is equal to # of phases </p>
+<p>If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point <br />
+ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250] </p>
+
+</div>
+</div>
+<a id="ae2597e3ed0f9cfdf17726207b30acf5d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2597e3ed0f9cfdf17726207b30acf5d">&#9670;&nbsp;</a></span>Weapons</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyList&lt;string&gt; GW2EIBuilders.JsonModels.JsonPlayer.Weapons</td>
         </tr>
       </table>
   </td>
