@@ -100,6 +100,10 @@ namespace GW2EIEvtcParser.EIData
             if (_barrierUpdates == null)
             {
                 _barrierUpdates = Segment.FromStates(log.CombatData.GetBarrierUpdateEvents(AgentItem).Select(x => x.ToState()).ToList(), 0, log.FightData.FightEnd);
+                if (!_barrierUpdates.Any(x => x.Value > 0))
+                {
+                    _barrierUpdates.Clear();
+                }
             }
             return _barrierUpdates;
         }
