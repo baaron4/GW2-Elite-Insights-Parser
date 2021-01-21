@@ -1,18 +1,8 @@
 <template>
     <div>
-        <ul class="nav nav-pills d-flex flex-row justify-content-center">
-            <li class="nav-item">
-                <a class="nav-link" @click="damageMode = graphModeEnum.Damage" :class="{active: damageMode === graphModeEnum.Damage}">Damage</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" @click="damageMode = graphModeEnum.DPS" :class="{active: damageMode === graphModeEnum.DPS}">DPS</a>
-            </li>
-            <li v-if="hasBreakbarDamage" class="nav-item">
-                <a class="nav-link" @click="damageMode = graphModeEnum.BreakbarDamage" :class="{active: damageMode === graphModeEnum.BreakbarDamage}">Breakbar Damage</a>
-            </li>
-        </ul>
         <div class="scrollable-cr-dps-table">
-            <table class="table table-sm table-striped table-hover"  cellspacing="0" width="100%" id="combat-replay-dps-table">
+            <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%"
+                id="combat-replay-dps-table">
                 <thead>
                     <tr>
                         <th class="cr-dps-table-icon-col"></th>
@@ -65,41 +55,40 @@
                     </tr>
                 </tfoot>
             </table>
-        </div>     
+        </div>
+
     </div>
-    
 </template>
 
 <script>
     Vue.component("combat-replay-damage-stats-component", {
         mixins: [timeRefreshComponent, numberComponent],
-        props: ["playerindex"],
+        props: ["playerindex", "graphdata"],
         template: `${template}`,
         data: function () {
             return {
-                targetless: logData.targetless,
-                damageMode: GraphType.DPS
+                targetless: logData.targetless
             };
         },
         methods: {
-            tableRound: function(value) {
-                return this.damageMode == GraphType.BreakbarDamage ? this.round1(value) : this.round(value)
+            tableRound: function (value) {
+                return this.graphdata.graphmode == GraphType.BreakbarDamage ? this.round1(value) : this.round(value)
             }
         },
         created() {
             var i, cacheID;
             for (var j = 0; j < this.targets.length; j++) {
                 var activeTargets = [j];
-                cacheID = getDPSGraphCacheID(0, this.damageMode, activeTargets, 0, null);
+                cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.graphmode, activeTargets, 0, null);
                 // compute dps for all players
                 for (i = 0; i < logData.players.length; i++) {
-                    computePlayerDPS(logData.players[i], this.graph[i].damage, 0, null, activeTargets, cacheID, this.phase.times, this.damageMode);
+                    computePlayerDPS(logData.players[i], this.graph[i].damage, this.graphdata.dpsmode, null, activeTargets, cacheID, this.phase.times, this.graphdata.graphmode);
                 }
             }
-            cacheID = getDPSGraphCacheID(0, this.damageMode, this.targets, 0, null);
+            cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.graphmode, this.targets, 0, null);
             // compute dps for all players
             for (i = 0; i < logData.players.length; i++) {
-                computePlayerDPS(logData.players[i], this.graph[i].damage, 0, null, this.targets, cacheID, this.phase.times, this.damageMode);
+                computePlayerDPS(logData.players[i], this.graph[i].damage, this.graphdata.dpsmode, null, this.targets, cacheID, this.phase.times, this.graphdata.graphmode);
             }
         },
         mounted() {
@@ -118,10 +107,10 @@
             graph: function () {
                 return graphData.phases[0].players;
             },
-            graphModeEnum: function() {
+            graphModeEnum: function () {
                 return GraphType;
             },
-            hasBreakbarDamage: function() {
+            hasBreakbarDamage: function () {
                 return logData.hasBreakbarDamage;
             },
             tableData: function () {
@@ -141,7 +130,7 @@
                     var target = logData.targets[this.targets[j]];
                     cols.push(target);
                 }
-                var damageArrayToUse = this.damageMode === GraphType.BreakbarDamage ? "breakbarDamage" : "damage";
+                var damageArrayToUse = this.graphdata.graphmode === GraphType.BreakbarDamage ? "breakbarDamage" : "damage";
                 for (i = 0; i < this.graph.length; i++) {
                     var cacheID, data, cur, next;
                     var player = logData.players[i];
@@ -150,22 +139,22 @@
                     // targets
                     for (j = 0; j < this.targets.length; j++) {
                         var activeTargets = [j];
-                        cacheID = getDPSGraphCacheID(0, this.damageMode, activeTargets, 0, null);
-                        data = computePlayerDPS(player, graphData[damageArrayToUse], 0, null, activeTargets, cacheID, this.phase.times, this.damageMode).dps.target;
+                        cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.graphmode, activeTargets, 0, null);
+                        data = computePlayerDPS(player, graphData[damageArrayToUse], this.graphdata.dpsmode, null, activeTargets, cacheID, this.phase.times, this.graphdata.graphmode).dps.target;
                         cur = data[curTime];
                         next = data[curTime + 1];
                         if (typeof next !== "undefined") {
-                            dps[j] = cur + (tS - curTime) * (next - cur)/(nextTime - curTime);
+                            dps[j] = cur + (tS - curTime) * (next - cur) / (nextTime - curTime);
                         } else {
                             dps[j] = cur;
                         }
                     }
-                    cacheID = getDPSGraphCacheID(0, this.damageMode, this.targets, 0, null);
-                    data = computePlayerDPS(player, graphData[damageArrayToUse], 0, null, this.targets, cacheID, this.phase.times, this.damageMode).dps.total;
+                    cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.graphmode, this.targets, 0, null);
+                    data = computePlayerDPS(player, graphData[damageArrayToUse], this.graphdata.dpsmode, null, this.targets, cacheID, this.phase.times, this.graphdata.graphmode).dps.total;
                     cur = data[curTime];
                     next = data[curTime + 1];
                     if (typeof next !== "undefined") {
-                        dps[j] = cur + (tS - curTime) * (next - cur)/(nextTime - curTime);
+                        dps[j] = cur + (tS - curTime) * (next - cur) / (nextTime - curTime);
                     } else {
                         dps[j] = cur;
                     }
