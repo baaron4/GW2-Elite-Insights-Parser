@@ -1,13 +1,17 @@
 <template>
     <div class="d-flex d-flex flex-column justify-content-center align-items-center">
-        <div class="target-status" :style="{'background': getGradient(time)}">
+        <div class="target-status" :style="{'background': getHPGradient(time)}">
             <h6 class="actor-shorten text-center" :title="target.name + ' - ' + target.health + ' health'">
                 <img :src="target.icon" height="18" width="18">
                 {{target.name}}
             </h6>
             <p class="text-right cr-hp-display cr-hp-display-target">
-                {{(Math.round(100*getPercent(time))/100).toFixed(2)}} %
+                {{(Math.round(100*getHPPercent(time))/100).toFixed(2)}} %
             </p>
+            <p v-if="hasBarrier" class="text-right cr-barrier-display cr-barrier-display-target">
+                {{(Math.round(100*getBarrierPercent(time))/100).toFixed(2)}} %
+            </p>
+            <div v-if="hasBarrier" class="cr-barrier" :style="{'background': getBarrierGradient(time, status)}"></div>
         </div>
         <div v-if="hasBreakbarPercent" class="cr-breakbar-display mb-4">
             <div class="cr-breakbar-bar" :style="{'background': getBreakbarGradient(time)}">
@@ -17,7 +21,8 @@
             </div>
             <div style="transform: translate(0px, -22px);">
                 <ul class="nav nav-pills d-flex flex-row flex-wrap justify-content-center scale65">
-                    <li class="nav-item" v-for="(phase, id) in breakbarPhases" @click="updatePhaseTime(phase.start * 1000, phase.end * 1000, phase.name)"
+                    <li class="nav-item" v-for="(phase, id) in breakbarPhases"
+                        @click="updatePhaseTime(phase.start * 1000, phase.end * 1000, phase.name)"
                         :data-original-title="phase.durationS + ' seconds'">
                         <a class="nav-link">{{id + 1}} </a>
                     </li>
@@ -38,16 +43,25 @@
                 }
                 return findState(this.breakbarPercent, time / 1000.0, 0, this.breakbarPercent.length - 1);
             },
-            getPercent: function (time) {
+            getHPPercent: function (time) {
                 return findState(this.healths, time / 1000.0, 0, this.healths.length - 1);
             },
-            getGradient: function (time) {
-                return computeGradient("green", this.getPercent(time));
+            getBarrierPercent: function (time) {
+                if (!this.hasBarrier) {
+                    return 0;
+                }
+                return findState(this.barriers, time/1000.0, 0, this.barriers.length - 1);
+            },
+            getHPGradient: function (time) {
+                return computeGradient("green", this.getHPPercent(time), 'black');
             },
             getBreakbarGradient: function (time) {
                 var color = findState(this.breakbarStates, time / 1000.0, 0, this.breakbarStates.length - 1) ? "#20B2AA" : "#888888";
-                return computeGradient(color, this.getBreakbarPercent(time));
-            },
+                return computeGradient(color, this.getBreakbarPercent(time), 'black');
+            },   
+            getBarrierGradient: function (time, status) {
+                return computeGradient('rgba(0,0,0,0)', 100 - this.getBarrierPercent(time), 'rgba(228,148,97, 0.5)' );
+            }, 
             updatePhaseTime: function (min, max, name) {
                 animator.updateTime(min);
                 sliderDelimiter.min = min;
@@ -70,7 +84,7 @@
                     // 2 seconds for colors
                     res.push([phase.start + 2, true]);
                     res.push([phase.end, false]);
-                    if (i === phases.length - 1) {                   
+                    if (i === phases.length - 1) {
                         res.push([this.phase.end, false]);
                     }
                 }
@@ -91,8 +105,14 @@
             breakbarPercent: function () {
                 return graphData.phases[0].targetsBreakbarPercentStatesForCR[this.targetindex];
             },
+            barriers: function () {
+                return graphData.phases[0].targetsBarrierStatesForCR[this.targetindex];
+            },
             hasBreakbarPercent: function () {
                 return !!this.breakbarPercent;
+            },
+            hasBarrier: function () {
+                return !!this.barriers;
             },
             target: function () {
                 return logData.targets[this.targetindex];

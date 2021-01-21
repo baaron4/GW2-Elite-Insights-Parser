@@ -1,10 +1,11 @@
 /*jshint esversion: 6 */
 "use strict";
-function computeGradient(left, percent) {
+
+function computeGradient(left, percent, right) {
     var template = "linear-gradient(to right, $fill$, $middle$, $black$)";
     var res = percent;
     var fillPercent = left + " " + res + "%";
-    var blackPercent = "black " + (100 - res) + "%";
+    var blackPercent = right + " " + (100 - res) + "%";
     var middle = res + "%";
     template = template.replace("$fill$", fillPercent);
     template = template.replace("$black$", blackPercent);
