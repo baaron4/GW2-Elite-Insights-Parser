@@ -47,8 +47,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<int>
             {
-                (int)ArcDPSEnums.TargetID.Kenut,
-                (int)ArcDPSEnums.TargetID.Nikare
+                (int)ArcDPSEnums.TargetID.Nikare,
+                (int)ArcDPSEnums.TargetID.Kenut
             };
         }
 
