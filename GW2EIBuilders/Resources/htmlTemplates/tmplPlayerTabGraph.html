@@ -10,6 +10,18 @@
 </template>
 
 <script>
+
+    function addPoints(res, graph, maxDPS) {
+        if (!graph) {
+            return;
+        }
+        var points = [];
+        for (var j = 0; j < graph.length; j++) {
+            points[j] = graph[j][1] * maxDPS / 100.0;
+        }
+        res.push(points);
+    }
+
     Vue.component("player-graph-tab-component", {
         props: ["playerindex", "phaseindex", "activetargets", "light"],
         template: `${template}`,  
@@ -49,6 +61,7 @@
             var hasBuffs = oldOffset !== this.playerOffset;
             this.graphOffset = this.playerOffset;
             this.playerOffset += computeTargetBreakbarData(this.graph, logData.targets, this.phase, this.data, 'y3');
+            this.playerOffset += computeTargetBarrierData(this.graph, logData.targets, this.phase, this.data, 'y3');
             this.playerOffset += computeTargetHealthData(this.graph, logData.targets, this.phase, this.data, 'y3');
             if (this.healthGraph) {
                 this.playerOffset += computePlayerHealthData(this.healthGraph, this.data, 'y3');
@@ -179,38 +192,22 @@
                 if (this.dataCache.has(cacheID)) {
                     return this.dataCache.get(cacheID);
                 }
-                var offset = 0;
                 var dpsData = this.computeDPSData();
                 var res = [];
-                res[offset++] = dpsData.playerDPS.total;
-                res[offset++] = dpsData.playerDPS.target;
-                res[offset++] = dpsData.playerDPS.cleave;
+                res.push(dpsData.playerDPS.total);
+                res.push(dpsData.playerDPS.target);
+                res.push(dpsData.playerDPS.cleave);
                 for (var i = 0; i < this.graph.targets.length; i++) {
-                    var breakbar = this.graph.targets[i].breakbarPercentStates;
-                    if (!breakbar) {
-                        continue;
-                    }
-                    var brPoints = [];
-                    for (var j = 0; j < breakbar.length; j++) {
-                        brPoints[j] = breakbar[j][1] * dpsData.maxDPS / 100.0;
-                    }
-                    res[offset++] = brPoints;
+                    addPoints(res, this.graph.targets[i].breakbarPercentStates, dpsData.maxDPS);
                 }
                 for (var i = 0; i < this.graph.targets.length; i++) {
-                    var health = this.graph.targets[i].healthStates;
-                    var hpPoints = [];
-                    for (var j = 0; j < health.length; j++) {
-                        hpPoints[j] = health[j][1] * dpsData.maxDPS / 100.0;
-                    }
-                    res[offset++] = hpPoints;
+                    addPoints(res, this.graph.targets[i].barrierStates, dpsData.maxDPS);
+                }
+                for (var i = 0; i < this.graph.targets.length; i++) {
+                    addPoints(res, this.graph.targets[i].healthStates, dpsData.maxDPS);
                 }
                 if (this.healthGraph) {
-                    var health = this.healthGraph;
-                    var hpPoints = [];
-                    for (var j = 0; j < health.length; j++) {
-                        hpPoints[j] = health[j][1] * dpsData.maxDPS / 100.0;
-                    }
-                    res[offset++] = hpPoints;
+                    addPoints(res, this.healthGraph, dpsData.maxDPS);
                 }
                 this.dataCache.set(cacheID, res);
                 return res;

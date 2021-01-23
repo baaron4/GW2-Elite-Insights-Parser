@@ -9,6 +9,16 @@
 </template>
 
 <script>
+    function addPoints(res, graph, maxDPS) {
+        if (!graph) {
+            return;
+        }
+        var points = [];
+        for (var j = 0; j < graph.length; j++) {
+            points[j] = graph[j][1] * maxDPS / 100.0;
+        }
+        res.push(points);
+    }
     Vue.component("dps-graph-component", {
         props: ["activetargets", 'mode', 'phaseindex', 'playerindex', 'light'],
         template: `${template}`,       
@@ -95,6 +105,8 @@
             });
             // targets health
             computeTargetHealthData(this.graph, logData.targets, this.phase, this.data, null);  
+            // targets barrier
+            computeTargetBarrierData(this.graph, logData.targets, this.phase, this.data, null);  
             // targets breakbar          
             computeTargetBreakbarData(this.graph, logData.targets, this.phase, this.data, null);
             // mechanics
@@ -281,39 +293,29 @@
                 var offset = 0;
                 for (i = 0; i < logData.players.length; i++) {
                     var pDPS = dpsData.playerDPS[i];
-                    res[offset++] = (this.mode === 0 ? pDPS.total : (this.mode === 1 ? pDPS.target : pDPS.cleave));
+                    res.push((this.mode === 0 ? pDPS.total : (this.mode === 1 ? pDPS.target : pDPS.cleave)));
                 }
-                res[offset++] = (this.mode === 0 ? dpsData.allDPS.total : (this.mode === 1 ? dpsData.allDPS.target : dpsData.allDPS.cleave));
+                res.push((this.mode === 0 ? dpsData.allDPS.total : (this.mode === 1 ? dpsData.allDPS.target : dpsData.allDPS.cleave)));
                 var maxDPS = (this.mode === 0 ? dpsData.maxDPS.total : (this.mode === 1 ? dpsData.maxDPS.target : dpsData.maxDPS.cleave));
                 var hps = [];
                 for (i = 0; i < this.graph.targets.length; i++) {
                     var health = this.graph.targets[i].healthStates;
-                    var hpPoints = [];
-                    for (j = 0; j < health.length; j++) {
-                        hpPoints[j] = health[j][1] * maxDPS / 100.0;
-                    }
-                    hps[i] = hpPoints;
-                    res[offset++] = hpPoints;
+                    addPoints(res, health, maxDPS);
+                }       
+                for (i = 0; i < this.graph.targets.length; i++) {
+                    var barrier = this.graph.targets[i].barrierStates;
+                    addPoints(res, barrier, maxDPS);
                 }
-                {
-                    for (i = 0; i < this.graph.targets.length; i++) {
-                        var breakbar = this.graph.targets[i].breakbarPercentStates;
-                        if (!breakbar) {
-                            continue;
-                        }
-                        var brPoints = [];
-                        for (j = 0; j < breakbar.length; j++) {
-                            brPoints[j] = breakbar[j][1] * maxDPS / 100.0;
-                        }
-                        res[offset++] = brPoints;
-                    }
+                for (i = 0; i < this.graph.targets.length; i++) {
+                    var breakbar = this.graph.targets[i].breakbarPercentStates;
+                    addPoints(res, breakbar, maxDPS);
                 }
                 
                 for (i = 0; i < graphData.mechanics.length; i++) {
                     var mech = graphData.mechanics[i];
                     var mechData = logData.mechanicMap[i];
                     var chart = [];
-                    res[offset++] = chart;
+                    res.push(chart);
                     var time, pts, k, ftime, y, yp1;
                     if (mechData.enemyMech) {
                         for (j = 0; j < mech.points[this.phaseindex].length; j++) {
