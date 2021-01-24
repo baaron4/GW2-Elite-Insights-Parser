@@ -121,11 +121,6 @@ namespace GW2EIEvtcParser.ParsedData
             ID = (int)id;
         }
 
-        internal void OverrideName(string name)
-        {
-            Name = name;
-        }
-
         internal void OverrideToughness(ushort toughness)
         {
             Toughness = toughness;

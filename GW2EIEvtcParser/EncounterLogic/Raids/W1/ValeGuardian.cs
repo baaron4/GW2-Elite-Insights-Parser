@@ -87,10 +87,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                        (int) ArcDPSEnums.TrashID.RedGuardian
                     };
                     AddTargetsToPhaseAndFit(phase, ids, log);
-                    foreach (NPC t in phase.Targets)
-                    {
-                        t.OverrideName(t.Character + " " + Math.Log(i, 2));
-                    }
                 }
                 else
                 {
@@ -99,6 +95,29 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             return phases;
+        }
+
+        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        {
+            base.EIEvtcParse(fightData, agentData, combatData, playerList);
+            int curRed = 1;
+            int curBlue = 1;
+            int curGreen = 1;
+            foreach (NPC target in Targets)
+            {
+                if (target.ID == (int)ArcDPSEnums.TrashID.RedGuardian)
+                {
+                    target.OverrideName(target.Character + " " + curRed++);
+                }
+                if (target.ID == (int)ArcDPSEnums.TrashID.BlueGuardian)
+                {
+                    target.OverrideName(target.Character + " " + curBlue++);
+                }
+                if (target.ID == (int)ArcDPSEnums.TrashID.GreenGuardian)
+                {
+                    target.OverrideName(target.Character + " " + curGreen++);
+                }
+            }
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
