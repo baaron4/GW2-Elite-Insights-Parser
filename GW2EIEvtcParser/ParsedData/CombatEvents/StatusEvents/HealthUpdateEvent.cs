@@ -12,7 +12,7 @@ namespace GW2EIEvtcParser.ParsedData
             HPPercent = Math.Round(evtcItem.DstAgent / 100.0, 2);
             if (HPPercent > 100.0)
             {
-                HPPercent = 0;
+                HPPercent = 100;
             }
         }
 

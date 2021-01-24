@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.ParsedData
             BreakbarPercent = Math.Round(100.0 * BitConverter.ToSingle(bytes, 0), 2);
             if (BreakbarPercent > 100.0)
             {
-                BreakbarPercent = 0;
+                BreakbarPercent = 100;
             }
         }
 
