@@ -307,24 +307,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phase100to10.AddTarget(mainTarget);
                 phases.Add(phase100to10);
 
-                if (_deimos10PercentTime > 0)
+                if (_deimos10PercentTime > 0 && log.FightData.FightEnd - _deimos10PercentTime > ParserHelper.PhaseTimeLimit)
                 {
-                    // Deimos gains additional health during the last 10% so the max-health needs to be corrected
-                    if (IsCM(log.CombatData, log.AgentData, log.FightData) == FightData.CMStatus.CM)
-                    {
-                        mainTarget.SetManualHealth(42804900);
-                    }
-                    else
-                    {
-                        mainTarget.SetManualHealth(37388210);
-                    }
-
-                    if (log.FightData.FightEnd - _deimos10PercentTime > ParserHelper.PhaseTimeLimit)
-                    {
-                        var phase10to0 = new PhaseData(_deimos10PercentTime, log.FightData.FightEnd, "10% - 0%");
-                        phase10to0.AddTarget(mainTarget);
-                        phases.Add(phase10to0);
-                    }
+                    var phase10to0 = new PhaseData(_deimos10PercentTime, log.FightData.FightEnd, "10% - 0%");
+                    phase10to0.AddTarget(mainTarget);
+                    phases.Add(phase10to0);
                 }
                 //mainTarget.AddCustomCastLog(end, -6, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
             }
@@ -514,7 +501,23 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Deimos not found");
             }
-            return (target.GetHealth(combatData) > 40e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            FightData.CMStatus cmStatus = (target.GetHealth(combatData) > 40e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+
+            if (_deimos10PercentTime > 0)
+            {
+                // Deimos gains additional health during the last 10% so the max-health needs to be corrected
+                // done here because this method will get called during the creation of the ParsedEvtcLog and the ParsedEvtcLog should contain complete and correct values after creation
+                if (cmStatus == FightData.CMStatus.CM)
+                {
+                    target.SetManualHealth(42804900);
+                }
+                else
+                {
+                    target.SetManualHealth(37388210);
+                }
+            }
+
+            return cmStatus;
         }
     }
 }
