@@ -1,7 +1,7 @@
 var class_g_w2_e_i_builders_1_1_json_models_1_1_json_n_p_c =
 [
-    [ "BreakbarPercents", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_n_p_c.html#a4a6657fdf0ed62ec814b694c85456824", null ],
-    [ "Buffs", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_n_p_c.html#a6ff33951b1f8a1f2e9b0617799ea636c", null ],
+    [ "BreakbarPercents", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_n_p_c.html#a84ae7dde517dca7963514a53dd7c8928", null ],
+    [ "Buffs", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_n_p_c.html#a814a5b2e2422d3df7928a0e1e1cec141", null ],
     [ "FinalHealth", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_n_p_c.html#a411e1b2c7ee7c912628b8d6fb6bc8662", null ],
     [ "FirstAware", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_n_p_c.html#aa7f998f3607d710e41618703a16001ca", null ],
     [ "HealthPercentBurned", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_n_p_c.html#a2f1fbe58cbced1f265977891dfe67c98", null ],
