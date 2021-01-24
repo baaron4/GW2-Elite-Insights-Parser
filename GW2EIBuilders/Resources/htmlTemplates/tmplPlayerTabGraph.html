@@ -1,7 +1,7 @@
 <template>
-    <div>     
-        <dps-graph-mode-selector-component :data="graphdata"
-            :phaseduration="this.phase.end - this.phase.start" :phasehassubphases="!!this.phase.subPhases" :ignorebreakbar="false">
+    <div>
+        <dps-graph-mode-selector-component :data="graphdata" :phaseduration="this.phase.end - this.phase.start"
+            :phasehassubphases="!!this.phase.subPhases" :ignorebreakbar="false">
         </dps-graph-mode-selector-component>
         <h3 class="text-center mt-1 mb-1">{{graphname}}</h3>
         <graph-component :id="graphid" :layout="layout" :data="computeData"></graph-component>
@@ -10,6 +10,43 @@
 </template>
 
 <script>
+
+    function _computePlayerGraphData(graph, data, yaxis, graphName, percentName) {
+        if (!graph) {
+            return 0;
+        }
+        var texts = [];
+        var times = [];
+        for (var j = 0; j < graph.length; j++) {
+            texts[j] = graph[j][1] + "%" + percentName + " - Player";
+            times[j] = graph[j][0];
+        }
+        var res = {
+            x: times,
+            text: texts,
+            mode: 'lines',
+            line: {
+                dash: 'dashdot',
+                shape: 'hv'
+            },
+            hoverinfo: 'text',
+            name: 'Player ' + graphName,
+            visible: 'legendonly',
+        };
+        if (yaxis) {
+            res.yaxis = yaxis;
+        }
+        data.push(res);
+        return 1;
+    }
+
+    function computePlayerHealthData(healthGraph, data, yaxis) {
+        return _computePlayerGraphData(healthGraph, data, yaxis, "health", "hp");
+    }
+
+    function computePlayerBarrierData(barrierGraph, data, yaxis) {
+        return _computePlayerGraphData(barrierGraph, data, yaxis, "barrier", "barrier");
+    }
 
     function addPoints(res, graph, maxDPS) {
         if (!graph) {
@@ -24,7 +61,7 @@
 
     Vue.component("player-graph-tab-component", {
         props: ["playerindex", "phaseindex", "activetargets", "light"],
-        template: `${template}`,  
+        template: `${template}`,
         mixins: [graphComponent],
         data: function () {
             return {
@@ -63,9 +100,8 @@
             this.playerOffset += computeTargetBreakbarData(this.graph, logData.targets, this.phase, this.data, 'y3');
             this.playerOffset += computeTargetBarrierData(this.graph, logData.targets, this.phase, this.data, 'y3');
             this.playerOffset += computeTargetHealthData(this.graph, logData.targets, this.phase, this.data, 'y3');
-            if (this.healthGraph) {
-                this.playerOffset += computePlayerHealthData(this.healthGraph, this.data, 'y3');
-            }
+            this.playerOffset += computePlayerBarrierData(this.barrierGraph, this.data, 'y3');
+            this.playerOffset += computePlayerHealthData(this.healthGraph, this.data, 'y3');
             this.data.push({
                 x: this.phase.times,
                 y: [],
@@ -120,6 +156,9 @@
             healthGraph: function () {
                 return this.graph.players[this.playerindex].healthStates;
             },
+            barrierGraph: function () {
+                return this.graph.players[this.playerindex].barrierStates;
+            },
             graphid: function () {
                 return "playergraph-" + this.playerindex + '-' + this.phaseindex;
             },
@@ -132,7 +171,7 @@
                     case -1:
                         name = "Phase " + name;
                         break;
-                    default:                       
+                    default:
                         name = this.graphdata.dpsmode + "s " + name;
                         break;
                 }
@@ -206,9 +245,8 @@
                 for (var i = 0; i < this.graph.targets.length; i++) {
                     addPoints(res, this.graph.targets[i].healthStates, dpsData.maxDPS);
                 }
-                if (this.healthGraph) {
-                    addPoints(res, this.healthGraph, dpsData.maxDPS);
-                }
+                addPoints(res, this.barrierGraph, dpsData.maxDPS);
+                addPoints(res, this.healthGraph, dpsData.maxDPS);
                 this.dataCache.set(cacheID, res);
                 return res;
             },

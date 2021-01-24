@@ -497,33 +497,6 @@ function computeTargetBreakbarData(graph, targets, phase, data, yaxis) {
     return _computeTargetGraphData(graph, targets, phase, data, yaxis, "breakbarPercentStates", "breakbar", "breakbar", phase.breakbarPhase);
 }
 
-function computePlayerHealthData(healthGraph, data, yaxis) {
-    var health = healthGraph;
-    var hpTexts = [];
-    var times = [];
-    for (var j = 0; j < health.length; j++) {
-        hpTexts[j] = health[j][1] + "% hp - Player";
-        times[j] = health[j][0];
-    }
-    var res = {
-        x: times,
-        text: hpTexts,
-        mode: 'lines',
-        line: {
-            dash: 'dashdot',
-            shape: 'hv'
-        },
-        hoverinfo: 'text',
-        name: 'Player health',
-        visible: 'legendonly',
-    };
-    if (yaxis) {
-        res.yaxis = yaxis;
-    }
-    data.push(res);
-    return 1;
-}
-
 function computeBuffData(buffData, data) {
     if (buffData) {
         for (var i = 0; i < buffData.length; i++) {

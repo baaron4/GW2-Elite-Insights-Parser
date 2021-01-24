@@ -62,6 +62,9 @@
     }
 
     function addLayout(data, target, states, percentName, graphName, visible) {
+        if (!states) {
+            return 0;
+        }
         var texts = [];
         var times = [];
         for (var j = 0; j < states.length; j++) {
@@ -82,6 +85,7 @@
             yaxis: 'y3'
         };
         data.push(res);
+        return 1;
     }
 
     function addPoints(res, graph, maxDPS) {
@@ -131,21 +135,9 @@
             var oldOffset = this.targetOffset;
             this.targetOffset += computeBuffData(this.target.details.boonGraph[this.phaseindex], this.data);
             var hasBuffs = oldOffset !== this.targetOffset;
-            if (this.hasBreakbarStates) {
-                var breakbarStates = this.graph.targets[this.phaseTargetIndex].breakbarPercentStates;
-                addLayout(this.data, this.target, breakbarStates, "breakbar", "breakbar", this.phase.breakbarPhase);
-                this.targetOffset++;
-            }
-            if (this.hasBarrierStates) {
-                var barrierStates = this.graph.targets[this.phaseTargetIndex].barrierStates;
-                addLayout(this.data, this.target, barrierStates, "barrier", "barrier", false);
-                this.targetOffset++;
-            }
-            {
-                var health = this.graph.targets[this.phaseTargetIndex].healthStates;
-                addLayout(this.data, this.target, health, "hp", "health", true);
-                this.targetOffset++;
-            }
+            this.targetOffset += addLayout(this.data, this.target, this.breakbarStates, "breakbar", "breakbar", this.phase.breakbarPhase);
+            this.targetOffset += addLayout(this.data, this.target, this.barrierStates, "barrier", "barrier", false);
+            this.targetOffset += addLayout(this.data, this.target, this.healthStates, "hp", "health", true);
             this.data.push({
                 x: this.phase.times,
                 y: [],
@@ -161,11 +153,14 @@
             computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
         },
         computed: {
-            hasBreakbarStates: function () {
-                return !!this.graph.targets[this.phaseTargetIndex].breakbarPercentStates;
+            healthStates: function () {
+                return this.graph.targets[this.phaseTargetIndex].healthStates;
             },
-            hasBarrierStates: function () {
-                return !!this.graph.targets[this.phaseTargetIndex].barrierStates;
+            breakbarStates: function () {
+                return this.graph.targets[this.phaseTargetIndex].breakbarPercentStates;
+            },
+            barrierStates: function () {
+                return this.graph.targets[this.phaseTargetIndex].barrierStates;
             },
             target: function () {
                 return logData.targets[this.targetindex];
@@ -242,20 +237,10 @@
                     return this.dataCache.get(cacheID);
                 }
                 var dpsData = this.computeDPSData();
-                var res = [];
-                res[0] = dpsData.dps;
-                {
-                    var health = this.graph.targets[this.phaseTargetIndex].healthStates;
-                    addPoints(res, health, dpsData.maxDPS);
-                }
-                if (this.hasBarrierStates) {
-                    var barrierStates = this.graph.targets[this.phaseTargetIndex].barrierStates;                   
-                    addPoints(res, barrierStates, dpsData.maxDPS);
-                }
-                if (this.hasBreakbarStates) {
-                    var breakbarStates = this.graph.targets[this.phaseTargetIndex].breakbarPercentStates;
-                    addPoints(res, breakbarStates, dpsData.maxDPS);
-                }
+                var res = [dpsData.dps];
+                addPoints(res, this.healthStates, dpsData.maxDPS);               
+                addPoints(res, this.barrierStates, dpsData.maxDPS);
+                addPoints(res, this.breakbarStates, dpsData.maxDPS);
                 this.dataCache.set(cacheID, res);
                 return res;
             },
