@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.Interfaces;
+﻿using System;
+using GW2EIEvtcParser.Interfaces;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -8,7 +9,11 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal BarrierUpdateEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
-            BarrierPercent = evtcItem.DstAgent / 100.0;
+            BarrierPercent = Math.Round(evtcItem.DstAgent / 100.0, 2);
+            if (BarrierPercent > 100.0)
+            {
+                BarrierPercent = 0;
+            }
         }
 
         public (long start, double value) ToState()

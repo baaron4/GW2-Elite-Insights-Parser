@@ -360,7 +360,7 @@ namespace GW2EIBuilders.JsonModels
                 foreach (Buff fractalInstab in log.StatisticsHelper.PresentFractalInstabilities)
                 {
                     presentFractalInstabilities.Add(fractalInstab.ID);
-                    if (!BuffMap.ContainsKey("b" + fractalInstab.ID))
+                    if (!buffMap.ContainsKey("b" + fractalInstab.ID))
                     {
                         buffMap["b" + fractalInstab.ID] = new BuffDesc(fractalInstab, log);
                     }

@@ -8,8 +8,8 @@ namespace GW2EIBuilders.HtmlModels
 {
     internal class ChartDataDto
     {
-        public List<PhaseChartDataDto> Phases { get; set; } = new List<PhaseChartDataDto>();
-        public List<MechanicChartDataDto> Mechanics { get; set; } = new List<MechanicChartDataDto>();
+        public List<PhaseChartDataDto> Phases { get; } = new List<PhaseChartDataDto>();
+        public List<MechanicChartDataDto> Mechanics { get; } = new List<MechanicChartDataDto>();
 
         private static List<object[]> BuildGraphStates(IReadOnlyList<Segment> segments, PhaseData phase, bool nullable, double defaultState)
         {
@@ -42,39 +42,16 @@ namespace GW2EIBuilders.HtmlModels
             return BuildGraphStates(npc.GetBreakbarPercentUpdates(log), phase, true, 100.0);
         }
 
-        public static ChartDataDto BuildChartData(ParsedEvtcLog log)
+        public ChartDataDto(ParsedEvtcLog log)
         {
-            var chartData = new ChartDataDto();
             var phaseChartData = new List<PhaseChartDataDto>();
             IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             for (int i = 0; i < phases.Count; i++)
             {
-                var phaseData = new PhaseChartDataDto()
-                {
-                    Players = PlayerChartDataDto.BuildPlayersGraphData(log, i)
-                };
-                foreach (NPC target in phases[i].Targets)
-                {
-                    phaseData.Targets.Add(TargetChartDataDto.BuildTargetGraphData(log, i, target));
-                }
-                if (i == 0)
-                {
-                    phaseData.TargetsHealthStatesForCR = new List<List<object[]>>();
-                    phaseData.TargetsBreakbarPercentStatesForCR = new List<List<object[]>>();
-                    phaseData.TargetsBarrierStatesForCR = new List<List<object[]>>();
-                    foreach (NPC target in log.FightData.Logic.Targets)
-                    {
-                        phaseData.TargetsHealthStatesForCR.Add(BuildHealthStates(log, target, phases[0], false));
-                        phaseData.TargetsBreakbarPercentStatesForCR.Add(BuildBreakbarPercentStates(log, target, phases[0]));
-                        phaseData.TargetsBarrierStatesForCR.Add(BuildBarrierStates(log, target, phases[0]));
-                    }
-                }
-
-                phaseChartData.Add(phaseData);
+                phaseChartData.Add(new PhaseChartDataDto(log, phases[i], i == 0));
             }
-            chartData.Phases = phaseChartData;
-            chartData.Mechanics = MechanicChartDataDto.BuildMechanicsChartData(log);
-            return chartData;
+            Phases = phaseChartData;
+            Mechanics = MechanicChartDataDto.BuildMechanicsChartData(log);
         }
     }
 }

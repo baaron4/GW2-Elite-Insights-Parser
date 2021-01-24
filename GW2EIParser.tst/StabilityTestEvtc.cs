@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIParser.Exceptions;
@@ -17,7 +15,7 @@ namespace GW2EIParser.tst
     [TestFixture]
     public class StabilityTestEvtc
     {
-        private static bool Loop(BlockingCollection<string> failed, BlockingCollection<string> messages, string file)
+        private static bool Loop(List<string> failed, List<string> messages, string file)
         {
             try
             {
@@ -53,7 +51,7 @@ namespace GW2EIParser.tst
             return true;
         }
 
-        private static void GenerateCrashData(BlockingCollection<string> failed, BlockingCollection<string> messages, string type, bool copy)
+        private static void GenerateCrashData(List<string> failed, List<string> messages, string type, bool copy)
         {
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/Crashes/";
 
@@ -107,10 +105,10 @@ namespace GW2EIParser.tst
             }
             Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
 
-            var failed = new BlockingCollection<string>();
-            var messages = new BlockingCollection<string>();
+            var failed = new List<string>();
+            var messages = new List<string>();
             var toCheck = Directory.EnumerateFiles(testLocation, "*.evtc", SearchOption.AllDirectories).ToList();
-            Parallel.ForEach(toCheck, file => Loop(failed, messages, file));
+            toCheck.ForEach(file => Loop(failed, messages, file));
 
             GenerateCrashData(failed, messages, "evtc", true);
 
@@ -126,10 +124,10 @@ namespace GW2EIParser.tst
                 Directory.CreateDirectory(testLocation);
             }
             Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
-            var failed = new BlockingCollection<string>();
-            var messages = new BlockingCollection<string>();
+            var failed = new List<string>();
+            var messages = new List<string>();
             var toCheck = Directory.EnumerateFiles(testLocation, "*.evtc.zip", SearchOption.AllDirectories).ToList();
-            Parallel.ForEach(toCheck, file => Loop(failed, messages, file));
+            toCheck.ForEach(file => Loop(failed, messages, file));
 
             GenerateCrashData(failed, messages, "evtczip", true);
 
@@ -146,10 +144,10 @@ namespace GW2EIParser.tst
             }
             Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
 
-            var failed = new BlockingCollection<string>();
-            var messages = new BlockingCollection<string>();
+            var failed = new List<string>();
+            var messages = new List<string>();
             var toCheck = Directory.EnumerateFiles(testLocation, "*.zevtc", SearchOption.AllDirectories).ToList();
-            Parallel.ForEach(toCheck, file => Loop(failed, messages, file));
+            toCheck.ForEach(file => Loop(failed, messages, file));
 
             GenerateCrashData(failed, messages, "zevtc", true);
 
@@ -164,9 +162,9 @@ namespace GW2EIParser.tst
             {
                 Directory.CreateDirectory(testLocation);
             }
-            var failed = new BlockingCollection<string>();
+            var failed = new List<string>();
             int failedCount = 0;
-            var messages = new BlockingCollection<string>();
+            var messages = new List<string>();
             var toCheck = Directory.EnumerateFiles(testLocation, "*.zevtc", SearchOption.AllDirectories).ToList();
             foreach (string file in toCheck)
             {

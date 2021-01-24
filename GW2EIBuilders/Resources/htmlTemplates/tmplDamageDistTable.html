@@ -1,22 +1,22 @@
 <template>
     <div>
-        <div v-if="actor !== null">
+        <div v-if="actor !== null" class="mb-1 mt-1">
             <div v-if="isminion">
-                <p>
+                <p style="display: table-row;">
                     {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of its master's total
                     {{istarget ? 'Target' :''}} damage ({{dmgdist.contributedDamage}})
                 </p>
-                <p v-if="hasBreakbarDamage && dmgdist.contributedBreakbarDamage > 0">
+                <p v-if="hasBreakbarDamage && dmgdist.contributedBreakbarDamage > 0" style="display: table-row;">
                     {{actor.name}} did {{round3(100*dmgdist.contributedBreakbarDamage/dmgdist.totalBreakbarDamage)}}% of its master's total
                     {{istarget ? 'Target' :''}} breakbar damage ({{round1(dmgdist.contributedBreakbarDamage)}})
                 </p>
             </div>
             <div v-else>
-                <p>
+                <p style="display: table-row;">
                     {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of their total {{istarget ?
                         'Target' :''}} damage ({{dmgdist.contributedDamage}})
                 </p>              
-                <p v-if="hasBreakbarDamage && dmgdist.contributedBreakbarDamage > 0">
+                <p v-if="hasBreakbarDamage && dmgdist.contributedBreakbarDamage > 0" style="display: table-row;">
                     {{actor.name}} did {{round3(100*dmgdist.contributedBreakbarDamage/dmgdist.totalBreakbarDamage)}}% of their total
                     {{istarget ? 'Target' :''}} breakbar damage ({{round1(dmgdist.contributedBreakbarDamage)}})
                 </p>

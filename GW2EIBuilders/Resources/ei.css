@@ -135,8 +135,22 @@
     width: 45px;
 }
 
+.cr-barrier-display {
+    font-size: 0.65rem;
+    top: -43px;
+    position: relative;
+    width: 45px;
+}
+
 .cr-breakbar-bar {
     color: #DDDDDD;
+}
+
+.cr-barrier { 
+    position: relative;
+    width: 100%;
+    height: 100%;
+    top: -96px;
 }
 
 .cr-breakbar-display {
@@ -147,11 +161,19 @@
 }
 
 .cr-hp-display-player {
+    left: 0%;
+}
+
+.cr-barrier-display-player {
     left: 53%;
 }
 
 .cr-hp-display-target {
-    left: 82%;
+    left: 0%;
+}
+
+.cr-barrier-display-target {
+    left: 77%;
 }
 
 h6.actor-shorten {

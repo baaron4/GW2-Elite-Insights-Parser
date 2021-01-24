@@ -254,8 +254,8 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Spawn Protection?", 34113, ParserHelper.Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Buff("Stun", 872, ParserHelper.Source.Common, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/97/Stun.png"),
                 new Buff("Daze", 833, ParserHelper.Source.Common, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/79/Daze.png"),
-                new Buff("Exposed (48209)", 48209, ParserHelper.Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/f/f4/Exposed_%28effect%29.png"),
-                new Buff("Exposed (31589)", 31589, ParserHelper.Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/f/f4/Exposed_%28effect%29.png"),
+                new Buff("Exposed (48209)", 48209, ParserHelper.Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6b/Exposed.png"),
+                new Buff("Exposed (31589)", 31589, ParserHelper.Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6b/Exposed.png"),
                 new Buff("Unblockable",36781, ParserHelper.Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/f0/Unblockable_%28effect%29.png",102321 , ulong.MaxValue),
                 //Auras
                 new Buff("Chaos Aura", 10332, ParserHelper.Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/e/ec/Chaos_Aura.png"),

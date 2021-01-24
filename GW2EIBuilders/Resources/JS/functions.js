@@ -1,10 +1,11 @@
 /*jshint esversion: 6 */
 "use strict";
-function computeGradient(left, percent) {
+
+function computeGradient(left, percent, right) {
     var template = "linear-gradient(to right, $fill$, $middle$, $black$)";
     var res = percent;
     var fillPercent = left + " " + res + "%";
-    var blackPercent = "black " + (100 - res) + "%";
+    var blackPercent = right + " " + (100 - res) + "%";
     var middle = res + "%";
     template = template.replace("$fill$", fillPercent);
     template = template.replace("$black$", blackPercent);
@@ -449,61 +450,32 @@ function getActorGraphLayout(images, color, hasBuffs) {
     };
 }
 
-function computeTargetHealthData(graph, targets, phase, data, yaxis) {
-    for (var i = 0; i < graph.targets.length; i++) {
-        var health = graph.targets[i].healthStates;
-        var hpTexts = [];
-        var times = [];
-        var target = targets[phase.targets[i]];
-        for (var j = 0; j < health.length; j++) {
-            hpTexts[j] = health[j][1] + "% hp - " + target.name;
-            times[j] = health[j][0];
-        }
-        var res = {
-            x: times,
-            text: hpTexts,
-            mode: 'lines',
-            line: {
-                dash: 'dashdot',
-                shape: 'hv'
-            },
-            hoverinfo: 'text',
-            name: target.name + ' health',
-        };
-        if (yaxis) {
-            res.yaxis = yaxis;
-        }
-        data.push(res);
-    }
-    return graph.targets.length;
-}
-
-function computeTargetBreakbarData(graph, targets, phase, data, yaxis) {
+function _computeTargetGraphData(graph, targets, phase, data, yaxis, jsonGraphName, percentName, graphName, visible) {
     var count = 0;
     for (var i = 0; i < graph.targets.length; i++) {
-        var breakbar = graph.targets[i].breakbarPercentStates;
-        if (!breakbar) {
+        var graphData = graph.targets[i][jsonGraphName];
+        if (!graphData) {
             continue;
         }
         count++;
-        var breakbarTexts = [];
+        var texts = [];
         var times = [];
         var target = targets[phase.targets[i]];
-        for (var j = 0; j < breakbar.length; j++) {
-            breakbarTexts[j] = breakbar[j][1] + "% breakbar - " + target.name;
-            times[j] = breakbar[j][0];
+        for (var j = 0; j < graphData.length; j++) {
+          texts[j] = graphData[j][1] + "% " + percentName + " - " + target.name;
+          times[j] = graphData[j][0];
         }
         var res = {
-            x: times,
-            text: breakbarTexts,
-            mode: 'lines',
-            line: {
-                dash: 'dashdot',
-                shape: 'hv'
-            },
-            hoverinfo: 'text',
-            visible: phase.breakbarPhase ? true : "legendonly",
-            name: target.name + ' breakbar',
+          x: times,
+          text: texts,
+          mode: "lines",
+          line: {
+            dash: "dashdot",
+            shape: "hv",
+          },
+          hoverinfo: "text",
+          visible: visible ? true : "legendonly",
+          name: target.name + " " + graphName,
         };
         if (yaxis) {
             res.yaxis = yaxis;
@@ -513,31 +485,16 @@ function computeTargetBreakbarData(graph, targets, phase, data, yaxis) {
     return count;
 }
 
-function computePlayerHealthData(healthGraph, data, yaxis) {
-    var health = healthGraph;
-    var hpTexts = [];
-    var times = [];
-    for (var j = 0; j < health.length; j++) {
-        hpTexts[j] = health[j][1] + "% hp - Player";
-        times[j] = health[j][0];
-    }
-    var res = {
-        x: times,
-        text: hpTexts,
-        mode: 'lines',
-        line: {
-            dash: 'dashdot',
-            shape: 'hv'
-        },
-        hoverinfo: 'text',
-        name: 'Player health',
-        visible: 'legendonly',
-    };
-    if (yaxis) {
-        res.yaxis = yaxis;
-    }
-    data.push(res);
-    return 1;
+function computeTargetHealthData(graph, targets, phase, data, yaxis) {
+    return _computeTargetGraphData(graph, targets, phase, data, yaxis, "healthStates", "hp", "health", true);
+}
+
+function computeTargetBarrierData(graph, targets, phase, data, yaxis) {
+    return _computeTargetGraphData(graph, targets, phase, data, yaxis, "barrierStates", "barrier", "barrier", false);
+}
+
+function computeTargetBreakbarData(graph, targets, phase, data, yaxis) {
+    return _computeTargetGraphData(graph, targets, phase, data, yaxis, "breakbarPercentStates", "breakbar", "breakbar", phase.breakbarPhase);
 }
 
 function computeBuffData(buffData, data) {

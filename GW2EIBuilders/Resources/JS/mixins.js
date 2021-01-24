@@ -41,7 +41,7 @@ var graphComponent = {
         return {
             graphdata: {
                 dpsmode: 0,
-                graphmode: GraphType.DPS,
+                graphmode: logData.wvw ? GraphType.Damage : GraphType.DPS,
             },
             layout: {},
             dpsCache: new Map(),

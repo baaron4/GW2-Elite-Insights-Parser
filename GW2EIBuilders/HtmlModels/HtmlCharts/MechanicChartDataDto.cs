@@ -8,11 +8,20 @@ namespace GW2EIBuilders.HtmlModels
 {
     internal class MechanicChartDataDto
     {
-        public string Symbol { get; set; }
-        public int Size { get; set; }
-        public string Color { get; set; }
-        public List<List<List<object>>> Points { get; set; }
-        public bool Visible { get; set; }
+        public string Symbol { get; }
+        public int Size { get; }
+        public string Color { get; }
+        public List<List<List<object>>> Points { get; }
+        public bool Visible { get; }
+
+        private MechanicChartDataDto(ParsedEvtcLog log, Mechanic mech)
+        {
+            Color = mech.PlotlySetting.Color;
+            Symbol = mech.PlotlySetting.Symbol;
+            Size = mech.PlotlySetting.Size;
+            Visible = (mech.SkillId == SkillItem.DeathId || mech.SkillId == SkillItem.DownId);
+            Points = BuildMechanicGraphPointData(log, log.MechanicData.GetMechanicLogs(log, mech), mech.IsEnemyMechanic);
+        }
 
         private static List<List<object>> GetMechanicChartPoints(IReadOnlyList<MechanicEvent> mechanicLogs, PhaseData phase, ParsedEvtcLog log, bool enemyMechanic)
         {
@@ -74,16 +83,7 @@ namespace GW2EIBuilders.HtmlModels
             var mechanicsChart = new List<MechanicChartDataDto>();
             foreach (Mechanic mech in log.MechanicData.GetPresentMechanics(log, log.FightData.FightStart, log.FightData.FightEnd))
             {
-                IReadOnlyList<MechanicEvent> mechanicLogs = log.MechanicData.GetMechanicLogs(log, mech);
-                var dto = new MechanicChartDataDto
-                {
-                    Color = mech.PlotlySetting.Color,
-                    Symbol = mech.PlotlySetting.Symbol,
-                    Size = mech.PlotlySetting.Size,
-                    Visible = (mech.SkillId == SkillItem.DeathId || mech.SkillId == SkillItem.DownId),
-                    Points = BuildMechanicGraphPointData(log, mechanicLogs, mech.IsEnemyMechanic)
-                };
-                mechanicsChart.Add(dto);
+                mechanicsChart.Add(new MechanicChartDataDto(log, mech));
             }
             return mechanicsChart;
         }

@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.Interfaces;
+﻿using System;
+using GW2EIEvtcParser.Interfaces;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -8,7 +9,11 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal HealthUpdateEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
-            HPPercent = evtcItem.DstAgent / 100.0;
+            HPPercent = Math.Round(evtcItem.DstAgent / 100.0, 2);
+            if (HPPercent > 100.0)
+            {
+                HPPercent = 100;
+            }
         }
 
         public (long start, double value) ToState()

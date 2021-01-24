@@ -1,12 +1,18 @@
 <template>
-    <div class="player-status" :style="{'background': getGradient(time, status)}">
+    <div class="player-status" :style="{'background': getHPGradient(time, status)}">
         <h6 class="actor-shorten text-center" :title="player.name">
             <img :src="player.icon" :alt="player.profession" height="18" width="18">
             {{player.name}}
         </h6>
         <p v-if="hasHealth" class="text-right cr-hp-display cr-hp-display-player">
-            {{(Math.round(100*getPercent(time))/100).toFixed(2)}} %
+            {{(Math.round(100*getHPPercent(time))/100).toFixed(2)}} %
         </p>
+        <p v-if="hasBarrier" class="text-right cr-barrier-display cr-barrier-display-player">
+            {{(Math.round(100*getBarrierPercent(time))/100).toFixed(2)}} %
+        </p>      
+        <div v-if="hasBarrier" class="cr-barrier" :style="{'background': getBarrierGradient(time, status)}">
+
+        </div>
     </div>
 </template>
 
@@ -15,16 +21,25 @@
         props: ["playerindex", "time"],
         template: `${template}`,
         methods: {         
-            getPercent: function (time) {
+            getHPPercent: function (time) {
                 if (!this.hasHealth) {
                     return 100;
                 }
                 return findState(this.healths, time/1000.0, 0, this.healths.length - 1);
             },
-            getGradient: function (time, status) {
+            getBarrierPercent: function (time) {
+                if (!this.hasBarrier) {
+                    return 0;
+                }
+                return findState(this.barriers, time/1000.0, 0, this.barriers.length - 1);
+            },
+            getHPGradient: function (time, status) {
                 var color = status === 0 ? 'black' : status === 1 ? 'red' : status === 2 ? 'grey' : 'green';
-                return computeGradient(color, this.getPercent(time));
-            }
+                return computeGradient(color, this.getHPPercent(time), 'black');
+            },    
+            getBarrierGradient: function (time, status) {
+                return computeGradient('rgba(0,0,0,0)', 100 - this.getBarrierPercent(time), 'rgba(228,148,97, 0.5)' );
+            }, 
         },
         computed: {
             phase: function () {
@@ -36,6 +51,9 @@
             healths: function () {
                 return graphData.phases[0].players[this.playerindex].healthStates;
             },
+            barriers: function () {
+                return graphData.phases[0].players[this.playerindex].barrierStates;
+            },
             status: function () {
                 var crPData = animator.playerData.get(this.player.uniqueID);
                 var icon = crPData.getIcon(this.time);
@@ -43,6 +61,9 @@
             },
             hasHealth: function () {
                 return !!this.healths;
+            },
+            hasBarrier: function () {
+                return !!this.barriers;
             }
         }
     });

@@ -1,7 +1,7 @@
 <template>
-    <div>     
-        <dps-graph-mode-selector-component :data="graphdata" 
-            :phaseduration="this.phase.end - this.phase.start" :phasehassubphases="!!this.phase.subPhases" :ignorebreakbar="true">
+    <div>
+        <dps-graph-mode-selector-component :data="graphdata" :phaseduration="this.phase.end - this.phase.start"
+            :phasehassubphases="!!this.phase.subPhases" :ignorebreakbar="true">
         </dps-graph-mode-selector-component>
         <h3 class="text-center mt-1 mb-1">{{graphname}}</h3>
         <graph-component :id="graphid" :layout="layout" :data="computeData"></graph-component>
@@ -30,7 +30,7 @@
             } else if (phasebreaks && phasebreaks[j]) {
                 left = j;
             }
-            right = j;    
+            right = j;
             if (graphMode === GraphType.CenteredDPS) {
                 if (lim > 0) {
                     right = Math.min(Math.round(time + lim), end - 1);
@@ -44,7 +44,7 @@
                 } else {
                     right = end - 1;
                 }
-            }  
+            }
             var div = graphMode !== GraphType.Damage && graphMode !== GraphType.BreakbarDamage ? Math.max(times[right] - times[left], 1) : 1;
             totalDamage = damageData[right] - damageData[left];
             totalDPS[j] = Math.round(totalDamage / (div));
@@ -61,9 +61,47 @@
         return res;
     }
 
+    function addLayout(data, target, states, percentName, graphName, visible) {
+        if (!states) {
+            return 0;
+        }
+        var texts = [];
+        var times = [];
+        for (var j = 0; j < states.length; j++) {
+            texts[j] = states[j][1] + "% " + percentName;
+            times[j] = states[j][0];
+        }
+        var res = {
+            x: times,
+            text: texts,
+            mode: 'lines',
+            line: {
+                dash: 'dashdot',
+                shape: 'hv'
+            },
+            hoverinfo: 'text',
+            visible: visible ? true : 'legendonly',
+            name: target.name + ' ' + graphName,
+            yaxis: 'y3'
+        };
+        data.push(res);
+        return 1;
+    }
+
+    function addPoints(res, graph, maxDPS) {
+        if (!graph) {
+            return;
+        }
+        var points = [];
+        for (var j = 0; j < graph.length; j++) {
+            points[j] = graph[j][1] * maxDPS / 100.0;
+        }
+        res.push(points);
+    }
+
     Vue.component("target-graph-tab-component", {
         props: ["targetindex", "phaseindex", 'light'],
-        template: `${template}`,   
+        template: `${template}`,
         mixins: [graphComponent],
         data: function () {
             return {
@@ -97,53 +135,9 @@
             var oldOffset = this.targetOffset;
             this.targetOffset += computeBuffData(this.target.details.boonGraph[this.phaseindex], this.data);
             var hasBuffs = oldOffset !== this.targetOffset;
-            if (this.hasBreakbarStates) {
-                var breakbarStates = this.graph.targets[this.phaseTargetIndex].breakbarPercentStates;
-                var breakbarTexts = [];
-                var times = [];
-                for (var j = 0; j < breakbarStates.length; j++) {
-                    breakbarTexts[j] = breakbarStates[j][1] + "% breakbar";
-                    times[j] = breakbarStates[j][0];
-                }
-                var res = {
-                    x: times,
-                    text: breakbarTexts,
-                    mode: 'lines',
-                    line: {
-                        dash: 'dashdot',
-                        shape: 'hv'
-                    },
-                    hoverinfo: 'text',
-                    visible: this.phase.breakbarPhase ? true : 'legendonly',
-                    name: this.target.name + ' breakbar',
-                    yaxis: 'y3'
-                };
-                this.data.push(res);
-                this.targetOffset++;
-            }
-            {
-                var health = this.graph.targets[this.phaseTargetIndex].healthStates;
-                var hpTexts = [];
-                var times = [];
-                for (var j = 0; j < health.length; j++) {
-                    hpTexts[j] = health[j][1] + "% hp";
-                    times[j] = health[j][0];
-                }
-                var res = {
-                    x: times,
-                    text: hpTexts,
-                    mode: 'lines',
-                    line: {
-                        dash: 'dashdot',
-                        shape: 'hv'
-                    },
-                    hoverinfo: 'text',
-                    name: this.target.name + ' health',
-                    yaxis: 'y3'
-                };
-                this.data.push(res);
-                this.targetOffset++;
-            }
+            this.targetOffset += addLayout(this.data, this.target, this.breakbarStates, "breakbar", "breakbar", this.phase.breakbarPhase);
+            this.targetOffset += addLayout(this.data, this.target, this.barrierStates, "barrier", "barrier", false);
+            this.targetOffset += addLayout(this.data, this.target, this.healthStates, "hp", "health", true);
             this.data.push({
                 x: this.phase.times,
                 y: [],
@@ -159,8 +153,14 @@
             computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
         },
         computed: {
-            hasBreakbarStates: function() {
-                return !!this.graph.targets[this.phaseTargetIndex].breakbarPercentStates;
+            healthStates: function () {
+                return this.graph.targets[this.phaseTargetIndex].healthStates;
+            },
+            breakbarStates: function () {
+                return this.graph.targets[this.phaseTargetIndex].breakbarPercentStates;
+            },
+            barrierStates: function () {
+                return this.graph.targets[this.phaseTargetIndex].barrierStates;
             },
             target: function () {
                 return logData.targets[this.targetindex];
@@ -186,7 +186,7 @@
                     case -1:
                         name = "Phase " + name;
                         break;
-                    default:                       
+                    default:
                         name = this.graphdata.dpsmode + "s " + name;
                         break;
                 }
@@ -208,10 +208,8 @@
                 this.layout.yaxis3.title = graphTypeEnumToString(this.graphdata.graphmode);
                 var res = this.data;
                 var data = this.computeDPSRelatedData();
-                this.data[this.targetOffset].y = data[0];
-                this.data[this.targetOffset - 1].y = data[1];
-                if (data[2]) {
-                    this.data[this.targetOffset - 2].y = data[2];
+                for (var i = 0; i < data.length; i++) {
+                    this.data[this.targetOffset - i].y = data[i];
                 }
                 return res;
             }
@@ -239,24 +237,10 @@
                     return this.dataCache.get(cacheID);
                 }
                 var dpsData = this.computeDPSData();
-                var res = [];
-                res[0] = dpsData.dps;
-                {
-                    var health = this.graph.targets[this.phaseTargetIndex].healthStates;
-                    var hpPoints = [];
-                    for (var j = 0; j < health.length; j++) {
-                        hpPoints[j] = health[j][1] * dpsData.maxDPS / 100.0;
-                    }
-                    res[1] = hpPoints;
-                }
-                if (this.hasBreakbarStates) {
-                    var breakbarStates = this.graph.targets[this.phaseTargetIndex].breakbarPercentStates;
-                    var breakbarPoints = [];
-                    for (var j = 0; j < breakbarStates.length; j++) {
-                        breakbarPoints[j] = breakbarStates[j][1] * dpsData.maxDPS / 100.0;
-                    }
-                    res[2] = breakbarPoints;
-                }
+                var res = [dpsData.dps];
+                addPoints(res, this.healthStates, dpsData.maxDPS);               
+                addPoints(res, this.barrierStates, dpsData.maxDPS);
+                addPoints(res, this.breakbarStates, dpsData.maxDPS);
                 this.dataCache.set(cacheID, res);
                 return res;
             },
