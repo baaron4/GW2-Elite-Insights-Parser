@@ -184,7 +184,7 @@ namespace GW2EIBuilders
                 // If the user set a Cdn url we replace the externalScriptsPath with the proper cdn url
                 if (!string.IsNullOrWhiteSpace(_externalScriptsCdn))
                 {
-                    cssPrePath = _externalScriptsCdn;
+                    cssPrePath = _externalScriptsCdn.EndsWith("/") && _externalScriptsCdn.Length > 1 ? _externalScriptsCdn.Substring(0, _externalScriptsCdn.Length - 1) : _externalScriptsCdn;
                 }
                 else
                 {
@@ -227,7 +227,7 @@ namespace GW2EIBuilders
                         catch
                         {
                             // something went wrong on creating the external folder (invalid chars?)      
-                            // this will skip the saving in this path and continue with css files in the root path for the report
+                            // this will skip the saving in this path and continue with script files in the root path for the report
                         }
                     }
                     else
@@ -262,7 +262,7 @@ namespace GW2EIBuilders
                 // If the user set a Cdn url we replace the externalScriptsPath with the proper cdn url
                 if (!string.IsNullOrWhiteSpace(_externalScriptsCdn))
                 {
-                    scriptPrePath = _externalScriptsCdn;
+                    scriptPrePath = _externalScriptsCdn.EndsWith("/") && _externalScriptsCdn.Length > 1 ? _externalScriptsCdn.Substring(0, _externalScriptsCdn.Length-1) : _externalScriptsCdn;
                 }
                 else
                 {
