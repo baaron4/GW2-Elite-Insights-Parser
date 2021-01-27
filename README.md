@@ -103,6 +103,10 @@ Note it may take some time for each file to parse and they will not be ready to 
 
 -__HtmlExternalScripts__: if true, css and js files will be separated from the html.
 
+-__HtmlExternalScriptsPath__: Available if HtmlExternalScripts is enabled. Will place the external script files in a subdirectory.
+
+-__HtmlExternalScriptsCdn__: Available if HtmlExternalScripts is enabled. Will use an url for the external script files. Generate once use multiple times. Will reduce needed webspace a bit.
+
 -__LightTheme__: if true, the html will use a light theme by default. Please note that the theme can be dynamically changed on the html post generation.
 
 ### CSV Settings

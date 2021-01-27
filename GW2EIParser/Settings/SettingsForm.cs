@@ -38,6 +38,7 @@ namespace GW2EIParser.Setting
             BtnResetTraitList.Enabled = !busy;
             BtnLoadSettings.Enabled = !busy;
             GroupWebhookSettings.Enabled = !busy;
+            TxtHtmlExternalScriptsPath.Enabled = !busy;
         }
 
         private void SetUIEnable()
@@ -47,6 +48,10 @@ namespace GW2EIParser.Setting
             PanelJson.Enabled = Properties.Settings.Default.SaveOutJSON;
             PanelXML.Enabled = Properties.Settings.Default.SaveOutXML;
             GroupRawSettings.Enabled = Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML;
+            TxtHtmlExternalScriptsPath.Enabled = Properties.Settings.Default.HtmlExternalScripts;
+            LblHtmlExternalScriptsPath.Enabled = Properties.Settings.Default.HtmlExternalScripts;
+            TxtHtmlExternalScriptsCdn.Enabled = Properties.Settings.Default.HtmlExternalScripts;
+            LblHtmlExternalScriptsCdn.Enabled = Properties.Settings.Default.HtmlExternalScripts;
         }
 
         private void SetValues()
@@ -88,6 +93,9 @@ namespace GW2EIParser.Setting
             ChkDetailledWvW.Checked = Properties.Settings.Default.DetailledWvW;
 
             ChkHtmlExternalScripts.Checked = Properties.Settings.Default.HtmlExternalScripts;
+            TxtHtmlExternalScriptsPath.Text = Properties.Settings.Default.HtmlExternalScriptsPath;
+            TxtHtmlExternalScriptsCdn.Text = Properties.Settings.Default.HtmlExternalScriptsCdn;
+            
 
             SetUIEnable();
         }
@@ -237,6 +245,10 @@ namespace GW2EIParser.Setting
         private void ChkHtmlExternalScriptsCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.HtmlExternalScripts = ChkHtmlExternalScripts.Checked;
+            LblHtmlExternalScriptsPath.Enabled = ChkHtmlExternalScripts.Checked;
+            TxtHtmlExternalScriptsPath.Enabled = ChkHtmlExternalScripts.Checked;
+            LblHtmlExternalScriptsCdn.Enabled = ChkHtmlExternalScripts.Checked;
+            TxtHtmlExternalScriptsCdn.Enabled = ChkHtmlExternalScripts.Checked;
         }
 
         private void RadioThemeLightCheckedChanged(object sender, EventArgs e)
@@ -378,6 +390,16 @@ namespace GW2EIParser.Setting
         private void ChkRawTimelineArraysCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.RawTimelineArrays = ChkRawTimelineArrays.Checked;
+        }
+
+        private void TxtHtmlExternalScriptsPath_TextChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.HtmlExternalScriptsPath = TxtHtmlExternalScriptsPath.Text.Trim();
+        }
+
+        private void TxtHtmlExternalScriptCdnUrl_TextChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.HtmlExternalScriptsCdn = TxtHtmlExternalScriptsCdn.Text.Trim();
         }
     }
 }

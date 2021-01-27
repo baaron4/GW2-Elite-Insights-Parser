@@ -7,6 +7,7 @@ using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using Newtonsoft.Json;
+using System.Linq;
 
 namespace GW2EIBuilders
 {
@@ -25,6 +26,8 @@ namespace GW2EIBuilders
         private readonly bool _cr;
         private readonly bool _light;
         private readonly bool _externalScripts;
+        private readonly string _externalScriptsPath;
+        private readonly string _externalScriptsCdn;
 
         private readonly string[] _uploadLink;
 
@@ -55,6 +58,8 @@ namespace GW2EIBuilders
             _cr = _log.CanCombatReplay;
             _light = settings.HTMLLightTheme;
             _externalScripts = settings.ExternalHTMLScripts;
+            _externalScriptsPath = settings.ExternalHtmlScriptsPath;
+            _externalScriptsCdn = settings.ExternalHtmlScriptsCdn;
         }
 
         /// <summary>
@@ -124,18 +129,69 @@ namespace GW2EIBuilders
             {
                 string cssFilename = "EliteInsights-" + _scriptVersion + ".css";
                 string cssPath = Path.Combine(path, cssFilename);
+                string cssPrePath = ".";
+
+                // Setting: External Scripts Path
+                // overwrite cssPath (create directory) if files should be placed on different location
+                // settings.externalHtmlScriptsPath is set by the user
+                if (!string.IsNullOrWhiteSpace(_externalScriptsPath) && !IsInvalidExternalScriptPath(_externalScriptsPath))
+                {
+                    string htmlExternalScriptsPath = Path.Combine(path, _externalScriptsPath);
+                    bool validPath = false;
+
+                    if (!System.IO.Directory.Exists(htmlExternalScriptsPath))
+                    {
+                        try
+                        {
+                            System.IO.Directory.CreateDirectory(htmlExternalScriptsPath);
+                            validPath = true;
+                        }
+                        catch
+                        {
+                            // something went wrong on creating the external folder (invalid chars?)      
+                            // this will skip the saving in this path and continue with css files in the root path for the report
+                        }
+                    }
+                    else
+                    {
+                        validPath = true;
+                    }
+
+                    // if the creation of the folder did not fail or the folder already exists use it to include within the report
+                    if (validPath)
+                    {
+                        cssPath = Path.Combine(htmlExternalScriptsPath, cssFilename);
+                    }
+                }
+
                 try
                 {
-                    using (var fs = new FileStream(cssPath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, NoBOMEncodingUTF8))
+                    // if the source file already exists, skip creation
+                    if (!System.IO.File.Exists(cssPath))
                     {
-                        scriptWriter.Write(scriptContent);
+                        using (var fs = new FileStream(cssPath, FileMode.Create, FileAccess.Write))
+                        using (var scriptWriter = new StreamWriter(fs, NoBOMEncodingUTF8))
+                        {
+                            scriptWriter.Write(scriptContent);
+                        }
                     }
                 }
                 catch (IOException)
                 {
                 }
-                return "<link rel=\"stylesheet\" type=\"text/css\" href=\"./" + cssFilename + "?version=" + _scriptVersionRev + "\">";
+
+                // Setting: External Scripts CDN Url
+                // If the user set a Cdn url we replace the externalScriptsPath with the proper cdn url
+                if (!string.IsNullOrWhiteSpace(_externalScriptsCdn))
+                {
+                    cssPrePath = _externalScriptsCdn;
+                }
+                else
+                {
+                    cssPrePath = _externalScriptsPath;
+                }
+
+                return "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + cssPrePath + "/" + cssFilename + "?version=" + _scriptVersionRev + "\">";
             }
             else
             {
@@ -151,18 +207,69 @@ namespace GW2EIBuilders
             {
                 string scriptFilename = "EliteInsights-" + _scriptVersion + ".js";
                 string scriptPath = Path.Combine(path, scriptFilename);
+                string scriptPrePath = ".";
+
+                // Setting: External Scripts Path
+                // overwrite cssPath (create directory) if files should be placed on different location
+                // settings.externalHtmlScriptsPath is set by the user
+                if (!string.IsNullOrWhiteSpace(_externalScriptsPath) && !IsInvalidExternalScriptPath(_externalScriptsPath))
+                {
+                    string htmlExternalScriptsPath = Path.Combine(path, _externalScriptsPath);
+                    bool validPath = false;
+
+                    if (!System.IO.Directory.Exists(htmlExternalScriptsPath))
+                    {
+                        try
+                        {
+                            System.IO.Directory.CreateDirectory(htmlExternalScriptsPath);
+                            validPath = true;
+                        }
+                        catch
+                        {
+                            // something went wrong on creating the external folder (invalid chars?)      
+                            // this will skip the saving in this path and continue with css files in the root path for the report
+                        }
+                    }
+                    else
+                    {
+                        validPath = true;
+                    }
+
+                    // if the creation of the folder did not fail or the folder already exists use it to include within the report
+                    if (validPath)
+                    {
+                        scriptPath = Path.Combine(htmlExternalScriptsPath, scriptFilename);
+                    }
+                }
+
                 try
                 {
-                    using (var fs = new FileStream(scriptPath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, NoBOMEncodingUTF8))
+                    // if the source file already exists, skip creation
+                    if (!System.IO.File.Exists(scriptPath))
                     {
-                        scriptWriter.Write(scriptContent);
+                        using (var fs = new FileStream(scriptPath, FileMode.Create, FileAccess.Write))
+                        using (var scriptWriter = new StreamWriter(fs, NoBOMEncodingUTF8))
+                        {
+                            scriptWriter.Write(scriptContent);
+                        }
                     }
                 }
                 catch (IOException)
                 {
                 }
-                return "<script src=\"./" + scriptFilename + "?version=" + _scriptVersionRev + "\"></script>";
+
+                // Setting: External Scripts CDN Url
+                // If the user set a Cdn url we replace the externalScriptsPath with the proper cdn url
+                if (!string.IsNullOrWhiteSpace(_externalScriptsCdn))
+                {
+                    scriptPrePath = _externalScriptsCdn;
+                }
+                else
+                {
+                    scriptPrePath = _externalScriptsPath;
+                }
+
+                return "<script src=\"" + scriptPrePath + "/" + scriptFilename + "?version=" + _scriptVersionRev + "\"></script>";
             }
             else
             {
@@ -178,6 +285,11 @@ namespace GW2EIBuilders
                 ContractResolver = RawFormatBuilder.DefaultJsonContractResolver
             };
             return JsonConvert.SerializeObject(value, settings);
+        }
+
+        private static bool IsInvalidExternalScriptPath(string path)
+        {
+            return new List<string> { @"\", "\"", "/", ":", "?", "<", ">", "|" }.Any(path.Contains);
         }
 
 
