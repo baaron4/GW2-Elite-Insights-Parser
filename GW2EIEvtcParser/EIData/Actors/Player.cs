@@ -199,6 +199,10 @@ namespace GW2EIEvtcParser.EIData
             {
                 damageMods.AddRange(list);
             }
+            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(ParserHelper.Source.Gear, out list))
+            {
+                damageMods.AddRange(list);
+            }
             if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(ParserHelper.Source.Common, out list))
             {
                 damageMods.AddRange(list);

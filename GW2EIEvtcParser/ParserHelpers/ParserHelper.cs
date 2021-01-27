@@ -28,7 +28,7 @@ namespace GW2EIEvtcParser
         public enum Source
         {
             Common,
-            Item,
+            Item, Gear,
             Necromancer, Reaper, Scourge,
             Elementalist, Tempest, Weaver,
             Mesmer, Chronomancer, Mirage,

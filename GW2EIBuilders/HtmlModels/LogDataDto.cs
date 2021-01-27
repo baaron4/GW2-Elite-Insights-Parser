@@ -224,6 +224,18 @@ namespace GW2EIBuilders.HtmlModels
                     }
                 }
             }
+            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(ParserHelper.Source.Gear, out list))
+            {
+                foreach (DamageModifier dMod in list)
+                {
+                    if (allDamageMods.Contains(dMod.Name))
+                    {
+                        itemDamageModifiers.Add(dMod);
+                        logData.DmgModifiersItem.Add(dMod.ID);
+                        usedDamageMods.Add(dMod);
+                    }
+                }
+            }
             foreach (Buff boon in statistics.PresentBoons)
             {
                 logData.Boons.Add(boon.ID);
