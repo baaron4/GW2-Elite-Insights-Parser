@@ -43,6 +43,7 @@ namespace GW2EIEvtcParser.EIData
             OffensiveBuffTable,
             DefensiveBuffTable,
             SupportBuffTable,
+            GearBuffTable,
             GraphOnlyBuff,
             Consumable,
             Unknow
@@ -284,17 +285,17 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Gear = new List<Buff>
         {
-                new Buff("Sigil of Concentration", 33719, Source.Gear, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b3/Superior_Sigil_of_Concentration.png",0 , 93543),
-                new Buff("Superior Rune of the Monk", 53285, Source.Gear, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/18/Superior_Rune_of_the_Monk.png", 93543, ulong.MaxValue),
-                new Buff("Sigil of Corruption", 9374, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/18/Superior_Sigil_of_Corruption.png"),
-                new Buff("Sigil of Life", 9386, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a7/Superior_Sigil_of_Life.png"),
-                new Buff("Sigil of Perception", 9385, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/cc/Superior_Sigil_of_Perception.png"),
-                new Buff("Sigil of Bloodlust", 9286, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/fb/Superior_Sigil_of_Bloodlust.png"),
-                new Buff("Sigil of Bounty", 38588, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/f8/Superior_Sigil_of_Bounty.png"),
-                new Buff("Sigil of Benevolence", 9398, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/59/Superior_Sigil_of_Benevolence.png"),
-                new Buff("Sigil of Momentum", 22144, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/30/Superior_Sigil_of_Momentum.png"),
-                new Buff("Sigil of the Stars", 46953, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/dc/Superior_Sigil_of_the_Stars.png"),
-                new Buff("Sigil of Severance", 43930, Source.Gear, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/c2/Superior_Sigil_of_Severance.png"),
+                new Buff("Sigil of Concentration", 33719, Source.Gear, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/b/b3/Superior_Sigil_of_Concentration.png",0 , 93543),
+                new Buff("Superior Rune of the Monk", 53285, Source.Gear, BuffStackType.Stacking, 10, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/1/18/Superior_Rune_of_the_Monk.png", 93543, ulong.MaxValue),
+                new Buff("Sigil of Corruption", 9374, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/1/18/Superior_Sigil_of_Corruption.png"),
+                new Buff("Sigil of Life", 9386, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/a/a7/Superior_Sigil_of_Life.png"),
+                new Buff("Sigil of Perception", 9385, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/c/cc/Superior_Sigil_of_Perception.png"),
+                new Buff("Sigil of Bloodlust", 9286, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/f/fb/Superior_Sigil_of_Bloodlust.png"),
+                new Buff("Sigil of Bounty", 38588, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/f/f8/Superior_Sigil_of_Bounty.png"),
+                new Buff("Sigil of Benevolence", 9398, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/5/59/Superior_Sigil_of_Benevolence.png"),
+                new Buff("Sigil of Momentum", 22144, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/3/30/Superior_Sigil_of_Momentum.png"),
+                new Buff("Sigil of the Stars", 46953, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/d/dc/Superior_Sigil_of_the_Stars.png"),
+                new Buff("Sigil of Severance", 43930, Source.Gear, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/c/c2/Superior_Sigil_of_Severance.png"),
         };
 
         internal static readonly List<Buff> FractalInstabilities = new List<Buff>()
