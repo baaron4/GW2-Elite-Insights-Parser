@@ -97,7 +97,7 @@ namespace GW2EIEvtcParser.EIData
         {
             switch (removeType)
             {
-                case ArcDPSEnums.BuffRemove.All:
+                case BuffRemove.All:
                     foreach (BuffStackItem stackItem in BuffStack)
                     {
                         WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.Duration, time));
@@ -111,7 +111,7 @@ namespace GW2EIEvtcParser.EIData
                     }
                     BuffStack.Clear();
                     break;
-                case ArcDPSEnums.BuffRemove.Single:
+                case BuffRemove.Single:
                     for (int i = 0; i < BuffStack.Count; i++)
                     {
                         BuffStackItem stackItem = BuffStack[i];

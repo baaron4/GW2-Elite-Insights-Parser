@@ -355,7 +355,7 @@ namespace GW2EIBuilders.JsonModels
         private static List<JsonBuffsUptime> GetPlayerJsonBuffsUptime(Player player, List<IReadOnlyDictionary<long, FinalPlayerBuffs>> buffs, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.BuffDesc> buffDesc, Dictionary<string, HashSet<long>> personalBuffs)
         {
             var res = new List<JsonBuffsUptime>();
-            var profEnums = new HashSet<ParserHelper.Source>(ParserHelper.ProfToEnum(player.Prof));
+            var profEnums = new HashSet<ParserHelper.Source>(ProfToEnum(player.Prof));
             IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             foreach (KeyValuePair<long, FinalPlayerBuffs> pair in buffs[0])
             {

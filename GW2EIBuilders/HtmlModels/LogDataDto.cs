@@ -187,7 +187,7 @@ namespace GW2EIBuilders.HtmlModels
                 allDamageMods.UnionWith(p.GetPresentDamageModifier(log));
             }
             var commonDamageModifiers = new List<DamageModifier>();
-            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(ParserHelper.Source.Common, out IReadOnlyList<DamageModifier> list))
+            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(Source.Common, out IReadOnlyList<DamageModifier> list))
             {
                 foreach (DamageModifier dMod in list)
                 {
@@ -199,7 +199,7 @@ namespace GW2EIBuilders.HtmlModels
                     }
                 }
             }
-            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(ParserHelper.Source.FightSpecific, out list))
+            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(Source.FightSpecific, out list))
             {
                 foreach (DamageModifier dMod in list)
                 {
@@ -212,7 +212,7 @@ namespace GW2EIBuilders.HtmlModels
                 }
             }
             var itemDamageModifiers = new List<DamageModifier>();
-            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(ParserHelper.Source.Item, out list))
+            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(Source.Item, out list))
             {
                 foreach (DamageModifier dMod in list)
                 {
@@ -224,7 +224,7 @@ namespace GW2EIBuilders.HtmlModels
                     }
                 }
             }
-            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(ParserHelper.Source.Gear, out list))
+            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(Source.Gear, out list))
             {
                 foreach (DamageModifier dMod in list)
                 {
