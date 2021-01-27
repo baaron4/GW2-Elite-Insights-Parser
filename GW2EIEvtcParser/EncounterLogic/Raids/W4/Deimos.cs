@@ -236,18 +236,18 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             ComputeFightTargets(agentData, combatData);
             // Find target
-            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
-            if (target == null)
+            NPC deimos = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
+            if (deimos == null)
             {
                 throw new MissingKeyActorsException("Deimos not found");
             }
             // Remove deimos despawn events as they are useless and mess with combat replay
-            combatData.RemoveAll(x => x.IsStateChange == ArcDPSEnums.StateChange.Despawn && x.SrcAgent == target.Agent);
+            combatData.RemoveAll(x => x.IsStateChange == ArcDPSEnums.StateChange.Despawn && x.SrcAgent == deimos.Agent);
             // invul correction
-            CombatItem invulApp = combatData.FirstOrDefault(x => x.DstAgent == target.Agent && x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0 && x.SkillID == 762 && x.IsStateChange == ArcDPSEnums.StateChange.None);
+            CombatItem invulApp = combatData.FirstOrDefault(x => x.DstAgent == deimos.Agent && x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0 && x.SkillID == 762 && x.IsStateChange == ArcDPSEnums.StateChange.None);
             if (invulApp != null)
             {
-                invulApp.OverrideValue((int)(target.LastAware - invulApp.Time));
+                invulApp.OverrideValue((int)(deimos.LastAware - invulApp.Time));
             }
             // Deimos gadgets
             CombatItem targetable = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.DstAgent > 0);
@@ -256,7 +256,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // legacy method
             if (firstAware == 0)
             {
-                CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= target.LastAware && (x.SkillID == 37980 || x.SkillID == 37982 || x.SkillID == 38046) && x.SrcAgent != 0 && x.SrcInstid != 0);
+                CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= deimos.LastAware && (x.SkillID == 37980 || x.SkillID == 37982 || x.SkillID == 38046) && x.SrcAgent != 0 && x.SrcInstid != 0);
                 if (armDeimosDamageEvent != null)
                 {
                     var deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Name.Contains("Deimos") && x.LastAware > armDeimosDamageEvent.Time).ToList();
@@ -269,11 +269,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             if (gadgetAgents.Count > 0)
             {
-                _deimos10PercentTime = (firstAware >= target.LastAware ? firstAware : target.LastAware);
-                MergeWithGadgets(target.AgentItem, gadgetAgents, combatData);
+                _deimos10PercentTime = (firstAware >= deimos.LastAware ? firstAware : deimos.LastAware);
+                MergeWithGadgets(deimos.AgentItem, gadgetAgents, combatData);
             }
-            target.AgentItem.OverrideAwareTimes(target.FirstAware, fightData.FightEnd);
-            target.OverrideName("Deimos");
+            deimos.AgentItem.OverrideAwareTimes(deimos.FirstAware, fightData.FightEnd);
+            deimos.OverrideName("Deimos");
+            foreach (NPC target in Targets)
+            {
+                if (target.ID == (int)ArcDPSEnums.TrashID.Thief || target.ID == (int)ArcDPSEnums.TrashID.Drunkard || target.ID == (int)ArcDPSEnums.TrashID.Gambler)
+                {
+
+                    string name = (target.ID == (int)ArcDPSEnums.TrashID.Thief ? "Thief" : (target.ID == (int)ArcDPSEnums.TrashID.Drunkard ? "Drunkard" : (target.ID == (int)ArcDPSEnums.TrashID.Gambler ? "Gambler" : "")));
+                    target.OverrideName(name);
+                }
+            }
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -325,15 +334,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (target.ID == (int)ArcDPSEnums.TrashID.Thief || target.ID == (int)ArcDPSEnums.TrashID.Drunkard || target.ID == (int)ArcDPSEnums.TrashID.Gambler)
                 {
-
-                    string name = (target.ID == (int)ArcDPSEnums.TrashID.Thief ? "Thief" : (target.ID == (int)ArcDPSEnums.TrashID.Drunkard ? "Drunkard" : (target.ID == (int)ArcDPSEnums.TrashID.Gambler ? "Gambler" : "")));
-                    target.OverrideName(name);
-                    var tarPhase = new PhaseData(target.FirstAware - 1000, Math.Min(target.LastAware + 1000, log.FightData.FightEnd), name);
-                    tarPhase.AddTarget(target);
-                    tarPhase.OverrideTimes(log);
+                    var addPhase = new PhaseData(target.FirstAware - 1000, Math.Min(target.LastAware + 1000, log.FightData.FightEnd), target.Character);
+                    addPhase.AddTarget(target);
+                    addPhase.OverrideTimes(log);
                     // override first then add Deimos so that it does not disturb the override process
-                    tarPhase.AddTarget(mainTarget);
-                    phases.Add(tarPhase);
+                    addPhase.AddTarget(mainTarget);
+                    phases.Add(addPhase);
                 }
             }
 
