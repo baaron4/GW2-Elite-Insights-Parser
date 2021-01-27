@@ -278,9 +278,6 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
-            long start = 0;
-            long end = 0;
-            long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
             NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
             if (mainTarget == null)
@@ -288,49 +285,63 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Deimos not found");
             }
             phases[0].AddTarget(mainTarget);
-            if (!requirePhases)
+
+            if (requirePhases)
             {
-                return phases;
+                phases = AddBossPhases(phases, log, mainTarget);
+                phases = AddAddPhases(phases, log, mainTarget);
+                phases = AddBurstPhases(phases, log, mainTarget);
             }
+
+            return phases;
+        }
+
+        private List<PhaseData> AddBossPhases(List<PhaseData> phases, ParsedEvtcLog log, NPC mainTarget)
+        {
             // Determined + additional data on inst change
             AbstractBuffEvent invulDei = log.CombatData.GetBuffData(762).FirstOrDefault(x => x is BuffApplyEvent && x.To == mainTarget.AgentItem);
+
             if (invulDei != null)
             {
-                end = invulDei.Time;
-                phases.Add(new PhaseData(start, end));
-                start = _deimos10PercentTime > 0 ? _deimos10PercentTime : fightDuration;
+                var phase100to10 = new PhaseData(0, invulDei.Time, "100% - 10%");
+                phase100to10.AddTarget(mainTarget);
+                phases.Add(phase100to10);
+
+                if (_deimos10PercentTime > 0 && log.FightData.FightEnd - _deimos10PercentTime > ParserHelper.PhaseTimeLimit)
+                {
+                    var phase10to0 = new PhaseData(_deimos10PercentTime, log.FightData.FightEnd, "10% - 0%");
+                    phase10to0.AddTarget(mainTarget);
+                    phases.Add(phase10to0);
+                }
                 //mainTarget.AddCustomCastLog(end, -6, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
             }
-            else if (_deimos10PercentTime > 0)
+
+            return phases;
+        }
+
+        private List<PhaseData> AddAddPhases(List<PhaseData> phases, ParsedEvtcLog log, NPC mainTarget)
+        {
+            foreach (NPC target in Targets)
             {
-                end = _deimos10PercentTime;
-                phases.Add(new PhaseData(start, end));
-                start = _deimos10PercentTime;
-            }
-            if (fightDuration - start > ParserHelper.PhaseTimeLimit && start >= phases.Last().End)
-            {
-                phases.Add(new PhaseData(start, fightDuration));
-            }
-            string[] names = { "100% - 10%", "10% - 0%" };
-            for (int i = 1; i < phases.Count; i++)
-            {
-                phases[i].Name = names[i - 1];
-                phases[i].AddTarget(mainTarget);
-            }
-            foreach (NPC tar in Targets)
-            {
-                if (tar.ID == (int)ArcDPSEnums.TrashID.Thief || tar.ID == (int)ArcDPSEnums.TrashID.Drunkard || tar.ID == (int)ArcDPSEnums.TrashID.Gambler)
+                if (target.ID == (int)ArcDPSEnums.TrashID.Thief || target.ID == (int)ArcDPSEnums.TrashID.Drunkard || target.ID == (int)ArcDPSEnums.TrashID.Gambler)
                 {
-                    string name = (tar.ID == (int)ArcDPSEnums.TrashID.Thief ? "Thief" : (tar.ID == (int)ArcDPSEnums.TrashID.Drunkard ? "Drunkard" : (tar.ID == (int)ArcDPSEnums.TrashID.Gambler ? "Gambler" : "")));
-                    tar.OverrideName(name);
-                    var tarPhase = new PhaseData(tar.FirstAware - 1000, Math.Min(tar.LastAware + 1000, fightDuration), name);
-                    tarPhase.AddTarget(tar);
+
+                    string name = (target.ID == (int)ArcDPSEnums.TrashID.Thief ? "Thief" : (target.ID == (int)ArcDPSEnums.TrashID.Drunkard ? "Drunkard" : (target.ID == (int)ArcDPSEnums.TrashID.Gambler ? "Gambler" : "")));
+                    target.OverrideName(name);
+                    var tarPhase = new PhaseData(target.FirstAware - 1000, Math.Min(target.LastAware + 1000, log.FightData.FightEnd), name);
+                    tarPhase.AddTarget(target);
                     tarPhase.OverrideTimes(log);
                     // override first then add Deimos so that it does not disturb the override process
                     tarPhase.AddTarget(mainTarget);
                     phases.Add(tarPhase);
                 }
             }
+
+            return phases;
+        }     
+
+        private List<PhaseData> AddBurstPhases(List<PhaseData> phases, ParsedEvtcLog log, NPC mainTarget)
+        {
             List<AbstractBuffEvent> signets = GetFilteredList(log.CombatData, 38224, mainTarget, true);
             long sigStart = 0;
             long sigEnd = 0;
@@ -344,7 +355,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 else
                 {
-                    sigEnd = Math.Min(signet.Time - 1, fightDuration);
+                    sigEnd = Math.Min(signet.Time - 1, log.FightData.FightEnd);
                     var burstPhase = new PhaseData(sigStart, sigEnd, "Burst " + burstID++);
                     burstPhase.AddTarget(mainTarget);
                     phases.Add(burstPhase);
@@ -490,12 +501,23 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Deimos not found");
             }
-            FightData.CMStatus res = (target.GetHealth(combatData) > 40e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            FightData.CMStatus cmStatus = (target.GetHealth(combatData) > 40e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+
             if (_deimos10PercentTime > 0)
             {
-                target.SetManualHealth(res > 0 ? 42804900 : 37388210);
+                // Deimos gains additional health during the last 10% so the max-health needs to be corrected
+                // done here because this method will get called during the creation of the ParsedEvtcLog and the ParsedEvtcLog should contain complete and correct values after creation
+                if (cmStatus == FightData.CMStatus.CM)
+                {
+                    target.SetManualHealth(42804900);
+                }
+                else
+                {
+                    target.SetManualHealth(37388210);
+                }
             }
-            return res;
+
+            return cmStatus;
         }
     }
 }
