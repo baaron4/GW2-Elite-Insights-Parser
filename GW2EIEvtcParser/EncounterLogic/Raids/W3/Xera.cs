@@ -102,7 +102,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (_xeraSecondPhaseStartTime > 0)
                     {
                         var phase2 = new PhaseData(_xeraSecondPhaseStartTime, fightDuration, "Phase 2");
-                        mainTarget.SetManualHealth(24085950);
                         phase2.AddTarget(mainTarget);
                         phase2.AddTargets(Targets.Where(t => t.ID == (int)ArcDPSEnums.TrashID.BloodstoneShard));
                         //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
@@ -204,6 +203,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             ComputeFightTargets(agentData, combatData);
+
+            if (_xeraSecondPhaseStartTime > 0)
+            {
+                NPC mainTarget = GetMainTarget();
+                if (mainTarget == null)
+                {
+                    throw new MissingKeyActorsException("Xera not found");
+                }
+                mainTarget.SetManualHealth(24085950);
+            }
         }
 
         protected override List<int> GetFightTargetsIDs()

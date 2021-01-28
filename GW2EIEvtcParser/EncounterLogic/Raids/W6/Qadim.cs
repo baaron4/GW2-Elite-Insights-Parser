@@ -124,19 +124,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         pyre.OverrideID(ArcDPSEnums.TrashID.PyreGuardianProtect);
                         refresh = true;
-                        pyre.OverrideName(pyre.Name.Insert(0, "Protect "));
                     }
                     else if ((Math.Abs(x + 4356) < 10 && Math.Abs(y - 12076) < 10) || (Math.Abs(x + 5889) < 10 && Math.Abs(y - 14723) < 10) || (Math.Abs(x + 7851) < 10 && Math.Abs(y - 13550) < 10))
                     {
                         pyre.OverrideID(ArcDPSEnums.TrashID.PyreGuardianStab);
                         refresh = true;
-                        pyre.OverrideName(pyre.Name.Insert(0, "Stab "));
                     }
                     else if ((Math.Abs(x + 8951) < 10 && Math.Abs(y - 9429) < 10) || (Math.Abs(x + 5716) < 10 && Math.Abs(y - 9325) < 10) || (Math.Abs(x + 7846) < 10 && Math.Abs(y - 10612) < 10))
                     {
                         pyre.OverrideID(ArcDPSEnums.TrashID.PyreGuardianRetal);
                         refresh = true;
-                        pyre.OverrideName(pyre.Name.Insert(0, "Retal "));
                     }
                 }
             }
@@ -145,6 +142,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                 agentData.Refresh();
             }
             ComputeFightTargets(agentData, combatData);
+            foreach (NPC target in Targets)
+            {
+                if (target.ID == (int)ArcDPSEnums.TrashID.PyreGuardianProtect)
+                {
+                    target.OverrideName("Protect " + target.Character);
+                }
+                if (target.ID == (int)ArcDPSEnums.TrashID.PyreGuardianRetal)
+                {
+                    target.OverrideName("Retal " + target.Character);
+                }
+                if (target.ID == (int)ArcDPSEnums.TrashID.PyreGuardianStab)
+                {
+                    target.OverrideName("Stab " + target.Character);
+                }
+            }
         }
 
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
