@@ -10,11 +10,11 @@ namespace GW2EIEvtcParser.EIData
     /// </summary>
     public class StatisticsHelper
     {
-        internal StatisticsHelper(CombatData combatData, List<Player> players, BuffsContainer boons)
+        internal StatisticsHelper(CombatData combatData, List<Player> players, BuffsContainer buffs)
         {
             IReadOnlyCollection<long> skillIDs = combatData.GetSkills();
             // Main boons
-            foreach (Buff boon in boons.BuffsByNature[BuffNature.Boon])
+            foreach (Buff boon in buffs.BuffsByNature[BuffNature.Boon])
             {
                 if (skillIDs.Contains(boon.ID))
                 {
@@ -22,59 +22,59 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Main Conditions
-            foreach (Buff boon in boons.BuffsByNature[BuffNature.Condition])
+            foreach (Buff condition in buffs.BuffsByNature[BuffNature.Condition])
             {
-                if (skillIDs.Contains(boon.ID))
+                if (skillIDs.Contains(condition.ID))
                 {
-                    _presentConditions.Add(boon);
+                    _presentConditions.Add(condition);
                 }
             }
 
             // Important class specific boons
-            foreach (Buff boon in boons.BuffsByNature[BuffNature.OffensiveBuffTable])
+            foreach (Buff offensiveBuff in buffs.BuffsByNature[BuffNature.OffensiveBuffTable])
             {
-                if (skillIDs.Contains(boon.ID))
+                if (skillIDs.Contains(offensiveBuff.ID))
                 {
-                    _presentOffbuffs.Add(boon);
+                    _presentOffbuffs.Add(offensiveBuff);
                 }
             }
 
-            foreach (Buff boon in boons.BuffsByNature[BuffNature.SupportBuffTable])
+            foreach (Buff supportBuff in buffs.BuffsByNature[BuffNature.SupportBuffTable])
             {
-                if (skillIDs.Contains(boon.ID))
+                if (skillIDs.Contains(supportBuff.ID))
                 {
-                    _presentSupbuffs.Add(boon);
+                    _presentSupbuffs.Add(supportBuff);
                 }
             }
 
-            foreach (Buff boon in boons.BuffsByNature[BuffNature.DefensiveBuffTable])
+            foreach (Buff defensiveBuff in buffs.BuffsByNature[BuffNature.DefensiveBuffTable])
             {
-                if (skillIDs.Contains(boon.ID))
+                if (skillIDs.Contains(defensiveBuff.ID))
                 {
-                    _presentDefbuffs.Add(boon);
-                }
-
-            }
-
-            foreach (Buff boon in boons.BuffsByNature[BuffNature.GearBuffTable])
-            {
-                if (skillIDs.Contains(boon.ID))
-                {
-                    _presentGearbuffs.Add(boon);
+                    _presentDefbuffs.Add(defensiveBuff);
                 }
 
             }
 
-            foreach (Buff boon in boons.BuffsBySource[ParserHelper.Source.FractalInstability])
+            foreach (Buff gearBuff in buffs.BuffsByNature[BuffNature.GearBuffTable])
             {
-                if (skillIDs.Contains(boon.ID))
+                if (skillIDs.Contains(gearBuff.ID))
                 {
-                    _presentFractalInstabilities.Add(boon);
+                    _presentGearbuffs.Add(gearBuff);
+                }
+
+            }
+
+            foreach (Buff fractalInstability in buffs.BuffsBySource[ParserHelper.Source.FractalInstability])
+            {
+                if (skillIDs.Contains(fractalInstability.ID))
+                {
+                    _presentFractalInstabilities.Add(fractalInstability);
                 }
             }
 
             // All class specific boons
-            var remainingBuffsByIds = boons.BuffsByNature[BuffNature.GraphOnlyBuff].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
+            var remainingBuffsByIds = buffs.BuffsByNature[BuffNature.GraphOnlyBuff].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
             foreach (Player player in players)
             {
                 _presentRemainingBuffsPerPlayer[player] = new HashSet<Buff>();
