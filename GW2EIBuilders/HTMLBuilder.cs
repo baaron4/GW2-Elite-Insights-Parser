@@ -101,18 +101,70 @@ namespace GW2EIBuilders
             {
                 string jsFileName = "EliteInsights-CR-" + _scriptVersion + ".js";
                 string jsPath = Path.Combine(path, jsFileName);
+                string jsPrePath = "./" + jsFileName;
+
+                // Setting: External Scripts Path
+                // overwrite jsPath (create directory) if files should be placed on different location
+                // settings.externalHtmlScriptsPath is set by the user
+                if (!string.IsNullOrWhiteSpace(_externalScriptsPath))
+                {
+                    string htmlExternalScriptsPath = _externalScriptsPath;
+                    bool validPath = false;
+
+                    if (!System.IO.Directory.Exists(htmlExternalScriptsPath))
+                    {
+                        try
+                        {
+                            System.IO.Directory.CreateDirectory(htmlExternalScriptsPath);
+                            validPath = true;
+                        }
+                        catch
+                        {
+                            // something went wrong on creating the external folder (invalid chars?)      
+                            // this will skip the saving in this path and continue with jsscript files in the root path for the report
+                        }
+                    }
+                    else
+                    {
+                        validPath = true;
+                    }
+
+                    // if the creation of the folder did not fail or the folder already exists use it to include within the report
+                    if (validPath)
+                    {
+                        jsPath = Path.Combine(htmlExternalScriptsPath, jsFileName);
+                    }
+                }
+
+
                 try
                 {
-                    using (var fs = new FileStream(jsPath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, NoBOMEncodingUTF8))
+                    // if the source file already exists, skip creation
+                    if (!System.IO.File.Exists(jsPath))
                     {
-                        scriptWriter.Write(scriptContent);
+                        using (var fs = new FileStream(jsPath, FileMode.Create, FileAccess.Write))
+                        using (var scriptWriter = new StreamWriter(fs, NoBOMEncodingUTF8))
+                        {
+                            scriptWriter.Write(scriptContent);
+                        }
                     }
                 }
                 catch (IOException)
                 {
                 }
-                string content = "<script src=\"./" + jsFileName + "?version=" + _scriptVersionRev + "\"></script>\n";
+
+                // Setting: External Scripts CDN Url
+                // If the user set a Cdn url we replace the externalScriptsPath with the proper cdn url
+                if (!string.IsNullOrWhiteSpace(_externalScriptsCdn))
+                {
+                    jsPrePath = (_externalScriptsCdn.EndsWith("/") && _externalScriptsCdn.Length > 1 ? _externalScriptsCdn.Substring(0, _externalScriptsCdn.Length - 1) : _externalScriptsCdn) + "/" + jsFileName;
+                }
+                else if (!string.IsNullOrWhiteSpace(_externalScriptsPath))
+                {
+                    jsPrePath = _externalScriptsPath + @"\" + jsFileName;
+                }
+
+                string content = "<script src=\"" + jsPrePath + "?version=" + _scriptVersionRev + "\"></script>\n";
                 return content;
             }
             else
@@ -186,7 +238,7 @@ namespace GW2EIBuilders
                 {
                     cssPrePath = (_externalScriptsCdn.EndsWith("/") && _externalScriptsCdn.Length > 1 ? _externalScriptsCdn.Substring(0, _externalScriptsCdn.Length - 1) : _externalScriptsCdn) + "/" + cssFilename;
                 }
-                else
+                else if(!string.IsNullOrWhiteSpace(_externalScriptsPath))
                 {
                     cssPrePath = _externalScriptsPath + @"\" + cssFilename;
                 }
@@ -264,7 +316,7 @@ namespace GW2EIBuilders
                 {
                     scriptPrePath = (_externalScriptsCdn.EndsWith("/") && _externalScriptsCdn.Length > 1 ? _externalScriptsCdn.Substring(0, _externalScriptsCdn.Length-1) : _externalScriptsCdn) + "/" + scriptFilename;
                 }
-                else
+                else if (!string.IsNullOrWhiteSpace(_externalScriptsPath))
                 {
                     scriptPrePath = _externalScriptsPath + @"\" + scriptFilename;
                 }
