@@ -39,6 +39,7 @@ namespace GW2EIParser.Setting
             BtnLoadSettings.Enabled = !busy;
             GroupWebhookSettings.Enabled = !busy;
             TxtHtmlExternalScriptsPath.Enabled = !busy;
+            TxtHtmlExternalScriptsCdn.Enabled = !busy;
         }
 
         private void SetUIEnable()
