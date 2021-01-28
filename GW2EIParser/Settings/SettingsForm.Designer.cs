@@ -61,6 +61,8 @@
             this.ChkAnonymous = new System.Windows.Forms.CheckBox();
             this.ChkHtmlExternalScripts = new System.Windows.Forms.CheckBox();
             this.ChkDetailledWvW = new System.Windows.Forms.CheckBox();
+            this.LblHtmlExternalScriptsCdn = new System.Windows.Forms.Label();
+            this.LblHtmlExternalScriptsPath = new System.Windows.Forms.Label();
             this.TxtHtmlExternalScriptsCdn = new System.Windows.Forms.TextBox();
             this.TxtHtmlExternalScriptsPath = new System.Windows.Forms.TextBox();
             this.ChkSaveOutTrace = new System.Windows.Forms.CheckBox();
@@ -79,8 +81,6 @@
             this.TabHTML = new System.Windows.Forms.TabPage();
             this.PictureTheme = new System.Windows.Forms.PictureBox();
             this.PanelHtml = new System.Windows.Forms.Panel();
-            this.LblHtmlExternalScriptsCdn = new System.Windows.Forms.Label();
-            this.LblHtmlExternalScriptsPath = new System.Windows.Forms.Label();
             this.PanelTheme = new System.Windows.Forms.Panel();
             this.RadioThemeLight = new System.Windows.Forms.RadioButton();
             this.RadioThemeDark = new System.Windows.Forms.RadioButton();
@@ -470,20 +470,43 @@
             this.ChkDetailledWvW.UseVisualStyleBackColor = true;
             this.ChkDetailledWvW.CheckedChanged += new System.EventHandler(this.ChkDetailledWvWCheckedChange);
             // 
+            // LblHtmlExternalScriptsCdn
+            // 
+            this.LblHtmlExternalScriptsCdn.AutoSize = true;
+            this.LblHtmlExternalScriptsCdn.Location = new System.Drawing.Point(9, 57);
+            this.LblHtmlExternalScriptsCdn.Name = "LblHtmlExternalScriptsCdn";
+            this.LblHtmlExternalScriptsCdn.Size = new System.Drawing.Size(29, 13);
+            this.LblHtmlExternalScriptsCdn.TabIndex = 56;
+            this.LblHtmlExternalScriptsCdn.Text = "Cdn:";
+            this.TlpSettings.SetToolTip(this.LblHtmlExternalScriptsCdn, resources.GetString("LblHtmlExternalScriptsCdn.ToolTip"));
+            // 
+            // LblHtmlExternalScriptsPath
+            // 
+            this.LblHtmlExternalScriptsPath.AutoSize = true;
+            this.LblHtmlExternalScriptsPath.Location = new System.Drawing.Point(9, 34);
+            this.LblHtmlExternalScriptsPath.Name = "LblHtmlExternalScriptsPath";
+            this.LblHtmlExternalScriptsPath.Size = new System.Drawing.Size(79, 13);
+            this.LblHtmlExternalScriptsPath.TabIndex = 55;
+            this.LblHtmlExternalScriptsPath.Text = "Absolute Path: ";
+            this.TlpSettings.SetToolTip(this.LblHtmlExternalScriptsPath, "Fill in an absolute path of a directory here to place the external scripts at a d" +
+        "ifferent location then the report file.");
+            // 
             // TxtHtmlExternalScriptsCdn
             // 
-            this.TxtHtmlExternalScriptsCdn.Location = new System.Drawing.Point(44, 54);
+            this.TxtHtmlExternalScriptsCdn.Location = new System.Drawing.Point(37, 54);
             this.TxtHtmlExternalScriptsCdn.Name = "TxtHtmlExternalScriptsCdn";
-            this.TxtHtmlExternalScriptsCdn.Size = new System.Drawing.Size(157, 20);
+            this.TxtHtmlExternalScriptsCdn.Size = new System.Drawing.Size(189, 20);
             this.TxtHtmlExternalScriptsCdn.TabIndex = 57;
+            this.TlpSettings.SetToolTip(this.TxtHtmlExternalScriptsCdn, resources.GetString("TxtHtmlExternalScriptsCdn.ToolTip"));
             this.TxtHtmlExternalScriptsCdn.TextChanged += new System.EventHandler(this.TxtHtmlExternalScriptCdnUrl_TextChanged);
             // 
             // TxtHtmlExternalScriptsPath
             // 
-            this.TxtHtmlExternalScriptsPath.Location = new System.Drawing.Point(44, 31);
+            this.TxtHtmlExternalScriptsPath.Location = new System.Drawing.Point(90, 31);
             this.TxtHtmlExternalScriptsPath.Name = "TxtHtmlExternalScriptsPath";
-            this.TxtHtmlExternalScriptsPath.Size = new System.Drawing.Size(157, 20);
+            this.TxtHtmlExternalScriptsPath.Size = new System.Drawing.Size(136, 20);
             this.TxtHtmlExternalScriptsPath.TabIndex = 54;
+            this.TlpSettings.SetToolTip(this.TxtHtmlExternalScriptsPath, "Fill a directory name here to place the external scripts in a subdirectory");
             this.TxtHtmlExternalScriptsPath.TextChanged += new System.EventHandler(this.TxtHtmlExternalScriptsPath_TextChanged);
             // 
             // ChkSaveOutTrace
@@ -688,28 +711,6 @@
             this.PanelHtml.Name = "PanelHtml";
             this.PanelHtml.Size = new System.Drawing.Size(468, 87);
             this.PanelHtml.TabIndex = 54;
-            // 
-            // LblHtmlExternalScriptsCdn
-            // 
-            this.LblHtmlExternalScriptsCdn.AutoSize = true;
-            this.LblHtmlExternalScriptsCdn.Location = new System.Drawing.Point(9, 57);
-            this.LblHtmlExternalScriptsCdn.Name = "LblHtmlExternalScriptsCdn";
-            this.LblHtmlExternalScriptsCdn.Size = new System.Drawing.Size(29, 13);
-            this.LblHtmlExternalScriptsCdn.TabIndex = 56;
-            this.LblHtmlExternalScriptsCdn.Text = "Cdn:";
-            this.TlpSettings.SetToolTip(this.LblHtmlExternalScriptsCdn, "Fill in a CDN Url to place the external scripts only once and reuse it for your r" +
-        "eports. Remember to think about CORS if you place those files on a seperate cdn " +
-        "server");
-            // 
-            // LblHtmlExternalScriptsPath
-            // 
-            this.LblHtmlExternalScriptsPath.AutoSize = true;
-            this.LblHtmlExternalScriptsPath.Location = new System.Drawing.Point(9, 34);
-            this.LblHtmlExternalScriptsPath.Name = "LblHtmlExternalScriptsPath";
-            this.LblHtmlExternalScriptsPath.Size = new System.Drawing.Size(32, 13);
-            this.LblHtmlExternalScriptsPath.TabIndex = 55;
-            this.LblHtmlExternalScriptsPath.Text = "Path:";
-            this.TlpSettings.SetToolTip(this.LblHtmlExternalScriptsPath, "Fill a directory name here to place the external scripts in a subdirectory");
             // 
             // PanelTheme
             // 

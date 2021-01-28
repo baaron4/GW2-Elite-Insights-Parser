@@ -129,14 +129,14 @@ namespace GW2EIBuilders
             {
                 string cssFilename = "EliteInsights-" + _scriptVersion + ".css";
                 string cssPath = Path.Combine(path, cssFilename);
-                string cssPrePath = ".";
+                string cssPrePath = "./" + cssFilename;
 
                 // Setting: External Scripts Path
                 // overwrite cssPath (create directory) if files should be placed on different location
                 // settings.externalHtmlScriptsPath is set by the user
-                if (!string.IsNullOrWhiteSpace(_externalScriptsPath) && !IsInvalidExternalScriptPath(_externalScriptsPath))
+                if (!string.IsNullOrWhiteSpace(_externalScriptsPath))
                 {
-                    string htmlExternalScriptsPath = Path.Combine(path, _externalScriptsPath);
+                    string htmlExternalScriptsPath = _externalScriptsPath;
                     bool validPath = false;
 
                     if (!System.IO.Directory.Exists(htmlExternalScriptsPath))
@@ -184,14 +184,14 @@ namespace GW2EIBuilders
                 // If the user set a Cdn url we replace the externalScriptsPath with the proper cdn url
                 if (!string.IsNullOrWhiteSpace(_externalScriptsCdn))
                 {
-                    cssPrePath = _externalScriptsCdn.EndsWith("/") && _externalScriptsCdn.Length > 1 ? _externalScriptsCdn.Substring(0, _externalScriptsCdn.Length - 1) : _externalScriptsCdn;
+                    cssPrePath = (_externalScriptsCdn.EndsWith("/") && _externalScriptsCdn.Length > 1 ? _externalScriptsCdn.Substring(0, _externalScriptsCdn.Length - 1) : _externalScriptsCdn) + "/" + cssFilename;
                 }
                 else
                 {
-                    cssPrePath = _externalScriptsPath;
+                    cssPrePath = _externalScriptsPath + @"\" + cssFilename;
                 }
 
-                return "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + cssPrePath + "/" + cssFilename + "?version=" + _scriptVersionRev + "\">";
+                return "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + cssPrePath + "?version=" + _scriptVersionRev + "\">";
             }
             else
             {
@@ -207,14 +207,14 @@ namespace GW2EIBuilders
             {
                 string scriptFilename = "EliteInsights-" + _scriptVersion + ".js";
                 string scriptPath = Path.Combine(path, scriptFilename);
-                string scriptPrePath = ".";
+                string scriptPrePath = "./" + scriptFilename;
 
                 // Setting: External Scripts Path
-                // overwrite cssPath (create directory) if files should be placed on different location
+                // overwrite scriptPath (create directory) if files should be placed on different location
                 // settings.externalHtmlScriptsPath is set by the user
-                if (!string.IsNullOrWhiteSpace(_externalScriptsPath) && !IsInvalidExternalScriptPath(_externalScriptsPath))
+                if (!string.IsNullOrWhiteSpace(_externalScriptsPath))
                 {
-                    string htmlExternalScriptsPath = Path.Combine(path, _externalScriptsPath);
+                    string htmlExternalScriptsPath = _externalScriptsPath;
                     bool validPath = false;
 
                     if (!System.IO.Directory.Exists(htmlExternalScriptsPath))
@@ -262,14 +262,14 @@ namespace GW2EIBuilders
                 // If the user set a Cdn url we replace the externalScriptsPath with the proper cdn url
                 if (!string.IsNullOrWhiteSpace(_externalScriptsCdn))
                 {
-                    scriptPrePath = _externalScriptsCdn.EndsWith("/") && _externalScriptsCdn.Length > 1 ? _externalScriptsCdn.Substring(0, _externalScriptsCdn.Length-1) : _externalScriptsCdn;
+                    scriptPrePath = (_externalScriptsCdn.EndsWith("/") && _externalScriptsCdn.Length > 1 ? _externalScriptsCdn.Substring(0, _externalScriptsCdn.Length-1) : _externalScriptsCdn) + "/" + scriptFilename;
                 }
                 else
                 {
-                    scriptPrePath = _externalScriptsPath;
+                    scriptPrePath = _externalScriptsPath + @"\" + scriptFilename;
                 }
 
-                return "<script src=\"" + scriptPrePath + "/" + scriptFilename + "?version=" + _scriptVersionRev + "\"></script>";
+                return "<script src=\"" + scriptPrePath + "?version=" + _scriptVersionRev + "\"></script>";
             }
             else
             {
@@ -286,12 +286,6 @@ namespace GW2EIBuilders
             };
             return JsonConvert.SerializeObject(value, settings);
         }
-
-        private static bool IsInvalidExternalScriptPath(string path)
-        {
-            return new List<string> { @"\", "\"", "/", ":", "?", "<", ">", "|" }.Any(path.Contains);
-        }
-
 
         internal static string GetLink(string name)
         {
