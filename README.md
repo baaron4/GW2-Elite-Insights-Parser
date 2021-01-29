@@ -103,6 +103,10 @@ Note it may take some time for each file to parse and they will not be ready to 
 
 -__HtmlExternalScripts__: if true, css and js files will be separated from the html.
 
+-__HtmlExternalScriptsPath__: Available if HtmlExternalScripts is enabled. Fill in an absolute path to place the external script files at a different location than the report file. If you use this tool on a server and wish to populate reports directly remember to set valid path in __HtmlExternalScriptsCdn__. Otherwise users might not be able to open the external scripts within your report.
+
+-__HtmlExternalScriptsCdn__: Available if HtmlExternalScripts is enabled. Will use an url for the external script files. Generate once, use multiple times. Will reduce needed webspace a bit. If this option is set the settings of __HtmlExternalScriptsPath__ will not be used to include external sources. Think about CORS if you use a seperate server for static source files.
+
 -__LightTheme__: if true, the html will use a light theme by default. Please note that the theme can be dynamically changed on the html post generation.
 
 ### CSV Settings

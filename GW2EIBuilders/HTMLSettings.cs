@@ -7,10 +7,16 @@
 
         public bool ExternalHTMLScripts { get; }
 
-        public HTMLSettings(bool htmlLightTheme, bool externalHTMLScripts)
+        public string ExternalHtmlScriptsPath { get; set; }
+
+        public string ExternalHtmlScriptsCdn { get; set; }
+
+        public HTMLSettings(bool htmlLightTheme, bool externalHTMLScripts, string externalHTMLScriptsPath, string externalHTMLScriptsCdn)
         {
             HTMLLightTheme = htmlLightTheme;
             ExternalHTMLScripts = externalHTMLScripts;
+            ExternalHtmlScriptsPath = externalHTMLScriptsPath;
+            ExternalHtmlScriptsCdn = externalHTMLScriptsCdn;
         }
     }
 }

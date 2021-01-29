@@ -60,6 +60,11 @@
             this.ChkMultiLogs = new System.Windows.Forms.CheckBox();
             this.ChkAnonymous = new System.Windows.Forms.CheckBox();
             this.ChkHtmlExternalScripts = new System.Windows.Forms.CheckBox();
+            this.ChkDetailledWvW = new System.Windows.Forms.CheckBox();
+            this.LblHtmlExternalScriptsCdn = new System.Windows.Forms.Label();
+            this.LblHtmlExternalScriptsPath = new System.Windows.Forms.Label();
+            this.TxtHtmlExternalScriptsCdn = new System.Windows.Forms.TextBox();
+            this.TxtHtmlExternalScriptsPath = new System.Windows.Forms.TextBox();
             this.ChkSaveOutTrace = new System.Windows.Forms.CheckBox();
             this.ChkDamageMods = new System.Windows.Forms.CheckBox();
             this.ChkRawTimelineArrays = new System.Windows.Forms.CheckBox();
@@ -76,6 +81,7 @@
             this.TabHTML = new System.Windows.Forms.TabPage();
             this.PictureTheme = new System.Windows.Forms.PictureBox();
             this.PanelHtml = new System.Windows.Forms.Panel();
+            this.BtnHtmlExternalScriptPathSelect = new System.Windows.Forms.Button();
             this.PanelTheme = new System.Windows.Forms.Panel();
             this.RadioThemeLight = new System.Windows.Forms.RadioButton();
             this.RadioThemeDark = new System.Windows.Forms.RadioButton();
@@ -96,7 +102,6 @@
             this.BtnClose = new System.Windows.Forms.Button();
             this.BtnDumpSettings = new System.Windows.Forms.Button();
             this.BtnLoadSettings = new System.Windows.Forms.Button();
-            this.ChkDetailledWvW = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.NumericCustomTooShort)).BeginInit();
             this.GroupWebhookSettings.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -449,9 +454,61 @@
             this.ChkHtmlExternalScripts.Text = "External Scripts";
             this.TlpSettings.SetToolTip(this.ChkHtmlExternalScripts, "Writes static css and js scripts in own files, which are shared between all logs." +
         " Log file size decreases, but the script files have to be kept along with the ht" +
-        "ml.");
+        "ml if you dont set a CDN Path");
             this.ChkHtmlExternalScripts.UseVisualStyleBackColor = true;
             this.ChkHtmlExternalScripts.CheckedChanged += new System.EventHandler(this.ChkHtmlExternalScriptsCheckedChanged);
+            // 
+            // ChkDetailledWvW
+            // 
+            this.ChkDetailledWvW.AutoSize = true;
+            this.ChkDetailledWvW.Location = new System.Drawing.Point(6, 88);
+            this.ChkDetailledWvW.Name = "ChkDetailledWvW";
+            this.ChkDetailledWvW.Size = new System.Drawing.Size(136, 17);
+            this.ChkDetailledWvW.TabIndex = 41;
+            this.ChkDetailledWvW.Text = "Detailled WvW Parsing";
+            this.TlpSettings.SetToolTip(this.ChkDetailledWvW, "Keep default value if unsure. Enabling this will make parsing significantly slowe" +
+        "r and the generated files bigger");
+            this.ChkDetailledWvW.UseVisualStyleBackColor = true;
+            this.ChkDetailledWvW.CheckedChanged += new System.EventHandler(this.ChkDetailledWvWCheckedChange);
+            // 
+            // LblHtmlExternalScriptsCdn
+            // 
+            this.LblHtmlExternalScriptsCdn.AutoSize = true;
+            this.LblHtmlExternalScriptsCdn.Location = new System.Drawing.Point(9, 57);
+            this.LblHtmlExternalScriptsCdn.Name = "LblHtmlExternalScriptsCdn";
+            this.LblHtmlExternalScriptsCdn.Size = new System.Drawing.Size(29, 13);
+            this.LblHtmlExternalScriptsCdn.TabIndex = 56;
+            this.LblHtmlExternalScriptsCdn.Text = "Cdn:";
+            this.TlpSettings.SetToolTip(this.LblHtmlExternalScriptsCdn, resources.GetString("LblHtmlExternalScriptsCdn.ToolTip"));
+            // 
+            // LblHtmlExternalScriptsPath
+            // 
+            this.LblHtmlExternalScriptsPath.AutoSize = true;
+            this.LblHtmlExternalScriptsPath.Location = new System.Drawing.Point(9, 34);
+            this.LblHtmlExternalScriptsPath.Name = "LblHtmlExternalScriptsPath";
+            this.LblHtmlExternalScriptsPath.Size = new System.Drawing.Size(79, 13);
+            this.LblHtmlExternalScriptsPath.TabIndex = 55;
+            this.LblHtmlExternalScriptsPath.Text = "Absolute Path: ";
+            this.TlpSettings.SetToolTip(this.LblHtmlExternalScriptsPath, "Fill in an absolute path of a directory here to place the external scripts at a d" +
+        "ifferent location then the report file.");
+            // 
+            // TxtHtmlExternalScriptsCdn
+            // 
+            this.TxtHtmlExternalScriptsCdn.Location = new System.Drawing.Point(37, 54);
+            this.TxtHtmlExternalScriptsCdn.Name = "TxtHtmlExternalScriptsCdn";
+            this.TxtHtmlExternalScriptsCdn.Size = new System.Drawing.Size(201, 20);
+            this.TxtHtmlExternalScriptsCdn.TabIndex = 57;
+            this.TlpSettings.SetToolTip(this.TxtHtmlExternalScriptsCdn, resources.GetString("TxtHtmlExternalScriptsCdn.ToolTip"));
+            this.TxtHtmlExternalScriptsCdn.TextChanged += new System.EventHandler(this.TxtHtmlExternalScriptCdnUrl_TextChanged);
+            // 
+            // TxtHtmlExternalScriptsPath
+            // 
+            this.TxtHtmlExternalScriptsPath.Location = new System.Drawing.Point(90, 31);
+            this.TxtHtmlExternalScriptsPath.Name = "TxtHtmlExternalScriptsPath";
+            this.TxtHtmlExternalScriptsPath.Size = new System.Drawing.Size(103, 20);
+            this.TxtHtmlExternalScriptsPath.TabIndex = 54;
+            this.TlpSettings.SetToolTip(this.TxtHtmlExternalScriptsPath, "Fill a directory name here to place the external scripts in a subdirectory");
+            this.TxtHtmlExternalScriptsPath.TextChanged += new System.EventHandler(this.TxtHtmlExternalScriptsPath_TextChanged);
             // 
             // ChkSaveOutTrace
             // 
@@ -645,12 +702,27 @@
             // 
             // PanelHtml
             // 
+            this.PanelHtml.Controls.Add(this.BtnHtmlExternalScriptPathSelect);
+            this.PanelHtml.Controls.Add(this.TxtHtmlExternalScriptsCdn);
+            this.PanelHtml.Controls.Add(this.LblHtmlExternalScriptsCdn);
+            this.PanelHtml.Controls.Add(this.LblHtmlExternalScriptsPath);
+            this.PanelHtml.Controls.Add(this.TxtHtmlExternalScriptsPath);
             this.PanelHtml.Controls.Add(this.PanelTheme);
             this.PanelHtml.Controls.Add(this.ChkHtmlExternalScripts);
             this.PanelHtml.Location = new System.Drawing.Point(0, 36);
             this.PanelHtml.Name = "PanelHtml";
             this.PanelHtml.Size = new System.Drawing.Size(468, 87);
             this.PanelHtml.TabIndex = 54;
+            // 
+            // BtnHtmlExternalScriptPathSelect
+            // 
+            this.BtnHtmlExternalScriptPathSelect.Location = new System.Drawing.Point(194, 30);
+            this.BtnHtmlExternalScriptPathSelect.Name = "BtnHtmlExternalScriptPathSelect";
+            this.BtnHtmlExternalScriptPathSelect.Size = new System.Drawing.Size(45, 22);
+            this.BtnHtmlExternalScriptPathSelect.TabIndex = 58;
+            this.BtnHtmlExternalScriptPathSelect.Text = "Select";
+            this.BtnHtmlExternalScriptPathSelect.UseVisualStyleBackColor = true;
+            this.BtnHtmlExternalScriptPathSelect.Click += new System.EventHandler(this.BtnHtmlExternalScriptPathSelect_Click);
             // 
             // PanelTheme
             // 
@@ -868,18 +940,6 @@
             this.BtnLoadSettings.UseVisualStyleBackColor = true;
             this.BtnLoadSettings.Click += new System.EventHandler(this.BtnLoadSettingsClicked);
             // 
-            // ChkDetailledWvW
-            // 
-            this.ChkDetailledWvW.AutoSize = true;
-            this.ChkDetailledWvW.Location = new System.Drawing.Point(6, 88);
-            this.ChkDetailledWvW.Name = "ChkDetailledWvW";
-            this.ChkDetailledWvW.Size = new System.Drawing.Size(156, 17);
-            this.ChkDetailledWvW.TabIndex = 41;
-            this.ChkDetailledWvW.Text = "Detailled WvW Parsing";
-            this.TlpSettings.SetToolTip(this.ChkDetailledWvW, "Keep default value if unsure. Enabling this will make parsing significantly slower and the generated files bigger");
-            this.ChkDetailledWvW.UseVisualStyleBackColor = true;
-            this.ChkDetailledWvW.CheckedChanged += new System.EventHandler(this.ChkDetailledWvWCheckedChange);
-            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1003,5 +1063,10 @@
         private System.Windows.Forms.Label DPSReportUserTokenLabel;
         private System.Windows.Forms.Label LblWebhookUrl;
         private System.Windows.Forms.CheckBox ChkDetailledWvW;
+        private System.Windows.Forms.Label LblHtmlExternalScriptsPath;
+        private System.Windows.Forms.TextBox TxtHtmlExternalScriptsPath;
+        private System.Windows.Forms.TextBox TxtHtmlExternalScriptsCdn;
+        private System.Windows.Forms.Label LblHtmlExternalScriptsCdn;
+        private System.Windows.Forms.Button BtnHtmlExternalScriptPathSelect;
     }
 }

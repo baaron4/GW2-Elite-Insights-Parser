@@ -229,7 +229,37 @@ namespace GW2EIParser.Properties {
                 this["HtmlExternalScripts"] = value;
             }
         }
-        
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string HtmlExternalScriptsPath
+        {
+            get
+            {
+                return ((string)(this["HtmlExternalScriptsPath"]));
+            }
+            set
+            {
+                this["HtmlExternalScriptsPath"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string HtmlExternalScriptsCdn
+        {
+            get
+            {
+                return ((string)(this["HtmlExternalScriptsCdn"]));
+            }
+            set
+            {
+                this["HtmlExternalScriptsCdn"] = value;
+            }
+        }
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
