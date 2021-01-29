@@ -81,6 +81,7 @@
             this.TabHTML = new System.Windows.Forms.TabPage();
             this.PictureTheme = new System.Windows.Forms.PictureBox();
             this.PanelHtml = new System.Windows.Forms.Panel();
+            this.BtnHtmlExternalScriptPathSelect = new System.Windows.Forms.Button();
             this.PanelTheme = new System.Windows.Forms.Panel();
             this.RadioThemeLight = new System.Windows.Forms.RadioButton();
             this.RadioThemeDark = new System.Windows.Forms.RadioButton();
@@ -495,7 +496,7 @@
             // 
             this.TxtHtmlExternalScriptsCdn.Location = new System.Drawing.Point(37, 54);
             this.TxtHtmlExternalScriptsCdn.Name = "TxtHtmlExternalScriptsCdn";
-            this.TxtHtmlExternalScriptsCdn.Size = new System.Drawing.Size(189, 20);
+            this.TxtHtmlExternalScriptsCdn.Size = new System.Drawing.Size(201, 20);
             this.TxtHtmlExternalScriptsCdn.TabIndex = 57;
             this.TlpSettings.SetToolTip(this.TxtHtmlExternalScriptsCdn, resources.GetString("TxtHtmlExternalScriptsCdn.ToolTip"));
             this.TxtHtmlExternalScriptsCdn.TextChanged += new System.EventHandler(this.TxtHtmlExternalScriptCdnUrl_TextChanged);
@@ -504,7 +505,7 @@
             // 
             this.TxtHtmlExternalScriptsPath.Location = new System.Drawing.Point(90, 31);
             this.TxtHtmlExternalScriptsPath.Name = "TxtHtmlExternalScriptsPath";
-            this.TxtHtmlExternalScriptsPath.Size = new System.Drawing.Size(136, 20);
+            this.TxtHtmlExternalScriptsPath.Size = new System.Drawing.Size(103, 20);
             this.TxtHtmlExternalScriptsPath.TabIndex = 54;
             this.TlpSettings.SetToolTip(this.TxtHtmlExternalScriptsPath, "Fill a directory name here to place the external scripts in a subdirectory");
             this.TxtHtmlExternalScriptsPath.TextChanged += new System.EventHandler(this.TxtHtmlExternalScriptsPath_TextChanged);
@@ -701,6 +702,7 @@
             // 
             // PanelHtml
             // 
+            this.PanelHtml.Controls.Add(this.BtnHtmlExternalScriptPathSelect);
             this.PanelHtml.Controls.Add(this.TxtHtmlExternalScriptsCdn);
             this.PanelHtml.Controls.Add(this.LblHtmlExternalScriptsCdn);
             this.PanelHtml.Controls.Add(this.LblHtmlExternalScriptsPath);
@@ -711,6 +713,16 @@
             this.PanelHtml.Name = "PanelHtml";
             this.PanelHtml.Size = new System.Drawing.Size(468, 87);
             this.PanelHtml.TabIndex = 54;
+            // 
+            // BtnHtmlExternalScriptPathSelect
+            // 
+            this.BtnHtmlExternalScriptPathSelect.Location = new System.Drawing.Point(194, 30);
+            this.BtnHtmlExternalScriptPathSelect.Name = "BtnHtmlExternalScriptPathSelect";
+            this.BtnHtmlExternalScriptPathSelect.Size = new System.Drawing.Size(45, 22);
+            this.BtnHtmlExternalScriptPathSelect.TabIndex = 58;
+            this.BtnHtmlExternalScriptPathSelect.Text = "Select";
+            this.BtnHtmlExternalScriptPathSelect.UseVisualStyleBackColor = true;
+            this.BtnHtmlExternalScriptPathSelect.Click += new System.EventHandler(this.BtnHtmlExternalScriptPathSelect_Click);
             // 
             // PanelTheme
             // 
@@ -1055,5 +1067,6 @@
         private System.Windows.Forms.TextBox TxtHtmlExternalScriptsPath;
         private System.Windows.Forms.TextBox TxtHtmlExternalScriptsCdn;
         private System.Windows.Forms.Label LblHtmlExternalScriptsCdn;
+        private System.Windows.Forms.Button BtnHtmlExternalScriptPathSelect;
     }
 }
