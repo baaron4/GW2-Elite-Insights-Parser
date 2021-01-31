@@ -1,28 +1,12 @@
 <template>
     <div>
         <buff-table-component :key="'gear-buff-stats-table'" :condition="false" :generation="false"
-            :id="'gear-buff-stats-table'" :buffs="gears" :playerdata="buffData" :sums="[]"
-            :playerindex="playerindex">
+            :id="'gear-buff-stats-table'" :buffs="gears" :playerdata="buffData" :sums="[]" :playerindex="playerindex">
         </buff-table-component>
     </div>
 </template>
 
 <script>
-    var getData = function (stats) {
-        var uptimes = [];
-        var i;
-        for (i = 0; i < logData.players.length; i++) {
-            var player = logData.players[i];
-            if (player.isConjure) {
-                continue;
-            }
-            uptimes.push({
-                player: player,
-                data: stats[i]
-            });
-        }
-        return uptimes;
-    };
     Vue.component("gear-buff-table-component", {
         props: ['phaseindex', 'playerindex', 'activeduration'],
         template: `${template}`,
@@ -50,6 +34,21 @@
                 var activeduration = this.activeduration;
                 var activeTimes = this.phase.playerActiveTimes;
 
+                var getData = function (stats) {
+                    var uptimes = [];
+                    var i;
+                    for (i = 0; i < logData.players.length; i++) {
+                        var player = logData.players[i];
+                        if (player.isConjure) {
+                            continue;
+                        }
+                        uptimes.push({
+                            player: player,
+                            data: stats[i]
+                        });
+                    }
+                    return uptimes;
+                };
                 var res;
                 if (this.activeduration) {
                     res = getData(this.phase.gearBuffActiveStats);

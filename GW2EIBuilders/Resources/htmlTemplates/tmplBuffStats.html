@@ -23,22 +23,22 @@
             </ul>
         </div>
         <keep-alive>
-            <buff-table-component v-if="type === 0" :key="'boon-stats-table'" :condition="false"
-                :generation="mode > 0" :id="'boon-stats-table'" :buffs="boons" :playerdata="buffData.boonsData[mode]"
+            <buff-table-component v-if="type === 0" :key="'boon-stats-table'" :condition="false" :generation="mode > 0"
+                :id="'boon-stats-table'" :buffs="boons" :playerdata="buffData.boonsData[mode]"
                 :sums="mode === 0 ? buffData.boonsData[5] : []" :playerindex="playerindex">
             </buff-table-component>
-            <buff-table-component v-if="type === 1" :key="'offensivebuff-stats-table'"
-                :condition="false" :generation="mode > 0" :id="'offensivebuff-stats-table'" :buffs="offs"
+            <buff-table-component v-if="type === 1" :key="'offensivebuff-stats-table'" :condition="false"
+                :generation="mode > 0" :id="'offensivebuff-stats-table'" :buffs="offs"
                 :playerdata="buffData.offsData[mode]" :sums="mode === 0 ? buffData.offsData[5] : []"
                 :playerindex="playerindex">
             </buff-table-component>
-            <buff-table-component v-if="type === 2" :key="'supportbuff-stats-table'"
-                :condition="false" :generation="mode > 0" :id="'supportbuff-stats-table'" :buffs="sups"
+            <buff-table-component v-if="type === 2" :key="'supportbuff-stats-table'" :condition="false"
+                :generation="mode > 0" :id="'supportbuff-stats-table'" :buffs="sups"
                 :playerdata="buffData.supsData[mode]" :sums="mode === 0 ? buffData.supsData[5] : []"
                 :playerindex="playerindex">
             </buff-table-component>
-            <buff-table-component v-if="type === 3" :key="'defensivebuff-stats-table'"
-                :condition="false" :generation="mode > 0" :id="'defensivebuff-stats-table'" :buffs="defs"
+            <buff-table-component v-if="type === 3" :key="'defensivebuff-stats-table'" :condition="false"
+                :generation="mode > 0" :id="'defensivebuff-stats-table'" :buffs="defs"
                 :playerdata="buffData.defsData[mode]" :sums="mode === 0 ? buffData.defsData[5] : []"
                 :playerindex="playerindex">
             </buff-table-component>
@@ -98,6 +98,7 @@
                 }
                 var activeduration = this.activeduration;
                 var activeTimes = this.phase.playerActiveTimes;
+
                 var getData = function (stats, genself, gengroup, genoffgr, gensquad) {
                     var uptimes = [],
                         gens = [],
