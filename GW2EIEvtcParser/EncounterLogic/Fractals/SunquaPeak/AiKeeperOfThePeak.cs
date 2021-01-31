@@ -96,11 +96,9 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            var width = 823;
-            var height = 1000;
             return new CombatReplayMap("https://i.imgur.com/zSBL7YP.png",
-                            (width, height),
-                            CombatReplayMap.ComputeSimpleMapRect(width, height, 6245, 739, 0.5, 0.5 * width / height, 2.25));
+                            (823, 1000),
+                            (5411, -95, 8413, 3552));
         }
 
         internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
