@@ -19,6 +19,7 @@ namespace GW2EIBuilders.HtmlModels
         public List<long> OffBuffs { get; } = new List<long>();
         public List<long> SupBuffs { get; } = new List<long>();
         public List<long> DefBuffs { get; } = new List<long>();
+        public List<long> GearBuffs { get; } = new List<long>();
         public List<long> FractalInstabilities { get; } = new List<long>();
         public List<long> DmgModifiersItem { get; } = new List<long>();
         public List<long> DmgModifiersCommon { get; } = new List<long>();
@@ -259,6 +260,11 @@ namespace GW2EIBuilders.HtmlModels
             foreach (Buff boon in statistics.PresentDefbuffs)
             {
                 logData.DefBuffs.Add(boon.ID);
+                usedBuffs[boon.ID] = boon;
+            }
+            foreach (Buff boon in statistics.PresentGearbuffs)
+            {
+                logData.GearBuffs.Add(boon.ID);
                 usedBuffs[boon.ID] = boon;
             }
             foreach (Buff boon in statistics.PresentFractalInstabilities)
