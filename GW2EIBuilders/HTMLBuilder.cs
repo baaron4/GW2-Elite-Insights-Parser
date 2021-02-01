@@ -148,7 +148,7 @@ namespace GW2EIBuilders
                 // if the file already exists, skip creation
                 if (File.Exists(filePath))
                 {
-                    return;
+                    return filePath;
                 }
 #endif
                 try
