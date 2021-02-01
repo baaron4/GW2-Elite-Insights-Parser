@@ -38,6 +38,8 @@ namespace GW2EIParser.Setting
             BtnResetTraitList.Enabled = !busy;
             BtnLoadSettings.Enabled = !busy;
             GroupWebhookSettings.Enabled = !busy;
+            TxtCustomSaveLocation.Enabled = !busy;
+            BtnCustomSaveLocSelect.Enabled = !busy;
             TxtHtmlExternalScriptsPath.Enabled = !busy;
             TxtHtmlExternalScriptsCdn.Enabled = !busy;
             BtnHtmlExternalScriptPathSelect.Enabled = !busy;
@@ -61,7 +63,7 @@ namespace GW2EIParser.Setting
         {
 
             ChkDefaultOutputLoc.Checked = Properties.Settings.Default.SaveAtOut;
-            TxtCustomSaveLoc.Text = Properties.Settings.Default.OutLocation;
+            TxtCustomSaveLocation.Text = Properties.Settings.Default.OutLocation;
             NumericCustomTooShort.Value = Properties.Settings.Default.CustomTooShort;
             ChkOutputHtml.Checked = Properties.Settings.Default.SaveOutHTML;
             ChkOutputCsv.Checked = Properties.Settings.Default.SaveOutCSV;
@@ -111,22 +113,30 @@ namespace GW2EIParser.Setting
             Properties.Settings.Default.SaveAtOut = ChkDefaultOutputLoc.Checked;
         }
 
-        private void BtnFolderSelectClick(object sender, EventArgs e)
+        private void BtnCustomSaveLocationSelectClick(object sender, EventArgs e)
         {
-            using (var fbd = new FolderBrowserDialog())
+            try
             {
-                DialogResult result = fbd.ShowDialog();
-
-                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                using (var fbd = new FolderBrowserDialog())
                 {
-                    TxtCustomSaveLoc.Text = fbd.SelectedPath;
+                    if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.OutLocation) && Directory.Exists(Properties.Settings.Default.OutLocation))
+                    {
+                        fbd.ShowNewFolderButton = true;
+                        fbd.SelectedPath = Properties.Settings.Default.OutLocation;
+                    }
+                    DialogResult result = fbd.ShowDialog();
+                    if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath) && Directory.Exists(fbd.SelectedPath))
+                    {
+                        TxtCustomSaveLocation.Text = fbd.SelectedPath;
+                    }
                 }
             }
+            catch { }
         }
 
         private void TxtCustomSaveLocationTextChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.OutLocation = TxtCustomSaveLoc.Text;
+            Properties.Settings.Default.OutLocation = TxtCustomSaveLocation.Text.Trim();
         }
 
         private void NumericCustomTooShortValueChanged(object sender, EventArgs e)
@@ -396,32 +406,33 @@ namespace GW2EIParser.Setting
             Properties.Settings.Default.RawTimelineArrays = ChkRawTimelineArrays.Checked;
         }
 
-        private void TxtHtmlExternalScriptsPath_TextChanged(object sender, EventArgs e)
+        private void TxtHtmlExternalScriptsPathTextChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.HtmlExternalScriptsPath = TxtHtmlExternalScriptsPath.Text.Trim();
         }
 
-        private void TxtHtmlExternalScriptCdnUrl_TextChanged(object sender, EventArgs e)
+        private void TxtHtmlExternalScriptCdnUrlTextChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.HtmlExternalScriptsCdn = TxtHtmlExternalScriptsCdn.Text.Trim();
         }
 
-        private void BtnHtmlExternalScriptPathSelect_Click(object sender, EventArgs e)
+        private void BtnHtmlExternalScriptPathSelectClick(object sender, EventArgs e)
         {
             try
             {
-                var fbd = new FolderBrowserDialog();
-                if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.HtmlExternalScriptsPath))
+                using(var fbd = new FolderBrowserDialog())
                 {
-                    fbd.ShowNewFolderButton = true;
-                    fbd.SelectedPath = Properties.Settings.Default.HtmlExternalScriptsPath;
-                }
-                fbd.ShowDialog();
-                if (!string.IsNullOrWhiteSpace(fbd.SelectedPath) && Directory.Exists(fbd.SelectedPath))
-                {
-                    Properties.Settings.Default.HtmlExternalScriptsPath = fbd.SelectedPath;
-                    TxtHtmlExternalScriptsPath.Text = fbd.SelectedPath;
-                }
+                    if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.HtmlExternalScriptsPath) && Directory.Exists(Properties.Settings.Default.HtmlExternalScriptsPath))
+                    {
+                        fbd.ShowNewFolderButton = true;
+                        fbd.SelectedPath = Properties.Settings.Default.HtmlExternalScriptsPath;
+                    }
+                    DialogResult result = fbd.ShowDialog();
+                    if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath) && Directory.Exists(fbd.SelectedPath))
+                    {
+                        TxtHtmlExternalScriptsPath.Text = fbd.SelectedPath;
+                    }
+                }       
             }
             catch { }
         }
