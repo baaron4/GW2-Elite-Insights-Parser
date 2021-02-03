@@ -67,8 +67,8 @@ function getTargetCacheID(activetargets) {
     return id;
 }
 
-function getDPSGraphCacheID(dpsmode, graphmode, activetargets, phaseIndex, extra) {
-    return dpsmode + '-' + graphmode + '-' + getTargetCacheID(activetargets) + '-' + phaseIndex + (extra !== null ? '-' + extra : '');
+function getDPSGraphCacheID(dpsmode, damagemode, graphmode, activetargets, phaseIndex, extra) {
+    return dpsmode + '-'+ damagemode + '-' + graphmode + '-' + getTargetCacheID(activetargets) + '-' + phaseIndex + (extra !== null ? '-' + extra : '');
 }
 
 function graphTypeEnumToString(mode) {
@@ -83,8 +83,26 @@ function graphTypeEnumToString(mode) {
         case GraphType.Damage:
             name = "Damage";
             break;
-        case GraphType.BreakbarDamage:
-            name = "Breakbar Damage";
+        default:
+            break;
+    }
+    return name;
+}
+
+function damageTypeEnumToString(mode) {
+    var name = "";
+    switch (mode) {
+        case DamageType.All:
+            name = "All";
+            break;
+        case DamageType.Power:
+            name = "Power";
+            break;
+        case DamageType.Condition:
+            name = "Condition";
+            break;
+        case DamageType.Breakbar:
+            name = "Breakbar";
             break;
         default:
             break;
@@ -92,8 +110,8 @@ function graphTypeEnumToString(mode) {
     return name;
 }
 
-function getDamageGraphName(mode) {
-    return graphTypeEnumToString(mode) + " Graph";
+function getDamageGraphName(damageMode, graphMode) {
+    return damageTypeEnumToString(damageMode) + " " + graphTypeEnumToString(graphMode) + " Graph";
 }
 
 const quickColor = {
@@ -303,7 +321,7 @@ function computePhaseMarkups(shapes, annotations, phase, linecolor) {
 }
 
 
-function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, cacheID, times, graphMode) {
+function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, cacheID, times, graphMode, damageMode) {
     if (player.dpsGraphCache.has(cacheID)) {
         return player.dpsGraphCache.get(cacheID);
     }
@@ -322,7 +340,7 @@ function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, c
     }
     var end = times.length;
     var left = 0, right = 0, targetid, k;
-    var roundingToUse = graphMode === GraphType.BreakbarDamage ? numberComponent.methods.round1 : numberComponent.methods.round;
+    var roundingToUse = damageMode === DamageType.Breakbar ? numberComponent.methods.round1 : numberComponent.methods.round;
     for (var j = 0; j < end; j++) {
         var time = times[j];
         if (lim > 0) {
@@ -345,7 +363,7 @@ function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, c
                 right = end - 1;
             }
         }          
-        var div = graphMode !== GraphType.Damage && graphMode !== GraphType.BreakbarDamage ? Math.max(times[right] - times[left], 1) : 1;
+        var div = graphMode !== GraphType.Damage ? Math.max(times[right] - times[left], 1) : 1;
         totalDamage = damageData.total[right] - damageData.total[left];
         targetDamage = 0;
         for (k = 0; k < activetargets.length; k++) {

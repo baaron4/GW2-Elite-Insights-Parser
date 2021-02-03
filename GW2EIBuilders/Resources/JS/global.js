@@ -11,12 +11,17 @@ $.extend($.fn.dataTable.defaults, {
     dom: "t"
 });
 
+const DamageType = {
+    All: 0,
+    Power: 1,
+    Condition: 2,
+    Breakbar: 3
+};
 
 const GraphType = {
     DPS: 0,
     Damage: 1,
-    CenteredDPS: 2,
-    BreakbarDamage: 3,
+    CenteredDPS: 2
 };
 
 const simpleLogData = {
