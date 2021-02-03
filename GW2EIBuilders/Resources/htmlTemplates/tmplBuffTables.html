@@ -13,8 +13,11 @@
             <li v-if="hasDefBuffs">
                 <a class="nav-link" :class="{active: tab === 3}" @click="tab = 3">Defensive Buffs</a>
             </li>
+            <li v-if="hasGearBuffs">
+                <a class="nav-link" :class="{active: tab === 4}" @click="tab = 4">Gear Buffs</a>
+            </li>
             <li v-if="hasPersBuffs">
-                <a class="nav-link" :class="{active: tab === 4}" @click="tab = 4">Personal Buffs</a>
+                <a class="nav-link" :class="{active: tab === 5}" @click="tab = 5">Personal Buffs</a>
             </li>
         </ul>
         <div :key="'activeduration'" class="d-flex flex-row justify-content-center mt-1 mb-1">
@@ -32,8 +35,10 @@
             <buff-stats-component v-if="tab < 4"
                 :key="'buffs'" :type="tab" :phaseindex="phaseindex"
                 :playerindex="playerindex" :activeduration="activeduration"></buff-stats-component>
-            <personal-buff-table-component v-if="tab === 4" :key="'persbuffs'"
-                :phaseindex="phaseindex" :playerindex="playerindex" :activeduration="activeduration">
+            <gear-buff-table-component v-if="tab === 4" :key="'gearbuffs'"
+                    :phaseindex="phaseindex" :playerindex="playerindex" :activeduration="activeduration"></gear-buff-table-component>
+            <personal-buff-table-component v-if="tab === 5" :key="'persbuffs'"
+                :phaseindex="phaseindex" :playerindex="playerindex" :activeduration="activeduration"></personal-buff-table-component>
         </keep-alive>     
     </div>
     
@@ -58,6 +63,9 @@
             },
             hasSupBuffs: function() {
                 return logData.supBuffs.length > 0;
+            },
+            hasGearBuffs: function() {
+                return logData.gearBuffs.length > 0;
             },
             hasPersBuffs: function () {
                 var hasPersBuffs = false;

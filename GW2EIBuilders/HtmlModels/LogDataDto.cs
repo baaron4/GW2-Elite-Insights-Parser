@@ -19,6 +19,7 @@ namespace GW2EIBuilders.HtmlModels
         public List<long> OffBuffs { get; } = new List<long>();
         public List<long> SupBuffs { get; } = new List<long>();
         public List<long> DefBuffs { get; } = new List<long>();
+        public List<long> GearBuffs { get; } = new List<long>();
         public List<long> FractalInstabilities { get; } = new List<long>();
         public List<long> DmgModifiersItem { get; } = new List<long>();
         public List<long> DmgModifiersCommon { get; } = new List<long>();
@@ -187,7 +188,7 @@ namespace GW2EIBuilders.HtmlModels
                 allDamageMods.UnionWith(p.GetPresentDamageModifier(log));
             }
             var commonDamageModifiers = new List<DamageModifier>();
-            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(ParserHelper.Source.Common, out IReadOnlyList<DamageModifier> list))
+            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(Source.Common, out IReadOnlyList<DamageModifier> list))
             {
                 foreach (DamageModifier dMod in list)
                 {
@@ -199,7 +200,7 @@ namespace GW2EIBuilders.HtmlModels
                     }
                 }
             }
-            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(ParserHelper.Source.FightSpecific, out list))
+            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(Source.FightSpecific, out list))
             {
                 foreach (DamageModifier dMod in list)
                 {
@@ -212,7 +213,19 @@ namespace GW2EIBuilders.HtmlModels
                 }
             }
             var itemDamageModifiers = new List<DamageModifier>();
-            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(ParserHelper.Source.Item, out list))
+            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(Source.Item, out list))
+            {
+                foreach (DamageModifier dMod in list)
+                {
+                    if (allDamageMods.Contains(dMod.Name))
+                    {
+                        itemDamageModifiers.Add(dMod);
+                        logData.DmgModifiersItem.Add(dMod.ID);
+                        usedDamageMods.Add(dMod);
+                    }
+                }
+            }
+            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(Source.Gear, out list))
             {
                 foreach (DamageModifier dMod in list)
                 {
@@ -249,6 +262,11 @@ namespace GW2EIBuilders.HtmlModels
                 logData.DefBuffs.Add(boon.ID);
                 usedBuffs[boon.ID] = boon;
             }
+            foreach (Buff boon in statistics.PresentGearbuffs)
+            {
+                logData.GearBuffs.Add(boon.ID);
+                usedBuffs[boon.ID] = boon;
+            }
             foreach (Buff boon in statistics.PresentFractalInstabilities)
             {
                 logData.FractalInstabilities.Add(boon.ID);
@@ -274,6 +292,7 @@ namespace GW2EIBuilders.HtmlModels
                     SupBuffStats = BuffData.BuildBuffUptimeData(log, statistics.PresentSupbuffs, phase),
                     DefBuffStats = BuffData.BuildBuffUptimeData(log, statistics.PresentDefbuffs, phase),
                     PersBuffStats = BuffData.BuildPersonalBuffUptimeData(log, persBuffDict, phase),
+                    GearBuffStats = BuffData.BuildBuffUptimeData(log, statistics.PresentGearbuffs, phase),
                     BoonGenSelfStats = BuffData.BuildBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.Self),
                     BoonGenGroupStats = BuffData.BuildBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.Group),
                     BoonGenOGroupStats = BuffData.BuildBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.OffGroup),
@@ -296,6 +315,7 @@ namespace GW2EIBuilders.HtmlModels
                     SupBuffActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentSupbuffs, phase),
                     DefBuffActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentDefbuffs, phase),
                     PersBuffActiveStats = BuffData.BuildActivePersonalBuffUptimeData(log, persBuffDict, phase),
+                    GearBuffActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentGearbuffs, phase),
                     BoonGenActiveSelfStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.Self),
                     BoonGenActiveGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.Group),
                     BoonGenActiveOGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.OffGroup),

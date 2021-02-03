@@ -1,0 +1,63 @@
+<template>
+    <div>
+        <buff-table-component :key="'gear-buff-stats-table'" :condition="false" :generation="false"
+            :id="'gear-buff-stats-table'" :buffs="gears" :playerdata="buffData" :sums="[]" :playerindex="playerindex">
+        </buff-table-component>
+    </div>
+</template>
+
+<script>
+    Vue.component("gear-buff-table-component", {
+        props: ['phaseindex', 'playerindex', 'activeduration'],
+        template: `${template}`,
+        data: function () {
+            return {
+                cache: new Map()
+            };
+        },
+        computed: {
+            phase: function () {
+                return logData.phases[this.phaseindex];
+            },
+            gears: function () {
+                var data = [];
+                for (var i = 0; i < logData.gearBuffs.length; i++) {
+                    data[i] = findSkill(true, logData.gearBuffs[i]);
+                }
+                return data;
+            },
+            buffData: function () {
+                var id = this.phaseindex + '-' + this.activeduration;
+                if (this.cache.has(id)) {
+                    return this.cache.get(id);
+                }
+                var activeduration = this.activeduration;
+                var activeTimes = this.phase.playerActiveTimes;
+
+                var getData = function (stats) {
+                    var uptimes = [];
+                    var i;
+                    for (i = 0; i < logData.players.length; i++) {
+                        var player = logData.players[i];
+                        if (player.isConjure) {
+                            continue;
+                        }
+                        uptimes.push({
+                            player: player,
+                            data: stats[i]
+                        });
+                    }
+                    return uptimes;
+                };
+                var res;
+                if (this.activeduration) {
+                    res = getData(this.phase.gearBuffActiveStats);
+                } else {
+                    res = getData(this.phase.gearBuffStats);
+                }
+                this.cache.set(id, res);
+                return res;
+            }
+        },
+    });
+</script>

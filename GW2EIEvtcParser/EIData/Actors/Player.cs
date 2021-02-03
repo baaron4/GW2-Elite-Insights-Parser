@@ -46,7 +46,7 @@ namespace GW2EIEvtcParser.EIData
 
         public override string GetIcon()
         {
-            return ParserHelper.GetProfIcon(Prof);
+            return GetProfIcon(Prof);
         }
 
 
@@ -195,15 +195,19 @@ namespace GW2EIEvtcParser.EIData
                 return;
             }
             var damageMods = new List<DamageModifier>();
-            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(ParserHelper.Source.Item, out IReadOnlyList<DamageModifier> list))
+            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(Source.Item, out IReadOnlyList<DamageModifier> list))
             {
                 damageMods.AddRange(list);
             }
-            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(ParserHelper.Source.Common, out list))
+            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(Source.Gear, out list))
             {
                 damageMods.AddRange(list);
             }
-            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(ParserHelper.Source.FightSpecific, out list))
+            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(Source.Common, out list))
+            {
+                damageMods.AddRange(list);
+            }
+            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(Source.FightSpecific, out list))
             {
                 damageMods.AddRange(list);
             }
@@ -271,7 +275,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     swapped = skill.FindWeaponSlot(swaps);
                 }
-                if (!skill.EstimateWeapons(weapons, swapped, cl.Time > swappedTime + ParserHelper.WeaponSwapDelayConstant) && cl is WeaponSwapEvent swe)
+                if (!skill.EstimateWeapons(weapons, swapped, cl.Time > swappedTime + WeaponSwapDelayConstant) && cl is WeaponSwapEvent swe)
                 {
                     //wepswap  
                     swapped = swe.SwappedTo;
