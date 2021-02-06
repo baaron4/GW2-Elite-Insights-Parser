@@ -89,11 +89,31 @@ namespace GW2EIBuilders
                         {
                             // something went wrong on creating the external folder (invalid chars?)      
                             // this will skip the saving in this path and continue with jsscript files in the root path for the report
+                            _log.UpdateProgressWithCancellationCheck("HTML Warning: can't create external script folder");
                         }
                     }
                     else
                     {
-                        validPath = true;
+                        try
+                        {
+                            // Verify write access
+                            // https://stackoverflow.com/a/6371533
+                            using (FileStream fs = File.Create(
+                                   Path.Combine(
+                                       _externalScriptsPath,
+                                       "EI-" + Path.GetRandomFileName()
+                                   ),
+                                   1,
+                                   FileOptions.DeleteOnClose)
+                               )
+                            { }
+                            validPath = true;
+                        }
+                        catch
+                        {
+                            _log.UpdateProgressWithCancellationCheck("HTML Warning: can't write in external script folder");
+                            // couldn't write to directory
+                        }
                     }
 
                     // if the creation of the folder did not fail or the folder already exists use it to include within the report
