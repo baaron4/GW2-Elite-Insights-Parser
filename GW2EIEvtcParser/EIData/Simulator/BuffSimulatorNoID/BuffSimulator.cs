@@ -126,7 +126,7 @@ namespace GW2EIEvtcParser.EIData
                                 }
                             }
                             BuffStack.RemoveAt(i);
-                            break;
+                            return;
                         }
                     }
                     break;

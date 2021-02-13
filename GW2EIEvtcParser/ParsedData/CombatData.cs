@@ -340,7 +340,6 @@ namespace GW2EIEvtcParser.ParsedData
                     if (combatItem.IsBuff != 0 && combatItem.BuffDmg == 0 && combatItem.Value > 0)
                     {
                         CombatEventFactory.AddBuffApplyEvent(combatItem, buffEvents, agentData, skillData);
-                        //HasStackIDs = HasStackIDs || combatItem.Pad > 0;
                     }
                     else if (combatItem.IsBuff == 0)
                     {
@@ -352,6 +351,7 @@ namespace GW2EIEvtcParser.ParsedData
                     }
                 }
             }
+            //HasStackIDs = buffEvents.Any(x => x is BuffStackActiveEvent || x is BuffStackResetEvent);
             HasMovementData = _statusEvents.MovementEvents.Count > 1;
             HasBreakbarDamageData = brkDamageData.Any();
             //
