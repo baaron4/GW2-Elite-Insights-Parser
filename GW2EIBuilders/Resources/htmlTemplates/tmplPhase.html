@@ -1,7 +1,7 @@
 <template>
-    <div v-if="phases.length > 1">
+    <div>
         <ul v-if="hasNormalPhases" class="nav nav-pills d-flex flex-row justify-content-center">
-            <li class="nav-item" v-for="(phase, id) in phases" v-show="!getPhaseData(id).breakbarPhase"
+            <li class="nav-item" v-for="(phase, id) in phases" v-show="!getPhaseData(id).breakbarPhase && !getPhaseData(id).dummy"
                 :data-original-title="getPhaseData(id).durationS + ' seconds'">
                 <a class="nav-link" @click="select(phase)" :class="{active: phase.active}">{{getPhaseData(id).name}}</a>
             </li>
@@ -34,7 +34,7 @@
         template: `${template}`,
         computed: {
             hasNormalPhases: function () {
-                return logData.phases.filter(phase => !phase.breakbarPhase).length > 0;
+                return logData.phases.filter(phase => !phase.breakbarPhase && !phase.dummy).length > 1;
             },
             hasBreakbarPhases: function () {
                 return this.breakbarPhasesPerTarget.length > 0;
@@ -42,7 +42,7 @@
             breakbarPhasesPerTarget: function () {
                 var res = [];
                 for (var targetId = 0; targetId < logData.targets.length; targetId++) {
-                    var brPhases = logData.phases.filter(phase => phase.breakbarPhase && phase.targets.indexOf(targetId) > -1);
+                    var brPhases = logData.phases.filter(phase => phase.breakbarPhase && !phase.dummy && phase.targets.indexOf(targetId) > -1);
                     var phaseIds = [];
                     for (var brPhaseId = 0; brPhaseId < brPhases.length; brPhaseId++) {
                         phaseIds.push(logData.phases.indexOf(brPhases[brPhaseId]));

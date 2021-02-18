@@ -44,7 +44,8 @@ function compileTemplates() {
 function mainLoad() {
     // make some additional variables reactive
     var i;
-
+    var nonDummyPhases = logData.phases.filter(x => !x.dummy);
+    var firstActive = nonDummyPhases[0];
     for (i = 0; i < logData.phases.length; i++) {
         var phase = logData.phases[i];
         phase.durationS = phase.duration / 1000.0
@@ -60,7 +61,7 @@ function mainLoad() {
         }
         phase.times = times;
         simpleLogData.phases.push({
-            active: i === 0,
+            active: firstActive === phase,
             focus: -1
         });
     }
