@@ -20,6 +20,8 @@ namespace GW2EIEvtcParser.EIData
         public bool CanBeSubPhase { get; internal set; } = true;
 
         public bool BreakbarPhase { get; internal set; } = false;
+
+        public bool Dummy { get; internal set; } = false;
         public IReadOnlyList<NPC> Targets => _targets;
         private readonly List<NPC> _targets = new List<NPC>();
 

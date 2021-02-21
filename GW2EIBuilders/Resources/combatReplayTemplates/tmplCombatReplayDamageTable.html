@@ -102,7 +102,7 @@
                 return logData.phases[0];
             },
             targets: function () {
-                return this.phase.targets;
+                return this.phase.dummy ? [] : this.phase.targets;
             },
             graph: function () {
                 return graphData.phases[0].players;

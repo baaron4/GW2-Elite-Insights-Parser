@@ -23,9 +23,12 @@
         computed: {
             phase: function () {
                 return logData.phases[0];
+            },   
+            targets: function () {
+                return this.phase.dummy ? [] : this.phase.targets;
             },
             selectorWidth: function () {
-                return  (273 + this.phase.targets.length * 130) + 'px';
+                return  (273 + this.targets.length * 130) + 'px';
             },
             playerindex: function () {
                 if (this.selectedplayer) {
