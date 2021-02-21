@@ -257,7 +257,12 @@ namespace GW2EIEvtcParser.ParsedData
                         // missing start
                         else
                         {
-                            res.Add(new AnimatedCastEvent(agentData, skillData, c));
+                            var toCheck = new AnimatedCastEvent(agentData, skillData, c);
+                            // only keep if list is empty as we are only interested in animations started before log starts
+                            if (!res.Any())
+                            {
+                                res.Add(toCheck);
+                            }
                         }
                     }
                 }
