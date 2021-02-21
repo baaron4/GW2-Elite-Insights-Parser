@@ -1,6 +1,6 @@
 <template>
-    <div class="d-flex flex-row justify-content-center mt-1 mb-1">
-        <ul class="nav nav-pills d-flex flex-row justify-content-center mr-3 scale85">
+    <div class="d-flex flex-row justify-content-center mt-1 mb-1">     
+        <ul class="nav nav-pills d-flex flex-row flex-wrap justify-content-center mr-3 scale85">
             <li class="nav-item">
                 <a class="nav-link" @click="data.dpsmode = 0" :class="{active: data.dpsmode === 0}">Full</a>
             </li>            
@@ -19,8 +19,22 @@
             <li v-if="phasehassubphases" class="nav-item">
                 <a class="nav-link" @click="data.dpsmode = -1" :class="{active: data.dpsmode === -1}">Phase</a>
             </li>
+        </ul>    
+        <ul class="nav nav-pills d-flex flex-row flex-wrap justify-content-center ml-3 scale85">
+            <li class="nav-item">
+                <a class="nav-link" @click="data.damagemode = damageModeEnum.All" :class="{active: data.damagemode === damageModeEnum.All}">All</a>
+            </li>    
+            <li class="nav-item">
+                <a class="nav-link" @click="data.damagemode = damageModeEnum.Power" :class="{active: data.damagemode === damageModeEnum.Power}">Power</a>
+            </li>                     
+            <li class="nav-item">
+                <a class="nav-link" @click="data.damagemode = damageModeEnum.Condition" :class="{active: data.damagemode === damageModeEnum.Condition}">Condition</a>
+            </li>
+            <li class="nav-item" v-if="hasBreakbarDamage">
+                <a class="nav-link" @click="data.damagemode = damageModeEnum.Breakbar" :class="{active: data.damagemode === damageModeEnum.Breakbar}">Breakbar</a>
+            </li>
         </ul>
-        <ul class="nav nav-pills d-flex flex-row justify-content-center ml-3 scale85">
+        <ul class="nav nav-pills d-flex flex-row flex-wrap justify-content-center ml-3 scale85">
             <li class="nav-item">
                 <a class="nav-link" @click="data.graphmode = graphModeEnum.DPS" :class="{active: data.graphmode === graphModeEnum.DPS}">DPS</a>
             </li>    
@@ -29,9 +43,6 @@
             </li>                     
             <li class="nav-item">
                 <a class="nav-link" @click="data.graphmode = graphModeEnum.Damage" :class="{active: data.graphmode === graphModeEnum.Damage}">Damage</a>
-            </li>
-            <li class="nav-item" v-if="hasBreakbarDamage">
-                <a class="nav-link" @click="data.graphmode = graphModeEnum.BreakbarDamage" :class="{active: data.graphmode === graphModeEnum.BreakbarDamage}">Breakbar Damage</a>
             </li>
         </ul>
     </div>
@@ -44,6 +55,9 @@
         computed: {
             graphModeEnum: function() {
                 return GraphType;
+            },
+            damageModeEnum: function() {
+                return DamageType;
             },
             hasBreakbarDamage: function() {
                 return !this.ignorebreakbar && logData.hasBreakbarDamage;

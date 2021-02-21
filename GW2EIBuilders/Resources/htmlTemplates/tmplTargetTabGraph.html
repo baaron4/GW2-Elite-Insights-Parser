@@ -45,7 +45,7 @@
                     right = end - 1;
                 }
             }
-            var div = graphMode !== GraphType.Damage && graphMode !== GraphType.BreakbarDamage ? Math.max(times[right] - times[left], 1) : 1;
+            var div = graphMode !== GraphType.Damage ? Math.max(times[right] - times[left], 1) : 1;
             totalDamage = damageData[right] - damageData[left];
             totalDPS[j] = Math.round(totalDamage / (div));
             maxDPS = Math.max(maxDPS, totalDPS[j]);
@@ -177,8 +177,20 @@
             graphid: function () {
                 return "targetgraph-" + this.phaseTargetIndex + '-' + this.phaseindex;
             },
+            damageGraphName: function () {
+                switch (this.graphdata.damagemode) {
+                    case DamageType.All:
+                        return "total";
+                    case DamageType.Power:
+                        return "totalPower";
+                    case DamageType.Condition:
+                        return "totalCondition";
+                    default:
+                        throw new Error("unknown enum in damage graph name");
+                }
+            },
             graphname: function () {
-                var name = getDamageGraphName(this.graphdata.graphmode);
+                var name = getDamageGraphName(this.graphdata.damagemode, this.graphdata.graphmode);
                 switch (this.graphdata.dpsmode) {
                     case 0:
                         name = "Full " + name;
@@ -216,13 +228,13 @@
         },
         methods: {
             computeDPSData: function () {
-                var cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.graphmode, [], this.phaseindex, null);
+                var cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, [], this.phaseindex, null);
                 if (this.dpsCache.has(cacheID)) {
                     return this.dpsCache.get(cacheID);
                 }
                 //var before = performance.now();
                 var res;
-                var damageData = this.graph.targets[this.phaseTargetIndex].total;
+                var damageData = this.graph.targets[this.phaseTargetIndex][this.damageGraphName];
                 if (this.graphdata.dpsmode >= 0) {
                     res = computeTargetDPS(this.target, damageData, this.graphdata.dpsmode, null, cacheID, this.phase.times, this.graphdata.graphmode);
                 } else {
@@ -232,7 +244,7 @@
                 return res;
             },
             computeDPSRelatedData: function () {
-                var cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.graphmode, [], this.phaseindex, null);
+                var cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, [], this.phaseindex, null);
                 if (this.dataCache.has(cacheID)) {
                     return this.dataCache.get(cacheID);
                 }
