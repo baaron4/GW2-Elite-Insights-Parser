@@ -170,6 +170,10 @@ namespace GW2EIEvtcParser.ParsedData
         // Effect Condition
         public int TraitSrc { get; }
         public int TraitSelf { get; }
+        public int BuffSrc { get; }
+        public int BuffSelf { get; }
+        internal long SortKey => TraitSrc + TraitSelf + BuffSrc + BuffSelf;
+        public bool IsConditional => SortKey > 0;
         // Meta data
         private bool Npc { get; }
         private bool Player { get; }
@@ -193,7 +197,7 @@ namespace GW2EIEvtcParser.ParsedData
             Npc = evtcItem.IsFlanking == 0;
             Player = evtcItem.IsShields == 0;
             Break = evtcItem.IsOffcycle > 0;
-            byte[] formulaBytes = new byte[8 * sizeof(float)];
+            byte[] formulaBytes = new byte[10 * sizeof(float)];
             int offset = 0;
             // 2 
             foreach (byte bt in BitConverter.GetBytes(evtcItem.Time))
@@ -220,8 +224,28 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 formulaBytes[offset++] = bt;
             }
+            // 0.5
+            foreach (byte bt in BitConverter.GetBytes(evtcItem.SrcInstid))
+            {
+                formulaBytes[offset++] = bt;
+            }
+            // 0.5
+            foreach (byte bt in BitConverter.GetBytes(evtcItem.DstInstid))
+            {
+                formulaBytes[offset++] = bt;
+            }
+            // 0.5
+            foreach (byte bt in BitConverter.GetBytes(evtcItem.SrcMasterInstid))
+            {
+                formulaBytes[offset++] = bt;
+            }
+            // 0.5
+            foreach (byte bt in BitConverter.GetBytes(evtcItem.DstMasterInstid))
+            {
+                formulaBytes[offset++] = bt;
+            }
             //
-            float[] formulaFloats = new float[8];
+            float[] formulaFloats = new float[10];
             Buffer.BlockCopy(formulaBytes, 0, formulaFloats, 0, formulaBytes.Length);
             //
             Type = (int)formulaFloats[0];
@@ -234,6 +258,8 @@ namespace GW2EIEvtcParser.ParsedData
             Variable = formulaFloats[5];
             TraitSrc = (int)formulaFloats[6];
             TraitSelf = (int)formulaFloats[7];
+            BuffSrc = (int)formulaFloats[8];
+            BuffSelf = (int)formulaFloats[9];
             ExtraNumber = evtcItem.OverstackValue;
             ExtraNumberState = evtcItem.Pad1;
         }
@@ -316,6 +342,22 @@ namespace GW2EIEvtcParser.ParsedData
             if (!Npc && Player)
             {
                 _solvedDescription += ", on Players";
+            }
+            if (TraitSelf > 0)
+            {
+                _solvedDescription += ", using " + TraitSelf;
+            }
+            if (TraitSrc > 0)
+            {
+                _solvedDescription += ", source using " + TraitSrc;
+            }
+            if (BuffSelf > 0)
+            {
+                _solvedDescription += ", under " + BuffSelf;
+            }
+            if (BuffSrc > 0)
+            {
+                _solvedDescription += ", source under " + BuffSrc;
             }
             return _solvedDescription;
         }

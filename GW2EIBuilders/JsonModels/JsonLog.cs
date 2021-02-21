@@ -87,7 +87,7 @@ namespace GW2EIBuilders.JsonModels
                     };
                     foreach (BuffFormula formula in buffInfoEvent.Formulas)
                     {
-                        if (formula.TraitSelf > 0 || formula.TraitSrc > 0)
+                        if (formula.IsConditional)
                         {
                             continue;
                         }

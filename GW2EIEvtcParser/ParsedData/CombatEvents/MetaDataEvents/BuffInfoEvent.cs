@@ -60,7 +60,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal void AdjustBuffInfo(Dictionary<byte, ArcDPSEnums.BuffAttribute> solved)
         {
-            Formulas.Sort((x, y) => (x.TraitSelf + x.TraitSrc).CompareTo(y.TraitSrc + y.TraitSelf));
+            Formulas.Sort((x, y) => (x.SortKey).CompareTo(y.SortKey));
             if (solved.Count == 0)
             {
                 return;
