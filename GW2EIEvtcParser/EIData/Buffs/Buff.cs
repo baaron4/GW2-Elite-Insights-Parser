@@ -147,12 +147,12 @@ namespace GW2EIEvtcParser.EIData
             {
                 operation.UpdateProgressWithCancellationCheck("Adjusted capacity for " + Name + " from " + Capacity + " to " + buffInfoEvent.MaxStacks);
                 Capacity = buffInfoEvent.MaxStacks;
-                if (buffInfoEvent.StackingType != StackType)
-                {
-                    //_stackType = buffInfoEvent.StackingType; // might be unreliable due to its absence on some logs
-                    operation.UpdateProgressWithCancellationCheck("Incoherent stack type for " + Name + ": is " + StackType + " but expected " + buffInfoEvent.StackingType);
-                }
             }
+            /*if (buffInfoEvent.StackingType != StackType)
+            {
+                //_stackType = buffInfoEvent.StackingType; // might be unreliable due to its absence on some logs
+                operation.UpdateProgressWithCancellationCheck("Incoherent stack type for " + Name + ": is " + StackType + " but expected " + buffInfoEvent.StackingType);
+            }*/
         }
         internal AbstractBuffSimulator CreateSimulator(ParsedEvtcLog log, bool forceNoId)
         {
