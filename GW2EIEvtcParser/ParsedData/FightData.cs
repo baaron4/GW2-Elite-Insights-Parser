@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EncounterLogic;
 
@@ -9,6 +10,7 @@ namespace GW2EIEvtcParser.ParsedData
     {
         // Fields
         private List<PhaseData> _phases = new List<PhaseData>();
+        private List<PhaseData> _nonDummyPhases = new List<PhaseData>();
         public int TriggerID { get; }
         public FightLogic Logic { get; }
         public long FightStart { get; } = 0;
@@ -226,7 +228,7 @@ namespace GW2EIEvtcParser.ParsedData
         public IReadOnlyList<PhaseData> GetPhases(ParsedEvtcLog log)
         {
 
-            if (_phases.Count == 0)
+            if (!_phases.Any())
             {
                 _phases = Logic.GetPhases(log, log.ParserSettings.ParsePhases);
                 _phases.AddRange(Logic.GetBreakbarPhases(log, log.ParserSettings.ParsePhases));
@@ -247,6 +249,15 @@ namespace GW2EIEvtcParser.ParsedData
                 });
             }
             return _phases;
+        }
+
+        public IReadOnlyList<PhaseData> GetNonDummyPhases(ParsedEvtcLog log)
+        {
+            if (!_nonDummyPhases.Any())
+            {
+                _nonDummyPhases = GetPhases(log).Where(x => !x.Dummy).ToList();
+            }
+            return _nonDummyPhases;
         }
 
         public IReadOnlyList<NPC> GetMainTargets(ParsedEvtcLog log)

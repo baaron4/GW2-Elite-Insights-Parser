@@ -184,7 +184,7 @@ namespace GW2EIBuilders.JsonModels
 
         protected JsonActor(AbstractSingleActor actor, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
-            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+            IReadOnlyList<PhaseData> phases = log.FightData.GetNonDummyPhases(log);
             //
             Name = actor.Character;
             Toughness = actor.Toughness;

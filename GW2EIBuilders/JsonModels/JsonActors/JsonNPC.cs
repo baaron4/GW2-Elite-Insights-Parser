@@ -66,7 +66,7 @@ namespace GW2EIBuilders.JsonModels
 
         internal JsonNPC(NPC npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc) : base(npc, log, settings, skillDesc, buffDesc)
         {
-            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+            IReadOnlyList<PhaseData> phases = log.FightData.GetNonDummyPhases(log);
             //
             Id = npc.ID;
             IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(npc.AgentItem);
@@ -99,7 +99,7 @@ namespace GW2EIBuilders.JsonModels
         private static List<JsonBuffsUptime> GetNPCJsonBuffsUptime(NPC npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
             var res = new List<JsonBuffsUptime>();
-            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+            IReadOnlyList<PhaseData> phases = log.FightData.GetNonDummyPhases(log);
             var buffs = phases.Select(x => npc.GetBuffs(log, x.Start, x.End)).ToList();
             foreach (KeyValuePair<long, FinalBuffs> pair in buffs[0])
             {

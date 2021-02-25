@@ -32,7 +32,7 @@ namespace GW2EIBuilders
             _log = log;
             _parserVersion = parserVersion;
             _delimiter = settings.Delimiter;
-            _phases = log.FightData.GetPhases(log);
+            _phases = log.FightData.GetNonDummyPhases(log);
             _noFakePlayers = log.PlayerList.Where(x => !x.IsFakeActor).ToList();
 
             _statistics = log.StatisticsHelper;

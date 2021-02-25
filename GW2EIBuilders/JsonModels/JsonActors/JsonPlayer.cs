@@ -211,7 +211,7 @@ namespace GW2EIBuilders.JsonModels
 
         internal JsonPlayer(Player player, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc, Dictionary<string, JsonLog.DamageModDesc> damageModDesc, Dictionary<string, HashSet<long>> personalBuffs) : base(player, log, settings, skillDesc, buffDesc)
         {
-            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+            IReadOnlyList<PhaseData> phases = log.FightData.GetNonDummyPhases(log);
             //
             Account = player.Account;
             Weapons = player.GetWeaponsArray(log).Select(w => w ?? "Unknown").ToArray();
@@ -313,7 +313,7 @@ namespace GW2EIBuilders.JsonModels
 
         private static List<JsonPlayerBuffsGeneration> GetPlayerBuffGenerations(List<IReadOnlyDictionary<long, FinalPlayerBuffs>> buffs, ParsedEvtcLog log, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
-            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+            IReadOnlyList<PhaseData> phases = log.FightData.GetNonDummyPhases(log);
             var uptimes = new List<JsonPlayerBuffsGeneration>();
             foreach (KeyValuePair<long, FinalPlayerBuffs> pair in buffs[0])
             {
@@ -356,7 +356,7 @@ namespace GW2EIBuilders.JsonModels
         {
             var res = new List<JsonBuffsUptime>();
             var profEnums = new HashSet<ParserHelper.Source>(ProfToEnum(player.Prof));
-            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+            IReadOnlyList<PhaseData> phases = log.FightData.GetNonDummyPhases(log);
             foreach (KeyValuePair<long, FinalPlayerBuffs> pair in buffs[0])
             {
                 Buff buff = log.Buffs.BuffsByIds[pair.Key];

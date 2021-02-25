@@ -64,7 +64,7 @@ namespace GW2EIBuilders.JsonModels
                 targets.Add(log.FightData.Logic.Targets.IndexOf(tar));
             }
             Targets = targets;
-            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+            IReadOnlyList<PhaseData> phases = log.FightData.GetNonDummyPhases(log);
             if (!BreakbarPhase)
             {
                 var subPhases = new List<int>();
