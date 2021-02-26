@@ -4,7 +4,7 @@
             :phasehassubphases="!!this.phase.subPhases" :ignorebreakbar="true">
         </dps-graph-mode-selector-component>
         <h3 class="text-center mt-1 mb-1">{{graphname}}</h3>
-        <graph-component :id="graphid" :layout="layout" :data="computeData" :duration="1000"></graph-component>
+        <graph-component :id="graphid" :layout="layout" :data="computeData"></graph-component>
         <rotation-legend-component></rotation-legend-component>
     </div>
 </template>
