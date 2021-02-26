@@ -29,7 +29,7 @@
             <li>
                 <a class="nav-link" :class="{active: tab === 4}" @click="tab = 4">Graph</a>
             </li>
-            <li>
+            <li v-if="players.length > 1">
                 <a class="nav-link" :class="{active: tab === 7}" @click="tab = 7">Rotations</a>
             </li>
             <li v-if="hasTargets">
@@ -118,6 +118,9 @@
             },
             hasTargets: function() {
                 return !logData.targetless;
+            },
+            players: function () {
+                return logData.players;
             }
         }
     });
