@@ -455,6 +455,7 @@ function getActorGraphLayout(images, color, hasBuffs) {
         xaxis: {
             title: 'Time(sec)',
             color: color,
+            rangemode: 'nonnegative',
             gridcolor: color,
             xrangeslider: {}
         },
@@ -619,7 +620,8 @@ function updateTable(id) {
             color: '#cccccc'
         },
         xaxis: {
-            title: 'Time(sec)',
+            title: 'Time(sec)',         
+            rangemode: 'nonnegative',
             color: '#cccccc',
             gridcolor: '#cccccc',
             xrangeslider: {}
