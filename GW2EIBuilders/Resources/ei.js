@@ -2,7 +2,7 @@
 "use strict";
 function compileTemplates() {
     Vue.component("graph-component", {
-        props: ['id', 'layout', 'data'],
+        props: ['id', 'layout', 'data', 'duration'],
         template: '<div :id="id" class="d-flex flex-row justify-content-center"></div>',
         mounted: function () {
             var div = document.querySelector(this.queryID);
@@ -21,7 +21,7 @@ function compileTemplates() {
             layout: {
                 handler: function () {
                     var div = document.querySelector(this.queryID);
-                    var duration = 1000;
+                    var duration = this.duration;
                     Plotly.animate(div, {
                         data: this.data
                     }, {

@@ -130,13 +130,13 @@ const normalColor = {
     b: 125
 };
 
-function computeRotationData(rotationData, images, data, phase) {
+function computeRotationData(rotationData, images, data, phase, actor, id) {
     if (rotationData) {
         var rotaTrace = {
             x: [],
             base: [],
             y: [],
-            name: 'Rotation',
+            name: actor.name,
             text: [],
             orientation: 'h',
             mode: 'markers',
@@ -146,6 +146,7 @@ function computeRotationData(rotationData, images, data, phase) {
             hoverlabel: {
                 namelength: '-1'
             },
+            yaxis: id === 0 ? 'y' : 'y' + (id + 1),
             marker: {
                 color: [],
                 width: '5',
@@ -155,7 +156,7 @@ function computeRotationData(rotationData, images, data, phase) {
                 }
             },
             showlegend: false
-        }
+        };
         for (var i = 0; i < rotationData.length; i++) {
             var item = rotationData[i];
             var x = item[0];
@@ -203,11 +204,11 @@ function computeRotationData(rotationData, images, data, phase) {
                 images.push({
                     source: icon,
                     xref: 'x',
-                    yref: 'y',
+                    yref: id === 0 ? 'y' : 'y' + (id + 1),
                     x: clampedX,
                     y: 0.0,
-                    sizex: 1.1,
-                    sizey: 1.1,
+                    sizex: 1.0,
+                    sizey: 1.0,
                     xanchor: 'middle',
                     yanchor: 'bottom'
                 });
