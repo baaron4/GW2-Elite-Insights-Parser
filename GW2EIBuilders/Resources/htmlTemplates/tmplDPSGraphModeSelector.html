@@ -1,6 +1,6 @@
 <template>
     <div class="d-flex flex-row justify-content-center mt-1 mb-1">     
-        <ul class="nav nav-pills d-flex flex-row flex-wrap justify-content-center mr-3 scale85">
+        <ul class="nav nav-pills d-flex flex-wrap justify-content-center mr-3 scale85" :class="{'flex-row': !column, 'flex-column': column}">
             <li class="nav-item">
                 <a class="nav-link" @click="data.dpsmode = 0" :class="{active: data.dpsmode === 0}">Full</a>
             </li>            
@@ -20,26 +20,30 @@
                 <a class="nav-link" @click="data.dpsmode = -1" :class="{active: data.dpsmode === -1}">Phase</a>
             </li>
         </ul>    
-        <ul class="nav nav-pills d-flex flex-row flex-wrap justify-content-center ml-3 scale85">
-            <li class="nav-item">
-                <a class="nav-link" @click="data.damagemode = damageModeEnum.All" :class="{active: data.damagemode === damageModeEnum.All}">All</a>
+        <ul class="nav nav-pills d-flex flex-wrap justify-content-center ml-3 scale85" :class="{'flex-row': !column, 'flex-column': column}">
+            <li class="nav-item" data-original-title="Power + Condition">
+                <a class="nav-link" @click="data.damagemode = damageModeEnum.All" :class="{active: data.damagemode === damageModeEnum.All}"><img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="All"
+                    class="icon"></a>
             </li>    
-            <li class="nav-item">
-                <a class="nav-link" @click="data.damagemode = damageModeEnum.Power" :class="{active: data.damagemode === damageModeEnum.Power}">Power</a>
+            <li class="nav-item" data-original-title="Power">
+                <a class="nav-link" @click="data.damagemode = damageModeEnum.Power" :class="{active: data.damagemode === damageModeEnum.Power}"><img src="https://wiki.guildwars2.com/images/2/23/Power.png" alt="Power"
+                    class="icon"></a>
             </li>                     
-            <li class="nav-item">
-                <a class="nav-link" @click="data.damagemode = damageModeEnum.Condition" :class="{active: data.damagemode === damageModeEnum.Condition}">Condition</a>
+            <li class="nav-item" data-original-title="Condition">
+                <a class="nav-link" @click="data.damagemode = damageModeEnum.Condition" :class="{active: data.damagemode === damageModeEnum.Condition}"><img src="https://wiki.guildwars2.com/images/5/54/Condition_Damage.png" alt="Condition"
+                    class="icon"></a>
             </li>
-            <li class="nav-item" v-if="hasBreakbarDamage">
-                <a class="nav-link" @click="data.damagemode = damageModeEnum.Breakbar" :class="{active: data.damagemode === damageModeEnum.Breakbar}">Breakbar</a>
+            <li class="nav-item" v-if="hasBreakbarDamage" data-original-title="Breakbar">
+                <a class="nav-link" @click="data.damagemode = damageModeEnum.Breakbar" :class="{active: data.damagemode === damageModeEnum.Breakbar}"> <img src="https://wiki.guildwars2.com/images/a/ae/Unshakable.png" alt="Breakbar"
+                    class="icon"></a>
             </li>
         </ul>
-        <ul class="nav nav-pills d-flex flex-row flex-wrap justify-content-center ml-3 scale85">
+        <ul class="nav nav-pills d-flex flex-wrap justify-content-center ml-3 scale85" :class="{'flex-row': !column, 'flex-column': column}">
             <li class="nav-item">
                 <a class="nav-link" @click="data.graphmode = graphModeEnum.DPS" :class="{active: data.graphmode === graphModeEnum.DPS}">DPS</a>
             </li>    
-            <li class="nav-item">
-                <a class="nav-link" @click="data.graphmode = graphModeEnum.CenteredDPS" :class="{active: data.graphmode === graphModeEnum.CenteredDPS}">Centered DPS</a>
+            <li class="nav-item" data-original-title="Centered DPS">
+                <a class="nav-link" @click="data.graphmode = graphModeEnum.CenteredDPS" :class="{active: data.graphmode === graphModeEnum.CenteredDPS}">Ctrd.DPS</a>
             </li>                     
             <li class="nav-item">
                 <a class="nav-link" @click="data.graphmode = graphModeEnum.Damage" :class="{active: data.graphmode === graphModeEnum.Damage}">Damage</a>
@@ -50,7 +54,7 @@
 
 <script>
     Vue.component("dps-graph-mode-selector-component", {
-        props: ['data', 'phaseduration', 'phasehassubphases', 'ignorebreakbar'],
+        props: ['data', 'phaseduration', 'phasehassubphases', 'ignorebreakbar', "column"],
         template: `${template}`,
         computed: {
             graphModeEnum: function() {

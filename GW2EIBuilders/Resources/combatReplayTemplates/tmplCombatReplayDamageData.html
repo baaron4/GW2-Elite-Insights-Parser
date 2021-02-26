@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex flex-column justify-content-center">
         <dps-graph-mode-selector-component :data="graphdata"
-            :phaseduration="this.phase.end - this.phase.start" :phasehassubphases="false" :ignorebreakbar="false" :style="{'width': selectorWidth}">
+            :phaseduration="this.phase.end - this.phase.start" :phasehassubphases="false" :ignorebreakbar="false" :style="{'width': selectorWidth + 'px'}" :column="selectorWidth < 280">
         </dps-graph-mode-selector-component>
         <combat-replay-damage-stats-component :time="time" :playerindex="playerindex" :graphdata="graphdata">
         </combat-replay-damage-stats-component>
@@ -29,7 +29,7 @@
                 return this.phase.dummy ? [] : this.phase.targets;
             },
             selectorWidth: function () {
-                return  (273 + this.targets.length * 130) + 'px';
+                return  (273 + this.targets.length * 130);
             },
             playerindex: function () {
                 if (this.selectedplayer) {
