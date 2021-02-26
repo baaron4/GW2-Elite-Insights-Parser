@@ -506,7 +506,7 @@ function _computeTargetGraphData(graph, targets, phase, data, yaxis, jsonGraphNa
 }
 
 function computeTargetHealthData(graph, targets, phase, data, yaxis) {
-    return _computeTargetGraphData(graph, targets, phase, data, yaxis, "healthStates", "hp", "health", true);
+    return _computeTargetGraphData(graph, targets, phase, data, yaxis, "healthStates", "hp", "health", !logData.wvw);
 }
 
 function computeTargetBarrierData(graph, targets, phase, data, yaxis) {
