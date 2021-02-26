@@ -93,6 +93,8 @@ namespace GW2EIBuilders
                 Properties.Resources.tmplDPSGraphModeSelector,
                 Properties.Resources.tmplGraphStats,
                 Properties.Resources.tmplPlayerTabGraph,
+                Properties.Resources.tmplPlayersRotation,
+                Properties.Resources.tmplPlayersRotationTab,
                 Properties.Resources.tmplRotationLegend,
                 Properties.Resources.tmplTargetTabGraph,
                 Properties.Resources.tmplTargetData,

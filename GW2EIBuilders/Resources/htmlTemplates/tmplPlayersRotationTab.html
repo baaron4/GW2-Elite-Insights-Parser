@@ -1,0 +1,23 @@
+<template>
+    <div class="d-flex flex-column align-items-center justify-content-center">
+        <h3 class="text-center mt-1 mb-1">Players' Rotation</h3>
+        <keep-alive>
+            <player-rotations-component v-for='(phase, index) in phases' :key="'rotations' + index"
+                v-if="index === phaseindex" :phaseindex="phaseindex" :light="light" :playerindex="playerindex">
+                </player-rotation-component>
+        </keep-alive>
+    </div>
+</template>
+
+<script>
+
+    Vue.component("player-rotations-tab-component", {
+        props: ["phaseindex", "light", 'playerindex'],
+        template: `${template}`,
+        computed: {
+            phases: function () {
+                return logData.phases;
+            },
+        }
+    });
+</script>
