@@ -130,7 +130,7 @@ const normalColor = {
     b: 125
 };
 
-function computeRotationData(rotationData, images, data, phase, actor, id) {
+function computeRotationData(rotationData, images, data, phase, actor, yAxis) {
     if (rotationData) {
         var rotaTrace = {
             x: [],
@@ -146,7 +146,7 @@ function computeRotationData(rotationData, images, data, phase, actor, id) {
             hoverlabel: {
                 namelength: '-1'
             },
-            yaxis: id === 0 ? 'y' : 'y' + (id + 1),
+            yaxis: yAxis === 0 ? 'y' : 'y' + (yAxis + 1),
             marker: {
                 color: [],
                 width: '5',
