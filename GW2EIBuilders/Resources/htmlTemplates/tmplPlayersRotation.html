@@ -1,0 +1,152 @@
+<template>
+    <div>
+        <graph-component :id="graphid" :layout="layout" :data="data"></graph-component>
+        <rotation-legend-component></rotation-legend-component>
+    </div>
+</template>
+
+<script>
+
+    function getActorsRotationLayout(images, color, players, phase) {
+        var layout = {
+            barmode: 'stack',
+            legend: {
+                traceorder: 'reversed'
+            },
+            hovermode: 'x',
+            hoverdistance: 50,
+            images: images,
+            font: {
+                color: color
+            },
+            xaxis: {
+                title: 'Time(sec)',
+                color: color,
+                gridcolor: color,
+                rangemode: 'nonnegative',
+                xrangeslider: {},
+                tickmode: 'auto',
+                nticks: 8,
+                range: [0, Math.min(Math.max(Math.floor((phase.end - phase.start) / 4), 1), 15) ]
+            },
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            shapes: [],
+            annotations: [],
+            autosize: true,
+            margin: {
+                l: 150,
+            },
+            width: 1100,
+            height: players.length * 80,
+            datarevision: new Date().getTime(),
+        };
+        var delta = 1.0 / players.length;
+        for (var i = 0; i < players.length; i++) {
+            var player = players[i];
+            var name;
+            if (i === 0) {
+                name = 'yaxis';
+            } else {
+                name = 'yaxis' + (i + 1);
+            }
+            layout[name] = {
+                domain: [i * delta, (i + 1) * delta],
+                fixedrange: true,
+                showgrid: false,
+                showticklabels: false,
+                color: color,
+                range: [0, 2]
+            };
+        }
+        return layout;
+    };
+
+    Vue.component("player-rotations-component", {
+        props: ["phaseindex", "light", "playerindex"],
+        template: `${template}`,
+        mixins: [graphComponent],
+        data: function () {
+            return {
+                annotationsOffset: 0
+            };
+        },
+        watch: {
+            light: {
+                handler: function () {
+                    var textColor = this.light ? '#495057' : '#cccccc';
+                    var players = this.players;
+                    for (var i = 0; i < players.length; i++) {
+                        var player = players[i];
+                        var name;
+                        if (i === 0) {
+                            name = 'yaxis';
+                        } else {
+                            name = 'yaxis' + (i + 1);
+                        }
+                        this.layout[name].gridcolor = textColor;
+                        this.layout[name].color = textColor;
+                        this.layout.annotations[this.annotationsOffset + i].bgcolor = player.id === this.playerindex ? (this.light ? 'rgba(120, 240, 0, 0.5)' : 'rgba(50, 120, 0, 0.5)') : 'rgba(0,0,0,0)';
+                    }
+                    this.layout.xaxis.gridcolor = textColor;
+                    this.layout.xaxis.color = textColor;
+                    this.layout.font.color = textColor;
+                    for (var i = 0; i < this.layout.shapes.length; i++) {
+                        this.layout.shapes[i].line.color = textColor;
+                    }
+                    this.layout.datarevision = new Date().getTime();
+                }
+            },
+            playerindex: {
+                handler: function () {
+                    var players = this.players;
+                    for (var i = 0; i < players.length; i++) {
+                        var player = players[i];
+                        this.layout.annotations[this.annotationsOffset + i].bgcolor = player.id === this.playerindex ? (this.light ?'rgba(120, 240, 0, 0.5)' : 'rgba(50, 120, 0, 0.5)') : 'rgba(0,0,0,0)';
+                    }
+                    this.layout.datarevision = new Date().getTime();
+                }
+            }
+        },
+        created: function () {
+            this.data = [];
+            var images = [];
+            for (var i = 0; i < this.players.length; i++) {
+                var player = this.players[i];
+                // plotly is mega slow with images
+                computeRotationData(player.details.rotation[this.phaseindex], images, this.data, this.phase, player, i);
+            }
+            this.layout = getActorsRotationLayout(images, this.light ? '#495057' : '#cccccc', this.players, this.phase);
+            computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');       
+            this.annotationsOffset = this.layout.annotations.length;    
+            for (var i = 0; i < this.players.length; i++) {
+                var player = this.players[i];
+                this.layout.annotations.push({
+                    xref: 'paper',
+                    yref: i === 0 ? 'y' : 'y' + (i + 1),
+                    x: 0,
+                    y: 1,
+                    xanchor: 'right',
+                    yanchor: 'middle',
+                    align: 'left',
+                    text: player.name,
+                    showarrow: false,
+                    width: 145,
+                    height: 57,
+                    bgcolor: player.id === this.playerindex ? (this.light ?'rgba(120, 240, 0, 0.5)' : 'rgba(50, 120, 0, 0.5)') : 'rgba(0,0,0,0)'
+                });
+            }
+        },
+        computed: {
+            phase: function () {
+                return logData.phases[this.phaseindex];
+            },
+            players: function () {
+                return logData.players;
+            },
+            graphid: function () {
+                return "playersrotation-" + '-' + this.phaseindex;
+            },
+        }
+    });
+</script>

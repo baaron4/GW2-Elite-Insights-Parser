@@ -29,6 +29,9 @@
             <li>
                 <a class="nav-link" :class="{active: tab === 4}" @click="tab = 4">Graph</a>
             </li>
+            <li v-if="players.length > 1">
+                <a class="nav-link" :class="{active: tab === 7}" @click="tab = 7">Rotations</a>
+            </li>
             <li v-if="hasTargets">
                 <a class="nav-link" :class="{active: tab === 5}" @click="tab = 5">Targets Summary</a>
             </li>
@@ -51,6 +54,7 @@
                 :activetargets="activePhaseTargets" :phaseindex="activePhase" :playerindex="activePlayer"
                 :light="light"></graph-stats-component>
             </personal-buff-table-component>
+            <player-rotations-tab-component v-if="tab === 7" :key="'rotations'" :phaseindex="activePhase" :light="light" :playerindex="activePlayer"></player-rotations-tab-component>
             <target-stats-component v-if="tab === 5" :key="'targets'" :playerindex="activePlayer"
                 :simplephase="logdata.phases[activePhase]" :phaseindex="activePhase" :light="light">
             </target-stats-component>
@@ -114,6 +118,9 @@
             },
             hasTargets: function() {
                 return !logData.targetless;
+            },
+            players: function () {
+                return logData.players;
             }
         }
     });

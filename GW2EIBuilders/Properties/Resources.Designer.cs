@@ -218,12 +218,17 @@ namespace GW2EIBuilders.Properties {
         ///    dom: &quot;t&quot;
         ///});
         ///
+        ///const DamageType = {
+        ///    All: 0,
+        ///    Power: 1,
+        ///    Condition: 2,
+        ///    Breakbar: 3
+        ///};
         ///
         ///const GraphType = {
         ///    DPS: 0,
         ///    Damage: 1,
-        ///    CenteredDPS: 2,
-        ///    BreakbarDamage: 3,
+        ///    CenteredDPS: 2
         ///};
         ///
         ///const simpleLogData = {
@@ -233,7 +238,7 @@ namespace GW2EIBuilders.Properties {
         ///};
         /////
         ///// polyfill for string include
-        ///// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/G [rest of string was truncated]&quot;;.
+        ///// ht [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string global {
             get {
@@ -853,14 +858,13 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;
-        ///        &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mr-3 scale85&quot;&gt;
+        ///    &lt;div class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;     
+        ///        &lt;ul class=&quot;nav nav-pills d-flex flex-row flex-wrap justify-content-center mr-3 scale85&quot;&gt;
         ///            &lt;li class=&quot;nav-item&quot;&gt;
         ///                &lt;a class=&quot;nav-link&quot; @click=&quot;data.dpsmode = 0&quot; :class=&quot;{active: data.dpsmode === 0}&quot;&gt;Full&lt;/a&gt;
         ///            &lt;/li&gt;            
         ///            &lt;li v-if=&quot;phaseduration &gt; 4&quot; class=&quot;nav-item&quot;&gt;
-        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;data.dpsmode = 4&quot; :class=&quot;{active: data.dpsmode === 4}&quot;&gt;4s&lt;/a&gt;
-        /// [rest of string was truncated]&quot;;.
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;data.dpsmode = 4&quot; :class=&quot;{active: data.dpsmode = [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplDPSGraphModeSelector {
             get {
@@ -929,19 +933,17 @@ namespace GW2EIBuilders.Properties {
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
         ///        &lt;buff-table-component :key=&quot;&apos;gear-buff-stats-table&apos;&quot; :condition=&quot;false&quot; :generation=&quot;false&quot;
-        ///            :id=&quot;&apos;gear-buff-stats-table&apos;&quot; :buffs=&quot;gears&quot; :playerdata=&quot;buffData&quot; :sums=&quot;[]&quot;
-        ///            :playerindex=&quot;playerindex&quot;&gt;
+        ///            :id=&quot;&apos;gear-buff-stats-table&apos;&quot; :buffs=&quot;gears&quot; :playerdata=&quot;buffData&quot; :sums=&quot;[]&quot; :playerindex=&quot;playerindex&quot;&gt;
         ///        &lt;/buff-table-component&gt;
         ///    &lt;/div&gt;
         ///&lt;/template&gt;
         ///
         ///&lt;script&gt;
-        ///    var getData = function (stats) {
-        ///        var uptimes = [];
-        ///        var i;
-        ///        for (i = 0; i &lt; logData.players.length; i++) {
-        ///            var player = logData.players[i];
-        ///   [rest of string was truncated]&quot;;.
+        ///    Vue.component(&quot;gear-buff-table-component&quot;, {
+        ///        props: [&apos;phaseindex&apos;, &apos;playerindex&apos;, &apos;activeduration&apos;],
+        ///        template: `${template}`,
+        ///        data: function () {
+        ///            return { [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplGearBuffTable {
             get {
@@ -1045,14 +1047,14 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div v-if=&quot;phases.length &gt; 1&quot;&gt;
+        ///    &lt;div&gt;
         ///        &lt;ul v-if=&quot;hasNormalPhases&quot; class=&quot;nav nav-pills d-flex flex-row justify-content-center&quot;&gt;
-        ///            &lt;li class=&quot;nav-item&quot; v-for=&quot;(phase, id) in phases&quot; v-show=&quot;!getPhaseData(id).breakbarPhase&quot;
+        ///            &lt;li class=&quot;nav-item&quot; v-for=&quot;(phase, id) in phases&quot; v-show=&quot;!getPhaseData(id).breakbarPhase &amp;&amp; !getPhaseData(id).dummy&quot;
         ///                :data-original-title=&quot;getPhaseData(id).durationS + &apos; seconds&apos;&quot;&gt;
         ///                &lt;a class=&quot;nav-link&quot; @click=&quot;select(phase)&quot; :class=&quot;{active: phase.active}&quot;&gt;{{getPhaseData(id).name}}&lt;/a&gt;
         ///            &lt;/li&gt;
         ///        &lt;/ul&gt;
-        ///        &lt;div v-if=&quot;hasBr [rest of string was truncated]&quot;;.
+        ///        &lt;div v-if=&quot;has [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPhase {
             get {
@@ -1073,6 +1075,56 @@ namespace GW2EIBuilders.Properties {
         internal static string tmplPlayers {
             get {
                 return ResourceManager.GetString("tmplPlayers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;graph-component :id=&quot;graphid&quot; :layout=&quot;layout&quot; :data=&quot;data&quot;&gt;&lt;/graph-component&gt;
+        ///        &lt;rotation-legend-component&gt;&lt;/rotation-legend-component&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/template&gt;
+        ///
+        ///&lt;script&gt;
+        ///
+        ///    function getActorsRotationLayout(images, color, players) {
+        ///        var layout = {
+        ///            barmode: &apos;stack&apos;,
+        ///            legend: {
+        ///                traceorder: &apos;reversed&apos;
+        ///            },
+        ///            hovermode: &apos;x&apos;,
+        ///            hoverdistance: 50,
+        ///            images: images,
+        ///         [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplPlayersRotation {
+            get {
+                return ResourceManager.GetString("tmplPlayersRotation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;       
+        ///        &lt;keep-alive&gt;
+        ///            &lt;player-rotations-component v-for=&apos;(phase, index) in phases&apos; :key=&quot;&apos;rotations&apos; + index&quot; v-if=&quot;index === phaseindex&quot; :phaseindex=&quot;phaseindex&quot; :light=&quot;light&quot;&gt;&lt;/player-rotation-component&gt;
+        ///        &lt;/keep-alive&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/template&gt;
+        ///
+        ///&lt;script&gt;
+        ///
+        ///    Vue.component(&quot;player-rotations-tab-component&quot;, {
+        ///        props: [&quot;phaseindex&quot;, &quot;light&quot;, &apos;playerindex&apos;],
+        ///        template: `${template}`,
+        ///        computed: {
+        ///            phases: function () {        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplPlayersRotationTab {
+            get {
+                return ResourceManager.GetString("tmplPlayersRotationTab", resourceCulture);
             }
         }
         

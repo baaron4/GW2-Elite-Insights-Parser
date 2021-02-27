@@ -130,13 +130,13 @@ const normalColor = {
     b: 125
 };
 
-function computeRotationData(rotationData, images, data, phase) {
+function computeRotationData(rotationData, images, data, phase, actor, yAxis) {
     if (rotationData) {
         var rotaTrace = {
             x: [],
             base: [],
             y: [],
-            name: 'Rotation',
+            name: actor.name,
             text: [],
             orientation: 'h',
             mode: 'markers',
@@ -146,6 +146,7 @@ function computeRotationData(rotationData, images, data, phase) {
             hoverlabel: {
                 namelength: '-1'
             },
+            yaxis: yAxis === 0 ? 'y' : 'y' + (yAxis + 1),
             marker: {
                 color: [],
                 width: '5',
@@ -155,7 +156,7 @@ function computeRotationData(rotationData, images, data, phase) {
                 }
             },
             showlegend: false
-        }
+        };
         for (var i = 0; i < rotationData.length; i++) {
             var item = rotationData[i];
             var x = item[0];
@@ -203,11 +204,11 @@ function computeRotationData(rotationData, images, data, phase) {
                 images.push({
                     source: icon,
                     xref: 'x',
-                    yref: 'y',
+                    yref: yAxis === 0 ? 'y' : 'y' + (yAxis + 1),
                     x: clampedX,
                     y: 0.0,
-                    sizex: 1.1,
-                    sizey: 1.1,
+                    sizex: 1.0,
+                    sizey: 1.0,
                     xanchor: 'middle',
                     yanchor: 'bottom'
                 });
@@ -454,7 +455,10 @@ function getActorGraphLayout(images, color, hasBuffs) {
         xaxis: {
             title: 'Time(sec)',
             color: color,
+            rangemode: 'nonnegative',
             gridcolor: color,
+            tickmode: 'auto',
+            nticks: 8,
             xrangeslider: {}
         },
         paper_bgcolor: 'rgba(0,0,0,0)',
@@ -504,7 +508,7 @@ function _computeTargetGraphData(graph, targets, phase, data, yaxis, jsonGraphNa
 }
 
 function computeTargetHealthData(graph, targets, phase, data, yaxis) {
-    return _computeTargetGraphData(graph, targets, phase, data, yaxis, "healthStates", "hp", "health", true);
+    return _computeTargetGraphData(graph, targets, phase, data, yaxis, "healthStates", "hp", "health", !logData.wvw);
 }
 
 function computeTargetBarrierData(graph, targets, phase, data, yaxis) {
@@ -618,8 +622,11 @@ function updateTable(id) {
             color: '#cccccc'
         },
         xaxis: {
-            title: 'Time(sec)',
+            title: 'Time(sec)',         
+            rangemode: 'nonnegative',
             color: '#cccccc',
+            tickmode: 'auto',
+            nticks: 8,
             gridcolor: '#cccccc',
             xrangeslider: {}
         },

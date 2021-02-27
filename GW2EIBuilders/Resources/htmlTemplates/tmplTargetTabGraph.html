@@ -131,7 +131,7 @@
         created: function () {
             var images = [];
             this.data = [];
-            this.targetOffset += computeRotationData(this.target.details.rotation[this.phaseindex], images, this.data, this.phase);
+            this.targetOffset += computeRotationData(this.target.details.rotation[this.phaseindex], images, this.data, this.phase, this.target, 0);
             var oldOffset = this.targetOffset;
             this.targetOffset += computeBuffData(this.target.details.boonGraph[this.phaseindex], this.data);
             var hasBuffs = oldOffset !== this.targetOffset;

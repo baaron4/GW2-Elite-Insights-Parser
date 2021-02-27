@@ -271,6 +271,12 @@
   <data name="tmplPlayers" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlTemplates\tmplPlayers.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="tmplPlayersRotation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\htmlTemplates\tmplPlayersRotation.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="tmplPlayersRotationTab" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\htmlTemplates\tmplPlayersRotationTab.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="tmplPlayerStats" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlTemplates\tmplPlayerStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
