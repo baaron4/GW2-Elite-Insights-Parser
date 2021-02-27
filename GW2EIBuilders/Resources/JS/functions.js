@@ -457,6 +457,8 @@ function getActorGraphLayout(images, color, hasBuffs) {
             color: color,
             rangemode: 'nonnegative',
             gridcolor: color,
+            tickmode: 'auto',
+            nticks: 8,
             xrangeslider: {}
         },
         paper_bgcolor: 'rgba(0,0,0,0)',
@@ -623,6 +625,8 @@ function updateTable(id) {
             title: 'Time(sec)',         
             rangemode: 'nonnegative',
             color: '#cccccc',
+            tickmode: 'auto',
+            nticks: 8,
             gridcolor: '#cccccc',
             xrangeslider: {}
         },
