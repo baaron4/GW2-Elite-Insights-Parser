@@ -204,7 +204,7 @@ function computeRotationData(rotationData, images, data, phase, actor, yAxis) {
                 images.push({
                     source: icon,
                     xref: 'x',
-                    yref: id === 0 ? 'y' : 'y' + (id + 1),
+                    yref: yAxis === 0 ? 'y' : 'y' + (yAxis + 1),
                     x: clampedX,
                     y: 0.0,
                     sizex: 1.0,
