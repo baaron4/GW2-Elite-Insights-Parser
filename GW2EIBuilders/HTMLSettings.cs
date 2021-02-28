@@ -11,10 +11,14 @@
 
         public string ExternalHtmlScriptsCdn { get; set; }
 
-        public HTMLSettings(bool htmlLightTheme, bool externalHTMLScripts, string externalHTMLScriptsPath, string externalHTMLScriptsCdn)
+        public HTMLSettings(bool htmlLightTheme, bool externalHTMLScripts)
         {
             HTMLLightTheme = htmlLightTheme;
             ExternalHTMLScripts = externalHTMLScripts;
+        }
+
+        public HTMLSettings(bool htmlLightTheme, bool externalHTMLScripts, string externalHTMLScriptsPath, string externalHTMLScriptsCdn) : this(htmlLightTheme, externalHTMLScripts)
+        {
             ExternalHtmlScriptsPath = externalHTMLScriptsPath;
             ExternalHtmlScriptsCdn = externalHTMLScriptsCdn;
         }
