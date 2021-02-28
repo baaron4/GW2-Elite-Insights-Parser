@@ -60,7 +60,7 @@ namespace GW2EIParser.tst
         {
             var ms = new MemoryStream();
             var sw = new StreamWriter(ms, NoBOMEncodingUTF8);
-            var builder = new RawFormatBuilder(log, rawSettings, Version);
+            var builder = new RawFormatBuilder(log, rawSettings, Version, new UploadResults());
 
             builder.CreateJSON(sw, false);
             sw.Close();
@@ -72,7 +72,7 @@ namespace GW2EIParser.tst
         {
             var ms = new MemoryStream();
             var sw = new StreamWriter(ms);
-            var builder = new CSVBuilder(log, csvSettings, Version);
+            var builder = new CSVBuilder(log, csvSettings, Version, new UploadResults());
 
             builder.CreateCSV(sw);
             sw.Close();
@@ -84,7 +84,7 @@ namespace GW2EIParser.tst
         {
             var ms = new MemoryStream();
             var sw = new StreamWriter(ms, NoBOMEncodingUTF8);
-            var builder = new HTMLBuilder(log, htmlSettings, htmlAssets, Version);
+            var builder = new HTMLBuilder(log, htmlSettings, htmlAssets, Version, new UploadResults());
 
             builder.CreateHTML(sw, null);
             sw.Close();
@@ -94,7 +94,7 @@ namespace GW2EIParser.tst
 
         public static JsonLog JsonLog(ParsedEvtcLog log)
         {
-            var builder = new RawFormatBuilder(log, rawSettings, null);
+            var builder = new RawFormatBuilder(log, rawSettings, Version, new UploadResults());
             return builder.JsonLog;
         }
 

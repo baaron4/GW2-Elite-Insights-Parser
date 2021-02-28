@@ -153,7 +153,7 @@ namespace GW2EIParser
                 }
                 operation.BasicMetaData = new OperationController.OperationBasicMetaData(log);
                 var externalTraces = new List<string>();
-                string[] uploadresult = UploadOperation(externalTraces, fInfo);
+                string[] uploadStrings = UploadOperation(externalTraces, fInfo);
                 foreach (string trace in externalTraces)
                 {
                     operation.UpdateProgressWithCancellationCheck(trace);
@@ -162,19 +162,19 @@ namespace GW2EIParser
                 {
                     if (Properties.Settings.Default.SendSimpleMessageToWebhook)
                     {
-                        operation.UpdateProgressWithCancellationCheck(new WebhookController(Properties.Settings.Default.WebhookURL, uploadresult[0]).SendMessage());
+                        operation.UpdateProgressWithCancellationCheck(new WebhookController(Properties.Settings.Default.WebhookURL, uploadStrings[0]).SendMessage());
                     } 
                     else
                     {
-                        operation.UpdateProgressWithCancellationCheck(new WebhookController(Properties.Settings.Default.WebhookURL, BuildEmbed(log, uploadresult[0])).SendMessage());
+                        operation.UpdateProgressWithCancellationCheck(new WebhookController(Properties.Settings.Default.WebhookURL, BuildEmbed(log, uploadStrings[0])).SendMessage());
                     }
                 }
-                if (uploadresult[0].Contains("https"))
+                if (uploadStrings[0].Contains("https"))
                 {
-                    operation.DPSReportLink = uploadresult[0];
+                    operation.DPSReportLink = uploadStrings[0];
                 }
                 //Creating File
-                GenerateFiles(log, operation, uploadresult, fInfo);
+                GenerateFiles(log, operation, uploadStrings, fInfo);
             }
             catch (Exception ex)
             {
@@ -261,7 +261,7 @@ namespace GW2EIParser
             }
         }
 
-        private static void GenerateFiles(ParsedEvtcLog log, OperationController operation, string[] uploadresult, FileInfo fInfo)
+        private static void GenerateFiles(ParsedEvtcLog log, OperationController operation, string[] uploadStrings, FileInfo fInfo)
         {
             operation.UpdateProgressWithCancellationCheck("Creating File(s)");
 
@@ -350,6 +350,7 @@ namespace GW2EIParser
                     }
                 });
             }
+            var uploadResults = new UploadResults(uploadStrings[0], uploadStrings[1], uploadStrings[2]);
             if (Properties.Settings.Default.SaveOutHTML)
             {
                 operation.UpdateProgressWithCancellationCheck("Creating HTML");
@@ -363,7 +364,7 @@ namespace GW2EIParser
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs))
                 {
-                    var builder = new HTMLBuilder(log, new HTMLSettings(Properties.Settings.Default.LightTheme, Properties.Settings.Default.HtmlExternalScripts, Properties.Settings.Default.HtmlExternalScriptsPath, Properties.Settings.Default.HtmlExternalScriptsCdn), htmlAssets, ParserVersion, uploadresult);
+                    var builder = new HTMLBuilder(log, new HTMLSettings(Properties.Settings.Default.LightTheme, Properties.Settings.Default.HtmlExternalScripts, Properties.Settings.Default.HtmlExternalScriptsPath, Properties.Settings.Default.HtmlExternalScriptsCdn), htmlAssets, ParserVersion, uploadResults);
                     builder.CreateHTML(sw, saveDirectory.FullName);
                 }
                 operation.UpdateProgressWithCancellationCheck("HTML created");
@@ -381,14 +382,14 @@ namespace GW2EIParser
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                 {
-                    var builder = new CSVBuilder(log, new CSVSettings(","), ParserVersion, uploadresult);
+                    var builder = new CSVBuilder(log, new CSVSettings(","), ParserVersion, uploadResults);
                     builder.CreateCSV(sw);
                 }
                 operation.UpdateProgressWithCancellationCheck("CSV created");
             }
             if (Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML)
             {
-                var builder = new RawFormatBuilder(log, new RawFormatSettings(Properties.Settings.Default.RawTimelineArrays), ParserVersion, uploadresult);
+                var builder = new RawFormatBuilder(log, new RawFormatSettings(Properties.Settings.Default.RawTimelineArrays), ParserVersion, uploadResults);
                 if (Properties.Settings.Default.SaveOutJSON)
                 {
                     operation.UpdateProgressWithCancellationCheck("Creating JSON");

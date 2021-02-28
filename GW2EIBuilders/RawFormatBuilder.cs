@@ -19,13 +19,13 @@ namespace GW2EIBuilders
 
         //
 
-        public RawFormatBuilder(ParsedEvtcLog log, RawFormatSettings settings, Version parserVersion, string[] uploadLinks = null)
+        public RawFormatBuilder(ParsedEvtcLog log, RawFormatSettings settings, Version parserVersion, UploadResults uploadResults)
         {
             if (settings == null)
             {
                 throw new InvalidDataException("Missing settings in RawFormatBuilder");
             }
-            JsonLog = new JsonLog(log, settings, parserVersion, uploadLinks);
+            JsonLog = new JsonLog(log, settings, parserVersion, uploadResults.ToArray());
         }
 
         public void CreateJSON(StreamWriter sw, bool indent)

@@ -42,7 +42,7 @@ namespace GW2EIParser
         /// <summary>
         /// Location of the output
         /// </summary>
-        public string OutLocation { get; set; }
+        internal string OutLocation { get; set; }
         /// <summary>
         /// Location of the generated files
         /// </summary>
@@ -54,7 +54,7 @@ namespace GW2EIParser
         /// <summary>
         /// Link to dps.report
         /// </summary>
-        public string DPSReportLink { get; set; }
+        internal string DPSReportLink { get; set; }
 
         public OperationBasicMetaData BasicMetaData { get; set; }
 

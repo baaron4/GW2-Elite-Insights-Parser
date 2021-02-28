@@ -35,7 +35,7 @@ namespace GW2EIBuilders
         private readonly HashSet<DamageModifier> _usedDamageMods = new HashSet<DamageModifier>();
         private readonly Dictionary<long, SkillItem> _usedSkills = new Dictionary<long, SkillItem>();
 
-        public HTMLBuilder(ParsedEvtcLog log, HTMLSettings settings, HTMLAssets assets, Version parserVersion, string[] uploadString = null)
+        public HTMLBuilder(ParsedEvtcLog log, HTMLSettings settings, HTMLAssets assets, Version parserVersion, UploadResults uploadResults)
         {
             if (settings == null)
             {
@@ -53,7 +53,7 @@ namespace GW2EIBuilders
             _scriptVersionRev = parserVersion.Revision;
             _log = log;
 
-            _uploadLink = uploadString ?? new string[] { "", "", "" };
+            _uploadLink = uploadResults.ToArray();
 
             _cr = _log.CanCombatReplay;
             _light = settings.HTMLLightTheme;

@@ -23,7 +23,7 @@ namespace GW2EIBuilders
 
         private readonly List<Player> _noFakePlayers;
 
-        public CSVBuilder(ParsedEvtcLog log, CSVSettings settings, Version parserVersion, string[] uploadresult = null)
+        public CSVBuilder(ParsedEvtcLog log, CSVSettings settings, Version parserVersion, UploadResults uploadResults)
         {
             if (settings == null)
             {
@@ -37,7 +37,7 @@ namespace GW2EIBuilders
 
             _statistics = log.StatisticsHelper;
 
-            _uploadResult = uploadresult ?? new string[] { "", "", "" };
+            _uploadResult = uploadResults.ToArray();
             _legacyTarget = log.FightData.Logic.GetLegacyTarget();
             if (_legacyTarget == null)
             {
