@@ -38,7 +38,7 @@
                 l: 150,
             },
             width: 1100,
-            height: players.length * 80,
+            height: players.length * 65 + 180, // 180 is the section above the plot
             datarevision: new Date().getTime(),
         };
         var delta = 1.0 / players.length;
@@ -132,7 +132,7 @@
                     text: player.name,
                     showarrow: false,
                     width: 145,
-                    height: 57,
+                    height: 62,
                     bgcolor: player.id === this.playerindex ? (this.light ?'rgba(120, 240, 0, 0.5)' : 'rgba(50, 120, 0, 0.5)') : 'rgba(0,0,0,0)'
                 });
             }
