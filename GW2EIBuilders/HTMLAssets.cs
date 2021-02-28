@@ -26,7 +26,6 @@ namespace GW2EIBuilders
                 scriptContent += orderedScripts[i];
             }
             List<string> templates = BuildTemplates();
-            templates.AddRange(BuildCRTemplates());
             EIJavascriptCode = scriptContent.Replace("TEMPLATE_COMPILE", string.Join("\n", templates));
             //
             var orderedCRScripts = new List<string>()
@@ -40,7 +39,8 @@ namespace GW2EIBuilders
             {
                 scriptCRContent += orderedCRScripts[i];
             }
-            EICRJavascriptCode = scriptCRContent;
+            List<string> templatesCR = BuildCRTemplates();
+            EICRJavascriptCode = scriptCRContent.Replace("TEMPLATE_CR_COMPILE", string.Join("\n", templatesCR));
         }
         private static string PrepareTemplate(string template)
         {

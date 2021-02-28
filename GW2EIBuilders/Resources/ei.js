@@ -82,6 +82,9 @@ function mainLoad() {
         playerData.id = i;
     }
     compileTemplates()
+    if (!!logData.crData) {
+        compileCRTemplates();
+    }
     new Vue({
         el: "#content",
         data: {

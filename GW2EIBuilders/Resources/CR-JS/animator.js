@@ -4,6 +4,11 @@
 /* global logData*/
 // const images
 "use strict";
+
+function compileCRTemplates() {
+    TEMPLATE_CR_COMPILE
+};
+
 const noUpdateTime = -1;
 const updateText = -2;
 const deadIcon = new Image();
