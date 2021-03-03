@@ -48,7 +48,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                     CanBeSubPhase = false
                 });
                 phases[1].AddTargets(Targets);
-                phases[1].RemoveTarget(mainTarget);
+                if (phases[1].Targets.Any())
+                {
+                    phases[1].RemoveTarget(mainTarget);
+                }
                 phases[0].Dummy = true;
             }
             return phases;
