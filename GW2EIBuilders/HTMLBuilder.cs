@@ -62,7 +62,7 @@ namespace GW2EIBuilders
             _externalScriptsCdn = settings.ExternalHtmlScriptsCdn;
         }
 
-        private (string, string) BuildAssetPath(string path)
+        private (string, string) BuildAssetPaths(string path)
         {
             string cdn = null;
             string external = null;
@@ -139,7 +139,7 @@ namespace GW2EIBuilders
         public void CreateHTML(StreamWriter sw, string path)
         {
             string html = Properties.Resources.tmplMain;
-            (string externalPath, string cdnPath) = BuildAssetPath(path);
+            (string externalPath, string cdnPath) = BuildAssetPaths(path);
             _log.UpdateProgressWithCancellationCheck("HTML: replacing global variables");
             html = html.Replace("${bootstrapTheme}", !_light ? "slate" : "yeti");
 
