@@ -72,6 +72,7 @@ namespace GW2EIBuilders
                 {
                     cdn = (_externalScriptsCdn.EndsWith("/") && _externalScriptsCdn.Length > 1 ? _externalScriptsCdn.Substring(0, _externalScriptsCdn.Length - 1) : _externalScriptsCdn);
                 }
+                external = path;
                 // Setting: External Scripts Path
                 // overwrite jsPath (create directory) if files should be placed on different location
                 // settings.externalHtmlScriptsPath is set by the user
@@ -122,9 +123,6 @@ namespace GW2EIBuilders
                     {
                         external = _externalScriptsPath;
                     }
-                } else
-                {
-                    external = path;
                 }
             }
             return (external, cdn);
@@ -208,7 +206,9 @@ namespace GW2EIBuilders
                 return "";
             }
             string scriptContent = _eiCRJS;
-            if (externalPath != null || cdnPath != null)
+            bool externalNull = string.IsNullOrEmpty(externalPath);
+            bool cdnNull = string.IsNullOrEmpty(cdnPath);
+            if (!externalNull || !cdnNull)
             {
                 string fileName = "EliteInsights-CR-" + _scriptVersion + ".js";
                 string path = CreateAssetFile(externalPath, cdnPath, fileName, scriptContent);
@@ -223,8 +223,9 @@ namespace GW2EIBuilders
         private string BuildCss(string externalPath, string cdnPath)
         {
             string scriptContent = Properties.Resources.css;
-
-            if (externalPath != null || cdnPath != null)
+            bool externalNull = string.IsNullOrEmpty(externalPath);
+            bool cdnNull = string.IsNullOrEmpty(cdnPath);
+            if (!externalNull || !cdnNull)
             {
                 string fileName = "EliteInsights-" + _scriptVersion + ".css";
                 string path = CreateAssetFile(externalPath, cdnPath, fileName, scriptContent);
@@ -239,8 +240,9 @@ namespace GW2EIBuilders
         private string BuildEIJs(string externalPath, string cdnPath)
         {
             string scriptContent = _eiJS;
-
-            if (externalPath != null || cdnPath != null)
+            bool externalNull = string.IsNullOrEmpty(externalPath);
+            bool cdnNull = string.IsNullOrEmpty(cdnPath);
+            if (!externalNull || !cdnNull)
             {
                 string fileName = "EliteInsights-" + _scriptVersion + ".js";
                 string path = CreateAssetFile(externalPath, cdnPath, fileName, scriptContent);
