@@ -26,14 +26,12 @@
                 rangemode: 'nonnegative',
                 xrangeslider: {},
                 tickmode: 'auto',
-                nticks: 8,
-                range: [0, Math.min(Math.max(Math.floor((phase.end - phase.start) / 4), 1), 15) ]
+                nticks: 8
             },
             paper_bgcolor: 'rgba(0,0,0,0)',
             plot_bgcolor: 'rgba(0,0,0,0)',
             shapes: [],
             annotations: [],
-            autosize: true,
             margin: {
                 l: 150,
             },
@@ -102,7 +100,7 @@
                     var players = this.players;
                     for (var i = 0; i < players.length; i++) {
                         var player = players[i];
-                        this.layout.annotations[this.annotationsOffset + i].bgcolor = player.id === this.playerindex ? (this.light ?'rgba(120, 240, 0, 0.5)' : 'rgba(50, 120, 0, 0.5)') : 'rgba(0,0,0,0)';
+                        this.layout.annotations[this.annotationsOffset + i].bgcolor = player.id === this.playerindex ? (this.light ? 'rgba(120, 240, 0, 0.5)' : 'rgba(50, 120, 0, 0.5)') : 'rgba(0,0,0,0)';
                     }
                     this.layout.datarevision = new Date().getTime();
                 }
@@ -113,12 +111,11 @@
             var images = [];
             for (var i = 0; i < this.players.length; i++) {
                 var player = this.players[i];
-                // plotly is mega slow with images
                 computeRotationData(player.details.rotation[this.phaseindex], images, this.data, this.phase, player, i);
             }
             this.layout = getActorsRotationLayout(images, this.light ? '#495057' : '#cccccc', this.players, this.phase);
-            computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');       
-            this.annotationsOffset = this.layout.annotations.length;    
+            computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
+            this.annotationsOffset = this.layout.annotations.length;
             for (var i = 0; i < this.players.length; i++) {
                 var player = this.players[i];
                 this.layout.annotations.push({
@@ -133,9 +130,37 @@
                     showarrow: false,
                     width: 145,
                     height: 62,
-                    bgcolor: player.id === this.playerindex ? (this.light ?'rgba(120, 240, 0, 0.5)' : 'rgba(50, 120, 0, 0.5)') : 'rgba(0,0,0,0)'
+                    bgcolor: player.id === this.playerindex ? (this.light ? 'rgba(120, 240, 0, 0.5)' : 'rgba(50, 120, 0, 0.5)') : 'rgba(0,0,0,0)'
                 });
             }
+            this.updateVisibily(this.layout.images, this.phase.start, this.phase.end);
+        },
+        mounted: function () {
+            var div = document.getElementById(this.graphid);
+            var layout = this.layout;
+            var images = layout.images;
+            var _this = this;
+            div.on('plotly_relayout', function (evt) {
+                var x0 = layout.xaxis.range[0];
+                var x1 = layout.xaxis.range[1];
+                //console.log("re-layout " + x0 + " " + x1);
+                if (_this.updateVisibily(images, x0, x1)) {
+                    layout.datarevision = new Date().getTime();
+                    //console.log("re-drawing");
+                }
+            });
+        },
+        methods: {
+            updateVisibily: function (images, x0, x1) {
+                var redraw = false;
+                for (var i = 0; i < images.length; i++) {
+                    var image = images[i];
+                    var old = image.visible;
+                    image.visible = typeof x0 === "undefined" || ((image.x <= x1 && image.x >= x0) && (x1 - x0) < 100);
+                    redraw = redraw || image.visible !== old;
+                }
+                return redraw;
+            },
         },
         computed: {
             phase: function () {
