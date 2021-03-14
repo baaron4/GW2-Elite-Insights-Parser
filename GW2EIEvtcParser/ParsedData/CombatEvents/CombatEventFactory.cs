@@ -235,6 +235,9 @@ namespace GW2EIEvtcParser.ParsedData
             var res = new List<AnimatedCastEvent>();
             foreach (KeyValuePair<ulong, List<CombatItem>> pair in castEventsBySrcAgent)
             {
+#if DEBUG
+                AgentItem a = agentData.GetAgent(pair.Key);
+#endif
                 CombatItem startItem = null;
                 foreach (CombatItem c in pair.Value)
                 {
@@ -265,6 +268,11 @@ namespace GW2EIEvtcParser.ParsedData
                             }
                         }
                     }
+                }
+                // missing end
+                if (startItem != null)
+                {
+                    res.Add(new AnimatedCastEvent(startItem, agentData, skillData, long.MaxValue));
                 }
             }
             res.Sort((x, y) => x.Time.CompareTo(y.Time));
