@@ -12,7 +12,7 @@
                     <img class="icon-xl" :src="encounter.icon" :alt="encounter.name">
                 </div>
                 <div class="ml-3 d-flex flex-column justify-content-center">
-                    <div class="mb-2" v-for="target in encounter.targets">
+                    <div v-if="target.health > 0" class="mb-2" v-for="target in encounter.targets">
                         <div v-if="encounter.targets.length > 1" class="small" style="text-align:center;">
                             {{target.name}}
                         </div>
@@ -20,7 +20,7 @@
                             :data-original-title="(target.hpLeft ? target.hpLeft : 0) + '% left'">
 
                         </div>
-                        <div v-if="target.health > 0" class="small" style="text-align:center;">
+                        <div  class="small" style="text-align:center;">
                             {{ target.health }} Health
                         </div>
                     </div>
