@@ -461,7 +461,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.Thief:
                 case (int)ArcDPSEnums.TrashID.Drunkard:
                     break;
-                case (int)ArcDPSEnums.TrashID.Saul:
                 case (int)ArcDPSEnums.TrashID.GamblerClones:
                 case (int)ArcDPSEnums.TrashID.GamblerReal:
                 case (int)ArcDPSEnums.TrashID.Greed:

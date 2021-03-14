@@ -401,7 +401,7 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TargetID.ConditionGolem:
                 case ArcDPSEnums.TargetID.MedGolem:
                     return "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
-                case ArcDPSEnums.TargetID.TwistedCastle:
+                case ArcDPSEnums.TargetID.DummyTarget:
                     return "https://i.imgur.com/ZBm5Uga.png";
             }
             switch (ArcDPSEnums.GetTrashID(id))
