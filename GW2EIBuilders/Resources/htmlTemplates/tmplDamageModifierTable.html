@@ -84,10 +84,10 @@
                 for (var i = 0; i < this.indicesToUse.length; i++) {
                     var index = this.indicesToUse[i];
                     var player = logData.players[index];
-                    if (player.isFake || player.isCustom) {
+                    if (player.isFake) {
                         continue;
                     }
-                    if (!groups[player.group]) {
+                    if (!player.isCustom && !groups[player.group]) {
                         groups[player.group] = {
                             name: "Group" + player.group,
                             data: []
@@ -97,16 +97,19 @@
                     var data = [];
                     for (j = 0; j < this.modifiers.length; j++) {
                         data[j] = dmgModifier[j];
-                        if (!groups[player.group].data[j]) {
-                            groups[player.group].data[j] = [0, 0, 0, 0];
+                        if (!!player.isCustom) {
+                            if (!groups[player.group].data[j]) {
+                                groups[player.group].data[j] = [0, 0, 0, 0];
+                            }
+                            if (!total.data[j]) {
+                                total.data[j] = [0, 0, 0, 0];
+                            }
+                            for (var k = 0; k < data[j].length; k++) {
+                                groups[player.group].data[j][k] += data[j][k];
+                                total.data[j][k] += data[j][k];
+                            }
                         }
-                        if (!total.data[j]) {
-                            total.data[j] = [0, 0, 0, 0];
-                        }
-                        for (var k = 0; k < data[j].length; k++) {
-                            groups[player.group].data[j][k] += data[j][k];
-                            total.data[j][k] += data[j][k];
-                        }
+                        
                     }
                     rows.push({
                         player: player,
@@ -143,10 +146,10 @@
                 for (var i = 0; i < this.indicesToUse.length; i++) {
                     var index = this.indicesToUse[i];
                     var player = logData.players[index];
-                    if (player.isFake || player.isCustom) {
+                    if (player.isFake) {
                         continue;
                     }
-                    if (!groups[player.group]) {
+                    if (!player.isCustom && !groups[player.group]) {
                         groups[player.group] = {
                             name: "Group" + player.group,
                             data: []
@@ -155,11 +158,13 @@
                     var data = [];
                     for (j = 0; j < this.modifiers.length; j++) {
                         data[j] = [0, 0, 0, 0];
-                        if (!groups[player.group].data[j]) {
-                            groups[player.group].data[j] = [0, 0, 0, 0];
-                        }
-                        if (!total.data[j]) {
-                            total.data[j] = [0, 0, 0, 0];
+                        if (!player.isCustom) {
+                            if (!groups[player.group].data[j]) {
+                                groups[player.group].data[j] = [0, 0, 0, 0];
+                            }
+                            if (!total.data[j]) {
+                                total.data[j] = [0, 0, 0, 0];
+                            }
                         }
                     }
                     var dmgModifier = this.modifiersdata[index].dataTarget;
@@ -173,12 +178,15 @@
                             }
                         }
                     }
-                    for (j = 0; j < this.modifiers.length; j++) {
-                        for (var k = 0; k < data[j].length; k++) {
-                            groups[player.group].data[j][k] += data[j][k];
-                            total.data[j][k] += data[j][k];
+                    if (!player.isCustom) {
+                        for (j = 0; j < this.modifiers.length; j++) {
+                            for (var k = 0; k < data[j].length; k++) {
+                                groups[player.group].data[j][k] += data[j][k];
+                                total.data[j][k] += data[j][k];
+                            }
                         }
                     }
+
                     rows.push({
                         player: player,
                         data: data
