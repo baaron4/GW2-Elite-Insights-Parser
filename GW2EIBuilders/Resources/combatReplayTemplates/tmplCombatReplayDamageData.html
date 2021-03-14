@@ -26,7 +26,7 @@
                 return logData.phases[0];
             },   
             targets: function () {
-                return this.phase.dummy ? [] : this.phase.targets;
+                return this.phase.dummy || logData.targetless ? [] : this.phase.targets;
             },
             selectorWidth: function () {
                 return  (273 + this.targets.length * 130);
