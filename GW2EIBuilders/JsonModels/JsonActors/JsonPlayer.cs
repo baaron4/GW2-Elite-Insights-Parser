@@ -36,6 +36,11 @@ namespace GW2EIBuilders.JsonModels
         public string Profession { get; internal set; }
         [JsonProperty]
         /// <summary>
+        /// Indicates that the JsonPlayer is actually a friendly NPC
+        /// </summary>
+        public bool FriendlyNPC { get; internal set; }
+        [JsonProperty]
+        /// <summary>
         /// Weapons of the player \n
         /// 0-1 are the first land set, 1-2 are the second land set \n
         /// 3-4 are the first aquatic set, 5-6 are the second aquatic set \n
@@ -217,6 +222,7 @@ namespace GW2EIBuilders.JsonModels
             Weapons = player.GetWeaponsArray(log).Select(w => w ?? "Unknown").ToArray();
             Group = player.Group;
             Profession = player.Prof;
+            FriendlyNPC = player.IsCustomActor;
             ActiveTimes = phases.Select(x => player.GetActiveDuration(log, x.Start, x.End)).ToList();
             HasCommanderTag = player.HasCommanderTag;
             //
