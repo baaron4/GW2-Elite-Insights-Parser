@@ -24,7 +24,8 @@ namespace GW2EIBuilders.HtmlModels
         public string ColTarget { get; set; }
         public string ColCleave { get; set; }
         public string ColTotal { get; set; }
-        public bool IsConjure { get; set; }
+        public bool IsFake { get; set; }
+        public bool IsCustom { get; set; }
 
         public PlayerDto(Player player, ParsedEvtcLog log, ActorDetailsDto details) : base(player, log, details)
         {
@@ -39,7 +40,8 @@ namespace GW2EIBuilders.HtmlModels
             ColTarget = HTMLBuilder.GetLink("Color-" + player.Prof);
             ColCleave = HTMLBuilder.GetLink("Color-" + player.Prof + "-NonBoss");
             ColTotal = HTMLBuilder.GetLink("Color-" + player.Prof + "-Total");
-            IsConjure = player.IsFakeActor;
+            IsFake = player.IsFakeActor;
+            IsCustom = player.IsCustomActor;
             BuildWeaponSets(player, log);
         }
 

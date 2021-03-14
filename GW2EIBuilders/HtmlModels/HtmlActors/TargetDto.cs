@@ -9,7 +9,6 @@ namespace GW2EIBuilders.HtmlModels
 {
     internal class TargetDto : ActorDto
     {
-        public string Icon { get; set; }
         public long Health { get; set; }
         public long HbWidth { get; set; }
         public long HbHeight { get; set; }
@@ -18,7 +17,6 @@ namespace GW2EIBuilders.HtmlModels
 
         public TargetDto(NPC target, ParsedEvtcLog log, ActorDetailsDto details) : base(target, log, details)
         {
-            Icon = target.GetIcon();
             Health = target.GetHealth(log.CombatData);
             HbHeight = target.HitboxHeight;
             HbWidth = target.HitboxWidth;

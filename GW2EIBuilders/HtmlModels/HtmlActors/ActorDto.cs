@@ -10,11 +10,13 @@ namespace GW2EIBuilders.HtmlModels
         public int UniqueID { get; set; }
         public string Name { get; set; }
         public uint Tough { get; set; }
+        public string Icon { get; set; }
         public List<MinionDto> Minions { get; } = new List<MinionDto>();
         public ActorDetailsDto Details { get; set; }
 
         protected ActorDto(AbstractSingleActor actor, ParsedEvtcLog log, ActorDetailsDto details)
         {
+            Icon = actor.GetIcon();
             Name = actor.Character;
             Tough = actor.Toughness;
             Details = details;
