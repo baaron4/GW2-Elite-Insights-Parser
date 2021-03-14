@@ -97,7 +97,7 @@
                     var data = [];
                     for (j = 0; j < this.modifiers.length; j++) {
                         data[j] = dmgModifier[j];
-                        if (!!player.isCustom) {
+                        if (!player.isCustom) {
                             if (!groups[player.group].data[j]) {
                                 groups[player.group].data[j] = [0, 0, 0, 0];
                             }
