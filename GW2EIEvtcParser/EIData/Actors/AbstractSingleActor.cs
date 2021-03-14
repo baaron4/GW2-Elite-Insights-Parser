@@ -46,6 +46,23 @@ namespace GW2EIEvtcParser.EIData
 
         // Status
 
+        private int _health = -2;
+
+        public int GetHealth(CombatData combatData)
+        {
+            if (_health == -2)
+            {
+                IReadOnlyList<MaxHealthUpdateEvent> maxHpUpdates = combatData.GetMaxHealthUpdateEvents(AgentItem);
+                _health = maxHpUpdates.Count > 0 ? maxHpUpdates.Max(x => x.MaxHealth) : -1;
+            }
+            return _health;
+        }
+
+        internal void SetManualHealth(int health)
+        {
+            _health = health;
+        }
+
         public (IReadOnlyList<(long start, long end)>, IReadOnlyList<(long start, long end)>, IReadOnlyList<(long start, long end)>) GetStatus(ParsedEvtcLog log)
         {
             if (_deads == null)

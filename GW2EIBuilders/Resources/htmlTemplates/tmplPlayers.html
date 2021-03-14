@@ -8,6 +8,8 @@
                     <div>
                         <img :src="player.icon" :alt="player.profession" class="icon"
                             :data-original-title="player.profession">
+                        <img v-if="player.health > 0" src="https://wiki.guildwars2.com/images/b/be/Vitality.png" alt="Health"
+                            class="icon" :data-original-title="'Health: ' + player.health">
                         <img v-if="player.condi > 0" src="https://wiki.guildwars2.com/images/5/54/Condition_Damage.png"
                             alt="Condition Damage" class="icon"
                             :data-original-title="'Condition Damage: ' + player.condi">

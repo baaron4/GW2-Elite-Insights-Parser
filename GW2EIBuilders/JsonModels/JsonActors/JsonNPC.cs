@@ -21,11 +21,6 @@ namespace GW2EIBuilders.JsonModels
         public int Id { get; internal set; }
         [JsonProperty]
         /// <summary>
-        /// Total health of the target
-        /// </summary>
-        public int TotalHealth { get; internal set; }
-        [JsonProperty]
-        /// <summary>
         /// Final health of the target
         /// </summary>
         public int FinalHealth { get; internal set; }
@@ -70,7 +65,6 @@ namespace GW2EIBuilders.JsonModels
             //
             Id = npc.ID;
             IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(npc.AgentItem);
-            TotalHealth = npc.GetHealth(log.CombatData);
             FirstAware = (int)npc.FirstAware;
             LastAware = (int)npc.LastAware;
             double hpLeft = 100.0;

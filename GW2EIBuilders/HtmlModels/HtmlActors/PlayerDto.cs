@@ -10,9 +10,6 @@ namespace GW2EIBuilders.HtmlModels
         public int Group { get; set; }
         public string Acc { get; set; }
         public string Profession { get; set; }
-        public uint Condi { get; set; }
-        public uint Conc { get; set; }
-        public uint Heal { get; set; }
 
         public bool IsPoV { get; set; }
 
@@ -32,9 +29,6 @@ namespace GW2EIBuilders.HtmlModels
             Group = player.Group;
             Acc = player.Account;
             Profession = player.Prof;
-            Condi = player.Condition;
-            Conc = player.Concentration;
-            Heal = player.Healing;
             IsPoV = log.LogData.PoV == player.AgentItem;
             IsCommander = player.HasCommanderTag;
             ColTarget = HTMLBuilder.GetLink("Color-" + player.Prof);

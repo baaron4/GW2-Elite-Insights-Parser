@@ -21,6 +21,11 @@ namespace GW2EIBuilders.JsonModels
         public string Name { get; internal set; }
         [JsonProperty]
         /// <summary>
+        /// Total health of the actor. -1 if information is missing (ex: players)
+        /// </summary>
+        public int TotalHealth { get; internal set; }
+        [JsonProperty]
+        /// <summary>
         /// Condition damage score
         /// </summary>
         public uint Condition { get; internal set; }
@@ -187,6 +192,7 @@ namespace GW2EIBuilders.JsonModels
             IReadOnlyList<PhaseData> phases = log.FightData.GetNonDummyPhases(log);
             //
             Name = actor.Character;
+            TotalHealth = actor.GetHealth(log.CombatData);
             Toughness = actor.Toughness;
             Healing = actor.Healing;
             Concentration = actor.Concentration;

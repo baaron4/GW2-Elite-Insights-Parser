@@ -13,18 +13,6 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        private int _health = -1;
-
-        public int GetHealth(CombatData combatData)
-        {
-            if (_health == -1)
-            {
-                IReadOnlyList<MaxHealthUpdateEvent> maxHpUpdates = combatData.GetMaxHealthUpdateEvents(AgentItem);
-                _health = maxHpUpdates.Count > 0 ? maxHpUpdates.Max(x => x.MaxHealth) : 1;
-            }
-            return _health;
-        }
-
         public IReadOnlyList<Segment> GetBreakbarPercentUpdates(ParsedEvtcLog log)
         {
             if (_breakbarPercentUpdates == null)
@@ -42,11 +30,6 @@ namespace GW2EIEvtcParser.EIData
         public override string GetIcon()
         {
             return AgentItem.Type == AgentItem.AgentType.EnemyPlayer ? ParserHelper.GetHighResolutionProfIcon(Prof) : ParserHelper.GetNPCIcon(ID);
-        }
-
-        internal void SetManualHealth(int health)
-        {
-            _health = health;
         }
 
         public IReadOnlyDictionary<long, FinalBuffs> GetBuffs(ParsedEvtcLog log, long start, long end)
