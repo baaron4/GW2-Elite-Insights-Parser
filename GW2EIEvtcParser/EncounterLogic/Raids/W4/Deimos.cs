@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -65,6 +66,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new HashSet<int>
             {
                 (int)ArcDPSEnums.TargetID.Deimos,
+                (int)ArcDPSEnums.TrashID.Saul,
                 (int)ArcDPSEnums.TrashID.Thief,
                 (int)ArcDPSEnums.TrashID.Drunkard,
                 (int)ArcDPSEnums.TrashID.Gambler,
@@ -283,6 +285,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     target.OverrideName(name);
                 }
             }
+            playerList.Add(new Player(agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.Saul).FirstOrDefault(), "Saul", GetNPCIcon((int)ArcDPSEnums.TrashID.Saul)));
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -385,7 +388,6 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<ArcDPSEnums.TrashID>
             {
-                ArcDPSEnums.TrashID.Saul,
                 ArcDPSEnums.TrashID.GamblerClones,
                 ArcDPSEnums.TrashID.GamblerReal,
                 ArcDPSEnums.TrashID.Greed,

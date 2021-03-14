@@ -27,6 +27,9 @@ namespace GW2EIEvtcParser.EIData
         //weaponslist
         private string[] _weaponsArray;
 
+        private readonly string _forceIcon = null;
+
+
         // Constructors
         internal Player(AgentItem agent, bool noSquad, bool fake) : base(agent)
         {
@@ -44,9 +47,17 @@ namespace GW2EIEvtcParser.EIData
             IsFakeActor = fake;
         }
 
+        internal Player(AgentItem agent, string account, string icon) : base(agent)
+        {
+            Account = account;
+            Group = 51;
+            IsCustomActor = true;
+            _forceIcon = icon;
+        }
+
         public override string GetIcon()
         {
-            return GetProfIcon(Prof);
+            return _forceIcon ?? GetProfIcon(Prof);
         }
 
 
@@ -190,7 +201,7 @@ namespace GW2EIEvtcParser.EIData
             _damageModifiersTargets = new Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>>();
             _presentDamageModifiers = new HashSet<string>();
             // If conjured sword, targetless or WvW, stop
-            if (!log.ParserSettings.ComputeDamageModifiers || IsFakeActor || log.FightData.Logic.Targetless)
+            if (!log.ParserSettings.ComputeDamageModifiers || IsFakeActor || IsCustomActor || log.FightData.Logic.Targetless)
             {
                 return;
             }
