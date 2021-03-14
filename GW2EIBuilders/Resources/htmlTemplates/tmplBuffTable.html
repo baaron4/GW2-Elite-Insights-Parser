@@ -15,7 +15,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="row in playerdata" :class="{active: row.player.group && row.player.id === playerindex}">
+                <tr v-show="!row.player.isCustom || sums.length > 0" v-for="row in playerdata" :class="{active: row.player.group && row.player.id === playerindex}">
                     <td>{{ row.player.group ? row.player.group : '-' }}</td>
                     <td :data-original-title="row.player.profession ? row.player.profession : row.player.name">
                         <img :src="row.player.icon"
