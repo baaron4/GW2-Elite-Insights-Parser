@@ -80,7 +80,7 @@ namespace GW2EIEvtcParser.ParsedData
                     if (agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.HauntingStatue).Count > 0)
                     {
                         TriggerID = (int)ArcDPSEnums.TrashID.HauntingStatue;
-                        Logic = new TwistedCastle((int)ArcDPSEnums.TargetID.TwistedCastle);
+                        Logic = new TwistedCastle((int)ArcDPSEnums.TargetID.DummyTarget);
                         break;
                     }
                     Logic = new Xera(id);
@@ -101,7 +101,7 @@ namespace GW2EIEvtcParser.ParsedData
                     Logic = new SoullessHorror(id);
                     break;
                 case ArcDPSEnums.TargetID.Desmina:
-                    Logic = new River(id);
+                    Logic = new River((int)ArcDPSEnums.TargetID.DummyTarget);
                     break;
                 case ArcDPSEnums.TargetID.BrokenKing:
                     Logic = new BrokenKing(id);
@@ -210,7 +210,7 @@ namespace GW2EIEvtcParser.ParsedData
                     switch (ArcDPSEnums.GetTrashID(id))
                     {
                         case ArcDPSEnums.TrashID.HauntingStatue:
-                            Logic = new TwistedCastle((int)ArcDPSEnums.TargetID.TwistedCastle);
+                            Logic = new TwistedCastle((int)ArcDPSEnums.TargetID.DummyTarget);
                             break;
                         default:
                             // Unknown

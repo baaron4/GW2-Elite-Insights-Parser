@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -19,6 +20,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             );
             GenericFallBackMethod = FallBackMethod.None;
             Extension = "river";
+            Targetless = true;
             Icon = "https://wiki.guildwars2.com/images/thumb/7/7b/Gold_River_of_Souls_Trophy.jpg/220px-Gold_River_of_Souls_Trophy.jpg";
             EncounterCategoryInformation.InSubCategoryOrder = 1;
         }
@@ -50,12 +52,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                NPC desmina = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Desmina);
+                AgentItem desmina = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Desmina).FirstOrDefault();
                 if (desmina == null)
                 {
                     throw new MissingKeyActorsException("Desmina not found");
                 }
-                ExitCombatEvent ooc = combatData.GetExitCombatEvents(desmina.AgentItem).LastOrDefault();
+                ExitCombatEvent ooc = combatData.GetExitCombatEvents(desmina).LastOrDefault();
                 if (ooc != null)
                 {
                     long time = 0;
@@ -63,7 +65,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         time = Math.Max(mob.LastAware, time);
                     }
-                    DespawnEvent dspwn = combatData.GetDespawnEvents(desmina.AgentItem).LastOrDefault();
+                    DespawnEvent dspwn = combatData.GetDespawnEvents(desmina).LastOrDefault();
                     if (time != 0 && dspwn == null && time + 500 <= desmina.LastAware)
                     {
                         if (!AtLeastOnePlayerAlive(combatData, fightData, time, playerAgents))
@@ -78,6 +80,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
+            agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, "River of Souls", "", (int)ArcDPSEnums.TargetID.DummyTarget);
             // The walls and bombers spawn at the start of the encounter, we fix it by overriding their first aware to the first velocity change event
             var agentsToOverrideFirstAware = new List<AgentItem>(agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.RiverOfSouls));
             agentsToOverrideFirstAware.AddRange(agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.HollowedBomber));
@@ -105,6 +108,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 combatData.Sort((x, y) => x.Time.CompareTo(y.Time));
             }
             ComputeFightTargets(agentData, combatData);
+            playerList.Add(new Player(agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Desmina).FirstOrDefault(), "Desmina", GetNPCIcon((int)ArcDPSEnums.TargetID.Desmina)));
         }
 
         internal override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
@@ -114,11 +118,6 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            NPC desmina = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Desmina);
-            if (desmina == null)
-            {
-                throw new MissingKeyActorsException("Desmina not found");
-            }
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
