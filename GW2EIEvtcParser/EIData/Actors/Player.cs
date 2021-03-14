@@ -201,7 +201,7 @@ namespace GW2EIEvtcParser.EIData
             _damageModifiersTargets = new Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>>();
             _presentDamageModifiers = new HashSet<string>();
             // If conjured sword, targetless or WvW, stop
-            if (!log.ParserSettings.ComputeDamageModifiers || IsFakeActor || IsCustomActor || log.FightData.Logic.Targetless)
+            if (!log.ParserSettings.ComputeDamageModifiers || IsFakeActor || log.FightData.Logic.Targetless)
             {
                 return;
             }
