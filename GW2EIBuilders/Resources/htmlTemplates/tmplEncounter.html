@@ -20,7 +20,7 @@
                             :data-original-title="(target.hpLeft ? target.hpLeft : 0) + '% left'">
 
                         </div>
-                        <div class="small" style="text-align:center;">
+                        <div v-if="target.health > 0" class="small" style="text-align:center;">
                             {{ target.health }} Health
                         </div>
                     </div>
