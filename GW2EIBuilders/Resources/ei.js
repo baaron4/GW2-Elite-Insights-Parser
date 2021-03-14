@@ -78,7 +78,6 @@ function mainLoad() {
             active: !!playerData.isPoV
         });
         playerData.dpsGraphCache = new Map();
-        playerData.icon = urls[playerData.profession];
         playerData.id = i;
     }
     compileTemplates()
