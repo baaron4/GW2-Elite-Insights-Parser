@@ -70,6 +70,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                         CanBeSubPhase = false
                     });
                     phases.Add(new PhaseData(firstDamageable.Time, fightDuration, "Ritual"));
+                } else
+                {
+                    phases.Add(new PhaseData(end, fightDuration, "Shielded Dhuum")
+                    {
+                        CanBeSubPhase = false
+                    });
                 }
             }
         }
