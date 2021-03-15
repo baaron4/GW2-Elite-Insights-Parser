@@ -224,10 +224,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AgentItem deimos in deimosAgents)
             {
                 // enter combat
-                CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcAgent == deimos.Agent && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat);
-                if (enterCombat != null)
+                CombatItem spawnProtectionRemove = combatData.FirstOrDefault(x => x.DstAgent == deimos.Agent && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SkillID == 34113);
+                if (spawnProtectionRemove != null)
                 {
-                    start = Math.Max(start, enterCombat.Time);
+                    start = Math.Max(start, spawnProtectionRemove.Time);
 
                 }
             }
