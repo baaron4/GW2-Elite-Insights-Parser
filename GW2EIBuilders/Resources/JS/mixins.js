@@ -48,6 +48,18 @@ var graphComponent = {
             dpsCache: new Map(),
             dataCache: new Map(),
         };
+    },
+    methods: {
+            updateVisibily: function (images, x0, x1) {
+                var redraw = false;
+                for (var i = 0; i < images.length; i++) {
+                    var image = images[i];
+                    var old = image.visible;
+                    image.visible = typeof x0 === "undefined" || ((image.x <= x1+15 && image.x >= x0 - 15) && (x1 - x0) < 100);
+                    redraw = redraw || image.visible !== old;
+                }
+                return redraw;
+            },
     }
 };
 
