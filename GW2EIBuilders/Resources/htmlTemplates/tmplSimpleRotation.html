@@ -11,6 +11,10 @@
                         :class="{active: hideInterruptedAA}">Hide interrupted auto attacks</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" @click="hideSmallTime = !hideSmallTime"
+                        :class="{active: hideSmallTime}">Hide < 10ms</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" @click="hideInstantCast = !hideInstantCast"
                         :class="{active: hideInstantCast}">Hide instant cast</a>
                 </li>
@@ -68,6 +72,7 @@
                 smallAA: true,
                 hideInterruptedAA: false,
                 hideInstantCast: false,
+                hideSmallTime: true,
             };
         },
         computed: {
@@ -94,6 +99,9 @@
                 }
                 if (this.hideInstantCast && rota[3] === 4 && !this.isSwap(rota[1])) {
                     return false;
+                }
+                if (this.hideSmallTime && rota[3] !== 4) {
+                    return rota[2] > 10;
                 }
                 return true;
             }
