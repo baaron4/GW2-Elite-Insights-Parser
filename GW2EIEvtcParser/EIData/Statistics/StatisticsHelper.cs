@@ -149,7 +149,7 @@ namespace GW2EIEvtcParser.EIData
                 var GroupsPosList = new List<List<Point3D>>();
                 foreach (Player player in log.PlayerList)
                 {
-                    if (player.IsFakeActor || player.IsCustomActor)
+                    if (player.IsFakeActor)
                     {
                         continue;
                     }

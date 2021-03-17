@@ -52,8 +52,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal FinalGameplayStatsAll(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor) : base(log, start, end, actor, null)
         {
-            // If fake actor, stop
-            if (actor.IsFakeActor)
+            // If dummy actor, stop
+            if (actor.IsDummyActor)
             {
                 return;
             }

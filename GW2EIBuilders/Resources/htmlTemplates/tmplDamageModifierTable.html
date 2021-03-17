@@ -84,7 +84,7 @@
                 for (var i = 0; i < this.indicesToUse.length; i++) {
                     var index = this.indicesToUse[i];
                     var player = logData.players[index];
-                    if (player.isFake) {
+                    if (player.isDummy) {
                         continue;
                     }
                     if (!player.isCustom && !groups[player.group]) {
@@ -146,7 +146,7 @@
                 for (var i = 0; i < this.indicesToUse.length; i++) {
                     var index = this.indicesToUse[i];
                     var player = logData.players[index];
-                    if (player.isFake) {
+                    if (player.isDummy) {
                         continue;
                     }
                     if (!player.isCustom && !groups[player.group]) {

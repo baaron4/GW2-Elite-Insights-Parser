@@ -21,7 +21,8 @@ namespace GW2EIEvtcParser.EIData
         public int ID => AgentItem.ID;
         public uint HitboxHeight => AgentItem.HitboxHeight;
         public uint HitboxWidth => AgentItem.HitboxWidth;
-        public bool IsFakeActor { get; protected set; }
+        public bool IsFakeActor => IsDummyActor || IsCustomActor;
+        public bool IsDummyActor { get; protected set; } = false;
         public bool IsCustomActor { get; protected set; } = false;
         // Damage
         protected List<AbstractHealthDamageEvent> DamageEvents { get; set; }

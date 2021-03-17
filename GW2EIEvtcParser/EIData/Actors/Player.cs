@@ -31,7 +31,7 @@ namespace GW2EIEvtcParser.EIData
 
 
         // Constructors
-        internal Player(AgentItem agent, bool noSquad, bool fake) : base(agent)
+        internal Player(AgentItem agent, bool noSquad, bool dummy) : base(agent)
         {
             string[] name = agent.Name.Split('\0');
             if (name.Length < 2)
@@ -44,7 +44,7 @@ namespace GW2EIEvtcParser.EIData
             }
             Account = name[1].TrimStart(':');
             Group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
-            IsFakeActor = fake;
+            IsDummyActor = dummy;
         }
 
         internal Player(AgentItem agent, string account, string icon) : base(agent)
@@ -116,14 +116,14 @@ namespace GW2EIEvtcParser.EIData
             {
                 case BuffEnum.Group:
                     var otherPlayersInGroup = log.PlayerList
-                        .Where(p => p.Group == Group && Agent != p.Agent && !p.IsFakeActor && !p.IsCustomActor)
+                        .Where(p => p.Group == Group && Agent != p.Agent && !p.IsFakeActor)
                         .ToList();
                     return FinalPlayerBuffs.GetBuffsForPlayers(otherPlayersInGroup, log, AgentItem, start, end);
                 case BuffEnum.OffGroup:
-                    var offGroupPlayers = log.PlayerList.Where(p => p.Group != Group && !p.IsFakeActor && !p.IsCustomActor).ToList();
+                    var offGroupPlayers = log.PlayerList.Where(p => p.Group != Group && !p.IsFakeActor).ToList();
                     return FinalPlayerBuffs.GetBuffsForPlayers(offGroupPlayers, log, AgentItem, start, end);
                 case BuffEnum.Squad:
-                    var otherPlayers = log.PlayerList.Where(p => p.Agent != Agent && !p.IsFakeActor && !p.IsCustomActor).ToList();
+                    var otherPlayers = log.PlayerList.Where(p => p.Agent != Agent && !p.IsFakeActor).ToList();
                     return FinalPlayerBuffs.GetBuffsForPlayers(otherPlayers, log, AgentItem, start, end);
                 case BuffEnum.Self:
                 default:
@@ -201,7 +201,7 @@ namespace GW2EIEvtcParser.EIData
             _damageModifiersTargets = new Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>>();
             _presentDamageModifiers = new HashSet<string>();
             // If conjured sword, targetless or WvW, stop
-            if (!log.ParserSettings.ComputeDamageModifiers || IsFakeActor || log.FightData.Logic.Targetless)
+            if (!log.ParserSettings.ComputeDamageModifiers || IsDummyActor || log.FightData.Logic.Targetless)
             {
                 return;
             }

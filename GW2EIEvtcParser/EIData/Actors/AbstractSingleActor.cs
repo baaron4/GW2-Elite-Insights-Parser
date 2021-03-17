@@ -574,7 +574,7 @@ namespace GW2EIEvtcParser.EIData
             if (CombatReplay.NoActors)
             {
                 CombatReplay.NoActors = false;
-                if (!IsFakeActor)
+                if (!IsDummyActor)
                 {
                     InitAdditionalCombatReplayData(log);
                 }

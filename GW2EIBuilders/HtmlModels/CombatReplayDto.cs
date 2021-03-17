@@ -31,7 +31,7 @@ namespace GW2EIBuilders.HtmlModels
             var actors = new List<object>();
             foreach (Player p in log.PlayerList)
             {
-                if (p.IsFakeActor)
+                if (p.IsDummyActor)
                 {
                     continue;
                 }
