@@ -415,6 +415,21 @@ namespace GW2EIParser.Properties {
 
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ApplicationTraces
+        {
+            get
+            {
+                return ((bool)(this["ApplicationTraces"]));
+            }
+            set
+            {
+                this["ApplicationTraces"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool RawTimelineArrays
         {

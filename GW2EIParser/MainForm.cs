@@ -21,6 +21,9 @@ namespace GW2EIParser
         private bool _anyRunning => _runningCount > 0;
         private readonly Queue<FormOperationController> _logQueue = new Queue<FormOperationController>();
 
+        private bool _traces => Properties.Settings.Default.ApplicationTraces;
+        private readonly string _traceFileName;
+
         private int _fileNameSorting = 0;
         private MainForm()
         {
@@ -35,6 +38,11 @@ namespace GW2EIParser
             _settingsForm = new SettingsForm();
             _settingsForm.SettingsClosedEvent += EnableSettingsWatcher;
             _settingsForm.WatchDirectoryUpdatedEvent += UpdateWatchDirectoryWatcher;
+            // Traces
+            ChkApplicationTraces.Checked = _traces;
+            DateTime now = DateTime.Now;
+            _traceFileName = ProgramHelper.EILogPath + "EILogs-" + now.Year + "-" + now.Month + "-" + now.Day + "-" + now.Hour + "-" + now.Minute + "-" + now.Second + ".txt";
+            AddTraceMessage("Initialized");
         }
 
         public MainForm(IEnumerable<string> filesArray) : this()
@@ -65,6 +73,7 @@ namespace GW2EIParser
                 {
                     QueueOrRunOperation(operation);
                 }
+                AddTraceMessage("Added " + file);
             }
             if (_fileNameSorting != 0)
             {
@@ -74,20 +83,17 @@ namespace GW2EIParser
             BtnParse.Enabled = !_anyRunning && filesArray.Any();
         }
 
-        private void EnableSettingsWatcher(object sender, EventArgs e)
-        {
-            BtnSettings.Enabled = true;
-        }
-
         private void _RunOperation(FormOperationController operation)
         {
             _runningCount++;
             _settingsForm.ConditionalSettingDisable(_anyRunning);
             operation.ToQueuedState();
+            AddTraceMessage("Queued " + operation.InputFile);
             var cancelTokenSource = new CancellationTokenSource();// Prepare task
             Task task = Task.Run(() =>
             {
                 operation.ToRunState();
+                AddTraceMessage("Parsing " + operation.InputFile);
                 ProgramHelper.DoWork(operation);
             }, cancelTokenSource.Token).ContinueWith(t =>
             {
@@ -217,6 +223,7 @@ namespace GW2EIParser
         /// <param name="e"></param>
         private void BtnParseClick(object sender, EventArgs e)
         {
+            AddTraceMessage("Parse all files");
             //Clear queue before parsing all
             _logQueue.Clear();
 
@@ -242,6 +249,7 @@ namespace GW2EIParser
         /// <param name="e"></param>
         private void BtnCancelAllClick(object sender, EventArgs e)
         {
+            AddTraceMessage("Cancelling all pending and ongoing parsing operations");
             //Clear queue so queued workers don't get started by any cancellations
             var operations = new HashSet<FormOperationController>(_logQueue);
             _logQueue.Clear();
@@ -272,6 +280,7 @@ namespace GW2EIParser
         /// <param name="e"></param>
         private void BtnSettingsClick(object sender, EventArgs e)
         {
+            AddTraceMessage("Opening settings");
             _settingsForm.Show();
             BtnSettings.Enabled = false;
         }
@@ -283,6 +292,7 @@ namespace GW2EIParser
         /// <param name="e"></param>
         private void BtnClearAllClick(object sender, EventArgs e)
         {
+            AddTraceMessage("Clearing all logs");
             BtnCancelAll.Enabled = false;
             BtnParse.Enabled = false;
 
@@ -306,6 +316,7 @@ namespace GW2EIParser
 
         private void BtnClearFailedClick(object sender, EventArgs e)
         {
+            AddTraceMessage("Clearing failed to parse logs");
             for (int i = OperatorBindingSource.Count - 1; i >= 0; i--)
             {
                 var operation = OperatorBindingSource[i] as FormOperationController;
@@ -491,6 +502,7 @@ namespace GW2EIParser
             }
             if (path != null)
             {
+                AddTraceMessage("Adding files from " + path);
                 var toAdd = new List<string>();
                 foreach (string format in ParserHelper.GetSupportedFormats())
                 {
@@ -504,23 +516,6 @@ namespace GW2EIParser
                     }
                 }
                 AddLogFiles(toAdd);
-            }
-        }
-
-        private void UpdateWatchDirectory()
-        {
-            if (Properties.Settings.Default.AutoAdd && Directory.Exists(Properties.Settings.Default.AutoAddPath))
-            {
-                LogFileWatcher.Path = Properties.Settings.Default.AutoAddPath;
-                LblWatchingDir.Text = "Watching for log files in " + Properties.Settings.Default.AutoAddPath;
-                LogFileWatcher.EnableRaisingEvents = true;
-                LblWatchingDir.Visible = true;
-            }
-            else
-            {
-                Properties.Settings.Default.AutoAdd = false;
-                LblWatchingDir.Visible = false;
-                LogFileWatcher.EnableRaisingEvents = false;
             }
         }
 
@@ -538,6 +533,7 @@ namespace GW2EIParser
             await Task.Delay(3000).ConfigureAwait(false);
             if (File.Exists(path))
             {
+                AddTraceMessage("File Watcher: adding " + path);
                 if (DgvFiles.InvokeRequired)
                 {
                     DgvFiles.Invoke(new Action(() => AddLogFiles(new string[] { path })));
@@ -554,6 +550,7 @@ namespace GW2EIParser
             if (ParserHelper.IsSupportedFormat(e.FullPath))
             {
                 AddDelayed(e.FullPath);
+                AddTraceMessage("File Watcher: created " + e.FullPath);
             }
         }
 
@@ -562,6 +559,7 @@ namespace GW2EIParser
             if (ParserHelper.IsTemporaryFormat(e.OldFullPath) && ParserHelper.IsCompressedFormat(e.FullPath))
             {
                 AddDelayed(e.FullPath);
+                AddTraceMessage("File Watcher: renamed " + e.OldFullPath + " to " + e.FullPath);
             }
         }
 
@@ -572,6 +570,7 @@ namespace GW2EIParser
         /// <param name="e"></param>
         private void BtnDiscordBatchClick(object sender, EventArgs e)
         {
+            AddTraceMessage("Sending batch to Discord");
             if (Properties.Settings.Default.WebhookURL == null)
             {
                 MessageBox.Show("Set a discord webhook url in settings first");
@@ -678,6 +677,71 @@ namespace GW2EIParser
             //    
             BtnDiscordBatch.Enabled = !_anyRunning;
             BtnParse.Enabled = !_anyRunning;
+        }
+
+        private void _AddTraceMessage(string message)
+        {
+            if (!_traces)
+            {
+                return;
+            }
+            if (!Directory.Exists(ProgramHelper.EILogPath))
+            {
+                Directory.CreateDirectory(ProgramHelper.EILogPath);
+            }
+            if (!File.Exists(_traceFileName))
+            {
+                using (StreamWriter sw = File.CreateText(_traceFileName))
+                {
+                    sw.WriteLine(message);
+                }
+            }
+            else
+            {
+                using (StreamWriter sw = File.AppendText(_traceFileName))
+                {
+                    sw.WriteLine(message);
+                }
+            }
+        }
+
+        private void AddTraceMessage(string message)
+        {
+            if (DgvFiles.InvokeRequired)
+            {
+                DgvFiles.Invoke(new Action(() => _AddTraceMessage(message)));
+            }
+            else
+            {
+                _AddTraceMessage(message);
+            }
+        }
+        // UI 
+        private void UpdateWatchDirectory()
+        {
+            if (Properties.Settings.Default.AutoAdd && Directory.Exists(Properties.Settings.Default.AutoAddPath))
+            {
+                LogFileWatcher.Path = Properties.Settings.Default.AutoAddPath;
+                LblWatchingDir.Text = "Watching for log files in " + Properties.Settings.Default.AutoAddPath;
+                LogFileWatcher.EnableRaisingEvents = true;
+                LblWatchingDir.Visible = true;
+                AddTraceMessage("Updated watch directory to " + Properties.Settings.Default.AutoAddPath);
+            }
+            else
+            {
+                Properties.Settings.Default.AutoAdd = false;
+                LblWatchingDir.Visible = false;
+                LogFileWatcher.EnableRaisingEvents = false;
+            }
+        }
+        private void ChkApplicationTracesCheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.ApplicationTraces = ChkApplicationTraces.Checked;
+        }
+
+        private void EnableSettingsWatcher(object sender, EventArgs e)
+        {
+            BtnSettings.Enabled = true;
         }
     }
 }
