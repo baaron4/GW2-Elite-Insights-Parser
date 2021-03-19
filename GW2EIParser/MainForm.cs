@@ -21,13 +21,16 @@ namespace GW2EIParser
         private bool _anyRunning => _runningCount > 0;
         private readonly Queue<FormOperationController> _logQueue = new Queue<FormOperationController>();
 
-        private bool _traces => Properties.Settings.Default.ApplicationTraces;
         private readonly string _traceFileName;
 
         private int _fileNameSorting = 0;
         private MainForm()
         {
             InitializeComponent();
+            // Traces
+            ChkApplicationTraces.Checked = Properties.Settings.Default.ApplicationTraces;
+            DateTime now = DateTime.Now;
+            _traceFileName = ProgramHelper.EILogPath + "EILogs-" + now.Year + "-" + now.Month + "-" + now.Day + "-" + now.Hour + "-" + now.Minute + "-" + now.Second + ".txt";
             //display version
             string version = Application.ProductVersion;
             LblVersion.Text = version;
@@ -38,11 +41,6 @@ namespace GW2EIParser
             _settingsForm = new SettingsForm();
             _settingsForm.SettingsClosedEvent += EnableSettingsWatcher;
             _settingsForm.WatchDirectoryUpdatedEvent += UpdateWatchDirectoryWatcher;
-            // Traces
-            ChkApplicationTraces.Checked = _traces;
-            DateTime now = DateTime.Now;
-            _traceFileName = ProgramHelper.EILogPath + "EILogs-" + now.Year + "-" + now.Month + "-" + now.Day + "-" + now.Hour + "-" + now.Minute + "-" + now.Second + ".txt";
-            AddTraceMessage("Initialized");
         }
 
         public MainForm(IEnumerable<string> filesArray) : this()
@@ -65,6 +63,7 @@ namespace GW2EIParser
                 }
 
                 _logsFiles.Add(file);
+                AddTraceMessage("Added " + file);
 
                 var operation = new FormOperationController(file, "Ready to parse", DgvFiles);
                 OperatorBindingSource.Add(operation);
@@ -73,7 +72,6 @@ namespace GW2EIParser
                 {
                     QueueOrRunOperation(operation);
                 }
-                AddTraceMessage("Added " + file);
             }
             if (_fileNameSorting != 0)
             {
@@ -547,19 +545,23 @@ namespace GW2EIParser
 
         private void LogFileWatcher_Created(object sender, FileSystemEventArgs e)
         {
+            AddTraceMessage("File Watcher: created " + e.FullPath);
             if (ParserHelper.IsSupportedFormat(e.FullPath))
             {
                 AddDelayed(e.FullPath);
-                AddTraceMessage("File Watcher: created " + e.FullPath);
             }
         }
 
         private void LogFileWatcher_Renamed(object sender, RenamedEventArgs e)
         {
-            if (ParserHelper.IsTemporaryFormat(e.OldFullPath) && ParserHelper.IsCompressedFormat(e.FullPath))
+            AddTraceMessage("File Watcher: renamed " + e.OldFullPath + " to " + e.FullPath);
+            if (ParserHelper.IsTemporaryCompressedFormat(e.OldFullPath) && ParserHelper.IsCompressedFormat(e.FullPath))
             {
                 AddDelayed(e.FullPath);
-                AddTraceMessage("File Watcher: renamed " + e.OldFullPath + " to " + e.FullPath);
+            }
+            if (ParserHelper.IsTemporaryFormat(e.OldFullPath) && ParserHelper.IsSupportedFormat(e.FullPath))
+            {
+                AddDelayed(e.FullPath);
             }
         }
 
@@ -681,7 +683,7 @@ namespace GW2EIParser
 
         private void _AddTraceMessage(string message)
         {
-            if (!_traces)
+            if (!Properties.Settings.Default.ApplicationTraces)
             {
                 return;
             }
@@ -737,10 +739,12 @@ namespace GW2EIParser
         private void ChkApplicationTracesCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ApplicationTraces = ChkApplicationTraces.Checked;
+            AddTraceMessage(Properties.Settings.Default.ApplicationTraces ? "Enabled traces" : "Disabled traces");
         }
 
         private void EnableSettingsWatcher(object sender, EventArgs e)
         {
+            AddTraceMessage("Closing settings");
             BtnSettings.Enabled = true;
         }
     }
