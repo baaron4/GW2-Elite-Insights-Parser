@@ -26,11 +26,11 @@ namespace GW2EIParser
         private int _fileNameSorting = 0;
         private MainForm()
         {
+            DateTime now = DateTime.Now;
+            _traceFileName = ProgramHelper.EILogPath + "EILogs-" + now.Year + "-" + now.Month + "-" + now.Day + "-" + now.Hour + "-" + now.Minute + "-" + now.Second + ".txt";
             InitializeComponent();
             // Traces
             ChkApplicationTraces.Checked = Properties.Settings.Default.ApplicationTraces;
-            DateTime now = DateTime.Now;
-            _traceFileName = ProgramHelper.EILogPath + "EILogs-" + now.Year + "-" + now.Month + "-" + now.Day + "-" + now.Hour + "-" + now.Minute + "-" + now.Second + ".txt";
             //display version
             string version = Application.ProductVersion;
             LblVersion.Text = version;
@@ -97,6 +97,7 @@ namespace GW2EIParser
             {
                 cancelTokenSource.Dispose();
                 _runningCount--;
+                AddTraceMessage("Parsed " + operation.InputFile);
                 // Exception management
                 if (t.IsFaulted)
                 {
@@ -558,8 +559,7 @@ namespace GW2EIParser
             if (ParserHelper.IsTemporaryCompressedFormat(e.OldFullPath) && ParserHelper.IsCompressedFormat(e.FullPath))
             {
                 AddDelayed(e.FullPath);
-            }
-            if (ParserHelper.IsTemporaryFormat(e.OldFullPath) && ParserHelper.IsSupportedFormat(e.FullPath))
+            } else if (ParserHelper.IsTemporaryFormat(e.OldFullPath) && ParserHelper.IsSupportedFormat(e.FullPath))
             {
                 AddDelayed(e.FullPath);
             }
