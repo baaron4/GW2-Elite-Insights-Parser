@@ -273,7 +273,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.LogFileWatcher)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
-
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler((sender, e) => Properties.Settings.Default.Save());
         }
 
         #endregion
