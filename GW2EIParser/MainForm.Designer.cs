@@ -39,8 +39,8 @@
             this.BtnSettings = new System.Windows.Forms.Button();
             this.BtnClearAll = new System.Windows.Forms.Button();
             this.DgvFiles = new System.Windows.Forms.DataGridView();
-            this.locationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.statusDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.LocationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.StatusDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ParseButtonState = new System.Windows.Forms.DataGridViewButtonColumn();
             this.OperatorBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.TlpMainWindow = new System.Windows.Forms.ToolTip(this.components);
@@ -136,8 +136,8 @@
             this.DgvFiles.BackgroundColor = System.Drawing.SystemColors.Control;
             this.DgvFiles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DgvFiles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.locationDataGridViewTextBoxColumn,
-            this.statusDataGridViewTextBoxColumn,
+            this.LocationDataGridViewTextBoxColumn,
+            this.StatusDataGridViewTextBoxColumn,
             this.ParseButtonState});
             this.DgvFiles.DataSource = this.OperatorBindingSource;
             this.DgvFiles.GridColor = System.Drawing.SystemColors.Control;
@@ -152,22 +152,22 @@
             this.DgvFiles.DragDrop += new System.Windows.Forms.DragEventHandler(this.DgvFilesDragDrop);
             this.DgvFiles.DragEnter += new System.Windows.Forms.DragEventHandler(this.DgvFilesDragEnter);
             // 
-            // locationDataGridViewTextBoxColumn
+            // LocationDataGridViewTextBoxColumn
             // 
-            this.locationDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.locationDataGridViewTextBoxColumn.DataPropertyName = "InputFile";
-            this.locationDataGridViewTextBoxColumn.HeaderText = "Input File";
-            this.locationDataGridViewTextBoxColumn.Name = "locationDataGridViewTextBoxColumn";
-            this.locationDataGridViewTextBoxColumn.ReadOnly = true;
-            this.locationDataGridViewTextBoxColumn.ToolTipText = "Double left click to open input location";
+            this.LocationDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.LocationDataGridViewTextBoxColumn.DataPropertyName = "InputFile";
+            this.LocationDataGridViewTextBoxColumn.HeaderText = "Input File";
+            this.LocationDataGridViewTextBoxColumn.Name = "LocationDataGridViewTextBoxColumn";
+            this.LocationDataGridViewTextBoxColumn.ReadOnly = true;
+            this.LocationDataGridViewTextBoxColumn.ToolTipText = "Double left click to open input location";
             // 
-            // statusDataGridViewTextBoxColumn
+            // StatusDataGridViewTextBoxColumn
             // 
-            this.statusDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.statusDataGridViewTextBoxColumn.DataPropertyName = "Status";
-            this.statusDataGridViewTextBoxColumn.HeaderText = "Status";
-            this.statusDataGridViewTextBoxColumn.Name = "statusDataGridViewTextBoxColumn";
-            this.statusDataGridViewTextBoxColumn.ReadOnly = true;
+            this.StatusDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.StatusDataGridViewTextBoxColumn.DataPropertyName = "Status";
+            this.StatusDataGridViewTextBoxColumn.HeaderText = "Status";
+            this.StatusDataGridViewTextBoxColumn.Name = "StatusDataGridViewTextBoxColumn";
+            this.StatusDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // ParseButtonState
             // 
@@ -296,8 +296,6 @@
         private System.Windows.Forms.ToolTip TlpMainWindow;
         private System.Windows.Forms.Button BtnDiscordBatch;
         private System.Windows.Forms.CheckBox ChkApplicationTraces;
-        private System.Windows.Forms.DataGridViewTextBoxColumn locationDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn statusDataGridViewTextBoxColumn;
     }
 }
 
