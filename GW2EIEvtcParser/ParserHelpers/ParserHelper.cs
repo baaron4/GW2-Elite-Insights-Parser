@@ -613,9 +613,14 @@ namespace GW2EIEvtcParser
             ".evtc.zip",
         };
 
-        private static readonly HashSet<string> _tmpFiles = new HashSet<string>()
+        private static readonly HashSet<string> _tmpCompressedFiles = new HashSet<string>()
         {
             ".tmp.zip"
+        };
+
+        private static readonly HashSet<string> _tmpFiles = new HashSet<string>()
+        {
+            ""
         };
 
         private static readonly HashSet<string> _supportedFiles = new HashSet<string>(_compressedFiles)
@@ -665,6 +670,18 @@ namespace GW2EIEvtcParser
                 i++;
             }
             return -1;
+        }
+
+        public static bool IsTemporaryCompressedFormat(string fileName)
+        {
+            foreach (string format in _tmpCompressedFiles)
+            {
+                if (fileName.EndsWith(format, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public static bool IsTemporaryFormat(string fileName)
