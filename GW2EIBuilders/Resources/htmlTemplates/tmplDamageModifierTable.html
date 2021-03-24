@@ -224,7 +224,10 @@
                 } else {
                     gain = "Pure Damage: ";
                 }
-                gain += this.round3(item[2]);
+                gain += this.round(item[2]);
+                if (mod.nonMultiplier) {
+                    gain += "<br>Total Damage: " + this.round3(100.0 * item[2] / item[3]) + "%";
+                }
                 return hits + "<br>" + percent + "<br>" + gain;
             },
             getCellValue: function (item, mod) {
