@@ -17,6 +17,10 @@ namespace GW2EIDPSReport
 
         private bool _userTokenValid => _userToken != null && _userToken.Length > 0;
 
+        private readonly bool _anonymous = false;
+
+        private readonly bool _detailedWvW = false;
+
         public DPSReportController()
         {
 
@@ -25,6 +29,12 @@ namespace GW2EIDPSReport
         public DPSReportController(string userToken)
         {
             _userToken = userToken;
+        }
+
+        public DPSReportController(string userToken, bool anomymous, bool detailedWvW) : this(userToken)
+        {
+            _anonymous = anomymous;
+            _detailedWvW = detailedWvW;
         }
 
         private static readonly DefaultContractResolver DefaultJsonContractResolver = new DefaultContractResolver
@@ -53,14 +63,28 @@ namespace GW2EIDPSReport
             return url;
         }
 
+        private string GetUploadURL(string baseURL)
+        {
+            string url = GetURL(baseURL);
+            if (_anonymous)
+            {
+                url += "&anonymous=true";
+            }
+            if (_detailedWvW)
+            {
+                url += "&detailedwvw=true";
+            }
+            return url;
+        }
+
         public DPSReportUploadObject UploadUsingEI(FileInfo fi, List<string> traces)
         {
-            return UploadToDPSR(fi, GetURL(BaseUploadContentURL) + "&generator=ei", traces);
+            return UploadToDPSR(fi, GetUploadURL(BaseUploadContentURL) + "&generator=ei", traces);
         }
 
         public DPSReportUploadObject UploadUsingRH(FileInfo fi, List<string> traces)
         {
-            return UploadToDPSR(fi, GetURL(BaseUploadContentURL) + "&generator=rh", traces);
+            return UploadToDPSR(fi, GetUploadURL(BaseUploadContentURL) + "&generator=rh", traces);
         }
 
         public DPSReportGetUploadsObject GetUploads(List<string> traces, int page = 1)

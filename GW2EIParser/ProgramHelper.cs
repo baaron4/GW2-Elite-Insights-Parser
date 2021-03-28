@@ -99,7 +99,10 @@ namespace GW2EIParser
 
         private static string[] UploadOperation(List<string> traces, FileInfo fInfo)
         {
-            var controller = new DPSReportController(Properties.Settings.Default.DPSReportUserToken);
+            var controller = new DPSReportController(Properties.Settings.Default.DPSReportUserToken,
+                Properties.Settings.Default.Anonymous,
+                Properties.Settings.Default.DetailledWvW
+                );
             //Upload Process
             string[] uploadresult = new string[3] { "", "", "" };
             if (Properties.Settings.Default.UploadToDPSReports)

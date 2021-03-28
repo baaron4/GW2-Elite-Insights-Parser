@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser
         {
         }
 
-        public EvtcParserSettings(bool anonymousPlayer, bool skipFailedTries, bool parsePhases, bool parseCombatReplay, bool computeDamageModifiers, long tooShortLimit, bool detailledWvW)
+        public EvtcParserSettings(bool anonymousPlayer, bool skipFailedTries, bool parsePhases, bool parseCombatReplay, bool computeDamageModifiers, long tooShortLimit, bool detailedWvW)
         {
             AnonymousPlayer = anonymousPlayer;
             SkipFailedTries = skipFailedTries;
@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser
             ParseCombatReplay = parseCombatReplay;
             ComputeDamageModifiers = computeDamageModifiers;
             TooShortLimit = Math.Max(tooShortLimit, ParserHelper.MinimumInCombatDuration);
-            DetailedWvWParse = detailledWvW;
+            DetailedWvWParse = detailedWvW;
         }
     }
 }

@@ -463,9 +463,9 @@
             this.ChkDetailledWvW.AutoSize = true;
             this.ChkDetailledWvW.Location = new System.Drawing.Point(6, 88);
             this.ChkDetailledWvW.Name = "ChkDetailledWvW";
-            this.ChkDetailledWvW.Size = new System.Drawing.Size(136, 17);
+            this.ChkDetailledWvW.Size = new System.Drawing.Size(134, 17);
             this.ChkDetailledWvW.TabIndex = 41;
-            this.ChkDetailledWvW.Text = "Detailled WvW Parsing";
+            this.ChkDetailledWvW.Text = "Detailed WvW Parsing";
             this.TlpSettings.SetToolTip(this.ChkDetailledWvW, "Keep default value if unsure. Enabling this will make parsing significantly slowe" +
         "r and the generated files bigger");
             this.ChkDetailledWvW.UseVisualStyleBackColor = true;
