@@ -20,11 +20,9 @@ namespace GW2EIEvtcParser.EIData
                 throw new InvalidDataException("Queue logic based must have a >1 capacity");
             }
             BuffStackItem first = stacks[0];
-            stacks.RemoveAt(0);
-            BuffStackItem minItem = stacks.MinBy(x => x.TotalDuration);
+            BuffStackItem minItem = stacks.Where(x => x != first).MinBy(x => x.TotalDuration);
             if (minItem.TotalDuration > stackItem.TotalDuration + ParserHelper.BuffSimulatorDelayConstant)
             {
-                stacks.Insert(0, first);
                 return false;
             }
             wastes.Add(new BuffSimulationItemWasted(minItem.Src, minItem.Duration, minItem.Start));
@@ -36,7 +34,6 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             stacks[stacks.IndexOf(minItem)] = stackItem;
-            stacks.Insert(0, first);
             Sort(log, stacks);
             return true;
         }
