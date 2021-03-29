@@ -443,6 +443,7 @@ namespace GW2EIEvtcParser.EIData
                     catch (EIBuffSimulatorIDException)
                     {
                         // get rid of logs invalid for HasStackIDs false
+                        log.UpdateProgressWithCancellationCheck("Failed id based simulation on " + Character + " for " + buff.Name);
                         buffEvents.RemoveAll(x => !x.IsBuffSimulatorCompliant(log.FightData.FightEnd, false));
                         simulator = buff.CreateSimulator(log, true);
                         simulator.Simulate(buffEvents, dur);
