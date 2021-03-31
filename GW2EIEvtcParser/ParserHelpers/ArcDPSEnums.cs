@@ -120,6 +120,7 @@ namespace GW2EIEvtcParser
             Error = 36,
             Tag = 37,
             BarrierUpdate = 38,
+            StatReset = 39,
             Unknown
         };
 
