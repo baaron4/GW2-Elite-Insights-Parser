@@ -23,5 +23,6 @@ var class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor =
     [ "StatsAll", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#aeb7a78404130f164ccf56b900add2200", null ],
     [ "TotalDamageDist", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#aeb0f9ed68c515788e40302c5b042060c", null ],
     [ "TotalDamageTaken", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#ad47ab8db514c084f3d747da23624e0b6", null ],
+    [ "TotalHealth", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#a72f7a2e232b565a0afb9cb3ce1267b4c", null ],
     [ "Toughness", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_actor.html#ae3160d45a616800c164b90fbe2cd32ea", null ]
 ];
