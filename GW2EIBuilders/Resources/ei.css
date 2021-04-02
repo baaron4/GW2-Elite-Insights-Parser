@@ -731,5 +731,11 @@ td.cr-dps-table-icon-col {
     max-width: 23px;
 }
 
-  
+td.lowerOrEqual::before {
+    content: "<=";
+}
+
+td.higherOrEqual::before {
+    content: ">=";
+}
   
