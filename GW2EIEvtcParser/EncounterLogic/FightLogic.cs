@@ -99,7 +99,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var newTargetAgent = new AgentItem(firstItem);
                 newTargetAgent.OverrideAwareTimes(agents.Min(x => x.FirstAware), agents.Max(x => x.LastAware));
                 agentData.SwapMasters(new HashSet<AgentItem>(agents), firstItem);
-                agentData.OverrideID(id, newTargetAgent);
+                agentData.ReplaceID(newTargetAgent);
                 foreach (CombatItem c in combatItems)
                 {
                     if (agentValues.Contains(c.SrcAgent) && c.IsStateChange.SrcIsAgent())
