@@ -285,7 +285,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     target.OverrideName(name);
                 }
             }
-            playerList.Add(new Player(agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.Saul).FirstOrDefault(), "Saul", GetNPCIcon((int)ArcDPSEnums.TrashID.Saul)));
+            AgentItem saul = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.Saul).FirstOrDefault();
+            if (saul != null)
+            {
+                playerList.Add(new Player(saul, "Saul", GetNPCIcon((int)ArcDPSEnums.TrashID.Saul)));
+            }
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

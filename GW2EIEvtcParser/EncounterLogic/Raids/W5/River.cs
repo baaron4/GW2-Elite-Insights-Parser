@@ -108,7 +108,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 combatData.Sort((x, y) => x.Time.CompareTo(y.Time));
             }
             ComputeFightTargets(agentData, combatData);
-            playerList.Add(new Player(agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Desmina).FirstOrDefault(), "Desmina", GetNPCIcon((int)ArcDPSEnums.TargetID.Desmina)));
+            AgentItem desmina = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Desmina).FirstOrDefault();
+            if (desmina != null)
+            {
+                playerList.Add(new Player(desmina, "Desmina", GetNPCIcon((int)ArcDPSEnums.TargetID.Desmina)));
+            }
         }
 
         internal override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
