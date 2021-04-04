@@ -148,7 +148,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     throw new MissingKeyActorsException("Deimos not found");
                 }
-                AgentItem saul = playerAgents.LastOrDefault(x => x.ID == (int)ArcDPSEnums.TrashID.Saul);
+                AgentItem saul = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.Saul).FirstOrDefault();
                 if (saul == null)
                 {
                     throw new MissingKeyActorsException("Saul not found");

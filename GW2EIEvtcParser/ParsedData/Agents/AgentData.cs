@@ -94,7 +94,7 @@ namespace GW2EIEvtcParser.ParsedData
             return ParserHelper._unknownAgent;
         }
 
-        internal void ReplaceID(AgentItem agentItem)
+        internal void ReplaceAgentsFromID(AgentItem agentItem)
         {
             _allAgentsList.RemoveAll(x => x.ID == agentItem.ID);
             _allAgentsList.Add(agentItem);
