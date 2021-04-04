@@ -98,7 +98,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var agentValues = new HashSet<ulong>(agents.Select(x => x.Agent));
                 var newTargetAgent = new AgentItem(firstItem);
                 newTargetAgent.OverrideAwareTimes(agents.Min(x => x.FirstAware), agents.Max(x => x.LastAware));
-                agentData.SwapMasters(new HashSet<AgentItem>(agents), firstItem);
+                agentData.SwapMasters(new HashSet<AgentItem>(agents), newTargetAgent);
                 agentData.ReplaceID(newTargetAgent);
                 foreach (CombatItem c in combatItems)
                 {
