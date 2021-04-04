@@ -9,6 +9,7 @@ var class_g_w2_e_i_builders_1_1_json_models_1_1_json_player =
     [ "DamageModifiersTarget", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#aa1fcb7379e9566225353b2869d254344", null ],
     [ "DeathRecap", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a0c8cafcb4e119f3d0e6f1d963c1cf9ce", null ],
     [ "DpsTargets", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#ac1dbc95be3a49c3552c1c3dd24c080f7", null ],
+    [ "FriendlyNPC", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a2e5c828ab414db6f52c8f9166a4d45ea", null ],
     [ "Group", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#ad7975fd9fa31cd097f704c5254d2d996", null ],
     [ "GroupBuffs", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a6fe42510512666bdd2b6c0acbb40f62d", null ],
     [ "GroupBuffsActive", "class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a30e510777c749000967bb6e612d3942a", null ],
