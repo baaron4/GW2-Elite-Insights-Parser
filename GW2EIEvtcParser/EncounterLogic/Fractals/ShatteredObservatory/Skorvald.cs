@@ -47,6 +47,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (11204, 4414, 13252, 6462)*/);
         }
 
+        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        {
+            base.EIEvtcParse(fightData, agentData, combatData, playerList);
+            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Skorvald);
+            if (target == null)
+            {
+                throw new MissingKeyActorsException("Skorvald not found");
+            }
+            target.OverrideName("Skorvald");
+        }
+
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Skorvald);
@@ -56,7 +67,26 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             if (combatData.GetBuildEvent().Build >= 106277)
             {
-                return agentData.GetNPCsByID(16725).Any() && agentData.GetNPCsByID(11245).Any() ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+                // Agent check not reliable, produces false positives and regular false negatives
+                /*if (agentData.GetNPCsByID(16725).Any() && agentData.GetNPCsByID(11245).Any())
+                {
+                    return FightData.CMStatus.CM;
+                }*/
+                // Check some CM skills instead, not perfect but helps, 
+                // Solar Bolt is the first thing he tries to cast, that looks very consistent
+                // If the phase 1 is super fast to the point skorvald does not cast anything, supernova should be there
+                // Otherwise we are looking at a super fast phase 1 (< 7 secondes) where the team ggs just before supernova
+                // Joining the encounter mid fight may also yield a false negative but at that point the log is incomplete already
+                var cmSkills = new HashSet<long>
+                {
+                    39313,// CM Solar Bolt
+                    39225,// CM Supernova
+                };
+                if(combatData.GetSkills().Intersect(cmSkills).Any()) 
+                {
+                    return FightData.CMStatus.CM;
+                }
+                return FightData.CMStatus.NoCM;
             }
             else
             {
