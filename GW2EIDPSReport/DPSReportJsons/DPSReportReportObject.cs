@@ -6,7 +6,7 @@ namespace GW2EIDPSReport.DPSReportJsons
     public class DPSReportReportObject
     {
         [JsonProperty]
-        public string Anonymous { get; internal set; }
+        public bool Anonymous { get; internal set; }
         [JsonProperty]
         public bool Detailed { get; internal set; }
     }
