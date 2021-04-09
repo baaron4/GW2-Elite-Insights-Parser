@@ -36,6 +36,8 @@ namespace GW2EIDPSReport.DPSReportJsons
         [JsonProperty]
         public Dictionary<string, DPSReportUploadPlayerObject> Players { get; internal set; }
         [JsonProperty]
+        public DPSReportReportObject Report { get; internal set; }
+        [JsonProperty]
         public string TempApiId { get; internal set; }
     }
 }
