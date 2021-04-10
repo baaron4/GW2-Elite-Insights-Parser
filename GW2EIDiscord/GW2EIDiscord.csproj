@@ -19,14 +19,12 @@
     <Product>GW2 Elite Insights</Product>
     <Company>GW2 Elite Insights</Company>
     <Authors>EliphasNUIT</Authors>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Discord.Net.Webhook" Version="2.3.0-dev-20201201.2" />
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="Discord.Net.Webhook" Version="2.3.1" />
   </ItemGroup>
 
 </Project>

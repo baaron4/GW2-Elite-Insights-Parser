@@ -4,7 +4,6 @@
     <AssemblyName>GuildWars2EliteInsights</AssemblyName>
     <TargetFramework>net472</TargetFramework>
     <!--<TargetFramework>netcoreapp3.1</TargetFramework>-->
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -64,6 +63,7 @@
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <Authors>EliphasNUIT, Baaron</Authors>
     <PackageId>GW2EIParser</PackageId>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
   </PropertyGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
