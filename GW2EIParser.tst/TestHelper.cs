@@ -95,7 +95,7 @@ namespace GW2EIParser.tst
         public static JsonLog JsonLog(ParsedEvtcLog log)
         {
             var builder = new RawFormatBuilder(log, rawSettings, Version, new UploadResults());
-            return builder.JsonLog;
+            return builder.GetJson();
         }
 
         ///////////////////////////////////////
