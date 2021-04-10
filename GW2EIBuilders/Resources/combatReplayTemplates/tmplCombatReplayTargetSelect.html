@@ -1,0 +1,62 @@
+<template>
+    <div class="d-flex flex-row flex-wrap justify-content-center align-items-start mb-2">
+        <div class="d-flex flex-column scrollable-y" style="max-height: 250px;">
+            <div v-for="targets in targetsArray" v-if="targets.values.length > 0"
+                class="d-flex flex-row align-items-center ml-2 mt-1" style="width:450px;">
+                <h5 style="width:160px;text-align: center;">{{targets.name}}</h5>
+                <div class="d-flex flex-row flex-wrap align-items-center ml-1" style="max-width:270px;">
+                    <span v-for="target in targets.values" @click="selectActor(target.uniqueID);"
+                        class="btn btn-small ply-btn"
+                        :class="{'active': selectedtargetid === target.uniqueID, 'btn-dark': !light, 'btn-light': light}"
+                        :title="target.name">
+                        <img :src="target.icon" :alt="target.name" class="icon">
+                        {{ target.name }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    Vue.component("combat-replay-target-select-component", {
+        props: ['selectedtargetid', "light"],
+        template: `${template}`,
+        methods: {
+            selectActor: function (id) {
+                animator.selectActor(id);
+            }
+        },
+        computed: {
+            mainTargets: function () {
+                var mainFight = logData.phases[0];
+                var res = [];
+                for (var i = 0; i < logData.targets.length; i++) {
+                    if (mainFight.targets.indexOf(i) > -1) {
+                        res.push(logData.targets[i]);
+                    }
+                }
+                return res;
+            },
+            secondaryTargets: function () {
+                var mainFight = logData.phases[0];
+                var res = [];
+                for (var i = 0; i < logData.targets.length; i++) {
+                    if (mainFight.targets.indexOf(i) === -1) {
+                        res.push(logData.targets[i]);
+                    }
+                }
+                return res;
+            },
+            targetsArray: function () {
+                return [{
+                    name: "Main Targets",
+                    values: this.mainTargets
+                }, {
+                    name: "Secondary Targets",
+                    values: this.secondaryTargets
+                }]
+            }
+        }
+    });
+</script>

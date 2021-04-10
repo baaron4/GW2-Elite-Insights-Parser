@@ -269,19 +269,22 @@ class Animator {
         }
     }
 
-    selectActor(pId) {
-        let actor = this.playerData.get(pId);
+    selectActor(actorId) {
+        let actor = this.playerData.get(actorId) || this.targetData.get(actorId);
+        let oldSelect = actor.selected;
         this.reactiveDataStatus.selectedActor = null;
         this.reactiveDataStatus.selectedActorID = null;
-        let oldSelect = actor.selected;
         this.playerData.forEach(function (value, key, map) {
             value.selected = false;
         });
+        this.targetData.forEach(function (value, key, map) {
+            value.selected = false;
+        });
         actor.selected = !oldSelect;
-        this.selectedGroup = actor.selected ? actor.group : -1;
+        this.selectedGroup = actor.selected && actor.group !== null ? actor.group : -1;
         if (actor.selected) {
             this.reactiveDataStatus.selectedActor = actor;
-            this.reactiveDataStatus.selectedActorID = pId;
+            this.reactiveDataStatus.selectedActorID = actorId;
         }
         if (this.animation === null) {
             animateCanvas(noUpdateTime);
