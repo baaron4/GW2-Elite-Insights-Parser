@@ -15,6 +15,12 @@ class IconDrawable {
             animateCanvas(noUpdateTime);
         };
         this.pixelSize = pixelSize;
+        this.selected = false;
+        this.group = null;
+    }
+
+    getIcon() {
+        return this.img;
     }
 
     getInterpolatedPosition(startIndex, currentIndex) {
@@ -67,30 +73,6 @@ class IconDrawable {
         if (pos === null) {
             return;
         }
-        const fullSize = this.pixelSize / animator.scale;
-        const halfSize = fullSize / 2;
-        animator.mainContext.drawImage(this.img,
-            pos.x - halfSize, pos.y - halfSize, fullSize, fullSize);
-    }
-
-}
-
-class PlayerIconDrawable extends IconDrawable {
-    constructor(imgSrc, pixelSize, group, pos, dead, down, dc) {
-        super(-1, -1, imgSrc, pixelSize);
-        this.pos = pos;
-        this.dead = dead;
-        this.down = down;
-        this.dc = dc;
-        this.selected = false;
-        this.group = group;
-    }
-
-    draw() {
-        const pos = this.getPosition();
-        if (pos === null) {
-            return;
-        }
         var ctx = animator.mainContext;
         const fullSize = this.pixelSize / animator.scale;
         const halfSize = fullSize / 2;
@@ -119,6 +101,18 @@ class PlayerIconDrawable extends IconDrawable {
         }
         ctx.drawImage(this.getIcon(),
             pos.x - halfSize, pos.y - halfSize, fullSize, fullSize);
+    }
+
+}
+
+class PlayerIconDrawable extends IconDrawable {
+    constructor(imgSrc, pixelSize, group, pos, dead, down, dc) {
+        super(-1, -1, imgSrc, pixelSize);
+        this.pos = pos;
+        this.dead = dead;
+        this.down = down;
+        this.dc = dc;
+        this.group = group;
     }
 
     died() {

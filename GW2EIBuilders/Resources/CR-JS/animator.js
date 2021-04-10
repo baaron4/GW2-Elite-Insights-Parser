@@ -38,8 +38,8 @@ var animator = null;
 // reactive structures
 var reactiveAnimationData = {
     time: 0,
-    selectedPlayer: null,
-    selectedPlayerID: null,
+    selectedActor: null,
+    selectedActorID: null,
     animated: false
 };
 
@@ -271,8 +271,8 @@ class Animator {
 
     selectActor(pId) {
         let actor = this.playerData.get(pId);
-        this.reactiveDataStatus.selectedPlayer = null;
-        this.reactiveDataStatus.selectedPlayerID = null;
+        this.reactiveDataStatus.selectedActor = null;
+        this.reactiveDataStatus.selectedActorID = null;
         let oldSelect = actor.selected;
         this.playerData.forEach(function (value, key, map) {
             value.selected = false;
@@ -280,8 +280,8 @@ class Animator {
         actor.selected = !oldSelect;
         this.selectedGroup = actor.selected ? actor.group : -1;
         if (actor.selected) {
-            this.reactiveDataStatus.selectedPlayer = actor;
-            this.reactiveDataStatus.selectedPlayerID = pId;
+            this.reactiveDataStatus.selectedActor = actor;
+            this.reactiveDataStatus.selectedActorID = pId;
         }
         if (this.animation === null) {
             animateCanvas(noUpdateTime);
@@ -601,15 +601,17 @@ class Animator {
         }
         
         this.targetData.forEach(function (value, key, map) {
-            value.draw();
-            if (_this.attachedActorData.has(key)) {
-                _this.attachedActorData.get(key).draw();
+            if (!value.selected) {
+                value.draw();
+                if (_this.attachedActorData.has(key)) {
+                    _this.attachedActorData.get(key).draw();
+                }
             }
         });
-        if (this.reactiveDataStatus.selectedPlayer !== null) {
-            this.reactiveDataStatus.selectedPlayer.draw();
-            if (this.attachedActorData.has(this.reactiveDataStatus.selectedPlayerID)) {
-                this.attachedActorData.get(this.reactiveDataStatus.selectedPlayerID).draw();
+        if (this.reactiveDataStatus.selectedActor !== null) {
+            this.reactiveDataStatus.selectedActor.draw();
+            if (this.attachedActorData.has(this.reactiveDataStatus.selectedActorID)) {
+                this.attachedActorData.get(this.reactiveDataStatus.selectedActorID).draw();
             }
         }
     }
