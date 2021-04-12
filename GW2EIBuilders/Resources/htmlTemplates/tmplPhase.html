@@ -1,6 +1,6 @@
 <template>
     <div>
-        <ul v-if="hasNormalPhases" class="nav nav-pills d-flex flex-row justify-content-center">
+        <ul v-if="showNormalPhases" class="nav nav-pills d-flex flex-row justify-content-center">
             <li class="nav-item" v-for="(phase, id) in phases" v-show="!getPhaseData(id).breakbarPhase && !getPhaseData(id).dummy"
                 :data-original-title="getPhaseData(id).durationS + ' seconds'">
                 <a class="nav-link" @click="select(phase)" :class="{active: phase.active}">{{getPhaseData(id).name}}</a>
@@ -33,8 +33,11 @@
         props: ["phases"],
         template: `${template}`,
         computed: {
-            hasNormalPhases: function () {
-                return logData.phases.filter(phase => !phase.breakbarPhase && !phase.dummy).length > 1;
+            showNormalPhases: function () {
+                return this.normalPhases.length > 1 || this.hasBreakbarPhases;
+            },
+            normalPhases: function () {
+                return logData.phases.filter(phase => !phase.breakbarPhase && !phase.dummy);
             },
             hasBreakbarPhases: function () {
                 return this.breakbarPhasesPerTarget.length > 0;
