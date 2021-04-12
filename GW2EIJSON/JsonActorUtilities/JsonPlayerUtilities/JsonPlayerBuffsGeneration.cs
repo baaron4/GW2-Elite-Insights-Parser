@@ -17,32 +17,32 @@ namespace GW2EIJSON
             /// <summary>
             /// Generation done
             /// </summary>
-            public double Generation { get; internal set; }
+            public double Generation { get; set; }
             [JsonProperty]
             /// <summary>
             /// Generation with overstack
             /// </summary>
-            public double Overstack { get; internal set; }
+            public double Overstack { get; set; }
             [JsonProperty]
             /// <summary>
             /// Wasted generation
             /// </summary>
-            public double Wasted { get; internal set; }
+            public double Wasted { get; set; }
             [JsonProperty]
             /// <summary>
             /// Extension from unknown source
             /// </summary>
-            public double UnknownExtended { get; internal set; }
+            public double UnknownExtended { get; set; }
             [JsonProperty]
             /// <summary>
             /// Generation done by extension
             /// </summary>
-            public double ByExtension { get; internal set; }
+            public double ByExtension { get; set; }
             [JsonProperty]
             /// <summary>
             /// Buff extended 
             /// </summary>
-            public double Extended { get; internal set; }
+            public double Extended { get; set; }
 
             [JsonConstructor]
             internal JsonBuffsGenerationData()
@@ -57,13 +57,13 @@ namespace GW2EIJSON
         /// ID of the buff
         /// </summary>
         /// <seealso cref="JsonLog.BuffMap"/>
-        public long Id { get; internal set; }
+        public long Id { get; set; }
         [JsonProperty]
         /// <summary>
         /// Array of buff data \n
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonBuffsGenerationData"/>
-        public IReadOnlyList<JsonBuffsGenerationData> BuffData { get; internal set; }
+        public IReadOnlyList<JsonBuffsGenerationData> BuffData { get; set; }
     }
 }

@@ -20,27 +20,27 @@ namespace GW2EIJSON
             /// </summary>
             /// <seealso cref="JsonLog.SkillMap"/>
             /// <seealso cref="JsonLog.BuffMap"/>
-            public long Id { get; internal set; }
+            public long Id { get; set; }
             [JsonProperty]
             /// <summary>
             /// True if the damage was indirect
             /// </summary>
-            public bool IndirectDamage { get; internal set; }
+            public bool IndirectDamage { get; set; }
             [JsonProperty]
             /// <summary>
             /// Source of the damage
             /// </summary>
-            public string Src { get; internal set; }
+            public string Src { get; set; }
             [JsonProperty]
             /// <summary>
             /// Damage done
             /// </summary>
-            public int Damage { get; internal set; }
+            public int Damage { get; set; }
             [JsonProperty]
             /// <summary>
             /// Time value
             /// </summary>
-            public int Time { get; internal set; }
+            public int Time { get; set; }
 
             [JsonConstructor]
             internal JsonDeathRecapDamageItem()
@@ -53,17 +53,17 @@ namespace GW2EIJSON
         /// <summary>
         /// Time of death
         /// </summary>
-        public long DeathTime { get; internal set; }
+        public long DeathTime { get; set; }
         [JsonProperty]
         /// <summary>
         /// List of damaging events to put into downstate
         /// </summary>
-        public IReadOnlyList<JsonDeathRecapDamageItem> ToDown { get; internal set; }
+        public IReadOnlyList<JsonDeathRecapDamageItem> ToDown { get; set; }
         [JsonProperty]
         /// <summary>
         /// List of damaging events to put into deadstate
         /// </summary>
-        public IReadOnlyList<JsonDeathRecapDamageItem> ToKill { get; internal set; }
+        public IReadOnlyList<JsonDeathRecapDamageItem> ToKill { get; set; }
 
         [JsonConstructor]
         internal JsonDeathRecap()

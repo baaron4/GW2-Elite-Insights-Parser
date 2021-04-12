@@ -18,23 +18,23 @@ namespace GW2EIJSON
             /// <summary>
             /// Hits done under the buff
             /// </summary>
-            public int HitCount { get; internal set; }
+            public int HitCount { get; set; }
             [JsonProperty]
             /// <summary>
             /// Total hits
             /// </summary>
-            public int TotalHitCount { get; internal set; }
+            public int TotalHitCount { get; set; }
             [JsonProperty]
             /// <summary>
             /// Gained damage \n
             /// If the corresponding <see cref="JsonLog.DamageModDesc.NonMultiplier"/> is true then this value correspond to the damage done while under the effect. One will have to deduce the gain manualy depending on your gear.
             /// </summary>
-            public double DamageGain { get; internal set; }
+            public double DamageGain { get; set; }
             [JsonProperty]
             /// <summary>
             /// Total damage done
             /// </summary>
-            public int TotalDamage { get; internal set; }
+            public int TotalDamage { get; set; }
 
             [JsonConstructor]
             internal JsonDamageModifierItem()
@@ -47,14 +47,14 @@ namespace GW2EIJSON
         /// ID of the damage modifier \
         /// </summary>
         /// <seealso cref="JsonLog.DamageModMap"/>
-        public int Id { get; internal set; }
+        public int Id { get; set; }
         [JsonProperty]
         /// <summary>
         /// Array of damage modifier data \n
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonDamageModifierItem"/>
-        public IReadOnlyList<JsonDamageModifierItem> DamageModifiers { get; internal set; }
+        public IReadOnlyList<JsonDamageModifierItem> DamageModifiers { get; set; }
 
         [JsonConstructor]
         internal JsonDamageModifierData()

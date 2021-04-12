@@ -17,12 +17,12 @@ namespace GW2EIJSON
             /// <summary>
             /// Time at which the event happened
             /// </summary>
-            public long Time { get; internal set; }
+            public long Time { get; set; }
             [JsonProperty]
             /// <summary>
             /// The actor who is concerned by the mechanic
             /// </summary>
-            public string Actor { get; internal set; }
+            public string Actor { get; set; }
 
             [JsonConstructor]
             internal JsonMechanic()
@@ -36,17 +36,17 @@ namespace GW2EIJSON
         /// <summary>
         /// List of mechanics application
         /// </summary>
-        public IReadOnlyList<JsonMechanic> MechanicsData { get; internal set; }
+        public IReadOnlyList<JsonMechanic> MechanicsData { get; set; }
         [JsonProperty]
         /// <summary>
         /// Name of the mechanic
         /// </summary>
-        public string Name { get; internal set; }
+        public string Name { get; set; }
         [JsonProperty]
         /// <summary>
         /// Description of the mechanic
         /// </summary>
-        public string Description { get; internal set; }
+        public string Description { get; set; }
 
         [JsonConstructor]
         internal JsonMechanics()
