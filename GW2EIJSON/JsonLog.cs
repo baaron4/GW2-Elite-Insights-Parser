@@ -16,7 +16,7 @@ namespace GW2EIJSON
         public class SkillDesc
         {
             [JsonConstructor]
-            internal SkillDesc()
+            public SkillDesc()
             {
 
             }
@@ -58,7 +58,7 @@ namespace GW2EIJSON
         public class BuffDesc
         {
             [JsonConstructor]
-            internal BuffDesc()
+            public BuffDesc()
             {
             }
 
@@ -90,7 +90,7 @@ namespace GW2EIJSON
         public class DamageModDesc
         {
             [JsonConstructor]
-            internal DamageModDesc()
+            public DamageModDesc()
             {
 
             }
@@ -275,7 +275,7 @@ namespace GW2EIJSON
         public IReadOnlyList<string> LogErrors { get; set; }
 
         [JsonConstructor]
-        internal JsonLog()
+        public JsonLog()
         {
 
         }

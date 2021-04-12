@@ -30,7 +30,7 @@ namespace GW2EIJSON
         public long Id { get; set; }
 
         [JsonConstructor]
-        internal JsonConsumable()
+        public JsonConsumable()
         {
 
         }

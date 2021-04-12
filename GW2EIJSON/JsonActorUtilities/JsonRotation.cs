@@ -37,7 +37,7 @@ namespace GW2EIJSON
             public double Quickness { get; set; }
 
             [JsonConstructor]
-            internal JsonSkill()
+            public JsonSkill()
             {
 
             }
@@ -57,7 +57,7 @@ namespace GW2EIJSON
         public IReadOnlyList<JsonSkill> Skills { get; set; }
 
         [JsonConstructor]
-        internal JsonRotation()
+        public JsonRotation()
         {
 
         }

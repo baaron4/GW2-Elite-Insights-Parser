@@ -50,7 +50,7 @@ namespace GW2EIJSON
         public IReadOnlyList<IReadOnlyList<double>> BreakbarPercents { get; set; }
 
         [JsonConstructor]
-        internal JsonNPC()
+        public JsonNPC()
         {
 
         }

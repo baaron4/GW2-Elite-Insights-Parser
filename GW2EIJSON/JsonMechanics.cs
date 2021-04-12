@@ -25,7 +25,7 @@ namespace GW2EIJSON
             public string Actor { get; set; }
 
             [JsonConstructor]
-            internal JsonMechanic()
+            public JsonMechanic()
             {
 
             }
@@ -49,7 +49,7 @@ namespace GW2EIJSON
         public string Description { get; set; }
 
         [JsonConstructor]
-        internal JsonMechanics()
+        public JsonMechanics()
         {
 
         }

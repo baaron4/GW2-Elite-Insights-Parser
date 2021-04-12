@@ -43,7 +43,7 @@ namespace GW2EIJSON
             public int Time { get; set; }
 
             [JsonConstructor]
-            internal JsonDeathRecapDamageItem()
+            public JsonDeathRecapDamageItem()
             {
 
             }
@@ -66,7 +66,7 @@ namespace GW2EIJSON
         public IReadOnlyList<JsonDeathRecapDamageItem> ToKill { get; set; }
 
         [JsonConstructor]
-        internal JsonDeathRecap()
+        public JsonDeathRecap()
         {
 
         }

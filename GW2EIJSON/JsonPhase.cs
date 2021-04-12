@@ -45,7 +45,7 @@ namespace GW2EIJSON
         public bool BreakbarPhase { get; set; }
 
         [JsonConstructor]
-        internal JsonPhase()
+        public JsonPhase()
         {
 
         }

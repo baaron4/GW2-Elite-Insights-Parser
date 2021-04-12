@@ -73,7 +73,7 @@ namespace GW2EIJSON
         public IReadOnlyList<JsonRotation> Rotation { get; set; }
 
         [JsonConstructor]
-        internal JsonMinions()
+        public JsonMinions()
         {
 
         }

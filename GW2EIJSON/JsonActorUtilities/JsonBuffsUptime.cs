@@ -56,7 +56,7 @@ namespace GW2EIJSON
             public IReadOnlyDictionary<string, double> Extended { get; set; }
 
             [JsonConstructor]
-            internal JsonBuffsUptimeData()
+            public JsonBuffsUptimeData()
             {
 
             }      
@@ -84,7 +84,7 @@ namespace GW2EIJSON
         public IReadOnlyList<IReadOnlyList<int>> States { get; set; }
 
         [JsonConstructor]
-        internal JsonBuffsUptime()
+        public JsonBuffsUptime()
         {
 
         }     

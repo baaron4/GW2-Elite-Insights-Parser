@@ -180,7 +180,7 @@ namespace GW2EIJSON
 
 
         [JsonConstructor]
-        internal JsonActor()
+        public JsonActor()
         {
 
         }

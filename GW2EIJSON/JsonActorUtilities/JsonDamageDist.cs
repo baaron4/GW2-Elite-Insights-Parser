@@ -100,7 +100,7 @@ namespace GW2EIJSON
         public bool IndirectDamage { get; set; }
 
         [JsonConstructor]
-        internal JsonDamageDist()
+        public JsonDamageDist()
         {
 
         }  

@@ -89,7 +89,7 @@ namespace GW2EIJSON
             public long DcDuration { get; set; }
 
             [JsonConstructor]
-            internal JsonDefensesAll()
+            public JsonDefensesAll()
             {
 
             }
@@ -172,7 +172,7 @@ namespace GW2EIJSON
             public double ActorBreakbarDamage { get; set; }
 
             [JsonConstructor]
-            internal JsonDPS()
+            public JsonDPS()
             {
 
             }
@@ -260,7 +260,7 @@ namespace GW2EIJSON
             public int Downed { get; set; }
 
             [JsonConstructor]
-            internal JsonGameplayStats()
+            public JsonGameplayStats()
             {
 
             }
@@ -328,7 +328,7 @@ namespace GW2EIJSON
             public int SwapCount { get; set; }
 
             [JsonConstructor]
-            internal JsonGameplayStatsAll()
+            public JsonGameplayStatsAll()
             {
 
             }
@@ -381,7 +381,7 @@ namespace GW2EIJSON
             public double BoonStripsTime { get; set; }
 
             [JsonConstructor]
-            internal JsonPlayerSupport()
+            public JsonPlayerSupport()
             {
 
             }

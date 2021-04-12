@@ -37,7 +37,7 @@ namespace GW2EIJSON
             public int TotalDamage { get; set; }
 
             [JsonConstructor]
-            internal JsonDamageModifierItem()
+            public JsonDamageModifierItem()
             {
 
             }
@@ -57,15 +57,9 @@ namespace GW2EIJSON
         public IReadOnlyList<JsonDamageModifierItem> DamageModifiers { get; set; }
 
         [JsonConstructor]
-        internal JsonDamageModifierData()
+        public JsonDamageModifierData()
         {
 
-        }
-
-        protected JsonDamageModifierData(int ID, List<JsonDamageModifierItem> data)
-        {
-            Id = ID;
-            DamageModifiers = data;
         }   
     }
 }

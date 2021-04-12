@@ -204,7 +204,7 @@ namespace GW2EIJSON
         public IReadOnlyList<long> ActiveTimes { get; set; }
 
         [JsonConstructor]
-        internal JsonPlayer()
+        public JsonPlayer()
         {
 
         }

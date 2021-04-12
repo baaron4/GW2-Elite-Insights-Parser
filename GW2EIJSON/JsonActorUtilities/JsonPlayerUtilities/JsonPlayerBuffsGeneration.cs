@@ -45,7 +45,7 @@ namespace GW2EIJSON
             public double Extended { get; set; }
 
             [JsonConstructor]
-            internal JsonBuffsGenerationData()
+            public JsonBuffsGenerationData()
             {
 
             }
