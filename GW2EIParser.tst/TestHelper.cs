@@ -6,6 +6,7 @@ using GW2EIBuilders;
 using GW2EIBuilders.JsonModels;
 using GW2EIEvtcParser;
 using GW2EIGW2API;
+using GW2EIJSON;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 

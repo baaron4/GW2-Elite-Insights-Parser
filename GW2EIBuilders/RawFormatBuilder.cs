@@ -4,6 +4,7 @@ using System.IO;
 using System.Xml;
 using GW2EIBuilders.JsonModels;
 using GW2EIEvtcParser;
+using GW2EIJSON;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -25,7 +26,7 @@ namespace GW2EIBuilders
             {
                 throw new InvalidDataException("Missing settings in RawFormatBuilder");
             }
-            _jsonLog = new JsonLog(log, settings, parserVersion, uploadResults.ToArray());
+            _jsonLog = JsonLogBuilder.BuildJsonLog(log, settings, parserVersion, uploadResults.ToArray());
         }
 
         /// <summary>
