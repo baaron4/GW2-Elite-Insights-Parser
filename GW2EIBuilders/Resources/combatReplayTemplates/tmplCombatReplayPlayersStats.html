@@ -20,7 +20,7 @@
             <div v-for="(group,id) in groups" v-if="group" class="d-flex flex-row align-items-center ml-2 mt-1">
                 <h5 style="width:70px" class="text-center mt-2">Group {{id}}</h5>
                 <div class="d-flex flex-row flex-wrap align-items-center ml-1 mr-1" style="width:280px;border: 2px solid #888;">
-                    <div v-for="player in group" class="player-data ml-1" :class="{active: selectedplayerindex === player.id}">
+                    <div v-for="player in group" class="player-data ml-1" :class="{active: selectedplayerid === player.uniqueID}">
                         <combat-replay-player-stats-component :time="time" :buffs="buffs" :rotation="rotation" :playerindex="player.id" :buffstoshow="buffsToShow"></combat-replay-player-stats-component>
                     </div>
                 </div>
@@ -43,16 +43,6 @@
         computed: {
             possibleBuffs: function() {
                 return [ "Boons", "Conditions", "Fight Specifics","Shared", "Consumables", "Others"];
-            },
-            selectedplayerindex: function () {
-                if (this.selectedplayer) {
-                    for (var i = 0; i < logData.players.length; i++) {
-                        if (logData.players[i].uniqueID == this.selectedplayerid) {
-                            return i;
-                        }
-                    }
-                }
-                return -1;
             },
             groups: function () {
                 var res = [];

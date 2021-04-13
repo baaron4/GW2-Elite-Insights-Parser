@@ -215,6 +215,14 @@ h6.actor-shorten {
     background-color: rgba(220, 220, 220, 0.9);
 }
 
+.theme-slate .target-data.active {
+    background-color: rgba(80, 86, 92, 0.9);
+}
+
+.theme-yeti .target-data.active {
+    background-color: rgba(220, 220, 220, 0.9);
+}
+
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";

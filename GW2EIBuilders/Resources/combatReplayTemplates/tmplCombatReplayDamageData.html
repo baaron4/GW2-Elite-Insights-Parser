@@ -3,7 +3,7 @@
         <dps-graph-mode-selector-component :data="graphdata"
             :phaseduration="this.phase.end - this.phase.start" :phasehassubphases="false" :ignorebreakbar="false" :style="{'width': selectorWidth + 'px'}" :column="selectorWidth < 280">
         </dps-graph-mode-selector-component>
-        <combat-replay-damage-stats-component :time="time" :playerindex="playerindex" :graphdata="graphdata">
+        <combat-replay-damage-stats-component :time="time" :playerid="selectedplayerid" :graphdata="graphdata">
         </combat-replay-damage-stats-component>
     </div>
 </template>
@@ -31,16 +31,6 @@
             selectorWidth: function () {
                 return  (273 + this.targets.length * 130);
             },
-            playerindex: function () {
-                if (this.selectedplayer) {
-                    for (var i = 0; i < logData.players.length; i++) {
-                        if (logData.players[i].uniqueID == this.selectedplayerid) {
-                            return i;
-                        }
-                    }
-                }
-                return -1;
-            }
         }
     });
 </script>

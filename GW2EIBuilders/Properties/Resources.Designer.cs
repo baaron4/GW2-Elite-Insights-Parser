@@ -92,6 +92,11 @@ namespace GW2EIBuilders.Properties {
         ////* global logData*/
         ///// const images
         ///&quot;use strict&quot;;
+        ///
+        ///function compileCRTemplates() {
+        ///    TEMPLATE_CR_COMPILE
+        ///};
+        ///
         ///const noUpdateTime = -1;
         ///const updateText = -2;
         ///const deadIcon = new Image();
@@ -104,9 +109,7 @@ namespace GW2EIBuilders.Properties {
         ///};
         ///const dcIcon = new Image();
         ///dcIcon.onload = function () {
-        ///    animateCanvas(noUpdateTime);
-        ///};
-        ///const facingIcon = new Image( [rest of string was truncated]&quot;;.
+        ///  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string animator {
             get {
@@ -314,11 +317,11 @@ namespace GW2EIBuilders.Properties {
         ///        &lt;div&gt;
         ///            &lt;h3 class=&quot;text-center&quot;&gt;Conditions&lt;/h3&gt;
         ///            &lt;buff-table-component :condition=&quot;true&quot; :generation=&quot;true&quot; :id=&quot;&apos;condition-stats-table-&apos; + target.id&quot; :buffs=&quot;conditions&quot;
-        ///                :playerdata=&quot;condiData&quot; :sums=&quot;condiSums&quot; :playerindex=&quot;playerindex&quot;&gt;&lt;/buff-table-component&gt;
+        ///                :playerdata=&quot;condiData&quot; :sums=&quot;condiSums&quot; :playerindex=&quot;playerindex&quot; :hidecustom=&quot;false&quot;&gt;&lt;/buff-table-component&gt;
         ///        &lt;/div&gt;
         ///        &lt;div v-show=&quot;hasBoons&quot; class=&quot;mt-2&quot;&gt;
         ///            &lt;h3 class=&quot;text-center&quot;&gt;Boons&lt;/h3&gt;
-        ///            &lt;buff-table-component :condition=&quot;false&quot; :generation=&quot; [rest of string was truncated]&quot;;.
+        ///            &lt;buff-table-component :condition=&quot; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplBuffStatsTarget {
             get {
@@ -422,12 +425,10 @@ namespace GW2EIBuilders.Properties {
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div class=&quot;d-flex flex-column justify-content-center&quot;&gt;
         ///        &lt;dps-graph-mode-selector-component :data=&quot;graphdata&quot;
-        ///            :phaseduration=&quot;this.phase.end - this.phase.start&quot; :phasehassubphases=&quot;false&quot; :ignorebreakbar=&quot;false&quot; :style=&quot;{&apos;width&apos;: selectorWidth}&quot;&gt;
+        ///            :phaseduration=&quot;this.phase.end - this.phase.start&quot; :phasehassubphases=&quot;false&quot; :ignorebreakbar=&quot;false&quot; :style=&quot;{&apos;width&apos;: selectorWidth + &apos;px&apos;}&quot; :column=&quot;selectorWidth &lt; 280&quot;&gt;
         ///        &lt;/dps-graph-mode-selector-component&gt;
-        ///        &lt;combat-replay-damage-stats-component :time=&quot;time&quot; :playerindex=&quot;playerindex&quot; :graphdata=&quot;graphdata&quot;&gt;
-        ///        &lt;/combat-replay-damage-stats-component&gt;
-        ///    &lt;/div&gt;
-        ///&lt;/templat [rest of string was truncated]&quot;;.
+        ///        &lt;combat-replay-damage-stats-component :time=&quot;time&quot; :playerid=&quot;selectedplayerid&quot; :graphdata=&quot;graphdata&quot;&gt;
+        ///        &lt;/combat-replay-damage- [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayDamageData {
             get {
@@ -573,6 +574,22 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div class=&quot;d-flex flex-row flex-wrap justify-content-center align-items-start mb-2&quot;&gt;
+        ///        &lt;div class=&quot;d-flex flex-column scrollable-y&quot; style=&quot;max-height: 250px;&quot;&gt;
+        ///            &lt;div class=&quot;d-flex flex-row flex-wrap align-items-center ml-1&quot; style=&quot;max-width:370px;&quot;&gt;
+        ///                &lt;div v-if=&quot;mainTargets.length &gt; 0&quot; class=&quot;d-flex flex-row flex-wrap align-items-center mb-1&quot;&gt;
+        ///
+        ///                    &lt;span v-for=&quot;target in mainTargets&quot; @click=&quot;selectActor(target.uniqueID);&quot;
+        ///                 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplCombatReplayTargetSelect {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayTargetSelect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
         ///        &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mb-1 scale65&quot;&gt;
         ///            &lt;li v-for=&quot;(buffType, index) in possibleBuffs&quot; class=&quot;ml-1 mr-1&quot;&gt;
@@ -630,9 +647,9 @@ namespace GW2EIBuilders.Properties {
         ///    &lt;div class=&quot;d-flex mt-2 justify-content-center&quot;&gt;
         ///        &lt;div class=&quot;d-flex flex-column align-items-center mr-2&quot; style=&quot;margin-left: auto; min-width:450px;&quot;&gt;
         ///            &lt;combat-replay-damage-data-component :time=&quot;animationStatus.time&quot;
-        ///                :selectedplayer=&quot;animationStatus.selectedPlayer&quot; :selectedplayerid=&quot;animationStatus.selectedPlayerID&quot;&gt;
+        ///                :selectedplayer=&quot;animationStatus.selectedActor&quot; :selectedplayerid=&quot;animationStatus.selectedActorID&quot;&gt;
         ///            &lt;/combat-replay-damage-data-component&gt;
-        ///            &lt;combat-replay-player-select-component :selectedplayerid=&quot;animationStatus [rest of string was truncated]&quot;;.
+        ///            &lt;ul v-if=&quot;!targetless&quot; class=&quot;nav nav-pills d-flex flex-row justify-content [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayUI {
             get {
@@ -839,7 +856,7 @@ namespace GW2EIBuilders.Properties {
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;      
         ///        &lt;dps-graph-mode-selector-component :data=&quot;graphdata&quot;
-        ///            :phaseduration=&quot;this.phase.end - this.phase.start&quot; :phasehassubphases=&quot;!!this.phase.subPhases&quot; :ignorebreakbar=&quot;false&quot;&gt;
+        ///            :phaseduration=&quot;this.phase.end - this.phase.start&quot; :phasehassubphases=&quot;!!this.phase.subPhases&quot; :ignorebreakbar=&quot;false&quot; :column=&quot;false&quot;&gt;
         ///        &lt;/dps-graph-mode-selector-component&gt;
         ///        &lt;h3 class=&quot;text-center mt-1 mb-1&quot;&gt;{{graphname}}&lt;/h3&gt;
         ///        &lt;graph-component :id=&quot;graphid&quot; :layout=&quot;layout&quot; :data=&quot;computeData&quot;&gt;&lt;/graph-component&gt;
@@ -847,8 +864,7 @@ namespace GW2EIBuilders.Properties {
         ///&lt;/template&gt;
         ///
         ///&lt;script&gt;
-        ///    function addPoints(res, graph, maxDPS) {
-        ///  [rest of string was truncated]&quot;;.
+        ///    function addPoints(res, gra [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplDPSGraph {
             get {
@@ -859,12 +875,12 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;     
-        ///        &lt;ul class=&quot;nav nav-pills d-flex flex-row flex-wrap justify-content-center mr-3 scale85&quot;&gt;
+        ///        &lt;ul class=&quot;nav nav-pills d-flex flex-wrap justify-content-center mr-3 scale85&quot; :class=&quot;{&apos;flex-row&apos;: !column, &apos;flex-column&apos;: column}&quot;&gt;
         ///            &lt;li class=&quot;nav-item&quot;&gt;
         ///                &lt;a class=&quot;nav-link&quot; @click=&quot;data.dpsmode = 0&quot; :class=&quot;{active: data.dpsmode === 0}&quot;&gt;Full&lt;/a&gt;
         ///            &lt;/li&gt;            
         ///            &lt;li v-if=&quot;phaseduration &gt; 4&quot; class=&quot;nav-item&quot;&gt;
-        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;data.dpsmode = 4&quot; :class=&quot;{active: data.dpsmode = [rest of string was truncated]&quot;;.
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;data [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplDPSGraphModeSelector {
             get {
@@ -933,7 +949,7 @@ namespace GW2EIBuilders.Properties {
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
         ///        &lt;buff-table-component :key=&quot;&apos;gear-buff-stats-table&apos;&quot; :condition=&quot;false&quot; :generation=&quot;false&quot;
-        ///            :id=&quot;&apos;gear-buff-stats-table&apos;&quot; :buffs=&quot;gears&quot; :playerdata=&quot;buffData&quot; :sums=&quot;[]&quot; :playerindex=&quot;playerindex&quot;&gt;
+        ///            :id=&quot;&apos;gear-buff-stats-table&apos;&quot; :buffs=&quot;gears&quot; :playerdata=&quot;buffData&quot; :sums=&quot;[]&quot; :playerindex=&quot;playerindex&quot; :hidecustom=&quot;false&quot;&gt;
         ///        &lt;/buff-table-component&gt;
         ///    &lt;/div&gt;
         ///&lt;/template&gt;
@@ -943,7 +959,7 @@ namespace GW2EIBuilders.Properties {
         ///        props: [&apos;phaseindex&apos;, &apos;playerindex&apos;, &apos;activeduration&apos;],
         ///        template: `${template}`,
         ///        data: function () {
-        ///            return { [rest of string was truncated]&quot;;.
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplGearBuffTable {
             get {
@@ -998,9 +1014,9 @@ namespace GW2EIBuilders.Properties {
         ///            &lt;phase-component :phases=&quot;logdata.phases&quot;&gt;&lt;/phase-component&gt;
         ///        &lt;/div&gt;
         ///        &lt;div class=&quot;d-flex flex-row justify-content-center mb-2 mt-2&quot; id=&quot;actors&quot;&gt;
-        ///            &lt;div v-show=&quot;tab !== 5&quot; :class=&quot;{&apos;d-flex&apos;: tab !== 5}&quot;
+        ///            &lt;div v-if=&quot;hasTargets&quot; v-show=&quot;tab !== 5&quot; :class=&quot;{&apos;d-flex&apos;: tab !== 5}&quot;
         ///                class=&quot;flex-row justify-content-center align-items-center flex-wrap mr-5&quot;&gt;
-        ///                &lt;target-component :targets=&quot;logdata.targets&quot; :phaseindex= [rest of string was truncated]&quot;;.
+        ///                &lt;target-component :targets=&quot;logdata.tar [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplMainView {
             get {
@@ -1088,7 +1104,7 @@ namespace GW2EIBuilders.Properties {
         ///
         ///&lt;script&gt;
         ///
-        ///    function getActorsRotationLayout(images, color, players) {
+        ///    function getActorsRotationLayout(images, color, players, phase) {
         ///        var layout = {
         ///            barmode: &apos;stack&apos;,
         ///            legend: {
@@ -1097,7 +1113,7 @@ namespace GW2EIBuilders.Properties {
         ///            hovermode: &apos;x&apos;,
         ///            hoverdistance: 50,
         ///            images: images,
-        ///         [rest of string was truncated]&quot;;.
+        ///  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayersRotation {
             get {
@@ -1107,20 +1123,19 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div&gt;       
+        ///    &lt;div class=&quot;d-flex flex-column align-items-center justify-content-center&quot;&gt;
+        ///        &lt;h3 class=&quot;text-center mt-1 mb-1&quot;&gt;Players&apos; Rotation&lt;/h3&gt;
         ///        &lt;keep-alive&gt;
-        ///            &lt;player-rotations-component v-for=&apos;(phase, index) in phases&apos; :key=&quot;&apos;rotations&apos; + index&quot; v-if=&quot;index === phaseindex&quot; :phaseindex=&quot;phaseindex&quot; :light=&quot;light&quot;&gt;&lt;/player-rotation-component&gt;
+        ///            &lt;player-rotations-component v-for=&apos;(phase, index) in phases&apos; :key=&quot;&apos;rotations&apos; + index&quot;
+        ///                v-if=&quot;index === phaseindex&quot; :phaseindex=&quot;phaseindex&quot; :light=&quot;light&quot; :playerindex=&quot;playerindex&quot;&gt;
+        ///                &lt;/player-rotation-component&gt;
         ///        &lt;/keep-alive&gt;
         ///    &lt;/div&gt;
         ///&lt;/template&gt;
         ///
         ///&lt;script&gt;
         ///
-        ///    Vue.component(&quot;player-rotations-tab-component&quot;, {
-        ///        props: [&quot;phaseindex&quot;, &quot;light&quot;, &apos;playerindex&apos;],
-        ///        template: `${template}`,
-        ///        computed: {
-        ///            phases: function () {        /// [rest of string was truncated]&quot;;.
+        ///    Vue.co [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayersRotationTab {
             get {
@@ -1131,14 +1146,14 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;h3 v-for=&quot;player in players&quot; :key=&quot;player.id&quot; v-if=&quot;!player.isConjure&quot; v-show=&quot;player.id === activeplayer&quot;
+        ///        &lt;h3 v-for=&quot;player in players&quot; :key=&quot;player.id&quot; v-if=&quot;!player.isDummy&quot; v-show=&quot;player.id === activeplayer&quot;
         ///            class=&quot;text-center mt-2&quot;&gt;&lt;img :alt=&quot;player.profession&quot; class=&quot;icon&quot; :src=&quot;player.icon&quot;&gt;{{player.name}}&lt;/h3&gt;
         ///        &lt;ul class=&quot;nav nav-tabs&quot; v-show=&quot;activeplayer &gt; -1&quot;&gt;
         ///            &lt;li&gt;
         ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: tabmode === 0}&quot; @click=&quot;tabmode = 0&quot;&gt;
         ///                    Damage
         ///                    Distribution
-        ///                &lt; [rest of string was truncated]&quot;;.
+        ///                &lt;/a [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayerStats {
             get {
@@ -1166,14 +1181,12 @@ namespace GW2EIBuilders.Properties {
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
         ///        &lt;dps-graph-mode-selector-component :data=&quot;graphdata&quot; :phaseduration=&quot;this.phase.end - this.phase.start&quot;
-        ///            :phasehassubphases=&quot;!!this.phase.subPhases&quot; :ignorebreakbar=&quot;false&quot;&gt;
+        ///            :phasehassubphases=&quot;!!this.phase.subPhases&quot; :ignorebreakbar=&quot;false&quot; :column=&quot;false&quot;&gt;
         ///        &lt;/dps-graph-mode-selector-component&gt;
         ///        &lt;h3 class=&quot;text-center mt-1 mb-1&quot;&gt;{{graphname}}&lt;/h3&gt;
         ///        &lt;graph-component :id=&quot;graphid&quot; :layout=&quot;layout&quot; :data=&quot;computeData&quot;&gt;&lt;/graph-component&gt;
         ///        &lt;rotation-legend-component&gt;&lt;/rotation-legend-component&gt;
-        ///    &lt;/div&gt;
-        ///&lt;/template&gt;
-        /// [rest of string was truncated]&quot;;.
+        ///    &lt;/div [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayerTabGraph {
             get {
@@ -1330,14 +1343,12 @@ namespace GW2EIBuilders.Properties {
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
         ///        &lt;dps-graph-mode-selector-component :data=&quot;graphdata&quot; :phaseduration=&quot;this.phase.end - this.phase.start&quot;
-        ///            :phasehassubphases=&quot;!!this.phase.subPhases&quot; :ignorebreakbar=&quot;true&quot;&gt;
+        ///            :phasehassubphases=&quot;!!this.phase.subPhases&quot; :ignorebreakbar=&quot;true&quot; :column=&quot;false&quot;&gt;
         ///        &lt;/dps-graph-mode-selector-component&gt;
         ///        &lt;h3 class=&quot;text-center mt-1 mb-1&quot;&gt;{{graphname}}&lt;/h3&gt;
         ///        &lt;graph-component :id=&quot;graphid&quot; :layout=&quot;layout&quot; :data=&quot;computeData&quot;&gt;&lt;/graph-component&gt;
         ///        &lt;rotation-legend-component&gt;&lt;/rotation-legend-component&gt;
-        ///    &lt;/div&gt;
-        ///&lt;/template&gt;
-        ///        /// [rest of string was truncated]&quot;;.
+        ///    &lt;/div&gt; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplTargetTabGraph {
             get {

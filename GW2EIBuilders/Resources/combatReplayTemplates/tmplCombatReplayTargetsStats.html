@@ -8,7 +8,7 @@
         </ul>
         <div class="mt-1 combat-actor-status-container scrollable-y">
             <div class="d-flex flex-column justify-content-center align-items-center">
-                <div v-for="(status, id) in targets" v-if="alive(status)" class="target-data ml-1 mr-1">
+                <div v-for="(status, id) in targets" v-if="alive(status)" class="target-data ml-1 mr-1" :class="{active: selectedtargetid === status.target.uniqueID}">
                     <combat-replay-target-stats-component :time="time" :targetindex="id" :buffstoshow="buffsToShow">
                     </combat-replay-target-stats-component>
                 </div>
@@ -19,7 +19,7 @@
 
 <script>
     Vue.component("combat-replay-targets-stats-component", {
-        props: ["time"],
+        props: ["time", "selectedtarget", "selectedtargetid"],
         template: `${template}`,
         data: function () {
             return {
@@ -42,6 +42,7 @@
                     var crTarget = animator.targetData.get(target.uniqueID);
                     if (crTarget) {
                         res.push({
+                            target: target,
                             start: crTarget.start,
                             end: crTarget.end
                         });
