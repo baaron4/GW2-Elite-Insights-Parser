@@ -22,18 +22,32 @@ namespace GW2EIBuilders.HtmlModels
 
             foreach (Mechanic mech in presMech)
             {
-                long timeFilter = 0;
                 int filterCount = 0;
-                var mls = log.MechanicData.GetMechanicLogs(log, mech).Where(x => x.Actor.Agent == actor.Agent && phase.InInterval(x.Time)).ToList();
-                int count = mls.Count;
-                foreach (MechanicEvent ml in mls)
+                int count = 0;
+                if (mech.InternalCooldown > 0)
                 {
-                    if (mech.InternalCooldown != 0 && ml.Time - timeFilter < mech.InternalCooldown)//ICD check
+                    long timeFilter = 0;
+                    var mls = log.MechanicData.GetMechanicLogs(log, mech).Where(x => x.Actor.Agent == actor.Agent).ToList();
+                    foreach (MechanicEvent ml in mls)
                     {
-                        filterCount++;
+                        bool inInterval = phase.InInterval(ml.Time);
+                        if (ml.Time - timeFilter < mech.InternalCooldown)//ICD check
+                        {
+                            if (inInterval)
+                            {
+                                filterCount++;
+                            }
+                        }
+                        timeFilter = ml.Time;
+                        if (inInterval)
+                        {
+                            count++;
+                        }
                     }
-                    timeFilter = ml.Time;
-
+                } 
+                else
+                {
+                    count = log.MechanicData.GetMechanicLogs(log, mech).Where(x => x.Actor.Agent == actor.Agent && phase.InInterval(x.Time)).Count();
                 }
                 res.Add(new int[] { count - filterCount, count });
             }
