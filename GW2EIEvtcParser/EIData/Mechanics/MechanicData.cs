@@ -65,6 +65,10 @@ namespace GW2EIEvtcParser.EIData
             {
                 _mechanicLogs.Remove(m);
             }
+            foreach (KeyValuePair<Mechanic, List<MechanicEvent>> pair in _mechanicLogs)
+            {
+                pair.Value.Sort((x, y) => x.Time.CompareTo(y.Time));
+            }
         }
 
         public Dictionary<Mechanic, List<MechanicEvent>>.ValueCollection GetAllMechanics(ParsedEvtcLog log)
