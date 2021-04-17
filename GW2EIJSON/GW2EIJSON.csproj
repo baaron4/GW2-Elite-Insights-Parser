@@ -1,7 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>2.33.1.0</Version>
     <Configurations>Debug;Release;NoRewards</Configurations>
   </PropertyGroup>
 
@@ -15,16 +16,15 @@
 
   <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-    <Version>2.0.0</Version>
-    <Product>GW2 Elite Insights</Product>
     <Company>GW2 Elite Insights</Company>
+    <Product>GW2 Elite Insights</Product>
     <Authors>EliphasNUIT</Authors>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <AnalysisLevel>latest</AnalysisLevel>
+    <Description></Description>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Discord.Net.Webhook" Version="2.3.1" />
-  </ItemGroup>
+  
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+  </PropertyGroup>
 
 </Project>
