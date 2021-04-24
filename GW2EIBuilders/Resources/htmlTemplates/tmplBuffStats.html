@@ -99,44 +99,43 @@
                 var activeduration = this.activeduration;
                 var activeTimes = this.phase.playerActiveTimes;
 
-                var getData = function (stats, genself, gengroup, genoffgr, gensquad) {
+                var getData = function (uptimesStats, genSelfStats, genGroupStats, genOffGroupStats, genSquadStats) {
                     var uptimes = [],
-                        gens = [],
-                        gengr = [],
-                        genoff = [],
-                        gensq = [];
+                        genSelf = [],
+                        genGroup = [],
+                        genOffGroup = [],
+                        genSquad = [];
                     var avg = [],
-                        gravg = [],
-                        totalavg = [];
-                    var grcount = [],
-                        totalcount = 0;
-                    var grBoonAvg = [],
+                        groupAvg = [],
+                        totalAvg = [];
+                    var groupCount = [],
+                        totalCount = 0;
+                    var groupBoonAvg = [],
                         totalBoonAvg = 0;
-                    var i, k;
-                    for (i = 0; i < logData.players.length; i++) {
+                    for (var i = 0; i < logData.players.length; i++) {
                         var player = logData.players[i];
                         if (player.isDummy) {
                             continue;
                         }
                         uptimes.push({
                             player: player,
-                            data: stats[i]
+                            data: uptimesStats[i]
                         });
-                        gens.push({
+                        genSelf.push({
                             player: player,
-                            data: genself[i]
+                            data: genSelfStats[i]
                         });
-                        gengr.push({
+                        genGroup.push({
                             player: player,
-                            data: gengroup[i]
+                            data: genGroupStats[i]
                         });
-                        genoff.push({
+                        genOffGroup.push({
                             player: player,
-                            data: genoffgr[i]
+                            data: genOffGroupStats[i]
                         });
-                        gensq.push({
+                        genSquad.push({
                             player: player,
-                            data: gensquad[i]
+                            data: genSquadStats[i]
                         });
                         if (activeduration && activeTimes[i] < 1e-6) {
                             continue;
@@ -144,41 +143,41 @@
                         if (player.isCustom) {
                             continue;
                         }
-                        if (!gravg[player.group]) {
-                            gravg[player.group] = [];
-                            grcount[player.group] = 0;
-                            grBoonAvg[player.group] = 0;
+                        if (!groupAvg[player.group]) {
+                            groupAvg[player.group] = [];
+                            groupCount[player.group] = 0;
+                            groupBoonAvg[player.group] = 0;
                         }
-                        totalcount++;
-                        totalBoonAvg += stats[i].avg;
-                        grBoonAvg[player.group] += stats[i].avg;
-                        grcount[player.group]++;
-                        for (var j = 0; j < stats[i].data.length; j++) {
-                            totalavg[j] = (totalavg[j] || 0) + (stats[i].data[j][0] || 0);
-                            gravg[player.group][j] = (gravg[player.group][j] || 0) + (stats[i].data[j][0] || 0);
+                        totalCount++;
+                        totalBoonAvg += uptimesStats[i].avg;
+                        groupBoonAvg[player.group] += uptimesStats[i].avg;
+                        groupCount[player.group]++;
+                        for (var j = 0; j < uptimesStats[i].data.length; j++) {
+                            totalAvg[j] = (totalAvg[j] || 0) + (uptimesStats[i].data[j][0] || 0);
+                            groupAvg[player.group][j] = (groupAvg[player.group][j] || 0) + (uptimesStats[i].data[j][0] || 0);
                         }
                     }
-                    for (i = 0; i < gravg.length; i++) {
-                        if (gravg[i]) {
-                            for (k = 0; k < gravg[i].length; k++) {
-                                gravg[i][k] = Math.round(1000 * gravg[i][k] / grcount[i]) / 1000;
+                    for (var i = 0; i < groupAvg.length; i++) {
+                        if (groupAvg[i]) {
+                            for (var k = 0; k < groupAvg[i].length; k++) {
+                                groupAvg[i][k] = Math.round(1000 * groupAvg[i][k] / groupCount[i]) / 1000;
                             }
                             avg.push({
                                 name: "Group " + i,
-                                data: gravg[i],
-                                avg: Math.round(1000 * grBoonAvg[i] / grcount[i]) / 1000
+                                data: groupAvg[i],
+                                avg: Math.round(1000 * groupBoonAvg[i] / groupCount[i]) / 1000
                             });
                         }
                     }
-                    for (k = 0; k < totalavg.length; k++) {
-                        totalavg[k] = Math.round(1000 * totalavg[k] / totalcount) / 1000;
+                    for (var k = 0; k < totalAvg.length; k++) {
+                        totalAvg[k] = Math.round(1000 * totalAvg[k] / totalCount) / 1000;
                     }
                     avg.push({
                         name: "Total",
-                        data: totalavg,
-                        avg: Math.round(1000 * totalBoonAvg / totalcount) / 1000
+                        data: totalAvg,
+                        avg: Math.round(1000 * totalBoonAvg / totalCount) / 1000
                     });
-                    return [uptimes, gens, gengr, genoff, gensq, avg];
+                    return [uptimes, genSelf, genGroup, genOffGroup, genSquad, avg];
                 };
                 var res;
                 if (this.activeduration) {

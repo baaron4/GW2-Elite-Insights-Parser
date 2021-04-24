@@ -1,7 +1,7 @@
 <template>
     <div>
         <buff-table-component :key="'conditions-stats-table'" :condition="true" :generation="false"
-            :id="'conditions-buff-stats-table'" :buffs="conditions" :playerdata="buffData" :sums="[]" :playerindex="playerindex" :hidecustom="false">
+            :id="'conditions-stats-table'" :buffs="conditions" :playerdata="buffData[0]" :sums="buffData[1]" :playerindex="playerindex" :hidecustom="false">
         </buff-table-component>
     </div>
 </template>
@@ -34,20 +34,66 @@
                 var activeduration = this.activeduration;
                 var activeTimes = this.phase.playerActiveTimes;
 
-                var getData = function (stats) {
-                    var uptimes = [];
-                    var i;
-                    for (i = 0; i < logData.players.length; i++) {
+                var getData = function (uptimesStats) {
+                    var uptimes = [];                    
+                    var avg = [],
+                        groupeAvg = [],
+                        totalAvg = [];
+                    var groupCount = [],
+                        totalCount = 0;
+                    var groupConditionAvg = [],
+                        totalConditionAvg = 0;
+                    for (var i = 0; i < logData.players.length; i++) {
                         var player = logData.players[i];
                         if (player.isDummy) {
                             continue;
                         }
                         uptimes.push({
                             player: player,
-                            data: stats[i]
+                            data: uptimesStats[i]
                         });
+                        
+                        if (activeduration && activeTimes[i] < 1e-6) {
+                            continue;
+                        }
+                        if (player.isCustom) {
+                            continue;
+                        }
+                        if (!groupeAvg[player.group]) {
+                            groupeAvg[player.group] = [];
+                            groupCount[player.group] = 0;
+                            groupConditionAvg[player.group] = 0;
+                        }
+                        totalCount++;
+                        totalConditionAvg += uptimesStats[i].avg;
+                        groupConditionAvg[player.group] += uptimesStats[i].avg;
+                        groupCount[player.group]++;
+                        for (var j = 0; j < uptimesStats[i].data.length; j++) {
+                            totalAvg[j] = (totalAvg[j] || 0) + (uptimesStats[i].data[j][0] || 0);
+                            groupeAvg[player.group][j] = (groupeAvg[player.group][j] || 0) + (uptimesStats[i].data[j][0] || 0);
+                        }
                     }
-                    return uptimes;
+                    for (var i = 0; i < groupeAvg.length; i++) {
+                        if (groupeAvg[i]) {
+                            for (var k = 0; k < groupeAvg[i].length; k++) {
+                                groupeAvg[i][k] = Math.round(1000 * groupeAvg[i][k] / groupCount[i]) / 1000;
+                            }
+                            avg.push({
+                                name: "Group " + i,
+                                data: groupeAvg[i],
+                                avg: Math.round(1000 * groupConditionAvg[i] / groupCount[i]) / 1000
+                            });
+                        }
+                    }
+                    for (var k = 0; k < totalAvg.length; k++) {
+                        totalAvg[k] = Math.round(1000 * totalAvg[k] / totalCount) / 1000;
+                    }
+                    avg.push({
+                        name: "Total",
+                        data: totalAvg,
+                        avg: Math.round(1000 * totalConditionAvg / totalCount) / 1000
+                    });
+                    return [uptimes, avg];
                 };
                 var res;
                 if (this.activeduration) {
