@@ -137,6 +137,7 @@ namespace GW2EIBuilders.HtmlModels
         {
             var list = new List<BuffData>();
             bool boonTable = listToUse.Any(x => x.Nature == Buff.BuffNature.Boon);
+            bool conditionTable = listToUse.Any(x => x.Nature == Buff.BuffNature.Condition);
 
             foreach (Player player in log.PlayerList)
             {
@@ -144,6 +145,10 @@ namespace GW2EIBuilders.HtmlModels
                 if (boonTable)
                 {
                     avg = player.GetGameplayStats(log, phase.Start, phase.End).AvgBoons;
+                }
+                else if (conditionTable)
+                {
+                    avg = player.GetGameplayStats(log, phase.Start, phase.End).AvgConditions;
                 }
                 list.Add(new BuffData(player.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End), listToUse, avg));
             }
@@ -154,6 +159,7 @@ namespace GW2EIBuilders.HtmlModels
         {
             var list = new List<BuffData>();
             bool boonTable = listToUse.Any(x => x.Nature == Buff.BuffNature.Boon);
+            bool conditionTable = listToUse.Any(x => x.Nature == Buff.BuffNature.Condition);
 
             foreach (Player player in log.PlayerList)
             {
@@ -161,6 +167,10 @@ namespace GW2EIBuilders.HtmlModels
                 if (boonTable)
                 {
                     avg = player.GetGameplayStats(log, phase.Start, phase.End).AvgActiveBoons;
+                } 
+                else if (conditionTable)
+                {
+                    avg = player.GetGameplayStats(log, phase.Start, phase.End).AvgActiveConditions;
                 }
                 list.Add(new BuffData(player.GetActiveBuffs(BuffEnum.Self, log, phase.Start, phase.End), listToUse, avg));
             }

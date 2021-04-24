@@ -48,6 +48,7 @@ namespace GW2EIBuilders.HtmlModels
         public List<BuffData> DefBuffGenOGroupStats { get; set; }
         public List<BuffData> DefBuffGenSquadStats { get; set; }
 
+        public List<BuffData> ConditionsStats { get; set; }
         public List<BuffData> PersBuffStats { get; set; }
         public List<BuffData> GearBuffStats { get; set; }
 
@@ -76,6 +77,7 @@ namespace GW2EIBuilders.HtmlModels
         public List<BuffData> DefBuffGenActiveOGroupStats { get; set; }
         public List<BuffData> DefBuffGenActiveSquadStats { get; set; }
 
+        public List<BuffData> ConditionsActiveStats { get; set; }
         public List<BuffData> PersBuffActiveStats { get; set; }
         public List<BuffData> GearBuffActiveStats { get; set; }
 
