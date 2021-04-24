@@ -427,8 +427,8 @@ namespace GW2EIBuilders.Properties {
         ///        &lt;dps-graph-mode-selector-component :data=&quot;graphdata&quot;
         ///            :phaseduration=&quot;this.phase.end - this.phase.start&quot; :phasehassubphases=&quot;false&quot; :ignorebreakbar=&quot;false&quot; :style=&quot;{&apos;width&apos;: selectorWidth + &apos;px&apos;}&quot; :column=&quot;selectorWidth &lt; 280&quot;&gt;
         ///        &lt;/dps-graph-mode-selector-component&gt;
-        ///        &lt;combat-replay-damage-stats-component :time=&quot;time&quot; :playerindex=&quot;playerindex&quot; :graphdata=&quot;graphdata&quot;&gt;
-        ///        &lt;/combat-replay-damage-st [rest of string was truncated]&quot;;.
+        ///        &lt;combat-replay-damage-stats-component :time=&quot;time&quot; :playerid=&quot;selectedplayerid&quot; :graphdata=&quot;graphdata&quot;&gt;
+        ///        &lt;/combat-replay-damage- [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayDamageData {
             get {
@@ -574,6 +574,22 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div class=&quot;d-flex flex-row flex-wrap justify-content-center align-items-start mb-2&quot;&gt;
+        ///        &lt;div class=&quot;d-flex flex-column scrollable-y&quot; style=&quot;max-height: 250px;&quot;&gt;
+        ///            &lt;div class=&quot;d-flex flex-row flex-wrap align-items-center ml-1&quot; style=&quot;max-width:370px;&quot;&gt;
+        ///                &lt;div v-if=&quot;mainTargets.length &gt; 0&quot; class=&quot;d-flex flex-row flex-wrap align-items-center mb-1&quot;&gt;
+        ///
+        ///                    &lt;span v-for=&quot;target in mainTargets&quot; @click=&quot;selectActor(target.uniqueID);&quot;
+        ///                 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplCombatReplayTargetSelect {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayTargetSelect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
         ///        &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mb-1 scale65&quot;&gt;
         ///            &lt;li v-for=&quot;(buffType, index) in possibleBuffs&quot; class=&quot;ml-1 mr-1&quot;&gt;
@@ -631,9 +647,9 @@ namespace GW2EIBuilders.Properties {
         ///    &lt;div class=&quot;d-flex mt-2 justify-content-center&quot;&gt;
         ///        &lt;div class=&quot;d-flex flex-column align-items-center mr-2&quot; style=&quot;margin-left: auto; min-width:450px;&quot;&gt;
         ///            &lt;combat-replay-damage-data-component :time=&quot;animationStatus.time&quot;
-        ///                :selectedplayer=&quot;animationStatus.selectedPlayer&quot; :selectedplayerid=&quot;animationStatus.selectedPlayerID&quot;&gt;
+        ///                :selectedplayer=&quot;animationStatus.selectedActor&quot; :selectedplayerid=&quot;animationStatus.selectedActorID&quot;&gt;
         ///            &lt;/combat-replay-damage-data-component&gt;
-        ///            &lt;combat-replay-player-select-component :selectedplayerid=&quot;animationStatus [rest of string was truncated]&quot;;.
+        ///            &lt;ul v-if=&quot;!targetless&quot; class=&quot;nav nav-pills d-flex flex-row justify-content [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayUI {
             get {
@@ -1069,13 +1085,13 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;ul v-if=&quot;showNormalPhases&quot; class=&quot;nav nav-pills d-flex flex-row justify-content-center&quot;&gt;
+        ///        &lt;ul v-if=&quot;hasNormalPhases&quot; class=&quot;nav nav-pills d-flex flex-row justify-content-center&quot;&gt;
         ///            &lt;li class=&quot;nav-item&quot; v-for=&quot;(phase, id) in phases&quot; v-show=&quot;!getPhaseData(id).breakbarPhase &amp;&amp; !getPhaseData(id).dummy&quot;
         ///                :data-original-title=&quot;getPhaseData(id).durationS + &apos; seconds&apos;&quot;&gt;
         ///                &lt;a class=&quot;nav-link&quot; @click=&quot;select(phase)&quot; :class=&quot;{active: phase.active}&quot;&gt;{{getPhaseData(id).name}}&lt;/a&gt;
         ///            &lt;/li&gt;
         ///        &lt;/ul&gt;
-        ///        &lt;div v-if=&quot;ha [rest of string was truncated]&quot;;.
+        ///        &lt;div v-if=&quot;has [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPhase {
             get {

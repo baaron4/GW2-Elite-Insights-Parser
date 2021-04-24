@@ -530,7 +530,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return (target.GetHealth(combatData) > 21e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
         }
 
-        private void AddPlatformsToCombatReplay(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        private static void AddPlatformsToCombatReplay(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             // We later use the target to find out the timing of the last move
             Debug.Assert(target.ID == (int)ArcDPSEnums.TargetID.Qadim);

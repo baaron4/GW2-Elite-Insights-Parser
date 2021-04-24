@@ -6,6 +6,7 @@ using GW2EIBuilders;
 using GW2EIBuilders.JsonModels;
 using GW2EIEvtcParser;
 using GW2EIGW2API;
+using GW2EIJSON;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 
@@ -95,7 +96,7 @@ namespace GW2EIParser.tst
         public static JsonLog JsonLog(ParsedEvtcLog log)
         {
             var builder = new RawFormatBuilder(log, rawSettings, Version, new UploadResults());
-            return builder.JsonLog;
+            return builder.GetJson();
         }
 
         ///////////////////////////////////////

@@ -95,7 +95,7 @@ namespace GW2EIDPSReport
             }
             return GetDPSReportResponse<DPSReportGetUploadsObject>("GetUploads", GetURL(BaseGetUploadsURL + page), traces);
         }
-        public string GenerateUserToken(List<string> traces)
+        public static string GenerateUserToken(List<string> traces)
         {
             DPSReportUserTokenResponse responseItem = GetDPSReportResponse<DPSReportUserTokenResponse>("GenerateUserToken", BaseGetUserTokenURL, traces);
             if (responseItem != null)
@@ -104,7 +104,7 @@ namespace GW2EIDPSReport
             }
             return "";
         }
-        public DPSReportUploadObject GetUploadMetaDataWithID(string id, List<string> traces)
+        public static DPSReportUploadObject GetUploadMetaDataWithID(string id, List<string> traces)
         {
             if (id == null || id.Length == 0)
             {
@@ -112,7 +112,7 @@ namespace GW2EIDPSReport
             }
             return GetDPSReportResponse<DPSReportUploadObject>("GetUploadMetaDataWithID", BaseGetUploadMetadataURL + "id=" + id, traces);
         }
-        public DPSReportUploadObject GetUploadMetaDataWithPermalink(string permalink, List<string> traces)
+        public static DPSReportUploadObject GetUploadMetaDataWithPermalink(string permalink, List<string> traces)
         {
             if (permalink == null || permalink.Length == 0)
             {
@@ -121,7 +121,7 @@ namespace GW2EIDPSReport
             return GetDPSReportResponse<DPSReportUploadObject>("GetUploadMetaDataWithPermalink", BaseGetUploadMetadataURL + "permalink=" + permalink, traces);
         }
 
-        public T GetJsonWithID<T>(string id, List<string> traces)
+        public static T GetJsonWithID<T>(string id, List<string> traces)
         {
             if (id == null || id.Length == 0)
             {
@@ -129,7 +129,7 @@ namespace GW2EIDPSReport
             }
             return GetDPSReportResponse<T>("GetJsonWithID", BaseGetJsonURL + "id=" + id, traces);
         }
-        public T GetJsonWithPermalink<T>(string permalink, List<string> traces)
+        public static T GetJsonWithPermalink<T>(string permalink, List<string> traces)
         {
             if (permalink == null || permalink.Length == 0)
             {
@@ -179,7 +179,7 @@ namespace GW2EIDPSReport
             //}
             return "";
         }*/
-        private T GetDPSReportResponse<T>(string requestName, string URI, List<string> traces)
+        private static T GetDPSReportResponse<T>(string requestName, string URI, List<string> traces)
         {
             const int tentatives = 5;
             for (int i = 0; i < tentatives; i++)
@@ -227,7 +227,7 @@ namespace GW2EIDPSReport
             }
             return default;
         }
-        private DPSReportUploadObject UploadToDPSR(FileInfo fi, string URI, List<string> traces)
+        private static DPSReportUploadObject UploadToDPSR(FileInfo fi, string URI, List<string> traces)
         {
             string fileName = fi.Name;
             byte[] fileContents = File.ReadAllBytes(fi.FullName);

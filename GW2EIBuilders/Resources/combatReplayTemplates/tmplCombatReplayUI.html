@@ -2,15 +2,24 @@
     <div class="d-flex mt-2 justify-content-center">
         <div class="d-flex flex-column align-items-center mr-2" style="margin-left: auto; min-width:450px;">
             <combat-replay-damage-data-component :time="animationStatus.time"
-                :selectedplayer="animationStatus.selectedPlayer" :selectedplayerid="animationStatus.selectedPlayerID">
+                :selectedplayer="animationStatus.selectedActor" :selectedplayerid="animationStatus.selectedActorID">
             </combat-replay-damage-data-component>
-            <combat-replay-player-select-component :selectedplayerid="animationStatus.selectedPlayerID" :light="light"></combat-replay-player-select-component>
+            <ul v-if="!targetless" class="nav nav-pills d-flex flex-row justify-content-center mb-1">
+                <li class="nav-item">
+                    <a class="nav-link" :class="{active: selectionMode === 0}" @click="selectionMode = 0">Players</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" :class="{active: selectionMode === 1}" @click="selectionMode = 1">Targets</a>
+                </li>
+            </ul>
+            <combat-replay-player-select-component v-if="selectionMode === 0" :selectedplayerid="animationStatus.selectedActorID" :light="light"></combat-replay-player-select-component>
+            <combat-replay-target-select-component v-if="selectionMode === 1" :selectedtargetid="animationStatus.selectedActorID" :light="light"></combat-replay-target-select-component>
             <combat-replay-extra-decorations-component :light="light"></combat-replay-extra-decorations-component>
         </div>
         <combat-replay-animation-control-component :light="light" :animated="animationStatus.animated"></combat-replay-animation-control-component>
         <div class="d-flex flex-column align-items-center ml-2" style="margin-right: auto;min-width:450px;">
             <combat-replay-status-data-component :time="animationStatus.time"
-                :selectedplayer="animationStatus.selectedPlayer" :selectedplayerid="animationStatus.selectedPlayerID">
+                :selectedactor="animationStatus.selectedActor" :selectedactorid="animationStatus.selectedActorID">
             </combat-replay-status-data-component>
         </div>
     </div>
@@ -22,7 +31,9 @@
         template: `${template}`,
         data: function () {
             return {
-                animationStatus: reactiveAnimationData
+                animationStatus: reactiveAnimationData,
+                selectionMode: 0,
+                targetless: logData.targetless,
             };
         },
         created() {

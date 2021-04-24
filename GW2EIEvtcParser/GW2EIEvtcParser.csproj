@@ -15,6 +15,7 @@
     <Company>GW2 Elite Insights</Company>
     <Product>GW2 Elite Insights</Product>
     <Authors>EliphasNUIT, Baaron</Authors>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NoRewards|AnyCPU'">

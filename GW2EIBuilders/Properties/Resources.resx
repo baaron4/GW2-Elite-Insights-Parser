@@ -178,6 +178,9 @@
   <data name="tmplCombatReplayPlayerSelect" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\combatReplayTemplates\tmplCombatReplayPlayerSelect.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="tmplCombatReplayTargetSelect" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\combatReplayTemplates\tmplCombatReplayTargetSelect.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="tmplCombatReplayPlayersStats" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\combatReplayTemplates\tmplCombatReplayPlayersStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

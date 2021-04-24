@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>0.5.0</Version>
+    <Version>0.6.0</Version>
     <Configurations>Debug;Release;NoRewards</Configurations>
   </PropertyGroup>
 
@@ -38,6 +38,7 @@
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayStatusData.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayMechanicsList.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayPlayerSelect.html" />
+    <None Include="Resources\combatReplayTemplates\tmplCombatReplayTargetSelect.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayAnimationControl.html" />
     <None Include="Resources\htmlTemplates\tmplBuffTable.html" />
     <None Include="Resources\htmlTemplates\tmplDamageDistTable.html" />
@@ -76,24 +77,20 @@
     <None Include="Resources\template.html" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
   <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <Company>GW2 Elite Insights</Company>
     <Product>GW2 Elite Insights</Product>
     <Authors>EliphasNUIT</Authors>
     <Description></Description>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <UserSecretsId>deaea9ef-69e9-4b48-ba82-b2294277674f</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\GW2EIEvtcParser\GW2EIEvtcParser.csproj" />
     <ProjectReference Include="..\GW2EIGW2API\GW2EIGW2API.csproj" />
+    <ProjectReference Include="..\GW2EIJSON\GW2EIJSON.csproj" />
   </ItemGroup>
 
   <ItemGroup>
