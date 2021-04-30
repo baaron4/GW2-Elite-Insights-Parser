@@ -142,7 +142,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 agentData.Refresh();
             }
             ComputeFightTargets(agentData, combatData);
-            foreach (NPC target in Targets)
+            foreach (NPC target in TrashMobs)
             {
                 if (target.ID == (int)ArcDPSEnums.TrashID.PyreGuardianProtect)
                 {
