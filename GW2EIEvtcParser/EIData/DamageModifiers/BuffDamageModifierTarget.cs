@@ -60,64 +60,6 @@ namespace GW2EIEvtcParser.EIData
             _gainComputerPlayer = gainComputerPlayer;
         }
 
-
-        internal override void ComputeDamageModifier(Dictionary<string, List<DamageModifierStat>> data, Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>> dataTarget, Player p, ParsedEvtcLog log)
-        {
-            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
-            Dictionary<long, BuffsGraphModel> bgmsP = p.GetBuffGraphs(log);
-            if (_trackerPlayer != null)
-            {
-                if (!_trackerPlayer.Has(bgmsP) && _gainComputerPlayer != ByAbsence)
-                {
-                    return;
-                }
-            }
-            foreach (NPC target in log.FightData.Logic.Targets)
-            {
-                Dictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
-                if (!Tracker.Has(bgms) && GainComputer != ByAbsence)
-                {
-                    continue;
-                }
-                if (!dataTarget.TryGetValue(target, out Dictionary<string, List<DamageModifierStat>> extra))
-                {
-                    dataTarget[target] = new Dictionary<string, List<DamageModifierStat>>();
-                }
-                Dictionary<string, List<DamageModifierStat>> dict = dataTarget[target];
-                if (!dict.TryGetValue(Name, out List<DamageModifierStat> list))
-                {
-                    var extraDataList = new List<DamageModifierStat>();
-                    foreach (PhaseData phase in phases)
-                    {
-                        int totalDamage = GetTotalDamage(p, log, target, phase.Start, phase.End);
-                        IReadOnlyList<AbstractHealthDamageEvent> typedHits = GetHitDamageEvents(p, log, target, phase.Start, phase.End);
-                        List<double> damages;
-                        if (_trackerPlayer != null)
-                        {
-                            damages = typedHits.Select(x =>
-                            {
-
-                                if (ComputeGainPlayer(_trackerPlayer.GetStack(bgmsP, x.Time), x, log) < 0.0)
-                                {
-                                    return -1.0;
-                                }
-                                return ComputeGain(Tracker.GetStack(bgms, x.Time), x, log);
-                            }).Where(x => x != -1.0).ToList();
-                        }
-                        else
-                        {
-                            damages = typedHits.Select(x =>
-                            {
-                                return ComputeGain(Tracker.GetStack(bgms, x.Time), x, log);
-                            }).Where(x => x != -1.0).ToList();
-                        }
-                        extraDataList.Add(new DamageModifierStat(damages.Count, typedHits.Count, damages.Sum(), totalDamage));
-                    }
-                    dict[Name] = extraDataList;
-                }
-            }
-        }
-
         internal override List<DamageModifierEvent> ComputeDamageModifier(Player p, ParsedEvtcLog log)
         {
             Dictionary<long, BuffsGraphModel> bgmsP = p.GetBuffGraphs(log);
@@ -129,7 +71,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             var res = new List<DamageModifierEvent>();
-            IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageEvents(p, log, null, log.FightData.FightStart, log.FightData.FightStart);
+            IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageEvents(p, log, null, log.FightData.FightStart, log.FightData.FightEnd);
             if (_trackerPlayer != null)
             {
                 foreach (AbstractHealthDamageEvent evt in typeHits)
