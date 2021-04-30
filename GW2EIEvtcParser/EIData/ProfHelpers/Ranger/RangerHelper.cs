@@ -26,7 +26,24 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
-            new BuffDamageModifier(33902, "Sic 'Em!", "40%", DamageSource.NoPets, 40.0, DamageType.Power, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png", DamageModifierMode.PvE),
+            new BuffDamageModifier(33902, "Sic 'Em!", "40%", DamageSource.NoPets, 40.0, DamageType.Power, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png", DamageModifierMode.PvE, (x, log) => {
+                AgentItem src = x.From;
+                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(33902).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
+                if (effectApply != null)
+                {
+                    return x.To == effectApply.By;
+                }
+                return false;
+            }),
+            new BuffDamageModifier(56923, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Power, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png", DamageModifierMode.sPvPWvW, (x, log) => {
+                AgentItem src = x.From;
+                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(33902).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
+                if (effectApply != null)
+                {
+                    return x.To == effectApply.By;
+                }
+                return false;
+            }),
             new DamageLogDamageModifier("Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, Source.Ranger,"https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png", (x, log) => x.IsFlanking , ByPresence, 102321, ulong.MaxValue, DamageModifierMode.All),
             new BuffDamageModifier(30673, "Light on your Feet", "10% (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/2/22/Light_on_your_Feet.png", DamageModifierMode.All),
             new BuffDamageModifier(NumberOfBoonsID, "Bountiful Hunter", "1% per boon", DamageSource.All, 1.0, DamageType.Power, DamageType.All, Source.Ranger, ByStack, "https://wiki.guildwars2.com/images/2/25/Bountiful_Hunter.png", DamageModifierMode.All),
