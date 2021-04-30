@@ -10,9 +10,9 @@ namespace GW2EIEvtcParser.EIData
         private readonly BuffsTracker _trackerPlayer = null;
         private readonly GainComputer _gainComputerPlayer = null;
 
-        protected double ComputeGainPlayer(int stack, AbstractHealthDamageEvent dl)
+        protected double ComputeGainPlayer(int stack, AbstractHealthDamageEvent dl, ParsedEvtcLog log)
         {
-            if (DLChecker != null && !DLChecker(dl))
+            if (DLChecker != null && !DLChecker(dl, log))
             {
                 return -1.0;
             }
@@ -97,18 +97,18 @@ namespace GW2EIEvtcParser.EIData
                             damages = typedHits.Select(x =>
                             {
 
-                                if (ComputeGainPlayer(_trackerPlayer.GetStack(bgmsP, x.Time), x) < 0.0)
+                                if (ComputeGainPlayer(_trackerPlayer.GetStack(bgmsP, x.Time), x, log) < 0.0)
                                 {
                                     return -1.0;
                                 }
-                                return ComputeGain(Tracker.GetStack(bgms, x.Time), x);
+                                return ComputeGain(Tracker.GetStack(bgms, x.Time), x, log);
                             }).Where(x => x != -1.0).ToList();
                         }
                         else
                         {
                             damages = typedHits.Select(x =>
                             {
-                                return ComputeGain(Tracker.GetStack(bgms, x.Time), x);
+                                return ComputeGain(Tracker.GetStack(bgms, x.Time), x, log);
                             }).Where(x => x != -1.0).ToList();
                         }
                         extraDataList.Add(new DamageModifierStat(damages.Count, typedHits.Count, damages.Sum(), totalDamage));

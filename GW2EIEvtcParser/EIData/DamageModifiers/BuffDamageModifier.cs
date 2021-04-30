@@ -30,9 +30,9 @@ namespace GW2EIEvtcParser.EIData
             Tracker = new BuffsTrackerMulti(new List<long>(ids));
         }
 
-        protected double ComputeGain(int stack, AbstractHealthDamageEvent dl)
+        protected double ComputeGain(int stack, AbstractHealthDamageEvent dl, ParsedEvtcLog log)
         {
-            if (DLChecker != null && !DLChecker(dl))
+            if (DLChecker != null && !DLChecker(dl, log))
             {
                 return -1.0;
             }
@@ -62,7 +62,7 @@ namespace GW2EIEvtcParser.EIData
                     {
                         int totalDamage = GetTotalDamage(p, log, target, phase.Start, phase.End);
                         IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageEvents(p, log, target, phase.Start, phase.End);
-                        var damages = typeHits.Select(x => ComputeGain(Tracker.GetStack(bgms, x.Time), x)).Where(x => x != -1.0).ToList();
+                        var damages = typeHits.Select(x => ComputeGain(Tracker.GetStack(bgms, x.Time), x, log)).Where(x => x != -1.0).ToList();
                         extraDataList.Add(new DamageModifierStat(damages.Count, typeHits.Count, damages.Sum(), totalDamage));
                     }
                     dict[Name] = extraDataList;
@@ -73,7 +73,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 int totalDamage = GetTotalDamage(p, log, null, phase.Start, phase.End);
                 IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageEvents(p, log, null, phase.Start, phase.End);
-                var damages = typeHits.Select(x => ComputeGain(Tracker.GetStack(bgms, x.Time), x)).Where(x => x != -1.0).ToList();
+                var damages = typeHits.Select(x => ComputeGain(Tracker.GetStack(bgms, x.Time), x, log)).Where(x => x != -1.0).ToList();
                 data[Name].Add(new DamageModifierStat(damages.Count, typeHits.Count, damages.Sum(), totalDamage));
             }
         }
