@@ -154,6 +154,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal abstract void ComputeDamageModifier(Dictionary<string, List<DamageModifierStat>> data, Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>> dataTarget, Player p, ParsedEvtcLog log);
 
+        internal abstract List<DamageModifierEvent> ComputeDamageModifier(Player p, ParsedEvtcLog log);
+
         internal static readonly List<DamageModifier> ItemDamageModifiers = new List<DamageModifier>
         {
             new DamageLogDamageModifier("Moving Bonus","Seaweed Salad (and the likes) – 5% while moving", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, Source.Item,"https://wiki.guildwars2.com/images/1/1c/Bowl_of_Seaweed_Salad.png", (x, log) => x.IsMoving, ByPresence, DamageModifierMode.All),

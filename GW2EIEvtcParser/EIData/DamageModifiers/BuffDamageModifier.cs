@@ -77,5 +77,22 @@ namespace GW2EIEvtcParser.EIData
                 data[Name].Add(new DamageModifierStat(damages.Count, typeHits.Count, damages.Sum(), totalDamage));
             }
         }
+
+        internal override List<DamageModifierEvent> ComputeDamageModifier(Player p, ParsedEvtcLog log)
+        {
+            Dictionary<long, BuffsGraphModel> bgms = p.GetBuffGraphs(log);
+            if (!Tracker.Has(bgms) && GainComputer != ByAbsence)
+            {
+                return new List<DamageModifierEvent>();
+            }
+            var res = new List<DamageModifierEvent>();
+            IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageEvents(p, log, null, log.FightData.FightStart, log.FightData.FightStart);
+            foreach (AbstractHealthDamageEvent evt in typeHits)
+            {
+                res.Add(new DamageModifierEvent(evt, this, ComputeGain(Tracker.GetStack(bgms, evt.Time), evt, log)));
+            }
+            res.RemoveAll(x => x.DamageGain == -1.0);
+            return res;
+        }
     }
 }

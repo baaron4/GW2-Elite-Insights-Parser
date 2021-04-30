@@ -53,5 +53,20 @@ namespace GW2EIEvtcParser.EIData
                 data[Name].Add(new DamageModifierStat(effect.Count, typeHits.Count, gain * effect.Sum(x => x.HealthDamage), totalDamage));
             }
         }
+
+        internal override List<DamageModifierEvent> ComputeDamageModifier(Player p, ParsedEvtcLog log)
+        {
+            var res = new List<DamageModifierEvent>();
+            double gain = GainComputer.ComputeGain(GainPerStack, 1);
+            IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageEvents(p, log, null, log.FightData.FightStart, log.FightData.FightStart);
+            foreach (AbstractHealthDamageEvent evt in typeHits)
+            {
+                if (DLChecker(evt, log))
+                {
+                    res.Add(new DamageModifierEvent(evt, this, gain * evt.HealthDamage));
+                }
+            }
+            return res;
+        }
     }
 }

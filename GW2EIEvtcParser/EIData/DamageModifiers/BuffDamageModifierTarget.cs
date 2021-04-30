@@ -117,5 +117,40 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
         }
+
+        internal override List<DamageModifierEvent> ComputeDamageModifier(Player p, ParsedEvtcLog log)
+        {
+            Dictionary<long, BuffsGraphModel> bgmsP = p.GetBuffGraphs(log);
+            if (_trackerPlayer != null)
+            {
+                if (!_trackerPlayer.Has(bgmsP) && _gainComputerPlayer != ByAbsence)
+                {
+                    return new List<DamageModifierEvent>();
+                }
+            }
+            var res = new List<DamageModifierEvent>();
+            IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageEvents(p, log, null, log.FightData.FightStart, log.FightData.FightStart);
+            if (_trackerPlayer != null)
+            {
+                foreach (AbstractHealthDamageEvent evt in typeHits)
+                {
+                    AbstractSingleActor target = log.FindActor(evt.To);
+                    Dictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
+                    double gain = ComputeGainPlayer(_trackerPlayer.GetStack(bgmsP, evt.Time), evt, log) < 0.0 ? -1.0 : ComputeGain(Tracker.GetStack(bgms, evt.Time), evt, log);
+                    res.Add(new DamageModifierEvent(evt, this, gain));
+                }
+            }
+            else
+            {
+                foreach (AbstractHealthDamageEvent evt in typeHits)
+                {
+                    AbstractSingleActor target = log.FindActor(evt.To);
+                    Dictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
+                    res.Add(new DamageModifierEvent(evt, this, ComputeGain(Tracker.GetStack(bgms, evt.Time), evt, log)));
+                }
+            }
+            res.RemoveAll(x => x.DamageGain == -1.0);
+            return res;
+        }
     }
 }
