@@ -15,7 +15,7 @@ namespace GW2EIBuilders.JsonModels
     /// </summary>
     internal static class JsonPlayerBuilder
     {
-        
+
         public static JsonPlayer BuildJsonPlayer(Player player, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc, Dictionary<string, JsonLog.DamageModDesc> damageModDesc, Dictionary<string, HashSet<long>> personalBuffs)
         {
             var jsonPlayer = new JsonPlayer();
@@ -30,7 +30,7 @@ namespace GW2EIBuilders.JsonModels
             jsonPlayer.ActiveTimes = phases.Select(x => player.GetActiveDuration(log, x.Start, x.End)).ToList();
             jsonPlayer.HasCommanderTag = player.HasCommanderTag;
             //
-            jsonPlayer.Support = phases.Select(phase => JsonStatisticsBuilder.BuildJsonPlayerSupport(player.GetPlayerSupportStats(log, phase.Start, phase.End))).ToArray();           
+            jsonPlayer.Support = phases.Select(phase => JsonStatisticsBuilder.BuildJsonPlayerSupport(player.GetPlayerSupportStats(log, phase.Start, phase.End))).ToArray();
             var targetDamage1S = new IReadOnlyList<int>[log.FightData.Logic.Targets.Count][];
             var targetPowerDamage1S = new IReadOnlyList<int>[log.FightData.Logic.Targets.Count][];
             var targetConditionDamage1S = new IReadOnlyList<int>[log.FightData.Logic.Targets.Count][];
@@ -117,8 +117,8 @@ namespace GW2EIBuilders.JsonModels
                 jsonPlayer.DeathRecap = deathRecaps.Select(x => JsonDeathRecapBuilder.BuildJsonDeathRecap(x)).ToList();
             }
             // 
-            jsonPlayer.DamageModifiers = JsonDamageModifierDataBuilder.GetDamageModifiers(player.GetDamageModifierStats(log, null), log, damageModDesc);
-            jsonPlayer.DamageModifiersTarget = JsonDamageModifierDataBuilder.GetDamageModifiersTarget(player, log, damageModDesc);
+            jsonPlayer.DamageModifiers = JsonDamageModifierDataBuilder.GetDamageModifiers(phases.Select(x => player.GetDamageModifierStats(null, log, x.Start, x.End)).ToList(), log, damageModDesc);
+            jsonPlayer.DamageModifiersTarget = JsonDamageModifierDataBuilder.GetDamageModifiersTarget(player, log, damageModDesc, phases);
             return jsonPlayer;
         }
 

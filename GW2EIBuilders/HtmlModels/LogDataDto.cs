@@ -335,9 +335,9 @@ namespace GW2EIBuilders.HtmlModels
                     DefBuffGenActiveOGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentDefbuffs, phase, BuffEnum.OffGroup),
                     DefBuffGenActiveSquadStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentDefbuffs, phase, BuffEnum.Squad),
                     //
-                    DmgModifiersCommon = DamageModData.BuildDmgModifiersData(log, i, commonDamageModifiers),
-                    DmgModifiersItem = DamageModData.BuildDmgModifiersData(log, i, itemDamageModifiers),
-                    DmgModifiersPers = DamageModData.BuildPersonalDmgModifiersData(log, i, persDamageModDict),
+                    DmgModifiersCommon = DamageModData.BuildDmgModifiersData(log, phase, commonDamageModifiers),
+                    DmgModifiersItem = DamageModData.BuildDmgModifiersData(log, phase, itemDamageModifiers),
+                    DmgModifiersPers = DamageModData.BuildPersonalDmgModifiersData(log, phase, persDamageModDict),
                     TargetsCondiStats = new List<List<BuffData>>(),
                     TargetsCondiTotals = new List<BuffData>(),
                     TargetsBoonTotals = new List<BuffData>(),
