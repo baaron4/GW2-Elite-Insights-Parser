@@ -41,7 +41,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        protected bool IsFull => Buff.Capacity == BuffStack.Count;
+        protected bool IsFull => _logic.IsFull(BuffStack, Buff.Capacity);
 
         protected override void Clear()
         {

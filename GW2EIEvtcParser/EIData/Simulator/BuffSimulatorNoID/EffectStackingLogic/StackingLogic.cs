@@ -7,6 +7,11 @@ namespace GW2EIEvtcParser.EIData
     {
         public abstract bool StackEffect(ParsedEvtcLog log, BuffStackItem stackItem, List<BuffStackItem> stacks, List<BuffSimulationItemWasted> wastes);
 
+        public virtual bool IsFull(List<BuffStackItem> stacks, int capacity)
+        {
+            return stacks.Count == capacity;
+        }
+
         protected abstract void Sort(ParsedEvtcLog log, List<BuffStackItem> stacks);
         public virtual void Add(ParsedEvtcLog log, List<BuffStackItem> stacks, BuffStackItem stackItem)
         {
