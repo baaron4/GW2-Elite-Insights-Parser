@@ -108,6 +108,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case 968:
                     EncounterCategoryInformation.SubCategory = SubFightCategory.EdgeOfTheMists;
                     return _defaultName + " - Edge of the Mists";
+                case 1315:
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.ArmisticeBastion;
+                    return _defaultName + " - Armistice Bastion";
             }
             return _defaultName;
         }

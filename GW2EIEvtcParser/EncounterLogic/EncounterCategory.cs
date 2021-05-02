@@ -38,6 +38,7 @@
             EternalBattlegrounds,
             EdgeOfTheMists,
             ObsidianSanctum,
+            ArmisticeBastion,
             //
             Golem,
             //
@@ -118,6 +119,8 @@
                     return "Blue Alpine Borderlands";
                 case SubFightCategory.EdgeOfTheMists:
                     return "Edge of the Mists";
+                case SubFightCategory.ArmisticeBastion:
+                    return "Armistice Bastion";
                 //
                 case SubFightCategory.Grothmar:
                     return "Grothmar Valley";
