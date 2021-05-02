@@ -152,7 +152,7 @@ namespace GW2EIEvtcParser
         {
             StackingConditionalLoss = 0, // the same thing as Stacking
             Queue = 1,
-            Unused = 2,
+            CappedDuration = 2,
             Regeneration = 3,
             Stacking = 4,
             Force = 5,

@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.EIData
             stacks.Sort((x, y) => x.TotalDuration.CompareTo(y.TotalDuration));
         }
 
-        public override bool StackEffect(ParsedEvtcLog log, BuffStackItem stackItem, List<BuffStackItem> stacks, List<BuffSimulationItemWasted> wastes)
+        public override bool FindLowestValue(ParsedEvtcLog log, BuffStackItem stackItem, List<BuffStackItem> stacks, List<BuffSimulationItemWasted> wastes)
         {
             if (!stacks.Any())
             {

@@ -31,7 +31,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public override bool StackEffect(ParsedEvtcLog log, BuffStackItem stackItem, List<BuffStackItem> stacks, List<BuffSimulationItemWasted> wastes)
+        public override bool FindLowestValue(ParsedEvtcLog log, BuffStackItem stackItem, List<BuffStackItem> stacks, List<BuffSimulationItemWasted> wastes)
         {
             if (stacks.Count <= 1)
             {

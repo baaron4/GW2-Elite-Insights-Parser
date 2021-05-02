@@ -203,7 +203,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> Boons = new List<Buff>
         {
                 new Buff("Might", 740, Source.Common, BuffStackType.Stacking, 25, BuffNature.Boon, "https://wiki.guildwars2.com/images/7/7c/Might.png"),
-                new Buff("Fury", 725, Source.Common, BuffStackType.Queue, 9, BuffNature.Boon, "https://wiki.guildwars2.com/images/4/46/Fury.png"),//or 3m and 30s
+                new Buff("Fury", 725, Source.Common, BuffStackType.Queue, 9, BuffNature.Boon, "https://wiki.guildwars2.com/images/4/46/Fury.png"),
                 new Buff("Quickness", 1187, Source.Common, BuffStackType.Queue, 5, BuffNature.Boon, "https://wiki.guildwars2.com/images/b/b4/Quickness.png"),
                 new Buff("Alacrity", 30328, Source.Common, BuffStackType.Queue, 9, BuffNature.Boon, "https://wiki.guildwars2.com/images/4/4c/Alacrity.png"),
                 new Buff("Protection", 717, Source.Common, BuffStackType.Queue, 5, BuffNature.Boon, "https://wiki.guildwars2.com/images/6/6c/Protection.png"),
@@ -214,6 +214,17 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Swiftness", 719, Source.Common, BuffStackType.Queue, 9, BuffNature.Boon, "https://wiki.guildwars2.com/images/a/af/Swiftness.png"),
                 new Buff("Retaliation", 873, Source.Common, BuffStackType.Queue, 5, BuffNature.Boon, "https://wiki.guildwars2.com/images/5/53/Retaliation.png"),
                 new Buff("Resistance", 26980, Source.Common, BuffStackType.Queue, 5, BuffNature.Boon, "https://wiki.guildwars2.com/images/4/4b/Resistance.png"),
+                //
+                new Buff("Fury", 725, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Boon, "https://wiki.guildwars2.com/images/4/46/Fury.png", ulong.MaxValue, ulong.MaxValue),
+                new Buff("Quickness", 1187, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Boon, "https://wiki.guildwars2.com/images/b/b4/Quickness.png", ulong.MaxValue, ulong.MaxValue),
+                new Buff("Alacrity", 30328, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Boon, "https://wiki.guildwars2.com/images/4/4c/Alacrity.png", ulong.MaxValue, ulong.MaxValue),
+                new Buff("Protection", 717, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Boon, "https://wiki.guildwars2.com/images/6/6c/Protection.png", ulong.MaxValue, ulong.MaxValue),
+                new Buff("Vigor", 726, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Boon, "https://wiki.guildwars2.com/images/f/f4/Vigor.png", ulong.MaxValue, ulong.MaxValue),
+                new Buff("Aegis", 743, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Boon, "https://wiki.guildwars2.com/images/e/e5/Aegis.png", ulong.MaxValue, ulong.MaxValue),
+                new Buff("Swiftness", 719, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Boon, "https://wiki.guildwars2.com/images/a/af/Swiftness.png", ulong.MaxValue, ulong.MaxValue),
+                new Buff("Resolution", 873, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Boon, "https://wiki.guildwars2.com/images/5/53/Retaliation.png", ulong.MaxValue, ulong.MaxValue),
+                new Buff("Resistance", 26980, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Boon, "https://wiki.guildwars2.com/images/4/4b/Resistance.png", ulong.MaxValue, ulong.MaxValue),
+                //
                 new Buff("Number of Boons", NumberOfBoonsID, Source.Common, BuffStackType.Stacking, 0, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/44/Boon_Duration.png"),
         };
 
@@ -233,6 +244,16 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Weakness", 742, Source.Common, BuffStackType.Queue, 5, BuffNature.Condition, "https://wiki.guildwars2.com/images/f/f9/Weakness.png"),
                 new Buff("Taunt", 27705, Source.Common, BuffStackType.Queue, 5, BuffNature.Condition, "https://wiki.guildwars2.com/images/c/cc/Taunt.png"),
                 new Buff("Vulnerability", 738, Source.Common, BuffStackType.Stacking, 25, BuffNature.Condition, "https://wiki.guildwars2.com/images/a/af/Vulnerability.png"),
+                //          
+                new Buff("Blind", 720, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Condition, "https://wiki.guildwars2.com/images/3/33/Blinded.png", ulong.MaxValue, ulong.MaxValue),
+                new Buff("Chilled", 722, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Condition, "https://wiki.guildwars2.com/images/a/a6/Chilled.png", ulong.MaxValue, ulong.MaxValue),
+                new Buff("Crippled", 721, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Condition, "https://wiki.guildwars2.com/images/f/fb/Crippled.png", ulong.MaxValue, ulong.MaxValue),
+                new Buff("Fear", 791, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Condition, "https://wiki.guildwars2.com/images/e/e6/Fear.png", ulong.MaxValue, ulong.MaxValue),
+                new Buff("Immobile", 727, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Condition, "https://wiki.guildwars2.com/images/3/32/Immobile.png", ulong.MaxValue, ulong.MaxValue),
+                new Buff("Slow", 26766, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Condition, "https://wiki.guildwars2.com/images/f/f5/Slow.png", ulong.MaxValue, ulong.MaxValue),
+                new Buff("Weakness", 742, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Condition, "https://wiki.guildwars2.com/images/f/f9/Weakness.png", ulong.MaxValue, ulong.MaxValue),
+                new Buff("Taunt", 27705, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Condition, "https://wiki.guildwars2.com/images/c/cc/Taunt.png", ulong.MaxValue, ulong.MaxValue),
+                //
                 new Buff("Number of Conditions", NumberOfConditionsID, Source.Common, BuffStackType.Stacking, 0, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/38/Condition_Duration.png"),
         };
 
