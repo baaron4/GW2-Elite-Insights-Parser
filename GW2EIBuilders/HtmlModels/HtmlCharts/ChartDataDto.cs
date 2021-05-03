@@ -34,7 +34,12 @@ namespace GW2EIBuilders.HtmlModels
 
         public static List<object[]> BuildBarrierStates(ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase)
         {
-            return BuildGraphStates(actor.GetBarrierUpdates(log), phase, true, 0.0);
+            var barriers = new List<Segment>(actor.GetBarrierUpdates(log));
+            if (!barriers.Any(x => x.Value > 0))
+            {
+                barriers.Clear();
+            }
+            return BuildGraphStates(barriers, phase, true, 0.0);
         }
 
         public static List<object[]> BuildBreakbarPercentStates(ParsedEvtcLog log, NPC npc, PhaseData phase)
