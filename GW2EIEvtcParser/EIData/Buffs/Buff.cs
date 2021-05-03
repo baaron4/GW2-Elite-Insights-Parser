@@ -248,11 +248,9 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Blind", 720, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Condition, "https://wiki.guildwars2.com/images/3/33/Blinded.png", ulong.MaxValue, ulong.MaxValue),
                 new Buff("Chilled", 722, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Condition, "https://wiki.guildwars2.com/images/a/a6/Chilled.png", ulong.MaxValue, ulong.MaxValue),
                 new Buff("Crippled", 721, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Condition, "https://wiki.guildwars2.com/images/f/fb/Crippled.png", ulong.MaxValue, ulong.MaxValue),
-                new Buff("Fear", 791, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Condition, "https://wiki.guildwars2.com/images/e/e6/Fear.png", ulong.MaxValue, ulong.MaxValue),
                 new Buff("Immobile", 727, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Condition, "https://wiki.guildwars2.com/images/3/32/Immobile.png", ulong.MaxValue, ulong.MaxValue),
                 new Buff("Slow", 26766, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Condition, "https://wiki.guildwars2.com/images/f/f5/Slow.png", ulong.MaxValue, ulong.MaxValue),
                 new Buff("Weakness", 742, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Condition, "https://wiki.guildwars2.com/images/f/f9/Weakness.png", ulong.MaxValue, ulong.MaxValue),
-                new Buff("Taunt", 27705, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Condition, "https://wiki.guildwars2.com/images/c/cc/Taunt.png", ulong.MaxValue, ulong.MaxValue),
                 //
                 new Buff("Number of Conditions", NumberOfConditionsID, Source.Common, BuffStackType.Stacking, 0, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/38/Condition_Duration.png"),
         };
