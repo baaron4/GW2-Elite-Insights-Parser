@@ -380,6 +380,23 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
+        public double GetCurrentHealthPercent(ParsedEvtcLog log, long time)
+        {
+            IReadOnlyList<Segment> hps = GetHealthUpdates(log);
+            if (!hps.Any())
+            {
+                return -1.0;
+            }
+            foreach (Segment seg in hps)
+            {
+                if (seg.Intersect(time - ParserHelper.ServerDelayConstant, time + ParserHelper.ServerDelayConstant))
+                {
+                    return seg.Value;
+                }
+            }
+            return -1.0;
+        }
+
         public IReadOnlyCollection<Buff> GetTrackedBuffs(ParsedEvtcLog log)
         {
             if (_buffMap == null)
