@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EIData
         public string Icon { get; }
         public string Name { get; }
         public int ID { get; }
-        public string Tooltip { get; }
+        public string Tooltip { get; protected set; }
         internal delegate bool DamageLogChecker(AbstractHealthDamageEvent dl, ParsedEvtcLog log);
 
         protected DamageModifierMode Mode { get; } = DamageModifierMode.All;

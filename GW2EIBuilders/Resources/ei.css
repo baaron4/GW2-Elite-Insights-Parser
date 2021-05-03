@@ -746,4 +746,8 @@ td.lowerOrEqual::before {
 td.higherOrEqual::before {
     content: ">=";
 }
+
+td.approximate::before {
+    content: "\2248";
+}
   
