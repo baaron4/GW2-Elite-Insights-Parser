@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EIData
         public bool Multiplier => GainComputer.Multiplier;
         public bool SkillBased => GainComputer.SkillBased;
 
-        public bool Approximative { get; protected set; } = false;
+        public bool Approximate { get; protected set; } = false;
         public ParserHelper.Source Src { get; }
         public string Icon { get; }
         public string Name { get; }
