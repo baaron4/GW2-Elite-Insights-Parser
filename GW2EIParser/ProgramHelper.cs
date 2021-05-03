@@ -317,7 +317,7 @@ namespace GW2EIParser
                     }
                 });
                 //
-                Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
+                //Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
                 Parallel.ForEach(log.PlayerList, actor =>
                 {
                     foreach (PhaseData phase in phases)

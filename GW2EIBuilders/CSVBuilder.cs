@@ -257,16 +257,16 @@ namespace GW2EIBuilders
             {
                 FinalGameplayStatsAll stats = player.GetGameplayStats(_log, phase.Start, phase.End);
                 FinalGameplayStats statsBoss = player.GetGameplayStats(_legacyTarget, _log, phase.Start, phase.End);
-                Dictionary<string, List<DamageModifierStat>> damageMods = player.GetDamageModifierStats(_log, _legacyTarget);
+                IReadOnlyDictionary<string, DamageModifierStat> damageMods = player.GetDamageModifierStats(_legacyTarget, _log, phase.Start, phase.End);
                 var scholar = new DamageModifierStat(0, 0, 0, 0);
                 var moving = new DamageModifierStat(0, 0, 0, 0);
-                if (damageMods.TryGetValue("Scholar Rune", out List<DamageModifierStat> schoDict))
+                if (damageMods.TryGetValue("Scholar Rune", out DamageModifierStat schoDict))
                 {
-                    scholar = schoDict[phaseIndex];
+                    scholar = schoDict;
                 }
-                if (damageMods.TryGetValue("Moving Bonus", out List<DamageModifierStat> moveDict))
+                if (damageMods.TryGetValue("Moving Bonus", out DamageModifierStat moveDict))
                 {
-                    moving = moveDict[phaseIndex];
+                    moving = moveDict;
                 }
 
                 WriteLine(new[] { player.Group.ToString(), player.Prof, player.Character,
@@ -303,16 +303,16 @@ namespace GW2EIBuilders
             foreach (Player player in _noFakePlayers)
             {
                 FinalGameplayStatsAll stats = player.GetGameplayStats(_log, phase.Start, phase.End);
-                Dictionary<string, List<DamageModifierStat>> damageMods = player.GetDamageModifierStats(_log, null);
+                IReadOnlyDictionary<string, DamageModifierStat> damageMods = player.GetDamageModifierStats(_legacyTarget, _log, phase.Start, phase.End);
                 var scholar = new DamageModifierStat(0, 0, 0, 0);
                 var moving = new DamageModifierStat(0, 0, 0, 0);
-                if (damageMods.TryGetValue("Scholar Rune", out List<DamageModifierStat> schoDict))
+                if (damageMods.TryGetValue("Scholar Rune", out DamageModifierStat schoDict))
                 {
-                    scholar = schoDict[phaseIndex];
+                    scholar = schoDict;
                 }
-                if (damageMods.TryGetValue("Moving Bonus", out List<DamageModifierStat> moveDict))
+                if (damageMods.TryGetValue("Moving Bonus", out DamageModifierStat moveDict))
                 {
-                    moving = moveDict[phaseIndex];
+                    moving = moveDict;
                 }
 
                 WriteLine(new[] { player.Group.ToString(), player.Prof, player.Character,

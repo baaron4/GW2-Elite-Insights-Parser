@@ -152,7 +152,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        internal abstract void ComputeDamageModifier(Dictionary<string, List<DamageModifierStat>> data, Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>> dataTarget, Player p, ParsedEvtcLog log);
+        internal abstract List<DamageModifierEvent> ComputeDamageModifier(Player p, ParsedEvtcLog log);
 
         internal static readonly List<DamageModifier> ItemDamageModifiers = new List<DamageModifier>
         {

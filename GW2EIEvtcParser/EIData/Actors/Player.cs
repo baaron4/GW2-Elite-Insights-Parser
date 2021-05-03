@@ -18,9 +18,8 @@ namespace GW2EIEvtcParser.EIData
 
         private List<Consumable> _consumeList;
         private List<DeathRecap> _deathRecaps;
-        private Dictionary<string, List<DamageModifierStat>> _damageModifiers;
-        private HashSet<string> _presentDamageModifiers;
-        private Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>> _damageModifiersTargets;
+        private CachingCollectionWithTarget<Dictionary<string, DamageModifierStat>> _damageModifiersPerTargets;
+        private CachingCollectionWithTarget<Dictionary<string, List<DamageModifierEvent>>> _damageModifierEventsPerTargets;
         // statistics
         private CachingCollection<FinalPlayerSupport> _playerSupportStats;
         private CachingCollectionCustom<BuffEnum, Dictionary<long, FinalPlayerBuffs>[]> _buffStats;
@@ -164,47 +163,58 @@ namespace GW2EIEvtcParser.EIData
             return _consumeList.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public Dictionary<string, List<DamageModifierStat>> GetDamageModifierStats(ParsedEvtcLog log, NPC target)
+        private Dictionary<string, DamageModifierStat> ComputeDamageModifierStats(NPC target, ParsedEvtcLog log, long start, long end)
         {
-            if (_damageModifiers == null)
+            // Check if damage mods against target
+            if (_damageModifierEventsPerTargets.TryGetValue(log.FightData.FightStart, log.FightData.FightEnd, target, out Dictionary<string, List<DamageModifierEvent>> events))
             {
-                SetDamageModifiersData(log);
-            }
-            if (target != null)
+                var res = new Dictionary<string, DamageModifierStat>();
+                foreach (KeyValuePair<string, List<DamageModifierEvent>> pair in events)
+                {
+                    DamageModifier damageMod = pair.Value.FirstOrDefault()?.DamageModifier;
+                    if (damageMod != null)
+                    {
+                        var eventsToUse = pair.Value.Where(x => x.Time >= start && x.Time <= end).ToList();
+                        int totalDamage = damageMod.GetTotalDamage(this, log, target, start, end);
+                        IReadOnlyList<AbstractHealthDamageEvent> typeHits = damageMod.GetHitDamageEvents(this, log, target, start, end);
+                        res[pair.Key] = new DamageModifierStat(eventsToUse.Count, typeHits.Count, eventsToUse.Sum(x => x.DamageGain), totalDamage);
+                    }
+                }
+                _damageModifiersPerTargets.Set(start, end, target, res);
+                return res;
+            } 
+            // Check if we already filled the cache, that means no damage modifiers against given target
+            else if (_damageModifierEventsPerTargets.TryGetValue(log.FightData.FightStart, log.FightData.FightEnd, null, out events))
             {
-                if (_damageModifiersTargets.TryGetValue(target, out Dictionary<string, List<DamageModifierStat>> res))
-                {
-                    return res;
-                }
-                else
-                {
-                    return new Dictionary<string, List<DamageModifierStat>>();
-                }
+                var res = new Dictionary<string, DamageModifierStat>();
+                _damageModifiersPerTargets.Set(start, end, target, res);
+                return res;
             }
-            return _damageModifiers;
+            return null;
         }
 
-        public IReadOnlyCollection<string> GetPresentDamageModifier(ParsedEvtcLog log)
+        public IReadOnlyDictionary<string, DamageModifierStat> GetDamageModifierStats(NPC target, ParsedEvtcLog log, long start, long end)
         {
-            if (_presentDamageModifiers == null)
-            {
-                SetDamageModifiersData(log);
-            }
-            return _presentDamageModifiers;
-        }
-
-        // Private Methods
-
-        private void SetDamageModifiersData(ParsedEvtcLog log)
-        {
-            _damageModifiers = new Dictionary<string, List<DamageModifierStat>>();
-            _damageModifiersTargets = new Dictionary<NPC, Dictionary<string, List<DamageModifierStat>>>();
-            _presentDamageModifiers = new HashSet<string>();
             // If conjured sword, targetless or WvW, stop
             if (!log.ParserSettings.ComputeDamageModifiers || IsDummyActor || log.FightData.Logic.Targetless)
             {
-                return;
+                return new Dictionary<string, DamageModifierStat>();
             }
+            if (_damageModifiersPerTargets == null)
+            {
+                _damageModifiersPerTargets = new CachingCollectionWithTarget<Dictionary<string, DamageModifierStat>>(log);
+                _damageModifierEventsPerTargets = new CachingCollectionWithTarget<Dictionary<string, List<DamageModifierEvent>>>(log);
+            }
+            if (_damageModifiersPerTargets.TryGetValue(start, end, target, out Dictionary<string, DamageModifierStat> res))
+            {
+                return res;
+            }
+            res = ComputeDamageModifierStats(target, log, start, end);
+            if (res != null)
+            {
+                return res;
+            }
+            //
             var damageMods = new List<DamageModifier>();
             if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(Source.Item, out IReadOnlyList<DamageModifier> list))
             {
@@ -223,16 +233,31 @@ namespace GW2EIEvtcParser.EIData
                 damageMods.AddRange(list);
             }
             damageMods.AddRange(log.DamageModifiers.GetModifiersPerProf(Prof));
-            foreach (DamageModifier mod in damageMods)
+            //
+            var damageModifierEvents = new List<DamageModifierEvent>();
+            foreach (DamageModifier damageMod in damageMods)
             {
-                mod.ComputeDamageModifier(_damageModifiers, _damageModifiersTargets, this, log);
+                damageModifierEvents.AddRange(damageMod.ComputeDamageModifier(this, log));
             }
-            _presentDamageModifiers.UnionWith(_damageModifiers.Keys);
-            foreach (NPC tar in _damageModifiersTargets.Keys)
+            damageModifierEvents.Sort((x, y) => x.Time.CompareTo(y.Time));
+            var damageModifiersEvents = damageModifierEvents.GroupBy(y => y.DamageModifier.Name).ToDictionary(y => y.Key, y => y.ToList());
+            _damageModifierEventsPerTargets.Set(log.FightData.FightStart, log.FightData.FightEnd, null, damageModifiersEvents);
+            var damageModifiersEventsByTarget = damageModifierEvents.GroupBy(x => x.Dst).ToDictionary(x => x.Key, x => x.GroupBy(y => y.DamageModifier.Name).ToDictionary(y => y.Key, y=> y.ToList()));
+            foreach (AgentItem actor in damageModifiersEventsByTarget.Keys)
             {
-                _presentDamageModifiers.UnionWith(_damageModifiersTargets[tar].Keys);
+                _damageModifierEventsPerTargets.Set(log.FightData.FightStart, log.FightData.FightEnd, log.FindActor(actor), damageModifiersEventsByTarget[actor]);
             }
+            //
+            res = ComputeDamageModifierStats(target, log, start, end);
+            return res;
         }
+
+        public IReadOnlyCollection<string> GetPresentDamageModifier(ParsedEvtcLog log)
+        {
+            return new HashSet<string>(GetDamageModifierStats(null, log, log.FightData.FightStart, log.FightData.FightEnd).Keys);
+        }
+
+        // Private Methods
 
         private void SetDeathRecaps(ParsedEvtcLog log)
         {
