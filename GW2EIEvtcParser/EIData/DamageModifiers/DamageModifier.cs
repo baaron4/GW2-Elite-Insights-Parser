@@ -21,11 +21,13 @@ namespace GW2EIEvtcParser.EIData
         private ulong _maxBuild { get; } = ulong.MinValue;
         public bool Multiplier => GainComputer.Multiplier;
         public bool SkillBased => GainComputer.SkillBased;
+
+        public bool Approximate { get; protected set; } = false;
         public ParserHelper.Source Src { get; }
         public string Icon { get; }
         public string Name { get; }
         public int ID { get; }
-        public string Tooltip { get; }
+        public string Tooltip { get; protected set; }
         internal delegate bool DamageLogChecker(AbstractHealthDamageEvent dl, ParsedEvtcLog log);
 
         protected DamageModifierMode Mode { get; } = DamageModifierMode.All;

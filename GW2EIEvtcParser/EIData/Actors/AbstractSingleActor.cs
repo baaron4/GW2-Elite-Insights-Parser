@@ -117,10 +117,6 @@ namespace GW2EIEvtcParser.EIData
             if (_barrierUpdates == null)
             {
                 _barrierUpdates = Segment.FromStates(log.CombatData.GetBarrierUpdateEvents(AgentItem).Select(x => x.ToState()).ToList(), 0, log.FightData.FightEnd);
-                if (!_barrierUpdates.Any(x => x.Value > 0))
-                {
-                    _barrierUpdates.Clear();
-                }
             }
             return _barrierUpdates;
         }
@@ -378,6 +374,40 @@ namespace GW2EIEvtcParser.EIData
             {
                 return false;
             }
+        }
+
+        public double GetCurrentHealthPercent(ParsedEvtcLog log, long time)
+        {
+            IReadOnlyList<Segment> hps = GetHealthUpdates(log);
+            if (!hps.Any())
+            {
+                return -1.0;
+            }
+            foreach (Segment seg in hps)
+            {
+                if (seg.Intersect(time - ParserHelper.ServerDelayConstant, time + ParserHelper.ServerDelayConstant))
+                {
+                    return seg.Value;
+                }
+            }
+            return -1.0;
+        }
+
+        public double GetCurrentBarrierPercent(ParsedEvtcLog log, long time)
+        {
+            IReadOnlyList<Segment> hps = GetBarrierUpdates(log);
+            if (!hps.Any())
+            {
+                return -1.0;
+            }
+            foreach (Segment seg in hps)
+            {
+                if (seg.Intersect(time - ParserHelper.ServerDelayConstant, time + ParserHelper.ServerDelayConstant))
+                {
+                    return seg.Value;
+                }
+            }
+            return -1.0;
         }
 
         public IReadOnlyCollection<Buff> GetTrackedBuffs(ParsedEvtcLog log)

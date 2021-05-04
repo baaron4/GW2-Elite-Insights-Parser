@@ -221,5 +221,17 @@ namespace GW2EIEvtcParser.ParsedData
             AbstractSingleActor actor = log.FindActor(this);
             return actor.HasBuff(log, buffId, time);
         }
+
+        public double GetCurrentHealthPercent(ParsedEvtcLog log, long time)
+        {
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.GetCurrentHealthPercent(log, time);
+        }
+
+        public double GetCurrentBarrierPercent(ParsedEvtcLog log, long time)
+        {
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.GetCurrentBarrierPercent(log, time);
+        }
     }
 }

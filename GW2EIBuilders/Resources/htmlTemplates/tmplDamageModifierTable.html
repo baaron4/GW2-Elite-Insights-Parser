@@ -20,7 +20,7 @@
                             style="display:none">{{row.player.profession}}</span>
                     </td>
                     <td class="text-left">{{row.player.name}}</td>
-                    <td v-for="(modifier, index) in modifiers"
+                    <td v-for="(modifier, index) in modifiers" :class="{approximate: modifier.approximate}"
                         :data-original-title="getTooltip(row.data[index], modifier)">
                         {{getCellValue(row.data[index], modifier)}}
                     </td>
@@ -31,7 +31,7 @@
                     <td></td>
                     <td></td>
                     <td class="text-left">{{row.name}}</td>
-                    <td v-for="(modifier, index) in modifiers"
+                    <td v-for="(modifier, index) in modifiers" :class="{approximate: modifier.approximate}"
                         :data-original-title="getTooltip(row.data[index], modifier)">
                         {{getCellValue(row.data[index], modifier)}}
                     </td>
