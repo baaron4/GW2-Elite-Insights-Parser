@@ -29,7 +29,7 @@ namespace GW2EIEvtcParser.EIData
 
         public override string GetIcon()
         {
-            return AgentItem.Type == AgentItem.AgentType.NonSquadPlayers ? ParserHelper.GetHighResolutionProfIcon(Prof) : ParserHelper.GetNPCIcon(ID);
+            return AgentItem.Type == AgentItem.AgentType.EnemyPlayers ? ParserHelper.GetHighResolutionProfIcon(Prof) : ParserHelper.GetNPCIcon(ID);
         }
 
         public IReadOnlyDictionary<long, FinalBuffs> GetBuffs(ParsedEvtcLog log, long start, long end)
@@ -94,7 +94,7 @@ namespace GW2EIEvtcParser.EIData
                 SpawnEvent spawnCheck = log.CombatData.GetSpawnEvents(AgentItem).LastOrDefault();
                 DeadEvent deathCheck = log.CombatData.GetDeadEvents(AgentItem).LastOrDefault();
                 AliveEvent aliveCheck = log.CombatData.GetAliveEvents(AgentItem).LastOrDefault();
-                if (AgentItem.Type != AgentItem.AgentType.NonSquadPlayers && deathCheck != null && (aliveCheck == null || aliveCheck.Time < deathCheck.Time))
+                if (AgentItem.Type != AgentItem.AgentType.EnemyPlayers && deathCheck != null && (aliveCheck == null || aliveCheck.Time < deathCheck.Time))
                 {
                     CombatReplay.Trim(AgentItem.FirstAware, deathCheck.Time);
                 }

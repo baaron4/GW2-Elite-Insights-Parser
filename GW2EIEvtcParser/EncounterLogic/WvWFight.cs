@@ -126,7 +126,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var playersToAdd = new HashSet<NPC>();
             foreach (NPC npc in _targets)
             {
-                if (npc.AgentItem.Type == AgentItem.AgentType.NonSquadPlayers)
+                if (npc.AgentItem.Type == AgentItem.AgentType.EnemyPlayers)
                 {
                     IReadOnlyList<AbstractHealthDamageEvent> damageTaken = combatData.GetDamageTakenData(npc.AgentItem);
                     if (!damageTaken.Any(x => playerAgents.Contains(x.CreditedFrom)))
@@ -156,7 +156,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             AgentItem dummyAgent = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, _detailed ? "Dummy WvW Agent" : "Enemy Players", "", (int)ArcDPSEnums.TargetID.WorldVersusWorld);
             ComputeFightTargets(agentData, combatData);
 
-            var aList = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayers).ToList();
+            var aList = agentData.GetAgentByType(AgentItem.AgentType.EnemyPlayers).ToList();
             if (_detailed)
             {
                 var set = new HashSet<string>();
