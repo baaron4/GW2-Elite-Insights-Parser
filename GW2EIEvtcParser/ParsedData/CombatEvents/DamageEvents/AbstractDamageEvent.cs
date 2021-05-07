@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData
 {
-    public abstract class AbstractDamageEvent : AbstractTimeCombatEvent
+    public abstract class AbstractDamageEvent : AbstractTimeIFFCombatEvent
     {
         public AgentItem From { get; }
         public AgentItem CreditedFrom => From.GetFinalMaster();
@@ -8,7 +8,6 @@
 
         public SkillItem Skill { get; }
         public long SkillId => Skill.ID;
-        public ArcDPSEnums.IFF IFF { get; }
 
         //private int _damage;
         public bool IsOverNinety { get; }
@@ -16,7 +15,7 @@
         public bool IsMoving { get; }
         public bool IsFlanking { get; }
 
-        internal AbstractDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem.Time)
+        internal AbstractDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem.Time, evtcItem.IFF)
         {
             From = agentData.GetAgent(evtcItem.SrcAgent);
             To = agentData.GetAgent(evtcItem.DstAgent);
@@ -25,7 +24,6 @@
             AgainstUnderFifty = evtcItem.IsFifty > 0;
             IsMoving = evtcItem.IsMoving > 0;
             IsFlanking = evtcItem.IsFlanking > 0;
-            IFF = evtcItem.IFF;
         }
 
         public abstract bool ConditionDamageBased(ParsedEvtcLog log);
