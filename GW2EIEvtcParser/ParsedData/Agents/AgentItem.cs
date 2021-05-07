@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.ParsedData
     {
 
         private static int AgentCount = 0;
-        public enum AgentType { NPC, Gadget, Player, EnemyPlayer }
+        public enum AgentType { NPC, Gadget, Player, NonSquadPlayers }
 
         // Fields
         public ulong Agent { get; }
@@ -55,7 +55,7 @@ namespace GW2EIEvtcParser.ParsedData
                     if (splitStr.Length < 2 || (splitStr[1].Length == 0 || splitStr[2].Length == 0 || splitStr[0].Contains("-")))
                     {
                         Name = Prof + " " + Name;
-                        Type = AgentType.EnemyPlayer;
+                        Type = AgentType.NonSquadPlayers;
                     }
                 }
             }
