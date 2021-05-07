@@ -31,7 +31,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             SetSuccessByCombatExit(targets, combatData, fightData, playerAgents);
         }
 
-        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             var raidRewardsTypes = new HashSet<int>
                 {

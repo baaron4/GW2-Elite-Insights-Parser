@@ -10,7 +10,7 @@ namespace GW2EIEvtcParser.EIData
     /// </summary>
     public class StatisticsHelper
     {
-        internal StatisticsHelper(CombatData combatData, List<Player> players, BuffsContainer buffs)
+        internal StatisticsHelper(CombatData combatData, IReadOnlyList<Player> players, BuffsContainer buffs)
         {
             IReadOnlyCollection<long> skillIDs = combatData.GetSkills();
             // Main boons

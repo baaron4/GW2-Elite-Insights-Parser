@@ -14,10 +14,10 @@ namespace GW2EIEvtcParser
         public AgentData AgentData { get; }
         public SkillData SkillData { get; }
         public CombatData CombatData { get; }
-        public List<Player> PlayerList { get; }
-        public HashSet<AgentItem> PlayerAgents { get; }
+        public IReadOnlyList<Player> PlayerList { get; }
+        public IReadOnlyCollection<AgentItem> PlayerAgents { get; }
         public bool IsBenchmarkMode => FightData.Logic.Mode == FightLogic.ParseMode.Benchmark;
-        public Dictionary<string, List<Player>> PlayerListBySpec { get; }
+        public IReadOnlyDictionary<string, List<Player>> PlayerListBySpec { get; }
         public DamageModifiersContainer DamageModifiers { get; }
         public BuffsContainer Buffs { get; }
         public EvtcParserSettings ParserSettings { get; }
@@ -40,13 +40,15 @@ namespace GW2EIEvtcParser
             ParserSettings = parserSettings;
             _operation = operation;
             //
-            PlayerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
-            PlayerAgents = new HashSet<AgentItem>(playerList.Select(x => x.AgentItem));
+            var playerAgents = new HashSet<AgentItem>(playerList.Select(x => x.AgentItem));
             _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Combat Events");
             CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList, operation);
             _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Log Meta Data");
             LogData = new LogData(buildVersion, CombatData, evtcLogDuration, playerList, operation);
             //
+            FightData.Logic.SpecialActorProcess(CombatData, playerList, playerAgents);
+            PlayerAgents = playerAgents;
+            PlayerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
             _operation.UpdateProgressWithCancellationCheck("Checking Success");
             FightData.Logic.CheckSuccess(CombatData, AgentData, FightData, PlayerAgents);
             if (FightData.FightEnd <= ParserSettings.TooShortLimit)

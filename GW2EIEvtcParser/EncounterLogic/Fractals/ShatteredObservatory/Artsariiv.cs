@@ -53,7 +53,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return FightData.CMStatus.CMnoName;
         }
 
-        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Artsariiv);
             if (target == null)
