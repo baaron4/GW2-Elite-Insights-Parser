@@ -25,7 +25,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        protected void SetSuccessByCombatExit(HashSet<int> targetIds, CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
+        protected void SetSuccessByCombatExit(HashSet<int> targetIds, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             var targets = Targets.Where(x => targetIds.Contains(x.ID)).ToList();
             SetSuccessByCombatExit(targets, combatData, fightData, playerAgents);
