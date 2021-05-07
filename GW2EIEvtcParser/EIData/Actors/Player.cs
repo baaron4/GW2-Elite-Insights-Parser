@@ -195,8 +195,7 @@ namespace GW2EIEvtcParser.EIData
 
         public IReadOnlyDictionary<string, DamageModifierStat> GetDamageModifierStats(NPC target, ParsedEvtcLog log, long start, long end)
         {
-            // If conjured sword, targetless or WvW, stop
-            if (!log.ParserSettings.ComputeDamageModifiers || IsDummyActor || log.FightData.Logic.Targetless)
+            if (!log.ParserSettings.ComputeDamageModifiers || IsDummyActor)
             {
                 return new Dictionary<string, DamageModifierStat>();
             }
