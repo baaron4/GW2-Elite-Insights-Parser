@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.ParsedData
 {
-    public abstract class AbstractBuffEvent : AbstractTimeIFFCombatEvent
+    public abstract class AbstractBuffEvent : AbstractTimeCombatEvent
     {
         public SkillItem BuffSkill { get; private set; }
         public long BuffID => BuffSkill.ID;
@@ -13,12 +13,12 @@ namespace GW2EIEvtcParser.ParsedData
 
         public AgentItem To { get; protected set; }
 
-        internal AbstractBuffEvent(CombatItem evtcItem, SkillData skillData) : base(evtcItem.Time, evtcItem.IFF)
+        internal AbstractBuffEvent(CombatItem evtcItem, SkillData skillData) : base(evtcItem.Time)
         {
             BuffSkill = skillData.Get(evtcItem.SkillID);
         }
 
-        internal AbstractBuffEvent(SkillItem buffSkill, long time) : base(time, ArcDPSEnums.IFF.Unknown)
+        internal AbstractBuffEvent(SkillItem buffSkill, long time) : base(time)
         {
             BuffSkill = buffSkill;
         }
