@@ -39,7 +39,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly GainComputerNonMultiplier ByPresenceNonMultiplier = new GainComputerNonMultiplier();
         internal static readonly GainComputerBySkill BySkill = new GainComputerBySkill();
         internal static readonly GainComputerByStack ByStack = new GainComputerByStack();
-        internal static readonly GainComputerByStackMultiplier ByStackMultiplier = new GainComputerByStackMultiplier();
+        internal static readonly GainComputerByMultiplyingStack ByMultipliyingStack = new GainComputerByMultiplyingStack();
         internal static readonly GainComputerByAbsence ByAbsence = new GainComputerByAbsence();
 
         internal DamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ParserHelper.Source src, string icon, GainComputer gainComputer, DamageLogChecker dlChecker, ulong minBuild, ulong maxBuild, DamageModifierMode mode)

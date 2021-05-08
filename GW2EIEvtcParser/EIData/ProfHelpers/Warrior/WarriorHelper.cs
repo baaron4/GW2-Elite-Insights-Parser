@@ -58,7 +58,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifier(719, "Warrior's Sprint", "7% under swiftness", DamageSource.NoPets, 7.0, DamageType.Power, DamageType.All, Source.Warrior, ByPresence, "https://wiki.guildwars2.com/images/e/e3/Warrior%27s_Sprint.png", 86181 , ulong.MaxValue, DamageModifierMode.PvE),
             new BuffDamageModifier(719, "Warrior's Sprint", "3% under swiftness", DamageSource.NoPets, 3.0, DamageType.Power, DamageType.All, Source.Warrior, ByPresence, "https://wiki.guildwars2.com/images/e/e3/Warrior%27s_Sprint.png", 86181 , ulong.MaxValue, DamageModifierMode.sPvPWvW),
             new BuffDamageModifier(719, "Warrior's Sprint", "10% under swiftness", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, Source.Warrior, ByPresence, "https://wiki.guildwars2.com/images/e/e3/Warrior%27s_Sprint.png", ulong.MaxValue , ulong.MaxValue, DamageModifierMode.PvE),
-            new BuffDamageModifierTarget(NumberOfBoonsID, "Destruction of the Empowered", "3% per target boon", DamageSource.NoPets, 3.0, DamageType.Power, DamageType.All, Source.Warrior, ByStackMultiplier, "https://wiki.guildwars2.com/images/5/5c/Destruction_of_the_Empowered.png", DamageModifierMode.All),
+            new BuffDamageModifierTarget(NumberOfBoonsID, "Destruction of the Empowered", "3% per target boon", DamageSource.NoPets, 3.0, DamageType.Power, DamageType.All, Source.Warrior, ByMultipliyingStack, "https://wiki.guildwars2.com/images/5/5c/Destruction_of_the_Empowered.png", DamageModifierMode.All),
 
         };
 

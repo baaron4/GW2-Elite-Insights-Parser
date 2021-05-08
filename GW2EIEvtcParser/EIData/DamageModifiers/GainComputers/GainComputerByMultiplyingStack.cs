@@ -2,9 +2,9 @@
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class GainComputerByStackMultiplier : GainComputer
+    internal class GainComputerByMultiplyingStack : GainComputer
     {
-        public GainComputerByStackMultiplier()
+        public GainComputerByMultiplyingStack()
         {
             Multiplier = true;
         }
