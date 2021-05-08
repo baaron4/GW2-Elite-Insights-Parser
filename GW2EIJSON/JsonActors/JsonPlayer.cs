@@ -33,7 +33,12 @@ namespace GW2EIJSON
         /// Indicates that the JsonPlayer is actually a friendly NPC
         /// </summary>
         public bool FriendlyNPC { get; set; }
-        
+
+        /// <summary>
+        /// Indicates that the JsonPlayer not actually part of the squad
+        /// </summary>
+        public bool NotInSquad { get; set; }
+
         /// <summary>
         /// Weapons of the player \n
         /// 0-1 are the first land set, 1-2 are the second land set \n

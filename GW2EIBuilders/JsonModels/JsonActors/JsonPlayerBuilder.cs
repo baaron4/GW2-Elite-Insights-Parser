@@ -28,6 +28,7 @@ namespace GW2EIBuilders.JsonModels
             jsonPlayer.Group = player.Group;
             jsonPlayer.Profession = player.Prof;
             jsonPlayer.FriendlyNPC = player.AgentItem.IsNPC;
+            jsonPlayer.NotInSquad = player.AgentItem.IsNotInSquadPlayer;
             jsonPlayer.ActiveTimes = phases.Select(x => player.GetActiveDuration(log, x.Start, x.End)).ToList();
             jsonPlayer.HasCommanderTag = player.HasCommanderTag;
             //
