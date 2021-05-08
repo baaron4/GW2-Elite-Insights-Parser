@@ -1,4 +1,6 @@
-﻿namespace GW2EIEvtcParser.EIData
+﻿using System;
+
+namespace GW2EIEvtcParser.EIData
 {
     internal class GainComputerByStack : GainComputer
     {
@@ -9,7 +11,8 @@
 
         public override double ComputeGain(double gainPerStack, int stack)
         {
-            return gainPerStack * stack / (100 + stack * gainPerStack);
+            var pow = Math.Pow(gainPerStack, stack);
+            return pow / (100 + pow);
         }
     }
 }
