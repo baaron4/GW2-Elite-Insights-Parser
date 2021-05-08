@@ -202,6 +202,7 @@ namespace GW2EIEvtcParser.ParsedData
         public string Name { get; }
         public string Icon { get; }
         private readonly WeaponDescriptor _weaponDescriptor;
+        public bool IsWeaponSkill => _weaponDescriptor != null;
         internal GW2APISkill ApiSkill { get; }
         private SkillInfoEvent _skillInfo { get; set; }
 
