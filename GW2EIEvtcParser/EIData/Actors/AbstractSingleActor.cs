@@ -410,6 +410,16 @@ namespace GW2EIEvtcParser.EIData
             return -1.0;
         }
 
+        public Point3D GetCurrentPosition(ParsedEvtcLog log, long time)
+        {
+            IReadOnlyList<Point3D> positions = GetCombatReplayPolledPositions(log);
+            if (!positions.Any())
+            {
+                return null;
+            }
+            return positions.FirstOrDefault(x => x.Time >= time);
+        }
+
         public IReadOnlyCollection<Buff> GetTrackedBuffs(ParsedEvtcLog log)
         {
             if (_buffMap == null)

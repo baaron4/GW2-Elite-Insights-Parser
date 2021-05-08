@@ -249,5 +249,11 @@ namespace GW2EIEvtcParser.ParsedData
             AbstractSingleActor actor = log.FindActor(this);
             return actor.GetCurrentBarrierPercent(log, time);
         }
+
+        public Point3D GetCurrentPosition(ParsedEvtcLog log, long time)
+        {
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.GetCurrentPosition(log, time);
+        }
     }
 }

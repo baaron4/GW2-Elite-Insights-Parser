@@ -26,6 +26,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
+            // Skills
             new BuffDamageModifier(33902, "Sic 'Em!", "40%", DamageSource.NoPets, 40.0, DamageType.Power, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png", DamageModifierMode.PvE, (x, log) => {
                 AgentItem src = x.From;
                 AbstractBuffEvent effectApply = log.CombatData.GetBuffData(33902).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
@@ -53,11 +54,40 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return false;
             }),
+            // Marksmanship
+            new DamageLogApproximateDamageModifier("Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.All, Source.Ranger, "https://wiki.guildwars2.com/images/2/2f/Steady_Focus.png", (x, log) => {
+                if (!x.Skill.IsWeaponSkill)
+                {
+                    return false;
+                }
+                Point3D currentPosition = x.From.GetCurrentPosition(log, x.Time);
+                Point3D currentTargetPosition = x.To.GetCurrentPosition(log, x.Time);
+                if (currentPosition == null || currentTargetPosition == null)
+                {
+                    return false;
+                }
+                return currentPosition.DistanceToPoint(currentTargetPosition) <= 600.0;
+            }, ByPresence, 90455, ulong.MaxValue, DamageModifierMode.All),
+            new DamageLogApproximateDamageModifier("Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, Source.Ranger, "https://wiki.guildwars2.com/images/2/2f/Steady_Focus.png", (x, log) => {
+                if (!x.Skill.IsWeaponSkill)
+                {
+                    return false;
+                }
+                Point3D currentPosition = x.From.GetCurrentPosition(log, x.Time);
+                Point3D currentTargetPosition = x.To.GetCurrentPosition(log, x.Time);
+                if (currentPosition == null || currentTargetPosition == null)
+                {
+                    return false;
+                }
+                return currentPosition.DistanceToPoint(currentTargetPosition) > 600.0;
+            }, ByPresence, 90455, ulong.MaxValue, DamageModifierMode.All),
+            new BuffDamageModifierTarget(new long[] { 872, 833, 721, 727, 791, 722, 27705}, "Predator's Onslaught", "15% to disabled or movement-impaired foes", DamageSource.All, 15.0, DamageType.Power, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/a/ac/Predator%27s_Onslaught.png", DamageModifierMode.All),
+            // Skirmishing
             new DamageLogDamageModifier("Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, Source.Ranger,"https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png", (x, log) => x.IsFlanking , ByPresence, 102321, ulong.MaxValue, DamageModifierMode.All),
             new BuffDamageModifier(30673, "Light on your Feet", "10% (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/2/22/Light_on_your_Feet.png", DamageModifierMode.All),
-            new BuffDamageModifier(NumberOfBoonsID, "Bountiful Hunter", "1% per boon", DamageSource.All, 1.0, DamageType.Power, DamageType.All, Source.Ranger, ByStack, "https://wiki.guildwars2.com/images/2/25/Bountiful_Hunter.png", DamageModifierMode.All),
-            new BuffDamageModifierTarget(new long[] { 872, 833, 721, 727, 791, 722, 27705}, "Predator's Onslaught", "15% to disabled or movement-impaired foes", DamageSource.All, 15.0, DamageType.Power, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/a/ac/Predator%27s_Onslaught.png", DamageModifierMode.All)
-            // TODO Predator's Onslaught ? can daze and stun be tracked?
+            // Nature Magic
+            // We can't check buffs on minions yet
+            new BuffDamageModifier(NumberOfBoonsID, "Bountiful Hunter", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Power, DamageType.All, Source.Ranger, ByStack, "https://wiki.guildwars2.com/images/2/25/Bountiful_Hunter.png", DamageModifierMode.All),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

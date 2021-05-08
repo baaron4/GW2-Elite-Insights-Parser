@@ -284,24 +284,20 @@ namespace GW2EIParser
                 operation.UpdateProgressWithCancellationCheck("Multi threading");
                 var playersAndTargets = new List<AbstractSingleActor>(log.PlayerList);
                 playersAndTargets.AddRange(log.FightData.Logic.Targets);
-                foreach (AbstractSingleActor actor in playersAndTargets)
+                var playersAndTargetsAndMobs = new List<AbstractSingleActor>(log.FightData.Logic.TrashMobs);
+                playersAndTargetsAndMobs.AddRange(playersAndTargets);
+                foreach (AbstractSingleActor actor in playersAndTargetsAndMobs)
                 {
-                    // that part can't be //
+                    // that part can't be // due to buff extensions
                     actor.GetTrackedBuffs(log);
                 }
                 Parallel.ForEach(playersAndTargets, actor => actor.GetStatus(log));
-                if (log.CanCombatReplay)
+                if (log.CombatData.HasMovementData)
                 {
-                    var playersAndTargetsAndMobs = new List<AbstractSingleActor>(log.FightData.Logic.TrashMobs);
-                    playersAndTargetsAndMobs.AddRange(playersAndTargets);
                     // init all positions
                     Parallel.ForEach(playersAndTargetsAndMobs, actor => actor.GetCombatReplayPolledPositions(log));
                 }
-                else if (log.CombatData.HasMovementData)
-                {
-                    Parallel.ForEach(log.PlayerList, player => player.GetCombatReplayPolledPositions(log));
-                }
-                Parallel.ForEach(playersAndTargets, actor => actor.GetBuffGraphs(log));
+                Parallel.ForEach(playersAndTargetsAndMobs, actor => actor.GetBuffGraphs(log));
                 Parallel.ForEach(playersAndTargets, actor =>
                 {
                     foreach (PhaseData phase in phases)

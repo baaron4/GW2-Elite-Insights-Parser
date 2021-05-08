@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
-            new BuffDamageModifier(44414, "Laser's Edge", "15%", DamageSource.NoPets, 15.0, DamageType.Power, DamageType.All, Source.Holosmith, ByPresenceNonMulti, "https://wiki.guildwars2.com/images/5/5d/Laser%27s_Edge.png", 0, 97950, DamageModifierMode.PvE),
+            new BuffDamageModifier(44414, "Laser's Edge", "15%", DamageSource.NoPets, 15.0, DamageType.Power, DamageType.All, Source.Holosmith, ByPresenceNonMultiplier, "https://wiki.guildwars2.com/images/5/5d/Laser%27s_Edge.png", 0, 97950, DamageModifierMode.PvE),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

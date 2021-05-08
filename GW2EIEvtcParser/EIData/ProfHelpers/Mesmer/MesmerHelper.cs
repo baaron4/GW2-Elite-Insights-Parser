@@ -80,12 +80,37 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
-            new BuffDamageModifier(49058, "Compounding Power", "2% per stack (8s) after creating an illusion ", DamageSource.NoPets, 2.0, DamageType.Power, DamageType.All, Source.Mesmer, ByStack, "https://wiki.guildwars2.com/images/e/e5/Compounding_Power.png", DamageModifierMode.All),
+            // Domination
+            // Empowered illusions require knowing all illusion species ID
+            // We need illusion species ID to enable Vicious Expression on All
+            new BuffDamageModifierTarget(NumberOfBoonsID, "Vicious Expression", "25% on boonless target",  DamageSource.NoPets, 25.0, DamageType.Power, DamageType.All, Source.Mesmer, ByAbsence, "https://wiki.guildwars2.com/images/f/f6/Confounding_Suggestions.png", 102321, 102389, DamageModifierMode.PvE),
+            new BuffDamageModifierTarget(NumberOfBoonsID, "Vicious Expression", "15% on boonless target",  DamageSource.NoPets, 15.0, DamageType.Power, DamageType.All, Source.Mesmer, ByAbsence, "https://wiki.guildwars2.com/images/f/f6/Confounding_Suggestions.png", 102389, ulong.MaxValue, DamageModifierMode.All),
+            new DamageLogApproximateDamageModifier("Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, Source.Mesmer, "https://wiki.guildwars2.com/images/7/78/Temporal_Enchanter.png", (x,log) =>
+            {
+                var selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
+                var dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
+                if (selfHP < 0.0 || dstHP < 0.0)
+                {
+                    return false;
+                }
+                return selfHP > dstHP;
+            }, ByPresence, 92715, ulong.MaxValue, DamageModifierMode.PvE),
+            new DamageLogApproximateDamageModifier("Egotism", "5% if target hp% lower than self hp%", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.All, Source.Mesmer, "https://wiki.guildwars2.com/images/7/78/Temporal_Enchanter.png", (x,log) =>
+            {
+                var selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
+                var dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
+                if (selfHP < 0.0 || dstHP < 0.0)
+                {
+                    return false;
+                }
+                return selfHP > dstHP;
+            }, ByPresence, 92715, ulong.MaxValue, DamageModifierMode.sPvPWvW),
             new BuffDamageModifierTarget(738, "Fragility", "0.5% per stack vuln on target", DamageSource.NoPets, 0.5, DamageType.Power, DamageType.All, Source.Mesmer, ByStack, "https://wiki.guildwars2.com/images/3/33/Fragility.png", DamageModifierMode.All),
-            // Phantasmal Force would require activating buff tracking on minions, huge performance impact and some code impact
-            // TOCHECK Superiority Complex
-            new BuffDamageModifierTarget(NumberOfBoonsID, "Vicious Expression", "25% on boonless target",  DamageSource.All, 25.0, DamageType.Power, DamageType.All, Source.Mesmer, ByAbsence, "https://wiki.guildwars2.com/images/f/f6/Confounding_Suggestions.png", 102321, 102389, DamageModifierMode.PvE),
-            new BuffDamageModifierTarget(NumberOfBoonsID, "Vicious Expression", "15% on boonless target",  DamageSource.All, 15.0, DamageType.Power, DamageType.All, Source.Mesmer, ByAbsence, "https://wiki.guildwars2.com/images/f/f6/Confounding_Suggestions.png", 102389, ulong.MaxValue, DamageModifierMode.All),
+            // Dueling
+            // Superiority Complex can all the conditions be tracked?
+            // Illusions
+            new BuffDamageModifier(49058, "Compounding Power", "2% per stack (8s) after creating an illusion ", DamageSource.NoPets, 2.0, DamageType.Power, DamageType.All, Source.Mesmer, ByStack, "https://wiki.guildwars2.com/images/e/e5/Compounding_Power.png", DamageModifierMode.All),
+            // Phantasmal Force: the current infrastructure is not capable of checking buffs on minions, once we have that, this does not require knowing illusion species id
         };
 
 
