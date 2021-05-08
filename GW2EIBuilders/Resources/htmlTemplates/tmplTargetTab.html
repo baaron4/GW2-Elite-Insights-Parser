@@ -7,7 +7,9 @@
                 :tableid="'dmgtaken-target-'+targetindex" :phaseindex="phaseindex"></dmgtaken-component>
             <target-graph-tab-component v-for="(ph, id) in phases" v-if="mode === 2 && id === phaseindex" :key="id"
                 :targetindex="targetindex" :phaseindex="id" :light="light"></target-graph-tab-component>
-            <buff-stats-target-component v-if="mode === 3" :key="'buffs' + targetindex" :targetindex="targetindex"
+            <simplerotation-component v-if="mode === 3" :key="'rot' + targetindex" :actorindex="targetindex"
+                :phaseindex="phaseindex" :target="true"></simplerotation-component>
+            <buff-stats-target-component v-if="mode === 4" :key="'buffs' + targetindex" :targetindex="targetindex"
                 :phaseindex="phaseindex" :playerindex="playerindex"></buff-stats-target-component>
         </keep-alive>
     </div>
