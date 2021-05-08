@@ -125,7 +125,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             AgentItem dummyAgent = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, _detailed ? "Dummy WvW Agent" : "Enemy Players", "", (int)ArcDPSEnums.TargetID.WorldVersusWorld, true);
             ComputeFightTargets(agentData, combatData);
 
-            IReadOnlyList<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.EnemyPlayers);
+            IReadOnlyList<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.EnemyPlayer);
             if (_detailed)
             {
                 var set = new HashSet<string>();

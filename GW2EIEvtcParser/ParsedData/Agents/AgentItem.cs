@@ -9,9 +9,9 @@ namespace GW2EIEvtcParser.ParsedData
     {
 
         private static int AgentCount = 0;
-        public enum AgentType { NPC, Gadget, Player, EnemyPlayers}
+        public enum AgentType { NPC, Gadget, Player, EnemyPlayer}
 
-        public bool IsPlayer => Type == AgentType.Player || Type == AgentType.EnemyPlayers;
+        public bool IsPlayer => Type == AgentType.Player || Type == AgentType.EnemyPlayer;
         public bool IsFriendlyPlayer => Type == AgentType.Player;
         public bool IsNPC => Type == AgentType.NPC || Type == AgentType.Gadget;
 
@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser.ParsedData
                         else
                         {
                             Name = Prof + " " + Name;
-                            Type = AgentType.EnemyPlayers;
+                            Type = AgentType.EnemyPlayer;
                         }
                     }
                 }
