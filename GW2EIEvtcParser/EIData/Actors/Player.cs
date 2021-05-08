@@ -28,7 +28,7 @@ namespace GW2EIEvtcParser.EIData
 
         private readonly string _forceIcon = null;
 
-        private static int friendlyPlayerCount = 0;
+        private static int FriendlyPlayerCount = 0;
         // Constructors
         internal Player(AgentItem agent, bool noSquad) : base(agent)
         {
@@ -54,7 +54,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 IsCustomActor = true;
                 Group = 51;
-                Account = "Friendly Player " + (++friendlyPlayerCount);
+                Account = "Friendly Player " + (++FriendlyPlayerCount);
             }
         }
 
