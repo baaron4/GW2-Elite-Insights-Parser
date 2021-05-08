@@ -37,7 +37,7 @@ namespace GW2EIEvtcParser.EIData
             // Devastation
             new BuffDamageModifier(29395, "Vicious Lacerations", "3% per Stack", DamageSource.NoPets, 3.0, DamageType.Power, DamageType.All, Source.Revenant, ByStack, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", 92715, 102321, DamageModifierMode.PvE),
             new BuffDamageModifier(29395, "Vicious Lacerations", "2% per Stack", DamageSource.NoPets, 2.0, DamageType.Power, DamageType.All, Source.Revenant, ByStack, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", 0, 92715, DamageModifierMode.PvE),
-            new DamageLogApproximateDamageModifier("Unsuspecting Strikesr", "25% if hp > 80%", DamageSource.NoPets, 25.0, DamageType.Power, DamageType.All, Source.Revenant, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", (x,log) =>
+            new DamageLogApproximateDamageModifier("Unsuspecting Strikes", "25% if hp > 80%", DamageSource.NoPets, 25.0, DamageType.Power, DamageType.All, Source.Revenant, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", (x,log) =>
             {
                 var selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
                 if (selfHP < 0.0)

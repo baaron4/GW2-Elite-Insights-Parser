@@ -55,7 +55,7 @@ namespace GW2EIEvtcParser.EIData
                 return false;
             }),
             // Marksmanship
-            new DamageLogApproximateDamageModifier("Farsighted", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.All, Source.Ranger, "https://wiki.guildwars2.com/images/2/2f/Steady_Focus.png", (x, log) => {
+            new DamageLogApproximateDamageModifier("Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.All, Source.Ranger, "https://wiki.guildwars2.com/images/2/2f/Steady_Focus.png", (x, log) => {
                 if (!x.Skill.IsWeaponSkill)
                 {
                     return false;
@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return currentPosition.DistanceToPoint(currentTargetPosition) <= 600.0;
             }, ByPresence, 90455, ulong.MaxValue, DamageModifierMode.All),
-            new DamageLogApproximateDamageModifier("Farsighted", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, Source.Ranger, "https://wiki.guildwars2.com/images/2/2f/Steady_Focus.png", (x, log) => {
+            new DamageLogApproximateDamageModifier("Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, Source.Ranger, "https://wiki.guildwars2.com/images/2/2f/Steady_Focus.png", (x, log) => {
                 if (!x.Skill.IsWeaponSkill)
                 {
                     return false;
