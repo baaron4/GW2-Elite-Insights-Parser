@@ -39,6 +39,17 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifier(45600, "Twice as Vicious", "5% (10s) after disabling foe", DamageSource.NoPets, 5.0, DamageType.All, DamageType.All, Source.Soulbeast, ByPresence, "https://wiki.guildwars2.com/images/0/00/Twice_as_Vicious.png", 102321, ulong.MaxValue, DamageModifierMode.sPvPWvW),
             new BuffDamageModifier(725, "Furious Strength", "7% under fury", DamageSource.NoPets, 7.0, DamageType.Power, DamageType.All, Source.Soulbeast, ByStack, "https://wiki.guildwars2.com/images/c/ca/Furious_Strength.png", DamageModifierMode.All),
             new BuffDamageModifier(725, "Furious Strength", "10% under fury", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, Source.Soulbeast, ByStack, "https://wiki.guildwars2.com/images/c/ca/Furious_Strength.png", ulong.MaxValue, ulong.MaxValue, DamageModifierMode.All),
+            new BuffDamageModifier(new long[] { 40272, 44932, 44693, 41720, 40069}, "Loud Whistle", "10% while merged and hp > 90%", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, Source.Soulbeast, ByPresence, "https://wiki.guildwars2.com/images/b/b6/Loud_Whistle.png", 88541, ulong.MaxValue, DamageModifierMode.All, (x,log) => x.IsOverNinety),
+            new DamageLogApproximateDamageModifier("Oppressive Superiority", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, Source.Soulbeast, "https://wiki.guildwars2.com/images/f/fc/Oppressive_Superiority.png", (x,log) =>
+            {
+                var selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
+                var dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
+                if (selfHP < 0.0 || dstHP < 0.0)
+                {
+                    return false;
+                }
+                return selfHP > dstHP;
+            }, ByPresence, DamageModifierMode.All ),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
