@@ -22,6 +22,10 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
             new BuffDamageModifier(NumberOfBoonsID, "Reinforced Potency", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Power, DamageType.All, Source.Herald, ByStack, "https://wiki.guildwars2.com/images/0/0a/Envoy_of_Sustenance.png", DamageModifierMode.All),
+            // 
+            new BuffDamageModifier(new long[] { 27336, 29275, 28036, 28243, 27376, 27983}, "Forceful Persistence (Facets)", "4% per active Facet", DamageSource.NoPets, 4.0, DamageType.Power, DamageType.All, Source.Herald, ByMultiPresence, "https://wiki.guildwars2.com/images/5/5f/Forceful_Persistence.png", 92069, ulong.MaxValue, DamageModifierMode.PvE),
+            new BuffDamageModifier(new long[] { 27336, 29275, 28036, 28243, 27376, 27983}, "Forceful Persistence (Facets)", "3% per active Facet", DamageSource.NoPets, 3.0, DamageType.Power, DamageType.All, Source.Herald, ByMultiPresence, "https://wiki.guildwars2.com/images/5/5f/Forceful_Persistence.png", 92069, ulong.MaxValue, DamageModifierMode.sPvPWvW),
+            //new BuffDamageModifier(new long[] { 27273, 27581, 28001}, "Forceful Persistence", "13% if active upkeep", DamageSource.NoPets, 13.0, DamageType.Power, DamageType.All, Source.Herald, ByPresence, "https://wiki.guildwars2.com/images/5/5f/Forceful_Persistence.png", 92069, ulong.MaxValue, DamageModifierMode.All), // Hammers, Embrace, Impossible Odds but how to track Protective Solace?
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
