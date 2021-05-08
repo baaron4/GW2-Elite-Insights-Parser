@@ -82,7 +82,10 @@ namespace GW2EIEvtcParser.EIData
 
         internal void MakeSquadless()
         {
-            Group = 1;
+            if (!IsFakeActor)
+            {
+                Group = 1;
+            }
         }
 
         // Public methods
