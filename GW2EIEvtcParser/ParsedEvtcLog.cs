@@ -40,8 +40,8 @@ namespace GW2EIEvtcParser
             ParserSettings = parserSettings;
             _operation = operation;
             //
-            PlayerAgents = new HashSet<AgentItem>(playerList.Select(x => x.AgentItem));
             PlayerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
+            PlayerAgents = new HashSet<AgentItem>(playerList.Select(x => x.AgentItem));
             _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Combat Events");
             CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList, operation);
             _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Log Meta Data");
