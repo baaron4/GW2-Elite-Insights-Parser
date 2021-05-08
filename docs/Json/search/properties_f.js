@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['quickness',['Quickness',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_rotation_1_1_json_skill.html#a47d4140b22e314dbb9df61897f1ecedd',1,'GW2EIBuilders::JsonModels::JsonRotation::JsonSkill']]]
+  ['quickness',['Quickness',['../class_g_w2_e_i_j_s_o_n_1_1_json_rotation_1_1_json_skill.html#a59d2216cf47657099df9f0e031cfd33e',1,'GW2EIJSON::JsonRotation::JsonSkill']]]
 ];

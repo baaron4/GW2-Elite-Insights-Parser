@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['language',['Language',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_log.html#ac7ffd74a43fddfb6c9fcc66ab19a40cd',1,'GW2EIBuilders::JsonModels::JsonLog']]],
-  ['languageid',['LanguageID',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_log.html#ad084ec5129b1ee8e12f14f2890bef76b',1,'GW2EIBuilders::JsonModels::JsonLog']]],
-  ['lastaware',['LastAware',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_n_p_c.html#a7a7664eaceab98b1597fbfb4e852230a',1,'GW2EIBuilders::JsonModels::JsonNPC']]],
-  ['logerrors',['LogErrors',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_log.html#ab38f7daa99802f15faa83ec283eace7a',1,'GW2EIBuilders::JsonModels::JsonLog']]]
+  ['language',['Language',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a1644dfa11424c9f28b64347bf56dd00c',1,'GW2EIJSON::JsonLog']]],
+  ['languageid',['LanguageID',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ae12642cdb8b209e31ca150b4b198ad86',1,'GW2EIJSON::JsonLog']]],
+  ['lastaware',['LastAware',['../class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c.html#a132a00b4388c2a07e63bc8c62587fc5d',1,'GW2EIJSON::JsonNPC']]],
+  ['logerrors',['LogErrors',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a82b2a1783260afb40910a0abd28c9f3a',1,'GW2EIJSON::JsonLog']]]
 ];

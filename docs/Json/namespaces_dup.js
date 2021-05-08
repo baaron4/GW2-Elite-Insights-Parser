@@ -1,4 +1,4 @@
 var namespaces_dup =
 [
-    [ "GW2EIBuilders", "namespace_g_w2_e_i_builders.html", "namespace_g_w2_e_i_builders" ]
+    [ "GW2EIJSON", "namespace_g_w2_e_i_j_s_o_n.html", null ]
 ];

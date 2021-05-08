@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['fighticon',['FightIcon',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_log.html#ad94d4979eb99daf7ce98405365718f0e',1,'GW2EIBuilders::JsonModels::JsonLog']]],
-  ['fightname',['FightName',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_log.html#ad0951531e0badcb059a4a69249878446',1,'GW2EIBuilders::JsonModels::JsonLog']]],
-  ['finalhealth',['FinalHealth',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_n_p_c.html#a411e1b2c7ee7c912628b8d6fb6bc8662',1,'GW2EIBuilders::JsonModels::JsonNPC']]],
-  ['firstaware',['FirstAware',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_n_p_c.html#aa7f998f3607d710e41618703a16001ca',1,'GW2EIBuilders::JsonModels::JsonNPC']]],
-  ['flank',['Flank',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_damage_dist.html#a8372c61aeb68f71cbb311df8f052dd9d',1,'GW2EIBuilders::JsonModels::JsonDamageDist']]],
-  ['flankingrate',['FlankingRate',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_statistics_1_1_json_gameplay_stats.html#ad8646e5a33c7040c587c104bd36b2a80',1,'GW2EIBuilders::JsonModels::JsonStatistics::JsonGameplayStats']]],
-  ['friendlynpc',['FriendlyNPC',['../class_g_w2_e_i_builders_1_1_json_models_1_1_json_player.html#a2e5c828ab414db6f52c8f9166a4d45ea',1,'GW2EIBuilders::JsonModels::JsonPlayer']]]
+  ['fighticon',['FightIcon',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ab39cc6c413503e7aab1d30ba935ffda2',1,'GW2EIJSON::JsonLog']]],
+  ['fightname',['FightName',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ab27aa1635469fe3020b5d104b12772e4',1,'GW2EIJSON::JsonLog']]],
+  ['finalhealth',['FinalHealth',['../class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c.html#af9285ee9e50a2236809e9eeba28a8ab2',1,'GW2EIJSON::JsonNPC']]],
+  ['firstaware',['FirstAware',['../class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c.html#a542d10d476c183c453814065da6f6223',1,'GW2EIJSON::JsonNPC']]],
+  ['flank',['Flank',['../class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html#a89a82095fb77ff16b55511c3d2d7d833',1,'GW2EIJSON::JsonDamageDist']]],
+  ['flankingrate',['FlankingRate',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a624c5f9a3ad7c3455f63400e34f4f6c1',1,'GW2EIJSON::JsonStatistics::JsonGameplayStats']]],
+  ['friendlynpc',['FriendlyNPC',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a2c1c95eacc9d6e6ef230e113c1377896',1,'GW2EIJSON::JsonPlayer']]]
 ];
