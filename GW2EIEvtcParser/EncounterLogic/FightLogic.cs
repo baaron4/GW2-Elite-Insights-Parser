@@ -302,13 +302,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<AbstractBuffEvent>();
         }
 
-
-
-        internal virtual void SpecialActorProcess(CombatData combatData, List<Player> players, HashSet<AgentItem> playerAgents)
-        {
-
-        }
-
         protected static void NegateDamageAgainstBarrier(List<AgentItem> agentItems, Dictionary<AgentItem, List<AbstractHealthDamageEvent>> damageByDst)
         {
             var dmgEvts = new List<AbstractHealthDamageEvent>();

@@ -133,7 +133,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         continue;
                     }
-                    AgentItem sacrificeCrystal = agentData.AddCustomAgent(sacrificeStartTime, sacrificeEndTime + 100, AgentItem.AgentType.NPC, "Sacrificed " + (i + 1) + " " + sacrifice.Character, sacrifice.Prof, (int)ArcDPSEnums.TrashID.MatthiasSacrificeCrystal);
+                    AgentItem sacrificeCrystal = agentData.AddCustomAgent(sacrificeStartTime, sacrificeEndTime + 100, AgentItem.AgentType.NPC, "Sacrificed " + (i + 1) + " " + sacrifice.Character, sacrifice.Prof, (int)ArcDPSEnums.TrashID.MatthiasSacrificeCrystal, false);
                     foreach (CombatItem cbt in combatData)
                     {
                         if (!sacrificeCrystal.InAwareTimes(cbt.Time))

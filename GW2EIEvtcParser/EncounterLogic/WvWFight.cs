@@ -120,43 +120,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             fightData.SetSuccess(true, fightData.FightEnd);
         }
 
-        internal override void SpecialActorProcess(CombatData combatData, List<Player> players, HashSet<AgentItem> playerAgents)
-        {
-            var npcsToRemove = new HashSet<NPC>();
-            var playersToAdd = new HashSet<NPC>();
-            foreach (NPC npc in _targets)
-            {
-                if (npc.AgentItem.Type == AgentItem.AgentType.EnemyPlayers)
-                {
-                    IReadOnlyList<AbstractHealthDamageEvent> damageTaken = combatData.GetDamageTakenData(npc.AgentItem);
-                    if (!damageTaken.Any(x => playerAgents.Contains(x.CreditedFrom)))
-                    {
-                        npcsToRemove.Add(npc);
-                    }
-                    IReadOnlyList<AbstractBuffEvent> buffReceived = combatData.GetBuffData(npc.AgentItem);
-                    if (buffReceived.Any(x => playerAgents.Contains(x.CreditedBy) && x.ToFriendly))
-                    {
-                        playersToAdd.Add(npc);
-                    }
-                }
-            }
-
-            _targets.RemoveAll(x => npcsToRemove.Contains(x));
-
-            int currentCount = 0;
-            foreach (NPC npc in playersToAdd)
-            {
-                players.Add(new Player(npc.AgentItem, "Friendly Player " + (++currentCount), ParserHelper.GetHighResolutionProfIcon(npc.Prof)));
-                playerAgents.Add(npc.AgentItem);
-            }
-        }
-
         internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
-            AgentItem dummyAgent = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, _detailed ? "Dummy WvW Agent" : "Enemy Players", "", (int)ArcDPSEnums.TargetID.WorldVersusWorld);
+            AgentItem dummyAgent = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, _detailed ? "Dummy WvW Agent" : "Enemy Players", "", (int)ArcDPSEnums.TargetID.WorldVersusWorld, true);
             ComputeFightTargets(agentData, combatData);
 
-            var aList = agentData.GetAgentByType(AgentItem.AgentType.EnemyPlayers).ToList();
+            IReadOnlyList<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.EnemyPlayers);
             if (_detailed)
             {
                 var set = new HashSet<string>();
@@ -209,7 +178,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
-
         }
     }
 }

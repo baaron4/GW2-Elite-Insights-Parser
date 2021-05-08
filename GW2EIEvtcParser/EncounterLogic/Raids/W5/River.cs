@@ -80,7 +80,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
-            agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, "River of Souls", "", (int)ArcDPSEnums.TargetID.DummyTarget);
+            agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, "River of Souls", "", (int)ArcDPSEnums.TargetID.DummyTarget, true);
             // The walls and bombers spawn at the start of the encounter, we fix it by overriding their first aware to the first velocity change event
             var agentsToOverrideFirstAware = new List<AgentItem>(agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.RiverOfSouls));
             agentsToOverrideFirstAware.AddRange(agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.HollowedBomber));
