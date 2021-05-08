@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterCategoryInformation.SubCategory = SubFightCategory.ShatteredObservatory;
         }
 
-        protected static HashSet<AgentItem> GetParticipatingPlayerAgents(NPC target, CombatData combatData, HashSet<AgentItem> playerAgents)
+        protected static HashSet<AgentItem> GetParticipatingPlayerAgents(NPC target, CombatData combatData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             if (target == null)
             {

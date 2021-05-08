@@ -374,7 +374,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return FightData.CMStatus.NoCM;
         }
 
-        protected void SetSuccessByDeath(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, bool all, int idFirst, params int[] ids)
+        protected void SetSuccessByDeath(CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all, int idFirst, params int[] ids)
         {
             var idsToUse = new List<int>
             {
@@ -384,7 +384,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             SetSuccessByDeath(combatData, fightData, playerAgents, all, idsToUse);
         }
 
-        protected void SetSuccessByDeath(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, bool all, List<int> idsToUse)
+        protected void SetSuccessByDeath(CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all, List<int> idsToUse)
         {
             int success = 0;
             long maxTime = long.MinValue;
@@ -414,7 +414,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        protected static bool AtLeastOnePlayerAlive(CombatData combatData, FightData fightData, long timeToCheck, HashSet<AgentItem> playerAgents)
+        protected static bool AtLeastOnePlayerAlive(CombatData combatData, FightData fightData, long timeToCheck, IReadOnlyCollection<AgentItem> playerAgents)
         {
             int playerDeadOrDCCount = 0;
             foreach (AgentItem playerAgent in playerAgents)
@@ -439,7 +439,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return true;
         }
 
-        protected static void SetSuccessByCombatExit(List<NPC> targets, CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
+        protected static void SetSuccessByCombatExit(List<NPC> targets, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             if (targets.Count == 0)
             {
@@ -477,7 +477,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal virtual void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        internal virtual void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             SetSuccessByDeath(combatData, fightData, playerAgents, true, GenericTriggerID);
         }

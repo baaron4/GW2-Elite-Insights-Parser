@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
@@ -11,6 +12,10 @@ namespace GW2EIEvtcParser.EIData
         // Constructors
         internal NPC(AgentItem agent) : base(agent)
         {
+            if (agent.IsFriendlyPlayer)
+            {
+                throw new EvtcAgentException("Agent is a friendly player");
+            }
         }
 
         public IReadOnlyList<Segment> GetBreakbarPercentUpdates(ParsedEvtcLog log)
@@ -29,7 +34,7 @@ namespace GW2EIEvtcParser.EIData
 
         public override string GetIcon()
         {
-            return AgentItem.Type == AgentItem.AgentType.EnemyPlayer ? ParserHelper.GetHighResolutionProfIcon(Prof) : ParserHelper.GetNPCIcon(ID);
+            return AgentItem.IsPlayer ? ParserHelper.GetHighResolutionProfIcon(Prof) : ParserHelper.GetNPCIcon(ID);
         }
 
         public IReadOnlyDictionary<long, FinalBuffs> GetBuffs(ParsedEvtcLog log, long start, long end)
@@ -94,7 +99,7 @@ namespace GW2EIEvtcParser.EIData
                 SpawnEvent spawnCheck = log.CombatData.GetSpawnEvents(AgentItem).LastOrDefault();
                 DeadEvent deathCheck = log.CombatData.GetDeadEvents(AgentItem).LastOrDefault();
                 AliveEvent aliveCheck = log.CombatData.GetAliveEvents(AgentItem).LastOrDefault();
-                if (AgentItem.Type != AgentItem.AgentType.EnemyPlayer && deathCheck != null && (aliveCheck == null || aliveCheck.Time < deathCheck.Time))
+                if (!AgentItem.IsPlayer && deathCheck != null && (aliveCheck == null || aliveCheck.Time < deathCheck.Time))
                 {
                     CombatReplay.Trim(AgentItem.FirstAware, deathCheck.Time);
                 }

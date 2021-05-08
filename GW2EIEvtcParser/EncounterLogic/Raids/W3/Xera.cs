@@ -65,7 +65,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return res;
         }
 
-        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             if (_xeraSecondPhaseStartTime == 0)
             {

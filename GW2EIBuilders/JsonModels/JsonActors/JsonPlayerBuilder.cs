@@ -2,6 +2,7 @@
 using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
 using Newtonsoft.Json;
 using static GW2EIEvtcParser.ParserHelper;
@@ -26,7 +27,8 @@ namespace GW2EIBuilders.JsonModels
             jsonPlayer.Weapons = player.GetWeaponsArray(log).Select(w => w ?? "Unknown").ToArray();
             jsonPlayer.Group = player.Group;
             jsonPlayer.Profession = player.Prof;
-            jsonPlayer.FriendlyNPC = player.IsCustomActor;
+            jsonPlayer.FriendlyNPC = player.AgentItem.IsNPC;
+            jsonPlayer.NotInSquad = player.AgentItem.IsNotInSquadPlayer;
             jsonPlayer.ActiveTimes = phases.Select(x => player.GetActiveDuration(log, x.Start, x.End)).ToList();
             jsonPlayer.HasCommanderTag = player.HasCommanderTag;
             //

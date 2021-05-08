@@ -758,7 +758,7 @@ namespace GW2EIEvtcParser.EIData
             if (DamageEvents == null)
             {
                 DamageEvents = new List<AbstractHealthDamageEvent>();
-                DamageEvents.AddRange(log.CombatData.GetDamageData(AgentItem).Where(x => x.IFF != ArcDPSEnums.IFF.Friend));
+                DamageEvents.AddRange(log.CombatData.GetDamageData(AgentItem).Where(x => !x.ToFriendly));
                 IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log);
                 foreach (Minions mins in minionsList.Values)
                 {
@@ -796,7 +796,7 @@ namespace GW2EIEvtcParser.EIData
             if (BreakbarDamageEvents == null)
             {
                 BreakbarDamageEvents = new List<AbstractBreakbarDamageEvent>();
-                BreakbarDamageEvents.AddRange(log.CombatData.GetBreakbarDamageData(AgentItem).Where(x => x.IFF != ArcDPSEnums.IFF.Friend));
+                BreakbarDamageEvents.AddRange(log.CombatData.GetBreakbarDamageData(AgentItem).Where(x => !x.ToFriendly));
                 IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log);
                 foreach (Minions mins in minionsList.Values)
                 {

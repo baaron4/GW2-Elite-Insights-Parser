@@ -14,10 +14,10 @@ namespace GW2EIEvtcParser
         public AgentData AgentData { get; }
         public SkillData SkillData { get; }
         public CombatData CombatData { get; }
-        public List<Player> PlayerList { get; }
-        public HashSet<AgentItem> PlayerAgents { get; }
+        public IReadOnlyList<Player> PlayerList { get; }
+        public IReadOnlyCollection<AgentItem> PlayerAgents { get; }
         public bool IsBenchmarkMode => FightData.Logic.Mode == FightLogic.ParseMode.Benchmark;
-        public Dictionary<string, List<Player>> PlayerListBySpec { get; }
+        public IReadOnlyDictionary<string, List<Player>> PlayerListBySpec { get; }
         public DamageModifiersContainer DamageModifiers { get; }
         public BuffsContainer Buffs { get; }
         public EvtcParserSettings ParserSettings { get; }

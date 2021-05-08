@@ -5,7 +5,7 @@
 "use strict";
 //// ACTORS
 class IconDrawable {
-    constructor(start, end, imgSrc, pixelSize) {
+    constructor(start, end, imgSrc, pixelSize, dead, down, dc) {
         this.pos = null;
         this.start = start;
         this.end = end;
@@ -17,9 +17,60 @@ class IconDrawable {
         this.pixelSize = pixelSize;
         this.selected = false;
         this.group = null;
+        this.dead = dead;
+        this.down = down;
+        this.dc = dc;
+    }
+
+    died() {
+        if (this.dead === null || this.dead.length === 0) {
+            return false;
+        }
+        var time = animator.reactiveDataStatus.time;
+        for (let i = 0; i < this.dead.length; i += 2) {
+            if (this.dead[i] <= time && this.dead[i + 1] >= time) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    downed() {
+        if (this.down === null || this.down.length === 0) {
+            return false;
+        }
+        var time = animator.reactiveDataStatus.time;
+        for (let i = 0; i < this.down.length; i += 2) {
+            if (this.down[i] <= time && this.down[i + 1] >= time) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    disconnected() {
+        if (this.dc === null || this.dc.length === 0) {
+            return false;
+        }
+        var time = animator.reactiveDataStatus.time;
+        for (let i = 0; i < this.dc.length; i += 2) {
+            if (this.dc[i] <= time && this.dc[i + 1] >= time) {
+                return true;
+            }
+        }
+        return false;
     }
 
     getIcon() {
+        if (this.died()) {
+            return deadIcon;
+        }
+        if (this.downed()) {
+            return downIcon;
+        }
+        if (this.disconnected()) {
+            return dcIcon;
+        }
         return this.img;
     }
 
@@ -107,71 +158,25 @@ class IconDrawable {
 
 class PlayerIconDrawable extends IconDrawable {
     constructor(imgSrc, pixelSize, group, pos, dead, down, dc) {
-        super(-1, -1, imgSrc, pixelSize);
+        super(-1, -1, imgSrc, pixelSize, dead, down, dc);
         this.pos = pos;
-        this.dead = dead;
-        this.down = down;
-        this.dc = dc;
         this.group = group;
-    }
-
-    died() {
-        if (this.dead === null || this.dead.length === 0) {
-            return false;
-        }
-        var time = animator.reactiveDataStatus.time;
-        for (let i = 0; i < this.dead.length; i += 2) {
-            if (this.dead[i] <= time && this.dead[i + 1] >= time) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    downed() {
-        if (this.down === null || this.down.length === 0) {
-            return false;
-        }
-        var time = animator.reactiveDataStatus.time;
-        for (let i = 0; i < this.down.length; i += 2) {
-            if (this.down[i] <= time && this.down[i + 1] >= time) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    disconnected() {
-        if (this.dc === null || this.dc.length === 0) {
-            return false;
-        }
-        var time = animator.reactiveDataStatus.time;
-        for (let i = 0; i < this.dc.length; i += 2) {
-            if (this.dc[i] <= time && this.dc[i + 1] >= time) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    getIcon() {
-        if (this.died()) {
-            return deadIcon;
-        }
-        if (this.downed()) {
-            return downIcon;
-        }
-        if (this.disconnected()) {
-            return dcIcon;
-        }
-        return this.img;
     }
 
 }
 
 class EnemyIconDrawable extends IconDrawable {
-    constructor(start, end, imgSrc, pixelSize, pos) {
-        super(start, end, imgSrc, pixelSize);
+    constructor(start, end, imgSrc, pixelSize, pos, dead, down, dc) {
+        if (!dead) {
+            dead = null;
+        }
+        if (!down) {
+            down = null;
+        }
+        if (!dc) {
+            dc = null;
+        }
+        super(start, end, imgSrc, pixelSize, dead, down, dc);
         this.pos = pos;
     }
 }

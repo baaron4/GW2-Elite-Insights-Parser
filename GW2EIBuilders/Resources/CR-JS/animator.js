@@ -167,10 +167,10 @@ class Animator {
                     }
                     break;
                 case "Target":
-                    this.targetData.set(actor.id, new EnemyIconDrawable(actor.start, actor.end, actor.img, 30, actor.positions));
+                    this.targetData.set(actor.id, new EnemyIconDrawable(actor.start, actor.end, actor.img, 30, actor.positions, actor.dead, actor.down, actor.dc));
                     break;
                 case "Mob":
-                    this.trashMobData.set(actor.id, new EnemyIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions));
+                    this.trashMobData.set(actor.id, new EnemyIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc));
                     break;
                 case "Circle":
                     this.mechanicActorData.push(new CircleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inch * actor.radius, actor.connectedTo, this.inch * actor.minRadius));

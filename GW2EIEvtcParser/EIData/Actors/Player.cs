@@ -28,29 +28,49 @@ namespace GW2EIEvtcParser.EIData
 
         private readonly string _forceIcon = null;
 
-
+        private static int FriendlyPlayerCount = 0;
         // Constructors
-        internal Player(AgentItem agent, bool noSquad, bool dummy) : base(agent)
+        internal Player(AgentItem agent, bool noSquad) : base(agent)
         {
-            string[] name = agent.Name.Split('\0');
-            if (name.Length < 2)
+            if (agent.Type != AgentItem.AgentType.Player)
             {
-                throw new EvtcAgentException("Name problem on Player");
+                throw new EvtcAgentException("Agent is not a Player");
             }
-            if (name[1].Length == 0 || name[2].Length == 0 || Character.Contains("-"))
+            if (!agent.IsNotInSquadPlayer)
             {
-                throw new EvtcAgentException("Missing Group on Player");
+                string[] name = agent.Name.Split('\0');
+                if (name.Length < 2)
+                {
+                    throw new EvtcAgentException("Name problem on Player");
+                }
+                if (name[1].Length == 0 || name[2].Length == 0 || Character.Contains("-"))
+                {
+                    throw new EvtcAgentException("Missing Group on Player");
+                }
+                Account = name[1].TrimStart(':');
+                Group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
+            } 
+            else
+            {
+                IsCustomActor = true;
+                Group = 51;
+                Account = "Friendly Player " + (++FriendlyPlayerCount);
             }
-            Account = name[1].TrimStart(':');
-            Group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
-            IsDummyActor = dummy;
         }
 
-        internal Player(AgentItem agent, string account, string icon) : base(agent)
+        internal Player(AgentItem agent, string account) : base(agent)
         {
+            if (agent.Type == AgentItem.AgentType.Player)
+            {
+                throw new EvtcAgentException("Agent is Player, use proper player constructor");
+            }
             Account = account;
             Group = 51;
-            IsCustomActor = true;
+            IsCustomActor = !IsDummyActor;
+        }
+
+        internal Player(AgentItem agent, string account, string icon) : this(agent, account)
+        {
             _forceIcon = icon;
         }
 
@@ -62,7 +82,10 @@ namespace GW2EIEvtcParser.EIData
 
         internal void MakeSquadless()
         {
-            Group = 1;
+            if (!IsFakeActor)
+            {
+                Group = 1;
+            }
         }
 
         // Public methods
@@ -195,8 +218,7 @@ namespace GW2EIEvtcParser.EIData
 
         public IReadOnlyDictionary<string, DamageModifierStat> GetDamageModifierStats(NPC target, ParsedEvtcLog log, long start, long end)
         {
-            // If conjured sword, targetless or WvW, stop
-            if (!log.ParserSettings.ComputeDamageModifiers || IsDummyActor || log.FightData.Logic.Targetless)
+            if (!log.ParserSettings.ComputeDamageModifiers || IsDummyActor)
             {
                 return new Dictionary<string, DamageModifierStat>();
             }

@@ -161,7 +161,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     long darkModeStart = combatData.FirstOrDefault(x => x.SkillID == 61277 && x.Time >= darkModePhaseEvent.Time).Time;
                     CombatItem invul895Loss = combatData.FirstOrDefault(x => x.Time <= darkModeStart && x.SkillID == 895 && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All);
                     long lastAwareTime = (invul895Loss != null ? invul895Loss.Time : darkModeStart);
-                    AgentItem darkAiAgent = agentData.AddCustomAgent(lastAwareTime + 1, aiAgent.LastAware, AgentItem.AgentType.NPC, aiAgent.Name, aiAgent.Prof, (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2, aiAgent.Toughness, aiAgent.Healing, aiAgent.Condition, aiAgent.Concentration, aiAgent.HitboxWidth, aiAgent.HitboxHeight);
+                    AgentItem darkAiAgent = agentData.AddCustomAgent(lastAwareTime + 1, aiAgent.LastAware, AgentItem.AgentType.NPC, aiAgent.Name, aiAgent.Prof, (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2, false, aiAgent.Toughness, aiAgent.Healing, aiAgent.Condition, aiAgent.Concentration, aiAgent.HitboxWidth, aiAgent.HitboxHeight);
                     aiAgent.OverrideAwareTimes(aiAgent.FirstAware, lastAwareTime);
                     // Redirect combat events
                     foreach (CombatItem evt in combatData)
@@ -350,7 +350,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             int status = 0;
             if (_hasElementalMode)

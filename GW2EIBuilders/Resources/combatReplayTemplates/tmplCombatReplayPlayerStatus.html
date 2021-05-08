@@ -10,7 +10,7 @@
         <p v-if="hasBarrier" class="text-right cr-barrier-display cr-barrier-display-player">
             {{(Math.round(100*getBarrierPercent(time))/100).toFixed(2)}} %
         </p>      
-        <div v-if="hasBarrier" class="cr-barrier" :style="{'background': getBarrierGradient(time, status)}">
+        <div v-if="hasBarrier" class="cr-barrier" :style="{'background': getBarrierGradient(time)}">
 
         </div>
     </div>
@@ -37,7 +37,7 @@
                 var color = status === 0 ? 'black' : status === 1 ? 'red' : status === 2 ? 'grey' : 'green';
                 return computeGradient(color, this.getHPPercent(time), 'black');
             },    
-            getBarrierGradient: function (time, status) {
+            getBarrierGradient: function (time) {
                 return computeGradient('rgba(0,0,0,0)', 100 - this.getBarrierPercent(time), 'rgba(228,148,97, 0.5)' );
             }, 
         },

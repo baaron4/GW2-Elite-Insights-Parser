@@ -115,17 +115,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             return _defaultName;
         }
 
-        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             fightData.SetSuccess(true, fightData.FightEnd);
         }
 
         internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
-            AgentItem dummyAgent = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, _detailed ? "Dummy WvW Agent" : "Enemy Players", "", (int)ArcDPSEnums.TargetID.WorldVersusWorld);
+            AgentItem dummyAgent = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, _detailed ? "Dummy WvW Agent" : "Enemy Players", "", (int)ArcDPSEnums.TargetID.WorldVersusWorld, true);
             ComputeFightTargets(agentData, combatData);
 
-            var aList = agentData.GetAgentByType(AgentItem.AgentType.EnemyPlayer).ToList();
+            IReadOnlyList<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.EnemyPlayer);
             if (_detailed)
             {
                 var set = new HashSet<string>();
@@ -178,7 +178,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
-
         }
     }
 }
