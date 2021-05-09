@@ -149,7 +149,7 @@
             };
         },
         mounted() {
-            initTable("#dps-table", logData.targetless ? hasBreakbarDamage ? 8 : 7 : 4, "desc");
+            initTable("#dps-table", logData.targetless ? this.hasBreakbarDamage ? 8 : 7 : 4, "desc");
         },
         updated() {
             updateTable("#dps-table");

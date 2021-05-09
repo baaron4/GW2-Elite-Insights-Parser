@@ -17,9 +17,9 @@ class IconDrawable {
         this.pixelSize = pixelSize;
         this.selected = false;
         this.group = null;
-        this.dead = dead;
-        this.down = down;
-        this.dc = dc;
+        this.dead = typeof dead !== "undefined" ? dead : null;
+        this.down = typeof down !== "undefined" ? down : null;
+        this.dc = typeof dc !== "undefined" ? dc : null;
     }
 
     died() {
@@ -167,15 +167,6 @@ class PlayerIconDrawable extends IconDrawable {
 
 class EnemyIconDrawable extends IconDrawable {
     constructor(start, end, imgSrc, pixelSize, pos, dead, down, dc) {
-        if (!dead) {
-            dead = null;
-        }
-        if (!down) {
-            down = null;
-        }
-        if (!dc) {
-            dc = null;
-        }
         super(start, end, imgSrc, pixelSize, dead, down, dc);
         this.pos = pos;
     }

@@ -63,6 +63,9 @@
                     current: null,
                     nexts: []
                 };
+                if (this.actorRotation.length === 0) {
+                    return res;
+                }
                 var time = this.timeToUse / 1000.0;
                 var id = this.findRotationIndex(this.actorRotation, time, 0, this.actorRotation.length - 1);
                 var j, next;
