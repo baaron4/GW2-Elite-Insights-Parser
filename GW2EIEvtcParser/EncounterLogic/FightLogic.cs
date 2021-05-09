@@ -131,6 +131,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     _targets.Add(new NPC(agentItem));
                 }
             }
+            _targets.Sort((x, y) => x.FirstAware.CompareTo(y.FirstAware));
             List<ArcDPSEnums.TrashID> ids2 = GetTrashMobsIDS();
             var aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids2.Contains(ArcDPSEnums.GetTrashID(x.ID))).ToList();
             //aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
@@ -138,6 +139,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 _trashMobs.Add(new NPC(a));
             }
+            _trashMobs.Sort((x, y) => x.FirstAware.CompareTo(y.FirstAware));
         }
 
         protected static List<PhaseData> GetPhasesByHealthPercent(ParsedEvtcLog log, NPC mainTarget, List<double> thresholds)
