@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
             // Skills
-            new BuffDamageModifier(33902, "Sic 'Em!", "40%", DamageSource.NoPets, 40.0, DamageType.Power, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png", DamageModifierMode.PvE, (x, log) => {
+            new BuffDamageModifier(33902, "Sic 'Em!", "40%", DamageSource.NoPets, 40.0, DamageType.Power, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png", 0, 114788, DamageModifierMode.PvE, (x, log) => {
                 AgentItem src = x.From;
                 AbstractBuffEvent effectApply = log.CombatData.GetBuffData(33902).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
                 if (effectApply != null)
@@ -36,7 +36,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return false;
             }),
-            new BuffDamageModifier(56923, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Power, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png", DamageModifierMode.sPvPWvW, (x, log) => {
+            new BuffDamageModifier(33902, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Power, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png", 0, 114788, DamageModifierMode.sPvPWvW, (x, log) => {
                 AgentItem src = x.From;
                 AbstractBuffEvent effectApply = log.CombatData.GetBuffData(33902).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
                 if (effectApply != null)
@@ -45,7 +45,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return false;
             }),
-            new BuffDamageModifier(56923, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Power, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png", ulong.MaxValue, ulong.MaxValue, DamageModifierMode.All, (x, log) => {
+            new BuffDamageModifier(33902, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Power, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png", 114788, ulong.MaxValue, DamageModifierMode.All, (x, log) => {
                 AgentItem src = x.From;
                 AbstractBuffEvent effectApply = log.CombatData.GetBuffData(33902).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
                 if (effectApply != null)
