@@ -39,6 +39,10 @@ namespace GW2EIBuilders.JsonModels
                 var descriptions = new List<string>(){
                         "Max Stack(s) " + item.Capacity
                     };
+                if (item.DurationCap > 0)
+                {
+                    descriptions.Add("Duration Cap: " + item.DurationCap + " seconds");
+                }
                 foreach (BuffFormula formula in buffInfoEvent.Formulas)
                 {
                     if (formula.IsConditional)

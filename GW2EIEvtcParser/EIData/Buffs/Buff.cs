@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using GW2EIEvtcParser.Interfaces;
 using GW2EIEvtcParser.ParsedData;
@@ -85,6 +86,8 @@ namespace GW2EIEvtcParser.EIData
         private ulong _maxBuild { get; } = ulong.MaxValue;
         private ulong _minBuild { get; } = ulong.MinValue;
         public int Capacity { get; private set; }
+
+        public double DurationCap { get; private set; } = 0;
         public string Link { get; }
 
         /// <summary>
@@ -149,6 +152,7 @@ namespace GW2EIEvtcParser.EIData
                 operation.UpdateProgressWithCancellationCheck("Adjusted capacity for " + Name + " from " + Capacity + " to " + buffInfoEvent.MaxStacks);
                 Capacity = buffInfoEvent.MaxStacks;
             }
+            DurationCap = Math.Round(buffInfoEvent.DurationCap / 1000.0, 3);
             /*if (buffInfoEvent.StackingType != StackType)
             {
                 //_stackType = buffInfoEvent.StackingType; // might be unreliable due to its absence on some logs

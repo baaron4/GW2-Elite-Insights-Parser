@@ -29,6 +29,10 @@ namespace GW2EIBuilders.HtmlModels
                 var descriptions = new List<string>() {
                     "Max Stack(s) " + buff.Capacity
                 };
+                if (buff.DurationCap > 0)
+                {
+                    descriptions.Add("Duration Cap: " + buff.DurationCap + " seconds");
+                }
                 foreach (BuffFormula formula in buffInfoEvent.Formulas)
                 {
                     if (formula.IsConditional)
