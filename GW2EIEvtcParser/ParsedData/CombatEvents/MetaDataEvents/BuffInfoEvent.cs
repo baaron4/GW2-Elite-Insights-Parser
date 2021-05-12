@@ -20,6 +20,7 @@ namespace GW2EIEvtcParser.ParsedData
         public bool ProbablyResistance { get; private set; }
 
         public ushort MaxStacks { get; private set; }
+        public uint DurationCap { get; private set; }
         public List<BuffFormula> Formulas { get; } = new List<BuffFormula>();
 
         internal BuffInfoEvent(CombatItem evtcItem) : base(evtcItem)
@@ -53,6 +54,7 @@ namespace GW2EIEvtcParser.ParsedData
             ProbablyInvert = evtcItem.IsShields > 0;
             Category = ArcDPSEnums.GetBuffCategory(evtcItem.IsOffcycle);
             MaxStacks = evtcItem.SrcMasterInstid;
+            DurationCap = evtcItem.OverstackValue;
             StackingTypeByte = evtcItem.Pad1;
             StackingType = ArcDPSEnums.GetBuffStackType(StackingTypeByte);
             ProbablyResistance = evtcItem.Pad2 > 0;
