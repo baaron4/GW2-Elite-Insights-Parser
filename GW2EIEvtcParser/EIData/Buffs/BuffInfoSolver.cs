@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using GW2EIEvtcParser.Interfaces;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
@@ -8,16 +9,18 @@ namespace GW2EIEvtcParser.EIData
     {
         private const int AnyPositive = int.MinValue;
         private const int AnyNegative = int.MaxValue;
-        private class BuffFormulaDescriptor
+        private class BuffFormulaDescriptor : IVersionable
         {
             private readonly float _constantOffset;
             private readonly float _levelOffset;
             private readonly float _variable;
             private readonly int _traitSrc;
             private readonly int _traitSelf;
+            private readonly ulong _minBuild;
+            private readonly ulong _maxBuild;
             private readonly ArcDPSEnums.BuffAttribute _result;
 
-            public BuffFormulaDescriptor(float constantOffset, float levelOffset, float variable, int traitSelf, int traitSrc, ArcDPSEnums.BuffAttribute result)
+            public BuffFormulaDescriptor(float constantOffset, float levelOffset, float variable, int traitSelf, int traitSrc, ArcDPSEnums.BuffAttribute result, ulong minBuild = 0, ulong maxBuild = ulong.MaxValue)
             {
                 _constantOffset = constantOffset;
                 _levelOffset = levelOffset;
@@ -25,6 +28,13 @@ namespace GW2EIEvtcParser.EIData
                 _traitSrc = traitSrc;
                 _traitSelf = traitSelf;
                 _result = result;
+                _minBuild = minBuild;
+                _maxBuild = maxBuild;
+            }
+
+            public bool Available(ulong gw2Build)
+            {
+                return gw2Build < _maxBuild && gw2Build >= _minBuild;
             }
 
             public bool Match(BuffFormula formula, Dictionary<byte, ArcDPSEnums.BuffAttribute> toFill)
@@ -62,9 +72,9 @@ namespace GW2EIEvtcParser.EIData
             // CriticalChance
             {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.CriticalChance), 725 },
             // Life Leech      
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.OutgoingLifeLeechEffectiveness), 42883 },
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.OutgoingLifeLeechEffectiveness), 45614 },
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, ArcDPSEnums.BuffAttribute.OutgoingLifeLeechEffectiveness), 725 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.OutgoingLifeLeechEffectiveness, 115190), 42883 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.OutgoingLifeLeechEffectiveness, 115190), 45614 },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, ArcDPSEnums.BuffAttribute.OutgoingLifeLeechEffectiveness, 115190), 725 },
             // ConditionDurationIncrease
             {new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, ArcDPSEnums.BuffAttribute.ConditionDurationIncrease), 725 },
             // SkillRechargeSpeedIncrease
@@ -104,11 +114,15 @@ namespace GW2EIEvtcParser.EIData
             { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.ConditionDamageToHP), 21665 },
         };
 
-        public static void AdjustBuffs(CombatData combatData, IReadOnlyDictionary<long, Buff> buffsByID, ParserController operation)
+        public static void AdjustBuffs(CombatData combatData, IReadOnlyDictionary<long, Buff> buffsByID, ParserController operation, ulong gw2Build)
         {
             var solved = new Dictionary<byte, ArcDPSEnums.BuffAttribute>();
             foreach (KeyValuePair<BuffFormulaDescriptor, long> pair in _recognizer)
             {
+                if (!pair.Key.Available(gw2Build))
+                {
+                    continue;
+                }
                 if (buffsByID.TryGetValue(pair.Value, out Buff buff))
                 {
                     BuffInfoEvent buffInfoEvent = combatData.GetBuffInfoEvent(buff.ID);

@@ -100,7 +100,7 @@ namespace GW2EIEvtcParser.EIData
             }
             //
             BuffsByIds = currentBuffs.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.First());
-            BuffInfoSolver.AdjustBuffs(combatData, BuffsByIds, operation);
+            BuffInfoSolver.AdjustBuffs(combatData, BuffsByIds, operation, build);
             foreach (Buff buff in currentBuffs)
             {
                 BuffInfoEvent buffInfoEvt = combatData.GetBuffInfoEvent(buff.ID);
