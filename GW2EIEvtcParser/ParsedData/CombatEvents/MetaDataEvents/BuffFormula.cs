@@ -65,7 +65,7 @@ namespace GW2EIEvtcParser.ParsedData
                 case SkillActivationDamageFormula:
                     return "Damage Formula on Skill Activation";
                 case MovementActivationDamageFormula:
-                    return "Damage Formula on Movement";
+                    return "Damage Formula based on Movement";
                 case EnduranceRegeneration:
                     return "Endurance Regeneration";
                 case IncomingHealingEffectiveness:
