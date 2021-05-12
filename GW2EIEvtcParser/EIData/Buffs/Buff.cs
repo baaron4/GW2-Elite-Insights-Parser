@@ -46,7 +46,7 @@ namespace GW2EIEvtcParser.EIData
             GearBuffTable,
             GraphOnlyBuff,
             Consumable,
-            Unknow
+            Unknown
         };
 
         public enum BuffType
@@ -129,7 +129,7 @@ namespace GW2EIEvtcParser.EIData
             Source = Source.Unknown;
             StackType = BuffStackType.Unknown;
             Capacity = 1;
-            Nature = BuffNature.Unknow;
+            Nature = BuffNature.Unknown;
             Link = link;
         }
 
