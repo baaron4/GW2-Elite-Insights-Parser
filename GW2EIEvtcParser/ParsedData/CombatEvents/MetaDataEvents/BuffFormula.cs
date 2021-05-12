@@ -41,6 +41,8 @@ namespace GW2EIEvtcParser.ParsedData
                     return "Outgoing Physical Damage";
                 case CondInc:
                     return "Outgoing Condition Damage";
+                case OutgoingLifeLeechEffectiveness:
+                    return "Outgoing Life Leech Damage";
                 case CondRec:
                     return "Incoming Condition Damage";
                 case PhysRec:
@@ -135,6 +137,7 @@ namespace GW2EIEvtcParser.ParsedData
                 case ConditionDamageToHP:
                 case EnduranceRegeneration:
                 case IncomingHealingEffectiveness:
+                case OutgoingLifeLeechEffectiveness:
                 case OutgoingHealingEffectivenessConvInc:
                 case OutgoingHealingEffectivenessFlatInc:
                 case ExperienceFromKills:

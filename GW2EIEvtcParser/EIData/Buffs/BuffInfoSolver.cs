@@ -27,8 +27,12 @@ namespace GW2EIEvtcParser.EIData
                 _result = result;
             }
 
-            public void Match(BuffFormula formula, Dictionary<byte, ArcDPSEnums.BuffAttribute> toFill)
+            public bool Match(BuffFormula formula, Dictionary<byte, ArcDPSEnums.BuffAttribute> toFill)
             {
+                if (toFill.Values.Contains(_result))
+                {
+                    return false;
+                }
                 if (formula.Attr1 == ArcDPSEnums.BuffAttribute.Unknown && !toFill.ContainsKey(formula.ByteAttr1))
                 {
                     if (formula.ConstantOffset == _constantOffset || (formula.ConstantOffset > 0 && _constantOffset == AnyPositive) || (formula.ConstantOffset < 0 && _constantOffset == AnyNegative))
@@ -42,18 +46,24 @@ namespace GW2EIEvtcParser.EIData
                                     if (formula.TraitSrc == _traitSrc || (formula.TraitSrc > 0 && _traitSrc == AnyPositive) || (formula.TraitSrc < 0 && _traitSrc == AnyNegative))
                                     {
                                         toFill[formula.ByteAttr1] = _result;
+                                        return true;
                                     }
                                 }
                             }
                         }
                     }
                 }
+                return false;
             }
         }
         // VERY IMPORTANT: if using an id multiple time, make sure the stricter checking conditions are done first
         private static readonly Dictionary<BuffFormulaDescriptor, long> _recognizer = new Dictionary<BuffFormulaDescriptor, long> {
             // CriticalChance
             {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.CriticalChance), 725 },
+            // Life Leech      
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.OutgoingLifeLeechEffectiveness), 42883 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.OutgoingLifeLeechEffectiveness), 45614 },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, ArcDPSEnums.BuffAttribute.OutgoingLifeLeechEffectiveness), 725 },
             // ConditionDurationIncrease
             {new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, ArcDPSEnums.BuffAttribute.ConditionDurationIncrease), 725 },
             // SkillRechargeSpeedIncrease
@@ -85,6 +95,12 @@ namespace GW2EIEvtcParser.EIData
             { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 29025 },
             { new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, ArcDPSEnums.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 31508 },
             { new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, ArcDPSEnums.BuffAttribute.OutgoingHealingEffectivenessFlatInc), 30449 },
+            // Damage to HP
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.PowerDamageToHP), 29466 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.PowerDamageToHP), 21665 },
+            // Condition to HP
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.ConditionDamageToHP), 29466 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.ConditionDamageToHP), 21665 },
         };
 
         public static void AdjustBuffs(CombatData combatData, IReadOnlyDictionary<long, Buff> buffsByID, ParserController operation)
@@ -99,7 +115,10 @@ namespace GW2EIEvtcParser.EIData
                     {
                         foreach (BuffFormula formula in buffInfoEvent.Formulas)
                         {
-                            pair.Key.Match(formula, solved);
+                            if(pair.Key.Match(formula, solved))
+                            {
+                                break;
+                            }
                         }
                     }
                 }

@@ -249,6 +249,7 @@ namespace GW2EIEvtcParser
             MagicFind = -20,
             ExperienceFromAll = -21,
             WXP = -22,
+            OutgoingLifeLeechEffectiveness = -23,
         }
         internal static BuffAttribute GetBuffAttribute(short bt)
         {
