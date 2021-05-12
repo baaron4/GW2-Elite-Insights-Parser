@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.EIData
             // if there are no elements nothing to sort
             // 1 element - is already sorted
             // 2 elements - is already sorted as the ticking stack can't be disturbed
-            if (stacks.Count > 2)
+            /*if (stacks.Count > 2)
             {
                 BuffStackItem first = stacks.First();
                 stacks.Sort((x, y) =>
@@ -28,7 +28,7 @@ namespace GW2EIEvtcParser.EIData
                     }
                     return -x.TotalDuration.CompareTo(y.TotalDuration);
                 });
-            }
+            }*/
         }
 
         public override bool FindLowestValue(ParsedEvtcLog log, BuffStackItem stackItem, List<BuffStackItem> stacks, List<BuffSimulationItemWasted> wastes)
@@ -39,10 +39,10 @@ namespace GW2EIEvtcParser.EIData
             }
             BuffStackItem first = stacks[0];
             BuffStackItem minItem = stacks.Where(x => x != first).MinBy(x => x.TotalDuration);
-            if (minItem.TotalDuration > stackItem.TotalDuration + ParserHelper.BuffSimulatorDelayConstant)
+            /*if (minItem.TotalDuration > stackItem.TotalDuration + ParserHelper.BuffSimulatorDelayConstant)
             {
                 return false;
-            }
+            }*/
             wastes.Add(new BuffSimulationItemWasted(minItem.Src, minItem.Duration, minItem.Start));
             if (minItem.Extensions.Any())
             {

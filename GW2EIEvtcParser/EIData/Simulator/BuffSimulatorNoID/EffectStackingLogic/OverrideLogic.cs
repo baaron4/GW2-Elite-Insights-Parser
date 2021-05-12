@@ -22,8 +22,8 @@ namespace GW2EIEvtcParser.EIData
                 return false;
             }
             BuffStackItem stack = stacks[0];
-            if (stack.TotalDuration <= stackItem.TotalDuration + ParserHelper.BuffSimulatorDelayConstant)
-            {
+            //if (stack.TotalDuration <= stackItem.TotalDuration + ParserHelper.BuffSimulatorDelayConstant)
+            //{
                 wastes.Add(new BuffSimulationItemWasted(stack.Src, stack.Duration, stack.Start));
                 if (stack.Extensions.Count > 0)
                 {
@@ -35,11 +35,11 @@ namespace GW2EIEvtcParser.EIData
                 stacks.RemoveAt(0);
                 Add(log, stacks, stackItem);
                 return true;
-            }
-            else
-            {
-                return false;
-            }
+            //}
+            //else
+            //{
+            //    return false;
+            //}
         }
 
         // https://www.c-sharpcorner.com/blogs/binary-search-implementation-using-c-sharp1
