@@ -18,6 +18,7 @@
         public bool IsOverNinety { get; }
         public bool AgainstUnderFifty { get; }
         public bool IsMoving { get; }
+        public bool AgainstMoving { get; }
         public bool IsFlanking { get; }
 
         internal AbstractDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem.Time)
@@ -27,7 +28,8 @@
             Skill = skillData.Get(evtcItem.SkillID);
             IsOverNinety = evtcItem.IsNinety > 0;
             AgainstUnderFifty = evtcItem.IsFifty > 0;
-            IsMoving = evtcItem.IsMoving > 0;
+            IsMoving = (evtcItem.IsMoving & 1) > 0;
+            AgainstMoving = (evtcItem.IsMoving & 2) > 0;
             IsFlanking = evtcItem.IsFlanking > 0; 
             _iff = evtcItem.IFF;
         }
