@@ -103,12 +103,16 @@ namespace GW2EIEvtcParser.EIData
 
         internal bool Keep(FightLogic.ParseMode mode, EvtcParserSettings parserSettings)
         {
-            if (Mode == DamageModifierMode.All)
+            // Remove target and approx based damage mods from PvP contexts
+            if (this is BuffDamageModifierTarget || Approximate)
             {
-                if (mode == FightLogic.ParseMode.WvW && !parserSettings.DetailedWvWParse)
+                if (mode == FightLogic.ParseMode.WvW || mode == FightLogic.ParseMode.sPvP)
                 {
-                    return !(this is BuffDamageModifierTarget);
+                    return false;
                 }
+            }
+            if (Mode == DamageModifierMode.All)
+            {     
                 return true;
             }
             switch (mode)
@@ -119,7 +123,7 @@ namespace GW2EIEvtcParser.EIData
                 case FightLogic.ParseMode.Benchmark:
                     return Mode == DamageModifierMode.PvE;
                 case FightLogic.ParseMode.WvW:
-                    return !(!parserSettings.DetailedWvWParse && this is BuffDamageModifierTarget) && (Mode == DamageModifierMode.WvW || Mode == DamageModifierMode.sPvPWvW);
+                    return (Mode == DamageModifierMode.WvW || Mode == DamageModifierMode.sPvPWvW);
                 case FightLogic.ParseMode.sPvP:
                     return Mode == DamageModifierMode.sPvP || Mode == DamageModifierMode.sPvPWvW;
             }
