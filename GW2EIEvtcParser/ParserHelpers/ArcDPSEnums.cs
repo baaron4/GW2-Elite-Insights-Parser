@@ -38,6 +38,23 @@ namespace GW2EIEvtcParser
             return bt < (byte)BuffRemove.Unknown ? (BuffRemove)bt : BuffRemove.Unknown;
         }
 
+        // Buff cycle
+        public enum BuffCycle : byte
+        {
+            Cycle, // damage happened on tick timer
+            NotCycle, // damage happened outside tick timer (resistable)
+            NotCycle_NoResit, // BEFORE MAY 2021: the others were lumped here, now retired
+            NotCycle_DamageToTargetOnHit, // damage happened to target on hitting target
+            NotCycle_DamageToSourceOnHit, // damage happened to source on htiting target
+            NotCycle_DamageToTargetOnStackRemove, // damage happened to target on source losing a stack
+            Unknown
+        };
+
+        internal static BuffCycle GetBuffCycle(byte bt)
+        {
+            return bt < (byte)BuffCycle.Unknown ? (BuffCycle)bt : BuffCycle.Unknown;
+        }
+
         // Result
 
         public enum PhysicalResult : byte

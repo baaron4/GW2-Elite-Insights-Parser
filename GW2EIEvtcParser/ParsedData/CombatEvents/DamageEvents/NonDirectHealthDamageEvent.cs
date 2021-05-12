@@ -1,10 +1,13 @@
 ﻿using GW2EIEvtcParser.EIData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.ParsedData
 {
     public class NonDirectHealthDamageEvent : AbstractHealthDamageEvent
     {
         private int _isCondi = -1;
+
+        private readonly BuffCycle _cycle;
 
         internal NonDirectHealthDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, ArcDPSEnums.ConditionResult result) : base(evtcItem, agentData, skillData)
         {
@@ -15,6 +18,7 @@ namespace GW2EIEvtcParser.ParsedData
                 result == ArcDPSEnums.ConditionResult.InvulByPlayerSkill3;
             HasHit = result == ArcDPSEnums.ConditionResult.ExpectedToHit;
             ShieldDamage = evtcItem.IsShields > 0 ? HealthDamage : 0;
+            _cycle = GetBuffCycle(evtcItem.IsOffcycle);
         }
 
         public override bool ConditionDamageBased(ParsedEvtcLog log)
