@@ -29,9 +29,10 @@ namespace GW2EIEvtcParser.EIData
 
             public bool Match(BuffFormula formula, Dictionary<byte, ArcDPSEnums.BuffAttribute> toFill)
             {
-                if (toFill.Values.Contains(_result))
+                // No need to match anything if we already associated the result
+                if (toFill.ContainsValue(_result))
                 {
-                    return false;
+                    return true;
                 }
                 if (formula.Attr1 == ArcDPSEnums.BuffAttribute.Unknown && !toFill.ContainsKey(formula.ByteAttr1))
                 {
