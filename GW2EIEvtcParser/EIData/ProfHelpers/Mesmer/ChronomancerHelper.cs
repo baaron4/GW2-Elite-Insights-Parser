@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffDamageModifierTarget(26766, "Danger Time", "30% crit damage on slowed target", DamageSource.NoPets, 30.0, DamageType.Power, DamageType.All, Source.Chronomancer, ByPresence, "https://wiki.guildwars2.com/images/3/33/Fragility.png", 86181, 94051, DamageModifierMode.All, ((x, log) => x.HasCrit)),
             new BuffDamageModifierTarget(26766, "Danger Time", "30% crit damage on slowed target", DamageSource.All, 30.0, DamageType.Power, DamageType.All, Source.Chronomancer, ByPresence, "https://wiki.guildwars2.com/images/3/33/Fragility.png", 94051, 95535, DamageModifierMode.All, ((x, log) => x.HasCrit)),
-            new BuffDamageModifierTarget(26766, "Danger Time", "10% crit damage on slowed target", DamageSource.All, 10.0, DamageType.Power, DamageType.All, Source.Chronomancer, ByPresence, "https://wiki.guildwars2.com/images/3/33/Fragility.png", 95535, 114788, DamageModifierMode.All, ((x, log) => x.HasCrit)),
+            new BuffDamageModifierTarget(26766, "Danger Time", "10% crit damage on slowed target", DamageSource.All, 10.0, DamageType.Power, DamageType.All, Source.Chronomancer, ByPresence, "https://wiki.guildwars2.com/images/3/33/Fragility.png", 95535, 115190, DamageModifierMode.All, ((x, log) => x.HasCrit)),
         };
 
 

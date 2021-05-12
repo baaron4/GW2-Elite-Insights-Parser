@@ -29,8 +29,8 @@ namespace GW2EIEvtcParser.EIData
         {
             // Retribution
             new BuffDamageModifierTarget(742, "Dwarven Battle Training", "10% on weakened target", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, Source.Revenant, ByPresence, "https://wiki.guildwars2.com/images/5/50/Dwarven_Battle_Training.png", 94051, ulong.MaxValue, DamageModifierMode.All),
-            new BuffDamageModifier(873, "Vicious Reprisal", "10% under retaliation", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, Source.Revenant, ByPresence, "https://wiki.guildwars2.com/images/c/cf/Vicious_Reprisal.png", 0, 114788, DamageModifierMode.All),
-            new BuffDamageModifier(873, "Vicious Reprisal", "10% under resolution", DamageSource.NoPets, 10.0, DamageType.All, DamageType.All, Source.Revenant, ByPresence, "https://wiki.guildwars2.com/images/c/cf/Vicious_Reprisal.png", 114788, ulong.MaxValue, DamageModifierMode.All),
+            new BuffDamageModifier(873, "Vicious Reprisal", "10% under retaliation", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, Source.Revenant, ByPresence, "https://wiki.guildwars2.com/images/c/cf/Vicious_Reprisal.png", 0, 115190, DamageModifierMode.All),
+            new BuffDamageModifier(873, "Vicious Reprisal", "10% under resolution", DamageSource.NoPets, 10.0, DamageType.All, DamageType.All, Source.Revenant, ByPresence, "https://wiki.guildwars2.com/images/c/cf/Vicious_Reprisal.png", 115190, ulong.MaxValue, DamageModifierMode.All),
             // Invocation
             new BuffDamageModifier(725, "Ferocious Aggression", "7% under fury", DamageSource.NoPets, 7.0, DamageType.All, DamageType.All, Source.Revenant, ByPresence, "https://wiki.guildwars2.com/images/e/ec/Ferocious_Aggression.png", DamageModifierMode.All),
             new DamageLogDamageModifier("Rising Tide", "7% if hp >90%", DamageSource.NoPets, 7.0, DamageType.Power, DamageType.All, Source.Revenant,"https://wiki.guildwars2.com/images/0/0c/Rising_Tide.png", (x, log) => x.IsOverNinety, ByPresence, DamageModifierMode.All),
