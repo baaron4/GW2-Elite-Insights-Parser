@@ -63,6 +63,7 @@ namespace GW2EIBuilders.JsonModels
             jsonGameplayStats.CriticalDmg = stats.CriticalDmg;
             jsonGameplayStats.FlankingRate = stats.FlankingCount;
             jsonGameplayStats.GlanceRate = stats.GlanceCount;
+            jsonGameplayStats.AgainstMovingRate = stats.AgainstMovingCount;
             jsonGameplayStats.Missed = stats.Missed;
             jsonGameplayStats.Blocked = stats.Blocked;
             jsonGameplayStats.Evaded = stats.Evaded;

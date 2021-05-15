@@ -50,7 +50,12 @@ namespace GW2EIJSON
         /// Number of flanks
         /// </summary>
         public int Flank { get; set; }
-        
+
+        /// <summary>
+        /// Number of time hits while target was moving
+        /// </summary>
+        public int AgainstMoving { get; set; }
+
         /// <summary>
         /// Number of times the hit missed due to blindness
         /// </summary>

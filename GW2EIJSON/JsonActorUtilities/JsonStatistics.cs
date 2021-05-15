@@ -219,7 +219,12 @@ namespace GW2EIJSON
             /// Number of hits while flanking
             /// </summary>
             public int FlankingRate { get; set; }
-            
+
+            /// <summary>
+            /// Number of hits while target was moving
+            /// </summary>
+            public int AgainstMovingRate { get; set; }
+
             /// <summary>
             /// Number of glanced hits
             /// </summary>
