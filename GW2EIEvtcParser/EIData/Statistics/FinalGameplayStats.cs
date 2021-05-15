@@ -13,6 +13,7 @@ namespace GW2EIEvtcParser.EIData
         public int CriticalDmg { get; internal set; }
         public int FlankingCount { get; internal set; }
         public int GlanceCount { get; internal set; }
+        public int AgainstMovingCount { get; internal set; }
         public int Missed { get; internal set; }
         public int Blocked { get; internal set; }
         public int Evaded { get; internal set; }
@@ -89,6 +90,10 @@ namespace GW2EIEvtcParser.EIData
                 if (dl.HasDowned)
                 {
                     Downed++;
+                }
+                if (dl.AgainstMoving)
+                {
+                    AgainstMovingCount++;
                 }
             }
         }
