@@ -660,22 +660,7 @@ namespace GW2EIEvtcParser.EIData
                     CastEvents.Add(wepSwap);
                 }
             }
-            CastEvents.Sort((x, y) =>
-            {
-                int compare = x.Time.CompareTo(y.Time);
-                if (compare == 0 && x.SkillId != y.SkillId)
-                {
-                    if (y.Skill.IsSwap)
-                    {
-                        return 1;
-                    }
-                    if (x.Skill.IsSwap)
-                    {
-                        return -1;
-                    }
-                }
-                return compare;
-            });
+            CastEvents = CastEvents.OrderBy(x => x.Time).ThenBy(x => x.Skill.IsSwap).ToList();
         }
 
         // DPS Stats
@@ -774,7 +759,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     DamageEvents.AddRange(mins.GetDamageEvents(null, log, 0, log.FightData.FightEnd));
                 }
-                DamageEvents.Sort((x, y) => x.Time.CompareTo(y.Time));
+                DamageEvents = DamageEvents.OrderBy(x => x.Time).ToList();
                 DamageEventByDst = DamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
@@ -812,7 +797,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     BreakbarDamageEvents.AddRange(mins.GetBreakbarDamageEvents(null, log, 0, log.FightData.FightEnd));
                 }
-                BreakbarDamageEvents.Sort((x, y) => x.Time.CompareTo(y.Time));
+                BreakbarDamageEvents = BreakbarDamageEvents.OrderBy(x => x.Time).ToList();
                 BreakbarDamageEventsByDst = BreakbarDamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)

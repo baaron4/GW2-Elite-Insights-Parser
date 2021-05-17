@@ -141,7 +141,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 CastEvents.AddRange(minion.GetCastEvents(log, 0, log.FightData.FightEnd));
             }
-            CastEvents.Sort((x, y) => x.Time.CompareTo(y.Time));
+            CastEvents = CastEvents.OrderBy(x => x.Time).ToList();
         }
 
         public override IReadOnlyList<AbstractCastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end)

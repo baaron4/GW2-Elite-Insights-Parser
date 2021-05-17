@@ -105,7 +105,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             // make sure the list is still sorted by time after overrides
             if (sortCombatList)
             {
-                combatData.Sort((x, y) => x.Time.CompareTo(y.Time));
+                var auxCombatData = combatData.OrderBy(x => x.Time).ToList();
+                combatData.Clear();
+                combatData.AddRange(auxCombatData);
             }
             ComputeFightTargets(agentData, combatData);
             AgentItem desmina = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Desmina).FirstOrDefault();

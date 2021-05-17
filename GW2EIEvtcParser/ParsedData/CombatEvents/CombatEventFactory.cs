@@ -275,7 +275,7 @@ namespace GW2EIEvtcParser.ParsedData
                     res.Add(new AnimatedCastEvent(startItem, agentData, skillData, long.MaxValue));
                 }
             }
-            res.Sort((x, y) => x.Time.CompareTo(y.Time));
+            res = res.OrderBy(x => x.Time).ToList();
             return res;
         }
 

@@ -185,7 +185,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         copied.OverrideDstAgent(0);
                         copied.OverrideTime(lastAwareTime);
                         combatData.Add(copied);
-                        combatData.Sort((x, y) => x.Time.CompareTo(y.Time));
+                        var auxCombatData = combatData.OrderBy(x => x.Time).ToList();
+                        combatData.Clear();
+                        combatData.AddRange(auxCombatData);
                     }
                     // Redirect NPC masters
                     foreach (AgentItem ag in agentData.GetAgentByType(AgentItem.AgentType.NPC))

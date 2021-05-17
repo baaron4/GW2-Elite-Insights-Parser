@@ -12,7 +12,7 @@ namespace GW2EIEvtcParser.EIData
         // Prefer using Add, to insert to the list in a sorted manner
         protected override void Sort(ParsedEvtcLog log, List<BuffStackItem> stacks)
         {
-            stacks.Sort((x, y) => x.TotalDuration.CompareTo(y.TotalDuration));
+            throw new InvalidOperationException("Do not use Sort for OverrideLogic");
         }
 
         public override bool FindLowestValue(ParsedEvtcLog log, BuffStackItem stackItem, List<BuffStackItem> stacks, List<BuffSimulationItemWasted> wastes)
