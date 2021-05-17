@@ -38,6 +38,6 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal abstract bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs);
 
-        internal abstract int CompareTo(AbstractBuffEvent abe);
+        //internal abstract int CompareTo(AbstractBuffEvent abe);
     }
 }
