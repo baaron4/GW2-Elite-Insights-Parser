@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.EIData
             _dict[buff.ID] = new List<AbstractBuffEvent>() { buffEvent };
         }
 
-        private static int CompareBuffEventType(AbstractBuffEvent x, AbstractBuffEvent y)
+        /*private static int CompareBuffEventType(AbstractBuffEvent x, AbstractBuffEvent y)
         {
             if (x.Time < y.Time)
             {
@@ -49,7 +49,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 return x.CompareTo(y);
             }
-        }
+        }*/
 
 
         public void Finalize(ParsedEvtcLog log, AgentItem agentItem, out HashSet<Buff> trackedBuffs)
@@ -66,7 +66,9 @@ namespace GW2EIEvtcParser.EIData
             foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in _dict)
             {
                 trackedBuffs.Add(log.Buffs.BuffsByIds[pair.Key]);
-                pair.Value.Sort(CompareBuffEventType);
+                var auxValue = pair.Value.OrderBy(x => x.Time).ToList();
+                pair.Value.Clear();
+                pair.Value.AddRange(auxValue);
             }
         }
 
