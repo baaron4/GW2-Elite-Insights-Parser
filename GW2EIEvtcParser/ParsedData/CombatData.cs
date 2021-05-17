@@ -271,7 +271,7 @@ namespace GW2EIEvtcParser.ParsedData
                 }
                 if (setDeads && agentDeaths.Count > 0)
                 {
-                    _statusEvents.DeadEvents[pair.Key] = agentDeaths.OrderBy(x => x.Time).ToList(); ;
+                    _statusEvents.DeadEvents[pair.Key] = agentDeaths.OrderBy(x => x.Time).ToList();
                 }
                 if (setDowns && agentDowns.Count > 0)
                 {
@@ -623,7 +623,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return res;
             }
-            return new List<AbstractBuffEvent>(); ;
+            return new List<AbstractBuffEvent>();
         }
 
         public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllData(long key)
@@ -632,7 +632,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return res;
             }
-            return new List<BuffRemoveAllEvent>(); ;
+            return new List<BuffRemoveAllEvent>();
         }
 
         /// <summary>
@@ -646,7 +646,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return res;
             }
-            return new List<AbstractBuffEvent>(); ;
+            return new List<AbstractBuffEvent>();
         }
 
         /// <summary>
@@ -660,7 +660,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return res;
             }
-            return new List<AbstractHealthDamageEvent>(); ;
+            return new List<AbstractHealthDamageEvent>();
         }
 
         /// <summary>
@@ -674,7 +674,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return res;
             }
-            return new List<AbstractBreakbarDamageEvent>(); ;
+            return new List<AbstractBreakbarDamageEvent>();
         }
 
         /// <summary>
@@ -688,7 +688,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return res;
             }
-            return new List<AbstractHealthDamageEvent>(); ;
+            return new List<AbstractHealthDamageEvent>();
         }
 
         /// <summary>
@@ -702,7 +702,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return res;
             }
-            return new List<AnimatedCastEvent>(); ;
+            return new List<AnimatedCastEvent>();
         }
 
         /// <summary>
@@ -716,7 +716,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return res;
             }
-            return new List<InstantCastEvent>(); ;
+            return new List<InstantCastEvent>();
         }
 
         /// <summary>
@@ -730,7 +730,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return res;
             }
-            return new List<WeaponSwapEvent>(); ;
+            return new List<WeaponSwapEvent>();
         }
 
         /// <summary>
@@ -744,7 +744,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return res;
             }
-            return new List<AnimatedCastEvent>(); ;
+            return new List<AnimatedCastEvent>();
         }
 
         /// <summary>
