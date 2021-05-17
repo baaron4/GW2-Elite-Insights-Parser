@@ -82,13 +82,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
+        /*internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
         {
             var res = new List<AbstractBuffEvent>();
             // Necrosis adjust
             AdjustTimeRefreshBuff(buffsByDst, buffsById, 47414);
             return res;
-        }
+        }*/
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {

@@ -93,7 +93,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
         }
-        internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
+        /*internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
         {
             var res = new List<AbstractBuffEvent>();
             // Greatsword Power
@@ -101,7 +101,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Conjured Shield
             AdjustTimeRefreshBuff(buffsByDst, buffsById, 52754);
             return res;
-        }
+        }*/
 
         protected override HashSet<int> GetUniqueTargetIDs()
         {
