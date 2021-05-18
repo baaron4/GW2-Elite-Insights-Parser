@@ -30,7 +30,7 @@ namespace GW2EIEvtcParser.EIData
         protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log)
         {
             log.FightData.Logic.ComputeNPCCombatReplayActors(this, log, CombatReplay);
-            if (CombatReplay.Rotations.Any() && log.FightData.Logic.Targets.Contains(this))
+            if (CombatReplay.Rotations.Any() && (log.FightData.Logic.Targets.Contains(this) || log.Friendlies.Contains(this)))
             {
                 CombatReplay.Decorations.Add(new FacingDecoration(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));
             }

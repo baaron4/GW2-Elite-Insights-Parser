@@ -77,6 +77,7 @@ class Animator {
         this.targetData = new Map();
         this.playerData = new Map();
         this.trashMobData = new Map();
+        this.friendlyMobData = new Map();
         this.mechanicActorData = [];
         this.attachedActorData = new Map();
         this.backgroundActorData = [];
@@ -153,6 +154,7 @@ class Animator {
         this.playerData.clear();
         this.targetData.clear();
         this.trashMobData.clear();
+        this.friendlyMobData.clear();
         this.attachedActorData.clear();
         this.mechanicActorData = [];
         for (let i = 0; i < actors.length; i++) {
@@ -171,6 +173,9 @@ class Animator {
                     break;
                 case "Mob":
                     this.trashMobData.set(actor.id, new EnemyIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc));
+                    break;
+                case "Friendly":
+                    this.friendlyMobData.set(actor.id, new EnemyIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc));
                     break;
                 case "Circle":
                     this.mechanicActorData.push(new CircleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inch * actor.radius, actor.connectedTo, this.inch * actor.minRadius));
@@ -270,17 +275,13 @@ class Animator {
     }
 
     selectActor(actorId) {
-        let actor = this.playerData.get(actorId) || this.targetData.get(actorId);
-        let oldSelect = actor.selected;
+        let actor = this.playerData.get(actorId) || this.targetData.get(actorId) || this.trashMobData.get(actorId) || this.friendlyMobData.get(actorId);
+        if (!actor) {
+            return;
+        }
         this.reactiveDataStatus.selectedActor = null;
         this.reactiveDataStatus.selectedActorID = null;
-        this.playerData.forEach(function (value, key, map) {
-            value.selected = false;
-        });
-        this.targetData.forEach(function (value, key, map) {
-            value.selected = false;
-        });
-        actor.selected = !oldSelect;
+        actor.selected = !actor.selected;
         this.selectedGroup = actor.selected && actor.group !== null ? actor.group : -1;
         if (actor.selected) {
             this.reactiveDataStatus.selectedActor = actor;
@@ -594,11 +595,22 @@ class Animator {
             }
         });
         
-        if (this.displayTrashMobs) {
-            this.trashMobData.forEach(function (value, key, map) {
+        this.friendlyMobData.forEach(function (value, key, map) {
+            if (!value.selected) {
                 value.draw();
                 if (_this.attachedActorData.has(key)) {
                     _this.attachedActorData.get(key).draw();
+                }
+            }
+        });
+        
+        if (this.displayTrashMobs) {
+            this.trashMobData.forEach(function (value, key, map) {
+                if (!value.selected) {
+                    value.draw();
+                    if (_this.attachedActorData.has(key)) {
+                        _this.attachedActorData.get(key).draw();
+                    }
                 }
             });
         }
