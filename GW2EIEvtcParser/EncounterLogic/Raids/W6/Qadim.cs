@@ -241,7 +241,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AddTargetsToPhaseAndFit(phase, ids, log);
                     if (phase.Targets.Count > 0)
                     {
-                        NPC phaseTar = phase.Targets[0];
+                        NPC phaseTar = phase.Targets.Last();
                         switch (phaseTar.ID)
                         {
                             case (int)ArcDPSEnums.TrashID.AncientInvokedHydra:
