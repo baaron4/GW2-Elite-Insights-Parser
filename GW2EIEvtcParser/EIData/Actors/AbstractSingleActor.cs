@@ -433,6 +433,11 @@ namespace GW2EIEvtcParser.EIData
         {
             //
             _buffMap = new BuffDictionary();
+            if (AgentItem == ParserHelper._unknownAgent)
+            {
+                _buffMap.Finalize(log, AgentItem, out _trackedBuffs);
+                return;
+            }
             // Fill in Boon Map
 #if DEBUG
             var test = log.CombatData.GetBuffData(AgentItem).Where(x => !log.Buffs.BuffsByIds.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
