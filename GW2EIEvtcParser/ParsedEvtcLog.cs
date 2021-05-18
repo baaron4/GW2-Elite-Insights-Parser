@@ -126,7 +126,14 @@ namespace GW2EIEvtcParser
             InitActorDictionaries();
             if (!_agentToActorDictionary.TryGetValue(agentItem, out AbstractSingleActor actor))
             {
-                actor = new NPC(agentItem);
+                if (actor.AgentItem.Type == AgentItem.AgentType.NonSquadPlayer)
+                {
+                    actor = new PlayerNonSquad(agentItem);
+                } 
+                else
+                {
+                    actor = new NPC(agentItem);
+                }
                 _agentToActorDictionary[agentItem] = actor;
                 //throw new EIException("Requested actor with id " + a.ID + " and name " + a.Name + " is missing");
             }

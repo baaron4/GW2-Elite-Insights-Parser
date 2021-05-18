@@ -101,6 +101,17 @@ namespace GW2EIEvtcParser.ParsedData
             Refresh();
         }
 
+        internal void RemoveAllFrom(HashSet<AgentItem> agents)
+        {
+            if (!agents.Any())
+            {
+                return;
+            }
+            _allAgentsList.RemoveAll(x => agents.Contains(x));
+            
+            Refresh();
+        }
+
         internal void Refresh()
         {
             _allAgentsByAgent = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList().First());

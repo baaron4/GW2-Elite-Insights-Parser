@@ -120,45 +120,50 @@ namespace GW2EIEvtcParser.EncounterLogic
             fightData.SetSuccess(true, fightData.FightEnd);
         }
 
+        private void SolveWvWPlayers(AgentData agentData, List<CombatItem> combatData, IReadOnlyList<AgentItem> aList, List<AbstractSingleActor> friendlies)
+        {
+            var set = new HashSet<string>();
+            var toRemove = new HashSet<AgentItem>();
+            var garbageList = new List<AbstractSingleActor>();
+            foreach (AgentItem a in aList)
+            {
+                List<AbstractSingleActor> actorListToFill = a.IsNotInSquadFriendlyPlayer ? friendlies : _detailed ? _targets : garbageList;
+                var nonSquadPlayer = new PlayerNonSquad(a);
+                if (!set.Contains(nonSquadPlayer.Character))
+                {
+                    actorListToFill.Add(nonSquadPlayer);
+                    set.Add(nonSquadPlayer.Character);
+                }
+                else
+                {
+                    // we merge
+                    AbstractSingleActor mainPlayer = actorListToFill.FirstOrDefault(x => x.Character == nonSquadPlayer.Character);
+                    foreach (CombatItem c in combatData)
+                    {
+                        if (c.IsStateChange.SrcIsAgent() && c.SrcAgent == nonSquadPlayer.Agent)
+                        {
+                            c.OverrideSrcAgent(mainPlayer.Agent);
+                        }
+                        if (c.IsStateChange.DstIsAgent() && c.DstAgent == nonSquadPlayer.Agent)
+                        {
+                            c.OverrideDstAgent(mainPlayer.Agent);
+                        }
+                    }
+                    agentData.SwapMasters(nonSquadPlayer.AgentItem, mainPlayer.AgentItem);
+                    mainPlayer.AgentItem.OverrideAwareTimes(Math.Min(nonSquadPlayer.FirstAware, mainPlayer.FirstAware), Math.Max(nonSquadPlayer.LastAware, mainPlayer.LastAware));
+                    toRemove.Add(nonSquadPlayer.AgentItem);
+                }
+            }
+            agentData.RemoveAllFrom(toRemove);
+        }
+
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
             AgentItem dummyAgent = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, _detailed ? "Dummy WvW Agent" : "Enemy Players", "", (int)ArcDPSEnums.TargetID.WorldVersusWorld, true);
-            ComputeFightTargets(agentData, combatData);
 
             IReadOnlyList<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer);
-            if (_detailed)
-            {
-                var set = new HashSet<string>();
-                foreach (AgentItem a in aList)
-                {
-                    List<AbstractSingleActor> actorListToFill = a.IsNotInSquadFriendlyPlayer ? friendlies : _targets;
-                    var nonSquadPlayer = new PlayerNonSquad(a);
-                    if (!set.Contains(nonSquadPlayer.Character))
-                    {
-                        actorListToFill.Add(nonSquadPlayer);
-                        set.Add(nonSquadPlayer.Character);
-                    }
-                    else
-                    {
-                        // we merge
-                        AbstractSingleActor mainNPC = actorListToFill.FirstOrDefault(x => x.Character == nonSquadPlayer.Character);
-                        foreach (CombatItem c in combatData)
-                        {
-                            if (c.IsStateChange.SrcIsAgent() && c.SrcAgent == nonSquadPlayer.Agent)
-                            {
-                                c.OverrideSrcAgent(mainNPC.Agent);
-                            }
-                            if (c.IsStateChange.DstIsAgent() && c.DstAgent == nonSquadPlayer.Agent)
-                            {
-                                c.OverrideDstAgent(mainNPC.Agent);
-                            }
-                        }
-                        agentData.SwapMasters(nonSquadPlayer.AgentItem, mainNPC.AgentItem);
-                        mainNPC.AgentItem.OverrideAwareTimes(Math.Min(nonSquadPlayer.FirstAware, mainNPC.FirstAware), Math.Max(nonSquadPlayer.LastAware, mainNPC.LastAware));
-                    }
-                }
-            }
-            else
+            SolveWvWPlayers(agentData, combatData, aList, friendlies);
+            if (!_detailed)
             {
                 var enemyPlayerDicts = aList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList().First());
                 foreach (CombatItem c in combatData)
@@ -179,6 +184,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
+            ComputeFightTargets(agentData, combatData);
         }
     }
 }
