@@ -33,7 +33,7 @@ namespace GW2EIEvtcParser.EIData
             return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillId) && x.Time <= time && time <= x.EndTime + ParserHelper.ServerDelayConstant).ToList();
         }
         // Spec specific checks
-        private int CouldBeEssenceOfSpeed(AgentItem dst, long extension, ParsedEvtcLog log)
+        protected virtual int CouldBeEssenceOfSpeed(AgentItem dst, long extension, ParsedEvtcLog log)
         {
             if (extension == EssenceOfSpeed && dst.Prof == "Soulbeast")
             {
@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.EIData
             return -1;
         }
 
-        private bool CouldBeImbuedMelodies(AgentItem agent, long time, long extension, ParsedEvtcLog log)
+        protected virtual bool CouldBeImbuedMelodies(AgentItem agent, long time, long extension, ParsedEvtcLog log)
         {
             if (extension == ImbuedMelodies && log.PlayerListBySpec.TryGetValue("Tempest", out List<Player> tempests))
             {
@@ -63,6 +63,16 @@ namespace GW2EIEvtcParser.EIData
             }
             return false;
         }
+
+        protected virtual HashSet<long> getIDs(long extension)
+        {
+            if (DurationToIDs.TryGetValue(extension, out HashSet<long> idsToCheck))
+            {
+                return idsToCheck;
+            }
+            return new HashSet<long>();
+        }
+
         // Main method
         public AgentItem TryFindSrc(AgentItem dst, long time, long extension, ParsedEvtcLog log, long buffID)
         {
@@ -76,7 +86,8 @@ namespace GW2EIEvtcParser.EIData
             {
                 return dst;
             }
-            if (DurationToIDs.TryGetValue(extension, out HashSet<long> idsToCheck))
+            HashSet<long> idsToCheck = getIDs(extension);
+            if (idsToCheck.Any())
             {
                 List<AbstractCastEvent> cls = GetExtensionSkills(log, time, idsToCheck);
                 // If only one cast item
