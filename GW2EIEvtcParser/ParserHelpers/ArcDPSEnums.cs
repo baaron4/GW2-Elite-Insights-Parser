@@ -44,8 +44,8 @@ namespace GW2EIEvtcParser
             Cycle, // damage happened on tick timer
             NotCycle, // damage happened outside tick timer (resistable)
             NotCycle_NoResit, // BEFORE MAY 2021: the others were lumped here, now retired
-            NotCycle_DamageToTargetOnHit, // damage happened to target on hitting target
-            NotCycle_DamageToSourceOnHit, // damage happened to source on htiting target
+            NotCycle_DamageToTargetOnHit, // damage happened to target on hiting target
+            NotCycle_DamageToSourceOnHit, // damage happened to source on hiting target
             NotCycle_DamageToTargetOnStackRemove, // damage happened to target on source losing a stack
             Unknown
         };
@@ -230,7 +230,7 @@ namespace GW2EIEvtcParser
             ConditionDurationIncrease = -1,
             DamageFormulaSquaredLevel = -2,
             CriticalChance = -3,
-            PowerDamageToHP = -4,
+            StrikeDamageToHP = -4,
             ConditionDamageToHP = -5,
             GlancingBlow = -6,
             SkillActivationDamageFormula = -7,
