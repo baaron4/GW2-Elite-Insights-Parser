@@ -150,7 +150,7 @@ namespace GW2EIEvtcParser.EIData
             _stackCenterPositions = new List<Point3D>();
             if (log.CombatData.HasMovementData)
             {
-                var GroupsPosList = new List<List<Point3D>>();
+                var GroupsPosList = new List<IReadOnlyList<Point3D>>();
                 foreach (Player player in log.PlayerList)
                 {
                     GroupsPosList.Add(player.GetCombatReplayActivePositions(log));

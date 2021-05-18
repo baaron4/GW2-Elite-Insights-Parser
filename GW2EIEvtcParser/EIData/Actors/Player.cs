@@ -46,7 +46,7 @@ namespace GW2EIEvtcParser.EIData
             Account = "Account " + index;
         }
 
-        protected override Dictionary<long, FinalActorBuffs>[] SetBuffs(ParsedEvtcLog log, long start, long end, BuffEnum type)
+        internal override Dictionary<long, FinalActorBuffs>[] ComputeBuffs(ParsedEvtcLog log, long start, long end, BuffEnum type)
         {
             switch (type)
             {
@@ -67,7 +67,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public List<Point3D> GetCombatReplayActivePositions(ParsedEvtcLog log)
+        public IReadOnlyList<Point3D> GetCombatReplayActivePositions(ParsedEvtcLog log)
         {
             if (CombatReplay == null)
             {

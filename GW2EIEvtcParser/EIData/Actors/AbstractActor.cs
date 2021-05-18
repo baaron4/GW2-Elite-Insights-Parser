@@ -110,17 +110,5 @@ namespace GW2EIEvtcParser.EIData
                 (evt.EndTime >= start && evt.EndTime <= end) || // end inside
                 (evt.Time <= start && evt.EndTime >= end); // start before, end after
         }
-
-        protected static void Add<T>(Dictionary<T, long> dictionary, T key, long value)
-        {
-            if (dictionary.TryGetValue(key, out long existing))
-            {
-                dictionary[key] = existing + value;
-            }
-            else
-            {
-                dictionary.Add(key, value);
-            }
-        }
     }
 }
