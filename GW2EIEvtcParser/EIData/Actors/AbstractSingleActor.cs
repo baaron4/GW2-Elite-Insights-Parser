@@ -11,9 +11,15 @@ namespace GW2EIEvtcParser.EIData
     public abstract class AbstractSingleActor : AbstractActor
     {
         public AgentItem AgentItem => SourceAgent;
+        public bool HasCommanderTag => AgentItem.HasCommanderTag;
         public string Account { get; protected set; }
         public int Group { get; protected set; }
         public int UniqueID => AgentItem.UniqueID;
+        //
+        private List<Consumable> _consumeList;
+        private List<DeathRecap> _deathRecaps;
+        private string[] _weaponsArray;
+        //weaponslist
         // Boons
         private HashSet<Buff> _trackedBuffs;
         private BuffDictionary _buffMap;
@@ -48,6 +54,7 @@ namespace GW2EIEvtcParser.EIData
         private CachingCollectionWithTarget<FinalDefenses> _defenseStats;
         private CachingCollectionWithTarget<FinalGameplayStats> _gameplayStats;
         private CachingCollectionWithTarget<FinalSupport> _supportStats;
+        private CachingCollection<FinalToPlayerSupport> _toPlayerSupportStats;
 
         protected AbstractSingleActor(AgentItem agent) : base(agent)
         {
@@ -111,6 +118,134 @@ namespace GW2EIEvtcParser.EIData
                     return 0;
                 });
         }
+        //
+
+
+        public IReadOnlyList<string> GetWeaponsArray(ParsedEvtcLog log)
+        {
+            if (_weaponsArray == null)
+            {
+                EstimateWeapons(log);
+            }
+            return _weaponsArray;
+        }
+
+        private void EstimateWeapons(ParsedEvtcLog log)
+        {
+            if (Prof == "Sword")
+            {
+                _weaponsArray = new string[]
+                {
+                    "Sword",
+                    "2Hand",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                };
+                return;
+            }
+            string[] weapons = new string[8];//first 2 for first set next 2 for second set, second sets of 4 for underwater
+            IReadOnlyList<AbstractCastEvent> casting = GetCastEvents(log, 0, log.FightData.FightEnd);
+            int swapped = -1;
+            long swappedTime = 0;
+            var swaps = casting.OfType<WeaponSwapEvent>().Select(x =>
+            {
+                return x.SwappedTo;
+            }).ToList();
+            foreach (AbstractCastEvent cl in casting)
+            {
+                if (cl.ActualDuration == 0 && cl.SkillId != SkillItem.WeaponSwapId)
+                {
+                    continue;
+                }
+                SkillItem skill = cl.Skill;
+                // first iteration
+                if (swapped == -1)
+                {
+                    swapped = skill.FindWeaponSlot(swaps);
+                }
+                if (!skill.EstimateWeapons(weapons, swapped, cl.Time > swappedTime + WeaponSwapDelayConstant) && cl is WeaponSwapEvent swe)
+                {
+                    //wepswap  
+                    swapped = swe.SwappedTo;
+                    swappedTime = swe.Time;
+                }
+            }
+            _weaponsArray = weapons;
+        }
+
+        //
+        public IReadOnlyList<Consumable> GetConsumablesList(ParsedEvtcLog log, long start, long end)
+        {
+            if (_consumeList == null)
+            {
+                SetConsumablesList(log);
+            }
+            return _consumeList.Where(x => x.Time >= start && x.Time <= end).ToList();
+        }
+        private void SetConsumablesList(ParsedEvtcLog log)
+        {
+            IReadOnlyList<Buff> consumableList = log.Buffs.BuffsByNature[BuffNature.Consumable];
+            _consumeList = new List<Consumable>();
+            long fightDuration = log.FightData.FightEnd;
+            foreach (Buff consumable in consumableList)
+            {
+                foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(consumable.ID))
+                {
+                    if (!(c is BuffApplyEvent ba) || AgentItem != ba.To)
+                    {
+                        continue;
+                    }
+                    long time = 0;
+                    if (!ba.Initial)
+                    {
+                        time = ba.Time;
+                    }
+                    if (time <= fightDuration)
+                    {
+                        Consumable existing = _consumeList.Find(x => x.Time == time && x.Buff.ID == consumable.ID);
+                        if (existing != null)
+                        {
+                            existing.Stack++;
+                        }
+                        else
+                        {
+                            _consumeList.Add(new Consumable(consumable, time, ba.AppliedDuration));
+                        }
+                    }
+                }
+            }
+            _consumeList.Sort((x, y) => x.Time.CompareTo(y.Time));
+
+        }
+        //
+        public IReadOnlyList<DeathRecap> GetDeathRecaps(ParsedEvtcLog log)
+        {
+            if (_deathRecaps == null)
+            {
+                SetDeathRecaps(log);
+            }
+            return _deathRecaps;
+        }
+        private void SetDeathRecaps(ParsedEvtcLog log)
+        {
+            _deathRecaps = new List<DeathRecap>();
+            IReadOnlyList<DeadEvent> deads = log.CombatData.GetDeadEvents(AgentItem);
+            IReadOnlyList<DownEvent> downs = log.CombatData.GetDownEvents(AgentItem);
+            IReadOnlyList<AliveEvent> ups = log.CombatData.GetAliveEvents(AgentItem);
+            long lastDeathTime = 0;
+            IReadOnlyList<AbstractHealthDamageEvent> damageLogs = GetDamageTakenEvents(null, log, 0, log.FightData.FightEnd);
+            foreach (DeadEvent dead in deads)
+            {
+                _deathRecaps.Add(new DeathRecap(log, damageLogs, dead, downs, ups, lastDeathTime));
+                lastDeathTime = dead.Time;
+            }
+        }
+
+        //
 
         public abstract string GetIcon();
 
@@ -521,12 +656,17 @@ namespace GW2EIEvtcParser.EIData
 
         protected virtual Dictionary<long, FinalActorBuffs>[] SetBuffs(ParsedEvtcLog log, long start, long end, BuffEnum type)
         {
+            Dictionary<long, FinalActorBuffs>[] empty =
+            {
+                        new Dictionary<long, FinalActorBuffs>(),
+                        new Dictionary<long, FinalActorBuffs>()
+             };
             switch (type)
             {
                 case BuffEnum.Group:
-                    return null;
+                    return empty;
                 case BuffEnum.OffGroup:
-                    return null;
+                    return empty;
                 case BuffEnum.Squad:
                     var otherPlayers = log.PlayerList.Where(p => p.Agent != Agent).ToList();
                     return FinalActorBuffs.GetBuffsForPlayers(otherPlayers, log, AgentItem, start, end);
@@ -863,6 +1003,20 @@ namespace GW2EIEvtcParser.EIData
             {
                 value = target != null ? new FinalSupport(log, start, end, this, target) : new FinalSupportAll(log, start, end, this);
                 _supportStats.Set(start, end, target, value);
+            }
+            return value;
+        }
+
+        public FinalToPlayerSupport GetToPlayerSupportStats(ParsedEvtcLog log, long start, long end)
+        {
+            if (_toPlayerSupportStats == null)
+            {
+                _toPlayerSupportStats = new CachingCollection<FinalToPlayerSupport>(log);
+            }
+            if (!_toPlayerSupportStats.TryGetValue(start, end, out FinalToPlayerSupport value))
+            {
+                value = new FinalToPlayerSupport(log, this, start, end);
+                _toPlayerSupportStats.Set(start, end, value);
             }
             return value;
         }

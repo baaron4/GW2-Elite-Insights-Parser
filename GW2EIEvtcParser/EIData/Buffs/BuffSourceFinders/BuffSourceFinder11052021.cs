@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (extension <= EssenceOfSpeed && dst.Prof == "Soulbeast")
             {
-                if (log.PlayerListBySpec.ContainsKey("Herald") || log.PlayerListBySpec.ContainsKey("Tempest") || log.PlayerListBySpec.ContainsKey("Chronomancer"))
+                if (log.FriendliesListBySpec.ContainsKey("Herald") || log.FriendliesListBySpec.ContainsKey("Tempest") || log.FriendliesListBySpec.ContainsKey("Chronomancer"))
                 {
                     // uncertain, needs to check more
                     return 0;

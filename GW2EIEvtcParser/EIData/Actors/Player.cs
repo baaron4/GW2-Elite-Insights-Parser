@@ -13,7 +13,6 @@ namespace GW2EIEvtcParser.EIData
     public class Player : AbstractPlayer
     {
         // Fields
-        public bool HasCommanderTag => AgentItem.HasCommanderTag;
 
         // Constructors
         internal Player(AgentItem agent, bool noSquad) : base(agent)
@@ -66,6 +65,35 @@ namespace GW2EIEvtcParser.EIData
                 default:
                     return FinalActorBuffs.GetBuffsForSelf(log, this, start, end);
             }
+        }
+
+        public List<Point3D> GetCombatReplayActivePositions(ParsedEvtcLog log)
+        {
+            if (CombatReplay == null)
+            {
+                InitCombatReplay(log);
+            }
+            (IReadOnlyList<(long start, long end)> deads, _, IReadOnlyList<(long start, long end)> dcs) = GetStatus(log);
+            var activePositions = new List<Point3D>(GetCombatReplayPolledPositions(log));
+            for (int i = 0; i < activePositions.Count; i++)
+            {
+                Point3D cur = activePositions[i];
+                foreach ((long start, long end) in deads)
+                {
+                    if (cur.Time >= start && cur.Time <= end)
+                    {
+                        activePositions[i] = null;
+                    }
+                }
+                foreach ((long start, long end) in dcs)
+                {
+                    if (cur.Time >= start && cur.Time <= end)
+                    {
+                        activePositions[i] = null;
+                    }
+                }
+            }
+            return activePositions;
         }
 
     }
