@@ -45,7 +45,7 @@
                         totalConditionAvg = 0;
                     for (var i = 0; i < logData.players.length; i++) {
                         var player = logData.players[i];
-                        if (player.isDummy) {
+                        if (player.isFake) {
                             continue;
                         }
                         uptimes.push({
@@ -56,7 +56,7 @@
                         if (activeduration && activeTimes[i] < 1e-6) {
                             continue;
                         }
-                        if (player.isCustom) {
+                        if (player.notInSquad) {
                             continue;
                         }
                         if (!groupeAvg[player.group]) {

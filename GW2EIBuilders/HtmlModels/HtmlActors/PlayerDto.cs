@@ -21,8 +21,8 @@ namespace GW2EIBuilders.HtmlModels
         public string ColTarget { get; set; }
         public string ColCleave { get; set; }
         public string ColTotal { get; set; }
-        public bool IsDummy { get; set; }
-        public bool IsCustom { get; set; }
+        public bool IsFake { get; set; }
+        public bool NotInSquad { get; set; }
 
         public PlayerDto(AbstractSingleActor actor, ParsedEvtcLog log, ActorDetailsDto details) : base(actor, log, details)
         {
@@ -34,8 +34,8 @@ namespace GW2EIBuilders.HtmlModels
             ColTarget = HTMLBuilder.GetLink("Color-" + actor.Prof);
             ColCleave = HTMLBuilder.GetLink("Color-" + actor.Prof + "-NonBoss");
             ColTotal = HTMLBuilder.GetLink("Color-" + actor.Prof + "-Total");
-            IsDummy = actor.IsFakeActor;
-            IsCustom = actor.AgentItem.Type != GW2EIEvtcParser.ParsedData.AgentItem.AgentType.Player;
+            IsFake = actor.IsFakeActor;
+            NotInSquad = !(actor is Player);
             BuildWeaponSets(actor, log);
         }
 

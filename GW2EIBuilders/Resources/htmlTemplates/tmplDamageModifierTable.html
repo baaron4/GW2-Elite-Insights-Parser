@@ -84,10 +84,10 @@
                 for (var i = 0; i < this.indicesToUse.length; i++) {
                     var index = this.indicesToUse[i];
                     var player = logData.players[index];
-                    if (player.isDummy) {
+                    if (player.isFake) {
                         continue;
                     }
-                    if (!player.isCustom && !groups[player.group]) {
+                    if (!player.notInSquad && !groups[player.group]) {
                         groups[player.group] = {
                             name: "Group" + player.group,
                             data: []
@@ -97,7 +97,7 @@
                     var data = [];
                     for (j = 0; j < this.modifiers.length; j++) {
                         data[j] = dmgModifier[j];
-                        if (!player.isCustom) {
+                        if (!player.notInSquad) {
                             if (!groups[player.group].data[j]) {
                                 groups[player.group].data[j] = [0, 0, 0, 0];
                             }
@@ -146,10 +146,10 @@
                 for (var i = 0; i < this.indicesToUse.length; i++) {
                     var index = this.indicesToUse[i];
                     var player = logData.players[index];
-                    if (player.isDummy) {
+                    if (player.isFake) {
                         continue;
                     }
-                    if (!player.isCustom && !groups[player.group]) {
+                    if (!player.notInSquad && !groups[player.group]) {
                         groups[player.group] = {
                             name: "Group" + player.group,
                             data: []
@@ -158,7 +158,7 @@
                     var data = [];
                     for (j = 0; j < this.modifiers.length; j++) {
                         data[j] = [0, 0, 0, 0];
-                        if (!player.isCustom) {
+                        if (!player.notInSquad) {
                             if (!groups[player.group].data[j]) {
                                 groups[player.group].data[j] = [0, 0, 0, 0];
                             }
@@ -178,7 +178,7 @@
                             }
                         }
                     }
-                    if (!player.isCustom) {
+                    if (!player.notInSquad) {
                         for (j = 0; j < this.modifiers.length; j++) {
                             for (var k = 0; k < data[j].length; k++) {
                                 groups[player.group].data[j][k] += data[j][k];
