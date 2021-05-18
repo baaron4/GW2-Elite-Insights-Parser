@@ -67,8 +67,8 @@ namespace GW2EIEvtcParser.ParsedData
                         else
                         {
                             Name = Prof + " " + Name;
-                            Type = AgentType.NonSquadPlayer;
                         }
+                        Type = AgentType.NonSquadPlayer;
                     }
                 }
             }

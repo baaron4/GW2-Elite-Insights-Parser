@@ -52,7 +52,12 @@ namespace GW2EIJSON
         /// </summary>
         /// <seealso cref="JsonMinions"/>
         public IReadOnlyList<JsonMinions> Minions { get; set; }
-        
+
+        /// <summary>
+        /// Indicates that the JsonActor does not exist in reality
+        /// </summary>
+        public bool IsFake { get; set; }
+
 
         /// <summary>
         /// Array of Total DPS stats \n

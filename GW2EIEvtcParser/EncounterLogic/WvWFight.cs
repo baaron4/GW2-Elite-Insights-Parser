@@ -131,16 +131,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var set = new HashSet<string>();
                 foreach (AgentItem a in aList)
                 {
+                    List<AbstractSingleActor> actorListToFill = a.IsNotInSquadFriendlyPlayer ? friendlies : _targets;
                     var nonSquadPlayer = new PlayerNonSquad(a);
                     if (!set.Contains(nonSquadPlayer.Character))
                     {
-                        _targets.Add(nonSquadPlayer);
+                        actorListToFill.Add(nonSquadPlayer);
                         set.Add(nonSquadPlayer.Character);
                     }
                     else
                     {
                         // we merge
-                        AbstractSingleActor mainNPC = _targets.FirstOrDefault(x => x.Character == nonSquadPlayer.Character);
+                        AbstractSingleActor mainNPC = actorListToFill.FirstOrDefault(x => x.Character == nonSquadPlayer.Character);
                         foreach (CombatItem c in combatData)
                         {
                             if (c.IsStateChange.SrcIsAgent() && c.SrcAgent == nonSquadPlayer.Agent)

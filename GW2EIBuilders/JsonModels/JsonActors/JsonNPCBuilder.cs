@@ -26,6 +26,7 @@ namespace GW2EIBuilders.JsonModels
             IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(npc.AgentItem);
             jsonNPC.FirstAware = (int)npc.FirstAware;
             jsonNPC.LastAware = (int)npc.LastAware;
+            jsonNPC.EnemyPlayer = npc is PlayerNonSquad;
             double hpLeft = 100.0;
             if (log.FightData.Success)
             {
