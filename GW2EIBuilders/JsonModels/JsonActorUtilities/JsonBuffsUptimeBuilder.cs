@@ -25,24 +25,28 @@ namespace GW2EIBuilders.JsonModels
 
         public static JsonBuffsUptimeData BuildJsonBuffsUptimeData(FinalActorBuffs buffs, FinalBuffsDictionary buffsDictionary)
         {
-            var jsonBuffsUptimeData = new JsonBuffsUptimeData();
-            jsonBuffsUptimeData.Uptime = buffs.Uptime;
-            jsonBuffsUptimeData.Presence = buffs.Presence;
-            jsonBuffsUptimeData.Generated = ConvertKeys(buffsDictionary.Generated);
-            jsonBuffsUptimeData.Overstacked = ConvertKeys(buffsDictionary.Overstacked);
-            jsonBuffsUptimeData.Wasted = ConvertKeys(buffsDictionary.Wasted);
-            jsonBuffsUptimeData.UnknownExtended = ConvertKeys(buffsDictionary.UnknownExtension);
-            jsonBuffsUptimeData.ByExtension = ConvertKeys(buffsDictionary.Extension);
-            jsonBuffsUptimeData.Extended = ConvertKeys(buffsDictionary.Extended);
+            var jsonBuffsUptimeData = new JsonBuffsUptimeData
+            {
+                Uptime = buffs.Uptime,
+                Presence = buffs.Presence,
+                Generated = ConvertKeys(buffsDictionary.Generated),
+                Overstacked = ConvertKeys(buffsDictionary.Overstacked),
+                Wasted = ConvertKeys(buffsDictionary.Wasted),
+                UnknownExtended = ConvertKeys(buffsDictionary.UnknownExtension),
+                ByExtension = ConvertKeys(buffsDictionary.Extension),
+                Extended = ConvertKeys(buffsDictionary.Extended)
+            };
             return jsonBuffsUptimeData;
         }
 
 
         public static JsonBuffsUptime BuildJsonBuffsUptime(AbstractSingleActor actor, long buffID, ParsedEvtcLog log, RawFormatSettings settings, List<JsonBuffsUptimeData> buffData, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
-            var jsonBuffsUptime = new JsonBuffsUptime();
-            jsonBuffsUptime.Id = buffID;
-            jsonBuffsUptime.BuffData = buffData;
+            var jsonBuffsUptime = new JsonBuffsUptime
+            {
+                Id = buffID,
+                BuffData = buffData
+            };
             if (!buffDesc.ContainsKey("b" + buffID))
             {
                 buffDesc["b" + buffID] = JsonLogBuilder.BuildBuffDesc(log.Buffs.BuffsByIds[buffID], log);

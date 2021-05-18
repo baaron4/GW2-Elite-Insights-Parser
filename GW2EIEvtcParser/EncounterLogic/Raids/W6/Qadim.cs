@@ -192,7 +192,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // If changing phase detection, combat replay platform timings may have to be updated.
 
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC qadim = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Qadim);
+            AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Qadim);
             if (qadim == null)
             {
                 throw new MissingKeyActorsException("Qadim not found");
@@ -241,7 +241,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AddTargetsToPhaseAndFit(phase, ids, log);
                     if (phase.Targets.Count > 0)
                     {
-                        NPC phaseTar = phase.Targets.Last();
+                        AbstractSingleActor phaseTar = phase.Targets.Last();
                         switch (phaseTar.ID)
                         {
                             case (int)ArcDPSEnums.TrashID.AncientInvokedHydra:
@@ -529,7 +529,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Qadim);
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Qadim);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Qadim not found");

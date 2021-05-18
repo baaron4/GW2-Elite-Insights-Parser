@@ -105,7 +105,7 @@ namespace GW2EIBuilders.HtmlModels
             End = phaseData.End / 1000.0;
             BreakbarPhase = phaseData.BreakbarPhase;
             Dummy = phaseData.Dummy;
-            foreach (NPC target in phaseData.Targets)
+            foreach (AbstractSingleActor target in phaseData.Targets)
             {
                 Targets.Add(log.FightData.Logic.Targets.IndexOf(target));
             }
@@ -298,7 +298,7 @@ namespace GW2EIBuilders.HtmlModels
             {
                 var playerData = new List<List<object>>();
 
-                foreach (NPC target in phase.Targets)
+                foreach (AbstractSingleActor target in phase.Targets)
                 {
                     playerData.Add(GetDPSStatData(actor.GetDPSStats(target, log, phase.Start, phase.End)));
                 }
@@ -325,7 +325,7 @@ namespace GW2EIBuilders.HtmlModels
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
                 var playerData = new List<List<object>>();
-                foreach (NPC target in phase.Targets)
+                foreach (AbstractSingleActor target in phase.Targets)
                 {
                     FinalGameplayStats statsTarget = actor.GetGameplayStats(target, log, phase.Start, phase.End);
                     playerData.Add(GetDMGTargetStatData(statsTarget));

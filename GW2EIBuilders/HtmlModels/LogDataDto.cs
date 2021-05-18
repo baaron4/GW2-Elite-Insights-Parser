@@ -124,7 +124,7 @@ namespace GW2EIBuilders.HtmlModels
             return damageModBySpecs;
         }
 
-        private static bool HasBoons(ParsedEvtcLog log, PhaseData phase, NPC target)
+        private static bool HasBoons(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor target)
         {
             IReadOnlyDictionary<long, FinalActorBuffs> conditions = target.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
             foreach (Buff boon in log.StatisticsHelper.PresentBoons)
@@ -173,7 +173,7 @@ namespace GW2EIBuilders.HtmlModels
             }
 
             log.UpdateProgressWithCancellationCheck("HTML: building Targets");
-            foreach (NPC target in log.FightData.Logic.Targets)
+            foreach (AbstractSingleActor target in log.FightData.Logic.Targets)
             {
                 var targetDto = new TargetDto(target, log, ActorDetailsDto.BuildTargetData(log, target, usedSkills, usedBuffs, cr));
                 logData.Targets.Add(targetDto);
@@ -344,7 +344,7 @@ namespace GW2EIBuilders.HtmlModels
                     MechanicStats = MechanicDto.BuildPlayerMechanicData(log, phase),
                     EnemyMechanicStats = MechanicDto.BuildEnemyMechanicData(log, phase)
                 };
-                foreach (NPC target in phase.Targets)
+                foreach (AbstractSingleActor target in phase.Targets)
                 {
                     phaseDto.TargetsCondiStats.Add(BuffData.BuildTargetCondiData(log, phase.Start, phase.End, target));
                     phaseDto.TargetsCondiTotals.Add(BuffData.BuildTargetCondiUptimeData(log, phase, target));

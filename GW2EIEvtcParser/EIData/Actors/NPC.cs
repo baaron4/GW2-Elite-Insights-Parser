@@ -17,9 +17,13 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        internal void OverrideName(string name)
+        internal override void OverrideName(string name)
         {
             Character = name;
+        }
+        internal override void SetManualHealth(int health)
+        {
+            Health = health;
         }
 
         public override string GetIcon()

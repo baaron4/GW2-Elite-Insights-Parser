@@ -17,7 +17,7 @@ namespace GW2EIBuilders.JsonModels
     internal static class JsonPlayerBuilder
     {
 
-        public static JsonPlayer BuildJsonPlayer(Player player, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc, Dictionary<string, JsonLog.DamageModDesc> damageModDesc, Dictionary<string, HashSet<long>> personalBuffs)
+        public static JsonPlayer BuildJsonPlayer(AbstractSingleActor player, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc, Dictionary<string, JsonLog.DamageModDesc> damageModDesc, Dictionary<string, HashSet<long>> personalBuffs)
         {
             var jsonPlayer = new JsonPlayer();
             JsonActorBuilder.FillJsonActor(jsonPlayer, player, log, settings, skillDesc, buffDesc);
@@ -42,7 +42,7 @@ namespace GW2EIBuilders.JsonModels
             var targetDamageDist = new IReadOnlyList<JsonDamageDist>[log.FightData.Logic.Targets.Count][];
             for (int j = 0; j < log.FightData.Logic.Targets.Count; j++)
             {
-                NPC target = log.FightData.Logic.Targets[j];
+                AbstractSingleActor target = log.FightData.Logic.Targets[j];
                 var graph1SDamageList = new IReadOnlyList<int>[phases.Count];
                 var graph1SPowerDamageList = new IReadOnlyList<int>[phases.Count];
                 var graph1SConditionDamageList = new IReadOnlyList<int>[phases.Count];
@@ -165,7 +165,7 @@ namespace GW2EIBuilders.JsonModels
             return uptimes;
         }
 
-        private static List<JsonBuffsUptime> GetPlayerJsonBuffsUptime(Player player, List<IReadOnlyDictionary<long, FinalActorBuffs>> buffs, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.BuffDesc> buffDesc, Dictionary<string, HashSet<long>> personalBuffs)
+        private static List<JsonBuffsUptime> GetPlayerJsonBuffsUptime(AbstractSingleActor player, List<IReadOnlyDictionary<long, FinalActorBuffs>> buffs, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.BuffDesc> buffDesc, Dictionary<string, HashSet<long>> personalBuffs)
         {
             var res = new List<JsonBuffsUptime>();
             var profEnums = new HashSet<ParserHelper.Source>(ProfToEnum(player.Prof));

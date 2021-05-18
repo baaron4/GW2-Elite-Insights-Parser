@@ -99,7 +99,7 @@ namespace GW2EIEvtcParser
                 {
                     AddToDictionary(p);
                 }
-                foreach (NPC npc in FightData.Logic.Targets)
+                foreach (AbstractSingleActor npc in FightData.Logic.Targets)
                 {
                     AddToDictionary(npc);
                 }

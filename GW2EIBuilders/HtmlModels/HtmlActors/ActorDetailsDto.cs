@@ -37,7 +37,7 @@ namespace GW2EIBuilders.HtmlModels
                 dto.Rotation.Add(SkillDto.BuildRotationData(log, actor, phase, usedSkills));
                 dto.DmgDistributions.Add(DmgDistributionDto.BuildFriendlyDMGDistData(log, actor, null, phase, usedSkills, usedBuffs));
                 var dmgTargetsDto = new List<DmgDistributionDto>();
-                foreach (NPC target in phase.Targets)
+                foreach (AbstractSingleActor target in phase.Targets)
                 {
                     dmgTargetsDto.Add(DmgDistributionDto.BuildFriendlyDMGDistData(log, actor, target, phase, usedSkills, usedBuffs));
                 }
@@ -63,7 +63,7 @@ namespace GW2EIBuilders.HtmlModels
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
                 var dmgTargetsDto = new List<DmgDistributionDto>();
-                foreach (NPC target in phase.Targets)
+                foreach (AbstractSingleActor target in phase.Targets)
                 {
                     dmgTargetsDto.Add(DmgDistributionDto.BuildFriendlyMinionDMGDistData(log, actor, minion, target, phase, usedSkills, usedBuffs));
                 }
@@ -73,7 +73,7 @@ namespace GW2EIBuilders.HtmlModels
             return dto;
         }
 
-        public static ActorDetailsDto BuildTargetData(ParsedEvtcLog log, NPC target, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, bool cr)
+        public static ActorDetailsDto BuildTargetData(ParsedEvtcLog log, AbstractSingleActor target, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, bool cr)
         {
             var dto = new ActorDetailsDto
             {
@@ -118,7 +118,7 @@ namespace GW2EIBuilders.HtmlModels
             return dto;
         }
 
-        private static ActorDetailsDto BuildTargetsMinionsData(ParsedEvtcLog log, NPC target, Minions minion, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        private static ActorDetailsDto BuildTargetsMinionsData(ParsedEvtcLog log, AbstractSingleActor target, Minions minion, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             var dto = new ActorDetailsDto
             {

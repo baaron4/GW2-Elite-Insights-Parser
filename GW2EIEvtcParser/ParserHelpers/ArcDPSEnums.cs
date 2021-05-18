@@ -139,7 +139,7 @@ namespace GW2EIEvtcParser
             BarrierUpdate = 38,
             StatReset = 39, 
             Extension = 40,
-            APIDelayed = 40,
+            APIDelayed = 41,
             Unknown
         };
 

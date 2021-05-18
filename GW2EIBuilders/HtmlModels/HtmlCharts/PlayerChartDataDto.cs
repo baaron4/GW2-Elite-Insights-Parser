@@ -33,7 +33,7 @@ namespace GW2EIBuilders.HtmlModels
                 Total = p.Get1SBreakbarDamageList(log, phase.Start, phase.End, null),
                 Targets = new List<IReadOnlyList<double>>()
             };
-            foreach (NPC target in phase.Targets)
+            foreach (AbstractSingleActor target in phase.Targets)
             {
                 Damage.Targets.Add(p.Get1SDamageList(log, phase.Start, phase.End, target, ParserHelper.DamageType.All));
                 PowerDamage.Targets.Add(p.Get1SDamageList(log, phase.Start, phase.End, target, ParserHelper.DamageType.Power));

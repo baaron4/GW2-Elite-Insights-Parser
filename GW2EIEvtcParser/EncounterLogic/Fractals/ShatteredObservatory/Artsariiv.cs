@@ -55,7 +55,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Artsariiv);
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Artsariiv);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Artsariiv not found");

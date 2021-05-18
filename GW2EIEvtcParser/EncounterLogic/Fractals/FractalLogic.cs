@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             // generic method for fractals
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Main target of the fight not found");
@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             // check reward
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Main target of the fight not found");

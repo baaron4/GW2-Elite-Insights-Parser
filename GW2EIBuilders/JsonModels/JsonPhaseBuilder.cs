@@ -21,7 +21,7 @@ namespace GW2EIBuilders.JsonModels
             jsPhase.Name = phase.Name;
             var targets = new List<int>();
             jsPhase.BreakbarPhase = phase.BreakbarPhase;
-            foreach (NPC tar in phase.Targets)
+            foreach (AbstractSingleActor tar in phase.Targets)
             {
                 targets.Add(log.FightData.Logic.Targets.IndexOf(tar));
             }

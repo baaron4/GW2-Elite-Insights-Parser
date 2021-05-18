@@ -51,7 +51,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
         {
-            NPC mainTarget = GetMainTarget();
+            AbstractSingleActor mainTarget = GetMainTarget();
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Xera not found");
@@ -78,7 +78,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = GetMainTarget();
+            AbstractSingleActor mainTarget = GetMainTarget();
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Xera not found");
@@ -112,9 +112,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        private NPC GetMainTarget() => Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Xera);
+        private AbstractSingleActor GetMainTarget() => Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Xera);
 
-        private AbstractBuffEvent GetInvulXeraEvent(ParsedEvtcLog log, NPC xera)
+        private static AbstractBuffEvent GetInvulXeraEvent(ParsedEvtcLog log, AbstractSingleActor xera)
         {
             AbstractBuffEvent determined = log.CombatData.GetBuffData(762).FirstOrDefault(x => x.To == xera.AgentItem && x is BuffApplyEvent);
             if (determined == null)
@@ -206,7 +206,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (_xeraSecondPhaseStartTime > 0)
             {
-                NPC mainTarget = GetMainTarget();
+                AbstractSingleActor mainTarget = GetMainTarget();
                 if (mainTarget == null)
                 {
                     throw new MissingKeyActorsException("Xera not found");

@@ -30,7 +30,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.WorldVersusWorld);
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.WorldVersusWorld);
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Main target of the fight not found");
@@ -131,29 +131,29 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var set = new HashSet<string>();
                 foreach (AgentItem a in aList)
                 {
-                    var npc = new NPC(a);
-                    if (!set.Contains(npc.Character))
+                    var nonSquadPlayer = new PlayerNonSquad(a);
+                    if (!set.Contains(nonSquadPlayer.Character))
                     {
-                        _targets.Add(npc);
-                        set.Add(npc.Character);
+                        _targets.Add(nonSquadPlayer);
+                        set.Add(nonSquadPlayer.Character);
                     }
                     else
                     {
                         // we merge
-                        NPC mainNPC = _targets.FirstOrDefault(x => x.Character == npc.Character);
+                        AbstractSingleActor mainNPC = _targets.FirstOrDefault(x => x.Character == nonSquadPlayer.Character);
                         foreach (CombatItem c in combatData)
                         {
-                            if (c.IsStateChange.SrcIsAgent() && c.SrcAgent == npc.Agent)
+                            if (c.IsStateChange.SrcIsAgent() && c.SrcAgent == nonSquadPlayer.Agent)
                             {
                                 c.OverrideSrcAgent(mainNPC.Agent);
                             }
-                            if (c.IsStateChange.DstIsAgent() && c.DstAgent == npc.Agent)
+                            if (c.IsStateChange.DstIsAgent() && c.DstAgent == nonSquadPlayer.Agent)
                             {
                                 c.OverrideDstAgent(mainNPC.Agent);
                             }
                         }
-                        agentData.SwapMasters(npc.AgentItem, mainNPC.AgentItem);
-                        mainNPC.AgentItem.OverrideAwareTimes(Math.Min(npc.FirstAware, mainNPC.FirstAware), Math.Max(npc.LastAware, mainNPC.LastAware));
+                        agentData.SwapMasters(nonSquadPlayer.AgentItem, mainNPC.AgentItem);
+                        mainNPC.AgentItem.OverrideAwareTimes(Math.Min(nonSquadPlayer.FirstAware, mainNPC.FirstAware), Math.Max(nonSquadPlayer.LastAware, mainNPC.LastAware));
                     }
                 }
             }

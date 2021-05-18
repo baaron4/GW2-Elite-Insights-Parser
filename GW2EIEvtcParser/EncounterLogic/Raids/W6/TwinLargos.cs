@@ -63,7 +63,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<AbstractHealthDamageEvent>();
         }
 
-        private static List<PhaseData> GetTargetPhases(ParsedEvtcLog log, NPC target, string baseName)
+        private static List<PhaseData> GetTargetPhases(ParsedEvtcLog log, AbstractSingleActor target, string baseName)
         {
             long start = 0;
             long end = 0;
@@ -113,7 +113,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        private static void FallBackPhases(NPC target, List<PhaseData> phases, ParsedEvtcLog log, bool firstPhaseAt0)
+        private static void FallBackPhases(AbstractSingleActor target, List<PhaseData> phases, ParsedEvtcLog log, bool firstPhaseAt0)
         {
             IReadOnlyCollection<AgentItem> pAgents = log.PlayerAgents;
             // clean Nikare related bugs
@@ -188,13 +188,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC nikare = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Nikare);
+            AbstractSingleActor nikare = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Nikare);
             if (nikare == null)
             {
                 throw new MissingKeyActorsException("Nikare not found");
             }
             phases[0].AddTarget(nikare);
-            NPC kenut = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Kenut);
+            AbstractSingleActor kenut = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Kenut);
             if (kenut != null)
             {
                 phases[0].AddTarget(kenut);
@@ -338,7 +338,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Nikare);
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Nikare);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Nikare not found");

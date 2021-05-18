@@ -73,7 +73,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Peerless Qadim not found");
@@ -173,7 +173,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         if (c is BuffApplyEvent)
                         {
-                            NPC qadim = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
+                            AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
                             surgeStart = (int)c.Time;
                             source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.CreditedBy) ?? qadim;
                         }
@@ -254,7 +254,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (c is BuffApplyEvent)
                 {
-                    NPC qadim = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
+                    AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
                     surgeStart = (int)c.Time;
                     source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.CreditedBy) ?? qadim;
                 }
@@ -292,7 +292,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Peerless Qadim not found");

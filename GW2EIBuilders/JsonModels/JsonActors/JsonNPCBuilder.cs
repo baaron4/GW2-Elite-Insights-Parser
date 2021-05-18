@@ -16,7 +16,7 @@ namespace GW2EIBuilders.JsonModels
     internal static class JsonNPCBuilder
     {
       
-        public static JsonNPC BuildJsonNPC(NPC npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        public static JsonNPC BuildJsonNPC(AbstractSingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
             var jsonNPC = new JsonNPC();
             JsonActorBuilder.FillJsonActor(jsonNPC, npc, log, settings, skillDesc, buffDesc);
@@ -50,7 +50,7 @@ namespace GW2EIBuilders.JsonModels
             return jsonNPC;
         }
 
-        private static List<JsonBuffsUptime> GetNPCJsonBuffsUptime(NPC npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        private static List<JsonBuffsUptime> GetNPCJsonBuffsUptime(AbstractSingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
             var res = new List<JsonBuffsUptime>();
             IReadOnlyList<PhaseData> phases = log.FightData.GetNonDummyPhases(log);

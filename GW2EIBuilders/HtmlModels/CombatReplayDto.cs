@@ -45,7 +45,7 @@ namespace GW2EIBuilders.HtmlModels
                     actors.Add(a.GetCombatReplayJSON(map, log));
                 }
             }
-            foreach (AbstractSingleActor actor in log.FightData.Logic.TrashMobs)
+            foreach (NPC actor in log.FightData.Logic.TrashMobs)
             {
                 if (actor.GetCombatReplayPolledPositions(log).Count == 0)
                 {

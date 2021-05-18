@@ -42,7 +42,7 @@ namespace GW2EIBuilders.HtmlModels
             return BuildGraphStates(barriers, phase, true, 0.0);
         }
 
-        public static List<object[]> BuildBreakbarPercentStates(ParsedEvtcLog log, NPC npc, PhaseData phase)
+        public static List<object[]> BuildBreakbarPercentStates(ParsedEvtcLog log, AbstractSingleActor npc, PhaseData phase)
         {
             return BuildGraphStates(npc.GetBreakbarPercentUpdates(log), phase, true, 100.0);
         }

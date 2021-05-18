@@ -106,7 +106,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
         {
-            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Deimos not found");
@@ -143,7 +143,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success && _deimos10PercentTime > 0)
             {
-                NPC deimos = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
+                AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
                 if (deimos == null)
                 {
                     throw new MissingKeyActorsException("Deimos not found");
@@ -238,7 +238,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             ComputeFightTargets(agentData, combatData);
             // Find target
-            NPC deimos = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
+            AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
             if (deimos == null)
             {
                 throw new MissingKeyActorsException("Deimos not found");
@@ -276,7 +276,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             deimos.AgentItem.OverrideAwareTimes(deimos.FirstAware, fightData.FightEnd);
             deimos.OverrideName("Deimos");
-            foreach (NPC target in Targets)
+            foreach (AbstractSingleActor target in Targets)
             {
                 if (target.ID == (int)ArcDPSEnums.TrashID.Thief || target.ID == (int)ArcDPSEnums.TrashID.Drunkard || target.ID == (int)ArcDPSEnums.TrashID.Gambler)
                 {
@@ -295,7 +295,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Deimos not found");
@@ -312,7 +312,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        private List<PhaseData> AddBossPhases(List<PhaseData> phases, ParsedEvtcLog log, NPC mainTarget)
+        private List<PhaseData> AddBossPhases(List<PhaseData> phases, ParsedEvtcLog log, AbstractSingleActor mainTarget)
         {
             // Determined + additional data on inst change
             AbstractBuffEvent invulDei = log.CombatData.GetBuffData(762).FirstOrDefault(x => x is BuffApplyEvent && x.To == mainTarget.AgentItem);
@@ -335,9 +335,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        private List<PhaseData> AddAddPhases(List<PhaseData> phases, ParsedEvtcLog log, NPC mainTarget)
+        private List<PhaseData> AddAddPhases(List<PhaseData> phases, ParsedEvtcLog log, AbstractSingleActor mainTarget)
         {
-            foreach (NPC target in Targets)
+            foreach (AbstractSingleActor target in Targets)
             {
                 if (target.ID == (int)ArcDPSEnums.TrashID.Thief || target.ID == (int)ArcDPSEnums.TrashID.Drunkard || target.ID == (int)ArcDPSEnums.TrashID.Gambler)
                 {
@@ -353,11 +353,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }     
 
-        private List<PhaseData> AddBurstPhases(List<PhaseData> phases, ParsedEvtcLog log, NPC mainTarget)
+        private static List<PhaseData> AddBurstPhases(List<PhaseData> phases, ParsedEvtcLog log, AbstractSingleActor mainTarget)
         {
             List<AbstractBuffEvent> signets = GetFilteredList(log.CombatData, 38224, mainTarget, true);
             long sigStart = 0;
-            long sigEnd = 0;
             int burstID = 1;
             for (int i = 0; i < signets.Count; i++)
             {
@@ -368,7 +367,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 else
                 {
-                    sigEnd = Math.Min(signet.Time - 1, log.FightData.FightEnd);
+                    long sigEnd = Math.Min(signet.Time - 1, log.FightData.FightEnd);
                     var burstPhase = new PhaseData(sigStart, sigEnd, "Burst " + burstID++);
                     burstPhase.AddTarget(mainTarget);
                     phases.Add(burstPhase);
@@ -507,7 +506,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Deimos not found");

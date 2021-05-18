@@ -45,22 +45,21 @@ namespace GW2EIEvtcParser.EIData
 
         // Status
 
-        private int _health = -2;
+        protected int Health { get; set; } = -2;
 
         public int GetHealth(CombatData combatData)
         {
-            if (_health == -2)
+            if (Health == -2)
             {
                 IReadOnlyList<MaxHealthUpdateEvent> maxHpUpdates = combatData.GetMaxHealthUpdateEvents(AgentItem);
-                _health = maxHpUpdates.Count > 0 ? maxHpUpdates.Max(x => x.MaxHealth) : -1;
+                Health = maxHpUpdates.Count > 0 ? maxHpUpdates.Max(x => x.MaxHealth) : -1;
             }
-            return _health;
+            return Health;
         }
 
-        internal void SetManualHealth(int health)
-        {
-            _health = health;
-        }
+        internal abstract void SetManualHealth(int health);
+
+        internal abstract void OverrideName(string name);
 
         public (IReadOnlyList<(long start, long end)>, IReadOnlyList<(long start, long end)>, IReadOnlyList<(long start, long end)>) GetStatus(ParsedEvtcLog log)
         {
@@ -187,7 +186,7 @@ namespace GW2EIEvtcParser.EIData
 
         // Damage Modifiers
 
-        public IReadOnlyDictionary<string, DamageModifierStat> GetDamageModifierStats(NPC target, ParsedEvtcLog log, long start, long end)
+        public IReadOnlyDictionary<string, DamageModifierStat> GetDamageModifierStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             return _damageModifiersHelper.GetDamageModifierStats(target, log, start, end);       
         }

@@ -80,7 +80,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        private static List<PhaseData> GetInBetweenSoulSplits(ParsedEvtcLog log, NPC dhuum, long mainStart, long mainEnd, bool hasRitual)
+        private static List<PhaseData> GetInBetweenSoulSplits(ParsedEvtcLog log, AbstractSingleActor dhuum, long mainStart, long mainEnd, bool hasRitual)
         {
             IReadOnlyList<AbstractCastEvent> cls = dhuum.GetCastEvents(log, 0, log.FightData.FightEnd);
             var cataCycles = cls.Where(x => x.SkillId == 48398).ToList();
@@ -115,7 +115,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC dhuum = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
+            AbstractSingleActor dhuum = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
             if (dhuum == null)
             {
                 throw new MissingKeyActorsException("Dhuum not found");
@@ -321,7 +321,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             // spirit transform
             var spiritTransform = log.CombatData.GetBuffData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Dhuum not found");
@@ -406,7 +406,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Dhuum not found");

@@ -24,6 +24,14 @@ namespace GW2EIEvtcParser.EIData
                 throw new EvtcAgentException("Players can't be fake actors");
             }
         }
+        internal override void OverrideName(string name)
+        {
+            throw new InvalidOperationException("Players' name can't be overriden");
+        }
+        internal override void SetManualHealth(int health)
+        {
+            throw new InvalidOperationException("Players' health can't be overriden");
+        }
 
         public override string GetIcon()
         {

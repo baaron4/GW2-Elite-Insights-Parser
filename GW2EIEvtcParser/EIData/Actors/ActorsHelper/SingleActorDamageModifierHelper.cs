@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        private Dictionary<string, DamageModifierStat> ComputeDamageModifierStats(NPC target, ParsedEvtcLog log, long start, long end)
+        private Dictionary<string, DamageModifierStat> ComputeDamageModifierStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             // Check if damage mods against target
             if (_damageModifierEventsPerTargets.TryGetValue(log.FightData.FightStart, log.FightData.FightEnd, target, out Dictionary<string, List<DamageModifierEvent>> events))
@@ -47,7 +47,7 @@ namespace GW2EIEvtcParser.EIData
             return null;
         }
 
-        public IReadOnlyDictionary<string, DamageModifierStat> GetDamageModifierStats(NPC target, ParsedEvtcLog log, long start, long end)
+        public IReadOnlyDictionary<string, DamageModifierStat> GetDamageModifierStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (!log.ParserSettings.ComputeDamageModifiers || Actor.IsFakeActor)
             {

@@ -57,7 +57,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Samarog);
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Samarog);
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Samarog not found");
@@ -96,7 +96,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, friendlies);
             int curGuldhem = 1;
             int curRigom = 1;
-            foreach (NPC target in Targets)
+            foreach (AbstractSingleActor target in Targets)
             {
                 if (target.ID == (int)ArcDPSEnums.TrashID.Guldhem)
                 {
@@ -186,7 +186,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             //fixated Ghuldem
             List<AbstractBuffEvent> fixatedGuldhem = GetFilteredList(log.CombatData, 38223, p, true);
             int fixationGuldhemStart = 0;
-            NPC guldhem = null;
+            AbstractSingleActor guldhem = null;
             foreach (AbstractBuffEvent c in fixatedGuldhem)
             {
                 if (c is BuffApplyEvent)
@@ -207,7 +207,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             //fixated Rigom
             List<AbstractBuffEvent> fixatedRigom = GetFilteredList(log.CombatData, 37693, p, true);
             int fixationRigomStart = 0;
-            NPC rigom = null;
+            AbstractSingleActor rigom = null;
             foreach (AbstractBuffEvent c in fixatedRigom)
             {
                 if (c is BuffApplyEvent)
@@ -229,7 +229,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Samarog);
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Samarog);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Samarog not found");

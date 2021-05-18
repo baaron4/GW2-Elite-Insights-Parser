@@ -204,7 +204,7 @@ namespace GW2EIBuilders.HtmlModels
         }
 
         /////
-        public static List<BuffData> BuildTargetCondiData(ParsedEvtcLog log, long start, long end, NPC target)
+        public static List<BuffData> BuildTargetCondiData(ParsedEvtcLog log, long start, long end, AbstractSingleActor target)
         {
             Dictionary<long, FinalBuffsDictionary> conditions = target.GetBuffsDictionary(log, start, end);
             var list = new List<BuffData>();
@@ -216,13 +216,13 @@ namespace GW2EIBuilders.HtmlModels
             return list;
         }
 
-        public static BuffData BuildTargetCondiUptimeData(ParsedEvtcLog log, PhaseData phase, NPC target)
+        public static BuffData BuildTargetCondiUptimeData(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor target)
         {
             IReadOnlyDictionary<long, FinalActorBuffs> buffs = target.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
             return new BuffData(buffs, log.StatisticsHelper.PresentConditions, target.GetGameplayStats(log, phase.Start, phase.End).AvgConditions);
         }
 
-        public static BuffData BuildTargetBoonData(ParsedEvtcLog log, PhaseData phase, NPC target)
+        public static BuffData BuildTargetBoonData(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor target)
         {
             IReadOnlyDictionary<long, FinalActorBuffs> buffs = target.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
             return new BuffData(buffs, log.StatisticsHelper.PresentBoons, target.GetGameplayStats(log, phase.Start, phase.End).AvgBoons);

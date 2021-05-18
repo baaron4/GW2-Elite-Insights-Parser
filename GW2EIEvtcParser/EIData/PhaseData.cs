@@ -22,8 +22,8 @@ namespace GW2EIEvtcParser.EIData
         public bool BreakbarPhase { get; internal set; } = false;
 
         public bool Dummy { get; internal set; } = false;
-        public IReadOnlyList<NPC> Targets => _targets;
-        private readonly List<NPC> _targets = new List<NPC>();
+        public IReadOnlyList<AbstractSingleActor> Targets => _targets;
+        private readonly List<AbstractSingleActor> _targets = new List<AbstractSingleActor>();
 
         internal PhaseData(long start, long end)
         {
@@ -44,17 +44,17 @@ namespace GW2EIEvtcParser.EIData
             return Start <= time && time <= End;
         }
 
-        internal void AddTarget(NPC target)
+        internal void AddTarget(AbstractSingleActor target)
         {
             _targets.Add(target);
         }
 
-        internal void RemoveTarget(NPC target)
+        internal void RemoveTarget(AbstractSingleActor target)
         {
             _targets.Remove(target);
         }
 
-        internal void AddTargets(IEnumerable<NPC> targets)
+        internal void AddTargets(IEnumerable<AbstractSingleActor> targets)
         {
             _targets.AddRange(targets);
         }
@@ -85,7 +85,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 long end = long.MinValue;
                 long start = long.MaxValue;
-                foreach (NPC target in Targets)
+                foreach (AbstractSingleActor target in Targets)
                 {
                     long startTime = target.FirstAware;
                     SpawnEvent spawned = log.CombatData.GetSpawnEvents(target.AgentItem).FirstOrDefault();

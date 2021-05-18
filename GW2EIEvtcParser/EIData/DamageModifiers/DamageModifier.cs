@@ -130,7 +130,7 @@ namespace GW2EIEvtcParser.EIData
             return false;
         }
 
-        public int GetTotalDamage(AbstractSingleActor actor, ParsedEvtcLog log, NPC t, long start, long end)
+        public int GetTotalDamage(AbstractSingleActor actor, ParsedEvtcLog log, AbstractSingleActor t, long start, long end)
         {
             FinalDPS damageData = actor.GetDPSStats(t, log, start, end);
             switch (_compareType)
@@ -145,7 +145,7 @@ namespace GW2EIEvtcParser.EIData
             return 0;
         }
 
-        public IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageEvents(AbstractSingleActor actor, ParsedEvtcLog log, NPC t, long start, long end)
+        public IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageEvents(AbstractSingleActor actor, ParsedEvtcLog log, AbstractSingleActor t, long start, long end)
         {
             switch (_srcType)
             {

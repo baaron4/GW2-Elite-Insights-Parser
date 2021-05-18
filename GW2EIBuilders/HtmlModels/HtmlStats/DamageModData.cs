@@ -35,7 +35,7 @@ namespace GW2EIBuilders.HtmlModels
                     });
                 }
             }
-            foreach (NPC target in phase.Targets)
+            foreach (AbstractSingleActor target in phase.Targets)
             {
                 var pTarget = new List<object[]>();
                 DataTarget.Add(pTarget);

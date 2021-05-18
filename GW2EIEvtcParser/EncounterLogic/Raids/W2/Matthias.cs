@@ -58,7 +58,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Matthias);
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Matthias);
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Matthias not found");
@@ -180,7 +180,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             ComputeFightTargets(agentData, combatData);
-            foreach (NPC target in Targets)
+            foreach (AbstractSingleActor target in Targets)
             {
                 if (target.ID == (int)ArcDPSEnums.TrashID.MatthiasSacrificeCrystal)
                 {
