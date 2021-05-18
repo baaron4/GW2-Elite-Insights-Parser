@@ -38,7 +38,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
             simulator.Remove(CreditedBy, RemovedDuration, 1, Time, ArcDPSEnums.BuffRemove.Single, BuffInstance);
         }
-        internal override int CompareTo(AbstractBuffEvent abe)
+        /*internal override int CompareTo(AbstractBuffEvent abe)
         {
             if (abe is BuffRemoveSingleEvent)
             {
@@ -49,6 +49,6 @@ namespace GW2EIEvtcParser.ParsedData
                 return -1;
             }
             return 1;
-        }
+        }*/
     }
 }

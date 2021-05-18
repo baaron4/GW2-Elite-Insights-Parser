@@ -174,22 +174,23 @@ namespace GW2EIBuilders
                 // always create file in DEBUG
 #if !DEBUG
                 // if the file already exists, skip creation
-                if (File.Exists(filePath))
+                if (!File.Exists(filePath))
                 {
-                    return filePath;
+#endif
+                    try
+                    {
+                        using (var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                        using (var scriptWriter = new StreamWriter(fs, NoBOMEncodingUTF8))
+                        {
+                            scriptWriter.Write(content);
+                        }
+                    }
+                    catch (IOException)
+                    {
+                    }
+#if !DEBUG
                 }
 #endif
-                try
-                {
-                    using (var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                    using (var scriptWriter = new StreamWriter(fs, NoBOMEncodingUTF8))
-                    {
-                        scriptWriter.Write(content);
-                    }
-                }
-                catch (IOException)
-                {
-                }
             }
             // Priority to cdn
             if (!cdnNull)

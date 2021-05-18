@@ -140,7 +140,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return fightData.LogStart;
         }
 
-        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
             // find target
             AgentItem firstXera = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Xera).FirstOrDefault();

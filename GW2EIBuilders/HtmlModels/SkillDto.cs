@@ -42,7 +42,7 @@ namespace GW2EIBuilders.HtmlModels
             return rotEntry;
         }
 
-        public static List<object[]> BuildRotationData(ParsedEvtcLog log, AbstractActor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills)
+        public static List<object[]> BuildRotationData(ParsedEvtcLog log, AbstractSingleActor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills)
         {
             var list = new List<object[]>();
             IReadOnlyList<AbstractCastEvent> casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End);

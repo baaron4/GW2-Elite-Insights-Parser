@@ -44,8 +44,8 @@ namespace GW2EIEvtcParser
             Cycle, // damage happened on tick timer
             NotCycle, // damage happened outside tick timer (resistable)
             NotCycle_NoResit, // BEFORE MAY 2021: the others were lumped here, now retired
-            NotCycle_DamageToTargetOnHit, // damage happened to target on hitting target
-            NotCycle_DamageToSourceOnHit, // damage happened to source on htiting target
+            NotCycle_DamageToTargetOnHit, // damage happened to target on hiting target
+            NotCycle_DamageToSourceOnHit, // damage happened to source on hiting target
             NotCycle_DamageToTargetOnStackRemove, // damage happened to target on source losing a stack
             Unknown
         };
@@ -230,7 +230,7 @@ namespace GW2EIEvtcParser
             ConditionDurationIncrease = -1,
             DamageFormulaSquaredLevel = -2,
             CriticalChance = -3,
-            PowerDamageToHP = -4,
+            StrikeDamageToHP = -4,
             ConditionDamageToHP = -5,
             GlancingBlow = -6,
             SkillActivationDamageFormula = -7,
@@ -313,6 +313,7 @@ namespace GW2EIEvtcParser
         private const int BloodstoneFragment = -10;
         private const int BloodstoneShard = -11;
         private const int ChargedBloodstone = -12;
+        private const int PyreGuardianResolution = -13;
 
 
         //
@@ -451,6 +452,7 @@ namespace GW2EIEvtcParser
             FireImp = 21100,
             PyreGuardian = 21050,
             PyreGuardianRetal = ArcDPSEnums.PyreGuardianRetal,
+            PyreGuardianResolution = ArcDPSEnums.PyreGuardianResolution,
             PyreGuardianProtect = ArcDPSEnums.PyreGuardianProtect,
             PyreGuardianStab = ArcDPSEnums.PyreGuardianStab,
             ReaperofFlesh = 21218,

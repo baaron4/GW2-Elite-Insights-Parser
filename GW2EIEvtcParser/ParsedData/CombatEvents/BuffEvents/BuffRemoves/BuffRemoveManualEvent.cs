@@ -21,9 +21,9 @@ namespace GW2EIEvtcParser.ParsedData
         internal override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
         }
-        internal override int CompareTo(AbstractBuffEvent abe)
+        /*internal override int CompareTo(AbstractBuffEvent abe)
         {
             throw new InvalidOperationException("Manual removes can't be sorted");
-        }
+        }*/
     }
 }

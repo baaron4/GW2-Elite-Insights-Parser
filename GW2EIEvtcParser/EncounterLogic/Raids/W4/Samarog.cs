@@ -91,9 +91,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
-            base.EIEvtcParse(fightData, agentData, combatData, playerList);
+            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, playerList);
             int curGuldhem = 1;
             int curRigom = 1;
             foreach (NPC target in Targets)

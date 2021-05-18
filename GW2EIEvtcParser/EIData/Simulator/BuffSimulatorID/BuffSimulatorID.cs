@@ -45,7 +45,6 @@ namespace GW2EIEvtcParser.EIData
         }
 
         protected List<BuffStackItemID> BuffStack { get; set; } = new List<BuffStackItemID>();
-        //protected List<(long duration, AgentItem src)> OverrideCandidates { get; } = new List<(long duration, AgentItem src)>();
 
         // Constructor
         protected BuffSimulatorID(ParsedEvtcLog log, Buff buff) : base(log, buff)
@@ -65,7 +64,6 @@ namespace GW2EIEvtcParser.EIData
                 throw new EIBuffSimulatorIDException("Extend has failed");
             }
             toExtend.Extend(extension, src);
-            //ExtendedSimulationResult.Add(new BuffCreationItem(src, extension, time, toExtend.ID));
         }
 
         public override void Remove(AgentItem by, long removedDuration, int removedStacks, long time, ArcDPSEnums.BuffRemove removeType, uint stackID)
@@ -84,7 +82,6 @@ namespace GW2EIEvtcParser.EIData
                     {
                         if (BuffStack.Count < removedStacks)
                         {
-                            //removedStacks = BuffStack.Count;
                             throw new EIBuffSimulatorIDException("Remove all failed");
                         }
                         // buff cleanse all
@@ -126,11 +123,8 @@ namespace GW2EIEvtcParser.EIData
                     toRemove.Shift(0, Math.Abs(removedDuration - toRemove.TotalDuration));
                 }
                 // Removed due to override
-                //(long duration, AgentItem src)? candidate = OverrideCandidates.FirstOrDefault(x => Math.Abs(x.duration - removedDuration) < ParserHelper.BuffSimulatorDelayConstant);
                 if (by == ParserHelper._unknownAgent)
                 {
-                    //(long duration, AgentItem candSrc) = candidate.Value;
-                    //OverrideCandidates.Remove(candidate.Value);
                     WasteSimulationResult.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, time));
                     if (toRemove.Extensions.Any())
                     {

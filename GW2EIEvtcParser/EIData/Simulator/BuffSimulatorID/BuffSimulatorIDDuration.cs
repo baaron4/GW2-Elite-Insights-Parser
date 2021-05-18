@@ -28,11 +28,6 @@ namespace GW2EIEvtcParser.EIData
         {
             var toAdd = new BuffStackItemID(start, duration, src, addedActive, stackID);
             BuffStack.Add(toAdd);
-            //AddedSimulationResult.Add(new BuffCreationItem(src, duration, start, toAdd.ID));
-            /*if (overstackDuration > 0)
-            {
-                OverrideCandidates.Add((overstackDuration, src));
-            }*/
             if (addedActive)
             {
                 _activeStack = toAdd;

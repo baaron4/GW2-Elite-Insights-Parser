@@ -33,13 +33,13 @@ namespace GW2EIEvtcParser.ParsedData
             simulator.Add(AppliedDuration, CreditedBy, Time, BuffInstance, _addedActive || simulator.Buff.StackType == ArcDPSEnums.BuffStackType.StackingConditionalLoss, _overstackDuration);
         }
 
-        internal override int CompareTo(AbstractBuffEvent abe)
+        /*internal override int CompareTo(AbstractBuffEvent abe)
         {
             if (abe is BuffApplyEvent && !(abe is BuffExtensionEvent))
             {
                 return 0;
             }
             return -1;
-        }
+        }*/
     }
 }

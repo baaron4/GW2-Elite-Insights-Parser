@@ -112,7 +112,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
             // has breakbar state into
             if (combatData.Any(x => x.IsStateChange == ArcDPSEnums.StateChange.BreakbarState))
@@ -174,7 +174,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (copies.Any())
                 {
                     combatData.AddRange(copies);
-                    combatData.Sort((x, y) => x.Time.CompareTo(y.Time));
+                    var auxCombatData = combatData.OrderBy(x => x.Time).ToList();
+                    combatData.Clear();
+                    combatData.AddRange(auxCombatData);
                 }
             }
             ComputeFightTargets(agentData, combatData);

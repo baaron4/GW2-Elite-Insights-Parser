@@ -323,7 +323,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        protected static void AdjustTimeRefreshBuff(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long id)
+        /*protected static void AdjustTimeRefreshBuff(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long id)
         {
             if (buffsById.TryGetValue(id, out List<AbstractBuffEvent> buffList))
             {
@@ -346,7 +346,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     buffsByDst[a].Sort((x, y) => x.Time.CompareTo(y.Time));
                 }
             }
-        }
+        }*/
 
         internal virtual List<AbstractCastEvent> SpecialCastEventProcess(Dictionary<AgentItem, List<AnimatedCastEvent>> animatedCastEvent, Dictionary<AgentItem, List<WeaponSwapEvent>> weaponSwapData, Dictionary<long, List<AnimatedCastEvent>> _castDataById, SkillData skillData)
         {
@@ -489,7 +489,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return fightData.LogStart;
         }
 
-        internal virtual void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal virtual void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
             ComputeFightTargets(agentData, combatData);
         }

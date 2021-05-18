@@ -16,7 +16,7 @@ namespace GW2EIBuilders.HtmlModels
         public bool EnemyMech { get; set; }
         public bool PlayerMech { get; set; }
 
-        private static List<int[]> GetMechanicData(IReadOnlyCollection<Mechanic> presMech, ParsedEvtcLog log, AbstractActor actor, PhaseData phase)
+        private static List<int[]> GetMechanicData(IReadOnlyCollection<Mechanic> presMech, ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase)
         {
             var res = new List<int[]>();
 

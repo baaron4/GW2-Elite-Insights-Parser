@@ -9,6 +9,8 @@ namespace GW2EIEvtcParser.ParsedData
 
         private readonly BuffCycle _cycle;
 
+        public bool IsLifeLeech => _cycle == BuffCycle.NotCycle_DamageToTargetOnHit || _cycle == BuffCycle.NotCycle_DamageToTargetOnStackRemove;
+
         internal NonDirectHealthDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, ArcDPSEnums.ConditionResult result) : base(evtcItem, agentData, skillData)
         {
             HealthDamage = evtcItem.BuffDmg;

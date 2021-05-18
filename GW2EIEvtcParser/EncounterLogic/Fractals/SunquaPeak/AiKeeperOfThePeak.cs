@@ -101,7 +101,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (5411, -95, 8413, 3552));
         }
 
-        internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
+        /*internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
         {
             var res = new List<AbstractBuffEvent>();
             // Tidal Bargain, Cacophonous Mind and Crushing Guilt adjust
@@ -109,7 +109,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             AdjustTimeRefreshBuff(buffsByDst, buffsById, 61208);
             AdjustTimeRefreshBuff(buffsByDst, buffsById, 61435);
             return res;
-        }
+        }*/
 
         protected override List<int> GetFightTargetsIDs()
         {
@@ -144,7 +144,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
         {
             AgentItem aiAgent = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.AiKeeperOfThePeak).FirstOrDefault();
             if (aiAgent == null)
@@ -185,7 +185,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         copied.OverrideDstAgent(0);
                         copied.OverrideTime(lastAwareTime);
                         combatData.Add(copied);
-                        combatData.Sort((x, y) => x.Time.CompareTo(y.Time));
+                        var auxCombatData = combatData.OrderBy(x => x.Time).ToList();
+                        combatData.Clear();
+                        combatData.AddRange(auxCombatData);
                     }
                     // Redirect NPC masters
                     foreach (AgentItem ag in agentData.GetAgentByType(AgentItem.AgentType.NPC))
@@ -215,7 +217,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 Extension = "elai";
             }
-            base.EIEvtcParse(fightData, agentData, combatData, playerList);
+            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, playerList);
             // Manually set HP and names
             NPC eleAi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak);
             NPC darkAi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2);
