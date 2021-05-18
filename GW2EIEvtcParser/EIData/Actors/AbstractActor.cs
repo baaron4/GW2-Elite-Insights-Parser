@@ -6,23 +6,23 @@ namespace GW2EIEvtcParser.EIData
 {
     public abstract class AbstractActor
     {
-        public AgentItem AgentItem { get; }
+        protected AgentItem SourceAgent { get; }
         public string Character { get; protected set; }
 
-        public uint Toughness => AgentItem.Toughness;
-        public uint Condition => AgentItem.Condition;
-        public uint Concentration => AgentItem.Concentration;
-        public uint Healing => AgentItem.Healing;
-        public ushort InstID => AgentItem.InstID;
-        public string Prof => AgentItem.Prof;
-        public ulong Agent => AgentItem.Agent;
-        public long LastAware => AgentItem.LastAware;
-        public long FirstAware => AgentItem.FirstAware;
-        public int ID => AgentItem.ID;
-        public uint HitboxHeight => AgentItem.HitboxHeight;
-        public uint HitboxWidth => AgentItem.HitboxWidth;
+        public uint Toughness => SourceAgent.Toughness;
+        public uint Condition => SourceAgent.Condition;
+        public uint Concentration => SourceAgent.Concentration;
+        public uint Healing => SourceAgent.Healing;
+        public ushort InstID => SourceAgent.InstID;
+        public string Prof => SourceAgent.Prof;
+        public ulong Agent => SourceAgent.Agent;
+        public long LastAware => SourceAgent.LastAware;
+        public long FirstAware => SourceAgent.FirstAware;
+        public int ID => SourceAgent.ID;
+        public uint HitboxHeight => SourceAgent.HitboxHeight;
+        public uint HitboxWidth => SourceAgent.HitboxWidth;
         public bool IsFakeActor => IsDummyActor || IsCustomActor;
-        public bool IsDummyActor => AgentItem.IsDummy;
+        public bool IsDummyActor => SourceAgent.IsDummy;
         public bool IsCustomActor { get; protected set; } = false;
         // Damage
         protected List<AbstractHealthDamageEvent> DamageEvents { get; set; }
@@ -44,7 +44,7 @@ namespace GW2EIEvtcParser.EIData
         {
             string[] name = agent.Name.Split('\0');
             Character = name[0];
-            AgentItem = agent;
+            SourceAgent = agent;
         }
         // Getters
         // Damage logs

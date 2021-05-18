@@ -9,6 +9,7 @@ namespace GW2EIEvtcParser.EIData
 {
     public abstract class AbstractSingleActor : AbstractActor
     {
+        public AgentItem AgentItem => SourceAgent;
         public int UniqueID => AgentItem.UniqueID;
         // Boons
         private HashSet<Buff> _trackedBuffs;
