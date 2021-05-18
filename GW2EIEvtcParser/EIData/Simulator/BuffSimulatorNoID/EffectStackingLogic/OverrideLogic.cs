@@ -22,24 +22,17 @@ namespace GW2EIEvtcParser.EIData
                 return false;
             }
             BuffStackItem stack = stacks[0];
-            //if (stack.TotalDuration <= stackItem.TotalDuration + ParserHelper.BuffSimulatorDelayConstant)
-            //{
-                wastes.Add(new BuffSimulationItemWasted(stack.Src, stack.Duration, stack.Start));
-                if (stack.Extensions.Count > 0)
+            wastes.Add(new BuffSimulationItemWasted(stack.Src, stack.Duration, stack.Start));
+            if (stack.Extensions.Count > 0)
+            {
+                foreach ((AgentItem src, long value) in stack.Extensions)
                 {
-                    foreach ((AgentItem src, long value) in stack.Extensions)
-                    {
-                        wastes.Add(new BuffSimulationItemWasted(src, value, stack.Start));
-                    }
+                    wastes.Add(new BuffSimulationItemWasted(src, value, stack.Start));
                 }
-                stacks.RemoveAt(0);
-                Add(log, stacks, stackItem);
-                return true;
-            //}
-            //else
-            //{
-            //    return false;
-            //}
+            }
+            stacks.RemoveAt(0);
+            Add(log, stacks, stackItem);
+            return true;
         }
 
         // https://www.c-sharpcorner.com/blogs/binary-search-implementation-using-c-sharp1
@@ -55,7 +48,7 @@ namespace GW2EIEvtcParser.EIData
             }
             if (minIndex > maxIndex)
             {
-               return minIndex;
+                return minIndex;
             }
             else
             {
