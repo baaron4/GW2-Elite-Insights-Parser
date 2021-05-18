@@ -49,7 +49,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, playerList);
+            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, friendlies);
             NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Skorvald);
             if (target == null)
             {

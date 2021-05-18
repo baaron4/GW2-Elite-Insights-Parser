@@ -113,11 +113,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             AgentItem desmina = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Desmina).FirstOrDefault();
             if (desmina != null)
             {
-                friendlies.Add(new Player(desmina, "Desmina", GetNPCIcon((int)ArcDPSEnums.TargetID.Desmina)));
+                friendlies.Add(new NPC(desmina));
             }
         }
 
-        internal override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // TODO bombs dual following circle actor (one growing, other static) + dual static circle actor (one growing with min radius the final radius of the previous, other static). Missing buff id
         }

@@ -291,7 +291,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
-        internal override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // Corruption
             List<AbstractBuffEvent> corruptedMatthias = GetFilteredList(log.CombatData, 34416, p, true);

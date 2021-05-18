@@ -209,7 +209,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // timed bombs
             var timedBombs = log.CombatData.GetBuffData(31485).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();

@@ -288,7 +288,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             AgentItem saul = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.Saul).FirstOrDefault();
             if (saul != null)
             {
-                friendlies.Add(new Player(saul, "Saul", GetNPCIcon((int)ArcDPSEnums.TrashID.Saul)));
+                friendlies.Add(new NPC(saul));
             }
         }
 
@@ -485,7 +485,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
-        internal override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // teleport zone
             List<AbstractBuffEvent> tpDeimos = GetFilteredList(log.CombatData, 37730, p, true);

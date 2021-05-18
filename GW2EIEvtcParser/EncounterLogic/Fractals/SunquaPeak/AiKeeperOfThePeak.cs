@@ -217,7 +217,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 Extension = "elai";
             }
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, playerList);
+            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, friendlies);
             // Manually set HP and names
             NPC eleAi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak);
             NPC darkAi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2);

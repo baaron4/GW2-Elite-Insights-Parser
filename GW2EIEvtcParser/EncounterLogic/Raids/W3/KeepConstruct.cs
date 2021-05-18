@@ -377,7 +377,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return combatData.GetSkills().Contains(34958) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
         }
 
-        internal override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // Bombs
             List<AbstractBuffEvent> xeraFury = GetFilteredList(log.CombatData, 35103, p, true);

@@ -81,8 +81,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             agentData.Refresh();
             ComputeFightTargets(agentData, combatData);
-            AgentItem sword = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, "Conjured Sword\0:Conjured Sword\051", "Sword", 0, true);
-            friendlies.Add(new Player(sword, "Conjured Sword"));
+            AgentItem sword = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, "Conjured Sword\0:Conjured Sword\051", "Sword", (int)ArcDPSEnums.TrashID.ConjuredPlayerSword, true);
+            friendlies.Add(new NPC(sword));
             foreach (CombatItem c in combatData)
             {
                 if (c.SkillID == 52370 && c.IsStateChange == ArcDPSEnums.StateChange.None && c.IsBuffRemove == ArcDPSEnums.BuffRemove.None &&
@@ -291,7 +291,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             IReadOnlyList<AbstractCastEvent> cls = p.GetCastEvents(log, 0, log.FightData.FightEnd);
             var shieldCast = cls.Where(x => x.SkillId == 52780).ToList();

@@ -202,7 +202,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
-        internal override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // fixated
             List<AbstractBuffEvent> fixated = GetFilteredList(log.CombatData, 56510, p, true);

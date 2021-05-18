@@ -358,7 +358,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<AbstractHealthDamageEvent>();
         }
 
-        internal virtual void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
+        internal virtual void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
         }
 
