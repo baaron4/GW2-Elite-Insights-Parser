@@ -28,7 +28,7 @@ namespace GW2EIEvtcParser.ParsedData
             simulator.Extend(_durationChange, _oldValue, CreditedBy, Time, BuffInstance);
         }
 
-        internal override int CompareTo(AbstractBuffEvent abe)
+        /*internal override int CompareTo(AbstractBuffEvent abe)
         {
             if (abe is BuffExtensionEvent)
             {
@@ -39,6 +39,6 @@ namespace GW2EIEvtcParser.ParsedData
                 return 1;
             }
             return -1;
-        }
+        }*/
     }
 }

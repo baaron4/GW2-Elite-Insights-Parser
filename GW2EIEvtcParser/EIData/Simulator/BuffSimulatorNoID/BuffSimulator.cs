@@ -12,6 +12,8 @@ namespace GW2EIEvtcParser.EIData
         protected List<BuffStackItem> BuffStack { get; set; } = new List<BuffStackItem>();
         private StackingLogic _logic { get; }
 
+        private readonly int _capacity;
+
         private static readonly QueueLogic _queueLogic = new QueueLogic();
         private static readonly HealingLogic _healingLogic = new HealingLogic();
         private static readonly ForceOverrideLogic _forceOverrideLogic = new ForceOverrideLogic();
@@ -19,8 +21,9 @@ namespace GW2EIEvtcParser.EIData
         private static readonly CappedDurationLogic _cappedDurationLogic = new CappedDurationLogic();
 
         // Constructor
-        protected BuffSimulator(ParsedEvtcLog log, Buff buff) : base(log, buff)
+        protected BuffSimulator(ParsedEvtcLog log, Buff buff, int capacity) : base(log, buff)
         {
+            _capacity = capacity;
             switch (buff.StackType)
             {
                 case BuffStackType.Queue:
@@ -45,7 +48,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        protected bool IsFull => _logic.IsFull(BuffStack, Buff.Capacity);
+        protected bool IsFull => _logic.IsFull(BuffStack, _capacity);
 
         protected override void Clear()
         {

@@ -78,11 +78,11 @@ namespace GW2EIEvtcParser.ParsedData
             }
             foreach (long buffID in buffIDsToSort)
             {
-                _buffData[buffID].Sort((x, y) => x.Time.CompareTo(y.Time));
+                _buffData[buffID] = _buffData[buffID].OrderBy(x => x.Time).ToList();
             }
             foreach (AgentItem a in buffAgentsToSort)
             {
-                _buffDataByDst[a].Sort((x, y) => x.Time.CompareTo(y.Time));
+                _buffDataByDst[a] = _buffDataByDst[a].OrderBy(x => x.Time).ToList();
             }
         }
 
@@ -134,15 +134,15 @@ namespace GW2EIEvtcParser.ParsedData
             }
             foreach (long buffID in idsToSort)
             {
-                _damageDataById[buffID].Sort((x, y) => x.Time.CompareTo(y.Time));
+                _damageDataById[buffID] = _damageDataById[buffID].OrderBy(x => x.Time).ToList();
             }
             foreach (AgentItem a in dstToSort)
             {
-                _damageTakenData[a].Sort((x, y) => x.Time.CompareTo(y.Time));
+                _damageTakenData[a] = _damageTakenData[a].OrderBy(x => x.Time).ToList();
             }
             foreach (AgentItem a in srcToSort)
             {
-                _damageData[a].Sort((x, y) => x.Time.CompareTo(y.Time));
+                _damageData[a] = _damageData[a].OrderBy(x => x.Time).ToList();
             }
         }
         private void EICastParse(List<Player> players, SkillData skillData, FightData fightData, AgentData agentData)
@@ -216,19 +216,19 @@ namespace GW2EIEvtcParser.ParsedData
             }
             foreach (long buffID in castIDsToSort)
             {
-                _animatedCastDataById[buffID].Sort((x, y) => x.Time.CompareTo(y.Time));
+                _animatedCastDataById[buffID] = _animatedCastDataById[buffID].OrderBy(x => x.Time).ToList();
             }
             foreach (AgentItem a in castAgentsToSort)
             {
-                _animatedCastData[a].Sort((x, y) => x.Time.CompareTo(y.Time));
+                _animatedCastData[a] = _animatedCastData[a].OrderBy(x => x.Time).ToList();
             }
             foreach (AgentItem a in wepSwapAgentsToSort)
             {
-                _weaponSwapData[a].Sort((x, y) => x.Time.CompareTo(y.Time));
+                _weaponSwapData[a] = _weaponSwapData[a].OrderBy(x => x.Time).ToList();
             }
             foreach (AgentItem a in instantAgentsToSort)
             {
-                _instantCastData[a].Sort((x, y) => x.Time.CompareTo(y.Time));
+                _instantCastData[a] = _instantCastData[a].OrderBy(x => x.Time).ToList();
             }
         }
 
@@ -269,15 +269,13 @@ namespace GW2EIEvtcParser.ParsedData
                         }
                     }
                 }
-                agentDowns.Sort((x, y) => x.Time.CompareTo(y.Time));
-                agentDeaths.Sort((x, y) => x.Time.CompareTo(y.Time));
                 if (setDeads && agentDeaths.Count > 0)
                 {
-                    _statusEvents.DeadEvents[pair.Key] = agentDeaths;
+                    _statusEvents.DeadEvents[pair.Key] = agentDeaths.OrderBy(x => x.Time).ToList();
                 }
                 if (setDowns && agentDowns.Count > 0)
                 {
-                    _statusEvents.DownEvents[pair.Key] = agentDowns;
+                    _statusEvents.DownEvents[pair.Key] = agentDowns.OrderBy(x => x.Time).ToList();
                 }
             }
             _metaDataEvents.ErrorEvents.AddRange(fightData.Logic.GetCustomWarningMessages());
@@ -625,7 +623,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return res;
             }
-            return new List<AbstractBuffEvent>(); ;
+            return new List<AbstractBuffEvent>();
         }
 
         public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllData(long key)
@@ -634,7 +632,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return res;
             }
-            return new List<BuffRemoveAllEvent>(); ;
+            return new List<BuffRemoveAllEvent>();
         }
 
         /// <summary>
@@ -648,7 +646,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return res;
             }
-            return new List<AbstractBuffEvent>(); ;
+            return new List<AbstractBuffEvent>();
         }
 
         /// <summary>
@@ -662,7 +660,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return res;
             }
-            return new List<AbstractHealthDamageEvent>(); ;
+            return new List<AbstractHealthDamageEvent>();
         }
 
         /// <summary>
@@ -676,7 +674,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return res;
             }
-            return new List<AbstractBreakbarDamageEvent>(); ;
+            return new List<AbstractBreakbarDamageEvent>();
         }
 
         /// <summary>
@@ -690,7 +688,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return res;
             }
-            return new List<AbstractHealthDamageEvent>(); ;
+            return new List<AbstractHealthDamageEvent>();
         }
 
         /// <summary>
@@ -704,7 +702,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return res;
             }
-            return new List<AnimatedCastEvent>(); ;
+            return new List<AnimatedCastEvent>();
         }
 
         /// <summary>
@@ -718,7 +716,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return res;
             }
-            return new List<InstantCastEvent>(); ;
+            return new List<InstantCastEvent>();
         }
 
         /// <summary>
@@ -732,7 +730,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return res;
             }
-            return new List<WeaponSwapEvent>(); ;
+            return new List<WeaponSwapEvent>();
         }
 
         /// <summary>
@@ -746,7 +744,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return res;
             }
-            return new List<AnimatedCastEvent>(); ;
+            return new List<AnimatedCastEvent>();
         }
 
         /// <summary>

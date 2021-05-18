@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (1920, 12160, 2944, 14464)*/);
         }
 
-        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
             agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, "Twisted Castle", "", (int)ArcDPSEnums.TargetID.DummyTarget, true);
             ComputeFightTargets(agentData, combatData);

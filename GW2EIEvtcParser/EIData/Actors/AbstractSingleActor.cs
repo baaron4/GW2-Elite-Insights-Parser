@@ -9,6 +9,7 @@ namespace GW2EIEvtcParser.EIData
 {
     public abstract class AbstractSingleActor : AbstractActor
     {
+        public AgentItem AgentItem => SourceAgent;
         public int UniqueID => AgentItem.UniqueID;
         // Boons
         private HashSet<Buff> _trackedBuffs;
@@ -177,7 +178,7 @@ namespace GW2EIEvtcParser.EIData
 
         // Graph
 
-        public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, AbstractActor target, ParserHelper.DamageType damageType = ParserHelper.DamageType.All)
+        public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target, ParserHelper.DamageType damageType = ParserHelper.DamageType.All)
         {
             if (_damageList1S == null)
             {
@@ -234,7 +235,7 @@ namespace GW2EIEvtcParser.EIData
             return res[damageType];
         }
 
-        public IReadOnlyList<double> Get1SBreakbarDamageList(ParsedEvtcLog log, long start, long end, AbstractActor target)
+        public IReadOnlyList<double> Get1SBreakbarDamageList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target)
         {
             if (!log.CombatData.HasBreakbarDamageData)
             {
@@ -433,6 +434,11 @@ namespace GW2EIEvtcParser.EIData
         {
             //
             _buffMap = new BuffDictionary();
+            if (AgentItem == ParserHelper._unknownAgent)
+            {
+                _buffMap.Finalize(log, AgentItem, out _trackedBuffs);
+                return;
+            }
             // Fill in Boon Map
 #if DEBUG
             var test = log.CombatData.GetBuffData(AgentItem).Where(x => !log.Buffs.BuffsByIds.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
@@ -660,22 +666,7 @@ namespace GW2EIEvtcParser.EIData
                     CastEvents.Add(wepSwap);
                 }
             }
-            CastEvents.Sort((x, y) =>
-            {
-                int compare = x.Time.CompareTo(y.Time);
-                if (compare == 0 && x.SkillId != y.SkillId)
-                {
-                    if (y.Skill.IsSwap)
-                    {
-                        return 1;
-                    }
-                    if (x.Skill.IsSwap)
-                    {
-                        return -1;
-                    }
-                }
-                return compare;
-            });
+            CastEvents = CastEvents.OrderBy(x => x.Time).ThenBy(x => x.Skill.IsSwap).ToList();
         }
 
         // DPS Stats
@@ -763,7 +754,7 @@ namespace GW2EIEvtcParser.EIData
 
 
         // Damage logs
-        public override IReadOnlyList<AbstractHealthDamageEvent> GetDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractHealthDamageEvent> GetDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (DamageEvents == null)
             {
@@ -774,7 +765,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     DamageEvents.AddRange(mins.GetDamageEvents(null, log, 0, log.FightData.FightEnd));
                 }
-                DamageEvents.Sort((x, y) => x.Time.CompareTo(y.Time));
+                DamageEvents = DamageEvents.OrderBy(x => x.Time).ToList();
                 DamageEventByDst = DamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
@@ -791,17 +782,17 @@ namespace GW2EIEvtcParser.EIData
             return DamageEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public IReadOnlyList<AbstractHealthDamageEvent> GetJustActorDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public IReadOnlyList<AbstractHealthDamageEvent> GetJustActorDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             return GetDamageEvents(target, log, start, end).Where(x => x.From == AgentItem).ToList();
         }
 
-        public IReadOnlyList<AbstractBreakbarDamageEvent> GetJustActorBreakbarDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public IReadOnlyList<AbstractBreakbarDamageEvent> GetJustActorBreakbarDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             return GetBreakbarDamageEvents(target, log, start, end).Where(x => x.From == AgentItem).ToList();
         }
 
-        public override IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (BreakbarDamageEvents == null)
             {
@@ -812,7 +803,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     BreakbarDamageEvents.AddRange(mins.GetBreakbarDamageEvents(null, log, 0, log.FightData.FightEnd));
                 }
-                BreakbarDamageEvents.Sort((x, y) => x.Time.CompareTo(y.Time));
+                BreakbarDamageEvents = BreakbarDamageEvents.OrderBy(x => x.Time).ToList();
                 BreakbarDamageEventsByDst = BreakbarDamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
@@ -829,7 +820,7 @@ namespace GW2EIEvtcParser.EIData
             return BreakbarDamageEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public override IReadOnlyList<AbstractHealthDamageEvent> GetDamageTakenEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractHealthDamageEvent> GetDamageTakenEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (DamageTakenEvents == null)
             {
@@ -853,7 +844,7 @@ namespace GW2EIEvtcParser.EIData
             return DamageTakenEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public override IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (BreakbarDamageTakenEvents == null)
             {
@@ -880,7 +871,7 @@ namespace GW2EIEvtcParser.EIData
         /// <summary>
         /// cached method for damage modifiers
         /// </summary>
-        internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorHitDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorHitDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (_hitSelfDamageEventsPerPhasePerTarget == null)
             {
@@ -894,7 +885,7 @@ namespace GW2EIEvtcParser.EIData
             return dls;
         }
 
-        internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorConditionHitDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorConditionHitDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (_conditionHitSelfDamageEventsPerPhasePerTarget == null)
             {
@@ -908,7 +899,7 @@ namespace GW2EIEvtcParser.EIData
             return dls;
         }
 
-        internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorPowerHitDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorPowerHitDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (_powerHitSelfDamageEventsPerPhasePerTarget == null)
             {

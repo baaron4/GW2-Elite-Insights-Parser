@@ -28,7 +28,7 @@ namespace GW2EIBuilders.HtmlModels
             var res = new List<List<object>>();
             if (!enemyMechanic)
             {
-                var playerIndex = new Dictionary<AbstractActor, int>();
+                var playerIndex = new Dictionary<AbstractSingleActor, int>();
                 for (int p = 0; p < log.PlayerList.Count; p++)
                 {
                     playerIndex.Add(log.PlayerList[p], p);
@@ -45,7 +45,7 @@ namespace GW2EIBuilders.HtmlModels
             }
             else
             {
-                var targetIndex = new Dictionary<AbstractActor, int>();
+                var targetIndex = new Dictionary<AbstractSingleActor, int>();
                 for (int p = 0; p < phase.Targets.Count; p++)
                 {
                     targetIndex.Add(phase.Targets[p], p);

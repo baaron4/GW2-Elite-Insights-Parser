@@ -3,7 +3,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser
 {
-    public class CachingCollectionWithTarget<T> : CachingCollectionCustom<AbstractActor, T>
+    public class CachingCollectionWithTarget<T> : CachingCollectionCustom<AbstractSingleActor, T>
     {
         private static readonly NPC _nullActor = new NPC(new AgentItem());
 

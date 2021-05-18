@@ -61,7 +61,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
             // make those into npcs
             IReadOnlyList<AgentItem> cas = agentData.GetGadgetsByID((int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
@@ -93,7 +93,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
         }
-        internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
+        /*internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
         {
             var res = new List<AbstractBuffEvent>();
             // Greatsword Power
@@ -101,7 +101,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Conjured Shield
             AdjustTimeRefreshBuff(buffsByDst, buffsById, 52754);
             return res;
-        }
+        }*/
 
         protected override HashSet<int> GetUniqueTargetIDs()
         {

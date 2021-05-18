@@ -20,7 +20,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
         }
 
-        internal override int CompareTo(AbstractBuffEvent abe)
+        /*internal override int CompareTo(AbstractBuffEvent abe)
         {
             if (abe is AbstractBuffApplyEvent)
             {
@@ -31,7 +31,7 @@ namespace GW2EIEvtcParser.ParsedData
                 return 0;
             }
             return -1;
-        }
+        }*/
     }
 }
 

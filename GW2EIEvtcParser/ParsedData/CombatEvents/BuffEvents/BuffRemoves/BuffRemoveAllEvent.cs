@@ -42,13 +42,13 @@ namespace GW2EIEvtcParser.ParsedData
             simulator.Remove(CreditedBy, RemovedDuration, RemovedStacks, Time, ArcDPSEnums.BuffRemove.All, 0);
         }
 
-        internal override int CompareTo(AbstractBuffEvent abe)
+        /*internal override int CompareTo(AbstractBuffEvent abe)
         {
             if (abe is BuffRemoveAllEvent)
             {
                 return 0;
             }
             return 1;
-        }
+        }*/
     }
 }

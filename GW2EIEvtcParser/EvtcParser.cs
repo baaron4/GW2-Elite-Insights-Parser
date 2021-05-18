@@ -30,6 +30,7 @@ namespace GW2EIEvtcParser
         private long _logStartTime;
         private long _logEndTime;
         private string _buildVersion;
+        private ulong _gw2Build;
         private readonly EvtcParserSettings _parserSettings;
         private readonly GW2APIController _apiController;
 
@@ -532,6 +533,10 @@ namespace GW2EIEvtcParser
                     _logEndTime = combatItem.Time;
                 }
                 _combatItems.Add(combatItem);
+                if (combatItem.IsStateChange == ArcDPSEnums.StateChange.GWBuild && combatItem.SrcAgent != 0)
+                {
+                    _gw2Build = combatItem.SrcAgent;
+                }
             }
             if (!_combatItems.Any())
             {
@@ -755,7 +760,7 @@ namespace GW2EIEvtcParser
             OffsetEvtcData();
             _friendlies = new List<AbstractSingleActor>();
             _friendlies.AddRange(_playerList);
-            _fightData.Logic.EIEvtcParse(_fightData, _agentData, _combatItems, _friendlies);
+            _fightData.Logic.EIEvtcParse(_gw2Build, _fightData, _agentData, _combatItems, _friendlies);
             if (!_fightData.Logic.Targets.Any())
             {
                 throw new MissingKeyActorsException("No Targets found");

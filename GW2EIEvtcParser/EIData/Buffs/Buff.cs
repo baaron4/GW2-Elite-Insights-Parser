@@ -85,9 +85,7 @@ namespace GW2EIEvtcParser.EIData
 
         private ulong _maxBuild { get; } = ulong.MaxValue;
         private ulong _minBuild { get; } = ulong.MinValue;
-        public int Capacity { get; private set; }
-
-        public double DurationCap { get; private set; } = 0;
+        public int Capacity { get; }
         public string Link { get; }
 
         /// <summary>
@@ -150,9 +148,7 @@ namespace GW2EIEvtcParser.EIData
             if (Capacity != buffInfoEvent.MaxStacks)
             {
                 operation.UpdateProgressWithCancellationCheck("Adjusted capacity for " + Name + " from " + Capacity + " to " + buffInfoEvent.MaxStacks);
-                Capacity = buffInfoEvent.MaxStacks;
             }
-            DurationCap = Math.Round(buffInfoEvent.DurationCap / 1000.0, 3);
             /*if (buffInfoEvent.StackingType != StackType)
             {
                 //_stackType = buffInfoEvent.StackingType; // might be unreliable due to its absence on some logs
@@ -162,13 +158,20 @@ namespace GW2EIEvtcParser.EIData
         internal AbstractBuffSimulator CreateSimulator(ParsedEvtcLog log, bool forceNoId)
         {
             if (!log.CombatData.HasStackIDs || forceNoId)
-            {               
+            {
+
+                BuffInfoEvent buffInfoEvent = log.CombatData.GetBuffInfoEvent(ID);
+                int capacity = Capacity;
+                if (buffInfoEvent != null && buffInfoEvent.MaxStacks != capacity)
+                {
+                    capacity = buffInfoEvent.MaxStacks;
+                }
                 switch (Type)
                 {
                     case BuffType.Intensity: 
-                        return new BuffSimulatorIntensity(log, this);
+                        return new BuffSimulatorIntensity(log, this, capacity);
                     case BuffType.Duration: 
-                        return new BuffSimulatorDuration(log, this);
+                        return new BuffSimulatorDuration(log, this, capacity);
                     case BuffType.Unknown:
                     default:
                         throw new InvalidDataException("Buffs can not be stackless");
@@ -188,6 +191,10 @@ namespace GW2EIEvtcParser.EIData
 
         internal static BuffSourceFinder GetBuffSourceFinder(ulong version, HashSet<long> boonIds)
         {
+            if (version > 115189)
+            {
+                return new BuffSourceFinder11052021(boonIds);
+            }
             if (version > 99526)
             {
                 return new BuffSourceFinder01102019(boonIds);

@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterCategoryInformation.InSubCategoryOrder = 0;
         }
 
-        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
             var attackTargets = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).ToList();
             long first = fightData.FightStart;
@@ -83,7 +83,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
-            combatData.Sort((x, y) => x.Time.CompareTo(y.Time));
+            var auxCombatData = combatData.OrderBy(x => x.Time).ToList();
+            combatData.Clear();
+            combatData.AddRange(auxCombatData);
             ComputeFightTargets(agentData, combatData);
         }
 

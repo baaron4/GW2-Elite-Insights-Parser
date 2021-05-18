@@ -60,6 +60,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new KilledMechanic((int)ArcDPSEnums.TrashID.PyreGuardianStab, "Stab Pyre Guardian", new MechanicPlotlySetting("bowtie","rgb(255,0,0)"), "Pyre.S.K","Stab Pyre Killed", "Stab Pyre Killed",0),
             new KilledMechanic((int)ArcDPSEnums.TrashID.PyreGuardianProtect, "Protect Pyre Guardian", new MechanicPlotlySetting("bowtie","rgb(255,125,0)"), "Pyre.P.K","Protect Pyre Killed", "Protect Pyre Killed",0),
             new KilledMechanic((int)ArcDPSEnums.TrashID.PyreGuardianRetal, "Retal Pyre Guardian", new MechanicPlotlySetting("bowtie","rgb(255,125,125)"), "Pyre.R.K","Retal Pyre Killed", "Retal Pyre Killed",0),
+            new KilledMechanic((int)ArcDPSEnums.TrashID.PyreGuardianResolution, "Resolution Pyre Guardian", new MechanicPlotlySetting("bowtie","rgb(255,125,125)"), "Pyre.R.K","Resolution Pyre Killed", "Resolution Pyre Killed",0),
             });
             Extension = "qadim";
             Icon = "https://wiki.guildwars2.com/images/f/f2/Mini_Qadim.png";
@@ -102,7 +103,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
             IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.PyreGuardian);
             // Lamps
@@ -132,7 +133,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     else if ((Math.Abs(x + 8951) < 10 && Math.Abs(y - 9429) < 10) || (Math.Abs(x + 5716) < 10 && Math.Abs(y - 9325) < 10) || (Math.Abs(x + 7846) < 10 && Math.Abs(y - 10612) < 10))
                     {
-                        pyre.OverrideID(ArcDPSEnums.TrashID.PyreGuardianRetal);
+                        pyre.OverrideID(gw2Build >= 115190 ? ArcDPSEnums.TrashID.PyreGuardianResolution : ArcDPSEnums.TrashID.PyreGuardianRetal);
                         refresh = true;
                     }
                 }
@@ -151,6 +152,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (target.ID == (int)ArcDPSEnums.TrashID.PyreGuardianRetal)
                 {
                     target.OverrideName("Retal " + target.Character);
+                }
+                if (target.ID == (int)ArcDPSEnums.TrashID.PyreGuardianResolution)
+                {
+                    target.OverrideName("Resolution " + target.Character);
                 }
                 if (target.ID == (int)ArcDPSEnums.TrashID.PyreGuardianStab)
                 {
@@ -211,6 +216,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (int) ArcDPSEnums.TrashID.PyreGuardianProtect,
                             (int) ArcDPSEnums.TrashID.PyreGuardianStab,
                             (int) ArcDPSEnums.TrashID.PyreGuardianRetal,
+                            (int) ArcDPSEnums.TrashID.PyreGuardianResolution,
                         };
                     foreach (int pyreId in pyres)
                     {
@@ -235,7 +241,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AddTargetsToPhaseAndFit(phase, ids, log);
                     if (phase.Targets.Count > 0)
                     {
-                        NPC phaseTar = phase.Targets[0];
+                        NPC phaseTar = phase.Targets.Last();
                         switch (phaseTar.ID)
                         {
                             case (int)ArcDPSEnums.TrashID.AncientInvokedHydra:
@@ -273,6 +279,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.PyreGuardian,
                 ArcDPSEnums.TrashID.PyreGuardianProtect,
                 ArcDPSEnums.TrashID.PyreGuardianRetal,
+                ArcDPSEnums.TrashID.PyreGuardianResolution,
                 ArcDPSEnums.TrashID.PyreGuardianStab,
                 ArcDPSEnums.TrashID.ReaperofFlesh,
                 ArcDPSEnums.TrashID.DestroyerTroll,

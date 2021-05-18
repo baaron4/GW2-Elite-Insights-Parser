@@ -234,7 +234,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return start;
         }
 
-        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
             ComputeFightTargets(agentData, combatData);
             // Find target
