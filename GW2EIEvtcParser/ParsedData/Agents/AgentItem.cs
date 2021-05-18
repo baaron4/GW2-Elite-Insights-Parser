@@ -32,7 +32,7 @@ namespace GW2EIEvtcParser.ParsedData
         public uint HitboxWidth { get; }
         public uint HitboxHeight { get; }
 
-        public bool IsDummy { get; }
+        public bool IsFake { get; }
         public bool IsNotInSquadFriendlyPlayer { get; }
 
         public bool HasCommanderTag { get; protected set; }
@@ -83,7 +83,7 @@ namespace GW2EIEvtcParser.ParsedData
             InstID = instid;
             FirstAware = firstAware;
             LastAware = lastAware;
-            IsDummy = isDummy;
+            IsFake = isDummy;
         }
 
         internal AgentItem(AgentItem other)
@@ -103,7 +103,7 @@ namespace GW2EIEvtcParser.ParsedData
             InstID = other.InstID;
             Master = other.Master;
             HasCommanderTag = other.HasCommanderTag;
-            IsDummy = other.IsDummy;
+            IsFake = other.IsFake;
         }
 
         internal AgentItem()

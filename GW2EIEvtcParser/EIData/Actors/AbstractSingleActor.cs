@@ -328,7 +328,7 @@ namespace GW2EIEvtcParser.EIData
 
         public IReadOnlyDictionary<string, DamageModifierStat> GetDamageModifierStats(NPC target, ParsedEvtcLog log, long start, long end)
         {
-            if (!log.ParserSettings.ComputeDamageModifiers || IsDummyActor)
+            if (!log.ParserSettings.ComputeDamageModifiers || IsFakeActor)
             {
                 return new Dictionary<string, DamageModifierStat>();
             }
@@ -736,7 +736,7 @@ namespace GW2EIEvtcParser.EIData
             if (CombatReplay.NoActors)
             {
                 CombatReplay.NoActors = false;
-                if (!IsDummyActor)
+                if (!IsFakeActor)
                 {
                     InitAdditionalCombatReplayData(log);
                 }

@@ -29,42 +29,42 @@ namespace GW2EIBuilders.HtmlModels
         private static List<object> GetCombatReplayActors(ParsedEvtcLog log, CombatReplayMap map)
         {
             var actors = new List<object>();
-            foreach (Player p in log.PlayerList)
+            foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                if (p.IsDummyActor)
+                if (actor.IsFakeActor)
                 {
                     continue;
                 }
-                if (p.GetCombatReplayPolledPositions(log).Count == 0)
+                if (actor.GetCombatReplayPolledPositions(log).Count == 0)
                 {
                     continue;
                 }
-                actors.Add(p.GetCombatReplayJSON(map, log));
-                foreach (GenericDecoration a in p.GetCombatReplayActors(log))
+                actors.Add(actor.GetCombatReplayJSON(map, log));
+                foreach (GenericDecoration a in actor.GetCombatReplayActors(log))
                 {
                     actors.Add(a.GetCombatReplayJSON(map, log));
                 }
             }
-            foreach (NPC m in log.FightData.Logic.TrashMobs)
+            foreach (AbstractSingleActor actor in log.FightData.Logic.TrashMobs)
             {
-                if (m.GetCombatReplayPolledPositions(log).Count == 0)
+                if (actor.GetCombatReplayPolledPositions(log).Count == 0)
                 {
                     continue;
                 }
-                actors.Add(m.GetCombatReplayJSON(map, log));
-                foreach (GenericDecoration a in m.GetCombatReplayActors(log))
+                actors.Add(actor.GetCombatReplayJSON(map, log));
+                foreach (GenericDecoration a in actor.GetCombatReplayActors(log))
                 {
                     actors.Add(a.GetCombatReplayJSON(map, log));
                 }
             }
-            foreach (NPC target in log.FightData.Logic.Targets)
+            foreach (AbstractSingleActor actor in log.FightData.Logic.Targets)
             {
-                if (target.GetCombatReplayPolledPositions(log).Count == 0)
+                if (actor.GetCombatReplayPolledPositions(log).Count == 0)
                 {
                     continue;
                 }
-                actors.Add(target.GetCombatReplayJSON(map, log));
-                foreach (GenericDecoration a in target.GetCombatReplayActors(log))
+                actors.Add(actor.GetCombatReplayJSON(map, log));
+                foreach (GenericDecoration a in actor.GetCombatReplayActors(log))
                 {
                     actors.Add(a.GetCombatReplayJSON(map, log));
                 }

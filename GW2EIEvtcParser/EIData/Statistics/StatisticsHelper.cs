@@ -149,10 +149,6 @@ namespace GW2EIEvtcParser.EIData
                 var GroupsPosList = new List<List<Point3D>>();
                 foreach (Player player in log.PlayerList)
                 {
-                    if (player.IsFakeActor)
-                    {
-                        continue;
-                    }
                     GroupsPosList.Add(player.GetCombatReplayActivePositions(log));
                 }
                 for (int time = 0; time < GroupsPosList[0].Count; time++)

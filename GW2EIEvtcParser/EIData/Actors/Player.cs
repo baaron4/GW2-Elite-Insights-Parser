@@ -38,12 +38,9 @@ namespace GW2EIEvtcParser.EIData
 
         internal void MakeSquadless()
         {
-            if (!IsFakeActor)
-            {
-                Group = 1;
-            }
+            Group = 1;
         }
-   
+
         internal void Anonymize(int index)
         {
             Character = "Player " + index;
@@ -56,14 +53,14 @@ namespace GW2EIEvtcParser.EIData
             {
                 case BuffEnum.Group:
                     var otherPlayersInGroup = log.PlayerList
-                        .Where(p => p.Group == Group && Agent != p.Agent && !p.IsFakeActor)
+                        .Where(p => p.Group == Group && Agent != p.Agent)
                         .ToList();
                     return FinalActorBuffs.GetBuffsForPlayers(otherPlayersInGroup, log, AgentItem, start, end);
                 case BuffEnum.OffGroup:
-                    var offGroupPlayers = log.PlayerList.Where(p => p.Group != Group && !p.IsFakeActor).ToList();
+                    var offGroupPlayers = log.PlayerList.Where(p => p.Group != Group).ToList();
                     return FinalActorBuffs.GetBuffsForPlayers(offGroupPlayers, log, AgentItem, start, end);
                 case BuffEnum.Squad:
-                    var otherPlayers = log.PlayerList.Where(p => p.Agent != Agent && !p.IsFakeActor).ToList();
+                    var otherPlayers = log.PlayerList.Where(p => p.Agent != Agent).ToList();
                     return FinalActorBuffs.GetBuffsForPlayers(otherPlayers, log, AgentItem, start, end);
                 case BuffEnum.Self:
                 default:

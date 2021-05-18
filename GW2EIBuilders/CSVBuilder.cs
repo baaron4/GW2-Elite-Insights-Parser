@@ -33,7 +33,7 @@ namespace GW2EIBuilders
             _parserVersion = parserVersion;
             _delimiter = settings.Delimiter;
             _phases = log.FightData.GetNonDummyPhases(log);
-            _noFakePlayers = log.PlayerList.Where(x => !x.IsDummyActor).ToList();
+            _noFakePlayers = log.PlayerList.ToList();
 
             _statistics = log.StatisticsHelper;
 

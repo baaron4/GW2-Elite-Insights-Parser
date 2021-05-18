@@ -34,8 +34,8 @@ namespace GW2EIBuilders.HtmlModels
             ColTarget = HTMLBuilder.GetLink("Color-" + player.Prof);
             ColCleave = HTMLBuilder.GetLink("Color-" + player.Prof + "-NonBoss");
             ColTotal = HTMLBuilder.GetLink("Color-" + player.Prof + "-Total");
-            IsDummy = player.IsDummyActor;
-            IsCustom = player.IsCustomActor;
+            IsDummy = player.IsFakeActor;
+            IsCustom = player.AgentItem.Type != GW2EIEvtcParser.ParsedData.AgentItem.AgentType.Player;
             BuildWeaponSets(player, log);
         }
 
