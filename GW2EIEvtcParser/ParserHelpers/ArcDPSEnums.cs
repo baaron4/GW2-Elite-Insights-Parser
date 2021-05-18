@@ -313,6 +313,7 @@ namespace GW2EIEvtcParser
         private const int BloodstoneFragment = -10;
         private const int BloodstoneShard = -11;
         private const int ChargedBloodstone = -12;
+        private const int PyreGuardianResolution = -13;
 
 
         //
@@ -451,6 +452,7 @@ namespace GW2EIEvtcParser
             FireImp = 21100,
             PyreGuardian = 21050,
             PyreGuardianRetal = ArcDPSEnums.PyreGuardianRetal,
+            PyreGuardianResolution = ArcDPSEnums.PyreGuardianResolution,
             PyreGuardianProtect = ArcDPSEnums.PyreGuardianProtect,
             PyreGuardianStab = ArcDPSEnums.PyreGuardianStab,
             ReaperofFlesh = 21218,
