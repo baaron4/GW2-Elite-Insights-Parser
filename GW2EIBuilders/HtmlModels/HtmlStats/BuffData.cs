@@ -11,7 +11,7 @@ namespace GW2EIBuilders.HtmlModels
         public double Avg { get; set; }
         public List<List<object>> Data { get; set; } = new List<List<object>>();
 
-        private BuffData(IReadOnlyDictionary<long, FinalPlayerBuffs> buffs, IReadOnlyList<Buff> listToUse, double avg)
+        private BuffData(IReadOnlyDictionary<long, FinalActorBuffs> buffs, IReadOnlyList<Buff> listToUse, double avg)
         {
             Avg = avg;
             foreach (Buff buff in listToUse)
@@ -19,26 +19,7 @@ namespace GW2EIBuilders.HtmlModels
                 var buffVals = new List<object>();
                 Data.Add(buffVals);
 
-                if (buffs.TryGetValue(buff.ID, out FinalPlayerBuffs uptime))
-                {
-                    buffVals.Add(uptime.Uptime);
-                    if (buff.Type == Buff.BuffType.Intensity && uptime.Presence > 0)
-                    {
-                        buffVals.Add(uptime.Presence);
-                    }
-                }
-            }
-        }
-
-        private BuffData(IReadOnlyDictionary<long, FinalBuffs> buffs, IReadOnlyList<Buff> listToUse, double avg)
-        {
-            Avg = avg;
-            foreach (Buff buff in listToUse)
-            {
-                var buffVals = new List<object>();
-                Data.Add(buffVals);
-
-                if (buffs.TryGetValue(buff.ID, out FinalBuffs uptime))
+                if (buffs.TryGetValue(buff.ID, out FinalActorBuffs uptime))
                 {
                     buffVals.Add(uptime.Uptime);
                     if (buff.Type == Buff.BuffType.Intensity && uptime.Presence > 0)
@@ -80,11 +61,11 @@ namespace GW2EIBuilders.HtmlModels
             }
         }
 
-        private BuffData(IReadOnlyList<Buff> listToUse, IReadOnlyDictionary<long, FinalPlayerBuffs> uptimes)
+        private BuffData(IReadOnlyList<Buff> listToUse, IReadOnlyDictionary<long, FinalActorBuffs> uptimes)
         {
             foreach (Buff buff in listToUse)
             {
-                if (uptimes.TryGetValue(buff.ID, out FinalPlayerBuffs uptime))
+                if (uptimes.TryGetValue(buff.ID, out FinalActorBuffs uptime))
                 {
                     Data.Add(new List<object>()
                         {
@@ -111,13 +92,13 @@ namespace GW2EIBuilders.HtmlModels
             }
         }
 
-        private BuffData(string prof, IReadOnlyDictionary<string, List<Buff>> buffsBySpec, IReadOnlyDictionary<long, FinalPlayerBuffs> uptimes)
+        private BuffData(string prof, IReadOnlyDictionary<string, List<Buff>> buffsBySpec, IReadOnlyDictionary<long, FinalActorBuffs> uptimes)
         {
             foreach (Buff buff in buffsBySpec[prof])
             {
                 var boonVals = new List<object>();
                 Data.Add(boonVals);
-                if (uptimes.TryGetValue(buff.ID, out FinalPlayerBuffs uptime))
+                if (uptimes.TryGetValue(buff.ID, out FinalActorBuffs uptime))
                 {
                     boonVals.Add(uptime.Uptime);
                     if (buff.Type == Buff.BuffType.Intensity && uptime.Presence > 0)
@@ -237,13 +218,13 @@ namespace GW2EIBuilders.HtmlModels
 
         public static BuffData BuildTargetCondiUptimeData(ParsedEvtcLog log, PhaseData phase, NPC target)
         {
-            IReadOnlyDictionary<long, FinalBuffs> buffs = target.GetBuffs(log, phase.Start, phase.End);
+            IReadOnlyDictionary<long, FinalActorBuffs> buffs = target.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
             return new BuffData(buffs, log.StatisticsHelper.PresentConditions, target.GetGameplayStats(log, phase.Start, phase.End).AvgConditions);
         }
 
         public static BuffData BuildTargetBoonData(ParsedEvtcLog log, PhaseData phase, NPC target)
         {
-            IReadOnlyDictionary<long, FinalBuffs> buffs = target.GetBuffs(log, phase.Start, phase.End);
+            IReadOnlyDictionary<long, FinalActorBuffs> buffs = target.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
             return new BuffData(buffs, log.StatisticsHelper.PresentBoons, target.GetGameplayStats(log, phase.Start, phase.End).AvgBoons);
         }
     }

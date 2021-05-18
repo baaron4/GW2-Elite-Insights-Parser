@@ -282,30 +282,30 @@ namespace GW2EIParser
             {
                 IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
                 operation.UpdateProgressWithCancellationCheck("Multi threading");
-                var playersAndTargets = new List<AbstractSingleActor>(log.PlayerList);
-                playersAndTargets.AddRange(log.FightData.Logic.Targets);
-                var playersAndTargetsAndMobs = new List<AbstractSingleActor>(log.FightData.Logic.TrashMobs);
-                playersAndTargetsAndMobs.AddRange(playersAndTargets);
-                foreach (AbstractSingleActor actor in playersAndTargetsAndMobs)
+                var friendliesAndTargets = new List<AbstractSingleActor>(log.Friendlies);
+                friendliesAndTargets.AddRange(log.FightData.Logic.Targets);
+                var friendliesAndTargetsAndMobs = new List<AbstractSingleActor>(log.FightData.Logic.TrashMobs);
+                friendliesAndTargetsAndMobs.AddRange(friendliesAndTargets);
+                foreach (AbstractSingleActor actor in friendliesAndTargetsAndMobs)
                 {
                     // that part can't be // due to buff extensions
                     actor.GetTrackedBuffs(log);
                 }
-                Parallel.ForEach(playersAndTargets, actor => actor.GetStatus(log));
+                Parallel.ForEach(friendliesAndTargets, actor => actor.GetStatus(log));
                 if (log.CombatData.HasMovementData)
                 {
                     // init all positions
-                    Parallel.ForEach(playersAndTargetsAndMobs, actor => actor.GetCombatReplayPolledPositions(log));
+                    Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.GetCombatReplayPolledPositions(log));
                 }
-                Parallel.ForEach(playersAndTargetsAndMobs, actor => actor.GetBuffGraphs(log));
-                Parallel.ForEach(playersAndTargets, actor =>
+                Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.GetBuffGraphs(log));
+                Parallel.ForEach(friendliesAndTargets, actor =>
                 {
                     foreach (PhaseData phase in phases)
                     {
                         actor.GetBuffDistribution(log, phase.Start, phase.End);
                     }
                 });
-                Parallel.ForEach(playersAndTargets, actor =>
+                Parallel.ForEach(friendliesAndTargets, actor =>
                 {
                     foreach (PhaseData phase in phases)
                     {
@@ -314,7 +314,7 @@ namespace GW2EIParser
                 });
                 //
                 //Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
-                Parallel.ForEach(log.PlayerList, actor =>
+                Parallel.ForEach(log.Friendlies, actor =>
                 {
                     foreach (PhaseData phase in phases)
                     {
@@ -346,7 +346,7 @@ namespace GW2EIParser
                 {
                     foreach (PhaseData phase in phases)
                     {
-                        actor.GetBuffs(log, phase.Start, phase.End);
+                        actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
                     }
                 });
             }

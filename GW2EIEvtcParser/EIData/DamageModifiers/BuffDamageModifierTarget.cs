@@ -60,9 +60,9 @@ namespace GW2EIEvtcParser.EIData
             _gainComputerPlayer = gainComputerPlayer;
         }
 
-        internal override List<DamageModifierEvent> ComputeDamageModifier(Player p, ParsedEvtcLog log)
+        internal override List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log)
         {
-            Dictionary<long, BuffsGraphModel> bgmsP = p.GetBuffGraphs(log);
+            Dictionary<long, BuffsGraphModel> bgmsP = actor.GetBuffGraphs(log);
             if (_trackerPlayer != null)
             {
                 if (!_trackerPlayer.Has(bgmsP) && _gainComputerPlayer != ByAbsence)
@@ -71,7 +71,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             var res = new List<DamageModifierEvent>();
-            IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageEvents(p, log, null, log.FightData.FightStart, log.FightData.FightEnd);
+            IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
             if (_trackerPlayer != null)
             {
                 foreach (AbstractHealthDamageEvent evt in typeHits)

@@ -10,7 +10,7 @@ namespace GW2EIBuilders.JsonModels
     /// </summary>
     internal static class JsonPlayerBuffsGenerationBuilder
     {
-        public static JsonBuffsGenerationData BuildJsonBuffsGenerationData(FinalPlayerBuffs stats)
+        public static JsonBuffsGenerationData BuildJsonBuffsGenerationData(FinalActorBuffs stats)
         {
             var jsonBuffsGenerationData = new JsonBuffsGenerationData();
             jsonBuffsGenerationData.Generation = stats.Generation;

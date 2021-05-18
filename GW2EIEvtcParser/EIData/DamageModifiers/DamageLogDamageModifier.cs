@@ -16,11 +16,11 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        internal override List<DamageModifierEvent> ComputeDamageModifier(Player p, ParsedEvtcLog log)
+        internal override List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log)
         {
             var res = new List<DamageModifierEvent>();
             double gain = GainComputer.ComputeGain(GainPerStack, 1);
-            IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageEvents(p, log, null, log.FightData.FightStart, log.FightData.FightEnd);
+            IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
             foreach (AbstractHealthDamageEvent evt in typeHits)
             {
                 if (DLChecker(evt, log))

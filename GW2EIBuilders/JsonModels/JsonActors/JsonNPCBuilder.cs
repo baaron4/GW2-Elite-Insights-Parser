@@ -54,15 +54,15 @@ namespace GW2EIBuilders.JsonModels
         {
             var res = new List<JsonBuffsUptime>();
             IReadOnlyList<PhaseData> phases = log.FightData.GetNonDummyPhases(log);
-            var buffs = phases.Select(x => npc.GetBuffs(log, x.Start, x.End)).ToList();
-            foreach (KeyValuePair<long, FinalBuffs> pair in buffs[0])
+            var buffs = phases.Select(x => npc.GetBuffs(ParserHelper.BuffEnum.Self, log, x.Start, x.End)).ToList();
+            foreach (KeyValuePair<long, FinalActorBuffs> pair in buffs[0])
             {
                 var data = new List<JsonBuffsUptimeData>();
                 for (int i = 0; i < phases.Count; i++)
                 {
                     PhaseData phase = phases[i];
                     Dictionary<long, FinalBuffsDictionary> buffsDictionary = npc.GetBuffsDictionary(log, phase.Start, phase.End);
-                    if (buffs[i].TryGetValue(pair.Key, out FinalBuffs val))
+                    if (buffs[i].TryGetValue(pair.Key, out FinalActorBuffs val))
                     {
                         JsonBuffsUptimeData value = JsonBuffsUptimeBuilder.BuildJsonBuffsUptimeData(val, buffsDictionary[pair.Key]);
                         data.Add(value);

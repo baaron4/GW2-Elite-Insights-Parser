@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EIData
         public int BoonStrips { get; internal set; }
         public double BoonStripsTime { get; internal set; }
 
-        internal FinalPlayerSupport(ParsedEvtcLog log, Player player, long start, long end)
+        internal FinalPlayerSupport(ParsedEvtcLog log, AbstractPlayer player, long start, long end)
         {
             FinalSupportAll totals = player.GetSupportStats(log, start, end);
             Resurrects = totals.Resurrects;

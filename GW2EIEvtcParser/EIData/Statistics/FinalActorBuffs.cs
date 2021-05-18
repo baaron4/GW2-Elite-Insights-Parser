@@ -7,8 +7,10 @@ using static GW2EIEvtcParser.EIData.Buff;
 namespace GW2EIEvtcParser.EIData
 {
 
-    public class FinalPlayerBuffs : FinalBuffs
+    public class FinalActorBuffs
     {
+        public double Uptime { get; internal set; }
+        public double Presence { get; internal set; }
         public double Generation { get; internal set; }
         public double Overstack { get; internal set; }
         public double Wasted { get; internal set; }
@@ -16,7 +18,7 @@ namespace GW2EIEvtcParser.EIData
         public double ByExtension { get; internal set; }
         public double Extended { get; internal set; }
 
-        internal static Dictionary<long, FinalPlayerBuffs>[] GetBuffsForPlayers(List<Player> playerList, ParsedEvtcLog log, AgentItem agentItem, long start, long end)
+        internal static Dictionary<long, FinalActorBuffs>[] GetBuffsForPlayers(List<Player> playerList, ParsedEvtcLog log, AgentItem agentItem, long start, long end)
         {
 
             long phaseDuration = end - start;
@@ -30,9 +32,9 @@ namespace GW2EIEvtcParser.EIData
             var buffsToTrack = new HashSet<Buff>(buffDistribution.SelectMany(x => x.Value.BuffIDs).Select(x => log.Buffs.BuffsByIds[x]));
 
             var buffs =
-                new Dictionary<long, FinalPlayerBuffs>();
+                new Dictionary<long, FinalActorBuffs>();
             var activeBuffs =
-                new Dictionary<long, FinalPlayerBuffs>();
+                new Dictionary<long, FinalActorBuffs>();
 
             foreach (Buff boon in buffsToTrack)
             {
@@ -92,8 +94,8 @@ namespace GW2EIEvtcParser.EIData
 
                 if (hasGeneration)
                 {
-                    var uptime = new FinalPlayerBuffs();
-                    var uptimeActive = new FinalPlayerBuffs();
+                    var uptime = new FinalActorBuffs();
+                    var uptimeActive = new FinalActorBuffs();
                     buffs[boon.ID] = uptime;
                     activeBuffs[boon.ID] = uptimeActive;
                     if (boon.Type == BuffType.Duration)
@@ -137,25 +139,25 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
 
-            return new Dictionary<long, FinalPlayerBuffs>[] { buffs, activeBuffs };
+            return new Dictionary<long, FinalActorBuffs>[] { buffs, activeBuffs };
         }
 
 
-        internal static Dictionary<long, FinalPlayerBuffs>[] GetBuffsForSelf(ParsedEvtcLog log, Player player, long start, long end)
+        internal static Dictionary<long, FinalActorBuffs>[] GetBuffsForSelf(ParsedEvtcLog log, AbstractSingleActor actor, long start, long end)
         {
-            var buffs = new Dictionary<long, FinalPlayerBuffs>();
-            var activeBuffs = new Dictionary<long, FinalPlayerBuffs>();
+            var buffs = new Dictionary<long, FinalActorBuffs>();
+            var activeBuffs = new Dictionary<long, FinalActorBuffs>();
 
-            BuffDistribution selfBuffs = player.GetBuffDistribution(log, start, end);
-            Dictionary<long, long> buffPresence = player.GetBuffPresence(log, start, end);
+            BuffDistribution selfBuffs = actor.GetBuffDistribution(log, start, end);
+            Dictionary<long, long> buffPresence = actor.GetBuffPresence(log, start, end);
 
             long phaseDuration = end - start;
-            long playerActiveDuration = player.GetActiveDuration(log, start, end);
-            foreach (Buff boon in player.GetTrackedBuffs(log))
+            long playerActiveDuration = actor.GetActiveDuration(log, start, end);
+            foreach (Buff boon in actor.GetTrackedBuffs(log))
             {
                 if (selfBuffs.HasBuffID(boon.ID))
                 {
-                    var uptime = new FinalPlayerBuffs
+                    var uptime = new FinalActorBuffs
                     {
                         Uptime = 0,
                         Generation = 0,
@@ -165,7 +167,7 @@ namespace GW2EIEvtcParser.EIData
                         ByExtension = 0,
                         Extended = 0
                     };
-                    var uptimeActive = new FinalPlayerBuffs
+                    var uptimeActive = new FinalActorBuffs
                     {
                         Uptime = 0,
                         Generation = 0,
@@ -177,13 +179,13 @@ namespace GW2EIEvtcParser.EIData
                     };
                     buffs[boon.ID] = uptime;
                     activeBuffs[boon.ID] = uptimeActive;
-                    double generationValue = selfBuffs.GetGeneration(boon.ID, player.AgentItem);
+                    double generationValue = selfBuffs.GetGeneration(boon.ID, actor.AgentItem);
                     double uptimeValue = selfBuffs.GetUptime(boon.ID);
-                    double overstackValue = selfBuffs.GetOverstack(boon.ID, player.AgentItem);
-                    double wasteValue = selfBuffs.GetWaste(boon.ID, player.AgentItem);
-                    double unknownExtensionValue = selfBuffs.GetUnknownExtension(boon.ID, player.AgentItem);
-                    double extensionValue = selfBuffs.GetExtension(boon.ID, player.AgentItem);
-                    double extendedValue = selfBuffs.GetExtended(boon.ID, player.AgentItem);
+                    double overstackValue = selfBuffs.GetOverstack(boon.ID, actor.AgentItem);
+                    double wasteValue = selfBuffs.GetWaste(boon.ID, actor.AgentItem);
+                    double unknownExtensionValue = selfBuffs.GetUnknownExtension(boon.ID, actor.AgentItem);
+                    double extensionValue = selfBuffs.GetExtension(boon.ID, actor.AgentItem);
+                    double extendedValue = selfBuffs.GetExtended(boon.ID, actor.AgentItem);
                     if (boon.Type == BuffType.Duration)
                     {
                         uptime.Uptime = Math.Round(100.0 * uptimeValue / phaseDuration, ParserHelper.BuffDigit);
@@ -238,7 +240,7 @@ namespace GW2EIEvtcParser.EIData
                     }
                 }
             }
-            return new Dictionary<long, FinalPlayerBuffs>[] { buffs, activeBuffs };
+            return new Dictionary<long, FinalActorBuffs>[] { buffs, activeBuffs };
         }
 
     }

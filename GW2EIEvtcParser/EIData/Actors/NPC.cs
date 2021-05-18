@@ -2,13 +2,12 @@
 using System.Linq;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
     public class NPC : AbstractSingleActor
     {
-        private CachingCollection<Dictionary<long, FinalBuffs>> _buffs;
-        private List<Segment> _breakbarPercentUpdates { get; set; }
         // Constructors
         internal NPC(AgentItem agent) : base(agent)
         {
@@ -16,15 +15,6 @@ namespace GW2EIEvtcParser.EIData
             {
                 throw new EvtcAgentException("Agent is a player");
             }
-        }
-
-        public IReadOnlyList<Segment> GetBreakbarPercentUpdates(ParsedEvtcLog log)
-        {
-            if (_breakbarPercentUpdates == null)
-            {
-                _breakbarPercentUpdates = Segment.FromStates(log.CombatData.GetBreakbarPercentEvents(AgentItem).Select(x => x.ToState()).ToList(), 0, log.FightData.FightEnd);
-            }
-            return _breakbarPercentUpdates;
         }
 
         internal void OverrideName(string name)
@@ -35,38 +25,6 @@ namespace GW2EIEvtcParser.EIData
         public override string GetIcon()
         {
             return ParserHelper.GetNPCIcon(ID);
-        }
-
-        public IReadOnlyDictionary<long, FinalBuffs> GetBuffs(ParsedEvtcLog log, long start, long end)
-        {
-            if (_buffs == null)
-            {
-                _buffs = new CachingCollection<Dictionary<long, FinalBuffs>>(log);
-            }
-            if (!_buffs.TryGetValue(start, end, out Dictionary<long, FinalBuffs> value))
-            {
-                value = ComputeBuffs(log, start, end);
-                _buffs.Set(start, end, value);
-            }
-            return value;
-        }
-
-        private Dictionary<long, FinalBuffs> ComputeBuffs(ParsedEvtcLog log, long start, long end)
-        {
-            BuffDistribution buffDistribution = GetBuffDistribution(log, start, end);
-            var rates = new Dictionary<long, FinalBuffs>();
-            Dictionary<long, long> buffPresence = GetBuffPresence(log, start, end);
-
-            long phaseDuration = end - start;
-
-            foreach (Buff buff in GetTrackedBuffs(log))
-            {
-                if (buffDistribution.HasBuffID(buff.ID))
-                {
-                    rates[buff.ID] = new FinalBuffs(buff, buffDistribution, buffPresence, phaseDuration);
-                }
-            }
-            return rates;
         }
 
         protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log)

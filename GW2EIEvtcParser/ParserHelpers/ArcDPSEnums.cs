@@ -443,6 +443,7 @@ namespace GW2EIEvtcParser
             // CA
             ConjuredGreatsword = 21255,
             ConjuredShield = 21170,
+            ConjuredPlayerSword = CASword,
             // Qadim
             LavaElemental1 = 21236,
             LavaElemental2 = 21078,

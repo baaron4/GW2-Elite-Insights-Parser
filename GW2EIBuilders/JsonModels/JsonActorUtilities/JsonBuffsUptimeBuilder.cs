@@ -23,7 +23,7 @@ namespace GW2EIBuilders.JsonModels
             return res;
         }
 
-        public static JsonBuffsUptimeData BuildJsonBuffsUptimeData(FinalBuffs buffs, FinalBuffsDictionary buffsDictionary)
+        public static JsonBuffsUptimeData BuildJsonBuffsUptimeData(FinalActorBuffs buffs, FinalBuffsDictionary buffsDictionary)
         {
             var jsonBuffsUptimeData = new JsonBuffsUptimeData();
             jsonBuffsUptimeData.Uptime = buffs.Uptime;

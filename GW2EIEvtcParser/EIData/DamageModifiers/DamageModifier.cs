@@ -130,9 +130,9 @@ namespace GW2EIEvtcParser.EIData
             return false;
         }
 
-        public int GetTotalDamage(Player p, ParsedEvtcLog log, NPC t, long start, long end)
+        public int GetTotalDamage(AbstractSingleActor actor, ParsedEvtcLog log, NPC t, long start, long end)
         {
-            FinalDPS damageData = p.GetDPSStats(t, log, start, end);
+            FinalDPS damageData = actor.GetDPSStats(t, log, start, end);
             switch (_compareType)
             {
                 case DamageType.All:
@@ -145,21 +145,21 @@ namespace GW2EIEvtcParser.EIData
             return 0;
         }
 
-        public IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageEvents(Player p, ParsedEvtcLog log, NPC t, long start, long end)
+        public IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageEvents(AbstractSingleActor actor, ParsedEvtcLog log, NPC t, long start, long end)
         {
             switch (_srcType)
             {
                 case DamageType.All:
-                    return _dmgSrc == DamageSource.All ? p.GetHitDamageEvents(t, log, start, end) : p.GetJustActorHitDamageEvents(t, log, start, end);
+                    return _dmgSrc == DamageSource.All ? actor.GetHitDamageEvents(t, log, start, end) : actor.GetJustActorHitDamageEvents(t, log, start, end);
                 case DamageType.Condition:
-                    return _dmgSrc == DamageSource.All ? p.GetConditionHitDamageEvents(t, log, start, end) : p.GetJustActorConditionHitDamageEvents(t, log, start, end);
+                    return _dmgSrc == DamageSource.All ? actor.GetConditionHitDamageEvents(t, log, start, end) : actor.GetJustActorConditionHitDamageEvents(t, log, start, end);
                 case DamageType.Power:
                 default:
-                    return _dmgSrc == DamageSource.All ? p.GetPowerHitDamageEvents(t, log, start, end) : p.GetJustActorPowerHitDamageEvents(t, log, start, end);
+                    return _dmgSrc == DamageSource.All ? actor.GetPowerHitDamageEvents(t, log, start, end) : actor.GetJustActorPowerHitDamageEvents(t, log, start, end);
             }
         }
 
-        internal abstract List<DamageModifierEvent> ComputeDamageModifier(Player p, ParsedEvtcLog log);
+        internal abstract List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log);
 
         internal static readonly List<DamageModifier> ItemDamageModifiers = new List<DamageModifier>
         {
