@@ -38,7 +38,7 @@ namespace GW2EIEvtcParser.ParsedData
                 case FlatInc:
                     return "Flat Increase";
                 case PhysInc:
-                    return "Outgoing Physical Damage";
+                    return "Outgoing Strike Damage";
                 case CondInc:
                     return "Outgoing Condition Damage";
                 case OutgoingLifeLeechEffectiveness:
@@ -46,7 +46,7 @@ namespace GW2EIEvtcParser.ParsedData
                 case CondRec:
                     return "Incoming Condition Damage";
                 case PhysRec:
-                    return "Incoming Physical Damage";
+                    return "Incoming Strike Damage";
                 case AttackSpeed:
                     return "Attack Speed";
                 case ConditionDurationIncrease:
@@ -58,8 +58,8 @@ namespace GW2EIEvtcParser.ParsedData
                     return "Glancing Blow";
                 case CriticalChance:
                     return "Critical Chance";
-                case PowerDamageToHP:
-                    return "Physical Damage to Health";
+                case StrikeDamageToHP:
+                    return "Strike Damage to Health";
                 case ConditionDamageToHP:
                     return "Condition Damage to Health";
                 case SkillActivationDamageFormula:
@@ -133,7 +133,7 @@ namespace GW2EIEvtcParser.ParsedData
                 case ConditionDurationIncrease:
                 case GlancingBlow:
                 case CriticalChance:
-                case PowerDamageToHP:
+                case StrikeDamageToHP:
                 case ConditionDamageToHP:
                 case EnduranceRegeneration:
                 case IncomingHealingEffectiveness:
