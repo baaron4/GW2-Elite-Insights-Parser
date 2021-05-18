@@ -12,9 +12,9 @@ namespace GW2EIEvtcParser.EIData
         // Constructors
         internal NPC(AgentItem agent) : base(agent)
         {
-            if (agent.IsFriendlyPlayer)
+            if (agent.IsPlayer)
             {
-                throw new EvtcAgentException("Agent is a friendly player");
+                throw new EvtcAgentException("Agent is a player");
             }
         }
 
@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser.EIData
 
         public override string GetIcon()
         {
-            return AgentItem.IsPlayer ? ParserHelper.GetHighResolutionProfIcon(Prof) : ParserHelper.GetNPCIcon(ID);
+            return ParserHelper.GetNPCIcon(ID);
         }
 
         public IReadOnlyDictionary<long, FinalBuffs> GetBuffs(ParsedEvtcLog log, long start, long end)
@@ -99,7 +99,7 @@ namespace GW2EIEvtcParser.EIData
                 SpawnEvent spawnCheck = log.CombatData.GetSpawnEvents(AgentItem).LastOrDefault();
                 DeadEvent deathCheck = log.CombatData.GetDeadEvents(AgentItem).LastOrDefault();
                 AliveEvent aliveCheck = log.CombatData.GetAliveEvents(AgentItem).LastOrDefault();
-                if (!AgentItem.IsPlayer && deathCheck != null && (aliveCheck == null || aliveCheck.Time < deathCheck.Time))
+                if (deathCheck != null && (aliveCheck == null || aliveCheck.Time < deathCheck.Time))
                 {
                     CombatReplay.Trim(AgentItem.FirstAware, deathCheck.Time);
                 }

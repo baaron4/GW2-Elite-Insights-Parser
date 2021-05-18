@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterCategoryInformation.InSubCategoryOrder = 0;
         }
 
-        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
             var attackTargets = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).ToList();
             long first = fightData.FightStart;

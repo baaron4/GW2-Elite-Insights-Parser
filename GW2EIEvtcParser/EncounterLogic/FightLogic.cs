@@ -489,7 +489,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return fightData.LogStart;
         }
 
-        internal virtual void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal virtual void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
             ComputeFightTargets(agentData, combatData);
         }

@@ -15,6 +15,7 @@ namespace GW2EIEvtcParser
         public SkillData SkillData { get; }
         public CombatData CombatData { get; }
         public IReadOnlyList<Player> PlayerList { get; }
+        public IReadOnlyList<AbstractSingleActor> Friendlies { get; }
         public IReadOnlyCollection<AgentItem> PlayerAgents { get; }
         public bool IsBenchmarkMode => FightData.Logic.Mode == FightLogic.ParseMode.Benchmark;
         public IReadOnlyDictionary<string, List<Player>> PlayerListBySpec { get; }
@@ -31,7 +32,7 @@ namespace GW2EIEvtcParser
         private Dictionary<AgentItem, AbstractSingleActor> _agentToActorDictionary;
 
         internal ParsedEvtcLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData,
-                List<CombatItem> combatItems, List<Player> playerList, long evtcLogDuration, EvtcParserSettings parserSettings, ParserController operation)
+                List<CombatItem> combatItems, List<Player> playerList, List<AbstractSingleActor> friendlies, long evtcLogDuration, EvtcParserSettings parserSettings, ParserController operation)
         {
             FightData = fightData;
             AgentData = agentData;
@@ -39,6 +40,7 @@ namespace GW2EIEvtcParser
             PlayerList = playerList;
             ParserSettings = parserSettings;
             _operation = operation;
+            Friendlies = friendlies;
             //
             PlayerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
             PlayerAgents = new HashSet<AgentItem>(playerList.Select(x => x.AgentItem));
@@ -93,7 +95,7 @@ namespace GW2EIEvtcParser
             {
                 _operation.UpdateProgressWithCancellationCheck("Initializing Actor dictionary");
                 _agentToActorDictionary = new Dictionary<AgentItem, AbstractSingleActor>();
-                foreach (Player p in PlayerList)
+                foreach (AbstractSingleActor p in Friendlies)
                 {
                     AddToDictionary(p);
                 }

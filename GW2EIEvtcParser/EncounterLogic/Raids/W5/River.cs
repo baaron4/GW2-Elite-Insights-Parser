@@ -78,7 +78,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
             agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, "River of Souls", "", (int)ArcDPSEnums.TargetID.DummyTarget, true);
             // The walls and bombers spawn at the start of the encounter, we fix it by overriding their first aware to the first velocity change event
@@ -111,7 +111,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             AgentItem desmina = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Desmina).FirstOrDefault();
             if (desmina != null)
             {
-                playerList.Add(new Player(desmina, "Desmina", GetNPCIcon((int)ArcDPSEnums.TargetID.Desmina)));
+                friendlies.Add(new Player(desmina, "Desmina", GetNPCIcon((int)ArcDPSEnums.TargetID.Desmina)));
             }
         }
 

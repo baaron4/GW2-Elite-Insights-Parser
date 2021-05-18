@@ -112,7 +112,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
             // has breakbar state into
             if (combatData.Any(x => x.IsStateChange == ArcDPSEnums.StateChange.BreakbarState))
@@ -128,7 +128,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     long sacrificeStartTime = sacrificeStartList[i].Time;
                     long sacrificeEndTime = i < sacrificeEndList.Count ? sacrificeEndList[i].Time : fightData.FightEnd;
                     //
-                    Player sacrifice = playerList.FirstOrDefault(x => x.AgentItem == agentData.GetAgent(sacrificeStartList[i].DstAgent));
+                    Player sacrifice = friendlies.OfType<Player>().FirstOrDefault(x => x.AgentItem == agentData.GetAgent(sacrificeStartList[i].DstAgent));
                     if (sacrifice == null)
                     {
                         continue;

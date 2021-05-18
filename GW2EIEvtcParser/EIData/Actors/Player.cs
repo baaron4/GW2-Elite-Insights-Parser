@@ -26,17 +26,15 @@ namespace GW2EIEvtcParser.EIData
         //weaponslist
         private string[] _weaponsArray;
 
-        private readonly string _forceIcon = null;
-
         private static int FriendlyPlayerCount = 0;
         // Constructors
         internal Player(AgentItem agent, bool noSquad) : base(agent)
         {
-            if (agent.Type != AgentItem.AgentType.Player)
+            if (agent.IsNPC)
             {
-                throw new EvtcAgentException("Agent is not a Player");
+                throw new EvtcAgentException("Agent is NPC");
             }
-            if (!agent.IsNotInSquadPlayer)
+            if (agent.Type == AgentItem.AgentType.Player && !agent.IsNotInSquadFriendlyPlayer)
             {
                 string[] name = agent.Name.Split('\0');
                 if (name.Length < 2)
@@ -54,29 +52,13 @@ namespace GW2EIEvtcParser.EIData
             {
                 IsCustomActor = true;
                 Group = 51;
-                Account = "Friendly Player " + (++FriendlyPlayerCount);
+                Account = "Player " + (++FriendlyPlayerCount);
             }
-        }
-
-        internal Player(AgentItem agent, string account) : base(agent)
-        {
-            if (agent.Type == AgentItem.AgentType.Player)
-            {
-                throw new EvtcAgentException("Agent is Player, use proper player constructor");
-            }
-            Account = account;
-            Group = 51;
-            IsCustomActor = !IsDummyActor;
-        }
-
-        internal Player(AgentItem agent, string account, string icon) : this(agent, account)
-        {
-            _forceIcon = icon;
         }
 
         public override string GetIcon()
         {
-            return _forceIcon ?? GetProfIcon(Prof);
+            return AgentItem.Type == AgentItem.AgentType.NonSquadPlayer && !AgentItem.IsNotInSquadFriendlyPlayer ? GetHighResolutionProfIcon(Prof) : GetProfIcon(Prof);
         }
 
 

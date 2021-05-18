@@ -9,10 +9,9 @@ namespace GW2EIEvtcParser.ParsedData
     {
 
         private static int AgentCount = 0;
-        public enum AgentType { NPC, Gadget, Player, EnemyPlayer}
+        public enum AgentType { NPC, Gadget, Player, NonSquadPlayer}
 
-        public bool IsPlayer => Type == AgentType.Player || Type == AgentType.EnemyPlayer;
-        public bool IsFriendlyPlayer => Type == AgentType.Player;
+        public bool IsPlayer => Type == AgentType.Player || Type == AgentType.NonSquadPlayer;
         public bool IsNPC => Type == AgentType.NPC || Type == AgentType.Gadget;
 
         // Fields
@@ -34,7 +33,7 @@ namespace GW2EIEvtcParser.ParsedData
         public uint HitboxHeight { get; }
 
         public bool IsDummy { get; }
-        public bool IsNotInSquadPlayer { get; }
+        public bool IsNotInSquadFriendlyPlayer { get; }
 
         public bool HasCommanderTag { get; protected set; }
 
@@ -63,12 +62,12 @@ namespace GW2EIEvtcParser.ParsedData
                     {
                         if (!splitStr[0].Any(char.IsDigit))
                         {
-                            IsNotInSquadPlayer = true;
+                            IsNotInSquadFriendlyPlayer = true;
                         } 
                         else
                         {
                             Name = Prof + " " + Name;
-                            Type = AgentType.EnemyPlayer;
+                            Type = AgentType.NonSquadPlayer;
                         }
                     }
                 }

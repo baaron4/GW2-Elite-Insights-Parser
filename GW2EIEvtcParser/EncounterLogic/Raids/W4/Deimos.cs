@@ -234,7 +234,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return start;
         }
 
-        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
             ComputeFightTargets(agentData, combatData);
             // Find target
@@ -288,7 +288,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             AgentItem saul = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.Saul).FirstOrDefault();
             if (saul != null)
             {
-                playerList.Add(new Player(saul, "Saul", GetNPCIcon((int)ArcDPSEnums.TrashID.Saul)));
+                friendlies.Add(new Player(saul, "Saul", GetNPCIcon((int)ArcDPSEnums.TrashID.Saul)));
             }
         }
 

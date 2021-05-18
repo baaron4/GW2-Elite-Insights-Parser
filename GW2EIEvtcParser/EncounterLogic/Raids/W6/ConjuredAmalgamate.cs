@@ -61,7 +61,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
             // make those into npcs
             IReadOnlyList<AgentItem> cas = agentData.GetGadgetsByID((int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
@@ -82,7 +82,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             agentData.Refresh();
             ComputeFightTargets(agentData, combatData);
             AgentItem sword = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, "Conjured Sword\0:Conjured Sword\051", "Sword", 0, true);
-            playerList.Add(new Player(sword, "Conjured Sword"));
+            friendlies.Add(new Player(sword, "Conjured Sword"));
             foreach (CombatItem c in combatData)
             {
                 if (c.SkillID == 52370 && c.IsStateChange == ArcDPSEnums.StateChange.None && c.IsBuffRemove == ArcDPSEnums.BuffRemove.None &&

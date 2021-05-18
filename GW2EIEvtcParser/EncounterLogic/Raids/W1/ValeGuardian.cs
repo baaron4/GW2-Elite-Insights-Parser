@@ -97,9 +97,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
-            base.EIEvtcParse(fightData, agentData, combatData, playerList);
+            base.EIEvtcParse(fightData, agentData, combatData, friendlies);
             int curRed = 1;
             int curBlue = 1;
             int curGreen = 1;

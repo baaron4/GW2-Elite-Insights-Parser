@@ -313,6 +313,7 @@ namespace GW2EIEvtcParser
         private const int BloodstoneFragment = -10;
         private const int BloodstoneShard = -11;
         private const int ChargedBloodstone = -12;
+        private const int CASword = -13;
 
 
         //

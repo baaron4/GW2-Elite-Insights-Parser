@@ -120,12 +120,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             fightData.SetSuccess(true, fightData.FightEnd);
         }
 
-        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
             AgentItem dummyAgent = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, _detailed ? "Dummy WvW Agent" : "Enemy Players", "", (int)ArcDPSEnums.TargetID.WorldVersusWorld, true);
             ComputeFightTargets(agentData, combatData);
 
-            IReadOnlyList<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.EnemyPlayer);
+            IReadOnlyList<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer);
             if (_detailed)
             {
                 var set = new HashSet<string>();

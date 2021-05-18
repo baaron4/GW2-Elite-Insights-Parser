@@ -102,7 +102,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
             IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.PyreGuardian);
             // Lamps

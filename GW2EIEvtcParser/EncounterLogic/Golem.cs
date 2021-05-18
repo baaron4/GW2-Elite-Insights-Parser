@@ -81,7 +81,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return fightData.LogStart;
         }
 
-        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal override void EIEvtcParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
             AgentItem target = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault();
             foreach (CombatItem c in combatData)
