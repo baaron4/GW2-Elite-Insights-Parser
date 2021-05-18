@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
@@ -27,11 +28,11 @@ namespace GW2EIBuilders.HtmlModels
             if (buffInfoEvent != null)
             {
                 var descriptions = new List<string>() {
-                    "Max Stack(s) " + buff.Capacity
+                    "Max Stack(s) " + buffInfoEvent.MaxStacks
                 };
-                if (buff.DurationCap > 0)
+                if (buffInfoEvent.DurationCap > 0)
                 {
-                    descriptions.Add("Duration Cap: " + buff.DurationCap + " seconds");
+                    descriptions.Add("Duration Cap: " + Math.Round(buffInfoEvent.DurationCap / 1000.0, 3) + " seconds");
                 }
                 foreach (BuffFormula formula in buffInfoEvent.Formulas)
                 {
