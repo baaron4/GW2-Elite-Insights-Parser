@@ -48,14 +48,14 @@ namespace GW2EIEvtcParser.EIData
         }
         // Getters
         // Damage logs
-        public abstract IReadOnlyList<AbstractHealthDamageEvent> GetDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end);
+        public abstract IReadOnlyList<AbstractHealthDamageEvent> GetDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
 
-        public abstract IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end);
+        public abstract IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
 
         /// <summary>
         /// cached method for damage modifiers
         /// </summary>
-        internal IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        internal IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if(_hitDamageEventsPerPhasePerTarget == null)
             {
@@ -69,7 +69,7 @@ namespace GW2EIEvtcParser.EIData
             return dls;
         }
 
-        internal IReadOnlyList<AbstractHealthDamageEvent> GetConditionHitDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        internal IReadOnlyList<AbstractHealthDamageEvent> GetConditionHitDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (_conditionHitDamageEventsPerPhasePerTarget == null)
             {
@@ -83,7 +83,7 @@ namespace GW2EIEvtcParser.EIData
             return dls;
         }
 
-        internal IReadOnlyList<AbstractHealthDamageEvent> GetPowerHitDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        internal IReadOnlyList<AbstractHealthDamageEvent> GetPowerHitDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (_powerHitDamageEventsPerPhasePerTarget == null)
             {
@@ -97,9 +97,9 @@ namespace GW2EIEvtcParser.EIData
             return dls;
         }
 
-        public abstract IReadOnlyList<AbstractHealthDamageEvent> GetDamageTakenEvents(AbstractActor target, ParsedEvtcLog log, long start, long end);
+        public abstract IReadOnlyList<AbstractHealthDamageEvent> GetDamageTakenEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
 
-        public abstract IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenEvents(AbstractActor target, ParsedEvtcLog log, long start, long end);
+        public abstract IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
 
         // Cast logs
         public abstract IReadOnlyList<AbstractCastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end);
