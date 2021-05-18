@@ -28,10 +28,10 @@ namespace GW2EIBuilders.HtmlModels
             return data;
         }
 
-        public static List<DeathRecapDto> BuildDeathRecap(ParsedEvtcLog log, Player p)
+        public static List<DeathRecapDto> BuildDeathRecap(ParsedEvtcLog log, AbstractSingleActor actor)
         {
             var res = new List<DeathRecapDto>();
-            IReadOnlyList<DeathRecap> recaps = p.GetDeathRecaps(log);
+            IReadOnlyList<DeathRecap> recaps = actor.GetDeathRecaps(log);
             if (!recaps.Any())
             {
                 return null;

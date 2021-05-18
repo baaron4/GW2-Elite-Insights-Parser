@@ -19,7 +19,7 @@ namespace GW2EIBuilders.HtmlModels
 
         // helpers
 
-        public static ActorDetailsDto BuildPlayerData(ParsedEvtcLog log, Player player, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        public static ActorDetailsDto BuildPlayerData(ParsedEvtcLog log, AbstractSingleActor actor, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             var dto = new ActorDetailsDto
             {
@@ -28,32 +28,32 @@ namespace GW2EIBuilders.HtmlModels
                 DmgDistributionsTaken = new List<DmgDistributionDto>(),
                 BoonGraph = new List<List<BuffChartDataDto>>(),
                 Rotation = new List<List<object[]>>(),
-                Food = FoodDto.BuildPlayerFoodData(log, player, usedBuffs),
+                Food = FoodDto.BuildFoodData(log, actor, usedBuffs),
                 Minions = new List<ActorDetailsDto>(),
-                DeathRecap = DeathRecapDto.BuildDeathRecap(log, player)
+                DeathRecap = DeathRecapDto.BuildDeathRecap(log, actor)
             };
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
-                dto.Rotation.Add(SkillDto.BuildRotationData(log, player, phase, usedSkills));
-                dto.DmgDistributions.Add(DmgDistributionDto.BuildPlayerDMGDistData(log, player, null, phase, usedSkills, usedBuffs));
+                dto.Rotation.Add(SkillDto.BuildRotationData(log, actor, phase, usedSkills));
+                dto.DmgDistributions.Add(DmgDistributionDto.BuildFriendlyDMGDistData(log, actor, null, phase, usedSkills, usedBuffs));
                 var dmgTargetsDto = new List<DmgDistributionDto>();
                 foreach (NPC target in phase.Targets)
                 {
-                    dmgTargetsDto.Add(DmgDistributionDto.BuildPlayerDMGDistData(log, player, target, phase, usedSkills, usedBuffs));
+                    dmgTargetsDto.Add(DmgDistributionDto.BuildFriendlyDMGDistData(log, actor, target, phase, usedSkills, usedBuffs));
                 }
                 dto.DmgDistributionsTargets.Add(dmgTargetsDto);
-                dto.DmgDistributionsTaken.Add(DmgDistributionDto.BuildDMGTakenDistData(log, player, phase, usedSkills, usedBuffs));
-                dto.BoonGraph.Add(BuffChartDataDto.BuildBoonGraphData(log, player, phase, usedBuffs));
+                dto.DmgDistributionsTaken.Add(DmgDistributionDto.BuildDMGTakenDistData(log, actor, phase, usedSkills, usedBuffs));
+                dto.BoonGraph.Add(BuffChartDataDto.BuildBoonGraphData(log, actor, phase, usedBuffs));
             }
-            foreach (KeyValuePair<long, Minions> pair in player.GetMinions(log))
+            foreach (KeyValuePair<long, Minions> pair in actor.GetMinions(log))
             {
-                dto.Minions.Add(BuildPlayerMinionsData(log, player, pair.Value, usedSkills, usedBuffs));
+                dto.Minions.Add(BuildFriendlyMinionsData(log, actor, pair.Value, usedSkills, usedBuffs));
             }
 
             return dto;
         }
 
-        private static ActorDetailsDto BuildPlayerMinionsData(ParsedEvtcLog log, Player player, Minions minion, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        private static ActorDetailsDto BuildFriendlyMinionsData(ParsedEvtcLog log, AbstractSingleActor actor, Minions minion, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             var dto = new ActorDetailsDto
             {
@@ -65,10 +65,10 @@ namespace GW2EIBuilders.HtmlModels
                 var dmgTargetsDto = new List<DmgDistributionDto>();
                 foreach (NPC target in phase.Targets)
                 {
-                    dmgTargetsDto.Add(DmgDistributionDto.BuildPlayerMinionDMGDistData(log, player, minion, target, phase, usedSkills, usedBuffs));
+                    dmgTargetsDto.Add(DmgDistributionDto.BuildFriendlyMinionDMGDistData(log, actor, minion, target, phase, usedSkills, usedBuffs));
                 }
                 dto.DmgDistributionsTargets.Add(dmgTargetsDto);
-                dto.DmgDistributions.Add(DmgDistributionDto.BuildPlayerMinionDMGDistData(log, player, minion, null, phase, usedSkills, usedBuffs));
+                dto.DmgDistributions.Add(DmgDistributionDto.BuildFriendlyMinionDMGDistData(log, actor, minion, null, phase, usedSkills, usedBuffs));
             }
             return dto;
         }

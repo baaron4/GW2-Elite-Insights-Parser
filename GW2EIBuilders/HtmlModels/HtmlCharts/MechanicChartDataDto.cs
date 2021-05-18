@@ -29,9 +29,9 @@ namespace GW2EIBuilders.HtmlModels
             if (!enemyMechanic)
             {
                 var playerIndex = new Dictionary<AbstractSingleActor, int>();
-                for (int p = 0; p < log.PlayerList.Count; p++)
+                for (int p = 0; p < log.Friendlies.Count; p++)
                 {
-                    playerIndex.Add(log.PlayerList[p], p);
+                    playerIndex.Add(log.Friendlies[p], p);
                     res.Add(new List<object>());
                 }
                 foreach (MechanicEvent ml in mechanicLogs.Where(x => phase.InInterval(x.Time)))

@@ -32,7 +32,7 @@ namespace GW2EIBuilders.JsonModels
             jsonPlayer.ActiveTimes = phases.Select(x => player.GetActiveDuration(log, x.Start, x.End)).ToList();
             jsonPlayer.HasCommanderTag = player.HasCommanderTag;
             //
-            jsonPlayer.Support = phases.Select(phase => JsonStatisticsBuilder.BuildJsonPlayerSupport(player.GetPlayerSupportStats(log, phase.Start, phase.End))).ToArray();
+            jsonPlayer.Support = phases.Select(phase => JsonStatisticsBuilder.BuildJsonPlayerSupport(player.GetToPlayerSupportStats(log, phase.Start, phase.End))).ToArray();
             var targetDamage1S = new IReadOnlyList<int>[log.FightData.Logic.Targets.Count][];
             var targetPowerDamage1S = new IReadOnlyList<int>[log.FightData.Logic.Targets.Count][];
             var targetConditionDamage1S = new IReadOnlyList<int>[log.FightData.Logic.Targets.Count][];

@@ -230,10 +230,10 @@ namespace GW2EIBuilders.HtmlModels
         }
 
 
-        public static DmgDistributionDto BuildPlayerDMGDistData(ParsedEvtcLog log, Player p, NPC target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        public static DmgDistributionDto BuildFriendlyDMGDistData(ParsedEvtcLog log, AbstractSingleActor actor, NPC target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
-            FinalDPS dps = p.GetDPSStats(target, log, phase.Start, phase.End);
-            return BuildDMGDistDataInternal(log, dps, p, target, phase, usedSkills, usedBuffs);
+            FinalDPS dps = actor.GetDPSStats(target, log, phase.Start, phase.End);
+            return BuildDMGDistDataInternal(log, dps, actor, target, phase, usedSkills, usedBuffs);
         }
 
 
@@ -259,9 +259,9 @@ namespace GW2EIBuilders.HtmlModels
             return dto;
         }
 
-        public static DmgDistributionDto BuildPlayerMinionDMGDistData(ParsedEvtcLog log, Player p, Minions minions, NPC target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        public static DmgDistributionDto BuildFriendlyMinionDMGDistData(ParsedEvtcLog log, AbstractSingleActor actor, Minions minions, NPC target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
-            FinalDPS dps = p.GetDPSStats(target, log, phase.Start, phase.End);
+            FinalDPS dps = actor.GetDPSStats(target, log, phase.Start, phase.End);
 
             return BuildDMGDistDataMinionsInternal(log, dps, minions, target, phase, usedSkills, usedBuffs);
         }

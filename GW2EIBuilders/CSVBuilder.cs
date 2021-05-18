@@ -362,7 +362,7 @@ namespace GW2EIBuilders
             int count = 0;
             foreach (Player player in _noFakePlayers)
             {
-                FinalPlayerSupport support = player.GetPlayerSupportStats(_log, phase.Start, phase.End);
+                FinalToPlayerSupport support = player.GetToPlayerSupportStats(_log, phase.Start, phase.End);
 
                 WriteLine(new[] { player.Group.ToString(), player.Prof, player.Character,
                 support.CondiCleanse.ToString(),support.CondiCleanseTime.ToString(), support.CondiCleanseSelf.ToString(), support.CondiCleanseTimeSelf.ToString(), support.BoonStrips.ToString(), support.BoonStripsTime.ToString(), support.Resurrects.ToString(),support.ResurrectTime.ToString() });
@@ -626,7 +626,7 @@ namespace GW2EIBuilders
         private void CreateMechanicTable(int phaseIndex)
         {
             PhaseData phase = _phases[phaseIndex];
-            IReadOnlyCollection<Mechanic> presMech = _log.MechanicData.GetPresentPlayerMechs(_log, phase.Start, phase.End);
+            IReadOnlyCollection<Mechanic> presMech = _log.MechanicData.GetPresentFriendlyMechs(_log, phase.Start, phase.End);
             //Dictionary<string, HashSet<Mechanic>> presEnemyMech = log.MechanicData.getPresentEnemyMechs(phaseIndex);
             //List<AbstractMasterPlayer> enemyList = log.MechanicData.getEnemyList(phaseIndex);
             int countLines = 0;

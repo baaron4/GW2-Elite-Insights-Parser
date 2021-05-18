@@ -30,20 +30,20 @@ namespace GW2EIBuilders.HtmlModels
             }
         }
 
-        private BuffData(IReadOnlyDictionary<long, FinalBuffsDictionary> buffs, IReadOnlyList<Buff> listToUse, Player player)
+        private BuffData(IReadOnlyDictionary<long, FinalBuffsDictionary> buffs, IReadOnlyList<Buff> listToUse, AbstractSingleActor actor)
         {
             foreach (Buff buff in listToUse)
             {
-                if (buffs.TryGetValue(buff.ID, out FinalBuffsDictionary toUse) && toUse.Generated.ContainsKey(player))
+                if (buffs.TryGetValue(buff.ID, out FinalBuffsDictionary toUse) && toUse.Generated.ContainsKey(actor))
                 {
                     Data.Add(new List<object>()
                         {
-                            toUse.Generated[player],
-                            toUse.Overstacked[player],
-                            toUse.Wasted[player],
-                            toUse.UnknownExtension[player],
-                            toUse.Extension[player],
-                            toUse.Extended[player]
+                            toUse.Generated[actor],
+                            toUse.Overstacked[actor],
+                            toUse.Wasted[actor],
+                            toUse.UnknownExtension[actor],
+                            toUse.Extension[actor],
+                            toUse.Extended[actor]
                         });
                 }
                 else
@@ -120,18 +120,18 @@ namespace GW2EIBuilders.HtmlModels
             bool boonTable = listToUse.Any(x => x.Nature == Buff.BuffNature.Boon);
             bool conditionTable = listToUse.Any(x => x.Nature == Buff.BuffNature.Condition);
 
-            foreach (Player player in log.PlayerList)
+            foreach (AbstractSingleActor actor in log.Friendlies)
             {
                 double avg = 0.0;
                 if (boonTable)
                 {
-                    avg = player.GetGameplayStats(log, phase.Start, phase.End).AvgBoons;
+                    avg = actor.GetGameplayStats(log, phase.Start, phase.End).AvgBoons;
                 }
                 else if (conditionTable)
                 {
-                    avg = player.GetGameplayStats(log, phase.Start, phase.End).AvgConditions;
+                    avg = actor.GetGameplayStats(log, phase.Start, phase.End).AvgConditions;
                 }
-                list.Add(new BuffData(player.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End), listToUse, avg));
+                list.Add(new BuffData(actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End), listToUse, avg));
             }
             return list;
         }
@@ -142,18 +142,18 @@ namespace GW2EIBuilders.HtmlModels
             bool boonTable = listToUse.Any(x => x.Nature == Buff.BuffNature.Boon);
             bool conditionTable = listToUse.Any(x => x.Nature == Buff.BuffNature.Condition);
 
-            foreach (Player player in log.PlayerList)
+            foreach (AbstractSingleActor actor in log.Friendlies)
             {
                 double avg = 0.0;
                 if (boonTable)
                 {
-                    avg = player.GetGameplayStats(log, phase.Start, phase.End).AvgActiveBoons;
+                    avg = actor.GetGameplayStats(log, phase.Start, phase.End).AvgActiveBoons;
                 } 
                 else if (conditionTable)
                 {
-                    avg = player.GetGameplayStats(log, phase.Start, phase.End).AvgActiveConditions;
+                    avg = actor.GetGameplayStats(log, phase.Start, phase.End).AvgActiveConditions;
                 }
-                list.Add(new BuffData(player.GetActiveBuffs(BuffEnum.Self, log, phase.Start, phase.End), listToUse, avg));
+                list.Add(new BuffData(actor.GetActiveBuffs(BuffEnum.Self, log, phase.Start, phase.End), listToUse, avg));
             }
             return list;
         }
@@ -162,9 +162,9 @@ namespace GW2EIBuilders.HtmlModels
         public static List<BuffData> BuildPersonalBuffUptimeData(ParsedEvtcLog log, IReadOnlyDictionary<string, List<Buff>> buffsBySpec, PhaseData phase)
         {
             var list = new List<BuffData>();
-            foreach (Player player in log.PlayerList)
+            foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                list.Add(new BuffData(player.Prof, buffsBySpec, player.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End)));
+                list.Add(new BuffData(actor.Prof, buffsBySpec, actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End)));
             }
             return list;
         }
@@ -172,9 +172,9 @@ namespace GW2EIBuilders.HtmlModels
         public static List<BuffData> BuildActivePersonalBuffUptimeData(ParsedEvtcLog log, IReadOnlyDictionary<string, List<Buff>> buffsBySpec, PhaseData phase)
         {
             var list = new List<BuffData>();
-            foreach (Player player in log.PlayerList)
+            foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                list.Add(new BuffData(player.Prof, buffsBySpec, player.GetActiveBuffs(BuffEnum.Self, log, phase.Start, phase.End)));
+                list.Add(new BuffData(actor.Prof, buffsBySpec, actor.GetActiveBuffs(BuffEnum.Self, log, phase.Start, phase.End)));
             }
             return list;
         }
@@ -185,9 +185,9 @@ namespace GW2EIBuilders.HtmlModels
         {
             var list = new List<BuffData>();
 
-            foreach (Player player in log.PlayerList)
+            foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                list.Add(new BuffData(listToUse, player.GetBuffs(type, log, phase.Start, phase.End)));
+                list.Add(new BuffData(listToUse, actor.GetBuffs(type, log, phase.Start, phase.End)));
             }
             return list;
         }
@@ -196,9 +196,9 @@ namespace GW2EIBuilders.HtmlModels
         {
             var list = new List<BuffData>();
 
-            foreach (Player player in log.PlayerList)
+            foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                list.Add(new BuffData(listToUse, player.GetActiveBuffs(type, log, phase.Start, phase.End)));
+                list.Add(new BuffData(listToUse, actor.GetActiveBuffs(type, log, phase.Start, phase.End)));
             }
             return list;
         }
@@ -209,9 +209,9 @@ namespace GW2EIBuilders.HtmlModels
             Dictionary<long, FinalBuffsDictionary> conditions = target.GetBuffsDictionary(log, start, end);
             var list = new List<BuffData>();
 
-            foreach (Player player in log.PlayerList)
+            foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                list.Add(new BuffData(conditions, log.StatisticsHelper.PresentConditions, player));
+                list.Add(new BuffData(conditions, log.StatisticsHelper.PresentConditions, actor));
             }
             return list;
         }
