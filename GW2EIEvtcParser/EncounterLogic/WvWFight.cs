@@ -120,8 +120,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             fightData.SetSuccess(true, fightData.FightEnd);
         }
 
-        private void SolveWvWPlayers(AgentData agentData, List<CombatItem> combatData, IReadOnlyList<AgentItem> aList, List<AbstractSingleActor> friendlies)
+        private void SolveWvWPlayers(AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
+            IReadOnlyList<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer);
             var set = new HashSet<string>();
             var toRemove = new HashSet<AgentItem>();
             var garbageList = new List<AbstractSingleActor>();
@@ -161,10 +162,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             AgentItem dummyAgent = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, _detailed ? "Dummy WvW Agent" : "Enemy Players", "", (int)ArcDPSEnums.TargetID.WorldVersusWorld, true);
 
-            IReadOnlyList<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer);
-            SolveWvWPlayers(agentData, combatData, aList, friendlies);
+            SolveWvWPlayers(agentData, combatData, friendlies);
+            var friendlyAgents = new HashSet<AgentItem>(friendlies.Select(x => x.AgentItem));
             if (!_detailed)
             {
+                var aList = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer).Where(x => !friendlyAgents.Contains(x)).ToList();
                 var enemyPlayerDicts = aList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList().First());
                 foreach (CombatItem c in combatData)
                 {
