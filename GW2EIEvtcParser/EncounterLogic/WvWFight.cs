@@ -126,8 +126,29 @@ namespace GW2EIEvtcParser.EncounterLogic
             var set = new HashSet<string>();
             var toRemove = new HashSet<AgentItem>();
             var garbageList = new List<AbstractSingleActor>();
+            var teamChangeDict = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.TeamChange).GroupBy(x => x.SrcAgent).ToDictionary(x => x.Key, x => x.Select(y => y.DstAgent).ToList());
+            //
+            IReadOnlyList<AgentItem> squadPlayers = agentData.GetAgentByType(AgentItem.AgentType.Player);
+            ulong greenTeam = ulong.MaxValue;
+            var greenTeams = new List<ulong>();
+            foreach (AgentItem a in squadPlayers)
+            {
+                if (teamChangeDict.TryGetValue(a.Agent, out List<ulong> teamChangeList))
+                {
+                    greenTeams.AddRange(teamChangeList);
+                }
+            }
+            if (greenTeams.Any())
+            {
+                greenTeam = greenTeams.GroupBy(x => x).OrderByDescending(x => x.Count()).Select(x => x.Key).First();
+            }
+            //
             foreach (AgentItem a in aList)
             {
+                if (!a.IsNotInSquadFriendlyPlayer && teamChangeDict.TryGetValue(a.Agent, out List<ulong> teamChangeList))
+                {
+                    a.OverrideIsNotInSquadFriendlyPlayer(teamChangeList.Any(x => x == greenTeam));
+                }
                 List<AbstractSingleActor> actorListToFill = a.IsNotInSquadFriendlyPlayer ? friendlies : _detailed ? _targets : garbageList;
                 var nonSquadPlayer = new PlayerNonSquad(a);
                 if (!set.Contains(nonSquadPlayer.Character))
