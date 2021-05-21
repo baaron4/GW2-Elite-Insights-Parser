@@ -54,7 +54,7 @@ namespace GW2EIEvtcParser.EIData
 
         protected override bool InitCombatReplay(ParsedEvtcLog log)
         {
-            if (base.InitCombatReplay(log))
+            if (base.InitCombatReplay(log) && !log.FriendlyAgents.Contains(AgentItem))
             {
                 // Trim
                 DespawnEvent despawnCheck = log.CombatData.GetDespawnEvents(AgentItem).LastOrDefault();
