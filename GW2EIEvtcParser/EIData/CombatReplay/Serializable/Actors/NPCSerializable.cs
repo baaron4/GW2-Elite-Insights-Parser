@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.EIData
             Start = replay.TimeOffsets.start;
             End = replay.TimeOffsets.end;
 
-            if (log.Friendlies.Contains(npc))
+            if (log.FriendlyAgents.Contains(npc.AgentItem))
             {
                 SetStatus(log, npc);
             }
