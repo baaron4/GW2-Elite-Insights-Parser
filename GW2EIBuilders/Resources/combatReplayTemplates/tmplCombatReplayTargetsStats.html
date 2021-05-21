@@ -28,7 +28,7 @@
         },
         methods: {
             alive: function (status) {
-                return status.start <= this.time && status.end >= this.time;
+                return status.start === -1 || status.start <= this.time && status.end >= this.time;
             }
         },
         computed: {
