@@ -101,7 +101,7 @@
                 return logData.phases[0];
             },
             status: function () {
-                var crPData = animator.targetData.get(this.target.uniqueID);
+                var crPData = animator.getActorData(target.uniqueID);
                 var icon = crPData.getIcon(this.time);
                 return icon === deadIcon ? 0 : icon === downIcon ? 1 : icon === dcIcon ? 2 : 3;
             },

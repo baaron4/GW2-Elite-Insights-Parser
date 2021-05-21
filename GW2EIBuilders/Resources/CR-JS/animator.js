@@ -275,7 +275,7 @@ class Animator {
     }
 
     selectActor(actorId) {
-        let actor = this.playerData.get(actorId) || this.targetData.get(actorId) || this.trashMobData.get(actorId) || this.friendlyMobData.get(actorId);
+        let actor = this.getActorData(actorId);
         if (!actor) {
             return;
         }
@@ -290,6 +290,10 @@ class Animator {
         if (this.animation === null) {
             animateCanvas(noUpdateTime);
         }
+    }
+
+    getActorData(actorId) {
+        return  animator.targetData.get(actorId) || animator.playerData.get(actorId) || animator.friendlyMobData.get(actorId) || animator.trashMobData.get(actorId);
     }
 
     toggleHighlightSelectedGroup() {
