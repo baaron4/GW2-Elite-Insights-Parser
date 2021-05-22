@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
@@ -6,30 +7,28 @@ namespace GW2EIEvtcParser.EIData
 {
     public abstract class AbstractActor
     {
-        protected AgentItem SourceAgent { get; }
+        protected AgentItem AgentItem { get; }
         public string Character { get; protected set; }
-
-        public uint Toughness => SourceAgent.Toughness;
-        public uint Condition => SourceAgent.Condition;
-        public uint Concentration => SourceAgent.Concentration;
-        public uint Healing => SourceAgent.Healing;
-        public ushort InstID => SourceAgent.InstID;
-        public string Prof => SourceAgent.Prof;
-        public ulong Agent => SourceAgent.Agent;
-        public long LastAware => SourceAgent.LastAware;
-        public long FirstAware => SourceAgent.FirstAware;
-        public int ID => SourceAgent.ID;
-        public uint HitboxHeight => SourceAgent.HitboxHeight;
-        public uint HitboxWidth => SourceAgent.HitboxWidth;
+        public int UniqueID => AgentItem.UniqueID;
+        public uint Toughness => AgentItem.Toughness;
+        public uint Condition => AgentItem.Condition;
+        public uint Concentration => AgentItem.Concentration;
+        public uint Healing => AgentItem.Healing;
+        public ushort InstID => AgentItem.InstID;
+        public string Prof => AgentItem.Prof;
+        public ulong Agent => AgentItem.Agent;
+        public long LastAware => AgentItem.LastAware;
+        public long FirstAware => AgentItem.FirstAware;
+        public int ID => AgentItem.ID;
+        public uint HitboxHeight => AgentItem.HitboxHeight;
+        public uint HitboxWidth => AgentItem.HitboxWidth;
         public bool IsFakeActor => IsDummyActor || IsCustomActor;
-        public bool IsDummyActor => SourceAgent.IsDummy;
+        public bool IsDummyActor => AgentItem.IsDummy;
         public bool IsCustomActor { get; protected set; } = false;
         // Damage
         protected List<AbstractHealthDamageEvent> DamageEvents { get; set; }
         protected Dictionary<AgentItem, List<AbstractHealthDamageEvent>> DamageEventByDst { get; set; }
-        private CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> _hitDamageEventsPerPhasePerTarget;
-        private CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> _powerHitDamageEventsPerPhasePerTarget;
-        private CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> _conditionHitDamageEventsPerPhasePerTarget;
+        private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>> _typedHitDamageEvents = new Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>>();
         protected List<AbstractHealthDamageEvent> DamageTakenEvents { get; set; }
         protected Dictionary<AgentItem, List<AbstractHealthDamageEvent>> DamageTakenEventsBySrc { get; set; }
         // Breakbar Damage
@@ -44,7 +43,7 @@ namespace GW2EIEvtcParser.EIData
         {
             string[] name = agent.Name.Split('\0');
             Character = name[0];
-            SourceAgent = agent;
+            AgentItem = agent;
         }
         // Getters
         // Damage logs
@@ -52,47 +51,36 @@ namespace GW2EIEvtcParser.EIData
 
         public abstract IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
 
-        /// <summary>
-        /// cached method for damage modifiers
-        /// </summary>
-        internal IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
         {
-            if(_hitDamageEventsPerPhasePerTarget == null)
+            if (!_typedHitDamageEvents.TryGetValue(damageType, out CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> hitDamageEventsPerPhasePerTarget))
             {
-                _hitDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>(log);
+                hitDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>(log);
+                _typedHitDamageEvents[damageType] = hitDamageEventsPerPhasePerTarget;
             }
-            if (!_hitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
+            if (!hitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
             {
                 dls = GetDamageEvents(target, log, start, end).Where(x => x.HasHit).ToList();
-                _hitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
-            }
-            return dls;
-        }
-
-        internal IReadOnlyList<AbstractHealthDamageEvent> GetConditionHitDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
-        {
-            if (_conditionHitDamageEventsPerPhasePerTarget == null)
-            {
-                _conditionHitDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>(log);
-            }
-            if (!_conditionHitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
-            {
-                dls = GetHitDamageEvents(target, log, start, end).Where(x => x.ConditionDamageBased(log)).ToList();
-                _conditionHitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
-            }
-            return dls;
-        }
-
-        internal IReadOnlyList<AbstractHealthDamageEvent> GetPowerHitDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
-        {
-            if (_powerHitDamageEventsPerPhasePerTarget == null)
-            {
-                _powerHitDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>(log);
-            }
-            if (!_powerHitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
-            {
-                dls = GetHitDamageEvents(target, log, start, end).Where(x => !x.ConditionDamageBased(log)).ToList();
-                _powerHitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
+                switch (damageType)
+                {
+                    case ParserHelper.DamageType.Power:
+                        dls.RemoveAll(x => x.ConditionDamageBased(log));
+                        break;
+                    case ParserHelper.DamageType.Strike:
+                        dls.RemoveAll(x => x is NonDirectHealthDamageEvent);
+                        break;
+                    case ParserHelper.DamageType.Condition:
+                        dls.RemoveAll(x => !x.ConditionDamageBased(log));
+                        break;
+                    case ParserHelper.DamageType.StrikeAndCondition:
+                        dls.RemoveAll(x => x is NonDirectHealthDamageEvent && !x.ConditionDamageBased(log));
+                        break;
+                    case ParserHelper.DamageType.All:
+                        break;
+                    default:
+                        throw new NotImplementedException("Not implemented damage type " + damageType);
+                }
+                hitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
             }
             return dls;
         }

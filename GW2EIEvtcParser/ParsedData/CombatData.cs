@@ -281,6 +281,11 @@ namespace GW2EIEvtcParser.ParsedData
             _metaDataEvents.ErrorEvents.AddRange(fightData.Logic.GetCustomWarningMessages());
         }
 
+        internal void AddCustomWarningMessage(string message)
+        {
+            _metaDataEvents.ErrorEvents.Add(new ErrorEvent(message));
+        }
+
         private void EIExtraEventProcess(List<Player> players, SkillData skillData, AgentData agentData, FightData fightData, ParserController operation)
         {
             operation.UpdateProgressWithCancellationCheck("Creating Custom Buff Events");

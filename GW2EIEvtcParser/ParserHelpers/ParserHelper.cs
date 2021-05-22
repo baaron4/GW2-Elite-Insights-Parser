@@ -43,7 +43,8 @@ namespace GW2EIEvtcParser
             Unknown
         };
 
-        public enum DamageType { All, Power, Condition };
+        // TODO: add life leech stuff
+        public enum DamageType { All, Power, Strike, Condition, StrikeAndCondition };
         public enum BuffEnum { Self, Group, OffGroup, Squad };
 
         internal static T MaxBy<T, TComparable>(this IEnumerable<T> en, Func<T, TComparable> evaluate) where TComparable : IComparable<TComparable>

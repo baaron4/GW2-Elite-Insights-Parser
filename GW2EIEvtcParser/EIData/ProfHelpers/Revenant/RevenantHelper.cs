@@ -28,16 +28,16 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
             // Retribution
-            new BuffDamageModifierTarget(742, "Dwarven Battle Training", "10% on weakened target", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, Source.Revenant, ByPresence, "https://wiki.guildwars2.com/images/5/50/Dwarven_Battle_Training.png", 94051, ulong.MaxValue, DamageModifierMode.All),
-            new BuffDamageModifier(873, "Vicious Reprisal", "10% under retaliation", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, Source.Revenant, ByPresence, "https://wiki.guildwars2.com/images/c/cf/Vicious_Reprisal.png", 0, 115190, DamageModifierMode.All),
-            new BuffDamageModifier(873, "Vicious Reprisal", "10% under resolution", DamageSource.NoPets, 10.0, DamageType.All, DamageType.All, Source.Revenant, ByPresence, "https://wiki.guildwars2.com/images/c/cf/Vicious_Reprisal.png", 115190, ulong.MaxValue, DamageModifierMode.All),
+            new BuffDamageModifierTarget(742, "Dwarven Battle Training", "10% on weakened target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, "https://wiki.guildwars2.com/images/5/50/Dwarven_Battle_Training.png", 94051, ulong.MaxValue, DamageModifierMode.All),
+            new BuffDamageModifier(873, "Vicious Reprisal", "10% under retaliation", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, "https://wiki.guildwars2.com/images/c/cf/Vicious_Reprisal.png", 0, 115190, DamageModifierMode.All),
+            new BuffDamageModifier(873, "Vicious Reprisal", "10% under resolution", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Revenant, ByPresence, "https://wiki.guildwars2.com/images/c/cf/Vicious_Reprisal.png", 115190, ulong.MaxValue, DamageModifierMode.All),
             // Invocation
-            new BuffDamageModifier(725, "Ferocious Aggression", "7% under fury", DamageSource.NoPets, 7.0, DamageType.All, DamageType.All, Source.Revenant, ByPresence, "https://wiki.guildwars2.com/images/e/ec/Ferocious_Aggression.png", DamageModifierMode.All),
-            new DamageLogDamageModifier("Rising Tide", "7% if hp >90%", DamageSource.NoPets, 7.0, DamageType.Power, DamageType.All, Source.Revenant,"https://wiki.guildwars2.com/images/0/0c/Rising_Tide.png", (x, log) => x.IsOverNinety, ByPresence, DamageModifierMode.All),
+            new BuffDamageModifier(725, "Ferocious Aggression", "7% under fury", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Revenant, ByPresence, "https://wiki.guildwars2.com/images/e/ec/Ferocious_Aggression.png", DamageModifierMode.All),
+            new DamageLogDamageModifier("Rising Tide", "7% if hp >90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Revenant,"https://wiki.guildwars2.com/images/0/0c/Rising_Tide.png", (x, log) => x.IsOverNinety, ByPresence, DamageModifierMode.All),
             // Devastation
-            new BuffDamageModifier(29395, "Vicious Lacerations", "3% per Stack", DamageSource.NoPets, 3.0, DamageType.Power, DamageType.All, Source.Revenant, ByStack, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", 92715, 102321, DamageModifierMode.PvE),
-            new BuffDamageModifier(29395, "Vicious Lacerations", "2% per Stack", DamageSource.NoPets, 2.0, DamageType.Power, DamageType.All, Source.Revenant, ByStack, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", 0, 92715, DamageModifierMode.PvE),
-            new DamageLogApproximateDamageModifier("Unsuspecting Strikes", "25% if hp > 80%", DamageSource.NoPets, 25.0, DamageType.Power, DamageType.All, Source.Revenant, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", (x,log) =>
+            new BuffDamageModifier(29395, "Vicious Lacerations", "3% per Stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", 92715, 102321, DamageModifierMode.PvE),
+            new BuffDamageModifier(29395, "Vicious Lacerations", "2% per Stack", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", 0, 92715, DamageModifierMode.PvE),
+            new DamageLogApproximateDamageModifier("Unsuspecting Strikes", "25% if hp > 80%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Revenant, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", (x,log) =>
             {
                 var selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
                 if (selfHP < 0.0)
@@ -46,7 +46,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return selfHP > 80.0;
             }, ByPresence, 102321, ulong.MaxValue, DamageModifierMode.PvE ),
-            new DamageLogApproximateDamageModifier("Unsuspecting Strikes", "10% if hp > 80%", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, Source.Revenant, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", (x,log) =>
+            new DamageLogApproximateDamageModifier("Unsuspecting Strikes", "10% if hp > 80%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", (x,log) =>
             {
                 var selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
                 if (selfHP < 0.0)
@@ -55,10 +55,10 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return selfHP > 80.0;
             }, ByPresence, 102321, ulong.MaxValue, DamageModifierMode.sPvPWvW ),
-            new BuffDamageModifierTarget(738, "Targeted Destruction", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Power, DamageType.All, Source.Revenant, ByStack, "https://wiki.guildwars2.com/images/e/ed/Targeted_Destruction.png", 95535, ulong.MaxValue, DamageModifierMode.All),
-            new BuffDamageModifierTarget(738, "Targeted Destruction", "10.0% if vuln", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, Source.Revenant, ByPresence, "https://wiki.guildwars2.com/images/e/ed/Targeted_Destruction.png", 92715, 95535, DamageModifierMode.PvE),
-            new BuffDamageModifierTarget(738, "Targeted Destruction", "7.0% if vuln", DamageSource.NoPets, 7.0, DamageType.Power, DamageType.All, Source.Revenant, ByPresence, "https://wiki.guildwars2.com/images/e/ed/Targeted_Destruction.png", 0, 92715, DamageModifierMode.PvE),
-            new DamageLogDamageModifier("Swift Termination", "20% if target <50%", DamageSource.NoPets, 20.0, DamageType.Power, DamageType.All, Source.Revenant,"https://wiki.guildwars2.com/images/b/bb/Swift_Termination.png", (x, log) => x.AgainstUnderFifty, ByPresence, DamageModifierMode.All),
+            new BuffDamageModifierTarget(738, "Targeted Destruction", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, "https://wiki.guildwars2.com/images/e/ed/Targeted_Destruction.png", 95535, ulong.MaxValue, DamageModifierMode.All),
+            new BuffDamageModifierTarget(738, "Targeted Destruction", "10.0% if vuln", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, "https://wiki.guildwars2.com/images/e/ed/Targeted_Destruction.png", 92715, 95535, DamageModifierMode.PvE),
+            new BuffDamageModifierTarget(738, "Targeted Destruction", "7.0% if vuln", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, "https://wiki.guildwars2.com/images/e/ed/Targeted_Destruction.png", 0, 92715, DamageModifierMode.PvE),
+            new DamageLogDamageModifier("Swift Termination", "20% if target <50%", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Revenant,"https://wiki.guildwars2.com/images/b/bb/Swift_Termination.png", (x, log) => x.AgainstUnderFifty, ByPresence, DamageModifierMode.All),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
