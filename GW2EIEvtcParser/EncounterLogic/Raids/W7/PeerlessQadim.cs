@@ -47,23 +47,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
+        internal override List<AbstractBuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
         {
             var res = new List<AbstractBuffEvent>();
-            if (buffsById.TryGetValue(56118, out List<AbstractBuffEvent> list))
+            IReadOnlyList<AbstractBuffEvent> sappingSurges = combatData.GetBuffData(56118);
+            var sappingSurgeByDst = sappingSurges.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            foreach (KeyValuePair<AgentItem, List<AbstractBuffEvent>> pair in sappingSurgeByDst.Where(x => x.Value.Exists(y => y is BuffRemoveSingleEvent)))
             {
-                var sappingSurgeByDst = list.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
-                foreach (KeyValuePair<AgentItem, List<AbstractBuffEvent>> pair in sappingSurgeByDst.Where(x => x.Value.Exists(y => y is BuffRemoveSingleEvent)))
+                var sglRemovals = pair.Value.Where(x => x is BuffRemoveSingleEvent).ToList();
+                foreach (AbstractBuffEvent sglRemoval in sglRemovals)
                 {
-                    var sglRemovals = pair.Value.Where(x => x is BuffRemoveSingleEvent).ToList();
-                    foreach (AbstractBuffEvent sglRemoval in sglRemovals)
+                    AbstractBuffEvent ba = pair.Value.LastOrDefault(x => x is BuffApplyEvent && Math.Abs(x.Time - sglRemoval.Time) < 5);
+                    if (ba != null)
                     {
-                        AbstractBuffEvent ba = pair.Value.LastOrDefault(x => x is BuffApplyEvent && Math.Abs(x.Time - sglRemoval.Time) < 5);
-                        if (ba != null)
-                        {
-                            res.Add(new BuffRemoveAllEvent(sglRemoval.CreditedBy, pair.Key, ba.Time - 1, int.MaxValue, ba.BuffSkill, 0, int.MaxValue));
-                            res.Add(new BuffRemoveManualEvent(sglRemoval.CreditedBy, pair.Key, ba.Time - 1, int.MaxValue, ba.BuffSkill));
-                        }
+                        res.Add(new BuffRemoveAllEvent(sglRemoval.CreditedBy, pair.Key, ba.Time - 1, int.MaxValue, ba.BuffSkill, 0, int.MaxValue));
+                        res.Add(new BuffRemoveManualEvent(sglRemoval.CreditedBy, pair.Key, ba.Time - 1, int.MaxValue, ba.BuffSkill));
                     }
                 }
             }

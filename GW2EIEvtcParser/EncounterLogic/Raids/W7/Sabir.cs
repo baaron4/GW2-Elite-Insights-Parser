@@ -40,9 +40,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override List<AbstractHealthDamageEvent> SpecialDamageEventProcess(Dictionary<AgentItem, List<AbstractHealthDamageEvent>> damageBySrc, Dictionary<AgentItem, List<AbstractHealthDamageEvent>> damageByDst, Dictionary<long, List<AbstractHealthDamageEvent>> damageById, SkillData skillData)
+        internal override List<AbstractHealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
         {
-            NegateDamageAgainstBarrier(Targets.Select(x => x.AgentItem).ToList(), damageByDst);
+            NegateDamageAgainstBarrier(combatData, Targets.Select(x => x.AgentItem).ToList());
             return new List<AbstractHealthDamageEvent>();
         }
 

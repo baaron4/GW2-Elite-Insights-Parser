@@ -130,12 +130,12 @@ namespace GW2EIEvtcParser.EIData
         };
 
 
-        public static void AttachMasterToRangerGadgets(List<Player> players, Dictionary<long, List<AbstractHealthDamageEvent>> damageData, Dictionary<long, List<AnimatedCastEvent>> castData)
+        public static void AttachMasterToRangerGadgets(List<Player> players, CombatData combatData)
         {
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
             // entangle works fine already
-            HashSet<AgentItem> jacarandaEmbraces = ProfHelper.GetOffensiveGadgetAgents(damageData, 1286, playerAgents);
-            HashSet<AgentItem> blackHoles = ProfHelper.GetOffensiveGadgetAgents(damageData, 31436, playerAgents);
+            HashSet<AgentItem> jacarandaEmbraces = ProfHelper.GetOffensiveGadgetAgents(combatData, 1286, playerAgents);
+            HashSet<AgentItem> blackHoles = ProfHelper.GetOffensiveGadgetAgents(combatData, 31436, playerAgents);
             var rangers = players.Where(x => x.Prof == "Ranger" || x.Prof == "Soulbeast" || x.Prof == "Druid").ToList();
             // if only one ranger, could only be that one
             if (rangers.Count == 1)
@@ -146,8 +146,8 @@ namespace GW2EIEvtcParser.EIData
             }
             else if (rangers.Count > 1)
             {
-                ProfHelper.AttachMasterToGadgetByCastData(castData, jacarandaEmbraces, new List<long> { 44980 }, 1000);
-                ProfHelper.AttachMasterToGadgetByCastData(castData, blackHoles, new List<long> { 31503 }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(combatData, jacarandaEmbraces, new List<long> { 44980 }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(combatData, blackHoles, new List<long> { 31503 }, 1000);
             }
         }
 
