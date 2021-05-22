@@ -14,6 +14,8 @@ namespace GW2EIEvtcParser.EIData
         public int CondiDamage { get; internal set; }
         public int PowerDps { get; internal set; }
         public int PowerDamage { get; internal set; }
+        public int StrikeDps { get; internal set; }
+        public int StrikeDamage { get; internal set; }
         public double BreakbarDamage { get; internal set; }
         // Actor only
         public int ActorDps { get; internal set; }
@@ -22,6 +24,8 @@ namespace GW2EIEvtcParser.EIData
         public int ActorCondiDamage { get; internal set; }
         public int ActorPowerDps { get; internal set; }
         public int ActorPowerDamage { get; internal set; }
+        public int ActorStrikeDps { get; internal set; }
+        public int ActorStrikeDamage { get; internal set; }
         public double ActorBreakbarDamage { get; internal set; }
 
 
@@ -30,64 +34,51 @@ namespace GW2EIEvtcParser.EIData
             double phaseDuration = (end - start) / 1000.0;
             int damage;
             double dps = 0.0;
-            IReadOnlyList<AbstractHealthDamageEvent> damageLogs = actor.GetDamageEvents(target, log, start, end);
-            //DPS
-            damage = damageLogs.Sum(x => x.HealthDamage);
+            (Damage, PowerDamage, CondiDamage, StrikeDamage) = ComputeDamageFrom(log, actor.GetDamageEvents(target, log, start, end));
+            (ActorDamage, ActorPowerDamage, ActorCondiDamage, ActorStrikeDamage) = ComputeDamageFrom(log, actor.GetJustActorDamageEvents(target, log, start, end));
 
             if (phaseDuration > 0)
             {
-                dps = damage / phaseDuration;
+                Dps = (int)Math.Round(Damage / phaseDuration);
+                CondiDps = (int)Math.Round(CondiDamage / phaseDuration);
+                PowerDps = (int)Math.Round(PowerDamage / phaseDuration);
+                StrikeDps = (int)Math.Round(StrikeDamage / phaseDuration);
+                //
+                ActorDps = (int)Math.Round(Damage / phaseDuration);
+                ActorCondiDps = (int)Math.Round(ActorCondiDamage / phaseDuration);
+                ActorPowerDps = (int)Math.Round(ActorPowerDamage / phaseDuration);
+                ActorStrikeDps = (int)Math.Round(ActorStrikeDamage / phaseDuration);
             }
-            Dps = (int)Math.Round(dps);
-            Damage = damage;
-            //Condi DPS
-            damage = damageLogs.Sum(x => x.ConditionDamageBased(log) ? x.HealthDamage : 0);
-
-            if (phaseDuration > 0)
-            {
-                dps = damage / phaseDuration;
-            }
-            CondiDps = (int)Math.Round(dps);
-            CondiDamage = damage;
-            //Power DPS
-            damage = Damage - CondiDamage;
-            if (phaseDuration > 0)
-            {
-                dps = damage / phaseDuration;
-            }
-            PowerDps = (int)Math.Round(dps);
-            PowerDamage = damage;
-            IReadOnlyList<AbstractHealthDamageEvent> actorDamageLogs = actor.GetJustActorDamageEvents(target, log, start, end);
-            // Actor DPS
-            damage = actorDamageLogs.Sum(x => x.HealthDamage);
-
-            if (phaseDuration > 0)
-            {
-                dps = damage / phaseDuration;
-            }
-            ActorDps = (int)Math.Round(dps);
-            ActorDamage = damage;
-            //Actor Condi DPS
-            damage = actorDamageLogs.Sum(x => x.ConditionDamageBased(log) ? x.HealthDamage : 0);
-
-            if (phaseDuration > 0)
-            {
-                dps = damage / phaseDuration;
-            }
-            ActorCondiDps = (int)Math.Round(dps);
-            ActorCondiDamage = damage;
-            //Actor Power DPS
-            damage = ActorDamage - ActorCondiDamage;
-            if (phaseDuration > 0)
-            {
-                dps = damage / phaseDuration;
-            }
-            ActorPowerDps = (int)Math.Round(dps);
-            ActorPowerDamage = damage;
 
             // Breakbar 
             BreakbarDamage = Math.Round(actor.GetBreakbarDamageEvents(target, log, start, end).Sum(x => x.BreakbarDamage), 1);
             ActorBreakbarDamage = Math.Round(actor.GetJustActorBreakbarDamageEvents(target, log, start, end).Sum(x => x.BreakbarDamage), 1);
+        }
+
+        private static (int allDamage, int powerDamage, int conditionDamage, int strikeDamage) ComputeDamageFrom(ParsedEvtcLog log, IReadOnlyList<AbstractHealthDamageEvent> damageEvents)
+        {
+            int allDamage = 0;
+            int powerDamage = 0;
+            int conditionDamage = 0;
+            int strikeDamage = 0;
+            foreach (AbstractHealthDamageEvent damageEvent in damageEvents)
+            {
+                allDamage += damageEvent.HealthDamage;
+                if (damageEvent is DirectHealthDamageEvent)
+                {
+                    strikeDamage += damageEvent.HealthDamage;
+                    powerDamage += damageEvent.HealthDamage;
+                }
+                else if (damageEvent.ConditionDamageBased(log))
+                {
+                    conditionDamage += damageEvent.HealthDamage;
+                }
+                else
+                {
+                    powerDamage += damageEvent.HealthDamage;
+                }
+            }
+            return (allDamage, powerDamage, conditionDamage, strikeDamage);
         }
     }
 }
