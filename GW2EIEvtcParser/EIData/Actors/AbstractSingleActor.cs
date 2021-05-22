@@ -173,8 +173,7 @@ namespace GW2EIEvtcParser.EIData
         }
 
         // Graph
-
-        public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target, ParserHelper.DamageType damageType = ParserHelper.DamageType.All)
+        public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target, ParserHelper.DamageType damageType)
         {
             return _graphHelper.Get1SDamageList(log, start, end, target, damageType);
         }
@@ -580,16 +579,6 @@ namespace GW2EIEvtcParser.EIData
         internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorHitDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             return _damageHelper.GetJustActorHitDamageEvents(target, log, start, end);
-        }
-
-        internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorConditionHitDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
-        {
-            return _damageHelper.GetJustActorConditionHitDamageEvents(target, log, start, end);
-        }
-
-        internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorPowerHitDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
-        {
-            return _damageHelper.GetJustActorPowerHitDamageEvents(target, log, start, end);
         }
 
         public Point3D GetCurrentPosition(ParsedEvtcLog log, long time)

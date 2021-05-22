@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Interfaces;
 using GW2EIEvtcParser.ParsedData;
@@ -70,14 +72,22 @@ namespace GW2EIEvtcParser.EIData
             switch (_srcType)
             {
                 case DamageType.All:
-                    Tooltip += "<br>All Damage type";
+                    Tooltip += "<br>All Damage";
                     break;
                 case DamageType.Power:
-                    Tooltip += "<br>Power Damage only";
+                    Tooltip += "<br>Power Damage";
+                    break;
+                case DamageType.Strike:
+                    Tooltip += "<br>Strike Damage";
+                    break;
+                case DamageType.StrikeAndCondition:
+                    Tooltip += "<br>Strike and Condition Damage";
                     break;
                 case DamageType.Condition:
-                    Tooltip += "<br>Condition Damage only";
+                    Tooltip += "<br>Condition Damage";
                     break;
+                default:
+                    throw new NotImplementedException("Not implemented damage type " + _srcType);
             }
             switch (_compareType)
             {
@@ -87,9 +97,17 @@ namespace GW2EIEvtcParser.EIData
                 case DamageType.Power:
                     Tooltip += "<br>Compared against Power Damage";
                     break;
+                case DamageType.Strike:
+                    Tooltip += "<br>Compared against Strike Damage";
+                    break;
+                case DamageType.StrikeAndCondition:
+                    Tooltip += "<br>Compared against Strike and Condition Damage";
+                    break;
                 case DamageType.Condition:
                     Tooltip += "<br>Compared against Condition Damage";
                     break;
+                default:
+                    throw new NotImplementedException("Not implemented damage type " + _compareType);
             }
             if (!Multiplier)
             {
@@ -141,67 +159,63 @@ namespace GW2EIEvtcParser.EIData
                     return _dmgSrc == DamageSource.All ? damageData.CondiDamage : damageData.ActorCondiDamage;
                 case DamageType.Power:
                     return _dmgSrc == DamageSource.All ? damageData.PowerDamage : damageData.ActorPowerDamage;
+                case DamageType.Strike:
+                    return _dmgSrc == DamageSource.All ? damageData.StrikeDamage : damageData.ActorStrikeDamage;
+                case DamageType.StrikeAndCondition:
+                    return _dmgSrc == DamageSource.All ? damageData.StrikeDamage + damageData.CondiDamage : damageData.ActorStrikeDamage + damageData.ActorCondiDamage;
+                default:
+                    throw new NotImplementedException("Not implemented damage type " + _compareType);
             }
-            return 0;
         }
 
         public IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageEvents(AbstractSingleActor actor, ParsedEvtcLog log, AbstractSingleActor t, long start, long end)
         {
-            switch (_srcType)
-            {
-                case DamageType.All:
-                    return _dmgSrc == DamageSource.All ? actor.GetHitDamageEvents(t, log, start, end) : actor.GetJustActorHitDamageEvents(t, log, start, end);
-                case DamageType.Condition:
-                    return _dmgSrc == DamageSource.All ? actor.GetConditionHitDamageEvents(t, log, start, end) : actor.GetJustActorConditionHitDamageEvents(t, log, start, end);
-                case DamageType.Power:
-                default:
-                    return _dmgSrc == DamageSource.All ? actor.GetPowerHitDamageEvents(t, log, start, end) : actor.GetJustActorPowerHitDamageEvents(t, log, start, end);
-            }
+            return _dmgSrc == DamageSource.All ? p.GetHitDamageEvents(t, log, start, end, _srcType) : p.GetJustActorHitDamageEvents(t, log, start, end, _srcType);
         }
 
         internal abstract List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log);
 
         internal static readonly List<DamageModifier> ItemDamageModifiers = new List<DamageModifier>
         {
-            new DamageLogDamageModifier("Moving Bonus","Seaweed Salad (and the likes) – 5% while moving", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, Source.Item,"https://wiki.guildwars2.com/images/1/1c/Bowl_of_Seaweed_Salad.png", (x, log) => x.IsMoving, ByPresence, DamageModifierMode.All),
-            new BuffDamageModifier(32473, "Fractal Offensive", "3% per stack", DamageSource.NoPets, 3.0, DamageType.All, DamageType.All, Source.Item, ByStack, "https://wiki.guildwars2.com/images/thumb/8/8d/Mist_Offensive_Potion.png/40px-Mist_Offensive_Potion.png", DamageModifierMode.PvE),
+            new DamageLogDamageModifier("Moving Bonus","Seaweed Salad (and the likes) – 5% while moving", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.Strike, Source.Item,"https://wiki.guildwars2.com/images/1/1c/Bowl_of_Seaweed_Salad.png", (x, log) => x.IsMoving, ByPresence, DamageModifierMode.All),
+            new BuffDamageModifier(32473, "Fractal Offensive", "3% per stack", DamageSource.NoPets, 3.0, DamageType.StrikeAndCondition, DamageType.All, Source.Item, ByStack, "https://wiki.guildwars2.com/images/thumb/8/8d/Mist_Offensive_Potion.png/40px-Mist_Offensive_Potion.png", DamageModifierMode.PvE),
             new BuffDamageModifier(33836, "Writ of Masterful Malice", "200 condition damage over 90% HP", DamageSource.NoPets, 0.0, DamageType.Condition, DamageType.Condition, Source.Item, ByPresenceNonMultiplier,"https://wiki.guildwars2.com/images/2/20/Writ_of_Masterful_Malice.png",DamageModifierMode.All, (x, log) => x.IsOverNinety),
-            new BuffDamageModifier(33297, "Writ of Masterful Strength", "200 power over 90% HP", DamageSource.NoPets, 0.0, DamageType.Power, DamageType.Power, Source.Item, ByPresenceNonMultiplier,"https://wiki.guildwars2.com/images/2/2b/Writ_of_Masterful_Strength.png",DamageModifierMode.All, (x, log) => x.IsOverNinety),
+            new BuffDamageModifier(33297, "Writ of Masterful Strength", "200 power over 90% HP", DamageSource.NoPets, 0.0, DamageType.Strike, DamageType.Strike, Source.Item, ByPresenceNonMultiplier,"https://wiki.guildwars2.com/images/2/2b/Writ_of_Masterful_Strength.png",DamageModifierMode.All, (x, log) => x.IsOverNinety),
         };
         internal static readonly List<DamageModifier> GearDamageModifiers = new List<DamageModifier>
         {
-            new DamageLogDamageModifier("Scholar Rune", "5% over 90% HP", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, Source.Gear,"https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png", (x, log) => x.IsOverNinety, ByPresence, 93543, ulong.MaxValue, DamageModifierMode.All ),
-            new DamageLogDamageModifier("Scholar Rune", "10% over 90% HP", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.Power, Source.Gear,"https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png", (x, log) => x.IsOverNinety, ByPresence, 0, 93543, DamageModifierMode.All ),
-            new DamageLogDamageModifier("Eagle Rune", "10% if target <50% HP", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.Power, Source.Gear,"https://wiki.guildwars2.com/images/9/9b/Superior_Rune_of_the_Eagle.png", (x, log) => x.AgainstUnderFifty, ByPresence, 93543, ulong.MaxValue, DamageModifierMode.All),
-            new DamageLogDamageModifier("Eagle Rune", "6% if target <50% HP", DamageSource.NoPets, 6.0, DamageType.Power, DamageType.Power, Source.Gear,"https://wiki.guildwars2.com/images/9/9b/Superior_Rune_of_the_Eagle.png", (x, log) => x.AgainstUnderFifty, ByPresence , 0 , 93543, DamageModifierMode.All),
-            new DamageLogDamageModifier("Thief Rune", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.Power, Source.Gear,"https://wiki.guildwars2.com/images/9/96/Superior_Rune_of_the_Thief.png", (x, log) => x.IsFlanking , ByPresence, DamageModifierMode.All),
-            new BuffDamageModifier(740, "Strength Rune", "5% under might",  DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, Source.Gear, ByPresence, "https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_Strength.png", DamageModifierMode.All),
-            new BuffDamageModifier(5677, "Fire Rune", "10% under fire aura",  DamageSource.NoPets, 10.0, DamageType.Power, DamageType.Power, Source.Gear, ByPresence, "https://wiki.guildwars2.com/images/4/4a/Superior_Rune_of_the_Fire.png", 93543 , ulong.MaxValue, DamageModifierMode.All),
-            new BuffDamageModifierTarget(737, "Flame Legion Rune", "7% on burning target",  DamageSource.NoPets, 7.0, DamageType.Power, DamageType.Power, Source.Gear, ByPresence, "https://wiki.guildwars2.com/images/4/4a/Superior_Rune_of_the_Flame_Legion.png", DamageModifierMode.All),
-            new BuffDamageModifierTarget(Buff.NumberOfBoonsID, "Spellbreaker Rune", "7% on boonless target",  DamageSource.NoPets, 7.0, DamageType.Power, DamageType.Power, Source.Gear, ByAbsence, "https://wiki.guildwars2.com/images/1/1a/Superior_Rune_of_the_Spellbreaker.png", DamageModifierMode.All),
-            new BuffDamageModifierTarget(722, "Ice Rune", "7% on chilled target",  DamageSource.NoPets, 7.0, DamageType.Power, DamageType.Power, Source.Gear, ByPresence, "https://wiki.guildwars2.com/images/7/78/Superior_Rune_of_the_Ice.png", DamageModifierMode.All),
-            new BuffDamageModifier(725, "Rage Rune", "5% under fury",  DamageSource.NoPets, 5.0, DamageType.Power, DamageType.Power, Source.Gear, ByPresence, "https://wiki.guildwars2.com/images/9/9e/Superior_Rune_of_Rage.png", DamageModifierMode.All),
+            new DamageLogDamageModifier("Scholar Rune", "5% over 90% HP", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.Strike, Source.Gear,"https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png", (x, log) => x.IsOverNinety, ByPresence, 93543, ulong.MaxValue, DamageModifierMode.All ),
+            new DamageLogDamageModifier("Scholar Rune", "10% over 90% HP", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear,"https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png", (x, log) => x.IsOverNinety, ByPresence, 0, 93543, DamageModifierMode.All ),
+            new DamageLogDamageModifier("Eagle Rune", "10% if target <50% HP", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear,"https://wiki.guildwars2.com/images/9/9b/Superior_Rune_of_the_Eagle.png", (x, log) => x.AgainstUnderFifty, ByPresence, 93543, ulong.MaxValue, DamageModifierMode.All),
+            new DamageLogDamageModifier("Eagle Rune", "6% if target <50% HP", DamageSource.NoPets, 6.0, DamageType.Strike, DamageType.Strike, Source.Gear,"https://wiki.guildwars2.com/images/9/9b/Superior_Rune_of_the_Eagle.png", (x, log) => x.AgainstUnderFifty, ByPresence , 0 , 93543, DamageModifierMode.All),
+            new DamageLogDamageModifier("Thief Rune", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear,"https://wiki.guildwars2.com/images/9/96/Superior_Rune_of_the_Thief.png", (x, log) => x.IsFlanking , ByPresence, DamageModifierMode.All),
+            new BuffDamageModifier(740, "Strength Rune", "5% under might",  DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, "https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_Strength.png", DamageModifierMode.All),
+            new BuffDamageModifier(5677, "Fire Rune", "10% under fire aura",  DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, "https://wiki.guildwars2.com/images/4/4a/Superior_Rune_of_the_Fire.png", 93543 , ulong.MaxValue, DamageModifierMode.All),
+            new BuffDamageModifierTarget(737, "Flame Legion Rune", "7% on burning target",  DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, "https://wiki.guildwars2.com/images/4/4a/Superior_Rune_of_the_Flame_Legion.png", DamageModifierMode.All),
+            new BuffDamageModifierTarget(Buff.NumberOfBoonsID, "Spellbreaker Rune", "7% on boonless target",  DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByAbsence, "https://wiki.guildwars2.com/images/1/1a/Superior_Rune_of_the_Spellbreaker.png", DamageModifierMode.All),
+            new BuffDamageModifierTarget(722, "Ice Rune", "7% on chilled target",  DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, "https://wiki.guildwars2.com/images/7/78/Superior_Rune_of_the_Ice.png", DamageModifierMode.All),
+            new BuffDamageModifier(725, "Rage Rune", "5% under fury",  DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, "https://wiki.guildwars2.com/images/9/9e/Superior_Rune_of_Rage.png", DamageModifierMode.All),
         };
         internal static readonly List<DamageModifier> CommonDamageModifiers = new List<DamageModifier>
         {
-            new BuffDamageModifierTarget(31589, "Exposed", "50%", DamageSource.All, 50.0, DamageType.All, DamageType.All, Source.Common, ByPresence, "https://wiki.guildwars2.com/images/6/6b/Exposed.png",0, 115190, DamageModifierMode.All),
-            new BuffDamageModifierTarget(31589, "Exposed (Power)", "30%", DamageSource.All, 30.0, DamageType.Power, DamageType.All, Source.Common, ByPresence, "https://wiki.guildwars2.com/images/6/6b/Exposed.png", 115190, ulong.MaxValue, DamageModifierMode.All),
+            new BuffDamageModifierTarget(31589, "Exposed", "50%", DamageSource.All, 50.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByPresence, "https://wiki.guildwars2.com/images/6/6b/Exposed.png",0, 115190, DamageModifierMode.All),
+            new BuffDamageModifierTarget(31589, "Exposed (Strike)", "30%", DamageSource.All, 30.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, "https://wiki.guildwars2.com/images/6/6b/Exposed.png", 115190, ulong.MaxValue, DamageModifierMode.All),
             new BuffDamageModifierTarget(31589, "Exposed (Condition)", "100%", DamageSource.All, 100.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, "https://wiki.guildwars2.com/images/6/6b/Exposed.png", 115190, ulong.MaxValue, DamageModifierMode.All),
-            new BuffDamageModifierTarget(738, "Vulnerability", "1% per Stack", DamageSource.All, 1.0, DamageType.All, DamageType.All, Source.Common, ByStack, "https://wiki.guildwars2.com/images/a/af/Vulnerability.png", DamageModifierMode.All),
-            new BuffDamageModifier(50421, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.All, Source.Common, ByPresenceNonMultiplier, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png", 88541, ulong.MaxValue, DamageModifierMode.All),
-            new DamageLogDamageModifier("Soulcleave's Summit", "per hit (no ICD)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, Source.Common,"https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png", ((x, log) => x.SkillId == 45026), BySkill, 0, 115190, DamageModifierMode.All),
-            new DamageLogDamageModifier("Soulcleave's Summit", "per hit (1s ICD per target)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, Source.Common,"https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png", ((x, log) => x.SkillId == 45026), BySkill, 115190, ulong.MaxValue, DamageModifierMode.All),
-            new DamageLogDamageModifier("One Wolf Pack", "per hit (max. once every 0.25s)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, Source.Common, "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png", ((x, log) => x.SkillId == 42145), BySkill, DamageModifierMode.All),
+            new BuffDamageModifierTarget(738, "Vulnerability", "1% per Stack", DamageSource.All, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByStack, "https://wiki.guildwars2.com/images/a/af/Vulnerability.png", DamageModifierMode.All),
+            new BuffDamageModifier(50421, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Common, ByPresenceNonMultiplier, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png", 88541, ulong.MaxValue, DamageModifierMode.All),
+            new DamageLogDamageModifier("Soulcleave's Summit", "per hit (no ICD)", DamageSource.NoPets, 0, DamageType.All, DamageType.All, Source.Common,"https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png", ((x, log) => x.SkillId == 45026), BySkill, 0, 115190, DamageModifierMode.All),
+            new DamageLogDamageModifier("Soulcleave's Summit", "per hit (1s ICD per target)", DamageSource.NoPets, 0, DamageType.All, DamageType.All, Source.Common,"https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png", ((x, log) => x.SkillId == 45026), BySkill, 115190, ulong.MaxValue, DamageModifierMode.All),
+            new DamageLogDamageModifier("One Wolf Pack", "per hit (max. once every 0.25s)", DamageSource.NoPets, 0, DamageType.All, DamageType.All, Source.Common, "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png", ((x, log) => x.SkillId == 42145), BySkill, DamageModifierMode.All),
         };
         internal static readonly List<DamageModifier> FightSpecificDamageModifiers = new List<DamageModifier>
         {
-            new BuffDamageModifier(56123, "Violent Currents", "5%", DamageSource.NoPets, 5.0, DamageType.All, DamageType.All, Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/0/06/Violent_Currents.png", DamageModifierMode.PvE),
-            new BuffDamageModifierTarget(38224,"Unnatural Signet", "100%", DamageSource.All, 100.0, DamageType.All, DamageType.All, Source.FightSpecific, ByPresence, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png", DamageModifierMode.PvE),
-            new BuffDamageModifierTarget(35096, "Compromised", "75% per stack", DamageSource.All, 75.0, DamageType.All, DamageType.All, Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/4/48/Compromised.png", DamageModifierMode.PvE),
-            new BuffDamageModifierTarget(56582, "Erratic Energy", "5% per stack", DamageSource.All, 5.0, DamageType.All, DamageType.All, Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/0/06/Values_Mastery.png", DamageModifierMode.PvE),
-            new BuffDamageModifierTarget(53030, "Fractured - Enemy", "10% per stack", DamageSource.All, 10.0, DamageType.All, DamageType.All, Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png", DamageModifierMode.PvE),
-            new BuffDamageModifier(34422, "Blood Fueled", "10% per stack", DamageSource.NoPets, 10.0, DamageType.All, DamageType.All, Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png", DamageModifierMode.PvE),
-            new BuffDamageModifier(34428, "Blood Fueled Abo", "10% per stack", DamageSource.NoPets, 10.0, DamageType.All, DamageType.All, Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png", DamageModifierMode.PvE),
+            new BuffDamageModifier(56123, "Violent Currents", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/0/06/Violent_Currents.png", DamageModifierMode.PvE),
+            new BuffDamageModifierTarget(38224,"Unnatural Signet", "100%", DamageSource.All, 100.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png", DamageModifierMode.PvE),
+            new BuffDamageModifierTarget(35096, "Compromised", "75% per stack", DamageSource.All, 75.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/4/48/Compromised.png", DamageModifierMode.PvE),
+            new BuffDamageModifierTarget(56582, "Erratic Energy", "5% per stack", DamageSource.All, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/0/06/Values_Mastery.png", DamageModifierMode.PvE),
+            new BuffDamageModifierTarget(53030, "Fractured - Enemy", "10% per stack", DamageSource.All, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png", DamageModifierMode.PvE),
+            new BuffDamageModifier(34422, "Blood Fueled", "10% per stack", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png", DamageModifierMode.PvE),
+            new BuffDamageModifier(34428, "Blood Fueled Abo", "10% per stack", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png", DamageModifierMode.PvE),
         };
 
     }

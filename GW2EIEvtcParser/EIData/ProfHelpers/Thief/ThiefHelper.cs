@@ -23,14 +23,14 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
             // Deadly arts
-            new BuffDamageModifierTarget(NumberOfConditionsID, "Exposed Weakness", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Power, DamageType.All, Source.Thief, ByStack, "https://wiki.guildwars2.com/images/0/02/Exposed_Weakness.png", 90455, ulong.MaxValue, DamageModifierMode.All),
-            new BuffDamageModifierTarget(NumberOfConditionsID, "Exposed Weakness", "10% if condition on target", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, Source.Thief, ByPresence, "https://wiki.guildwars2.com/images/0/02/Exposed_Weakness.png", 0, 90455, DamageModifierMode.PvE),
-            new DamageLogDamageModifier("Executioner", "20% if target <50% HP", DamageSource.NoPets, 20.0, DamageType.Power, DamageType.All, Source.Thief,"https://wiki.guildwars2.com/images/9/93/Executioner.png", (x, log) => x.AgainstUnderFifty, ByPresence, DamageModifierMode.All),
+            new BuffDamageModifierTarget(NumberOfConditionsID, "Exposed Weakness", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Thief, ByStack, "https://wiki.guildwars2.com/images/0/02/Exposed_Weakness.png", 90455, ulong.MaxValue, DamageModifierMode.All),
+            new BuffDamageModifierTarget(NumberOfConditionsID, "Exposed Weakness", "10% if condition on target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, ByPresence, "https://wiki.guildwars2.com/images/0/02/Exposed_Weakness.png", 0, 90455, DamageModifierMode.PvE),
+            new DamageLogDamageModifier("Executioner", "20% if target <50% HP", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Thief,"https://wiki.guildwars2.com/images/9/93/Executioner.png", (x, log) => x.AgainstUnderFifty, ByPresence, DamageModifierMode.All),
             // Critical Strikes
-            new DamageLogDamageModifier("Twin Fangs","7% over 90%", DamageSource.NoPets, 7.0, DamageType.Power, DamageType.All, Source.Thief,"https://wiki.guildwars2.com/images/d/d1/Ferocious_Strikes.png", (x, log) => x.IsOverNinety && x.HasCrit, ByPresence, DamageModifierMode.All),
-            new DamageLogDamageModifier("Ferocious Strikes", "10% on critical strikes if target >50%", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, Source.Thief,"https://wiki.guildwars2.com/images/d/d1/Ferocious_Strikes.png", (x, log) => !x.AgainstUnderFifty && x.HasCrit, ByPresence, DamageModifierMode.All),
+            new DamageLogDamageModifier("Twin Fangs","7% over 90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Thief,"https://wiki.guildwars2.com/images/d/d1/Ferocious_Strikes.png", (x, log) => x.IsOverNinety && x.HasCrit, ByPresence, DamageModifierMode.All),
+            new DamageLogDamageModifier("Ferocious Strikes", "10% on critical strikes if target >50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief,"https://wiki.guildwars2.com/images/d/d1/Ferocious_Strikes.png", (x, log) => !x.AgainstUnderFifty && x.HasCrit, ByPresence, DamageModifierMode.All),
             // Trickery
-            new BuffDamageModifier(34659, "Lead Attacks", "1% (10s) per initiative spent", DamageSource.NoPets, 1.0, DamageType.All, DamageType.All, Source.Thief, ByStack, "https://wiki.guildwars2.com/images/0/01/Lead_Attacks.png", DamageModifierMode.All), // It's not always possible to detect the presence of pistol and the trait is additive with itself. Staff master is worse as we can't detect endurance at all
+            new BuffDamageModifier(34659, "Lead Attacks", "1% (10s) per initiative spent", DamageSource.NoPets, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByStack, "https://wiki.guildwars2.com/images/0/01/Lead_Attacks.png", DamageModifierMode.All), // It's not always possible to detect the presence of pistol and the trait is additive with itself. Staff master is worse as we can't detect endurance at all
         };
 
 
