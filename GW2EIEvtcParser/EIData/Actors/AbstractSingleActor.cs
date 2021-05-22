@@ -10,7 +10,7 @@ namespace GW2EIEvtcParser.EIData
 {
     public abstract class AbstractSingleActor : AbstractActor
     {
-        public AgentItem AgentItem => SourceAgent;
+        public new AgentItem AgentItem => base.AgentItem;
         public bool HasCommanderTag => AgentItem.HasCommanderTag;
         public string Account { get; protected set; }
         public int Group { get; protected set; }
