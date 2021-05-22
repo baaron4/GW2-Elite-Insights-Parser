@@ -8,7 +8,7 @@ namespace GW2EIEvtcParser.EIData
     {
         protected AgentItem AgentItem { get; }
         public string Character { get; protected set; }
-
+        public int UniqueID => AgentItem.UniqueID;
         public uint Toughness => AgentItem.Toughness;
         public uint Condition => AgentItem.Condition;
         public uint Concentration => AgentItem.Concentration;

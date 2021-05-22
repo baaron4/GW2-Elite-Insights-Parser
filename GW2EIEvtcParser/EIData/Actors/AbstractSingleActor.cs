@@ -10,7 +10,6 @@ namespace GW2EIEvtcParser.EIData
     public abstract class AbstractSingleActor : AbstractActor
     {
         public new AgentItem AgentItem => base.AgentItem;
-        public int UniqueID => AgentItem.UniqueID;
         // Boons
         private HashSet<Buff> _trackedBuffs;
         private BuffDictionary _buffMap;
@@ -147,7 +146,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     if (pair.Value.GetDamageEvents(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastEvents(log, 0, log.FightData.FightEnd).Any(x => x.SkillId != SkillItem.WeaponSwapId && x.SkillId != SkillItem.MirageCloakDodgeId))
                     {
-                        _minions[pair.Value.OriginAgent.UniqueID] = pair.Value;
+                        _minions[pair.Value.UniqueID] = pair.Value;
                     }
                 }
                 // gadget, string based
@@ -169,7 +168,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     if (pair.Value.GetDamageEvents(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastEvents(log, 0, log.FightData.FightEnd).Any(x => x.SkillId != SkillItem.WeaponSwapId && x.SkillId != SkillItem.MirageCloakDodgeId))
                     {
-                        _minions[pair.Value.OriginAgent.UniqueID] = pair.Value;
+                        _minions[pair.Value.UniqueID] = pair.Value;
                     }
                 }
             }
