@@ -73,7 +73,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 case DamageType.All:
                     Tooltip += "<br>All Damage";
-                    throw new InvalidDataException("There is no known damage modifier that increases every kind of output");
+                    break;
                 case DamageType.Power:
                     Tooltip += "<br>Power Damage";
                     break;
