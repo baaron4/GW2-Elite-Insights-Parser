@@ -233,6 +233,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             return start;
         }
+        
+        internal override List<ErrorEvent> GetCustomWarningMessages()
+        {
+            return new List<ErrorEvent>()
+            {
+                new ErrorEvent("Missing data due to green ports")
+            };
+        }
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
@@ -512,6 +520,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Deimos not found");
             }
             FightData.CMStatus cmStatus = (target.GetHealth(combatData) > 40e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            if (cmStatus == FightData.CMStatus.NoCM)
+            {
+                combatData.AddCustomWarningMessage("Missing outgoing Saul damage due to % based damage");
+            }
 
             if (_deimos10PercentTime > 0)
             {

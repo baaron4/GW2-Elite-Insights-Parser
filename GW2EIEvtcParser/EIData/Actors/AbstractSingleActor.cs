@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.EIData
         public bool HasCommanderTag => AgentItem.HasCommanderTag;
         public string Account { get; protected set; }
         public int Group { get; protected set; }
-        public int UniqueID => AgentItem.UniqueID;
+        
         // Helpers
         private readonly SingleActorBuffsHelper _buffHelper;
         private readonly SingleActorGraphsHelper _graphHelper;
@@ -143,7 +143,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     if (pair.Value.GetDamageEvents(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastEvents(log, 0, log.FightData.FightEnd).Any(x => x.SkillId != SkillItem.WeaponSwapId && x.SkillId != SkillItem.MirageCloakDodgeId))
                     {
-                        _minions[pair.Value.AgentItem.UniqueID] = pair.Value;
+                        _minions[pair.Value.UniqueID] = pair.Value;
                     }
                 }
                 // gadget, string based
@@ -165,7 +165,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     if (pair.Value.GetDamageEvents(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastEvents(log, 0, log.FightData.FightEnd).Any(x => x.SkillId != SkillItem.WeaponSwapId && x.SkillId != SkillItem.MirageCloakDodgeId))
                     {
-                        _minions[pair.Value.AgentItem.UniqueID] = pair.Value;
+                        _minions[pair.Value.UniqueID] = pair.Value;
                     }
                 }
             }

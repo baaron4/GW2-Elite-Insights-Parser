@@ -1,7 +1,7 @@
 # Contact
 The following discord is used for general ArcDPS related discussions and troubleshooting, whether we are talking about ArcDPS, ArcDPS addons or EVTC log parsing:
 
-https://discord.gg/dCDEPXx
+https://discord.gg/T4kSbKJ5Sf
 
 Our GitHub Page: https://baaron4.github.io/GW2-Elite-Insights-Parser/
 
