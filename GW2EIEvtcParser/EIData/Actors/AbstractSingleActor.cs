@@ -10,20 +10,20 @@ namespace GW2EIEvtcParser.EIData
 {
     public abstract class AbstractSingleActor : AbstractActor
     {
-        public AgentItem AgentItem => SourceAgent;
+        public new AgentItem AgentItem => base.AgentItem;
         public bool HasCommanderTag => AgentItem.HasCommanderTag;
         public string Account { get; protected set; }
         public int Group { get; protected set; }
-        public int UniqueID => AgentItem.UniqueID;
+        
         // Helpers
         private readonly SingleActorBuffsHelper _buffHelper;
         private readonly SingleActorGraphsHelper _graphHelper;
         private readonly SingleActorDamageModifierHelper _damageModifiersHelper;
         private readonly SingleActorStatusHelper _statusHelper;
-        private readonly SingleActorDamageHelper _damageHelper;
         // Minions
         private Dictionary<long, Minions> _minions;
         // Replay
+        private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>> _typedSelfHitDamageEvents = new Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>>();
         protected CombatReplay CombatReplay { get; set; }
         // Statistics
         private CachingCollectionWithTarget<FinalDPS> _dpsStats;
@@ -40,7 +40,6 @@ namespace GW2EIEvtcParser.EIData
             _graphHelper = new SingleActorGraphsHelper(this);
             _damageModifiersHelper = new SingleActorDamageModifierHelper(this);
             _statusHelper = new SingleActorStatusHelper(this);
-            _damageHelper = new SingleActorDamageHelper(this);
         }
 
         // Status
@@ -143,7 +142,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     if (pair.Value.GetDamageEvents(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastEvents(log, 0, log.FightData.FightEnd).Any(x => x.SkillId != SkillItem.WeaponSwapId && x.SkillId != SkillItem.MirageCloakDodgeId))
                     {
-                        _minions[pair.Value.AgentItem.UniqueID] = pair.Value;
+                        _minions[pair.Value.UniqueID] = pair.Value;
                     }
                 }
                 // gadget, string based
@@ -165,7 +164,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     if (pair.Value.GetDamageEvents(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastEvents(log, 0, log.FightData.FightEnd).Any(x => x.SkillId != SkillItem.WeaponSwapId && x.SkillId != SkillItem.MirageCloakDodgeId))
                     {
-                        _minions[pair.Value.AgentItem.UniqueID] = pair.Value;
+                        _minions[pair.Value.UniqueID] = pair.Value;
                     }
                 }
             }
@@ -173,8 +172,7 @@ namespace GW2EIEvtcParser.EIData
         }
 
         // Graph
-
-        public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target, ParserHelper.DamageType damageType = ParserHelper.DamageType.All)
+        public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target, ParserHelper.DamageType damageType)
         {
             return _graphHelper.Get1SDamageList(log, start, end, target, damageType);
         }
@@ -577,19 +575,19 @@ namespace GW2EIEvtcParser.EIData
         /// <summary>
         /// cached method for damage modifiers
         /// </summary>
-        internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorHitDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorHitDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
         {
-            return _damageHelper.GetJustActorHitDamageEvents(target, log, start, end);
-        }
-
-        internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorConditionHitDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
-        {
-            return _damageHelper.GetJustActorConditionHitDamageEvents(target, log, start, end);
-        }
-
-        internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorPowerHitDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
-        {
-            return _damageHelper.GetJustActorPowerHitDamageEvents(target, log, start, end);
+            if (!_typedSelfHitDamageEvents.TryGetValue(damageType, out CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> hitDamageEventsPerPhasePerTarget))
+            {
+                hitDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>(log);
+                _typedSelfHitDamageEvents[damageType] = hitDamageEventsPerPhasePerTarget;
+            }
+            if (!hitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
+            {
+                dls = GetHitDamageEvents(target, log, start, end, damageType).Where(x => x.From == AgentItem).ToList();
+                hitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
+            }
+            return dls;
         }
 
         public Point3D GetCurrentPosition(ParsedEvtcLog log, long time)

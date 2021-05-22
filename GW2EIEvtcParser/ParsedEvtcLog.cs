@@ -48,8 +48,8 @@ namespace GW2EIEvtcParser
             FriendlyAgents = new HashSet<AgentItem>(friendlies.Select(x => x.AgentItem));
             _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Combat Events");
             CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList, operation);
-            _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Log Meta Data");
-            LogData = new LogData(buildVersion, CombatData, evtcLogDuration, playerList, operation);
+            _operation.UpdateProgressWithCancellationCheck("Checking CM");
+            FightData.SetCM(CombatData, AgentData, FightData);
             //
             _operation.UpdateProgressWithCancellationCheck("Checking Success");
             FightData.Logic.CheckSuccess(CombatData, AgentData, FightData, PlayerAgents);
@@ -61,8 +61,8 @@ namespace GW2EIEvtcParser
             {
                 throw new SkipException();
             }
-            _operation.UpdateProgressWithCancellationCheck("Checking CM");
-            FightData.SetCM(CombatData, AgentData, FightData);
+            _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Log Meta Data");
+            LogData = new LogData(buildVersion, CombatData, evtcLogDuration, playerList, operation);
             //
             _operation.UpdateProgressWithCancellationCheck("Creating Buff Container");
             Buffs = new BuffsContainer(LogData.GW2Build, CombatData, operation);

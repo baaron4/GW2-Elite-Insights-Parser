@@ -10,7 +10,8 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class SingleActorGraphsHelper : AbstractSingleActorHelper
     {
-        private CachingCollectionWithTarget<Dictionary<ParserHelper.DamageType, int[]>> _damageList1S;
+        private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<int[]>> _damageList1S = new Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<int[]>>();
+
         private CachingCollectionWithTarget<double[]> _breakbarDamageList1S;
         private List<Segment> _healthUpdates { get; set; }
         private List<Segment> _breakbarPercentUpdates { get; set; }
@@ -53,59 +54,39 @@ namespace GW2EIEvtcParser.EIData
 
         public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target, ParserHelper.DamageType damageType = ParserHelper.DamageType.All)
         {
-            if (_damageList1S == null)
+            if (!_damageList1S.TryGetValue(damageType, out CachingCollectionWithTarget<int[]> graphs))
             {
-                _damageList1S = new CachingCollectionWithTarget<Dictionary<ParserHelper.DamageType, int[]>>(log);
+                graphs = new CachingCollectionWithTarget<int[]>(log);
+                _damageList1S[damageType] = graphs;
             }
-            if (_damageList1S.TryGetValue(start, end, target, out Dictionary<ParserHelper.DamageType, int[]> res))
+            if (!graphs.TryGetValue(start, end, target, out int[] graph))
             {
-                return res[damageType];
-            }
-            int durationInMS = (int)(end - start);
-            int durationInS = durationInMS / 1000;
-            var dmgList = durationInS * 1000 != durationInMS ? new int[durationInS + 2] : new int[durationInS + 1];
-            var dmgListPower = new int[dmgList.Length];
-            var dmgListCondition = new int[dmgList.Length];
-            IReadOnlyList<AbstractHealthDamageEvent> damageEvents = Actor.GetDamageEvents(target, log, start, end);
-            // fill the graph
-            int previousTime = 0;
-            foreach (AbstractHealthDamageEvent dl in damageEvents)
-            {
-                int time = (int)Math.Ceiling((dl.Time - start) / 1000.0);
-                if (time != previousTime)
+                int durationInMS = (int)(end - start);
+                int durationInS = durationInMS / 1000;
+                graph = durationInS * 1000 != durationInMS ? new int[durationInS + 2] : new int[durationInS + 1];
+                // fill the graph
+                int previousTime = 0;
+                foreach (AbstractHealthDamageEvent dl in Actor.GetHitDamageEvents(target, log, start, end, damageType))
                 {
-                    for (int i = previousTime + 1; i <= time; i++)
+                    int time = (int)Math.Ceiling((dl.Time - start) / 1000.0);
+                    if (time != previousTime)
                     {
-                        dmgList[i] = dmgList[previousTime];
-                        dmgListPower[i] = dmgListPower[previousTime];
-                        dmgListCondition[i] = dmgListCondition[previousTime];
+                        for (int i = previousTime + 1; i <= time; i++)
+                        {
+                            graph[i] = graph[previousTime];
+                        }
                     }
+                    previousTime = time;
+                    graph[time] += dl.HealthDamage;
                 }
-                previousTime = time;
-                dmgList[time] += dl.HealthDamage;
-                if (dl.ConditionDamageBased(log))
+                for (int i = previousTime + 1; i < graph.Length; i++)
                 {
-                    dmgListCondition[time] += dl.HealthDamage;
+                    graph[i] = graph[previousTime];
                 }
-                else
-                {
-                    dmgListPower[time] += dl.HealthDamage;
-                }
+                //
+                graphs.Set(start, end, target, graph);
             }
-            for (int i = previousTime + 1; i < dmgList.Length; i++)
-            {
-                dmgList[i] = dmgList[previousTime];
-                dmgListPower[i] = dmgListPower[previousTime];
-                dmgListCondition[i] = dmgListCondition[previousTime];
-            }
-            //
-            res = new Dictionary<ParserHelper.DamageType, int[]> {
-                {ParserHelper.DamageType.All, dmgList },
-                { ParserHelper.DamageType.Power,dmgListPower },
-                { ParserHelper.DamageType.Condition,dmgListCondition }
-            };
-            _damageList1S.Set(start, end, target, res);
-            return res[damageType];
+            return graph;
         }
 
         public IReadOnlyList<double> Get1SBreakbarDamageList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target)

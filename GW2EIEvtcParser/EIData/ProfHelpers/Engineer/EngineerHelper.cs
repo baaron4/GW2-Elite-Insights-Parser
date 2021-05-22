@@ -49,12 +49,12 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
             // Explosives
-            new DamageLogApproximateDamageModifier("Glass Cannon", "5% if self >75%", DamageSource.NoPets, 5.0, DamageType.Power, DamageType.All, Source.Engineer,"https://wiki.guildwars2.com/images/6/6e/Glass_Cannon.png", (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), ByPresence, 72781, 98248, DamageModifierMode.All),
-            new DamageLogApproximateDamageModifier("Glass Cannon", "7% if self >75%", DamageSource.NoPets, 7.0, DamageType.Power, DamageType.All, Source.Engineer,"https://wiki.guildwars2.com/images/6/6e/Glass_Cannon.png", (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), ByPresence, 98248, 115190, DamageModifierMode.All),
-            new DamageLogApproximateDamageModifier("Glass Cannon", "10% if self >75%", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, Source.Engineer,"https://wiki.guildwars2.com/images/6/6e/Glass_Cannon.png", (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), ByPresence, 115190, ulong.MaxValue, DamageModifierMode.All),
-            new BuffDamageModifierTarget(738, "Shaped Charge", "10% on vulnerable enemies", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, Source.Engineer, ByPresence, "https://wiki.guildwars2.com/images/f/f3/Explosive_Powder.png", 0, 99526, DamageModifierMode.PvE),
-            new BuffDamageModifierTarget(738, "Shaped Charge", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Power, DamageType.All, Source.Engineer, ByStack, "https://wiki.guildwars2.com/images/f/f3/Explosive_Powder.png", 99526, ulong.MaxValue, DamageModifierMode.All),
-            new DamageLogApproximateDamageModifier("Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, Source.Engineer, "https://wiki.guildwars2.com/images/8/83/Big_Boomer.png", (x,log) =>
+            new DamageLogApproximateDamageModifier("Glass Cannon", "5% if self >75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Engineer,"https://wiki.guildwars2.com/images/6/6e/Glass_Cannon.png", (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), ByPresence, 72781, 98248, DamageModifierMode.All),
+            new DamageLogApproximateDamageModifier("Glass Cannon", "7% if self >75%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Engineer,"https://wiki.guildwars2.com/images/6/6e/Glass_Cannon.png", (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), ByPresence, 98248, 115190, DamageModifierMode.All),
+            new DamageLogApproximateDamageModifier("Glass Cannon", "10% if self >75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer,"https://wiki.guildwars2.com/images/6/6e/Glass_Cannon.png", (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), ByPresence, 115190, ulong.MaxValue, DamageModifierMode.All),
+            new BuffDamageModifierTarget(738, "Shaped Charge", "10% on vulnerable enemies", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, "https://wiki.guildwars2.com/images/f/f3/Explosive_Powder.png", 0, 99526, DamageModifierMode.PvE),
+            new BuffDamageModifierTarget(738, "Shaped Charge", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, "https://wiki.guildwars2.com/images/f/f3/Explosive_Powder.png", 99526, ulong.MaxValue, DamageModifierMode.All),
+            new DamageLogApproximateDamageModifier("Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, "https://wiki.guildwars2.com/images/8/83/Big_Boomer.png", (x,log) =>
             {
                 var selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
                 var dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
@@ -67,9 +67,9 @@ namespace GW2EIEvtcParser.EIData
             // Firearms
             new BuffDamageModifier(51389, "Thermal Vision", "5% (4s) after burning foe", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Engineer, ByPresence, "https://wiki.guildwars2.com/images/8/8a/Skilled_Marksman.png", 92069, ulong.MaxValue, DamageModifierMode.All),
             new BuffDamageModifier(51389, "Thermal Vision", "10% (4s) after burning foe", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Engineer, ByPresence, "https://wiki.guildwars2.com/images/8/8a/Skilled_Marksman.png", 0, 92069, DamageModifierMode.PvE),
-            new BuffDamageModifierTarget(NumberOfConditionsID, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Power, DamageType.All, Source.Engineer, ByStack, "https://wiki.guildwars2.com/images/9/94/Modified_Ammunition.png", DamageModifierMode.All),
+            new BuffDamageModifierTarget(NumberOfConditionsID, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, "https://wiki.guildwars2.com/images/9/94/Modified_Ammunition.png", DamageModifierMode.All),
             // Tools
-            new BuffDamageModifier(726, "Excessive Energy", "10% under vigor", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, Source.Engineer, ByPresence, "https://wiki.guildwars2.com/images/1/1f/Excessive_Energy.png", DamageModifierMode.All),
+            new BuffDamageModifier(726, "Excessive Energy", "10% under vigor", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, "https://wiki.guildwars2.com/images/1/1f/Excessive_Energy.png", DamageModifierMode.All),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
