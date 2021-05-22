@@ -49,7 +49,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (1920, 12160, 2944, 14464)*/);
         }
 
-        internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
+        internal override List<AbstractBuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
         {
             NPC mainTarget = GetMainTarget();
             if (mainTarget == null)

@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.ParsedData
         private readonly MetaEventsContainer _metaDataEvents = new MetaEventsContainer();
         private readonly HashSet<long> _skillIds;
         private readonly Dictionary<long, List<AbstractBuffEvent>> _buffData;
-        private readonly Dictionary<long, List<BuffRemoveAllEvent>> _buffRemoveAllData;
+        private Dictionary<long, List<BuffRemoveAllEvent>> _buffRemoveAllData;
         private readonly Dictionary<AgentItem, List<AbstractBuffEvent>> _buffDataByDst;
         private readonly Dictionary<AgentItem, List<AbstractHealthDamageEvent>> _damageData;
         private readonly Dictionary<AgentItem, List<AbstractBreakbarDamageEvent>> _breakbarDamageData;
@@ -46,7 +46,7 @@ namespace GW2EIEvtcParser.ParsedData
                     ElementalistHelper.RemoveDualBuffs(GetBuffData(p.AgentItem), _buffData, skillData);
                 }
             }
-            toAdd.AddRange(fightData.Logic.SpecialBuffEventProcess(_buffDataByDst, _buffData, skillData));
+            toAdd.AddRange(fightData.Logic.SpecialBuffEventProcess(this, skillData));
             var buffIDsToSort = new HashSet<long>();
             var buffAgentsToSort = new HashSet<AgentItem>();
             foreach (AbstractBuffEvent bf in toAdd)
@@ -76,6 +76,10 @@ namespace GW2EIEvtcParser.ParsedData
                 }
                 buffIDsToSort.Add(bf.BuffID);
             }
+            if (toAdd.Any())
+            {
+                _buffRemoveAllData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffRemoveAllEvent>().ToList());
+            }
             foreach (long buffID in buffIDsToSort)
             {
                 _buffData[buffID] = _buffData[buffID].OrderBy(x => x.Time).ToList();
@@ -89,7 +93,7 @@ namespace GW2EIEvtcParser.ParsedData
         private void EIDamageParse(SkillData skillData, FightData fightData)
         {
             var toAdd = new List<AbstractHealthDamageEvent>();
-            toAdd.AddRange(fightData.Logic.SpecialDamageEventProcess(_damageData, _damageTakenData, _damageDataById, skillData));
+            toAdd.AddRange(fightData.Logic.SpecialDamageEventProcess(this, skillData));
             var idsToSort = new HashSet<long>();
             var dstToSort = new HashSet<AgentItem>();
             var srcToSort = new HashSet<AgentItem>();
@@ -147,7 +151,7 @@ namespace GW2EIEvtcParser.ParsedData
         }
         private void EICastParse(List<Player> players, SkillData skillData, FightData fightData, AgentData agentData)
         {
-            List<AbstractCastEvent> toAdd = fightData.Logic.SpecialCastEventProcess(_animatedCastData, _weaponSwapData, _animatedCastDataById, skillData);
+            List<AbstractCastEvent> toAdd = fightData.Logic.SpecialCastEventProcess(this, skillData);
             toAdd.AddRange(ProfHelper.ComputeInstantCastEvents(players, this, skillData, agentData));
             //
             var castIDsToSort = new HashSet<long>();
@@ -278,7 +282,7 @@ namespace GW2EIEvtcParser.ParsedData
                     _statusEvents.DownEvents[pair.Key] = agentDowns.OrderBy(x => x.Time).ToList();
                 }
             }
-            _metaDataEvents.ErrorEvents.AddRange(fightData.Logic.GetCustomWarningMessages());
+            _metaDataEvents.ErrorEvents.AddRange(fightData.Logic.GetCustomWarningMessages(fightData));
         }
 
         internal void AddCustomWarningMessage(string message)
@@ -298,13 +302,13 @@ namespace GW2EIEvtcParser.ParsedData
             EIMetaAndStatusParse(fightData);
             // master attachements
             operation.UpdateProgressWithCancellationCheck("Attaching Banners to Warriors");
-            WarriorHelper.AttachMasterToWarriorBanners(players, _buffData, _animatedCastDataById);
+            WarriorHelper.AttachMasterToWarriorBanners(players, this);
             operation.UpdateProgressWithCancellationCheck("Attaching Turrets to Engineers");
-            EngineerHelper.AttachMasterToEngineerTurrets(players, _damageDataById, _animatedCastDataById);
+            EngineerHelper.AttachMasterToEngineerTurrets(players, this);
             operation.UpdateProgressWithCancellationCheck("Attaching Ranger Gadgets to Rangers");
-            RangerHelper.AttachMasterToRangerGadgets(players, _damageDataById, _animatedCastDataById);
+            RangerHelper.AttachMasterToRangerGadgets(players, this);
             operation.UpdateProgressWithCancellationCheck("Attaching Racial Gadgets to Players");
-            ProfHelper.AttachMasterToRacialGadgets(players, _damageDataById, _animatedCastDataById);
+            ProfHelper.AttachMasterToRacialGadgets(players, this);
         }
 
         internal CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players, ParserController operation)
@@ -378,6 +382,7 @@ namespace GW2EIEvtcParser.ParsedData
             _damageDataById = damageData.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             _breakbarDamageData = brkDamageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             _breakbarDamageTakenData = brkDamageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            _buffRemoveAllData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffRemoveAllEvent>().ToList());
             //
             /*healing_data = allCombatItems.Where(x => x.getDstInstid() != 0 && x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                          ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
@@ -386,8 +391,9 @@ namespace GW2EIEvtcParser.ParsedData
             healing_received_data = allCombatItems.Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                             ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
                                                 (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
+            operation.UpdateProgressWithCancellationCheck("Checking CM");
+            fightData.SetCM(this, agentData, fightData);
             EIExtraEventProcess(players, skillData, agentData, fightData, operation);
-            _buffRemoveAllData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffRemoveAllEvent>().ToList());
         }
 
         // getters
