@@ -20,10 +20,10 @@ namespace GW2EIEvtcParser.EIData
         private readonly SingleActorGraphsHelper _graphHelper;
         private readonly SingleActorDamageModifierHelper _damageModifiersHelper;
         private readonly SingleActorStatusHelper _statusHelper;
-        private readonly SingleActorDamageHelper _damageHelper;
         // Minions
         private Dictionary<long, Minions> _minions;
         // Replay
+        private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>> _typedSelfHitDamageEvents = new Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>>();
         protected CombatReplay CombatReplay { get; set; }
         // Statistics
         private CachingCollectionWithTarget<FinalDPS> _dpsStats;
@@ -40,7 +40,6 @@ namespace GW2EIEvtcParser.EIData
             _graphHelper = new SingleActorGraphsHelper(this);
             _damageModifiersHelper = new SingleActorDamageModifierHelper(this);
             _statusHelper = new SingleActorStatusHelper(this);
-            _damageHelper = new SingleActorDamageHelper(this);
         }
 
         // Status
@@ -576,9 +575,19 @@ namespace GW2EIEvtcParser.EIData
         /// <summary>
         /// cached method for damage modifiers
         /// </summary>
-        internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorHitDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorHitDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
         {
-            return _damageHelper.GetJustActorHitDamageEvents(target, log, start, end);
+            if (!_typedSelfHitDamageEvents.TryGetValue(damageType, out CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> hitDamageEventsPerPhasePerTarget))
+            {
+                hitDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>(log);
+                _typedSelfHitDamageEvents[damageType] = hitDamageEventsPerPhasePerTarget;
+            }
+            if (!hitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
+            {
+                dls = GetHitDamageEvents(target, log, start, end, damageType).Where(x => x.From == AgentItem).ToList();
+                hitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
+            }
+            return dls;
         }
 
         public Point3D GetCurrentPosition(ParsedEvtcLog log, long time)

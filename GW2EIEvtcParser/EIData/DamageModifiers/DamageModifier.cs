@@ -170,7 +170,7 @@ namespace GW2EIEvtcParser.EIData
 
         public IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageEvents(AbstractSingleActor actor, ParsedEvtcLog log, AbstractSingleActor t, long start, long end)
         {
-            return _dmgSrc == DamageSource.All ? p.GetHitDamageEvents(t, log, start, end, _srcType) : p.GetJustActorHitDamageEvents(t, log, start, end, _srcType);
+            return _dmgSrc == DamageSource.All ? actor.GetHitDamageEvents(t, log, start, end, _srcType) : actor.GetJustActorHitDamageEvents(t, log, start, end, _srcType);
         }
 
         internal abstract List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log);
