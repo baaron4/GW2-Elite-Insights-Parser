@@ -238,7 +238,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 new ErrorEvent("Missing data due to green ports")
             };
-            if (fightData.IsCM)
+            if (!fightData.IsCM)
             {
                 res.Add(new ErrorEvent("Missing outgoing Saul damage due to % based damage"));
             }
