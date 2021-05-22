@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
@@ -27,9 +28,7 @@ namespace GW2EIEvtcParser.EIData
         // Damage
         protected List<AbstractHealthDamageEvent> DamageEvents { get; set; }
         protected Dictionary<AgentItem, List<AbstractHealthDamageEvent>> DamageEventByDst { get; set; }
-        private CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> _hitDamageEventsPerPhasePerTarget;
-        private CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> _powerHitDamageEventsPerPhasePerTarget;
-        private CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> _conditionHitDamageEventsPerPhasePerTarget;
+        private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>> _typedHitDamageEvents = new Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>>();
         protected List<AbstractHealthDamageEvent> DamageTakenEvents { get; set; }
         protected Dictionary<AgentItem, List<AbstractHealthDamageEvent>> DamageTakenEventsBySrc { get; set; }
         // Breakbar Damage
@@ -52,47 +51,36 @@ namespace GW2EIEvtcParser.EIData
 
         public abstract IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end);
 
-        /// <summary>
-        /// cached method for damage modifiers
-        /// </summary>
-        internal IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
         {
-            if(_hitDamageEventsPerPhasePerTarget == null)
+            if (!_typedHitDamageEvents.TryGetValue(damageType, out CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> hitDamageEventsPerPhasePerTarget))
             {
-                _hitDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>(log);
+                hitDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>(log);
+                _typedHitDamageEvents[damageType] = hitDamageEventsPerPhasePerTarget;
             }
-            if (!_hitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
+            if (!hitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
             {
                 dls = GetDamageEvents(target, log, start, end).Where(x => x.HasHit).ToList();
-                _hitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
-            }
-            return dls;
-        }
-
-        internal IReadOnlyList<AbstractHealthDamageEvent> GetConditionHitDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
-        {
-            if (_conditionHitDamageEventsPerPhasePerTarget == null)
-            {
-                _conditionHitDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>(log);
-            }
-            if (!_conditionHitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
-            {
-                dls = GetHitDamageEvents(target, log, start, end).Where(x => x.ConditionDamageBased(log)).ToList();
-                _conditionHitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
-            }
-            return dls;
-        }
-
-        internal IReadOnlyList<AbstractHealthDamageEvent> GetPowerHitDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
-        {
-            if (_powerHitDamageEventsPerPhasePerTarget == null)
-            {
-                _powerHitDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>(log);
-            }
-            if (!_powerHitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
-            {
-                dls = GetHitDamageEvents(target, log, start, end).Where(x => !x.ConditionDamageBased(log)).ToList();
-                _powerHitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
+                switch (damageType)
+                {
+                    case ParserHelper.DamageType.Power:
+                        dls.RemoveAll(x => x.ConditionDamageBased(log));
+                        break;
+                    case ParserHelper.DamageType.Strike:
+                        dls.RemoveAll(x => x is NonDirectHealthDamageEvent);
+                        break;
+                    case ParserHelper.DamageType.Condition:
+                        dls.RemoveAll(x => !x.ConditionDamageBased(log));
+                        break;
+                    case ParserHelper.DamageType.StrikeAndCondition:
+                        dls.RemoveAll(x => x is NonDirectHealthDamageEvent && !x.ConditionDamageBased(log));
+                        break;
+                    case ParserHelper.DamageType.All:
+                        break;
+                    default:
+                        throw new NotImplementedException("Not implemented damage type " + damageType);
+                }
+                hitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
             }
             return dls;
         }

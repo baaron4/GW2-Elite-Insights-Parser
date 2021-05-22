@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Interfaces;
 using GW2EIEvtcParser.ParsedData;
@@ -70,13 +71,19 @@ namespace GW2EIEvtcParser.EIData
             switch (_srcType)
             {
                 case DamageType.All:
-                    Tooltip += "<br>All Damage type";
+                    Tooltip += "<br>All Damage";
                     break;
                 case DamageType.Power:
-                    Tooltip += "<br>Power Damage only";
+                    Tooltip += "<br>Power Damage";
+                    break;
+                case DamageType.Strike:
+                    Tooltip += "<br>Strike Damage";
+                    break;
+                case DamageType.StrikeAndCondition:
+                    Tooltip += "<br>Strike and Condition Damage";
                     break;
                 case DamageType.Condition:
-                    Tooltip += "<br>Condition Damage only";
+                    Tooltip += "<br>Condition Damage";
                     break;
             }
             switch (_compareType)
@@ -86,6 +93,12 @@ namespace GW2EIEvtcParser.EIData
                     break;
                 case DamageType.Power:
                     Tooltip += "<br>Compared against Power Damage";
+                    break;
+                case DamageType.Strike:
+                    Tooltip += "<br>Compared against Strike Damage";
+                    break;
+                case DamageType.StrikeAndCondition:
+                    Tooltip += "<br>Compared against Strike and Condition Damage";
                     break;
                 case DamageType.Condition:
                     Tooltip += "<br>Compared against Condition Damage";
@@ -141,22 +154,18 @@ namespace GW2EIEvtcParser.EIData
                     return _dmgSrc == DamageSource.All ? damageData.CondiDamage : damageData.ActorCondiDamage;
                 case DamageType.Power:
                     return _dmgSrc == DamageSource.All ? damageData.PowerDamage : damageData.ActorPowerDamage;
+                case DamageType.Strike:
+                    return _dmgSrc == DamageSource.All ? damageData.StrikeDamage : damageData.ActorStrikeDamage;
+                case DamageType.StrikeAndCondition:
+                    return _dmgSrc == DamageSource.All ? damageData.StrikeDamage + damageData.CondiDamage : damageData.ActorStrikeDamage + damageData.ActorCondiDamage;
+                default:
+                    throw new NotImplementedException("Not implemented damage type " + _compareType);
             }
-            return 0;
         }
 
         public IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageEvents(Player p, ParsedEvtcLog log, NPC t, long start, long end)
         {
-            switch (_srcType)
-            {
-                case DamageType.All:
-                    return _dmgSrc == DamageSource.All ? p.GetHitDamageEvents(t, log, start, end) : p.GetJustActorHitDamageEvents(t, log, start, end);
-                case DamageType.Condition:
-                    return _dmgSrc == DamageSource.All ? p.GetConditionHitDamageEvents(t, log, start, end) : p.GetJustActorConditionHitDamageEvents(t, log, start, end);
-                case DamageType.Power:
-                default:
-                    return _dmgSrc == DamageSource.All ? p.GetPowerHitDamageEvents(t, log, start, end) : p.GetJustActorPowerHitDamageEvents(t, log, start, end);
-            }
+            return _dmgSrc == DamageSource.All ? p.GetHitDamageEvents(t, log, start, end, _srcType) : p.GetJustActorHitDamageEvents(t, log, start, end, _srcType);
         }
 
         internal abstract List<DamageModifierEvent> ComputeDamageModifier(Player p, ParsedEvtcLog log);

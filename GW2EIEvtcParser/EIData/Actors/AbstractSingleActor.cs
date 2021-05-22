@@ -19,11 +19,9 @@ namespace GW2EIEvtcParser.EIData
         private CachingCollection<(Dictionary<long, FinalBuffsDictionary>, Dictionary<long, FinalBuffsDictionary>)> _buffsDictionary;
         private readonly Dictionary<long, AbstractBuffSimulator> _buffSimulators = new Dictionary<long, AbstractBuffSimulator>();
         // damage list
-        private CachingCollectionWithTarget<Dictionary<ParserHelper.DamageType, int[]>> _damageList1S;
+        private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<int[]>> _damageList1S = new Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<int[]>>();
         private CachingCollectionWithTarget<double[]> _breakbarDamageList1S;
-        private CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> _hitSelfDamageEventsPerPhasePerTarget;
-        private CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> _powerHitSelfDamageEventsPerPhasePerTarget;
-        private CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> _conditionHitSelfDamageEventsPerPhasePerTarget;
+        private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>> _typedSelfHitDamageEvents = new Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>>();
         //status
         private List<Segment> _healthUpdates { get; set; }
         private List<Segment> _barrierUpdates { get; set; }
@@ -176,62 +174,41 @@ namespace GW2EIEvtcParser.EIData
         }
 
         // Graph
-        // TODO: add support for strike and life leech stuff
-        public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, AbstractActor target, ParserHelper.DamageType damageType = ParserHelper.DamageType.All)
+        public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, AbstractActor target, ParserHelper.DamageType damageType)
         {
-            if (_damageList1S == null)
+            if (!_damageList1S.TryGetValue(damageType, out CachingCollectionWithTarget<int[]> graphs))
             {
-                _damageList1S = new CachingCollectionWithTarget<Dictionary<ParserHelper.DamageType, int[]>>(log);
+                graphs = new CachingCollectionWithTarget<int[]>(log);
+                _damageList1S[damageType] = graphs;
             }
-            if (_damageList1S.TryGetValue(start, end, target, out Dictionary<ParserHelper.DamageType, int[]> res))
+            if (!graphs.TryGetValue(start, end, target, out int[] graph))
             {
-                return res[damageType];
-            }
-            int durationInMS = (int)(end - start);
-            int durationInS = durationInMS / 1000;
-            var dmgList = durationInS * 1000 != durationInMS ? new int[durationInS + 2] : new int[durationInS + 1];
-            var dmgListPower = new int[dmgList.Length];
-            var dmgListCondition = new int[dmgList.Length];
-            IReadOnlyList<AbstractHealthDamageEvent> damageEvents = GetDamageEvents(target, log, start, end);
-            // fill the graph
-            int previousTime = 0;
-            foreach (AbstractHealthDamageEvent dl in damageEvents)
-            {
-                int time = (int)Math.Ceiling((dl.Time - start) / 1000.0);
-                if (time != previousTime)
+                int durationInMS = (int)(end - start);
+                int durationInS = durationInMS / 1000;
+                graph = durationInS * 1000 != durationInMS ? new int[durationInS + 2] : new int[durationInS + 1];
+                // fill the graph
+                int previousTime = 0;
+                foreach (AbstractHealthDamageEvent dl in GetHitDamageEvents(target, log, start, end, damageType))
                 {
-                    for (int i = previousTime + 1; i <= time; i++)
+                    int time = (int)Math.Ceiling((dl.Time - start) / 1000.0);
+                    if (time != previousTime)
                     {
-                        dmgList[i] = dmgList[previousTime];
-                        dmgListPower[i] = dmgListPower[previousTime];
-                        dmgListCondition[i] = dmgListCondition[previousTime];
+                        for (int i = previousTime + 1; i <= time; i++)
+                        {
+                            graph[i] = graph[previousTime];
+                        }
                     }
+                    previousTime = time;
+                    graph[time] += dl.HealthDamage;
                 }
-                previousTime = time;
-                dmgList[time] += dl.HealthDamage;
-                if (dl.ConditionDamageBased(log))
+                for (int i = previousTime + 1; i < graph.Length; i++)
                 {
-                    dmgListCondition[time] += dl.HealthDamage;
+                    graph[i] = graph[previousTime];
                 }
-                else
-                {
-                    dmgListPower[time] += dl.HealthDamage;
-                }
+                //
+                graphs.Set(start, end, target, graph);
             }
-            for (int i = previousTime + 1; i < dmgList.Length; i++)
-            {
-                dmgList[i] = dmgList[previousTime];
-                dmgListPower[i] = dmgListPower[previousTime];
-                dmgListCondition[i] = dmgListCondition[previousTime];
-            }
-            //
-            res = new Dictionary<ParserHelper.DamageType, int[]> {
-                {ParserHelper.DamageType.All, dmgList },
-                { ParserHelper.DamageType.Power,dmgListPower },
-                { ParserHelper.DamageType.Condition,dmgListCondition }
-            };
-            _damageList1S.Set(start, end, target, res);
-            return res[damageType];
+            return graph;
         }
 
         public IReadOnlyList<double> Get1SBreakbarDamageList(ParsedEvtcLog log, long start, long end, AbstractActor target)
@@ -870,44 +847,17 @@ namespace GW2EIEvtcParser.EIData
         /// <summary>
         /// cached method for damage modifiers
         /// </summary>
-        internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorHitDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public IReadOnlyList<AbstractHealthDamageEvent> GetJustActorHitDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
         {
-            if (_hitSelfDamageEventsPerPhasePerTarget == null)
+            if (!_typedSelfHitDamageEvents.TryGetValue(damageType, out CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> hitDamageEventsPerPhasePerTarget))
             {
-                _hitSelfDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>(log);
+                hitDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>(log);
+                _typedSelfHitDamageEvents[damageType] = hitDamageEventsPerPhasePerTarget;
             }
-            if (!_hitSelfDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
+            if (!hitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
             {
-                dls = GetHitDamageEvents(target, log, start, end).Where(x => x.From == AgentItem).ToList();
-                _hitSelfDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
-            }
-            return dls;
-        }
-
-        internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorConditionHitDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
-        {
-            if (_conditionHitSelfDamageEventsPerPhasePerTarget == null)
-            {
-                _conditionHitSelfDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>(log);
-            }
-            if (!_conditionHitSelfDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
-            {
-                dls = GetJustActorHitDamageEvents(target, log, start, end).Where(x => x.ConditionDamageBased(log)).ToList();
-                _conditionHitSelfDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
-            }
-            return dls;
-        }
-
-        internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorPowerHitDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
-        {
-            if (_powerHitSelfDamageEventsPerPhasePerTarget == null)
-            {
-                _powerHitSelfDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>(log);
-            }
-            if (!_powerHitSelfDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
-            {
-                dls = GetJustActorHitDamageEvents(target, log, start, end).Where(x => !x.ConditionDamageBased(log)).ToList();
-                _powerHitSelfDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
+                dls = GetHitDamageEvents(target, log, start, end, damageType).Where(x => x.From == AgentItem).ToList();
+                hitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
             }
             return dls;
         }
