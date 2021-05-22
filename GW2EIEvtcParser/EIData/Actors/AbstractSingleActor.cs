@@ -176,7 +176,7 @@ namespace GW2EIEvtcParser.EIData
         }
 
         // Graph
-
+        // TODO: add support for strike and life leech stuff
         public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, AbstractActor target, ParserHelper.DamageType damageType = ParserHelper.DamageType.All)
         {
             if (_damageList1S == null)
