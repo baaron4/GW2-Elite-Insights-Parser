@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EIData
             _minionList.Add(minion);
         }
 
-        public override IReadOnlyList<AbstractHealthDamageEvent> GetDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractHealthDamageEvent> GetDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (DamageEvents == null)
             {
@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.EIData
             return DamageEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public override IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (BreakbarDamageEvents == null)
             {
@@ -84,7 +84,7 @@ namespace GW2EIEvtcParser.EIData
             return res;
         }*/
 
-        public override IReadOnlyList<AbstractHealthDamageEvent> GetDamageTakenEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractHealthDamageEvent> GetDamageTakenEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (DamageTakenEvents == null)
             {
@@ -109,7 +109,7 @@ namespace GW2EIEvtcParser.EIData
             return DamageTakenEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public override IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenEvents(AbstractActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (BreakbarDamageTakenEvents == null)
             {

@@ -393,6 +393,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Twisting Chaos",35032, Source.FightSpecific, BuffStackType.Stacking, 11, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/60/Twisting_Chaos.png"),
                 new Buff("Intervention",35000, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a2/Intervention_%28effect%29.png"),
                 new Buff("Bloodstone Protection",35168, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/4e/Bloodstone_Protection.png"),
+                new Buff("Bloodstone Blessed",34917, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/7a/Bloodstone_Blessed.png"),
                 // Gorseval
                 new Buff("Spirited Fusion",31722, Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/eb/Spirited_Fusion.png"),
                 new Buff("Protective Shadow", 31877, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/87/Protective_Shadow.png"),

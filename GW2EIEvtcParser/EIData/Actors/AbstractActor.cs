@@ -7,9 +7,9 @@ namespace GW2EIEvtcParser.EIData
 {
     public abstract class AbstractActor
     {
-        public AgentItem AgentItem { get; }
+        protected AgentItem AgentItem { get; }
         public string Character { get; protected set; }
-
+        public int UniqueID => AgentItem.UniqueID;
         public uint Toughness => AgentItem.Toughness;
         public uint Condition => AgentItem.Condition;
         public uint Concentration => AgentItem.Concentration;
@@ -47,11 +47,11 @@ namespace GW2EIEvtcParser.EIData
         }
         // Getters
         // Damage logs
-        public abstract IReadOnlyList<AbstractHealthDamageEvent> GetDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end);
+        public abstract IReadOnlyList<AbstractHealthDamageEvent> GetDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
 
-        public abstract IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end);
+        public abstract IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
 
-        public IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageEvents(AbstractActor target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
+        public IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
         {
             if (!_typedHitDamageEvents.TryGetValue(damageType, out CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> hitDamageEventsPerPhasePerTarget))
             {
@@ -85,9 +85,9 @@ namespace GW2EIEvtcParser.EIData
             return dls;
         }
 
-        public abstract IReadOnlyList<AbstractHealthDamageEvent> GetDamageTakenEvents(AbstractActor target, ParsedEvtcLog log, long start, long end);
+        public abstract IReadOnlyList<AbstractHealthDamageEvent> GetDamageTakenEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
 
-        public abstract IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenEvents(AbstractActor target, ParsedEvtcLog log, long start, long end);
+        public abstract IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
 
         // Cast logs
         public abstract IReadOnlyList<AbstractCastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end);
