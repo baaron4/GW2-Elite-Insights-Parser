@@ -12,8 +12,13 @@ namespace GW2EIEvtcParser.EIData
         }
 
         // Spec specific checks
-        protected override int CouldBeEssenceOfSpeed(AgentItem dst, long extension, ParsedEvtcLog log)
+        protected override int CouldBeEssenceOfSpeed(AgentItem dst, long extension, long buffID, ParsedEvtcLog log)
         {
+            BuffInfoEvent buffDescription = log.CombatData.GetBuffInfoEvent(buffID);
+            if (buffDescription != null && buffDescription.DurationCap == 0)
+            {
+                return base.CouldBeEssenceOfSpeed(dst, extension, buffID, log);
+            }
             if (extension <= EssenceOfSpeed && dst.Prof == "Soulbeast")
             {
                 if (log.PlayerListBySpec.ContainsKey("Herald") || log.PlayerListBySpec.ContainsKey("Tempest") || log.PlayerListBySpec.ContainsKey("Chronomancer"))
@@ -27,8 +32,13 @@ namespace GW2EIEvtcParser.EIData
             return -1;
         }
 
-        protected override HashSet<long> getIDs(long extension)
+        protected override HashSet<long> GetIDs(ParsedEvtcLog log, long buffID, long extension)
         {
+            BuffInfoEvent buffDescription = log.CombatData.GetBuffInfoEvent(buffID);
+            if (buffDescription != null && buffDescription.DurationCap == 0)
+            {
+                return base.GetIDs(log, buffID, extension);
+            }
             var res = new HashSet<long>();
             foreach (KeyValuePair<long, HashSet<long>> pair in DurationToIDs)
             {
