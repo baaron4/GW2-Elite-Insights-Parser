@@ -37,23 +37,32 @@ namespace GW2EIEvtcParser.EIData
             // Devastation
             new BuffDamageModifier(29395, "Vicious Lacerations", "3% per Stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", 92715, 102321, DamageModifierMode.PvE),
             new BuffDamageModifier(29395, "Vicious Lacerations", "2% per Stack", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", 0, 92715, DamageModifierMode.PvE),
-            new DamageLogApproximateDamageModifier("Unsuspecting Strikes", "25% if hp > 80%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Revenant, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", (x,log) =>
+            new DamageLogApproximateDamageModifier("Unsuspecting Strikes", "25% if target hp > 80%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Revenant, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", (x,log) =>
             {
-                var selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
-                if (selfHP < 0.0)
+                var foeHP = x.To.GetCurrentHealthPercent(log, x.Time);
+                if (foeHP < 0.0)
                 {
                     return false;
                 }
-                return selfHP > 80.0;
-            }, ByPresence, 102321, ulong.MaxValue, DamageModifierMode.PvE ),
-            new DamageLogApproximateDamageModifier("Unsuspecting Strikes", "10% if hp > 80%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", (x,log) =>
+                return foeHP > 80.0;
+            }, ByPresence, 102321, 115728, DamageModifierMode.PvE ),
+            new DamageLogApproximateDamageModifier("Unsuspecting Strikes", "20% if target hp > 80%", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Revenant, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", (x,log) =>
             {
-                var selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
-                if (selfHP < 0.0)
+                var foeHP = x.To.GetCurrentHealthPercent(log, x.Time);
+                if (foeHP < 0.0)
                 {
                     return false;
                 }
-                return selfHP > 80.0;
+                return foeHP > 80.0;
+            }, ByPresence, 115728, ulong.MaxValue, DamageModifierMode.PvE ),
+            new DamageLogApproximateDamageModifier("Unsuspecting Strikes", "10% if target hp > 80%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", (x,log) =>
+            {
+                var foeHP = x.To.GetCurrentHealthPercent(log, x.Time);
+                if (foeHP < 0.0)
+                {
+                    return false;
+                }
+                return foeHP > 80.0;
             }, ByPresence, 102321, ulong.MaxValue, DamageModifierMode.sPvPWvW ),
             new BuffDamageModifierTarget(738, "Targeted Destruction", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, "https://wiki.guildwars2.com/images/e/ed/Targeted_Destruction.png", 95535, ulong.MaxValue, DamageModifierMode.All),
             new BuffDamageModifierTarget(738, "Targeted Destruction", "10.0% if vuln", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, "https://wiki.guildwars2.com/images/e/ed/Targeted_Destruction.png", 92715, 95535, DamageModifierMode.PvE),

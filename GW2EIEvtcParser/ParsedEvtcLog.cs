@@ -44,8 +44,6 @@ namespace GW2EIEvtcParser
             PlayerAgents = new HashSet<AgentItem>(playerList.Select(x => x.AgentItem));
             _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Combat Events");
             CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList, operation);
-            _operation.UpdateProgressWithCancellationCheck("Checking CM");
-            FightData.SetCM(CombatData, AgentData, FightData);
             //
             _operation.UpdateProgressWithCancellationCheck("Checking Success");
             FightData.Logic.CheckSuccess(CombatData, AgentData, FightData, PlayerAgents);

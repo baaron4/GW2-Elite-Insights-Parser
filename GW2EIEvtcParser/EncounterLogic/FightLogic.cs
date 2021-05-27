@@ -282,7 +282,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal virtual List<ErrorEvent> GetCustomWarningMessages()
+        internal virtual List<ErrorEvent> GetCustomWarningMessages(FightData fightData)
         {
             return new List<ErrorEvent>();
         }
@@ -299,20 +299,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             phase.OverrideTimes(log);
         }
 
-        internal virtual List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
+        internal virtual List<AbstractBuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
         {
             return new List<AbstractBuffEvent>();
         }
 
-        protected static void NegateDamageAgainstBarrier(List<AgentItem> agentItems, Dictionary<AgentItem, List<AbstractHealthDamageEvent>> damageByDst)
+        protected static void NegateDamageAgainstBarrier(CombatData combatData, List<AgentItem> agentItems)
         {
             var dmgEvts = new List<AbstractHealthDamageEvent>();
             foreach (AgentItem agentItem in agentItems)
             {
-                if (damageByDst.TryGetValue(agentItem, out List<AbstractHealthDamageEvent> list))
-                {
-                    dmgEvts.AddRange(list);
-                }
+                dmgEvts.AddRange(combatData.GetDamageTakenData(agentItem));
             }
             foreach (AbstractHealthDamageEvent de in dmgEvts)
             {
@@ -348,12 +345,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }*/
 
-        internal virtual List<AbstractCastEvent> SpecialCastEventProcess(Dictionary<AgentItem, List<AnimatedCastEvent>> animatedCastEvent, Dictionary<AgentItem, List<WeaponSwapEvent>> weaponSwapData, Dictionary<long, List<AnimatedCastEvent>> _castDataById, SkillData skillData)
+        internal virtual List<AbstractCastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
         {
             return new List<AbstractCastEvent>();
         }
 
-        internal virtual List<AbstractHealthDamageEvent> SpecialDamageEventProcess(Dictionary<AgentItem, List<AbstractHealthDamageEvent>> damageBySrc, Dictionary<AgentItem, List<AbstractHealthDamageEvent>> damageByDst, Dictionary<long, List<AbstractHealthDamageEvent>> damageById, SkillData skillData)
+        internal virtual List<AbstractHealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
         {
             return new List<AbstractHealthDamageEvent>();
         }

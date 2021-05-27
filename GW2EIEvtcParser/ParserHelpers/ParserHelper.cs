@@ -506,8 +506,9 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.QadimLamp:
                     return "https://i.imgur.com/89Kjv0N.png";
                 case ArcDPSEnums.TrashID.PyreGuardianRetal:
-                case ArcDPSEnums.TrashID.PyreGuardianResolution:
                     return "https://i.imgur.com/WC6LRkO.png";
+                case ArcDPSEnums.TrashID.PyreGuardianResolution:
+                    return "https://i.imgur.com/26rY9IM.png";
                 case ArcDPSEnums.TrashID.PyreGuardianStab:
                     return "https://i.imgur.com/ISa0urR.png";
                 case ArcDPSEnums.TrashID.PyreGuardianProtect:
