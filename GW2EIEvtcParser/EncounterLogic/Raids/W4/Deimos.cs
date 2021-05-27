@@ -104,7 +104,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
+        internal override List<AbstractBuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
         {
             AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
             if (target == null)
@@ -112,26 +112,24 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Deimos not found");
             }
             var res = new List<AbstractBuffEvent>();
-            if (buffsById.TryGetValue(38224, out List<AbstractBuffEvent> list))
+            IReadOnlyList<AbstractBuffEvent> signets = combatData.GetBuffData(38224);
+            foreach (AbstractBuffEvent bfe in signets)
             {
-                foreach (AbstractBuffEvent bfe in list)
+                if (bfe is BuffApplyEvent ba)
                 {
-                    if (bfe is BuffApplyEvent ba)
+                    AbstractBuffEvent removal = signets.FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > bfe.Time && x.Time < bfe.Time + 30000);
+                    if (removal == null)
                     {
-                        AbstractBuffEvent removal = list.FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > bfe.Time && x.Time < bfe.Time + 30000);
-                        if (removal == null)
-                        {
-                            res.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224), 1, 0));
-                            res.Add(new BuffRemoveManualEvent(ParserHelper._unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224)));
-                        }
+                        res.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224), 1, 0));
+                        res.Add(new BuffRemoveManualEvent(ParserHelper._unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224)));
                     }
-                    else if (bfe is BuffRemoveAllEvent)
+                }
+                else if (bfe is BuffRemoveAllEvent)
+                {
+                    AbstractBuffEvent apply = signets.FirstOrDefault(x => x is BuffApplyEvent && x.Time < bfe.Time && x.Time > bfe.Time - 30000);
+                    if (apply == null)
                     {
-                        AbstractBuffEvent apply = list.FirstOrDefault(x => x is BuffApplyEvent && x.Time < bfe.Time && x.Time > bfe.Time - 30000);
-                        if (apply == null)
-                        {
-                            res.Add(new BuffApplyEvent(ParserHelper._unknownAgent, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(38224), uint.MaxValue, true));
-                        }
+                        res.Add(new BuffApplyEvent(ParserHelper._unknownAgent, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(38224), uint.MaxValue, true));
                     }
                 }
             }
@@ -233,13 +231,18 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             return start;
         }
-        
-        internal override List<ErrorEvent> GetCustomWarningMessages()
+
+        internal override List<ErrorEvent> GetCustomWarningMessages(FightData fightData)
         {
-            return new List<ErrorEvent>()
+            var res = new List<ErrorEvent>()
             {
                 new ErrorEvent("Missing data due to green ports")
             };
+            if (!fightData.IsCM)
+            {
+                res.Add(new ErrorEvent("Missing outgoing Saul damage due to % based damage"));
+            }
+            return res;
         }
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
@@ -520,11 +523,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Deimos not found");
             }
             FightData.CMStatus cmStatus = (target.GetHealth(combatData) > 40e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
-            if (cmStatus == FightData.CMStatus.NoCM)
-            {
-                combatData.AddCustomWarningMessage("Missing outgoing Saul damage due to % based damage");
-            }
-
+            
             if (_deimos10PercentTime > 0)
             {
                 // Deimos gains additional health during the last 10% so the max-health needs to be corrected

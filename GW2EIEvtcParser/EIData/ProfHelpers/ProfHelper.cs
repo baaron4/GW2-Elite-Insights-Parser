@@ -14,16 +14,13 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(9428, 9428, 500), // Hydro Sigil
         };
 
-        internal static void AttachMasterToGadgetByCastData(Dictionary<long, List<AnimatedCastEvent>> castData, HashSet<AgentItem> gadgets, List<long> castIDS, long castEndThreshold)
+        internal static void AttachMasterToGadgetByCastData(CombatData combatData, HashSet<AgentItem> gadgets, List<long> castIDS, long castEndThreshold)
         {
             var possibleCandidates = new HashSet<AgentItem>();
             var gadgetSpawnCastData = new List<AnimatedCastEvent>();
             foreach (long id in castIDS)
             {
-                if (castData.TryGetValue(id, out List<AnimatedCastEvent> list))
-                {
-                    gadgetSpawnCastData.AddRange(list);
-                }
+                gadgetSpawnCastData.AddRange(combatData.GetAnimatedCastData(id));
             }
             gadgetSpawnCastData.Sort((x, y) => x.Time.CompareTo(y.Time));
             foreach (AbstractCastEvent castEvent in gadgetSpawnCastData)
@@ -57,19 +54,16 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        internal static HashSet<AgentItem> GetOffensiveGadgetAgents(Dictionary<long, List<AbstractHealthDamageEvent>> damageData, long damageSkillID, HashSet<AgentItem> playerAgents)
+        internal static HashSet<AgentItem> GetOffensiveGadgetAgents(CombatData combatData, long damageSkillID, HashSet<AgentItem> playerAgents)
         {
             var res = new HashSet<AgentItem>();
-            if (damageData.TryGetValue(damageSkillID, out List<AbstractHealthDamageEvent> list))
+            foreach (AbstractHealthDamageEvent evt in combatData.GetDamageData(damageSkillID))
             {
-                foreach (AbstractHealthDamageEvent evt in list)
+                // dst must no be a gadget nor a friendly player
+                // src must be a masterless gadget
+                if (!playerAgents.Contains(evt.To.GetFinalMaster()) && evt.To.Type != AgentItem.AgentType.Gadget && evt.From.Type == AgentItem.AgentType.Gadget && evt.From.Master == null)
                 {
-                    // dst must no be a gadget nor a friendly player
-                    // src must be a masterless gadget
-                    if (!playerAgents.Contains(evt.To.GetFinalMaster()) && evt.To.Type != AgentItem.AgentType.Gadget && evt.From.Type == AgentItem.AgentType.Gadget && evt.From.Master == null)
-                    {
-                        res.Add(evt.From);
-                    }
+                    res.Add(evt.From);
                 }
             }
             return res;
@@ -83,14 +77,14 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        internal static void AttachMasterToRacialGadgets(List<Player> players, Dictionary<long, List<AbstractHealthDamageEvent>> damageData, Dictionary<long, List<AnimatedCastEvent>> castData)
+        internal static void AttachMasterToRacialGadgets(List<Player> players, CombatData combatData)
         {
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
             // Sylvari stuff
-            HashSet<AgentItem> seedTurrets = GetOffensiveGadgetAgents(damageData, 12455, playerAgents);
-            HashSet<AgentItem> graspingWines = GetOffensiveGadgetAgents(damageData, 1290, playerAgents);
-            AttachMasterToGadgetByCastData(castData, seedTurrets, new List<long> { 12456, 12457 }, 1000);
-            AttachMasterToGadgetByCastData(castData, graspingWines, new List<long> { 12453 }, 1000);
+            HashSet<AgentItem> seedTurrets = GetOffensiveGadgetAgents(combatData, 12455, playerAgents);
+            HashSet<AgentItem> graspingWines = GetOffensiveGadgetAgents(combatData, 1290, playerAgents);
+            AttachMasterToGadgetByCastData(combatData, seedTurrets, new List<long> { 12456, 12457 }, 1000);
+            AttachMasterToGadgetByCastData(combatData, graspingWines, new List<long> { 12453 }, 1000);
             // melandru avatar works fine already
         }
 
