@@ -62,7 +62,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override List<ErrorEvent> GetCustomWarningMessages()
+        internal override List<ErrorEvent> GetCustomWarningMessages(FightData fightData)
         {
             return new List<ErrorEvent>()
             {

@@ -8,10 +8,5 @@
         {
             Time = time;
         }
-
-        internal void OverrideTime(long time)
-        {
-            Time = time;
-        }
     }
 }

@@ -362,7 +362,7 @@ namespace GW2EIBuilders
             int count = 0;
             foreach (Player player in _noFakePlayers)
             {
-                FinalToPlayerSupport support = player.GetToPlayerSupportStats(_log, phase.Start, phase.End);
+                FinalToPlayersSupport support = player.GetToPlayerSupportStats(_log, phase.Start, phase.End);
 
                 WriteLine(new[] { player.Group.ToString(), player.Prof, player.Character,
                 support.CondiCleanse.ToString(),support.CondiCleanseTime.ToString(), support.CondiCleanseSelf.ToString(), support.CondiCleanseTimeSelf.ToString(), support.BoonStrips.ToString(), support.BoonStripsTime.ToString(), support.Resurrects.ToString(),support.ResurrectTime.ToString() });

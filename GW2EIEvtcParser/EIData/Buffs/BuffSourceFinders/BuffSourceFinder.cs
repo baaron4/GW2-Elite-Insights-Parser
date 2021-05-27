@@ -33,7 +33,7 @@ namespace GW2EIEvtcParser.EIData
             return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillId) && x.Time <= time && time <= x.EndTime + ParserHelper.ServerDelayConstant).ToList();
         }
         // Spec specific checks
-        protected virtual int CouldBeEssenceOfSpeed(AgentItem dst, long extension, ParsedEvtcLog log)
+        protected virtual int CouldBeEssenceOfSpeed(AgentItem dst, long extension, long buffID, ParsedEvtcLog log)
         {
             if (extension == EssenceOfSpeed && dst.Prof == "Soulbeast")
             {
@@ -64,7 +64,7 @@ namespace GW2EIEvtcParser.EIData
             return false;
         }
 
-        protected virtual HashSet<long> getIDs(long extension)
+        protected virtual HashSet<long> GetIDs(ParsedEvtcLog log, long buffID, long extension)
         {
             if (DurationToIDs.TryGetValue(extension, out HashSet<long> idsToCheck))
             {
@@ -80,13 +80,13 @@ namespace GW2EIEvtcParser.EIData
             {
                 return dst;
             }
-            int essenceOfSpeedCheck = CouldBeEssenceOfSpeed(dst, extension, log);
+            int essenceOfSpeedCheck = CouldBeEssenceOfSpeed(dst, extension, buffID, log);
             // can only be the soulbeast
             if (essenceOfSpeedCheck == 1)
             {
                 return dst;
             }
-            HashSet<long> idsToCheck = getIDs(extension);
+            HashSet<long> idsToCheck = GetIDs(log, buffID, extension);
             if (idsToCheck.Any())
             {
                 List<AbstractCastEvent> cls = GetExtensionSkills(log, time, idsToCheck);
