@@ -224,7 +224,7 @@ namespace GW2EIBuilders.HtmlModels
             return data;
         }
 
-        private static List<object> GetSupportStatData(FinalToPlayerSupport support)
+        private static List<object> GetSupportStatData(FinalToPlayersSupport support)
         {
             var data = new List<object>()
                 {
@@ -354,7 +354,7 @@ namespace GW2EIBuilders.HtmlModels
 
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                FinalToPlayerSupport support = actor.GetToPlayerSupportStats(log, phase.Start, phase.End);
+                FinalToPlayersSupport support = actor.GetToPlayerSupportStats(log, phase.Start, phase.End);
                 list.Add(GetSupportStatData(support));
             }
             return list;

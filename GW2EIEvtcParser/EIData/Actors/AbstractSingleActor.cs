@@ -30,7 +30,7 @@ namespace GW2EIEvtcParser.EIData
         private CachingCollectionWithTarget<FinalDefenses> _defenseStats;
         private CachingCollectionWithTarget<FinalGameplayStats> _gameplayStats;
         private CachingCollectionWithTarget<FinalSupport> _supportStats;
-        private CachingCollection<FinalToPlayerSupport> _toPlayerSupportStats;
+        private CachingCollection<FinalToPlayersSupport> _toPlayerSupportStats;
 
         protected AbstractSingleActor(AgentItem agent) : base(agent)
         {
@@ -442,15 +442,15 @@ namespace GW2EIEvtcParser.EIData
             return value;
         }
 
-        public FinalToPlayerSupport GetToPlayerSupportStats(ParsedEvtcLog log, long start, long end)
+        public FinalToPlayersSupport GetToPlayerSupportStats(ParsedEvtcLog log, long start, long end)
         {
             if (_toPlayerSupportStats == null)
             {
-                _toPlayerSupportStats = new CachingCollection<FinalToPlayerSupport>(log);
+                _toPlayerSupportStats = new CachingCollection<FinalToPlayersSupport>(log);
             }
-            if (!_toPlayerSupportStats.TryGetValue(start, end, out FinalToPlayerSupport value))
+            if (!_toPlayerSupportStats.TryGetValue(start, end, out FinalToPlayersSupport value))
             {
-                value = new FinalToPlayerSupport(log, this, start, end);
+                value = new FinalToPlayersSupport(log, this, start, end);
                 _toPlayerSupportStats.Set(start, end, value);
             }
             return value;

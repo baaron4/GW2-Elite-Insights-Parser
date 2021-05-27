@@ -4,7 +4,7 @@ using static GW2EIEvtcParser.EIData.Buff;
 namespace GW2EIEvtcParser.EIData
 {
     // to match non generic support stats
-    public class FinalToPlayerSupport
+    public class FinalToPlayersSupport
     {
         //public long allHeal;
         public int Resurrects { get; internal set; }
@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EIData
         public int BoonStrips { get; internal set; }
         public double BoonStripsTime { get; internal set; }
 
-        internal FinalToPlayerSupport(ParsedEvtcLog log, AbstractSingleActor actor, long start, long end)
+        internal FinalToPlayersSupport(ParsedEvtcLog log, AbstractSingleActor actor, long start, long end)
         {
             FinalSupportAll totals = actor.GetSupportStats(log, start, end);
             Resurrects = totals.Resurrects;
