@@ -103,7 +103,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (pushes.Count > 0)
             {
                 AbstractCastEvent push = pushes[0];
-                phaseStarts.Add(push.EndTime);
+                phaseStarts.Add(push.Time);
                 foreach (long magmaDrop in phaseEnds)
                 {
                     push = pushes.FirstOrDefault(x => x.Time >= magmaDrop);
