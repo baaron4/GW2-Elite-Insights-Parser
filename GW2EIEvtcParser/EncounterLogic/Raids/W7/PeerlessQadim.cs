@@ -111,7 +111,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         break;
                     }
-                    phaseStarts.Add(push.EndTime);
+                    phaseStarts.Add(push.Time);
                 }
             }
             // rush to pylon
@@ -126,6 +126,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             for (int i = 0; i < phaseStarts.Count; i++)
             {
                 var phase = new PhaseData(phaseStarts[i], phaseEnds[i], "Phase " + (i + 1));
+                phase.AddTarget(mainTarget);
+                phases.Add(phase);
+            }
+            string[] intermissionNames = { "Magma Drop 1", "Magma Drop 2", "North Pylon", "SouthWest Pylon", "SouthEast Pylon" };
+            for (int i = 0; i < phaseEnds.Count - 1; i++)
+            {
+                var phase = new PhaseData(phaseEnds[i], phaseStarts[i + 1], intermissionNames[i]);
                 phase.AddTarget(mainTarget);
                 phases.Add(phase);
             }
