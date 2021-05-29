@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffLossCastFinder(10234, 10233, EIData.InstantCastFinder.DefaultICD, (brae, combatData) => {
                 return combatData.GetBuffData(brae.To).Any(x =>
                                     x is BuffApplyEvent bae &&
-                                    bae.BuffID == 13017 &&
+                                    bae.BuffID == 10269 &&
                                     Math.Abs(bae.AppliedDuration - 2000) <= ServerDelayConstant &&
                                     bae.CreditedBy == brae.To &&
                                     Math.Abs(brae.Time - bae.Time) <= ServerDelayConstant
