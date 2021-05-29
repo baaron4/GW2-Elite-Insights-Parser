@@ -43,6 +43,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Facet of Strength",27376, ParserHelper.Source.Herald, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a8/Facet_of_Strength.png"),
                 new Buff("Facet of Strength (Traited)",51700, ParserHelper.Source.Herald, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a8/Facet_of_Strength.png"),//Lingering buff with Draconic Echo trait
                 new Buff("Facet of Chaos",27983, ParserHelper.Source.Herald, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/c7/Facet_of_Chaos.png"),
+                new Buff("Facet of Chaos (Traited)",51685, ParserHelper.Source.Herald, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/c7/Facet_of_Chaos.png"),
                 new Buff("Facet of Nature",29275, ParserHelper.Source.Herald, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e9/Facet_of_Nature.png"),
                 new Buff("Facet of Nature (Traited)",51681, ParserHelper.Source.Herald, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e9/Facet_of_Nature.png"),//Lingering buff with Draconic Echo trait
                 new Buff("Facet of Nature-Assassin",51692, ParserHelper.Source.Herald, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/c/cd/Facet_of_Nature%E2%80%95Assassin.png"),
