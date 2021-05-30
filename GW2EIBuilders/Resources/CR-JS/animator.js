@@ -592,7 +592,7 @@ class Animator {
         }
         
         this.playerData.forEach(function (value, key, map) {
-            if (!value.selected) {
+            if (!value.isSelected()) {
                 value.draw();
                 if (_this.attachedActorData.has(key)) {
                     _this.attachedActorData.get(key).draw();
@@ -601,7 +601,7 @@ class Animator {
         });
         
         this.friendlyMobData.forEach(function (value, key, map) {
-            if (!value.selected) {
+            if (!value.isSelected()) {
                 value.draw();
                 if (_this.attachedActorData.has(key)) {
                     _this.attachedActorData.get(key).draw();
@@ -611,7 +611,7 @@ class Animator {
         
         if (this.displayTrashMobs) {
             this.trashMobData.forEach(function (value, key, map) {
-                if (!value.selected) {
+                if (!value.isSelected()) {
                     value.draw();
                     if (_this.attachedActorData.has(key)) {
                         _this.attachedActorData.get(key).draw();
@@ -621,7 +621,7 @@ class Animator {
         }
         
         this.targetData.forEach(function (value, key, map) {
-            if (!value.selected) {
+            if (!value.isSelected()) {
                 value.draw();
                 if (_this.attachedActorData.has(key)) {
                     _this.attachedActorData.get(key).draw();
@@ -630,8 +630,8 @@ class Animator {
         });
         if (this.selectedActor !== null) {
             this.selectedActor.draw();
-            if (this.attachedActorData.has(this.selectedActorID)) {
-                this.attachedActorData.get(this.selectedActorID).draw();
+            if (this.attachedActorData.has(this.reactiveDataStatus.selectedActorID)) {
+                this.attachedActorData.get(this.reactiveDataStatus.selectedActorID).draw();
             }
         }
     }

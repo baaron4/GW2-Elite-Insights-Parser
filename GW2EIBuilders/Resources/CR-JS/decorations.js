@@ -77,7 +77,7 @@ class FacingMechanicDrawable extends MechanicDrawable {
         ctx.rotate(angle);
         const facingFullSize = 5 * this.master.pixelSize / (3 * animator.scale);
         const facingHalfSize = facingFullSize / 2;
-        if (this.master !== null && animator.coneControl.enabled && this.master.selected) {           
+        if (this.master !== null && animator.coneControl.enabled && this.master.isSelected()) {           
             ctx.save(); 
             var coneOpening = ToRadians(animator.coneControl.openingAngle);
             ctx.rotate(0.5 * coneOpening);
