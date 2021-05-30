@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser.EIData
         protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log)
         {
             log.FightData.Logic.ComputeNPCCombatReplayActors(this, log, CombatReplay);
-            if (CombatReplay.Rotations.Any() && (log.FightData.Logic.Targets.Contains(this) || log.Friendlies.Contains(this)))
+            if (CombatReplay.Rotations.Any() && (log.FightData.Logic.TargetAgents.Contains(AgentItem) || log.FriendlyAgents.Contains(AgentItem)))
             {
                 CombatReplay.Decorations.Add(new FacingDecoration(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));
             }
@@ -54,7 +54,7 @@ namespace GW2EIEvtcParser.EIData
 
         protected override bool InitCombatReplay(ParsedEvtcLog log)
         {
-            if (base.InitCombatReplay(log))
+            if (base.InitCombatReplay(log) && !log.FriendlyAgents.Contains(AgentItem))
             {
                 // Trim
                 DespawnEvent despawnCheck = log.CombatData.GetDespawnEvents(AgentItem).LastOrDefault();

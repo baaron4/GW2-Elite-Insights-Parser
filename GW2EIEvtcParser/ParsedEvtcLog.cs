@@ -17,6 +17,7 @@ namespace GW2EIEvtcParser
         public IReadOnlyList<Player> PlayerList { get; }
         public IReadOnlyList<AbstractSingleActor> Friendlies { get; }
         public IReadOnlyCollection<AgentItem> PlayerAgents { get; }
+        public IReadOnlyCollection<AgentItem> FriendlyAgents { get; }
         public bool IsBenchmarkMode => FightData.Logic.Mode == FightLogic.ParseMode.Benchmark;
         public IReadOnlyDictionary<string, List<AbstractSingleActor>> FriendliesListBySpec { get; }
         public DamageModifiersContainer DamageModifiers { get; }
@@ -44,6 +45,7 @@ namespace GW2EIEvtcParser
             //
             FriendliesListBySpec = friendlies.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
             PlayerAgents = new HashSet<AgentItem>(playerList.Select(x => x.AgentItem));
+            FriendlyAgents = new HashSet<AgentItem>(friendlies.Select(x => x.AgentItem));
             _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Combat Events");
             CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList, operation);
             //

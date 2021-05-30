@@ -33,7 +33,7 @@ namespace GW2EIEvtcParser.ParsedData
         public uint HitboxHeight { get; }
 
         public bool IsFake { get; }
-        public bool IsNotInSquadFriendlyPlayer { get; }
+        public bool IsNotInSquadFriendlyPlayer { get; private set; }
 
         public bool HasCommanderTag { get; protected set; }
 
@@ -109,6 +109,11 @@ namespace GW2EIEvtcParser.ParsedData
         internal AgentItem()
         {
             UniqueID = AgentCount++;
+        }
+
+        internal void OverrideIsNotInSquadFriendlyPlayer(bool status)
+        {
+            IsNotInSquadFriendlyPlayer = status;
         }
 
         internal void OverrideType(AgentType type)

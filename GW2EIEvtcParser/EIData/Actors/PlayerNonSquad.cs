@@ -14,7 +14,6 @@ namespace GW2EIEvtcParser.EIData
             {
                 throw new InvalidDataException("Agent is not a squad Player");
             }
-            Group = 51;
             Account = "Non Squad Player " + (++NonSquadPlayers);
         }
 
