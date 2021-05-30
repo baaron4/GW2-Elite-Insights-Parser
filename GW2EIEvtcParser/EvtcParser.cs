@@ -765,7 +765,6 @@ namespace GW2EIEvtcParser
             {
                 throw new MissingKeyActorsException("No Targets found");
             }
-            _fightData.Logic.ValidateTargetsAndTrashMobs();
         }
 
         //
