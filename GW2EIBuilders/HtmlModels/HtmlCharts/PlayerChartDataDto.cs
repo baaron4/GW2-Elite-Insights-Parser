@@ -11,7 +11,7 @@ namespace GW2EIBuilders.HtmlModels
         public PlayerDamageChartDto<int> ConditionDamage { get; }
         public PlayerDamageChartDto<double> BreakbarDamage { get; }
 
-        private PlayerChartDataDto(ParsedEvtcLog log, PhaseData phase, Player p) : base(log, phase, p, true)
+        private PlayerChartDataDto(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor p) : base(log, phase, p, true)
         {
             Damage = new PlayerDamageChartDto<int>()
             {
@@ -33,7 +33,7 @@ namespace GW2EIBuilders.HtmlModels
                 Total = p.Get1SBreakbarDamageList(log, phase.Start, phase.End, null),
                 Targets = new List<IReadOnlyList<double>>()
             };
-            foreach (NPC target in phase.Targets)
+            foreach (AbstractSingleActor target in phase.Targets)
             {
                 Damage.Targets.Add(p.Get1SDamageList(log, phase.Start, phase.End, target, ParserHelper.DamageType.All));
                 PowerDamage.Targets.Add(p.Get1SDamageList(log, phase.Start, phase.End, target, ParserHelper.DamageType.Power));
@@ -46,9 +46,9 @@ namespace GW2EIBuilders.HtmlModels
         {
             var list = new List<PlayerChartDataDto>();
 
-            foreach (Player p in log.PlayerList)
+            foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                list.Add(new PlayerChartDataDto(log, phase, p));
+                list.Add(new PlayerChartDataDto(log, phase, actor));
             }
             return list;
         }

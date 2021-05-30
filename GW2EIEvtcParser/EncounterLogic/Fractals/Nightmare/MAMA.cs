@@ -51,7 +51,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mama = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.MAMA);
+            AbstractSingleActor mama = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.MAMA);
             if (mama == null)
             {
                 throw new MissingKeyActorsException("MAMA not found");
@@ -76,7 +76,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AddTargetsToPhaseAndFit(phase, ids, log);
                     if (phase.Targets.Count > 0)
                     {
-                        NPC phaseTar = phase.Targets[0];
+                        AbstractSingleActor phaseTar = phase.Targets[0];
                         switch (phaseTar.ID)
                         {
                             case (int)ArcDPSEnums.TrashID.GreenKnight:

@@ -139,7 +139,7 @@ namespace GW2EIEvtcParser
             BarrierUpdate = 38,
             StatReset = 39, 
             Extension = 40,
-            APIDelayed = 40,
+            APIDelayed = 41,
             Unknown
         };
 
@@ -314,6 +314,7 @@ namespace GW2EIEvtcParser
         private const int BloodstoneShard = -11;
         private const int ChargedBloodstone = -12;
         private const int PyreGuardianResolution = -13;
+        private const int CASword = -14;
 
 
         //
@@ -442,6 +443,7 @@ namespace GW2EIEvtcParser
             // CA
             ConjuredGreatsword = 21255,
             ConjuredShield = 21170,
+            ConjuredPlayerSword = CASword,
             // Qadim
             LavaElemental1 = 21236,
             LavaElemental2 = 21078,

@@ -21,10 +21,10 @@ namespace GW2EIBuilders.HtmlModels
             Dimished = (consume.Buff.ID == 46587 || consume.Buff.ID == 46668);
         }
 
-        public static List<FoodDto> BuildPlayerFoodData(ParsedEvtcLog log, Player p, Dictionary<long, Buff> usedBuffs)
+        public static List<FoodDto> BuildFoodData(ParsedEvtcLog log, AbstractSingleActor actor, Dictionary<long, Buff> usedBuffs)
         {
             var list = new List<FoodDto>();
-            IReadOnlyList<Consumable> consume = p.GetConsumablesList(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<Consumable> consume = actor.GetConsumablesList(log, 0, log.FightData.FightEnd);
 
             foreach (Consumable entry in consume)
             {

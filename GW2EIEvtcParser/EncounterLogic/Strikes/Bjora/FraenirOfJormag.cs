@@ -36,13 +36,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC fraenir = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.FraenirOfJormag);
+            AbstractSingleActor fraenir = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.FraenirOfJormag);
             if (fraenir == null)
             {
                 throw new MissingKeyActorsException("Fraenir of Jormag not found");
             }
             phases[0].AddTarget(fraenir);
-            NPC icebrood = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.IcebroodConstructFraenir);
+            AbstractSingleActor icebrood = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.IcebroodConstructFraenir);
             if (icebrood != null)
             {
                 phases[0].AddTarget(icebrood);

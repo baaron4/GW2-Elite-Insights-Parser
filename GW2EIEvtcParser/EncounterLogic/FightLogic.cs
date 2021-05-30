@@ -20,9 +20,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         private readonly int _basicMechanicsCount;
         public bool HasNoFightSpecificMechanics => MechanicList.Count == _basicMechanicsCount;
         public IReadOnlyList<NPC> TrashMobs => _trashMobs;
-        public IReadOnlyList<NPC> Targets => _targets;
+        public IReadOnlyList<AbstractSingleActor> Targets => _targets;
         protected readonly List<NPC> _trashMobs = new List<NPC>();
-        protected readonly List<NPC> _targets = new List<NPC>();
+        protected readonly List<AbstractSingleActor> _targets = new List<AbstractSingleActor>();
 
         public bool Targetless { get; protected set; } = false;
         protected int GenericTriggerID { get; }
@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         // Only used for CSV files
         public NPC GetLegacyTarget()
         {
-            return Targets.FirstOrDefault();
+            return Targets.OfType<NPC>().FirstOrDefault();
         }
 
         internal MechanicData GetMechanicData()
@@ -81,7 +81,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal virtual string GetLogicName(ParsedEvtcLog log)
         {
-            NPC target = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);
             if (target == null)
             {
                 return "UNKNOWN";
@@ -142,7 +142,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             _trashMobs.Sort((x, y) => x.FirstAware.CompareTo(y.FirstAware));
         }
 
-        protected static List<PhaseData> GetPhasesByHealthPercent(ParsedEvtcLog log, NPC mainTarget, List<double> thresholds)
+        protected static List<PhaseData> GetPhasesByHealthPercent(ParsedEvtcLog log, AbstractSingleActor mainTarget, List<double> thresholds)
         {
             var phases = new List<PhaseData>();
             if (thresholds.Count == 0)
@@ -174,7 +174,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        protected static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, NPC mainTarget, bool addSkipPhases, bool beginWithStart)
+        protected static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart)
         {
             long fightDuration = log.FightData.FightEnd;
             var phases = new List<PhaseData>();
@@ -230,7 +230,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return new List<PhaseData>();
             }
             var breakbarPhases = new List<PhaseData>();
-            foreach (NPC target in Targets)
+            foreach (AbstractSingleActor target in Targets)
             {
                 int i = 0;
                 IReadOnlyList<BreakbarStateEvent> breakbarStateEvents = log.CombatData.GetBreakbarStateEvents(target.AgentItem);
@@ -273,7 +273,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal virtual List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Main target of the fight not found");
@@ -289,7 +289,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected void AddTargetsToPhaseAndFit(PhaseData phase, List<int> ids, ParsedEvtcLog log)
         {
-            foreach (NPC target in Targets)
+            foreach (AbstractSingleActor target in Targets)
             {
                 if (ids.Contains(target.ID) && phase.InInterval(Math.Max(target.FirstAware, 0)))
                 {
@@ -355,7 +355,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<AbstractHealthDamageEvent>();
         }
 
-        internal virtual void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
+        internal virtual void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
         }
 
@@ -389,7 +389,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             long maxTime = long.MinValue;
             foreach (int id in idsToUse)
             {
-                NPC target = Targets.FirstOrDefault(x => x.ID == id);
+                AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == id);
                 if (target == null)
                 {
                     return;
@@ -438,7 +438,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return true;
         }
 
-        protected static void SetSuccessByCombatExit(List<NPC> targets, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+        protected static void SetSuccessByCombatExit(List<AbstractSingleActor> targets, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             if (targets.Count == 0)
             {
@@ -446,7 +446,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             var targetExits = new List<ExitCombatEvent>();
             var lastTargetDamages = new List<AbstractHealthDamageEvent>();
-            foreach (NPC t in targets)
+            foreach (AbstractSingleActor t in targets)
             {
                 EnterCombatEvent enterCombat = combatData.GetEnterCombatEvents(t.AgentItem).LastOrDefault();
                 if (enterCombat != null)
@@ -486,7 +486,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return fightData.LogStart;
         }
 
-        internal virtual void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal virtual void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
             ComputeFightTargets(agentData, combatData);
         }

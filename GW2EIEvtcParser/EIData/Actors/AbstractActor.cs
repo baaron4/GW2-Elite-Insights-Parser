@@ -9,6 +9,7 @@ namespace GW2EIEvtcParser.EIData
     {
         protected AgentItem AgentItem { get; }
         public string Character { get; protected set; }
+
         public int UniqueID => AgentItem.UniqueID;
         public uint Toughness => AgentItem.Toughness;
         public uint Condition => AgentItem.Condition;
@@ -22,9 +23,7 @@ namespace GW2EIEvtcParser.EIData
         public int ID => AgentItem.ID;
         public uint HitboxHeight => AgentItem.HitboxHeight;
         public uint HitboxWidth => AgentItem.HitboxWidth;
-        public bool IsFakeActor => IsDummyActor || IsCustomActor;
-        public bool IsDummyActor => AgentItem.IsDummy;
-        public bool IsCustomActor { get; protected set; } = false;
+        public bool IsFakeActor => AgentItem.IsFake;
         // Damage
         protected List<AbstractHealthDamageEvent> DamageEvents { get; set; }
         protected Dictionary<AgentItem, List<AbstractHealthDamageEvent>> DamageEventByDst { get; set; }
@@ -99,18 +98,6 @@ namespace GW2EIEvtcParser.EIData
             return (evt.Time >= start && evt.Time <= end) || // start inside
                 (evt.EndTime >= start && evt.EndTime <= end) || // end inside
                 (evt.Time <= start && evt.EndTime >= end); // start before, end after
-        }
-
-        protected static void Add<T>(Dictionary<T, long> dictionary, T key, long value)
-        {
-            if (dictionary.TryGetValue(key, out long existing))
-            {
-                dictionary[key] = existing + value;
-            }
-            else
-            {
-                dictionary.Add(key, value);
-            }
         }
     }
 }

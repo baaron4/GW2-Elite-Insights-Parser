@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterCategoryInformation.SubCategory = SubFightCategory.ShatteredObservatory;
         }
 
-        protected static HashSet<AgentItem> GetParticipatingPlayerAgents(NPC target, CombatData combatData, IReadOnlyCollection<AgentItem> playerAgents)
+        protected static HashSet<AgentItem> GetParticipatingPlayerAgents(AbstractSingleActor target, CombatData combatData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             if (target == null)
             {
@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <summary>
         /// Returns true if the buff count was not reached so that another method can be called, if necessary
         /// </summary>
-        protected static bool SetSuccessByBuffCount(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, NPC target, long buffID, int count)
+        protected static bool SetSuccessByBuffCount(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, AbstractSingleActor target, long buffID, int count)
         {
             if (target == null)
             {
@@ -39,7 +39,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AbstractBuffEvent last = invulsTarget.Last();
                 if (!(last is BuffApplyEvent))
                 {
-                    SetSuccessByCombatExit(new List<NPC> { target }, combatData, fightData, playerAgents);
+                    SetSuccessByCombatExit(new List<AbstractSingleActor> { target }, combatData, fightData, playerAgents);
                     return false;
                 }
             }

@@ -32,7 +32,7 @@ class MechanicDrawable {
         } else {
             if (this.master === null) {
                 let masterId = this.connectedTo;
-                this.master = animator.playerData.has(masterId) ? animator.playerData.get(masterId) : animator.trashMobData.has(masterId) ? animator.trashMobData.get(masterId) : animator.targetData.get(masterId);
+                this.master = animator.playerData.get(masterId) ||  animator.trashMobData.get(masterId) || animator.targetData.get(masterId) || animator.friendlyMobData.get(masterId);
             }
             return this.master.getPosition();
         }
@@ -322,8 +322,8 @@ class LineMechanicDrawable extends FormMechanicDrawable {
             };
         } else {
             if (this.endmaster === null) {
-                let endMasterID = this.connectedFrom;
-                this.endmaster = animator.playerData.has(endMasterID) ? animator.playerData.get(endMasterID) : animator.trashMobData.has(endMasterID) ? animator.trashMobData.get(endMasterID) : animator.targetData.get(endMasterID);
+                let masterId = this.connectedFrom;
+                this.endmaster = animator.playerData.get(masterId) ||  animator.trashMobData.get(masterId) || animator.targetData.get(masterId) || animator.friendlyMobData.get(masterId);;
             }
             return this.endmaster.getPosition();
         }

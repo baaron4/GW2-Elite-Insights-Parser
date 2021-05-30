@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.EIData
     {
         public int Group { get; }
 
-        internal PlayerSerializable(Player player, ParsedEvtcLog log, CombatReplayMap map, CombatReplay replay) : base(player, log, map, replay, "Player")
+        internal PlayerSerializable(AbstractPlayer player, ParsedEvtcLog log, CombatReplayMap map, CombatReplay replay) : base(player, log, map, replay, "Player")
         {
             Group = player.Group;
         }

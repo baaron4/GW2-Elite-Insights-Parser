@@ -148,9 +148,9 @@ namespace GW2EIEvtcParser.EIData
             return false;
         }
 
-        public int GetTotalDamage(Player p, ParsedEvtcLog log, NPC t, long start, long end)
+        public int GetTotalDamage(AbstractSingleActor actor, ParsedEvtcLog log, AbstractSingleActor t, long start, long end)
         {
-            FinalDPS damageData = p.GetDPSStats(t, log, start, end);
+            FinalDPS damageData = actor.GetDPSStats(t, log, start, end);
             switch (_compareType)
             {
                 case DamageType.All:
@@ -168,12 +168,12 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageEvents(Player p, ParsedEvtcLog log, NPC t, long start, long end)
+        public IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageEvents(AbstractSingleActor actor, ParsedEvtcLog log, AbstractSingleActor t, long start, long end)
         {
-            return _dmgSrc == DamageSource.All ? p.GetHitDamageEvents(t, log, start, end, _srcType) : p.GetJustActorHitDamageEvents(t, log, start, end, _srcType);
+            return _dmgSrc == DamageSource.All ? actor.GetHitDamageEvents(t, log, start, end, _srcType) : actor.GetJustActorHitDamageEvents(t, log, start, end, _srcType);
         }
 
-        internal abstract List<DamageModifierEvent> ComputeDamageModifier(Player p, ParsedEvtcLog log);
+        internal abstract List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log);
 
         internal static readonly List<DamageModifier> ItemDamageModifiers = new List<DamageModifier>
         {

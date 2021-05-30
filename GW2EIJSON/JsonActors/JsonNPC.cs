@@ -41,7 +41,12 @@ namespace GW2EIJSON
         /// </summary>
         /// <seealso cref="JsonBuffsUptime"/>
         public IReadOnlyList<JsonBuffsUptime> Buffs { get; set; }
-        
+
+        /// <summary>
+        /// Indicates that the JsonNPC is actually an enemy player
+        /// </summary>
+        public bool EnemyPlayer { get; set; }
+
         /// <summary>
         /// Array of double[2] that represents the breakbar percent of the actor \n
         /// Value[i][0] will be the time, value[i][1] will be breakbar % \n

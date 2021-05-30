@@ -21,22 +21,22 @@ namespace GW2EIBuilders.HtmlModels
         public string ColTarget { get; set; }
         public string ColCleave { get; set; }
         public string ColTotal { get; set; }
-        public bool IsDummy { get; set; }
-        public bool IsCustom { get; set; }
+        public bool IsFake { get; set; }
+        public bool NotInSquad { get; set; }
 
-        public PlayerDto(Player player, ParsedEvtcLog log, ActorDetailsDto details) : base(player, log, details)
+        public PlayerDto(AbstractSingleActor actor, ParsedEvtcLog log, ActorDetailsDto details) : base(actor, log, details)
         {
-            Group = player.Group;
-            Acc = player.Account;
-            Profession = player.Prof;
-            IsPoV = log.LogData.PoV == player.AgentItem;
-            IsCommander = player.HasCommanderTag;
-            ColTarget = HTMLBuilder.GetLink("Color-" + player.Prof);
-            ColCleave = HTMLBuilder.GetLink("Color-" + player.Prof + "-NonBoss");
-            ColTotal = HTMLBuilder.GetLink("Color-" + player.Prof + "-Total");
-            IsDummy = player.IsDummyActor;
-            IsCustom = player.IsCustomActor;
-            BuildWeaponSets(player, log);
+            Group = actor.Group;
+            Acc = actor.Account;
+            Profession = actor.Prof;
+            IsPoV = log.LogData.PoV == actor.AgentItem;
+            IsCommander = actor.HasCommanderTag;
+            ColTarget = HTMLBuilder.GetLink("Color-" + actor.Prof);
+            ColCleave = HTMLBuilder.GetLink("Color-" + actor.Prof + "-NonBoss");
+            ColTotal = HTMLBuilder.GetLink("Color-" + actor.Prof + "-Total");
+            IsFake = actor.IsFakeActor;
+            NotInSquad = !(actor is Player);
+            BuildWeaponSets(actor, log);
         }
 
         private static void BuildWeaponSets(IReadOnlyList<string> weps, int offset, List<string> set1, List<string> set2)
@@ -81,9 +81,9 @@ namespace GW2EIBuilders.HtmlModels
             }
         }
 
-        private void BuildWeaponSets(Player player, ParsedEvtcLog log)
+        private void BuildWeaponSets(AbstractSingleActor actor, ParsedEvtcLog log)
         {
-            IReadOnlyList<string> weps = player.GetWeaponsArray(log);
+            IReadOnlyList<string> weps = actor.GetWeaponsArray(log);
             BuildWeaponSets(weps, 0, L1Set, L2Set);
             BuildWeaponSets(weps, 4, A1Set, A2Set);
         }

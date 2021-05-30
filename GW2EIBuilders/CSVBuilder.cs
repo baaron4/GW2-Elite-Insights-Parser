@@ -33,7 +33,7 @@ namespace GW2EIBuilders
             _parserVersion = parserVersion;
             _delimiter = settings.Delimiter;
             _phases = log.FightData.GetNonDummyPhases(log);
-            _noFakePlayers = log.PlayerList.Where(x => !x.IsDummyActor).ToList();
+            _noFakePlayers = log.PlayerList.ToList();
 
             _statistics = log.StatisticsHelper;
 
@@ -362,7 +362,7 @@ namespace GW2EIBuilders
             int count = 0;
             foreach (Player player in _noFakePlayers)
             {
-                FinalPlayerSupport support = player.GetPlayerSupportStats(_log, phase.Start, phase.End);
+                FinalToPlayersSupport support = player.GetToPlayerSupportStats(_log, phase.Start, phase.End);
 
                 WriteLine(new[] { player.Group.ToString(), player.Prof, player.Character,
                 support.CondiCleanse.ToString(),support.CondiCleanseTime.ToString(), support.CondiCleanseSelf.ToString(), support.CondiCleanseTimeSelf.ToString(), support.BoonStrips.ToString(), support.BoonStripsTime.ToString(), support.Resurrects.ToString(),support.ResurrectTime.ToString() });
@@ -390,13 +390,13 @@ namespace GW2EIBuilders
             int count = 0;
             foreach (Player player in _noFakePlayers)
             {
-                IReadOnlyDictionary<long, FinalPlayerBuffs> uptimes = player.GetBuffs(BuffEnum.Self, _log, phase.Start, phase.End);
+                IReadOnlyDictionary<long, FinalActorBuffs> uptimes = player.GetBuffs(BuffEnum.Self, _log, phase.Start, phase.End);
 
                 WriteCell(player.Character);
                 WriteCell(player.GetGameplayStats(_log, phase.Start, phase.End).AvgBoons.ToString());
                 foreach (Buff boon in listToUse)
                 {
-                    if (uptimes.TryGetValue(boon.ID, out FinalPlayerBuffs value))
+                    if (uptimes.TryGetValue(boon.ID, out FinalActorBuffs value))
                     {
                         if (boon.Type == Buff.BuffType.Duration)
                         {
@@ -436,14 +436,14 @@ namespace GW2EIBuilders
             int count = 0;
             foreach (Player player in _noFakePlayers)
             {
-                IReadOnlyDictionary<long, FinalPlayerBuffs> uptimes = player.GetBuffs(BuffEnum.Self, _log, phase.Start, phase.End);
+                IReadOnlyDictionary<long, FinalActorBuffs> uptimes = player.GetBuffs(BuffEnum.Self, _log, phase.Start, phase.End);
 
                 WriteCell(player.Character);
                 foreach (Buff boon in listToUse)
                 {
                     string rate = "0";
                     string overstack = "0";
-                    if (uptimes.TryGetValue(boon.ID, out FinalPlayerBuffs uptime))
+                    if (uptimes.TryGetValue(boon.ID, out FinalActorBuffs uptime))
                     {
                         if (uptime.Generation > 0 || uptime.Overstack > 0)
                         {
@@ -486,14 +486,14 @@ namespace GW2EIBuilders
             PhaseData phase = _phases[phaseIndex];
             foreach (Player player in _noFakePlayers)
             {
-                IReadOnlyDictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(BuffEnum.Group, _log, phase.Start, phase.End);
+                IReadOnlyDictionary<long, FinalActorBuffs> boons = player.GetBuffs(BuffEnum.Group, _log, phase.Start, phase.End);
 
                 WriteCell(player.Character);
                 foreach (Buff boon in listToUse)
                 {
                     string rate = "0";
                     string overstack = "0";
-                    if (boons.TryGetValue(boon.ID, out FinalPlayerBuffs uptime))
+                    if (boons.TryGetValue(boon.ID, out FinalActorBuffs uptime))
                     {
                         if (uptime.Generation > 0 || uptime.Overstack > 0)
                         {
@@ -537,14 +537,14 @@ namespace GW2EIBuilders
             PhaseData phase = _phases[phaseIndex];
             foreach (Player player in _noFakePlayers)
             {
-                IReadOnlyDictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(BuffEnum.OffGroup, _log, phase.Start, phase.End);
+                IReadOnlyDictionary<long, FinalActorBuffs> boons = player.GetBuffs(BuffEnum.OffGroup, _log, phase.Start, phase.End);
 
                 WriteCell(player.Character);
                 foreach (Buff boon in listToUse)
                 {
                     string rate = "0";
                     string overstack = "0";
-                    if (boons.TryGetValue(boon.ID, out FinalPlayerBuffs uptime))
+                    if (boons.TryGetValue(boon.ID, out FinalActorBuffs uptime))
                     {
                         if (uptime.Generation > 0 || uptime.Overstack > 0)
                         {
@@ -588,13 +588,13 @@ namespace GW2EIBuilders
             PhaseData phase = _phases[phaseIndex];
             foreach (Player player in _noFakePlayers)
             {
-                IReadOnlyDictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(BuffEnum.Squad, _log, phase.Start, phase.End);
+                IReadOnlyDictionary<long, FinalActorBuffs> boons = player.GetBuffs(BuffEnum.Squad, _log, phase.Start, phase.End);
                 WriteCell(player.Character);
                 foreach (Buff boon in listToUse)
                 {
                     string rate = "0";
                     string overstack = "0";
-                    if (boons.TryGetValue(boon.ID, out FinalPlayerBuffs uptime))
+                    if (boons.TryGetValue(boon.ID, out FinalActorBuffs uptime))
                     {
                         if (uptime.Generation > 0 || uptime.Overstack > 0)
                         {
@@ -626,7 +626,7 @@ namespace GW2EIBuilders
         private void CreateMechanicTable(int phaseIndex)
         {
             PhaseData phase = _phases[phaseIndex];
-            IReadOnlyCollection<Mechanic> presMech = _log.MechanicData.GetPresentPlayerMechs(_log, phase.Start, phase.End);
+            IReadOnlyCollection<Mechanic> presMech = _log.MechanicData.GetPresentFriendlyMechs(_log, phase.Start, phase.End);
             //Dictionary<string, HashSet<Mechanic>> presEnemyMech = log.MechanicData.getPresentEnemyMechs(phaseIndex);
             //List<AbstractMasterPlayer> enemyList = log.MechanicData.getEnemyList(phaseIndex);
             int countLines = 0;
@@ -700,7 +700,7 @@ namespace GW2EIBuilders
         {
             NPC boss = _legacyTarget;
             PhaseData phase = _phases[phaseIndex];
-            IReadOnlyDictionary<long, FinalBuffs> conditions = _legacyTarget.GetBuffs(_log, phase.Start, phase.End);
+            IReadOnlyDictionary<long, FinalActorBuffs> conditions = _legacyTarget.GetBuffs(BuffEnum.Self,_log, phase.Start, phase.End);
 
             WriteCell("Name");
             WriteCell("Avg");
@@ -715,7 +715,7 @@ namespace GW2EIBuilders
             WriteCell(Math.Round(_legacyTarget.GetGameplayStats(_log, phase.Start, phase.End).AvgConditions, 1).ToString());
             foreach (Buff boon in _statistics.PresentConditions)
             {
-                if (conditions.TryGetValue(boon.ID, out FinalBuffs uptime))
+                if (conditions.TryGetValue(boon.ID, out FinalActorBuffs uptime))
                 {
                     if (boon.Type == Buff.BuffType.Duration)
                     {
@@ -743,7 +743,7 @@ namespace GW2EIBuilders
         {
             NPC boss = _legacyTarget;
             PhaseData phase = _phases[phaseIndex];
-            IReadOnlyDictionary<long, FinalBuffs> conditions = _legacyTarget.GetBuffs(_log, phase.Start, phase.End);
+            IReadOnlyDictionary<long, FinalActorBuffs> conditions = _legacyTarget.GetBuffs(BuffEnum.Self,_log, phase.Start, phase.End);
             WriteCell("Name");
             WriteCell("Avg");
             foreach (Buff boon in _statistics.PresentBoons)
@@ -756,7 +756,7 @@ namespace GW2EIBuilders
             WriteCell(boss.Character);
             foreach (Buff boon in _statistics.PresentBoons)
             {
-                if (conditions.TryGetValue(boon.ID, out FinalBuffs uptime))
+                if (conditions.TryGetValue(boon.ID, out FinalActorBuffs uptime))
                 {
                     if (boon.Type == Buff.BuffType.Duration)
                     {

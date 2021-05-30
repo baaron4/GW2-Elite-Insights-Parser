@@ -4,7 +4,7 @@ using static GW2EIEvtcParser.EIData.Buff;
 namespace GW2EIEvtcParser.EIData
 {
     // to match non generic support stats
-    public class FinalPlayerSupport
+    public class FinalToPlayersSupport
     {
         //public long allHeal;
         public int Resurrects { get; internal set; }
@@ -16,12 +16,12 @@ namespace GW2EIEvtcParser.EIData
         public int BoonStrips { get; internal set; }
         public double BoonStripsTime { get; internal set; }
 
-        internal FinalPlayerSupport(ParsedEvtcLog log, Player player, long start, long end)
+        internal FinalToPlayersSupport(ParsedEvtcLog log, AbstractSingleActor actor, long start, long end)
         {
-            FinalSupportAll totals = player.GetSupportStats(log, start, end);
+            FinalSupportAll totals = actor.GetSupportStats(log, start, end);
             Resurrects = totals.Resurrects;
             ResurrectTime = Math.Round(totals.ResurrectTime / 1000.0, ParserHelper.TimeDigit);
-            FinalSupport self = player.GetSupportStats(player, log, start, end);
+            FinalSupport self = actor.GetSupportStats(actor, log, start, end);
             foreach (Buff boon in log.Buffs.BuffsByNature[BuffNature.Boon])
             {
                 // add everything from total
@@ -47,11 +47,11 @@ namespace GW2EIEvtcParser.EIData
                 }
                 foreach (Player p in log.PlayerList)
                 {
-                    if (p == player)
+                    if (p == actor)
                     {
                         continue;
                     }
-                    FinalSupport other = player.GetSupportStats(p, log, start, end);
+                    FinalSupport other = actor.GetSupportStats(p, log, start, end);
                     // Add everything from other
                     if (other.Removals.TryGetValue(condition.ID, out item))
                     {

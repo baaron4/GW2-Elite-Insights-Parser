@@ -30,7 +30,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.WorldVersusWorld);
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.WorldVersusWorld);
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Main target of the fight not found");
@@ -120,45 +120,53 @@ namespace GW2EIEvtcParser.EncounterLogic
             fightData.SetSuccess(true, fightData.FightEnd);
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        private void SolveWvWPlayers(AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
-            AgentItem dummyAgent = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, _detailed ? "Dummy WvW Agent" : "Enemy Players", "", (int)ArcDPSEnums.TargetID.WorldVersusWorld, true);
-            ComputeFightTargets(agentData, combatData);
-
-            IReadOnlyList<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.EnemyPlayer);
-            if (_detailed)
+            IReadOnlyList<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer);
+            var set = new HashSet<string>();
+            var toRemove = new HashSet<AgentItem>();
+            var garbageList = new List<AbstractSingleActor>();
+            foreach (AgentItem a in aList)
             {
-                var set = new HashSet<string>();
-                foreach (AgentItem a in aList)
+                List<AbstractSingleActor> actorListToFill = a.IsNotInSquadFriendlyPlayer ? friendlies : _detailed ? _targets : garbageList;
+                var nonSquadPlayer = new PlayerNonSquad(a);
+                if (!set.Contains(nonSquadPlayer.Character))
                 {
-                    var npc = new NPC(a);
-                    if (!set.Contains(npc.Character))
+                    actorListToFill.Add(nonSquadPlayer);
+                    set.Add(nonSquadPlayer.Character);
+                }
+                else
+                {
+                    // we merge
+                    AbstractSingleActor mainPlayer = actorListToFill.FirstOrDefault(x => x.Character == nonSquadPlayer.Character);
+                    foreach (CombatItem c in combatData)
                     {
-                        _targets.Add(npc);
-                        set.Add(npc.Character);
-                    }
-                    else
-                    {
-                        // we merge
-                        NPC mainNPC = _targets.FirstOrDefault(x => x.Character == npc.Character);
-                        foreach (CombatItem c in combatData)
+                        if (c.IsStateChange.SrcIsAgent() && c.SrcAgent == nonSquadPlayer.Agent)
                         {
-                            if (c.IsStateChange.SrcIsAgent() && c.SrcAgent == npc.Agent)
-                            {
-                                c.OverrideSrcAgent(mainNPC.Agent);
-                            }
-                            if (c.IsStateChange.DstIsAgent() && c.DstAgent == npc.Agent)
-                            {
-                                c.OverrideDstAgent(mainNPC.Agent);
-                            }
+                            c.OverrideSrcAgent(mainPlayer.Agent);
                         }
-                        agentData.SwapMasters(npc.AgentItem, mainNPC.AgentItem);
-                        mainNPC.AgentItem.OverrideAwareTimes(Math.Min(npc.FirstAware, mainNPC.FirstAware), Math.Max(npc.LastAware, mainNPC.LastAware));
+                        if (c.IsStateChange.DstIsAgent() && c.DstAgent == nonSquadPlayer.Agent)
+                        {
+                            c.OverrideDstAgent(mainPlayer.Agent);
+                        }
                     }
+                    agentData.SwapMasters(nonSquadPlayer.AgentItem, mainPlayer.AgentItem);
+                    mainPlayer.AgentItem.OverrideAwareTimes(Math.Min(nonSquadPlayer.FirstAware, mainPlayer.FirstAware), Math.Max(nonSquadPlayer.LastAware, mainPlayer.LastAware));
+                    toRemove.Add(nonSquadPlayer.AgentItem);
                 }
             }
-            else
+            agentData.RemoveAllFrom(toRemove);
+        }
+
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
+        {
+            AgentItem dummyAgent = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, _detailed ? "Dummy WvW Agent" : "Enemy Players", "", (int)ArcDPSEnums.TargetID.WorldVersusWorld, true);
+
+            SolveWvWPlayers(agentData, combatData, friendlies);
+            var friendlyAgents = new HashSet<AgentItem>(friendlies.Select(x => x.AgentItem));
+            if (!_detailed)
             {
+                var aList = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer).Where(x => !friendlyAgents.Contains(x)).ToList();
                 var enemyPlayerDicts = aList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList().First());
                 foreach (CombatItem c in combatData)
                 {
@@ -178,6 +186,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
+            ComputeFightTargets(agentData, combatData);
         }
     }
 }

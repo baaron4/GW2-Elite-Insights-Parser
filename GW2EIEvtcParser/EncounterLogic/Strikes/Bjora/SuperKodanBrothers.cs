@@ -39,8 +39,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC voice = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.ClawOfTheFallen);
-            NPC claw = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.VoiceOfTheFallen);
+            AbstractSingleActor voice = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.ClawOfTheFallen);
+            AbstractSingleActor claw = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.VoiceOfTheFallen);
             if (voice == null || claw == null)
             {
                 throw new MissingKeyActorsException("Claw or Voice not found");
@@ -64,7 +64,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             //
             int voiceAndClawCount = 0;
             int offset = 1;
-            foreach (NPC voiceAndClaw in Targets.Where(x => x.ID == (int)ArcDPSEnums.TargetID.VoiceAndClaw))
+            foreach (AbstractSingleActor voiceAndClaw in Targets.Where(x => x.ID == (int)ArcDPSEnums.TargetID.VoiceAndClaw))
             {
                 EnterCombatEvent enterCombat = log.CombatData.GetEnterCombatEvents(voiceAndClaw.AgentItem).FirstOrDefault();
                 PhaseData nextUnmergedPhase = unmergedPhases.Count > offset + 1 ? unmergedPhases[offset] : null;

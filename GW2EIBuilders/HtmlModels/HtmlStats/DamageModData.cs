@@ -9,9 +9,9 @@ namespace GW2EIBuilders.HtmlModels
         public List<object[]> Data { get; } = new List<object[]>();
         public List<List<object[]>> DataTarget { get; } = new List<List<object[]>>();
 
-        private DamageModData(Player player, ParsedEvtcLog log, List<DamageModifier> listToUse, PhaseData phase)
+        private DamageModData(AbstractSingleActor actor, ParsedEvtcLog log, List<DamageModifier> listToUse, PhaseData phase)
         {
-            IReadOnlyDictionary<string, DamageModifierStat> dModData = player.GetDamageModifierStats(null, log, phase.Start, phase.End);
+            IReadOnlyDictionary<string, DamageModifierStat> dModData = actor.GetDamageModifierStats(null, log, phase.Start, phase.End);
             foreach (DamageModifier dMod in listToUse)
             {
                 if (dModData.TryGetValue(dMod.Name, out DamageModifierStat data))
@@ -29,17 +29,17 @@ namespace GW2EIBuilders.HtmlModels
                     Data.Add(new object[]
                     {
                         0,
-                        dMod.GetHitDamageEvents(player, log, null, phase.Start, phase.End).Count,
+                        dMod.GetHitDamageEvents(actor, log, null, phase.Start, phase.End).Count,
                         0,
-                        dMod.GetTotalDamage(player, log, null, phase.Start, phase.End)
+                        dMod.GetTotalDamage(actor, log, null, phase.Start, phase.End)
                     });
                 }
             }
-            foreach (NPC target in phase.Targets)
+            foreach (AbstractSingleActor target in phase.Targets)
             {
                 var pTarget = new List<object[]>();
                 DataTarget.Add(pTarget);
-                dModData = player.GetDamageModifierStats(target, log, phase.Start, phase.End);
+                dModData = actor.GetDamageModifierStats(target, log, phase.Start, phase.End);
                 foreach (DamageModifier dMod in listToUse)
                 {
                     if (dModData.TryGetValue(dMod.Name, out DamageModifierStat data))
@@ -57,9 +57,9 @@ namespace GW2EIBuilders.HtmlModels
                         pTarget.Add(new object[]
                         {
                             0,
-                            dMod.GetHitDamageEvents(player, log, target, phase.Start, phase.End).Count,
+                            dMod.GetHitDamageEvents(actor, log, target, phase.Start, phase.End).Count,
                             0,
-                            dMod.GetTotalDamage(player, log, target, phase.Start, phase.End)
+                            dMod.GetTotalDamage(actor, log, target, phase.Start, phase.End)
                         });
                     }
                 }
@@ -68,9 +68,9 @@ namespace GW2EIBuilders.HtmlModels
         public static List<DamageModData> BuildDmgModifiersData(ParsedEvtcLog log, PhaseData phase, List<DamageModifier> damageModsToUse)
         {
             var pData = new List<DamageModData>();
-            foreach (Player player in log.PlayerList)
+            foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                pData.Add(new DamageModData(player, log, damageModsToUse, phase));
+                pData.Add(new DamageModData(actor, log, damageModsToUse, phase));
             }
             return pData;
         }
@@ -78,9 +78,9 @@ namespace GW2EIBuilders.HtmlModels
         public static List<DamageModData> BuildPersonalDmgModifiersData(ParsedEvtcLog log, PhaseData phase, Dictionary<string, List<DamageModifier>> damageModsToUse)
         {
             var pData = new List<DamageModData>();
-            foreach (Player player in log.PlayerList)
+            foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                pData.Add(new DamageModData(player, log, damageModsToUse[player.Prof], phase));
+                pData.Add(new DamageModData(actor, log, damageModsToUse[actor.Prof], phase));
             }
             return pData;
         }

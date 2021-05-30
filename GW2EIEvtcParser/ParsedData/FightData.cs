@@ -260,7 +260,7 @@ namespace GW2EIEvtcParser.ParsedData
             return _nonDummyPhases;
         }
 
-        public IReadOnlyList<NPC> GetMainTargets(ParsedEvtcLog log)
+        public IReadOnlyList<AbstractSingleActor> GetMainTargets(ParsedEvtcLog log)
         {
             return GetPhases(log)[0].Targets;
         }

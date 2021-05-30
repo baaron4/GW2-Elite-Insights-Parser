@@ -68,7 +68,7 @@ namespace GW2EIBuilders.HtmlModels
             }
             if (p.GetType() == typeof(Player))
             {
-                foreach (NPC mainTarget in log.FightData.GetMainTargets(log))
+                foreach (AbstractSingleActor mainTarget in log.FightData.GetMainTargets(log))
                 {
                     boonGraphData = mainTarget.GetBuffGraphs(log);
                     foreach (BuffsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.Buff.Name == "Compromised" || x.Buff.Name == "Unnatural Signet" || x.Buff.Name == "Fractured - Enemy" || x.Buff.Name == "Erratic Energy"))

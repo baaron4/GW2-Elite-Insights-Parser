@@ -75,9 +75,9 @@ namespace GW2EIBuilders.HtmlModels
         {
             var list = new List<List<int[]>>();
 
-            foreach (Player p in log.PlayerList)
+            foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                list.Add(GetMechanicData(log.MechanicData.GetPresentPlayerMechs(log, log.FightData.FightStart, log.FightData.FightEnd), log, p, phase));
+                list.Add(GetMechanicData(log.MechanicData.GetPresentFriendlyMechs(log, log.FightData.FightStart, log.FightData.FightEnd), log, actor, phase));
             }
             return list;
         }

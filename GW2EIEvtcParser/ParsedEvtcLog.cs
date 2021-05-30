@@ -15,9 +15,10 @@ namespace GW2EIEvtcParser
         public SkillData SkillData { get; }
         public CombatData CombatData { get; }
         public IReadOnlyList<Player> PlayerList { get; }
+        public IReadOnlyList<AbstractSingleActor> Friendlies { get; }
         public IReadOnlyCollection<AgentItem> PlayerAgents { get; }
         public bool IsBenchmarkMode => FightData.Logic.Mode == FightLogic.ParseMode.Benchmark;
-        public IReadOnlyDictionary<string, List<Player>> PlayerListBySpec { get; }
+        public IReadOnlyDictionary<string, List<AbstractSingleActor>> FriendliesListBySpec { get; }
         public DamageModifiersContainer DamageModifiers { get; }
         public BuffsContainer Buffs { get; }
         public EvtcParserSettings ParserSettings { get; }
@@ -31,7 +32,7 @@ namespace GW2EIEvtcParser
         private Dictionary<AgentItem, AbstractSingleActor> _agentToActorDictionary;
 
         internal ParsedEvtcLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData,
-                List<CombatItem> combatItems, List<Player> playerList, long evtcLogDuration, EvtcParserSettings parserSettings, ParserController operation)
+                List<CombatItem> combatItems, List<Player> playerList, List<AbstractSingleActor> friendlies, long evtcLogDuration, EvtcParserSettings parserSettings, ParserController operation)
         {
             FightData = fightData;
             AgentData = agentData;
@@ -39,8 +40,9 @@ namespace GW2EIEvtcParser
             PlayerList = playerList;
             ParserSettings = parserSettings;
             _operation = operation;
+            Friendlies = friendlies;
             //
-            PlayerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
+            FriendliesListBySpec = friendlies.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
             PlayerAgents = new HashSet<AgentItem>(playerList.Select(x => x.AgentItem));
             _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Combat Events");
             CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList, operation);
@@ -91,11 +93,11 @@ namespace GW2EIEvtcParser
             {
                 _operation.UpdateProgressWithCancellationCheck("Initializing Actor dictionary");
                 _agentToActorDictionary = new Dictionary<AgentItem, AbstractSingleActor>();
-                foreach (Player p in PlayerList)
+                foreach (AbstractSingleActor p in Friendlies)
                 {
                     AddToDictionary(p);
                 }
-                foreach (NPC npc in FightData.Logic.Targets)
+                foreach (AbstractSingleActor npc in FightData.Logic.Targets)
                 {
                     AddToDictionary(npc);
                 }
@@ -122,7 +124,14 @@ namespace GW2EIEvtcParser
             InitActorDictionaries();
             if (!_agentToActorDictionary.TryGetValue(agentItem, out AbstractSingleActor actor))
             {
-                actor = new NPC(agentItem);
+                if (agentItem.Type == AgentItem.AgentType.NonSquadPlayer)
+                {
+                    actor = new PlayerNonSquad(agentItem);
+                } 
+                else
+                {
+                    actor = new NPC(agentItem);
+                }
                 _agentToActorDictionary[agentItem] = actor;
                 //throw new EIException("Requested actor with id " + a.ID + " and name " + a.Name + " is missing");
             }

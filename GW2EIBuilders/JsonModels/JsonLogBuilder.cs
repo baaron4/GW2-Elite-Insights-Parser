@@ -17,22 +17,26 @@ namespace GW2EIBuilders.JsonModels
     {
         internal static SkillDesc BuildSkillDesc(SkillItem item, ulong gw2Build, SkillData skillData)
         {
-            var skillDesc = new SkillDesc();
-            skillDesc.Name = item.Name;
-            skillDesc.AutoAttack = item.AA;
-            skillDesc.Icon = item.Icon;
-            skillDesc.CanCrit = SkillItem.CanCrit(item.ID, gw2Build);
-            skillDesc.IsSwap = item.IsSwap;
-            skillDesc.IsNotAccurate = skillData.IsNotAccurate(item.ID);
+            var skillDesc = new SkillDesc
+            {
+                Name = item.Name,
+                AutoAttack = item.AA,
+                Icon = item.Icon,
+                CanCrit = SkillItem.CanCrit(item.ID, gw2Build),
+                IsSwap = item.IsSwap,
+                IsNotAccurate = skillData.IsNotAccurate(item.ID)
+            };
             return skillDesc;
         }
 
         internal static BuffDesc BuildBuffDesc(Buff item, ParsedEvtcLog log)
         {
-            var buffDesc = new BuffDesc();
-            buffDesc.Name = item.Name;
-            buffDesc.Icon = item.Link;
-            buffDesc.Stacking = item.Type == Buff.BuffType.Intensity;
+            var buffDesc = new BuffDesc
+            {
+                Name = item.Name,
+                Icon = item.Link,
+                Stacking = item.Type == Buff.BuffType.Intensity
+            };
             BuffInfoEvent buffInfoEvent = log.CombatData.GetBuffInfoEvent(item.ID);
             if (buffInfoEvent != null)
             {
@@ -62,13 +66,15 @@ namespace GW2EIBuilders.JsonModels
 
         internal static DamageModDesc BuildDamageModDesc(DamageModifier item)
         {
-            var damageModDesc = new DamageModDesc();
-            damageModDesc.Name = item.Name;
-            damageModDesc.Icon = item.Icon;
-            damageModDesc.Description = item.Tooltip;
-            damageModDesc.NonMultiplier = !item.Multiplier;
-            damageModDesc.SkillBased = item.SkillBased;
-            damageModDesc.Approximate = item.Approximate;
+            var damageModDesc = new DamageModDesc
+            {
+                Name = item.Name,
+                Icon = item.Icon,
+                Description = item.Tooltip,
+                NonMultiplier = !item.Multiplier,
+                SkillBased = item.SkillBased,
+                Approximate = item.Approximate
+            };
             return damageModDesc;
         }
 
@@ -132,7 +138,7 @@ namespace GW2EIBuilders.JsonModels
             jsonLog.Targets = log.FightData.Logic.Targets.Select(x => JsonNPCBuilder.BuildJsonNPC(x, log, settings, skillMap, buffMap)).ToList();
             //
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Players");
-            jsonLog.Players = log.PlayerList.Select(x => JsonPlayerBuilder.BuildJsonPlayer(x, log, settings, skillMap, buffMap, damageModMap, personalBuffs)).ToList();
+            jsonLog.Players = log.Friendlies.Select(x => JsonPlayerBuilder.BuildJsonPlayer(x, log, settings, skillMap, buffMap, damageModMap, personalBuffs)).ToList();
             //
             if (log.LogData.LogErrors.Count > 0)
             {
