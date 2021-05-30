@@ -13,8 +13,8 @@
         </ul>
         <div class="squad-details">
             <keep-alive>
-                <combat-replay-players-stats-component v-if="mode === 0" :key="'players-cr-details'" :time="time" :selectedplayer="selectedactor" :selectedplayerid="selectedactorid"></combat-replay-players-stats-component>
-                <combat-replay-targets-stats-component v-if="mode === 1" :key="'targets-cr-details'" :time="time" :selectedtarget="selectedactor" :selectedtargetid="selectedactorid"></combat-replay-targets-stats-component>
+                <combat-replay-players-stats-component v-if="mode === 0" :key="'players-cr-details'" :time="time" :selectedplayerid="selectedactorid"></combat-replay-players-stats-component>
+                <combat-replay-targets-stats-component v-if="mode === 1" :key="'targets-cr-details'" :time="time" :selectedtargetid="selectedactorid"></combat-replay-targets-stats-component>
                 <combat-replay-mechanics-list-component v-if="mode === 2" :key="'mechanics-cr-details'" :selectedplayerid="selectedactorid"></combat-replay-mechanics-list-component>
             </keep-alive>
         </div>
@@ -24,7 +24,7 @@
 <script>
     Vue.component("combat-replay-status-data-component", {
         template: `${template}`,
-        props: ["time", "selectedactor", "selectedactorid"],
+        props: ["time", "selectedactorid"],
         data: function() {
             return {
                 targetless: logData.targetless,

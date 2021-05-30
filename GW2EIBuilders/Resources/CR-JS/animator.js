@@ -38,7 +38,6 @@ var animator = null;
 // reactive structures
 var reactiveAnimationData = {
     time: 0,
-    selectedActor: null,
     selectedActorID: null,
     animated: false
 };
@@ -67,7 +66,6 @@ class Animator {
         this.highlightSelectedGroup = true;
         this.displayMechanics = true;
         this.displayTrashMobs = true;
-        this.selectedGroup = -1;
         this.coneControl = {
             enabled: false,
             openingAngle: 90,
@@ -82,6 +80,7 @@ class Animator {
         this.attachedActorData = new Map();
         this.backgroundActorData = [];
         this.backgroundImages = [];
+        this.selectedActor = null;
         // animation
         this.needBGUpdate = false;
         this.prevBGImage = null;
@@ -161,7 +160,7 @@ class Animator {
             const actor = actors[i];
             switch (actor.type) {
                 case "Player":
-                    this.playerData.set(actor.id, new PlayerIconDrawable(actor.img, 20, actor.group, actor.positions, actor.dead, actor.down, actor.dc));
+                    this.playerData.set(actor.id, new SquadIconDrawable(actor.img, 20, actor.group, actor.positions, actor.dead, actor.down, actor.dc));
                     if (this.times.length === 0) {
                         for (let j = 0; j < actor.positions.length / 2; j++) {
                             this.times.push(j * this.pollingRate);
@@ -169,16 +168,16 @@ class Animator {
                     }
                     break;
                 case "Target":
-                    this.targetData.set(actor.id, new EnemyIconDrawable(actor.start, actor.end, actor.img, 30, actor.positions, actor.dead, actor.down, actor.dc));
+                    this.targetData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 30, actor.positions, actor.dead, actor.down, actor.dc));
                     break;
                 case "TargetPlayer":
-                    this.targetData.set(actor.id, new EnemyIconDrawable(-1, -1, actor.img, 30, actor.positions, actor.dead, actor.down, actor.dc));
+                    this.targetData.set(actor.id, new NonSquadIconDrawable(-1, -1, actor.img, 30, actor.positions, actor.dead, actor.down, actor.dc));
                     break;
                 case "Mob":
-                    this.trashMobData.set(actor.id, new EnemyIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc));
+                    this.trashMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc));
                     break;
                 case "Friendly":
-                    this.friendlyMobData.set(actor.id, new EnemyIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc));
+                    this.friendlyMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc));
                     break;
                 case "Circle":
                     this.mechanicActorData.push(new CircleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inch * actor.radius, actor.connectedTo, this.inch * actor.minRadius));
@@ -282,12 +281,11 @@ class Animator {
         if (!actor) {
             return;
         }
-        this.reactiveDataStatus.selectedActor = null;
-        this.reactiveDataStatus.selectedActorID = null;
-        actor.selected = !actor.selected;
-        this.selectedGroup = actor.selected && actor.group !== null ? actor.group : -1;
-        if (actor.selected) {
-            this.reactiveDataStatus.selectedActor = actor;
+        if (this.selectedActor == actor) {
+            this.selectedActor = null;
+            this.reactiveDataStatus.selectedActorID = null;
+        } else {
+            this.selectedActor = actor;
             this.reactiveDataStatus.selectedActorID = actorId;
         }
         if (this.animation === null) {
@@ -630,10 +628,10 @@ class Animator {
                 }
             }
         });
-        if (this.reactiveDataStatus.selectedActor !== null) {
-            this.reactiveDataStatus.selectedActor.draw();
-            if (this.attachedActorData.has(this.reactiveDataStatus.selectedActorID)) {
-                this.attachedActorData.get(this.reactiveDataStatus.selectedActorID).draw();
+        if (this.selectedActor !== null) {
+            this.selectedActor.draw();
+            if (this.attachedActorData.has(this.selectedActorID)) {
+                this.attachedActorData.get(this.selectedActorID).draw();
             }
         }
     }

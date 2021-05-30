@@ -5,8 +5,8 @@
 "use strict";
 //// ACTORS
 class IconDrawable {
-    constructor(start, end, imgSrc, pixelSize, dead, down, dc) {
-        this.pos = null;
+    constructor(pos, start, end, imgSrc, pixelSize, dead, down, dc) {
+        this.pos = pos;
         this.start = start;
         this.end = end;
         this.img = new Image();
@@ -15,11 +15,18 @@ class IconDrawable {
             animateCanvas(noUpdateTime);
         };
         this.pixelSize = pixelSize;
-        this.selected = false;
         this.group = null;
         this.dead = typeof dead !== "undefined" ? dead : null;
         this.down = typeof down !== "undefined" ? down : null;
         this.dc = typeof dc !== "undefined" ? dc : null;
+    }
+
+    isSelected() {
+        return animator.selectedActor === this;
+    }
+
+    inSelectedGroup() {
+        return false;
     }
 
     died() {
@@ -127,13 +134,15 @@ class IconDrawable {
         var ctx = animator.mainContext;
         const fullSize = this.pixelSize / animator.scale;
         const halfSize = fullSize / 2;
-        if (animator.highlightSelectedGroup && !this.selected && this.group === animator.selectedGroup) {
+        var isSelected = this.isSelected();
+        var inSelectedGroup = this.inSelectedGroup();
+        if (animator.highlightSelectedGroup && !isSelected && inSelectedGroup) {
             ctx.beginPath();
             ctx.lineWidth = (2 / animator.scale).toString();
             ctx.strokeStyle = 'blue';
             ctx.rect(pos.x - halfSize, pos.y - halfSize, fullSize, fullSize);
             ctx.stroke();
-        } else if (this.selected) {
+        } else if (isSelected) {
             ctx.beginPath();
             ctx.lineWidth = (4 / animator.scale).toString();
             ctx.strokeStyle = 'green';
@@ -156,18 +165,20 @@ class IconDrawable {
 
 }
 
-class PlayerIconDrawable extends IconDrawable {
+class SquadIconDrawable extends IconDrawable {
     constructor(imgSrc, pixelSize, group, pos, dead, down, dc) {
-        super(-1, -1, imgSrc, pixelSize, dead, down, dc);
-        this.pos = pos;
+        super(pos, -1, -1, imgSrc, pixelSize, dead, down, dc);
         this.group = group;
+    }
+
+    inSelectedGroup() {
+        return animator.selectedActor !== null && animator.selectedActor.group === this.group;
     }
 
 }
 
-class EnemyIconDrawable extends IconDrawable {
+class NonSquadIconDrawable extends IconDrawable {
     constructor(start, end, imgSrc, pixelSize, pos, dead, down, dc) {
-        super(start, end, imgSrc, pixelSize, dead, down, dc);
-        this.pos = pos;
+        super(pos, start, end, imgSrc, pixelSize, dead, down, dc);
     }
 }
