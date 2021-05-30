@@ -19,6 +19,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         public string Icon { get; protected set; }
         private readonly int _basicMechanicsCount;
         public bool HasNoFightSpecificMechanics => MechanicList.Count == _basicMechanicsCount;
+        public IReadOnlyCollection<AgentItem> TargetAgents { get; private set; }
+        public IReadOnlyCollection<AgentItem> TrashMobAgents { get; private set; }
         public IReadOnlyList<NPC> TrashMobs => _trashMobs;
         public IReadOnlyList<AbstractSingleActor> Targets => _targets;
         protected readonly List<NPC> _trashMobs = new List<NPC>();
@@ -140,6 +142,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 _trashMobs.Add(new NPC(a));
             }
             _trashMobs.Sort((x, y) => x.FirstAware.CompareTo(y.FirstAware));
+        }
+
+        internal void ValidateTargetsAndTrashMobs()
+        {
+            TargetAgents = new HashSet<AgentItem>(Targets.Select(x => x.AgentItem));
+            TrashMobAgents = new HashSet<AgentItem>(TrashMobs.Select(x => x.AgentItem));
         }
 
         protected static List<PhaseData> GetPhasesByHealthPercent(ParsedEvtcLog log, AbstractSingleActor mainTarget, List<double> thresholds)
