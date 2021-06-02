@@ -78,6 +78,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 // Red Desert
                 case 1099:
                     return new CombatReplayMap("https://i.imgur.com/R5p9fqw.png", (1000, 1000), (-36864, -36864, 36864, 36864)/*, (-36864, -36864, 36864, 36864), (9214, 8958, 12286, 12030)*/);
+                case 968:
+                    return new CombatReplayMap("https://i.imgur.com/iEpKYL0.jpg", (3556, 3646), (-36864, -36864, 36864, 36864)/*, (-36864, -36864, 36864, 36864), (9214, 8958, 12286, 12030)*/);
             }
             return base.GetCombatMapInternal(log);
         }
