@@ -145,7 +145,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             //
             foreach (AgentItem a in aList)
             {
-                if (!a.IsNotInSquadFriendlyPlayer && teamChangeDict.TryGetValue(a.Agent, out List<ulong> teamChangeList))
+                if (teamChangeDict.TryGetValue(a.Agent, out List<ulong> teamChangeList))
                 {
                     a.OverrideIsNotInSquadFriendlyPlayer(teamChangeList.Any(x => x == greenTeam));
                 }
