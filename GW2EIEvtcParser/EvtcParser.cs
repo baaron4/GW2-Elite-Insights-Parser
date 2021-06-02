@@ -572,12 +572,17 @@ namespace GW2EIEvtcParser
             }
             return combatItem.IsStateChange != ArcDPSEnums.StateChange.Unknown && combatItem.IsStateChange != ArcDPSEnums.StateChange.StatReset && combatItem.IsStateChange != ArcDPSEnums.StateChange.APIDelayed && combatItem.IsStateChange != ArcDPSEnums.StateChange.Extension;
         }
-        private static void UpdateAgentData(AgentItem ag, long logTime, ushort instid)
+        private static bool UpdateAgentData(AgentItem ag, long logTime, ushort instid)
         {
             if (ag.InstID == 0)
             {
                 ag.SetInstid(instid);
+            } 
+            else if (ag.InstID != instid)
+            {
+                return false;
             }
+            
             if (ag.FirstAware == 0)
             {
                 ag.OverrideAwareTimes(logTime, logTime);
@@ -586,6 +591,7 @@ namespace GW2EIEvtcParser
             {
                 ag.OverrideAwareTimes(ag.FirstAware, logTime);
             }
+            return true;
         }
 
         private void FindAgentMaster(long logTime, ushort masterInstid, ulong minionAgent)
@@ -593,7 +599,7 @@ namespace GW2EIEvtcParser
             AgentItem master = _agentData.GetAgentByInstID(masterInstid, logTime);
             if (master != ParserHelper._unknownAgent)
             {
-                AgentItem minion = _agentData.GetAgent(minionAgent);
+                AgentItem minion = _agentData.GetAgent(minionAgent, logTime);
                 if (minion != ParserHelper._unknownAgent && minion.Master == null)
                 {
                     if (minion.FirstAware <= logTime && logTime <= minion.LastAware)
@@ -692,23 +698,35 @@ namespace GW2EIEvtcParser
 
         private void CompleteAgents()
         {
-            var agentsLookup = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList().First());
+            var agentsLookup = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
             //var agentsLookup = _allAgentsList.ToDictionary(x => x.Agent);
             // Set Agent instid, firstAware and lastAware
             foreach (CombatItem c in _combatItems)
             {
                 if (c.IsStateChange.SrcIsAgent())
                 {
-                    if (agentsLookup.TryGetValue(c.SrcAgent, out AgentItem agent))
+                    if (agentsLookup.TryGetValue(c.SrcAgent, out List<AgentItem> agents))
                     {
-                        UpdateAgentData(agent, c.Time, c.SrcInstid);
+                        foreach (AgentItem agent in agents)
+                        {
+                            if (UpdateAgentData(agent, c.Time, c.SrcInstid))
+                            {
+                                break;
+                            }
+                        }
                     }
                 }
                 if (c.IsStateChange.DstIsAgent())
                 {
-                    if (agentsLookup.TryGetValue(c.DstAgent, out AgentItem agent))
+                    if (agentsLookup.TryGetValue(c.DstAgent, out List<AgentItem> agents))
                     {
-                        UpdateAgentData(agent, c.Time, c.DstInstid);
+                        foreach (AgentItem agent in agents)
+                        {
+                            if (UpdateAgentData(agent, c.Time, c.DstInstid))
+                            {
+                                break;
+                            }
+                        }
                     }
                 }
             }

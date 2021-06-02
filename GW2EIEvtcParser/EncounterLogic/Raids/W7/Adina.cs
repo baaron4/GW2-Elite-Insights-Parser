@@ -34,8 +34,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             long final = fightData.FightEnd;
             foreach (CombatItem at in attackTargets)
             {
-                AgentItem hand = agentData.GetAgent(at.DstAgent);
-                AgentItem atAgent = agentData.GetAgent(at.SrcAgent);
+                AgentItem hand = agentData.GetAgent(at.DstAgent, at.Time);
+                AgentItem atAgent = agentData.GetAgent(at.SrcAgent, at.Time);
                 var attackables = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.SrcAgent == atAgent.Agent && x.Time <= atAgent.LastAware && x.Time >= atAgent.FirstAware).ToList();
                 var attackOn = attackables.Where(x => x.DstAgent == 1 && x.Time >= first + 2000).Select(x => x.Time).ToList();
                 var attackOff = attackables.Where(x => x.DstAgent == 0 && x.Time >= first + 2000).Select(x => x.Time).ToList();

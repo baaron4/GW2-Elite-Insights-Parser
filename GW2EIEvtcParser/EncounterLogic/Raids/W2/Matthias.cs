@@ -128,7 +128,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     long sacrificeStartTime = sacrificeStartList[i].Time;
                     long sacrificeEndTime = i < sacrificeEndList.Count ? sacrificeEndList[i].Time : fightData.FightEnd;
                     //
-                    Player sacrifice = friendlies.OfType<Player>().FirstOrDefault(x => x.AgentItem == agentData.GetAgent(sacrificeStartList[i].DstAgent));
+                    Player sacrifice = friendlies.OfType<Player>().FirstOrDefault(x => x.AgentItem == agentData.GetAgent(sacrificeStartList[i].DstAgent, sacrificeStartList[i].Time));
                     if (sacrifice == null)
                     {
                         continue;

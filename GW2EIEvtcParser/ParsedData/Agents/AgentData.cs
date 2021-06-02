@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.ParsedData
     public class AgentData
     {
         private readonly List<AgentItem> _allAgentsList;
-        private Dictionary<ulong, AgentItem> _allAgentsByAgent;
+        private Dictionary<ulong, List<AgentItem>> _allAgentsByAgent;
         private Dictionary<ushort, List<AgentItem>> _allAgentsByInstID;
         private Dictionary<int, List<AgentItem>> _allNPCsByID;
         private Dictionary<int, List<AgentItem>> _allGadgetsByID;
@@ -41,13 +41,20 @@ namespace GW2EIEvtcParser.ParsedData
             return agent;
         }
 
-        public AgentItem GetAgent(ulong agentAddress)
+        public AgentItem GetAgent(ulong agentAddress, long time)
         {
             if (agentAddress != 0)
             {
-                if (_allAgentsByAgent.TryGetValue(agentAddress, out AgentItem a))
+                if (_allAgentsByAgent.TryGetValue(agentAddress, out List<AgentItem> agents))
                 {
-                    return a;
+                    foreach (AgentItem a in agents)
+                    {
+                        if (a.FirstAware <= time && a.LastAware >= time)
+                        {
+                            return a;
+                        }
+                    }
+                    throw new InvalidOperationException("Couldn't find agent for given addr");
                 }
             }
             return ParserHelper._unknownAgent;
@@ -114,7 +121,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal void Refresh()
         {
-            _allAgentsByAgent = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList().First());
+            _allAgentsByAgent = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
             _allNPCsByID = _allAgentsList.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.Where(y => y.Type == AgentItem.AgentType.NPC).ToList());
             _allGadgetsByID = _allAgentsList.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.Where(y => y.Type == AgentItem.AgentType.Gadget).ToList());
             _allAgentsByInstID = _allAgentsList.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());

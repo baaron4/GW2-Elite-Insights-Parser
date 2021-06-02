@@ -24,7 +24,7 @@
         internal AbstractCastEvent(CombatItem baseItem, AgentData agentData, SkillData skillData) : base(baseItem.Time)
         {
             Skill = skillData.Get(baseItem.SkillID);
-            Caster = agentData.GetAgent(baseItem.SrcAgent);
+            Caster = agentData.GetAgent(baseItem.SrcAgent, baseItem.Time);
         }
 
         internal AbstractCastEvent(long time, SkillItem skill, AgentItem caster) : base(time)

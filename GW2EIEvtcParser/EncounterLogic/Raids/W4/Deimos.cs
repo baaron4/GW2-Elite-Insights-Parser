@@ -191,7 +191,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return 0;
             }
             long firstAware = targetable.Time;
-            AgentItem targetAgent = agentData.GetAgent(targetable.SrcAgent);
+            AgentItem targetAgent = agentData.GetAgent(targetable.SrcAgent, targetable.Time);
             if (targetAgent == ParserHelper._unknownAgent)
             {
                 return 0;
@@ -201,7 +201,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return 0;
             }
-            AgentItem deimosStructBody = agentData.GetAgent(attackTargetEvent.DstAgent);
+            AgentItem deimosStructBody = agentData.GetAgent(attackTargetEvent.DstAgent, attackTargetEvent.Time);
             if (deimosStructBody == ParserHelper._unknownAgent)
             {
                 return 0;
