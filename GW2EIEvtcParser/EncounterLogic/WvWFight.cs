@@ -164,13 +164,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AbstractSingleActor mainPlayer = actorListToFill.FirstOrDefault(x => x.Character == nonSquadPlayer.Character);
                     foreach (CombatItem c in combatData)
                     {
-                        if (c.IsStateChange.SrcIsAgent() && c.SrcAgent == nonSquadPlayer.Agent)
+                        if (c.SrcMatchesAgent(nonSquadPlayer.AgentItem))
                         {
-                            c.OverrideSrcAgent(mainPlayer.Agent);
+                            c.OverrideSrcAgent(mainPlayer.AgentItem.Agent);
                         }
-                        if (c.IsStateChange.DstIsAgent() && c.DstAgent == nonSquadPlayer.Agent)
+                        if (c.DstMatchesAgent(nonSquadPlayer.AgentItem))
                         {
-                            c.OverrideDstAgent(mainPlayer.Agent);
+                            c.OverrideDstAgent(mainPlayer.AgentItem.Agent);
                         }
                     }
                     agentData.SwapMasters(nonSquadPlayer.AgentItem, mainPlayer.AgentItem);

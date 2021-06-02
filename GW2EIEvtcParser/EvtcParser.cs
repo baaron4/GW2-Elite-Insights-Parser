@@ -644,14 +644,14 @@ namespace GW2EIEvtcParser
                         if (p.Character == player.Character) // same character, can be fused
                         {
                             skip = true;
-                            ulong agent = p.Agent;
+                            ulong agent = p.AgentItem.Agent;
                             foreach (CombatItem c in _combatItems)
                             {
-                                if (player.Agent == c.DstAgent && c.IsStateChange.DstIsAgent())
+                                if (c.DstMatchesAgent(player.AgentItem))
                                 {
                                     c.OverrideDstAgent(agent);
                                 }
-                                if (player.Agent == c.SrcAgent && c.IsStateChange.SrcIsAgent())
+                                if (c.SrcMatchesAgent(player.AgentItem))
                                 {
                                     c.OverrideSrcAgent(agent);
                                 }

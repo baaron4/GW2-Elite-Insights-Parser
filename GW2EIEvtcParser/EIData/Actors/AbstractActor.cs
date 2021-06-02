@@ -15,9 +15,7 @@ namespace GW2EIEvtcParser.EIData
         public uint Condition => AgentItem.Condition;
         public uint Concentration => AgentItem.Concentration;
         public uint Healing => AgentItem.Healing;
-        public ushort InstID => AgentItem.InstID;
         public string Prof => AgentItem.Prof;
-        public ulong Agent => AgentItem.Agent;
         public long LastAware => AgentItem.LastAware;
         public long FirstAware => AgentItem.FirstAware;
         public int ID => AgentItem.ID;

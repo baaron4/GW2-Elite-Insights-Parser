@@ -219,7 +219,7 @@ namespace GW2EIEvtcParser.EIData
                 case BuffEnum.OffGroup:
                     return empty;
                 case BuffEnum.Squad:
-                    var otherPlayers = log.PlayerList.Where(p => p.Agent != Agent).ToList();
+                    var otherPlayers = log.PlayerList.Where(p => p != this).ToList();
                     return FinalActorBuffs.GetBuffsForPlayers(otherPlayers, log, AgentItem, start, end);
                 case BuffEnum.Self:
                 default:
