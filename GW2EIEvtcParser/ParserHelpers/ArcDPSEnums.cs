@@ -690,7 +690,7 @@ namespace GW2EIEvtcParser
 
         public static bool DstIsAgent(this ArcDPSEnums.StateChange state)
         {
-            return state == ArcDPSEnums.StateChange.None || state == ArcDPSEnums.StateChange.AttackTarget;
+            return state == ArcDPSEnums.StateChange.None || state == ArcDPSEnums.StateChange.AttackTarget || state == ArcDPSEnums.StateChange.BuffInitial;
         }
 
         public static bool HasTime(this ArcDPSEnums.StateChange state)
