@@ -83,6 +83,9 @@ namespace GW2EIEvtcParser.EIData
                 case DamageType.StrikeAndCondition:
                     Tooltip += "<br>Strike and Condition Damage";
                     break;
+                case DamageType.StrikeAndConditionAndLifeLeech:
+                    Tooltip += "<br>Strike, Condition and Life Leech Damage";
+                    break;
                 case DamageType.Condition:
                     Tooltip += "<br>Condition Damage";
                     break;
@@ -102,6 +105,9 @@ namespace GW2EIEvtcParser.EIData
                     break;
                 case DamageType.StrikeAndCondition:
                     Tooltip += "<br>Compared against Strike and Condition Damage";
+                    break;
+                case DamageType.StrikeAndConditionAndLifeLeech:
+                    Tooltip += "<br>Compared against Strike, Condition and Life Leech Damage";
                     break;
                 case DamageType.Condition:
                     Tooltip += "<br>Compared against Condition Damage";
@@ -163,6 +169,8 @@ namespace GW2EIEvtcParser.EIData
                     return _dmgSrc == DamageSource.All ? damageData.StrikeDamage : damageData.ActorStrikeDamage;
                 case DamageType.StrikeAndCondition:
                     return _dmgSrc == DamageSource.All ? damageData.StrikeDamage + damageData.CondiDamage : damageData.ActorStrikeDamage + damageData.ActorCondiDamage;
+                case DamageType.StrikeAndConditionAndLifeLeech:
+                    return _dmgSrc == DamageSource.All ? damageData.StrikeDamage + damageData.CondiDamage + damageData.LifeLeechDamage : damageData.ActorStrikeDamage + damageData.ActorCondiDamage + damageData.ActorLifeLeechDamage;
                 default:
                     throw new NotImplementedException("Not implemented damage type " + _compareType);
             }

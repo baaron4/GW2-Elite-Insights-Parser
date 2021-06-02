@@ -74,6 +74,9 @@ namespace GW2EIEvtcParser.EIData
                     case ParserHelper.DamageType.StrikeAndCondition:
                         dls.RemoveAll(x => x is NonDirectHealthDamageEvent && !x.ConditionDamageBased(log));
                         break;
+                    case ParserHelper.DamageType.StrikeAndConditionAndLifeLeech:
+                        dls.RemoveAll(x => x is NonDirectHealthDamageEvent ndhd && !x.ConditionDamageBased(log) && !ndhd.IsLifeLeech);
+                        break;
                     case ParserHelper.DamageType.All:
                         break;
                     default:
