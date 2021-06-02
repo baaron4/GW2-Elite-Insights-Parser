@@ -168,11 +168,23 @@ namespace GW2EIEvtcParser.EncounterLogic
                 gadget.OverrideType(AgentItem.AgentType.NPC);
                 gadget.OverrideID(ArcDPSEnums.TrashID.ChargedBloodstone);
                 // they are actually present from start to finish
-                gadget.OverrideAwareTimes(firstXera.LastAware + 15000, gadget.LastAware);
+                var firstAware = firstXera.LastAware + 12000;
+                foreach (CombatItem c in combatData)
+                {
+                    if ((c.SrcMatchesAgent(gadget) || c.DstMatchesAgent(gadget)) && c.Time <= firstAware)
+                    {
+                        c.OverrideTime(firstAware);
+                    }
+                }
+                gadget.OverrideAwareTimes(firstAware, gadget.LastAware);
+
             }
             if (bloodstoneFragments.Any() || bloodstoneShards.Any() || chargedBloodStones.Any())
             {
                 agentData.Refresh();
+                var auxCombatData = combatData.OrderBy(x => x.Time).ToList();
+                combatData.Clear();
+                combatData.AddRange(auxCombatData);
             }
             // find split
             AgentItem secondXera = agentData.GetNPCsByID(16286).FirstOrDefault();

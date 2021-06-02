@@ -573,14 +573,17 @@ namespace GW2EIEvtcParser
             return combatItem.IsStateChange != ArcDPSEnums.StateChange.Unknown && combatItem.IsStateChange != ArcDPSEnums.StateChange.StatReset && combatItem.IsStateChange != ArcDPSEnums.StateChange.APIDelayed && combatItem.IsStateChange != ArcDPSEnums.StateChange.Extension;
         }
         private static bool UpdateAgentData(AgentItem ag, long logTime, ushort instid)
-        {
-            if (ag.InstID == 0)
+        {       
+            if (instid != 0)
             {
-                ag.SetInstid(instid);
-            } 
-            else if (ag.InstID != instid)
-            {
-                return false;
+                if (ag.InstID == 0)
+                {
+                    ag.SetInstid(instid);
+                }
+                else if (ag.InstID != instid)
+                {
+                    return false;
+                }
             }
             
             if (ag.FirstAware == 0)
@@ -602,10 +605,7 @@ namespace GW2EIEvtcParser
                 AgentItem minion = _agentData.GetAgent(minionAgent, logTime);
                 if (minion != ParserHelper._unknownAgent && minion.Master == null)
                 {
-                    if (minion.FirstAware <= logTime && logTime <= minion.LastAware)
-                    {
-                        minion.SetMaster(master);
-                    }
+                    minion.SetMaster(master);
                 }
             }
         }
@@ -619,21 +619,7 @@ namespace GW2EIEvtcParser
             {
                 if (playerAgent.InstID == 0 || playerAgent.FirstAware == 0 || playerAgent.LastAware == long.MaxValue)
                 {
-                    CombatItem tst = _combatItems.Find(x => x.SrcAgent == playerAgent.Agent);
-                    if (tst == null)
-                    {
-                        tst = _combatItems.Find(x => x.DstAgent == playerAgent.Agent);
-                        if (tst == null)
-                        {
-                            continue;
-                        }
-                        playerAgent.SetInstid(tst.DstInstid);
-                    }
-                    else
-                    {
-                        playerAgent.SetInstid(tst.SrcInstid);
-                    }
-                    playerAgent.OverrideAwareTimes(_logStartTime, _logEndTime);
+                    continue;
                 }
                 bool skip = false;
                 var player = new Player(playerAgent, _fightData.Logic.Mode == FightLogic.ParseMode.Instanced5 || _fightData.Logic.Mode == FightLogic.ParseMode.sPvP);
