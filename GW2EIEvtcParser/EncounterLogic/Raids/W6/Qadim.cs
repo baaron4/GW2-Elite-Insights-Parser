@@ -117,7 +117,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Pyres
             foreach (AgentItem pyre in pyres)
             {
-                CombatItem position = combatData.FirstOrDefault(x => x.SrcAgent == pyre.Agent && x.IsStateChange == ArcDPSEnums.StateChange.Position);
+                CombatItem position = combatData.FirstOrDefault(x => x.SrcMatchesAgent(pyre) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
                 if (position != null)
                 {
                     (float x, float y, _) = AbstractMovementEvent.UnpackMovementData(position.DstAgent, 0);

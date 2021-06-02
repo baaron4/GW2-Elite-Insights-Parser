@@ -87,19 +87,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             bool sortCombatList = false;
             foreach (AgentItem agentToOverrideFirstAware in agentsToOverrideFirstAware)
             {
-                CombatItem firstMovement = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && x.SrcAgent == agentToOverrideFirstAware.Agent && x.DstAgent != 0);
+                CombatItem firstMovement = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && x.SrcMatchesAgent(agentToOverrideFirstAware) && x.DstAgent != 0);
                 if (firstMovement != null)
                 {
                     // update start
-                    agentToOverrideFirstAware.OverrideAwareTimes(firstMovement.Time - ParserHelper.ServerDelayConstant, agentToOverrideFirstAware.LastAware);
+                    long firstAware = firstMovement.Time - ParserHelper.ServerDelayConstant;
                     foreach (CombatItem c in combatData)
                     {
-                        if (c.SrcAgent == agentToOverrideFirstAware.Agent && (c.IsStateChange == ArcDPSEnums.StateChange.Position || c.IsStateChange == ArcDPSEnums.StateChange.Rotation) && c.Time <= agentToOverrideFirstAware.FirstAware)
+                        if (c.SrcMatchesAgent(agentToOverrideFirstAware) && (c.IsStateChange == ArcDPSEnums.StateChange.Position || c.IsStateChange == ArcDPSEnums.StateChange.Rotation) && c.Time <= firstAware)
                         {
                             sortCombatList = true;
-                            c.OverrideTime(agentToOverrideFirstAware.FirstAware);
+                            c.OverrideTime(firstAware);
                         }
                     }
+                    agentToOverrideFirstAware.OverrideAwareTimes(firstAware, agentToOverrideFirstAware.LastAware);
                 }
             }
             // make sure the list is still sorted by time after overrides

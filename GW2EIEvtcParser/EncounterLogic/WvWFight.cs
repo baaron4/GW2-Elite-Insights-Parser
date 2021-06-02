@@ -128,16 +128,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             var set = new HashSet<string>();
             var toRemove = new HashSet<AgentItem>();
             var garbageList = new List<AbstractSingleActor>();
-            var teamChangeDict = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.TeamChange).GroupBy(x => x.SrcAgent).ToDictionary(x => x.Key, x => x.Select(y => y.DstAgent).ToList());
+            var teamChangeDict = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.TeamChange).GroupBy(x => x.SrcAgent).ToDictionary(x => x.Key, x => x.ToList());
             //
             IReadOnlyList<AgentItem> squadPlayers = agentData.GetAgentByType(AgentItem.AgentType.Player);
             ulong greenTeam = ulong.MaxValue;
             var greenTeams = new List<ulong>();
             foreach (AgentItem a in squadPlayers)
             {
-                if (teamChangeDict.TryGetValue(a.Agent, out List<ulong> teamChangeList))
+                if (teamChangeDict.TryGetValue(a.Agent, out List<CombatItem> teamChangeList))
                 {
-                    greenTeams.AddRange(teamChangeList);
+                    greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(x => x.DstAgent));
                 }
             }
             if (greenTeams.Any())
@@ -147,9 +147,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             //
             foreach (AgentItem a in aList)
             {
-                if (teamChangeDict.TryGetValue(a.Agent, out List<ulong> teamChangeList))
+                if (teamChangeDict.TryGetValue(a.Agent, out List<CombatItem> teamChangeList))
                 {
-                    a.OverrideIsNotInSquadFriendlyPlayer(teamChangeList.Any(x => x == greenTeam));
+                    a.OverrideIsNotInSquadFriendlyPlayer(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(x => x.DstAgent).Any(x => x == greenTeam));
                 }
                 List<AbstractSingleActor> actorListToFill = a.IsNotInSquadFriendlyPlayer ? friendlies : _detailed ? _targets : garbageList;
                 var nonSquadPlayer = new PlayerNonSquad(a);
@@ -190,7 +190,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (!_detailed)
             {
                 var aList = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer).Where(x => !friendlyAgents.Contains(x)).ToList();
-                var enemyPlayerDicts = aList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList().First());
+                var enemyPlayerDicts = aList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
                 foreach (CombatItem c in combatData)
                 {
                     if (c.IsStateChange == ArcDPSEnums.StateChange.None &&
@@ -198,13 +198,27 @@ namespace GW2EIEvtcParser.EncounterLogic
                         c.IsBuffRemove == ArcDPSEnums.BuffRemove.None &&
                         ((c.IsBuff != 0 && c.Value == 0) || (c.IsBuff == 0)))
                     {
-                        if (enemyPlayerDicts.TryGetValue(c.SrcAgent, out AgentItem src))
+                        if (enemyPlayerDicts.TryGetValue(c.SrcAgent, out List<AgentItem> srcs))
                         {
-                            c.OverrideSrcAgent(dummyAgent.Agent);
+                            foreach (AgentItem src in srcs)
+                            {
+                                if (c.SrcMatchesAgent(src))
+                                {
+                                    c.OverrideSrcAgent(dummyAgent.Agent);
+                                    break;
+                                }
+                            }
                         }
-                        if (enemyPlayerDicts.TryGetValue(c.DstAgent, out AgentItem dst))
+                        if (enemyPlayerDicts.TryGetValue(c.DstAgent, out List<AgentItem> dsts))
                         {
-                            c.OverrideDstAgent(dummyAgent.Agent);
+                            foreach (AgentItem dst in dsts)
+                            {
+                                if (c.DstMatchesAgent(dst))
+                                {
+                                    c.OverrideSrcAgent(dummyAgent.Agent);
+                                    break;
+                                }
+                            }
                         }
                     }
                 }

@@ -196,7 +196,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return 0;
             }
-            CombatItem attackTargetEvent = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget && x.SrcAgent == targetAgent.Agent);
+            CombatItem attackTargetEvent = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget && x.SrcMatchesAgent(targetAgent));
             if (attackTargetEvent == null)
             {
                 return 0;
@@ -222,7 +222,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AgentItem deimos in deimosAgents)
             {
                 // enter combat
-                CombatItem spawnProtectionRemove = combatData.FirstOrDefault(x => x.DstAgent == deimos.Agent && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SkillID == 34113);
+                CombatItem spawnProtectionRemove = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos) && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SkillID == 34113);
                 if (spawnProtectionRemove != null)
                 {
                     start = Math.Max(start, spawnProtectionRemove.Time);

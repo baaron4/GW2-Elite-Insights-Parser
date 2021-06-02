@@ -168,17 +168,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         if (evt.Time >= darkAiAgent.FirstAware && evt.Time <= darkAiAgent.LastAware)
                         {
-                            if (evt.IsStateChange.SrcIsAgent() && evt.SrcAgent == aiAgent.Agent)
+                            if (evt.SrcMatchesAgent(aiAgent))
                             {
                                 evt.OverrideSrcAgent(darkAiAgent.Agent);
                             }
-                            if (evt.IsStateChange.DstIsAgent() && evt.DstAgent == aiAgent.Agent)
+                            if (evt.DstMatchesAgent(aiAgent))
                             {
                                 evt.OverrideDstAgent(darkAiAgent.Agent);
                             }
                         }
                     }
-                    CombatItem toCopy = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcAgent == aiAgent.Agent && x.Time <= lastAwareTime - 1);
+                    CombatItem toCopy = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(aiAgent) && x.Time <= lastAwareTime - 1);
                     if (toCopy != null)
                     {
                         var copied = new CombatItem(toCopy);
@@ -225,7 +225,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             eleAi?.OverrideName("Elemental Ai");
             if (_hasElementalMode && _hasDarkMode)
             {
-                CombatItem aiMaxHP = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && x.SrcAgent == aiAgent.Agent);
+                CombatItem aiMaxHP = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && x.SrcMatchesAgent(aiAgent));
                 if (aiMaxHP != null)
                 {
                     darkAi.SetManualHealth((int)aiMaxHP.DstAgent);
