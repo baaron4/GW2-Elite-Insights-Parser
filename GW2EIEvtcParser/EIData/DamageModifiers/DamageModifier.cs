@@ -83,6 +83,9 @@ namespace GW2EIEvtcParser.EIData
                 case DamageType.StrikeAndCondition:
                     Tooltip += "<br>Strike and Condition Damage";
                     break;
+                case DamageType.StrikeAndConditionAndLifeLeech:
+                    Tooltip += "<br>Strike, Condition and Life Leech Damage";
+                    break;
                 case DamageType.Condition:
                     Tooltip += "<br>Condition Damage";
                     break;
@@ -102,6 +105,9 @@ namespace GW2EIEvtcParser.EIData
                     break;
                 case DamageType.StrikeAndCondition:
                     Tooltip += "<br>Compared against Strike and Condition Damage";
+                    break;
+                case DamageType.StrikeAndConditionAndLifeLeech:
+                    Tooltip += "<br>Compared against Strike, Condition and Life Leech Damage";
                     break;
                 case DamageType.Condition:
                     Tooltip += "<br>Compared against Condition Damage";
@@ -163,6 +169,8 @@ namespace GW2EIEvtcParser.EIData
                     return _dmgSrc == DamageSource.All ? damageData.StrikeDamage : damageData.ActorStrikeDamage;
                 case DamageType.StrikeAndCondition:
                     return _dmgSrc == DamageSource.All ? damageData.StrikeDamage + damageData.CondiDamage : damageData.ActorStrikeDamage + damageData.ActorCondiDamage;
+                case DamageType.StrikeAndConditionAndLifeLeech:
+                    return _dmgSrc == DamageSource.All ? damageData.StrikeDamage + damageData.CondiDamage + damageData.LifeLeechDamage : damageData.ActorStrikeDamage + damageData.ActorCondiDamage + damageData.ActorLifeLeechDamage;
                 default:
                     throw new NotImplementedException("Not implemented damage type " + _compareType);
             }
@@ -202,7 +210,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifierTarget(31589, "Exposed (Strike)", "30%", DamageSource.All, 30.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, "https://wiki.guildwars2.com/images/6/6b/Exposed.png", 115190, ulong.MaxValue, DamageModifierMode.All),
             new BuffDamageModifierTarget(31589, "Exposed (Condition)", "100%", DamageSource.All, 100.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, "https://wiki.guildwars2.com/images/6/6b/Exposed.png", 115190, ulong.MaxValue, DamageModifierMode.All),
             new BuffDamageModifierTarget(738, "Vulnerability", "1% per Stack", DamageSource.All, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByStack, "https://wiki.guildwars2.com/images/a/af/Vulnerability.png", DamageModifierMode.All),
-            new BuffDamageModifier(50421, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Common, ByPresenceNonMultiplier, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png", 88541, ulong.MaxValue, DamageModifierMode.All),
+            new BuffApproximateDamageModifier(50421, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png", 88541, ulong.MaxValue, DamageModifierMode.All),
             new DamageLogDamageModifier("Soulcleave's Summit", "per hit (no ICD)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, Source.Common,"https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png", ((x, log) => x.SkillId == 45026), BySkill, 0, 115190, DamageModifierMode.All),
             new DamageLogDamageModifier("Soulcleave's Summit", "per hit (1s ICD per target)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, Source.Common,"https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png", ((x, log) => x.SkillId == 45026), BySkill, 115190, ulong.MaxValue, DamageModifierMode.All),
             new DamageLogDamageModifier("One Wolf Pack", "per hit (max. once every 0.25s)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, Source.Common, "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png", ((x, log) => x.SkillId == 42145), BySkill, DamageModifierMode.All),

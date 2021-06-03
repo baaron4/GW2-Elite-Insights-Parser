@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.EIData
             new DamageLogDamageModifier("Close to Death", "20% below 50% HP", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Necromancer,"https://wiki.guildwars2.com/images/b/b2/Close_to_Death.png", (x, log) => x.AgainstUnderFifty, ByPresence, DamageModifierMode.All),
             // Soul Reaping
             new BuffDamageModifier(53489, "Soul Barbs", "10% after entering or exiting shroud", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, "https://wiki.guildwars2.com/images/b/bd/Soul_Barbs.png", 94051, 115190, DamageModifierMode.All),
-            new BuffDamageModifier(53489, "Soul Barbs", "10% after entering or exiting shroud", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, ByPresence, "https://wiki.guildwars2.com/images/b/bd/Soul_Barbs.png", 115190, ulong.MaxValue, DamageModifierMode.All),
+            new BuffDamageModifier(53489, "Soul Barbs", "10% after entering or exiting shroud", DamageSource.NoPets, 10.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Necromancer, ByPresence, "https://wiki.guildwars2.com/images/b/bd/Soul_Barbs.png", 115190, ulong.MaxValue, DamageModifierMode.All),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

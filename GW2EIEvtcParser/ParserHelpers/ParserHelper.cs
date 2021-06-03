@@ -44,7 +44,7 @@ namespace GW2EIEvtcParser
         };
 
         // TODO: add life leech stuff
-        public enum DamageType { All, Power, Strike, Condition, StrikeAndCondition };
+        public enum DamageType { All, Power, Strike, Condition, StrikeAndCondition, StrikeAndConditionAndLifeLeech };
         public enum BuffEnum { Self, Group, OffGroup, Squad };
 
         internal static T MaxBy<T, TComparable>(this IEnumerable<T> en, Func<T, TComparable> evaluate) where TComparable : IComparable<TComparable>
