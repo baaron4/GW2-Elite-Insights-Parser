@@ -162,7 +162,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                     CombatItem invul895Loss = combatData.FirstOrDefault(x => x.Time <= darkModeStart && x.SkillID == 895 && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All);
                     long lastAwareTime = (invul895Loss != null ? invul895Loss.Time : darkModeStart);
                     AgentItem darkAiAgent = agentData.AddCustomAgent(lastAwareTime + 1, aiAgent.LastAware, AgentItem.AgentType.NPC, aiAgent.Name, aiAgent.Prof, (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2, false, aiAgent.Toughness, aiAgent.Healing, aiAgent.Condition, aiAgent.Concentration, aiAgent.HitboxWidth, aiAgent.HitboxHeight);
-                    aiAgent.OverrideAwareTimes(aiAgent.FirstAware, lastAwareTime);
                     // Redirect combat events
                     foreach (CombatItem evt in combatData)
                     {
@@ -181,14 +180,27 @@ namespace GW2EIEvtcParser.EncounterLogic
                     CombatItem toCopy = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(aiAgent) && x.Time <= lastAwareTime - 1);
                     if (toCopy != null)
                     {
-                        var copied = new CombatItem(toCopy);
-                        copied.OverrideDstAgent(0);
-                        copied.OverrideTime(lastAwareTime);
-                        combatData.Add(copied);
+                        //
+                        {
+                            var elAI0HP = new CombatItem(toCopy);
+                            elAI0HP.OverrideDstAgent(0);
+                            elAI0HP.OverrideTime(lastAwareTime);
+                            combatData.Add(elAI0HP);
+                        }
+                        //
+                        {
+                            var darkAI0HP = new CombatItem(toCopy);
+                            darkAI0HP.OverrideDstAgent(0);
+                            darkAI0HP.OverrideTime(darkAiAgent.FirstAware);
+                            darkAI0HP.OverrideSrcAgent(darkAiAgent.Agent);
+                            combatData.Add(darkAI0HP);
+                        }
+                        //
                         var auxCombatData = combatData.OrderBy(x => x.Time).ToList();
                         combatData.Clear();
                         combatData.AddRange(auxCombatData);
                     }
+                    aiAgent.OverrideAwareTimes(aiAgent.FirstAware, lastAwareTime);
                     // Redirect NPC masters
                     foreach (AgentItem ag in agentData.GetAgentByType(AgentItem.AgentType.NPC))
                     {
