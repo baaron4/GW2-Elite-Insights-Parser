@@ -6,7 +6,7 @@
 
         internal PointOfViewEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem)
         {
-            PoV = agentData.GetAgent(evtcItem.SrcAgent);
+            PoV = agentData.GetAgent(evtcItem.SrcAgent, evtcItem.Time);
         }
 
     }

@@ -8,8 +8,8 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal AbstractBuffApplyEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, skillData)
         {
-            By = agentData.GetAgent(evtcItem.SrcAgent);
-            To = agentData.GetAgent(evtcItem.DstAgent);
+            By = agentData.GetAgent(evtcItem.SrcAgent, evtcItem.Time);
+            To = agentData.GetAgent(evtcItem.DstAgent, evtcItem.Time);
             BuffInstance = evtcItem.Pad;
         }
 

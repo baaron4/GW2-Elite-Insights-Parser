@@ -52,14 +52,14 @@ namespace GW2EIEvtcParser.EIData
             {
                 case BuffEnum.Group:
                     var otherPlayersInGroup = log.PlayerList
-                        .Where(p => p.Group == Group && Agent != p.Agent)
+                        .Where(p => p.Group == Group && this != p)
                         .ToList();
                     return FinalActorBuffs.GetBuffsForPlayers(otherPlayersInGroup, log, AgentItem, start, end);
                 case BuffEnum.OffGroup:
                     var offGroupPlayers = log.PlayerList.Where(p => p.Group != Group).ToList();
                     return FinalActorBuffs.GetBuffsForPlayers(offGroupPlayers, log, AgentItem, start, end);
                 case BuffEnum.Squad:
-                    var otherPlayers = log.PlayerList.Where(p => p.Agent != Agent).ToList();
+                    var otherPlayers = log.PlayerList.Where(p => p != this).ToList();
                     return FinalActorBuffs.GetBuffsForPlayers(otherPlayers, log, AgentItem, start, end);
                 case BuffEnum.Self:
                 default:

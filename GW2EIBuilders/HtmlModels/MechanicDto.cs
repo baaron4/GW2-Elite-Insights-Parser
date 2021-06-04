@@ -27,7 +27,7 @@ namespace GW2EIBuilders.HtmlModels
                 if (mech.InternalCooldown > 0)
                 {
                     long timeFilter = 0;
-                    var mls = log.MechanicData.GetMechanicLogs(log, mech).Where(x => x.Actor.Agent == actor.Agent).ToList();
+                    var mls = log.MechanicData.GetMechanicLogs(log, mech).Where(x => x.Actor == actor).ToList();
                     foreach (MechanicEvent ml in mls)
                     {
                         bool inInterval = phase.InInterval(ml.Time);
@@ -47,7 +47,7 @@ namespace GW2EIBuilders.HtmlModels
                 } 
                 else
                 {
-                    count = log.MechanicData.GetMechanicLogs(log, mech).Where(x => x.Actor.Agent == actor.Agent && phase.InInterval(x.Time)).Count();
+                    count = log.MechanicData.GetMechanicLogs(log, mech).Where(x => x.Actor == actor && phase.InInterval(x.Time)).Count();
                 }
                 res.Add(new int[] { count - filterCount, count });
             }

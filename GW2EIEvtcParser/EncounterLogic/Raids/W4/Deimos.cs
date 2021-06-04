@@ -191,17 +191,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return 0;
             }
             long firstAware = targetable.Time;
-            AgentItem targetAgent = agentData.GetAgent(targetable.SrcAgent);
+            AgentItem targetAgent = agentData.GetAgent(targetable.SrcAgent, targetable.Time);
             if (targetAgent == ParserHelper._unknownAgent)
             {
                 return 0;
             }
-            CombatItem attackTargetEvent = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget && x.SrcAgent == targetAgent.Agent);
+            CombatItem attackTargetEvent = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget && x.SrcMatchesAgent(targetAgent));
             if (attackTargetEvent == null)
             {
                 return 0;
             }
-            AgentItem deimosStructBody = agentData.GetAgent(attackTargetEvent.DstAgent);
+            AgentItem deimosStructBody = agentData.GetAgent(attackTargetEvent.DstAgent, attackTargetEvent.Time);
             if (deimosStructBody == ParserHelper._unknownAgent)
             {
                 return 0;
@@ -222,7 +222,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AgentItem deimos in deimosAgents)
             {
                 // enter combat
-                CombatItem spawnProtectionRemove = combatData.FirstOrDefault(x => x.DstAgent == deimos.Agent && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SkillID == 34113);
+                CombatItem spawnProtectionRemove = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos) && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SkillID == 34113);
                 if (spawnProtectionRemove != null)
                 {
                     start = Math.Max(start, spawnProtectionRemove.Time);
@@ -255,9 +255,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Deimos not found");
             }
             // Remove deimos despawn events as they are useless and mess with combat replay
-            combatData.RemoveAll(x => x.IsStateChange == ArcDPSEnums.StateChange.Despawn && x.SrcAgent == deimos.Agent);
+            combatData.RemoveAll(x => x.IsStateChange == ArcDPSEnums.StateChange.Despawn && x.SrcMatchesAgent(deimos.AgentItem));
             // invul correction
-            CombatItem invulApp = combatData.FirstOrDefault(x => x.DstAgent == deimos.Agent && x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0 && x.SkillID == 762 && x.IsStateChange == ArcDPSEnums.StateChange.None);
+            CombatItem invulApp = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos.AgentItem) && x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0 && x.SkillID == 762 && x.IsStateChange == ArcDPSEnums.StateChange.None);
             if (invulApp != null)
             {
                 invulApp.OverrideValue((int)(deimos.LastAware - invulApp.Time));

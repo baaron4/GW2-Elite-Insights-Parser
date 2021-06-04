@@ -128,7 +128,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     long sacrificeStartTime = sacrificeStartList[i].Time;
                     long sacrificeEndTime = i < sacrificeEndList.Count ? sacrificeEndList[i].Time : fightData.FightEnd;
                     //
-                    Player sacrifice = friendlies.OfType<Player>().FirstOrDefault(x => x.AgentItem == agentData.GetAgent(sacrificeStartList[i].DstAgent));
+                    Player sacrifice = friendlies.OfType<Player>().FirstOrDefault(x => x.AgentItem == agentData.GetAgent(sacrificeStartList[i].DstAgent, sacrificeStartList[i].Time));
                     if (sacrifice == null)
                     {
                         continue;
@@ -140,7 +140,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             continue;
                         }
-                        bool skip = !((cbt.IsStateChange.DstIsAgent() && cbt.DstAgent == sacrifice.Agent) || (cbt.IsStateChange.SrcIsAgent() && cbt.SrcAgent == sacrifice.Agent));
+                        bool skip = !(cbt.DstMatchesAgent(sacrifice.AgentItem) || cbt.SrcMatchesAgent(sacrifice.AgentItem));
                         if (skip)
                         {
                             continue;
@@ -150,7 +150,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (isDamageEvent)
                         {
                             // only redirect incoming damage
-                            if (cbt.DstAgent == sacrifice.Agent)
+                            if (cbt.DstMatchesAgent(sacrifice.AgentItem))
                             {
                                 cbt.OverrideDstAgent(sacrificeCrystal.Agent);
                             }
@@ -159,11 +159,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                         else
                         {
                             var copy = new CombatItem(cbt);
-                            if (cbt.IsStateChange.DstIsAgent() && cbt.DstAgent == sacrifice.Agent)
+                            if (cbt.DstMatchesAgent(sacrifice.AgentItem))
                             {
                                 cbt.OverrideDstAgent(sacrificeCrystal.Agent);
                             }
-                            if (cbt.IsStateChange.SrcIsAgent() && cbt.SrcAgent == sacrifice.Agent)
+                            if (cbt.SrcMatchesAgent(sacrifice.AgentItem))
                             {
                                 cbt.OverrideSrcAgent(sacrificeCrystal.Agent);
                             }

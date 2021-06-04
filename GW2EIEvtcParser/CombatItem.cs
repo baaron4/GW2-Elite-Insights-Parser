@@ -1,4 +1,5 @@
 ﻿using System;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser
 {
@@ -104,6 +105,24 @@ namespace GW2EIEvtcParser
             Pad2 = c.Pad2;
             Pad3 = c.Pad3;
             Pad4 = c.Pad4;
+        }
+
+        internal bool DstMatchesAgent(AgentItem agentItem)
+        {
+            if (IsStateChange.DstIsAgent())
+            {
+                return agentItem.Agent == DstAgent && agentItem.FirstAware <= Time && agentItem.LastAware >= Time;
+            }
+            return false;
+        }
+
+        internal bool SrcMatchesAgent(AgentItem agentItem)
+        {
+            if (IsStateChange.SrcIsAgent())
+            {
+                return agentItem.Agent == SrcAgent && agentItem.FirstAware <= Time && agentItem.LastAware >= Time;
+            }
+            return false;
         }
 
 

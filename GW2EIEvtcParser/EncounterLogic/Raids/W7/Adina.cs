@@ -34,12 +34,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             long final = fightData.FightEnd;
             foreach (CombatItem at in attackTargets)
             {
-                AgentItem hand = agentData.GetAgent(at.DstAgent);
-                AgentItem atAgent = agentData.GetAgent(at.SrcAgent);
-                var attackables = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.SrcAgent == atAgent.Agent && x.Time <= atAgent.LastAware && x.Time >= atAgent.FirstAware).ToList();
+                AgentItem hand = agentData.GetAgent(at.DstAgent, at.Time);
+                AgentItem atAgent = agentData.GetAgent(at.SrcAgent, at.Time);
+                var attackables = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.SrcMatchesAgent(atAgent)).ToList();
                 var attackOn = attackables.Where(x => x.DstAgent == 1 && x.Time >= first + 2000).Select(x => x.Time).ToList();
                 var attackOff = attackables.Where(x => x.DstAgent == 0 && x.Time >= first + 2000).Select(x => x.Time).ToList();
-                var posFacingHP = combatData.Where(x => x.SrcAgent == hand.Agent && x.Time >= hand.FirstAware && hand.LastAware >= x.Time && (x.IsStateChange == ArcDPSEnums.StateChange.Position || x.IsStateChange == ArcDPSEnums.StateChange.Rotation || x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)).ToList();
+                var posFacingHP = combatData.Where(x => x.SrcMatchesAgent(hand) && (x.IsStateChange == ArcDPSEnums.StateChange.Position || x.IsStateChange == ArcDPSEnums.StateChange.Rotation || x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)).ToList();
                 CombatItem pos = posFacingHP.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Position);
                 int id = (int)ArcDPSEnums.TrashID.HandOfErosion;
                 if (pos != null)
@@ -64,11 +64,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         if (c.Time >= extra.FirstAware && c.Time <= extra.LastAware)
                         {
-                            if (c.IsStateChange.SrcIsAgent() && c.SrcAgent == hand.Agent)
+                            if (c.SrcMatchesAgent(hand))
                             {
                                 c.OverrideSrcAgent(extra.Agent);
                             }
-                            if (c.IsStateChange.DstIsAgent() && c.DstAgent == hand.Agent)
+                            if (c.DstMatchesAgent(hand))
                             {
                                 c.OverrideDstAgent(extra.Agent);
                             }

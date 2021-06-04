@@ -132,7 +132,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Xera not found");
             }
             // enter combat
-            CombatItem enterCombat = combatData.Find(x => x.SrcAgent == target.Agent && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat);
+            CombatItem enterCombat = combatData.Find(x => x.SrcMatchesAgent(target) && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat);
             if (enterCombat != null)
             {
                 return enterCombat.Time;
@@ -150,35 +150,47 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             var maxHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && x.DstAgent > 0).ToList();
-            var bloodstoneFragments = maxHPUpdates.Where(x => x.DstAgent == 104580).Select(x => agentData.GetAgent(x.SrcAgent)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+            var bloodstoneFragments = maxHPUpdates.Where(x => x.DstAgent == 104580).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
             foreach (AgentItem gadget in bloodstoneFragments)
             {
                 gadget.OverrideType(AgentItem.AgentType.NPC);
                 gadget.OverrideID(ArcDPSEnums.TrashID.BloodstoneFragment);
             }
-            var bloodstoneShards = maxHPUpdates.Where(x => x.DstAgent == 343620).Select(x => agentData.GetAgent(x.SrcAgent)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+            var bloodstoneShards = maxHPUpdates.Where(x => x.DstAgent == 343620).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
             foreach (AgentItem gadget in bloodstoneShards)
             {
                 gadget.OverrideType(AgentItem.AgentType.NPC);
                 gadget.OverrideID(ArcDPSEnums.TrashID.BloodstoneShard);
             }
-            var chargedBloodStones = maxHPUpdates.Where(x => x.DstAgent == 74700).Select(x => agentData.GetAgent(x.SrcAgent)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.LastAware > firstXera.LastAware).ToList();
+            var chargedBloodStones = maxHPUpdates.Where(x => x.DstAgent == 74700).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.LastAware > firstXera.LastAware).ToList();
             foreach (AgentItem gadget in chargedBloodStones)
             {
                 gadget.OverrideType(AgentItem.AgentType.NPC);
                 gadget.OverrideID(ArcDPSEnums.TrashID.ChargedBloodstone);
                 // they are actually present from start to finish
-                gadget.OverrideAwareTimes(firstXera.LastAware + 15000, gadget.LastAware);
+                var firstAware = firstXera.LastAware + 12000;
+                foreach (CombatItem c in combatData)
+                {
+                    if ((c.SrcMatchesAgent(gadget) || c.DstMatchesAgent(gadget)) && c.Time <= firstAware)
+                    {
+                        c.OverrideTime(firstAware);
+                    }
+                }
+                gadget.OverrideAwareTimes(firstAware, gadget.LastAware);
+
             }
             if (bloodstoneFragments.Any() || bloodstoneShards.Any() || chargedBloodStones.Any())
             {
                 agentData.Refresh();
+                var auxCombatData = combatData.OrderBy(x => x.Time).ToList();
+                combatData.Clear();
+                combatData.AddRange(auxCombatData);
             }
             // find split
             AgentItem secondXera = agentData.GetNPCsByID(16286).FirstOrDefault();
             if (secondXera != null)
             {
-                CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcAgent == secondXera.Agent && x.Time >= secondXera.FirstAware + 500);
+                CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcMatchesAgent(secondXera) && x.Time >= secondXera.FirstAware + 500);
                 if (move != null)
                 {
                     _xeraSecondPhaseStartTime = move.Time;
@@ -192,11 +204,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 // update combat data
                 foreach (CombatItem c in combatData)
                 {
-                    if (c.SrcAgent == secondXera.Agent && c.IsStateChange.SrcIsAgent())
+                    if (c.SrcMatchesAgent(secondXera))
                     {
                         c.OverrideSrcAgent(firstXera.Agent);
                     }
-                    if (c.DstAgent == secondXera.Agent && c.IsStateChange.DstIsAgent())
+                    if (c.DstMatchesAgent(secondXera))
                     {
                         c.OverrideDstAgent(firstXera.Agent);
                     }

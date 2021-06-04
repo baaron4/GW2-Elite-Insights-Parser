@@ -27,7 +27,7 @@ namespace GW2EIBuilders.JsonModels
             jsonActor.Condition = actor.Condition;
             jsonActor.HitboxHeight = actor.HitboxHeight;
             jsonActor.HitboxWidth = actor.HitboxWidth;
-            jsonActor.InstanceID = actor.InstID;
+            jsonActor.InstanceID = actor.AgentItem.InstID;
             jsonActor.IsFake = actor.IsFakeActor;
             //
             jsonActor.DpsAll = phases.Select(phase => JsonStatisticsBuilder.BuildJsonDPS(actor.GetDPSStats(log, phase.Start, phase.End))).ToArray();

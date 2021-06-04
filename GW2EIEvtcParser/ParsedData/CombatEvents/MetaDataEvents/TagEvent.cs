@@ -8,7 +8,7 @@
         internal TagEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem)
         {
             TagID = evtcItem.Value;
-            Src = agentData.GetAgent(evtcItem.SrcAgent);
+            Src = agentData.GetAgent(evtcItem.SrcAgent, evtcItem.Time);
             Src.SetCommanderTag(this);
         }
 
