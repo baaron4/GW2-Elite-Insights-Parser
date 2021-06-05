@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
@@ -15,6 +16,17 @@ namespace GW2EIEvtcParser.EIData
                 throw new InvalidDataException("Agent is not a squad Player");
             }
             Account = "Non Squad Player " + (++NonSquadPlayers);
+        }
+
+        protected override bool InitCombatReplay(ParsedEvtcLog log)
+        {
+            bool baseValue = base.InitCombatReplay(log);
+            if (baseValue && !AgentItem.IsNotInSquadFriendlyPlayer)
+            {
+                TrimCombatReplay(log, CombatReplay, AgentItem);
+                return true;
+            }
+            return baseValue;
         }
 
     }

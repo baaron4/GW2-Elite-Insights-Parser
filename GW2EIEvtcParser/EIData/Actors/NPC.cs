@@ -54,28 +54,13 @@ namespace GW2EIEvtcParser.EIData
 
         protected override bool InitCombatReplay(ParsedEvtcLog log)
         {
-            if (base.InitCombatReplay(log) && !log.FriendlyAgents.Contains(AgentItem))
+            bool baseValue = base.InitCombatReplay(log);
+            if (baseValue && !log.FriendlyAgents.Contains(AgentItem))
             {
-                // Trim
-                DespawnEvent despawnCheck = log.CombatData.GetDespawnEvents(AgentItem).LastOrDefault();
-                SpawnEvent spawnCheck = log.CombatData.GetSpawnEvents(AgentItem).LastOrDefault();
-                DeadEvent deathCheck = log.CombatData.GetDeadEvents(AgentItem).LastOrDefault();
-                AliveEvent aliveCheck = log.CombatData.GetAliveEvents(AgentItem).LastOrDefault();
-                if (deathCheck != null && (aliveCheck == null || aliveCheck.Time < deathCheck.Time))
-                {
-                    CombatReplay.Trim(AgentItem.FirstAware, deathCheck.Time);
-                }
-                else if (despawnCheck != null && (spawnCheck == null || spawnCheck.Time < despawnCheck.Time))
-                {
-                    CombatReplay.Trim(AgentItem.FirstAware, despawnCheck.Time);
-                }
-                else
-                {
-                    CombatReplay.Trim(AgentItem.FirstAware, AgentItem.LastAware);
-                }
+                TrimCombatReplay(log, CombatReplay, AgentItem);
                 return true;
             }
-            return false;
+            return baseValue;
         }
     }
 }

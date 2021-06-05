@@ -168,10 +168,8 @@ class Animator {
                     }
                     break;
                 case "Target":
-                    this.targetData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 30, actor.positions, actor.dead, actor.down, actor.dc));
-                    break;
                 case "TargetPlayer":
-                    this.targetData.set(actor.id, new NonSquadIconDrawable(-1, -1, actor.img, 30, actor.positions, actor.dead, actor.down, actor.dc));
+                    this.targetData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 30, actor.positions, actor.dead, actor.down, actor.dc));
                     break;
                 case "Mob":
                     this.trashMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc));

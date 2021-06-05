@@ -12,9 +12,13 @@ namespace GW2EIEvtcParser.EIData
         public List<long> Dead { get; private set; }
         public List<long> Down { get; private set; }
         public List<long> Dc { get; private set; }
+        public long Start { get; }
+        public long End { get; }
 
         internal AbstractSingleActorSerializable(AbstractSingleActor actor, ParsedEvtcLog log, CombatReplayMap map, CombatReplay replay, string type)
         {
+            Start = replay.TimeOffsets.start;
+            End = replay.TimeOffsets.end;
             Img = actor.GetIcon();
             ID = actor.UniqueID;
             Positions = new List<double>();

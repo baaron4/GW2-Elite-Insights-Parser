@@ -284,6 +284,27 @@ namespace GW2EIEvtcParser.EIData
             return CombatReplay.PolledPositions;
         }
 
+        protected static void TrimCombatReplay(ParsedEvtcLog log, CombatReplay replay, AgentItem agentItem)
+        {
+            // Trim
+            DespawnEvent despawnCheck = log.CombatData.GetDespawnEvents(agentItem).LastOrDefault();
+            SpawnEvent spawnCheck = log.CombatData.GetSpawnEvents(agentItem).LastOrDefault();
+            DeadEvent deathCheck = log.CombatData.GetDeadEvents(agentItem).LastOrDefault();
+            AliveEvent aliveCheck = log.CombatData.GetAliveEvents(agentItem).LastOrDefault();
+            if (deathCheck != null && (aliveCheck == null || aliveCheck.Time < deathCheck.Time))
+            {
+                replay.Trim(agentItem.FirstAware, deathCheck.Time);
+            }
+            else if (despawnCheck != null && (spawnCheck == null || spawnCheck.Time < despawnCheck.Time))
+            {
+                replay.Trim(agentItem.FirstAware, despawnCheck.Time);
+            }
+            else
+            {
+                replay.Trim(agentItem.FirstAware, agentItem.LastAware);
+            }
+        }
+
         protected virtual bool InitCombatReplay(ParsedEvtcLog log)
         {
             CombatReplay = new CombatReplay();
