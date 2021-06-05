@@ -209,6 +209,7 @@ namespace GW2EIBuilders.HtmlModels
                     stats.Killed, // 12
                     stats.Downed, // 13
                     stats.AgainstMovingCount, // 14
+                    stats.ConnectedDamageCount, // 15
                 };
             return data;
         }

@@ -199,7 +199,12 @@ namespace GW2EIJSON
             /// Number of connected direct damage hit
             /// </summary>
             public int ConnectedDirectDamageCount { get; set; }
-            
+
+            /// <summary>
+            /// Number of connected damage hit
+            /// </summary>
+            public int ConnectedDamageCount { get; set; }
+
             /// <summary>
             /// Number of critable hit
             /// </summary>

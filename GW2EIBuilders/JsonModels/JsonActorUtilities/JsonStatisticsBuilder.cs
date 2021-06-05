@@ -58,6 +58,7 @@ namespace GW2EIBuilders.JsonModels
             jsonGameplayStats.TotalDamageCount = stats.TotalDamageCount;
             jsonGameplayStats.DirectDamageCount = stats.DirectDamageCount;
             jsonGameplayStats.ConnectedDirectDamageCount = stats.ConnectedDirectDamageCount;
+            jsonGameplayStats.ConnectedDamageCount = stats.ConnectedDamageCount;
             jsonGameplayStats.CritableDirectDamageCount = stats.CritableDirectDamageCount;
             jsonGameplayStats.CriticalRate = stats.CriticalCount;
             jsonGameplayStats.CriticalDmg = stats.CriticalDmg;
