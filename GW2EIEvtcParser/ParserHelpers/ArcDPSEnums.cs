@@ -139,7 +139,7 @@ namespace GW2EIEvtcParser
             BarrierUpdate = 38,
             StatReset = 39, 
             Extension = 40,
-            APIDelayed = 40,
+            APIDelayed = 41,
             Unknown
         };
 
@@ -314,6 +314,7 @@ namespace GW2EIEvtcParser
         private const int BloodstoneShard = -11;
         private const int ChargedBloodstone = -12;
         private const int PyreGuardianResolution = -13;
+        private const int CASword = -14;
 
 
         //
@@ -442,6 +443,7 @@ namespace GW2EIEvtcParser
             // CA
             ConjuredGreatsword = 21255,
             ConjuredShield = 21170,
+            ConjuredPlayerSword = CASword,
             // Qadim
             LavaElemental1 = 21236,
             LavaElemental2 = 21078,
@@ -680,30 +682,20 @@ namespace GW2EIEvtcParser
                 || state == ArcDPSEnums.StateChange.Velocity || state == ArcDPSEnums.StateChange.Rotation
                 || state == ArcDPSEnums.StateChange.TeamChange || state == ArcDPSEnums.StateChange.AttackTarget
                 || state == ArcDPSEnums.StateChange.Targetable || state == ArcDPSEnums.StateChange.StackActive
-                || state == ArcDPSEnums.StateChange.StackReset || state == ArcDPSEnums.StateChange.BreakbarState
+                || state == ArcDPSEnums.StateChange.StackReset || state == ArcDPSEnums.StateChange.Guild 
+                || state == ArcDPSEnums.StateChange.BreakbarState
                 || state == ArcDPSEnums.StateChange.BreakbarPercent || state == ArcDPSEnums.StateChange.Tag 
-                || state == ArcDPSEnums.StateChange.BarrierUpdate;
+                || state == ArcDPSEnums.StateChange.BarrierUpdate ;
         }
 
         public static bool DstIsAgent(this ArcDPSEnums.StateChange state)
         {
-            return state == ArcDPSEnums.StateChange.None || state == ArcDPSEnums.StateChange.AttackTarget;
+            return state == ArcDPSEnums.StateChange.None || state == ArcDPSEnums.StateChange.AttackTarget || state == ArcDPSEnums.StateChange.BuffInitial;
         }
 
         public static bool HasTime(this ArcDPSEnums.StateChange state)
         {
-            return state == ArcDPSEnums.StateChange.None || state == ArcDPSEnums.StateChange.EnterCombat
-                || state == ArcDPSEnums.StateChange.ExitCombat || state == ArcDPSEnums.StateChange.ChangeUp
-                || state == ArcDPSEnums.StateChange.ChangeDead || state == ArcDPSEnums.StateChange.ChangeDown
-                || state == ArcDPSEnums.StateChange.Spawn || state == ArcDPSEnums.StateChange.Despawn
-                || state == ArcDPSEnums.StateChange.HealthUpdate || state == ArcDPSEnums.StateChange.WeaponSwap
-                || state == ArcDPSEnums.StateChange.MaxHealthUpdate || state == ArcDPSEnums.StateChange.BuffInitial
-                || state == ArcDPSEnums.StateChange.Position || state == ArcDPSEnums.StateChange.Velocity
-                || state == ArcDPSEnums.StateChange.Rotation || state == ArcDPSEnums.StateChange.TeamChange
-                || state == ArcDPSEnums.StateChange.AttackTarget || state == ArcDPSEnums.StateChange.Targetable
-                || state == ArcDPSEnums.StateChange.StackActive || state == ArcDPSEnums.StateChange.StackReset
-                || state == ArcDPSEnums.StateChange.Reward || state == ArcDPSEnums.StateChange.BreakbarState
-                || state == ArcDPSEnums.StateChange.BreakbarPercent || state == ArcDPSEnums.StateChange.BarrierUpdate;
+            return state.SrcIsAgent() || state.DstIsAgent() || state == ArcDPSEnums.StateChange.Reward;
         }
     }
 

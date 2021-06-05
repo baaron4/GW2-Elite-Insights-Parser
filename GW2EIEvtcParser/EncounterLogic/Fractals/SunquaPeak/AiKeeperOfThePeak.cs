@@ -144,7 +144,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
             AgentItem aiAgent = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.AiKeeperOfThePeak).FirstOrDefault();
             if (aiAgent == null)
@@ -162,33 +162,45 @@ namespace GW2EIEvtcParser.EncounterLogic
                     CombatItem invul895Loss = combatData.FirstOrDefault(x => x.Time <= darkModeStart && x.SkillID == 895 && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All);
                     long lastAwareTime = (invul895Loss != null ? invul895Loss.Time : darkModeStart);
                     AgentItem darkAiAgent = agentData.AddCustomAgent(lastAwareTime + 1, aiAgent.LastAware, AgentItem.AgentType.NPC, aiAgent.Name, aiAgent.Prof, (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2, false, aiAgent.Toughness, aiAgent.Healing, aiAgent.Condition, aiAgent.Concentration, aiAgent.HitboxWidth, aiAgent.HitboxHeight);
-                    aiAgent.OverrideAwareTimes(aiAgent.FirstAware, lastAwareTime);
                     // Redirect combat events
                     foreach (CombatItem evt in combatData)
                     {
                         if (evt.Time >= darkAiAgent.FirstAware && evt.Time <= darkAiAgent.LastAware)
                         {
-                            if (evt.IsStateChange.SrcIsAgent() && evt.SrcAgent == aiAgent.Agent)
+                            if (evt.SrcMatchesAgent(aiAgent))
                             {
                                 evt.OverrideSrcAgent(darkAiAgent.Agent);
                             }
-                            if (evt.IsStateChange.DstIsAgent() && evt.DstAgent == aiAgent.Agent)
+                            if (evt.DstMatchesAgent(aiAgent))
                             {
                                 evt.OverrideDstAgent(darkAiAgent.Agent);
                             }
                         }
                     }
-                    CombatItem toCopy = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcAgent == aiAgent.Agent && x.Time <= lastAwareTime - 1);
+                    CombatItem toCopy = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(aiAgent) && x.Time <= lastAwareTime - 1);
                     if (toCopy != null)
                     {
-                        var copied = new CombatItem(toCopy);
-                        copied.OverrideDstAgent(0);
-                        copied.OverrideTime(lastAwareTime);
-                        combatData.Add(copied);
+                        //
+                        {
+                            var elAI0HP = new CombatItem(toCopy);
+                            elAI0HP.OverrideDstAgent(0);
+                            elAI0HP.OverrideTime(lastAwareTime);
+                            combatData.Add(elAI0HP);
+                        }
+                        //
+                        {
+                            var darkAI0HP = new CombatItem(toCopy);
+                            darkAI0HP.OverrideDstAgent(0);
+                            darkAI0HP.OverrideTime(darkAiAgent.FirstAware);
+                            darkAI0HP.OverrideSrcAgent(darkAiAgent.Agent);
+                            combatData.Add(darkAI0HP);
+                        }
+                        //
                         var auxCombatData = combatData.OrderBy(x => x.Time).ToList();
                         combatData.Clear();
                         combatData.AddRange(auxCombatData);
                     }
+                    aiAgent.OverrideAwareTimes(aiAgent.FirstAware, lastAwareTime);
                     // Redirect NPC masters
                     foreach (AgentItem ag in agentData.GetAgentByType(AgentItem.AgentType.NPC))
                     {
@@ -217,15 +229,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 Extension = "elai";
             }
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, playerList);
+            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, friendlies);
             // Manually set HP and names
-            NPC eleAi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak);
-            NPC darkAi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2);
+            AbstractSingleActor eleAi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak);
+            AbstractSingleActor darkAi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2);
             darkAi?.OverrideName("Dark Ai");
             eleAi?.OverrideName("Elemental Ai");
             if (_hasElementalMode && _hasDarkMode)
             {
-                CombatItem aiMaxHP = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && x.SrcAgent == aiAgent.Agent);
+                CombatItem aiMaxHP = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && x.SrcMatchesAgent(aiAgent));
                 if (aiMaxHP != null)
                 {
                     darkAi.SetManualHealth((int)aiMaxHP.DstAgent);
@@ -241,7 +253,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC elementalAi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak);
+            AbstractSingleActor elementalAi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak);
             if (elementalAi == null)
             {
                 if (_hasElementalMode)
@@ -253,7 +265,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 phases[0].AddTarget(elementalAi);
             }
-            NPC darkAi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2);
+            AbstractSingleActor darkAi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2);
             if (darkAi == null)
             {
                 if (_hasDarkMode)

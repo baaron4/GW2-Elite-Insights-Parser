@@ -17,7 +17,7 @@ namespace GW2EIBuilders.JsonModels
     internal static class JsonPlayerBuilder
     {
 
-        public static JsonPlayer BuildJsonPlayer(Player player, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc, Dictionary<string, JsonLog.DamageModDesc> damageModDesc, Dictionary<string, HashSet<long>> personalBuffs)
+        public static JsonPlayer BuildJsonPlayer(AbstractSingleActor player, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc, Dictionary<string, JsonLog.DamageModDesc> damageModDesc, Dictionary<string, HashSet<long>> personalBuffs)
         {
             var jsonPlayer = new JsonPlayer();
             JsonActorBuilder.FillJsonActor(jsonPlayer, player, log, settings, skillDesc, buffDesc);
@@ -27,12 +27,12 @@ namespace GW2EIBuilders.JsonModels
             jsonPlayer.Weapons = player.GetWeaponsArray(log).Select(w => w ?? "Unknown").ToArray();
             jsonPlayer.Group = player.Group;
             jsonPlayer.Profession = player.Prof;
-            jsonPlayer.FriendlyNPC = player.AgentItem.IsNPC;
-            jsonPlayer.NotInSquad = player.AgentItem.IsNotInSquadPlayer;
+            jsonPlayer.FriendlyNPC = player is NPC;
+            jsonPlayer.NotInSquad = player is PlayerNonSquad;
             jsonPlayer.ActiveTimes = phases.Select(x => player.GetActiveDuration(log, x.Start, x.End)).ToList();
             jsonPlayer.HasCommanderTag = player.HasCommanderTag;
             //
-            jsonPlayer.Support = phases.Select(phase => JsonStatisticsBuilder.BuildJsonPlayerSupport(player.GetPlayerSupportStats(log, phase.Start, phase.End))).ToArray();
+            jsonPlayer.Support = phases.Select(phase => JsonStatisticsBuilder.BuildJsonPlayerSupport(player.GetToPlayerSupportStats(log, phase.Start, phase.End))).ToArray();
             var targetDamage1S = new IReadOnlyList<int>[log.FightData.Logic.Targets.Count][];
             var targetPowerDamage1S = new IReadOnlyList<int>[log.FightData.Logic.Targets.Count][];
             var targetConditionDamage1S = new IReadOnlyList<int>[log.FightData.Logic.Targets.Count][];
@@ -42,7 +42,7 @@ namespace GW2EIBuilders.JsonModels
             var targetDamageDist = new IReadOnlyList<JsonDamageDist>[log.FightData.Logic.Targets.Count][];
             for (int j = 0; j < log.FightData.Logic.Targets.Count; j++)
             {
-                NPC target = log.FightData.Logic.Targets[j];
+                AbstractSingleActor target = log.FightData.Logic.Targets[j];
                 var graph1SDamageList = new IReadOnlyList<int>[phases.Count];
                 var graph1SPowerDamageList = new IReadOnlyList<int>[phases.Count];
                 var graph1SConditionDamageList = new IReadOnlyList<int>[phases.Count];
@@ -124,11 +124,11 @@ namespace GW2EIBuilders.JsonModels
             return jsonPlayer;
         }
 
-        private static List<JsonPlayerBuffsGeneration> GetPlayerBuffGenerations(List<IReadOnlyDictionary<long, FinalPlayerBuffs>> buffs, ParsedEvtcLog log, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        private static List<JsonPlayerBuffsGeneration> GetPlayerBuffGenerations(List<IReadOnlyDictionary<long, FinalActorBuffs>> buffs, ParsedEvtcLog log, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
             IReadOnlyList<PhaseData> phases = log.FightData.GetNonDummyPhases(log);
             var uptimes = new List<JsonPlayerBuffsGeneration>();
-            foreach (KeyValuePair<long, FinalPlayerBuffs> pair in buffs[0])
+            foreach (KeyValuePair<long, FinalActorBuffs> pair in buffs[0])
             {
                 Buff buff = log.Buffs.BuffsByIds[pair.Key];
                 if (!buffDesc.ContainsKey("b" + pair.Key))
@@ -138,7 +138,7 @@ namespace GW2EIBuilders.JsonModels
                 var data = new List<JsonBuffsGenerationData>();
                 for (int i = 0; i < phases.Count; i++)
                 {
-                    if (buffs[i].TryGetValue(pair.Key, out FinalPlayerBuffs val))
+                    if (buffs[i].TryGetValue(pair.Key, out FinalActorBuffs val))
                     {
                         JsonBuffsGenerationData value = JsonPlayerBuffsGenerationBuilder.BuildJsonBuffsGenerationData(val);
                         data.Add(value);
@@ -165,12 +165,12 @@ namespace GW2EIBuilders.JsonModels
             return uptimes;
         }
 
-        private static List<JsonBuffsUptime> GetPlayerJsonBuffsUptime(Player player, List<IReadOnlyDictionary<long, FinalPlayerBuffs>> buffs, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.BuffDesc> buffDesc, Dictionary<string, HashSet<long>> personalBuffs)
+        private static List<JsonBuffsUptime> GetPlayerJsonBuffsUptime(AbstractSingleActor player, List<IReadOnlyDictionary<long, FinalActorBuffs>> buffs, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.BuffDesc> buffDesc, Dictionary<string, HashSet<long>> personalBuffs)
         {
             var res = new List<JsonBuffsUptime>();
             var profEnums = new HashSet<ParserHelper.Source>(ProfToEnum(player.Prof));
             IReadOnlyList<PhaseData> phases = log.FightData.GetNonDummyPhases(log);
-            foreach (KeyValuePair<long, FinalPlayerBuffs> pair in buffs[0])
+            foreach (KeyValuePair<long, FinalActorBuffs> pair in buffs[0])
             {
                 Buff buff = log.Buffs.BuffsByIds[pair.Key];
                 var data = new List<JsonBuffsUptimeData>();
@@ -178,7 +178,7 @@ namespace GW2EIBuilders.JsonModels
                 {
                     PhaseData phase = phases[i];
                     Dictionary<long, FinalBuffsDictionary> buffsDictionary = player.GetBuffsDictionary(log, phase.Start, phase.End);
-                    if (buffs[i].TryGetValue(pair.Key, out FinalPlayerBuffs val))
+                    if (buffs[i].TryGetValue(pair.Key, out FinalActorBuffs val))
                     {
                         JsonBuffsUptimeData value = JsonBuffsUptimeBuilder.BuildJsonBuffsUptimeData(val, buffsDictionary[pair.Key]);
                         data.Add(value);

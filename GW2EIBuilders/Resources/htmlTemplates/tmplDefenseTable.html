@@ -128,7 +128,7 @@
                 for (i = 0; i < this.phase.defStats.length; i++) {
                     var def = this.phase.defStats[i];
                     var player = logData.players[i];
-                    if (player.isDummy) {
+                    if (player.isFake) {
                         continue;
                     }
                     rows.push({

@@ -69,7 +69,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        public static void SetPhasePerTarget(NPC target, List<PhaseData> phases, ParsedEvtcLog log)
+        private static void SetPhasePerTarget(AbstractSingleActor target, List<PhaseData> phases, ParsedEvtcLog log)
         {
             long fightDuration = log.FightData.FightEnd;
             EnterCombatEvent phaseStart = log.CombatData.GetEnterCombatEvents(target.AgentItem).LastOrDefault();
@@ -115,17 +115,17 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC berg = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Berg);
+            AbstractSingleActor berg = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Berg);
             if (berg == null)
             {
                 throw new MissingKeyActorsException("Berg not found");
             }
-            NPC zane = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Zane);
+            AbstractSingleActor zane = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Zane);
             if (zane == null)
             {
                 throw new MissingKeyActorsException("Zane not found");
             }
-            NPC narella = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Narella);
+            AbstractSingleActor narella = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Narella);
             if (narella == null)
             {
                 throw new MissingKeyActorsException("Narella not found");
@@ -135,7 +135,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            foreach (NPC target in Targets)
+            foreach (AbstractSingleActor target in Targets)
             {
                 SetPhasePerTarget(target, phases, log);
             }

@@ -69,12 +69,12 @@ namespace GW2EIBuilders.JsonModels
             return res;
         }
 
-        public static List<JsonDamageModifierData>[] GetDamageModifiersTarget(Player player, ParsedEvtcLog log, Dictionary<string, JsonLog.DamageModDesc> damageModDesc, IReadOnlyList<PhaseData> phases)
+        public static List<JsonDamageModifierData>[] GetDamageModifiersTarget(AbstractSingleActor player, ParsedEvtcLog log, Dictionary<string, JsonLog.DamageModDesc> damageModDesc, IReadOnlyList<PhaseData> phases)
         {
             var res = new List<JsonDamageModifierData>[log.FightData.Logic.Targets.Count];
             for (int i = 0; i < log.FightData.Logic.Targets.Count; i++)
             {
-                NPC tar = log.FightData.Logic.Targets[i];
+                AbstractSingleActor tar = log.FightData.Logic.Targets[i];
                 res[i] = GetDamageModifiers(phases.Select(x => player.GetDamageModifierStats(tar, log, x.Start, x.End)).ToList(), log, damageModDesc); ;
             }
             return res;

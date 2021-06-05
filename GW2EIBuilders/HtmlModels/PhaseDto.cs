@@ -105,14 +105,14 @@ namespace GW2EIBuilders.HtmlModels
             End = phaseData.End / 1000.0;
             BreakbarPhase = phaseData.BreakbarPhase;
             Dummy = phaseData.Dummy;
-            foreach (NPC target in phaseData.Targets)
+            foreach (AbstractSingleActor target in phaseData.Targets)
             {
                 Targets.Add(log.FightData.Logic.Targets.IndexOf(target));
             }
             PlayerActiveTimes = new List<long>();
-            foreach (Player p in log.PlayerList)
+            foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                PlayerActiveTimes.Add(p.GetActiveDuration(log, phaseData.Start, phaseData.End));
+                PlayerActiveTimes.Add(actor.GetActiveDuration(log, phaseData.Start, phaseData.End));
             }
             // add phase markup
             MarkupLines = new List<double>();
@@ -225,7 +225,7 @@ namespace GW2EIBuilders.HtmlModels
             return data;
         }
 
-        private static List<object> GetSupportStatData(FinalPlayerSupport support)
+        private static List<object> GetSupportStatData(FinalToPlayersSupport support)
         {
             var data = new List<object>()
                 {
@@ -282,10 +282,10 @@ namespace GW2EIBuilders.HtmlModels
         }
         public static List<List<object>> BuildDPSData(ParsedEvtcLog log, PhaseData phase)
         {
-            var list = new List<List<object>>(log.PlayerList.Count);
-            foreach (Player player in log.PlayerList)
+            var list = new List<List<object>>(log.Friendlies.Count);
+            foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                FinalDPS dpsAll = player.GetDPSStats(log, phase.Start, phase.End);
+                FinalDPS dpsAll = actor.GetDPSStats(log, phase.Start, phase.End);
                 list.Add(GetDPSStatData(dpsAll));
             }
             return list;
@@ -293,15 +293,15 @@ namespace GW2EIBuilders.HtmlModels
 
         public static List<List<List<object>>> BuildDPSTargetsData(ParsedEvtcLog log, PhaseData phase)
         {
-            var list = new List<List<List<object>>>(log.PlayerList.Count);
+            var list = new List<List<List<object>>>(log.Friendlies.Count);
 
-            foreach (Player player in log.PlayerList)
+            foreach (AbstractSingleActor actor in log.Friendlies)
             {
                 var playerData = new List<List<object>>();
 
-                foreach (NPC target in phase.Targets)
+                foreach (AbstractSingleActor target in phase.Targets)
                 {
-                    playerData.Add(GetDPSStatData(player.GetDPSStats(target, log, phase.Start, phase.End)));
+                    playerData.Add(GetDPSStatData(actor.GetDPSStats(target, log, phase.Start, phase.End)));
                 }
                 list.Add(playerData);
             }
@@ -311,9 +311,9 @@ namespace GW2EIBuilders.HtmlModels
         public static List<List<object>> BuildDMGStatsData(ParsedEvtcLog log, PhaseData phase)
         {
             var list = new List<List<object>>();
-            foreach (Player player in log.PlayerList)
+            foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                FinalGameplayStatsAll stats = player.GetGameplayStats(log, phase.Start, phase.End);
+                FinalGameplayStatsAll stats = actor.GetGameplayStats(log, phase.Start, phase.End);
                 list.Add(GetDMGStatData(stats));
             }
             return list;
@@ -323,12 +323,12 @@ namespace GW2EIBuilders.HtmlModels
         {
             var list = new List<List<List<object>>>();
 
-            foreach (Player player in log.PlayerList)
+            foreach (AbstractSingleActor actor in log.Friendlies)
             {
                 var playerData = new List<List<object>>();
-                foreach (NPC target in phase.Targets)
+                foreach (AbstractSingleActor target in phase.Targets)
                 {
-                    FinalGameplayStats statsTarget = player.GetGameplayStats(target, log, phase.Start, phase.End);
+                    FinalGameplayStats statsTarget = actor.GetGameplayStats(target, log, phase.Start, phase.End);
                     playerData.Add(GetDMGTargetStatData(statsTarget));
                 }
                 list.Add(playerData);
@@ -340,9 +340,9 @@ namespace GW2EIBuilders.HtmlModels
         {
             var list = new List<List<object>>();
 
-            foreach (Player player in log.PlayerList)
+            foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                FinalDefensesAll defenses = player.GetDefenseStats(log, phase.Start, phase.End);
+                FinalDefensesAll defenses = actor.GetDefenseStats(log, phase.Start, phase.End);
                 list.Add(GetDefenseStatData(defenses, phase));
             }
 
@@ -353,9 +353,9 @@ namespace GW2EIBuilders.HtmlModels
         {
             var list = new List<List<object>>();
 
-            foreach (Player player in log.PlayerList)
+            foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                FinalPlayerSupport support = player.GetPlayerSupportStats(log, phase.Start, phase.End);
+                FinalToPlayersSupport support = actor.GetToPlayerSupportStats(log, phase.Start, phase.End);
                 list.Add(GetSupportStatData(support));
             }
             return list;

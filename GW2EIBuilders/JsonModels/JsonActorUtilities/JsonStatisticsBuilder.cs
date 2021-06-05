@@ -99,7 +99,7 @@ namespace GW2EIBuilders.JsonModels
         }
 
 
-        public static JsonPlayerSupport BuildJsonPlayerSupport(FinalPlayerSupport stats)
+        public static JsonPlayerSupport BuildJsonPlayerSupport(FinalToPlayersSupport stats)
         {
             var jsonPlayerSupport = new JsonPlayerSupport();
             jsonPlayerSupport.Resurrects = stats.Resurrects;

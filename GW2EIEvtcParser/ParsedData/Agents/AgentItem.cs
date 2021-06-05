@@ -9,10 +9,9 @@ namespace GW2EIEvtcParser.ParsedData
     {
 
         private static int AgentCount = 0;
-        public enum AgentType { NPC, Gadget, Player, EnemyPlayer}
+        public enum AgentType { NPC, Gadget, Player, NonSquadPlayer}
 
-        public bool IsPlayer => Type == AgentType.Player || Type == AgentType.EnemyPlayer;
-        public bool IsFriendlyPlayer => Type == AgentType.Player;
+        public bool IsPlayer => Type == AgentType.Player || Type == AgentType.NonSquadPlayer;
         public bool IsNPC => Type == AgentType.NPC || Type == AgentType.Gadget;
 
         // Fields
@@ -33,8 +32,8 @@ namespace GW2EIEvtcParser.ParsedData
         public uint HitboxWidth { get; }
         public uint HitboxHeight { get; }
 
-        public bool IsDummy { get; }
-        public bool IsNotInSquadPlayer { get; }
+        public bool IsFake { get; }
+        public bool IsNotInSquadFriendlyPlayer { get; private set; }
 
         public bool HasCommanderTag { get; protected set; }
 
@@ -63,13 +62,13 @@ namespace GW2EIEvtcParser.ParsedData
                     {
                         if (!splitStr[0].Any(char.IsDigit))
                         {
-                            IsNotInSquadPlayer = true;
+                            IsNotInSquadFriendlyPlayer = true;
                         } 
                         else
                         {
                             Name = Prof + " " + Name;
-                            Type = AgentType.EnemyPlayer;
                         }
+                        Type = AgentType.NonSquadPlayer;
                     }
                 }
             }
@@ -84,7 +83,7 @@ namespace GW2EIEvtcParser.ParsedData
             InstID = instid;
             FirstAware = firstAware;
             LastAware = lastAware;
-            IsDummy = isDummy;
+            IsFake = isDummy;
         }
 
         internal AgentItem(AgentItem other)
@@ -104,12 +103,17 @@ namespace GW2EIEvtcParser.ParsedData
             InstID = other.InstID;
             Master = other.Master;
             HasCommanderTag = other.HasCommanderTag;
-            IsDummy = other.IsDummy;
+            IsFake = other.IsFake;
         }
 
         internal AgentItem()
         {
             UniqueID = AgentCount++;
+        }
+
+        internal void OverrideIsNotInSquadFriendlyPlayer(bool status)
+        {
+            IsNotInSquadFriendlyPlayer = status;
         }
 
         internal void OverrideType(AgentType type)

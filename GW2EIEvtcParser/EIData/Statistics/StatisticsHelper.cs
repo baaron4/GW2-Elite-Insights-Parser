@@ -98,8 +98,12 @@ namespace GW2EIEvtcParser.EIData
         public IReadOnlyList<Buff> PresentGearbuffs => _presentGearbuffs;//Used only for Gear Buff tables
         public IReadOnlyList<Buff> PresentFractalInstabilities => _presentFractalInstabilities;
 
-        public IReadOnlyCollection<Buff> GetPresentRemainingBuffsOnPlayer(Player p)
+        public IReadOnlyCollection<Buff> GetPresentRemainingBuffsOnPlayer(AbstractSingleActor actor)
         {
+            if (!(actor is Player p))
+            {
+                return new HashSet<Buff>();
+            }
             if (_presentRemainingBuffsPerPlayer.TryGetValue(p, out HashSet<Buff> buffs))
             {
                 return buffs;
@@ -146,13 +150,9 @@ namespace GW2EIEvtcParser.EIData
             _stackCenterPositions = new List<Point3D>();
             if (log.CombatData.HasMovementData)
             {
-                var GroupsPosList = new List<List<Point3D>>();
+                var GroupsPosList = new List<IReadOnlyList<Point3D>>();
                 foreach (Player player in log.PlayerList)
                 {
-                    if (player.IsFakeActor)
-                    {
-                        continue;
-                    }
                     GroupsPosList.Add(player.GetCombatReplayActivePositions(log));
                 }
                 for (int time = 0; time < GroupsPosList[0].Count; time++)

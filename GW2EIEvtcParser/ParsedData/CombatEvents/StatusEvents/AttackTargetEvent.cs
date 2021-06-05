@@ -7,7 +7,7 @@
         internal AttackTargetEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
             AttackTarget = Src;
-            Src = agentData.GetAgent(evtcItem.DstAgent);
+            Src = agentData.GetAgent(evtcItem.DstAgent, evtcItem.Time);
         }
 
     }

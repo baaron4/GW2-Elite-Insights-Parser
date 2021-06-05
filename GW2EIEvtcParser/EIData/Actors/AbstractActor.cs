@@ -9,22 +9,19 @@ namespace GW2EIEvtcParser.EIData
     {
         protected AgentItem AgentItem { get; }
         public string Character { get; protected set; }
+
         public int UniqueID => AgentItem.UniqueID;
         public uint Toughness => AgentItem.Toughness;
         public uint Condition => AgentItem.Condition;
         public uint Concentration => AgentItem.Concentration;
         public uint Healing => AgentItem.Healing;
-        public ushort InstID => AgentItem.InstID;
         public string Prof => AgentItem.Prof;
-        public ulong Agent => AgentItem.Agent;
         public long LastAware => AgentItem.LastAware;
         public long FirstAware => AgentItem.FirstAware;
         public int ID => AgentItem.ID;
         public uint HitboxHeight => AgentItem.HitboxHeight;
         public uint HitboxWidth => AgentItem.HitboxWidth;
-        public bool IsFakeActor => IsDummyActor || IsCustomActor;
-        public bool IsDummyActor => AgentItem.IsDummy;
-        public bool IsCustomActor { get; protected set; } = false;
+        public bool IsFakeActor => AgentItem.IsFake;
         // Damage
         protected List<AbstractHealthDamageEvent> DamageEvents { get; set; }
         protected Dictionary<AgentItem, List<AbstractHealthDamageEvent>> DamageEventByDst { get; set; }
@@ -75,6 +72,9 @@ namespace GW2EIEvtcParser.EIData
                     case ParserHelper.DamageType.StrikeAndCondition:
                         dls.RemoveAll(x => x is NonDirectHealthDamageEvent && !x.ConditionDamageBased(log));
                         break;
+                    case ParserHelper.DamageType.StrikeAndConditionAndLifeLeech:
+                        dls.RemoveAll(x => x is NonDirectHealthDamageEvent ndhd && !x.ConditionDamageBased(log) && !ndhd.IsLifeLeech);
+                        break;
                     case ParserHelper.DamageType.All:
                         break;
                     default:
@@ -99,18 +99,6 @@ namespace GW2EIEvtcParser.EIData
             return (evt.Time >= start && evt.Time <= end) || // start inside
                 (evt.EndTime >= start && evt.EndTime <= end) || // end inside
                 (evt.Time <= start && evt.EndTime >= end); // start before, end after
-        }
-
-        protected static void Add<T>(Dictionary<T, long> dictionary, T key, long value)
-        {
-            if (dictionary.TryGetValue(key, out long existing))
-            {
-                dictionary[key] = existing + value;
-            }
-            else
-            {
-                dictionary.Add(key, value);
-            }
         }
     }
 }

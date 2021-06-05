@@ -14,7 +14,7 @@ namespace GW2EIBuilders.HtmlModels
         public double Percent { get; set; }
         public double HpLeft { get; set; }
 
-        public TargetDto(NPC target, ParsedEvtcLog log, ActorDetailsDto details) : base(target, log, details)
+        public TargetDto(AbstractSingleActor target, ParsedEvtcLog log, ActorDetailsDto details) : base(target, log, details)
         {
             HbHeight = target.HitboxHeight;
             HbWidth = target.HitboxWidth;

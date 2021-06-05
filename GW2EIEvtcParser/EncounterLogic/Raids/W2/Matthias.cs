@@ -58,7 +58,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Matthias);
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Matthias);
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Matthias not found");
@@ -112,7 +112,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
             // has breakbar state into
             if (combatData.Any(x => x.IsStateChange == ArcDPSEnums.StateChange.BreakbarState))
@@ -128,7 +128,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     long sacrificeStartTime = sacrificeStartList[i].Time;
                     long sacrificeEndTime = i < sacrificeEndList.Count ? sacrificeEndList[i].Time : fightData.FightEnd;
                     //
-                    Player sacrifice = playerList.FirstOrDefault(x => x.AgentItem == agentData.GetAgent(sacrificeStartList[i].DstAgent));
+                    Player sacrifice = friendlies.OfType<Player>().FirstOrDefault(x => x.AgentItem == agentData.GetAgent(sacrificeStartList[i].DstAgent, sacrificeStartList[i].Time));
                     if (sacrifice == null)
                     {
                         continue;
@@ -140,7 +140,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             continue;
                         }
-                        bool skip = !((cbt.IsStateChange.DstIsAgent() && cbt.DstAgent == sacrifice.Agent) || (cbt.IsStateChange.SrcIsAgent() && cbt.SrcAgent == sacrifice.Agent));
+                        bool skip = !(cbt.DstMatchesAgent(sacrifice.AgentItem) || cbt.SrcMatchesAgent(sacrifice.AgentItem));
                         if (skip)
                         {
                             continue;
@@ -150,7 +150,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (isDamageEvent)
                         {
                             // only redirect incoming damage
-                            if (cbt.DstAgent == sacrifice.Agent)
+                            if (cbt.DstMatchesAgent(sacrifice.AgentItem))
                             {
                                 cbt.OverrideDstAgent(sacrificeCrystal.Agent);
                             }
@@ -159,11 +159,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                         else
                         {
                             var copy = new CombatItem(cbt);
-                            if (cbt.IsStateChange.DstIsAgent() && cbt.DstAgent == sacrifice.Agent)
+                            if (cbt.DstMatchesAgent(sacrifice.AgentItem))
                             {
                                 cbt.OverrideDstAgent(sacrificeCrystal.Agent);
                             }
-                            if (cbt.IsStateChange.SrcIsAgent() && cbt.SrcAgent == sacrifice.Agent)
+                            if (cbt.SrcMatchesAgent(sacrifice.AgentItem))
                             {
                                 cbt.OverrideSrcAgent(sacrificeCrystal.Agent);
                             }
@@ -180,7 +180,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             ComputeFightTargets(agentData, combatData);
-            foreach (NPC target in Targets)
+            foreach (AbstractSingleActor target in Targets)
             {
                 if (target.ID == (int)ArcDPSEnums.TrashID.MatthiasSacrificeCrystal)
                 {
@@ -291,7 +291,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
-        internal override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // Corruption
             List<AbstractBuffEvent> corruptedMatthias = GetFilteredList(log.CombatData, 34416, p, true);

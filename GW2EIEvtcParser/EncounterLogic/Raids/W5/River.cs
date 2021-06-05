@@ -78,7 +78,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
             agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, "River of Souls", "", (int)ArcDPSEnums.TargetID.DummyTarget, true);
             // The walls and bombers spawn at the start of the encounter, we fix it by overriding their first aware to the first velocity change event
@@ -87,19 +87,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             bool sortCombatList = false;
             foreach (AgentItem agentToOverrideFirstAware in agentsToOverrideFirstAware)
             {
-                CombatItem firstMovement = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && x.SrcAgent == agentToOverrideFirstAware.Agent && x.DstAgent != 0);
+                CombatItem firstMovement = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && x.SrcMatchesAgent(agentToOverrideFirstAware) && x.DstAgent != 0);
                 if (firstMovement != null)
                 {
                     // update start
-                    agentToOverrideFirstAware.OverrideAwareTimes(firstMovement.Time - ParserHelper.ServerDelayConstant, agentToOverrideFirstAware.LastAware);
+                    long firstAware = firstMovement.Time - ParserHelper.ServerDelayConstant;
                     foreach (CombatItem c in combatData)
                     {
-                        if (c.SrcAgent == agentToOverrideFirstAware.Agent && (c.IsStateChange == ArcDPSEnums.StateChange.Position || c.IsStateChange == ArcDPSEnums.StateChange.Rotation) && c.Time <= agentToOverrideFirstAware.FirstAware)
+                        if (c.SrcMatchesAgent(agentToOverrideFirstAware) && c.Time <= firstAware)
                         {
                             sortCombatList = true;
-                            c.OverrideTime(agentToOverrideFirstAware.FirstAware);
+                            c.OverrideTime(firstAware);
                         }
                     }
+                    agentToOverrideFirstAware.OverrideAwareTimes(firstAware, agentToOverrideFirstAware.LastAware);
                 }
             }
             // make sure the list is still sorted by time after overrides
@@ -113,11 +114,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             AgentItem desmina = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Desmina).FirstOrDefault();
             if (desmina != null)
             {
-                playerList.Add(new Player(desmina, "Desmina", GetNPCIcon((int)ArcDPSEnums.TargetID.Desmina)));
+                friendlies.Add(new NPC(desmina));
             }
         }
 
-        internal override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // TODO bombs dual following circle actor (one growing, other static) + dual static circle actor (one growing with min radius the final radius of the previous, other static). Missing buff id
         }

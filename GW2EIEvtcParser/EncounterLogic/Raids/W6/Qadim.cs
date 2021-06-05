@@ -103,11 +103,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
             IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.PyreGuardian);
             // Lamps
-            var lampAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202).ToList();
+            var lampAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202).ToList();
             foreach (AgentItem lamp in lampAgents)
             {
                 lamp.OverrideType(AgentItem.AgentType.NPC);
@@ -117,7 +117,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Pyres
             foreach (AgentItem pyre in pyres)
             {
-                CombatItem position = combatData.FirstOrDefault(x => x.SrcAgent == pyre.Agent && x.IsStateChange == ArcDPSEnums.StateChange.Position);
+                CombatItem position = combatData.FirstOrDefault(x => x.SrcMatchesAgent(pyre) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
                 if (position != null)
                 {
                     (float x, float y, _) = AbstractMovementEvent.UnpackMovementData(position.DstAgent, 0);
@@ -192,7 +192,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // If changing phase detection, combat replay platform timings may have to be updated.
 
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC qadim = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Qadim);
+            AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Qadim);
             if (qadim == null)
             {
                 throw new MissingKeyActorsException("Qadim not found");
@@ -241,7 +241,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AddTargetsToPhaseAndFit(phase, ids, log);
                     if (phase.Targets.Count > 0)
                     {
-                        NPC phaseTar = phase.Targets.Last();
+                        AbstractSingleActor phaseTar = phase.Targets.Last();
                         switch (phaseTar.ID)
                         {
                             case (int)ArcDPSEnums.TrashID.AncientInvokedHydra:
@@ -529,7 +529,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Qadim);
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Qadim);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Qadim not found");

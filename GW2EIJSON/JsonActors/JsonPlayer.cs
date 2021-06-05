@@ -35,7 +35,7 @@ namespace GW2EIJSON
         public bool FriendlyNPC { get; set; }
 
         /// <summary>
-        /// Indicates that the JsonPlayer not actually part of the squad
+        /// Indicates that the JsonPlayer is not actually part of the squad
         /// </summary>
         public bool NotInSquad { get; set; }
 

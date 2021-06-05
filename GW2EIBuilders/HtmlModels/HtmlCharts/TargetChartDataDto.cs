@@ -11,7 +11,7 @@ namespace GW2EIBuilders.HtmlModels
         public IReadOnlyList<int> TotalCondition { get; }
         public List<object[]> BreakbarPercentStates { get; }
 
-        public TargetChartDataDto(ParsedEvtcLog log, PhaseData phase, NPC target) : base(log, phase, target, false)
+        public TargetChartDataDto(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor target) : base(log, phase, target, false)
         {
             Total = target.Get1SDamageList(log, phase.Start, phase.End, null, ParserHelper.DamageType.All);
             TotalPower = target.Get1SDamageList(log, phase.Start, phase.End, null, ParserHelper.DamageType.Power);

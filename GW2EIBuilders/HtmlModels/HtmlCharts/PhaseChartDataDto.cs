@@ -16,7 +16,7 @@ namespace GW2EIBuilders.HtmlModels
         public PhaseChartDataDto(ParsedEvtcLog log, PhaseData phase, bool addCRData)
         {
             Players = PlayerChartDataDto.BuildPlayersGraphData(log, phase);
-            foreach (NPC target in phase.Targets)
+            foreach (AbstractSingleActor target in phase.Targets)
             {
                Targets.Add(new TargetChartDataDto(log, phase, target));
             }
@@ -25,7 +25,7 @@ namespace GW2EIBuilders.HtmlModels
                 TargetsHealthStatesForCR = new List<List<object[]>>();
                 TargetsBreakbarPercentStatesForCR = new List<List<object[]>>();
                 TargetsBarrierStatesForCR = new List<List<object[]>>();
-                foreach (NPC target in log.FightData.Logic.Targets)
+                foreach (AbstractSingleActor target in log.FightData.Logic.Targets)
                 {
                     TargetsHealthStatesForCR.Add(ChartDataDto.BuildHealthStates(log, target, phase, false));
                     TargetsBreakbarPercentStatesForCR.Add(ChartDataDto.BuildBreakbarPercentStates(log, target, phase));

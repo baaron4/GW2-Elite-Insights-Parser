@@ -38,7 +38,6 @@ var animator = null;
 // reactive structures
 var reactiveAnimationData = {
     time: 0,
-    selectedActor: null,
     selectedActorID: null,
     animated: false
 };
@@ -67,7 +66,6 @@ class Animator {
         this.highlightSelectedGroup = true;
         this.displayMechanics = true;
         this.displayTrashMobs = true;
-        this.selectedGroup = -1;
         this.coneControl = {
             enabled: false,
             openingAngle: 90,
@@ -77,10 +75,12 @@ class Animator {
         this.targetData = new Map();
         this.playerData = new Map();
         this.trashMobData = new Map();
+        this.friendlyMobData = new Map();
         this.mechanicActorData = [];
         this.attachedActorData = new Map();
         this.backgroundActorData = [];
         this.backgroundImages = [];
+        this.selectedActor = null;
         // animation
         this.needBGUpdate = false;
         this.prevBGImage = null;
@@ -153,13 +153,14 @@ class Animator {
         this.playerData.clear();
         this.targetData.clear();
         this.trashMobData.clear();
+        this.friendlyMobData.clear();
         this.attachedActorData.clear();
         this.mechanicActorData = [];
         for (let i = 0; i < actors.length; i++) {
             const actor = actors[i];
             switch (actor.type) {
                 case "Player":
-                    this.playerData.set(actor.id, new PlayerIconDrawable(actor.img, 20, actor.group, actor.positions, actor.dead, actor.down, actor.dc));
+                    this.playerData.set(actor.id, new SquadIconDrawable(actor.img, 20, actor.group, actor.positions, actor.dead, actor.down, actor.dc));
                     if (this.times.length === 0) {
                         for (let j = 0; j < actor.positions.length / 2; j++) {
                             this.times.push(j * this.pollingRate);
@@ -167,10 +168,14 @@ class Animator {
                     }
                     break;
                 case "Target":
-                    this.targetData.set(actor.id, new EnemyIconDrawable(actor.start, actor.end, actor.img, 30, actor.positions, actor.dead, actor.down, actor.dc));
+                case "TargetPlayer":
+                    this.targetData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 30, actor.positions, actor.dead, actor.down, actor.dc));
                     break;
                 case "Mob":
-                    this.trashMobData.set(actor.id, new EnemyIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc));
+                    this.trashMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc));
+                    break;
+                case "Friendly":
+                    this.friendlyMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc));
                     break;
                 case "Circle":
                     this.mechanicActorData.push(new CircleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inch * actor.radius, actor.connectedTo, this.inch * actor.minRadius));
@@ -270,25 +275,24 @@ class Animator {
     }
 
     selectActor(actorId) {
-        let actor = this.playerData.get(actorId) || this.targetData.get(actorId);
-        let oldSelect = actor.selected;
-        this.reactiveDataStatus.selectedActor = null;
-        this.reactiveDataStatus.selectedActorID = null;
-        this.playerData.forEach(function (value, key, map) {
-            value.selected = false;
-        });
-        this.targetData.forEach(function (value, key, map) {
-            value.selected = false;
-        });
-        actor.selected = !oldSelect;
-        this.selectedGroup = actor.selected && actor.group !== null ? actor.group : -1;
-        if (actor.selected) {
-            this.reactiveDataStatus.selectedActor = actor;
+        let actor = this.getActorData(actorId);
+        if (!actor) {
+            return;
+        }
+        if (this.selectedActor == actor) {
+            this.selectedActor = null;
+            this.reactiveDataStatus.selectedActorID = null;
+        } else {
+            this.selectedActor = actor;
             this.reactiveDataStatus.selectedActorID = actorId;
         }
         if (this.animation === null) {
             animateCanvas(noUpdateTime);
         }
+    }
+
+    getActorData(actorId) {
+        return  animator.targetData.get(actorId) || animator.playerData.get(actorId) || animator.friendlyMobData.get(actorId) || animator.trashMobData.get(actorId);
     }
 
     toggleHighlightSelectedGroup() {
@@ -586,7 +590,16 @@ class Animator {
         }
         
         this.playerData.forEach(function (value, key, map) {
-            if (!value.selected) {
+            if (!value.isSelected()) {
+                value.draw();
+                if (_this.attachedActorData.has(key)) {
+                    _this.attachedActorData.get(key).draw();
+                }
+            }
+        });
+        
+        this.friendlyMobData.forEach(function (value, key, map) {
+            if (!value.isSelected()) {
                 value.draw();
                 if (_this.attachedActorData.has(key)) {
                     _this.attachedActorData.get(key).draw();
@@ -596,23 +609,25 @@ class Animator {
         
         if (this.displayTrashMobs) {
             this.trashMobData.forEach(function (value, key, map) {
-                value.draw();
-                if (_this.attachedActorData.has(key)) {
-                    _this.attachedActorData.get(key).draw();
+                if (!value.isSelected()) {
+                    value.draw();
+                    if (_this.attachedActorData.has(key)) {
+                        _this.attachedActorData.get(key).draw();
+                    }
                 }
             });
         }
         
         this.targetData.forEach(function (value, key, map) {
-            if (!value.selected) {
+            if (!value.isSelected()) {
                 value.draw();
                 if (_this.attachedActorData.has(key)) {
                     _this.attachedActorData.get(key).draw();
                 }
             }
         });
-        if (this.reactiveDataStatus.selectedActor !== null) {
-            this.reactiveDataStatus.selectedActor.draw();
+        if (this.selectedActor !== null) {
+            this.selectedActor.draw();
             if (this.attachedActorData.has(this.reactiveDataStatus.selectedActorID)) {
                 this.attachedActorData.get(this.reactiveDataStatus.selectedActorID).draw();
             }

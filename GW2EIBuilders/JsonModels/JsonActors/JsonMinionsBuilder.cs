@@ -19,7 +19,7 @@ namespace GW2EIBuilders.JsonModels
         {
             var jsonMinions = new JsonMinions();
             IReadOnlyList<PhaseData> phases = log.FightData.GetNonDummyPhases(log);
-            bool isNPCMinion = minions.Master is NPC;
+            bool isEnemyMinion = !log.FriendlyAgents.Contains(minions.Master.AgentItem);
             //
             jsonMinions.Name = minions.Character;
             //
@@ -42,14 +42,14 @@ namespace GW2EIBuilders.JsonModels
             jsonMinions.TotalDamage = totalDamage;
             jsonMinions.TotalShieldDamage = totalShieldDamage;
             jsonMinions.TotalBreakbarDamage = totalBreakbarDamage;
-            if (!isNPCMinion)
+            if (!isEnemyMinion)
             {
                 var totalTargetDamage = new IReadOnlyList<int>[log.FightData.Logic.Targets.Count];
                 var totalTargetShieldDamage = new IReadOnlyList<int>[log.FightData.Logic.Targets.Count];
                 var totalTargetBreakbarDamage = new IReadOnlyList<double>[log.FightData.Logic.Targets.Count];
                 for (int i = 0; i < log.FightData.Logic.Targets.Count; i++)
                 {
-                    NPC tar = log.FightData.Logic.Targets[i];
+                    AbstractSingleActor tar = log.FightData.Logic.Targets[i];
                     var totalTarDamage = new List<int>();
                     var totalTarShieldDamage = new List<int>();
                     var totalTarBreakbarDamage = new List<double>();
@@ -88,12 +88,12 @@ namespace GW2EIBuilders.JsonModels
                 totalDamageDist[i] = JsonDamageDistBuilder.BuildJsonDamageDistList(minions.GetDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
             }
             jsonMinions.TotalDamageDist = totalDamageDist;
-            if (!isNPCMinion)
+            if (!isEnemyMinion)
             {
                 var targetDamageDist = new IReadOnlyList<JsonDamageDist>[log.FightData.Logic.Targets.Count][];
                 for (int i = 0; i < log.FightData.Logic.Targets.Count; i++)
                 {
-                    NPC target = log.FightData.Logic.Targets[i];
+                    AbstractSingleActor target = log.FightData.Logic.Targets[i];
                     targetDamageDist[i] = new IReadOnlyList<JsonDamageDist>[phases.Count];
                     for (int j = 0; j < phases.Count; j++)
                     {

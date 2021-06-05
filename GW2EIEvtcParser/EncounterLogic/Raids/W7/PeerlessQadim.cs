@@ -71,7 +71,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Peerless Qadim not found");
@@ -103,7 +103,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (pushes.Count > 0)
             {
                 AbstractCastEvent push = pushes[0];
-                phaseStarts.Add(push.EndTime);
+                phaseStarts.Add(push.Time);
                 foreach (long magmaDrop in phaseEnds)
                 {
                     push = pushes.FirstOrDefault(x => x.Time >= magmaDrop);
@@ -111,7 +111,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         break;
                     }
-                    phaseStarts.Add(push.EndTime);
+                    phaseStarts.Add(push.Time);
                 }
             }
             // rush to pylon
@@ -126,6 +126,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             for (int i = 0; i < phaseStarts.Count; i++)
             {
                 var phase = new PhaseData(phaseStarts[i], phaseEnds[i], "Phase " + (i + 1));
+                phase.AddTarget(mainTarget);
+                phases.Add(phase);
+            }
+            string[] intermissionNames = { "Magma Drop 1", "Magma Drop 2", "North Pylon", "SouthWest Pylon", "SouthEast Pylon" };
+            for (int i = 0; i < phaseEnds.Count - 1; i++)
+            {
+                var phase = new PhaseData(phaseEnds[i], phaseStarts[i + 1], intermissionNames[i]);
                 phase.AddTarget(mainTarget);
                 phases.Add(phase);
             }
@@ -171,7 +178,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         if (c is BuffApplyEvent)
                         {
-                            NPC qadim = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
+                            AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
                             surgeStart = (int)c.Time;
                             source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.CreditedBy) ?? qadim;
                         }
@@ -200,7 +207,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
-        internal override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // fixated
             List<AbstractBuffEvent> fixated = GetFilteredList(log.CombatData, 56510, p, true);
@@ -252,7 +259,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (c is BuffApplyEvent)
                 {
-                    NPC qadim = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
+                    AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
                     surgeStart = (int)c.Time;
                     source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.CreditedBy) ?? qadim;
                 }
@@ -290,7 +297,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Peerless Qadim not found");

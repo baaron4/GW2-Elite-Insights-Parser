@@ -23,8 +23,8 @@
 
         internal AbstractDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem.Time)
         {
-            From = agentData.GetAgent(evtcItem.SrcAgent);
-            To = agentData.GetAgent(evtcItem.DstAgent);
+            From = agentData.GetAgent(evtcItem.SrcAgent, evtcItem.Time);
+            To = agentData.GetAgent(evtcItem.DstAgent, evtcItem.Time);
             Skill = skillData.Get(evtcItem.SkillID);
             IsOverNinety = evtcItem.IsNinety > 0;
             AgainstUnderFifty = evtcItem.IsFifty > 0;

@@ -54,23 +54,23 @@ namespace GW2EIBuilders.HtmlModels
         public List<string> UploadLinks { get; set; }
 
 
-        private static Dictionary<string, List<Buff>> BuildPersonalBoonData(ParsedEvtcLog log, Dictionary<string, List<long>> dict, Dictionary<long, Buff> usedBuffs)
+        private static Dictionary<string, List<Buff>> BuildPersonalBuffData(ParsedEvtcLog log, Dictionary<string, List<long>> dict, Dictionary<long, Buff> usedBuffs)
         {
             var boonsBySpec = new Dictionary<string, List<Buff>>();
             // Collect all personal buffs by spec
-            foreach (KeyValuePair<string, List<Player>> pair in log.PlayerListBySpec)
+            foreach (KeyValuePair<string, List<AbstractSingleActor>> pair in log.FriendliesListBySpec)
             {
-                List<Player> players = pair.Value;
+                List<AbstractSingleActor> friendlies = pair.Value;
                 var specBoonIds = new HashSet<long>(log.Buffs.GetPersonalBuffsList(pair.Key).Select(x => x.ID));
                 var boonToUse = new HashSet<Buff>();
-                foreach (Player player in players)
+                foreach (AbstractSingleActor actor in friendlies)
                 {
                     foreach (PhaseData phase in log.FightData.GetPhases(log))
                     {
-                        IReadOnlyDictionary<long, FinalPlayerBuffs> boons = player.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
-                        foreach (Buff boon in log.StatisticsHelper.GetPresentRemainingBuffsOnPlayer(player))
+                        IReadOnlyDictionary<long, FinalActorBuffs> boons = actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
+                        foreach (Buff boon in log.StatisticsHelper.GetPresentRemainingBuffsOnPlayer(actor))
                         {
-                            if (boons.TryGetValue(boon.ID, out FinalPlayerBuffs uptime))
+                            if (boons.TryGetValue(boon.ID, out FinalActorBuffs uptime))
                             {
                                 if (uptime.Uptime > 0 && specBoonIds.Contains(boon.ID))
                                 {
@@ -98,13 +98,13 @@ namespace GW2EIBuilders.HtmlModels
         {
             var damageModBySpecs = new Dictionary<string, List<DamageModifier>>();
             // Collect all personal damage mods by spec
-            foreach (KeyValuePair<string, List<Player>> pair in log.PlayerListBySpec)
+            foreach (KeyValuePair<string, List<AbstractSingleActor>> pair in log.FriendliesListBySpec)
             {
                 var specDamageModsName = new HashSet<string>(log.DamageModifiers.GetModifiersPerProf(pair.Key).Select(x => x.Name));
                 var damageModsToUse = new HashSet<DamageModifier>();
-                foreach (Player player in pair.Value)
+                foreach (AbstractSingleActor actor in pair.Value)
                 {
-                    var presentDamageMods = new HashSet<string>(player.GetPresentDamageModifier(log).Intersect(specDamageModsName));
+                    var presentDamageMods = new HashSet<string>(actor.GetPresentDamageModifier(log).Intersect(specDamageModsName));
                     foreach (string name in presentDamageMods)
                     {
                         damageModsToUse.Add(log.DamageModifiers.DamageModifiersByName[name]);
@@ -124,12 +124,12 @@ namespace GW2EIBuilders.HtmlModels
             return damageModBySpecs;
         }
 
-        private static bool HasBoons(ParsedEvtcLog log, PhaseData phase, NPC target)
+        private static bool HasBoons(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor target)
         {
-            IReadOnlyDictionary<long, FinalBuffs> conditions = target.GetBuffs(log, phase.Start, phase.End);
+            IReadOnlyDictionary<long, FinalActorBuffs> conditions = target.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
             foreach (Buff boon in log.StatisticsHelper.PresentBoons)
             {
-                if (conditions.TryGetValue(boon.ID, out FinalBuffs uptime))
+                if (conditions.TryGetValue(boon.ID, out FinalActorBuffs uptime))
                 {
                     if (uptime.Uptime > 0.0)
                     {
@@ -160,10 +160,10 @@ namespace GW2EIBuilders.HtmlModels
                 logData.CrData = new CombatReplayDto(log);
             }
             log.UpdateProgressWithCancellationCheck("HTML: building Players");
-            foreach (Player player in log.PlayerList)
+            foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                logData.HasCommander = logData.HasCommander || player.HasCommanderTag;
-                logData.Players.Add(new PlayerDto(player, log, ActorDetailsDto.BuildPlayerData(log, player, usedSkills, usedBuffs)));
+                logData.HasCommander = logData.HasCommander || actor.HasCommanderTag;
+                logData.Players.Add(new PlayerDto(actor, log, ActorDetailsDto.BuildPlayerData(log, actor, usedSkills, usedBuffs)));
             }
 
             log.UpdateProgressWithCancellationCheck("HTML: building Enemies");
@@ -173,19 +173,19 @@ namespace GW2EIBuilders.HtmlModels
             }
 
             log.UpdateProgressWithCancellationCheck("HTML: building Targets");
-            foreach (NPC target in log.FightData.Logic.Targets)
+            foreach (AbstractSingleActor target in log.FightData.Logic.Targets)
             {
                 var targetDto = new TargetDto(target, log, ActorDetailsDto.BuildTargetData(log, target, usedSkills, usedBuffs, cr));
                 logData.Targets.Add(targetDto);
             }
             //
             log.UpdateProgressWithCancellationCheck("HTML: building Skill/Buff dictionaries");
-            Dictionary<string, List<Buff>> persBuffDict = BuildPersonalBoonData(log, logData.PersBuffs, usedBuffs);
+            Dictionary<string, List<Buff>> persBuffDict = BuildPersonalBuffData(log, logData.PersBuffs, usedBuffs);
             Dictionary<string, List<DamageModifier>> persDamageModDict = BuildPersonalDamageModData(log, logData.DmgModifiersPers, usedDamageMods);
             var allDamageMods = new HashSet<string>();
-            foreach (Player p in log.PlayerList)
+            foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                allDamageMods.UnionWith(p.GetPresentDamageModifier(log));
+                allDamageMods.UnionWith(actor.GetPresentDamageModifier(log));
             }
             var commonDamageModifiers = new List<DamageModifier>();
             if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(Source.Common, out IReadOnlyList<DamageModifier> list))
@@ -344,7 +344,7 @@ namespace GW2EIBuilders.HtmlModels
                     MechanicStats = MechanicDto.BuildPlayerMechanicData(log, phase),
                     EnemyMechanicStats = MechanicDto.BuildEnemyMechanicData(log, phase)
                 };
-                foreach (NPC target in phase.Targets)
+                foreach (AbstractSingleActor target in phase.Targets)
                 {
                     phaseDto.TargetsCondiStats.Add(BuffData.BuildTargetCondiData(log, phase.Start, phase.End, target));
                     phaseDto.TargetsCondiTotals.Add(BuffData.BuildTargetCondiUptimeData(log, phase, target));
@@ -361,7 +361,7 @@ namespace GW2EIBuilders.HtmlModels
             logData.FightName = log.FightData.GetFightName(log);
             logData.FightIcon = log.FightData.Logic.Icon;
             logData.LightTheme = light;
-            logData.SingleGroup = log.PlayerList.Where(x => !x.IsFakeActor).Select(x => x.Group).Distinct().Count() == 1;
+            logData.SingleGroup = log.PlayerList.Select(x => x.Group).Distinct().Count() == 1;
             logData.HasBreakbarDamage = log.CombatData.HasBreakbarDamageData;
             logData.NoMechanics = log.FightData.Logic.HasNoFightSpecificMechanics;
             if (log.LogData.LogErrors.Count > 0)

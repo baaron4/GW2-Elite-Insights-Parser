@@ -25,10 +25,10 @@ namespace GW2EIEvtcParser.EIData
         // Counts
         public int SwapCount { get; internal set; }
 
-        private static double GetDistanceToTarget(Player player, ParsedEvtcLog log, long start, long end, IReadOnlyList<Point3D> reference)
+        private static double GetDistanceToTarget(AbstractSingleActor actor, ParsedEvtcLog log, long start, long end, IReadOnlyList<Point3D> reference)
         {
-            var positions = player.GetCombatReplayPolledPositions(log).Where(x => x.Time >= start && x.Time <= end).ToList();
-            int offset = player.GetCombatReplayPolledPositions(log).Count(x => x.Time < start);
+            var positions = actor.GetCombatReplayPolledPositions(log).Where(x => x.Time >= start && x.Time <= end).ToList();
+            int offset = actor.GetCombatReplayPolledPositions(log).Count(x => x.Time < start);
             if (positions.Count > 1 && reference.Count > 0)
             {
                 var distances = new List<float>();
@@ -53,7 +53,7 @@ namespace GW2EIEvtcParser.EIData
         internal FinalGameplayStatsAll(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor) : base(log, start, end, actor, null)
         {
             // If dummy actor, stop
-            if (actor.IsDummyActor)
+            if (actor.IsFakeActor)
             {
                 return;
             }
@@ -96,10 +96,10 @@ namespace GW2EIEvtcParser.EIData
             AvgConditions = Math.Round(avgCondis / duration, ParserHelper.BuffDigit);
             AvgActiveConditions = activeDuration > 0 ? Math.Round(avgCondis / activeDuration, ParserHelper.BuffDigit) : 0.0;
 
-            if (log.CombatData.HasMovementData && actor is Player player)
+            if (log.CombatData.HasMovementData && log.FriendlyAgents.Contains(actor.AgentItem) && actor.GetCombatReplayPolledPositions(log).Any(x => x.X > int.MinValue + 1))
             {
-                StackDist = GetDistanceToTarget(player, log, start, end, log.StatisticsHelper.GetStackCenterPositions(log));
-                DistToCom = GetDistanceToTarget(player, log, start, end, log.StatisticsHelper.GetStackCommanderPositions(log));
+                StackDist = GetDistanceToTarget(actor, log, start, end, log.StatisticsHelper.GetStackCenterPositions(log));
+                DistToCom = GetDistanceToTarget(actor, log, start, end, log.StatisticsHelper.GetStackCommanderPositions(log));
             }
         }
     }

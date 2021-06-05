@@ -44,7 +44,7 @@ namespace GW2EIEvtcParser
         };
 
         // TODO: add life leech stuff
-        public enum DamageType { All, Power, Strike, Condition, StrikeAndCondition };
+        public enum DamageType { All, Power, Strike, Condition, StrikeAndCondition, StrikeAndConditionAndLifeLeech };
         public enum BuffEnum { Self, Group, OffGroup, Squad };
 
         internal static T MaxBy<T, TComparable>(this IEnumerable<T> en, Func<T, TComparable> evaluate) where TComparable : IComparable<TComparable>
@@ -218,8 +218,6 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/9/95/Reaper_tango_icon_200px.png";
                 case "Scourge":
                     return "https://wiki.guildwars2.com/images/8/8a/Scourge_tango_icon_200px.png";
-                case "Sword":
-                    return "https://wiki.guildwars2.com/images/0/07/Crimson_Antique_Blade.png";
             }
             return "";
         }
@@ -282,8 +280,6 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/1/11/Reaper_tango_icon_20px.png";
                 case "Scourge":
                     return "https://wiki.guildwars2.com/images/0/06/Scourge_tango_icon_20px.png";
-                case "Sword":
-                    return "https://wiki.guildwars2.com/images/0/07/Crimson_Antique_Blade.png";
             }
             return "";
         }
@@ -491,6 +487,8 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/0LGKCn2.png";
                 case ArcDPSEnums.TrashID.ConjuredGreatsword:
                     return "https://i.imgur.com/vHka0QN.png";
+                case ArcDPSEnums.TrashID.ConjuredPlayerSword:
+                    return "https://wiki.guildwars2.com/images/0/07/Crimson_Antique_Blade.png";
                 case ArcDPSEnums.TrashID.ConjuredShield:
                     return "https://i.imgur.com/wUiI19S.png";
                 case ArcDPSEnums.TrashID.GreaterMagmaElemental1:

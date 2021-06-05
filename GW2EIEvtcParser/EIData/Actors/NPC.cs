@@ -2,77 +2,39 @@
 using System.Linq;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
     public class NPC : AbstractSingleActor
     {
-        private CachingCollection<Dictionary<long, FinalBuffs>> _buffs;
-        private List<Segment> _breakbarPercentUpdates { get; set; }
         // Constructors
         internal NPC(AgentItem agent) : base(agent)
         {
-            if (agent.IsFriendlyPlayer)
+            if (agent.IsPlayer)
             {
-                throw new EvtcAgentException("Agent is a friendly player");
+                throw new EvtcAgentException("Agent is a player");
             }
         }
 
-        public IReadOnlyList<Segment> GetBreakbarPercentUpdates(ParsedEvtcLog log)
-        {
-            if (_breakbarPercentUpdates == null)
-            {
-                _breakbarPercentUpdates = Segment.FromStates(log.CombatData.GetBreakbarPercentEvents(AgentItem).Select(x => x.ToState()).ToList(), 0, log.FightData.FightEnd);
-            }
-            return _breakbarPercentUpdates;
-        }
-
-        internal void OverrideName(string name)
+        internal override void OverrideName(string name)
         {
             Character = name;
+        }
+        internal override void SetManualHealth(int health)
+        {
+            Health = health;
         }
 
         public override string GetIcon()
         {
-            return AgentItem.IsPlayer ? ParserHelper.GetHighResolutionProfIcon(Prof) : ParserHelper.GetNPCIcon(ID);
-        }
-
-        public IReadOnlyDictionary<long, FinalBuffs> GetBuffs(ParsedEvtcLog log, long start, long end)
-        {
-            if (_buffs == null)
-            {
-                _buffs = new CachingCollection<Dictionary<long, FinalBuffs>>(log);
-            }
-            if (!_buffs.TryGetValue(start, end, out Dictionary<long, FinalBuffs> value))
-            {
-                value = ComputeBuffs(log, start, end);
-                _buffs.Set(start, end, value);
-            }
-            return value;
-        }
-
-        private Dictionary<long, FinalBuffs> ComputeBuffs(ParsedEvtcLog log, long start, long end)
-        {
-            BuffDistribution buffDistribution = GetBuffDistribution(log, start, end);
-            var rates = new Dictionary<long, FinalBuffs>();
-            Dictionary<long, long> buffPresence = GetBuffPresence(log, start, end);
-
-            long phaseDuration = end - start;
-
-            foreach (Buff buff in GetTrackedBuffs(log))
-            {
-                if (buffDistribution.HasBuffID(buff.ID))
-                {
-                    rates[buff.ID] = new FinalBuffs(buff, buffDistribution, buffPresence, phaseDuration);
-                }
-            }
-            return rates;
+            return ParserHelper.GetNPCIcon(ID);
         }
 
         protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log)
         {
             log.FightData.Logic.ComputeNPCCombatReplayActors(this, log, CombatReplay);
-            if (CombatReplay.Rotations.Any() && log.FightData.Logic.Targets.Contains(this))
+            if (CombatReplay.Rotations.Any() && (log.FightData.Logic.TargetAgents.Contains(AgentItem) || log.FriendlyAgents.Contains(AgentItem)))
             {
                 CombatReplay.Decorations.Add(new FacingDecoration(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));
             }
@@ -92,28 +54,13 @@ namespace GW2EIEvtcParser.EIData
 
         protected override bool InitCombatReplay(ParsedEvtcLog log)
         {
-            if (base.InitCombatReplay(log))
+            bool baseValue = base.InitCombatReplay(log);
+            if (baseValue && !log.FriendlyAgents.Contains(AgentItem))
             {
-                // Trim
-                DespawnEvent despawnCheck = log.CombatData.GetDespawnEvents(AgentItem).LastOrDefault();
-                SpawnEvent spawnCheck = log.CombatData.GetSpawnEvents(AgentItem).LastOrDefault();
-                DeadEvent deathCheck = log.CombatData.GetDeadEvents(AgentItem).LastOrDefault();
-                AliveEvent aliveCheck = log.CombatData.GetAliveEvents(AgentItem).LastOrDefault();
-                if (!AgentItem.IsPlayer && deathCheck != null && (aliveCheck == null || aliveCheck.Time < deathCheck.Time))
-                {
-                    CombatReplay.Trim(AgentItem.FirstAware, deathCheck.Time);
-                }
-                else if (despawnCheck != null && (spawnCheck == null || spawnCheck.Time < despawnCheck.Time))
-                {
-                    CombatReplay.Trim(AgentItem.FirstAware, despawnCheck.Time);
-                }
-                else
-                {
-                    CombatReplay.Trim(AgentItem.FirstAware, AgentItem.LastAware);
-                }
+                TrimCombatReplay(log, CombatReplay, AgentItem);
                 return true;
             }
-            return false;
+            return baseValue;
         }
     }
 }

@@ -34,11 +34,11 @@ namespace GW2EIEvtcParser.EIData
                 {
                     if (c is DirectHealthDamageEvent && c.HasHit && Keep(c, log))
                     {
-                        foreach (Player p in log.PlayerList)
+                        foreach (AbstractSingleActor actor in log.Friendlies)
                         {
-                            if (c.From.GetFinalMaster() == p.AgentItem)
+                            if (c.From.GetFinalMaster() == actor.AgentItem)
                             {
-                                mechanicLogs[this].Add(new MechanicEvent(c.Time, this, p));
+                                mechanicLogs[this].Add(new MechanicEvent(c.Time, this, actor));
                             }
                         }
                     }

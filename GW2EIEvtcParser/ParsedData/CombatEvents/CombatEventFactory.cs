@@ -235,9 +235,6 @@ namespace GW2EIEvtcParser.ParsedData
             var res = new List<AnimatedCastEvent>();
             foreach (KeyValuePair<ulong, List<CombatItem>> pair in castEventsBySrcAgent)
             {
-#if DEBUG
-                AgentItem a = agentData.GetAgent(pair.Key);
-#endif
                 CombatItem startItem = null;
                 foreach (CombatItem c in pair.Value)
                 {

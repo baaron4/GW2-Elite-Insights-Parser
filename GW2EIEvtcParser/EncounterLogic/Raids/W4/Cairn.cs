@@ -62,7 +62,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC cairn = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Cairn);
+            AbstractSingleActor cairn = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Cairn);
             if (cairn == null)
             {
                 throw new MissingKeyActorsException("Cairn not found");
@@ -144,7 +144,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Cairn not found");
             }
             // spawn protection loss -- most reliable
-            CombatItem spawnProtectionLoss = combatData.Find(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.IsBuff != 0 && x.SrcAgent == target.Agent && x.SkillID == 34113);
+            CombatItem spawnProtectionLoss = combatData.Find(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.IsBuff != 0 && x.SrcMatchesAgent(target) && x.SkillID == 34113);
             if (spawnProtectionLoss != null)
             {
                 return spawnProtectionLoss.Time - 1;
@@ -152,7 +152,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             else
             {
                 // get first end casting
-                CombatItem firstCastEnd = combatData.FirstOrDefault(x => x.IsActivation.EndCasting() && (x.Time - fightData.LogStart) < 2000 && x.SrcAgent == target.Agent);
+                CombatItem firstCastEnd = combatData.FirstOrDefault(x => x.IsActivation.EndCasting() && (x.Time - fightData.LogStart) < 2000 && x.SrcMatchesAgent(target));
                 // It has to Impact(38102), otherwise anomaly, player may have joined mid fight, do nothing
                 if (firstCastEnd != null && firstCastEnd.SkillID == 38102)
                 {
@@ -174,7 +174,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return fightData.LogStart;
         }
 
-        internal override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // shared agony
             var agony = log.CombatData.GetBuffData(38049).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();

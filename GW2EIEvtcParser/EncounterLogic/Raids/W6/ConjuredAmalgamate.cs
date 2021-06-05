@@ -61,7 +61,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<Player> playerList)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
             // make those into npcs
             IReadOnlyList<AgentItem> cas = agentData.GetGadgetsByID((int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
@@ -81,8 +81,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             agentData.Refresh();
             ComputeFightTargets(agentData, combatData);
-            AgentItem sword = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, "Conjured Sword\0:Conjured Sword\051", "Sword", 0, true);
-            playerList.Add(new Player(sword, "Conjured Sword"));
+            AgentItem sword = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, "Conjured Sword\0:Conjured Sword\051", "Sword", (int)ArcDPSEnums.TrashID.ConjuredPlayerSword, true);
+            friendlies.Add(new NPC(sword));
             foreach (CombatItem c in combatData)
             {
                 if (c.SkillID == 52370 && c.IsStateChange == ArcDPSEnums.StateChange.None && c.IsBuffRemove == ArcDPSEnums.BuffRemove.None &&
@@ -166,9 +166,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
-                NPC leftArm = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.CALeftArm);
-                NPC rightArm = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.CARightArm);
+                AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
+                AbstractSingleActor leftArm = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.CALeftArm);
+                AbstractSingleActor rightArm = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.CARightArm);
                 if (target == null)
                 {
                     throw new MissingKeyActorsException("Conjured Amalgamate not found");
@@ -207,7 +207,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        private static List<long> GetTargetableTimes(ParsedEvtcLog log, NPC target)
+        private static List<long> GetTargetableTimes(ParsedEvtcLog log, AbstractSingleActor target)
         {
             var attackTargetsAgents = log.CombatData.GetAttackTargetEvents(target.AgentItem).Take(2).ToList(); // 3rd one is weird
             var attackTargets = new List<AgentItem>();
@@ -227,7 +227,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC ca = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
+            AbstractSingleActor ca = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
             if (ca == null)
             {
                 throw new MissingKeyActorsException("Conjured Amalgamate not found");
@@ -253,7 +253,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 phase.Name = name;
             }
-            NPC leftArm = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.CALeftArm);
+            AbstractSingleActor leftArm = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.CALeftArm);
             if (leftArm != null)
             {
                 List<long> targetables = GetTargetableTimes(log, leftArm);
@@ -267,7 +267,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
-            NPC rightArm = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.CARightArm);
+            AbstractSingleActor rightArm = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.CARightArm);
             if (rightArm != null)
             {
                 List<long> targetables = GetTargetableTimes(log, rightArm);
@@ -291,7 +291,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override void ComputePlayerCombatReplayActors(Player p, ParsedEvtcLog log, CombatReplay replay)
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             IReadOnlyList<AbstractCastEvent> cls = p.GetCastEvents(log, 0, log.FightData.FightEnd);
             var shieldCast = cls.Where(x => x.SkillId == 52780).ToList();
@@ -312,7 +312,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Conjured Amalgamate not found");

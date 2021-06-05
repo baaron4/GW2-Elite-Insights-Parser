@@ -8,7 +8,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal AbstractBuffStackEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, skillData)
         {
-            To = agentData.GetAgent(evtcItem.SrcAgent);
+            To = agentData.GetAgent(evtcItem.SrcAgent, evtcItem.Time);
         }
 
         internal override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
