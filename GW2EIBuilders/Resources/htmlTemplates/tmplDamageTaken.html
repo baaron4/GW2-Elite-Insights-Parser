@@ -6,11 +6,14 @@
 
 <script>
     Vue.component('dmgtaken-component', {
-        props: ['actor', 'tableid',
+        props: ['actorindex', "player", 'tableid',
             'phaseindex'
         ],
         template: `${template}`,
         computed: {
+            actor: function () {
+                return this.player? logData.players[this.actorindex] : logData.targets[this.actorindex];
+            },
             dmgtaken: function () {
                 return this.actor.details.dmgDistributionsTaken[this.phaseindex];
             }
