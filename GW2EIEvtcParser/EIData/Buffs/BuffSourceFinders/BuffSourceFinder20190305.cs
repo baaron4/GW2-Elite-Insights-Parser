@@ -2,9 +2,9 @@
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class BuffSourceFinder05032019 : BuffSourceFinder
+    internal class BuffSourceFinder20190305 : BuffSourceFinder
     {
-        public BuffSourceFinder05032019(HashSet<long> boonIds) : base(boonIds)
+        public BuffSourceFinder20190305(HashSet<long> boonIds) : base(boonIds)
         {
             ExtensionIDS = new HashSet<long>()
             {

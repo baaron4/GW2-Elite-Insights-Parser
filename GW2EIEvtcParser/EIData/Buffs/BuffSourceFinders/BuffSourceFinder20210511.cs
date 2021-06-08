@@ -5,9 +5,9 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class BuffSourceFinder11052021 : BuffSourceFinder01102019
+    internal class BuffSourceFinder20210511 : BuffSourceFinder20191001
     {
-        public BuffSourceFinder11052021(HashSet<long> boonIds) : base(boonIds)
+        public BuffSourceFinder20210511(HashSet<long> boonIds) : base(boonIds)
         {
         }
 

@@ -193,17 +193,17 @@ namespace GW2EIEvtcParser.EIData
         {
             if (version > 115189)
             {
-                return new BuffSourceFinder11052021(boonIds);
+                return new BuffSourceFinder20210511(boonIds);
             }
             if (version > 99526)
             {
-                return new BuffSourceFinder01102019(boonIds);
+                return new BuffSourceFinder20191001(boonIds);
             }
             if (version > 95112)
             {
-                return new BuffSourceFinder05032019(boonIds);
+                return new BuffSourceFinder20190305(boonIds);
             }
-            return new BuffSourceFinder11122018(boonIds);
+            return new BuffSourceFinder20181211(boonIds);
         }
 
         public bool Available(ulong gw2Build)

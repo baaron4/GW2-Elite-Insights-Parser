@@ -3,9 +3,9 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class BuffSourceFinder01102019 : BuffSourceFinder05032019
+    internal class BuffSourceFinder20191001 : BuffSourceFinder20190305
     {
-        public BuffSourceFinder01102019(HashSet<long> boonIds) : base(boonIds)
+        public BuffSourceFinder20191001(HashSet<long> boonIds) : base(boonIds)
         {
             ImbuedMelodies = -1;
         }
