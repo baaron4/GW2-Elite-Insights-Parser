@@ -62,12 +62,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override List<ErrorEvent> GetCustomWarningMessages(FightData fightData)
+        internal override List<ErrorEvent> GetCustomWarningMessages(FightData fightData, int arcdpsVersion)
         {
-            return new List<ErrorEvent>()
-            {
-                new ErrorEvent("Missing confusion damage")
-            };
+            return GetConfusionDamageMissingMessage(arcdpsVersion);
         }
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)

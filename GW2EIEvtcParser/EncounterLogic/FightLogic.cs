@@ -287,9 +287,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal virtual List<ErrorEvent> GetCustomWarningMessages(FightData fightData)
+        internal virtual List<ErrorEvent> GetCustomWarningMessages(FightData fightData, int arcdpsVersion)
         {
             return new List<ErrorEvent>();
+        }
+
+        protected static List<ErrorEvent> GetConfusionDamageMissingMessage(int arcdpsVersion)
+        {
+            if (arcdpsVersion > 20210529)
+            {
+                return new List<ErrorEvent>();
+            }
+            return new List<ErrorEvent>()
+            {
+                new ErrorEvent("Missing confusion damage")
+            };
         }
 
         protected void AddTargetsToPhaseAndFit(PhaseData phase, List<int> ids, ParsedEvtcLog log)

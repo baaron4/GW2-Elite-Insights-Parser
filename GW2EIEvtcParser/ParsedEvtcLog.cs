@@ -32,7 +32,7 @@ namespace GW2EIEvtcParser
 
         private Dictionary<AgentItem, AbstractSingleActor> _agentToActorDictionary;
 
-        internal ParsedEvtcLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData,
+        internal ParsedEvtcLog(int arcdpsVersion, FightData fightData, AgentData agentData, SkillData skillData,
                 List<CombatItem> combatItems, List<Player> playerList, List<AbstractSingleActor> friendlies, long evtcLogDuration, EvtcParserSettings parserSettings, ParserController operation)
         {
             FightData = fightData;
@@ -47,7 +47,7 @@ namespace GW2EIEvtcParser
             PlayerAgents = new HashSet<AgentItem>(playerList.Select(x => x.AgentItem));
             FriendlyAgents = new HashSet<AgentItem>(friendlies.Select(x => x.AgentItem));
             _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Combat Events");
-            CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList, operation);
+            CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList, operation, arcdpsVersion);
             //
             _operation.UpdateProgressWithCancellationCheck("Checking Success");
             FightData.Logic.CheckSuccess(CombatData, AgentData, FightData, PlayerAgents);
@@ -60,7 +60,7 @@ namespace GW2EIEvtcParser
                 throw new SkipException();
             }
             _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Log Meta Data");
-            LogData = new LogData(buildVersion, CombatData, evtcLogDuration, playerList, operation);
+            LogData = new LogData("EVTC"+arcdpsVersion, CombatData, evtcLogDuration, playerList, operation);
             //
             _operation.UpdateProgressWithCancellationCheck("Creating Buff Container");
             Buffs = new BuffsContainer(LogData.GW2Build, CombatData, operation);

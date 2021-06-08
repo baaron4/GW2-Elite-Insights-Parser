@@ -29,7 +29,7 @@ namespace GW2EIEvtcParser
         private ushort _id;
         private long _logStartTime;
         private long _logEndTime;
-        private string _buildVersion;
+        private int _arcdpsVersion;
         private ulong _gw2Build;
         private readonly EvtcParserSettings _parserSettings;
         private readonly GW2APIController _apiController;
@@ -133,7 +133,7 @@ namespace GW2EIEvtcParser
                     operation.UpdateProgressWithCancellationCheck("Preparing data for log generation");
                     PreProcessEvtcData();
                     operation.UpdateProgressWithCancellationCheck("Data parsed");
-                    return new ParsedEvtcLog(_buildVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _friendlies, _logEndTime - _logStartTime, _parserSettings, operation);
+                    return new ParsedEvtcLog(_arcdpsVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _friendlies, _logEndTime - _logStartTime, _parserSettings, operation);
                 }
             }
             catch (Exception ex)
@@ -167,8 +167,12 @@ namespace GW2EIEvtcParser
         private void ParseFightData(BinaryReader reader, ParserController operation)
         {
             // 12 bytes: arc build version
-            _buildVersion = GetString(reader, 12);
-            operation.UpdateProgressWithCancellationCheck("ArcDPS Build " + _buildVersion);
+            string evtcVersion = GetString(reader, 12);
+            if (!evtcVersion.StartsWith("EVTC") || !int.TryParse(new string(evtcVersion.Where(char.IsDigit).ToArray()), out _arcdpsVersion))
+            {
+                throw new EvtcFileException("Not EVTC");
+            }
+            operation.UpdateProgressWithCancellationCheck("ArcDPS Build " + evtcVersion);
 
             // 1 byte: revision
             _revision = reader.ReadByte();
