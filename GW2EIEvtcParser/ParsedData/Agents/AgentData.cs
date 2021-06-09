@@ -47,6 +47,12 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 if (_allAgentsByAgent.TryGetValue(agentAddress, out List<AgentItem> agents))
                 {
+#if !DEBUG
+                    if (agents.Count == 1)
+                    {
+                        return agents[0];
+                    }
+#endif
                     foreach (AgentItem a in agents)
                     {
                         if (a.FirstAware <= time && a.LastAware >= time)
@@ -54,7 +60,9 @@ namespace GW2EIEvtcParser.ParsedData
                             return a;
                         }
                     }
+#if DEBUG
                     throw new InvalidOperationException("Couldn't find agent for given addr");
+#endif
                 }
             }
             return ParserHelper._unknownAgent;
