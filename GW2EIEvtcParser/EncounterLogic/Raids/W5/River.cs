@@ -94,7 +94,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     long firstAware = firstMovement.Time - ParserHelper.ServerDelayConstant;
                     foreach (CombatItem c in combatData)
                     {
-                        if (c.SrcMatchesAgent(agentToOverrideFirstAware) && c.Time <= firstAware)
+                        if ((c.SrcMatchesAgent(agentToOverrideFirstAware) || c.DstMatchesAgent(agentToOverrideFirstAware)) && c.Time <= firstAware)
                         {
                             sortCombatList = true;
                             c.OverrideTime(firstAware);
