@@ -58,11 +58,13 @@ namespace GW2EIBuilders.JsonModels
             jsonGameplayStats.TotalDamageCount = stats.TotalDamageCount;
             jsonGameplayStats.DirectDamageCount = stats.DirectDamageCount;
             jsonGameplayStats.ConnectedDirectDamageCount = stats.ConnectedDirectDamageCount;
+            jsonGameplayStats.ConnectedDamageCount = stats.ConnectedDamageCount;
             jsonGameplayStats.CritableDirectDamageCount = stats.CritableDirectDamageCount;
             jsonGameplayStats.CriticalRate = stats.CriticalCount;
             jsonGameplayStats.CriticalDmg = stats.CriticalDmg;
             jsonGameplayStats.FlankingRate = stats.FlankingCount;
             jsonGameplayStats.GlanceRate = stats.GlanceCount;
+            jsonGameplayStats.AgainstMovingRate = stats.AgainstMovingCount;
             jsonGameplayStats.Missed = stats.Missed;
             jsonGameplayStats.Blocked = stats.Blocked;
             jsonGameplayStats.Evaded = stats.Evaded;

@@ -22,7 +22,8 @@
             </ul>
         </div>
         <damagedist-table-component :dmgdist="targetmode === 0 ? dmgdist : dmgdisttarget"
-            :tableid="'dmgdist-' + playerindex" :actor="actor" :isminion="distmode>=0" :istarget="targetmode === 1"
+            :tableid="'dmgdist-' + playerindex" :actorindex="playerindex" :minionindex="distmode" 
+            :player="true" :istarget="targetmode === 1"
             :phaseindex="phaseindex"></damagedist-table-component>
     </div>
 </template>
@@ -47,12 +48,6 @@
             },
             player: function () {
                 return logData.players[this.playerindex];
-            },
-            actor: function () {
-                if (this.distmode === -1) {
-                    return this.player;
-                }
-                return this.player.minions[this.distmode];
             },
             dmgdist: function () {
                 if (this.distmode === -1) {
@@ -109,6 +104,7 @@
                             row[13] += targetDistribution[13];
                             row[14] += targetDistribution[14];
                             // skip 15
+                            row[16] += targetDistribution[16];
                         } else {
                             rows.set(targetDistribution[1], targetDistribution.slice(0));
                         }

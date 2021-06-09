@@ -53,6 +53,7 @@ namespace GW2EIBuilders.JsonModels
                 {
                     jsonDamageDist.Min = Math.Min(jsonDamageDist.Min, dmgEvt.HealthDamage);
                     jsonDamageDist.Max = Math.Max(jsonDamageDist.Max, dmgEvt.HealthDamage);
+                    jsonDamageDist.AgainstMoving += dmgEvt.AgainstMoving ? 1 : 0;
                 }
                 if (!jsonDamageDist.IndirectDamage)
                 {

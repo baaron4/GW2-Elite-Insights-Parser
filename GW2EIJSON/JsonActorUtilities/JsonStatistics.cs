@@ -199,7 +199,12 @@ namespace GW2EIJSON
             /// Number of connected direct damage hit
             /// </summary>
             public int ConnectedDirectDamageCount { get; set; }
-            
+
+            /// <summary>
+            /// Number of connected damage hit
+            /// </summary>
+            public int ConnectedDamageCount { get; set; }
+
             /// <summary>
             /// Number of critable hit
             /// </summary>
@@ -219,7 +224,12 @@ namespace GW2EIJSON
             /// Number of hits while flanking
             /// </summary>
             public int FlankingRate { get; set; }
-            
+
+            /// <summary>
+            /// Number of hits while target was moving
+            /// </summary>
+            public int AgainstMovingRate { get; set; }
+
             /// <summary>
             /// Number of glanced hits
             /// </summary>

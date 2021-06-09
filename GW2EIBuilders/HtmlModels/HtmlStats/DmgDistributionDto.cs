@@ -27,6 +27,7 @@ namespace GW2EIBuilders.HtmlModels
                     critDamage = 0,
                     connectedHits = 0,
                     flank = 0,
+                    againstMoving = 0,
                     glance = 0,
                     shieldDamage = 0;
             bool IsIndirectDamage = false;
@@ -54,6 +55,10 @@ namespace GW2EIBuilders.HtmlModels
                     if (dl.IsFlanking)
                     {
                         flank++;
+                    }
+                    if (dl.AgainstMoving)
+                    {
+                        againstMoving++;
                     }
                 }
 
@@ -123,7 +128,8 @@ namespace GW2EIBuilders.HtmlModels
                     shieldDamage,
                     IsIndirectDamage ? 0 : critDamage,
                     hits,
-                    IsIndirectDamage ? 0 : timeCasting
+                    IsIndirectDamage ? 0 : timeCasting,
+                    againstMoving
                 };
             return skillItem;
         }
@@ -207,7 +213,8 @@ namespace GW2EIBuilders.HtmlModels
                     0,
                     0,
                     0,
-                    timeCasting
+                    timeCasting,
+                    0
                 };
                 list.Add(skillData);
             }

@@ -7,12 +7,14 @@ namespace GW2EIEvtcParser.EIData
     {
         public int TotalDamageCount { get; internal set; }
         public int DirectDamageCount { get; internal set; }
+        public int ConnectedDamageCount { get; internal set; }
         public int ConnectedDirectDamageCount { get; internal set; }
         public int CritableDirectDamageCount { get; internal set; }
         public int CriticalCount { get; internal set; }
         public int CriticalDmg { get; internal set; }
         public int FlankingCount { get; internal set; }
         public int GlanceCount { get; internal set; }
+        public int AgainstMovingCount { get; internal set; }
         public int Missed { get; internal set; }
         public int Blocked { get; internal set; }
         public int Evaded { get; internal set; }
@@ -90,6 +92,15 @@ namespace GW2EIEvtcParser.EIData
                 {
                     Downed++;
                 }
+                if (dl.HasHit)
+                {
+                    ConnectedDamageCount++;
+                    if (dl.AgainstMoving)
+                    {
+                        AgainstMovingCount++;
+                    }
+                }
+                
             }
         }
     }
