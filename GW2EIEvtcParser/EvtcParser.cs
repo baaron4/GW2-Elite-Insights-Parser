@@ -576,7 +576,7 @@ namespace GW2EIEvtcParser
             }
             return combatItem.IsStateChange != ArcDPSEnums.StateChange.Unknown && combatItem.IsStateChange != ArcDPSEnums.StateChange.StatReset && combatItem.IsStateChange != ArcDPSEnums.StateChange.APIDelayed && combatItem.IsStateChange != ArcDPSEnums.StateChange.Extension;
         }
-        private static bool UpdateAgentData(AgentItem ag, long logTime, ushort instid)
+        private static bool UpdateAgentData(AgentItem ag, long logTime, ushort instid, bool checkInstid)
         {       
             if (instid != 0)
             {
@@ -584,7 +584,7 @@ namespace GW2EIEvtcParser
                 {
                     ag.SetInstid(instid);
                 }
-                else if (ag.InstID != instid)
+                else if (checkInstid && ag.InstID != instid)
                 {
                     return false;
                 }
@@ -704,9 +704,9 @@ namespace GW2EIEvtcParser
                         bool updatedAgent = false;
                         foreach (AgentItem agent in agents)
                         {
-                            if (UpdateAgentData(agent, c.Time, c.SrcInstid))
+                            updatedAgent = UpdateAgentData(agent, c.Time, c.SrcInstid, agents.Count > 1);
+                            if (updatedAgent)
                             {
-                                updatedAgent = true;
                                 break;
                             }
                         }
@@ -724,9 +724,9 @@ namespace GW2EIEvtcParser
                         bool updatedAgent = false;
                         foreach (AgentItem agent in agents)
                         {
-                            if (UpdateAgentData(agent, c.Time, c.DstInstid))
+                            updatedAgent = UpdateAgentData(agent, c.Time, c.DstInstid, agents.Count > 1);
+                            if (updatedAgent)
                             {
-                                updatedAgent = true;
                                 break;
                             }
                         }
