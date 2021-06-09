@@ -94,12 +94,13 @@ namespace GW2EIEvtcParser.EIData
                 {
                     string name = buffInfoEvent.Category == BuffCategory.Enhancement ? "Utility" : "Food";
                     string link = buffInfoEvent.Category == BuffCategory.Enhancement ? "https://wiki.guildwars2.com/images/2/23/Nourishment_utility.png" : "https://wiki.guildwars2.com/images/c/ca/Nourishment_food.png";
-                    operation.UpdateProgressWithCancellationCheck("Unknown " + name + " " + buffInfoEvent.BuffID);
+                    operation.UpdateProgressWithCancellationCheck("Creating consumable " + name + " " + buffInfoEvent.BuffID);
                     currentBuffs.Add(CreateCustomConsumable(name, buffInfoEvent.BuffID, link, buffInfoEvent.MaxStacks));
                 }
             }
             //
             BuffsByIds = currentBuffs.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.First());
+            operation.UpdateProgressWithCancellationCheck("Adjusting Buffs");
             BuffInfoSolver.AdjustBuffs(combatData, BuffsByIds, operation, build);
             foreach (Buff buff in currentBuffs)
             {
