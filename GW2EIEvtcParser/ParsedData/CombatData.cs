@@ -236,7 +236,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        private void EIMetaAndStatusParse(FightData fightData)
+        private void EIMetaAndStatusParse(FightData fightData, int arcdpsVersion)
         {
             foreach (KeyValuePair<AgentItem, List<AbstractHealthDamageEvent>> pair in _damageTakenData)
             {
@@ -282,7 +282,7 @@ namespace GW2EIEvtcParser.ParsedData
                     _statusEvents.DownEvents[pair.Key] = agentDowns.OrderBy(x => x.Time).ToList();
                 }
             }
-            _metaDataEvents.ErrorEvents.AddRange(fightData.Logic.GetCustomWarningMessages(fightData));
+            _metaDataEvents.ErrorEvents.AddRange(fightData.Logic.GetCustomWarningMessages(fightData, arcdpsVersion));
         }
 
         internal void AddCustomWarningMessage(string message)
@@ -290,7 +290,7 @@ namespace GW2EIEvtcParser.ParsedData
             _metaDataEvents.ErrorEvents.Add(new ErrorEvent(message));
         }
 
-        private void EIExtraEventProcess(List<Player> players, SkillData skillData, AgentData agentData, FightData fightData, ParserController operation)
+        private void EIExtraEventProcess(List<Player> players, SkillData skillData, AgentData agentData, FightData fightData, ParserController operation, int arcdpsVersion)
         {
             operation.UpdateProgressWithCancellationCheck("Creating Custom Buff Events");
             EIBuffParse(players, skillData, fightData);
@@ -299,7 +299,7 @@ namespace GW2EIEvtcParser.ParsedData
             operation.UpdateProgressWithCancellationCheck("Creating Custom Cast Events");
             EICastParse(players, skillData, fightData, agentData);
             operation.UpdateProgressWithCancellationCheck("Creating Custom Status Events");
-            EIMetaAndStatusParse(fightData);
+            EIMetaAndStatusParse(fightData, arcdpsVersion);
             // master attachements
             operation.UpdateProgressWithCancellationCheck("Attaching Banners to Warriors");
             WarriorHelper.AttachMasterToWarriorBanners(players, this);
@@ -311,7 +311,7 @@ namespace GW2EIEvtcParser.ParsedData
             ProfHelper.AttachMasterToRacialGadgets(players, this);
         }
 
-        internal CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players, ParserController operation)
+        internal CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players, ParserController operation, int arcdpsVersion)
         {
             _skillIds = new HashSet<long>();
             var castCombatEvents = new Dictionary<ulong, List<CombatItem>>();
@@ -393,7 +393,7 @@ namespace GW2EIEvtcParser.ParsedData
                                                 (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
             operation.UpdateProgressWithCancellationCheck("Checking CM");
             fightData.SetCM(this, agentData, fightData);
-            EIExtraEventProcess(players, skillData, agentData, fightData, operation);
+            EIExtraEventProcess(players, skillData, agentData, fightData, operation, arcdpsVersion);
         }
 
         // getters

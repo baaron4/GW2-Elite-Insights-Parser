@@ -193,17 +193,17 @@ namespace GW2EIEvtcParser.EIData
         {
             if (version > 115189)
             {
-                return new BuffSourceFinder11052021(boonIds);
+                return new BuffSourceFinder20210511(boonIds);
             }
             if (version > 99526)
             {
-                return new BuffSourceFinder01102019(boonIds);
+                return new BuffSourceFinder20191001(boonIds);
             }
             if (version > 95112)
             {
-                return new BuffSourceFinder05032019(boonIds);
+                return new BuffSourceFinder20190305(boonIds);
             }
-            return new BuffSourceFinder11122018(boonIds);
+            return new BuffSourceFinder20181211(boonIds);
         }
 
         public bool Available(ulong gw2Build)
@@ -275,7 +275,8 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Stealth", 13017, Source.Common, BuffStackType.Queue, 5, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
                 new Buff("Hide in Shadows", 10269, Source.Common, BuffStackType.Queue, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
                 new Buff("Revealed", 890, Source.Common, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/d/db/Revealed.png"),
-                new Buff("Superspeed", 5974, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/1/1a/Super_Speed.png"),
+                new Buff("Superspeed", 5974, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/1/1a/Super_Speed.png", 0, 116210),
+                new Buff("Superspeed", 5974, Source.Common, BuffStackType.Queue, 9, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/1/1a/Super_Speed.png", 116210, ulong.MaxValue),
                 new Buff("Determined (762)", 762, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Buff("Determined (788)", 788, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Buff("Determined (895)", 895, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),

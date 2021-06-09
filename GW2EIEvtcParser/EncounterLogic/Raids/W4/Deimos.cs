@@ -232,7 +232,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return start;
         }
 
-        internal override List<ErrorEvent> GetCustomWarningMessages(FightData fightData)
+        internal override List<ErrorEvent> GetCustomWarningMessages(FightData fightData, int arcdpsVersion)
         {
             var res = new List<ErrorEvent>()
             {
