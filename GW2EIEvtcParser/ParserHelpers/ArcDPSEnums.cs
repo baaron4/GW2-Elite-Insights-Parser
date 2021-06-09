@@ -672,30 +672,49 @@ namespace GW2EIEvtcParser
     {
         public static bool SrcIsAgent(this ArcDPSEnums.StateChange state)
         {
-            return state == ArcDPSEnums.StateChange.None || state == ArcDPSEnums.StateChange.EnterCombat
-                || state == ArcDPSEnums.StateChange.ExitCombat || state == ArcDPSEnums.StateChange.ChangeUp
-                || state == ArcDPSEnums.StateChange.ChangeDead || state == ArcDPSEnums.StateChange.ChangeDown
-                || state == ArcDPSEnums.StateChange.Spawn || state == ArcDPSEnums.StateChange.Despawn
-                || state == ArcDPSEnums.StateChange.HealthUpdate || state == ArcDPSEnums.StateChange.WeaponSwap
-                || state == ArcDPSEnums.StateChange.MaxHealthUpdate || state == ArcDPSEnums.StateChange.PointOfView
-                || state == ArcDPSEnums.StateChange.BuffInitial || state == ArcDPSEnums.StateChange.Position
-                || state == ArcDPSEnums.StateChange.Velocity || state == ArcDPSEnums.StateChange.Rotation
-                || state == ArcDPSEnums.StateChange.TeamChange || state == ArcDPSEnums.StateChange.AttackTarget
-                || state == ArcDPSEnums.StateChange.Targetable || state == ArcDPSEnums.StateChange.StackActive
-                || state == ArcDPSEnums.StateChange.StackReset || state == ArcDPSEnums.StateChange.Guild 
+            return state == ArcDPSEnums.StateChange.None 
+                || state == ArcDPSEnums.StateChange.EnterCombat
+                || state == ArcDPSEnums.StateChange.ExitCombat 
+                || state == ArcDPSEnums.StateChange.ChangeUp
+                || state == ArcDPSEnums.StateChange.ChangeDead 
+                || state == ArcDPSEnums.StateChange.ChangeDown
+                || state == ArcDPSEnums.StateChange.Spawn 
+                || state == ArcDPSEnums.StateChange.Despawn
+                || state == ArcDPSEnums.StateChange.HealthUpdate 
+                || state == ArcDPSEnums.StateChange.WeaponSwap
+                || state == ArcDPSEnums.StateChange.MaxHealthUpdate 
+                || state == ArcDPSEnums.StateChange.PointOfView
+                || state == ArcDPSEnums.StateChange.BuffInitial 
+                || state == ArcDPSEnums.StateChange.Position
+                || state == ArcDPSEnums.StateChange.Velocity 
+                || state == ArcDPSEnums.StateChange.Rotation
+                || state == ArcDPSEnums.StateChange.TeamChange 
+                || state == ArcDPSEnums.StateChange.AttackTarget
+                || state == ArcDPSEnums.StateChange.Targetable 
+                || state == ArcDPSEnums.StateChange.StackActive
+                || state == ArcDPSEnums.StateChange.StackReset 
+                || state == ArcDPSEnums.StateChange.Guild 
                 || state == ArcDPSEnums.StateChange.BreakbarState
-                || state == ArcDPSEnums.StateChange.BreakbarPercent || state == ArcDPSEnums.StateChange.Tag 
-                || state == ArcDPSEnums.StateChange.BarrierUpdate ;
+                || state == ArcDPSEnums.StateChange.BreakbarPercent 
+                || state == ArcDPSEnums.StateChange.Tag 
+                || state == ArcDPSEnums.StateChange.BarrierUpdate
+                ;
         }
 
         public static bool DstIsAgent(this ArcDPSEnums.StateChange state)
         {
-            return state == ArcDPSEnums.StateChange.None || state == ArcDPSEnums.StateChange.AttackTarget || state == ArcDPSEnums.StateChange.BuffInitial;
+            return state == ArcDPSEnums.StateChange.None 
+                || state == ArcDPSEnums.StateChange.AttackTarget 
+                || state == ArcDPSEnums.StateChange.BuffInitial
+                ;
         }
 
         public static bool HasTime(this ArcDPSEnums.StateChange state)
         {
-            return state.SrcIsAgent() || state.DstIsAgent() || state == ArcDPSEnums.StateChange.Reward;
+            return state.SrcIsAgent() 
+                || state.DstIsAgent() 
+                || state == ArcDPSEnums.StateChange.Reward
+                ;
         }
     }
 
