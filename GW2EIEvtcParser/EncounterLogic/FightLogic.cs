@@ -130,7 +130,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
                 foreach (AgentItem agentItem in agents)
                 {
-                    _targets.Add(new NPC(agentItem));
+                    if (agentItem.LastAware - agentItem.FirstAware > 200)
+                    {
+                        _targets.Add(new NPC(agentItem));
+                    }
                 }
             }
             _targets.Sort((x, y) => x.FirstAware.CompareTo(y.FirstAware));
@@ -139,7 +142,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             //aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
             foreach (AgentItem a in aList)
             {
-                _trashMobs.Add(new NPC(a));
+                if (a.LastAware - a.FirstAware > 200)
+                {
+                    _trashMobs.Add(new NPC(a));
+                }
             }
             _trashMobs.Sort((x, y) => x.FirstAware.CompareTo(y.FirstAware));
             //
