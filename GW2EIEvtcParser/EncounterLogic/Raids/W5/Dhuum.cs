@@ -10,20 +10,35 @@ namespace GW2EIEvtcParser.EncounterLogic
     internal class Dhuum : HallOfChains
     {
         private bool _isBugged;
-        private short _reapersSeen;
         private int _greenStart;
 
         public Dhuum(int triggerID) : base(triggerID)
         {
             _isBugged = false;
-            _reapersSeen = -7;
             _greenStart = 0;
             MechanicList.AddRange(new List<Mechanic>
             {
             new HitOnPlayerMechanic(48172, "Hateful Ephemera", new MechanicPlotlySetting("square","rgb(255,140,0)"), "Golem","Hateful Ephemera (Golem AoE dmg)", "Golem Dmg",0),
             new HitOnPlayerMechanic(48121, "Arcing Affliction", new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Bomb dmg","Arcing Affliction (Bomb) hit", "Bomb dmg",0),
             new PlayerBuffApplyMechanic(47646, "Arcing Affliction", new MechanicPlotlySetting("circle","rgb(255,0,0)"), "Bomb","Arcing Affliction (Bomb) application", "Bomb",0),
-            new PlayerBuffRemoveMechanic(47646, "Arcing Affliction", new MechanicPlotlySetting("diamond","rgb(255,0,0)"), "Bomb Trig","Arcing Affliction (Bomb) manualy triggered", "Bomb Triggered",0, (br, log) => br.RemovedDuration > 50 && !log.CombatData.GetDamageData(48210).Any(x => Math.Abs(x.Time - br.Time) < 15 && x.To == br.To) && !br.To.HasBuff(log, 48281, br.Time)),
+            new PlayerBuffRemoveMechanic(47646, "Arcing Affliction", new MechanicPlotlySetting("diamond","rgb(255,0,0)"), "Bomb Trig","Arcing Affliction (Bomb) manualy triggered", "Bomb Triggered",0, (br, log) =>
+            {
+                // Removal duration check
+                if (br.RemovedDuration < 50)
+                {
+                    return false;
+                }
+                // Greater Death mark check
+                if (log.CombatData.GetDamageData(48210).Any(x => Math.Abs(x.Time - br.Time) < 15 && x.To == br.To)) {
+                    return false;
+                }
+                // Spirit transformation check
+                if (br.To.HasBuff(log, 48281, br.Time))
+                {
+                    return false;
+                }
+                return true;
+             }),
             //new Mechanic(47476, "Residual Affliction", ParseEnum.BossIDS.Dhuum, new MechanicPlotlySetting("star-diamond","rgb(255,200,0)"), "Bomb",0), //not needed, imho, applied at the same time as Arcing Affliction
             new PlayerOnPlayerBuffApplyMechanic(47335, "Soul Shackle", new MechanicPlotlySetting("diamond","rgb(0,255,255)"), "Shackles","Soul Shackle (Tether) application", "Shackles",10000),//  //also used for removal.
             new HitOnPlayerMechanic(47164, "Soul Shackle", new MechanicPlotlySetting("diamond-open","rgb(0,255,255)"), "Shackles dmg","Soul Shackle (Tether) dmg ticks", "Shackles Dmg",0,   (de,log) => de.HealthDamage > 0),
@@ -183,6 +198,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        private static readonly Dictionary<Point3D, int> ReapersToGreen = new Dictionary<Point3D, int>
+        {
+            { new Point3D(16897, 1225, -6215, 0), 0 },
+            { new Point3D(16853, 65, -6215, 0), 1 },
+            { new Point3D(15935, -614, -6215, 0), 2 },
+            { new Point3D(14830, -294, -6215, 0), 3 },
+            { new Point3D(14408, 764, -6215, 0), 4 },
+            { new Point3D(14929, 1762, -6215, 0), 5 },
+            { new Point3D(16062, 1991, -6215, 0), 6 },
+        };
+
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             // TODO: correct position
@@ -260,40 +286,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.Deathling:
                     break;
                 case (int)ArcDPSEnums.TrashID.UnderworldReaper:
-                    // if not bugged and we assumed we are still on the reapers at the door, check if start is above 2 seconds (first reaper spawns around 10+ seconds). If yes, put _reapersSeen at 0 to start greens. 
-                    if (!_isBugged && _reapersSeen < 0 && start > 2000)
-                    {
-                        //Reminder that agents appear in chronological order, after this one, reaper has spawned afer the first one
-                        _reapersSeen = 0;
-                    }
-                    if (!_isBugged && _reapersSeen >= 0)
-                    {
-                        if (_greenStart == 0)
-                        {
-                            AbstractBuffEvent greenTaken = log.CombatData.GetBuffData(46950).Where(x => x is BuffApplyEvent).FirstOrDefault();
-                            if (greenTaken != null)
-                            {
-                                _greenStart = (int)greenTaken.Time - 5000;
-                            }
-                            else
-                            {
-                                _greenStart = 30600;
-                            }
-                        }
-                        int multiplier = 210000;
-                        int gStart = _greenStart + _reapersSeen * 30000;
-                        var greens = new List<int>() {
-                            gStart,
-                            gStart + multiplier,
-                            gStart + 2 * multiplier
-                        };
-                        foreach (int gstart in greens)
-                        {
-                            int gend = gstart + 5000;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(target)));
-                            replay.Decorations.Add(new CircleDecoration(true, gend, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(target)));
-                        }
-                    }
                     List<AbstractBuffEvent> stealths = GetFilteredList(log.CombatData, 13017, target, true);
                     int stealthStart = 0;
                     int stealthEnd = 0;
@@ -309,7 +301,52 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new CircleDecoration(true, 0, 180, (stealthStart, stealthEnd), "rgba(80, 80, 80, 0.3)", new AgentConnector(target)));
                         }
                     }
-                    _reapersSeen++;
+                    if (!_isBugged)
+                    {
+                        if (_greenStart == 0)
+                        {
+                            AbstractBuffEvent greenTaken = log.CombatData.GetBuffData(46950).Where(x => x is BuffApplyEvent).FirstOrDefault();
+                            if (greenTaken != null)
+                            {
+                                _greenStart = (int)greenTaken.Time - 5000;
+                            }
+                            else
+                            {
+                                _greenStart = 30600;
+                            }
+                        }
+                        Point3D pos = replay.Positions.FirstOrDefault();
+                        if (pos == null)
+                        {
+                            break;
+                        }
+                        int reaper = -1;
+                        foreach (KeyValuePair<Point3D, int> pair in ReapersToGreen)
+                        {
+                            if (pair.Key.DistanceToPoint(pos) < 10)
+                            {
+                                reaper = pair.Value;
+                                break;
+                            }
+                        }
+                        if (reaper == -1)
+                        {
+                            break;
+                        }
+                        int multiplier = 210000;
+                        int gStart = _greenStart + reaper * 30000;
+                        var greens = new List<int>() {
+                            gStart,
+                            gStart + multiplier,
+                            gStart + 2 * multiplier
+                        };
+                        foreach (int gstart in greens)
+                        {
+                            int gend = gstart + 5000;
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(target)));
+                            replay.Decorations.Add(new CircleDecoration(true, gend, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(target)));
+                        }
+                    }
                     break;
                 default:
                     break;
