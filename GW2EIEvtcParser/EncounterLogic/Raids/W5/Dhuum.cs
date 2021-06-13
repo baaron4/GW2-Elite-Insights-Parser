@@ -42,15 +42,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     return false;
                 }
-                // Reaper death check
-                IReadOnlyList<AgentItem> reapers = log.AgentData.GetNPCsByID((int) ArcDPSEnums.TrashID.UnderworldReaper);
-                foreach (AgentItem reaper in reapers)
-                {
-                    if (log.CombatData.GetDeadEvents(reaper).Any(x => Math.Abs(x.Time - br.Time) < 100))
-                    {
-                        return false;
-                    }
-                }
                 return true;
              }),
             //new Mechanic(47476, "Residual Affliction", ParseEnum.BossIDS.Dhuum, new MechanicPlotlySetting("star-diamond","rgb(255,200,0)"), "Bomb",0), //not needed, imho, applied at the same time as Arcing Affliction
