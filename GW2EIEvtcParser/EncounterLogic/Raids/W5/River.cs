@@ -81,35 +81,6 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
             agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, "River of Souls", "", (int)ArcDPSEnums.TargetID.DummyTarget, true);
-            // The walls and bombers spawn at the start of the encounter, we fix it by overriding their first aware to the first velocity change event
-            var agentsToOverrideFirstAware = new List<AgentItem>(agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.RiverOfSouls));
-            agentsToOverrideFirstAware.AddRange(agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.HollowedBomber));
-            bool sortCombatList = false;
-            foreach (AgentItem agentToOverrideFirstAware in agentsToOverrideFirstAware)
-            {
-                CombatItem firstMovement = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && x.SrcMatchesAgent(agentToOverrideFirstAware) && x.DstAgent != 0);
-                if (firstMovement != null)
-                {
-                    // update start
-                    long firstAware = firstMovement.Time - ParserHelper.ServerDelayConstant;
-                    foreach (CombatItem c in combatData)
-                    {
-                        if ((c.SrcMatchesAgent(agentToOverrideFirstAware) || c.DstMatchesAgent(agentToOverrideFirstAware)) && c.Time <= firstAware)
-                        {
-                            sortCombatList = true;
-                            c.OverrideTime(firstAware);
-                        }
-                    }
-                    agentToOverrideFirstAware.OverrideAwareTimes(firstAware, agentToOverrideFirstAware.LastAware);
-                }
-            }
-            // make sure the list is still sorted by time after overrides
-            if (sortCombatList)
-            {
-                var auxCombatData = combatData.OrderBy(x => x.Time).ToList();
-                combatData.Clear();
-                combatData.AddRange(auxCombatData);
-            }
             ComputeFightTargets(agentData, combatData);
             AgentItem desmina = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Desmina).FirstOrDefault();
             if (desmina != null)
@@ -125,11 +96,14 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            int start = (int)replay.TimeOffsets.start;
-            int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TrashID.HollowedBomber:
+                    Point3D firstBomberMovement = replay.Velocities.FirstOrDefault(x => x.Length() != 0);
+                    if (firstBomberMovement != null)
+                    {
+                        replay.Trim(firstBomberMovement.Time - 1000, replay.TimeOffsets.end);
+                    }
                     var bomberman = target.GetCastEvents(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == 48272).ToList();
                     foreach (AbstractCastEvent bomb in bomberman)
                     {
@@ -141,8 +115,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.RiverOfSouls:
+                    Point3D firstRiverMovement = replay.Velocities.FirstOrDefault(x => x.Length() != 0);
+                    if (firstRiverMovement != null)
+                    {
+                        replay.Trim(firstRiverMovement.Time - 1000, replay.TimeOffsets.end);
+                    }
                     if (replay.Rotations.Count > 0)
                     {
+                        int start = (int)replay.TimeOffsets.start;
+                        int end = (int)replay.TimeOffsets.end;
                         replay.Decorations.Add(new FacingRectangleDecoration((start, end), new AgentConnector(target), replay.PolledRotations, 160, 390, "rgba(255,100,0,0.5)"));
                     }
                     break;

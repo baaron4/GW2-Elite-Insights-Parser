@@ -20,6 +20,12 @@ namespace GW2EIEvtcParser.EIData
             return distance;
         }
 
+        public float Length()
+        {
+            float length = (float)Math.Sqrt(X * X + Y * Y + Z * Z);
+            return length;
+        }
+
         public Point3D(float x, float y, float z, long time)
         {
             X = x;
