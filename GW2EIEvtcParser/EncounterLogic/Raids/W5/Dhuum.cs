@@ -29,13 +29,27 @@ namespace GW2EIEvtcParser.EncounterLogic
                     return false;
                 }
                 // Greater Death mark check
-                if (log.CombatData.GetDamageData(48210).Any(x => Math.Abs(x.Time - br.Time) < 15 && x.To == br.To)) {
+                if (log.CombatData.GetDamageData(48210).Any(x => Math.Abs(x.Time - br.Time) < 100 && x.To == br.To)) {
                     return false;
                 }
                 // Spirit transformation check
                 if (br.To.HasBuff(log, 48281, br.Time))
                 {
                     return false;
+                }
+                // Death check
+                if (log.CombatData.GetDeadEvents(br.To).Any(x => Math.Abs(x.Time - br.Time) < 100))
+                {
+                    return false;
+                }
+                // Reaper death check
+                IReadOnlyList<AgentItem> reapers = log.AgentData.GetNPCsByID((int) ArcDPSEnums.TrashID.UnderworldReaper);
+                foreach (AgentItem reaper in reapers)
+                {
+                    if (log.CombatData.GetDeadEvents(reaper).Any(x => Math.Abs(x.Time - br.Time) < 100))
+                    {
+                        return false;
+                    }
                 }
                 return true;
              }),
@@ -185,6 +199,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
+        protected override List<int> GetFightTargetsIDs()
+        {
+            return new List<int>
+            {
+                (int)ArcDPSEnums.TargetID.Dhuum,
+                (int)ArcDPSEnums.TrashID.UnderworldReaper,
+            };
+        }
+
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
             return new List<ArcDPSEnums.TrashID>
@@ -193,7 +216,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.Enforcer,
                 ArcDPSEnums.TrashID.Messenger,
                 ArcDPSEnums.TrashID.Deathling,
-                ArcDPSEnums.TrashID.UnderworldReaper,
                 ArcDPSEnums.TrashID.DhuumDesmina
             };
         }
