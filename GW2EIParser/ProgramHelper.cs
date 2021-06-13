@@ -292,11 +292,11 @@ namespace GW2EIParser
                     actor.GetTrackedBuffs(log);
                 }
                 Parallel.ForEach(friendliesAndTargets, actor => actor.GetStatus(log));
-                if (log.CombatData.HasMovementData)
+                /*if (log.CombatData.HasMovementData)
                 {
                     // init all positions
                     Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.GetCombatReplayPolledPositions(log));
-                }
+                }*/
                 Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.GetBuffGraphs(log));
                 Parallel.ForEach(friendliesAndTargets, actor =>
                 {

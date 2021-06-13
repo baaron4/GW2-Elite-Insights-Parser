@@ -305,17 +305,26 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        protected virtual bool InitCombatReplay(ParsedEvtcLog log)
+        protected virtual void TrimCombatReplay(ParsedEvtcLog log)
+        {
+
+        }
+
+        protected void InitCombatReplay(ParsedEvtcLog log)
         {
             CombatReplay = new CombatReplay();
             if (!log.CombatData.HasMovementData)
             {
                 // no combat replay support on fight
-                return false;
+                return;
             }
             SetMovements(log);
             CombatReplay.PollingRate(log.FightData.FightEnd);
-            return true;
+            TrimCombatReplay(log);
+            if (!IsFakeActor)
+            {
+                InitAdditionalCombatReplayData(log);
+            }
         }
 
         public IReadOnlyList<GenericDecoration> GetCombatReplayActors(ParsedEvtcLog log)
@@ -328,14 +337,6 @@ namespace GW2EIEvtcParser.EIData
             if (CombatReplay == null)
             {
                 InitCombatReplay(log);
-            }
-            if (CombatReplay.NoActors)
-            {
-                CombatReplay.NoActors = false;
-                if (!IsFakeActor)
-                {
-                    InitAdditionalCombatReplayData(log);
-                }
             }
             return CombatReplay.Decorations;
         }

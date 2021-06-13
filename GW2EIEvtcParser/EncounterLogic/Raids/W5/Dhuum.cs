@@ -329,6 +329,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                         }
                         Point3D pos = replay.Positions.FirstOrDefault();
+                        if (replay.Positions.Count > 1)
+                        {
+                            replay.Trim(replay.Positions.LastOrDefault().Time, replay.TimeOffsets.end);
+                        }
                         if (pos == null)
                         {
                             break;

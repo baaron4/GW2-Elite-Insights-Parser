@@ -51,16 +51,12 @@ namespace GW2EIEvtcParser.EIData
             }
             return new NPCSerializable(this, log, map, CombatReplay);
         }
-
-        protected override bool InitCombatReplay(ParsedEvtcLog log)
+        protected override void TrimCombatReplay(ParsedEvtcLog log)
         {
-            bool baseValue = base.InitCombatReplay(log);
-            if (baseValue && !log.FriendlyAgents.Contains(AgentItem))
+            if (!log.FriendlyAgents.Contains(AgentItem))
             {
                 TrimCombatReplay(log, CombatReplay, AgentItem);
-                return true;
             }
-            return baseValue;
         }
     }
 }

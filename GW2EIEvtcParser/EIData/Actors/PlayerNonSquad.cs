@@ -17,16 +17,12 @@ namespace GW2EIEvtcParser.EIData
             }
             Account = "Non Squad Player " + (++NonSquadPlayers);
         }
-
-        protected override bool InitCombatReplay(ParsedEvtcLog log)
+        protected override void TrimCombatReplay(ParsedEvtcLog log)
         {
-            bool baseValue = base.InitCombatReplay(log);
-            if (baseValue && !AgentItem.IsNotInSquadFriendlyPlayer)
+            if (!AgentItem.IsNotInSquadFriendlyPlayer)
             {
                 TrimCombatReplay(log, CombatReplay, AgentItem);
-                return true;
             }
-            return baseValue;
         }
 
     }

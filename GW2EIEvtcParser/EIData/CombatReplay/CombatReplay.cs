@@ -15,15 +15,19 @@ namespace GW2EIEvtcParser.EIData
         private long _end = -1;
         internal (long start, long end) TimeOffsets => (_start, _end);
         // actors
-        internal bool NoActors { get; set; } = true;
         internal List<GenericDecoration> Decorations { get; } = new List<GenericDecoration>();
 
         internal void Trim(long start, long end)
         {
+            if (_end == -1)
+            {
+                _start = long.MinValue;
+                _end = long.MaxValue;
+            }
             PolledPositions.RemoveAll(x => x.Time < start || x.Time > end);
             PolledRotations.RemoveAll(x => x.Time < start || x.Time > end);
-            _start = Math.Max(start, 1);
-            _end = Math.Max(_start, end);
+            _start = Math.Max(start, _start);
+            _end = Math.Max(_start, Math.Min(end, _end));
         }
 
         private void PositionPolling(int rate, long fightDuration)
