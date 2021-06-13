@@ -10,6 +10,7 @@ namespace GW2EIEvtcParser.EncounterLogic
     {
 
         private long _xeraSecondPhaseStartTime = 0;
+        private long _xeraFirstPhaseEndTime = 0;
 
         public Xera(int triggerID) : base(triggerID)
         {
@@ -148,43 +149,34 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Xera not found");
             }
-
+            _xeraFirstPhaseEndTime = firstXera.LastAware;
+            //
             var maxHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && x.DstAgent > 0).ToList();
+            //
             var bloodstoneFragments = maxHPUpdates.Where(x => x.DstAgent == 104580).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
             foreach (AgentItem gadget in bloodstoneFragments)
             {
                 gadget.OverrideType(AgentItem.AgentType.NPC);
                 gadget.OverrideID(ArcDPSEnums.TrashID.BloodstoneFragment);
             }
+            //
             var bloodstoneShards = maxHPUpdates.Where(x => x.DstAgent == 343620).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
             foreach (AgentItem gadget in bloodstoneShards)
             {
                 gadget.OverrideType(AgentItem.AgentType.NPC);
                 gadget.OverrideID(ArcDPSEnums.TrashID.BloodstoneShard);
             }
+            //
             var chargedBloodStones = maxHPUpdates.Where(x => x.DstAgent == 74700).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.LastAware > firstXera.LastAware).ToList();
             foreach (AgentItem gadget in chargedBloodStones)
             {
                 gadget.OverrideType(AgentItem.AgentType.NPC);
                 gadget.OverrideID(ArcDPSEnums.TrashID.ChargedBloodstone);
-                // they are actually present from start to finish
-                var firstAware = firstXera.LastAware + 12000;
-                foreach (CombatItem c in combatData)
-                {
-                    if ((c.SrcMatchesAgent(gadget) || c.DstMatchesAgent(gadget)) && c.Time <= firstAware)
-                    {
-                        c.OverrideTime(firstAware);
-                    }
-                }
-                gadget.OverrideAwareTimes(firstAware, gadget.LastAware);
 
             }
             if (bloodstoneFragments.Any() || bloodstoneShards.Any() || chargedBloodStones.Any())
             {
                 agentData.Refresh();
-                var auxCombatData = combatData.OrderBy(x => x.Time).ToList();
-                combatData.Clear();
-                combatData.AddRange(auxCombatData);
             }
             // find split
             AgentItem secondXera = agentData.GetNPCsByID(16286).FirstOrDefault();
@@ -263,6 +255,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         replay.Decorations.Add(new CircleDecoration(true, 0, 180, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
+                    break;
+                case (int)ArcDPSEnums.TrashID.ChargedBloodstone:
+                    if (_xeraFirstPhaseEndTime != 0)
+                    {
+                        replay.Trim(_xeraFirstPhaseEndTime + 12000, replay.TimeOffsets.end);
+                    }
+                    break;
+                case (int)ArcDPSEnums.TrashID.BloodstoneFragment:
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 760, ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end), "rgba(255, 155, 0, 0.2)", new AgentConnector(target)));
                     break;
                 default:
                     break;
