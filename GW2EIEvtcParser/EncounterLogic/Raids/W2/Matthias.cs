@@ -34,8 +34,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             //new Mechanic(34367, "Unbalanced", ParseEnum.BossIDS.Matthias, new MechanicPlotlySetting("square","rgb(0,140,0)"), "KD","Unbalanced (triggered Storm phase Debuff) only on successful interrupt", "Knockdown (interrupt)",0,(condition => condition.getDLog().GetResult() == ParseEnum.Result.Interrupt)),
             //new Mechanic(34422, "Blood Fueled", ParseEnum.BossIDS.Matthias, new MechanicPlotlySetting("square","rgb(255,0,0)"), "Ate Reflects(good)",0),//human //Applied at the same time as Backflip Shards since it is the buff applied by them, can be omitted imho
             //new Mechanic(34428, "Blood Fueled", ParseEnum.BossIDS.Matthias, new MechanicPlotlySetting("square","rgb(255,0,0)"), "Ate Reflects(good)",0),//abom
-            new EnemyBuffApplyMechanic(34376, "Blood Shield", new MechanicPlotlySetting("octagon","rgb(255,0,0)"), "Bubble","Blood Shield (protective bubble)", "Bubble",100),//human
-            new EnemyBuffApplyMechanic(34518, "Blood Shield", new MechanicPlotlySetting("octagon","rgb(255,0,0)"), "Bubble","Blood Shield (protective bubble)", "Bubble",100),//abom
+            new EnemyBuffApplyMechanic(34376, "Blood Shield", new MechanicPlotlySetting("octagon","rgb(255,0,0)"), "Bubble","Blood Shield (protective bubble)", "Bubble",100, (ba, log) => !ba.To.HasBuff(log, 34376, ba.Time - 100)),//human
+            new EnemyBuffApplyMechanic(34518, "Blood Shield", new MechanicPlotlySetting("octagon","rgb(255,0,0)"), "Bubble","Blood Shield (protective bubble)", "Bubble",100, (ba, log) => !ba.To.HasBuff(log, 34518, ba.Time - 100)),//abom
             new PlayerBuffApplyMechanic(34511, "Zealous Benediction", new MechanicPlotlySetting("circle","rgb(255,200,0)"), "Bombs","Zealous Benediction (Expanding bombs)","Bomb",0),
             new PlayerBuffApplyMechanic(26766, "Icy Patch", new MechanicPlotlySetting("circle-open","rgb(0,0,255)"), "Icy KD","Knockdown by Icy Patch", "Icy Patch KD",0, (br,log) => br.AppliedDuration == 10000 && !br.To.HasBuff(log, 1122, br.Time)),
             new HitOnPlayerMechanic(34413, "Surrender", new MechanicPlotlySetting("circle-open","rgb(0,0,0)"), "Spirit","Surrender (hit by walking Spirit)", "Spirit hit",0)
@@ -210,6 +210,28 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        private static void AddMatthiasBubbles(long buffID, NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            List<AbstractBuffEvent> shields = GetFilteredList(log.CombatData, buffID, target, true);
+            int start = 0;
+            for (int i = 0; i < shields.Count; i++)
+            {
+                AbstractBuffEvent buffEvent = shields[i];
+                if (buffEvent is BuffApplyEvent)
+                {
+                    start = (int)buffEvent.Time;
+                    if (i == shields.Count - 1)
+                    {
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)start, (int)log.FightData.FightEnd), "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
+                    }
+                } 
+                else
+                {
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)start, (int)buffEvent.Time), "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
+                }
+            }
+        }
+
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
@@ -218,36 +240,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Matthias:
-                    var humanShield = cls.Where(x => x.SkillId == 34468).ToList();
-                    var humanShieldRemoval = log.CombatData.GetBuffRemoveAllData(34518).Select(x => (int)x.Time).Distinct().ToList();
-                    for (int i = 0; i < humanShield.Count; i++)
-                    {
-                        AbstractCastEvent shield = humanShield[i];
-                        if (i < humanShieldRemoval.Count)
-                        {
-                            int removal = humanShieldRemoval[i];
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, removal), "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
-                        }
-                        else
-                        {
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, (int)log.FightData.FightEnd), "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
-                        }
-                    }
-                    var aboShield = cls.Where(x => x.SkillId == 34510).ToList();
-                    var aboShieldRemoval = log.CombatData.GetBuffRemoveAllData(34376).Select(x => (int)x.Time).Distinct().ToList();
-                    for (int i = 0; i < aboShield.Count; i++)
-                    {
-                        AbstractCastEvent shield = aboShield[i];
-                        if (i < aboShieldRemoval.Count)
-                        {
-                            int removal = aboShieldRemoval[i];
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, removal), "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
-                        }
-                        else
-                        {
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, (int)log.FightData.FightEnd), "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
-                        }
-                    }
+                    AddMatthiasBubbles(34518, target, log, replay);
+                    AddMatthiasBubbles(34376, target, log, replay);
                     var rageShards = cls.Where(x => x.SkillId == 34404 || x.SkillId == 34411).ToList();
                     foreach (AbstractCastEvent c in rageShards)
                     {
