@@ -127,7 +127,7 @@
                     xref: 'x',
                     yref: 'y',
                     x: clampedX,
-                    y: 0.0 + yOffset,
+                    y: 0.0 - yOffset,
                     sizex: 0.5,
                     sizey: 0.5,
                     xanchor: 'middle',
@@ -137,7 +137,7 @@
 
             rotaTrace.x.push(clampedWidth - 0.001);
             rotaTrace.base.push(clampedX);
-            rotaTrace.y.push(0.6 + yOffset);
+            rotaTrace.y.push(0.6 - yOffset);
             rotaTrace.text.push(name + ' at ' + x + 's for ' + originalDuration + 'ms');
             rotaTrace.width.push(aa ? 0.25 : 0.5);
             rotaTrace.marker.color.push(fillColor);
