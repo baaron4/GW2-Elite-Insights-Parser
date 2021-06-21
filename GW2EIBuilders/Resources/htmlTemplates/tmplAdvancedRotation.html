@@ -85,10 +85,12 @@
             var endType = item[3];
             var quick = item[4];
             var skill = findSkill(false, skillId);
+            var aa = false;
             var icon;
             var name = '???';
             var swap = false;
             if (skill) {
+                aa = skill.aa;
                 icon = skill.icon;
                 name = skill.name;
                 swap = skill.isSwap;
