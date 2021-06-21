@@ -85,12 +85,10 @@
             var endType = item[3];
             var quick = item[4];
             var skill = findSkill(false, skillId);
-            var aa = false;
             var icon;
             var name = '???';
             var swap = false;
             if (skill) {
-                aa = skill.aa;
                 icon = skill.icon;
                 name = skill.name;
                 swap = skill.isSwap;
@@ -123,7 +121,7 @@
             var diffX = clampedX - x;
             var clampedWidth = Math.min(x + duration / 1000.0, phase.duration / 1000.0) - x - diffX;
             clampedX -= timeOffset;
-            if (!aa && icon) {
+            if (icon) {
                 images.push({
                     source: icon,
                     xref: 'x',
