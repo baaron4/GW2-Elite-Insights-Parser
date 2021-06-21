@@ -5,13 +5,13 @@
                 :phaseindex="phaseindex" :activetargets="activetargets"></dmgdist-player-component>
             <dmgtaken-component v-if="tabmode ===1" :key="'taken' + playerindex" :actorindex="playerindex" :player="true"
                 :tableid="'dmgtaken-player-'+playerindex" :phaseindex="phaseindex"></dmgtaken-component>
-            <player-graph-tab-component v-for="(ph, id) in phases" v-if="tabmode === 2 && id === phaseindex" :key="id"
+            <player-graph-tab-component v-for="(ph, id) in phases" v-if="tabmode === 2 && id === phaseindex" :key="id + 'graph' + playerindex"
                 :playerindex="playerindex" :phaseindex="id" :activetargets="activetargets" :light="light">
             </player-graph-tab-component>
             <simplerotation-component v-if="tabmode === 3" :key="'rot' + playerindex" :actorindex="playerindex"
                 :phaseindex="phaseindex" :target="false"></simplerotation-component>            
-            <advancedrotation-component v-if="tabmode === 4" :key="'advrot' + playerindex" :actorindex="playerindex"
-            :phaseindex="phaseindex" :target="false" :light="light"></advancedrotation-component>
+            <advancedrotation-component v-for="(ph, id) in phases" v-if="tabmode === 4 && id === phaseindex" :key="id + 'advrot' + playerindex" :actorindex="playerindex"
+            :phaseindex="id" :target="false" :light="light"></advancedrotation-component>
             <food-component v-if="tabmode === 5" :key="'cons' + playerindex" :playerindex="playerindex"
                 :phaseindex="phaseindex"></food-component>
             <deathrecap-component v-if="tabmode === 6" :key="'recap' + playerindex" :playerindex="playerindex"

@@ -194,8 +194,10 @@
             div.on('plotly_relayout', function (evt) {
                 var x0 = layout.xaxis.range[0];
                 var x1 = layout.xaxis.range[1];
+                var y0 = layout.yaxis.range[0];
+                var y1 = layout.yaxis.range[1];
                 //console.log("re-layout " + x0 + " " + x1);
-                if (_this.updateVisibily(images, x0, x1)) {
+                if (_this.updateVisibilyInQuad(images, x0, x1, y0, y1)) {
                     layout.datarevision = new Date().getTime();
                     //console.log("re-drawing");
                 }
