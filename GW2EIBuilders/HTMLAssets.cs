@@ -86,6 +86,7 @@ namespace GW2EIBuilders
                 Properties.Resources.tmplPlayerStats,
                 Properties.Resources.tmplPlayerTab,
                 Properties.Resources.tmplSimpleRotation,
+                Properties.Resources.tmplAdvancedRotation,
                 Properties.Resources.tmplSupportTable,
                 Properties.Resources.tmplTargets,
                 Properties.Resources.tmplTargetStats,
