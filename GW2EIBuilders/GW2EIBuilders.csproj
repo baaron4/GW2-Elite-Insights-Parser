@@ -56,6 +56,7 @@
     <None Include="Resources\htmlTemplates\tmplTargetStats.html" />
     <None Include="Resources\htmlTemplates\tmplDeathRecap.html" />
     <None Include="Resources\htmlTemplates\tmplSimpleRotation.html" />
+    <None Include="Resources\htmlTemplates\tmplAdvancedRotation.html" />
     <None Include="Resources\htmlTemplates\tmplFood.html" />
     <None Include="Resources\htmlTemplates\tmplDamageDistPlayer.html" />
     <None Include="Resources\htmlTemplates\tmplPlayerTab.html" />

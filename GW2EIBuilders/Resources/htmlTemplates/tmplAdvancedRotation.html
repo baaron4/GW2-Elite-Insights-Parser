@@ -1,0 +1,221 @@
+<template>
+    <div>
+        <graph-component :id="graphid" :layout="layout" :data="data"></graph-component>
+        <rotation-legend-component></rotation-legend-component>
+    </div>
+</template>
+
+<script>
+
+    function getAdvancedRotationLayout(images, color, nbLines) {
+        var layout = {
+            barmode: 'stack',
+            legend: {
+                traceorder: 'reversed'
+            },
+            hovermode: "closest",
+            hoverdistance: 50,
+            images: images,
+            font: {
+                color: color
+            },
+            xaxis: {
+                title: 'Time(sec)',
+                color: color,
+                gridcolor: color,
+                rangemode: 'nonnegative',
+                xrangeslider: {},
+                tickmode: 'auto',
+                nticks: 8
+            },
+            yaxis: {
+                tickmode: 'auto',
+                color: color,
+                tickformat: ",d",
+                range: [-nbLines, 1]
+            },
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            shapes: [],
+            annotations: [],
+            margin: {
+                l: 150,
+            },
+            width: 1100,
+            height: 800,
+            datarevision: new Date().getTime(),
+        };
+        return layout;
+    };
+
+    function computeAdvancedRotationData(rotationData, images, data, phase, actor, yAxis) {
+    if (rotationData) {
+        var rotaTrace = {
+            x: [],
+            base: [],
+            y: [],
+            name: actor.name,
+            text: [],
+            orientation: 'h',
+            mode: 'markers',
+            type: 'bar',
+            width: [],
+            hoverinfo: 'text',
+            hoverlabel: {
+                namelength: '-1'
+            },
+            yaxis: 'y',
+            marker: {
+                color: [],
+                width: '2.5',
+                line: {
+                    color: [],
+                    width: '1.0'
+                }
+            },
+            showlegend: false
+        };
+        var timeOffset = 0;
+        var yOffset = 0;
+        for (var i = 0; i < rotationData.length; i++) {
+            var item = rotationData[i];
+            var x = item[0];
+            var skillId = item[1];
+            var duration = item[2];
+            var endType = item[3];
+            var quick = item[4];
+            var skill = findSkill(false, skillId);
+            var aa = false;
+            var icon;
+            var name = '???';
+            var swap = false;
+            if (skill) {
+                aa = skill.aa;
+                icon = skill.icon;
+                name = skill.name;
+                swap = skill.isSwap;
+            }
+
+            if (!icon.includes("render") && !icon.includes("darthmaim")) {
+                icon = null;
+            }
+
+            var fillColor;
+            var originalDuration = duration;
+            if (endType == 1) { 
+                fillColor = 'rgb(0,0,255)'; 
+            }
+            else if (endType == 2) { 
+                fillColor = 'rgb(255,0,0)'; 
+            }
+            else if (endType == 3) { 
+                fillColor = 'rgb(0,255,0)'; 
+            }
+            else if (endType == 4) { 
+                fillColor = 'rgb(0,255,255)'; 
+                duration = 50;
+            }
+            else { 
+                fillColor = 'rgb(255,255,0)'; 
+            }
+
+            var clampedX = Math.max(x, 0);
+            var diffX = clampedX - x;
+            var clampedWidth = Math.min(x + duration / 1000.0, phase.duration / 1000.0) - x - diffX;
+            clampedX -= timeOffset;
+            if (!aa && icon) {
+                images.push({
+                    source: icon,
+                    xref: 'x',
+                    yref: 'y',
+                    x: clampedX,
+                    y: 0.0 - yOffset,
+                    sizex: 0.5,
+                    sizey: 0.5,
+                    xanchor: 'middle',
+                    yanchor: 'bottom'
+                });
+            }
+
+            rotaTrace.x.push(clampedWidth - 0.001);
+            rotaTrace.base.push(clampedX);
+            rotaTrace.y.push(0.6 - yOffset);
+            rotaTrace.text.push(name + ' at ' + x + 's for ' + originalDuration + 'ms');
+            rotaTrace.width.push(aa ? 0.25 : 0.5);
+            rotaTrace.marker.color.push(fillColor);
+
+            var outlineR = quick > 0.0 ? quick * quickColor.r + (1.0 - quick) * normalColor.r : -quick * slowColor.r + (1.0 + quick) * normalColor.r;
+            var outlineG = quick > 0.0 ? quick * quickColor.g + (1.0 - quick) * normalColor.g : -quick * slowColor.g + (1.0 + quick) * normalColor.g;
+            var outlineB = quick > 0.0 ? quick * quickColor.b + (1.0 - quick) * normalColor.b : -quick * slowColor.b + (1.0 + quick) * normalColor.b;
+            rotaTrace.marker.line.color.push('rgb(' + outlineR + ',' + outlineG + ',' + outlineB + ')');
+            if (swap) {
+                yOffset++;
+                timeOffset = x;
+            }
+        }
+        data.push(rotaTrace);
+        return yOffset;
+    }
+    return 0;
+}
+
+    Vue.component("advancedrotation-component", {
+        props: ["phaseindex", "light", "actorindex", "target"],
+        template: `${template}`,
+        mixins: [graphComponent],
+        watch: {
+            light: {
+                handler: function () {
+                    var textColor = this.light ? '#495057' : '#cccccc';
+                    this.layout.yaxis.gridcolor = textColor;
+                    this.layout.yaxis.color = textColor;
+                    this.layout.xaxis.gridcolor = textColor;
+                    this.layout.xaxis.color = textColor;
+                    this.layout.font.color = textColor;
+                    for (var i = 0; i < this.layout.shapes.length; i++) {
+                        this.layout.shapes[i].line.color = textColor;
+                    }
+                    this.layout.datarevision = new Date().getTime();
+                }
+            }
+        },
+        created: function () {
+            this.data = [];
+            var images = [];
+            var nbLines = computeAdvancedRotationData(this.rotation, images, this.data, this.phase, this.actor);
+            this.layout = getAdvancedRotationLayout(images, this.light ? '#495057' : '#cccccc', nbLines);
+            this.updateVisibily(this.layout.images, this.phase.start, this.phase.end);
+        },
+        mounted: function () {
+            var div = document.getElementById(this.graphid);
+            var layout = this.layout;
+            var images = layout.images;
+            var _this = this;
+            div.on('plotly_relayout', function (evt) {
+                var x0 = layout.xaxis.range[0];
+                var x1 = layout.xaxis.range[1];
+                var y0 = layout.yaxis.range[0];
+                var y1 = layout.yaxis.range[1];
+                //console.log("re-layout " + x0 + " " + x1);
+                if (_this.updateVisibilyInQuad(images, x0, x1, y0, y1)) {
+                    layout.datarevision = new Date().getTime();
+                    //console.log("re-drawing");
+                }
+            });
+        },
+        computed: {
+            phase: function () {
+                return logData.phases[this.phaseindex];
+            },
+            actor: function () {
+                return this.target ? logData.targets[this.actorindex] : logData.players[this.actorindex];
+            },
+            graphid: function () {
+                return (this.target ? "target" : "player") + "advancedrotation-" + this.actorindex + '-' + this.phaseindex;
+            },
+            rotation: function () {
+                return this.actor.details.rotation[this.phaseindex];
+            }
+        }
+    });
+</script>
