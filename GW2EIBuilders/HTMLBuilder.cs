@@ -8,6 +8,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using Newtonsoft.Json;
 using System.Linq;
+using System.IO.Compression;
 
 namespace GW2EIBuilders
 {
@@ -28,12 +29,30 @@ namespace GW2EIBuilders
         private readonly bool _externalScripts;
         private readonly string _externalScriptsPath;
         private readonly string _externalScriptsCdn;
+        private readonly bool _compressJson;
 
         private readonly string[] _uploadLink;
 
         private readonly Dictionary<long, Buff> _usedBuffs = new Dictionary<long, Buff>();
         private readonly HashSet<DamageModifier> _usedDamageMods = new HashSet<DamageModifier>();
         private readonly Dictionary<long, SkillItem> _usedSkills = new Dictionary<long, SkillItem>();
+
+        // https://point2blog.wordpress.com/2012/12/26/compressdecompress-a-string-in-c/
+        private static string CompressAndBase64(string s)
+        {
+            byte[] bytes = Encoding.UTF8.GetBytes(s);
+            using (var msi = new MemoryStream(bytes))
+            {
+                using (var mso = new MemoryStream())
+                {
+                    using (var gs = new GZipStream(mso, CompressionMode.Compress))
+                    {
+                        msi.CopyTo(gs);
+                    }
+                    return Convert.ToBase64String(mso.ToArray());
+                }
+            }       
+        }
 
         public HTMLBuilder(ParsedEvtcLog log, HTMLSettings settings, HTMLAssets assets, Version parserVersion, UploadResults uploadResults)
         {
@@ -60,6 +79,7 @@ namespace GW2EIBuilders
             _externalScripts = settings.ExternalHTMLScripts;
             _externalScriptsPath = settings.ExternalHtmlScriptsPath;
             _externalScriptsCdn = settings.ExternalHtmlScriptsCdn;
+            _compressJson = settings.CompressJson;
         }
 
         private (string, string) BuildAssetPaths(string path)
@@ -148,7 +168,13 @@ namespace GW2EIBuilders
             _log.UpdateProgressWithCancellationCheck("HTML: building Combat Replay JS");
             html = html.Replace("<!--${CombatReplayJS}-->", BuildCombatReplayJS(externalPath, cdnPath));
 
-            html = html.Replace("'${logDataJson}'", ToJson(LogDataDto.BuildLogData(_log, _usedSkills, _usedBuffs, _usedDamageMods, _cr, _light, _parserVersion, _uploadLink)));
+            string json = ToJson(LogDataDto.BuildLogData(_log, _usedSkills, _usedBuffs, _usedDamageMods, _cr, _light, _parserVersion, _uploadLink));
+
+            html = html.Replace("'${logDataJson}'", _compressJson ? ("'" + CompressAndBase64(json) + "'") : json);
+            // Compression stuff
+            html = html.Replace("<!--${CompressionRequire}-->", _compressJson ? "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.10/pako.min.js\"></script>" : "");
+            html = html.Replace("<!--${CompressionUtils}-->", _compressJson ? Properties.Resources.compressionUtils : "");
+            //
 
             _log.UpdateProgressWithCancellationCheck("HTML: building Graph Data");
             html = html.Replace("'${graphDataJson}'", ToJson(new ChartDataDto(_log)));
