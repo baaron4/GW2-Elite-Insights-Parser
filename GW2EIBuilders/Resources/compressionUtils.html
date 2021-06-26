@@ -1,14 +1,16 @@
 <script>
 
+    "use strict";
+
     /*\
     |*|
-    |*|  utilitairezs de manipulations de chaînes base 64 / binaires / UTF-8
+    |*|  Base64 / binary data / UTF-8 strings utilities
     |*|
-    |*|  https://developer.mozilla.org/fr/docs/Décoder_encoder_en_base64
+    |*|  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Base64_encoding_and_decoding
     |*|
     \*/
 
-    /* Décoder un tableau d'octets depuis une chaîne en base64 */
+    /* Array of bytes to Base64 string decoding */
 
     function b64ToUint6(nChr) {
 
@@ -35,7 +37,7 @@
 
         for (var nMod3, nMod4, nUint24 = 0, nOutIdx = 0, nInIdx = 0; nInIdx < nInLen; nInIdx++) {
             nMod4 = nInIdx & 3;
-            nUint24 |= b64ToUint6(sB64Enc.charCodeAt(nInIdx)) << 18 - 6 * nMod4;
+            nUint24 |= b64ToUint6(sB64Enc.charCodeAt(nInIdx)) << 6 * (3 - nMod4);
             if (nMod4 === 3 || nInLen - nInIdx === 1) {
                 for (nMod3 = 0; nMod3 < 3 && nOutIdx < nOutLen; nMod3++, nOutIdx++) {
                     taBytes[nOutIdx] = nUint24 >>> (16 >>> nMod3 & 24) & 255;
@@ -48,7 +50,7 @@
         return taBytes;
     }
 
-    /* encodage d'un tableau en une chaîne en base64 */
+    /* Base64 string to array encoding */
 
     function uint6ToB64(nUint6) {
 
@@ -85,7 +87,7 @@
 
     }
 
-    /* Tableau UTF-8 en DOMString et vice versa */
+    /* UTF-8 array to DOMString and vice versa */
 
     function UTF8ArrToStr(aBytes) {
 
@@ -95,7 +97,7 @@
             nPart = aBytes[nIdx];
             sView += String.fromCharCode(
                 nPart > 251 && nPart < 254 && nIdx + 5 < nLen ? /* six bytes */
-                    /* (nPart - 252 << 32) n'est pas possible pour ECMAScript donc, on utilise un contournement... : */
+                    /* (nPart - 252 << 30) may be not so safe in ECMAScript! So...: */
                     (nPart - 252) * 1073741824 + (aBytes[++nIdx] - 128 << 24) + (aBytes[++nIdx] - 128 << 18) + (aBytes[++nIdx] - 128 << 12) + (aBytes[++nIdx] - 128 << 6) + aBytes[++nIdx] - 128
                     : nPart > 247 && nPart < 252 && nIdx + 4 < nLen ? /* five bytes */
                         (nPart - 248 << 24) + (aBytes[++nIdx] - 128 << 18) + (aBytes[++nIdx] - 128 << 12) + (aBytes[++nIdx] - 128 << 6) + aBytes[++nIdx] - 128
@@ -158,7 +160,7 @@
                 aBytes[nIdx++] = 128 + (nChr & 63);
             } else /* if (nChr <= 0x7fffffff) */ {
                 /* six bytes */
-                aBytes[nIdx++] = 252 + /* (nChr >>> 32) is not possible in ECMAScript! So...: */ (nChr / 1073741824);
+                aBytes[nIdx++] = 252 + (nChr >>> 30);
                 aBytes[nIdx++] = 128 + (nChr >>> 24 & 63);
                 aBytes[nIdx++] = 128 + (nChr >>> 18 & 63);
                 aBytes[nIdx++] = 128 + (nChr >>> 12 & 63);
