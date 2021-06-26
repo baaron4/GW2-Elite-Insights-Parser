@@ -76,10 +76,6 @@ namespace GW2EIEvtcParser.ParsedData
                 }
                 buffIDsToSort.Add(bf.BuffID);
             }
-            if (toAdd.Any())
-            {
-                _buffRemoveAllData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffRemoveAllEvent>().ToList());
-            }
             foreach (long buffID in buffIDsToSort)
             {
                 _buffData[buffID] = _buffData[buffID].OrderBy(x => x.Time).ToList();
@@ -87,6 +83,10 @@ namespace GW2EIEvtcParser.ParsedData
             foreach (AgentItem a in buffAgentsToSort)
             {
                 _buffDataByDst[a] = _buffDataByDst[a].OrderBy(x => x.Time).ToList();
+            }
+            if (toAdd.Any())
+            {
+                _buffRemoveAllData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffRemoveAllEvent>().ToList());
             }
         }
 
@@ -122,7 +122,7 @@ namespace GW2EIEvtcParser.ParsedData
                         de
                     };
                 }
-                srcToSort.Add(de.To);
+                srcToSort.Add(de.From);
                 if (_damageDataById.TryGetValue(de.SkillId, out List<AbstractHealthDamageEvent> list2))
                 {
                     list2.Add(de);
@@ -218,9 +218,9 @@ namespace GW2EIEvtcParser.ParsedData
                     instantAgentsToSort.Add(ice.Caster);
                 }
             }
-            foreach (long buffID in castIDsToSort)
+            foreach (long castID in castIDsToSort)
             {
-                _animatedCastDataById[buffID] = _animatedCastDataById[buffID].OrderBy(x => x.Time).ToList();
+                _animatedCastDataById[castID] = _animatedCastDataById[castID].OrderBy(x => x.Time).ToList();
             }
             foreach (AgentItem a in castAgentsToSort)
             {
@@ -283,11 +283,6 @@ namespace GW2EIEvtcParser.ParsedData
                 }
             }
             _metaDataEvents.ErrorEvents.AddRange(fightData.Logic.GetCustomWarningMessages(fightData, arcdpsVersion));
-        }
-
-        internal void AddCustomWarningMessage(string message)
-        {
-            _metaDataEvents.ErrorEvents.Add(new ErrorEvent(message));
         }
 
         private void EIExtraEventProcess(List<Player> players, SkillData skillData, AgentData agentData, FightData fightData, ParserController operation, int arcdpsVersion)
