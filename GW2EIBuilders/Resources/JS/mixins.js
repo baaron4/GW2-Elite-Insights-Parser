@@ -55,7 +55,17 @@ var graphComponent = {
                 for (var i = 0; i < images.length; i++) {
                     var image = images[i];
                     var old = image.visible;
-                    image.visible = typeof x0 === "undefined" || ((image.x <= x1+15 && image.x >= x0 - 15) && (x1 - x0) < 100);
+                    image.visible = typeof x0 === "undefined" || ((image.x <= x1+10 && image.x >= x0 - 10) && (x1 - x0) < 75);
+                    redraw = redraw || image.visible !== old;
+                }
+                return redraw;
+            },
+            updateVisibilyInQuad: function (images, x0, x1, y0, y1) {
+                var redraw = false;
+                for (var i = 0; i < images.length; i++) {
+                    var image = images[i];
+                    var old = image.visible;
+                    image.visible = typeof x0 === "undefined" || (((image.x <= x1+10 && image.x >= x0 - 10) && (x1 - x0) < 75) && ((image.y <= y1+10 && image.y >= y0 - 10) && (y1 - y0) < 75)) ;
                     redraw = redraw || image.visible !== old;
                 }
                 return redraw;

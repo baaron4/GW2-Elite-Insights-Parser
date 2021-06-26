@@ -23,14 +23,20 @@
                     Simple
                     Rotation
                 </a>
-            </li>
+            </li>        
             <li>
                 <a class="nav-link" :class="{active: tabmode === 4}" @click="tabmode = 4">
+                    Advanced
+                    Rotation
+                </a>
+            </li>
+            <li>
+                <a class="nav-link" :class="{active: tabmode === 5}" @click="tabmode = 5">
                     Consumables
                 </a>
             </li>
             <li>
-                <a class="nav-link" v-show="hasDeaths" :class="{active: tabmode === 5}" @click="tabmode = 5">
+                <a class="nav-link" v-show="hasDeaths" :class="{active: tabmode === 6}" @click="tabmode = 6">
                     Death
                     Recap
                 </a>
