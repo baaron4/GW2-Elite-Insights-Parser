@@ -574,7 +574,7 @@ namespace GW2EIEvtcParser
             {
                 return false;
             }
-            return combatItem.IsStateChange != ArcDPSEnums.StateChange.Unknown && combatItem.IsStateChange != ArcDPSEnums.StateChange.StatReset && combatItem.IsStateChange != ArcDPSEnums.StateChange.APIDelayed && combatItem.IsStateChange != ArcDPSEnums.StateChange.Extension;
+            return combatItem.IsStateChange != ArcDPSEnums.StateChange.Unknown && combatItem.IsStateChange != ArcDPSEnums.StateChange.ReplInfo && combatItem.IsStateChange != ArcDPSEnums.StateChange.StatReset && combatItem.IsStateChange != ArcDPSEnums.StateChange.APIDelayed && combatItem.IsStateChange != ArcDPSEnums.StateChange.Extension;
         }
         private static bool UpdateAgentData(AgentItem ag, long logTime, ushort instid, bool checkInstid)
         {       
