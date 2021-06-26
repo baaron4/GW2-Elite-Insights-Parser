@@ -430,6 +430,21 @@ namespace GW2EIParser.Properties {
 
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool HtmlCompressJson
+        {
+            get
+            {
+                return ((bool)(this["HtmlCompressJson"]));
+            }
+            set
+            {
+                this["HtmlCompressJson"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool RawTimelineArrays
         {
