@@ -284,6 +284,7 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.PhysicalResult.BreakbarDamage:
                     brkBarDamage.Add(new DirectBreakbarDamageEvent(damageEvent, agentData, skillData));
                     break;
+                case ArcDPSEnums.PhysicalResult.Activation:
                 case ArcDPSEnums.PhysicalResult.Unknown:
                     break;
                 default:
