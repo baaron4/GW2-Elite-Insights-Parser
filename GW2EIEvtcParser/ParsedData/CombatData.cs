@@ -51,9 +51,9 @@ namespace GW2EIEvtcParser.ParsedData
             var buffAgentsToSort = new HashSet<AgentItem>();
             foreach (AbstractBuffEvent bf in toAdd)
             {
-                if (_buffDataByDst.TryGetValue(bf.To, out List<AbstractBuffEvent> list1))
+                if (_buffDataByDst.TryGetValue(bf.To, out List<AbstractBuffEvent> buffByDstList))
                 {
-                    list1.Add(bf);
+                    buffByDstList.Add(bf);
                 }
                 else
                 {
@@ -63,9 +63,9 @@ namespace GW2EIEvtcParser.ParsedData
                     };
                 }
                 buffAgentsToSort.Add(bf.To);
-                if (_buffData.TryGetValue(bf.BuffID, out List<AbstractBuffEvent> list2))
+                if (_buffData.TryGetValue(bf.BuffID, out List<AbstractBuffEvent> buffByIDList))
                 {
-                    list2.Add(bf);
+                    buffByIDList.Add(bf);
                 }
                 else
                 {
@@ -99,9 +99,9 @@ namespace GW2EIEvtcParser.ParsedData
             var srcToSort = new HashSet<AgentItem>();
             foreach (AbstractHealthDamageEvent de in toAdd)
             {
-                if (_damageTakenData.TryGetValue(de.To, out List<AbstractHealthDamageEvent> list1))
+                if (_damageTakenData.TryGetValue(de.To, out List<AbstractHealthDamageEvent> damageTakenList))
                 {
-                    list1.Add(de);
+                    damageTakenList.Add(de);
                 }
                 else
                 {
@@ -111,9 +111,9 @@ namespace GW2EIEvtcParser.ParsedData
                     };
                 }
                 dstToSort.Add(de.To);
-                if (_damageData.TryGetValue(de.From, out List<AbstractHealthDamageEvent> list3))
+                if (_damageData.TryGetValue(de.From, out List<AbstractHealthDamageEvent> damageDoneList))
                 {
-                    list1.Add(de);
+                    damageDoneList.Add(de);
                 }
                 else
                 {
@@ -123,9 +123,9 @@ namespace GW2EIEvtcParser.ParsedData
                     };
                 }
                 srcToSort.Add(de.To);
-                if (_damageDataById.TryGetValue(de.SkillId, out List<AbstractHealthDamageEvent> list2))
+                if (_damageDataById.TryGetValue(de.SkillId, out List<AbstractHealthDamageEvent> damageDoneByIDList))
                 {
-                    list2.Add(de);
+                    damageDoneByIDList.Add(de);
                 }
                 else
                 {
@@ -162,9 +162,9 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 if (cast is AnimatedCastEvent ace)
                 {
-                    if (_animatedCastData.TryGetValue(ace.Caster, out List<AnimatedCastEvent> list1))
+                    if (_animatedCastData.TryGetValue(ace.Caster, out List<AnimatedCastEvent> animatedCastList))
                     {
-                        list1.Add(ace);
+                        animatedCastList.Add(ace);
                     }
                     else
                     {
@@ -174,9 +174,9 @@ namespace GW2EIEvtcParser.ParsedData
                         };
                     }
                     castAgentsToSort.Add(ace.Caster);
-                    if (_animatedCastDataById.TryGetValue(ace.SkillId, out List<AnimatedCastEvent> list2))
+                    if (_animatedCastDataById.TryGetValue(ace.SkillId, out List<AnimatedCastEvent> animatedCastByIDList))
                     {
-                        list2.Add(ace);
+                        animatedCastByIDList.Add(ace);
                     }
                     else
                     {
@@ -189,9 +189,9 @@ namespace GW2EIEvtcParser.ParsedData
                 }
                 if (cast is WeaponSwapEvent wse)
                 {
-                    if (_weaponSwapData.TryGetValue(wse.Caster, out List<WeaponSwapEvent> list1))
+                    if (_weaponSwapData.TryGetValue(wse.Caster, out List<WeaponSwapEvent> weaponSwapList))
                     {
-                        list1.Add(wse);
+                        weaponSwapList.Add(wse);
                     }
                     else
                     {
@@ -204,9 +204,9 @@ namespace GW2EIEvtcParser.ParsedData
                 }
                 if (cast is InstantCastEvent ice)
                 {
-                    if (_instantCastData.TryGetValue(ice.Caster, out List<InstantCastEvent> list1))
+                    if (_instantCastData.TryGetValue(ice.Caster, out List<InstantCastEvent> instantCastList))
                     {
-                        list1.Add(ice);
+                        instantCastList.Add(ice);
                     }
                     else
                     {
