@@ -310,33 +310,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + i * 360 / 8 - 120), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts longer
                         }
                     }
-                    // phantasms locations
-                    var phantasmsID = new HashSet<int>
-                    {
-                        (int)ArcDPSEnums.TrashID.Jessica,
-                        (int)ArcDPSEnums.TrashID.Olson,
-                        (int)ArcDPSEnums.TrashID.Engul,
-                        (int)ArcDPSEnums.TrashID.Faerla,
-                        (int)ArcDPSEnums.TrashID.Caulle,
-                        (int)ArcDPSEnums.TrashID.Henley,
-                        (int)ArcDPSEnums.TrashID.Galletta,
-                        (int)ArcDPSEnums.TrashID.Ianim,
-                    };
-                    foreach (NPC m in TrashMobs)
-                    {
-                        if (phantasmsID.Contains(m.ID))
-                        {
-                            start = (int)m.FirstAware;
-                            Point3D pos = m.GetCombatReplayPolledPositions(log).FirstOrDefault();
-                            if (pos != null)
-                            {
-                                replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start - 5000, start), "rgba(220, 50, 0, 0.5)", new PositionConnector(pos)));
-                                replay.Decorations.Add(new CircleDecoration(true, start, 300, (start - 5000, start), "rgba(220, 50, 0, 0.5)", new PositionConnector(pos)));
-                            }
-                        }
-                    }
                     break;
-
                 case (int)ArcDPSEnums.TrashID.Core:
                     break;
                 case (int)ArcDPSEnums.TrashID.Jessica:
@@ -347,13 +321,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.Henley:
                 case (int)ArcDPSEnums.TrashID.Galletta:
                 case (int)ArcDPSEnums.TrashID.Ianim:
-                    AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.KeepConstruct);
-                    if (mainTarget == null)
-                    {
-                        throw new MissingKeyActorsException("Keep Construct not found");
-                    }
                     replay.Decorations.Add(new CircleDecoration(false, 0, 600, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     replay.Decorations.Add(new CircleDecoration(true, 0, 400, (start, end), "rgba(0, 125, 255, 0.5)", new AgentConnector(target)));
+                    Point3D firstPhantasmPosition = replay.PolledPositions.FirstOrDefault();
+                    if (firstPhantasmPosition != null)
+                    {
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start - 5000, start), "rgba(220, 50, 0, 0.5)", new PositionConnector(firstPhantasmPosition)));
+                        replay.Decorations.Add(new CircleDecoration(true, start, 300, (start - 5000, start), "rgba(220, 50, 0, 0.5)", new PositionConnector(firstPhantasmPosition)));
+                    }
                     break;
                 case (int)ArcDPSEnums.TrashID.GreenPhantasm:
                     int lifetime = 8000;
