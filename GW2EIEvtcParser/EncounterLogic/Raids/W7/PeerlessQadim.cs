@@ -157,6 +157,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case (int)ArcDPSEnums.TargetID.PeerlessQadim:
                     var cataCycle = cls.Where(x => x.SkillId == 56329).ToList();
+                    var forceOfHavoc = cls.Where(x => x.SkillId == 56017).ToList();
 
                     foreach (AbstractCastEvent c in cataCycle)
                     {
@@ -167,6 +168,27 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, (start, end), "rgba(255, 220, 50, 0.15)", new PositionConnector(pylonPosition)));
                         replay.Decorations.Add(new CircleDecoration(true, end, magmaRadius, (start, end), "rgba(255, 220, 50, 0.25)", new PositionConnector(pylonPosition)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, (end, (int)log.FightData.FightEnd), "rgba(255, 220, 0, 0.5)", new PositionConnector(pylonPosition)));
+                    }
+                    foreach (AbstractCastEvent c in forceOfHavoc)
+                    {
+                        int roadLength = 2400;
+                        int roadWidth = 360;
+                        int hitboxOffset = 200;
+                        int subdivisions = 100;
+                        int rollOutTime = 3250;
+                        start = (int)c.Time;
+                        int preCastTime = 1500;
+                        int duration = 22500;
+                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
+                        if (facing != null)
+                        {
+                            int direction = (int)(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI);
+                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, roadLength, roadWidth, direction, roadLength / 2 + 200, (start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new AgentConnector(target)));
+                            for (int i = 0; i < subdivisions; i++)
+                            {
+                                replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, roadLength/subdivisions, roadWidth, direction, (int)((i + 0.5) * roadLength / subdivisions + hitboxOffset), (start + preCastTime + i * (rollOutTime / subdivisions), start + preCastTime + i * (rollOutTime / subdivisions) + duration), "rgba(143, 0, 179, 0.6)", new AgentConnector(target)));
+                            }
+                        }
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.EntropicDistortion:
