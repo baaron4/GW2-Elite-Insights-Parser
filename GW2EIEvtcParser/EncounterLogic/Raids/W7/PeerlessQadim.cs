@@ -222,6 +222,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.Pylon2:
                     break;
                 case (int)ArcDPSEnums.TrashID.EnergyOrb:
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start, end), "rgba(0, 255, 0, 0.3)", new AgentConnector(target)));
                     break;
                 default:
                     break;
