@@ -41,6 +41,7 @@ namespace GW2EIParser
             _settingsForm = new SettingsForm();
             _settingsForm.SettingsClosedEvent += EnableSettingsWatcher;
             _settingsForm.WatchDirectoryUpdatedEvent += UpdateWatchDirectoryWatcher;
+            FormClosing += new FormClosingEventHandler((sender, e) => Properties.Settings.Default.Save());
         }
 
         public MainForm(IEnumerable<string> filesArray) : this()

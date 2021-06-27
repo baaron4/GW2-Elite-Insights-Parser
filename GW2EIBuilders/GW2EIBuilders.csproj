@@ -76,6 +76,7 @@
     <None Include="Resources\htmlTemplates\tmplDamageTaken.html" />
     <None Include="Resources\htmlTemplates\tmplTargetData.html" />
     <None Include="Resources\template.html" />
+    <None Include="Resources\compressionUtils.html" />
   </ItemGroup>
 
   <PropertyGroup>

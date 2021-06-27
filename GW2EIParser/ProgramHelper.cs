@@ -364,7 +364,14 @@ namespace GW2EIParser
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs))
                 {
-                    var builder = new HTMLBuilder(log, new HTMLSettings(Properties.Settings.Default.LightTheme, Properties.Settings.Default.HtmlExternalScripts, Properties.Settings.Default.HtmlExternalScriptsPath, Properties.Settings.Default.HtmlExternalScriptsCdn), htmlAssets, ParserVersion, uploadResults);
+                    var builder = new HTMLBuilder(log, 
+                        new HTMLSettings(
+                            Properties.Settings.Default.LightTheme, 
+                            Properties.Settings.Default.HtmlExternalScripts,
+                            Properties.Settings.Default.HtmlExternalScriptsPath,
+                            Properties.Settings.Default.HtmlExternalScriptsCdn,
+                            Properties.Settings.Default.HtmlCompressJson
+                        ), htmlAssets, ParserVersion, uploadResults);
                     builder.CreateHTML(sw, saveDirectory.FullName);
                 }
                 operation.UpdateProgressWithCancellationCheck("HTML created");

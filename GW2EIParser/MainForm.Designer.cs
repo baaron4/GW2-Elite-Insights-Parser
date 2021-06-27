@@ -73,7 +73,7 @@
             // BtnParse
             // 
             this.BtnParse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnParse.Location = new System.Drawing.Point(444, 321);
+            this.BtnParse.Location = new System.Drawing.Point(444, 322);
             this.BtnParse.Name = "BtnParse";
             this.BtnParse.Size = new System.Drawing.Size(235, 23);
             this.BtnParse.TabIndex = 10;
@@ -84,7 +84,7 @@
             // BtnPopulate
             // 
             this.BtnPopulate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BtnPopulate.Location = new System.Drawing.Point(97, 345);
+            this.BtnPopulate.Location = new System.Drawing.Point(97, 346);
             this.BtnPopulate.Name = "BtnPopulate";
             this.BtnPopulate.Size = new System.Drawing.Size(154, 23);
             this.BtnPopulate.TabIndex = 10;
@@ -95,7 +95,7 @@
             // BtnCancelAll
             // 
             this.BtnCancelAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnCancelAll.Location = new System.Drawing.Point(444, 347);
+            this.BtnCancelAll.Location = new System.Drawing.Point(444, 348);
             this.BtnCancelAll.Name = "BtnCancelAll";
             this.BtnCancelAll.Size = new System.Drawing.Size(75, 23);
             this.BtnCancelAll.TabIndex = 11;
@@ -106,7 +106,7 @@
             // BtnSettings
             // 
             this.BtnSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BtnSettings.Location = new System.Drawing.Point(16, 345);
+            this.BtnSettings.Location = new System.Drawing.Point(16, 346);
             this.BtnSettings.Name = "BtnSettings";
             this.BtnSettings.Size = new System.Drawing.Size(75, 23);
             this.BtnSettings.TabIndex = 15;
@@ -117,7 +117,7 @@
             // BtnClearAll
             // 
             this.BtnClearAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnClearAll.Location = new System.Drawing.Point(604, 347);
+            this.BtnClearAll.Location = new System.Drawing.Point(604, 348);
             this.BtnClearAll.Name = "BtnClearAll";
             this.BtnClearAll.Size = new System.Drawing.Size(75, 23);
             this.BtnClearAll.TabIndex = 16;
@@ -145,7 +145,7 @@
             this.DgvFiles.MultiSelect = false;
             this.DgvFiles.Name = "DgvFiles";
             this.DgvFiles.ReadOnly = true;
-            this.DgvFiles.Size = new System.Drawing.Size(663, 254);
+            this.DgvFiles.Size = new System.Drawing.Size(663, 255);
             this.DgvFiles.TabIndex = 17;
             this.DgvFiles.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DgvFilesCellContentClick);
             this.DgvFiles.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DgvFilesCellContentDoubleClick);
@@ -185,7 +185,7 @@
             // BtnClearFailed
             // 
             this.BtnClearFailed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnClearFailed.Location = new System.Drawing.Point(523, 347);
+            this.BtnClearFailed.Location = new System.Drawing.Point(523, 348);
             this.BtnClearFailed.Name = "BtnClearFailed";
             this.BtnClearFailed.Size = new System.Drawing.Size(75, 23);
             this.BtnClearFailed.TabIndex = 19;
@@ -197,7 +197,7 @@
             // BtnDiscordBatch
             // 
             this.BtnDiscordBatch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BtnDiscordBatch.Location = new System.Drawing.Point(257, 345);
+            this.BtnDiscordBatch.Location = new System.Drawing.Point(257, 346);
             this.BtnDiscordBatch.Name = "BtnDiscordBatch";
             this.BtnDiscordBatch.Size = new System.Drawing.Size(154, 23);
             this.BtnDiscordBatch.TabIndex = 20;
@@ -218,7 +218,7 @@
             // 
             this.LblVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.LblVersion.AutoSize = true;
-            this.LblVersion.Location = new System.Drawing.Point(16, 371);
+            this.LblVersion.Location = new System.Drawing.Point(16, 372);
             this.LblVersion.Name = "LblVersion";
             this.LblVersion.Size = new System.Drawing.Size(29, 13);
             this.LblVersion.TabIndex = 17;
@@ -229,7 +229,7 @@
             this.LblWatchingDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.LblWatchingDir.AutoEllipsis = true;
-            this.LblWatchingDir.Location = new System.Drawing.Point(16, 305);
+            this.LblWatchingDir.Location = new System.Drawing.Point(16, 306);
             this.LblWatchingDir.Name = "LblWatchingDir";
             this.LblWatchingDir.Size = new System.Drawing.Size(412, 13);
             this.LblWatchingDir.TabIndex = 18;
@@ -237,6 +237,8 @@
             // 
             // ChkApplicationTraces
             // 
+            this.ChkApplicationTraces.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.ChkApplicationTraces.AutoSize = true;
             this.ChkApplicationTraces.Location = new System.Drawing.Point(19, 325);
             this.ChkApplicationTraces.Name = "ChkApplicationTraces";
@@ -250,7 +252,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Menu;
-            this.ClientSize = new System.Drawing.Size(696, 389);
+            this.ClientSize = new System.Drawing.Size(696, 390);
             this.Controls.Add(this.BtnDiscordBatch);
             this.Controls.Add(this.BtnClearFailed);
             this.Controls.Add(this.LblWatchingDir);
@@ -273,7 +275,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.LogFileWatcher)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler((sender, e) => Properties.Settings.Default.Save());
         }
 
         #endregion

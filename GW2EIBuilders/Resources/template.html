@@ -16,7 +16,10 @@
     <script src="https://cdn.datatables.net/plug-ins/1.10.13/sorting/alt-string.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.min.js"></script>
+    <!--${CompressionRequire}-->
+    <!--${CompressionUtils}-->
     <script>
+
         function initTheme() {
             window.theme = '${bootstrapTheme}';
             if (window.localStorage) {
@@ -35,12 +38,16 @@
         initTheme();
     </script>
     <script>
-        var logData = '${logDataJson}';
+        var _logData = '${logDataJson}';
+        var logData = _logData;
+        if (window.pako) {
+            logData = JSON.parse(new TextDecoder("utf-8").decode(pako.inflate(base64DecToArr(logData))))
+        }
     </script>
     <script>
         var graphData = '${graphDataJson}';
     </script>
-    <!--${Js}-->   
+    <!--${Js}-->
     <!--${CombatReplayJS}-->
 </head>
 

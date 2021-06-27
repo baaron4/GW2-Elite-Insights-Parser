@@ -117,6 +117,34 @@ namespace GW2EIBuilders.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;script&gt;
+        ///
+        ///    /*\
+        ///    |*|
+        ///    |*|  utilitairezs de manipulations de cha�nes base 64 / binaires / UTF-8
+        ///    |*|
+        ///    |*|  https://developer.mozilla.org/fr/docs/D�coder_encoder_en_base64
+        ///    |*|
+        ///    \*/
+        ///
+        ///    /* D�coder un tableau d&apos;octets depuis une cha�ne en base64 */
+        ///
+        ///    function b64ToUint6(nChr) {
+        ///
+        ///        return nChr &gt; 64 &amp;&amp; nChr &lt; 91 ?
+        ///            nChr - 65
+        ///            : nChr &gt; 96 &amp;&amp; nChr &lt; 123 ?
+        ///                nChr - 71
+        ///                : nChr &gt; 47 &amp;&amp; nChr &lt; 58 ?
+        ///                    n [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string compressionUtils {
+            get {
+                return ResourceManager.GetString("compressionUtils", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .table th {
         ///    border-top: 0;
         ///}
@@ -302,15 +330,16 @@ namespace GW2EIBuilders.Properties {
         ///
         ///&lt;script&gt;
         ///
-        ///    function getAdvancedRotationLayout(images, color, phase, nbLines) {
+        ///    function getAdvancedRotationLayout(images, color, nbLines) {
         ///        var layout = {
         ///            barmode: &apos;stack&apos;,
         ///            legend: {
         ///                traceorder: &apos;reversed&apos;
         ///            },
-        ///            hovermode: &apos;x&apos;,
+        ///            hovermode: &quot;closest&quot;,
         ///            hoverdistance: 50,
-        ///            images: images,        /// [rest of string was truncated]&quot;;.
+        ///            images: images,
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplAdvancedRotation {
             get {
