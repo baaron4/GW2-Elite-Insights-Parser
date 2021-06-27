@@ -12,6 +12,7 @@ var searchData=
   ['condition',['Condition',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a57780f2e3a2977095e323b086aa56a42',1,'GW2EIJSON::JsonActor']]],
   ['conditiondamage1s',['ConditionDamage1S',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#ab44c88ff2ea9e4be783bb435ea7361c6',1,'GW2EIJSON::JsonActor']]],
   ['conditionsstates',['ConditionsStates',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#acb5f99d98c9a996e6136eff02e869b77',1,'GW2EIJSON::JsonActor']]],
+  ['connecteddamagecount',['ConnectedDamageCount',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a6fc43dff6329068d8c97803663052d33',1,'GW2EIJSON::JsonStatistics::JsonGameplayStats']]],
   ['connecteddirectdamagecount',['ConnectedDirectDamageCount',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#ac486f23bfc1dddeb2a7649c775c57391',1,'GW2EIJSON::JsonStatistics::JsonGameplayStats']]],
   ['connectedhits',['ConnectedHits',['../class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html#ab5f5975e64aab937214fba3e851908fe',1,'GW2EIJSON::JsonDamageDist']]],
   ['consumables',['Consumables',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a6c567ff2839c88b2f7a0ad05abfa5cf8',1,'GW2EIJSON::JsonPlayer']]],

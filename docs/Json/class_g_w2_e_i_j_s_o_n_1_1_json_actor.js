@@ -16,6 +16,7 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_actor =
     [ "HitboxHeight", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#ac1d45d1c96b60c59e72819eeba87e1a5", null ],
     [ "HitboxWidth", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a5b6f7c0c2b730e6f54e181dba74277a5", null ],
     [ "InstanceID", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a9dc1b5e789ca92a24e51e00d169e6cc3", null ],
+    [ "IsFake", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a7b2a754478c15d81ff69f2d55dc98ed1", null ],
     [ "Minions", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#aecc145e27c4ce37cbec550b23d4f3bbb", null ],
     [ "Name", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#abd7e14bb7480bf296c3a44f2b594f46a", null ],
     [ "PowerDamage1S", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a8187b6427bfa96464bc691e28dd4ebe2", null ],
