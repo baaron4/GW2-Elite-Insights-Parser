@@ -214,6 +214,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                         }
                     }
+                    Point3D firstEntropicPosition = replay.PolledPositions.FirstOrDefault();
+                    if (firstEntropicPosition != null)
+                    {
+                        replay.Decorations.Add(new CircleDecoration(true, start, 200, (start - 2000, start), "rgba(255, 150, 0, 0.4)", new PositionConnector(firstEntropicPosition)));
+                    }
                     break;
                 case (int)ArcDPSEnums.TrashID.BigKillerTornado:
                     replay.Decorations.Add(new CircleDecoration(true, 0, 450, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
