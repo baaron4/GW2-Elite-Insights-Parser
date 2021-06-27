@@ -130,7 +130,7 @@
                         {{(!getSkill(row[0], row[1]).condi && row[6]) ? round2(row[9]*100/row[6]) + '%' : ''}}
                     </td>
                     <td :data-original-title="row[16] +' out of ' + row[6] + ' connected hit(s)'">
-                        {{round2(100 * row[16]/row[6]) + '%'}}
+                        {{row[6] ? (round2(100 * row[16]/row[6]) + '%') : ''}}
                     </td>
                     <td v-if="actor !== null"
                         :data-original-title="row[10] ? round2(100.0 * row[10]/phase.durationS) + '% of the phase' : false">
