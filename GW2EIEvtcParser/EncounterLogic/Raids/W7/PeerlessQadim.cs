@@ -180,7 +180,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int preCastTime = 1500;
                         int duration = 22500;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
-                        Point3D position = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 1000);
+                        Point3D position = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null && position != null)
                         {
                             int direction = (int)(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI);
