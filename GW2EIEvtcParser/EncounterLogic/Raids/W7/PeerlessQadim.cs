@@ -180,13 +180,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int preCastTime = 1500;
                         int duration = 22500;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
-                        if (facing != null)
+                        Point3D position = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 1000);
+                        if (facing != null && position != null)
                         {
                             int direction = (int)(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI);
-                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, roadLength, roadWidth, direction, roadLength / 2 + 200, (start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new AgentConnector(target)));
+                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, roadLength, roadWidth, direction, roadLength / 2 + 200, (start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new PositionConnector(position)));
                             for (int i = 0; i < subdivisions; i++)
                             {
-                                replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, roadLength/subdivisions, roadWidth, direction, (int)((i + 0.5) * roadLength / subdivisions + hitboxOffset), (start + preCastTime + i * (rollOutTime / subdivisions), start + preCastTime + i * (rollOutTime / subdivisions) + duration), "rgba(143, 0, 179, 0.6)", new AgentConnector(target)));
+                                replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, roadLength/subdivisions, roadWidth, direction, (int)((i + 0.5) * roadLength / subdivisions + hitboxOffset), (start + preCastTime + i * (rollOutTime / subdivisions), start + preCastTime + i * (rollOutTime / subdivisions) + duration), "rgba(143, 0, 179, 0.6)", new PositionConnector(position)));
                             }
                         }
                     }
