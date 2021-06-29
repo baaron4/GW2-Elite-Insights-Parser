@@ -160,6 +160,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TargetID.PeerlessQadim:
                     var cataCycle = cls.Where(x => x.SkillId == 56329).ToList();
                     var forceOfHavoc = cls.Where(x => x.SkillId == 56017).ToList();
+                    var forceOfRetal = cls.Where(x => x.SkillId == 56405).ToList();
 
                     foreach (AbstractCastEvent c in cataCycle)
                     {
@@ -191,6 +192,23 @@ namespace GW2EIEvtcParser.EncounterLogic
                             {
                                 replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, roadLength/subdivisions, roadWidth, direction, (int)((i + 0.5) * roadLength / subdivisions + hitboxOffset), (start + preCastTime + i * (rollOutTime / subdivisions), start + preCastTime + i * (rollOutTime / subdivisions) + duration), "rgba(143, 0, 179, 0.6)", new PositionConnector(position)));
                             }
+                        }
+                    }
+                    foreach (AbstractCastEvent c in forceOfRetal)
+                    {
+                        int radius = 650;
+                        double radiusIncrement = 433.3;
+                        int preCastTime = 1800;
+                        int timeBetweenCascades = 200;
+                        int cascades = 5;
+                        start = (int)c.Time + 1400;
+                        Point3D position = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
+                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, start + preCastTime), "rgba(255, 220, 50, 0.15)", new PositionConnector(position)));
+                        replay.Decorations.Add(new CircleDecoration(true, start + preCastTime, radius, (start, start + preCastTime), "rgba(255, 220, 50, 0.25)", new PositionConnector(position)));
+                        for (int i = 0; i < cascades; i++)
+                        {
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, radius + (int)(radiusIncrement * i), radius + (int)(radiusIncrement * (i + 1)), (start + preCastTime + timeBetweenCascades * i, start + preCastTime + timeBetweenCascades * (i + 1)), "rgba(30, 30, 30, 0.5)", new PositionConnector(position)));
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, radius + (int)(radiusIncrement * i), radius + (int)(radiusIncrement * (i + 1)), (start + preCastTime + timeBetweenCascades * (i + 1), start + preCastTime + timeBetweenCascades * (i + 2)), "rgba(50, 20, 50, 0.25)", new PositionConnector(position)));
                         }
                     }
                     break;
