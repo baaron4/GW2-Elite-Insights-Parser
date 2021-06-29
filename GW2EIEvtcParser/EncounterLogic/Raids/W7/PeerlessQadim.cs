@@ -255,6 +255,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                     replay.Decorations.Add(new CircleDecoration(true, 0, 120, (fixatedStart, fixatedEnd), "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
                 }
             }
+            // Critical Mass, debuff while carrying an orb
+            List<AbstractBuffEvent> criticalMass = GetFilteredList(log.CombatData, 56424, p, true);
+            int criticalMassStart = 0;
+            foreach (AbstractBuffEvent c in criticalMass)
+            {
+                if (c is BuffApplyEvent)
+                {
+                    criticalMassStart = Math.Max((int)c.Time, 0);
+                }
+                else
+                {
+                    int criticalMassEnd = (int)c.Time;
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 200, (criticalMassStart, criticalMassEnd), "rgba(255, 0, 0, 0.3)", new AgentConnector(p)));
+                }
+            }
             // Magma drop
             List<AbstractBuffEvent> magmaDrop = GetFilteredList(log.CombatData, 56475, p, true);
             int magmaDropStart = 0;
