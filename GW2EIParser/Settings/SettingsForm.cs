@@ -97,6 +97,7 @@ namespace GW2EIParser.Setting
             ChkRawTimelineArrays.Checked = Properties.Settings.Default.RawTimelineArrays;
             ChkDetailledWvW.Checked = Properties.Settings.Default.DetailledWvW;
             ChkHtmlExternalScripts.Checked = Properties.Settings.Default.HtmlExternalScripts;
+            ChkHtmlCompressJson.Checked = Properties.Settings.Default.HtmlCompressJson;
             TxtHtmlExternalScriptsPath.Text = Properties.Settings.Default.HtmlExternalScriptsPath;
             TxtHtmlExternalScriptsCdn.Text = Properties.Settings.Default.HtmlExternalScriptsCdn;            
 
@@ -262,6 +263,11 @@ namespace GW2EIParser.Setting
             LblHtmlExternalScriptsCdn.Enabled = ChkHtmlExternalScripts.Checked;
             TxtHtmlExternalScriptsCdn.Enabled = ChkHtmlExternalScripts.Checked;
             BtnHtmlExternalScriptPathSelect.Enabled = ChkHtmlExternalScripts.Checked;
+        }
+
+        private void ChkHtmlCompressCheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.HtmlCompressJson = ChkHtmlCompressJson.Checked;
         }
 
         private void RadioThemeLightCheckedChanged(object sender, EventArgs e)

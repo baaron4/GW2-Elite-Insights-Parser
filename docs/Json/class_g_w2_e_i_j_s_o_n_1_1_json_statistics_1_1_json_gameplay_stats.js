@@ -1,6 +1,8 @@
 var class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats =
 [
+    [ "AgainstMovingRate", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#acc81131a972ec000df4ab55df6e31d36", null ],
     [ "Blocked", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#ad4387cf7a62f1133e221e0a5d843d2a1", null ],
+    [ "ConnectedDamageCount", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a6fc43dff6329068d8c97803663052d33", null ],
     [ "ConnectedDirectDamageCount", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#ac486f23bfc1dddeb2a7649c775c57391", null ],
     [ "CritableDirectDamageCount", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a1d1d265d1c72e0cb00dc8bb48a90bc11", null ],
     [ "CriticalDmg", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a40648ecf4798a86eeaffa7a3b05db44c", null ],

@@ -7,9 +7,10 @@
 
         public bool ExternalHTMLScripts { get; }
 
-        public string ExternalHtmlScriptsPath { get; set; }
+        public string ExternalHtmlScriptsPath { get; }
 
-        public string ExternalHtmlScriptsCdn { get; set; }
+        public string ExternalHtmlScriptsCdn { get; }
+        public bool CompressJson { get; }
 
         public HTMLSettings(bool htmlLightTheme, bool externalHTMLScripts)
         {
@@ -21,6 +22,11 @@
         {
             ExternalHtmlScriptsPath = externalHTMLScriptsPath;
             ExternalHtmlScriptsCdn = externalHTMLScriptsCdn;
+        }
+
+        public HTMLSettings(bool htmlLightTheme, bool externalHTMLScripts, string externalHTMLScriptsPath, string externalHTMLScriptsCdn, bool compressJson) : this(htmlLightTheme, externalHTMLScripts, externalHTMLScriptsPath, externalHTMLScriptsCdn)
+        {
+            CompressJson = compressJson;
         }
     }
 }

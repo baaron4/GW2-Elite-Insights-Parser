@@ -11,6 +11,8 @@ var searchData=
   ['actordps',['ActorDps',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_d_p_s.html#a5d997702b06658aa8ee425efb01abd43',1,'GW2EIJSON::JsonStatistics::JsonDPS']]],
   ['actorpowerdamage',['ActorPowerDamage',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_d_p_s.html#a4ecaa5caea225e24f4924991de669c6a',1,'GW2EIJSON::JsonStatistics::JsonDPS']]],
   ['actorpowerdps',['ActorPowerDps',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_d_p_s.html#ab5265ed7ac8502ec0dfdad815ab20de6',1,'GW2EIJSON::JsonStatistics::JsonDPS']]],
+  ['againstmoving',['AgainstMoving',['../class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html#a11333610a2d4ea3fbc2637c1d19fd3da',1,'GW2EIJSON::JsonDamageDist']]],
+  ['againstmovingrate',['AgainstMovingRate',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#acc81131a972ec000df4ab55df6e31d36',1,'GW2EIJSON::JsonStatistics::JsonGameplayStats']]],
   ['approximate',['Approximate',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_damage_mod_desc.html#a09b0116189f887de21e778cb683453de',1,'GW2EIJSON::JsonLog::DamageModDesc']]],
   ['arcversion',['ArcVersion',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a47681fcdcbd7b0cb7456da99fe141bad',1,'GW2EIJSON::JsonLog']]],
   ['autoattack',['AutoAttack',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a01f5fc7100a0de67cc1e83bf2bd3637b',1,'GW2EIJSON::JsonLog::SkillDesc']]],

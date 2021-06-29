@@ -1,5 +1,6 @@
 var class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist =
 [
+    [ "AgainstMoving", "class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html#a11333610a2d4ea3fbc2637c1d19fd3da", null ],
     [ "Blocked", "class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html#a4d097e45c3e26855a73a610028ca3299", null ],
     [ "ConnectedHits", "class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html#ab5f5975e64aab937214fba3e851908fe", null ],
     [ "Crit", "class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html#a59c747c099e61b5ec126e0e1225a5ec4", null ],

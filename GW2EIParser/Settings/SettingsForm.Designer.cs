@@ -60,6 +60,7 @@
             this.ChkMultiLogs = new System.Windows.Forms.CheckBox();
             this.ChkAnonymous = new System.Windows.Forms.CheckBox();
             this.ChkHtmlExternalScripts = new System.Windows.Forms.CheckBox();
+            this.ChkHtmlCompressJson = new System.Windows.Forms.CheckBox();
             this.ChkDetailledWvW = new System.Windows.Forms.CheckBox();
             this.LblHtmlExternalScriptsCdn = new System.Windows.Forms.Label();
             this.LblHtmlExternalScriptsPath = new System.Windows.Forms.Label();
@@ -458,6 +459,18 @@
             this.ChkHtmlExternalScripts.UseVisualStyleBackColor = true;
             this.ChkHtmlExternalScripts.CheckedChanged += new System.EventHandler(this.ChkHtmlExternalScriptsCheckedChanged);
             // 
+            // ChkHtmlCompressJson
+            // 
+            this.ChkHtmlCompressJson.AutoSize = true;
+            this.ChkHtmlCompressJson.Location = new System.Drawing.Point(117, 13);
+            this.ChkHtmlCompressJson.Name = "ChkHtmlCompressJson";
+            this.ChkHtmlCompressJson.Size = new System.Drawing.Size(97, 17);
+            this.ChkHtmlCompressJson.TabIndex = 46;
+            this.ChkHtmlCompressJson.Text = "Compress Json";
+            this.TlpSettings.SetToolTip(this.ChkHtmlCompressJson, "Put the json inside the html file in a compressed state.");
+            this.ChkHtmlCompressJson.UseVisualStyleBackColor = true;
+            this.ChkHtmlCompressJson.CheckedChanged += new System.EventHandler(this.ChkHtmlCompressCheckedChanged);
+            // 
             // ChkDetailledWvW
             // 
             this.ChkDetailledWvW.AutoSize = true;
@@ -707,6 +720,7 @@
             this.PanelHtml.Controls.Add(this.TxtHtmlExternalScriptsPath);
             this.PanelHtml.Controls.Add(this.PanelTheme);
             this.PanelHtml.Controls.Add(this.ChkHtmlExternalScripts);
+            this.PanelHtml.Controls.Add(this.ChkHtmlCompressJson);
             this.PanelHtml.Location = new System.Drawing.Point(0, 36);
             this.PanelHtml.Name = "PanelHtml";
             this.PanelHtml.Size = new System.Drawing.Size(468, 87);
@@ -1022,6 +1036,7 @@
         private System.Windows.Forms.CheckBox ChkCompressRaw;
         private System.Windows.Forms.ToolTip TlpSettings;
         private System.Windows.Forms.CheckBox ChkHtmlExternalScripts;
+        private System.Windows.Forms.CheckBox ChkHtmlCompressJson;
         private System.Windows.Forms.TabControl TabControl;
         private System.Windows.Forms.TabPage TabGeneral;
         private System.Windows.Forms.TabPage TabHTML;

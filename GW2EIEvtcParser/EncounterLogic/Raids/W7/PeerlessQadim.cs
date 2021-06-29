@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 new HitOnPlayerMechanic(56541, "Pylon Debris Field", new MechanicPlotlySetting("circle-open-dot","rgb(255,150,0)"), "P.Magma", "Hit by Pylon Magma", "Pylon Magma", 0),
                 new HitOnPlayerMechanic(56020, "Energized Affliction", new MechanicPlotlySetting("circle-open","rgb(0,255,0)"), "E.Aff", "Energized Affliction", "Energized Affliction", 0),
-                new HitOnPlayerMechanic(56134, "Force of Retaliation", new MechanicPlotlySetting("circle-open","rgb(0,0,0)"), "Pushed", "Pushed by Shockwave", "Shockwave Push", 0, (de, log) => !de.To.HasBuff(log, 1122, de.Time)),
+                new HitOnPlayerMechanic(56134, "Force of Retaliation", new MechanicPlotlySetting("circle-open","rgb(0,0,0)"), "Pushed", "Pushed by Shockwave", "Shockwave Push", 1000, (de, log) => !de.To.HasBuff(log, 1122, de.Time)),
                 new HitOnPlayerMechanic(56441, "Force of Havoc", new MechanicPlotlySetting("square-open","rgb(150,0,250)"), "P.Rect", "Hit by Purple Rectangle", "Purple Rectangle", 0),
                 new HitOnPlayerMechanic(56145, "Chaos Called", new MechanicPlotlySetting("circle-x-open","rgb(150,0,250)"), "Pattern.H", "Hit by Energy on Pattern", "Pattern Energy Hit", 0),
                 new HitOnPlayerMechanic(56527, "Rain of Chaos", new MechanicPlotlySetting("star-square","rgb(150,0,250)"), "Lght.H", "Hit by Expanding Lightning", "Lightning Hit", 0),
@@ -181,13 +181,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int preCastTime = 1500;
                         int duration = 22500;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
-                        if (facing != null)
+                        Point3D position = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
+                        if (facing != null && position != null)
                         {
                             int direction = (int)(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI);
-                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, roadLength, roadWidth, direction, roadLength / 2 + 200, (start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new AgentConnector(target)));
+                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, roadLength, roadWidth, direction, roadLength / 2 + 200, (start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new PositionConnector(position)));
                             for (int i = 0; i < subdivisions; i++)
                             {
-                                replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, roadLength/subdivisions, roadWidth, direction, (int)((i + 0.5) * roadLength / subdivisions + hitboxOffset), (start + preCastTime + i * (rollOutTime / subdivisions), start + preCastTime + i * (rollOutTime / subdivisions) + duration), "rgba(143, 0, 179, 0.6)", new AgentConnector(target)));
+                                replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, roadLength/subdivisions, roadWidth, direction, (int)((i + 0.5) * roadLength / subdivisions + hitboxOffset), (start + preCastTime + i * (rollOutTime / subdivisions), start + preCastTime + i * (rollOutTime / subdivisions) + duration), "rgba(143, 0, 179, 0.6)", new PositionConnector(position)));
                             }
                         }
                     }
@@ -213,6 +214,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 replay.Decorations.Add(new LineDecoration(0, (surgeStart, surgeEnd), "rgba(255, 0, 0, 0.3)", new AgentConnector(target), new AgentConnector(source)));
                             }
                         }
+                    }
+                    Point3D firstEntropicPosition = replay.PolledPositions.FirstOrDefault();
+                    if (firstEntropicPosition != null)
+                    {
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start - 5000, start), "rgba(255, 0, 0, 0.4)", new PositionConnector(firstEntropicPosition)));
+                        replay.Decorations.Add(new CircleDecoration(true, start, 300, (start - 5000, start), "rgba(255, 0, 0, 0.4)", new PositionConnector(firstEntropicPosition)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.BigKillerTornado:
