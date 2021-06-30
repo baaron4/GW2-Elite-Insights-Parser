@@ -215,7 +215,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             {
                                 if (c.DstMatchesAgent(dst))
                                 {
-                                    c.OverrideSrcAgent(dummyAgent.Agent);
+                                    c.OverrideDstAgent(dummyAgent.Agent);
                                     break;
                                 }
                             }
