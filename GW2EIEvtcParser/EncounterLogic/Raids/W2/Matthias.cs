@@ -180,7 +180,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     combatData.AddRange(auxCombatData);
                 }
             }
-            ComputeFightTargets(agentData, combatData);
+            ComputeFightTargets(agentData, combatData, extensions);
             foreach (AbstractSingleActor target in Targets)
             {
                 if (target.ID == (int)ArcDPSEnums.TrashID.MatthiasSacrificeCrystal)

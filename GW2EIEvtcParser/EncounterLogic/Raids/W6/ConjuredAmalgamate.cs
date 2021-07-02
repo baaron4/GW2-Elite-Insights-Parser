@@ -81,7 +81,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 rightArm.OverrideType(AgentItem.AgentType.NPC);
             }
             agentData.Refresh();
-            ComputeFightTargets(agentData, combatData);
+            ComputeFightTargets(agentData, combatData, extensions);
             AgentItem sword = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, "Conjured Sword\0:Conjured Sword\051", "Sword", (int)ArcDPSEnums.TrashID.ConjuredPlayerSword, true);
             friendlies.Add(new NPC(sword));
             foreach (CombatItem c in combatData)

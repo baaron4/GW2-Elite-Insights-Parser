@@ -93,7 +93,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     c.OverrideDstAgent(target.Agent);
                 }
             }
-            ComputeFightTargets(agentData, combatData);
+            ComputeFightTargets(agentData, combatData, extensions);
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

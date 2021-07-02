@@ -207,7 +207,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
-            ComputeFightTargets(agentData, combatData);
+            ComputeFightTargets(agentData, combatData, extensions);
 
             if (_xeraSecondPhaseStartTime > 0)
             {

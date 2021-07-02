@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Extensions;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -306,7 +307,7 @@ namespace GW2EIEvtcParser.ParsedData
             ProfHelper.AttachMasterToRacialGadgets(players, this);
         }
 
-        internal CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players, ParserController operation, int arcdpsVersion)
+        internal CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players, ParserController operation, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, int arcdpsVersion)
         {
             _skillIds = new HashSet<long>();
             var castCombatEvents = new Dictionary<ulong, List<CombatItem>>();
@@ -320,7 +321,26 @@ namespace GW2EIEvtcParser.ParsedData
                 _skillIds.Add(combatItem.SkillID);
                 if (combatItem.IsStateChange != ArcDPSEnums.StateChange.None)
                 {
-                    CombatEventFactory.AddStateChangeEvent(combatItem, agentData, skillData, _metaDataEvents, _statusEvents, _rewardEvents, wepSwaps, buffEvents);
+                    if (combatItem.IsStateChange == ArcDPSEnums.StateChange.Extension)
+                    {
+                        uint sig = 0;
+                        if (combatItem.Pad == 0)
+                        {
+                            sig = combatItem.OverstackValue;
+                        } else
+                        {
+                            sig = combatItem.Pad;
+                        }
+                        if (extensions.TryGetValue(sig, out AbstractExtensionHandler handler))
+                        {
+                            handler.InsertEIExtensionEvent(this, combatItem);
+                        }
+                    } 
+                    else
+                    {
+                        CombatEventFactory.AddStateChangeEvent(combatItem, agentData, skillData, _metaDataEvents, _statusEvents, _rewardEvents, wepSwaps, buffEvents);
+                    }
+                    
                 }
                 else if (combatItem.IsActivation != ArcDPSEnums.Activation.None)
                 {

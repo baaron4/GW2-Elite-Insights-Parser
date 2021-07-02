@@ -136,7 +136,7 @@ namespace GW2EIEvtcParser
                     operation.UpdateProgressWithCancellationCheck("Preparing data for log generation");
                     PreProcessEvtcData(operation);
                     operation.UpdateProgressWithCancellationCheck("Data parsed");
-                    return new ParsedEvtcLog(_arcdpsVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _friendlies, _logEndTime - _logStartTime, _parserSettings, operation);
+                    return new ParsedEvtcLog(_arcdpsVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _friendlies, _enabledExtensions, _logEndTime - _logStartTime, _parserSettings, operation);
                 }
             }
             catch (Exception ex)
@@ -575,7 +575,7 @@ namespace GW2EIEvtcParser
             }
             if (combatItem.IsStateChange == ArcDPSEnums.StateChange.Extension)
             {
-                // Generic versioning check, we expect the first event that'll be sent by an addon will always be meta data
+                // Generic versioning check, we expect that the first event that'll be sent by an addon will always be meta data
                 if (combatItem.Pad == 0)
                 {
                     AbstractExtensionHandler handler = ExtensionHelper.GetExtensionHandler(combatItem);

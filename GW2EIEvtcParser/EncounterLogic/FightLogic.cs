@@ -92,7 +92,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return target.Character;
         }
 
-        private static void RegroupTargetsByID(int id, AgentData agentData, List<CombatItem> combatItems)
+        private static void RegroupTargetsByID(int id, AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
             if (agents.Count > 1)
@@ -105,11 +105,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 agentData.ReplaceAgentsFromID(newTargetAgent);
                 foreach (CombatItem c in combatItems)
                 {
-                    if (agentValues.Contains(c.SrcAgent) && c.IsStateChange.SrcIsAgent())
+                    if (agentValues.Contains(c.SrcAgent) && c.SrcIsAgent(extensions))
                     {
                         c.OverrideSrcAgent(newTargetAgent.Agent);
                     }
-                    if (agentValues.Contains(c.DstAgent) && c.IsStateChange.DstIsAgent())
+                    if (agentValues.Contains(c.DstAgent) && c.DstIsAgent(extensions))
                     {
                         c.OverrideDstAgent(newTargetAgent.Agent);
                     }
@@ -119,11 +119,11 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected abstract HashSet<int> GetUniqueTargetIDs();
 
-        internal virtual void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems)
+        internal virtual void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             foreach (int id in GetUniqueTargetIDs())
             {
-                RegroupTargetsByID(id, agentData, combatItems);
+                RegroupTargetsByID(id, agentData, combatItems, extensions);
             }
             List<int> ids = GetFightTargetsIDs();
             foreach (int id in ids)
@@ -512,7 +512,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal virtual void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            ComputeFightTargets(agentData, combatData);
+            ComputeFightTargets(agentData, combatData, extensions);
         }
 
         //

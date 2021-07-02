@@ -224,7 +224,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
-            ComputeFightTargets(agentData, combatData);
+            ComputeFightTargets(agentData, combatData, extensions);
         }
     }
 }

@@ -87,7 +87,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var auxCombatData = combatData.OrderBy(x => x.Time).ToList();
             combatData.Clear();
             combatData.AddRange(auxCombatData);
-            ComputeFightTargets(agentData, combatData);
+            ComputeFightTargets(agentData, combatData, extensions);
         }
 
         protected override List<int> GetFightTargetsIDs()
