@@ -7,14 +7,13 @@ namespace GW2EIEvtcParser.Extensions
     public abstract class AbstractExtensionHandler
     {
         public uint Signature { get; }
-        public uint Revision { get; }
+        public uint Revision { get; protected set; }
         public string Name { get; }
-        public string Version { get; }
+        public string Version { get; protected set; }
 
-        internal AbstractExtensionHandler(CombatItem c, string name)
+        internal AbstractExtensionHandler(uint sig, string name)
         {
-            Signature = c.OverstackValue;
-            Revision = c.SkillID;
+            Signature = sig;
             Name = name;
         }
 
