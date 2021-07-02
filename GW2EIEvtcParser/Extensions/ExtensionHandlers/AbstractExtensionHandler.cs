@@ -17,6 +17,8 @@ namespace GW2EIEvtcParser.Extensions
         public abstract bool SrcIsAgent(CombatItem c);
         public abstract bool DstIsAgent(CombatItem c);
 
+        public abstract bool IsDamage(CombatItem c);
+
         public abstract void InsertEIExtensionEvent(CombatData combatData, CombatItem c);
 
     }

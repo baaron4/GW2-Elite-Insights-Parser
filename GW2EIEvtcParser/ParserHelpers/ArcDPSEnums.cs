@@ -718,17 +718,4 @@ namespace GW2EIEvtcParser
                 ;
         }
     }
-
-    public static class ActivationExtensions
-    {
-        public static bool StartCasting(this ArcDPSEnums.Activation activation)
-        {
-            return activation == ArcDPSEnums.Activation.Normal || activation == ArcDPSEnums.Activation.Quickness;
-        }
-
-        public static bool EndCasting(this ArcDPSEnums.Activation activation)
-        {
-            return activation == ArcDPSEnums.Activation.CancelFire || activation == ArcDPSEnums.Activation.Reset || activation == ArcDPSEnums.Activation.CancelCancel;
-        }
-    }
 }

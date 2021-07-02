@@ -152,7 +152,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             else
             {
                 // get first end casting
-                CombatItem firstCastEnd = combatData.FirstOrDefault(x => x.IsActivation.EndCasting() && x.IsStateChange == ArcDPSEnums.StateChange.None && (x.Time - fightData.LogStart) < 2000 && x.SrcMatchesAgent(target));
+                CombatItem firstCastEnd = combatData.FirstOrDefault(x => x.EndCasting() && (x.Time - fightData.LogStart) < 2000 && x.SrcMatchesAgent(target));
                 // It has to Impact(38102), otherwise anomaly, player may have joined mid fight, do nothing
                 if (firstCastEnd != null && firstCastEnd.SkillID == 38102)
                 {

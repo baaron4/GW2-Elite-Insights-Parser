@@ -194,10 +194,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var enemyPlayerDicts = aList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
                 foreach (CombatItem c in combatData)
                 {
-                    if (c.IsStateChange == ArcDPSEnums.StateChange.None &&
-                        c.IsActivation == ArcDPSEnums.Activation.None &&
-                        c.IsBuffRemove == ArcDPSEnums.BuffRemove.None &&
-                        ((c.IsBuff != 0 && c.Value == 0) || (c.IsBuff == 0)))
+                    if (c.IsDamage(extensions))
                     {
                         if (enemyPlayerDicts.TryGetValue(c.SrcAgent, out List<AgentItem> srcs))
                         {

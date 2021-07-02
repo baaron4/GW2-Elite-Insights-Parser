@@ -238,7 +238,7 @@ namespace GW2EIEvtcParser.ParsedData
                 CombatItem startItem = null;
                 foreach (CombatItem c in pair.Value)
                 {
-                    if (c.IsActivation.StartCasting())
+                    if (c.StartCasting())
                     {
                         // missing end
                         if (startItem != null)
@@ -247,7 +247,7 @@ namespace GW2EIEvtcParser.ParsedData
                         }
                         startItem = c;
                     }
-                    else if (c.IsActivation.EndCasting())
+                    else if (c.EndCasting())
                     {
                         if (startItem != null && startItem.SkillID == c.SkillID)
                         {

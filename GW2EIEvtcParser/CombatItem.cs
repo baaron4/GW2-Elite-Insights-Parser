@@ -18,10 +18,13 @@ namespace GW2EIEvtcParser
         public ushort DstInstid { get; }
         public ushort SrcMasterInstid { get; }
         public ushort DstMasterInstid { get; }
+        public byte IFFByte { get; }
         public ArcDPSEnums.IFF IFF { get; }
         public byte IsBuff { get; }
         public byte Result { get; }
+        public byte IsActivationByte { get; }
         public ArcDPSEnums.Activation IsActivation { get; }
+        public byte IsBuffRemoveByte { get; }
         public ArcDPSEnums.BuffRemove IsBuffRemove { get; }
         public byte IsNinety { get; }
         public byte IsFifty { get; }
@@ -56,10 +59,13 @@ namespace GW2EIEvtcParser
             DstInstid = dstInstid;
             SrcMasterInstid = srcMasterInstid;
             DstMasterInstid = dstMasterInstid;
+            IFFByte = iff;
             IFF = ArcDPSEnums.GetIFF(iff);
             IsBuff = isBuff;
             Result = result;
+            IsActivationByte = isActivation;
             IsActivation = ArcDPSEnums.GetActivation(isActivation);
+            IsBuffRemoveByte = isBuffRemove;
             IsBuffRemove = ArcDPSEnums.GetBuffRemove(isBuffRemove);
             IsNinety = isNinety;
             IsFifty = isFifty;
@@ -90,10 +96,13 @@ namespace GW2EIEvtcParser
             DstInstid = c.DstInstid;
             SrcMasterInstid = c.SrcMasterInstid;
             DstMasterInstid = c.DstMasterInstid;
+            IFFByte = c.IFFByte;
             IFF = c.IFF;
             IsBuff = c.IsBuff;
             Result = c.Result;
+            IsActivationByte = c.IsActivationByte;
             IsActivation = c.IsActivation;
+            IsBuffRemoveByte = c.IsBuffRemoveByte;
             IsBuffRemove = c.IsBuffRemove;
             IsNinety = c.IsNinety;
             IsFifty = c.IsFifty;
@@ -116,6 +125,18 @@ namespace GW2EIEvtcParser
                 return handler.HasTime(this);
             }
             return IsStateChange.HasTime();
+        }
+
+        internal bool IsDamage(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            if (IsStateChange == ArcDPSEnums.StateChange.Extension && Pad != 0 && extensions.TryGetValue(Pad, out AbstractExtensionHandler handler))
+            {
+                return handler.IsDamage(this);
+            }
+            return IsStateChange == ArcDPSEnums.StateChange.None &&
+                        IsActivation == ArcDPSEnums.Activation.None &&
+                        IsBuffRemove == ArcDPSEnums.BuffRemove.None &&
+                        ((IsBuff != 0 && Value == 0) || (IsBuff == 0));
         }
 
         internal bool SrcIsAgent(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -171,8 +192,25 @@ namespace GW2EIEvtcParser
             }
             return false;
         }
+        public bool StartCasting()
+        {
+            if (IsStateChange != ArcDPSEnums.StateChange.None)
+            {
+                return false;
+            }
+            return IsActivation == ArcDPSEnums.Activation.Normal || IsActivation == ArcDPSEnums.Activation.Quickness;
+        }
 
+        public bool EndCasting()
+        {
+            if (IsStateChange != ArcDPSEnums.StateChange.None)
+            {
+                return false;
+            }
+            return IsActivation == ArcDPSEnums.Activation.CancelFire || IsActivation == ArcDPSEnums.Activation.Reset || IsActivation == ArcDPSEnums.Activation.CancelCancel;
+        }
 
+        ///
         internal void OverrideTime(long time)
         {
             Time = time;
