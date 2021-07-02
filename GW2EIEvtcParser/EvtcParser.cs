@@ -527,7 +527,7 @@ namespace GW2EIEvtcParser
             for (long i = 0; i < cbtItemCount; i++)
             {
                 CombatItem combatItem = _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader);
-                if (!IsValid(combatItem))
+                if (!IsValid(combatItem, operation))
                 {
                     continue;
                 }
@@ -565,7 +565,7 @@ namespace GW2EIEvtcParser
         /// </summary>
         /// <param name="combatItem"></param>
         /// <returns>true if the combat item is valid</returns>
-        private bool IsValid(CombatItem combatItem)
+        private bool IsValid(CombatItem combatItem, ParserController operation)
         {
             if (combatItem.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && combatItem.DstAgent > 20000)
             {
@@ -579,8 +579,13 @@ namespace GW2EIEvtcParser
                 if (combatItem.Pad == 0)
                 {
                     AbstractExtensionHandler handler = ExtensionHelper.GetExtensionHandler(combatItem);
-                    _enabledExtensions[handler.Sig] = handler;
-                    return true;
+                    if (handler != null)
+                    {
+                        _enabledExtensions[handler.Sig] = handler;
+                        operation.UpdateProgressWithCancellationCheck("Encountered supported extension " + handler.Name);
+                        return true;
+                    }
+                    return false;
                 } 
                 else
                 {
