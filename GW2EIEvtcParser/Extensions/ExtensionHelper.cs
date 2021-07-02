@@ -12,7 +12,7 @@ namespace GW2EIEvtcParser.Extensions
                 return null;
             }
             // place holder for sig
-            switch (c.BuffDmg)
+            switch (c.OverstackValue)
             {
                 // TODO: based on sig, do a switch on rev
                 default:
