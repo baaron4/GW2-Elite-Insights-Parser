@@ -2,6 +2,7 @@
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -141,7 +142,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return fightData.LogStart;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             // find target
             AgentItem firstXera = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Xera).FirstOrDefault();
@@ -196,11 +197,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 // update combat data
                 foreach (CombatItem c in combatData)
                 {
-                    if (c.SrcMatchesAgent(secondXera))
+                    if (c.SrcMatchesAgent(secondXera, extensions))
                     {
                         c.OverrideSrcAgent(firstXera.Agent);
                     }
-                    if (c.DstMatchesAgent(secondXera))
+                    if (c.DstMatchesAgent(secondXera, extensions))
                     {
                         c.OverrideDstAgent(firstXera.Agent);
                     }

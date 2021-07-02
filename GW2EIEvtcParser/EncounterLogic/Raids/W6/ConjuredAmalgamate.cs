@@ -2,6 +2,7 @@
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -61,7 +62,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             // make those into npcs
             IReadOnlyList<AgentItem> cas = agentData.GetGadgetsByID((int)ArcDPSEnums.TargetID.ConjuredAmalgamate);

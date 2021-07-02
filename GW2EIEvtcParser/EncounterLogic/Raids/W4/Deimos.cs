@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
 
@@ -222,7 +223,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AgentItem deimos in deimosAgents)
             {
                 // enter combat
-                CombatItem spawnProtectionRemove = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos) && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SkillID == 34113);
+                CombatItem spawnProtectionRemove = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos) && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.IsStateChange == ArcDPSEnums.StateChange.None && x.SkillID == 34113);
                 if (spawnProtectionRemove != null)
                 {
                     start = Math.Max(start, spawnProtectionRemove.Time);
@@ -245,7 +246,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return res;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             ComputeFightTargets(agentData, combatData);
             // Find target

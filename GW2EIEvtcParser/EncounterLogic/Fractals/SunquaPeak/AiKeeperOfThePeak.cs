@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 
@@ -144,7 +145,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             AgentItem aiAgent = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.AiKeeperOfThePeak).FirstOrDefault();
             if (aiAgent == null)
@@ -167,29 +168,29 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         if (evt.Time >= darkAiAgent.FirstAware && evt.Time <= darkAiAgent.LastAware)
                         {
-                            if (evt.SrcMatchesAgent(aiAgent))
+                            if (evt.SrcMatchesAgent(aiAgent, extensions))
                             {
                                 evt.OverrideSrcAgent(darkAiAgent.Agent);
                             }
-                            if (evt.DstMatchesAgent(aiAgent))
+                            if (evt.DstMatchesAgent(aiAgent, extensions))
                             {
                                 evt.OverrideDstAgent(darkAiAgent.Agent);
                             }
                         }
                     }
-                    CombatItem toCopy = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(aiAgent) && x.Time <= lastAwareTime - 1);
-                    if (toCopy != null)
+                    CombatItem healthUpdateToCopy = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(aiAgent) && x.Time <= lastAwareTime - 1);
+                    if (healthUpdateToCopy != null)
                     {
                         //
                         {
-                            var elAI0HP = new CombatItem(toCopy);
+                            var elAI0HP = new CombatItem(healthUpdateToCopy);
                             elAI0HP.OverrideDstAgent(0);
                             elAI0HP.OverrideTime(lastAwareTime);
                             combatData.Add(elAI0HP);
                         }
                         //
                         {
-                            var darkAI0HP = new CombatItem(toCopy);
+                            var darkAI0HP = new CombatItem(healthUpdateToCopy);
                             darkAI0HP.OverrideDstAgent(0);
                             darkAI0HP.OverrideTime(darkAiAgent.FirstAware);
                             darkAI0HP.OverrideSrcAgent(darkAiAgent.Agent);
@@ -229,7 +230,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 Extension = "elai";
             }
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, friendlies);
+            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, friendlies, extensions);
             // Manually set HP and names
             AbstractSingleActor eleAi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak);
             AbstractSingleActor darkAi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2);

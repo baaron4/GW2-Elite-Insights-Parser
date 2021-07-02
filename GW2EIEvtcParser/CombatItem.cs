@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser
@@ -107,11 +109,56 @@ namespace GW2EIEvtcParser
             Pad4 = c.Pad4;
         }
 
+        internal bool HasTime(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            if (IsStateChange == ArcDPSEnums.StateChange.Extension && Pad != 0 && extensions.TryGetValue(Pad, out AbstractExtensionHandler handler))
+            {
+                return handler.HasTime(this);
+            }
+            return IsStateChange.HasTime();
+        }
+
+        internal bool SrcIsAgent(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            if (IsStateChange == ArcDPSEnums.StateChange.Extension && Pad != 0 && extensions.TryGetValue(Pad, out AbstractExtensionHandler handler))
+            {
+                return handler.SrcIsAgent(this);
+            }
+            return IsStateChange.SrcIsAgent();
+        }
+
+        internal bool DstIsAgent(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            if (IsStateChange == ArcDPSEnums.StateChange.Extension && Pad != 0 && extensions.TryGetValue(Pad, out AbstractExtensionHandler handler))
+            {
+                return handler.DstIsAgent(this);
+            }
+            return IsStateChange.DstIsAgent();
+        }
+
+        internal bool DstMatchesAgent(AgentItem agentItem, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            if (DstIsAgent(extensions))
+            {
+                return agentItem.Agent == DstAgent && agentItem.FirstAware <= Time && agentItem.LastAware >= Time;
+            }
+            return false;
+        }
+
         internal bool DstMatchesAgent(AgentItem agentItem)
         {
             if (IsStateChange.DstIsAgent())
             {
                 return agentItem.Agent == DstAgent && agentItem.FirstAware <= Time && agentItem.LastAware >= Time;
+            }
+            return false;
+        }
+
+        internal bool SrcMatchesAgent(AgentItem agentItem, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            if (SrcIsAgent(extensions))
+            {
+                return agentItem.Agent == SrcAgent && agentItem.FirstAware <= Time && agentItem.LastAware >= Time;
             }
             return false;
         }
@@ -128,10 +175,7 @@ namespace GW2EIEvtcParser
 
         internal void OverrideTime(long time)
         {
-            if (IsStateChange.HasTime())
-            {
-                Time = time;
-            }
+            Time = time;
         }
 
         internal void OverrideSrcAgent(ulong agent)
