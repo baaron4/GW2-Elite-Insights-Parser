@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.EIData
                 return new List<DamageModifierEvent>();
             }
             var res = new List<DamageModifierEvent>();
-            IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
+            IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageEvents(actor, log, null, 0, log.FightData.FightEnd);
             foreach (AbstractHealthDamageEvent evt in typeHits)
             {
                 res.Add(new DamageModifierEvent(evt, this, ComputeGain(Tracker.GetStack(bgms, evt.Time), evt, log)));
