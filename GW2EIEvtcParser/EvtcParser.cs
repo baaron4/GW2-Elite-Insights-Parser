@@ -581,7 +581,7 @@ namespace GW2EIEvtcParser
                     AbstractExtensionHandler handler = ExtensionHelper.GetExtensionHandler(combatItem);
                     if (handler != null)
                     {
-                        _enabledExtensions[handler.Sig] = handler;
+                        _enabledExtensions[handler.Signature] = handler;
                         operation.UpdateProgressWithCancellationCheck("Encountered supported extension " + handler.Name + " on " + handler.Version);
                     }
                     // No need to keep that event, it'll be immediately parsed by the handler
