@@ -61,7 +61,7 @@ namespace GW2EIEvtcParser
                 throw new SkipException();
             }
             _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Log Meta Data");
-            LogData = new LogData("EVTC"+arcdpsVersion, CombatData, evtcLogDuration, playerList, operation);
+            LogData = new LogData("EVTC"+arcdpsVersion, CombatData, evtcLogDuration, playerList, extensions, operation);
             //
             _operation.UpdateProgressWithCancellationCheck("Creating Buff Container");
             Buffs = new BuffsContainer(LogData.GW2Build, CombatData, operation);

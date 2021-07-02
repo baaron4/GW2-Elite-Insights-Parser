@@ -582,9 +582,9 @@ namespace GW2EIEvtcParser
                     if (handler != null)
                     {
                         _enabledExtensions[handler.Sig] = handler;
-                        operation.UpdateProgressWithCancellationCheck("Encountered supported extension " + handler.Name);
-                        return true;
+                        operation.UpdateProgressWithCancellationCheck("Encountered supported extension " + handler.Name + " on " + handler.Version);
                     }
+                    // No need to keep that event, it'll be immediately parsed by the handler
                     return false;
                 } 
                 else

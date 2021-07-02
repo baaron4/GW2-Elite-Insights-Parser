@@ -3,9 +3,10 @@ using System.Collections.Generic;
 
 namespace GW2EIEvtcParser.Extensions
 {
-    internal static class ExtensionHelper
+    public static class ExtensionHelper
     {
-        public static AbstractExtensionHandler GetExtensionHandler(CombatItem c)
+        // TODO add supported sigs as public consts
+        internal static AbstractExtensionHandler GetExtensionHandler(CombatItem c)
         {
             if (!c.IsExtension && c.Pad != 0)
             {

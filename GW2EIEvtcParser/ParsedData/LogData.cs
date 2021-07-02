@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Extensions;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -22,11 +24,13 @@ namespace GW2EIEvtcParser.ParsedData
         public string LogStartStd { get; private set; } = DefaultTimeValue;
         public string LogEndStd { get; private set; } = DefaultTimeValue;
 
+        public IReadOnlyList<AbstractExtensionHandler> UsedExtensions { get; }
+
         public IReadOnlyList<string> LogErrors => _logErrors;
         private readonly List<string> _logErrors = new List<string>();
 
         // Constructors
-        internal LogData(string buildVersion, CombatData combatData, long evtcLogDuration, List<Player> playerList, ParserController operation)
+        internal LogData(string buildVersion, CombatData combatData, long evtcLogDuration, List<Player> playerList, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, ParserController operation)
         {
             ArcVersion = buildVersion;
             double unixStart = 0;
@@ -93,6 +97,8 @@ namespace GW2EIEvtcParser.ParsedData
                 operation.UpdateProgressWithCancellationCheck("Error " + evt.Message);
                 _logErrors.Add(evt.Message);
             }
+            //
+            UsedExtensions = extensions.Values.ToList();
         }
 
         // Setters

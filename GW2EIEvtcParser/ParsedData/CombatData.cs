@@ -323,17 +323,9 @@ namespace GW2EIEvtcParser.ParsedData
                 {
                     if (combatItem.IsExtension)
                     {
-                        uint sig = 0;
-                        if (combatItem.Pad == 0)
+                        if (extensions.TryGetValue(combatItem.Pad, out AbstractExtensionHandler handler))
                         {
-                            sig = combatItem.OverstackValue;
-                        } else
-                        {
-                            sig = combatItem.Pad;
-                        }
-                        if (extensions.TryGetValue(sig, out AbstractExtensionHandler handler))
-                        {
-                            handler.InsertEIExtensionEvent(this, combatItem);
+                            handler.InsertEIExtensionEvent(combatItem);
                         }
                     } 
                     else
@@ -409,6 +401,10 @@ namespace GW2EIEvtcParser.ParsedData
             operation.UpdateProgressWithCancellationCheck("Checking CM");
             fightData.SetCM(this, agentData, fightData);
             EIExtraEventProcess(players, skillData, agentData, fightData, operation, arcdpsVersion);
+            foreach (AbstractExtensionHandler handler in extensions.Values)
+            {
+                handler.AttachToCombatData(this, operation);
+            }
         }
 
         // getters

@@ -4,22 +4,29 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.Extensions
 {
-    internal abstract class AbstractExtensionHandler
+    public abstract class AbstractExtensionHandler
     {
         public uint Sig { get; }
+        public uint Rev { get; }
+        public string Name { get; }
+        public string Version { get; }
 
-        protected AbstractExtensionHandler(uint sig)
+        internal AbstractExtensionHandler(CombatItem c, string name)
         {
-            Sig = sig;
+            Sig = c.OverstackValue;
+            Rev = c.SkillID;
+            Name = name;
         }
 
-        public abstract bool HasTime(CombatItem c);
-        public abstract bool SrcIsAgent(CombatItem c);
-        public abstract bool DstIsAgent(CombatItem c);
+        internal abstract bool HasTime(CombatItem c);
+        internal abstract bool SrcIsAgent(CombatItem c);
+        internal abstract bool DstIsAgent(CombatItem c);
 
-        public abstract bool IsDamage(CombatItem c);
+        internal abstract bool IsDamage(CombatItem c);
 
-        public abstract void InsertEIExtensionEvent(CombatData combatData, CombatItem c);
+        internal abstract void InsertEIExtensionEvent(CombatItem c);
+
+        internal abstract void AttachToCombatData(CombatData combatData, ParserController operation);
 
     }
 }
