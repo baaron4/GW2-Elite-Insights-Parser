@@ -71,7 +71,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             var res = new List<DamageModifierEvent>();
-            IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
+            IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageEvents(actor, log, null, 0, log.FightData.FightEnd);
             if (_trackerPlayer != null)
             {
                 foreach (AbstractHealthDamageEvent evt in typeHits)

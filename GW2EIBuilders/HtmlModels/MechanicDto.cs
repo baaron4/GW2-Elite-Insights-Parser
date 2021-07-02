@@ -77,7 +77,7 @@ namespace GW2EIBuilders.HtmlModels
 
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                list.Add(GetMechanicData(log.MechanicData.GetPresentFriendlyMechs(log, log.FightData.FightStart, log.FightData.FightEnd), log, actor, phase));
+                list.Add(GetMechanicData(log.MechanicData.GetPresentFriendlyMechs(log, 0, log.FightData.FightEnd), log, actor, phase));
             }
             return list;
         }
@@ -85,9 +85,9 @@ namespace GW2EIBuilders.HtmlModels
         public static List<List<int[]>> BuildEnemyMechanicData(ParsedEvtcLog log, PhaseData phase)
         {
             var list = new List<List<int[]>>();
-            foreach (AbstractSingleActor enemy in log.MechanicData.GetEnemyList(log, log.FightData.FightStart, log.FightData.FightEnd))
+            foreach (AbstractSingleActor enemy in log.MechanicData.GetEnemyList(log, 0, log.FightData.FightEnd))
             {
-                list.Add(GetMechanicData(log.MechanicData.GetPresentEnemyMechs(log, log.FightData.FightStart, log.FightData.FightEnd), log, enemy, phase));
+                list.Add(GetMechanicData(log.MechanicData.GetPresentEnemyMechs(log, 0, log.FightData.FightEnd), log, enemy, phase));
             }
             return list;
         }

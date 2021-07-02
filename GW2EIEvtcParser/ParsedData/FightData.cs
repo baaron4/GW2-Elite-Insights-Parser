@@ -13,18 +13,18 @@ namespace GW2EIEvtcParser.ParsedData
         private List<PhaseData> _nonDummyPhases = new List<PhaseData>();
         public int TriggerID { get; }
         public FightLogic Logic { get; }
-        public long FightStart { get; } = 0;
         public long FightEnd { get; private set; } = long.MaxValue;
+        public long FightDuration => FightEnd;
 
         public long LogStart { get; private set; }
         public long LogEnd { get; private set; }
 
-        public long FightStartOffset => FightStart - LogStart;
+        public long FightStartOffset => -LogStart;
         public string DurationString
         {
             get
             {
-                var duration = TimeSpan.FromMilliseconds(FightEnd);
+                var duration = TimeSpan.FromMilliseconds(FightDuration);
                 string durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s " + duration.Milliseconds + "ms";
                 if (duration.Hours > 0)
                 {
