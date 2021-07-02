@@ -104,6 +104,9 @@
             <div v-if="uploadLinks">
                 <p v-for="link in uploadLinks" v-if="link.url.length > 0">{{link.key}}: <a :href="link.url">{{link.url}}</a> </p>
             </div>
+            <div v-if="usedExtensions">
+                <span v-for="(usedExtension, id) in usedExtensions" >{{(id > 0 ? "|" : "") + usedExtension}}</span>
+            </div>
         </div>
     </div>
 </body>
