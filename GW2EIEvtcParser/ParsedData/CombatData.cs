@@ -321,7 +321,7 @@ namespace GW2EIEvtcParser.ParsedData
                 _skillIds.Add(combatItem.SkillID);
                 if (combatItem.IsStateChange != ArcDPSEnums.StateChange.None)
                 {
-                    if (combatItem.IsStateChange == ArcDPSEnums.StateChange.Extension)
+                    if (combatItem.IsExtension)
                     {
                         uint sig = 0;
                         if (combatItem.Pad == 0)

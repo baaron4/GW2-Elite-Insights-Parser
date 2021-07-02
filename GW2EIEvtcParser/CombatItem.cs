@@ -40,6 +40,8 @@ namespace GW2EIEvtcParser
         public byte Pad3 { get; }
         public byte Pad4 { get; }
 
+        public bool IsExtension => IsStateChange == ArcDPSEnums.StateChange.Extension;
+
         // Constructor
         internal CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
                uint skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid,
@@ -120,7 +122,7 @@ namespace GW2EIEvtcParser
 
         internal bool HasTime(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            if (IsStateChange == ArcDPSEnums.StateChange.Extension && Pad != 0 && extensions.TryGetValue(Pad, out AbstractExtensionHandler handler))
+            if (IsExtension && Pad != 0 && extensions.TryGetValue(Pad, out AbstractExtensionHandler handler))
             {
                 return handler.HasTime(this);
             }
@@ -129,7 +131,7 @@ namespace GW2EIEvtcParser
 
         internal bool IsDamage(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            if (IsStateChange == ArcDPSEnums.StateChange.Extension && Pad != 0 && extensions.TryGetValue(Pad, out AbstractExtensionHandler handler))
+            if (IsExtension && Pad != 0 && extensions.TryGetValue(Pad, out AbstractExtensionHandler handler))
             {
                 return handler.IsDamage(this);
             }
@@ -139,9 +141,14 @@ namespace GW2EIEvtcParser
                         ((IsBuff != 0 && Value == 0) || (IsBuff == 0));
         }
 
+        internal bool IsBuffApply()
+        {
+            return IsBuff != 0 && BuffDmg == 0 && Value > 0 && IsActivation == ArcDPSEnums.Activation.None && IsBuffRemove == ArcDPSEnums.BuffRemove.None && IsStateChange == ArcDPSEnums.StateChange.None;
+        }
+
         internal bool SrcIsAgent(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            if (IsStateChange == ArcDPSEnums.StateChange.Extension && Pad != 0 && extensions.TryGetValue(Pad, out AbstractExtensionHandler handler))
+            if (IsExtension && Pad != 0 && extensions.TryGetValue(Pad, out AbstractExtensionHandler handler))
             {
                 return handler.SrcIsAgent(this);
             }
@@ -150,7 +157,7 @@ namespace GW2EIEvtcParser
 
         internal bool DstIsAgent(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            if (IsStateChange == ArcDPSEnums.StateChange.Extension && Pad != 0 && extensions.TryGetValue(Pad, out AbstractExtensionHandler handler))
+            if (IsExtension && Pad != 0 && extensions.TryGetValue(Pad, out AbstractExtensionHandler handler))
             {
                 return handler.DstIsAgent(this);
             }
@@ -192,9 +199,10 @@ namespace GW2EIEvtcParser
             }
             return false;
         }
+
         public bool StartCasting()
         {
-            if (IsStateChange != ArcDPSEnums.StateChange.None)
+            if (IsExtension)
             {
                 return false;
             }
@@ -203,7 +211,7 @@ namespace GW2EIEvtcParser
 
         public bool EndCasting()
         {
-            if (IsStateChange != ArcDPSEnums.StateChange.None)
+            if (IsExtension)
             {
                 return false;
             }

@@ -661,14 +661,6 @@ namespace GW2EIEvtcParser
         }
     }
 
-    public static class SpanwExtensions
-    {
-        public static bool IsSpawn(this ArcDPSEnums.StateChange state)
-        {
-            return state == ArcDPSEnums.StateChange.None || state == ArcDPSEnums.StateChange.Position || state == ArcDPSEnums.StateChange.Velocity || state == ArcDPSEnums.StateChange.Rotation || state == ArcDPSEnums.StateChange.MaxHealthUpdate || state == ArcDPSEnums.StateChange.Spawn || state == ArcDPSEnums.StateChange.TeamChange;
-        }
-    }
-
     public static class StateChangeAgentExtensions
     {
         public static bool SrcIsAgent(this ArcDPSEnums.StateChange state)

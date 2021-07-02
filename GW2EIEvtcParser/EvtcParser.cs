@@ -573,7 +573,7 @@ namespace GW2EIEvtcParser
                 // If it is more than 200% health ignore this record
                 return false;
             }
-            if (combatItem.IsStateChange == ArcDPSEnums.StateChange.Extension)
+            if (combatItem.IsExtension)
             {
                 // Generic versioning check, we expect that the first event that'll be sent by an addon will always be meta data
                 if (combatItem.Pad == 0)
