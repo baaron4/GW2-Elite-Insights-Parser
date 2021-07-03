@@ -26,4 +26,8 @@
     <ProjectReference Include="..\GW2EIGW2API\GW2EIGW2API.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Extensions\ExtensionCombatData\ExtensionCombatEvents\" />
+  </ItemGroup>
+
 </Project>
