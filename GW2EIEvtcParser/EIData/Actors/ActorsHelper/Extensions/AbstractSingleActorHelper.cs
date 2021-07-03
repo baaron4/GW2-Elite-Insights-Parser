@@ -8,11 +8,16 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class EXTAbstractSingleActorHealingHelper : AbstractSingleActorHelper
+    public abstract class ExtensionAbstractSingleActorHelper
     {
 
-        public EXTAbstractSingleActorHealingHelper(AbstractSingleActor actor) : base(actor)
+        internal AbstractSingleActor Actor { get; }
+
+        internal AgentItem AgentItem => Actor.AgentItem;
+
+        internal ExtensionAbstractSingleActorHelper(AbstractSingleActor actor)
         {
+            Actor = actor;
         }
     }
 }

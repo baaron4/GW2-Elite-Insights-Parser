@@ -8,9 +8,9 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class EXTMinionsHealingHelper : AbstractMinionsHelper
+    public class EXTMinionsHealingHelper : ExtensionMinionsHelper
     {
-        public EXTMinionsHealingHelper(Minions minions) : base(minions)
+        internal EXTMinionsHealingHelper(Minions minions) : base(minions)
         {
         }
 

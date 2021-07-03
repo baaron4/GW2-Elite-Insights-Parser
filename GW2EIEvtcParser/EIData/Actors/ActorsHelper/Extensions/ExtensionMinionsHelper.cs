@@ -8,14 +8,14 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal abstract class AbstractMinionsHelper
+    public abstract class ExtensionMinionsHelper
     {
 
-        protected Minions Minions { get; }
+        internal Minions Minions { get; }
 
-        public IReadOnlyList<NPC> MinionList => Minions.MinionList;
+        internal IReadOnlyList<NPC> MinionList => Minions.MinionList;
 
-        public AbstractMinionsHelper(Minions minions)
+        internal ExtensionMinionsHelper(Minions minions)
         {
             Minions = minions;
         }
