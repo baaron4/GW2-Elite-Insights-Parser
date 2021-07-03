@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.Extensions
         public uint Signature { get; }
         public uint Revision { get; protected set; }
         public string Name { get; }
-        public string Version { get; protected set; }
+        public string Version { get; protected set; } = "Unknown";
 
         internal AbstractExtensionHandler(uint sig, string name)
         {

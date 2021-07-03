@@ -23,7 +23,6 @@ namespace GW2EIEvtcParser.Extensions
         internal HealingStatsRev0ExtensionHandler() : base(ExtensionHelper.EXT_HealingStats, "Healing Stats")
         {
             Revision = 0;
-            Version = "Unknown";
         }
 
         internal override bool HasTime(CombatItem c)
