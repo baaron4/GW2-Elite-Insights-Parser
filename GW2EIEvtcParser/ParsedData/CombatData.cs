@@ -325,7 +325,7 @@ namespace GW2EIEvtcParser.ParsedData
                     {
                         if (extensions.TryGetValue(combatItem.Pad, out AbstractExtensionHandler handler))
                         {
-                            handler.InsertEIExtensionEvent(combatItem);
+                            handler.InsertEIExtensionEvent(combatItem, agentData, skillData);
                         }
                     } 
                     else

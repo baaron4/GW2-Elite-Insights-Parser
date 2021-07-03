@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.Extensions
 
         internal abstract bool IsDamage(CombatItem c);
 
-        internal abstract void InsertEIExtensionEvent(CombatItem c);
+        internal abstract void InsertEIExtensionEvent(CombatItem c, AgentData agentData, SkillData skillData);
 
         internal abstract void AttachToCombatData(CombatData combatData, ParserController operation);
 
