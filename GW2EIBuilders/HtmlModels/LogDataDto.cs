@@ -155,7 +155,7 @@ namespace GW2EIBuilders.HtmlModels
                 Parser = "Elite Insights " + parserVersion.ToString(),
                 RecordedBy = log.LogData.PoVName,
                 UploadLinks = uploadLinks.ToList(),
-                UsedExtensions = log.LogData.UsedExtensions.Any() ? log.LogData.UsedExtensions.Select(x => x.Name + ": " + x.Version).ToList() : null
+                UsedExtensions = log.LogData.UsedExtensions.Any() ? log.LogData.UsedExtensions.Select(x => x.Name + " - " + x.Version).ToList() : null
             };
             if (cr)
             {
