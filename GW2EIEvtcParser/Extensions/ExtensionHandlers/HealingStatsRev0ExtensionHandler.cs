@@ -65,6 +65,7 @@ namespace GW2EIEvtcParser.Extensions
             var healData = _healingEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             var healReceivedData = _healingEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             var healDataById = _healingEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
+            operation.UpdateProgressWithCancellationCheck(healData.Count + " has the addon running");
             operation.UpdateProgressWithCancellationCheck("Attached " + _healingEvents.Count + " heal events to CombatData");
             combatData.EXTHealingCombatData = new EXTHealingCombatData(healData, healReceivedData, healDataById);
         }
