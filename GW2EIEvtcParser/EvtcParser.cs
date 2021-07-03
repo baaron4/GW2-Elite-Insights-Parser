@@ -589,6 +589,14 @@ namespace GW2EIEvtcParser
                 } 
                 else
                 {
+                    // TESTING PURPOSES
+                    AbstractExtensionHandler handler = ExtensionHelper.GetExtensionHandler(combatItem.Pad);
+                    if (handler != null)
+                    {
+                        _enabledExtensions[handler.Signature] = handler;
+                        operation.UpdateProgressWithCancellationCheck("Encountered supported extension " + handler.Name + " on " + handler.Version);
+                    }
+                    //
                     return _enabledExtensions.ContainsKey(combatItem.Pad);
                 }
             }
