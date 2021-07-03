@@ -53,6 +53,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        internal override List<InstantCastFinder> GetInstantCastFinders()
+        {
+            return new List<InstantCastFinder>()
+            {
+                new DamageCastFinder(34505, 34505, InstantCastFinder.DefaultICD), // Volatile Aura
+            };
+        }
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             long fightDuration = log.FightData.FightEnd;

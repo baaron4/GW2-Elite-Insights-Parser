@@ -59,6 +59,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (11774, 4480, 14078, 5376)*/);
         }
 
+        internal override List<InstantCastFinder> GetInstantCastFinders()
+        {
+            return new List<InstantCastFinder>()
+            {
+                new DamageCastFinder(37989, 37989, InstantCastFinder.DefaultICD), // Cosmic Aura
+            };
+        }
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);

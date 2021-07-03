@@ -47,6 +47,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (-15360, -36864, 15360, 39936),
                             (3456, 11012, 4736, 14212)*/);
         }
+        internal override List<InstantCastFinder> GetInstantCastFinders()
+        {
+            return new List<InstantCastFinder>()
+            {
+                new DamageCastFinder(31557, 31557, InstantCastFinder.DefaultICD), // Magic Aura VG
+                new DamageCastFinder(31462, 31462, InstantCastFinder.DefaultICD), // Magic Aura Red
+                new DamageCastFinder(31557, 31557, InstantCastFinder.DefaultICD), // Magic Aura Green
+                new DamageCastFinder(31375, 31375, InstantCastFinder.DefaultICD), // Magic Aura Blue
+            };
+        }
 
         protected override List<int> GetFightTargetsIDs()
         {

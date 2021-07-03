@@ -40,6 +40,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        internal override List<InstantCastFinder> GetInstantCastFinders()
+        {
+            return new List<InstantCastFinder>()
+            {
+                new DamageCastFinder(56523, 56523, InstantCastFinder.DefaultICD), // Bolt Break
+            };
+        }
+
         internal override List<AbstractHealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
         {
             NegateDamageAgainstBarrier(combatData, Targets.Select(x => x.AgentItem).ToList());
