@@ -11,10 +11,5 @@ namespace GW2EIEvtcParser.Extensions
         {
             HealingDone = -evtcItem.BuffDmg;
         }
-
-        public override bool ConditionDamageBased(ParsedEvtcLog log)
-        {
-            return false;
-        }
     }
 }

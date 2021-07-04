@@ -18,5 +18,10 @@ namespace GW2EIEvtcParser.Extensions
             return log.CombatData.EXTHealingCombatData.GetHealingType(Skill, log);
         }
 
+        public override bool ConditionDamageBased(ParsedEvtcLog log)
+        {
+            return false;
+        }
+
     }
 }
