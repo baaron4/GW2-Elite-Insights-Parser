@@ -16,6 +16,9 @@ namespace GW2EIEvtcParser.Extensions
 
         private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>> _healing1S = new Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>>();
 
+        private CachingCollectionWithTarget<EXTFinalOutgoingHealingStat> _outgoingHealStats { get; set; }
+        private CachingCollectionWithTarget<EXTFinalIncomingHealingStat> _incomingHealStats { get; set; }
+
         internal EXTAbstractSingleActorHealingHelper(AbstractSingleActor actor) : base()
         {
             _actor = actor;
@@ -140,6 +143,34 @@ namespace GW2EIEvtcParser.Extensions
                 graphs.Set(start, end, target, graph);
             }
             return graph;
+        }
+
+        public EXTFinalOutgoingHealingStat GetOutgoingHealStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        {
+            if (_outgoingHealStats == null)
+            {
+                _outgoingHealStats = new CachingCollectionWithTarget<EXTFinalOutgoingHealingStat>(log);
+            }
+            if (!_outgoingHealStats.TryGetValue(start, end, target, out EXTFinalOutgoingHealingStat value))
+            {
+                value = new EXTFinalOutgoingHealingStat(log, start, end, _actor, target);
+                _outgoingHealStats.Set(start, end, target, value);
+            }
+            return value;
+        }
+
+        public EXTFinalIncomingHealingStat GetIncomingHealStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        {
+            if (_incomingHealStats == null)
+            {
+                _incomingHealStats = new CachingCollectionWithTarget<EXTFinalIncomingHealingStat>(log);
+            }
+            if (!_incomingHealStats.TryGetValue(start, end, target, out EXTFinalIncomingHealingStat value))
+            {
+                value = new EXTFinalIncomingHealingStat(log, start, end, _actor, target);
+                _incomingHealStats.Set(start, end, target, value);
+            }
+            return value;
         }
     }
 }
