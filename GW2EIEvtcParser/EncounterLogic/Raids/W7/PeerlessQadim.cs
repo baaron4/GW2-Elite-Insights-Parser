@@ -161,6 +161,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var cataCycle = cls.Where(x => x.SkillId == 56329).ToList();
                     var forceOfHavoc = cls.Where(x => x.SkillId == 56017).ToList();
                     var forceOfRetal = cls.Where(x => x.SkillId == 56405).ToList();
+                    var etherStrikes = cls.Where(x => x.SkillId == 56012 || x.SkillId == 56653).ToList();
 
                     foreach (AbstractCastEvent c in cataCycle)
                     {
@@ -210,6 +211,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new DoughnutDecoration(true, 0, radius + (int)(radiusIncrement * i), radius + (int)(radiusIncrement * (i + 1)), (start + preCastTime + timeBetweenCascades * i, start + preCastTime + timeBetweenCascades * (i + 1)), "rgba(30, 30, 30, 0.5)", new PositionConnector(position)));
                             replay.Decorations.Add(new DoughnutDecoration(true, 0, radius + (int)(radiusIncrement * i), radius + (int)(radiusIncrement * (i + 1)), (start + preCastTime + timeBetweenCascades * (i + 1), start + preCastTime + timeBetweenCascades * (i + 2)), "rgba(50, 20, 50, 0.25)", new PositionConnector(position)));
                         }
+                    }
+                    foreach (AbstractCastEvent c in etherStrikes)
+                    {
+                        int coneRadius = 2600;
+                        int coneAngle = 60;
+                        start = (int)c.Time;
+                        end = start + 250;
+                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 300);
+                        replay.Decorations.Add(new PieDecoration(false, 0, coneRadius, facing, coneAngle, (start, end), "rgba(255, 100, 0, 0.30)", new AgentConnector(target)));
+                        replay.Decorations.Add(new PieDecoration(true, 0, coneRadius, facing, coneAngle, (start, end), "rgba(255, 100, 0, 0.1)", new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.EntropicDistortion:
@@ -274,6 +285,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                     replay.Decorations.Add(new CircleDecoration(true, 0, 120, (fixatedStart, fixatedEnd), "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
                 }
             }
+            // Chaos Corrosion
+            List<AbstractBuffEvent> chaosCorrosion = GetFilteredList(log.CombatData, 56182, p, true);
+            int corrosionStart = 0;
+            foreach (AbstractBuffEvent c in chaosCorrosion)
+            {
+                if (c is BuffApplyEvent)
+                {
+                    corrosionStart = (int)c.Time;
+                }
+                else
+                {
+                    int corrosionEnd = (int)c.Time;
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 100, (corrosionStart, corrosionEnd), "rgba(80, 80, 80, 0.3)", new AgentConnector(p)));
+                }
+            }
             // Critical Mass, debuff while carrying an orb
             List<AbstractBuffEvent> criticalMass = GetFilteredList(log.CombatData, 56424, p, true);
             int criticalMassStart = 0;
@@ -281,7 +307,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (c is BuffApplyEvent)
                 {
-                    criticalMassStart = Math.Max((int)c.Time, 0);
+                    criticalMassStart = (int)c.Time;
                 }
                 else
                 {
