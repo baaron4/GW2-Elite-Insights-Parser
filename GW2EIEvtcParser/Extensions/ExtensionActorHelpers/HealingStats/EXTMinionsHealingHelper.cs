@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using GW2EIEvtcParser.Extensions;
-using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EIData.Buff;
-using static GW2EIEvtcParser.ParserHelper;
+using GW2EIEvtcParser.EIData;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.Extensions
 {
     public class EXTMinionsHealingHelper : EXTActorHealingHelper
     {
