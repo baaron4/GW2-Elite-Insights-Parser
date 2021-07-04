@@ -17,5 +17,31 @@ namespace GW2EIEvtcParser.Extensions
             _healDataById = healDataById;
         }
 
+        public IReadOnlyList<EXTAbstractHealingEvent> GetHealData(AgentItem key)
+        {
+            if (_healData.TryGetValue(key, out List<EXTAbstractHealingEvent> res))
+            {
+                return res;
+            }
+            return new List<EXTAbstractHealingEvent>();
+        }
+        public IReadOnlyList<EXTAbstractHealingEvent> GetHealReceivedData(AgentItem key)
+        {
+            if (_healReceivedData.TryGetValue(key, out List<EXTAbstractHealingEvent> res))
+            {
+                return res;
+            }
+            return new List<EXTAbstractHealingEvent>();
+        }
+
+        public IReadOnlyList<EXTAbstractHealingEvent> GetHealData(long key)
+        {
+            if (_healDataById.TryGetValue(key, out List<EXTAbstractHealingEvent> res))
+            {
+                return res;
+            }
+            return new List<EXTAbstractHealingEvent>();
+        }
+
     }
 }
