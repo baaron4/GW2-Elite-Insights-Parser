@@ -7,6 +7,7 @@ namespace GW2EIEvtcParser.Extensions
     {
         // TODO add supported sigs as public consts
         public const uint EXT_HealingStats = 0x9c9b3c99;
+        public enum EXTHealingType { All, HealingPower, ConversionBased };
 
         internal static AbstractExtensionHandler GetExtensionHandler(CombatItem c)
         {
