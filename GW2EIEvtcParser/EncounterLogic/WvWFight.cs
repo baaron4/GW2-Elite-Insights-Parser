@@ -183,7 +183,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
         {
-            AgentItem dummyAgent = agentData.AddCustomAgent(fightData.FightStart, fightData.FightEnd, AgentItem.AgentType.NPC, _detailed ? "Dummy WvW Agent" : "Enemy Players", "", (int)ArcDPSEnums.TargetID.WorldVersusWorld, true);
+            AgentItem dummyAgent = agentData.AddCustomAgent(0, fightData.FightEnd, AgentItem.AgentType.NPC, _detailed ? "Dummy WvW Agent" : "Enemy Players", "", (int)ArcDPSEnums.TargetID.WorldVersusWorld, true);
 
             SolveWvWPlayers(agentData, combatData, friendlies);
             var friendlyAgents = new HashSet<AgentItem>(friendlies.Select(x => x.AgentItem));
@@ -215,7 +215,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             {
                                 if (c.DstMatchesAgent(dst))
                                 {
-                                    c.OverrideSrcAgent(dummyAgent.Agent);
+                                    c.OverrideDstAgent(dummyAgent.Agent);
                                     break;
                                 }
                             }

@@ -167,7 +167,7 @@ namespace GW2EIBuilders.HtmlModels
             }
 
             log.UpdateProgressWithCancellationCheck("HTML: building Enemies");
-            foreach (AbstractSingleActor enemy in log.MechanicData.GetEnemyList(log, log.FightData.FightStart, log.FightData.FightEnd))
+            foreach (AbstractSingleActor enemy in log.MechanicData.GetEnemyList(log, 0, log.FightData.FightEnd))
             {
                 logData.Enemies.Add(new EnemyDto() { Name = enemy.Character });
             }
@@ -372,7 +372,7 @@ namespace GW2EIBuilders.HtmlModels
             SkillDto.AssembleSkills(usedSkills.Values, logData.SkillMap, log.SkillData);
             DamageModDto.AssembleDamageModifiers(usedDamageMods, logData.DamageModMap);
             BuffDto.AssembleBoons(usedBuffs.Values, logData.BuffMap, log);
-            MechanicDto.BuildMechanics(log.MechanicData.GetPresentMechanics(log, log.FightData.FightStart, log.FightData.FightEnd), logData.MechanicMap);
+            MechanicDto.BuildMechanics(log.MechanicData.GetPresentMechanics(log, 0, log.FightData.FightEnd), logData.MechanicMap);
             return logData;
         }
 

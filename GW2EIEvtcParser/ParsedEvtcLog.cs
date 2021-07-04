@@ -51,9 +51,9 @@ namespace GW2EIEvtcParser
             //
             _operation.UpdateProgressWithCancellationCheck("Checking Success");
             FightData.Logic.CheckSuccess(CombatData, AgentData, FightData, PlayerAgents);
-            if (FightData.FightEnd <= ParserSettings.TooShortLimit)
+            if (FightData.FightDuration <= ParserSettings.TooShortLimit)
             {
-                throw new TooShortException(FightData.FightEnd, ParserSettings.TooShortLimit);
+                throw new TooShortException(FightData.FightDuration, ParserSettings.TooShortLimit);
             }
             if (ParserSettings.SkipFailedTries && !FightData.Success)
             {
