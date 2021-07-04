@@ -38,8 +38,10 @@ namespace GW2EIEvtcParser.Extensions
                 switch (healingType)
                 {
                     case EXTHealingType.HealingPower:
+                        dls.RemoveAll(x => x.GetHealingType(log) != EXTHealingType.HealingPower);
                         break;
                     case EXTHealingType.ConversionBased:
+                        dls.RemoveAll(x => x.GetHealingType(log) != EXTHealingType.ConversionBased);
                         break;
                     default:
                         throw new NotImplementedException("Not implemented healing type " + healingType);
