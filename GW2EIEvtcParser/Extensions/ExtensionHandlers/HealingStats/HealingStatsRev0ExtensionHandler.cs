@@ -5,7 +5,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.Extensions
 {
-    public class HealingStatsRev0ExtensionHandler : AbstractExtensionHandler
+    internal class HealingStatsRev0ExtensionHandler : HealingStatsExtensionHandler
     {
 
         private readonly List<EXTAbstractHealingEvent> _healingEvents = new List<EXTAbstractHealingEvent>();
@@ -15,12 +15,12 @@ namespace GW2EIEvtcParser.Extensions
             return (c.IsBuff == 0 && c.Value < 0) || (c.IsBuff != 0 && c.Value == 0 && c.BuffDmg < 0);
         }
 
-        internal HealingStatsRev0ExtensionHandler(CombatItem c) : base(ExtensionHelper.EXT_HealingStats, "Healing Stats")
+        internal HealingStatsRev0ExtensionHandler(CombatItem c) : base()
         {
             Revision = 0;
         }
 
-        internal HealingStatsRev0ExtensionHandler() : base(ExtensionHelper.EXT_HealingStats, "Healing Stats")
+        internal HealingStatsRev0ExtensionHandler() : base()
         {
             Revision = 0;
         }
