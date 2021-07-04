@@ -23,6 +23,10 @@ namespace GW2EIEvtcParser.Extensions
 
         public override IReadOnlyList<EXTAbstractHealingEvent> GetOutgoingHealEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
+            if (!log.CombatData.HasEXTHealing)
+            {
+                throw new InvalidOperationException("Healing Stats extension not present");
+            }
             if (HealEvents == null)
             {
                 HealEvents = new List<EXTAbstractHealingEvent>();
@@ -51,6 +55,10 @@ namespace GW2EIEvtcParser.Extensions
 
         public override IReadOnlyList<EXTAbstractHealingEvent> GetIncomingHealEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
+            if (!log.CombatData.HasEXTHealing)
+            {
+                throw new InvalidOperationException("Healing Stats extension not present");
+            }
             if (HealReceivedEvents == null)
             {
                 HealReceivedEvents = new List<EXTAbstractHealingEvent>();
