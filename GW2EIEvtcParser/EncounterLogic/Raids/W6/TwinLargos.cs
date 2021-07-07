@@ -52,6 +52,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        internal override List<InstantCastFinder> GetInstantCastFinders()
+        {
+            return new List<InstantCastFinder>()
+            {
+                new DamageCastFinder(52779, 52779, InstantCastFinder.DefaultICD), // Nikare Aquatic Aura
+                new DamageCastFinder(52005, 52005, InstantCastFinder.DefaultICD), // Kenut Aquatic Aura
+            };
+        }
+
         protected override List<int> GetSuccessCheckIds()
         {
             return GetFightTargetsIDs();

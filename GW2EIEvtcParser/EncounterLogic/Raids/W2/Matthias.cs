@@ -53,7 +53,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (-12288, -27648, 12288, 27648),
                             (2688, 11906, 3712, 14210)*/);
         }
-
+        internal override List<InstantCastFinder> GetInstantCastFinders()
+        {
+            return new List<InstantCastFinder>()
+            {
+                new DamageCastFinder(34363, 34363, InstantCastFinder.DefaultICD), // Spontaneous Combustion
+                new DamageCastFinder(34356, 34356, InstantCastFinder.DefaultICD), // Snowstorm
+                new DamageCastFinder(34554, 34554, InstantCastFinder.DefaultICD), // Downpour 
+            };
+        }
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             long fightDuration = log.FightData.FightEnd;

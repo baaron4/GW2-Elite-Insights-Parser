@@ -36,6 +36,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterCategoryInformation.InSubCategoryOrder = 0;
         }
 
+        internal override List<InstantCastFinder> GetInstantCastFinders()
+        {
+            return new List<InstantCastFinder>()
+            {
+                new DamageCastFinder(47837, 47837, InstantCastFinder.DefaultICD), // Chilling Aura
+            };
+        }
+
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/xjPq9vq.png",

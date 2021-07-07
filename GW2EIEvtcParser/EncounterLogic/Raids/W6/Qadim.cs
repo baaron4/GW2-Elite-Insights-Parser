@@ -164,6 +164,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        internal override List<InstantCastFinder> GetInstantCastFinders()
+        {
+            return new List<InstantCastFinder>()
+            {
+                new DamageCastFinder(52522, 52522, InstantCastFinder.DefaultICD), // Burning Crucible
+            };
+        }
+
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // Find target

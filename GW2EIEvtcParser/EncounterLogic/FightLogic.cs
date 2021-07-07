@@ -153,6 +153,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             TrashMobAgents = new HashSet<AgentItem>(_trashMobs.Select(x => x.AgentItem));
         }
 
+        internal virtual List<InstantCastFinder> GetInstantCastFinders()
+        {
+            return new List<InstantCastFinder>();
+        }
+
         protected static List<PhaseData> GetPhasesByHealthPercent(ParsedEvtcLog log, AbstractSingleActor mainTarget, List<double> thresholds)
         {
             var phases = new List<PhaseData>();
