@@ -46,6 +46,22 @@ class FacingMechanicDrawable extends MechanicDrawable {
         this.facingData = facingData;
     }
 
+    getInterpolatedRotation(startIndex, currentIndex) {
+        const offsetedIndex = currentIndex - startIndex;
+        const initialAngle = this.facingData[offsetedIndex];
+        const timeValue = animator.times[currentIndex];
+        var angle = 0;
+        var time = animator.reactiveDataStatus.time;
+        if (time - timeValue > 0 && offsetedIndex < this.facingData.length - 1) {
+            const nextTimeValue = animator.times[currentIndex + 1];
+            const nextAngle = this.facingData[offsetedIndex + 1];
+            angle = initialAngle + (time - timeValue) / (nextTimeValue - timeValue) * (nextAngle - initialAngle);
+        } else {
+            angle = initialAngle;
+        }
+        return angle;
+    }
+
     getRotation() {
         if (this.facingData.length === 0) {
             return null;
@@ -60,8 +76,7 @@ class FacingMechanicDrawable extends MechanicDrawable {
         const lastTime = animator.times[animator.times.length - 1];
         const startIndex = Math.ceil((animator.times.length - 1) * Math.max(this.start, 0) / lastTime);
         const currentIndex = Math.floor((animator.times.length - 1) * time / lastTime);
-        const offsetedIndex = Math.max(currentIndex - startIndex, 0);
-        return this.facingData[offsetedIndex];
+        return this.getInterpolatedRotation(startIndex, Math.max(currentIndex, startIndex));
     }
 
     draw() {

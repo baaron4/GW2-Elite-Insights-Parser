@@ -73,6 +73,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (19072, 15484, 20992, 16508)*/);
         }
 
+        internal override List<InstantCastFinder> GetInstantCastFinders()
+        {
+            return new List<InstantCastFinder>()
+            {
+                new DamageCastFinder(48238, 48238, InstantCastFinder.DefaultICD), // Deathly Aura
+            };
+        }
+
         private static void ComputeFightPhases(List<PhaseData> phases, IReadOnlyList<AbstractCastEvent> castLogs, long fightDuration, long start)
         {
             AbstractCastEvent shield = castLogs.FirstOrDefault(x => x.SkillId == 47396);

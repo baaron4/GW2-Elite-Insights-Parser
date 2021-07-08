@@ -153,7 +153,7 @@ namespace GW2EIEvtcParser.ParsedData
         private void EICastParse(List<Player> players, SkillData skillData, FightData fightData, AgentData agentData)
         {
             List<AbstractCastEvent> toAdd = fightData.Logic.SpecialCastEventProcess(this, skillData);
-            toAdd.AddRange(ProfHelper.ComputeInstantCastEvents(players, this, skillData, agentData));
+            toAdd.AddRange(ProfHelper.ComputeInstantCastEvents(players, this, skillData, agentData, fightData.Logic));
             //
             var castIDsToSort = new HashSet<long>();
             var castAgentsToSort = new HashSet<AgentItem>();

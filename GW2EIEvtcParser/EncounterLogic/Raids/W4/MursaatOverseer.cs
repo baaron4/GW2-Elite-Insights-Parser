@@ -43,7 +43,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.Jade
             };
         }
-
+        internal override List<InstantCastFinder> GetInstantCastFinders()
+        {
+            return new List<InstantCastFinder>()
+            {
+                new DamageCastFinder(37952, 37952, InstantCastFinder.DefaultICD), // Punishement Aura
+            };
+        }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {

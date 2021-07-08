@@ -76,7 +76,13 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
-
+        internal override List<InstantCastFinder> GetInstantCastFinders()
+        {
+            return new List<InstantCastFinder>()
+            {
+                new DamageCastFinder(48218, 48218, InstantCastFinder.DefaultICD), // Biting Aura
+            };
+        }
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             SetSuccessByDeath(combatData, fightData, playerAgents, true, (int)ArcDPSEnums.TargetID.BrokenKing);

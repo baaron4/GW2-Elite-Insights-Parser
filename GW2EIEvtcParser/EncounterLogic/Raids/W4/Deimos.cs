@@ -61,7 +61,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (-27648, -9216, 27648, 12288),
                             (11774, 4480, 14078, 5376)*/);
         }
-
+        internal override List<InstantCastFinder> GetInstantCastFinders()
+        {
+            return new List<InstantCastFinder>()
+            {
+                new DamageCastFinder(37872, 37872, InstantCastFinder.DefaultICD), // Demonic Aura
+            };
+        }
         protected override HashSet<int> GetUniqueTargetIDs()
         {
             return new HashSet<int>

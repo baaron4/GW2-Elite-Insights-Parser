@@ -33,6 +33,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (0, 0, 0, 0)*/);
         }
 
+        internal override List<InstantCastFinder> GetInstantCastFinders()
+        {
+            return new List<InstantCastFinder>()
+            {
+                new DamageCastFinder(58736, 58736, InstantCastFinder.DefaultICD), // Unnatural Aura
+            };
+        }
+
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
             return new List<ArcDPSEnums.TrashID>
