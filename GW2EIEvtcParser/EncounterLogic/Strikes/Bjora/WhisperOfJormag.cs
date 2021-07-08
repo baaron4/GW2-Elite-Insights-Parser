@@ -39,6 +39,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (-0, -0, 0, 0),
                             (0, 0, 0, 0));
         }*/
+        internal override List<InstantCastFinder> GetInstantCastFinders()
+        {
+            return new List<InstantCastFinder>()
+            {
+                new DamageCastFinder(59202, 59202, InstantCastFinder.DefaultICD), // Frostbite Aura
+            };
+        }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {

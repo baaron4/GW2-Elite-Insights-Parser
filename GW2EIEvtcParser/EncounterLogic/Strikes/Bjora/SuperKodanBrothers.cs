@@ -30,7 +30,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (-0, -0, 0, 0),
                             (0, 0, 0, 0)*/);
         }
-
+        internal override List<InstantCastFinder> GetInstantCastFinders()
+        {
+            return new List<InstantCastFinder>()
+            {
+                new DamageCastFinder(58174, 58174, InstantCastFinder.DefaultICD), // Vengeful Aura Claw
+            };
+        }
         protected override void SetSuccessByDeath(CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all)
         {
             SetSuccessByDeath(combatData, fightData, playerAgents, all, (int)ArcDPSEnums.TargetID.ClawOfTheFallen, (int)ArcDPSEnums.TargetID.VoiceOfTheFallen);

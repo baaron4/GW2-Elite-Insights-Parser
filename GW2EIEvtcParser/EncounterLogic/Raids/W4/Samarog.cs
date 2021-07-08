@@ -55,6 +55,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (11774, 4480, 14078, 5376)*/);
         }
 
+        internal override List<InstantCastFinder> GetInstantCastFinders()
+        {
+            return new List<InstantCastFinder>()
+            {
+                new DamageCastFinder(38258, 38258, InstantCastFinder.DefaultICD), // brutal aura
+            };
+        }
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);

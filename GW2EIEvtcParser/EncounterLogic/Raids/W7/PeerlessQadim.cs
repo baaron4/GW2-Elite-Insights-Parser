@@ -47,6 +47,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        internal override List<InstantCastFinder> GetInstantCastFinders()
+        {
+            return new List<InstantCastFinder>()
+            {
+                new DamageCastFinder(56038, 56038, InstantCastFinder.DefaultICD), // Unbearable Power
+            };
+        }
         internal override List<AbstractBuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
         {
             var res = new List<AbstractBuffEvent>();

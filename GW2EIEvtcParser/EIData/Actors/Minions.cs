@@ -35,6 +35,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     DamageEvents.AddRange(minion.GetDamageEvents(null, log, 0, log.FightData.FightEnd));
                 }
+                DamageEvents = DamageEvents.OrderBy(x => x.Time).ToList();
                 DamageEventByDst = DamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
@@ -60,6 +61,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     BreakbarDamageEvents.AddRange(minion.GetBreakbarDamageEvents(null, log, 0, log.FightData.FightEnd));
                 }
+                BreakbarDamageEvents = BreakbarDamageEvents.OrderBy(x => x.Time).ToList();
                 BreakbarDamageEventsByDst = BreakbarDamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
@@ -96,6 +98,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     DamageTakenEvents.AddRange(minion.GetDamageTakenEvents(null, log, 0, log.FightData.FightEnd));
                 }
+                DamageTakenEvents = DamageTakenEvents.OrderBy(x => x.Time).ToList();
                 DamageTakenEventsBySrc = DamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
@@ -121,6 +124,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     BreakbarDamageTakenEvents.AddRange(minion.GetBreakbarDamageTakenEvents(null, log, 0, log.FightData.FightEnd));
                 }
+                BreakbarDamageTakenEvents = BreakbarDamageTakenEvents.OrderBy(x => x.Time).ToList();
                 BreakbarDamageTakenEventsBySrc = BreakbarDamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
