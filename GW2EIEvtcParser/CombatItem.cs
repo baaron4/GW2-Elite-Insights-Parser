@@ -199,7 +199,7 @@ namespace GW2EIEvtcParser
             }
             return false;
         }
-
+        
         public bool StartCasting()
         {
             if (IsExtension)
