@@ -126,7 +126,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (combatData.Any(x => x.IsStateChange == ArcDPSEnums.StateChange.BreakbarState))
             {
                 long sacrificeID = 34442;
-                var sacrificeList = combatData.Where(x => x.SkillID == sacrificeID && ((x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.IsBuff != 0) || (x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0 && x.IsStateChange == ArcDPSEnums.StateChange.None && x.IsActivation == ArcDPSEnums.Activation.None && x.IsBuffRemove == ArcDPSEnums.BuffRemove.None))).ToList();
+                var sacrificeList = combatData.Where(x => x.SkillID == sacrificeID && !x.IsExtension && (x.IsBuffRemove == ArcDPSEnums.BuffRemove.All || x.IsBuffApply())).ToList();
                 var sacrificeStartList = sacrificeList.Where(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.None).ToList();
                 var sacrificeEndList = sacrificeList.Where(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All).ToList();
                 var copies = new List<CombatItem>();
@@ -153,9 +153,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             continue;
                         }
-                        bool isDamageEvent = cbt.IsStateChange == ArcDPSEnums.StateChange.None && cbt.IsActivation == ArcDPSEnums.Activation.None && cbt.IsBuffRemove == ArcDPSEnums.BuffRemove.None && ((cbt.IsBuff != 0 && cbt.Value == 0) || (cbt.IsBuff == 0));
                         // redirect damage events
-                        if (isDamageEvent)
+                        if (cbt.IsDamage())
                         {
                             // only redirect incoming damage
                             if (cbt.DstMatchesAgent(sacrifice.AgentItem))
@@ -167,13 +166,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                         else
                         {
                             var copy = new CombatItem(cbt);
-                            if (cbt.DstMatchesAgent(sacrifice.AgentItem))
+                            if (copy.DstMatchesAgent(sacrifice.AgentItem))
                             {
-                                cbt.OverrideDstAgent(sacrificeCrystal.Agent);
+                                copy.OverrideDstAgent(sacrificeCrystal.Agent);
                             }
-                            if (cbt.SrcMatchesAgent(sacrifice.AgentItem))
+                            if (copy.SrcMatchesAgent(sacrifice.AgentItem))
                             {
-                                cbt.OverrideSrcAgent(sacrificeCrystal.Agent);
+                                copy.OverrideSrcAgent(sacrificeCrystal.Agent);
                             }
                             copies.Add(copy);
                         }

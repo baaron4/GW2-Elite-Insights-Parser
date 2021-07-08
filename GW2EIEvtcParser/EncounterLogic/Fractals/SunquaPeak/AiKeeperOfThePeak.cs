@@ -159,7 +159,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (_hasElementalMode)
                 {
                     long darkModeStart = combatData.FirstOrDefault(x => x.SkillID == 61277 && x.Time >= darkModePhaseEvent.Time).Time;
-                    CombatItem invul895Loss = combatData.FirstOrDefault(x => x.Time <= darkModeStart && x.SkillID == 895 && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All);
+                    CombatItem invul895Loss = combatData.FirstOrDefault(x => x.Time <= darkModeStart && x.SkillID == 895 && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && !x.IsExtension);
                     long lastAwareTime = (invul895Loss != null ? invul895Loss.Time : darkModeStart);
                     AgentItem darkAiAgent = agentData.AddCustomAgent(lastAwareTime + 1, aiAgent.LastAware, AgentItem.AgentType.NPC, aiAgent.Name, aiAgent.Prof, (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2, false, aiAgent.Toughness, aiAgent.Healing, aiAgent.Condition, aiAgent.Concentration, aiAgent.HitboxWidth, aiAgent.HitboxHeight);
                     // Redirect combat events
@@ -177,19 +177,19 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                         }
                     }
-                    CombatItem toCopy = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(aiAgent) && x.Time <= lastAwareTime - 1);
-                    if (toCopy != null)
+                    CombatItem healthUpdateToCopy = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(aiAgent) && x.Time <= lastAwareTime - 1);
+                    if (healthUpdateToCopy != null)
                     {
                         //
                         {
-                            var elAI0HP = new CombatItem(toCopy);
+                            var elAI0HP = new CombatItem(healthUpdateToCopy);
                             elAI0HP.OverrideDstAgent(0);
                             elAI0HP.OverrideTime(lastAwareTime);
                             combatData.Add(elAI0HP);
                         }
                         //
                         {
-                            var darkAI0HP = new CombatItem(toCopy);
+                            var darkAI0HP = new CombatItem(healthUpdateToCopy);
                             darkAI0HP.OverrideDstAgent(0);
                             darkAI0HP.OverrideTime(darkAiAgent.FirstAware);
                             darkAI0HP.OverrideSrcAgent(darkAiAgent.Agent);

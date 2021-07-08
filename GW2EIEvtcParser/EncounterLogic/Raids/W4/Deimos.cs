@@ -228,7 +228,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AgentItem deimos in deimosAgents)
             {
                 // enter combat
-                CombatItem spawnProtectionRemove = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos) && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SkillID == 34113);
+                CombatItem spawnProtectionRemove = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos) && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && !x.IsExtension && x.SkillID == 34113);
                 if (spawnProtectionRemove != null)
                 {
                     start = Math.Max(start, spawnProtectionRemove.Time);
@@ -263,7 +263,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Remove deimos despawn events as they are useless and mess with combat replay
             combatData.RemoveAll(x => x.IsStateChange == ArcDPSEnums.StateChange.Despawn && x.SrcMatchesAgent(deimos.AgentItem));
             // invul correction
-            CombatItem invulApp = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos.AgentItem) && x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0 && x.SkillID == 762 && x.IsStateChange == ArcDPSEnums.StateChange.None);
+            CombatItem invulApp = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos.AgentItem) && x.IsBuffApply() && x.SkillID == 762);
             if (invulApp != null)
             {
                 invulApp.OverrideValue((int)(deimos.LastAware - invulApp.Time));

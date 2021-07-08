@@ -87,7 +87,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (CombatItem c in combatData)
             {
                 // redirect all attacks to the main golem
-                if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsStateChange == ArcDPSEnums.StateChange.None && c.IFF == ArcDPSEnums.IFF.Foe && c.IsActivation == ArcDPSEnums.Activation.None && c.IsBuffRemove == ArcDPSEnums.BuffRemove.None)
+                if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsDamage())
                 {
                     c.OverrideDstAgent(target.Agent);
                 }

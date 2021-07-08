@@ -16,10 +16,13 @@ namespace GW2EIEvtcParser
         public ushort DstInstid { get; }
         public ushort SrcMasterInstid { get; }
         public ushort DstMasterInstid { get; }
+        public byte IFFByte { get; }
         public ArcDPSEnums.IFF IFF { get; }
         public byte IsBuff { get; }
         public byte Result { get; }
+        public byte IsActivationByte { get; }
         public ArcDPSEnums.Activation IsActivation { get; }
+        public byte IsBuffRemoveByte { get; }
         public ArcDPSEnums.BuffRemove IsBuffRemove { get; }
         public byte IsNinety { get; }
         public byte IsFifty { get; }
@@ -34,6 +37,8 @@ namespace GW2EIEvtcParser
         public byte Pad2 { get; }
         public byte Pad3 { get; }
         public byte Pad4 { get; }
+
+        public bool IsExtension => IsStateChange == ArcDPSEnums.StateChange.Extension;
 
         // Constructor
         internal CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
@@ -54,10 +59,13 @@ namespace GW2EIEvtcParser
             DstInstid = dstInstid;
             SrcMasterInstid = srcMasterInstid;
             DstMasterInstid = dstMasterInstid;
+            IFFByte = iff;
             IFF = ArcDPSEnums.GetIFF(iff);
             IsBuff = isBuff;
             Result = result;
+            IsActivationByte = isActivation;
             IsActivation = ArcDPSEnums.GetActivation(isActivation);
+            IsBuffRemoveByte = isBuffRemove;
             IsBuffRemove = ArcDPSEnums.GetBuffRemove(isBuffRemove);
             IsNinety = isNinety;
             IsFifty = isFifty;
@@ -88,10 +96,13 @@ namespace GW2EIEvtcParser
             DstInstid = c.DstInstid;
             SrcMasterInstid = c.SrcMasterInstid;
             DstMasterInstid = c.DstMasterInstid;
+            IFFByte = c.IFFByte;
             IFF = c.IFF;
             IsBuff = c.IsBuff;
             Result = c.Result;
+            IsActivationByte = c.IsActivationByte;
             IsActivation = c.IsActivation;
+            IsBuffRemoveByte = c.IsBuffRemoveByte;
             IsBuffRemove = c.IsBuffRemove;
             IsNinety = c.IsNinety;
             IsFifty = c.IsFifty;
@@ -105,6 +116,34 @@ namespace GW2EIEvtcParser
             Pad2 = c.Pad2;
             Pad3 = c.Pad3;
             Pad4 = c.Pad4;
+        }
+
+        internal bool HasTime()
+        {
+            return IsStateChange.HasTime();
+        }
+
+        internal bool IsDamage()
+        {
+            return IsStateChange == ArcDPSEnums.StateChange.None &&
+                        IsActivation == ArcDPSEnums.Activation.None &&
+                        IsBuffRemove == ArcDPSEnums.BuffRemove.None &&
+                        ((IsBuff != 0 && Value == 0) || (IsBuff == 0));
+        }
+
+        internal bool SrcIsAgent()
+        {
+            return IsStateChange.SrcIsAgent();
+        }
+
+        internal bool DstIsAgent()
+        {
+            return IsStateChange.DstIsAgent();
+        }
+
+        internal bool IsBuffApply()
+        {
+            return IsBuff != 0 && BuffDmg == 0 && Value > 0 && IsActivation == ArcDPSEnums.Activation.None && IsBuffRemove == ArcDPSEnums.BuffRemove.None && IsStateChange == ArcDPSEnums.StateChange.None;
         }
 
         internal bool DstMatchesAgent(AgentItem agentItem)
@@ -124,14 +163,27 @@ namespace GW2EIEvtcParser
             }
             return false;
         }
+        public bool StartCasting()
+        {
+            if (IsExtension)
+            {
+                return false;
+            }
+            return IsActivation == ArcDPSEnums.Activation.Normal || IsActivation == ArcDPSEnums.Activation.Quickness;
+        }
 
+        public bool EndCasting()
+        {
+            if (IsExtension)
+            {
+                return false;
+            }
+            return IsActivation == ArcDPSEnums.Activation.CancelFire || IsActivation == ArcDPSEnums.Activation.Reset || IsActivation == ArcDPSEnums.Activation.CancelCancel;
+        }
 
         internal void OverrideTime(long time)
         {
-            if (IsStateChange.HasTime())
-            {
-                Time = time;
-            }
+            Time = time;
         }
 
         internal void OverrideSrcAgent(ulong agent)

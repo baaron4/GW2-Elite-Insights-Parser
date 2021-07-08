@@ -180,8 +180,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Qadim not found");
             }
-            CombatItem startCast = combatData.FirstOrDefault(x => x.SkillID == 52496 && x.IsActivation.StartCasting());
-            CombatItem sanityCheckCast = combatData.FirstOrDefault(x => (x.SkillID == 52528 || x.SkillID == 52333 || x.SkillID == 58814) && x.IsActivation.StartCasting());
+            CombatItem startCast = combatData.FirstOrDefault(x => x.SkillID == 52496 && x.StartCasting());
+            CombatItem sanityCheckCast = combatData.FirstOrDefault(x => (x.SkillID == 52528 || x.SkillID == 52333 || x.SkillID == 58814) && x.StartCasting());
             if (startCast == null || sanityCheckCast == null)
             {
                 return fightData.LogStart;

@@ -661,14 +661,6 @@ namespace GW2EIEvtcParser
         }
     }
 
-    public static class SpanwExtensions
-    {
-        public static bool IsSpawn(this ArcDPSEnums.StateChange state)
-        {
-            return state == ArcDPSEnums.StateChange.None || state == ArcDPSEnums.StateChange.Position || state == ArcDPSEnums.StateChange.Velocity || state == ArcDPSEnums.StateChange.Rotation || state == ArcDPSEnums.StateChange.MaxHealthUpdate || state == ArcDPSEnums.StateChange.Spawn || state == ArcDPSEnums.StateChange.TeamChange;
-        }
-    }
-
     public static class StateChangeAgentExtensions
     {
         public static bool SrcIsAgent(this ArcDPSEnums.StateChange state)
@@ -716,19 +708,6 @@ namespace GW2EIEvtcParser
                 || state.DstIsAgent() 
                 || state == ArcDPSEnums.StateChange.Reward
                 ;
-        }
-    }
-
-    public static class ActivationExtensions
-    {
-        public static bool StartCasting(this ArcDPSEnums.Activation activation)
-        {
-            return activation == ArcDPSEnums.Activation.Normal || activation == ArcDPSEnums.Activation.Quickness;
-        }
-
-        public static bool EndCasting(this ArcDPSEnums.Activation activation)
-        {
-            return activation == ArcDPSEnums.Activation.CancelFire || activation == ArcDPSEnums.Activation.Reset || activation == ArcDPSEnums.Activation.CancelCancel;
         }
     }
 }

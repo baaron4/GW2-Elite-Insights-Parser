@@ -780,7 +780,10 @@ namespace GW2EIEvtcParser
             // apply offset to everything
             foreach (CombatItem c in _combatItems)
             {
-                c.OverrideTime(c.Time - offset);
+                if (c.HasTime())
+                {
+                    c.OverrideTime(c.Time - offset);
+                }
             }
             foreach (AgentItem a in _allAgentsList)
             {

@@ -104,11 +104,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 agentData.ReplaceAgentsFromID(newTargetAgent);
                 foreach (CombatItem c in combatItems)
                 {
-                    if (agentValues.Contains(c.SrcAgent) && c.IsStateChange.SrcIsAgent())
+                    if (agentValues.Contains(c.SrcAgent) && c.SrcIsAgent())
                     {
                         c.OverrideSrcAgent(newTargetAgent.Agent);
                     }
-                    if (agentValues.Contains(c.DstAgent) && c.IsStateChange.DstIsAgent())
+                    if (agentValues.Contains(c.DstAgent) && c.DstIsAgent())
                     {
                         c.OverrideDstAgent(newTargetAgent.Agent);
                     }

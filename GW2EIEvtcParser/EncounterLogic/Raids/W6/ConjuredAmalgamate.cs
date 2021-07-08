@@ -85,9 +85,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             friendlies.Add(new NPC(sword));
             foreach (CombatItem c in combatData)
             {
-                if (c.SkillID == 52370 && c.IsStateChange == ArcDPSEnums.StateChange.None && c.IsBuffRemove == ArcDPSEnums.BuffRemove.None &&
-                                        ((c.IsBuff == 1 && c.BuffDmg >= 0 && c.Value == 0) ||
-                                        (c.IsBuff == 0 && c.Value >= 0)) && c.DstInstid != 0 && c.IFF == ArcDPSEnums.IFF.Foe)
+                if (c.IsDamage() && c.SkillID == 52370)
                 {
                     c.OverrideSrcAgent(sword.Agent);
                 }
