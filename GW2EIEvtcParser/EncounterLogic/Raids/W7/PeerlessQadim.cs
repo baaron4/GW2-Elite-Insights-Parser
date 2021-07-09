@@ -162,7 +162,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var forceOfHavoc = cls.Where(x => x.SkillId == 56017).ToList();
                     var forceOfRetal = cls.Where(x => x.SkillId == 56405).ToList();
                     var etherStrikes = cls.Where(x => x.SkillId == 56012 || x.SkillId == 56653).ToList();
-
+                    var causticChaos = cls.Where(x => x.SkillId == 56332).ToList();
                     foreach (AbstractCastEvent c in cataCycle)
                     {
                         int magmaRadius = 850;
@@ -221,6 +221,30 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 300);
                         replay.Decorations.Add(new PieDecoration(false, 0, coneRadius, facing, coneAngle, (start, end), "rgba(255, 100, 0, 0.30)", new AgentConnector(target)));
                         replay.Decorations.Add(new PieDecoration(true, 0, coneRadius, facing, coneAngle, (start, end), "rgba(255, 100, 0, 0.1)", new AgentConnector(target)));
+                    }
+                    foreach (AbstractCastEvent c in causticChaos)
+                    {
+                        double acceleration = c.Acceleration;
+                        double ratio = 1.0;
+                        if (acceleration > 0)
+                        {
+                            ratio = acceleration * 0.5 + 1;
+                        }
+                        else
+                        {
+                            ratio = acceleration * 0.6 + 1;
+                        }
+                        int chaosLength = 2600;
+                        int chaosWidth = 100;
+                        start = (int)c.Time;
+                        end = (int)c.EndTime;
+                        int aimTime = (int)((double)c.ExpectedDuration*ratio);
+                        replay.Decorations.Add(new FacingDecoration((0, end), new AgentConnector(target), replay.PolledRotations));
+                        replay.Decorations.Add(new FacingRectangleDecoration((start, end), new AgentConnector(target), replay.PolledRotations, chaosLength, chaosWidth, chaosLength / 2, "rgba(255,100,0,0.3)"));
+                        if (end > start + aimTime)
+                        {
+                            replay.Decorations.Add(new FacingRectangleDecoration((start + aimTime,end), new AgentConnector(target), replay.PolledRotations, chaosLength, chaosWidth, chaosLength / 2, "rgba(100,100,100,0.7)"));
+                        }
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.EntropicDistortion:
