@@ -11,9 +11,8 @@ namespace GW2EIEvtcParser.Extensions
         public const uint EXT_HealingStats = 0x9c9b3c99;
         public enum EXTHealingType { All, HealingPower, ConversionBased };
 
-        internal HealingStatsExtensionHandler(CombatItem c) : base(EXT_HealingStats, "Healing Stats")
+        internal virtual void SetVersion(CombatItem c)
         {
-            Revision = 0;
             var size = (c.SrcAgent & 0xFF00000000000000) >> 56;
             byte[] bytes = new byte[size * 1]; // 32 * sizeof(char), char as in C not C#
             uint offset = 0;
@@ -100,6 +99,10 @@ namespace GW2EIEvtcParser.Extensions
                 bytes[offset++] = bt;
             }
             Version = System.Text.Encoding.UTF8.GetString(bytes);
+        }
+
+        internal HealingStatsExtensionHandler() : base(EXT_HealingStats, "Healing Stats")
+        {
         }
 
     }
