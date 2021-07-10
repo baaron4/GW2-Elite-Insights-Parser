@@ -15,16 +15,17 @@ namespace GW2EIBuilders.JsonModels
     /// </summary>
     internal static class JsonLogBuilder
     {
-        internal static SkillDesc BuildSkillDesc(SkillItem item, ulong gw2Build, SkillData skillData)
+        internal static SkillDesc BuildSkillDesc(SkillItem item, ParsedEvtcLog log)
         {
             var skillDesc = new SkillDesc
             {
                 Name = item.Name,
                 AutoAttack = item.AA,
                 Icon = item.Icon,
-                CanCrit = SkillItem.CanCrit(item.ID, gw2Build),
+                CanCrit = SkillItem.CanCrit(item.ID, log.LogData.GW2Build),
                 IsSwap = item.IsSwap,
-                IsNotAccurate = skillData.IsNotAccurate(item.ID)
+                IsNotAccurate = log.SkillData.IsNotAccurate(item.ID),
+                ConversionBasedHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(item, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.ConversionBased : false
             };
             return skillDesc;
         }
@@ -35,7 +36,8 @@ namespace GW2EIBuilders.JsonModels
             {
                 Name = item.Name,
                 Icon = item.Link,
-                Stacking = item.Type == Buff.BuffType.Intensity
+                Stacking = item.Type == Buff.BuffType.Intensity,
+                ConversionBasedHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(log.SkillData.Get(item.ID), log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.ConversionBased : false
             };
             BuffInfoEvent buffInfoEvent = log.CombatData.GetBuffInfoEvent(item.ID);
             if (buffInfoEvent != null)
