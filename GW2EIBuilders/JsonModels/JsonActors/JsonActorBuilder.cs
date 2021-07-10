@@ -94,7 +94,7 @@ namespace GW2EIBuilders.JsonModels
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                res[i] = JsonDamageDistBuilder.BuildJsonDamageDistList(actor.GetDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
+                res[i] = JsonDamageDistBuilder.BuildJsonDamageDistList(actor.GetJustActorDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
             }
             return res;
         }
