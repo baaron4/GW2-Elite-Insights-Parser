@@ -12,31 +12,19 @@ namespace GW2EIEvtcParser.Extensions
                 return null;
             }
             // place holder for sig
-            switch (c.SrcAgent & 0x00000000FFFFFFFF)
+            ulong sig = c.SrcAgent & 0x00000000FFFFFFFF;
+            ulong rev = (c.SrcAgent & 0x00FFFFFF00000000) >> 32;
+            switch (sig)
             {
                 case HealingStatsExtensionHandler.EXT_HealingStats:
-                    switch (c.SrcAgent & 0x00FFFFFF00000000)
+                    switch (rev)
                     {
-                        case 0:
-                            return new HealingStatsRev0ExtensionHandler(c);
+                        case 1:
+                            return new HealingStatsRev1ExtensionHandler(c);
                         default:
                             break;
                     }
                     break;
-                default:
-                    break;
-            }
-            return null;
-        }
-
-        // FOR TESTING PURPOSES
-        internal static AbstractExtensionHandler GetExtensionHandler(uint sig)
-        {
-            // place holder for sig
-            switch (sig)
-            {
-                case HealingStatsExtensionHandler.EXT_HealingStats:
-                    return new HealingStatsRev0ExtensionHandler();
                 default:
                     break;
             }
