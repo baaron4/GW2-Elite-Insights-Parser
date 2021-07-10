@@ -37,7 +37,7 @@ namespace GW2EIBuilders.JsonModels
                 Name = item.Name,
                 Icon = item.Link,
                 Stacking = item.Type == Buff.BuffType.Intensity,
-                ConversionBasedHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(log.SkillData.Get(item.ID), log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.ConversionBased : false
+                ConversionBasedHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(item, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.ConversionBased : false
             };
             BuffInfoEvent buffInfoEvent = log.CombatData.GetBuffInfoEvent(item.ID);
             if (buffInfoEvent != null)
