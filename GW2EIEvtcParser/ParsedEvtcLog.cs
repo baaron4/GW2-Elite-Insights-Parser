@@ -80,13 +80,13 @@ namespace GW2EIEvtcParser
         private void AddToDictionary(AbstractSingleActor actor)
         {
             _agentToActorDictionary[actor.AgentItem] = actor;
-            foreach (Minions minions in actor.GetMinions(this).Values)
+            /*foreach (Minions minions in actor.GetMinions(this).Values)
             {
                 foreach (NPC npc in minions.MinionList)
                 {
                     AddToDictionary(npc);
                 }
-            }
+            }*/
         }
 
         private void InitActorDictionaries()
