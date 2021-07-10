@@ -126,6 +126,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             phaseEnds.Add(log.FightData.FightEnd);
             // tp to middle after pylon destruction
             phaseStarts.AddRange(log.CombatData.GetAnimatedCastData(56375).Select(x => x.EndTime));
+            // There should be at least as many starts as ends, otherwise skip phases
             if (phaseEnds.Count < phaseStarts.Count)
             {
                 return phases;
@@ -137,6 +138,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phases.Add(phase);
             }
             string[] intermissionNames = { "Magma Drop 1", "Magma Drop 2", "North Pylon", "SouthWest Pylon", "SouthEast Pylon" };
+            // intermission phase never finished, add a "dummy" log end
+            if (phaseEnds.Count - 1 == phaseStarts.Count)
+            {
+                phaseStarts.Add(log.FightData.FightEnd);
+            }
+            // There should be as many ends as starts, otherwise anomaly, skip intermission phases
+            if (phaseEnds.Count != phaseStarts.Count)
+            {
+                return phases;
+            }
             for (int i = 0; i < phaseEnds.Count - 1; i++)
             {
                 var phase = new PhaseData(phaseEnds[i], phaseStarts[i + 1], intermissionNames[i]);
