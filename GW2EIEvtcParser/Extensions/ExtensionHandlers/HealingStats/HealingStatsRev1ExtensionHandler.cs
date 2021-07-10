@@ -5,7 +5,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.Extensions
 {
-    internal class HealingStatsRev0ExtensionHandler : HealingStatsExtensionHandler
+    internal class HealingStatsRev1ExtensionHandler : HealingStatsExtensionHandler
     {
 
         private readonly List<EXTAbstractHealingEvent> _healingEvents = new List<EXTAbstractHealingEvent>();
@@ -15,14 +15,9 @@ namespace GW2EIEvtcParser.Extensions
             return (c.IsBuff == 0 && c.Value < 0) || (c.IsBuff != 0 && c.Value == 0 && c.BuffDmg < 0);
         }
 
-        internal HealingStatsRev0ExtensionHandler(CombatItem c) : base()
+        internal HealingStatsRev1ExtensionHandler(CombatItem c) : base(c)
         {
-            Revision = 0;
-        }
-
-        internal HealingStatsRev0ExtensionHandler() : base()
-        {
-            Revision = 0;
+            Revision = 1;
         }
 
         internal override bool HasTime(CombatItem c)
