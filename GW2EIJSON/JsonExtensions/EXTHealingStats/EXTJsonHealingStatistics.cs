@@ -9,12 +9,12 @@ namespace GW2EIJSON
     {
         public class EXTJsonOutgoingHealingStatistics
         {
-            public double Hps { get; internal set; }
-            public int Healing { get; internal set; }
-            public double HealingPowerHps { get; internal set; }
-            public int HealingPowerHealing { get; internal set; }
-            public double ConversionHps { get; internal set; }
-            public int ConversionHealing { get; internal set; }
+            public double Hps { get; set; }
+            public int Healing { get; set; }
+            public double HealingPowerHps { get; set; }
+            public int HealingPowerHealing { get; set; }
+            public double ConversionHps { get; set; }
+            public int ConversionHealing { get; set; }
 
             public EXTJsonOutgoingHealingStatistics()
             {
@@ -24,9 +24,9 @@ namespace GW2EIJSON
 
         public class EXTJsonIncomingHealingStatistics
         {
-            public int Healed { get; internal set; }
-            public int HealingPowerHealed { get; internal set; }
-            public int ConversionHealed { get; internal set; }
+            public int Healed { get; set; }
+            public int HealingPowerHealed { get; set; }
+            public int ConversionHealed { get; set; }
 
             public EXTJsonIncomingHealingStatistics()
             {

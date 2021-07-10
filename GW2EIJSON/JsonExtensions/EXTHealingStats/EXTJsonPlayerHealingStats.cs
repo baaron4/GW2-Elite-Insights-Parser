@@ -24,5 +24,10 @@ namespace GW2EIJSON
         public IReadOnlyList<IReadOnlyList<IReadOnlyList<EXTJsonHealingDist>>> AlliedHealingDist { get; set; }
         public IReadOnlyList<IReadOnlyList<EXTJsonHealingDist>> TotalHealingDist { get; set; }
         public IReadOnlyList<IReadOnlyList<EXTJsonHealingDist>> TotalIncomingHealingDist { get; set; }
+
+        public EXTJsonPlayerHealingStats()
+        {
+
+        }
     }
 }
