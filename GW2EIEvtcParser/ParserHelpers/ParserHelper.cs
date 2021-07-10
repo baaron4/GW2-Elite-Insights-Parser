@@ -98,6 +98,21 @@ namespace GW2EIEvtcParser
             return final;
         }
 
+        public static readonly string green = "rgb(0,255,0)";
+        internal static string Colors(string color) 
+        {
+            switch (color)
+            {
+                case "red":
+                    return GW2EIEvtcParser.Colors.Red;
+                case "orange":
+                    return "rgb(255,100,0)";
+                case "yellow":
+                    return "rgb(255,220,0)";
+            }
+            return "";
+        }
+
         public static List<Source> ProfToEnum(string prof)
         {
             switch (prof)
@@ -696,5 +711,31 @@ namespace GW2EIEvtcParser
             }
             return false;
         }
+                
+    }
+
+    public static class Colors 
+    {
+        public const string Red = "rgb(255,0,0)";
+        public const string DarkRed = "rgb(128,0,0)";
+        public const string Orange = "rgb(255,100,0)";
+        public const string LightOrange = "rgb(255,160,0)";
+        public const string Yellow = "rgb(255,220,0)";
+        public const string Brown = "rgb(120,100,0)";
+        public const string Green = "rgb(0,255,0)";
+        public const string DarkGreen = "rgb(0,128,0)";
+        public const string Teal = "rgb(0,255,255)";
+        public const string DarkTeal = "rgb(0,160,150)";
+        public const string LightBlue = "rgb(0,140,255)"; 
+        public const string Purple = "rgb(150,0,255)";
+        public const string DarkPurple = "rgb(50,0,150)";
+        public const string LightPurple = "rgb(200, 140, 255)";
+        public const string Pink = "rgb(255,0,150)";
+        public const string Magenta = "rgb(255,0,255)";
+        public const string Blue = "rgb(0,0,255)";
+        public const string White = "rgb(255,255,255)";
+        public const string Grey = "rgb(60,60,60)";
+        public const string Black = "rgb(0,0,0)";
+        public const string LightRed = "rgb(255,128,128)";
     }
 }
