@@ -175,9 +175,9 @@ namespace GW2EIBuilders
             html = html.Replace("<!--${CompressionRequire}-->", _compressJson ? "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.10/pako.min.js\"></script>" : "");
             html = html.Replace("<!--${CompressionUtils}-->", _compressJson ? Properties.Resources.compressionUtils : "");
             //
-
+            string graphJson = ToJson(new ChartDataDto(_log));
             _log.UpdateProgressWithCancellationCheck("HTML: building Graph Data");
-            html = html.Replace("'${graphDataJson}'", ToJson(new ChartDataDto(_log)));
+            html = html.Replace("'${graphDataJson}'", _compressJson ? ("'" + CompressAndBase64(graphJson) + "'") : graphJson);
 
             sw.Write(html);
             return;
