@@ -36,16 +36,109 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (11204, 4414, 13252, 6462)*/);
         }
 
+        protected override HashSet<int> GetUniqueTargetIDs()
+        {
+            return new HashSet<int>
+            {
+            };
+        }
+
+        protected override List<int> GetFightTargetsIDs()
+        {
+            return new List<int>()
+            {
+                (int)ArcDPSEnums.TargetID.Artsariiv,
+                (int)ArcDPSEnums.TrashID.CloneArtsariiv
+            };
+        }
+
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
             return new List<ArcDPSEnums.TrashID>
             {
                 ArcDPSEnums.TrashID.TemporalAnomaly,
                 ArcDPSEnums.TrashID.Spark,
-                ArcDPSEnums.TrashID.Artsariiv1,
-                ArcDPSEnums.TrashID.Artsariiv2,
-                ArcDPSEnums.TrashID.Artsariiv3
+                ArcDPSEnums.TrashID.SmallArtsariiv,
+                ArcDPSEnums.TrashID.MediumArtsariiv,
+                ArcDPSEnums.TrashID.BigArtsariiv,
             };
+        }
+
+        internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+        {
+            // generic method for fractals
+            List<PhaseData> phases = GetInitialPhase(log);
+            AbstractSingleActor artsariiv = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Artsariiv);
+            if (artsariiv == null)
+            {
+                throw new MissingKeyActorsException("Artsariiv not found");
+            }
+            phases[0].AddTarget(artsariiv);
+            if (!requirePhases)
+            {
+                return phases;
+            }
+            phases.AddRange(GetPhasesByInvul(log, 762, artsariiv, true, true));
+            for (int i = 1; i < phases.Count; i++)
+            {
+                PhaseData phase = phases[i];
+                if (i % 2 == 0)
+                {
+                    phase.Name = "Split " + (i) / 2;
+                    var ids = new List<int>
+                    {
+                       (int)ArcDPSEnums.TrashID.CloneArtsariiv,
+                    };
+                    AddTargetsToPhaseAndFit(phase, ids, log);
+                }
+                else
+                {
+                    phase.Name = "Phase " + (i + 1) / 2;
+                    phase.AddTarget(artsariiv);
+                }
+            }
+            return phases;
+        }
+
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
+        {
+            var artsariivs = new List<AgentItem>(agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Artsariiv));
+            if (artsariivs.Any())
+            {
+                artsariivs.Remove(artsariivs.MaxBy(x => x.LastAware - x.FirstAware));
+                if (artsariivs.Any())
+                {
+                    foreach (AgentItem subartsariiv in artsariivs)
+                    {
+                        subartsariiv.OverrideID(ArcDPSEnums.TrashID.CloneArtsariiv);
+                    }
+                }
+                agentData.Refresh();
+            }
+            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, friendlies);
+            int count = 0;
+            foreach (NPC trashMob in _trashMobs)
+            {
+                if (trashMob.ID == (int)ArcDPSEnums.TrashID.SmallArtsariiv)
+                {
+                    trashMob.OverrideName("Small " + trashMob.Character);
+                }
+                if (trashMob.ID == (int)ArcDPSEnums.TrashID.MediumArtsariiv)
+                {
+                    trashMob.OverrideName("Medium " + trashMob.Character);
+                }
+                if (trashMob.ID == (int)ArcDPSEnums.TrashID.BigArtsariiv)
+                {
+                    trashMob.OverrideName("Big " + trashMob.Character);
+                }
+            }
+            foreach (NPC target in _targets)
+            {
+                if (target.ID == (int)ArcDPSEnums.TrashID.CloneArtsariiv)
+                {
+                    target.OverrideName("Clone " + target.Character + " " + (++count));
+                }
+            }
         }
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)

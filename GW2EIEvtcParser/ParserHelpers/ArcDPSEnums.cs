@@ -316,6 +316,7 @@ namespace GW2EIEvtcParser
         private const int ChargedBloodstone = -12;
         private const int PyreGuardianResolution = -13;
         private const int CASword = -14;
+        private const int SubArtsariiv = -15;
 
 
         //
@@ -537,9 +538,10 @@ namespace GW2EIEvtcParser
             // Artsariiv
             TemporalAnomaly = 17870,
             Spark = 17630,
-            Artsariiv1 = 17811, // tiny adds
-            Artsariiv2 = 17694, // small adds
-            Artsariiv3 = 17937, // big adds
+            SmallArtsariiv = 17811, // tiny adds
+            MediumArtsariiv = 17694, // small adds
+            BigArtsariiv = 17937, // big adds
+            CloneArtsariiv = SubArtsariiv, // clone adds
             // Arkk
             TemporalAnomaly2 = 17720,
             Archdiviner = 17893,

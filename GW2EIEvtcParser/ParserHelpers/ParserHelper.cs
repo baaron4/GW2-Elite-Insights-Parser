@@ -603,6 +603,8 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.RedKnight:
                 case ArcDPSEnums.TrashID.BlueKnight:
                     return "https://i.imgur.com/lpBm4d6.png";
+                case ArcDPSEnums.TrashID.CloneArtsariiv:
+                    return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
             }
             return "https://i.imgur.com/HuJHqRZ.png";
         }
