@@ -12,9 +12,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new HitOnPlayerMechanic(48066, "King's Wrath", new MechanicPlotlySetting("triangle-left","rgb(0,100,255)"), "Cone Hit","King's Wrath (Auto Attack Cone Part)", "Cone Auto Attack",0),
-            new HitOnPlayerMechanic(47531, "Numbing Breach", new MechanicPlotlySetting("asterisk-open","rgb(0,100,255)"), "Cracks","Numbing Breach (Ice Cracks in the Ground)", "Cracks",0),
-            new PlayerBuffApplyMechanic(47776, "Frozen Wind", new MechanicPlotlySetting("circle-open","rgb(0,255,0)"), "Green","Frozen Wind (Stood in Green)", "Green Stack",0),
+            new HitOnPlayerMechanic(48066, "King's Wrath", new MechanicPlotlySetting("triangle-left",Colors.LightBlue), "Cone Hit","King's Wrath (Auto Attack Cone Part)", "Cone Auto Attack",0),
+            new HitOnPlayerMechanic(47531, "Numbing Breach", new MechanicPlotlySetting("asterisk-open",Colors.LightBlue), "Cracks","Numbing Breach (Ice Cracks in the Ground)", "Cracks",0),
+            new PlayerBuffApplyMechanic(47776, "Frozen Wind", new MechanicPlotlySetting("circle-open",Colors.Green), "Green","Frozen Wind (Stood in Green)", "Green Stack",0),
             }
             );
             Extension = "brokenking";
