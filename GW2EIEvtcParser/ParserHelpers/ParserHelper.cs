@@ -98,21 +98,6 @@ namespace GW2EIEvtcParser
             return final;
         }
 
-        public static readonly string green = "rgb(0,255,0)";
-        internal static string Colors(string color) 
-        {
-            switch (color)
-            {
-                case "red":
-                    return GW2EIEvtcParser.Colors.Red;
-                case "orange":
-                    return "rgb(255,100,0)";
-                case "yellow":
-                    return "rgb(255,220,0)";
-            }
-            return "";
-        }
-
         public static List<Source> ProfToEnum(string prof)
         {
             switch (prof)
