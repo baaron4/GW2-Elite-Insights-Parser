@@ -17,8 +17,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new HitOnPlayerMechanic(56541, "Pylon Debris Field", new MechanicPlotlySetting("circle-open-dot",Colors.Orange), "P.Magma", "Hit by Pylon Magma", "Pylon Magma", 0),
                 new HitOnPlayerMechanic(56020, "Energized Affliction", new MechanicPlotlySetting("circle-open",Colors.Green), "E.Aff", "Energized Affliction", "Energized Affliction", 0),
                 new HitOnPlayerMechanic(56134, "Force of Retaliation", new MechanicPlotlySetting("circle-open",Colors.Black), "Pushed", "Pushed by Shockwave", "Shockwave Push", 1000, (de, log) => !de.To.HasBuff(log, 1122, de.Time)),
-                new HitOnPlayerMechanic(56093, "Exponential Repercussion", new MechanicPlotlySetting("diamond-open",Colors.Magenta), "P.KB", "Pushed by Pylon Knockback", "Pylon Knockback", 1000, (de, log) => !de.To.HasBuff(log, 1122, de.Time)),
-                new HitOnPlayerMechanic(56254, "Exponential Repercussion", new MechanicPlotlySetting("diamond-open",Colors.Magenta), "Dome.KB", "Pushed by Dome Shield Knockback", "Dome Knockback", 1000, (de, log) => !de.To.HasBuff(log, 1122, de.Time)),
+                new HitOnPlayerMechanic(56093, "Exponential Repercussion", new MechanicPlotlySetting("diamond-open",Colors.Magenta), "P.KB", "Pushed by Pylon Knockback", "Pylon Knockback", 1000),
+                new HitOnPlayerMechanic(56254, "Exponential Repercussion", new MechanicPlotlySetting("diamond-open",Colors.Magenta), "Dome.KB", "Pushed by Dome Shield Knockback", "Dome Knockback", 1000),
                 new HitOnPlayerMechanic(56441, "Force of Havoc", new MechanicPlotlySetting("square-open",Colors.Purple), "P.Rect", "Hit by Purple Rectangle", "Purple Rectangle", 0),
                 new HitOnPlayerMechanic(56145, "Chaos Called", new MechanicPlotlySetting("circle-x-open",Colors.Purple), "Pattern.H", "Hit by Energy on Pattern", "Pattern Energy Hit", 0),
                 new HitOnPlayerMechanic(56527, "Rain of Chaos", new MechanicPlotlySetting("star-square",Colors.Purple), "Lght.H", "Hit by Expanding Lightning", "Lightning Hit", 0),
@@ -31,7 +31,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerBuffApplyMechanic(56510, "Fixated", new MechanicPlotlySetting("star",Colors.Magenta), "Fixated", "Fixated", "Fixated", 0),
                 new PlayerBuffApplyMechanic(56424, "Critical Mass", new MechanicPlotlySetting("circle-open",Colors.Red), "Orb caught", "Collected a Pylon Orb", "Critical Mass", 0),
                 new HitOnPlayerMechanic(56543, "Caustic Chaos", new MechanicPlotlySetting("triangle-right-open",Colors.Red), "A.Prj.E", "Hit by Aimed Projectile Explosion", "Aimed Projectile Explosion", 0),
-                new PlayerBuffApplyMechanic(56118, "Sapping Surge", new MechanicPlotlySetting("y-down-open",Colors.DarkPurple), "B.Tether", "25% damage reduction", "Bad Tether", 0),
+                new PlayerBuffApplyMechanic(56118, "Sapping Surge", new MechanicPlotlySetting("y-down-open",Colors.Red), "B.Tether", "25% damage reduction", "Bad Tether", 0),
             });
             Extension = "prlqadim";
             Icon = "https://wiki.guildwars2.com/images/8/8b/Mini_Qadim_the_Peerless.png";
@@ -164,6 +164,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var forceOfRetal = cls.Where(x => x.SkillId == 56405).ToList();
                     var etherStrikes = cls.Where(x => x.SkillId == 56012 || x.SkillId == 56653).ToList();
                     var causticChaos = cls.Where(x => x.SkillId == 56332).ToList();
+                    var expoReperc = cls.Where(x => x.SkillId == 56223).ToList();
                     foreach (AbstractCastEvent c in cataCycle)
                     {
                         int magmaRadius = 850;
@@ -245,6 +246,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (end > start + aimTime)
                         {
                             replay.Decorations.Add(new FacingRectangleDecoration((start + aimTime,end), new AgentConnector(target), replay.PolledRotations, chaosLength, chaosWidth, chaosLength / 2, "rgba(100,100,100,0.7)"));
+                        }
+                    }
+                    foreach (AbstractCastEvent c in expoReperc)
+                    {
+                        int radius = 650;
+                        start = (int)c.Time;
+                        end = (int)c.EndTime;
+                        Point3D position = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
+                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, end), "rgba(255, 220, 0, 0.15)", new PositionConnector(position)));
+                        replay.Decorations.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(255, 220, 50, 0.25)", new PositionConnector(position)));
+
+                        foreach (NPC pylon in TrashMobs.Where(x => x.ID == 21962))
+                        {
+                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, end), "rgba(255, 220, 0, 0.15)", new AgentConnector(pylon)));
+                            replay.Decorations.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(255, 220, 50, 0.25)", new AgentConnector(pylon)));
                         }
                     }
                     break;
