@@ -15,9 +15,10 @@ namespace GW2EIEvtcParser.Extensions
             return (c.IsBuff == 0 && c.Value < 0) || (c.IsBuff != 0 && c.Value == 0 && c.BuffDmg < 0);
         }
 
-        internal HealingStatsRev1ExtensionHandler(CombatItem c) : base(c)
+        internal HealingStatsRev1ExtensionHandler(CombatItem c) : base()
         {
             Revision = 1;
+            SetVersion(c);
         }
 
         internal override bool HasTime(CombatItem c)

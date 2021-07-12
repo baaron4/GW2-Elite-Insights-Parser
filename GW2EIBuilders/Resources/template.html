@@ -45,7 +45,11 @@
         }
     </script>
     <script>
-        var graphData = '${graphDataJson}';
+        var _graphData = '${graphDataJson}';
+        var graphData = _graphData;
+        if (window.pako) {
+            graphData = JSON.parse(new TextDecoder("utf-8").decode(pako.inflate(base64DecToArr(graphData))))
+        }
     </script>
     <!--${Js}-->
     <!--${CombatReplayJS}-->
