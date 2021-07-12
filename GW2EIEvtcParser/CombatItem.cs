@@ -141,11 +141,6 @@ namespace GW2EIEvtcParser
                         ((IsBuff != 0 && Value == 0) || (IsBuff == 0));
         }
 
-        internal bool IsBuffApply()
-        {
-            return IsBuff != 0 && BuffDmg == 0 && Value > 0 && IsActivation == ArcDPSEnums.Activation.None && IsBuffRemove == ArcDPSEnums.BuffRemove.None && IsStateChange == ArcDPSEnums.StateChange.None;
-        }
-
         internal bool SrcIsAgent(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             if (IsExtension && Pad != 0 && extensions.TryGetValue(Pad, out AbstractExtensionHandler handler))
@@ -162,6 +157,11 @@ namespace GW2EIEvtcParser
                 return handler.DstIsAgent(this);
             }
             return IsStateChange.DstIsAgent();
+        }
+
+        internal bool IsBuffApply()
+        {
+            return IsBuff != 0 && BuffDmg == 0 && Value > 0 && IsActivation == ArcDPSEnums.Activation.None && IsBuffRemove == ArcDPSEnums.BuffRemove.None && IsStateChange == ArcDPSEnums.StateChange.None;
         }
 
         internal bool DstMatchesAgent(AgentItem agentItem, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -199,7 +199,7 @@ namespace GW2EIEvtcParser
             }
             return false;
         }
-
+        
         public bool StartCasting()
         {
             if (IsExtension)

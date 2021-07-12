@@ -132,13 +132,17 @@ namespace GW2EIEvtcParser.EIData
                 foreach (AgentItem agent in combatMinion)
                 {
                     long id = agent.ID;
-                    if (auxMinions.TryGetValue(id, out Minions values))
+                    AbstractSingleActor singleActor = log.FindActor(agent);
+                    if (singleActor is NPC npc)
                     {
-                        values.AddMinion(new NPC(agent));
-                    }
-                    else
-                    {
-                        auxMinions[id] = new Minions(this, new NPC(agent));
+                        if (auxMinions.TryGetValue(id, out Minions values))
+                        {
+                            values.AddMinion(npc);
+                        }
+                        else
+                        {
+                            auxMinions[id] = new Minions(this, npc);
+                        }
                     }
                 }
                 foreach (KeyValuePair<long, Minions> pair in auxMinions)
@@ -154,13 +158,17 @@ namespace GW2EIEvtcParser.EIData
                 foreach (AgentItem agent in combatGadgetMinion)
                 {
                     string id = agent.Name;
-                    if (auxGadgetMinions.TryGetValue(id, out Minions values))
+                    AbstractSingleActor singleActor = log.FindActor(agent);
+                    if (singleActor is NPC npc)
                     {
-                        values.AddMinion(new NPC(agent));
-                    }
-                    else
-                    {
-                        auxGadgetMinions[id] = new Minions(this, new NPC(agent));
+                        if (auxGadgetMinions.TryGetValue(id, out Minions values))
+                        {
+                            values.AddMinion(npc);
+                        }
+                        else
+                        {
+                            auxGadgetMinions[id] = new Minions(this, npc);
+                        }
                     }
                 }
                 foreach (KeyValuePair<string, Minions> pair in auxGadgetMinions)

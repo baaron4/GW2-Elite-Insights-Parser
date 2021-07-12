@@ -13,11 +13,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new PlayerBuffApplyMechanic(34912, "Fixate", new MechanicPlotlySetting("star","rgb(255,0,255)"), "Fixate","Fixated by Statue", "Fixated",0),
-            new PlayerBuffApplyMechanic(34925, "Fixate", new MechanicPlotlySetting("star","rgb(255,0,255)"), "Fixate","Fixated by Statue", "Fixated",0),
-            new HitOnPlayerMechanic(35077, "Hail of Fury", new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Debris","Hail of Fury (Falling Debris)", "Debris",0),
-            new EnemyBuffApplyMechanic(35096, "Compromised", new MechanicPlotlySetting("hexagon","rgb(0,0,255)"), "Rift#","Compromised (Pushed Orb through Rifts)", "Compromised",0),
-            new EnemyBuffApplyMechanic(35119, "Magic Blast", new MechanicPlotlySetting("star","rgb(0,255,255)"), "M.B.# 33%","Magic Blast (Orbs eaten by KC) at 33%", "Magic Blast 33%",0, (de, log) => {
+            new PlayerBuffApplyMechanic(34912, "Fixate", new MechanicPlotlySetting("star",Colors.Magenta), "Fixate","Fixated by Statue", "Fixated",0),
+            new PlayerBuffApplyMechanic(34925, "Fixate", new MechanicPlotlySetting("star",Colors.Magenta), "Fixate","Fixated by Statue", "Fixated",0),
+            new HitOnPlayerMechanic(35077, "Hail of Fury", new MechanicPlotlySetting("circle-open",Colors.Red), "Debris","Hail of Fury (Falling Debris)", "Debris",0),
+            new EnemyBuffApplyMechanic(35096, "Compromised", new MechanicPlotlySetting("hexagon",Colors.Blue), "Rift#","Compromised (Pushed Orb through Rifts)", "Compromised",0),
+            new EnemyBuffApplyMechanic(35119, "Magic Blast", new MechanicPlotlySetting("star",Colors.Teal), "M.B.# 33%","Magic Blast (Orbs eaten by KC) at 33%", "Magic Blast 33%",0, (de, log) => {
                 var phases = log.FightData.GetPhases(log).Where(x => x.Name.Contains("%")).ToList();
                 if (phases.Count < 2)
                 {
@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 return de.Time >= phases[1].End;
             }),
-            new EnemyBuffApplyMechanic(35119, "Magic Blast", new MechanicPlotlySetting("star","rgb(0,255,255)"), "M.B.# 66%","Magic Blast (Orbs eaten by KC) at 66%", "Magic Blast 66%",0, (de, log) => {
+            new EnemyBuffApplyMechanic(35119, "Magic Blast", new MechanicPlotlySetting("star",Colors.Teal), "M.B.# 66%","Magic Blast (Orbs eaten by KC) at 66%", "Magic Blast 66%",0, (de, log) => {
                 var phases = log.FightData.GetPhases(log).Where(x => x.Name.Contains("%")).ToList();
                 if (phases.Count < 1)
                 {
@@ -41,17 +41,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 return condition;
             }),
-            new SpawnMechanic(16227, "Insidious Projection", new MechanicPlotlySetting("bowtie","rgb(255,0,0)"), "Merge","Insidious Projection spawn (2 Statue merge)", "Merged Statues",0),
-            new HitOnPlayerMechanic(35137, "Phantasmal Blades", new MechanicPlotlySetting("hexagram-open","rgb(255,0,255)"), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
-            new HitOnPlayerMechanic(34971, "Phantasmal Blades", new MechanicPlotlySetting("hexagram-open","rgb(255,0,255)"), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
-            new HitOnPlayerMechanic(35064, "Phantasmal Blades", new MechanicPlotlySetting("hexagram-open","rgb(255,0,255)"), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
-            new HitOnPlayerMechanic(35086, "Tower Drop", new MechanicPlotlySetting("circle","rgb(255,140,0)"), "Jump","Tower Drop (KC Jump)", "Tower Drop",0),
-            new PlayerBuffApplyMechanic(35103, "Xera's Fury", new MechanicPlotlySetting("circle","rgb(200,140,0)"), "Bomb","Xera's Fury (Large Bombs) application", "Bombs",0),
-            new HitOnPlayerMechanic(34914, "Good White Orb", new MechanicPlotlySetting("circle","rgb(200,200,200)"), "GW.Orb","Good White Orb", "Good White Orb",0, (de,log) => de.To.HasBuff(log, 35109, de.Time)),
-            new HitOnPlayerMechanic(34972, "Good Red Orb", new MechanicPlotlySetting("circle","rgb(100,0,0)"), "GR.Orb","Good Red Orb", "Good Red Orb",0, (de,log) => de.To.HasBuff(log, 35091, de.Time)),
-            new HitOnPlayerMechanic(34914, "Bad White Orb", new MechanicPlotlySetting("circle","rgb(100,100,100)"), "BW.Orb","Bad White Orb", "Bad White Orb",0, (de,log) => !de.To.HasBuff(log, 35109, de.Time)),
-            new HitOnPlayerMechanic(34972, "Bad Red Orb", new MechanicPlotlySetting("circle","rgb(200,0,0)"), "BR.Orb","Bad Red Orb", "Bad Red Orb",0, (de,log) => !de.To.HasBuff(log, 35091, de.Time)),
-            new HitOnEnemyMechanic(16261, "Core Hit", new MechanicPlotlySetting("star-open","rgb(255,140,0)"), "Core Hit","Core was Hit by Player", "Core Hit",1000)
+            new SpawnMechanic(16227, "Insidious Projection", new MechanicPlotlySetting("bowtie",Colors.Red), "Merge","Insidious Projection spawn (2 Statue merge)", "Merged Statues",0),
+            new HitOnPlayerMechanic(35137, "Phantasmal Blades", new MechanicPlotlySetting("hexagram-open",Colors.Magenta), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
+            new HitOnPlayerMechanic(34971, "Phantasmal Blades", new MechanicPlotlySetting("hexagram-open",Colors.Magenta), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
+            new HitOnPlayerMechanic(35064, "Phantasmal Blades", new MechanicPlotlySetting("hexagram-open",Colors.Magenta), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
+            new HitOnPlayerMechanic(35086, "Tower Drop", new MechanicPlotlySetting("circle",Colors.LightOrange), "Jump","Tower Drop (KC Jump)", "Tower Drop",0),
+            new PlayerBuffApplyMechanic(35103, "Xera's Fury", new MechanicPlotlySetting("circle",Colors.Orange), "Bomb","Xera's Fury (Large Bombs) application", "Bombs",0),
+            new HitOnPlayerMechanic(34914, "Good White Orb", new MechanicPlotlySetting("circle",Colors.White), "GW.Orb","Good White Orb", "Good White Orb",0, (de,log) => de.To.HasBuff(log, 35109, de.Time)),
+            new HitOnPlayerMechanic(34972, "Good Red Orb", new MechanicPlotlySetting("circle",Colors.DarkRed), "GR.Orb","Good Red Orb", "Good Red Orb",0, (de,log) => de.To.HasBuff(log, 35091, de.Time)),
+            new HitOnPlayerMechanic(34914, "Bad White Orb", new MechanicPlotlySetting("circle",Colors.Grey), "BW.Orb","Bad White Orb", "Bad White Orb",0, (de,log) => !de.To.HasBuff(log, 35109, de.Time)),
+            new HitOnPlayerMechanic(34972, "Bad Red Orb", new MechanicPlotlySetting("circle",Colors.Red), "BR.Orb","Bad Red Orb", "Bad Red Orb",0, (de,log) => !de.To.HasBuff(log, 35091, de.Time)),
+            new HitOnEnemyMechanic(16261, "Core Hit", new MechanicPlotlySetting("star-open",Colors.LightOrange), "Core Hit","Core was Hit by Player", "Core Hit",1000)
             });
             Extension = "kc";
             Icon = "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png";
