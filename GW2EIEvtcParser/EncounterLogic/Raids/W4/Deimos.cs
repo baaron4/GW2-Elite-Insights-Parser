@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
 
@@ -79,7 +80,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        private static void MergeWithGadgets(AgentItem target, HashSet<ulong> gadgetAgents, List<CombatItem> combatData)
+        private static void MergeWithGadgets(AgentItem target, HashSet<ulong> gadgetAgents, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             var allAgents = new HashSet<ulong>(gadgetAgents)
             {
@@ -98,12 +99,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                         continue;
                     }
                 }
-                if (allAgents.Contains(c.SrcAgent) && c.IsStateChange.SrcIsAgent())
+                if (allAgents.Contains(c.SrcAgent) && c.SrcIsAgent(extensions))
                 {
                     c.OverrideSrcAgent(target.Agent);
 
                 }
-                if (allAgents.Contains(c.DstAgent) && c.IsStateChange.DstIsAgent())
+                if (allAgents.Contains(c.DstAgent) && c.DstIsAgent(extensions))
                 {
                     c.OverrideDstAgent(target.Agent);
                 }
@@ -251,9 +252,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             return res;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            ComputeFightTargets(agentData, combatData);
+            ComputeFightTargets(agentData, combatData, extensions);
             // Find target
             AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
             if (deimos == null)
@@ -289,7 +290,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (gadgetAgents.Count > 0)
             {
                 _deimos10PercentTime = (firstAware >= deimos.LastAware ? firstAware : deimos.LastAware);
-                MergeWithGadgets(deimos.AgentItem, gadgetAgents, combatData);
+                MergeWithGadgets(deimos.AgentItem, gadgetAgents, combatData, extensions);
             }
             deimos.AgentItem.OverrideAwareTimes(deimos.FirstAware, fightData.FightEnd);
             deimos.OverrideName("Deimos");

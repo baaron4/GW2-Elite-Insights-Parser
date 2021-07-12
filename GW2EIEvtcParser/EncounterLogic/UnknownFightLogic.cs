@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 
@@ -21,7 +22,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new HashSet<int>();
         }
 
-        internal override void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems)
+        internal override void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             int id = GetFightTargetsIDs().First();
             AgentItem agentItem = agentData.GetNPCsByID(id).FirstOrDefault();

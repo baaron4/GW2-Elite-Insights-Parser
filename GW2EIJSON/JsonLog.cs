@@ -85,6 +85,37 @@ namespace GW2EIJSON
         }
 
         /// <summary>
+        /// Describes an extension
+        /// </summary>
+        public class ExtensionDesc
+        {
+            public ExtensionDesc()
+            {
+
+            }
+
+            /// <summary>
+            /// Name of the extension
+            /// </summary>
+            public string Name { get; set; }
+
+            /// <summary>
+            /// Version of the extension, "Unknown" if missing
+            /// </summary>
+            public string Version { get; set; }
+
+            /// <summary>
+            /// Revision of the extension
+            /// </summary>
+            public uint Revision { get; set; }
+
+            /// <summary>
+            /// Signature of the extension
+            /// </summary>
+            public uint Signature { get; set; }
+        }
+
+        /// <summary>
         /// Describs the damage modifier item
         /// </summary>
         public class DamageModDesc
@@ -278,7 +309,12 @@ namespace GW2EIJSON
         /// </summary>
         public IReadOnlyList<string> LogErrors { get; set; }
 
-        
+        /// <summary>
+        /// List of used extensions
+        /// </summary>
+        public IReadOnlyList<ExtensionDesc> UsedExtensions { get; set; }
+
+
         public JsonLog()
         {
 

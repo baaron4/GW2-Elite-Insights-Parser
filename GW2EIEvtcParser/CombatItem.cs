@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser
@@ -118,26 +120,42 @@ namespace GW2EIEvtcParser
             Pad4 = c.Pad4;
         }
 
-        internal bool HasTime()
+        internal bool HasTime(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
+            if (IsExtension && Pad != 0 && extensions.TryGetValue(Pad, out AbstractExtensionHandler handler))
+            {
+                return handler.HasTime(this);
+            }
             return IsStateChange.HasTime();
         }
 
-        internal bool IsDamage()
+        internal bool IsDamage(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
+            if (IsExtension && Pad != 0 && extensions.TryGetValue(Pad, out AbstractExtensionHandler handler))
+            {
+                return handler.IsDamage(this);
+            }
             return IsStateChange == ArcDPSEnums.StateChange.None &&
                         IsActivation == ArcDPSEnums.Activation.None &&
                         IsBuffRemove == ArcDPSEnums.BuffRemove.None &&
                         ((IsBuff != 0 && Value == 0) || (IsBuff == 0));
         }
 
-        internal bool SrcIsAgent()
+        internal bool SrcIsAgent(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
+            if (IsExtension && Pad != 0 && extensions.TryGetValue(Pad, out AbstractExtensionHandler handler))
+            {
+                return handler.SrcIsAgent(this);
+            }
             return IsStateChange.SrcIsAgent();
         }
 
-        internal bool DstIsAgent()
+        internal bool DstIsAgent(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
+            if (IsExtension && Pad != 0 && extensions.TryGetValue(Pad, out AbstractExtensionHandler handler))
+            {
+                return handler.DstIsAgent(this);
+            }
             return IsStateChange.DstIsAgent();
         }
 
@@ -146,11 +164,29 @@ namespace GW2EIEvtcParser
             return IsBuff != 0 && BuffDmg == 0 && Value > 0 && IsActivation == ArcDPSEnums.Activation.None && IsBuffRemove == ArcDPSEnums.BuffRemove.None && IsStateChange == ArcDPSEnums.StateChange.None;
         }
 
+        internal bool DstMatchesAgent(AgentItem agentItem, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            if (DstIsAgent(extensions))
+            {
+                return agentItem.Agent == DstAgent && agentItem.FirstAware <= Time && agentItem.LastAware >= Time;
+            }
+            return false;
+        }
+
         internal bool DstMatchesAgent(AgentItem agentItem)
         {
             if (IsStateChange.DstIsAgent())
             {
                 return agentItem.Agent == DstAgent && agentItem.FirstAware <= Time && agentItem.LastAware >= Time;
+            }
+            return false;
+        }
+
+        internal bool SrcMatchesAgent(AgentItem agentItem, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            if (SrcIsAgent(extensions))
+            {
+                return agentItem.Agent == SrcAgent && agentItem.FirstAware <= Time && agentItem.LastAware >= Time;
             }
             return false;
         }
@@ -163,6 +199,7 @@ namespace GW2EIEvtcParser
             }
             return false;
         }
+        
         public bool StartCasting()
         {
             if (IsExtension)
@@ -181,6 +218,7 @@ namespace GW2EIEvtcParser
             return IsActivation == ArcDPSEnums.Activation.CancelFire || IsActivation == ArcDPSEnums.Activation.Reset || IsActivation == ArcDPSEnums.Activation.CancelCancel;
         }
 
+        ///
         internal void OverrideTime(long time)
         {
             Time = time;

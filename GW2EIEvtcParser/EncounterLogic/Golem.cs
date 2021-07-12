@@ -2,6 +2,7 @@
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 
@@ -81,18 +82,18 @@ namespace GW2EIEvtcParser.EncounterLogic
             return fightData.LogStart;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             AgentItem target = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault();
             foreach (CombatItem c in combatData)
             {
                 // redirect all attacks to the main golem
-                if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsDamage())
+                if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsDamage(extensions))
                 {
                     c.OverrideDstAgent(target.Agent);
                 }
             }
-            ComputeFightTargets(agentData, combatData);
+            ComputeFightTargets(agentData, combatData, extensions);
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

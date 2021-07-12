@@ -6,6 +6,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;
@@ -33,6 +34,7 @@ namespace GW2EIEvtcParser
         private ulong _gw2Build;
         private readonly EvtcParserSettings _parserSettings;
         private readonly GW2APIController _apiController;
+        private readonly Dictionary<uint, AbstractExtensionHandler> _enabledExtensions;
 
         public EvtcParser(EvtcParserSettings parserSettings, GW2EIGW2API.GW2APIController apiController)
         {
@@ -44,6 +46,7 @@ namespace GW2EIEvtcParser
             _playerList = new List<Player>();
             _logStartTime = 0;
             _logEndTime = 0;
+            _enabledExtensions = new Dictionary<uint, AbstractExtensionHandler>();
         }
 
         //Main Parse method------------------------------------------------------------------------------------------------------------------------------------------------
@@ -133,7 +136,7 @@ namespace GW2EIEvtcParser
                     operation.UpdateProgressWithCancellationCheck("Preparing data for log generation");
                     PreProcessEvtcData(operation);
                     operation.UpdateProgressWithCancellationCheck("Data parsed");
-                    return new ParsedEvtcLog(_arcdpsVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _friendlies, _logEndTime - _logStartTime, _parserSettings, operation);
+                    return new ParsedEvtcLog(_arcdpsVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _friendlies, _enabledExtensions, _logEndTime - _logStartTime, _parserSettings, operation);
                 }
             }
             catch (Exception ex)
@@ -524,7 +527,7 @@ namespace GW2EIEvtcParser
             for (long i = 0; i < cbtItemCount; i++)
             {
                 CombatItem combatItem = _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader);
-                if (!IsValid(combatItem))
+                if (!IsValid(combatItem, operation))
                 {
                     continue;
                 }
@@ -562,7 +565,7 @@ namespace GW2EIEvtcParser
         /// </summary>
         /// <param name="combatItem"></param>
         /// <returns>true if the combat item is valid</returns>
-        private static bool IsValid(CombatItem combatItem)
+        private bool IsValid(CombatItem combatItem, ParserController operation)
         {
             if (combatItem.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && combatItem.DstAgent > 20000)
             {
@@ -570,11 +573,30 @@ namespace GW2EIEvtcParser
                 // If it is more than 200% health ignore this record
                 return false;
             }
+            if (combatItem.IsExtension)
+            {
+                // Generic versioning check, we expect that the first event that'll be sent by an addon will always be meta data
+                if (combatItem.Pad == 0)
+                {
+                    AbstractExtensionHandler handler = ExtensionHelper.GetExtensionHandler(combatItem);
+                    if (handler != null)
+                    {
+                        _enabledExtensions[handler.Signature] = handler;
+                        operation.UpdateProgressWithCancellationCheck("Encountered supported extension " + handler.Name + " on " + handler.Version);
+                    }
+                    // No need to keep that event, it'll be immediately parsed by the handler
+                    return false;
+                } 
+                else
+                {
+                    return _enabledExtensions.ContainsKey(combatItem.Pad);
+                }
+            }
             if (combatItem.SrcInstid == 0 && combatItem.DstAgent == 0 && combatItem.SrcAgent == 0 && combatItem.DstInstid == 0 && combatItem.IFF == ArcDPSEnums.IFF.Unknown)
             {
                 return false;
             }
-            return combatItem.IsStateChange != ArcDPSEnums.StateChange.Unknown && combatItem.IsStateChange != ArcDPSEnums.StateChange.ReplInfo && combatItem.IsStateChange != ArcDPSEnums.StateChange.StatReset && combatItem.IsStateChange != ArcDPSEnums.StateChange.APIDelayed && combatItem.IsStateChange != ArcDPSEnums.StateChange.Extension;
+            return combatItem.IsStateChange != ArcDPSEnums.StateChange.Unknown && combatItem.IsStateChange != ArcDPSEnums.StateChange.ReplInfo && combatItem.IsStateChange != ArcDPSEnums.StateChange.StatReset && combatItem.IsStateChange != ArcDPSEnums.StateChange.APIDelayed;
         }
         private static bool UpdateAgentData(AgentItem ag, long logTime, ushort instid, bool checkInstid)
         {       
@@ -614,7 +636,6 @@ namespace GW2EIEvtcParser
             }
         }
 
-
         private void CompletePlayers(ParserController operation)
         {
             //Fix Disconnected players
@@ -639,11 +660,11 @@ namespace GW2EIEvtcParser
                             operation.UpdateProgressWithCancellationCheck("Merging player " + p.Character);
                             foreach (CombatItem c in _combatItems)
                             {
-                                if (c.DstMatchesAgent(player.AgentItem))
+                                if (c.DstMatchesAgent(player.AgentItem, _enabledExtensions))
                                 {
                                     c.OverrideDstAgent(agent);
                                 }
-                                if (c.SrcMatchesAgent(player.AgentItem))
+                                if (c.SrcMatchesAgent(player.AgentItem, _enabledExtensions))
                                 {
                                     c.OverrideSrcAgent(agent);
                                 }
@@ -780,7 +801,7 @@ namespace GW2EIEvtcParser
             // apply offset to everything
             foreach (CombatItem c in _combatItems)
             {
-                if (c.HasTime())
+                if (c.HasTime(_enabledExtensions))
                 {
                     c.OverrideTime(c.Time - offset);
                 }
@@ -802,7 +823,7 @@ namespace GW2EIEvtcParser
             _friendlies = new List<AbstractSingleActor>();
             _friendlies.AddRange(_playerList);
             operation.UpdateProgressWithCancellationCheck("Encounter specific processing");
-            _fightData.Logic.EIEvtcParse(_gw2Build, _fightData, _agentData, _combatItems, _friendlies);
+            _fightData.Logic.EIEvtcParse(_gw2Build, _fightData, _agentData, _combatItems, _friendlies, _enabledExtensions);
             if (!_fightData.Logic.Targets.Any())
             {
                 throw new MissingKeyActorsException("No Targets found");
