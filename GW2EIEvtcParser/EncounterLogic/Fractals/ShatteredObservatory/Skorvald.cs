@@ -48,6 +48,45 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (11204, 4414, 13252, 6462)*/);
         }
 
+        internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+        {
+            // generic method for fractals
+            List<PhaseData> phases = GetInitialPhase(log);
+            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Skorvald);
+            if (skorvald == null)
+            {
+                throw new MissingKeyActorsException("Skorvald not found");
+            }
+            phases[0].AddTarget(skorvald);
+            if (!requirePhases)
+            {
+                return phases;
+            }
+            phases.AddRange(GetPhasesByInvul(log, 762, skorvald, true, true));
+            for (int i = 1; i < phases.Count; i++)
+            {
+                PhaseData phase = phases[i];
+                if (i % 2 == 0)
+                {
+                    phase.Name = "Split " + (i) / 2;
+                    var ids = new List<int>
+                    {
+                        (int)ArcDPSEnums.TrashID.FluxAnomaly4,
+                        (int)ArcDPSEnums.TrashID.FluxAnomaly3,
+                        (int)ArcDPSEnums.TrashID.FluxAnomaly2,
+                        (int)ArcDPSEnums.TrashID.FluxAnomaly1,
+                    };
+                    AddTargetsToPhaseAndFit(phase, ids, log);
+                }
+                else
+                {
+                    phase.Name = "Phase " + (i + 1) / 2;
+                    phase.AddTarget(skorvald);
+                }
+            }
+            return phases;
+        }
+
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, friendlies, extensions);
@@ -56,7 +95,18 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Skorvald not found");
             }
-            target.OverrideName("Skorvald");
+            skorvald.OverrideName("Skorvald");
+            int count = 0;
+            foreach (NPC target in _targets)
+            {
+                if (target.ID == (int)ArcDPSEnums.TrashID.FluxAnomaly1 || 
+                    target.ID == (int)ArcDPSEnums.TrashID.FluxAnomaly2 || 
+                    target.ID == (int)ArcDPSEnums.TrashID.FluxAnomaly3 || 
+                    target.ID == (int)ArcDPSEnums.TrashID.FluxAnomaly4)
+                {
+                    target.OverrideName(target.Character + " " + (++count));
+                }
+            }
         }
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
@@ -95,14 +145,22 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        protected override List<int> GetFightTargetsIDs()
+        {
+            return new List<int>()
+            {
+                (int)ArcDPSEnums.TargetID.Skorvald,
+                (int)ArcDPSEnums.TrashID.FluxAnomaly4,
+                (int)ArcDPSEnums.TrashID.FluxAnomaly3,
+                (int)ArcDPSEnums.TrashID.FluxAnomaly2,
+                (int)ArcDPSEnums.TrashID.FluxAnomaly1,
+            };
+        }
+
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
             return new List<ArcDPSEnums.TrashID>
             {
-                ArcDPSEnums.TrashID.FluxAnomaly4,
-                ArcDPSEnums.TrashID.FluxAnomaly3,
-                ArcDPSEnums.TrashID.FluxAnomaly2,
-                ArcDPSEnums.TrashID.FluxAnomaly1,
                 ArcDPSEnums.TrashID.SolarBloom
             };
         }

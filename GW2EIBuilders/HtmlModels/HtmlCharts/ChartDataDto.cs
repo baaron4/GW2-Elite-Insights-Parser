@@ -17,8 +17,8 @@ namespace GW2EIBuilders.HtmlModels
             {
                 return nullable ? null : new List<object[]>()
                 {
-                    new object[] { Math.Round(phase.Start/1000.0, 3), defaultState},
-                    new object[] { Math.Round(phase.End/1000.0, 3), defaultState},
+                    new object[] { 0.0, defaultState},
+                    new object[] { Math.Round(phase.DurationInMS/1000.0, 3), defaultState},
                 };
             }
             var res = new List<object[]>();

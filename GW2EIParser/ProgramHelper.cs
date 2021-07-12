@@ -290,6 +290,7 @@ namespace GW2EIParser
                 {
                     // that part can't be // due to buff extensions
                     actor.GetTrackedBuffs(log);
+                    actor.GetMinions(log);
                 }
                 Parallel.ForEach(friendliesAndTargets, actor => actor.GetStatus(log));
                 /*if (log.CombatData.HasMovementData)

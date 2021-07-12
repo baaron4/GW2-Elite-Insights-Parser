@@ -16,6 +16,7 @@ namespace GW2EIEvtcParser.EIData
         {
             _minionList = new List<NPC> { firstMinion };
             Master = master;
+            Character = firstMinion.Character;
         }
 
         internal void AddMinion(NPC minion)

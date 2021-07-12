@@ -7,6 +7,7 @@ namespace GW2EIEvtcParser.EIData
         public int Width { get; }
         public int Height { get; }
         public string Color { get; }
+        public int Translation { get; }
         public FacingRectangleDecoration((int start, int end) lifespan, AgentConnector connector, List<Point3D> facings, int width, int height, string color) : base(lifespan, connector, facings)
         {
             Width = width;
@@ -14,6 +15,10 @@ namespace GW2EIEvtcParser.EIData
             Color = color;
         }
 
+        public FacingRectangleDecoration((int start, int end) lifespan, AgentConnector connector, List<Point3D> facings, int width, int height, int translation, string color) : this(lifespan, connector, facings, width, height, color)
+        {
+            Translation = translation;
+        }
         //
 
         public override GenericDecorationSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedEvtcLog log)

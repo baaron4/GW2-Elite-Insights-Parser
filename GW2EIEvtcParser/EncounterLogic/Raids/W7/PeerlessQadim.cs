@@ -11,24 +11,27 @@ namespace GW2EIEvtcParser.EncounterLogic
     {
         public PeerlessQadim(int triggerID) : base(triggerID)
         {
+            
             MechanicList.AddRange(new List<Mechanic>()
             {
-                new HitOnPlayerMechanic(56541, "Pylon Debris Field", new MechanicPlotlySetting("circle-open-dot","rgb(255,150,0)"), "P.Magma", "Hit by Pylon Magma", "Pylon Magma", 0),
-                new HitOnPlayerMechanic(56020, "Energized Affliction", new MechanicPlotlySetting("circle-open","rgb(0,255,0)"), "E.Aff", "Energized Affliction", "Energized Affliction", 0),
-                new HitOnPlayerMechanic(56134, "Force of Retaliation", new MechanicPlotlySetting("circle-open","rgb(0,0,0)"), "Pushed", "Pushed by Shockwave", "Shockwave Push", 1000, (de, log) => !de.To.HasBuff(log, 1122, de.Time)),
-                new HitOnPlayerMechanic(56441, "Force of Havoc", new MechanicPlotlySetting("square-open","rgb(150,0,250)"), "P.Rect", "Hit by Purple Rectangle", "Purple Rectangle", 0),
-                new HitOnPlayerMechanic(56145, "Chaos Called", new MechanicPlotlySetting("circle-x-open","rgb(150,0,250)"), "Pattern.H", "Hit by Energy on Pattern", "Pattern Energy Hit", 0),
-                new HitOnPlayerMechanic(56527, "Rain of Chaos", new MechanicPlotlySetting("star-square","rgb(150,0,250)"), "Lght.H", "Hit by Expanding Lightning", "Lightning Hit", 0),
-                new HitOnPlayerMechanic(56656, "Brandstorm Lightning", new MechanicPlotlySetting("triangle","rgb(150,0,250)"), "S.Lght.H", "Hit by Small Lightning", "Small Lightning Hit", 0),
-                //new HitOnPlayerMechanic(56254, "Exponential Repercussion", new MechanicPlotlySetting("diamond-open","rgb(150,0,250)"), "Shield.H", "Hit by Energy Shield", "Shield Hit", 0),// to check
-                new HitOnPlayerMechanic(56180, "Residual Impact", new MechanicPlotlySetting("circle-open","rgb(250,150,0)"), "Magma.F", "Hit by Magma Field", "Magma Field", 500),
-                new HitOnPlayerMechanic(56378, "Residual Impact", new MechanicPlotlySetting("circle-open","rgb(250,150,0)",10), "S.Magma.F", "Hit by Small Magma Field", "Small Magma Field", 500),
-                new HitOnPlayerMechanic(56616, "Battering Blitz", new MechanicPlotlySetting("bowtie","rgb(250,150,0)"), "Rush.H", "Hit by Qadim Rush", "Qadim Rush", 500),
-                new HitOnPlayerMechanic(56332, "Caustic Chaos", new MechanicPlotlySetting("triangle-right","rgb(250,0,0)"), "A.Prj.H", "Hit by Aimed Projectile", "Aimed Projectile", 0),
-                new HitByEnemyMechanic(56598, "Shower of Chaos", new MechanicPlotlySetting("circle","rgb(0,0,0)"), "Orb.D", "Pylon Orb not caught", "Shower of Chaos", 1000),
-                new PlayerBuffApplyMechanic(56510, "Fixated", new MechanicPlotlySetting("star","rgb(255,0,255)"), "Fixated", "Fixated", "Fixated", 0),
-                new HitOnPlayerMechanic(56543, "Caustic Chaos", new MechanicPlotlySetting("triangle-right-open","rgb(250,0,0)"), "A.Prj.E", "Hit by Aimed Projectile Explosion", "Aimed Projectile Explosion", 0),
-                new PlayerBuffApplyMechanic(56118, "Sapping Surge", new MechanicPlotlySetting("y-down-open","rgb(250,0,50)"), "B.Tether", "25% damage reduction", "Bad Tether", 0),
+                new HitOnPlayerMechanic(56541, "Pylon Debris Field", new MechanicPlotlySetting("circle-open-dot",Colors.Orange), "P.Magma", "Hit by Pylon Magma", "Pylon Magma", 0),
+                new HitOnPlayerMechanic(56020, "Energized Affliction", new MechanicPlotlySetting("circle-open",Colors.Green), "E.Aff", "Energized Affliction", "Energized Affliction", 0),
+                new HitOnPlayerMechanic(56134, "Force of Retaliation", new MechanicPlotlySetting("circle-open",Colors.Black), "Pushed", "Pushed by Shockwave", "Shockwave Push", 1000, (de, log) => !de.To.HasBuff(log, 1122, de.Time)),
+                new HitOnPlayerMechanic(56093, "Exponential Repercussion", new MechanicPlotlySetting("diamond-open",Colors.Magenta), "P.KB", "Pushed by Pylon Knockback", "Pylon Knockback", 1000),
+                new HitOnPlayerMechanic(56254, "Exponential Repercussion", new MechanicPlotlySetting("diamond-open",Colors.Magenta), "Dome.KB", "Pushed by Dome Shield Knockback", "Dome Knockback", 1000),
+                new HitOnPlayerMechanic(56441, "Force of Havoc", new MechanicPlotlySetting("square-open",Colors.Purple), "P.Rect", "Hit by Purple Rectangle", "Purple Rectangle", 0),
+                new HitOnPlayerMechanic(56145, "Chaos Called", new MechanicPlotlySetting("circle-x-open",Colors.Purple), "Pattern.H", "Hit by Energy on Pattern", "Pattern Energy Hit", 0),
+                new HitOnPlayerMechanic(56527, "Rain of Chaos", new MechanicPlotlySetting("star-square",Colors.Purple), "Lght.H", "Hit by Expanding Lightning", "Lightning Hit", 0),
+                new HitOnPlayerMechanic(56656, "Brandstorm Lightning", new MechanicPlotlySetting("triangle",Colors.Yellow), "S.Lght.H", "Hit by Small Lightning", "Small Lightning Hit", 0),
+                new HitOnPlayerMechanic(56180, "Residual Impact", new MechanicPlotlySetting("circle-open",Colors.Orange), "Magma.F", "Hit by Magma Field", "Magma Field", 500),
+                new HitOnPlayerMechanic(56378, "Residual Impact", new MechanicPlotlySetting("circle-open",Colors.Orange,10), "S.Magma.F", "Hit by Small Magma Field", "Small Magma Field", 500),
+                new HitOnPlayerMechanic(56616, "Battering Blitz", new MechanicPlotlySetting("bowtie",Colors.Orange), "Rush.H", "Hit by Qadim Rush", "Qadim Rush", 500),
+                new HitOnPlayerMechanic(56332, "Caustic Chaos", new MechanicPlotlySetting("triangle-right",Colors.Red), "A.Prj.H", "Hit by Aimed Projectile", "Aimed Projectile", 0),
+                new HitByEnemyMechanic(56598, "Shower of Chaos", new MechanicPlotlySetting("circle",Colors.Black), "Orb.D", "Pylon Orb not caught", "Shower of Chaos", 1000),
+                new PlayerBuffApplyMechanic(56510, "Fixated", new MechanicPlotlySetting("star",Colors.Magenta), "Fixated", "Fixated", "Fixated", 0),
+                new PlayerBuffApplyMechanic(56424, "Critical Mass", new MechanicPlotlySetting("circle-open",Colors.Red), "Orb caught", "Collected a Pylon Orb", "Critical Mass", 0),
+                new HitOnPlayerMechanic(56543, "Caustic Chaos", new MechanicPlotlySetting("triangle-right-open",Colors.Red), "A.Prj.E", "Hit by Aimed Projectile Explosion", "Aimed Projectile Explosion", 0),
+                new PlayerBuffApplyMechanic(56118, "Sapping Surge", new MechanicPlotlySetting("y-down-open",Colors.Red), "B.Tether", "25% damage reduction", "Bad Tether", 0),
             });
             Extension = "prlqadim";
             Icon = "https://wiki.guildwars2.com/images/8/8b/Mini_Qadim_the_Peerless.png";
@@ -126,6 +129,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             phaseEnds.Add(log.FightData.FightEnd);
             // tp to middle after pylon destruction
             phaseStarts.AddRange(log.CombatData.GetAnimatedCastData(56375).Select(x => x.EndTime));
+            // There should be at least as many starts as ends, otherwise skip phases
             if (phaseEnds.Count < phaseStarts.Count)
             {
                 return phases;
@@ -137,6 +141,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phases.Add(phase);
             }
             string[] intermissionNames = { "Magma Drop 1", "Magma Drop 2", "North Pylon", "SouthWest Pylon", "SouthEast Pylon" };
+            // intermission phase never finished, add a "dummy" log end
+            if (phaseEnds.Count - 1 == phaseStarts.Count)
+            {
+                phaseStarts.Add(log.FightData.FightEnd);
+            }
+            // There should be as many ends as starts, otherwise anomaly, skip intermission phases
+            if (phaseEnds.Count != phaseStarts.Count)
+            {
+                return phases;
+            }
             for (int i = 0; i < phaseEnds.Count - 1; i++)
             {
                 var phase = new PhaseData(phaseEnds[i], phaseStarts[i + 1], intermissionNames[i]);
@@ -165,7 +179,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TargetID.PeerlessQadim:
                     var cataCycle = cls.Where(x => x.SkillId == 56329).ToList();
                     var forceOfHavoc = cls.Where(x => x.SkillId == 56017).ToList();
-
+                    var forceOfRetal = cls.Where(x => x.SkillId == 56405).ToList();
+                    var etherStrikes = cls.Where(x => x.SkillId == 56012 || x.SkillId == 56653).ToList();
+                    var causticChaos = cls.Where(x => x.SkillId == 56332).ToList();
+                    var expoReperc = cls.Where(x => x.SkillId == 56223).ToList();
                     foreach (AbstractCastEvent c in cataCycle)
                     {
                         int magmaRadius = 850;
@@ -196,6 +213,72 @@ namespace GW2EIEvtcParser.EncounterLogic
                             {
                                 replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, roadLength/subdivisions, roadWidth, direction, (int)((i + 0.5) * roadLength / subdivisions + hitboxOffset), (start + preCastTime + i * (rollOutTime / subdivisions), start + preCastTime + i * (rollOutTime / subdivisions) + duration), "rgba(143, 0, 179, 0.6)", new PositionConnector(position)));
                             }
+                        }
+                    }
+                    foreach (AbstractCastEvent c in forceOfRetal)
+                    {
+                        int radius = 650;
+                        double radiusIncrement = 433.3;
+                        int preCastTime = 1800;
+                        int timeBetweenCascades = 200;
+                        int cascades = 5;
+                        start = (int)c.Time + 1400;
+                        Point3D position = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
+                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, start + preCastTime), "rgba(255, 220, 50, 0.15)", new PositionConnector(position)));
+                        replay.Decorations.Add(new CircleDecoration(true, start + preCastTime, radius, (start, start + preCastTime), "rgba(255, 220, 50, 0.25)", new PositionConnector(position)));
+                        for (int i = 0; i < cascades; i++)
+                        {
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, radius + (int)(radiusIncrement * i), radius + (int)(radiusIncrement * (i + 1)), (start + preCastTime + timeBetweenCascades * i, start + preCastTime + timeBetweenCascades * (i + 1)), "rgba(30, 30, 30, 0.5)", new PositionConnector(position)));
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, radius + (int)(radiusIncrement * i), radius + (int)(radiusIncrement * (i + 1)), (start + preCastTime + timeBetweenCascades * (i + 1), start + preCastTime + timeBetweenCascades * (i + 2)), "rgba(50, 20, 50, 0.25)", new PositionConnector(position)));
+                        }
+                    }
+                    foreach (AbstractCastEvent c in etherStrikes)
+                    {
+                        int coneRadius = 2600;
+                        int coneAngle = 60;
+                        start = (int)c.Time;
+                        end = start + 250;
+                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 300);
+                        replay.Decorations.Add(new PieDecoration(false, 0, coneRadius, facing, coneAngle, (start, end), "rgba(255, 100, 0, 0.30)", new AgentConnector(target)));
+                        replay.Decorations.Add(new PieDecoration(true, 0, coneRadius, facing, coneAngle, (start, end), "rgba(255, 100, 0, 0.1)", new AgentConnector(target)));
+                    }
+                    foreach (AbstractCastEvent c in causticChaos)
+                    {
+                        double acceleration = c.Acceleration;
+                        double ratio = 1.0;
+                        if (acceleration > 0)
+                        {
+                            ratio = acceleration * 0.5 + 1;
+                        }
+                        else
+                        {
+                            ratio = acceleration * 0.6 + 1;
+                        }
+                        int chaosLength = 2600;
+                        int chaosWidth = 100;
+                        start = (int)c.Time;
+                        end = (int)c.EndTime;
+                        int aimTime = (int)((double)c.ExpectedDuration*ratio);
+                        replay.Decorations.Add(new FacingDecoration((0, end), new AgentConnector(target), replay.PolledRotations));
+                        replay.Decorations.Add(new FacingRectangleDecoration((start, end), new AgentConnector(target), replay.PolledRotations, chaosLength, chaosWidth, chaosLength / 2, "rgba(255,100,0,0.3)"));
+                        if (end > start + aimTime)
+                        {
+                            replay.Decorations.Add(new FacingRectangleDecoration((start + aimTime,end), new AgentConnector(target), replay.PolledRotations, chaosLength, chaosWidth, chaosLength / 2, "rgba(100,100,100,0.7)"));
+                        }
+                    }
+                    foreach (AbstractCastEvent c in expoReperc)
+                    {
+                        int radius = 650;
+                        start = (int)c.Time;
+                        end = (int)c.EndTime;
+                        Point3D position = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
+                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, end), "rgba(255, 220, 0, 0.15)", new PositionConnector(position)));
+                        replay.Decorations.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(255, 220, 50, 0.25)", new PositionConnector(position)));
+
+                        foreach (NPC pylon in TrashMobs.Where(x => x.ID == 21962))
+                        {
+                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, end), "rgba(255, 220, 0, 0.15)", new AgentConnector(pylon)));
+                            replay.Decorations.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(255, 220, 50, 0.25)", new AgentConnector(pylon)));
                         }
                     }
                     break;
@@ -259,6 +342,36 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     int fixatedEnd = (int)c.Time;
                     replay.Decorations.Add(new CircleDecoration(true, 0, 120, (fixatedStart, fixatedEnd), "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
+                }
+            }
+            // Chaos Corrosion
+            List<AbstractBuffEvent> chaosCorrosion = GetFilteredList(log.CombatData, 56182, p, true);
+            int corrosionStart = 0;
+            foreach (AbstractBuffEvent c in chaosCorrosion)
+            {
+                if (c is BuffApplyEvent)
+                {
+                    corrosionStart = (int)c.Time;
+                }
+                else
+                {
+                    int corrosionEnd = (int)c.Time;
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 100, (corrosionStart, corrosionEnd), "rgba(80, 80, 80, 0.3)", new AgentConnector(p)));
+                }
+            }
+            // Critical Mass, debuff while carrying an orb
+            List<AbstractBuffEvent> criticalMass = GetFilteredList(log.CombatData, 56424, p, true);
+            int criticalMassStart = 0;
+            foreach (AbstractBuffEvent c in criticalMass)
+            {
+                if (c is BuffApplyEvent)
+                {
+                    criticalMassStart = (int)c.Time;
+                }
+                else
+                {
+                    int criticalMassEnd = (int)c.Time;
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 200, (criticalMassStart, criticalMassEnd), "rgba(255, 0, 0, 0.3)", new AgentConnector(p)));
                 }
             }
             // Magma drop

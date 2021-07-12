@@ -111,10 +111,11 @@ class FacingMechanicDrawable extends MechanicDrawable {
 }
 
 class FacingRectangleMechanicDrawable extends FacingMechanicDrawable {
-    constructor(start, end, connectedTo, facingData, width, height, color) {
+    constructor(start, end, connectedTo, facingData, width, height, translation, color) {
         super(start, end, connectedTo, facingData);
         this.width = width;
         this.height = height;
+        this.translation = translation;
         this.color = color;
     }
 
@@ -130,7 +131,7 @@ class FacingRectangleMechanicDrawable extends FacingMechanicDrawable {
         ctx.translate(pos.x, pos.y);
         ctx.rotate(angle);
         ctx.beginPath();
-        ctx.rect(- 0.5 * this.width, - 0.5 * this.height, this.width, this.height);
+        ctx.rect(- 0.5 * this.width + this.translation, - 0.5 * this.height, this.width, this.height);
         ctx.fillStyle = this.color;
         ctx.fill();
         ctx.restore();

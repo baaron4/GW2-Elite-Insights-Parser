@@ -10,7 +10,10 @@ namespace GW2EIEvtcParser.EIData
         {
             foreach (Point3D facing in facings)
             {
-                Angles.Add(-Point3D.GetRotationFromFacing(facing));
+                if(facing.Time >= lifespan.start && facing.Time <= lifespan.end)
+                {
+                    Angles.Add(-Point3D.GetRotationFromFacing(facing));
+                }
             }
         }
 
