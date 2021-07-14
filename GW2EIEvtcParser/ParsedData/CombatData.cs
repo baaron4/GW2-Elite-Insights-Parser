@@ -353,7 +353,7 @@ namespace GW2EIEvtcParser.ParsedData
                     }
                 }
             }
-            //HasStackIDs = buffEvents.Any(x => x is BuffStackActiveEvent || x is BuffStackResetEvent);
+            HasStackIDs = arcdpsVersion > 20210529 && buffEvents.Any(x => x is BuffStackActiveEvent || x is BuffStackResetEvent) && (fightData.Logic.Mode == EncounterLogic.FightLogic.ParseMode.Instanced10 || fightData.Logic.Mode == EncounterLogic.FightLogic.ParseMode.Instanced5);
             HasMovementData = _statusEvents.MovementEvents.Count > 1;
             HasBreakbarDamageData = brkDamageData.Any();
             //

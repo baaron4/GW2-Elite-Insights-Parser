@@ -260,8 +260,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Deimos not found");
             }
-            // Remove deimos despawn events as they are useless and mess with combat replay
-            combatData.RemoveAll(x => x.IsStateChange == ArcDPSEnums.StateChange.Despawn && x.SrcMatchesAgent(deimos.AgentItem));
             // invul correction
             CombatItem invulApp = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos.AgentItem) && x.IsBuffApply() && x.SkillID == 762);
             if (invulApp != null)
@@ -290,6 +288,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 _deimos10PercentTime = (firstAware >= deimos.LastAware ? firstAware : deimos.LastAware);
                 MergeWithGadgets(deimos.AgentItem, gadgetAgents, combatData);
+                // Add custom spawn event
+                combatData.Add(new CombatItem(_deimos10PercentTime + 1, deimos.AgentItem.Agent, 0, 0, 0, 0, 0, deimos.AgentItem.InstID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0));
+                var auxList = combatData.OrderBy(x => x.Time).ToList();
+                combatData.Clear();
+                combatData.AddRange(auxList);
             }
             deimos.AgentItem.OverrideAwareTimes(deimos.FirstAware, fightData.FightEnd);
             deimos.OverrideName("Deimos");

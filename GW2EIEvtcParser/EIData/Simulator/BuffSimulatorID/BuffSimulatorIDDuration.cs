@@ -16,6 +16,10 @@ namespace GW2EIEvtcParser.EIData
 
         public override void Activate(uint stackID)
         {
+            if (_activeStack != null)
+            {
+                _activeStack.Disable();
+            }
             _activeStack = BuffStack.FirstOrDefault(x => x.StackID == stackID);
             if (_activeStack == null)
             {
@@ -30,6 +34,10 @@ namespace GW2EIEvtcParser.EIData
             BuffStack.Add(toAdd);
             if (addedActive)
             {
+                if (_activeStack != null)
+                {
+                    _activeStack.Disable();
+                }
                 _activeStack = toAdd;
             }
         }
