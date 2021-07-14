@@ -54,27 +54,6 @@ namespace GW2EIEvtcParser.EIData
         {
             BuffStack.Clear();
         }
-        protected override void ProcessEvents(List<AbstractBuffEvent> logs, long fightDuration)
-        {
-            long firstTimeValue = logs.Count > 0 ? Math.Min(logs.First().Time, 0) : 0;
-            long timeCur = firstTimeValue;
-            long timePrev = firstTimeValue;
-            foreach (AbstractBuffEvent log in logs)
-            {
-                timeCur = log.Time;
-                if (timeCur - timePrev < 0)
-                {
-                    throw new InvalidOperationException("Negative passed time in boon simulation");
-                }
-                if (!(timeCur - timePrev <= 5 && log is BuffRemoveSingleEvent))
-                {
-                    Update(timeCur - timePrev);
-                    timePrev = timeCur;
-                }
-                log.UpdateSimulator(this);
-            }
-            Update(fightDuration - timePrev);
-        }
 
         public override void Extend(long extension, long oldValue, AgentItem src, long time, uint stackID)
         {

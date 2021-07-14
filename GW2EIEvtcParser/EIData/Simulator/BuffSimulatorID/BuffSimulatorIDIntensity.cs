@@ -8,9 +8,11 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class BuffSimulatorIDIntensity : BuffSimulatorID
     {
+        private readonly int _capacity;
         // Constructor
-        public BuffSimulatorIDIntensity(ParsedEvtcLog log, Buff buff) : base(log, buff)
+        public BuffSimulatorIDIntensity(ParsedEvtcLog log, Buff buff, int capacity) : base(log, buff)
         {
+            _capacity = capacity;
         }
 
         public override void Activate(uint stackID)
@@ -35,7 +37,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 long diff = timePassed;
                 long leftOver = 0;
-                var activeStacks = BuffStack.Where(x => x.Active && x.Duration > 0).ToList();
+                var activeStacks = BuffStack.Where(x => x.Active && x.Duration > 0).Take(_capacity).ToList();
                 if (activeStacks.Any())
                 {
                     var toAdd = new BuffSimulationItemIntensity(activeStacks);

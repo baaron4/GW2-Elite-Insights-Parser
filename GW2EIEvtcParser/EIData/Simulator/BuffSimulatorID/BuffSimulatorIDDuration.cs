@@ -63,6 +63,11 @@ namespace GW2EIEvtcParser.EIData
                         toAdd.OverrideEnd(toAdd.Start + diff);
                     }
                     _activeStack.Shift(0, diff);
+                    // keep current stack alive while waiting for stack active/ stack remove to arrive
+                    if (_activeStack.Duration == 0 && leftOver > 0 && leftOver < ParserHelper.BuffSimulatorStackActiveDelayConstant)
+                    {
+                        _activeStack.Shift(0, -leftOver);
+                    }
                 }
                 foreach (BuffStackItemID buffStackItem in BuffStack)
                 {
