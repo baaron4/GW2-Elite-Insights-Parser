@@ -466,8 +466,8 @@ function getActorGraphLayout(images, color, hasBuffs) {
         shapes: [],
         annotations: [],
         autosize: true,
-        width: 1100,
-        height: 800,
+        width: 1300,
+        height: 900,
         datarevision: new Date().getTime(),
     };
 }
