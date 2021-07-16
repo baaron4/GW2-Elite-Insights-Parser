@@ -112,19 +112,19 @@
                     <td :data-original-title="row.data[14] + ' out of ' + row.data[15] + ' connected hit(s)'">
                         {{round2(100*row.data[14]/ row.data[15]) + '%' }}
                     </td>
-                    <td :data-original-title="round2(100*row.data[6]/ row.data[0]) + '% of '+ row.data[0] + ' hit(s)'">
+                    <td :data-original-title="round2(100*row.data[6]/ row.data[0]) + '% of '+ row.data[0] + ' direct hit(s)'">
                         {{row.data[6]}}
                     </td>
                     <td>
                         {{row.data[7]}}
                     </td>
-                    <td :data-original-title="round2(100*row.data[8]/ row.data[0]) + '% of '+ row.data[0] + ' hit(s)'">
+                    <td :data-original-title="round2(100*row.data[8]/ row.data[0]) + '% of '+ row.data[16] + ' hit(s)'">
                         {{row.data[8]}}
                     </td>
-                    <td :data-original-title="round2(100*row.data[9]/ row.data[0]) + '% of '+ row.data[0] + ' hit(s)'">
+                    <td :data-original-title="round2(100*row.data[9]/ row.data[0]) + '% of '+ row.data[0] + ' direct hit(s)'">
                         {{row.data[9]}}
                     </td>
-                    <td :data-original-title="round2(100*row.data[10]/ row.data[0]) + '% of '+ row.data[0] + ' hit(s)'">
+                    <td :data-original-title="round2(100*row.data[10]/ row.data[0]) + '% of '+ row.data[0] + ' direct hit(s)'">
                         {{row.data[10]}}
                     </td>
                     <td v-if="wvw">
@@ -165,19 +165,19 @@
                     <td :data-original-title="row.data[14] + ' out of ' + row.data[15] + ' connected hit(s)'">
                         {{round2(100*row.data[14]/ row.data[15]) + '%' }}
                     </td>
-                    <td :data-original-title="round2(100*row.data[6]/ row.data[0])+ '% of '+ row.data[0] + ' hit(s)'">
+                    <td :data-original-title="round2(100*row.data[6]/ row.data[0])+ '% of '+ row.data[0] + ' direct hit(s)'">
                         {{row.data[6]}}
                     </td>
                     <td>
                         {{row.data[7]}}
                     </td>
-                    <td :data-original-title="round2(100*row.data[8]/ row.data[0])+ '% of '+ row.data[0] + ' hit(s)'">
+                    <td :data-original-title="round2(100*row.data[8]/ row.data[0])+ '% of '+ row.data[16] + ' hit(s)'">
                         {{row.data[8]}}
                     </td>
-                    <td :data-original-title="round2(100*row.data[9]/ row.data[0])+ '% of '+ row.data[0] + ' hit(s)'">
+                    <td :data-original-title="round2(100*row.data[9]/ row.data[0])+ '% of '+ row.data[0] + ' direct hit(s)'">
                         {{row.data[9]}}
                     </td>
-                    <td :data-original-title="round2(100*row.data[10]/ row.data[0]) + '% of '+ row.data[0] + ' hit(s)'">
+                    <td :data-original-title="round2(100*row.data[10]/ row.data[0]) + '% of '+ row.data[0] + ' direct hit(s)'">
                         {{row.data[10]}}
                     </td>
                     <td v-if="wvw">
@@ -198,7 +198,7 @@
 </template>
 
 <script>
-    var commonOffset = 16;
+    var commonOffset = 17;
 
     Vue.component("gameplay-stats-component", {
         props: ["activetargets", "playerindex", "phaseindex"],
