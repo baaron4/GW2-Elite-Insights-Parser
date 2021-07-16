@@ -421,9 +421,9 @@ function findState(states, timeS, start, end) {
 function getActorGraphLayout(images, color, hasBuffs) {
     return {
         barmode: 'stack',
-        yaxis: {
+        yaxis2: {
             title: 'Rotation',
-            domain: [0, 0.09],
+            domain: hasBuffs ? [0.45, 0.54] : [0.0, 0.09],
             fixedrange: true,
             showgrid: false,
             showticklabels: false,
@@ -435,9 +435,9 @@ function getActorGraphLayout(images, color, hasBuffs) {
         },
         hovermode: 'x',
         hoverdistance: 150,
-        yaxis2: {
+        yaxis: {
             title: 'Buffs',
-            domain: hasBuffs ? [0.11, 0.6] : [0.11, 0.11],
+            domain: hasBuffs ? [0.0, 0.44] : [0.0, 0.0],
             color: color,
             gridcolor: color,
             fixedrange: true
@@ -446,7 +446,7 @@ function getActorGraphLayout(images, color, hasBuffs) {
             title: 'DPS',
             color: color,
             gridcolor: color,
-            domain: hasBuffs ? [0.61, 1] : [0.11, 1]
+            domain: hasBuffs ? [0.55, 1.0] : [0.1, 1.0],
         },
         images: images,
         font: {
@@ -528,7 +528,7 @@ function computeBuffData(buffData, data) {
                 x: [],
                 y: [],
                 text: [],
-                yaxis: 'y2',
+                yaxis: 'y',
                 type: 'scatter',
                 visible: boonItem.visible ? null : 'legendonly',
                 line: {
