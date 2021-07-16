@@ -29,6 +29,11 @@
     overflow-x: hidden;
 }
 
+.scrollable-x {
+    overflow-y: hidden;
+    overflow-x: auto;
+}
+
 .theme-yeti ::-webkit-scrollbar {
     width: 6px;
     background-color: #DDDDDD;
@@ -66,7 +71,7 @@
 }
 
 .ei-container-small {
-    max-width: 60%;
+    max-width: 68%;
     min-width: 1000px;
     margin-right: auto;
     margin-left: auto;
