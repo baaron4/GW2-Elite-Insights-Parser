@@ -141,6 +141,7 @@ function computeRotationData(rotationData, images, data, phase, actor, yAxis) {
             orientation: 'h',
             mode: 'markers',
             type: 'bar',
+            textposition: "none",
             width: [],
             hoverinfo: 'text',
             hoverlabel: {
@@ -429,24 +430,39 @@ function getActorGraphLayout(images, color, hasBuffs) {
             showticklabels: false,
             color: color,
             range: [0, 2]
-        },
+        },      
         legend: {
             traceorder: 'reversed'
         },
         hovermode: 'x',
         hoverdistance: 150,
         yaxis: {
-            title: 'Buffs',
+            title: 'Duration Buffs',
             domain: hasBuffs ? [0.0, 0.44] : [0.0, 0.0],
             color: color,
             gridcolor: color,
-            fixedrange: true
+            tickformat: ",d",
+            fixedrange: true,
+            side: 'right',
+            range: [0, 1.5],
+            nticks: 1
+        },
+        yaxis4: {
+            title: 'Intensity Buffs',
+            domain: hasBuffs ? [0.0, 0.44] : [0.0, 0.0],
+            color: color,
+            gridcolor: color,
+            tickformat: ",d",
+            fixedrange: true,
+            overlaying: 'y',
+            nticks: 10,
         },
         yaxis3: {
             title: 'DPS',
             color: color,
+            tickformat: ",d",
             gridcolor: color,
-            domain: hasBuffs ? [0.55, 1.0] : [0.1, 1.0],
+            domain: hasBuffs ? [0.55, 1.0] : [0.1, 1.0]
         },
         images: images,
         font: {
@@ -459,7 +475,8 @@ function getActorGraphLayout(images, color, hasBuffs) {
             gridcolor: color,
             tickmode: 'auto',
             nticks: 8,
-            xrangeslider: {}
+            xrangeslider: {},
+            domain: [0.0, 0.95],
         },
         paper_bgcolor: 'rgba(0,0,0,0)',
         plot_bgcolor: 'rgba(0,0,0,0)',
@@ -528,7 +545,7 @@ function computeBuffData(buffData, data) {
                 x: [],
                 y: [],
                 text: [],
-                yaxis: 'y',
+                yaxis: boon.stacking ? 'y4' : 'y',
                 type: 'scatter',
                 visible: boonItem.visible ? null : 'legendonly',
                 line: {

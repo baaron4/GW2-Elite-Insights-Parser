@@ -80,6 +80,7 @@
                         y: [],
                         x: [],
                         type: 'bar',
+                        textposition: "none",
                         text: [],
                         hoverinfo: 'y+text',
                         marker: {
@@ -127,7 +128,8 @@
                     showlegend: false,
                     bargap: 0.05,
                     yaxis: {
-                        title: 'Damage'
+                        title: 'Damage',
+                        tickformat: ",d",
                     },
                     xaxis: {
                         title: 'Time(seconds)',
