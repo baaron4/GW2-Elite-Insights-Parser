@@ -87,21 +87,24 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
             foreach (CombatItem c in combatData)
             {
-                if (gadgetAgents.Contains(c.SrcAgent))
+                if (c.HasTime() && c.Time < target.LastAware)
                 {
-                    if (c.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)
-                    {
-                        continue;
-                    }
-                    if (c.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && c.DstAgent > 1500)
-                    {
-                        continue;
-                    }
+                    continue;
                 }
                 if (allAgents.Contains(c.SrcAgent) && c.IsStateChange.SrcIsAgent())
                 {
+                    if (gadgetAgents.Contains(c.SrcAgent))
+                    {
+                        if (c.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)
+                        {
+                            continue;
+                        }
+                        if (c.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && c.DstAgent > 1500)
+                        {
+                            continue;
+                        }
+                    }                
                     c.OverrideSrcAgent(target.Agent);
-
                 }
                 if (allAgents.Contains(c.DstAgent) && c.IsStateChange.DstIsAgent())
                 {
