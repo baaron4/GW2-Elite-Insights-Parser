@@ -224,7 +224,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AgentItem deimos in deimosAgents)
             {
                 // enter combat
-                CombatItem spawnProtectionRemove = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos) && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && !x.IsExtension && x.SkillID == 34113);
+                CombatItem spawnProtectionRemove = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos) && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SkillID == 34113);
                 if (spawnProtectionRemove != null)
                 {
                     start = Math.Max(start, spawnProtectionRemove.Time);
