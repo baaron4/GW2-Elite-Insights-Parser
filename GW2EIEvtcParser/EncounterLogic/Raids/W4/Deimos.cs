@@ -82,13 +82,13 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static void MergeWithGadgets(AgentItem target, HashSet<ulong> gadgetAgents, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            var allAgents = new HashSet<ulong>(gadgetAgents)
-            {
-                target.Agent
-            };
             foreach (CombatItem c in combatData)
             {
-                if (gadgetAgents.Contains(c.SrcAgent))
+                if (c.HasTime(extensions) && c.Time < target.LastAware)
+                {
+                    continue;
+                }
+                if (gadgetAgents.Contains(c.SrcAgent) && c.SrcIsAgent(extensions))
                 {
                     if (c.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)
                     {
@@ -98,13 +98,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         continue;
                     }
-                }
-                if (allAgents.Contains(c.SrcAgent) && c.SrcIsAgent(extensions))
-                {
                     c.OverrideSrcAgent(target.Agent);
-
                 }
-                if (allAgents.Contains(c.DstAgent) && c.DstIsAgent(extensions))
+                if (gadgetAgents.Contains(c.DstAgent) && c.DstIsAgent(extensions))
                 {
                     c.OverrideDstAgent(target.Agent);
                 }
@@ -229,7 +225,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AgentItem deimos in deimosAgents)
             {
                 // enter combat
-                CombatItem spawnProtectionRemove = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos) && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && !x.IsExtension && x.SkillID == 34113);
+                CombatItem spawnProtectionRemove = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos) && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SkillID == 34113);
                 if (spawnProtectionRemove != null)
                 {
                     start = Math.Max(start, spawnProtectionRemove.Time);

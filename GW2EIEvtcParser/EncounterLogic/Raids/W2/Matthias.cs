@@ -158,7 +158,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (cbt.IsDamage(extensions))
                         {
                             // only redirect incoming damage
-                            if (cbt.DstMatchesAgent(sacrifice.AgentItem))
+                            if (cbt.DstMatchesAgent(sacrifice.AgentItem, extensions))
                             {
                                 cbt.OverrideDstAgent(sacrificeCrystal.Agent);
                             }

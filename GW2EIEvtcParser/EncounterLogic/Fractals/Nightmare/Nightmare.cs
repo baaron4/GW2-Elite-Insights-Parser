@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Main target of the fight not found");
             }
             // check invul gain at the start of the fight (initial or with a small threshold)
-            CombatItem invulGain = combatData.FirstOrDefault(x => !x.IsExtension && x.DstMatchesAgent(target) && (x.IsBuffApply() || x.IsStateChange == ArcDPSEnums.StateChange.BuffInitial) && x.SkillID == invulID);
+            CombatItem invulGain = combatData.FirstOrDefault(x => x.DstMatchesAgent(target) && (x.IsBuffApply() || x.IsStateChange == ArcDPSEnums.StateChange.BuffInitial) && x.SkillID == invulID);
             // get invul lost
             CombatItem invulLost = combatData.FirstOrDefault(x => x.Time >= fightData.LogStart && x.SrcMatchesAgent(target) && !x.IsExtension && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SkillID == invulID);
             if (invulGain != null && invulGain.Time - fightData.LogStart < invulGainOffset && invulLost != null && invulLost.Time > invulGain.Time)

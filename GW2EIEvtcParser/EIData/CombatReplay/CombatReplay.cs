@@ -17,13 +17,14 @@ namespace GW2EIEvtcParser.EIData
         // actors
         internal List<GenericDecoration> Decorations { get; } = new List<GenericDecoration>();
 
+        internal CombatReplay(ParsedEvtcLog log)
+        {
+            _start = 0;
+            _end = log.FightData.FightDuration;
+        }
+
         internal void Trim(long start, long end)
         {
-            if (_end == -1)
-            {
-                _start = long.MinValue;
-                _end = long.MaxValue;
-            }
             PolledPositions.RemoveAll(x => x.Time < start || x.Time > end);
             PolledRotations.RemoveAll(x => x.Time < start || x.Time > end);
             _start = Math.Max(start, _start);
