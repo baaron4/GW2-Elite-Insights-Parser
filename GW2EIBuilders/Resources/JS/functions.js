@@ -141,6 +141,7 @@ function computeRotationData(rotationData, images, data, phase, actor, yAxis) {
             orientation: 'h',
             mode: 'markers',
             type: 'bar',
+            textposition: "none",
             width: [],
             hoverinfo: 'text',
             hoverlabel: {
@@ -421,32 +422,47 @@ function findState(states, timeS, start, end) {
 function getActorGraphLayout(images, color, hasBuffs) {
     return {
         barmode: 'stack',
-        yaxis: {
+        yaxis2: {
             title: 'Rotation',
-            domain: [0, 0.09],
+            domain: hasBuffs ? [0.45, 0.54] : [0.0, 0.09],
             fixedrange: true,
             showgrid: false,
             showticklabels: false,
             color: color,
             range: [0, 2]
-        },
+        },      
         legend: {
             traceorder: 'reversed'
         },
         hovermode: 'x',
         hoverdistance: 150,
-        yaxis2: {
-            title: 'Buffs',
-            domain: hasBuffs ? [0.11, 0.6] : [0.11, 0.11],
+        yaxis: {
+            title: 'Duration Buffs',
+            domain: hasBuffs ? [0.0, 0.44] : [0.0, 0.0],
             color: color,
             gridcolor: color,
-            fixedrange: true
+            tickformat: ",d",
+            fixedrange: true,
+            side: 'right',
+            range: [0, 1.5],
+            nticks: 1
+        },
+        yaxis4: {
+            title: 'Intensity Buffs',
+            domain: hasBuffs ? [0.0, 0.44] : [0.0, 0.0],
+            color: color,
+            gridcolor: color,
+            tickformat: ",d",
+            fixedrange: true,
+            overlaying: 'y',
+            nticks: 10,
         },
         yaxis3: {
             title: 'DPS',
             color: color,
+            tickformat: ",d",
             gridcolor: color,
-            domain: hasBuffs ? [0.61, 1] : [0.11, 1]
+            domain: hasBuffs ? [0.55, 1.0] : [0.1, 1.0]
         },
         images: images,
         font: {
@@ -459,15 +475,16 @@ function getActorGraphLayout(images, color, hasBuffs) {
             gridcolor: color,
             tickmode: 'auto',
             nticks: 8,
-            xrangeslider: {}
+            xrangeslider: {},
+            domain: [0.0, 0.95],
         },
         paper_bgcolor: 'rgba(0,0,0,0)',
         plot_bgcolor: 'rgba(0,0,0,0)',
         shapes: [],
         annotations: [],
         autosize: true,
-        width: 1100,
-        height: 800,
+        width: 1300,
+        height: 850,
         datarevision: new Date().getTime(),
     };
 }
@@ -528,7 +545,7 @@ function computeBuffData(buffData, data) {
                 x: [],
                 y: [],
                 text: [],
-                yaxis: 'y2',
+                yaxis: boon.stacking ? 'y4' : 'y',
                 type: 'scatter',
                 visible: boonItem.visible ? null : 'legendonly',
                 line: {

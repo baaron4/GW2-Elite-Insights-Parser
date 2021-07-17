@@ -156,7 +156,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Sometimes the pre event is not in the evtc
             IReadOnlyList<AbstractCastEvent> castLogs = dhuum.GetCastEvents(log, 0, log.FightData.FightEnd);
             IReadOnlyList<AbstractCastEvent> dhuumCast = dhuum.GetCastEvents(log, 0, 20000);
-            if (dhuumCast.Count > 0)
+            if (dhuumCast.Any(x => !(x is InstantCastEvent)))
             {
                 // full fight does not contain the pre event
                 ComputeFightPhases(phases, castLogs, fightDuration, 0);

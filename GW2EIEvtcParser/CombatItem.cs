@@ -120,13 +120,20 @@ namespace GW2EIEvtcParser
             Pad4 = c.Pad4;
         }
 
+        internal bool HasTime()
+        {
+            return SrcIsAgent()
+                || DstIsAgent()
+                || IsStateChange == ArcDPSEnums.StateChange.Reward;
+        }
+
         internal bool HasTime(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             if (IsExtension && Pad != 0 && extensions.TryGetValue(Pad, out AbstractExtensionHandler handler))
             {
                 return handler.HasTime(this);
             }
-            return IsStateChange.HasTime();
+            return HasTime();
         }
 
         internal bool IsDamage(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -141,13 +148,52 @@ namespace GW2EIEvtcParser
                         ((IsBuff != 0 && Value == 0) || (IsBuff == 0));
         }
 
+        internal bool SrcIsAgent()
+        {
+            return IsStateChange == ArcDPSEnums.StateChange.None
+                || IsStateChange == ArcDPSEnums.StateChange.EnterCombat
+                || IsStateChange == ArcDPSEnums.StateChange.ExitCombat
+                || IsStateChange == ArcDPSEnums.StateChange.ChangeUp
+                || IsStateChange == ArcDPSEnums.StateChange.ChangeDead
+                || IsStateChange == ArcDPSEnums.StateChange.ChangeDown
+                || IsStateChange == ArcDPSEnums.StateChange.Spawn
+                || IsStateChange == ArcDPSEnums.StateChange.Despawn
+                || IsStateChange == ArcDPSEnums.StateChange.HealthUpdate
+                || IsStateChange == ArcDPSEnums.StateChange.WeaponSwap
+                || IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate
+                || IsStateChange == ArcDPSEnums.StateChange.PointOfView
+                || IsStateChange == ArcDPSEnums.StateChange.BuffInitial
+                || IsStateChange == ArcDPSEnums.StateChange.Position
+                || IsStateChange == ArcDPSEnums.StateChange.Velocity
+                || IsStateChange == ArcDPSEnums.StateChange.Rotation
+                || IsStateChange == ArcDPSEnums.StateChange.TeamChange
+                || IsStateChange == ArcDPSEnums.StateChange.AttackTarget
+                || IsStateChange == ArcDPSEnums.StateChange.Targetable
+                || IsStateChange == ArcDPSEnums.StateChange.StackActive
+                || IsStateChange == ArcDPSEnums.StateChange.StackReset
+                || IsStateChange == ArcDPSEnums.StateChange.Guild
+                || IsStateChange == ArcDPSEnums.StateChange.BreakbarState
+                || IsStateChange == ArcDPSEnums.StateChange.BreakbarPercent
+                || IsStateChange == ArcDPSEnums.StateChange.Tag
+                || IsStateChange == ArcDPSEnums.StateChange.BarrierUpdate
+                ;
+        }
+
         internal bool SrcIsAgent(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             if (IsExtension && Pad != 0 && extensions.TryGetValue(Pad, out AbstractExtensionHandler handler))
             {
                 return handler.SrcIsAgent(this);
             }
-            return IsStateChange.SrcIsAgent();
+            return SrcIsAgent();
+        }
+
+        internal bool DstIsAgent()
+        {
+            return IsStateChange == ArcDPSEnums.StateChange.None
+                || IsStateChange == ArcDPSEnums.StateChange.AttackTarget
+                || IsStateChange == ArcDPSEnums.StateChange.BuffInitial
+                ;
         }
 
         internal bool DstIsAgent(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -156,7 +202,7 @@ namespace GW2EIEvtcParser
             {
                 return handler.DstIsAgent(this);
             }
-            return IsStateChange.DstIsAgent();
+            return DstIsAgent();
         }
 
         internal bool IsBuffApply()
@@ -175,7 +221,7 @@ namespace GW2EIEvtcParser
 
         internal bool DstMatchesAgent(AgentItem agentItem)
         {
-            if (IsStateChange.DstIsAgent())
+            if (DstIsAgent())
             {
                 return agentItem.Agent == DstAgent && agentItem.FirstAware <= Time && agentItem.LastAware >= Time;
             }
@@ -193,7 +239,7 @@ namespace GW2EIEvtcParser
 
         internal bool SrcMatchesAgent(AgentItem agentItem)
         {
-            if (IsStateChange.SrcIsAgent())
+            if (SrcIsAgent())
             {
                 return agentItem.Agent == SrcAgent && agentItem.FirstAware <= Time && agentItem.LastAware >= Time;
             }

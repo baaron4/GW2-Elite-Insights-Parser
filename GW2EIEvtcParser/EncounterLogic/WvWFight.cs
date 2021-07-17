@@ -200,7 +200,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             foreach (AgentItem src in srcs)
                             {
-                                if (c.SrcMatchesAgent(src))
+                                if (c.SrcMatchesAgent(src, extensions))
                                 {
                                     c.OverrideSrcAgent(dummyAgent.Agent);
                                     break;
@@ -211,7 +211,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             foreach (AgentItem dst in dsts)
                             {
-                                if (c.DstMatchesAgent(dst))
+                                if (c.DstMatchesAgent(dst, extensions))
                                 {
                                     c.OverrideDstAgent(dummyAgent.Agent);
                                     break;
