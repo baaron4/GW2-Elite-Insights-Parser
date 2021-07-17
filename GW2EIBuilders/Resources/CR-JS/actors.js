@@ -111,7 +111,7 @@ class IconDrawable {
             return null;
         }
         var time = animator.reactiveDataStatus.time;
-        if (this.start !== -1 && (this.start >= time || this.end <= time)) {
+        if (this.start !== -1 && (this.start > time || this.end < time)) {
             return null;
         }
         if (this.pos.length === 2) {
@@ -166,8 +166,8 @@ class IconDrawable {
 }
 
 class SquadIconDrawable extends IconDrawable {
-    constructor(imgSrc, pixelSize, group, pos, dead, down, dc) {
-        super(pos, -1, -1, imgSrc, pixelSize, dead, down, dc);
+    constructor(start, end, imgSrc, pixelSize, group, pos, dead, down, dc) {
+        super(pos, start, end, imgSrc, pixelSize, dead, down, dc);
         this.group = group;
     }
 

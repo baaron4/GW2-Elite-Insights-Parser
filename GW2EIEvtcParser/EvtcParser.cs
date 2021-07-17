@@ -531,7 +531,7 @@ namespace GW2EIEvtcParser
                 {
                     continue;
                 }
-                if (combatItem.IsStateChange.HasTime())
+                if (combatItem.HasTime())
                 {
                     if (_logStartTime == 0)
                     {
@@ -718,7 +718,7 @@ namespace GW2EIEvtcParser
             var invalidCombatItems = new HashSet<CombatItem>();
             foreach (CombatItem c in _combatItems)
             {
-                if (c.IsStateChange.SrcIsAgent())
+                if (c.SrcIsAgent())
                 {
                     if (agentsLookup.TryGetValue(c.SrcAgent, out List<AgentItem> agents))
                     {
@@ -738,7 +738,7 @@ namespace GW2EIEvtcParser
                         }
                     }
                 }
-                if (c.IsStateChange.DstIsAgent())
+                if (c.DstIsAgent())
                 {
                     if (agentsLookup.TryGetValue(c.DstAgent, out List<AgentItem> agents))
                     {
@@ -781,11 +781,11 @@ namespace GW2EIEvtcParser
             operation.UpdateProgressWithCancellationCheck("Linking minions to their masters");
             foreach (CombatItem c in _combatItems)
             {
-                if (c.IsStateChange.SrcIsAgent() && c.SrcMasterInstid != 0)
+                if (c.SrcIsAgent() && c.SrcMasterInstid != 0)
                 {
                     FindAgentMaster(c.Time, c.SrcMasterInstid, c.SrcAgent);
                 }
-                if (c.IsStateChange.DstIsAgent() && c.DstMasterInstid != 0)
+                if (c.DstIsAgent() && c.DstMasterInstid != 0)
                 {
                     FindAgentMaster(c.Time, c.DstMasterInstid, c.DstAgent);
                 }

@@ -320,7 +320,7 @@ namespace GW2EIEvtcParser.EIData
 
         protected void InitCombatReplay(ParsedEvtcLog log)
         {
-            CombatReplay = new CombatReplay();
+            CombatReplay = new CombatReplay(log);
             if (!log.CombatData.HasMovementData)
             {
                 // no combat replay support on fight

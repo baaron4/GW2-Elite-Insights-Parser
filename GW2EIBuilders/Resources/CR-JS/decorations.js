@@ -21,7 +21,7 @@ class MechanicDrawable {
             return null;
         }
         var time = animator.reactiveDataStatus.time;
-        if (this.start !== -1 && (this.start >= time || this.end <= time)) {
+        if (this.start !== -1 && (this.start > time || this.end < time)) {
             return null;
         }
         if (this.connectedTo instanceof Array) {
@@ -67,7 +67,7 @@ class FacingMechanicDrawable extends MechanicDrawable {
             return null;
         }
         var time = animator.reactiveDataStatus.time;
-        if (this.start !== -1 && (this.start >= time || this.end <= time)) {
+        if (this.start !== -1 && (this.start > time || this.end < time)) {
             return null;
         }
         if (this.facingData.length === 1) {
@@ -328,7 +328,7 @@ class LineMechanicDrawable extends FormMechanicDrawable {
             return null;
         }
         var time = animator.reactiveDataStatus.time;
-        if (this.start !== -1 && (this.start >= time || this.end <= time)) {
+        if (this.start !== -1 && (this.start > time || this.end < time)) {
             return null;
         }
         if (this.connectedFrom instanceof Array) {
