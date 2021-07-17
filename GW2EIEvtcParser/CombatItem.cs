@@ -120,7 +120,9 @@ namespace GW2EIEvtcParser
 
         internal bool HasTime()
         {
-            return IsStateChange.HasTime();
+            return SrcIsAgent()
+                || DstIsAgent()
+                || IsStateChange == ArcDPSEnums.StateChange.Reward;
         }
 
         internal bool IsDamage()
@@ -133,12 +135,41 @@ namespace GW2EIEvtcParser
 
         internal bool SrcIsAgent()
         {
-            return IsStateChange.SrcIsAgent();
+            return IsStateChange == ArcDPSEnums.StateChange.None
+                || IsStateChange == ArcDPSEnums.StateChange.EnterCombat
+                || IsStateChange == ArcDPSEnums.StateChange.ExitCombat
+                || IsStateChange == ArcDPSEnums.StateChange.ChangeUp
+                || IsStateChange == ArcDPSEnums.StateChange.ChangeDead
+                || IsStateChange == ArcDPSEnums.StateChange.ChangeDown
+                || IsStateChange == ArcDPSEnums.StateChange.Spawn
+                || IsStateChange == ArcDPSEnums.StateChange.Despawn
+                || IsStateChange == ArcDPSEnums.StateChange.HealthUpdate
+                || IsStateChange == ArcDPSEnums.StateChange.WeaponSwap
+                || IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate
+                || IsStateChange == ArcDPSEnums.StateChange.PointOfView
+                || IsStateChange == ArcDPSEnums.StateChange.BuffInitial
+                || IsStateChange == ArcDPSEnums.StateChange.Position
+                || IsStateChange == ArcDPSEnums.StateChange.Velocity
+                || IsStateChange == ArcDPSEnums.StateChange.Rotation
+                || IsStateChange == ArcDPSEnums.StateChange.TeamChange
+                || IsStateChange == ArcDPSEnums.StateChange.AttackTarget
+                || IsStateChange == ArcDPSEnums.StateChange.Targetable
+                || IsStateChange == ArcDPSEnums.StateChange.StackActive
+                || IsStateChange == ArcDPSEnums.StateChange.StackReset
+                || IsStateChange == ArcDPSEnums.StateChange.Guild
+                || IsStateChange == ArcDPSEnums.StateChange.BreakbarState
+                || IsStateChange == ArcDPSEnums.StateChange.BreakbarPercent
+                || IsStateChange == ArcDPSEnums.StateChange.Tag
+                || IsStateChange == ArcDPSEnums.StateChange.BarrierUpdate
+                ;
         }
 
         internal bool DstIsAgent()
         {
-            return IsStateChange.DstIsAgent();
+            return IsStateChange == ArcDPSEnums.StateChange.None
+                || IsStateChange == ArcDPSEnums.StateChange.AttackTarget
+                || IsStateChange == ArcDPSEnums.StateChange.BuffInitial
+                ;
         }
 
         internal bool IsBuffApply()
@@ -148,7 +179,7 @@ namespace GW2EIEvtcParser
 
         internal bool DstMatchesAgent(AgentItem agentItem)
         {
-            if (IsStateChange.DstIsAgent())
+            if (DstIsAgent())
             {
                 return agentItem.Agent == DstAgent && agentItem.FirstAware <= Time && agentItem.LastAware >= Time;
             }
@@ -157,7 +188,7 @@ namespace GW2EIEvtcParser
 
         internal bool SrcMatchesAgent(AgentItem agentItem)
         {
-            if (IsStateChange.SrcIsAgent())
+            if (SrcIsAgent())
             {
                 return agentItem.Agent == SrcAgent && agentItem.FirstAware <= Time && agentItem.LastAware >= Time;
             }

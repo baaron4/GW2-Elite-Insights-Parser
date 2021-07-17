@@ -81,13 +81,13 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static void MergeWithGadgets(AgentItem target, HashSet<ulong> gadgetAgents, List<CombatItem> combatData)
         {
-            var allAgents = new HashSet<ulong>(gadgetAgents)
-            {
-                target.Agent
-            };
             foreach (CombatItem c in combatData)
             {
-                if (gadgetAgents.Contains(c.SrcAgent))
+                if (c.HasTime() && c.Time < target.LastAware)
+                {
+                    continue;
+                }
+                if (gadgetAgents.Contains(c.SrcAgent) && c.SrcIsAgent())
                 {
                     if (c.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)
                     {
@@ -97,13 +97,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         continue;
                     }
-                }
-                if (allAgents.Contains(c.SrcAgent) && c.IsStateChange.SrcIsAgent())
-                {
                     c.OverrideSrcAgent(target.Agent);
-
                 }
-                if (allAgents.Contains(c.DstAgent) && c.IsStateChange.DstIsAgent())
+                if (gadgetAgents.Contains(c.DstAgent) && c.DstIsAgent())
                 {
                     c.OverrideDstAgent(target.Agent);
                 }
@@ -213,7 +209,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return 0;
             }
             gadgetAgents.Add(deimosStructBody.Agent);
-            CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && (x.SkillID == 37980 || x.SkillID == 37982 || x.SkillID == 38046) && x.SrcAgent != 0 && x.SrcInstid != 0);
+            CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && (x.SkillID == 37980 || x.SkillID == 37982 || x.SkillID == 38046) && x.SrcAgent != 0 && x.SrcInstid != 0 && !x.IsExtension);
             if (armDeimosDamageEvent != null)
             {
                 gadgetAgents.Add(armDeimosDamageEvent.SrcAgent);
@@ -228,7 +224,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AgentItem deimos in deimosAgents)
             {
                 // enter combat
-                CombatItem spawnProtectionRemove = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos) && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && !x.IsExtension && x.SkillID == 34113);
+                CombatItem spawnProtectionRemove = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos) && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SkillID == 34113);
                 if (spawnProtectionRemove != null)
                 {
                     start = Math.Max(start, spawnProtectionRemove.Time);
@@ -273,7 +269,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // legacy method
             if (firstAware == 0)
             {
-                CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= deimos.LastAware && (x.SkillID == 37980 || x.SkillID == 37982 || x.SkillID == 38046) && x.SrcAgent != 0 && x.SrcInstid != 0);
+                CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= deimos.LastAware && (x.SkillID == 37980 || x.SkillID == 37982 || x.SkillID == 38046) && x.SrcAgent != 0 && x.SrcInstid != 0 && !x.IsExtension);
                 if (armDeimosDamageEvent != null)
                 {
                     var deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Name.Contains("Deimos") && x.LastAware > armDeimosDamageEvent.Time).ToList();

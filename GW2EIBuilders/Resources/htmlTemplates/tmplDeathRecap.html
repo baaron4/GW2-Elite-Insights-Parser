@@ -80,6 +80,7 @@
                         y: [],
                         x: [],
                         type: 'bar',
+                        textposition: "none",
                         text: [],
                         hoverinfo: 'y+text',
                         marker: {
@@ -120,13 +121,15 @@
                     font: {
                         color: '#ffffff'
                     },
-                    width: 1100,
+                    width: 1300,
+                    height: 600,
                     paper_bgcolor: 'rgba(0,0,0,0)',
                     plot_bgcolor: 'rgba(0,0,0,0)',
                     showlegend: false,
                     bargap: 0.05,
                     yaxis: {
-                        title: 'Damage'
+                        title: 'Damage',
+                        tickformat: ",d",
                     },
                     xaxis: {
                         title: 'Time(seconds)',
