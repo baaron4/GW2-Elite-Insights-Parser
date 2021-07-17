@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // check invul gain at the start of the fight (initial or with a small threshold)
             CombatItem invulGain = combatData.FirstOrDefault(x => x.DstMatchesAgent(target) && (x.IsBuffApply() || x.IsStateChange == ArcDPSEnums.StateChange.BuffInitial) && x.SkillID == invulID);
             // get invul lost
-            CombatItem invulLost = combatData.FirstOrDefault(x => x.Time >= fightData.LogStart && x.SrcMatchesAgent(target) && !x.IsExtension && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SkillID == invulID);
+            CombatItem invulLost = combatData.FirstOrDefault(x => x.Time >= fightData.LogStart && x.SrcMatchesAgent(target) && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SkillID == invulID);
             if (invulGain != null && invulGain.Time - fightData.LogStart < invulGainOffset && invulLost != null && invulLost.Time > invulGain.Time)
             {
                 return invulLost.Time + 1;
