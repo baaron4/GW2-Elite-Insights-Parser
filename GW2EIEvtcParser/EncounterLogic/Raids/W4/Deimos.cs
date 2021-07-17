@@ -81,32 +81,25 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static void MergeWithGadgets(AgentItem target, HashSet<ulong> gadgetAgents, List<CombatItem> combatData)
         {
-            var allAgents = new HashSet<ulong>(gadgetAgents)
-            {
-                target.Agent
-            };
             foreach (CombatItem c in combatData)
             {
                 if (c.HasTime() && c.Time < target.LastAware)
                 {
                     continue;
                 }
-                if (allAgents.Contains(c.SrcAgent) && c.IsStateChange.SrcIsAgent())
+                if (gadgetAgents.Contains(c.SrcAgent) && c.SrcIsAgent())
                 {
-                    if (gadgetAgents.Contains(c.SrcAgent))
+                    if (c.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)
                     {
-                        if (c.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)
-                        {
-                            continue;
-                        }
-                        if (c.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && c.DstAgent > 1500)
-                        {
-                            continue;
-                        }
-                    }                
+                        continue;
+                    }
+                    if (c.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && c.DstAgent > 1500)
+                    {
+                        continue;
+                    }
                     c.OverrideSrcAgent(target.Agent);
                 }
-                if (allAgents.Contains(c.DstAgent) && c.IsStateChange.DstIsAgent())
+                if (gadgetAgents.Contains(c.DstAgent) && c.DstIsAgent())
                 {
                     c.OverrideDstAgent(target.Agent);
                 }
