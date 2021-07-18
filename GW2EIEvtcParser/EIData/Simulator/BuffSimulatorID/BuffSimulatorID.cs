@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.EIData
 
             public long StackID { get; protected set; } = 0;
 
-            public bool Active { get; set; } = false;
+            public bool Active { get; protected set; } = false;
 
             public BuffStackItemID(long start, long boonDuration, AgentItem src, bool active, long stackID) : base(start, boonDuration, src)
             {
@@ -34,8 +34,7 @@ namespace GW2EIEvtcParser.EIData
 
             public override void Shift(long startShift, long durationShift)
             {
-                // Only time shift if not active or duration is 0
-                if (!Active || Duration == 0)
+                if (!Active)
                 {
                     base.Shift(startShift, 0);
                     return;
@@ -85,7 +84,7 @@ namespace GW2EIEvtcParser.EIData
                             throw new EIBuffSimulatorIDException("Remove all failed");
                         }
                         // buff cleanse all
-                        for (int i = 0; i < removedStacks; i++)
+                        for (int i = 0; i < BuffStack.Count; i++)
                         {
                             BuffStackItem stackItem = BuffStack[i];
                             WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.Duration, time));
@@ -97,7 +96,7 @@ namespace GW2EIEvtcParser.EIData
                                 }
                             }
                         }
-                        BuffStack = BuffStack.GetRange(removedStacks, BuffStack.Count - removedStacks);
+                        BuffStack.Clear();
                         return;
                     }
                     toRemove = BuffStack[0];
@@ -110,7 +109,6 @@ namespace GW2EIEvtcParser.EIData
             }
             if (toRemove == null)
             {
-                //return;
                 throw new EIBuffSimulatorIDException("Remove has failed");
             }
             BuffStack.Remove(toRemove);
