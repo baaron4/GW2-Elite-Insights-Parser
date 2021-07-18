@@ -84,7 +84,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             foreach (CombatItem c in combatData)
             {
-                if (c.HasTime(extensions) && c.Time < target.LastAware)
+                if (c.HasTime(extensions) && c.Time < target.LastAware && c.IsStateChange != ArcDPSEnums.StateChange.AttackTarget && c.IsStateChange != ArcDPSEnums.StateChange.Targetable)
                 {
                     continue;
                 }
