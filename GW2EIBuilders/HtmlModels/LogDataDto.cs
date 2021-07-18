@@ -47,6 +47,7 @@ namespace GW2EIBuilders.HtmlModels
         public string EncounterStart { get; set; }
         public string EncounterEnd { get; set; }
         public string ArcVersion { get; set; }
+        public long EvtcVersion { get; set; }
         public ulong Gw2Build { get; set; }
         public long FightID { get; set; }
         public string Parser { get; set; }
@@ -150,6 +151,7 @@ namespace GW2EIBuilders.HtmlModels
                 EncounterStart = log.LogData.LogStartStd,
                 EncounterEnd = log.LogData.LogEndStd,
                 ArcVersion = log.LogData.ArcVersion,
+                EvtcVersion = log.LogData.EvtcVersion,
                 Gw2Build = log.LogData.GW2Build,
                 FightID = log.FightData.TriggerID,
                 Parser = "Elite Insights " + parserVersion.ToString(),

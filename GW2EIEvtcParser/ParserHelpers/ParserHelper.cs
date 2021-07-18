@@ -644,7 +644,7 @@ namespace GW2EIEvtcParser
             return false;
         }
 
-        public static List<string> GetSupportedFormats()
+        public static IReadOnlyList<string> GetSupportedFormats()
         {
             return new List<string>(_supportedFiles);
         }

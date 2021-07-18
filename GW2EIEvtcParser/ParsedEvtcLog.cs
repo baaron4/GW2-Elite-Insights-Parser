@@ -33,7 +33,7 @@ namespace GW2EIEvtcParser
 
         private Dictionary<AgentItem, AbstractSingleActor> _agentToActorDictionary;
 
-        internal ParsedEvtcLog(int arcdpsVersion, FightData fightData, AgentData agentData, SkillData skillData,
+        internal ParsedEvtcLog(int evtcVersion, FightData fightData, AgentData agentData, SkillData skillData,
                 List<CombatItem> combatItems, List<Player> playerList, List<AbstractSingleActor> friendlies, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, long evtcLogDuration, EvtcParserSettings parserSettings, ParserController operation)
         {
             FightData = fightData;
@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser
             PlayerAgents = new HashSet<AgentItem>(playerList.Select(x => x.AgentItem));
             FriendlyAgents = new HashSet<AgentItem>(friendlies.Select(x => x.AgentItem));
             _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Combat Events");
-            CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList, operation, extensions, arcdpsVersion);
+            CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList, operation, extensions, evtcVersion);
             //
             _operation.UpdateProgressWithCancellationCheck("Checking Success");
             FightData.Logic.CheckSuccess(CombatData, AgentData, FightData, PlayerAgents);
@@ -61,7 +61,7 @@ namespace GW2EIEvtcParser
                 throw new SkipException();
             }
             _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Log Meta Data");
-            LogData = new LogData("EVTC"+arcdpsVersion, CombatData, evtcLogDuration, playerList, extensions, operation);
+            LogData = new LogData(evtcVersion, CombatData, evtcLogDuration, playerList, extensions, operation);
             //
             _operation.UpdateProgressWithCancellationCheck("Creating Buff Container");
             Buffs = new BuffsContainer(LogData.GW2Build, CombatData, operation);

@@ -30,7 +30,7 @@ namespace GW2EIEvtcParser
         private ushort _id;
         private long _logStartTime;
         private long _logEndTime;
-        private int _arcdpsVersion;
+        private int _evtcVersion;
         private ulong _gw2Build;
         private readonly EvtcParserSettings _parserSettings;
         private readonly GW2APIController _apiController;
@@ -136,7 +136,7 @@ namespace GW2EIEvtcParser
                     operation.UpdateProgressWithCancellationCheck("Preparing data for log generation");
                     PreProcessEvtcData(operation);
                     operation.UpdateProgressWithCancellationCheck("Data parsed");
-                    return new ParsedEvtcLog(_arcdpsVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _friendlies, _enabledExtensions, _logEndTime - _logStartTime, _parserSettings, operation);
+                    return new ParsedEvtcLog(_evtcVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _friendlies, _enabledExtensions, _logEndTime - _logStartTime, _parserSettings, operation);
                 }
             }
             catch (Exception ex)
@@ -171,7 +171,7 @@ namespace GW2EIEvtcParser
         {
             // 12 bytes: arc build version
             string evtcVersion = GetString(reader, 12);
-            if (!evtcVersion.StartsWith("EVTC") || !int.TryParse(new string(evtcVersion.Where(char.IsDigit).ToArray()), out _arcdpsVersion))
+            if (!evtcVersion.StartsWith("EVTC") || !int.TryParse(new string(evtcVersion.Where(char.IsDigit).ToArray()), out _evtcVersion))
             {
                 throw new EvtcFileException("Not EVTC");
             }
