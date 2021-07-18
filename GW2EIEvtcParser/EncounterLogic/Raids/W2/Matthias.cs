@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -120,7 +121,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             // has breakbar state into
             if (combatData.Any(x => x.IsStateChange == ArcDPSEnums.StateChange.BreakbarState))
@@ -148,16 +149,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             continue;
                         }
-                        bool skip = !(cbt.DstMatchesAgent(sacrifice.AgentItem) || cbt.SrcMatchesAgent(sacrifice.AgentItem));
+                        bool skip = !(cbt.DstMatchesAgent(sacrifice.AgentItem, extensions) || cbt.SrcMatchesAgent(sacrifice.AgentItem, extensions));
                         if (skip)
                         {
                             continue;
                         }
                         // redirect damage events
-                        if (cbt.IsDamage())
+                        if (cbt.IsDamage(extensions))
                         {
                             // only redirect incoming damage
-                            if (cbt.DstMatchesAgent(sacrifice.AgentItem))
+                            if (cbt.DstMatchesAgent(sacrifice.AgentItem, extensions))
                             {
                                 cbt.OverrideDstAgent(sacrificeCrystal.Agent);
                             }
@@ -166,11 +167,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                         else
                         {
                             var copy = new CombatItem(cbt);
-                            if (copy.DstMatchesAgent(sacrifice.AgentItem))
+                            if (copy.DstMatchesAgent(sacrifice.AgentItem, extensions))
                             {
                                 copy.OverrideDstAgent(sacrificeCrystal.Agent);
                             }
-                            if (copy.SrcMatchesAgent(sacrifice.AgentItem))
+                            if (copy.SrcMatchesAgent(sacrifice.AgentItem, extensions))
                             {
                                 copy.OverrideSrcAgent(sacrificeCrystal.Agent);
                             }
@@ -186,7 +187,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     combatData.AddRange(auxCombatData);
                 }
             }
-            ComputeFightTargets(agentData, combatData);
+            ComputeFightTargets(agentData, combatData, extensions);
             foreach (AbstractSingleActor target in Targets)
             {
                 if (target.ID == (int)ArcDPSEnums.TrashID.MatthiasSacrificeCrystal)

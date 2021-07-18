@@ -52,6 +52,7 @@ namespace GW2EIBuilders.HtmlModels
         public string Parser { get; set; }
         public string RecordedBy { get; set; }
         public List<string> UploadLinks { get; set; }
+        public List<string> UsedExtensions { get; set; }
 
 
         private static Dictionary<string, List<Buff>> BuildPersonalBuffData(ParsedEvtcLog log, Dictionary<string, List<long>> dict, Dictionary<long, Buff> usedBuffs)
@@ -153,7 +154,8 @@ namespace GW2EIBuilders.HtmlModels
                 FightID = log.FightData.TriggerID,
                 Parser = "Elite Insights " + parserVersion.ToString(),
                 RecordedBy = log.LogData.PoVName,
-                UploadLinks = uploadLinks.ToList()
+                UploadLinks = uploadLinks.ToList(),
+                UsedExtensions = log.LogData.UsedExtensions.Any() ? log.LogData.UsedExtensions.Select(x => x.Name + " - " + x.Version).ToList() : null
             };
             if (cr)
             {

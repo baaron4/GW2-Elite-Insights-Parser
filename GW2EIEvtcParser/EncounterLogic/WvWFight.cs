@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 
@@ -122,7 +123,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             fightData.SetSuccess(true, fightData.FightEnd);
         }
 
-        private void SolveWvWPlayers(AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
+        private void SolveWvWPlayers(AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             IReadOnlyList<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer);
             var set = new HashSet<string>();
@@ -164,11 +165,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AbstractSingleActor mainPlayer = actorListToFill.FirstOrDefault(x => x.Character == nonSquadPlayer.Character);
                     foreach (CombatItem c in combatData)
                     {
-                        if (c.SrcMatchesAgent(nonSquadPlayer.AgentItem))
+                        if (c.SrcMatchesAgent(nonSquadPlayer.AgentItem, extensions))
                         {
                             c.OverrideSrcAgent(mainPlayer.AgentItem.Agent);
                         }
-                        if (c.DstMatchesAgent(nonSquadPlayer.AgentItem))
+                        if (c.DstMatchesAgent(nonSquadPlayer.AgentItem, extensions))
                         {
                             c.OverrideDstAgent(mainPlayer.AgentItem.Agent);
                         }
@@ -181,11 +182,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             agentData.RemoveAllFrom(toRemove);
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             AgentItem dummyAgent = agentData.AddCustomAgent(0, fightData.FightEnd, AgentItem.AgentType.NPC, _detailed ? "Dummy WvW Agent" : "Enemy Players", "", (int)ArcDPSEnums.TargetID.WorldVersusWorld, true);
 
-            SolveWvWPlayers(agentData, combatData, friendlies);
+            SolveWvWPlayers(agentData, combatData, friendlies, extensions);
             var friendlyAgents = new HashSet<AgentItem>(friendlies.Select(x => x.AgentItem));
             if (!_detailed)
             {
@@ -193,13 +194,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var enemyPlayerDicts = aList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
                 foreach (CombatItem c in combatData)
                 {
-                    if (c.IsDamage())
+                    if (c.IsDamage(extensions))
                     {
                         if (enemyPlayerDicts.TryGetValue(c.SrcAgent, out List<AgentItem> srcs))
                         {
                             foreach (AgentItem src in srcs)
                             {
-                                if (c.SrcMatchesAgent(src))
+                                if (c.SrcMatchesAgent(src, extensions))
                                 {
                                     c.OverrideSrcAgent(dummyAgent.Agent);
                                     break;
@@ -210,7 +211,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             foreach (AgentItem dst in dsts)
                             {
-                                if (c.DstMatchesAgent(dst))
+                                if (c.DstMatchesAgent(dst, extensions))
                                 {
                                     c.OverrideDstAgent(dummyAgent.Agent);
                                     break;
@@ -220,7 +221,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
-            ComputeFightTargets(agentData, combatData);
+            ComputeFightTargets(agentData, combatData, extensions);
         }
     }
 }
