@@ -15,16 +15,16 @@ namespace GW2EIBuilders.JsonModels
     /// </summary>
     internal static class JsonLogBuilder
     {
-        internal static SkillDesc BuildSkillDesc(SkillItem item, ulong gw2Build, SkillData skillData)
+        internal static SkillDesc BuildSkillDesc(SkillItem item, ParsedEvtcLog log)
         {
             var skillDesc = new SkillDesc
             {
                 Name = item.Name,
                 AutoAttack = item.AA,
                 Icon = item.Icon,
-                CanCrit = SkillItem.CanCrit(item.ID, gw2Build),
+                CanCrit = SkillItem.CanCrit(item.ID, log.LogData.GW2Build),
                 IsSwap = item.IsSwap,
-                IsNotAccurate = skillData.IsNotAccurate(item.ID)
+                IsNotAccurate = log.SkillData.IsNotAccurate(item.ID)
             };
             return skillDesc;
         }
