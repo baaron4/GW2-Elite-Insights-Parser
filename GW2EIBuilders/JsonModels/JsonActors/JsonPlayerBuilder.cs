@@ -58,7 +58,7 @@ namespace GW2EIBuilders.JsonModels
                         graph1SConditionDamageList[i] = player.Get1SDamageList(log, phase.Start, phase.End, target, DamageType.Condition);
                         graph1SBreakbarDamageList[i] = player.Get1SBreakbarDamageList(log, phase.Start, phase.End, target);
                     }
-                    targetDamageDistList[i] = JsonDamageDistBuilder.BuildJsonDamageDistList(player.GetDamageEvents(target, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
+                    targetDamageDistList[i] = JsonDamageDistBuilder.BuildJsonDamageDistList(player.GetJustActorDamageEvents(target, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
                 }
                 if (settings.RawFormatTimelineArrays)
                 {
