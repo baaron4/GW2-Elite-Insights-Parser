@@ -60,7 +60,14 @@ namespace GW2EIEvtcParser.EIData
             {
                 foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in _dict)
                 {
-                    pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, dsp.Time, int.MaxValue, log.SkillData.Get(pair.Key), BuffRemoveAllEvent.FullRemoval, int.MaxValue));
+                    pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, dsp.Time + ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), BuffRemoveAllEvent.FullRemoval, int.MaxValue));
+                }
+            }
+            foreach (SpawnEvent sp in log.CombatData.GetSpawnEvents(agentItem))
+            {
+                foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in _dict)
+                {
+                    pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, sp.Time - ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), BuffRemoveAllEvent.FullRemoval, int.MaxValue));
                 }
             }
             trackedBuffs = new HashSet<Buff>();
