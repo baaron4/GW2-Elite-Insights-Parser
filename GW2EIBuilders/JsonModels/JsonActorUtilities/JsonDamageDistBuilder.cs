@@ -39,7 +39,7 @@ namespace GW2EIBuilders.JsonModels
                 if (!skillDesc.ContainsKey("s" + id))
                 {
                     SkillItem skill = list.First().Skill;
-                    skillDesc["s" + id] = JsonLogBuilder.BuildSkillDesc(skill, log.LogData.GW2Build, log.SkillData);
+                    skillDesc["s" + id] = JsonLogBuilder.BuildSkillDesc(skill, log);
                 }
             }
             jsonDamageDist.Id = id;
