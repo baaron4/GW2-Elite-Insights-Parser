@@ -53,17 +53,17 @@ namespace GW2EIEvtcParser.Extensions
             return new List<EXTAbstractHealingEvent>();
         }
 
-        public EXTHealingType GetHealingType(SkillItem skill, ParsedEvtcLog log)
+        public EXTHealingType GetHealingType(long id, ParsedEvtcLog log)
         {
-            if (HybridHealIDs.Contains(skill.ID))
+            if (HybridHealIDs.Contains(id))
             {
                 return EXTHealingType.HealingPower;
             }
-            if (EncounteredIDs.TryGetValue(skill.ID, out EXTHealingType type))
+            if (EncounteredIDs.TryGetValue(id, out EXTHealingType type))
             {
                 return type;
             }
-            if (log.CombatData.GetDamageData(skill.ID).Any(x => !x.DoubleProcHit))
+            if (log.CombatData.GetDamageData(id).Any(x => !x.DoubleProcHit))
             {
                 type = EXTHealingType.ConversionBased;
             } 
@@ -71,8 +71,18 @@ namespace GW2EIEvtcParser.Extensions
             {
                 type = EXTHealingType.HealingPower;
             }
-            EncounteredIDs[skill.ID] = type;
+            EncounteredIDs[id] = type;
             return type;
+        }
+
+        public EXTHealingType GetHealingType(SkillItem skill, ParsedEvtcLog log)
+        {
+            return GetHealingType(skill.ID, log);
+        }
+
+        public EXTHealingType GetHealingType(Buff buff, ParsedEvtcLog log)
+        {
+            return GetHealingType(buff.ID, log);
         }
 
     }
