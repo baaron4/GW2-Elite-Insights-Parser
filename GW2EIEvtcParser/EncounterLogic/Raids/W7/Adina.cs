@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -34,8 +35,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new DamageCastFinder(56351, 56351, InstantCastFinder.DefaultICD), // Seismic Suffering
             };
         }
-
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies)
+        
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             var attackTargets = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).ToList();
             long first = 0;
@@ -72,11 +73,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         if (c.Time >= extra.FirstAware && c.Time <= extra.LastAware)
                         {
-                            if (c.SrcMatchesAgent(hand))
+                            if (c.SrcMatchesAgent(hand, extensions))
                             {
                                 c.OverrideSrcAgent(extra.Agent);
                             }
-                            if (c.DstMatchesAgent(hand))
+                            if (c.DstMatchesAgent(hand, extensions))
                             {
                                 c.OverrideDstAgent(extra.Agent);
                             }
@@ -94,7 +95,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var auxCombatData = combatData.OrderBy(x => x.Time).ToList();
             combatData.Clear();
             combatData.AddRange(auxCombatData);
-            ComputeFightTargets(agentData, combatData);
+            ComputeFightTargets(agentData, combatData, extensions);
         }
 
         protected override List<int> GetFightTargetsIDs()

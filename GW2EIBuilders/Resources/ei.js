@@ -137,6 +137,12 @@ function mainLoad() {
                     }
                 }
                 return hasAny ? res : null;
+            },
+            usedExtensions: function () {
+                if (!logData.usedExtensions) {
+                    return null;
+                }
+                return logData.usedExtensions;
             }
         },
         mounted() {

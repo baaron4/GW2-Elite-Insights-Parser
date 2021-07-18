@@ -140,9 +140,21 @@ namespace GW2EIBuilders.JsonModels
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Players");
             jsonLog.Players = log.Friendlies.Select(x => JsonPlayerBuilder.BuildJsonPlayer(x, log, settings, skillMap, buffMap, damageModMap, personalBuffs)).ToList();
             //
-            if (log.LogData.LogErrors.Count > 0)
+            if (log.LogData.LogErrors.Any())
             {
                 jsonLog.LogErrors = new List<string>(log.LogData.LogErrors);
+            }
+            if (log.LogData.UsedExtensions.Any())
+            {
+                jsonLog.UsedExtensions = log.LogData.UsedExtensions.Select(x => {
+                    return new ExtensionDesc()
+                    {
+                        Name = x.Name,
+                        Version = x.Version,
+                        Signature = x.Signature,
+                        Revision = x.Revision
+                    };
+                }).ToList();
             }
             //
             jsonLog.PersonalBuffs = personalBuffs.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>) x.Value);
