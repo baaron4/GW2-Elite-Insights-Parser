@@ -8,9 +8,11 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class BuffSimulatorIDIntensity : BuffSimulatorID
     {
+        private readonly int _capacity;
         // Constructor
-        public BuffSimulatorIDIntensity(ParsedEvtcLog log, Buff buff) : base(log, buff)
+        public BuffSimulatorIDIntensity(ParsedEvtcLog log, Buff buff, int capacity) : base(log, buff)
         {
+            _capacity = capacity;
         }
 
         public override void Activate(uint stackID)
@@ -33,28 +35,32 @@ namespace GW2EIEvtcParser.EIData
         {
             if (BuffStack.Any() && timePassed > 0)
             {
-                List<BuffStackItemID> BuffStackToUse = BuffStack;
-                long diff = Math.Min(BuffStackToUse.Min(x => x.Duration), timePassed);
-                if (diff == 0)
+                long diff = timePassed;
+                long leftOver = 0;
+                var activeStacks = BuffStack.Where(x => x.Active && x.Duration > 0).Take(_capacity).ToList();
+                if (activeStacks.Any())
                 {
-                    BuffStackToUse = BuffStack.Where(x => x.Duration > 0).ToList();
-                    if (!BuffStackToUse.Any())
+                    var toAdd = new BuffSimulationItemIntensity(activeStacks);
+                    GenerationSimulation.Add(toAdd);
+                    long currentDur = activeStacks.Min(x => x.Duration);
+                    long timeDiff = currentDur - timePassed;
+                    if (timeDiff < 0)
                     {
-                        return;
+                        diff = currentDur;
+                        leftOver = timePassed - diff;
                     }
-                    diff = Math.Min(BuffStackToUse.Min(x => x.Duration), timePassed);
+                    if (toAdd.End > toAdd.Start + diff)
+                    {
+                        toAdd.OverrideEnd(toAdd.Start + diff);
+                    }
+                    foreach (BuffStackItemID buffStackItem in activeStacks)
+                    {
+                        buffStackItem.Shift(0, diff);
+                    }
                 }
-                var toAdd = new BuffSimulationItemIntensity(BuffStackToUse);
-                GenerationSimulation.Add(toAdd);
-                long leftOver = timePassed - diff;
-                if (toAdd.End > toAdd.Start + diff)
-                {
-                    toAdd.OverrideEnd(toAdd.Start + diff);
-                }
-                // Subtract from each from the original stack so that everyone's time start are shifted
                 foreach (BuffStackItemID buffStackItem in BuffStack)
                 {
-                    buffStackItem.Shift(diff, diff);
+                    buffStackItem.Shift(diff, 0);
                 }
                 Update(leftOver);
             }

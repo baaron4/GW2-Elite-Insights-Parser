@@ -157,15 +157,15 @@ namespace GW2EIEvtcParser.EIData
         }
         internal AbstractBuffSimulator CreateSimulator(ParsedEvtcLog log, bool forceNoId)
         {
+            BuffInfoEvent buffInfoEvent = log.CombatData.GetBuffInfoEvent(ID);
+            int capacity = Capacity;
+            if (buffInfoEvent != null && buffInfoEvent.MaxStacks != capacity)
+            {
+                capacity = buffInfoEvent.MaxStacks;
+            }
             if (!log.CombatData.HasStackIDs || forceNoId)
             {
 
-                BuffInfoEvent buffInfoEvent = log.CombatData.GetBuffInfoEvent(ID);
-                int capacity = Capacity;
-                if (buffInfoEvent != null && buffInfoEvent.MaxStacks != capacity)
-                {
-                    capacity = buffInfoEvent.MaxStacks;
-                }
                 switch (Type)
                 {
                     case BuffType.Intensity: 
@@ -180,7 +180,7 @@ namespace GW2EIEvtcParser.EIData
             switch (Type)
             {
                 case BuffType.Intensity:
-                    return new BuffSimulatorIDIntensity(log, this);
+                    return new BuffSimulatorIDIntensity(log, this, capacity);
                 case BuffType.Duration:
                     return new BuffSimulatorIDDuration(log, this);
                 case BuffType.Unknown:

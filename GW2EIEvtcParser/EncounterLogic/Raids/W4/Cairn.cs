@@ -152,7 +152,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Cairn not found");
             }
             // spawn protection loss -- most reliable
-            CombatItem spawnProtectionLoss = combatData.Find(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && !x.IsExtension && x.SrcMatchesAgent(target) && x.SkillID == 34113);
+            CombatItem spawnProtectionLoss = combatData.Find(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SrcMatchesAgent(target) && x.SkillID == 34113);
             if (spawnProtectionLoss != null)
             {
                 return spawnProtectionLoss.Time - 1;
