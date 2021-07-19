@@ -5,7 +5,6 @@ namespace GW2EIEvtcParser.Extensions
 {
     public static class ExtensionHelper
     {
-        // TODO add supported sigs as public consts
         internal static AbstractExtensionHandler GetExtensionHandler(CombatItem c)
         {
             if (!c.IsExtension && c.Pad != 0)
@@ -13,9 +12,19 @@ namespace GW2EIEvtcParser.Extensions
                 return null;
             }
             // place holder for sig
-            switch (c.SrcAgent & 0x00000000FFFFFFFF)
+            ulong sig = c.SrcAgent & 0x00000000FFFFFFFF;
+            ulong rev = (c.SrcAgent & 0x00FFFFFF00000000) >> 32;
+            switch (sig)
             {
-                // TODO: based on sig, do a switch on rev
+                case HealingStatsExtensionHandler.EXT_HealingStats:
+                    switch (rev)
+                    {
+                        case 1:
+                            return new HealingStatsRev1ExtensionHandler(c);
+                        default:
+                            break;
+                    }
+                    break;
                 default:
                     break;
             }

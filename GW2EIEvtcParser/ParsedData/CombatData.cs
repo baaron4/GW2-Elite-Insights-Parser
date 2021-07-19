@@ -28,6 +28,9 @@ namespace GW2EIEvtcParser.ParsedData
         private readonly Dictionary<AgentItem, List<AbstractHealthDamageEvent>> _damageTakenData;
         private readonly Dictionary<AgentItem, List<AbstractBreakbarDamageEvent>> _breakbarDamageTakenData;
         private readonly List<RewardEvent> _rewardEvents = new List<RewardEvent>();
+        // EXTENSIONS
+        public EXTHealingCombatData EXTHealingCombatData { get; internal set; }
+        public bool HasEXTHealing => EXTHealingCombatData != null;
 
         internal bool HasStackIDs { get; } = false;
 

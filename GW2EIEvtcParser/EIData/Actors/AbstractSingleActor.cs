@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.ParserHelper;
@@ -20,6 +21,7 @@ namespace GW2EIEvtcParser.EIData
         private readonly SingleActorGraphsHelper _graphHelper;
         private readonly SingleActorDamageModifierHelper _damageModifiersHelper;
         private readonly SingleActorStatusHelper _statusHelper;
+        public EXTAbstractSingleActorHealingHelper EXTHealing { get; }
         // Minions
         private Dictionary<long, Minions> _minions;
         // Replay
@@ -40,6 +42,7 @@ namespace GW2EIEvtcParser.EIData
             _graphHelper = new SingleActorGraphsHelper(this);
             _damageModifiersHelper = new SingleActorDamageModifierHelper(this);
             _statusHelper = new SingleActorStatusHelper(this);
+            EXTHealing = new EXTAbstractSingleActorHealingHelper(this);
         }
 
         // Status
