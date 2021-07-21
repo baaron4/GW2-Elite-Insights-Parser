@@ -63,21 +63,21 @@ namespace GW2EIJSON
         /// Array of Total DPS stats \n
         /// Length == # of phases
         /// </summary>
-        /// <seealso cref="JsonDPS"/>
+        /// <seealso cref="JsonStatistics.JsonDPS"/>
         public IReadOnlyList<JsonStatistics.JsonDPS> DpsAll { get; set; }
-        
+
         /// <summary>
         /// Stats against all  \n
         /// Length == # of phases
         /// </summary>
-        /// <seealso cref="JsonGameplayStatsAll"/>
+        /// <seealso cref="JsonStatistics.JsonGameplayStatsAll"/>
         public IReadOnlyList<JsonStatistics.JsonGameplayStatsAll> StatsAll { get; set; }
-        
+
         /// <summary>
         /// Defensive stats \n
         /// Length == # of phases
         /// </summary>
-        /// <seealso cref="JsonDefensesAll"/>
+        /// <seealso cref="JsonStatistics.JsonDefensesAll"/>
         public IReadOnlyList<JsonStatistics.JsonDefensesAll> Defenses { get; set; }
         
         /// <summary>
