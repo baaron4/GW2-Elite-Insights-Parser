@@ -96,7 +96,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target) && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && Math.Abs(x.Time - invulLost.Time) < ParserHelper.ServerDelayConstant);
                 if (enterCombat != null)
                 {
-                    return enterCombat.Time + 1;
+                    return invulLost.Time + 1;
                 }
             }
             return fightData.LogStart;
