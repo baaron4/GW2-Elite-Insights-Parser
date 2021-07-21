@@ -123,7 +123,7 @@ namespace GW2EIBuilders.JsonModels
             jsonPlayer.DamageModifiersTarget = JsonDamageModifierDataBuilder.GetDamageModifiersTarget(player, log, damageModDesc, phases);
             if (log.CombatData.HasEXTHealing)
             {
-                jsonPlayer.EXTHealingStats = EXTJsonPlayerHealingStatsBuilder.BuildPlayerHealingStats(player, log, skillDesc, buffDesc);
+                jsonPlayer.EXTHealingStats = EXTJsonPlayerHealingStatsBuilder.BuildPlayerHealingStats(player, log, settings, skillDesc, buffDesc);
             }
             return jsonPlayer;
         }
