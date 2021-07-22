@@ -103,6 +103,10 @@ namespace GW2EIBuilders.JsonModels
                 }
                 jsonMinions.TargetDamageDist = targetDamageDist;
             }
+            if (log.CombatData.HasEXTHealing && !isEnemyMinion)
+            {
+                jsonMinions.EXTHealingStats = EXTJsonMinionsHealingStatsBuilder.BuildMinionsHealingStats(minions, log, skillDesc, buffDesc);
+            }
             return jsonMinions;
         }
 

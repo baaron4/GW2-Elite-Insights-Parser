@@ -67,7 +67,7 @@ namespace GW2EIEvtcParser.Extensions
             if (log.CombatData.GetDamageData(id).Any(x => !x.DoubleProcHit))
             {
                 type = EXTHealingType.ConversionBased;
-            } 
+            }
             else
             {
                 type = EXTHealingType.HealingPower;

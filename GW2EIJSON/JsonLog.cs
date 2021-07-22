@@ -50,6 +50,10 @@ namespace GW2EIJSON
             /// True in case where the skill is an instant cast and the detection may have missed some
             /// </summary>
             public bool IsNotAccurate { get; set; }
+            /// <summary>
+            /// If the skill is encountered in a healing context, true if healing happened because of conversion, false otherwise
+            /// </summary>
+            public bool ConversionBasedHealing { get; set; }
         }
 
         /// <summary>
@@ -77,7 +81,12 @@ namespace GW2EIJSON
             /// True if the buff is stacking
             /// </summary>
             public bool Stacking { get; set; }
-            
+
+            /// <summary>
+            /// If the buff is encountered in a healing context, true if healing happened because of conversion, false otherwise
+            /// </summary>
+            public bool ConversionBasedHealing { get; set; }
+
             /// <summary>
             /// Descriptions of the buffs (no traits)
             /// </summary>
