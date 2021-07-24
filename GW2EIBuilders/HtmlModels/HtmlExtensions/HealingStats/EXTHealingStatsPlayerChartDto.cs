@@ -36,7 +36,7 @@ namespace GW2EIBuilders.HtmlModels
             }
         }
 
-        public static List<EXTHealingStatsPlayerChartDto> BuildPlayersGraphData(ParsedEvtcLog log, PhaseData phase)
+        public static List<EXTHealingStatsPlayerChartDto> BuildPlayersHealingGraphData(ParsedEvtcLog log, PhaseData phase)
         {
             var list = new List<EXTHealingStatsPlayerChartDto>();
 
