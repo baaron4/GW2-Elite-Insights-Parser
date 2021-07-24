@@ -43,13 +43,7 @@
         if (window.pako) {
             logData = JSON.parse(new TextDecoder("utf-8").decode(pako.inflate(base64DecToArr(logData))))
         }
-    </script>
-    <script>
-        var _graphData = '${graphDataJson}';
-        var graphData = _graphData;
-        if (window.pako) {
-            graphData = JSON.parse(new TextDecoder("utf-8").decode(pako.inflate(base64DecToArr(graphData))))
-        }
+        var graphData = logData.graphData;
     </script>
     <!--${Js}-->
     <!--${CombatReplayJS}-->

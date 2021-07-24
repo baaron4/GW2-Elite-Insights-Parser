@@ -15,6 +15,7 @@ namespace GW2EIBuilders.HtmlModels
         public List<PlayerDto> Players { get; } = new List<PlayerDto>();
         public List<EnemyDto> Enemies { get; } = new List<EnemyDto>();
         public List<PhaseDto> Phases { get; } = new List<PhaseDto>();
+        // Present buffs and damamge modifiers
         public List<long> Boons { get; } = new List<long>();
         public List<long> OffBuffs { get; } = new List<long>();
         public List<long> SupBuffs { get; } = new List<long>();
@@ -26,11 +27,15 @@ namespace GW2EIBuilders.HtmlModels
         public Dictionary<string, List<long>> DmgModifiersPers { get; } = new Dictionary<string, List<long>>();
         public Dictionary<string, List<long>> PersBuffs { get; } = new Dictionary<string, List<long>>();
         public List<long> Conditions { get; } = new List<long>();
+        // Dictionaries
         public Dictionary<string, SkillDto> SkillMap { get; } = new Dictionary<string, SkillDto>();
         public Dictionary<string, BuffDto> BuffMap { get; } = new Dictionary<string, BuffDto>();
         public Dictionary<string, DamageModDto> DamageModMap { get; } = new Dictionary<string, DamageModDto>();
         public List<MechanicDto> MechanicMap { get; set; } = new List<MechanicDto>();
+        // Extra components
         public CombatReplayDto CrData { get; set; } = null;
+        public ChartDataDto GraphData { get; set; } = null;
+        // meta data
         public string EncounterDuration { get; set; }
         public bool Success { get; set; }
         public bool Wvw { get; set; }
@@ -43,7 +48,6 @@ namespace GW2EIBuilders.HtmlModels
         public bool SingleGroup { get; set; }
         public bool HasBreakbarDamage { get; set; }
         public List<string> LogErrors { get; set; }
-
         public string EncounterStart { get; set; }
         public string EncounterEnd { get; set; }
         public string ArcVersion { get; set; }
@@ -54,7 +58,35 @@ namespace GW2EIBuilders.HtmlModels
         public string RecordedBy { get; set; }
         public List<string> UploadLinks { get; set; }
         public List<string> UsedExtensions { get; set; }
-
+        //
+        private LogDataDto(ParsedEvtcLog log, bool light, Version parserVersion, string[] uploadLinks)
+        {
+            log.UpdateProgressWithCancellationCheck("HTML: building Meta Data");
+            EncounterStart = log.LogData.LogStartStd;
+            EncounterEnd = log.LogData.LogEndStd;
+            ArcVersion = log.LogData.ArcVersion;
+            EvtcVersion = log.LogData.EvtcVersion;
+            Gw2Build = log.LogData.GW2Build;
+            FightID = log.FightData.TriggerID;
+            Parser = "Elite Insights " + parserVersion.ToString();
+            RecordedBy = log.LogData.PoVName;
+            UploadLinks = uploadLinks.ToList();
+            UsedExtensions = log.LogData.UsedExtensions.Any() ? log.LogData.UsedExtensions.Select(x => x.Name + " - " + x.Version).ToList() : null;
+            EncounterDuration = log.FightData.DurationString;
+            Success = log.FightData.Success;
+            Wvw = log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;
+            Targetless = log.FightData.Logic.Targetless;
+            FightName = log.FightData.GetFightName(log);
+            FightIcon = log.FightData.Logic.Icon;
+            LightTheme = light;
+            SingleGroup = log.PlayerList.Select(x => x.Group).Distinct().Count() == 1;
+            HasBreakbarDamage = log.CombatData.HasBreakbarDamageData;
+            NoMechanics = log.FightData.Logic.HasNoFightSpecificMechanics;
+            if (log.LogData.LogErrors.Count > 0)
+            {
+                LogErrors = new List<string>(log.LogData.LogErrors);
+            }
+        }
 
         private static Dictionary<string, IReadOnlyList<Buff>> BuildPersonalBuffData(ParsedEvtcLog log, Dictionary<string, List<long>> dict, Dictionary<long, Buff> usedBuffs)
         {
@@ -126,56 +158,12 @@ namespace GW2EIBuilders.HtmlModels
             return damageModBySpecs;
         }
 
-        public static LogDataDto BuildLogData(ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, HashSet<DamageModifier> usedDamageMods, bool cr, bool light, Version parserVersion, string[] uploadLinks)
+        private static void BuildDictionaries(ParsedEvtcLog log, Dictionary<long, Buff> usedBuffs, HashSet<DamageModifier> usedDamageMods, LogDataDto logData, HashSet<string> allDamageMods, List<DamageModifier> commonDamageModifiers, List<DamageModifier> itemDamageModifiers)
         {
-            StatisticsHelper statistics = log.StatisticsHelper;
-            log.UpdateProgressWithCancellationCheck("HTML: building Log Data");
-            var logData = new LogDataDto
-            {
-                EncounterStart = log.LogData.LogStartStd,
-                EncounterEnd = log.LogData.LogEndStd,
-                ArcVersion = log.LogData.ArcVersion,
-                EvtcVersion = log.LogData.EvtcVersion,
-                Gw2Build = log.LogData.GW2Build,
-                FightID = log.FightData.TriggerID,
-                Parser = "Elite Insights " + parserVersion.ToString(),
-                RecordedBy = log.LogData.PoVName,
-                UploadLinks = uploadLinks.ToList(),
-                UsedExtensions = log.LogData.UsedExtensions.Any() ? log.LogData.UsedExtensions.Select(x => x.Name + " - " + x.Version).ToList() : null
-            };
-            if (cr)
-            {
-                logData.CrData = new CombatReplayDto(log);
-            }
-            log.UpdateProgressWithCancellationCheck("HTML: building Players");
-            foreach (AbstractSingleActor actor in log.Friendlies)
-            {
-                logData.HasCommander = logData.HasCommander || actor.HasCommanderTag;
-                logData.Players.Add(new PlayerDto(actor, log, ActorDetailsDto.BuildPlayerData(log, actor, usedSkills, usedBuffs)));
-            }
-
-            log.UpdateProgressWithCancellationCheck("HTML: building Enemies");
-            foreach (AbstractSingleActor enemy in log.MechanicData.GetEnemyList(log, 0, log.FightData.FightEnd))
-            {
-                logData.Enemies.Add(new EnemyDto() { Name = enemy.Character });
-            }
-
-            log.UpdateProgressWithCancellationCheck("HTML: building Targets");
-            foreach (AbstractSingleActor target in log.FightData.Logic.Targets)
-            {
-                var targetDto = new TargetDto(target, log, ActorDetailsDto.BuildTargetData(log, target, usedSkills, usedBuffs, cr));
-                logData.Targets.Add(targetDto);
-            }
-            //
-            log.UpdateProgressWithCancellationCheck("HTML: building Skill/Buff dictionaries");
-            Dictionary<string, IReadOnlyList<Buff>> persBuffDict = BuildPersonalBuffData(log, logData.PersBuffs, usedBuffs);
-            Dictionary<string, IReadOnlyList<DamageModifier>> persDamageModDict = BuildPersonalDamageModData(log, logData.DmgModifiersPers, usedDamageMods);
-            var allDamageMods = new HashSet<string>();
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
                 allDamageMods.UnionWith(actor.GetPresentDamageModifier(log));
             }
-            var commonDamageModifiers = new List<DamageModifier>();
             if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(Source.Common, out IReadOnlyList<DamageModifier> list))
             {
                 foreach (DamageModifier dMod in list)
@@ -200,7 +188,6 @@ namespace GW2EIBuilders.HtmlModels
                     }
                 }
             }
-            var itemDamageModifiers = new List<DamageModifier>();
             if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(Source.Item, out list))
             {
                 foreach (DamageModifier dMod in list)
@@ -225,6 +212,7 @@ namespace GW2EIBuilders.HtmlModels
                     }
                 }
             }
+            StatisticsHelper statistics = log.StatisticsHelper;
             foreach (Buff boon in statistics.PresentBoons)
             {
                 logData.Boons.Add(boon.ID);
@@ -260,6 +248,46 @@ namespace GW2EIBuilders.HtmlModels
                 logData.FractalInstabilities.Add(boon.ID);
                 usedBuffs[boon.ID] = boon;
             }
+        }
+
+        public static LogDataDto BuildLogData(ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, HashSet<DamageModifier> usedDamageMods, bool cr, bool light, Version parserVersion, string[] uploadLinks)
+        {
+            log.UpdateProgressWithCancellationCheck("HTML: building Log Data");
+            var logData = new LogDataDto(log, light, parserVersion, uploadLinks);
+            if (cr)
+            {
+                log.UpdateProgressWithCancellationCheck("HTML: building Combat Replay");
+                logData.CrData = new CombatReplayDto(log);
+            }
+            log.UpdateProgressWithCancellationCheck("HTML: building Graph Data");
+            logData.GraphData = new ChartDataDto(log);
+            log.UpdateProgressWithCancellationCheck("HTML: building Players");
+            foreach (AbstractSingleActor actor in log.Friendlies)
+            {
+                logData.HasCommander = logData.HasCommander || actor.HasCommanderTag;
+                logData.Players.Add(new PlayerDto(actor, log, ActorDetailsDto.BuildPlayerData(log, actor, usedSkills, usedBuffs)));
+            }
+
+            log.UpdateProgressWithCancellationCheck("HTML: building Enemies");
+            foreach (AbstractSingleActor enemy in log.MechanicData.GetEnemyList(log, 0, log.FightData.FightEnd))
+            {
+                logData.Enemies.Add(new EnemyDto() { Name = enemy.Character });
+            }
+
+            log.UpdateProgressWithCancellationCheck("HTML: building Targets");
+            foreach (AbstractSingleActor target in log.FightData.Logic.Targets)
+            {
+                var targetDto = new TargetDto(target, log, ActorDetailsDto.BuildTargetData(log, target, usedSkills, usedBuffs, cr));
+                logData.Targets.Add(targetDto);
+            }
+            //
+            log.UpdateProgressWithCancellationCheck("HTML: building Skill/Buff dictionaries");
+            Dictionary<string, IReadOnlyList<Buff>> persBuffDict = BuildPersonalBuffData(log, logData.PersBuffs, usedBuffs);
+            Dictionary<string, IReadOnlyList<DamageModifier>> persDamageModDict = BuildPersonalDamageModData(log, logData.DmgModifiersPers, usedDamageMods);
+            var allDamageMods = new HashSet<string>();
+            var commonDamageModifiers = new List<DamageModifier>();
+            var itemDamageModifiers = new List<DamageModifier>();
+            BuildDictionaries(log, usedBuffs, usedDamageMods, logData, allDamageMods, commonDamageModifiers, itemDamageModifiers);
             //
             log.UpdateProgressWithCancellationCheck("HTML: building Phases");
             IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
@@ -270,26 +298,10 @@ namespace GW2EIBuilders.HtmlModels
                 logData.Phases.Add(phaseDto);
             }
             //
-            log.UpdateProgressWithCancellationCheck("HTML: building Meta Data");
-            logData.EncounterDuration = log.FightData.DurationString;
-            logData.Success = log.FightData.Success;
-            logData.Wvw = log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;
-            logData.Targetless = log.FightData.Logic.Targetless;
-            logData.FightName = log.FightData.GetFightName(log);
-            logData.FightIcon = log.FightData.Logic.Icon;
-            logData.LightTheme = light;
-            logData.SingleGroup = log.PlayerList.Select(x => x.Group).Distinct().Count() == 1;
-            logData.HasBreakbarDamage = log.CombatData.HasBreakbarDamageData;
-            logData.NoMechanics = log.FightData.Logic.HasNoFightSpecificMechanics;
-            if (log.LogData.LogErrors.Count > 0)
-            {
-                logData.LogErrors = new List<string>(log.LogData.LogErrors);
-            }
-            //
             SkillDto.AssembleSkills(usedSkills.Values, logData.SkillMap, log);
             DamageModDto.AssembleDamageModifiers(usedDamageMods, logData.DamageModMap);
             BuffDto.AssembleBoons(usedBuffs.Values, logData.BuffMap, log);
-            MechanicDto.BuildMechanics(log.MechanicData.GetPresentMechanics(log, 0, log.FightData.FightEnd), logData.MechanicMap);
+            MechanicDto.BuildMechanics(log.MechanicData.GetPresentMechanics(log, 0, log.FightData.FightEnd), logData.MechanicMap);  
             return logData;
         }
 
