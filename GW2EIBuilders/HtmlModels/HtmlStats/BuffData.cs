@@ -92,7 +92,7 @@ namespace GW2EIBuilders.HtmlModels
             }
         }
 
-        private BuffData(string prof, IReadOnlyDictionary<string, List<Buff>> buffsBySpec, IReadOnlyDictionary<long, FinalActorBuffs> uptimes)
+        private BuffData(string prof, IReadOnlyDictionary<string, IReadOnlyList<Buff>> buffsBySpec, IReadOnlyDictionary<long, FinalActorBuffs> uptimes)
         {
             foreach (Buff buff in buffsBySpec[prof])
             {
@@ -159,7 +159,7 @@ namespace GW2EIBuilders.HtmlModels
         }
 
         //////
-        public static List<BuffData> BuildPersonalBuffUptimeData(ParsedEvtcLog log, IReadOnlyDictionary<string, List<Buff>> buffsBySpec, PhaseData phase)
+        public static List<BuffData> BuildPersonalBuffUptimeData(ParsedEvtcLog log, IReadOnlyDictionary<string, IReadOnlyList<Buff>> buffsBySpec, PhaseData phase)
         {
             var list = new List<BuffData>();
             foreach (AbstractSingleActor actor in log.Friendlies)
@@ -169,7 +169,7 @@ namespace GW2EIBuilders.HtmlModels
             return list;
         }
 
-        public static List<BuffData> BuildActivePersonalBuffUptimeData(ParsedEvtcLog log, IReadOnlyDictionary<string, List<Buff>> buffsBySpec, PhaseData phase)
+        public static List<BuffData> BuildActivePersonalBuffUptimeData(ParsedEvtcLog log, IReadOnlyDictionary<string, IReadOnlyList<Buff>> buffsBySpec, PhaseData phase)
         {
             var list = new List<BuffData>();
             foreach (AbstractSingleActor actor in log.Friendlies)

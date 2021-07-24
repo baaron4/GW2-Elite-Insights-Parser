@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIBuilders.HtmlModels
 {
@@ -97,22 +98,22 @@ namespace GW2EIBuilders.HtmlModels
         public List<AreaLabelDto> MarkupAreas { get; set; }
         public List<int> SubPhases { get; set; }
 
-        public PhaseDto(PhaseData phaseData, IReadOnlyList<PhaseData> phases, ParsedEvtcLog log)
+        public PhaseDto(PhaseData phase, IReadOnlyList<PhaseData> phases, ParsedEvtcLog log, IReadOnlyDictionary<string, IReadOnlyList<Buff>> persBuffDict, IReadOnlyList<DamageModifier> commonDamageModifiers, IReadOnlyList<DamageModifier> itemDamageModifiers, IReadOnlyDictionary<string, IReadOnlyList<DamageModifier>> persDamageModDict)
         {
-            Name = phaseData.Name;
-            Duration = phaseData.DurationInMS;
-            Start = phaseData.Start / 1000.0;
-            End = phaseData.End / 1000.0;
-            BreakbarPhase = phaseData.BreakbarPhase;
-            Dummy = phaseData.Dummy;
-            foreach (AbstractSingleActor target in phaseData.Targets)
+            Name = phase.Name;
+            Duration = phase.DurationInMS;
+            Start = phase.Start / 1000.0;
+            End = phase.End / 1000.0;
+            BreakbarPhase = phase.BreakbarPhase;
+            Dummy = phase.Dummy;
+            foreach (AbstractSingleActor target in phase.Targets)
             {
                 Targets.Add(log.FightData.Logic.Targets.IndexOf(target));
             }
             PlayerActiveTimes = new List<long>();
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                PlayerActiveTimes.Add(actor.GetActiveDuration(log, phaseData.Start, phaseData.End));
+                PlayerActiveTimes.Add(actor.GetActiveDuration(log, phase.Start, phase.End));
             }
             // add phase markup
             MarkupLines = new List<double>();
@@ -122,8 +123,8 @@ namespace GW2EIBuilders.HtmlModels
                 for (int j = 1; j < phases.Count; j++)
                 {
                     PhaseData curPhase = phases[j];
-                    if (curPhase.Start < phaseData.Start || curPhase.End > phaseData.End ||
-                        (curPhase.Start == phaseData.Start && curPhase.End == phaseData.End) || !curPhase.CanBeSubPhase)
+                    if (curPhase.Start < phase.Start || curPhase.End > phase.End ||
+                        (curPhase.Start == phase.Start && curPhase.End == phase.End) || !curPhase.CanBeSubPhase)
                     {
                         continue;
                     }
@@ -132,8 +133,8 @@ namespace GW2EIBuilders.HtmlModels
                         SubPhases = new List<int>();
                     }
                     SubPhases.Add(j);
-                    long start = curPhase.Start - phaseData.Start;
-                    long end = curPhase.End - phaseData.Start;
+                    long start = curPhase.Start - phase.Start;
+                    long end = curPhase.End - phase.Start;
                     if (curPhase.DrawStart)
                     {
                         MarkupLines.Add(start / 1000.0);
@@ -163,6 +164,94 @@ namespace GW2EIBuilders.HtmlModels
             {
                 MarkupLines = null;
             }
+            StatisticsHelper statistics = log.StatisticsHelper;
+
+            DpsStats = PhaseDto.BuildDPSData(log, phase);
+            DpsStatsTargets = PhaseDto.BuildDPSTargetsData(log, phase);
+            DmgStatsTargets = PhaseDto.BuildDMGStatsTargetsData(log, phase);
+            DmgStats = PhaseDto.BuildDMGStatsData(log, phase);
+            DefStats = PhaseDto.BuildDefenseData(log, phase);
+            SupportStats = PhaseDto.BuildSupportData(log, phase);
+            //
+            BoonStats = BuffData.BuildBuffUptimeData(log, statistics.PresentBoons, phase);
+            OffBuffStats = BuffData.BuildBuffUptimeData(log, statistics.PresentOffbuffs, phase);
+            SupBuffStats = BuffData.BuildBuffUptimeData(log, statistics.PresentSupbuffs, phase);
+            DefBuffStats = BuffData.BuildBuffUptimeData(log, statistics.PresentDefbuffs, phase);
+            PersBuffStats = BuffData.BuildPersonalBuffUptimeData(log, persBuffDict, phase);
+            GearBuffStats = BuffData.BuildBuffUptimeData(log, statistics.PresentGearbuffs, phase);
+            ConditionsStats = BuffData.BuildBuffUptimeData(log, statistics.PresentConditions, phase);
+            BoonGenSelfStats = BuffData.BuildBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.Self);
+            BoonGenGroupStats = BuffData.BuildBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.Group);
+            BoonGenOGroupStats = BuffData.BuildBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.OffGroup);
+            BoonGenSquadStats = BuffData.BuildBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.Squad);
+            OffBuffGenSelfStats = BuffData.BuildBuffGenerationData(log, statistics.PresentOffbuffs, phase, BuffEnum.Self);
+            OffBuffGenGroupStats = BuffData.BuildBuffGenerationData(log, statistics.PresentOffbuffs, phase, BuffEnum.Group);
+            OffBuffGenOGroupStats = BuffData.BuildBuffGenerationData(log, statistics.PresentOffbuffs, phase, BuffEnum.OffGroup);
+            OffBuffGenSquadStats = BuffData.BuildBuffGenerationData(log, statistics.PresentOffbuffs, phase, BuffEnum.Squad);
+            SupBuffGenSelfStats = BuffData.BuildBuffGenerationData(log, statistics.PresentSupbuffs, phase, BuffEnum.Self);
+            SupBuffGenGroupStats = BuffData.BuildBuffGenerationData(log, statistics.PresentSupbuffs, phase, BuffEnum.Group);
+            SupBuffGenOGroupStats = BuffData.BuildBuffGenerationData(log, statistics.PresentSupbuffs, phase, BuffEnum.OffGroup);
+            SupBuffGenSquadStats = BuffData.BuildBuffGenerationData(log, statistics.PresentSupbuffs, phase, BuffEnum.Squad);
+            DefBuffGenSelfStats = BuffData.BuildBuffGenerationData(log, statistics.PresentDefbuffs, phase, BuffEnum.Self);
+            DefBuffGenGroupStats = BuffData.BuildBuffGenerationData(log, statistics.PresentDefbuffs, phase, BuffEnum.Group);
+            DefBuffGenOGroupStats = BuffData.BuildBuffGenerationData(log, statistics.PresentDefbuffs, phase, BuffEnum.OffGroup);
+            DefBuffGenSquadStats = BuffData.BuildBuffGenerationData(log, statistics.PresentDefbuffs, phase, BuffEnum.Squad);
+            //
+            BoonActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentBoons, phase);
+            OffBuffActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentOffbuffs, phase);
+            SupBuffActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentSupbuffs, phase);
+            DefBuffActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentDefbuffs, phase);
+            PersBuffActiveStats = BuffData.BuildActivePersonalBuffUptimeData(log, persBuffDict, phase);
+            GearBuffActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentGearbuffs, phase);
+            ConditionsActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentConditions, phase);
+            BoonGenActiveSelfStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.Self);
+            BoonGenActiveGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.Group);
+            BoonGenActiveOGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.OffGroup);
+            BoonGenActiveSquadStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.Squad);
+            OffBuffGenActiveSelfStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentOffbuffs, phase, BuffEnum.Self);
+            OffBuffGenActiveGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentOffbuffs, phase, BuffEnum.Group);
+            OffBuffGenActiveOGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentOffbuffs, phase, BuffEnum.OffGroup);
+            OffBuffGenActiveSquadStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentOffbuffs, phase, BuffEnum.Squad);
+            SupBuffGenActiveSelfStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentSupbuffs, phase, BuffEnum.Self);
+            SupBuffGenActiveGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentSupbuffs, phase, BuffEnum.Group);
+            SupBuffGenActiveOGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentSupbuffs, phase, BuffEnum.OffGroup);
+            SupBuffGenActiveSquadStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentSupbuffs, phase, BuffEnum.Squad);
+            DefBuffGenActiveSelfStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentDefbuffs, phase, BuffEnum.Self);
+            DefBuffGenActiveGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentDefbuffs, phase, BuffEnum.Group);
+            DefBuffGenActiveOGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentDefbuffs, phase, BuffEnum.OffGroup);
+            DefBuffGenActiveSquadStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentDefbuffs, phase, BuffEnum.Squad);
+            //
+            DmgModifiersCommon = DamageModData.BuildDmgModifiersData(log, phase, commonDamageModifiers);
+            DmgModifiersItem = DamageModData.BuildDmgModifiersData(log, phase, itemDamageModifiers);
+            DmgModifiersPers = DamageModData.BuildPersonalDmgModifiersData(log, phase, persDamageModDict);
+            TargetsCondiStats = new List<List<BuffData>>();
+            TargetsCondiTotals = new List<BuffData>();
+            TargetsBoonTotals = new List<BuffData>();
+            MechanicStats = MechanicDto.BuildPlayerMechanicData(log, phase);
+            EnemyMechanicStats = MechanicDto.BuildEnemyMechanicData(log, phase);
+
+            foreach (AbstractSingleActor target in phase.Targets)
+            {
+                TargetsCondiStats.Add(BuffData.BuildTargetCondiData(log, phase.Start, phase.End, target));
+                TargetsCondiTotals.Add(BuffData.BuildTargetCondiUptimeData(log, phase, target));
+                TargetsBoonTotals.Add(HasBoons(log, phase, target) ? BuffData.BuildTargetBoonData(log, phase, target) : null);
+            }
+        }
+
+        private static bool HasBoons(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor target)
+        {
+            IReadOnlyDictionary<long, FinalActorBuffs> conditions = target.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
+            foreach (Buff boon in log.StatisticsHelper.PresentBoons)
+            {
+                if (conditions.TryGetValue(boon.ID, out FinalActorBuffs uptime))
+                {
+                    if (uptime.Uptime > 0.0)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
 

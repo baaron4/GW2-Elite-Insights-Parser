@@ -56,9 +56,9 @@ namespace GW2EIBuilders.HtmlModels
         public List<string> UsedExtensions { get; set; }
 
 
-        private static Dictionary<string, List<Buff>> BuildPersonalBuffData(ParsedEvtcLog log, Dictionary<string, List<long>> dict, Dictionary<long, Buff> usedBuffs)
+        private static Dictionary<string, IReadOnlyList<Buff>> BuildPersonalBuffData(ParsedEvtcLog log, Dictionary<string, List<long>> dict, Dictionary<long, Buff> usedBuffs)
         {
-            var boonsBySpec = new Dictionary<string, List<Buff>>();
+            var boonsBySpec = new Dictionary<string, IReadOnlyList<Buff>>();
             // Collect all personal buffs by spec
             foreach (KeyValuePair<string, List<AbstractSingleActor>> pair in log.FriendliesListBySpec)
             {
@@ -84,7 +84,7 @@ namespace GW2EIBuilders.HtmlModels
                 }
                 boonsBySpec[pair.Key] = boonToUse.ToList();
             }
-            foreach (KeyValuePair<string, List<Buff>> pair in boonsBySpec)
+            foreach (KeyValuePair<string, IReadOnlyList<Buff>> pair in boonsBySpec)
             {
                 dict[pair.Key] = new List<long>();
                 foreach (Buff boon in pair.Value)
@@ -96,9 +96,9 @@ namespace GW2EIBuilders.HtmlModels
             return boonsBySpec;
         }
 
-        private static Dictionary<string, List<DamageModifier>> BuildPersonalDamageModData(ParsedEvtcLog log, Dictionary<string, List<long>> dict, HashSet<DamageModifier> usedDamageMods)
+        private static Dictionary<string, IReadOnlyList<DamageModifier>> BuildPersonalDamageModData(ParsedEvtcLog log, Dictionary<string, List<long>> dict, HashSet<DamageModifier> usedDamageMods)
         {
-            var damageModBySpecs = new Dictionary<string, List<DamageModifier>>();
+            var damageModBySpecs = new Dictionary<string, IReadOnlyList<DamageModifier>>();
             // Collect all personal damage mods by spec
             foreach (KeyValuePair<string, List<AbstractSingleActor>> pair in log.FriendliesListBySpec)
             {
@@ -114,7 +114,7 @@ namespace GW2EIBuilders.HtmlModels
                 }
                 damageModBySpecs[pair.Key] = damageModsToUse.ToList();
             }
-            foreach (KeyValuePair<string, List<DamageModifier>> pair in damageModBySpecs)
+            foreach (KeyValuePair<string, IReadOnlyList<DamageModifier>> pair in damageModBySpecs)
             {
                 dict[pair.Key] = new List<long>();
                 foreach (DamageModifier mod in pair.Value)
@@ -124,22 +124,6 @@ namespace GW2EIBuilders.HtmlModels
                 }
             }
             return damageModBySpecs;
-        }
-
-        private static bool HasBoons(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor target)
-        {
-            IReadOnlyDictionary<long, FinalActorBuffs> conditions = target.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
-            foreach (Buff boon in log.StatisticsHelper.PresentBoons)
-            {
-                if (conditions.TryGetValue(boon.ID, out FinalActorBuffs uptime))
-                {
-                    if (uptime.Uptime > 0.0)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
         }
 
         public static LogDataDto BuildLogData(ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, HashSet<DamageModifier> usedDamageMods, bool cr, bool light, Version parserVersion, string[] uploadLinks)
@@ -184,8 +168,8 @@ namespace GW2EIBuilders.HtmlModels
             }
             //
             log.UpdateProgressWithCancellationCheck("HTML: building Skill/Buff dictionaries");
-            Dictionary<string, List<Buff>> persBuffDict = BuildPersonalBuffData(log, logData.PersBuffs, usedBuffs);
-            Dictionary<string, List<DamageModifier>> persDamageModDict = BuildPersonalDamageModData(log, logData.DmgModifiersPers, usedDamageMods);
+            Dictionary<string, IReadOnlyList<Buff>> persBuffDict = BuildPersonalBuffData(log, logData.PersBuffs, usedBuffs);
+            Dictionary<string, IReadOnlyList<DamageModifier>> persDamageModDict = BuildPersonalDamageModData(log, logData.DmgModifiersPers, usedDamageMods);
             var allDamageMods = new HashSet<string>();
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
@@ -282,78 +266,7 @@ namespace GW2EIBuilders.HtmlModels
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                var phaseDto = new PhaseDto(phase, phases, log)
-                {
-                    DpsStats = PhaseDto.BuildDPSData(log, phase),
-                    DpsStatsTargets = PhaseDto.BuildDPSTargetsData(log, phase),
-                    DmgStatsTargets = PhaseDto.BuildDMGStatsTargetsData(log, phase),
-                    DmgStats = PhaseDto.BuildDMGStatsData(log, phase),
-                    DefStats = PhaseDto.BuildDefenseData(log, phase),
-                    SupportStats = PhaseDto.BuildSupportData(log, phase),
-                    //
-                    BoonStats = BuffData.BuildBuffUptimeData(log, statistics.PresentBoons, phase),
-                    OffBuffStats = BuffData.BuildBuffUptimeData(log, statistics.PresentOffbuffs, phase),
-                    SupBuffStats = BuffData.BuildBuffUptimeData(log, statistics.PresentSupbuffs, phase),
-                    DefBuffStats = BuffData.BuildBuffUptimeData(log, statistics.PresentDefbuffs, phase),
-                    PersBuffStats = BuffData.BuildPersonalBuffUptimeData(log, persBuffDict, phase),
-                    GearBuffStats = BuffData.BuildBuffUptimeData(log, statistics.PresentGearbuffs, phase),
-                    ConditionsStats = BuffData.BuildBuffUptimeData(log, statistics.PresentConditions, phase),
-                    BoonGenSelfStats = BuffData.BuildBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.Self),
-                    BoonGenGroupStats = BuffData.BuildBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.Group),
-                    BoonGenOGroupStats = BuffData.BuildBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.OffGroup),
-                    BoonGenSquadStats = BuffData.BuildBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.Squad),
-                    OffBuffGenSelfStats = BuffData.BuildBuffGenerationData(log, statistics.PresentOffbuffs, phase, BuffEnum.Self),
-                    OffBuffGenGroupStats = BuffData.BuildBuffGenerationData(log, statistics.PresentOffbuffs, phase, BuffEnum.Group),
-                    OffBuffGenOGroupStats = BuffData.BuildBuffGenerationData(log, statistics.PresentOffbuffs, phase, BuffEnum.OffGroup),
-                    OffBuffGenSquadStats = BuffData.BuildBuffGenerationData(log, statistics.PresentOffbuffs, phase, BuffEnum.Squad),
-                    SupBuffGenSelfStats = BuffData.BuildBuffGenerationData(log, statistics.PresentSupbuffs, phase, BuffEnum.Self),
-                    SupBuffGenGroupStats = BuffData.BuildBuffGenerationData(log, statistics.PresentSupbuffs, phase, BuffEnum.Group),
-                    SupBuffGenOGroupStats = BuffData.BuildBuffGenerationData(log, statistics.PresentSupbuffs, phase, BuffEnum.OffGroup),
-                    SupBuffGenSquadStats = BuffData.BuildBuffGenerationData(log, statistics.PresentSupbuffs, phase, BuffEnum.Squad),
-                    DefBuffGenSelfStats = BuffData.BuildBuffGenerationData(log, statistics.PresentDefbuffs, phase, BuffEnum.Self),
-                    DefBuffGenGroupStats = BuffData.BuildBuffGenerationData(log, statistics.PresentDefbuffs, phase, BuffEnum.Group),
-                    DefBuffGenOGroupStats = BuffData.BuildBuffGenerationData(log, statistics.PresentDefbuffs, phase, BuffEnum.OffGroup),
-                    DefBuffGenSquadStats = BuffData.BuildBuffGenerationData(log, statistics.PresentDefbuffs, phase, BuffEnum.Squad),
-                    //
-                    BoonActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentBoons, phase),
-                    OffBuffActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentOffbuffs, phase),
-                    SupBuffActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentSupbuffs, phase),
-                    DefBuffActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentDefbuffs, phase),
-                    PersBuffActiveStats = BuffData.BuildActivePersonalBuffUptimeData(log, persBuffDict, phase),
-                    GearBuffActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentGearbuffs, phase),
-                    ConditionsActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentConditions, phase),
-                    BoonGenActiveSelfStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.Self),
-                    BoonGenActiveGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.Group),
-                    BoonGenActiveOGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.OffGroup),
-                    BoonGenActiveSquadStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.Squad),
-                    OffBuffGenActiveSelfStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentOffbuffs, phase, BuffEnum.Self),
-                    OffBuffGenActiveGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentOffbuffs, phase, BuffEnum.Group),
-                    OffBuffGenActiveOGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentOffbuffs, phase, BuffEnum.OffGroup),
-                    OffBuffGenActiveSquadStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentOffbuffs, phase, BuffEnum.Squad),
-                    SupBuffGenActiveSelfStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentSupbuffs, phase, BuffEnum.Self),
-                    SupBuffGenActiveGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentSupbuffs, phase, BuffEnum.Group),
-                    SupBuffGenActiveOGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentSupbuffs, phase, BuffEnum.OffGroup),
-                    SupBuffGenActiveSquadStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentSupbuffs, phase, BuffEnum.Squad),
-                    DefBuffGenActiveSelfStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentDefbuffs, phase, BuffEnum.Self),
-                    DefBuffGenActiveGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentDefbuffs, phase, BuffEnum.Group),
-                    DefBuffGenActiveOGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentDefbuffs, phase, BuffEnum.OffGroup),
-                    DefBuffGenActiveSquadStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentDefbuffs, phase, BuffEnum.Squad),
-                    //
-                    DmgModifiersCommon = DamageModData.BuildDmgModifiersData(log, phase, commonDamageModifiers),
-                    DmgModifiersItem = DamageModData.BuildDmgModifiersData(log, phase, itemDamageModifiers),
-                    DmgModifiersPers = DamageModData.BuildPersonalDmgModifiersData(log, phase, persDamageModDict),
-                    TargetsCondiStats = new List<List<BuffData>>(),
-                    TargetsCondiTotals = new List<BuffData>(),
-                    TargetsBoonTotals = new List<BuffData>(),
-                    MechanicStats = MechanicDto.BuildPlayerMechanicData(log, phase),
-                    EnemyMechanicStats = MechanicDto.BuildEnemyMechanicData(log, phase)
-                };
-                foreach (AbstractSingleActor target in phase.Targets)
-                {
-                    phaseDto.TargetsCondiStats.Add(BuffData.BuildTargetCondiData(log, phase.Start, phase.End, target));
-                    phaseDto.TargetsCondiTotals.Add(BuffData.BuildTargetCondiUptimeData(log, phase, target));
-                    phaseDto.TargetsBoonTotals.Add(HasBoons(log, phase, target) ? BuffData.BuildTargetBoonData(log, phase, target) : null);
-                }
+                var phaseDto = new PhaseDto(phase, phases, log, persBuffDict, commonDamageModifiers, itemDamageModifiers, persDamageModDict);
                 logData.Phases.Add(phaseDto);
             }
             //
@@ -373,7 +286,7 @@ namespace GW2EIBuilders.HtmlModels
                 logData.LogErrors = new List<string>(log.LogData.LogErrors);
             }
             //
-            SkillDto.AssembleSkills(usedSkills.Values, logData.SkillMap, log.SkillData);
+            SkillDto.AssembleSkills(usedSkills.Values, logData.SkillMap, log);
             DamageModDto.AssembleDamageModifiers(usedDamageMods, logData.DamageModMap);
             BuffDto.AssembleBoons(usedBuffs.Values, logData.BuffMap, log);
             MechanicDto.BuildMechanics(log.MechanicData.GetPresentMechanics(log, 0, log.FightData.FightEnd), logData.MechanicMap);
