@@ -39,27 +39,27 @@ namespace GW2EIJSON
 
 
             /// <summary>
-            /// Total actor hps
+            /// Total actor only hps
             /// </summary>
             public double ActorHps { get; set; }
             /// <summary>
-            /// Total actor healing
+            /// Total actor only healing
             /// </summary>
             public int ActorHealing { get; set; }
             /// <summary>
-            /// Total actor healing power based hps
+            /// Total actor only healing power based hps
             /// </summary>
             public double ActorHealingPowerHps { get; set; }
             /// <summary>
-            /// Total actor healing power based healing
+            /// Total actor only healing power based healing
             /// </summary>
             public int ActorHealingPowerHealing { get; set; }
             /// <summary>
-            /// Total actor conversion based hps
+            /// Total actor only conversion based hps
             /// </summary>
             public double ActorConversionHps { get; set; }
             /// <summary>
-            /// Total actor conversion based healing
+            /// Total actor only conversion based healing
             /// </summary>
             public int ActorConversionHealing { get; set; }
 
