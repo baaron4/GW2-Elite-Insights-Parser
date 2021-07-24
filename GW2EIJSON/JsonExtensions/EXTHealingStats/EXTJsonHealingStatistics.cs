@@ -37,6 +37,32 @@ namespace GW2EIJSON
             /// </summary>
             public int ConversionHealing { get; set; }
 
+
+            /// <summary>
+            /// Total actor hps
+            /// </summary>
+            public double ActorHps { get; set; }
+            /// <summary>
+            /// Total actor healing
+            /// </summary>
+            public int ActorHealing { get; set; }
+            /// <summary>
+            /// Total actor healing power based hps
+            /// </summary>
+            public double ActorHealingPowerHps { get; set; }
+            /// <summary>
+            /// Total actor healing power based healing
+            /// </summary>
+            public int ActorHealingPowerHealing { get; set; }
+            /// <summary>
+            /// Total actor conversion based hps
+            /// </summary>
+            public double ActorConversionHps { get; set; }
+            /// <summary>
+            /// Total actor conversion based healing
+            /// </summary>
+            public int ActorConversionHealing { get; set; }
+
             public EXTJsonOutgoingHealingStatistics()
             {
 

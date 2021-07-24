@@ -21,7 +21,14 @@ namespace GW2EIBuilders.JsonModels
                 Healing = stats.Healing,
                 HealingPowerHealing = stats.HealingPowerHealing,
                 HealingPowerHps = stats.HealingPowerHps,
-                Hps = stats.Hps
+                Hps = stats.Hps,
+
+                ActorConversionHealing = stats.ActorConversionHealing,
+                ActorConversionHps = stats.ActorConversionHps,
+                ActorHealing = stats.ActorHealing,
+                ActorHealingPowerHealing = stats.ActorHealingPowerHealing,
+                ActorHealingPowerHps = stats.ActorHealingPowerHps,
+                ActorHps = stats.ActorHps
             };
         }
 
