@@ -15,7 +15,7 @@ namespace GW2EIJSON
             /// <summary>
             /// Total hps
             /// </summary>
-            public double Hps { get; set; }
+            public int Hps { get; set; }
             /// <summary>
             /// Total healing
             /// </summary>
@@ -23,7 +23,7 @@ namespace GW2EIJSON
             /// <summary>
             /// Total healing power based hps
             /// </summary>
-            public double HealingPowerHps { get; set; }
+            public int HealingPowerHps { get; set; }
             /// <summary>
             /// Total healing power based healing
             /// </summary>
@@ -31,7 +31,7 @@ namespace GW2EIJSON
             /// <summary>
             /// Total conversion based hps
             /// </summary>
-            public double ConversionHps { get; set; }
+            public int ConversionHps { get; set; }
             /// <summary>
             /// Total conversion based healing
             /// </summary>
@@ -41,7 +41,7 @@ namespace GW2EIJSON
             /// <summary>
             /// Total actor only hps
             /// </summary>
-            public double ActorHps { get; set; }
+            public int ActorHps { get; set; }
             /// <summary>
             /// Total actor only healing
             /// </summary>
@@ -49,7 +49,7 @@ namespace GW2EIJSON
             /// <summary>
             /// Total actor only healing power based hps
             /// </summary>
-            public double ActorHealingPowerHps { get; set; }
+            public int ActorHealingPowerHps { get; set; }
             /// <summary>
             /// Total actor only healing power based healing
             /// </summary>
@@ -57,7 +57,7 @@ namespace GW2EIJSON
             /// <summary>
             /// Total actor only conversion based hps
             /// </summary>
-            public double ActorConversionHps { get; set; }
+            public int ActorConversionHps { get; set; }
             /// <summary>
             /// Total actor only conversion based healing
             /// </summary>
