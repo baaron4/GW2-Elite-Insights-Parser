@@ -33,10 +33,6 @@ namespace GW2EIBuilders
 
         private readonly string[] _uploadLink;
 
-        private readonly Dictionary<long, Buff> _usedBuffs = new Dictionary<long, Buff>();
-        private readonly HashSet<DamageModifier> _usedDamageMods = new HashSet<DamageModifier>();
-        private readonly Dictionary<long, SkillItem> _usedSkills = new Dictionary<long, SkillItem>();
-
         // https://point2blog.wordpress.com/2012/12/26/compressdecompress-a-string-in-c/
         private static string CompressAndBase64(string s)
         {
@@ -168,7 +164,7 @@ namespace GW2EIBuilders
             _log.UpdateProgressWithCancellationCheck("HTML: building Combat Replay JS");
             html = html.Replace("<!--${CombatReplayJS}-->", BuildCombatReplayJS(externalPath, cdnPath));
 
-            string json = ToJson(LogDataDto.BuildLogData(_log, _usedSkills, _usedBuffs, _usedDamageMods, _cr, _light, _parserVersion, _uploadLink));
+            string json = ToJson(LogDataDto.BuildLogData(_log, _cr, _light, _parserVersion, _uploadLink));
 
             html = html.Replace("'${logDataJson}'", _compressJson ? ("'" + CompressAndBase64(json) + "'") : json);
             // Compression stuff

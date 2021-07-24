@@ -35,6 +35,7 @@ namespace GW2EIBuilders.HtmlModels
         // Extra components
         public CombatReplayDto CrData { get; set; } = null;
         public ChartDataDto GraphData { get; set; } = null;
+        public HealingStatsExtension HealingStatsExtension { get; set; } = null;
         // meta data
         public string EncounterDuration { get; set; }
         public bool Success { get; set; }
@@ -250,8 +251,12 @@ namespace GW2EIBuilders.HtmlModels
             }
         }
 
-        public static LogDataDto BuildLogData(ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, HashSet<DamageModifier> usedDamageMods, bool cr, bool light, Version parserVersion, string[] uploadLinks)
+        public static LogDataDto BuildLogData(ParsedEvtcLog log, bool cr, bool light, Version parserVersion, string[] uploadLinks)
         {
+
+            var usedBuffs = new Dictionary<long, Buff>();
+            var usedDamageMods = new HashSet<DamageModifier>();
+            var usedSkills = new Dictionary<long, SkillItem>();
             log.UpdateProgressWithCancellationCheck("HTML: building Log Data");
             var logData = new LogDataDto(log, light, parserVersion, uploadLinks);
             if (cr)
@@ -298,10 +303,16 @@ namespace GW2EIBuilders.HtmlModels
                 logData.Phases.Add(phaseDto);
             }
             //
+            if (log.CombatData.HasEXTHealing)
+            {
+                log.UpdateProgressWithCancellationCheck("HTML: building Healing Extension");
+                logData.HealingStatsExtension = new HealingStatsExtension(log, usedSkills, usedBuffs);
+            }
+            //
             SkillDto.AssembleSkills(usedSkills.Values, logData.SkillMap, log);
             DamageModDto.AssembleDamageModifiers(usedDamageMods, logData.DamageModMap);
             BuffDto.AssembleBoons(usedBuffs.Values, logData.BuffMap, log);
-            MechanicDto.BuildMechanics(log.MechanicData.GetPresentMechanics(log, 0, log.FightData.FightEnd), logData.MechanicMap);  
+            MechanicDto.BuildMechanics(log.MechanicData.GetPresentMechanics(log, 0, log.FightData.FightEnd), logData.MechanicMap);
             return logData;
         }
 
