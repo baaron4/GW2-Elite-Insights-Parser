@@ -10,6 +10,7 @@ namespace GW2EIBuilders.HtmlModels
         public EXTHealingStatsPlayerHealingChartDto<int> Healing { get; }
         public EXTHealingStatsPlayerHealingChartDto<int> HealingPowerHealing { get; }
         public EXTHealingStatsPlayerHealingChartDto<int> ConversionBasedHealing { get; }
+        public EXTHealingStatsPlayerHealingChartDto<int> HybridHealing { get; }
 
         private EXTHealingStatsPlayerChartDto(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor p)
         {
@@ -28,11 +29,17 @@ namespace GW2EIBuilders.HtmlModels
                 Total = p.EXTHealing.Get1SHealingList(log, phase.Start, phase.End, null, HealingStatsExtensionHandler.EXTHealingType.ConversionBased),
                 Friendlies = new List<IReadOnlyList<int>>()
             };
+            HybridHealing = new EXTHealingStatsPlayerHealingChartDto<int>()
+            {
+                Total = p.EXTHealing.Get1SHealingList(log, phase.Start, phase.End, null, HealingStatsExtensionHandler.EXTHealingType.Hybrid),
+                Friendlies = new List<IReadOnlyList<int>>()
+            };
             foreach (AbstractSingleActor target in log.Friendlies)
             {
                 Healing.Friendlies.Add(p.EXTHealing.Get1SHealingList(log, phase.Start, phase.End, target, HealingStatsExtensionHandler.EXTHealingType.All));
                 HealingPowerHealing.Friendlies.Add(p.EXTHealing.Get1SHealingList(log, phase.Start, phase.End, target, HealingStatsExtensionHandler.EXTHealingType.HealingPower));
                 ConversionBasedHealing.Friendlies.Add(p.EXTHealing.Get1SHealingList(log, phase.Start, phase.End, target, HealingStatsExtensionHandler.EXTHealingType.ConversionBased));
+                HybridHealing.Friendlies.Add(p.EXTHealing.Get1SHealingList(log, phase.Start, phase.End, target, HealingStatsExtensionHandler.EXTHealingType.Hybrid));
             }
         }
 

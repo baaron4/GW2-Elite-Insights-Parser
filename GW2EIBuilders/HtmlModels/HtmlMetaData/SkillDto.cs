@@ -14,6 +14,7 @@ namespace GW2EIBuilders.HtmlModels
         public bool IsSwap { get; set; }
         public bool NotAccurate { get; set; }
         public bool ConversionBasedHealing { get; set; }
+        public bool HybridHealing { get; set; }
 
         public SkillDto(SkillItem skill, ParsedEvtcLog log)
         {
@@ -26,6 +27,7 @@ namespace GW2EIBuilders.HtmlModels
             if (log.CombatData.HasEXTHealing)
             {
                 ConversionBasedHealing = log.CombatData.EXTHealingCombatData.GetHealingType(skill, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.ConversionBased;
+                HybridHealing = log.CombatData.EXTHealingCombatData.GetHealingType(skill, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.Hybrid;
             }
         }
 

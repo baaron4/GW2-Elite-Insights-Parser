@@ -16,6 +16,7 @@ namespace GW2EIBuilders.HtmlModels
         public bool Consumable { get; set; }
         public bool FightSpecific { get; set; }
         public bool ConversionBasedHealing { get; set; }
+        public bool HybridHealing { get; set; }
 
         public BuffDto(Buff buff, ParsedEvtcLog log)
         {
@@ -56,6 +57,7 @@ namespace GW2EIBuilders.HtmlModels
             if (log.CombatData.HasEXTHealing)
             {
                 ConversionBasedHealing = log.CombatData.EXTHealingCombatData.GetHealingType(buff, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.ConversionBased;
+                HybridHealing = log.CombatData.EXTHealingCombatData.GetHealingType(buff, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.Hybrid;
             }
         }
 
