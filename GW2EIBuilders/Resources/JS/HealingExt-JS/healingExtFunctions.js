@@ -28,8 +28,11 @@ function healingTypeEnumToString(mode) {
         case HealingType.HealingPower:
             name = "Healing Power";
             break;
-        case DamageType.Conversion:
+        case HealingType.Conversion:
             name = "Conversion";
+            break;
+        case HealingType.Hybrid:
+            name = "Healing Power or Conversion";
             break;
         default:
             break;

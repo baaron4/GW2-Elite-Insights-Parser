@@ -8,5 +8,6 @@ function compileHealingExtTemplates() {
 const HealingType = {
     All: 0,
     HealingPower: 1,
-    Conversion: 2
+    Conversion: 2,
+    Hybrid: 3
 };
