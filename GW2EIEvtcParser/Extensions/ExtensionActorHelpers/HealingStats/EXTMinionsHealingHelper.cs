@@ -51,11 +51,11 @@ namespace GW2EIEvtcParser.Extensions
                     HealEvents.AddRange(minion.EXTHealing.GetIncomingHealEvents(null, log, 0, log.FightData.FightEnd));
                 }
                 HealReceivedEvents = HealReceivedEvents.OrderBy(x => x.Time).ToList();
-                HealReceivedEventsByDst = HealReceivedEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+                HealReceivedEventsBySrc = HealReceivedEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
             {
-                if (HealReceivedEventsByDst.TryGetValue(target.AgentItem, out List<EXTAbstractHealingEvent> list))
+                if (HealReceivedEventsBySrc.TryGetValue(target.AgentItem, out List<EXTAbstractHealingEvent> list))
                 {
                     return list.Where(x => x.Time >= start && x.Time <= end).ToList();
                 }

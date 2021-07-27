@@ -12,7 +12,7 @@ namespace GW2EIEvtcParser.Extensions
         protected List<EXTAbstractHealingEvent> HealEvents { get; set; }
         protected Dictionary<AgentItem, List<EXTAbstractHealingEvent>> HealEventsByDst { get; set; }
         protected List<EXTAbstractHealingEvent> HealReceivedEvents { get; set; }
-        protected Dictionary<AgentItem, List<EXTAbstractHealingEvent>> HealReceivedEventsByDst { get; set; }
+        protected Dictionary<AgentItem, List<EXTAbstractHealingEvent>> HealReceivedEventsBySrc { get; set; }
 
 
         private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>> _typedHealEvents = new Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>>();
