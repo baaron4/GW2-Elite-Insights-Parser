@@ -162,7 +162,10 @@ namespace GW2EIBuilders
                 Properties.Resources.tmplTargetPlayers,
                 Properties.Resources.tmplIncomingHealingTable,
                 Properties.Resources.tmpHealingStatTables,
-                Properties.Resources.tmplOutgoingHealingTable
+                Properties.Resources.tmplOutgoingHealingTable,
+                Properties.Resources.tmplHPSGraphModeSelector,
+                Properties.Resources.tmplHPSGraph,
+                Properties.Resources.tmplHealingGraphStats,
             };
             var res = new List<string>();
             foreach (string template in templates)

@@ -41,5 +41,5 @@ function healingTypeEnumToString(mode) {
 }
 
 function getHealingGraphName(healingMode, graphMode) {
-    return healingGraphTypeEnumToString(healingMode) + " " + healingTypeEnumToString(graphMode) + " Graph";
+    return healingTypeEnumToString(healingMode) + " " + healingGraphTypeEnumToString(graphMode) + " Graph";
 }

@@ -29,6 +29,9 @@
     <None Include="Resources\htmlHealingExtensionTemplates\tmplTargetPlayers.html" />
     <None Include="Resources\htmlHealingExtensionTemplates\tmplIncomingHealingTable.html" />
     <None Include="Resources\htmlHealingExtensionTemplates\tmplOutgoingHealingTable.html" />
+    <None Include="Resources\htmlHealingExtensionTemplates\tmplHPSGraphModeSelector.html" />
+    <None Include="Resources\htmlHealingExtensionTemplates\tmplHealingGraphStats.html" />
+    <None Include="Resources\htmlHealingExtensionTemplates\tmplHPSGraph.html" />
     <None Include="Resources\htmlHealingExtensionTemplates\tmpHealingStatTables.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayUI.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayDamageData.html" />
