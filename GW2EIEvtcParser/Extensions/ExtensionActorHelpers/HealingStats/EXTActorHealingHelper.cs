@@ -43,6 +43,9 @@ namespace GW2EIEvtcParser.Extensions
                     case EXTHealingType.ConversionBased:
                         dls.RemoveAll(x => x.GetHealingType(log) != EXTHealingType.ConversionBased);
                         break;
+                    case EXTHealingType.Hybrid:
+                        dls.RemoveAll(x => x.GetHealingType(log) != EXTHealingType.Hybrid);
+                        break;
                     case EXTHealingType.All:
                         break;
                     default:

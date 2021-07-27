@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.Extensions
         // to be filled
         private static readonly HashSet<long> HybridHealIDs = new HashSet<long>()
         {
-
+            9140, // Holy strike
         };
 
         private readonly Dictionary<long, EXTHealingType> EncounteredIDs = new Dictionary<long, EXTHealingType>();
@@ -58,7 +58,7 @@ namespace GW2EIEvtcParser.Extensions
         {
             if (HybridHealIDs.Contains(id))
             {
-                return EXTHealingType.HealingPower;
+                return EXTHealingType.Hybrid;
             }
             if (EncounteredIDs.TryGetValue(id, out EXTHealingType type))
             {
