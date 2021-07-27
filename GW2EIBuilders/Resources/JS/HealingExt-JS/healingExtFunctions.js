@@ -40,6 +40,6 @@ function healingTypeEnumToString(mode) {
     return name;
 }
 
-function getHealingGraphName(damageMode, graphMode) {
-    return healingGraphTypeEnumToString(damageMode) + " " + healingTypeEnumToString(graphMode) + " Graph";
+function getHealingGraphName(healingMode, graphMode) {
+    return healingGraphTypeEnumToString(healingMode) + " " + healingTypeEnumToString(graphMode) + " Graph";
 }

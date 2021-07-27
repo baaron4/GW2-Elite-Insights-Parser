@@ -131,7 +131,7 @@
                     var hpsStat = this.hPhase.outgoingHealingStats[i];
                     var hpsTargetStat = [0, 0, 0, 0];
                     for (j = 0; j < this.activetargets.length; j++) {
-                        var tar = this.hPhase.outgoingHealingStatsFriendlies[i][this.activetargets[j]];
+                        var tar = this.hPhase.outgoingHealingStatsTargets[i][this.activetargets[j]];
                         for (var k = 0; k < hpsTargetStat.length; k++) {
                             hpsTargetStat[k] += tar[k];
                         }

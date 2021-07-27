@@ -11,13 +11,13 @@ namespace GW2EIBuilders.HtmlModels
     {
 
         public List<List<object>> OutgoingHealingStats { get; set; }
-        public List<List<List<object>>> OutgoingHealingStatsFriendlies { get; set; }
+        public List<List<List<object>>> OutgoingHealingStatsTargets { get; set; }
         public List<List<object>> IncomingHealingStats { get; set; } 
 
         public EXTHealingStatsPhaseDto(PhaseData phase, ParsedEvtcLog log)
         {
             OutgoingHealingStats = BuildOutgoingHealingStatData(log, phase);
-            OutgoingHealingStatsFriendlies = BuildOutgoingHealingFriendlyStatData(log, phase);
+            OutgoingHealingStatsTargets = BuildOutgoingHealingFriendlyStatData(log, phase);
             IncomingHealingStats = BuildIncomingHealingStatData(log, phase);
         }
 
