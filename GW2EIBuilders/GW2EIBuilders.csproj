@@ -21,11 +21,15 @@
     <None Include="Resources\JS\CR-JS\actors.js" />
     <None Include="Resources\JS\CR-JS\decorations.js" />
     <None Include="Resources\JS\HealingExt-JS\healingExtFunctions.js" />
+    <None Include="Resources\JS\HealingExt-JS\healingExtGlobals.js" />
     <None Include="Resources\JS\global.js" />
     <None Include="Resources\JS\functions.js" />
     <None Include="Resources\JS\mixins.js" />
     <None Include="Resources\htmlHealingExtensionTemplates\tmplHealingExtensionView.html"  />
     <None Include="Resources\htmlHealingExtensionTemplates\tmplTargetPlayers.html" />
+    <None Include="Resources\htmlHealingExtensionTemplates\tmplIncomingHealingTable.html" />
+    <None Include="Resources\htmlHealingExtensionTemplates\tmplOutgoingHealingTable.html" />
+    <None Include="Resources\htmlHealingExtensionTemplates\tmpHealingStatTables.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayUI.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayDamageData.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayDamageTable.html" />

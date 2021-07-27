@@ -45,6 +45,7 @@ namespace GW2EIBuilders
             //
             var orderedHealingExtScripts = new List<string>()
             {
+                Properties.Resources.healingExtGlobals,
                 Properties.Resources.healingExtFunctions,
             };
             string scriptHealingExtContent = orderedHealingExtScripts[0];
@@ -158,7 +159,10 @@ namespace GW2EIBuilders
             var templates = new List<string>
             {
                 Properties.Resources.tmplHealingExtensionView,
-                Properties.Resources.tmplTargetPlayers
+                Properties.Resources.tmplTargetPlayers,
+                Properties.Resources.tmplIncomingHealingTable,
+                Properties.Resources.tmpHealingStatTables,
+                Properties.Resources.tmplOutgoingHealingTable
             };
             var res = new List<string>();
             foreach (string template in templates)

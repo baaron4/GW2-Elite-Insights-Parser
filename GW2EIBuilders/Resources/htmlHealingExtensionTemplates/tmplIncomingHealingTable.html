@@ -1,0 +1,127 @@
+<template>
+    <div>
+        <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" id="incoming-heal-table">
+            <thead>
+                <tr>
+                    <th class="sub-cell">Sub</th>
+                    <th class="prof-cell"></th>
+                    <th class="text-left">Name</th>
+                    <th>Account</th>
+                    <th class="damage-cell" data-original-title="Healed" >
+                        <img src="https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/20px-Healing.png" alt="Healed"
+                        class="icon icon-hover">
+                    </th>
+                    <th class="damage-cell" data-original-title="Healing Power Healed">
+                        <img src="https://wiki.guildwars2.com/images/8/81/Healing_Power.png" alt="Healing Power Healed"
+                        class="icon icon-hover">
+                    </th>
+                    <th class="damage-cell" data-original-title="Conversion Healed">
+                        <img src="https://wiki.guildwars2.com/images/4/4a/Litany_of_Wrath.png" alt="Conversion Healed"
+                        class="icon icon-hover">
+                    </th>  
+                    <th class="damage-cell" data-original-title="Hybrid Healed">
+                        <img src="https://wiki.guildwars2.com/images/5/55/Leap_of_Faith.png" alt="Conversion Healed"
+                        class="icon icon-hover">
+                    </th>             
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="row in tableData.rows" :class="{active: row.player.id === playerindex}">
+                    <td>{{row.player.group}}</td>
+                    <td :data-original-title="row.player.profession">
+                        <img :src="row.player.icon" :alt="row.player.profession" class="icon"><span
+                            style="display:none">{{row.player.profession}}</span>
+                    </td>
+                    <td class="text-left">{{row.player.name}}</td>
+                    <td>{{row.player.acc}}</td>               
+                    <td v-for="(value, id) in row.incomingHeal">
+                        {{value}}                
+                    </td>              
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr v-for="sum in tableData.sums">
+                    <td></td>
+                    <td></td>
+                    <td class="text-left">{{sum.name}}</td>
+                    <td></td>             
+                    <td v-for="(value, id) in sum.incomingHeal">
+                        {{value}}                
+                    </td>               
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</template>
+
+<script>
+    Vue.component("incoming-healing-stats-component", {
+        props: ["phaseindex", "playerindex"],
+        template: `${template}`,
+        data: function () {
+            return {
+                cache: new Map()
+            };
+        },
+        mounted() {
+            initTable("#incoming-heal-table", 4, "desc");
+        },
+        updated() {
+            updateTable("#incoming-heal-table");
+        },
+        computed: {
+            phase: function () {
+                return logData.phases[this.phaseindex];
+            },
+            hPhase: function () {
+                return logData.healingStatsExtension.healingPhases[this.phaseindex];
+            },
+            tableData: function () {
+                if (this.cache.has(this.phaseindex)) {
+                    return this.cache.get(this.phaseindex);
+                }
+                var rows = [];
+                var sums = [];
+                var total = [0, 0, 0, 0];
+                var groups = [];
+                var i;
+                for (i = 0; i < this.hPhase.incomingHealingStats.length; i++) {
+                    var incomingHeal = this.hPhase.incomingHealingStats[i];
+                    var player = logData.players[i];
+                    if (player.isFake) {
+                        continue;
+                    }
+                    rows.push({
+                        player: player,
+                        incomingHeal: incomingHeal
+                    });
+                    if (!groups[player.group]) {
+                        groups[player.group] = [0, 0, 0, 0];
+                    }
+                    for (var j = 0; j < total.length; j++) {
+                        total[j] += incomingHeal[j];
+                        groups[player.group][j] += incomingHeal[j];
+                    }
+                }
+                for (i = 0; i < groups.length; i++) {
+                    if (groups[i]) {
+                        sums.push({
+                            name: "Group " + i,
+                            incomingHeal: groups[i]
+                        });
+                    }
+                }
+                sums.push({
+                    name: "Total",
+                    incomingHeal: total
+                });
+                var res = {
+                    rows: rows,
+                    sums: sums
+                };
+                this.cache.set(this.phaseindex, res);
+                return res;
+            }
+        }
+    });
+</script>
