@@ -47,6 +47,7 @@
     </script>
     <!--${Js}-->
     <!--${CombatReplayJS}-->
+    <!--${HealingExtensionJS}-->
 </head>
 
 <body>
@@ -60,7 +61,7 @@
             </div>
         </div>
     </div>
-    <div v-cloak id="content" :class="{'ei-container-small':mode === 0, 'ei-container-big':mode === 1}">
+    <div v-cloak id="content" :class="{'ei-container-small':mode !== 1, 'ei-container-big':mode === 1}">
         <div class="d-flex flex-row justify-content-center align-items-center mt-2 ">
             <div v-if="!!errorMessages" class="d-flex flex-column justify-content-center align-items-center">
                 <img v-for="message in errorMessages" class="mb-1 icon" src="https://i.imgur.com/k3tdKEQ.png" :data-original-title="message" />
@@ -77,13 +78,16 @@
                         </li>
                     </ul>
                 </div>
-                <div v-if="cr" class="d-flex flex-row justify-content-center align-items-center">
+                <div v-if="cr || healingExt" class="d-flex flex-row justify-content-center align-items-center">
                     <ul class="nav nav-pills">
                         <li class="nav-item mb-1">
                             <a class="nav-link" @click="mode = 0" :class="{active: mode === 0}">Statistics</a>
                         </li>
-                        <li class="nav-item">
+                        <li v-if="cr" class="nav-item">
                             <a class="nav-link" @click="mode = 1" :class="{active: mode === 1 }">Combat Replay</a>
+                        </li>                      
+                        <li v-if="healingExt" class="nav-item">
+                            <a class="nav-link" @click="mode = 2" :class="{active: mode === 2 }">Healing Statistics</a>
                         </li>
                     </ul>
                 </div>
@@ -93,6 +97,7 @@
             <keep-alive>
                 <main-view-component v-if="mode === 0" :key="'main-view'" :light="light"></main-view-component>
                 <combat-replay-ui-component v-if="mode === 1" :mode="mode" :key="'combat-replay'" :light="light"></combat-replay-ui-component>
+                <healing-extension-view-component v-if="mode === 2" :mode="mode" :key="'healing-extension'" :light="light"></healing-extension-view-component>
             </keep-alive>
         </div>
         <div class="footer">

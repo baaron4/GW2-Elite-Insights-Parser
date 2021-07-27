@@ -10,6 +10,7 @@ namespace GW2EIBuilders
         internal string EIJavascriptCode { get; }
 
         internal string EICRJavascriptCode { get; }
+        internal string EIHealingExtJavascriptCode { get; }
 
         public HTMLAssets()
         {
@@ -41,6 +42,18 @@ namespace GW2EIBuilders
             }
             List<string> templatesCR = BuildCRTemplates();
             EICRJavascriptCode = scriptCRContent.Replace("TEMPLATE_CR_COMPILE", string.Join("\n", templatesCR));
+            //
+            var orderedHealingExtScripts = new List<string>()
+            {
+                Properties.Resources.healingExtFunctions,
+            };
+            string scriptHealingExtContent = orderedHealingExtScripts[0];
+            for (int i = 1; i < orderedHealingExtScripts.Count; i++)
+            {
+                scriptHealingExtContent += orderedHealingExtScripts[i];
+            }
+            List<string> templateHealingExt = BuildHealingExtensionTemplates();
+            EIHealingExtJavascriptCode = scriptHealingExtContent.Replace("TEMPLATE_HEALING_EXT_COMPILE", string.Join("\n", templateHealingExt));
         }
         private static string PrepareTemplate(string template)
         {
@@ -131,6 +144,21 @@ namespace GW2EIBuilders
                 Properties.Resources.tmplCombatReplayExtraDecorations,
                 Properties.Resources.tmplCombatReplayAnimationControl,
                 Properties.Resources.tmplCombatReplayMechanicsList
+            };
+            var res = new List<string>();
+            foreach (string template in templates)
+            {
+                res.Add(PrepareTemplate(template));
+            }
+            return res;
+        }
+
+        private static List<string> BuildHealingExtensionTemplates()
+        {
+            var templates = new List<string>
+            {
+                Properties.Resources.tmplHealingExtensionView,
+                Properties.Resources.tmplTargetPlayers
             };
             var res = new List<string>();
             foreach (string template in templates)

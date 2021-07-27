@@ -75,7 +75,8 @@ function mainLoad() {
     for (i = 0; i < logData.players.length; i++) {
         var playerData = logData.players[i];
         simpleLogData.players.push({
-            active: !!playerData.isPoV
+            active: !!playerData.isPoV,
+            targetActive: !playerData.isFake
         });
         playerData.dpsGraphCache = new Map();
         playerData.id = i;
@@ -84,12 +85,16 @@ function mainLoad() {
     if (!!logData.crData) {
         compileCRTemplates();
     }
+    if (!!logData.healingStatsExtension) {
+        compileHealingExtTemplates();
+    }
     new Vue({
         el: "#content",
         data: {
             light: typeof (window.theme) !== "undefined" ? (window.theme === 'yeti') : logData.lightTheme,
             mode: 0,
-            cr: !!logData.crData
+            cr: !!logData.crData,
+            healingExt: !!logData.healingStatsExtension
         },
         methods: {
             switchTheme: function (state) {

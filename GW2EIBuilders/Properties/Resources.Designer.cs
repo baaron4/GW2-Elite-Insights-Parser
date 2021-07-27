@@ -115,19 +115,29 @@ namespace GW2EIBuilders.Properties {
                 return ResourceManager.GetString("animator", resourceCulture);
             }
         }
-        
+
+        internal static string anhealingExtFunctionsimator
+        {
+            get
+            {
+                return ResourceManager.GetString("healingExtFunctions", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to &lt;script&gt;
         ///
+        ///    &quot;use strict&quot;;
+        ///
         ///    /*\
         ///    |*|
-        ///    |*|  utilitairezs de manipulations de cha�nes base 64 / binaires / UTF-8
+        ///    |*|  Base64 / binary data / UTF-8 strings utilities
         ///    |*|
-        ///    |*|  https://developer.mozilla.org/fr/docs/D�coder_encoder_en_base64
+        ///    |*|  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Base64_encoding_and_decoding
         ///    |*|
         ///    \*/
         ///
-        ///    /* D�coder un tableau d&apos;octets depuis une cha�ne en base64 */
+        ///    /* Array of bytes to Base64 string decoding */
         ///
         ///    function b64ToUint6(nChr) {
         ///
@@ -136,7 +146,7 @@ namespace GW2EIBuilders.Properties {
         ///            : nChr &gt; 96 &amp;&amp; nChr &lt; 123 ?
         ///                nChr - 71
         ///                : nChr &gt; 47 &amp;&amp; nChr &lt; 58 ?
-        ///                    n [rest of string was truncated]&quot;;.
+        ///                [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string compressionUtils {
             get {
@@ -273,6 +283,20 @@ namespace GW2EIBuilders.Properties {
         internal static string global {
             get {
                 return ResourceManager.GetString("global", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /*jshint esversion: 6 */
+        ///&quot;use strict&quot;;
+        ///
+        ///function compileHealingExtTemplates() {
+        ///    TEMPLATE_HEALING_EXT_COMPILE
+        ///};.
+        /// </summary>
+        internal static string healingExtFunctions {
+            get {
+                return ResourceManager.GetString("healingExtFunctions", resourceCulture);
             }
         }
         
@@ -1062,6 +1086,24 @@ namespace GW2EIBuilders.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;div class=&quot;d-flex flex-row justify-content-center mt-1&quot; id=&quot;phase-nav&quot;&gt;
+        ///            &lt;phase-component :phases=&quot;logdata.phases&quot;&gt;&lt;/phase-component&gt;
+        ///        &lt;/div&gt;
+        ///        &lt;div class=&quot;d-flex flex-row justify-content-center mb-2 mt-2&quot; id=&quot;actors&quot;&gt;
+        ///            &lt;div class=&quot;flex-row justify-content-center align-items-center flex-wrap mr-5&quot;&gt;
+        ///                &lt;player-target-component :players=&quot;logdata.players&quot;&gt;&lt;/player-target-component&gt;
+        ///            &lt;/div&gt;
+        ///            &lt;div class=&quot; [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplHealingExtensionView {
+            get {
+                return ResourceManager.GetString("tmplHealingExtensionView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
         ///&lt;html lang=&quot;en&quot;&gt;
         ///
@@ -1157,9 +1199,10 @@ namespace GW2EIBuilders.Properties {
         ///        &lt;img class=&quot;icon mb-1&quot; src=&quot;https://i.imgur.com/nSYuby8.png&quot; :data-original-title=&quot;scoreExpl&quot; /&gt;
         ///        &lt;div class=&quot;d-flex flex-column&quot; style=&quot;max-width: 900px;&quot;&gt;
         ///            &lt;div v-for=&quot;group in groups&quot; class=&quot;d-flex flex-wrap mb-1&quot;&gt;
-        ///                &lt;div v-for=&quot;player in group&quot; class=&quot;player-cell d-flex flex-column align-items-center justify-content-center&quot; :class=&quot;{active: player.id === playerindex}&quot;
+        ///                &lt;div v-for=&quot;player in group&quot; class=&quot;player-cell d-flex flex-column align-items-center justify-content-center&quot; :class=&quot;{active: player.active}&quot;
         ///                    @click=&quot;select(player.id)&quot;&gt;
-        ///                    &lt; [rest of string was truncated]&quot;;.
+        ///                    &lt;div&gt;
+        ///       [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayers {
             get {
@@ -1360,6 +1403,23 @@ namespace GW2EIBuilders.Properties {
         internal static string tmplTargetData {
             get {
                 return ResourceManager.GetString("tmplTargetData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;img class=&quot;icon mb-1&quot; src=&quot;https://i.imgur.com/nSYuby8.png&quot; :data-original-title=&quot;scoreExpl&quot; /&gt;
+        ///        &lt;div class=&quot;d-flex flex-column&quot; style=&quot;max-width: 900px;&quot;&gt;
+        ///            &lt;div v-for=&quot;group in groups&quot; class=&quot;d-flex flex-wrap mb-1&quot;&gt;
+        ///                &lt;div v-for=&quot;player in group&quot; class=&quot;player-cell d-flex flex-column align-items-center justify-content-center&quot; :class=&quot;{active: player.targetActive}&quot;
+        ///                    @click=&quot;select(player.id)&quot;&gt;
+        ///                    &lt;div&gt;
+        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplTargetPlayers {
+            get {
+                return ResourceManager.GetString("tmplTargetPlayers", resourceCulture);
             }
         }
         

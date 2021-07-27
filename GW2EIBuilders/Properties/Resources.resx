@@ -119,16 +119,19 @@
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="actors" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CR-JS\actors.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\Resources\JS\CR-JS\actors.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="animator" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CR-JS\animator.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\Resources\JS\CR-JS\animator.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="css" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ei.css;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="decorations" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CR-JS\decorations.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\Resources\JS\CR-JS\decorations.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="healingExtFunctions" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\JS\HealingExt-JS\healingExtFunctions.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="functions" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\JS\functions.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
@@ -324,5 +327,13 @@
   </data>
   <data name="tmplTargetTabGraph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlTemplates\tmplTargetTabGraph.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+
+  <data name="tmplTargetPlayers" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\htmlHealingExtensionTemplates\tmplTargetPlayers.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+
+  <data name="tmplHealingExtensionView" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\htmlHealingExtensionTemplates\tmplHealingExtensionView.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>

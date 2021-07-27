@@ -18,6 +18,7 @@ namespace GW2EIBuilders
 
         private readonly string _eiJS;
         private readonly string _eiCRJS;
+        private readonly string _eiHealingExtJS;
 
         private readonly string _scriptVersion;
         private readonly int _scriptVersionRev;
@@ -58,6 +59,7 @@ namespace GW2EIBuilders
             }
             _eiJS = assets.EIJavascriptCode;
             _eiCRJS = assets.EICRJavascriptCode;
+            _eiHealingExtJS = assets.EIHealingExtJavascriptCode;
             _parserVersion = parserVersion;
             _scriptVersion = parserVersion.Major + "." + parserVersion.Minor;
 #if !DEBUG
@@ -163,6 +165,7 @@ namespace GW2EIBuilders
             html = html.Replace("<!--${Js}-->", BuildEIJs(externalPath, cdnPath));
             _log.UpdateProgressWithCancellationCheck("HTML: building Combat Replay JS");
             html = html.Replace("<!--${CombatReplayJS}-->", BuildCombatReplayJS(externalPath, cdnPath));
+            html = html.Replace("<!--${HealingExtensionJS}-->", BuildHealingExtensionJS(externalPath, cdnPath));
 
             string json = ToJson(LogDataDto.BuildLogData(_log, _cr, _light, _parserVersion, _uploadLink));
 
@@ -232,6 +235,27 @@ namespace GW2EIBuilders
                 string fileName = "EliteInsights-CR-" + _scriptVersion + ".js";
                 string path = CreateAssetFile(externalPath, cdnPath, fileName, scriptContent);
                 return "<script src=\"" + path + "?version=" + _scriptVersionRev + "\"></script>\n";            
+            }
+            else
+            {
+                return "<script>\r\n" + scriptContent + "\r\n</script>";
+            }
+        }
+
+        private string BuildHealingExtensionJS(string externalPath, string cdnPath)
+        {
+            if (!_log.CombatData.HasEXTHealing)
+            {
+                return "";
+            }
+            string scriptContent = _eiHealingExtJS;
+            bool externalNull = string.IsNullOrEmpty(externalPath);
+            bool cdnNull = string.IsNullOrEmpty(cdnPath);
+            if (!externalNull || !cdnNull)
+            {
+                string fileName = "EliteInsights-HealingExt-" + _scriptVersion + ".js";
+                string path = CreateAssetFile(externalPath, cdnPath, fileName, scriptContent);
+                return "<script src=\"" + path + "?version=" + _scriptVersionRev + "\"></script>\n";
             }
             else
             {

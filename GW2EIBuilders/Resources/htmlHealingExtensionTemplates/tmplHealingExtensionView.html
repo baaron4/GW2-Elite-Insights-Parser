@@ -1,0 +1,81 @@
+<template>
+    <div>
+        <div class="d-flex flex-row justify-content-center mt-1" id="healing-phase-nav">
+            <phase-component :phases="logdata.phases"></phase-component>
+        </div>
+        <div class="d-flex flex-row justify-content-center mb-2 mt-2" id="healing-actors">
+            <div class="flex-row justify-content-center align-items-center flex-wrap mr-5">
+                <player-target-component :players="logdata.players"></player-target-component>
+            </div>
+            <div class="ml-5">
+                <player-component :players="logdata.players"></player-component>
+            </div>
+        </div>     
+        <h2 class="text-center">{{ name }}</h2>
+        <ul class="nav nav-tabs">
+            <li>
+                <a class="nav-link" :class="{active: tab === 0}" @click="tab = 0">Healing Stats</a>
+            </li>
+            <li>
+                <a class="nav-link" :class="{active: tab === 1}" @click="tab = 1">Healing Graph</a>
+            </li>
+            <li>
+                <a class="nav-link" :class="{active: tab === 2}" @click="tab = 2">Player Healing Summary</a>
+            </li>
+        </ul>
+
+        <keep-alive>
+        </keep-alive>
+    </div>
+</template>
+
+<script>
+    Vue.component("healing-extension-view-component", {
+        props: ['light'],
+        template: `${template}`,
+        data: function () {
+            return {
+                tab: 0,
+                logdata: simpleLogData
+            };
+        },
+        computed: {
+            activePhase: function () {
+                var phases = this.logdata.phases;
+                for (var i = 0; i < phases.length; i++) {
+                    if (phases[i].active) {
+                        return i;
+                    }
+                }
+            },
+            phase: function () {
+                return logData.phases[this.activePhase];
+            },
+            activePlayer: function () {
+                var players = this.logdata.players;
+                for (var i = 0; i < players.length; i++) {
+                    if (players[i].active) {
+                        return i;
+                    }
+                }
+                return -1;
+            },
+            name: function () {
+                return this.phase.name + " Healing Summary";
+            },
+            activePlayerTargets: function () {
+                var res = [];
+                for (var i = 0; i < logData.players.length; i++) {
+                    var player = this.logdata.players[i];
+                    if (player.targetActive) {
+                        res.push(i);
+                    }
+                }
+                return res;
+            },
+            players: function () {
+                return logData.players;
+            }
+        }
+    });
+</script>
