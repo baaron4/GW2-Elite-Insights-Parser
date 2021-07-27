@@ -85,11 +85,13 @@ namespace GW2EIParser.tst
                         NullValueHandling = NullValueHandling.Ignore,
                         ContractResolver = TestHelper.DefaultJsonContractResolver
                     };
-                    var writer = new JsonTextWriter(sw)
+                    using (var writer = new JsonTextWriter(sw)
                     {
                         Formatting = Formatting.Indented
-                    };
-                    serializer.Serialize(writer, dict);
+                    })
+                    {
+                        serializer.Serialize(writer, dict);
+                    }
                 }
             }
         }
