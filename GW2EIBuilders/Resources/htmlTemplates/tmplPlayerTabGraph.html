@@ -161,6 +161,9 @@
             graphid: function () {
                 return "playergraph-" + this.playerindex + '-' + this.phaseindex;
             },
+            player: function() {
+                return logData.players[this.playerindex];
+            },
             damageGraphName: function () {
                 switch (this.graphdata.damagemode) {
                     case DamageType.All:
@@ -239,16 +242,16 @@
                 res.push(dpsData.playerDPS.target);
                 res.push(dpsData.playerDPS.cleave);
                 for (var i = 0; i < this.graph.targets.length; i++) {
-                    addPoints(res, this.graph.targets[i].breakbarPercentStates, dpsData.maxDPS);
+                    addPointsToGraph(res, this.graph.targets[i].breakbarPercentStates, dpsData.maxDPS);
                 }
                 for (var i = 0; i < this.graph.targets.length; i++) {
-                    addPoints(res, this.graph.targets[i].barrierStates, dpsData.maxDPS);
+                    addPointsToGraph(res, this.graph.targets[i].barrierStates, dpsData.maxDPS);
                 }
                 for (var i = 0; i < this.graph.targets.length; i++) {
-                    addPoints(res, this.graph.targets[i].healthStates, dpsData.maxDPS);
+                    addPointsToGraph(res, this.graph.targets[i].healthStates, dpsData.maxDPS);
                 }
-                addPoints(res, this.barrierGraph, dpsData.maxDPS);
-                addPoints(res, this.healthGraph, dpsData.maxDPS);
+                addPointsToGraph(res, this.barrierGraph, dpsData.maxDPS);
+                addPointsToGraph(res, this.healthGraph, dpsData.maxDPS);
                 this.dataCache.set(cacheID, res);
                 return res;
             },

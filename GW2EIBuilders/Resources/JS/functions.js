@@ -89,7 +89,7 @@ function graphTypeEnumToString(mode) {
     return name;
 }
 
-function addPoints(res, graph, max) {
+function addPointsToGraph(res, graph, max) {
     if (!graph) {
         return;
     }
@@ -98,6 +98,103 @@ function addPoints(res, graph, max) {
         points[j] = graph[j][1] * max / 100.0;
     }
     res.push(points);
+}
+
+function addMechanicsToGraph(data, phase, phaseIndex) {
+    for (var i = 0; i < graphData.mechanics.length; i++) {
+        var mech = graphData.mechanics[i];
+        var mechData = logData.mechanicMap[i];
+        var chart = {
+            x: [],
+            mode: 'markers',
+            visible: mech.visible ? null : 'legendonly',
+            type: 'scatter',
+            marker: {
+                symbol: mech.symbol,
+                color: mech.color,
+                size: mech.size ? mech.size : 15
+            },
+            text: [],
+            name: mechData.name,
+            hoverinfo: 'text'
+        };
+        if (mechData.enemyMech) {
+            for (var j = 0; j < mech.points[phaseIndex].length; j++) {
+                var pts = mech.points[phaseIndex][j];
+                var tarId = phase.targets[j];
+                if (tarId >= 0) {
+                    var target = logData.targets[tarId];
+                    for (var k = 0; k < pts.length; k++) {
+                        var time = pts[k];
+                        chart.x.push(time);
+                        chart.text.push(time + 's: ' + target.name);
+                    }
+                } else {
+                    for (var k = 0; k < pts.length; k++) {
+                        var time = pts[k][0];
+                        chart.x.push(time);
+                        chart.text.push(time + 's: ' + pts[k][1]);
+                    }
+                }
+            }
+        } else {
+            for (var j = 0; j < mech.points[phaseIndex].length; j++) {
+                var pts = mech.points[phaseIndex][j];
+                var player = logData.players[j];
+                for (var k = 0; k < pts.length; k++) {
+                    var time = pts[k];
+                    chart.x.push(time);
+                    chart.text.push(time + 's: ' + player.name);
+                }
+            }
+        }
+        data.push(chart);
+    }
+}
+
+function updateMechanicsYValues(res, phase, phaseIndex, phaseGraphData, max) {
+    for (var i = 0; i < graphData.mechanics.length; i++) {
+        var mech = graphData.mechanics[i];
+        var mechData = logData.mechanicMap[i];
+        var chart = [];
+        res.push(chart);
+        if (mechData.enemyMech) {
+            for (var j = 0; j < mech.points[phaseIndex].length; j++) {
+                var pts = mech.points[phaseIndex][j];
+                var tarId = phase.targets[j];
+                if (tarId >= 0) {
+                    var health = phaseGraphData.targets[j].healthStates;
+                    for (var k = 0; k < pts.length; k++) {
+                        chart.push(findState(health, pts[k], 0, health.length - 1) * max / 100.0);
+                    }
+                } else {
+                    for (var k = 0; k < pts.length; k++) {
+                        chart.push(max * 0.5);
+                    }
+                }
+            }
+        } else {
+            for (var j = 0; j < mech.points[phaseIndex].length; j++) {
+                var pts = mech.points[phaseIndex][j];
+                for (var k = 0; k < pts.length; k++) {
+                    var time = pts[k];
+                    var ftime = Math.floor(time);
+                    var y = res[j][ftime];
+                    var yp1 = res[j][ftime + 1];
+                    chart.push(interpolatePoint(ftime, ftime + 1, y, yp1, time));
+                }
+            }
+        }
+    }
+}
+
+
+function interpolatePoint(x1, x2, y1, y2, x) {
+    if (typeof y2 !== "undefined") {
+        return y1 + (y2 - y1) / (x2 - x1) * (x - x1);
+    } else {
+        return y1;
+    }
 }
 
 function damageTypeEnumToString(mode) {
@@ -124,22 +221,6 @@ function damageTypeEnumToString(mode) {
 function getDamageGraphName(damageMode, graphMode) {
     return damageTypeEnumToString(damageMode) + " " + graphTypeEnumToString(graphMode) + " Graph";
 }
-
-const quickColor = {
-    r: 220,
-    g: 20,
-    b: 220
-};
-const slowColor = {
-    r: 220,
-    g: 125,
-    b: 30
-};
-const normalColor = {
-    r: 125,
-    g: 125,
-    b: 125
-};
 
 function computeRotationData(rotationData, images, data, phase, actor, yAxis) {
     if (rotationData) {

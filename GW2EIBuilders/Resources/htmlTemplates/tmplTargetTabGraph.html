@@ -238,9 +238,9 @@
                 }
                 var dpsData = this.computeDPSData();
                 var res = [dpsData.dps];
-                addPoints(res, this.healthStates, dpsData.maxDPS);               
-                addPoints(res, this.barrierStates, dpsData.maxDPS);
-                addPoints(res, this.breakbarStates, dpsData.maxDPS);
+                addPointsToGraph(res, this.healthStates, dpsData.maxDPS);               
+                addPointsToGraph(res, this.barrierStates, dpsData.maxDPS);
+                addPointsToGraph(res, this.breakbarStates, dpsData.maxDPS);
                 this.dataCache.set(cacheID, res);
                 return res;
             },

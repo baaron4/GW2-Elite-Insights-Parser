@@ -19,7 +19,6 @@
         },
         created: function () {
             // layout - constant during whole lifetime
-            var i, j;
             var textColor = this.light ? '#495057' : '#cccccc';
             this.layout = {
                 yaxis: {
@@ -67,10 +66,10 @@
             this.data = [];
             var data = this.data;
             var player;
-            for (i = 0; i < logData.players.length; i++) {
+            for (var i = 0; i < logData.players.length; i++) {
                 var pText = [];
                 player = logData.players[i];
-                for (j = 0; j < this.phase.times.length; j++) {
+                for (var j = 0; j < this.phase.times.length; j++) {
                     pText.push(player.name);
                 }
                 data.push({
@@ -104,56 +103,7 @@
             // targets breakbar          
             computeTargetBreakbarData(this.graph, logData.targets, this.phase, this.data, null);
             // mechanics
-            for (i = 0; i < graphData.mechanics.length; i++) {
-                var mech = graphData.mechanics[i];
-                var mechData = logData.mechanicMap[i];
-                var chart = {
-                    x: [],
-                    mode: 'markers',
-                    visible: mech.visible ? null : 'legendonly',
-                    type: 'scatter',
-                    marker: {
-                        symbol: mech.symbol,
-                        color: mech.color,
-                        size: mech.size ? mech.size : 15
-                    },
-                    text: [],
-                    name: mechData.name,
-                    hoverinfo: 'text'
-                };
-                var time, pts, k;
-                if (mechData.enemyMech) {
-                    for (j = 0; j < mech.points[this.phaseindex].length; j++) {
-                        pts = mech.points[this.phaseindex][j];
-                        var tarId = this.phase.targets[j];
-                        if (tarId >= 0) {
-                            var target = logData.targets[tarId];
-                            for (k = 0; k < pts.length; k++) {
-                                time = pts[k];
-                                chart.x.push(time);
-                                chart.text.push(time + 's: ' + target.name);
-                            }
-                        } else {
-                            for (k = 0; k < pts.length; k++) {
-                                time = pts[k][0];
-                                chart.x.push(time);
-                                chart.text.push(time + 's: ' + pts[k][1]);
-                            }
-                        }
-                    }
-                } else {
-                    for (j = 0; j < mech.points[this.phaseindex].length; j++) {
-                        pts = mech.points[this.phaseindex][j];
-                        player = logData.players[j];
-                        for (k = 0; k < pts.length; k++) {
-                            time = pts[k];
-                            chart.x.push(time);
-                            chart.text.push(time + 's: ' + player.name);
-                        }
-                    }
-                }
-                data.push(chart);
-            }
+            addMechanicsToGraph(data, this.phase, this.phaseindex);
         },
         watch: {
             playerindex: {
@@ -275,7 +225,6 @@
             },
             computeDPSRelatedData: function () {
                 var cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, this.activetargets, this.phaseindex, this.mode);
-                var i, j;
                 if (this.dataCache.has(cacheID)) {
                     return this.dataCache.get(cacheID);
                 }
@@ -289,63 +238,22 @@
                 res.push((this.mode === 0 ? dpsData.allDPS.total : (this.mode === 1 ? dpsData.allDPS.target : dpsData.allDPS.cleave)));
                 var maxDPS = (this.mode === 0 ? dpsData.maxDPS.total : (this.mode === 1 ? dpsData.maxDPS.target : dpsData.maxDPS.cleave));
                 var hps = [];
-                for (i = 0; i < this.graph.targets.length; i++) {
+                for (var i = 0; i < this.graph.targets.length; i++) {
                     var health = this.graph.targets[i].healthStates;
-                    addPoints(res, health, maxDPS);
+                    addPointsToGraph(res, health, maxDPS);
                 }       
-                for (i = 0; i < this.graph.targets.length; i++) {
+                for (var i = 0; i < this.graph.targets.length; i++) {
                     var barrier = this.graph.targets[i].barrierStates;
-                    addPoints(res, barrier, maxDPS);
+                    addPointsToGraph(res, barrier, maxDPS);
                 }
-                for (i = 0; i < this.graph.targets.length; i++) {
+                for (var i = 0; i < this.graph.targets.length; i++) {
                     var breakbar = this.graph.targets[i].breakbarPercentStates;
-                    addPoints(res, breakbar, maxDPS);
+                    addPointsToGraph(res, breakbar, maxDPS);
                 }
-                
-                for (i = 0; i < graphData.mechanics.length; i++) {
-                    var mech = graphData.mechanics[i];
-                    var mechData = logData.mechanicMap[i];
-                    var chart = [];
-                    res.push(chart);
-                    var time, pts, k, ftime, y, yp1;
-                    if (mechData.enemyMech) {
-                        for (j = 0; j < mech.points[this.phaseindex].length; j++) {
-                            pts = mech.points[this.phaseindex][j];
-                            var tarId = this.phase.targets[j];
-                            if (tarId >= 0) {
-                                var health = this.graph.targets[j].healthStates;
-                                for (k = 0; k < pts.length; k++) {
-                                    chart.push(findState(health, pts[k], 0, health.length - 1) * maxDPS / 100.0);
-                                }
-                            } else {
-                                for (k = 0; k < pts.length; k++) {
-                                    chart.push(maxDPS * 0.5);
-                                }
-                            }
-                        }
-                    } else {
-                        for (j = 0; j < mech.points[this.phaseindex].length; j++) {
-                            pts = mech.points[this.phaseindex][j];
-                            for (k = 0; k < pts.length; k++) {
-                                time = pts[k];
-                                ftime = Math.floor(time);
-                                y = res[j][ftime];
-                                yp1 = res[j][ftime + 1];
-                                chart.push(this.interpolatePoint(ftime, ftime + 1, y, yp1, time));
-                            }
-                        }
-                    }
-                }
+                updateMechanicsYValues(res, this.phase, this.phaseindex, this.graph, maxDPS);
                 this.dataCache.set(cacheID, res);
                 return res;
             },
-            interpolatePoint: function (x1, x2, y1, y2, x) {
-                if (typeof y2 !== "undefined") {
-                    return y1 + (y2 - y1) / (x2 - x1) * (x - x1);
-                } else {
-                    return y1;
-                }
-            }
         }
     });
 </script>
