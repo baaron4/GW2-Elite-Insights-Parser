@@ -49,6 +49,25 @@ var graphComponent = {
             dataCache: new Map(),
         };
     },
+    computed: {       
+        computePhaseBreaks: function () {
+            var res = [];
+            if (this.phase.subPhases) {
+                for (var i = 0; i < this.phase.subPhases.length; i++) {
+                    var subPhase = logData.phases[this.phase.subPhases[i]];
+                    res[Math.floor(subPhase.start - this.phase.start)] = true;
+                    res[Math.floor(subPhase.end - this.phase.start)] = true;
+                }
+            }
+            return res;
+        },
+        phase: function () {
+            return logData.phases[this.phaseindex];
+        },
+        graph: function () {
+            return graphData.phases[this.phaseindex];
+        },
+    },
     methods: {
             updateVisibily: function (images, x0, x1) {
                 var redraw = false;

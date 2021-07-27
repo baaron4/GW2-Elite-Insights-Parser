@@ -88,17 +88,6 @@
         return 1;
     }
 
-    function addPoints(res, graph, maxDPS) {
-        if (!graph) {
-            return;
-        }
-        var points = [];
-        for (var j = 0; j < graph.length; j++) {
-            points[j] = graph[j][1] * maxDPS / 100.0;
-        }
-        res.push(points);
-    }
-
     Vue.component("target-graph-tab-component", {
         props: ["targetindex", "phaseindex", 'light'],
         template: `${template}`,
@@ -181,12 +170,6 @@
             target: function () {
                 return logData.targets[this.targetindex];
             },
-            phase: function () {
-                return logData.phases[this.phaseindex];
-            },
-            graph: function () {
-                return graphData.phases[this.phaseindex];
-            },
             phaseTargetIndex: function () {
                 return this.phase.targets.indexOf(this.targetindex);
             },
@@ -219,17 +202,6 @@
                         break;
                 }
                 return name;
-            },
-            computePhaseBreaks: function () {
-                var res = [];
-                if (this.phase.subPhases) {
-                    for (var i = 0; i < this.phase.subPhases.length; i++) {
-                        var subPhase = logData.phases[this.phase.subPhases[i]];
-                        res[Math.floor(subPhase.start - this.phase.start)] = true;
-                        res[Math.floor(subPhase.end - this.phase.start)] = true;
-                    }
-                }
-                return res;
             },
             computeData: function () {
                 this.layout.datarevision = new Date().getTime();

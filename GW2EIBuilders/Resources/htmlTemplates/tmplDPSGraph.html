@@ -9,16 +9,6 @@
 </template>
 
 <script>
-    function addPoints(res, graph, maxDPS) {
-        if (!graph) {
-            return;
-        }
-        var points = [];
-        for (var j = 0; j < graph.length; j++) {
-            points[j] = graph[j][1] * maxDPS / 100.0;
-        }
-        res.push(points);
-    }
     Vue.component("dps-graph-component", {
         props: ["activetargets", 'mode', 'phaseindex', 'playerindex', 'light'],
         template: `${template}`,       
@@ -194,12 +184,6 @@
             graphid: function () {
                 return 'dpsgraph-' + this.phaseindex;
             },
-            phase: function () {
-                return logData.phases[this.phaseindex];
-            },
-            graph: function () {
-                return graphData.phases[this.phaseindex];
-            },
             damageGraphName: function () {
                 switch (this.graphdata.damagemode) {
                     case DamageType.All:
@@ -229,17 +213,6 @@
                 }
                 name = (this.mode === 0 ? "Total " : (this.mode === 1 ? "Target " : "Cleave ")) + name;
                 return name;
-            },
-            computePhaseBreaks: function () {
-                var res = [];
-                if (this.phase.subPhases) {
-                    for (var i = 0; i < this.phase.subPhases.length; i++) {
-                        var subPhase = logData.phases[this.phase.subPhases[i]];
-                        res[Math.floor(subPhase.start - this.phase.start)] = true;
-                        res[Math.floor(subPhase.end - this.phase.start)] = true;
-                    }
-                }
-                return res;
             },
             computeData: function () {
                 this.layout.datarevision = new Date().getTime();

@@ -48,17 +48,6 @@
         return _computePlayerGraphData(barrierGraph, data, yaxis, "barrier", "barrier");
     }
 
-    function addPoints(res, graph, maxDPS) {
-        if (!graph) {
-            return;
-        }
-        var points = [];
-        for (var j = 0; j < graph.length; j++) {
-            points[j] = graph[j][1] * maxDPS / 100.0;
-        }
-        res.push(points);
-    }
-
     Vue.component("player-graph-tab-component", {
         props: ["playerindex", "phaseindex", "activetargets", "light"],
         template: `${template}`,
@@ -163,12 +152,6 @@
             phase: function () {
                 return logData.phases[this.phaseindex];
             },
-            player: function () {
-                return logData.players[this.playerindex];
-            },
-            graph: function () {
-                return graphData.phases[this.phaseindex];
-            },
             healthGraph: function () {
                 return this.graph.players[this.playerindex].healthStates;
             },
@@ -206,17 +189,6 @@
                         break;
                 }
                 return name;
-            },
-            computePhaseBreaks: function () {
-                var res = [];
-                if (this.phase.subPhases) {
-                    for (var i = 0; i < this.phase.subPhases.length; i++) {
-                        var subPhase = logData.phases[this.phase.subPhases[i]];
-                        res[Math.floor(subPhase.start - this.phase.start)] = true;
-                        res[Math.floor(subPhase.end - this.phase.start)] = true;
-                    }
-                }
-                return res;
             },
             computeData: function () {
                 this.layout.datarevision = new Date().getTime();

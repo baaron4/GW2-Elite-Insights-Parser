@@ -89,6 +89,17 @@ function graphTypeEnumToString(mode) {
     return name;
 }
 
+function addPoints(res, graph, max) {
+    if (!graph) {
+        return;
+    }
+    var points = [];
+    for (var j = 0; j < graph.length; j++) {
+        points[j] = graph[j][1] * max / 100.0;
+    }
+    res.push(points);
+}
+
 function damageTypeEnumToString(mode) {
     var name = "";
     switch (mode) {
