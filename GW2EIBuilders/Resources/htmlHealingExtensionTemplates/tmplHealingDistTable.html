@@ -1,0 +1,196 @@
+<template>
+    <div>
+        <div v-if="actor !== null" class="mb-1 mt-1">
+            <div v-if="isminion">
+                <p style="display: table-row;">
+                    {{actor.name}} did {{round3(100*healingdist.contributedHealing/healingdist.totalHealing)}}% of its master's total
+                    {{istarget ? 'Target' :''}} healing ({{healingdist.contributedHealing}})
+                </p>
+            </div>
+            <div v-else>
+                <p style="display: table-row;">
+                    {{actor.name}} did {{round3(100*healingdist.contributedHealing/healingdist.totalHealing)}}% of their total {{istarget ?
+                        'Target' :''}} healing ({{healingdist.contributedHealing}})
+                </p> 
+            </div>
+        </div>
+        <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
+            <thead>
+                <tr>
+                    <th class="text-left">Skill</th>
+                    <th class="damage-dist-cell">
+                        %
+                    </th>
+                    <th class="damage-dist-cell" data-original-title="Healing">
+                        <img src="https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/20px-Healing.png" alt="Healing"
+                            class="icon icon-hover">
+                    </th>
+                    <th class="damage-dist-cell" data-original-title="Minimum">
+                        Min
+                    </th>
+                    <th class="damage-dist-cell" data-original-title="Average">
+                        Avg
+                    </th>
+                    <th class="damage-dist-cell" data-original-title="Maximum">
+                        Max
+                    </th>
+                    <th class="damage-dist-cell" v-if="actor !== null">
+                        Cast
+                    </th>
+                    <th class="damage-dist-cell">
+                        Hits
+                    </th>
+                    <th class="damage-dist-cell" v-if="actor !== null" data-original-title="Hits per Cast">
+                        <img src="https://wiki.guildwars2.com/images/thumb/5/53/Number_of_targets.png/20px-Number_of_targets.png"
+                            alt="Hits per Cast" class="icon icon-hover">
+                    </th>
+                    <th class="damage-dist-cell" v-if="actor !== null" data-original-title="Healing divided by time spent in animation">
+                        <img src="https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/20px-Healing.png" alt="Healing"
+                            class="icon">
+                        /
+                        <img src="https://wiki.guildwars2.com/images/6/6e/Activation.png" alt="Activation Time"
+                            class="icon">
+                    </th>
+                    <th class="damage-dist-cell" v-if="actor !== null" data-original-title="Time wasted interupting skill casts">
+                        <img src="https://wiki.guildwars2.com/images/b/b3/Out_Of_Health_Potions.png" alt="Wasted"
+                            class="icon icon-hover">
+                    </th>
+                    <th class="damage-dist-cell" v-if="actor !== null" data-original-title="Time saved(in seconds) interupting skill casts">
+                        <img src="https://wiki.guildwars2.com/images/e/eb/Ready.png" alt="Saved"
+                            class="icon icon-hover">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="row in healingdist.distribution" :class="{condi: getSkill(row[0], row[1]).condi}">
+                    <td class="text-left" :data-original-title="row[1]">
+                        <img :src="getSkill(row[0], row[1]).icon" class="icon">
+                        {{getSkill(row[0],row[1]).name}}
+                    </td>
+                    <td>{{ round3(100*row[2]/healingdist.contributedHealing) }}%</td>
+                    <td :data-original-title="round2(row[2]/phase.durationS) +' hps'">
+                        {{ row[2] }}
+                    </td>
+                    <td>{{ Math.max(row[3],0) }}</td>
+                    <td>{{ round(row[2]/row[8]) }}</td>
+                    <td>{{ row[4] }}</td>
+                    <td :class="{higherOrEqual: (!getSkill(row[0], row[1]).condi && row[5]) && showInequality(getSkill(row[0], row[1]),row[9])}" v-if="actor !== null">
+                        {{ (!getSkill(row[0], row[1]).condi && row[5]) ? row[5] : ''}}
+                    </td>
+                    <td>
+                        {{ row[8] }}
+                    </td>
+                    <td :class="{lowerOrEqual: (!getSkill(row[0], row[1]).condi && row[8] && row[5]) && showInequality(getSkill(row[0], row[1]),row[9])}" v-if="actor !== null">
+                        {{(!getSkill(row[0], row[1]).condi && row[8] && row[5]) ? round2(row[8]/row[5]) : ''}}
+                    </td>
+                    <td v-if="actor !== null">
+                        {{(!getSkill(row[0], row[1]).condi && row[8] && row[9]) ? round2(row[2]/(0.001 * row[9])) : ''}}
+                    </td>
+                    <td v-if="actor !== null"
+                        :data-original-title="row[6] ? round2(100.0 * row[6]/phase.durationS) + '% of the phase' : false">
+                        {{ row[6] ? row[6] + 's' : ''}}</td>
+                    <td v-if="actor !== null"
+                        :data-original-title="row[7] ? round2(100.0 * row[7]/phase.durationS) + '% of the phase' : false">
+                        {{ row[7] ? row[7] + 's' : ''}}</td>
+                </tr>
+            </tbody>
+            <tfoot class="text-dark">
+                <tr>
+                    <td class="text-left">Total</td>
+                    <td></td>
+                    <td :data-original-title="Math.round(healingdist.contributedHealing/phase.durationS) +' hps'">
+                        {{healingdist.contributedHealing}}
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td v-if="actor !== null"></td>
+                    <td></td>
+                    <td v-if="actor !== null"></td>
+                    <td v-if="actor !== null">
+                        {{round2(healingdist.contributedHealing/(0.001 * healingdist.totalCasting))}}
+                    </td>
+                    <td v-if="actor !== null"></td>
+                    <td v-if="actor !== null"></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</template>
+
+<script>
+    Vue.component("healingdist-table-component", {
+        props: ["healingdist", "tableid", "actorindex", "minionindex", "istarget", "phaseindex", "player"],
+        template: `${template}`,
+        data: function () {
+            return {
+                sortdata: {
+                    order: "desc",
+                    index: 2
+                }
+            };
+        },
+        mixins: [numberComponent],
+        mounted() {
+            var _this = this;
+            initTable(
+                "#" + this.tableid,
+                this.sortdata.index,
+                this.sortdata.order,
+                function () {
+                    var order = $("#" + _this.tableid)
+                        .DataTable()
+                        .order();
+                    _this.sortdata.order = order[0][1];
+                    _this.sortdata.index = order[0][0];
+                }
+            );
+        },
+        beforeUpdate() {
+            $("#" + this.tableid)
+                .DataTable()
+                .destroy();
+        },
+        updated() {
+            var _this = this;
+            initTable(
+                "#" + this.tableid,
+                this.sortdata.index,
+                this.sortdata.order,
+                function () {
+                    var order = $("#" + _this.tableid)
+                        .DataTable()
+                        .order();
+                    _this.sortdata.order = order[0][1];
+                    _this.sortdata.index = order[0][0];
+                }
+            );
+        },
+        methods: {
+            getSkill: function (isBoon, id) {
+                return findSkill(isBoon, id);
+            },
+            showInequality: function (skillData, castDuration) {
+                return castDuration === 0 && skillData.notAccurate;
+            },
+        },
+        computed: {
+            phase: function () {
+                return logData.phases[this.phaseindex];
+            },
+            isminion: function() {
+                return this.minionindex > -1;
+            },
+            actor: function() {
+                if (this.actorindex < 0) {
+                    return null;
+                }
+                var master = !this.player ? logData.targets[this.actorindex] : logData.players[this.actorindex];
+                if (this.isminion) {
+                    return master.minions[this.minionindex];
+                }
+                return master;
+            },
+        }
+    });
+</script>

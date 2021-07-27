@@ -1,0 +1,114 @@
+<template>
+    <div>
+        <div v-if="player.minions.length > 0">
+            <ul class="nav nav-tabs">
+                <li>
+                    <a class="nav-link" :class="{active: distmode === -1}" @click="distmode = -1">{{player.name}}</a>
+                </li>
+                <li v-for="(minion, mindex) in player.minions">
+                    <a class="nav-link" :class="{active: distmode === mindex}"
+                        @click="distmode = mindex">{{minion.name}}</a>
+                </li>
+            </ul>
+        </div>
+        <div class="d-flex flex-row justify-content-center mt-1 mb-1">
+            <ul class="nav nav-pills scale85">
+                <li class="nav-item">
+                    <a class="nav-link" @click="targetmode = 1" :class="{active: targetmode}">Target</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" @click="targetmode = 0" :class="{active: !targetmode }">All</a>
+                </li>
+            </ul>
+        </div>
+        <healingdist-table-component :healingdist="targetmode === 0 ? healingdist : healingdisttarget"
+            :tableid="'healingdist-' + playerindex" :actorindex="playerindex" :minionindex="distmode" 
+            :player="true" :istarget="targetmode === 1"
+            :phaseindex="phaseindex"></healingdist-table-component>
+    </div>
+</template>
+
+<script>
+    Vue.component('healingdist-player-component', {
+        props: ['playerindex',
+            'phaseindex', 'activetargets'
+        ],
+        template: `${template}`,
+        data: function () {
+            return {
+                distmode: -1,
+                targetmode: 1,
+                cacheTarget: new Map()
+            };
+        },
+        computed: {
+            phase: function () {
+                return logData.phases[this.phaseindex];
+            },
+            player: function () {
+                return logData.players[this.playerindex];
+            },
+            healingdist: function () {
+                if (this.distmode === -1) {
+                    return logData.healingStatsExtension.playerHealingDetails[this.playerindex].healingDistributions[this.phaseindex];
+                }
+                return logData.healingStatsExtension.playerHealingDetails[this.playerindex].minions[this.distmode].healingDistributions[this.phaseindex];
+            },
+            _healingdisttarget: function() {
+                if (this.distmode === -1) {
+                    return logData.healingStatsExtension.playerHealingDetails[this.playerindex].healingDistributionsTargets[this.phaseindex];
+                }
+                return logData.healingStatsExtension.playerHealingDetails[this.playerindex].minions[this.distmode].healingDistributionsTargets[this.phaseindex];
+            },
+            healingdisttarget: function () {
+                var cacheID = this.phaseindex + '-' + this.distmode + '-';
+                cacheID += getTargetCacheID(this.activetargets);
+                if (this.cacheTarget.has(cacheID)) {
+                    return this.cacheTarget.get(cacheID);
+                }
+                var dist = {
+                    contributedHealing: 0,
+                    totalHealing: 0,
+                    totalCasting: 0,
+                    distribution: [],
+                };
+                var rows = new Map();
+                for (var i = 0; i < this.activetargets.length; i++) {
+                    var targetid = this.activetargets[i];
+                    var targetDist = this._healingdisttarget[targetid];
+                    dist.contributedHealing += targetDist.contributedHealing;
+                    dist.totalHealing += targetDist.totalHealing;
+                    dist.totalCasting += targetDist.totalCasting;
+                    var distribution = targetDist.distribution;
+                    for (var k = 0; k < distribution.length; k++) {
+                        var targetDistribution = distribution[k];
+                        if (rows.has(targetDistribution[1])) {
+                            var row = rows.get(targetDistribution[1]);
+                            row[2] += targetDistribution[2];
+                            if (row[3] < 0) {
+                                row[3] = targetDistribution[3];
+                            } else if (targetDistribution[3] >= 0) {
+                                row[3] = Math.min(targetDistribution[3], row[3]);
+                            }
+                            row[4] = Math.max(targetDistribution[4], row[4]);
+                            // skip 5 6 7
+                            row[8] += targetDistribution[8];
+                            // skip 9
+                        } else {
+                            rows.set(targetDistribution[1], targetDistribution.slice(0));
+                        }
+
+                    }
+                }
+                rows.forEach(function (value, key, map) {
+                    dist.distribution.push(value);
+                });
+                dist.contributedHealing = Math.max(dist.contributedHealing, 0);
+                dist.totalHealing = Math.max(dist.totalHealing, 0);
+                dist.totalCasting = Math.max(dist.totalCasting, 0);
+                this.cacheTarget.set(cacheID, dist);
+                return dist;
+            }
+        },
+    });
+</script>

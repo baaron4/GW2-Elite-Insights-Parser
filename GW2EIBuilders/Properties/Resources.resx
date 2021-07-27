@@ -356,4 +356,19 @@
   <data name="tmplHealingGraphStats" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlHealingExtensionTemplates\tmplHealingGraphStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="tmplHealingDistPlayer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\htmlHealingExtensionTemplates\tmplHealingDistPlayer.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="tmplHealingDistTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\htmlHealingExtensionTemplates\tmplHealingDistTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="tmplPlayerHealingStats" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\htmlHealingExtensionTemplates\tmplPlayerHealingStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="tmplPlayerHealingTab" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\htmlHealingExtensionTemplates\tmplPlayerHealingTab.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="tmplHealingTaken" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\htmlHealingExtensionTemplates\tmplHealingTaken.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
 </root>

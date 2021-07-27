@@ -31,6 +31,9 @@
             <healing-graph-stats-component v-if="tab === 1" :key="'healing-graph'"
             :activetargets="activePlayerTargets" :phaseindex="activePhase" :playerindex="activePlayer"
             :light="light"></healing-graph-stats-component>
+            <player-healing-stats-component v-if="tab === 2" :key="'healing-players'"
+                :activeplayer="activePlayer" :phaseindex="activePhase" :activetargets="activePlayerTargets"
+                :light="light"></player-healing-stats-component>
         </keep-alive>
     </div>
 </template>

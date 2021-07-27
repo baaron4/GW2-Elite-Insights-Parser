@@ -166,6 +166,11 @@ namespace GW2EIBuilders
                 Properties.Resources.tmplHPSGraphModeSelector,
                 Properties.Resources.tmplHPSGraph,
                 Properties.Resources.tmplHealingGraphStats,
+                Properties.Resources.tmplHealingDistPlayer,
+                Properties.Resources.tmplHealingDistTable,
+                Properties.Resources.tmplPlayerHealingStats,
+                Properties.Resources.tmplPlayerHealingTab,
+                Properties.Resources.tmplHealingTaken,
             };
             var res = new List<string>();
             foreach (string template in templates)
