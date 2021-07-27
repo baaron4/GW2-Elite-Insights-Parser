@@ -36,6 +36,14 @@ namespace GW2EIJSON
             /// Total conversion based healing
             /// </summary>
             public int ConversionHealing { get; set; }
+            /// <summary>
+            /// Total hybrid hps
+            /// </summary>
+            public int HybridHps { get; set; }
+            /// <summary>
+            /// Total hybrid healing
+            /// </summary>
+            public int HybridHealing { get; set; }
 
 
             /// <summary>
@@ -62,6 +70,14 @@ namespace GW2EIJSON
             /// Total actor only conversion based healing
             /// </summary>
             public int ActorConversionHealing { get; set; }
+            /// <summary>
+            /// Total actor only hybrid hps
+            /// </summary>
+            public int ActorHybridHps { get; set; }
+            /// <summary>
+            /// Total actor only hybrid healing
+            /// </summary>
+            public int ActorHybridHealing { get; set; }
 
             public EXTJsonOutgoingHealingStatistics()
             {
@@ -86,6 +102,10 @@ namespace GW2EIJSON
             /// Total received conversion based healing
             /// </summary>
             public int ConversionHealed { get; set; }
+            /// <summary>
+            /// Total received hybrid healing
+            /// </summary>
+            public int HybridHealed { get; set; }
 
             public EXTJsonIncomingHealingStatistics()
             {

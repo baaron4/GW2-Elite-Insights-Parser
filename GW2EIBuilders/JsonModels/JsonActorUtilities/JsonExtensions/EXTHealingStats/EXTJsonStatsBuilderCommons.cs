@@ -22,13 +22,17 @@ namespace GW2EIBuilders.JsonModels
                 HealingPowerHealing = stats.HealingPowerHealing,
                 HealingPowerHps = stats.HealingPowerHps,
                 Hps = stats.Hps,
+                HybridHealing = stats.HybridHealing,
+                HybridHps = stats.HybridHps,
 
                 ActorConversionHealing = stats.ActorConversionHealing,
                 ActorConversionHps = stats.ActorConversionHps,
                 ActorHealing = stats.ActorHealing,
                 ActorHealingPowerHealing = stats.ActorHealingPowerHealing,
                 ActorHealingPowerHps = stats.ActorHealingPowerHps,
-                ActorHps = stats.ActorHps
+                ActorHps = stats.ActorHps,
+                ActorHybridHealing = stats.ActorHybridHealing,
+                ActorHybridHps = stats.ActorHybridHps
             };
         }
 
@@ -38,7 +42,8 @@ namespace GW2EIBuilders.JsonModels
             {
                 ConversionHealed = stats.ConversionHealed,
                 Healed = stats.Healed,
-                HealingPowerHealed = stats.HealingPowerHealed
+                HealingPowerHealed = stats.HealingPowerHealed,
+                HybridHealed = stats.HybridHealed,
             };
         }
 
