@@ -17,7 +17,7 @@ namespace GW2EIBuilders.HtmlModels
         public long TotalCasting { get; set; }
         public List<object[]> Distribution { get; set; }
 
-        private static object[] GetDMGDtoItem(KeyValuePair<SkillItem, List<AbstractHealthDamageEvent>> entry, Dictionary<SkillItem, List<AbstractCastEvent>> castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
+        private static object[] GetDMGDtoItem(SkillItem skill, List<AbstractHealthDamageEvent> damageLogs, Dictionary<SkillItem, List<AbstractCastEvent>> castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
         {
             int totaldamage = 0,
                     mindamage = int.MaxValue,
@@ -31,7 +31,7 @@ namespace GW2EIBuilders.HtmlModels
                     glance = 0,
                     shieldDamage = 0;
             bool IsIndirectDamage = false;
-            foreach (AbstractHealthDamageEvent dl in entry.Value)
+            foreach (AbstractHealthDamageEvent dl in damageLogs)
             {
                 IsIndirectDamage = IsIndirectDamage || dl is NonDirectHealthDamageEvent;
                 int curdmg = dl.HealthDamage;
@@ -66,31 +66,31 @@ namespace GW2EIBuilders.HtmlModels
             }
             if (IsIndirectDamage)
             {
-                if (!usedBoons.ContainsKey(entry.Key.ID))
+                if (!usedBoons.ContainsKey(skill.ID))
                 {
-                    if (boons.BuffsByIds.TryGetValue(entry.Key.ID, out Buff buff))
+                    if (boons.BuffsByIds.TryGetValue(skill.ID, out Buff buff))
                     {
                         usedBoons.Add(buff.ID, buff);
                     }
                     else
                     {
-                        SkillItem aux = entry.Key;
-                        var auxBoon = new Buff(aux.Name, entry.Key.ID, aux.Icon);
+                        SkillItem aux = skill;
+                        var auxBoon = new Buff(aux.Name, aux.ID, aux.Icon);
                         usedBoons.Add(auxBoon.ID, auxBoon);
                     }
                 }
             }
             else
             {
-                if (!usedSkills.ContainsKey(entry.Key.ID))
+                if (!usedSkills.ContainsKey(skill.ID))
                 {
-                    usedSkills.Add(entry.Key.ID, entry.Key);
+                    usedSkills.Add(skill.ID, skill);
                 }
             }
 
             long timeCasting = 0;
             int casts = 0, timeWasted = 0, timeSaved = 0;
-            if (!IsIndirectDamage && castLogsBySkill != null && castLogsBySkill.TryGetValue(entry.Key, out List<AbstractCastEvent> clList))
+            if (!IsIndirectDamage && castLogsBySkill != null && castLogsBySkill.TryGetValue(skill, out List<AbstractCastEvent> clList))
             {
                 foreach (AbstractCastEvent cl in clList)
                 {
@@ -114,7 +114,7 @@ namespace GW2EIBuilders.HtmlModels
             }
             object[] skillItem = {
                     IsIndirectDamage,
-                    entry.Key.ID,
+                    skill.ID,
                     totaldamage,
                     mindamage == int.MaxValue ? 0 : mindamage,
                     maxdamage == int.MinValue ? 0 : maxdamage,
@@ -144,10 +144,9 @@ namespace GW2EIBuilders.HtmlModels
             var damageLogsBySkill = damageLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
             dto.ContributedDamage = damageLogs.Sum(x => x.HealthDamage);
             dto.ContributedShieldDamage = damageLogs.Sum(x => x.ShieldDamage);
-            var conditionsById = log.StatisticsHelper.PresentConditions.ToDictionary(x => x.ID);
-            foreach (KeyValuePair<SkillItem, List<AbstractHealthDamageEvent>> entry in damageLogsBySkill)
+            foreach (KeyValuePair<SkillItem, List<AbstractHealthDamageEvent>> pair in damageLogsBySkill)
             {
-                dto.Distribution.Add(GetDMGDtoItem(entry, null, usedSkills, usedBuffs, log.Buffs, phase));
+                dto.Distribution.Add(GetDMGDtoItem(pair.Key, pair.Value, null, usedSkills, usedBuffs, log.Buffs, phase));
             }
             return dto;
         }
@@ -159,26 +158,26 @@ namespace GW2EIBuilders.HtmlModels
             var castLogsBySkill = casting.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
             var damageLogsBySkill = damageLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
             var conditionsById = log.StatisticsHelper.PresentConditions.ToDictionary(x => x.ID);
-            foreach (KeyValuePair<SkillItem, List<AbstractHealthDamageEvent>> entry in damageLogsBySkill)
+            foreach (KeyValuePair<SkillItem, List<AbstractHealthDamageEvent>> pair in damageLogsBySkill)
             {
-                list.Add(GetDMGDtoItem(entry, castLogsBySkill, usedSkills, usedBuffs, log.Buffs, phase));
+                list.Add(GetDMGDtoItem(pair.Key, pair.Value, castLogsBySkill, usedSkills, usedBuffs, log.Buffs, phase));
             }
             // non damaging
-            foreach (KeyValuePair<SkillItem, List<AbstractCastEvent>> entry in castLogsBySkill)
+            foreach (KeyValuePair<SkillItem, List<AbstractCastEvent>> pair in castLogsBySkill)
             {
-                if (damageLogsBySkill.ContainsKey(entry.Key))
+                if (damageLogsBySkill.ContainsKey(pair.Key))
                 {
                     continue;
                 }
 
-                if (!usedSkills.ContainsKey(entry.Key.ID))
+                if (!usedSkills.ContainsKey(pair.Key.ID))
                 {
-                    usedSkills.Add(entry.Key.ID, entry.Key);
+                    usedSkills.Add(pair.Key.ID, pair.Key);
                 }
                 long timeCasting = 0;
                 int casts = 0;
                 int timeWasted = 0, timeSaved = 0;
-                foreach (AbstractCastEvent cl in entry.Value)
+                foreach (AbstractCastEvent cl in pair.Value)
                 {
                     if (phase.InInterval(cl.Time))
                     {
@@ -199,7 +198,7 @@ namespace GW2EIBuilders.HtmlModels
 
                 object[] skillData = {
                     false,
-                    entry.Key.ID,
+                    pair.Key.ID,
                     0,
                     -1,
                     0,

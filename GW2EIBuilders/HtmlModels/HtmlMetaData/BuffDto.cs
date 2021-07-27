@@ -15,6 +15,7 @@ namespace GW2EIBuilders.HtmlModels
         public bool Stacking { get; set; }
         public bool Consumable { get; set; }
         public bool FightSpecific { get; set; }
+        public bool ConversionBasedHealing { get; set; }
 
         public BuffDto(Buff buff, ParsedEvtcLog log)
         {
@@ -51,6 +52,10 @@ namespace GW2EIBuilders.HtmlModels
                 {
                     Description += desc + "<br>";
                 }
+            }
+            if (log.CombatData.HasEXTHealing)
+            {
+                ConversionBasedHealing = log.CombatData.EXTHealingCombatData.GetHealingType(buff, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.ConversionBased;
             }
         }
 

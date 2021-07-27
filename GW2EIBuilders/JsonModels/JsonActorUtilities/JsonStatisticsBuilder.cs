@@ -33,22 +33,24 @@ namespace GW2EIBuilders.JsonModels
 
         public static JsonDPS BuildJsonDPS(FinalDPS stats)
         {
-            var jsonDPS = new JsonDPS();
-            jsonDPS.Dps = stats.Dps;
-            jsonDPS.Damage = stats.Damage;
-            jsonDPS.CondiDps = stats.CondiDps;
-            jsonDPS.CondiDamage = stats.CondiDamage;
-            jsonDPS.PowerDps = stats.PowerDps;
-            jsonDPS.PowerDamage = stats.PowerDamage;
-            jsonDPS.BreakbarDamage = stats.BreakbarDamage;
+            var jsonDPS = new JsonDPS
+            {
+                Dps = stats.Dps,
+                Damage = stats.Damage,
+                CondiDps = stats.CondiDps,
+                CondiDamage = stats.CondiDamage,
+                PowerDps = stats.PowerDps,
+                PowerDamage = stats.PowerDamage,
+                BreakbarDamage = stats.BreakbarDamage,
 
-            jsonDPS.ActorDps = stats.ActorDps;
-            jsonDPS.ActorDamage = stats.ActorDamage;
-            jsonDPS.ActorCondiDps = stats.ActorCondiDps;
-            jsonDPS.ActorCondiDamage = stats.ActorCondiDamage;
-            jsonDPS.ActorPowerDps = stats.ActorPowerDps;
-            jsonDPS.ActorPowerDamage = stats.ActorPowerDamage;
-            jsonDPS.ActorBreakbarDamage = stats.ActorBreakbarDamage;
+                ActorDps = stats.ActorDps,
+                ActorDamage = stats.ActorDamage,
+                ActorCondiDps = stats.ActorCondiDps,
+                ActorCondiDamage = stats.ActorCondiDamage,
+                ActorPowerDps = stats.ActorPowerDps,
+                ActorPowerDamage = stats.ActorPowerDamage,
+                ActorBreakbarDamage = stats.ActorBreakbarDamage
+            };
 
             return jsonDPS;
         }
@@ -83,34 +85,38 @@ namespace GW2EIBuilders.JsonModels
 
         public static JsonGameplayStatsAll BuildJsonGameplayStatsAll(FinalGameplayStatsAll stats)
         {
-            var jsonGameplayStatsAll = new JsonGameplayStatsAll();
+            var jsonGameplayStatsAll = new JsonGameplayStatsAll
+            {
+                Wasted = stats.Wasted,
+                TimeWasted = stats.TimeWasted,
+                Saved = stats.Saved,
+                TimeSaved = stats.TimeSaved,
+                StackDist = stats.StackDist,
+                DistToCom = stats.DistToCom,
+                AvgBoons = stats.AvgBoons,
+                AvgActiveBoons = stats.AvgActiveBoons,
+                AvgConditions = stats.AvgConditions,
+                AvgActiveConditions = stats.AvgActiveConditions,
+                SwapCount = stats.SwapCount
+            };
             FillJsonGamePlayStats(jsonGameplayStatsAll, stats);
-            jsonGameplayStatsAll.Wasted = stats.Wasted;
-            jsonGameplayStatsAll.TimeWasted = stats.TimeWasted;
-            jsonGameplayStatsAll.Saved = stats.Saved;
-            jsonGameplayStatsAll.TimeSaved = stats.TimeSaved;
-            jsonGameplayStatsAll.StackDist = stats.StackDist;
-            jsonGameplayStatsAll.DistToCom = stats.DistToCom;
-            jsonGameplayStatsAll.AvgBoons = stats.AvgBoons;
-            jsonGameplayStatsAll.AvgActiveBoons = stats.AvgActiveBoons;
-            jsonGameplayStatsAll.AvgConditions = stats.AvgConditions;
-            jsonGameplayStatsAll.AvgActiveConditions = stats.AvgActiveConditions;
-            jsonGameplayStatsAll.SwapCount = stats.SwapCount;
             return jsonGameplayStatsAll;
         }
 
 
         public static JsonPlayerSupport BuildJsonPlayerSupport(FinalToPlayersSupport stats)
         {
-            var jsonPlayerSupport = new JsonPlayerSupport();
-            jsonPlayerSupport.Resurrects = stats.Resurrects;
-            jsonPlayerSupport.ResurrectTime = stats.ResurrectTime;
-            jsonPlayerSupport.CondiCleanse = stats.CondiCleanse;
-            jsonPlayerSupport.CondiCleanseTime = stats.CondiCleanseTime;
-            jsonPlayerSupport.CondiCleanseSelf = stats.CondiCleanseSelf;
-            jsonPlayerSupport.CondiCleanseTimeSelf = stats.CondiCleanseTimeSelf;
-            jsonPlayerSupport.BoonStrips = stats.BoonStrips;
-            jsonPlayerSupport.BoonStripsTime = stats.BoonStripsTime;
+            var jsonPlayerSupport = new JsonPlayerSupport
+            {
+                Resurrects = stats.Resurrects,
+                ResurrectTime = stats.ResurrectTime,
+                CondiCleanse = stats.CondiCleanse,
+                CondiCleanseTime = stats.CondiCleanseTime,
+                CondiCleanseSelf = stats.CondiCleanseSelf,
+                CondiCleanseTimeSelf = stats.CondiCleanseTimeSelf,
+                BoonStrips = stats.BoonStrips,
+                BoonStripsTime = stats.BoonStripsTime
+            };
             return jsonPlayerSupport;
         }
     }

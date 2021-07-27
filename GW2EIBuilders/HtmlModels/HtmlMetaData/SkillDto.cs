@@ -13,20 +13,27 @@ namespace GW2EIBuilders.HtmlModels
         public bool Aa { get; set; }
         public bool IsSwap { get; set; }
         public bool NotAccurate { get; set; }
+        public bool ConversionBasedHealing { get; set; }
 
-        public static void AssembleSkills(ICollection<SkillItem> skills, Dictionary<string, SkillDto> dict, SkillData skillData)
+        public SkillDto(SkillItem skill, ParsedEvtcLog log)
+        {
+            Id = skill.ID;
+            Name = skill.Name;
+            Icon = skill.Icon;
+            Aa = skill.AA;
+            IsSwap = skill.IsSwap;
+            NotAccurate = log.SkillData.IsNotAccurate(skill.ID);
+            if (log.CombatData.HasEXTHealing)
+            {
+                ConversionBasedHealing = log.CombatData.EXTHealingCombatData.GetHealingType(skill, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.ConversionBased;
+            }
+        }
+
+        public static void AssembleSkills(ICollection<SkillItem> skills, Dictionary<string, SkillDto> dict, ParsedEvtcLog log)
         {
             foreach (SkillItem skill in skills)
             {
-                dict["s" + skill.ID] = new SkillDto()
-                {
-                    Id = skill.ID,
-                    Name = skill.Name,
-                    Icon = skill.Icon,
-                    Aa = skill.AA,
-                    IsSwap = skill.IsSwap,
-                    NotAccurate = skillData.IsNotAccurate(skill.ID)
-                };
+                dict["s" + skill.ID] = new SkillDto(skill, log);
             }
         }
 
