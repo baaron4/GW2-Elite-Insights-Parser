@@ -25,7 +25,8 @@ namespace GW2EIBuilders.JsonModels
                 CanCrit = SkillItem.CanCrit(item.ID, log.LogData.GW2Build),
                 IsSwap = item.IsSwap,
                 IsNotAccurate = log.SkillData.IsNotAccurate(item.ID),
-                ConversionBasedHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(item, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.ConversionBased : false
+                ConversionBasedHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(item, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.ConversionBased : false,
+                HybridHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(item, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.Hybrid : false
             };
             return skillDesc;
         }
@@ -37,7 +38,8 @@ namespace GW2EIBuilders.JsonModels
                 Name = item.Name,
                 Icon = item.Link,
                 Stacking = item.Type == Buff.BuffType.Intensity,
-                ConversionBasedHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(item, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.ConversionBased : false
+                ConversionBasedHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(item, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.ConversionBased : false,
+                HybridHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(item, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.Hybrid : false
             };
             BuffInfoEvent buffInfoEvent = log.CombatData.GetBuffInfoEvent(item.ID);
             if (buffInfoEvent != null)

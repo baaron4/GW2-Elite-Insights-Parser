@@ -157,7 +157,7 @@ dotnet_diagnostic.CA1034.severity = none
 dotnet_diagnostic.CA1716.severity = none
 
 # CA1028: Enum Storage should be Int32
-dotnet_diagnostic.CA1028.severity = suggestion
+dotnet_diagnostic.CA1028.severity = none
 
 # CA1720: Identifier contains type name
 dotnet_diagnostic.CA1720.severity = none
@@ -185,6 +185,26 @@ dotnet_diagnostic.CA1724.severity = silent
 
 # CA1054: Uri parameters should not be strings
 dotnet_diagnostic.CA1054.severity = suggestion
+
+dotnet_diagnostic.CA1002.severity = suggestion
+
+dotnet_diagnostic.CA1711.severity = none
+
+dotnet_diagnostic.CA1805.severity = none
+
+dotnet_diagnostic.CA5394.severity = none
+
+dotnet_diagnostic.CA1024.severity = suggestion
+
+dotnet_diagnostic.CA1310.severity = suggestion
+
+dotnet_diagnostic.CA1069.severity = none
+
+dotnet_diagnostic.CA1707.severity = none
+
+dotnet_diagnostic.CA1008.severity = none
+
+dotnet_diagnostic.CA1715.severity = none
 
 [*.vb] 
 # Modifier preferences 

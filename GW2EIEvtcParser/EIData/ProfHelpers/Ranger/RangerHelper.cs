@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
@@ -21,6 +22,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(12500,12543,EIData.InstantCastFinder.DefaultICD, (evt, combatData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
             new BuffGainCastFinder(42470,12543,EIData.InstantCastFinder.DefaultICD, (evt, combatData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant), // Lesser Signet of Stone
             new BuffGainCastFinder(12537,12536,EIData.InstantCastFinder.DefaultICD), // Sharpening Stone
+            new EXTHealingCastFinder(13980, 13980, EIData.InstantCastFinder.DefaultICD), // Windborne Notes
         };
 
 

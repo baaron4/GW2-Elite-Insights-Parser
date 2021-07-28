@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.Exceptions
 {
-    internal class EIBuffSimulatorIDException : Exception
+    public class EIBuffSimulatorIDException : Exception
     {
         internal EIBuffSimulatorIDException(string message) : base(message)
         {

@@ -9,7 +9,7 @@ namespace GW2EIBuilders.HtmlModels
     internal class EXTHealingStatsPlayerDetailsDto
     {
         public List<EXTHealingStatsHealingDistributionDto> healingDistributions { get; set; }
-        public List<List<EXTHealingStatsHealingDistributionDto>> healingDistributionsFriendlies { get; set; }
+        public List<List<EXTHealingStatsHealingDistributionDto>> healingDistributionsTargets { get; set; }
         public List<EXTHealingStatsHealingDistributionDto> IncomingHealingDistributions { get; set; }
         public List<EXTHealingStatsPlayerDetailsDto> Minions { get; set; }
 
@@ -20,7 +20,7 @@ namespace GW2EIBuilders.HtmlModels
             var dto = new EXTHealingStatsPlayerDetailsDto
             {
                 healingDistributions = new List<EXTHealingStatsHealingDistributionDto>(),
-                healingDistributionsFriendlies = new List<List<EXTHealingStatsHealingDistributionDto>>(),
+                healingDistributionsTargets = new List<List<EXTHealingStatsHealingDistributionDto>>(),
                 IncomingHealingDistributions = new List<EXTHealingStatsHealingDistributionDto>(),
                 Minions = new List<EXTHealingStatsPlayerDetailsDto>(),
             };
@@ -32,7 +32,7 @@ namespace GW2EIBuilders.HtmlModels
                 {
                     dmgTargetsDto.Add(EXTHealingStatsHealingDistributionDto.BuildFriendlyHealingDistData(log, actor, target, phase, usedSkills, usedBuffs));
                 }
-                dto.healingDistributionsFriendlies.Add(dmgTargetsDto);
+                dto.healingDistributionsTargets.Add(dmgTargetsDto);
                 dto.IncomingHealingDistributions.Add(EXTHealingStatsHealingDistributionDto.BuildIncomingHealingDistData(log, actor, phase, usedSkills, usedBuffs));
             }
             foreach (KeyValuePair<long, Minions> pair in actor.GetMinions(log))
@@ -48,7 +48,7 @@ namespace GW2EIBuilders.HtmlModels
             var dto = new EXTHealingStatsPlayerDetailsDto
             {
                 healingDistributions = new List<EXTHealingStatsHealingDistributionDto>(),
-                healingDistributionsFriendlies = new List<List<EXTHealingStatsHealingDistributionDto>>()
+                healingDistributionsTargets = new List<List<EXTHealingStatsHealingDistributionDto>>()
             };
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
@@ -57,7 +57,7 @@ namespace GW2EIBuilders.HtmlModels
                 {
                     dmgTargetsDto.Add(EXTHealingStatsHealingDistributionDto.BuildFriendlyMinionHealingDistData(log, actor, minion, target, phase, usedSkills, usedBuffs));
                 }
-                dto.healingDistributionsFriendlies.Add(dmgTargetsDto);
+                dto.healingDistributionsTargets.Add(dmgTargetsDto);
                 dto.healingDistributions.Add(EXTHealingStatsHealingDistributionDto.BuildFriendlyMinionHealingDistData(log, actor, minion, null, phase, usedSkills, usedBuffs));
             }
             return dto;

@@ -12,7 +12,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace GW2EIParser.tst
 {
-    public class TestHelper
+    public static class TestHelper
     {
         internal static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
         internal static readonly DefaultContractResolver DefaultJsonContractResolver = new DefaultContractResolver

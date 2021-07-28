@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.Extensions
     {
 
         public const uint EXT_HealingStats = 0x9c9b3c99;
-        public enum EXTHealingType { All, HealingPower, ConversionBased };
+        public enum EXTHealingType { All, HealingPower, ConversionBased, Hybrid };
 
         internal virtual void SetVersion(CombatItem c)
         {

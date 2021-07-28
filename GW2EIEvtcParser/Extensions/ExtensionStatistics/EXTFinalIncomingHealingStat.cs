@@ -12,6 +12,7 @@ namespace GW2EIEvtcParser.Extensions
         public int Healed { get; internal set; }
         public int HealingPowerHealed { get; internal set; }
         public int ConversionHealed { get; internal set; }
+        public int HybridHealed { get; internal set; }
 
         internal EXTFinalIncomingHealingStat(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor target)
         {
@@ -22,6 +23,9 @@ namespace GW2EIEvtcParser.Extensions
                 {
                     case EXTHealingType.ConversionBased:
                         ConversionHealed += healingEvent.HealingDone;
+                        break;
+                    case EXTHealingType.Hybrid:
+                        HybridHealed += healingEvent.HealingDone;
                         break;
                     case EXTHealingType.HealingPower:
                         HealingPowerHealed += healingEvent.HealingDone;

@@ -363,7 +363,7 @@ namespace GW2EIParser
             {
                 string right = new FileInfo(form2.InputFile).Name;
                 string left = new FileInfo(form1.InputFile).Name;
-                return _fileNameSorting * string.Compare(left, right);
+                return _fileNameSorting * string.Compare(left, right, StringComparison.Ordinal);
             });
             OperatorBindingSource.Clear();
             foreach (FormOperationController val in auxList)

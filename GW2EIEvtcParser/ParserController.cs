@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser
 
         protected List<string> StatusList { get; }
 
-        public ParserController()
+        protected ParserController()
         {
             StatusList = new List<string>();
         }

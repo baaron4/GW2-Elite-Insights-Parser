@@ -173,7 +173,7 @@ namespace GW2EIJSON
         public IReadOnlyList<IReadOnlyList<double>> BarrierPercents { get; set; }
 
 
-        public JsonActor()
+        protected JsonActor()
         {
 
         }

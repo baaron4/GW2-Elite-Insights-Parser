@@ -199,7 +199,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         lastDamageTaken = lastDamageTaken.Time > lastDamageTakenArm.Time ? lastDamageTaken : lastDamageTakenArm;
                     }
                 }
-                if (npcSpawn != null && lastDamageTaken != null)
+                if (npcSpawn != null)
                 {
                     fightData.SetSuccess(true, lastDamageTaken.Time);
                 }

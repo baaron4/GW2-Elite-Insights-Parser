@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GW2EIEvtcParser.Extensions;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
@@ -22,6 +23,7 @@ namespace GW2EIEvtcParser.EIData
             //new DamageCastFinder(9097,9097, EIData.InstantCastFinder.DefaultICD), // Symbol of Blades
             new DamageCastFinder(21795, 21795, EIData.InstantCastFinder.DefaultICD), // Glacial Heart
             new DamageCastFinder(22499, 22499, EIData.InstantCastFinder.DefaultICD), // Shattered Aegis
+            new EXTHealingCastFinder(13594, 13594, EIData.InstantCastFinder.DefaultICD), // Selfless Daring
         };
 
 

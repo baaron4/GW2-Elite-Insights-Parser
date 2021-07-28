@@ -31,7 +31,8 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Laser's Edge",44414, Source.Holosmith, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/5d/Laser%27s_Edge.png",0 , 97950),
                 new Buff("Afterburner",42210, Source.Holosmith, BuffStackType.StackingConditionalLoss, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/51/Solar_Focusing_Lens.png"),
                 new Buff("Heat Therapy",40694, Source.Holosmith, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/34/Heat_Therapy.png"),
-                new Buff("Overheat", 41037, Source.Holosmith, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/4b/Overheat.png"),
+                new Buff("Overheat", 41037, Source.Holosmith, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/4b/Overheat.png"),          
+                new Buff("Big Boomer", 59601, Source.Holosmith, BuffStackType.Queue, 3, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/83/Big_Boomer.png"),
 
         };
     }

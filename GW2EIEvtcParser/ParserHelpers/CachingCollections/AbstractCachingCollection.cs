@@ -8,7 +8,7 @@ namespace GW2EIEvtcParser
         private readonly long _start;
         private readonly long _end;
 
-        public AbstractCachingCollection(ParsedEvtcLog log)
+        protected AbstractCachingCollection(ParsedEvtcLog log)
         {
             _start = log.FightData.LogStart;
             _end = log.FightData.LogEnd;

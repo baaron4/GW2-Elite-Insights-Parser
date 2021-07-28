@@ -403,11 +403,11 @@ namespace GW2EIEvtcParser.ParsedData
                                                 (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
             operation.UpdateProgressWithCancellationCheck("Checking CM");
             fightData.SetCM(this, agentData, fightData);
-            EIExtraEventProcess(players, skillData, agentData, fightData, operation, arcdpsVersion);
             foreach (AbstractExtensionHandler handler in extensions.Values)
             {
                 handler.AttachToCombatData(this, operation);
             }
+            EIExtraEventProcess(players, skillData, agentData, fightData, operation, arcdpsVersion);
         }
 
         // getters

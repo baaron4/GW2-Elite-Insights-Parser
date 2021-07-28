@@ -2,6 +2,7 @@
 using System.Linq;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.Extensions;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -13,6 +14,7 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(9433, 9433, 500), // Earth Sigil
             new DamageCastFinder(9292, 9292, 500), // Air Sigil
             new DamageCastFinder(9428, 9428, 500), // Hydro Sigil
+            new EXTHealingCastFinder(12836, 12836, EIData.InstantCastFinder.DefaultICD), // Water Blast Combo
         };
 
         internal static void AttachMasterToGadgetByCastData(CombatData combatData, HashSet<AgentItem> gadgets, List<long> castIDS, long castEndThreshold)
