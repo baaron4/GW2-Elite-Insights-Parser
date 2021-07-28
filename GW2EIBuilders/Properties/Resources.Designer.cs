@@ -1221,9 +1221,9 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;damagedist-table-component :dmgdist=&quot;healingtaken&quot; :tableid=&quot;tableid&quot; :actorindex=&quot;-1&quot; :minionindex=&quot;-1&quot; :istarget=&quot;false&quot; :player=&quot;player&quot;
+        ///    &lt;healingdist-table-component :healingdist=&quot;healingtaken&quot; :tableid=&quot;tableid&quot; :actorindex=&quot;-1&quot; :minionindex=&quot;-1&quot; :istarget=&quot;false&quot; :player=&quot;true&quot;
         ///        :phaseindex=&quot;phaseindex&quot;&gt;
-        ///    &lt;/damagedist-table-component&gt;
+        ///    &lt;/healingdist-table-component&gt;
         ///&lt;/template&gt;
         ///
         ///&lt;script&gt;
@@ -1234,7 +1234,7 @@ namespace GW2EIBuilders.Properties {
         ///        template: `${template}`,
         ///        computed: {
         ///            healingtaken: function () {
-        ///                return logData.heali [rest of string was truncated]&quot;;.
+        ///                return logData.h [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplHealingTaken {
             get {
@@ -1439,6 +1439,25 @@ namespace GW2EIBuilders.Properties {
         internal static string tmplPlayerHealingTab {
             get {
                 return ResourceManager.GetString("tmplPlayerHealingTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;hps-graph-mode-selector-component :data=&quot;graphhealingdata&quot;
+        ///            :phaseduration=&quot;this.phase.end - this.phase.start&quot; :phasehassubphases=&quot;!!this.phase.subPhases&quot; :column=&quot;false&quot;&gt;
+        ///        &lt;/hps-graph-mode-selector-component&gt;
+        ///        &lt;h3 class=&quot;text-center mt-1 mb-1&quot;&gt;{{graphname}}&lt;/h3&gt;
+        ///        &lt;graph-component :id=&quot;graphid&quot; :layout=&quot;layout&quot; :data=&quot;computeData&quot;&gt;&lt;/graph-component&gt;
+        ///        &lt;rotation-legend-component&gt;&lt;/rotation-legend-component&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/template&gt;
+        ///        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplPlayerHealingTabGraph {
+            get {
+                return ResourceManager.GetString("tmplPlayerHealingTabGraph", resourceCulture);
             }
         }
         
