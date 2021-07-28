@@ -102,7 +102,7 @@
                 name: 'All Player'
             });
             // targets health
-            computeTargetHealthData(this.graph, logData.targets, this.phase, this.data, null); 
+            computePlayersHealthData(this.graph, this.data, null); 
             // mechanics          
             addMechanicsToGraph(data, this.phase, this.phaseindex);
         },
@@ -242,8 +242,11 @@
                 res.push((this.mode === 0 ? hpsData.allHPS.total : (this.mode === 1 ? hpsData.allHPS.target : hpsData.allHPS.cleave)));
                 var maxHPS = (this.mode === 0 ? hpsData.maxHPS.total : (this.mode === 1 ? hpsData.maxHPS.target : hpsData.maxHPS.cleave));
                 var hps = [];
-                for (var i = 0; i < this.graph.targets.length; i++) {
-                    var health = this.graph.targets[i].healthStates;
+                for (var i = 0; i < this.graph.players.length; i++) {
+                    if (logData.players[i].isFake) {
+                        continue;
+                    }
+                    var health = this.graph.players[i].healthStates;
                     addPointsToGraph(res, health, maxHPS);
                 }
                 updateMechanicsYValues(res, this.phase, this.phaseindex, this.graph, maxHPS);

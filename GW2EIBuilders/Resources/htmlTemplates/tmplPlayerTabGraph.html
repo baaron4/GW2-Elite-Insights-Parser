@@ -11,43 +11,6 @@
 
 <script>
 
-    function _computePlayerGraphData(graph, data, yaxis, graphName, percentName) {
-        if (!graph) {
-            return 0;
-        }
-        var texts = [];
-        var times = [];
-        for (var j = 0; j < graph.length; j++) {
-            texts[j] = graph[j][1] + "%" + percentName + " - Player";
-            times[j] = graph[j][0];
-        }
-        var res = {
-            x: times,
-            text: texts,
-            mode: 'lines',
-            line: {
-                dash: 'dashdot',
-                shape: 'hv'
-            },
-            hoverinfo: 'text',
-            name: 'Player ' + graphName,
-            visible: 'legendonly',
-        };
-        if (yaxis) {
-            res.yaxis = yaxis;
-        }
-        data.push(res);
-        return 1;
-    }
-
-    function computePlayerHealthData(healthGraph, data, yaxis) {
-        return _computePlayerGraphData(healthGraph, data, yaxis, "health", "hp");
-    }
-
-    function computePlayerBarrierData(barrierGraph, data, yaxis) {
-        return _computePlayerGraphData(barrierGraph, data, yaxis, "barrier", "barrier");
-    }
-
     Vue.component("player-graph-tab-component", {
         props: ["playerindex", "phaseindex", "activetargets", "light"],
         template: `${template}`,
@@ -89,8 +52,8 @@
             this.playerOffset += computeTargetBreakbarData(this.graph, logData.targets, this.phase, this.data, 'y3');
             this.playerOffset += computeTargetBarrierData(this.graph, logData.targets, this.phase, this.data, 'y3');
             this.playerOffset += computeTargetHealthData(this.graph, logData.targets, this.phase, this.data, 'y3');
-            this.playerOffset += computePlayerBarrierData(this.barrierGraph, this.data, 'y3');
-            this.playerOffset += computePlayerHealthData(this.healthGraph, this.data, 'y3');
+            this.playerOffset += computePlayerBarrierData(this.barrierGraph, this.player, this.data, 'y3');
+            this.playerOffset += computePlayerHealthData(this.healthGraph, this.player, this.data, 'y3');
             this.data.push({
                 x: this.phase.times,
                 y: [],
@@ -149,9 +112,6 @@
             });
         },
         computed: {
-            phase: function () {
-                return logData.phases[this.phaseindex];
-            },
             healthGraph: function () {
                 return this.graph.players[this.playerindex].healthStates;
             },

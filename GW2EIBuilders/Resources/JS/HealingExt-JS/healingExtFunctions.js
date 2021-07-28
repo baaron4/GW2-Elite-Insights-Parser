@@ -43,3 +43,15 @@ function healingTypeEnumToString(mode) {
 function getHealingGraphName(healingMode, graphMode) {
     return healingTypeEnumToString(healingMode) + " " + healingGraphTypeEnumToString(graphMode) + " Graph";
 }
+
+function computePlayersHealthData(graph, data, yaxis) {
+    var offset = 0;
+    for (var i = 0; i < logData.players.length; i++) {
+        var player = logData.players[i];
+        if (player.isFake) {
+            continue;
+        }
+        offset += computePlayerHealthData(graph.players[i].healthStates, player, data, yaxis)
+    }
+    return offset;
+}

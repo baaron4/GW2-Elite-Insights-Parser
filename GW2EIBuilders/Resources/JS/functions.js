@@ -628,6 +628,43 @@ function computeTargetBreakbarData(graph, targets, phase, data, yaxis) {
     return _computeTargetGraphData(graph, targets, phase, data, yaxis, "breakbarPercentStates", "breakbar", "breakbar", phase.breakbarPhase);
 }
 
+function _computePlayerGraphData(graph, player, data, yaxis, graphName, percentName) {
+    if (!graph) {
+        return 0;
+    }
+    var texts = [];
+    var times = [];
+    for (var j = 0; j < graph.length; j++) {
+        texts[j] = graph[j][1] + "%" + percentName + " - " + player.name;
+        times[j] = graph[j][0];
+    }
+    var res = {
+        x: times,
+        text: texts,
+        mode: 'lines',
+        line: {
+            dash: 'dashdot',
+            shape: 'hv'
+        },
+        hoverinfo: 'text',
+        name: player.name + ' ' + graphName,
+        visible: 'legendonly',
+    };
+    if (yaxis) {
+        res.yaxis = yaxis;
+    }
+    data.push(res);
+    return 1;
+}
+
+function computePlayerHealthData(healthGraph, player, data, yaxis) {
+    return _computePlayerGraphData(healthGraph, player, data, yaxis, "health", "hp");
+}
+
+function computePlayerBarrierData(barrierGraph, player, data, yaxis) {
+    return _computePlayerGraphData(barrierGraph, player, data, yaxis, "barrier", "barrier");
+}
+
 function computeBuffData(buffData, data) {
     if (buffData) {
         for (var i = 0; i < buffData.length; i++) {
