@@ -123,54 +123,6 @@ namespace GW2EIBuilders.HtmlModels
             {
                 list.Add(GetHealingToItem(pair.Key, pair.Value, castLogsBySkill, usedSkills, usedBuffs, log.Buffs, phase));
             }
-            // non damaging
-            foreach (KeyValuePair<SkillItem, List<AbstractCastEvent>> pair in castLogsBySkill)
-            {
-                if (healingLogsBySkill.ContainsKey(pair.Key))
-                {
-                    continue;
-                }
-
-                if (!usedSkills.ContainsKey(pair.Key.ID))
-                {
-                    usedSkills.Add(pair.Key.ID, pair.Key);
-                }
-                long timeCasting = 0;
-                int casts = 0;
-                int timeWasted = 0, timeSaved = 0;
-                foreach (AbstractCastEvent cl in pair.Value)
-                {
-                    if (phase.InInterval(cl.Time))
-                    {
-                        casts++;
-                        switch (cl.Status)
-                        {
-                            case AbstractCastEvent.AnimationStatus.Interrupted:
-                                timeWasted += cl.SavedDuration;
-                                break;
-
-                            case AbstractCastEvent.AnimationStatus.Reduced:
-                                timeSaved += cl.SavedDuration;
-                                break;
-                        }
-                    }
-                    timeCasting += Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start);
-                }
-
-                object[] skillData = {
-                    false,
-                    pair.Key.ID,
-                    0,
-                    -1,
-                    0,
-                    casts,
-                    -timeWasted / 1000.0,
-                    timeSaved / 1000.0,
-                    0,
-                    timeCasting
-                };
-                list.Add(skillData);
-            }
             return list;
         }
 

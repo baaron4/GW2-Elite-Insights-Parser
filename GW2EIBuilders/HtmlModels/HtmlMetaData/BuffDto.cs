@@ -2,27 +2,20 @@
 using System.Collections.Generic;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIBuilders.HtmlModels
 {
-    internal class BuffDto
+    internal class BuffDto : AbstractSkillDto
     {
-        public long Id { get; set; }
-        public string Name { get; set; }
         public string Description { get; set; } = null;
-        public string Icon { get; set; }
         public bool Stacking { get; set; }
         public bool Consumable { get; set; }
         public bool FightSpecific { get; set; }
-        public bool ConversionBasedHealing { get; set; }
-        public bool HybridHealing { get; set; }
 
-        public BuffDto(Buff buff, ParsedEvtcLog log)
+        public BuffDto(Buff buff, ParsedEvtcLog log) : base(buff, log)
         {
-            Id = buff.ID;
-            Name = buff.Name;
-            Icon = buff.Link;
             Stacking = (buff.Type == Buff.BuffType.Intensity);
             Consumable = (buff.Nature == Buff.BuffNature.Consumable);
             FightSpecific = (buff.Source == ParserHelper.Source.FightSpecific || buff.Source == ParserHelper.Source.FractalInstability);
@@ -53,11 +46,6 @@ namespace GW2EIBuilders.HtmlModels
                 {
                     Description += desc + "<br>";
                 }
-            }
-            if (log.CombatData.HasEXTHealing)
-            {
-                ConversionBasedHealing = log.CombatData.EXTHealingCombatData.GetHealingType(buff, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.ConversionBased;
-                HybridHealing = log.CombatData.EXTHealingCombatData.GetHealingType(buff, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.Hybrid;
             }
         }
 

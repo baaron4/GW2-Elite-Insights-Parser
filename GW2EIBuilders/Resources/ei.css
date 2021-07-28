@@ -347,6 +347,14 @@ tr.condi td {
     background-color: rgba(255, 0, 0, 0.25);
 }
 
+tr.hybridH td {
+    background-color: rgba(0, 255, 0, 0.25);
+}
+
+tr.conversionH td {
+    background-color: rgba(0, 0, 255, 0.25);
+}
+
 img.icon-s {
     width: 16px;
     height: 16px;
