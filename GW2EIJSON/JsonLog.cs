@@ -96,11 +96,6 @@ namespace GW2EIJSON
             public bool HybridHealing { get; set; }
 
             /// <summary>
-            /// If the buff is encountered in a healing context, true if healing could have happened due to conversion or healing power
-            /// </summary>
-            public bool HybridHealing { get; set; }
-
-            /// <summary>
             /// Descriptions of the buffs (no traits)
             /// </summary>
             public IReadOnlyList<string> Descriptions { get; set; }
