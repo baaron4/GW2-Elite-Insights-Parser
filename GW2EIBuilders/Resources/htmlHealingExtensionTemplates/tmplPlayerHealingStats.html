@@ -17,6 +17,23 @@
             </li>
             <li>
                 <a class="nav-link" :class="{active: tabmode === 2}" @click="tabmode = 2">Healing Graph</a>
+            </li>     
+            <li>
+                <a class="nav-link" :class="{active: tabmode === 3}" @click="tabmode = 3">
+                    Simple
+                    Rotation
+                </a>
+            </li>        
+            <li>
+                <a class="nav-link" :class="{active: tabmode === 4}" @click="tabmode = 4">
+                    Advanced
+                    Rotation
+                </a>
+            </li>
+            <li>
+                <a class="nav-link" :class="{active: tabmode === 5}" @click="tabmode = 5">
+                    Consumables
+                </a>
             </li>
         </ul>
         <keep-alive>
