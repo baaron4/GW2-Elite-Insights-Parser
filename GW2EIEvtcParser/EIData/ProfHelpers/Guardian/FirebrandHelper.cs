@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GW2EIEvtcParser.Extensions;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 
@@ -12,6 +13,7 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(46616,46616,EIData.InstantCastFinder.DefaultICD), // Flame Surge
             //new DamageCastFinder(42360,42360,InstantCastFinder.DefaultICD), // Echo of Truth
             //new DamageCastFinder(44008,44008,InstantCastFinder.DefaultICD), // Voice of Truth
+            new EXTHealingCastFinder(41714, 41714, EIData.InstantCastFinder.DefaultICD), // Mantra of Solace
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
