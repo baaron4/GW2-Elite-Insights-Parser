@@ -90,6 +90,10 @@ namespace GW2EIJSON
             /// If the buff is encountered in a healing context, true if healing happened because of conversion, false otherwise
             /// </summary>
             public bool ConversionBasedHealing { get; set; }
+            /// <summary>
+            /// If the buff is encountered in a healing context, true if healing could have happened due to conversion or healing power
+            /// </summary>
+            public bool HybridHealing { get; set; }
 
             /// <summary>
             /// If the buff is encountered in a healing context, true if healing could have happened due to conversion or healing power

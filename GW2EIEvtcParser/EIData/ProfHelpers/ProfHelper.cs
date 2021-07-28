@@ -3,6 +3,7 @@ using System.Linq;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.Extensions;
 
 namespace GW2EIEvtcParser.EIData
 {

@@ -31,7 +31,7 @@ namespace GW2EIBuilders.HtmlModels
                     outgoingHealingStats.Healing,
                     outgoingHealingStats.HealingPowerHealing,
                     outgoingHealingStats.ConversionHealing,
-                    outgoingHealingStats.HybridHealing
+                    outgoingHealingStats.HybridHealing,
                 };
             return data;
         }

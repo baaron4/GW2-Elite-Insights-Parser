@@ -32,7 +32,7 @@ namespace GW2EIBuilders.JsonModels
                 ActorHealingPowerHps = stats.ActorHealingPowerHps,
                 ActorHps = stats.ActorHps,
                 ActorHybridHealing = stats.ActorHybridHealing,
-                ActorHybridHps = stats.ActorHybridHps
+                ActorHybridHps = stats.ActorHybridHps,
             };
         }
 
