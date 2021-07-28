@@ -26,6 +26,7 @@ namespace GW2EIEvtcParser.ParsedData
         public const int SecondWaterSet = 1;
         public const int TransformSet = 3;
         public const int KitSet = 2;
+
         private static readonly Dictionary<long, string> _overrideNames = new Dictionary<long, string>()
         {
             {ResurrectId, "Resurrect"},
@@ -33,6 +34,11 @@ namespace GW2EIEvtcParser.ParsedData
             {DodgeId, "Dodge" },
             {MirageCloakDodgeId, "Mirage Cloak" },
             {WeaponSwapId, "Weapon Swap" },
+            {13594, "Selfless Daring"}, // The game maps this name incorrectly to "Selflessness Daring"
+	        {14024, "Natural Healing"}, // The game does not map this one at all
+	        {26558, "Energy Expulsion"},
+            {29863, "Live Vicariously"}, // The game maps this name incorrectly to "Vigorous Recovery"
+	        {30313, "Escapist's Fortitude"}, // The game maps this to the wrong skill
             // Gorseval
             {31834,"Ghastly Rampage" },
             {31759,"Protective Shadow" },
@@ -146,6 +152,11 @@ namespace GW2EIEvtcParser.ParsedData
             {43630, "https://wiki.guildwars2.com/images/0/0c/Thermal_Release_Valve.png" },
             {22499, "https://wiki.guildwars2.com/images/d/d0/Shattered_Aegis.png" },
             {29604, "https://wiki.guildwars2.com/images/8/82/Chilling_Nova.png" },
+            {13594, "https://wiki.guildwars2.com/images/9/9c/Selfless_Daring.png" },
+            {12538, "https://wiki.guildwars2.com/images/1/11/Signet_of_Renewal.png" },
+            {13980, "https://wiki.guildwars2.com/images/8/84/Windborne_Notes.png" },
+            {43558, "https://wiki.guildwars2.com/images/7/73/Rugged_Growth.png" },
+            {12836, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" }, // Water Blast Combo
             // Weaver attunements
             {Buff.FireDual, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
             {Buff.FireWater, "https://i.imgur.com/ar8Hn8G.png" },
