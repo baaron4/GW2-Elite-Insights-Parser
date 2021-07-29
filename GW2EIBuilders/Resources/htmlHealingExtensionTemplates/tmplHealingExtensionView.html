@@ -45,7 +45,7 @@
             :activetargets="activePlayerTargets" :phaseindex="activePhase" :playerindex="activePlayer"
             :light="light"></healing-graph-stats-component>   
             <player-rotations-tab-component v-if="tab === 4" :key="'healingrotations'" :phaseindex="activePhase" 
-            :light="light" :playerindex="activePlayer">
+            :light="light" :playerindex="activePlayer"></player-rotations-tab-component>
             <player-healing-stats-component v-if="tab === 5" :key="'healing-players'"
                 :activeplayer="activePlayer" :phaseindex="activePhase" :activetargets="activePlayerTargets"
                 :light="light"></player-healing-stats-component>
