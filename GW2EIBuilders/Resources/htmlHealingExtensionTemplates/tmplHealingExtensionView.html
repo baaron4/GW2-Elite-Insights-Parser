@@ -16,22 +16,37 @@
         <ul class="nav nav-tabs">
             <li>
                 <a class="nav-link" :class="{active: tab === 0}" @click="tab = 0">Healing Stats</a>
+            </li>    
+            <li>
+                <a class="nav-link" :class="{active: tab === 1}" @click="tab = 1">Buffs</a>
+            </li>         
+            <li v-if="hasMechanics">
+                <a class="nav-link" :class="{active: tab === 2}" @click="tab = 2">Mechanics</a>
             </li>
             <li>
-                <a class="nav-link" :class="{active: tab === 1}" @click="tab = 1">Healing Graph</a>
+                <a class="nav-link" :class="{active: tab === 3}" @click="tab = 3">Healing Graph</a>
+            </li>    
+            <li v-if="players.length > 1">
+                <a class="nav-link" :class="{active: tab === 4}" @click="tab = 4">Rotations</a>
             </li>
             <li>
-                <a class="nav-link" :class="{active: tab === 2}" @click="tab = 2">Player Healing Summary</a>
+                <a class="nav-link" :class="{active: tab === 5}" @click="tab = 5">Player Healing Summary</a>
             </li>
         </ul>
 
         <keep-alive>
             <healing-stat-tables-component v-if="tab === 0" :key="'healing-stat-tables'"
-                :phaseindex="activePhase" :playerindex="activePlayer" :activetargets="activePlayerTargets"></healing-stat-tables-component>            
-            <healing-graph-stats-component v-if="tab === 1" :key="'healing-graph'"
+                :phaseindex="activePhase" :playerindex="activePlayer" :activetargets="activePlayerTargets"></healing-stat-tables-component>                    
+            <buff-tables-component v-if="tab === 1" :key="'healingbuff-tables'"
+            :phaseindex="activePhase" :playerindex="activePlayer"></buff-tables-component>          
+            <mechanics-stats-component v-if="tab === 2" :key="'healingmechanics'"
+                :phaseindex="activePhase" :playerindex="activePlayer"></mechanics-stats-component> 
+            <healing-graph-stats-component v-if="tab === 3" :key="'healing-graph'"
             :activetargets="activePlayerTargets" :phaseindex="activePhase" :playerindex="activePlayer"
-            :light="light"></healing-graph-stats-component>
-            <player-healing-stats-component v-if="tab === 2" :key="'healing-players'"
+            :light="light"></healing-graph-stats-component>   
+            <player-rotations-tab-component v-if="tab === 4" :key="'healingrotations'" :phaseindex="activePhase" 
+            :light="light" :playerindex="activePlayer">
+            <player-healing-stats-component v-if="tab === 5" :key="'healing-players'"
                 :activeplayer="activePlayer" :phaseindex="activePhase" :activetargets="activePlayerTargets"
                 :light="light"></player-healing-stats-component>
         </keep-alive>
@@ -84,7 +99,10 @@
             },
             players: function () {
                 return logData.players;
-            }
+            },
+            hasMechanics: function() {
+                return logData.mechanicMap.length > 0 && !logData.noMechanics;
+            },
         }
     });
 </script>
