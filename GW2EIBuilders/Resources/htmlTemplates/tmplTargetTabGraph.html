@@ -142,7 +142,7 @@
             computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
             this.updateVisibily(this.layout.images, this.phase.start, this.phase.end);
         },
-        mounted: function () {
+        activated: function () {
             var div = document.getElementById(this.graphid);
             var layout = this.layout;
             var images = layout.images;

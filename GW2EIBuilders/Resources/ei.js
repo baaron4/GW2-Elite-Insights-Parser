@@ -4,7 +4,7 @@ function compileTemplates() {
     Vue.component("graph-component", {
         props: ['id', 'layout', 'data'],
         template: '<div :id="id" class="d-flex flex-row justify-content-center"></div>',
-        mounted: function () {
+        activated: function () {
             var div = document.querySelector(this.queryID);
             Plotly.react(div, this.data, this.layout, { showEditInChartStudio: true, plotlyServerURL: "https://chart-studio.plotly.com" });
             var _this = this;
@@ -21,6 +21,9 @@ function compileTemplates() {
             layout: {
                 handler: function () {
                     var div = document.querySelector(this.queryID);
+                    if (!div) {
+                        return;
+                    }
                     var duration = 1000;
                     Plotly.animate(div, {
                         data: this.data
