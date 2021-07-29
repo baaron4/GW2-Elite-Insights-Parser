@@ -44,6 +44,8 @@
             logData = JSON.parse(new TextDecoder("utf-8").decode(pako.inflate(base64DecToArr(logData))))
         }
         var graphData = logData.graphData;
+        var healingStatsExtension = logData.healingStatsExtension;
+        var crData = logData.crData;
     </script>
     <!--${Js}-->
     <!--${CombatReplayJS}-->

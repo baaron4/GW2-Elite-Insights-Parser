@@ -50,15 +50,15 @@
             },
             healingdist: function () {
                 if (this.distmode === -1) {
-                    return logData.healingStatsExtension.playerHealingDetails[this.playerindex].healingDistributions[this.phaseindex];
+                    return healingStatsExtension.playerHealingDetails[this.playerindex].healingDistributions[this.phaseindex];
                 }
-                return logData.healingStatsExtension.playerHealingDetails[this.playerindex].minions[this.distmode].healingDistributions[this.phaseindex];
+                return healingStatsExtension.playerHealingDetails[this.playerindex].minions[this.distmode].healingDistributions[this.phaseindex];
             },
             _healingdisttarget: function() {
                 if (this.distmode === -1) {
-                    return logData.healingStatsExtension.playerHealingDetails[this.playerindex].healingDistributionsTargets[this.phaseindex];
+                    return healingStatsExtension.playerHealingDetails[this.playerindex].healingDistributionsTargets[this.phaseindex];
                 }
-                return logData.healingStatsExtension.playerHealingDetails[this.playerindex].minions[this.distmode].healingDistributionsTargets[this.phaseindex];
+                return healingStatsExtension.playerHealingDetails[this.playerindex].minions[this.distmode].healingDistributionsTargets[this.phaseindex];
             },
             healingdisttarget: function () {
                 var cacheID = this.phaseindex + '-' + this.distmode + '-';

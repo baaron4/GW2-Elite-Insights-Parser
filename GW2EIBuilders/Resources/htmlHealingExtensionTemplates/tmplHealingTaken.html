@@ -12,7 +12,7 @@
         template: `${template}`,
         computed: {
             healingtaken: function () {
-                return logData.healingStatsExtension.playerHealingDetails[this.actorindex].incomingHealingDistributions[this.phaseindex];
+                return healingStatsExtension.playerHealingDetails[this.actorindex].incomingHealingDistributions[this.phaseindex];
             }
         },
     });

@@ -82,10 +82,10 @@ function mainLoad() {
         playerData.id = i;
     }
     compileTemplates()
-    if (!!logData.crData) {
+    if (!!crData) {
         compileCRTemplates();
     }
-    if (!!logData.healingStatsExtension) {
+    if (!!healingStatsExtension) {
         compileHealingExtTemplates();
     }
     new Vue({
@@ -93,8 +93,8 @@ function mainLoad() {
         data: {
             light: typeof (window.theme) !== "undefined" ? (window.theme === 'yeti') : logData.lightTheme,
             mode: 0,
-            cr: !!logData.crData,
-            healingExt: !!logData.healingStatsExtension
+            cr: !!crData,
+            healingExt: !!healingStatsExtension
         },
         methods: {
             switchTheme: function (state) {
