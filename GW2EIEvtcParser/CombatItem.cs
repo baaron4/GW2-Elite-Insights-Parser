@@ -207,7 +207,7 @@ namespace GW2EIEvtcParser
 
         internal bool IsBuffApply()
         {
-            return IsBuff != 0 && BuffDmg == 0 && Value > 0 && IsActivation == ArcDPSEnums.Activation.None && IsBuffRemove == ArcDPSEnums.BuffRemove.None && IsStateChange == ArcDPSEnums.StateChange.None;
+            return (IsBuff != 0 && BuffDmg == 0 && Value > 0 && IsActivation == ArcDPSEnums.Activation.None && IsBuffRemove == ArcDPSEnums.BuffRemove.None && IsStateChange == ArcDPSEnums.StateChange.None) || IsStateChange == ArcDPSEnums.StateChange.BuffInitial;
         }
 
         internal bool DstMatchesAgent(AgentItem agentItem, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)

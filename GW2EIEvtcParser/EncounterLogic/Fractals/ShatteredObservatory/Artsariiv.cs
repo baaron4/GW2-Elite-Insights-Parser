@@ -147,6 +147,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             return FightData.CMStatus.CMnoName;
         }
 
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)ArcDPSEnums.TargetID.Artsariiv, 762, 1500);
+        }
+
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Artsariiv);
