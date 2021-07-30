@@ -1,6 +1,6 @@
 <template>
     <div>
-        <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="id">
+        <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
             <thead>
                 <tr>
                     <th class="sub-cell">Sub</th>
@@ -49,10 +49,17 @@
         data: function () {
             return {
                 cache: new Map(),
-                cacheTarget: new Map()
+                cacheTarget: new Map(),
+                sortdata: {
+                    order: "asc",
+                    index: 1
+                }
             };
         },
         computed: {
+            tableid: function() {
+                return this.id;
+            },
             phase: function () {
                 return logData.phases[this.phaseindex];
             },
@@ -245,10 +252,13 @@
             }
         },
         mounted() {
-            initTable("#" + this.id, 1, "asc");
+            initializeTable(this.tableid, this.sortdata);
         },
         updated() {
-            updateTable("#" + this.id);
+            updateTable(this.tableid);
+        },
+        activated() {
+            initializeTable(this.tableid, this.sortdata);
         },
     });
 </script>

@@ -185,39 +185,13 @@
         },
         mixins: [numberComponent],
         mounted() {
-            var _this = this;
-            initTable(
-                "#" + this.tableid,
-                this.sortdata.index,
-                this.sortdata.order,
-                function () {
-                    var order = $("#" + _this.tableid)
-                        .DataTable()
-                        .order();
-                    _this.sortdata.order = order[0][1];
-                    _this.sortdata.index = order[0][0];
-                }
-            );
-        },
-        beforeUpdate() {
-            $("#" + this.tableid)
-                .DataTable()
-                .destroy();
+            initializeTable(this.tableid, this.sortdata);
         },
         updated() {
-            var _this = this;
-            initTable(
-                "#" + this.tableid,
-                this.sortdata.index,
-                this.sortdata.order,
-                function () {
-                    var order = $("#" + _this.tableid)
-                        .DataTable()
-                        .order();
-                    _this.sortdata.order = order[0][1];
-                    _this.sortdata.index = order[0][0];
-                }
-            );
+            initializeTable(this.tableid, this.sortdata);
+        },
+        activated() {
+            initializeTable(this.tableid, this.sortdata);
         },
         methods: {
             getSkill: function (isBoon, id) {

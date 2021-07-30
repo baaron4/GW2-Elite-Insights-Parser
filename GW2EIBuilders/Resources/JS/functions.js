@@ -697,30 +697,11 @@ function computeBuffData(buffData, data) {
     return 0;
 }
 
-function initTable (id, cell, order, orderCallBack) {
+function _initTable (id, cell, order, orderCallBack) {
     var table = $(id);
     if (!table.length) {
         return;
     }
-    /*if (lazyTableUpdater) {
-        var lazyTable = document.querySelector(id);
-        var lazyTableObserver = new IntersectionObserver(function (entries, observer) {
-            entries.forEach(function (entry) {
-                if (entry.isIntersecting) {
-                    table.DataTable({
-                        order: [
-                            [cell, order]
-                        ]
-                    });
-                    if (orderCallBack) {
-                        table.DataTable().on('order.dt', orderCallBack);
-                    }
-                    observer.unobserve(entry.target);
-                }
-            });
-        });
-        lazyTableObserver.observe(lazyTable);
-    } else {*/
     var data = {
         order: [
             [cell, order]
@@ -733,14 +714,29 @@ function initTable (id, cell, order, orderCallBack) {
     //}
 };
 
+function initializeTable(tableid, sortdata) {   
+    $("#" + tableid)
+    .DataTable()
+    .destroy();   
+
+    _initTable(
+        "#" + tableid,
+        sortdata.index,
+        sortdata.order,
+        function () {
+            var order = $("#" + tableid)
+                .DataTable()
+                .order();
+                sortdata.order = order[0][1];
+                sortdata.index = order[0][0];
+        }
+    );
+}
+
 function updateTable(id) {
-    /*if (lazyTableUpdater) {
-        var lazyTable = document.querySelector(id);
-        lazyTableUpdater.unobserve(lazyTable);
-        lazyTableUpdater.observe(lazyTable);
-    } else {*/
-    var table = $(id);
-    if ($.fn.dataTable.isDataTable(id)) {
+    var divID = "#" + id;
+    var table = $(divID);
+    if ($.fn.dataTable.isDataTable(divID)) {
         table.DataTable().rows().invalidate('dom');
         table.DataTable().draw();
     }

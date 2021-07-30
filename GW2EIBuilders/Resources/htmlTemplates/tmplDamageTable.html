@@ -1,6 +1,6 @@
 <template>
     <div>
-        <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" id="dps-table">
+        <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
             <thead>
                 <tr>
                     <th class="sub-cell">Sub</th>
@@ -118,14 +118,21 @@
             return {
                 targetless: logData.targetless,
                 showDamage: logData.wvw,
-                cacheTarget: new Map()
+                cacheTarget: new Map(),
+                sortdata: {
+                    order: "desc",
+                    index: logData.targetless ? logData.hasBreakbarDamage ? 8 : 7 : 4
+                }
             };
         },
         mounted() {
-            initTable("#dps-table", logData.targetless ? this.hasBreakbarDamage ? 8 : 7 : 4, "desc");
+            initializeTable(this.tableid, this.sortdata);
         },
         updated() {
-            updateTable("#dps-table");
+            updateTable(this.tableid);
+        },
+        activated() {
+            initializeTable(this.tableid, this.sortdata);
         },
         methods: {
             computeTotalContribution: function (index, row, sums) {
@@ -156,6 +163,9 @@
             }
         },
         computed: {
+            tableid: function() {
+                return "dps-table";
+            },
             phase: function () {
                 return logData.phases[this.phaseindex];
             },

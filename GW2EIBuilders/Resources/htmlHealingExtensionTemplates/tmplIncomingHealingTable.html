@@ -1,6 +1,6 @@
 <template>
     <div>
-        <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" id="incoming-heal-table">
+        <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
             <thead>
                 <tr>
                     <th class="sub-cell">Sub</th>
@@ -59,18 +59,29 @@
     Vue.component("incoming-healing-stats-component", {
         props: ["phaseindex", "playerindex"],
         template: `${template}`,
+        mixins: [numberComponent],
         data: function () {
             return {
-                cache: new Map()
+                cache: new Map(),               
+                sortdata: {
+                    order: "desc",
+                    index: 4
+                }
             };
         },
         mounted() {
-            initTable("#incoming-heal-table", 4, "desc");
+            initializeTable(this.tableid, this.sortdata);
         },
         updated() {
-            updateTable("#incoming-heal-table");
+            updateTable(this.tableid);
+        },
+        activated() {
+            initializeTable(this.tableid, this.sortdata);
         },
         computed: {
+            tableid: function() {
+                return "incoming-heal-table";
+            },
             phase: function () {
                 return logData.phases[this.phaseindex];
             },

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" id="sup-table">
+        <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
             <thead>
                 <tr>
                     <th class="sub-cell">Sub</th>
@@ -61,17 +61,27 @@
         template: `${template}`,
         data: function () {
             return {
-                cache: new Map()
+                cache: new Map(),
+                sortdata: {
+                    order: "desc",
+                    index: 1
+                }
             };
         },
         mixins: [numberComponent],
         mounted() {
-            initTable("#sup-table", 1, "desc");
+            initializeTable(this.tableid, this.sortdata);
         },
         updated() {
-            updateTable("#sup-table");
+            updateTable(this.tableid);
+        },
+        activated() {
+            initializeTable(this.tableid, this.sortdata);
         },
         computed: {
+            tableid: function() {
+                return "sup-table";
+            },
             phase: function () {
                 return logData.phases[this.phaseindex];
             },
