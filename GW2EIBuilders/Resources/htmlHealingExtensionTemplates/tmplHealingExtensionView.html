@@ -1,0 +1,108 @@
+<template>
+    <div>
+        <div class="d-flex flex-row justify-content-center mt-1" id="healing-phase-nav">
+            <phase-component :phases="logdata.phases"></phase-component>
+        </div>
+        <div class="d-flex flex-row justify-content-center mb-2 mt-2" id="healing-actors">
+            <div class="flex-row justify-content-center align-items-center flex-wrap mr-5">
+                <player-target-component :players="logdata.players"></player-target-component>
+            </div>
+            <div class="ml-5">
+                <player-component :players="logdata.players"></player-component>
+            </div>
+        </div>     
+        <h2 class="text-center">{{ name }}</h2>
+        <h6 class="text-center">Data may be incomplete due to not everybody running the <a href="https://github.com/Krappa322/arcdps_healing_stats/releases/latest">healing stats addon</a>. Make sure to enable its logging features.</h6>
+        <ul class="nav nav-tabs">
+            <li>
+                <a class="nav-link" :class="{active: tab === 0}" @click="tab = 0">Healing Stats</a>
+            </li>    
+            <li>
+                <a class="nav-link" :class="{active: tab === 1}" @click="tab = 1">Buffs</a>
+            </li>         
+            <li v-if="hasMechanics">
+                <a class="nav-link" :class="{active: tab === 2}" @click="tab = 2">Mechanics</a>
+            </li>
+            <li>
+                <a class="nav-link" :class="{active: tab === 3}" @click="tab = 3">Healing Graph</a>
+            </li>    
+            <li v-if="players.length > 1">
+                <a class="nav-link" :class="{active: tab === 4}" @click="tab = 4">Rotations</a>
+            </li>
+            <li>
+                <a class="nav-link" :class="{active: tab === 5}" @click="tab = 5">Player Healing Summary</a>
+            </li>
+        </ul>
+
+        <keep-alive>
+            <healing-stat-tables-component v-if="tab === 0" :key="'healing-stat-tables'"
+                :phaseindex="activePhase" :playerindex="activePlayer" :activetargets="activePlayerTargets"></healing-stat-tables-component>                    
+            <buff-tables-component v-if="tab === 1" :key="'healingbuff-tables'"
+            :phaseindex="activePhase" :playerindex="activePlayer"></buff-tables-component>          
+            <mechanics-stats-component v-if="tab === 2" :key="'healingmechanics'"
+                :phaseindex="activePhase" :playerindex="activePlayer"></mechanics-stats-component> 
+            <healing-graph-stats-component v-if="tab === 3" :key="'healing-graph'"
+            :activetargets="activePlayerTargets" :phaseindex="activePhase" :playerindex="activePlayer"
+            :light="light"></healing-graph-stats-component>   
+            <player-rotations-tab-component v-if="tab === 4" :key="'healingrotations'" :phaseindex="activePhase" 
+            :light="light" :playerindex="activePlayer"></player-rotations-tab-component>
+            <player-healing-stats-component v-if="tab === 5" :key="'healing-players'"
+                :activeplayer="activePlayer" :phaseindex="activePhase" :activetargets="activePlayerTargets"
+                :light="light"></player-healing-stats-component>
+        </keep-alive>
+    </div>
+</template>
+
+<script>
+    Vue.component("healing-extension-view-component", {
+        props: ['light'],
+        template: `${template}`,
+        data: function () {
+            return {
+                tab: 0,
+                logdata: simpleLogData
+            };
+        },
+        computed: {
+            activePhase: function () {
+                var phases = this.logdata.phases;
+                for (var i = 0; i < phases.length; i++) {
+                    if (phases[i].active) {
+                        return i;
+                    }
+                }
+            },
+            phase: function () {
+                return logData.phases[this.activePhase];
+            },
+            activePlayer: function () {
+                var players = this.logdata.players;
+                for (var i = 0; i < players.length; i++) {
+                    if (players[i].active) {
+                        return i;
+                    }
+                }
+                return -1;
+            },
+            name: function () {
+                return this.phase.name + " Healing Summary";
+            },
+            activePlayerTargets: function () {
+                var res = [];
+                for (var i = 0; i < logData.players.length; i++) {
+                    var player = this.logdata.players[i];
+                    if (player.targetActive) {
+                        res.push(i);
+                    }
+                }
+                return res;
+            },
+            players: function () {
+                return logData.players;
+            },
+            hasMechanics: function() {
+                return logData.mechanicMap.length > 0 && !logData.noMechanics;
+            },
+        }
+    });
+</script>

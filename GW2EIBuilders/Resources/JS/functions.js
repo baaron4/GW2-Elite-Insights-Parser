@@ -62,7 +62,7 @@ function findSkill(isBuff, id) {
 function getTargetCacheID(activetargets) {
     var id = 0;
     for (var i = 0; i < activetargets.length; i++) {
-        id |= 1 << activetargets[i];
+        id += Math.pow(2, activetargets[i]);
     }
     return id;
 }
@@ -89,6 +89,114 @@ function graphTypeEnumToString(mode) {
     return name;
 }
 
+function addPointsToGraph(res, graph, max) {
+    if (!graph) {
+        return;
+    }
+    var points = [];
+    for (var j = 0; j < graph.length; j++) {
+        points[j] = graph[j][1] * max / 100.0;
+    }
+    res.push(points);
+}
+
+function addMechanicsToGraph(data, phase, phaseIndex) {
+    for (var i = 0; i < graphData.mechanics.length; i++) {
+        var mech = graphData.mechanics[i];
+        var mechData = logData.mechanicMap[i];
+        var chart = {
+            x: [],
+            mode: 'markers',
+            visible: mech.visible ? null : 'legendonly',
+            type: 'scatter',
+            marker: {
+                symbol: mech.symbol,
+                color: mech.color,
+                size: mech.size ? mech.size : 15
+            },
+            text: [],
+            name: mechData.name,
+            hoverinfo: 'text'
+        };
+        if (mechData.enemyMech) {
+            for (var j = 0; j < mech.points[phaseIndex].length; j++) {
+                var pts = mech.points[phaseIndex][j];
+                var tarId = phase.targets[j];
+                if (tarId >= 0) {
+                    var target = logData.targets[tarId];
+                    for (var k = 0; k < pts.length; k++) {
+                        var time = pts[k];
+                        chart.x.push(time);
+                        chart.text.push(time + 's: ' + target.name);
+                    }
+                } else {
+                    for (var k = 0; k < pts.length; k++) {
+                        var time = pts[k][0];
+                        chart.x.push(time);
+                        chart.text.push(time + 's: ' + pts[k][1]);
+                    }
+                }
+            }
+        } else {
+            for (var j = 0; j < mech.points[phaseIndex].length; j++) {
+                var pts = mech.points[phaseIndex][j];
+                var player = logData.players[j];
+                for (var k = 0; k < pts.length; k++) {
+                    var time = pts[k];
+                    chart.x.push(time);
+                    chart.text.push(time + 's: ' + player.name);
+                }
+            }
+        }
+        data.push(chart);
+    }
+}
+
+function updateMechanicsYValues(res, phase, phaseIndex, phaseGraphData, max) {
+    for (var i = 0; i < graphData.mechanics.length; i++) {
+        var mech = graphData.mechanics[i];
+        var mechData = logData.mechanicMap[i];
+        var chart = [];
+        res.push(chart);
+        if (mechData.enemyMech) {
+            for (var j = 0; j < mech.points[phaseIndex].length; j++) {
+                var pts = mech.points[phaseIndex][j];
+                var tarId = phase.targets[j];
+                if (tarId >= 0) {
+                    var health = phaseGraphData.targets[j].healthStates;
+                    for (var k = 0; k < pts.length; k++) {
+                        chart.push(findState(health, pts[k], 0, health.length - 1) * max / 100.0);
+                    }
+                } else {
+                    for (var k = 0; k < pts.length; k++) {
+                        chart.push(max * 0.5);
+                    }
+                }
+            }
+        } else {
+            for (var j = 0; j < mech.points[phaseIndex].length; j++) {
+                var pts = mech.points[phaseIndex][j];
+                for (var k = 0; k < pts.length; k++) {
+                    var time = pts[k];
+                    var ftime = Math.floor(time);
+                    var y = res[j][ftime];
+                    var yp1 = res[j][ftime + 1];
+                    chart.push(interpolatePoint(ftime, ftime + 1, y, yp1, time));
+                }
+            }
+        }
+    }
+}
+
+
+function interpolatePoint(x1, x2, y1, y2, x) {
+    if (typeof y2 !== "undefined") {
+        return y1 + (y2 - y1) / (x2 - x1) * (x - x1);
+    } else {
+        return y1;
+    }
+}
+
 function damageTypeEnumToString(mode) {
     var name = "";
     switch (mode) {
@@ -113,22 +221,6 @@ function damageTypeEnumToString(mode) {
 function getDamageGraphName(damageMode, graphMode) {
     return damageTypeEnumToString(damageMode) + " " + graphTypeEnumToString(graphMode) + " Graph";
 }
-
-const quickColor = {
-    r: 220,
-    g: 20,
-    b: 220
-};
-const slowColor = {
-    r: 220,
-    g: 125,
-    b: 30
-};
-const normalColor = {
-    r: 125,
-    g: 125,
-    b: 125
-};
 
 function computeRotationData(rotationData, images, data, phase, actor, yAxis) {
     if (rotationData) {
@@ -536,6 +628,43 @@ function computeTargetBreakbarData(graph, targets, phase, data, yaxis) {
     return _computeTargetGraphData(graph, targets, phase, data, yaxis, "breakbarPercentStates", "breakbar", "breakbar", phase.breakbarPhase);
 }
 
+function _computePlayerGraphData(graph, player, data, yaxis, graphName, percentName) {
+    if (!graph) {
+        return 0;
+    }
+    var texts = [];
+    var times = [];
+    for (var j = 0; j < graph.length; j++) {
+        texts[j] = graph[j][1] + "%" + percentName + " - " + player.name;
+        times[j] = graph[j][0];
+    }
+    var res = {
+        x: times,
+        text: texts,
+        mode: 'lines',
+        line: {
+            dash: 'dashdot',
+            shape: 'hv'
+        },
+        hoverinfo: 'text',
+        name: player.name + ' ' + graphName,
+        visible: 'legendonly',
+    };
+    if (yaxis) {
+        res.yaxis = yaxis;
+    }
+    data.push(res);
+    return 1;
+}
+
+function computePlayerHealthData(healthGraph, player, data, yaxis) {
+    return _computePlayerGraphData(healthGraph, player, data, yaxis, "health", "hp");
+}
+
+function computePlayerBarrierData(barrierGraph, player, data, yaxis) {
+    return _computePlayerGraphData(barrierGraph, player, data, yaxis, "barrier", "barrier");
+}
+
 function computeBuffData(buffData, data) {
     if (buffData) {
         for (var i = 0; i < buffData.length; i++) {
@@ -568,30 +697,11 @@ function computeBuffData(buffData, data) {
     return 0;
 }
 
-function initTable (id, cell, order, orderCallBack) {
+function _initTable (id, cell, order, orderCallBack) {
     var table = $(id);
     if (!table.length) {
         return;
     }
-    /*if (lazyTableUpdater) {
-        var lazyTable = document.querySelector(id);
-        var lazyTableObserver = new IntersectionObserver(function (entries, observer) {
-            entries.forEach(function (entry) {
-                if (entry.isIntersecting) {
-                    table.DataTable({
-                        order: [
-                            [cell, order]
-                        ]
-                    });
-                    if (orderCallBack) {
-                        table.DataTable().on('order.dt', orderCallBack);
-                    }
-                    observer.unobserve(entry.target);
-                }
-            });
-        });
-        lazyTableObserver.observe(lazyTable);
-    } else {*/
     var data = {
         order: [
             [cell, order]
@@ -604,14 +714,29 @@ function initTable (id, cell, order, orderCallBack) {
     //}
 };
 
+function initializeTable(tableid, sortdata) {   
+    $("#" + tableid)
+    .DataTable()
+    .destroy();   
+
+    _initTable(
+        "#" + tableid,
+        sortdata.index,
+        sortdata.order,
+        function () {
+            var order = $("#" + tableid)
+                .DataTable()
+                .order();
+                sortdata.order = order[0][1];
+                sortdata.index = order[0][0];
+        }
+    );
+}
+
 function updateTable(id) {
-    /*if (lazyTableUpdater) {
-        var lazyTable = document.querySelector(id);
-        lazyTableUpdater.unobserve(lazyTable);
-        lazyTableUpdater.observe(lazyTable);
-    } else {*/
-    var table = $(id);
-    if ($.fn.dataTable.isDataTable(id)) {
+    var divID = "#" + id;
+    var table = $(divID);
+    if ($.fn.dataTable.isDataTable(divID)) {
         table.DataTable().rows().invalidate('dom');
         table.DataTable().draw();
     }

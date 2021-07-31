@@ -2,7 +2,7 @@
     <div>
         <div class="scrollable-cr-dps-table">
             <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%"
-                id="combat-replay-dps-table">
+                :id="tableid">
                 <thead>
                     <tr>
                         <th class="cr-dps-table-icon-col"></th>
@@ -64,10 +64,14 @@
     Vue.component("combat-replay-damage-stats-component", {
         mixins: [timeRefreshComponent, numberComponent],
         props: ["playerid", "graphdata"],
-        template: `${template}`,
+        template: `${template}`, 
         data: function () {
             return {
-                targetless: logData.targetless
+                targetless: logData.targetless,
+                sortdata: {
+                    order: "desc",
+                    index: 2
+                }
             };
         },
         methods: {
@@ -92,12 +96,18 @@
             }
         },
         mounted() {
-            initTable("#combat-replay-dps-table", 2, "desc", null);
+            initializeTable(this.tableid, this.sortdata);
         },
         updated() {
-            updateTable("#combat-replay-dps-table");
+            updateTable(this.tableid);
+        },
+        activated() {
+            initializeTable(this.tableid, this.sortdata);
         },
         computed: {
+            tableid: function() {
+                return "combat-replay-dps-table";
+            },
             phase: function () {
                 return logData.phases[0];
             },

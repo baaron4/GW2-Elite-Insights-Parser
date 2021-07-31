@@ -1,0 +1,33 @@
+<template>
+    <div>
+        <keep-alive>
+            <healingdist-player-component v-if="tabmode === 0" :key="'healingdist' + playerindex" :playerindex="playerindex"
+                :phaseindex="phaseindex" :activetargets="activetargets"></healingdist-player-component>
+            <healingtaken-component v-if="tabmode ===1" :key="'healingtaken' + playerindex" :actorindex="playerindex"
+                :tableid="'healingtaken-player-'+playerindex" :phaseindex="phaseindex"></healingtaken-component>
+            <player-healing-graph-tab-component v-for="(ph, id) in phases" v-if="tabmode === 2 && id === phaseindex" :key="id + 'healing-graph' + playerindex"
+                :playerindex="playerindex" :phaseindex="id" :activetargets="activetargets" :light="light">
+            </player-healing-graph-tab-component>
+            <simplerotation-component v-if="tabmode === 3" :key="'healingrot' + playerindex" :actorindex="playerindex"
+                :phaseindex="phaseindex" :target="false"></simplerotation-component>            
+            <advancedrotation-component v-for="(ph, id) in phases" v-if="tabmode === 4 && id === phaseindex" :key="id + 'healingadvrot' + playerindex" :actorindex="playerindex"
+            :phaseindex="id" :target="false" :light="light"></advancedrotation-component>
+            <food-component v-if="tabmode === 5" :key="'healingcons' + playerindex" :playerindex="playerindex"
+                :phaseindex="phaseindex"></food-component>
+        </keep-alive>
+    </div>
+</template>
+
+<script>
+    Vue.component('player-healing-tab-component', {
+        props: ['playerindex', 'tabmode',
+            'phaseindex', 'activetargets', 'light'
+        ],
+        template: `${template}`,
+        computed: {
+            phases: function () {
+                return logData.phases;
+            },
+        }
+    });
+</script>

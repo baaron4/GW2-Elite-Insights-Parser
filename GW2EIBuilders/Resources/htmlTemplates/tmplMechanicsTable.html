@@ -1,6 +1,6 @@
 <template>
     <div>
-        <table v-if="playerMechHeader.length > 0" class="table table-sm table-striped table-hover" cellspacing="0" id="playermechs">
+        <table v-if="playerMechHeader.length > 0" class="table table-sm table-striped table-hover" cellspacing="0" :id="tablePid">
             <thead>
                 <tr>
                     <th class="sub-cell">Sub</th>
@@ -25,7 +25,7 @@
                 </tr>
             </tbody>
         </table>
-        <table v-if="enemyMechHeader.length > 0" class="table table-sm table-striped table-hover" cellspacing="0" id="enemymechs">
+        <table v-if="enemyMechHeader.length > 0" class="table table-sm table-striped table-hover" cellspacing="0" :id="tableEid">
             <thead>
                 <tr>
                     <th class="text-left">Enemy</th>
@@ -50,27 +50,49 @@
     Vue.component("mechanics-stats-component", {
         props: ["phaseindex", "playerindex"],
         template: `${template}`,
+        mixins: [numberComponent],
         data: function () {
             return {
                 cacheP: new Map(),
-                cacheE: new Map()
+                cacheE: new Map(),
+                sortEdata: {
+                    order: "asc",
+                    index: 0
+                },
+                sortPdata: {
+                    order: "asc",
+                    index: 0
+                }
             };
         },
         mounted() {
-            initTable("#playermechs", 0, "asc");
+            initializeTable(this.tablePid, this.sortPdata);
             //
             if (this.enemyMechHeader.length) {
-                initTable("#enemymechs", 0, "asc");
+                initializeTable(this.tableEid, this.sortEdata);
             }
         },
         updated() {
-            updateTable("#playermechs");
+            updateTable(this.tablePid);
             //
             if (this.enemyMechHeader.length) {
-                updateTable("#enemymechs");
+                updateTable(this.tableEid);
+            }
+        },
+        activated() {
+            initializeTable(this.tablePid, this.sortPdata);
+            //
+            if (this.enemyMechHeader.length) {
+                initializeTable(this.tableEid, this.sortEdata);
             }
         },
         computed: {
+            tablePid: function() {
+                return "playermechs";
+            },
+            tableEid: function() {
+                return "enemymechs";
+            },
             phase: function() {
                 return logData.phases[this.phaseindex];
             },

@@ -4,7 +4,7 @@ function compileTemplates() {
     Vue.component("graph-component", {
         props: ['id', 'layout', 'data'],
         template: '<div :id="id" class="d-flex flex-row justify-content-center"></div>',
-        mounted: function () {
+        activated: function () {
             var div = document.querySelector(this.queryID);
             Plotly.react(div, this.data, this.layout, { showEditInChartStudio: true, plotlyServerURL: "https://chart-studio.plotly.com" });
             var _this = this;
@@ -21,6 +21,9 @@ function compileTemplates() {
             layout: {
                 handler: function () {
                     var div = document.querySelector(this.queryID);
+                    if (!div) {
+                        return;
+                    }
                     var duration = 1000;
                     Plotly.animate(div, {
                         data: this.data
@@ -75,21 +78,26 @@ function mainLoad() {
     for (i = 0; i < logData.players.length; i++) {
         var playerData = logData.players[i];
         simpleLogData.players.push({
-            active: !!playerData.isPoV
+            active: !!playerData.isPoV,
+            targetActive: !playerData.isFake
         });
         playerData.dpsGraphCache = new Map();
         playerData.id = i;
     }
     compileTemplates()
-    if (!!logData.crData) {
+    if (!!crData) {
         compileCRTemplates();
+    }
+    if (!!healingStatsExtension) {
+        compileHealingExtTemplates();
     }
     new Vue({
         el: "#content",
         data: {
             light: typeof (window.theme) !== "undefined" ? (window.theme === 'yeti') : logData.lightTheme,
             mode: 0,
-            cr: !!logData.crData
+            cr: !!crData,
+            healingExt: !!healingStatsExtension
         },
         methods: {
             switchTheme: function (state) {

@@ -1,8 +1,8 @@
 <template>
     <div>
-        <dps-graph-mode-selector-component :data="graphdata" :phaseduration="this.phase.end - this.phase.start"
-            :phasehassubphases="!!this.phase.subPhases" :ignorebreakbar="false" :column="false">
-        </dps-graph-mode-selector-component>
+        <hps-graph-mode-selector-component :data="graphhealingdata"
+            :phaseduration="this.phase.end - this.phase.start" :phasehassubphases="!!this.phase.subPhases" :column="false">
+        </hps-graph-mode-selector-component>
         <h3 class="text-center mt-1 mb-1">{{graphname}}</h3>
         <graph-component :id="graphid" :layout="layout" :data="computeData"></graph-component>
         <rotation-legend-component></rotation-legend-component>
@@ -11,14 +11,19 @@
 
 <script>
 
-    Vue.component("player-graph-tab-component", {
+    Vue.component("player-healing-graph-tab-component", {
         props: ["playerindex", "phaseindex", "activetargets", "light"],
         template: `${template}`,
         mixins: [graphComponent],
         data: function () {
             return {
                 playerOffset: 0,
-                graphOffset: 0
+                graphOffset: 0,
+                graphhealingdata: {
+                    hpsmode: 0,
+                    graphmode: GraphType.Damage,
+                    healingmode: HealingType.All,
+                },
             };
         },
         watch: {
@@ -49,11 +54,8 @@
             this.playerOffset += computeBuffData(this.player.details.boonGraph[this.phaseindex], this.data);
             var hasBuffs = oldOffset !== this.playerOffset;
             this.graphOffset = this.playerOffset;
-            this.playerOffset += computeTargetBreakbarData(this.graph, logData.targets, this.phase, this.data, 'y3');
-            this.playerOffset += computeTargetBarrierData(this.graph, logData.targets, this.phase, this.data, 'y3');
-            this.playerOffset += computeTargetHealthData(this.graph, logData.targets, this.phase, this.data, 'y3');
+            this.playerOffset += computePlayersHealthData(this.graph, this.data, 'y3');
             this.playerOffset += computePlayerBarrierData(this.barrierGraph, this.player, this.data, 'y3');
-            this.playerOffset += computePlayerHealthData(this.healthGraph, this.player, this.data, 'y3');
             this.data.push({
                 x: this.phase.times,
                 y: [],
@@ -66,32 +68,30 @@
                 hoverinfo: 'name+y+x',
                 name: 'Total'
             });
-            if (!logData.targetless) {
                 this.data.push({
-                    x: this.phase.times,
-                    y: [],
-                    mode: 'lines',
-                    line: {
-                        shape: 'spline',
-                        color: this.player.colTarget,
-                    },
-                    yaxis: 'y3',
-                    hoverinfo: 'name+y+x',
-                    name: 'Target'
-                });
-                this.data.push({
-                    x: this.phase.times,
-                    y: [],
-                    mode: 'lines',
-                    line: {
-                        shape: 'spline',
-                        color: this.player.colCleave,
-                    },
-                    yaxis: 'y3',
-                    hoverinfo: 'name+y+x',
-                    name: 'Cleave'
-                });
-            }
+                x: this.phase.times,
+                y: [],
+                mode: 'lines',
+                line: {
+                    shape: 'spline',
+                    color: this.player.colTarget,
+                },
+                yaxis: 'y3',
+                hoverinfo: 'name+y+x',
+                name: 'Target'
+            });
+            this.data.push({
+                x: this.phase.times,
+                y: [],
+                mode: 'lines',
+                line: {
+                    shape: 'spline',
+                    color: this.player.colCleave,
+                },
+                yaxis: 'y3',
+                hoverinfo: 'name+y+x',
+                name: 'Cleave'
+            });
             this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc', hasBuffs);
             computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
             this.updateVisibily(this.layout.images, this.phase.start, this.phase.end);
@@ -118,51 +118,52 @@
             barrierGraph: function () {
                 return this.graph.players[this.playerindex].barrierStates;
             },
+            hGraph: function () {
+                return healingStatsExtension.playerHealingCharts[this.phaseindex][this.playerindex];
+            },
             graphid: function () {
-                return "playergraph-" + this.playerindex + '-' + this.phaseindex;
+                return "playerhealinggraph-" + this.playerindex + '-' + this.phaseindex;
             },
             player: function() {
                 return logData.players[this.playerindex];
             },
-            damageGraphName: function () {
-                switch (this.graphdata.damagemode) {
-                    case DamageType.All:
-                        return "damage";
-                    case DamageType.Power:
-                        return "powerDamage";
-                    case DamageType.Condition:
-                        return "conditionDamage";
-                    case DamageType.Breakbar:
-                        return "breakbarDamage";
+            healingGraphName: function () {
+                switch (this.graphhealingdata.healingmode) {
+                    case HealingType.All:
+                        return "healing";
+                    case HealingType.HealingPower:
+                        return "healingPowerHealing";
+                    case HealingType.Conversion:
+                        return "conversionBasedHealing";
+                    case HealingType.Hybrid:
+                        return "hybridHealing";
                     default:
-                        throw new Error("unknown enum in damage graph name");
+                        throw new Error("unknown enum in healing graph name");
                 }
             },
             graphname: function () {
-                var name = getDamageGraphName(this.graphdata.damagemode, this.graphdata.graphmode);
-                switch (this.graphdata.dpsmode) {
+                var name = getHealingGraphName(this.graphhealingdata.healingmode, this.graphhealingdata.graphmode);
+                switch (this.graphhealingdata.hpsmode) {
                     case 0:
                         name = "Full " + name;
                         break;
                     case -1:
                         name = "Phase " + name;
                         break;
-                    default:
-                        name = this.graphdata.dpsmode + "s " + name;
+                    default:                       
+                        name = this.graphhealingdata.hpsmode + "s " + name;
                         break;
                 }
                 return name;
             },
             computeData: function () {
                 this.layout.datarevision = new Date().getTime();
-                this.layout.yaxis3.title = graphTypeEnumToString(this.graphdata.graphmode);
+                this.layout.yaxis3.title = healingGraphTypeEnumToString(this.graphhealingdata.graphmode);
                 var res = this.data;
-                var data = this.computeDPSRelatedData();
+                var data = this.computeHPSRelatedData();
                 this.data[this.playerOffset].y = data[0];
-                if (!logData.targetless) {
-                    this.data[this.playerOffset + 1].y = data[1];
-                    this.data[this.playerOffset + 2].y = data[2];
-                }
+                this.data[this.playerOffset + 1].y = data[1];
+                this.data[this.playerOffset + 2].y = data[2];
                 var offset = 3;
                 for (var i = this.graphOffset; i < this.playerOffset; i++) {
                     this.data[i].y = data[offset++];
@@ -172,46 +173,39 @@
         },
         methods: {
             computeDPSData: function () {
-                var cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, this.activetargets, this.phaseindex, null);
+                var cacheID = getDPSGraphCacheID(this.graphhealingdata.hpsmode, this.graphhealingdata.healingmode, this.graphhealingdata.graphmode, this.activetargets, this.phaseindex, null);
                 if (this.dpsCache.has(cacheID)) {
                     return this.dpsCache.get(cacheID);
                 }
                 var data;
-                var graphData = this.graph.players[this.playerindex];
-                var damageArrayToUse = this.damageGraphName;
-                if (this.graphdata.dpsmode >= 0) {
-                    data = computePlayerDPS(this.player, graphData[damageArrayToUse], this.graphdata.dpsmode, null, this.activetargets, cacheID, this.phase.times, this.graphdata.graphmode, this.graphdata.damagemode);
+                var graphData = this.hGraph;
+                var damageArrayToUse = this.healingGraphName;
+                if (this.graphhealingdata.hpsmode >= 0) {
+                    data = computePlayerDPS(this.player, graphData[damageArrayToUse], this.graphhealingdata.hpsmode, null, this.activetargets, cacheID, this.phase.times, this.graphhealingdata.graphmode, this.graphhealingdata.healingmode);
                 } else {
-                    data = computePlayerDPS(this.player, graphData[damageArrayToUse], 0, this.computePhaseBreaks, this.activetargets, cacheID, this.phase.times, this.graphdata.graphmode, this.graphdata.damagemode);
+                    data = computePlayerDPS(this.player, graphData[damageArrayToUse], 0, this.computePhaseBreaks, this.activetargets, cacheID, this.phase.times, this.graphhealingdata.graphmode, this.graphhealingdata.healingmode);
                 }
                 var res = {
-                    maxDPS: data.maxDPS.total,
-                    playerDPS: data.dps
+                    maxHPS: data.maxDPS.total,
+                    playerHPS: data.dps
                 };
                 this.dpsCache.set(cacheID, res);
                 return res;
             },
-            computeDPSRelatedData: function () {
-                var cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, this.activetargets, this.phaseindex, null);
+            computeHPSRelatedData: function () {
+                var cacheID = getDPSGraphCacheID(this.graphhealingdata.hpsmode, this.graphhealingdata.healingmode, this.graphhealingdata.graphmode, this.activetargets, this.phaseindex, null);
                 if (this.dataCache.has(cacheID)) {
                     return this.dataCache.get(cacheID);
                 }
-                var dpsData = this.computeDPSData();
+                var hpsData = this.computeDPSData();
                 var res = [];
-                res.push(dpsData.playerDPS.total);
-                res.push(dpsData.playerDPS.target);
-                res.push(dpsData.playerDPS.cleave);
-                for (var i = 0; i < this.graph.targets.length; i++) {
-                    addPointsToGraph(res, this.graph.targets[i].breakbarPercentStates, dpsData.maxDPS);
+                res.push(hpsData.playerHPS.total);
+                res.push(hpsData.playerHPS.target);
+                res.push(hpsData.playerHPS.cleave);
+                for (var i = 0; i < this.graph.players.length; i++) {
+                    addPointsToGraph(res, this.graph.players[i].healthStates, hpsData.maxHPS);
                 }
-                for (var i = 0; i < this.graph.targets.length; i++) {
-                    addPointsToGraph(res, this.graph.targets[i].barrierStates, dpsData.maxDPS);
-                }
-                for (var i = 0; i < this.graph.targets.length; i++) {
-                    addPointsToGraph(res, this.graph.targets[i].healthStates, dpsData.maxDPS);
-                }
-                addPointsToGraph(res, this.barrierGraph, dpsData.maxDPS);
-                addPointsToGraph(res, this.healthGraph, dpsData.maxDPS);
+                addPointsToGraph(res, this.barrierGraph, hpsData.maxHPS);
                 this.dataCache.set(cacheID, res);
                 return res;
             },

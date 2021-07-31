@@ -11,6 +11,22 @@ $.extend($.fn.dataTable.defaults, {
     dom: "t"
 });
 
+const quickColor = {
+    r: 220,
+    g: 20,
+    b: 220
+};
+const slowColor = {
+    r: 220,
+    g: 125,
+    b: 30
+};
+const normalColor = {
+    r: 125,
+    g: 125,
+    b: 125
+};
+
 const DamageType = {
     All: 0,
     Power: 1,

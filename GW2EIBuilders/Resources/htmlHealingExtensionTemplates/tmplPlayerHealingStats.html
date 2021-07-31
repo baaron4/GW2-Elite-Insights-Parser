@@ -5,19 +5,19 @@
         <ul class="nav nav-tabs" v-show="activeplayer > -1">
             <li>
                 <a class="nav-link" :class="{active: tabmode === 0}" @click="tabmode = 0">
-                    Outgoing Damage
+                    Outgoing Healing
                     Distribution
                 </a>
             </li>
             <li>
                 <a class="nav-link" :class="{active: tabmode === 1}" @click="tabmode = 1">
-                    Incoming Damage
+                    Incoming Healing
                     Distribution
                 </a>
             </li>
             <li>
-                <a class="nav-link" :class="{active: tabmode === 2}" @click="tabmode = 2">Graph</a>
-            </li>
+                <a class="nav-link" :class="{active: tabmode === 2}" @click="tabmode = 2">Healing Graph</a>
+            </li>     
             <li>
                 <a class="nav-link" :class="{active: tabmode === 3}" @click="tabmode = 3">
                     Simple
@@ -35,17 +35,11 @@
                     Consumables
                 </a>
             </li>
-            <li>
-                <a class="nav-link" v-show="hasDeaths" :class="{active: tabmode === 6}" @click="tabmode = 6">
-                    Death
-                    Recap
-                </a>
-            </li>
         </ul>
         <keep-alive>
-            <player-tab-component v-for="player in players" :key="player.id"
+            <player-healing-tab-component v-for="player in players" :key="'healing' + player.id"
                 v-if="player.id === activeplayer" :playerindex="player.id" :tabmode="tabmode"
-                :phaseindex="phaseindex" :activetargets="activetargets" :light="light"></player-tab-component>
+                :phaseindex="phaseindex" :activetargets="activetargets" :light="light"></player-healing-tab-component>
         </keep-alive>
         <div v-if="activeplayer === -1">
             <h3 class="text-center">No player selected</h3>
@@ -54,7 +48,7 @@
 </template>
 
 <script>
-    Vue.component("player-stats-component", {
+    Vue.component("player-healing-stats-component", {
         props: ["phaseindex", 'activetargets', 'activeplayer', 'light'],
         template: `${template}`,
         data: function () {
@@ -65,14 +59,6 @@
         computed: {
             players: function () {
                 return logData.players;
-            },
-            hasDeaths: function () {
-                for (var i = 0; i < this.players.length; i++) {
-                    if (!!this.players[i].details.deathRecap) {
-                        return true;
-                    }
-                }
-                return false;
             }
         }
     });

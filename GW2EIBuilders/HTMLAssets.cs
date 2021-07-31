@@ -10,6 +10,7 @@ namespace GW2EIBuilders
         internal string EIJavascriptCode { get; }
 
         internal string EICRJavascriptCode { get; }
+        internal string EIHealingExtJavascriptCode { get; }
 
         public HTMLAssets()
         {
@@ -41,6 +42,19 @@ namespace GW2EIBuilders
             }
             List<string> templatesCR = BuildCRTemplates();
             EICRJavascriptCode = scriptCRContent.Replace("TEMPLATE_CR_COMPILE", string.Join("\n", templatesCR));
+            //
+            var orderedHealingExtScripts = new List<string>()
+            {
+                Properties.Resources.healingExtGlobals,
+                Properties.Resources.healingExtFunctions,
+            };
+            string scriptHealingExtContent = orderedHealingExtScripts[0];
+            for (int i = 1; i < orderedHealingExtScripts.Count; i++)
+            {
+                scriptHealingExtContent += orderedHealingExtScripts[i];
+            }
+            List<string> templateHealingExt = BuildHealingExtensionTemplates();
+            EIHealingExtJavascriptCode = scriptHealingExtContent.Replace("TEMPLATE_HEALING_EXT_COMPILE", string.Join("\n", templateHealingExt));
         }
         private static string PrepareTemplate(string template)
         {
@@ -131,6 +145,33 @@ namespace GW2EIBuilders
                 Properties.Resources.tmplCombatReplayExtraDecorations,
                 Properties.Resources.tmplCombatReplayAnimationControl,
                 Properties.Resources.tmplCombatReplayMechanicsList
+            };
+            var res = new List<string>();
+            foreach (string template in templates)
+            {
+                res.Add(PrepareTemplate(template));
+            }
+            return res;
+        }
+
+        private static List<string> BuildHealingExtensionTemplates()
+        {
+            var templates = new List<string>
+            {
+                Properties.Resources.tmplHealingExtensionView,
+                Properties.Resources.tmplTargetPlayers,
+                Properties.Resources.tmplIncomingHealingTable,
+                Properties.Resources.tmpHealingStatTables,
+                Properties.Resources.tmplOutgoingHealingTable,
+                Properties.Resources.tmplHPSGraphModeSelector,
+                Properties.Resources.tmplHPSGraph,
+                Properties.Resources.tmplHealingGraphStats,
+                Properties.Resources.tmplHealingDistPlayer,
+                Properties.Resources.tmplHealingDistTable,
+                Properties.Resources.tmplPlayerHealingStats,
+                Properties.Resources.tmplPlayerHealingTab,
+                Properties.Resources.tmplHealingTaken,
+                Properties.Resources.tmplPlayerHealingTabGraph,
             };
             var res = new List<string>();
             foreach (string template in templates)

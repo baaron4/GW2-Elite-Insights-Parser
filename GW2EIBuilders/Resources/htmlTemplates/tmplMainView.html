@@ -9,7 +9,7 @@
                 <target-component :targets="logdata.targets" :phaseindex="activePhase"></target-component>
             </div>
             <div class="ml-5">
-                <player-component :players="logdata.players" :playerindex="activePlayer"></player-component>
+                <player-component :players="logdata.players"></player-component>
             </div>
         </div>     
         <h2 class="text-center">{{ name }}</h2>
@@ -42,7 +42,8 @@
 
         <keep-alive>
             <stat-tables-component v-if="tab === 0" :key="'stat-tables'"
-                :phaseindex="activePhase" :playerindex="activePlayer" :activetargets="activePhaseTargets"></stat-tables-component>
+                :phaseindex="activePhase" :playerindex="activePlayer" 
+                :activetargets="activePhaseTargets"></stat-tables-component>
             <buff-tables-component v-if="tab === 1" :key="'buff-tables'"
                 :phaseindex="activePhase" :playerindex="activePlayer"></buff-tables-component>
             <dmgmodifier-stats-component v-if="tab === 2" :key="'modifier'"
@@ -53,8 +54,9 @@
             <graph-stats-component v-if="tab === 4" :key="'graph'"
                 :activetargets="activePhaseTargets" :phaseindex="activePhase" :playerindex="activePlayer"
                 :light="light"></graph-stats-component>
-            </personal-buff-table-component>
-            <player-rotations-tab-component v-if="tab === 7" :key="'rotations'" :phaseindex="activePhase" :light="light" :playerindex="activePlayer"></player-rotations-tab-component>
+            <player-rotations-tab-component v-if="tab === 7" :key="'rotations'" :phaseindex="activePhase" 
+            :light="light" :playerindex="activePlayer">
+            </player-rotations-tab-component>
             <target-stats-component v-if="tab === 5" :key="'targets'" :playerindex="activePlayer"
                 :simplephase="logdata.phases[activePhase]" :phaseindex="activePhase" :light="light">
             </target-stats-component>

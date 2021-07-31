@@ -17,12 +17,22 @@
   <ItemGroup>
     <None Include="Resources\ei.css" />
     <None Include="Resources\ei.js" />
-    <None Include="Resources\CR-JS\animator.js" />
-    <None Include="Resources\CR-JS\actors.js" />
-    <None Include="Resources\CR-JS\decorations.js" />
+    <None Include="Resources\JS\CR-JS\animator.js" />
+    <None Include="Resources\JS\CR-JS\actors.js" />
+    <None Include="Resources\JS\CR-JS\decorations.js" />
+    <None Include="Resources\JS\HealingExt-JS\healingExtFunctions.js" />
+    <None Include="Resources\JS\HealingExt-JS\healingExtGlobals.js" />
     <None Include="Resources\JS\global.js" />
     <None Include="Resources\JS\functions.js" />
     <None Include="Resources\JS\mixins.js" />
+    <None Include="Resources\htmlHealingExtensionTemplates\tmplHealingExtensionView.html"  />
+    <None Include="Resources\htmlHealingExtensionTemplates\tmplTargetPlayers.html" />
+    <None Include="Resources\htmlHealingExtensionTemplates\tmplIncomingHealingTable.html" />
+    <None Include="Resources\htmlHealingExtensionTemplates\tmplOutgoingHealingTable.html" />
+    <None Include="Resources\htmlHealingExtensionTemplates\tmplHPSGraphModeSelector.html" />
+    <None Include="Resources\htmlHealingExtensionTemplates\tmplHealingGraphStats.html" />
+    <None Include="Resources\htmlHealingExtensionTemplates\tmplHPSGraph.html" />
+    <None Include="Resources\htmlHealingExtensionTemplates\tmpHealingStatTables.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayUI.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayDamageData.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayDamageTable.html" />

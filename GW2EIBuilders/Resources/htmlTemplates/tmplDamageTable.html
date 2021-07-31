@@ -1,6 +1,6 @@
 <template>
     <div>
-        <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" id="dps-table">
+        <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
             <thead>
                 <tr>
                     <th class="sub-cell">Sub</th>
@@ -50,46 +50,28 @@
                     </td>
                     <td class="text-left">{{row.player.name}}</td>
                     <td>{{row.player.acc}}</td>
-                    <td v-show="!targetless" v-if="!showDamage"
-                        :data-original-title="row.dps[0] + ' damage'+ '<br>' + computeTotalContribution(0, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 0, row.dps,tableData.sums)">
-                        {{round(row.dps[0]/phase.durationS)}}</td>
-                    <td v-show="!targetless" v-else
-                        :data-original-title="round(row.dps[0]/phase.durationS) + ' dps'+ '<br>' + computeTotalContribution(0, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 0, row.dps,tableData.sums)">
-                        {{row.dps[0]}}</td>
-                    <td v-show="!targetless" v-if="!showDamage"
-                        :data-original-title="row.dps[1] + ' damage'+ '<br>' + computeTotalContribution(1, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 1, row.dps,tableData.sums)">
-                        {{round(row.dps[1]/phase.durationS)}}</td>
-                    <td v-show="!targetless" v-else
-                        :data-original-title="round(row.dps[1]/phase.durationS) + ' dps'+ '<br>' + computeTotalContribution(1, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 1, row.dps,tableData.sums)">
-                        {{row.dps[1]}}</td>
-                    <td v-show="!targetless" v-if="!showDamage"
-                        :data-original-title="row.dps[2] + ' damage'+ '<br>' + computeTotalContribution(2, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 2, row.dps,tableData.sums)">
-                        {{round(row.dps[2]/phase.durationS)}}</td>
-                    <td v-show="!targetless" v-else
-                        :data-original-title="round(row.dps[2]/phase.durationS) + ' dps'+ '<br>' + computeTotalContribution(2, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 2, row.dps,tableData.sums)">
-                        {{row.dps[2]}}</td>
+                    <td v-show="!targetless" 
+                        :data-original-title="getPlayerTooltip(0, row, tableData.sums)">
+                        {{getPlayerCell(0, row)}}</td>
+                    <td v-show="!targetless" 
+                        :data-original-title="getPlayerTooltip(1, row, tableData.sums)">
+                        {{getPlayerCell(1, row)}}</td>
+                    <td v-show="!targetless" 
+                        :data-original-title="getPlayerTooltip(2, row, tableData.sums)">
+                        {{getPlayerCell(2, row)}}</td>
                     <td v-show="!targetless" v-if="hasBreakbarDamage"
                         :data-original-title="computeTotalContribution(3, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 3, row.dps,tableData.sums)">
                         {{round1(row.dps[3])}}
                     </td>
-                    <td v-if="!showDamage"
-                        :data-original-title="row.dps[4] + ' damage'+ '<br>' + computeTotalContribution(4, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 4, row.dps,tableData.sums)">
-                        {{round(row.dps[4]/phase.durationS)}}</td>
-                    <td v-else
-                        :data-original-title="round(row.dps[4]/phase.durationS) + ' dps'+ '<br>' + computeTotalContribution(4, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 4, row.dps,tableData.sums)">
-                        {{row.dps[4]}}</td>
-                    <td v-if="!showDamage"
-                        :data-original-title="row.dps[5] + ' damage'+ '<br>' + computeTotalContribution(5, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 5, row.dps,tableData.sums)">
-                        {{round(row.dps[5]/phase.durationS)}}</td>
-                    <td v-else
-                        :data-original-title="round(row.dps[5]/phase.durationS) + ' dps'+ '<br>' + computeTotalContribution(5, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 5, row.dps,tableData.sums)">
-                        {{row.dps[5]}}</td>
-                    <td v-if="!showDamage"
-                        :data-original-title="row.dps[6] + ' damage'+ '<br>' + computeTotalContribution(6, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 6, row.dps,tableData.sums)">
-                        {{round(row.dps[6]/phase.durationS)}}</td>
-                    <td v-else
-                        :data-original-title="round(row.dps[6]/phase.durationS) + ' dps'+ '<br>' + computeTotalContribution(6, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 6, row.dps,tableData.sums)">
-                        {{row.dps[6]}}</td>
+                    <td 
+                        :data-original-title="getPlayerTooltip(4, row, tableData.sums)">
+                        {{getPlayerCell(4, row)}}</td>
+                    <td 
+                        :data-original-title="getPlayerTooltip(5, row, tableData.sums)">
+                        {{getPlayerCell(4, row)}}</td>
+                    <td 
+                        :data-original-title="getPlayerTooltip(6, row, tableData.sums)">
+                        {{getPlayerCell(5, row)}}</td>
 
                     <td v-if="hasBreakbarDamage"
                         :data-original-title="computeTotalContribution(7, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 7, row.dps,tableData.sums)">
@@ -103,30 +85,21 @@
                     <td></td>
                     <td class="text-left">{{sum.name}}</td>
                     <td></td>
-                    <td v-show="!targetless" v-if="!showDamage" :data-original-title="sum.dps[0] + ' damage'">
-                        {{round(sum.dps[0]/phase.durationS)}}</td>
-                    <td v-show="!targetless" v-else :data-original-title="round(sum.dps[0]/phase.durationS) + ' dps'">
-                        {{sum.dps[0]}}</td>
-                    <td v-show="!targetless" v-if="!showDamage" :data-original-title="sum.dps[1] + ' damage'">
-                        {{round(sum.dps[1]/phase.durationS)}}</td>
-                    <td v-show="!targetless" v-else :data-original-title="round(sum.dps[1]/phase.durationS) + ' dps'">
-                        {{sum.dps[1]}}</td>
-                    <td v-show="!targetless" v-if="!showDamage" :data-original-title="sum.dps[2] + ' damage'">
-                        {{round(sum.dps[2]/phase.durationS)}}</td>
-                    <td v-show="!targetless" v-else :data-original-title="round(sum.dps[2]/phase.durationS) + ' dps'">
-                        {{sum.dps[2]}}</td>
+                    <td v-show="!targetless" :data-original-title="getSumTooltip(0, sum)">
+                        {{getSumCell(0, sum)}}</td>
+                    <td v-show="!targetless" :data-original-title="getSumTooltip(1, sum)">
+                        {{getSumCell(1, sum)}}</td>
+                    <td v-show="!targetless" :data-original-title="getSumTooltip(2, sum)">
+                        {{getSumCell(2, sum)}}</td>
                     <td v-show="!targetless" v-if="hasBreakbarDamage">
                         {{round1(sum.dps[3])}}
                     </td>
-                    <td v-if="!showDamage" :data-original-title="sum.dps[4] + ' damage'">
-                        {{round(sum.dps[4]/phase.durationS)}}</td>
-                    <td v-else :data-original-title="round(sum.dps[4]/phase.durationS) + ' dps'">{{sum.dps[4]}}</td>
-                    <td v-if="!showDamage" :data-original-title="sum.dps[5] + ' damage'">
-                        {{round(sum.dps[5]/phase.durationS)}}</td>
-                    <td v-else :data-original-title="round(sum.dps[5]/phase.durationS) + ' dps'">{{sum.dps[5]}}</td>
-                    <td v-if="!showDamage" :data-original-title="sum.dps[6] + ' damage'">
-                        {{round(sum.dps[6]/phase.durationS)}}</td>
-                    <td v-else :data-original-title="round(sum.dps[6]/phase.durationS) + ' dps'">{{sum.dps[6]}}</td>
+                    <td :data-original-title="getSumTooltip(4, sum)">
+                        {{getSumCell(4, sum)}}</td>
+                    <td :data-original-title="getSumTooltip(5, sum)">
+                        {{getSumCell(5, sum)}}</td>
+                    <td :data-original-title="getSumTooltip(6, sum)">
+                        {{getSumCell(6, sum)}}</td>
                     <td v-if="hasBreakbarDamage">
                         {{round1(sum.dps[7])}}
                     </td>
@@ -145,14 +118,21 @@
             return {
                 targetless: logData.targetless,
                 showDamage: logData.wvw,
-                cacheTarget: new Map()
+                cacheTarget: new Map(),
+                sortdata: {
+                    order: "desc",
+                    index: logData.targetless ? logData.hasBreakbarDamage ? 8 : 7 : 4
+                }
             };
         },
         mounted() {
-            initTable("#dps-table", logData.targetless ? this.hasBreakbarDamage ? 8 : 7 : 4, "desc");
+            initializeTable(this.tableid, this.sortdata);
         },
         updated() {
-            updateTable("#dps-table");
+            updateTable(this.tableid);
+        },
+        activated() {
+            initializeTable(this.tableid, this.sortdata);
         },
         methods: {
             computeTotalContribution: function (index, row, sums) {
@@ -166,9 +146,26 @@
                     }
                 }
                 return this.round2(row[index] * 100 / sums[sumId].dps[index]) + '% of group';
+            },
+            getPlayerTooltip: function(index, row, sums) {
+                return (!this.showDamage ? row.dps[index] : this.round(row.dps[index]/this.phase.durationS)) + ' damage'+
+                 '<br>' + this.computeTotalContribution(index, row.dps, sums) +
+                 '<br>'+ this.computeGroupContribution(row.player.group, index, row.dps, sums);
+            },
+            getPlayerCell: function(index, row) {
+                return this.showDamage ? row.dps[index] : this.round(row.dps[index]/this.phase.durationS)
+            },
+            getSumTooltip: function(index, row) {
+                return (!this.showDamage ? row.dps[index] : this.round(row.dps[index]/this.phase.durationS)) + ' damage';
+            },
+            getSumCell: function(index, row) {
+                return this.showDamage ? row.dps[index] : this.round(row.dps[index]/this.phase.durationS)
             }
         },
         computed: {
+            tableid: function() {
+                return "dps-table";
+            },
             phase: function () {
                 return logData.phases[this.phaseindex];
             },

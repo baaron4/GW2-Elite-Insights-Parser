@@ -88,17 +88,6 @@
         return 1;
     }
 
-    function addPoints(res, graph, maxDPS) {
-        if (!graph) {
-            return;
-        }
-        var points = [];
-        for (var j = 0; j < graph.length; j++) {
-            points[j] = graph[j][1] * maxDPS / 100.0;
-        }
-        res.push(points);
-    }
-
     Vue.component("target-graph-tab-component", {
         props: ["targetindex", "phaseindex", 'light'],
         template: `${template}`,
@@ -153,7 +142,7 @@
             computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
             this.updateVisibily(this.layout.images, this.phase.start, this.phase.end);
         },
-        mounted: function () {
+        activated: function () {
             var div = document.getElementById(this.graphid);
             var layout = this.layout;
             var images = layout.images;
@@ -180,12 +169,6 @@
             },
             target: function () {
                 return logData.targets[this.targetindex];
-            },
-            phase: function () {
-                return logData.phases[this.phaseindex];
-            },
-            graph: function () {
-                return graphData.phases[this.phaseindex];
             },
             phaseTargetIndex: function () {
                 return this.phase.targets.indexOf(this.targetindex);
@@ -219,17 +202,6 @@
                         break;
                 }
                 return name;
-            },
-            computePhaseBreaks: function () {
-                var res = [];
-                if (this.phase.subPhases) {
-                    for (var i = 0; i < this.phase.subPhases.length; i++) {
-                        var subPhase = logData.phases[this.phase.subPhases[i]];
-                        res[Math.floor(subPhase.start - this.phase.start)] = true;
-                        res[Math.floor(subPhase.end - this.phase.start)] = true;
-                    }
-                }
-                return res;
             },
             computeData: function () {
                 this.layout.datarevision = new Date().getTime();
@@ -266,9 +238,9 @@
                 }
                 var dpsData = this.computeDPSData();
                 var res = [dpsData.dps];
-                addPoints(res, this.healthStates, dpsData.maxDPS);               
-                addPoints(res, this.barrierStates, dpsData.maxDPS);
-                addPoints(res, this.breakbarStates, dpsData.maxDPS);
+                addPointsToGraph(res, this.healthStates, dpsData.maxDPS);               
+                addPointsToGraph(res, this.barrierStates, dpsData.maxDPS);
+                addPointsToGraph(res, this.breakbarStates, dpsData.maxDPS);
                 this.dataCache.set(cacheID, res);
                 return res;
             },

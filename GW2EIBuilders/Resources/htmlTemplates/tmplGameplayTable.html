@@ -10,7 +10,7 @@
                 </li>
             </ul>
         </div>
-        <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" id="dmg-table">
+        <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
             <thead>
                 <tr>
                     <th class="sub-cell">Sub</th>
@@ -211,16 +211,26 @@
                 mode: logData.targetless ? 0 : 1,
                 hasCommander: logData.hasCommander,
                 cache: new Map(),
-                cacheTarget: new Map()
+                cacheTarget: new Map(),
+                sortdata: {
+                    order: "desc",
+                    index: 1
+                }
             };
         },
         mounted() {
-            initTable("#dmg-table", 1, "desc");
+            initializeTable(this.tableid, this.sortdata);
         },
         updated() {
-            updateTable("#dmg-table");
+            updateTable(this.tableid);
+        },
+        activated() {
+            initializeTable(this.tableid, this.sortdata);
         },
         computed: {
+            tableid: function() {
+                return "dmg-table";
+            },
             phase: function () {
                 return logData.phases[this.phaseindex];
             },

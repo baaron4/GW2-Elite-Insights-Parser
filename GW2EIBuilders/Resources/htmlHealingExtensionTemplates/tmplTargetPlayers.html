@@ -1,24 +1,14 @@
 <template>
     <div>
-        <img class="icon mb-1" src="https://i.imgur.com/nSYuby8.png" :data-original-title="scoreExpl" />
         <div class="d-flex flex-column" style="max-width: 900px;">
             <div v-for="group in groups" class="d-flex flex-wrap mb-1">
-                <div v-for="player in group" class="player-cell d-flex flex-column align-items-center justify-content-center" :class="{active: player.active}"
+                <div v-for="player in group" class="player-cell d-flex flex-column align-items-center justify-content-center" :class="{active: player.targetActive}"
                     @click="select(player.id)">
                     <div>
                         <img :src="player.icon" :alt="player.profession" class="icon"
                             :data-original-title="player.profession">
                         <img v-if="player.health > 0" src="https://wiki.guildwars2.com/images/b/be/Vitality.png" alt="Health"
                             class="icon" :data-original-title="'Health: ' + player.health">
-                        <img v-if="player.condi > 0" src="https://wiki.guildwars2.com/images/5/54/Condition_Damage.png"
-                            alt="Condition Damage" class="icon"
-                            :data-original-title="'Condition Damage: ' + player.condi">
-                        <img v-if="player.conc > 0" src="https://wiki.guildwars2.com/images/4/44/Boon_Duration.png"
-                            alt="Concentration" class="icon" :data-original-title="'Concentration: ' + player.conc">
-                        <img v-if="player.heal > 0" src="https://wiki.guildwars2.com/images/8/81/Healing_Power.png"
-                            alt="Healing Power" class="icon" :data-original-title="'Healing Power: ' + player.heal">
-                        <img v-if="player.tough > 0" src="https://wiki.guildwars2.com/images/1/12/Toughness.png"
-                            alt="Toughness" class="icon" :data-original-title="'Toughness: ' + player.tough">
                     </div>
                     <div v-if="player.l1Set.length > 0 || player.l2Set.length > 0">
                         <img v-for="wep in player.l1Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
@@ -46,7 +36,7 @@
 
 
 <script>
-    Vue.component("player-component", {
+    Vue.component("player-target-component", {
         props: ["players"],
         template: `${template}`,
         methods: {
@@ -54,16 +44,10 @@
                 return urls[path];
             },
             select: function (id) {
-                for (var i = 0; i < this.players.length; i++) {
-                    this.players[i].active = false;
-                }
-                this.players[id].active = true;
+                this.players[id].targetActive = !this.players[id].targetActive;
             }
         },
         computed: {
-            scoreExpl: function () {
-                return "<span style='text-align:left;display: block;'>Scores are relative to the squad. 10 means that that player had the highest stat in the squad. 8 means that that player had between 80% and 89% of the highest scored player's stat.</span>"
-            },
             groups: function () {
                 var aux = [];
                 var i = 0;
@@ -77,7 +61,7 @@
                     }
                     var toPush = {};
                     Object.assign(toPush, playerData);
-                    toPush.active = this.players[i].active;
+                    toPush.targetActive = this.players[i].targetActive;
                     aux[playerData.group].push(toPush);
                 }
 

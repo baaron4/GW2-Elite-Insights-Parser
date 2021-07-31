@@ -119,15 +119,17 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;script&gt;
         ///
+        ///    &quot;use strict&quot;;
+        ///
         ///    /*\
         ///    |*|
-        ///    |*|  utilitairezs de manipulations de cha�nes base 64 / binaires / UTF-8
+        ///    |*|  Base64 / binary data / UTF-8 strings utilities
         ///    |*|
-        ///    |*|  https://developer.mozilla.org/fr/docs/D�coder_encoder_en_base64
+        ///    |*|  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Base64_encoding_and_decoding
         ///    |*|
         ///    \*/
         ///
-        ///    /* D�coder un tableau d&apos;octets depuis une cha�ne en base64 */
+        ///    /* Array of bytes to Base64 string decoding */
         ///
         ///    function b64ToUint6(nChr) {
         ///
@@ -136,7 +138,7 @@ namespace GW2EIBuilders.Properties {
         ///            : nChr &gt; 96 &amp;&amp; nChr &lt; 123 ?
         ///                nChr - 71
         ///                : nChr &gt; 47 &amp;&amp; nChr &lt; 58 ?
-        ///                    n [rest of string was truncated]&quot;;.
+        ///                [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string compressionUtils {
             get {
@@ -248,6 +250,22 @@ namespace GW2EIBuilders.Properties {
         ///    dom: &quot;t&quot;
         ///});
         ///
+        ///const quickColor = {
+        ///    r: 220,
+        ///    g: 20,
+        ///    b: 220
+        ///};
+        ///const slowColor = {
+        ///    r: 220,
+        ///    g: 125,
+        ///    b: 30
+        ///};
+        ///const normalColor = {
+        ///    r: 125,
+        ///    g: 125,
+        ///    b: 125
+        ///};
+        ///
         ///const DamageType = {
         ///    All: 0,
         ///    Power: 1,
@@ -255,24 +273,64 @@ namespace GW2EIBuilders.Properties {
         ///    Breakbar: 3
         ///};
         ///
-        ///const GraphType = {
-        ///    DPS: 0,
-        ///    Damage: 1,
-        ///    CenteredDPS: 2
-        ///};
-        ///
-        ///const simpleLogData = {
-        ///    phases: [],
-        ///    players: [],
-        ///    targets: []
-        ///};
-        /////
-        ///// polyfill for string include
-        ///// ht [rest of string was truncated]&quot;;.
+        ///const  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string global {
             get {
                 return ResourceManager.GetString("global", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /*jshint esversion: 6 */
+        ///&quot;use strict&quot;;
+        ///
+        ///function healingGraphTypeEnumToString(mode) {
+        ///    var name = &quot;&quot;;
+        ///    switch (mode) {
+        ///        case GraphType.DPS:
+        ///            name = &quot;HPS&quot;;
+        ///            break;
+        ///        case GraphType.CenteredDPS:
+        ///            name = &quot;Centered HPS&quot;;
+        ///            break;
+        ///        case GraphType.Damage:
+        ///            name = &quot;Healing&quot;;
+        ///            break;
+        ///        default:
+        ///            break;
+        ///    }
+        ///    return name;
+        ///}
+        ///
+        ///function healingTypeEnumToString(mode) {
+        ///    var name = &quot;&quot;;        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string healingExtFunctions {
+            get {
+                return ResourceManager.GetString("healingExtFunctions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /*jshint esversion: 6 */
+        ///&quot;use strict&quot;;
+        ///
+        ///function compileHealingExtTemplates() {
+        ///    TEMPLATE_HEALING_EXT_COMPILE
+        ///};
+        ///
+        ///const HealingType = {
+        ///    All: 0,
+        ///    HealingPower: 1,
+        ///    Conversion: 2,
+        ///    Hybrid: 3
+        ///};
+        ///.
+        /// </summary>
+        internal static string healingExtGlobals {
+            get {
+                return ResourceManager.GetString("healingExtGlobals", resourceCulture);
             }
         }
         
@@ -317,6 +375,27 @@ namespace GW2EIBuilders.Properties {
         internal static string mixins {
             get {
                 return ResourceManager.GetString("mixins", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///            &lt;li&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: tab === 0}&quot; @click=&quot;tab = 0&quot;&gt;Outgoing Healing Stats&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: tab === 1}&quot; @click=&quot;tab = 1&quot;&gt;Incoming Healing Stats&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///        &lt;/ul&gt;
+        ///        &lt;keep-alive&gt;
+        ///            &lt;outgoing-healing-stats-component v-if=&quot;tab === 0&quot; :key=&quot;&apos;healing&apos;&quot; :phaseindex=&quot;phaseindex&quot;
+        ///                : [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmpHealingStatTables {
+            get {
+                return ResourceManager.GetString("tmpHealingStatTables", resourceCulture);
             }
         }
         
@@ -937,7 +1016,7 @@ namespace GW2EIBuilders.Properties {
         ///&lt;/template&gt;
         ///
         ///&lt;script&gt;
-        ///    function addPoints(res, gra [rest of string was truncated]&quot;;.
+        ///    Vue.component(&quot;dps-graph-co [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplDPSGraph {
             get {
@@ -1062,6 +1141,164 @@ namespace GW2EIBuilders.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;div v-if=&quot;player.minions.length &gt; 0&quot;&gt;
+        ///            &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///                &lt;li&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === -1}&quot; @click=&quot;distmode = -1&quot;&gt;{{player.name}}&lt;/a&gt;
+        ///                &lt;/li&gt;
+        ///                &lt;li v-for=&quot;(minion, mindex) in player.minions&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === mindex}&quot;
+        ///                        @click=&quot;distmode = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
+        ///                &lt;/li&gt; [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplHealingDistPlayer {
+            get {
+                return ResourceManager.GetString("tmplHealingDistPlayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;div v-if=&quot;actor !== null&quot; class=&quot;mb-1 mt-1&quot;&gt;
+        ///            &lt;div v-if=&quot;isminion&quot;&gt;
+        ///                &lt;p style=&quot;display: table-row;&quot;&gt;
+        ///                    {{actor.name}} did {{round3(100*healingdist.contributedHealing/healingdist.totalHealing)}}% of its master&apos;s total
+        ///                    {{istarget ? &apos;Target&apos; :&apos;&apos;}} healing ({{healingdist.contributedHealing}})
+        ///                &lt;/p&gt;
+        ///            &lt;/div&gt;
+        ///            &lt;div v-else&gt;
+        ///                &lt;p style=&quot;display: table-row;&quot;&gt;
+        ///     [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplHealingDistTable {
+            get {
+                return ResourceManager.GetString("tmplHealingDistTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;div class=&quot;d-flex flex-row justify-content-center mt-1&quot; id=&quot;healing-phase-nav&quot;&gt;
+        ///            &lt;phase-component :phases=&quot;logdata.phases&quot;&gt;&lt;/phase-component&gt;
+        ///        &lt;/div&gt;
+        ///        &lt;div class=&quot;d-flex flex-row justify-content-center mb-2 mt-2&quot; id=&quot;healing-actors&quot;&gt;
+        ///            &lt;div class=&quot;flex-row justify-content-center align-items-center flex-wrap mr-5&quot;&gt;
+        ///                &lt;player-target-component :players=&quot;logdata.players&quot;&gt;&lt;/player-target-component&gt;
+        ///            &lt;/div&gt;
+        ///         [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplHealingExtensionView {
+            get {
+                return ResourceManager.GetString("tmplHealingExtensionView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;div&gt;
+        ///            &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///                &lt;li&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: mode === 0}&quot; @click=&quot;mode = 0&quot;&gt;Total&lt;/a&gt;
+        ///                &lt;/li&gt;
+        ///                &lt;li&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: mode === 1}&quot; @click=&quot;mode = 1&quot;&gt;Target&lt;/a&gt;
+        ///                &lt;/li&gt;
+        ///                &lt;li&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: mode === 2}&quot; @click=&quot;mode = 2&quot;&gt;Cleave&lt;/a&gt;
+        ///                &lt;/li&gt;
+        ///  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplHealingGraphStats {
+            get {
+                return ResourceManager.GetString("tmplHealingGraphStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;healingdist-table-component :healingdist=&quot;healingtaken&quot; :tableid=&quot;tableid&quot; :actorindex=&quot;-1&quot; :minionindex=&quot;-1&quot; :istarget=&quot;false&quot; :player=&quot;true&quot;
+        ///        :phaseindex=&quot;phaseindex&quot;&gt;
+        ///    &lt;/healingdist-table-component&gt;
+        ///&lt;/template&gt;
+        ///
+        ///&lt;script&gt;
+        ///    Vue.component(&apos;healingtaken-component&apos;, {
+        ///        props: [&apos;actorindex&apos;, &apos;tableid&apos;,
+        ///            &apos;phaseindex&apos;
+        ///        ],
+        ///        template: `${template}`,
+        ///        computed: {
+        ///            healingtaken: function () {
+        ///                return logData.h [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplHealingTaken {
+            get {
+                return ResourceManager.GetString("tmplHealingTaken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;      
+        ///        &lt;hps-graph-mode-selector-component :data=&quot;graphhealingdata&quot;
+        ///            :phaseduration=&quot;this.phase.end - this.phase.start&quot; :phasehassubphases=&quot;!!this.phase.subPhases&quot; :column=&quot;false&quot;&gt;
+        ///        &lt;/hps-graph-mode-selector-component&gt;
+        ///        &lt;h3 class=&quot;text-center mt-1 mb-1&quot;&gt;{{graphname}}&lt;/h3&gt;
+        ///        &lt;graph-component :id=&quot;graphid&quot; :layout=&quot;layout&quot; :data=&quot;computeData&quot;&gt;&lt;/graph-component&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/template&gt;
+        ///
+        ///&lt;script&gt;
+        ///    Vue.component(&quot;hps-graph-component&quot;, {
+        ///     [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplHPSGraph {
+            get {
+                return ResourceManager.GetString("tmplHPSGraph", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;     
+        ///        &lt;ul class=&quot;nav nav-pills d-flex flex-wrap justify-content-center mr-3 scale85&quot; :class=&quot;{&apos;flex-row&apos;: !column, &apos;flex-column&apos;: column}&quot;&gt;
+        ///            &lt;li class=&quot;nav-item&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;data.hpsmode = 0&quot; :class=&quot;{active: data.hpsmode === 0}&quot;&gt;Full&lt;/a&gt;
+        ///            &lt;/li&gt;            
+        ///            &lt;li v-if=&quot;phaseduration &gt; 4&quot; class=&quot;nav-item&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;data [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplHPSGraphModeSelector {
+            get {
+                return ResourceManager.GetString("tmplHPSGraphModeSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot; id=&quot;incoming-heal-table&quot;&gt;
+        ///            &lt;thead&gt;
+        ///                &lt;tr&gt;
+        ///                    &lt;th class=&quot;sub-cell&quot;&gt;Sub&lt;/th&gt;
+        ///                    &lt;th class=&quot;prof-cell&quot;&gt;&lt;/th&gt;
+        ///                    &lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
+        ///                    &lt;th&gt;Account&lt;/th&gt;
+        ///                    &lt;th class=&quot;damage-cell&quot; data-original-title=&quot;Healed&quot; &gt;
+        ///                        &lt;img src=&quot;https://wiki.guildwars2.c [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplIncomingHealingTable {
+            get {
+                return ResourceManager.GetString("tmplIncomingHealingTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
         ///&lt;html lang=&quot;en&quot;&gt;
         ///
@@ -1118,6 +1355,25 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
+        ///        &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot; id=&quot;hps-table&quot;&gt;
+        ///            &lt;thead&gt;
+        ///                &lt;tr&gt;
+        ///                    &lt;th class=&quot;sub-cell&quot;&gt;Sub&lt;/th&gt;
+        ///                    &lt;th class=&quot;prof-cell&quot;&gt;&lt;/th&gt;
+        ///                    &lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
+        ///                    &lt;th&gt;Account&lt;/th&gt;
+        ///                    &lt;th data-original-title=&quot;All&quot; class=&quot;damage-cell&quot;&gt;
+        ///                        Target &lt;img src=&quot;https://wiki.guildwars2.com/imag [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplOutgoingHealingTable {
+            get {
+                return ResourceManager.GetString("tmplOutgoingHealingTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
         ///        &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mt-1 mb-1 scale85&quot;&gt;
         ///            &lt;li v-for=&quot;base in bases&quot; class=&quot;nav-item&quot;&gt;
         ///                &lt;a class=&quot;nav-link&quot; @click=&quot;mode = base&quot; :class=&quot;{active: mode === base}&quot;&gt;{{ base }}&lt;/a&gt;
@@ -1154,12 +1410,67 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
+        ///        &lt;h3 v-for=&quot;player in players&quot; :key=&quot;player.id&quot; v-show=&quot;player.id === activeplayer&quot;
+        ///            class=&quot;text-center mt-2&quot;&gt;&lt;img :alt=&quot;player.profession&quot; class=&quot;icon&quot; :src=&quot;player.icon&quot;&gt;{{player.name}}&lt;/h3&gt;
+        ///        &lt;ul class=&quot;nav nav-tabs&quot; v-show=&quot;activeplayer &gt; -1&quot;&gt;
+        ///            &lt;li&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: tabmode === 0}&quot; @click=&quot;tabmode = 0&quot;&gt;
+        ///                    Outgoing Healing
+        ///                    Distribution
+        ///                &lt;/a&gt;
+        ///           [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplPlayerHealingStats {
+            get {
+                return ResourceManager.GetString("tmplPlayerHealingStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;keep-alive&gt;
+        ///            &lt;healingdist-player-component v-if=&quot;tabmode === 0&quot; :key=&quot;&apos;healingdist&apos; + playerindex&quot; :playerindex=&quot;playerindex&quot;
+        ///                :phaseindex=&quot;phaseindex&quot; :activetargets=&quot;activetargets&quot;&gt;&lt;/healingdist-player-component&gt;
+        ///            &lt;healingtaken-component v-if=&quot;tabmode ===1&quot; :key=&quot;&apos;healingtaken&apos; + playerindex&quot; :actorindex=&quot;playerindex&quot;
+        ///                :tableid=&quot;&apos;healingtaken-player-&apos;+playerindex&quot; :phaseindex=&quot;phaseindex&quot;&gt;&lt;/healingtaken-component&gt;
+        ///    [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplPlayerHealingTab {
+            get {
+                return ResourceManager.GetString("tmplPlayerHealingTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;hps-graph-mode-selector-component :data=&quot;graphhealingdata&quot;
+        ///            :phaseduration=&quot;this.phase.end - this.phase.start&quot; :phasehassubphases=&quot;!!this.phase.subPhases&quot; :column=&quot;false&quot;&gt;
+        ///        &lt;/hps-graph-mode-selector-component&gt;
+        ///        &lt;h3 class=&quot;text-center mt-1 mb-1&quot;&gt;{{graphname}}&lt;/h3&gt;
+        ///        &lt;graph-component :id=&quot;graphid&quot; :layout=&quot;layout&quot; :data=&quot;computeData&quot;&gt;&lt;/graph-component&gt;
+        ///        &lt;rotation-legend-component&gt;&lt;/rotation-legend-component&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/template&gt;
+        ///        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplPlayerHealingTabGraph {
+            get {
+                return ResourceManager.GetString("tmplPlayerHealingTabGraph", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
         ///        &lt;img class=&quot;icon mb-1&quot; src=&quot;https://i.imgur.com/nSYuby8.png&quot; :data-original-title=&quot;scoreExpl&quot; /&gt;
         ///        &lt;div class=&quot;d-flex flex-column&quot; style=&quot;max-width: 900px;&quot;&gt;
         ///            &lt;div v-for=&quot;group in groups&quot; class=&quot;d-flex flex-wrap mb-1&quot;&gt;
-        ///                &lt;div v-for=&quot;player in group&quot; class=&quot;player-cell d-flex flex-column align-items-center justify-content-center&quot; :class=&quot;{active: player.id === playerindex}&quot;
+        ///                &lt;div v-for=&quot;player in group&quot; class=&quot;player-cell d-flex flex-column align-items-center justify-content-center&quot; :class=&quot;{active: player.active}&quot;
         ///                    @click=&quot;select(player.id)&quot;&gt;
-        ///                    &lt; [rest of string was truncated]&quot;;.
+        ///                    &lt;div&gt;
+        ///       [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayers {
             get {
@@ -1224,11 +1535,10 @@ namespace GW2EIBuilders.Properties {
         ///        &lt;ul class=&quot;nav nav-tabs&quot; v-show=&quot;activeplayer &gt; -1&quot;&gt;
         ///            &lt;li&gt;
         ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: tabmode === 0}&quot; @click=&quot;tabmode = 0&quot;&gt;
-        ///                    Damage
+        ///                    Outgoing Damage
         ///                    Distribution
         ///                &lt;/a&gt;
-        ///            &lt;/li&gt;
-        ///  [rest of string was truncated]&quot;;.
+        ///            [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayerStats {
             get {
@@ -1360,6 +1670,23 @@ namespace GW2EIBuilders.Properties {
         internal static string tmplTargetData {
             get {
                 return ResourceManager.GetString("tmplTargetData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;div class=&quot;d-flex flex-column&quot; style=&quot;max-width: 900px;&quot;&gt;
+        ///            &lt;div v-for=&quot;group in groups&quot; class=&quot;d-flex flex-wrap mb-1&quot;&gt;
+        ///                &lt;div v-for=&quot;player in group&quot; class=&quot;player-cell d-flex flex-column align-items-center justify-content-center&quot; :class=&quot;{active: player.targetActive}&quot;
+        ///                    @click=&quot;select(player.id)&quot;&gt;
+        ///                    &lt;div&gt;
+        ///                        &lt;img :src=&quot;player.icon&quot; :alt=&quot;player.profession&quot; class=&quot;icon&quot;
+        ///                    [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplTargetPlayers {
+            get {
+                return ResourceManager.GetString("tmplTargetPlayers", resourceCulture);
             }
         }
         

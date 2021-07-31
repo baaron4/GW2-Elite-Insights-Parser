@@ -1,32 +1,22 @@
 ﻿using System.Collections.Generic;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIBuilders.HtmlModels
 {
-    internal class SkillDto
+    internal class SkillDto : AbstractSkillDto
     {
-        public long Id { get; set; }
-        public string Name { get; set; }
-        public string Icon { get; set; }
         public bool Aa { get; set; }
         public bool IsSwap { get; set; }
         public bool NotAccurate { get; set; }
-        public bool ConversionBasedHealing { get; set; }
 
-        public SkillDto(SkillItem skill, ParsedEvtcLog log)
+        public SkillDto(SkillItem skill, ParsedEvtcLog log) : base(skill, log)
         {
-            Id = skill.ID;
-            Name = skill.Name;
-            Icon = skill.Icon;
             Aa = skill.AA;
             IsSwap = skill.IsSwap;
             NotAccurate = log.SkillData.IsNotAccurate(skill.ID);
-            if (log.CombatData.HasEXTHealing)
-            {
-                ConversionBasedHealing = log.CombatData.EXTHealingCombatData.GetHealingType(skill, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.ConversionBased;
-            }
         }
 
         public static void AssembleSkills(ICollection<SkillItem> skills, Dictionary<string, SkillDto> dict, ParsedEvtcLog log)

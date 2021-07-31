@@ -20,6 +20,7 @@
         public bool IsMoving { get; }
         public bool AgainstMoving { get; }
         public bool IsFlanking { get; }
+        public bool AgainstDowned { get; protected set; }
 
         internal AbstractDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem.Time)
         {

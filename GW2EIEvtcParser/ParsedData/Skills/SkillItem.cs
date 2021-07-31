@@ -26,6 +26,7 @@ namespace GW2EIEvtcParser.ParsedData
         public const int SecondWaterSet = 1;
         public const int TransformSet = 3;
         public const int KitSet = 2;
+
         private static readonly Dictionary<long, string> _overrideNames = new Dictionary<long, string>()
         {
             {ResurrectId, "Resurrect"},
