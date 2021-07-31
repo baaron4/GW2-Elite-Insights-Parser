@@ -10,6 +10,7 @@ namespace GW2EIEvtcParser.Extensions
         internal EXTDirectHealingEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
             HealingDone = -evtcItem.Value;
+            AgainstDowned = evtcItem.IsOffcycle == 1;
         }
     }
 }
