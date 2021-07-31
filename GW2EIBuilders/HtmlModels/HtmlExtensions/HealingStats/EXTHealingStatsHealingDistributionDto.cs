@@ -55,7 +55,10 @@ namespace GW2EIBuilders.HtmlModels
                     usedSkills.Add(skill.ID, skill);
                 }
             }
-
+            if (castLogsBySkill != null && castLogsBySkill.ContainsKey(skill))
+            {
+                isIndirectHealing = false;
+            }
             long timeCasting = 0;
             int casts = 0, timeWasted = 0, timeSaved = 0;
             if (!isIndirectHealing && castLogsBySkill != null && castLogsBySkill.TryGetValue(skill, out List<AbstractCastEvent> clList))
@@ -124,7 +127,7 @@ namespace GW2EIBuilders.HtmlModels
                 list.Add(GetHealingToItem(pair.Key, pair.Value, castLogsBySkill, usedSkills, usedBuffs, log.Buffs, phase));
             }
             // non damaging
-            foreach (KeyValuePair<SkillItem, List<AbstractCastEvent>> pair in castLogsBySkill)
+            /*foreach (KeyValuePair<SkillItem, List<AbstractCastEvent>> pair in castLogsBySkill)
             {
                 if (healingLogsBySkill.ContainsKey(pair.Key))
                 {
@@ -170,7 +173,7 @@ namespace GW2EIBuilders.HtmlModels
                     timeCasting
                 };
                 list.Add(skillData);
-            }
+            }*/
             return list;
         }
 
