@@ -36,14 +36,21 @@ var numberComponent = {
     }
 };
 
-var graphComponent = {
-    data: function () {
+var damageGraphComponent = {
+    data: function() {
         return {
             graphdata: {
                 dpsmode: 0,
                 graphmode: logData.wvw ? GraphType.Damage : GraphType.DPS,
                 damagemode: DamageType.All,
-            },
+            }
+        };
+    },
+};
+
+var graphComponent = {
+    data: function () {
+        return {
             layout: {},
             dpsCache: new Map(),
             dataCache: new Map(),

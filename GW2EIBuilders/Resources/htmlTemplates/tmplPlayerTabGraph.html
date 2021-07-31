@@ -14,7 +14,7 @@
     Vue.component("player-graph-tab-component", {
         props: ["playerindex", "phaseindex", "activetargets", "light"],
         template: `${template}`,
-        mixins: [graphComponent],
+        mixins: [graphComponent, damageGraphComponent],
         data: function () {
             return {
                 playerOffset: 0,

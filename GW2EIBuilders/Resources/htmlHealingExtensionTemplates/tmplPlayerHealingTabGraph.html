@@ -14,16 +14,11 @@
     Vue.component("player-healing-graph-tab-component", {
         props: ["playerindex", "phaseindex", "activetargets", "light"],
         template: `${template}`,
-        mixins: [graphComponent],
+        mixins: [graphComponent, healingGraphComponent],
         data: function () {
             return {
                 playerOffset: 0,
-                graphOffset: 0,
-                graphhealingdata: {
-                    hpsmode: 0,
-                    graphmode: GraphType.Damage,
-                    healingmode: HealingType.All,
-                },
+                graphOffset: 0
             };
         },
         watch: {

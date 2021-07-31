@@ -12,16 +12,7 @@
     Vue.component("hps-graph-component", {
         props: ["activetargets", 'mode', 'phaseindex', 'playerindex', 'light'],
         template: `${template}`,       
-        mixins: [graphComponent],
-        data: function () {
-            return {
-                graphhealingdata: {
-                    hpsmode: 0,
-                    graphmode: GraphType.Damage,
-                    healingmode: HealingType.All,
-                },
-            };
-        },
+        mixins: [graphComponent, healingGraphComponent],
         created: function () {
             // layout - constant during whole lifetime
             var textColor = this.light ? '#495057' : '#cccccc';

@@ -91,7 +91,7 @@
     Vue.component("target-graph-tab-component", {
         props: ["targetindex", "phaseindex", 'light'],
         template: `${template}`,
-        mixins: [graphComponent],
+        mixins: [graphComponent, damageGraphComponent],
         data: function () {
             return {
                 targetOffset: 0
