@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.Extensions
                 HealReceivedEvents = new List<EXTAbstractHealingEvent>();
                 foreach (NPC minion in _minionList)
                 {
-                    HealEvents.AddRange(minion.EXTHealing.GetIncomingHealEvents(null, log, 0, log.FightData.FightEnd));
+                    HealReceivedEvents.AddRange(minion.EXTHealing.GetIncomingHealEvents(null, log, 0, log.FightData.FightEnd));
                 }
                 HealReceivedEvents = HealReceivedEvents.OrderBy(x => x.Time).ToList();
                 HealReceivedEventsBySrc = HealReceivedEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
