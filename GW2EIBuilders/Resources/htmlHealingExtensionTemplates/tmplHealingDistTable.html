@@ -138,18 +138,27 @@
                 sortdata: {
                     order: "desc",
                     index: 2
-                }
+                },
+                divElement: null
             };
         },
         mixins: [numberComponent],
         mounted() {
             initializeTable(this.tableid, this.sortdata);
+            this.divElement =  $("#" + this.tableid);
+        },
+        beforeUpdate() {
+            this.divElement
+                .DataTable()
+                .destroy();
         },
         updated() {      
             initializeTable(this.tableid, this.sortdata);
+            this.divElement =  $("#" + this.tableid);
         },
         activated() {             
             initializeTable(this.tableid, this.sortdata);
+            this.divElement =  $("#" + this.tableid);
         },
         methods: {
             getSkill: function (isBoon, id) {

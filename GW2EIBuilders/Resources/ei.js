@@ -97,6 +97,7 @@ function mainLoad() {
             light: typeof (window.theme) !== "undefined" ? (window.theme === 'yeti') : logData.lightTheme,
             mode: 0,
             cr: !!crData,
+            healingExtShow: !!healingStatsExtension || logData.evtcVersion >= 20210701,
             healingExt: !!healingStatsExtension
         },
         methods: {

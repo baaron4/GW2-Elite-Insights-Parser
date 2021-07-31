@@ -714,11 +714,7 @@ function _initTable (id, cell, order, orderCallBack) {
     //}
 };
 
-function initializeTable(tableid, sortdata) {   
-    $("#" + tableid)
-    .DataTable()
-    .destroy();   
-
+function initializeTable(tableid, sortdata) {
     _initTable(
         "#" + tableid,
         sortdata.index,
