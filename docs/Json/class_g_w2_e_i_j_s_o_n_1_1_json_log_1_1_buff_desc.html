@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="LI.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Guild Wars 2 - Elite Insights
-   &#160;<span id="projectnumber">2.35+</span>
+   &#160;<span id="projectnumber">2.36+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -110,6 +110,12 @@ Properties</h2></td></tr>
 <tr class="memitem:ac0d68686cd784720f6025de293392527"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_buff_desc.html#ac0d68686cd784720f6025de293392527">Stacking</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:ac0d68686cd784720f6025de293392527"><td class="mdescLeft">&#160;</td><td class="mdescRight">True if the buff is stacking  <a href="#ac0d68686cd784720f6025de293392527">More...</a><br /></td></tr>
 <tr class="separator:ac0d68686cd784720f6025de293392527"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8473c67de9a8a75537f9d1f6b52e51f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_buff_desc.html#af8473c67de9a8a75537f9d1f6b52e51f">ConversionBasedHealing</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:af8473c67de9a8a75537f9d1f6b52e51f"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the buff is encountered in a healing context, true if healing happened because of conversion, false otherwise  <a href="#af8473c67de9a8a75537f9d1f6b52e51f">More...</a><br /></td></tr>
+<tr class="separator:af8473c67de9a8a75537f9d1f6b52e51f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d5cce90498986930346ebb4761e6c52"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_buff_desc.html#a1d5cce90498986930346ebb4761e6c52">HybridHealing</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a1d5cce90498986930346ebb4761e6c52"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the buff is encountered in a healing context, true if healing could have happened due to conversion or healing power  <a href="#a1d5cce90498986930346ebb4761e6c52">More...</a><br /></td></tr>
+<tr class="separator:a1d5cce90498986930346ebb4761e6c52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6df6ae0a11c99ae057b2b422eac1e5db"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_buff_desc.html#a6df6ae0a11c99ae057b2b422eac1e5db">Descriptions</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a6df6ae0a11c99ae057b2b422eac1e5db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Descriptions of the buffs (no traits)  <a href="#a6df6ae0a11c99ae057b2b422eac1e5db">More...</a><br /></td></tr>
 <tr class="separator:a6df6ae0a11c99ae057b2b422eac1e5db"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -117,6 +123,30 @@ Properties</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Describs the buff item </p>
 </div><h2 class="groupheader">Property Documentation</h2>
+<a id="af8473c67de9a8a75537f9d1f6b52e51f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8473c67de9a8a75537f9d1f6b52e51f">&#9670;&nbsp;</a></span>ConversionBasedHealing</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool GW2EIJSON.JsonLog.BuffDesc.ConversionBasedHealing</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If the buff is encountered in a healing context, true if healing happened because of conversion, false otherwise </p>
+
+</div>
+</div>
 <a id="a6df6ae0a11c99ae057b2b422eac1e5db"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6df6ae0a11c99ae057b2b422eac1e5db">&#9670;&nbsp;</a></span>Descriptions</h2>
 
@@ -138,6 +168,30 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Descriptions of the buffs (no traits) </p>
+
+</div>
+</div>
+<a id="a1d5cce90498986930346ebb4761e6c52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d5cce90498986930346ebb4761e6c52">&#9670;&nbsp;</a></span>HybridHealing</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool GW2EIJSON.JsonLog.BuffDesc.HybridHealing</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If the buff is encountered in a healing context, true if healing could have happened due to conversion or healing power </p>
 
 </div>
 </div>

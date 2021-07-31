@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="LI.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Guild Wars 2 - Elite Insights
-   &#160;<span id="projectnumber">2.35+</span>
+   &#160;<span id="projectnumber">2.36+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -119,6 +119,12 @@ Properties</h2></td></tr>
 <tr class="memitem:a263adadb266370df3431a5a90e66f364"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a263adadb266370df3431a5a90e66f364">IsNotAccurate</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a263adadb266370df3431a5a90e66f364"><td class="mdescLeft">&#160;</td><td class="mdescRight">True in case where the skill is an instant cast and the detection may have missed some  <a href="#a263adadb266370df3431a5a90e66f364">More...</a><br /></td></tr>
 <tr class="separator:a263adadb266370df3431a5a90e66f364"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00216f7ed7828a28eaec5018f6f1e71c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a00216f7ed7828a28eaec5018f6f1e71c">ConversionBasedHealing</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a00216f7ed7828a28eaec5018f6f1e71c"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the skill is encountered in a healing context, true if healing happened because of conversion, false otherwise  <a href="#a00216f7ed7828a28eaec5018f6f1e71c">More...</a><br /></td></tr>
+<tr class="separator:a00216f7ed7828a28eaec5018f6f1e71c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22621451e19e8db6d3ad13475bde173b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a22621451e19e8db6d3ad13475bde173b">HybridHealing</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a22621451e19e8db6d3ad13475bde173b"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the skill is encountered in a healing context, true if healing could have happened due to conversion or healing power  <a href="#a22621451e19e8db6d3ad13475bde173b">More...</a><br /></td></tr>
+<tr class="separator:a22621451e19e8db6d3ad13475bde173b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Describes the skill item </p>
@@ -168,6 +174,54 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 
 <p>If the skill can crit </p>
+
+</div>
+</div>
+<a id="a00216f7ed7828a28eaec5018f6f1e71c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00216f7ed7828a28eaec5018f6f1e71c">&#9670;&nbsp;</a></span>ConversionBasedHealing</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool GW2EIJSON.JsonLog.SkillDesc.ConversionBasedHealing</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If the skill is encountered in a healing context, true if healing happened because of conversion, false otherwise </p>
+
+</div>
+</div>
+<a id="a22621451e19e8db6d3ad13475bde173b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22621451e19e8db6d3ad13475bde173b">&#9670;&nbsp;</a></span>HybridHealing</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool GW2EIJSON.JsonLog.SkillDesc.HybridHealing</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If the skill is encountered in a healing context, true if healing could have happened due to conversion or healing power </p>
 
 </div>
 </div>
