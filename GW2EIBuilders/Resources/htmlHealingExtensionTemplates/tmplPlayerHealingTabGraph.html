@@ -173,7 +173,7 @@
         },
         methods: {
             computeDPSData: function () {
-                var cacheID = getDPSGraphCacheID(this.graphhealingdata.hpsmode, this.graphhealingdata.healingmode, this.graphhealingdata.graphmode, this.activetargets, this.phaseindex, null);
+                var cacheID = getHPSGraphCacheID(this.graphhealingdata.hpsmode, this.graphhealingdata.healingmode, this.graphhealingdata.graphmode, this.activetargets, this.phaseindex, null);
                 if (this.dpsCache.has(cacheID)) {
                     return this.dpsCache.get(cacheID);
                 }
@@ -193,7 +193,7 @@
                 return res;
             },
             computeHPSRelatedData: function () {
-                var cacheID = getDPSGraphCacheID(this.graphhealingdata.hpsmode, this.graphhealingdata.healingmode, this.graphhealingdata.graphmode, this.activetargets, this.phaseindex, null);
+                var cacheID = getHPSGraphCacheID(this.graphhealingdata.hpsmode, this.graphhealingdata.healingmode, this.graphhealingdata.graphmode, this.activetargets, this.phaseindex, null);
                 if (this.dataCache.has(cacheID)) {
                     return this.dataCache.get(cacheID);
                 }

@@ -40,6 +40,10 @@ function healingTypeEnumToString(mode) {
     return name;
 }
 
+function getHPSGraphCacheID(hpsmode, healingmode, graphmode, activetargets, phaseIndex, extra) {
+    return "hps" + hpsmode + '-'+ healingmode + '-' + graphmode + '-' + getTargetCacheID(activetargets) + '-' + phaseIndex + (extra !== null ? '-' + extra : '');
+}
+
 function getHealingGraphName(healingMode, graphMode) {
     return healingTypeEnumToString(healingMode) + " " + healingGraphTypeEnumToString(graphMode) + " Graph";
 }

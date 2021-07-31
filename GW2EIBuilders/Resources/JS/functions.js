@@ -68,7 +68,7 @@ function getTargetCacheID(activetargets) {
 }
 
 function getDPSGraphCacheID(dpsmode, damagemode, graphmode, activetargets, phaseIndex, extra) {
-    return dpsmode + '-'+ damagemode + '-' + graphmode + '-' + getTargetCacheID(activetargets) + '-' + phaseIndex + (extra !== null ? '-' + extra : '');
+    return "dps" + dpsmode + '-'+ damagemode + '-' + graphmode + '-' + getTargetCacheID(activetargets) + '-' + phaseIndex + (extra !== null ? '-' + extra : '');
 }
 
 function graphTypeEnumToString(mode) {
