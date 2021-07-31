@@ -80,7 +80,7 @@
                         </li>
                     </ul>
                 </div>
-                <div v-if="cr || healingExt" class="d-flex flex-row justify-content-center align-items-center">
+                <div v-if="cr || healingExtShow" class="d-flex flex-row justify-content-center align-items-center">
                     <ul class="nav nav-pills">
                         <li class="nav-item mb-1">
                             <a class="nav-link" @click="mode = 0" :class="{active: mode === 0}">Statistics</a>
@@ -88,7 +88,7 @@
                         <li v-if="cr" class="nav-item">
                             <a class="nav-link" @click="mode = 1" :class="{active: mode === 1 }">Combat Replay</a>
                         </li>                      
-                        <li v-if="healingExt" class="nav-item">
+                        <li v-if="healingExtShow" class="nav-item">
                             <a class="nav-link" @click="mode = 2" :class="{active: mode === 2 }">Healing Statistics</a>
                         </li>
                     </ul>
@@ -99,8 +99,15 @@
             <keep-alive>
                 <main-view-component v-if="mode === 0" :key="'main-view'" :light="light"></main-view-component>
                 <combat-replay-ui-component v-if="mode === 1" :mode="mode" :key="'combat-replay'" :light="light"></combat-replay-ui-component>
-                <healing-extension-view-component v-if="mode === 2" :mode="mode" :key="'healing-extension'" :light="light"></healing-extension-view-component>
+                <healing-extension-view-component v-if="mode === 2" :mode="mode" :key="'healing-extension'" :light="light"></healing-extension-view-component>            
             </keep-alive>
+            <div v-show="mode === 2 && !healingExt" class="mt-3 mb-3">
+                <h2 class="text-center">
+                    The <a href="https://github.com/Krappa322/arcdps_healing_stats/releases">healing
+                        stats addon</a> is now officially supported by Elite Insights. Make sure to download and enable its
+                    logging features.
+                </h2>
+            </div>
         </div>
         <div class="footer">
             <div>Time Start: {{getLogData().encounterStart}} | Time End: {{getLogData().encounterEnd}}</div>
