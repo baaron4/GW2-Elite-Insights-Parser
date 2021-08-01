@@ -67,7 +67,7 @@ namespace GW2EIBuilders.JsonModels
                 foreach (PhaseData phase in phases)
                 {
                     outgoingHealingAlly.Add(EXTJsonStatsBuilderCommons.BuildOutgoingHealingStatistics(a.EXTHealing.GetOutgoingHealStats(friendly, log, phase.Start, phase.End)));
-                    if (!settings.RawFormatTimelineArrays)
+                    if (settings.RawFormatTimelineArrays)
                     {
                         allyHealing1S.Add(a.EXTHealing.Get1SHealingList(log, phase.Start, phase.End, friendly, HealingStatsExtensionHandler.EXTHealingType.All));
                         allyHealingPowerHealing1S.Add(a.EXTHealing.Get1SHealingList(log, phase.Start, phase.End, friendly, HealingStatsExtensionHandler.EXTHealingType.HealingPower));
@@ -81,7 +81,7 @@ namespace GW2EIBuilders.JsonModels
             {
                 outgoingHealing.Add(EXTJsonStatsBuilderCommons.BuildOutgoingHealingStatistics(a.EXTHealing.GetOutgoingHealStats(null, log, phase.Start, phase.End)));
                 incomingHealing.Add(EXTJsonStatsBuilderCommons.BuildIncomingHealingStatistics(a.EXTHealing.GetIncomingHealStats(null, log, phase.Start, phase.End)));
-                if (!settings.RawFormatTimelineArrays)
+                if (settings.RawFormatTimelineArrays)
                 {
                     healing1S.Add(a.EXTHealing.Get1SHealingList(log, phase.Start, phase.End, null, HealingStatsExtensionHandler.EXTHealingType.All));
                     healingPowerHealing1S.Add(a.EXTHealing.Get1SHealingList(log, phase.Start, phase.End, null, HealingStatsExtensionHandler.EXTHealingType.HealingPower));
