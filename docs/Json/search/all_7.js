@@ -1,11 +1,22 @@
 var searchData=
 [
   ['hascommandertag',['HasCommanderTag',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a66c207adcd20b26b2179ec82e1ba9e69',1,'GW2EIJSON::JsonPlayer']]],
-  ['healing',['Healing',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a02f1322d95ba4cae950a265c6f22c534',1,'GW2EIJSON::JsonActor']]],
+  ['healed',['Healed',['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_incoming_healing_statistics.html#aa02c37cf42f19412d843083aa0054a6f',1,'GW2EIJSON::EXTJsonHealingStatistics::EXTJsonIncomingHealingStatistics']]],
+  ['healing',['Healing',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a02f1322d95ba4cae950a265c6f22c534',1,'GW2EIJSON.JsonActor.Healing()'],['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html#af5809449ba0327688a53f6f08fdbeece',1,'GW2EIJSON.EXTJsonHealingStatistics.EXTJsonOutgoingHealingStatistics.Healing()']]],
+  ['healing1s',['Healing1S',['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_healing_stats.html#a5ddc96ad6994811ac06b0e9a6384e16a',1,'GW2EIJSON::EXTJsonPlayerHealingStats']]],
+  ['healingpowerhealed',['HealingPowerHealed',['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_incoming_healing_statistics.html#a5d32e59096cfa8015badfba5da28c63b',1,'GW2EIJSON::EXTJsonHealingStatistics::EXTJsonIncomingHealingStatistics']]],
+  ['healingpowerhealing',['HealingPowerHealing',['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html#aec341cb3d1896363993d9c5983992e4d',1,'GW2EIJSON::EXTJsonHealingStatistics::EXTJsonOutgoingHealingStatistics']]],
+  ['healingpowerhealing1s',['HealingPowerHealing1S',['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_healing_stats.html#adb474d4c4ddb63902862c8f5b1391321',1,'GW2EIJSON::EXTJsonPlayerHealingStats']]],
+  ['healingpowerhps',['HealingPowerHps',['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html#a3453620480d866ed4c4d418df6d3703f',1,'GW2EIJSON::EXTJsonHealingStatistics::EXTJsonOutgoingHealingStatistics']]],
   ['healthpercentburned',['HealthPercentBurned',['../class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c.html#ab0842d6f5fec2ca25764c9fc771bdaa6',1,'GW2EIJSON::JsonNPC']]],
   ['healthpercents',['HealthPercents',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a078b4a45be686c1f954b631c6e2095a5',1,'GW2EIJSON::JsonActor']]],
   ['hitboxheight',['HitboxHeight',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#ac1d45d1c96b60c59e72819eeba87e1a5',1,'GW2EIJSON::JsonActor']]],
   ['hitboxwidth',['HitboxWidth',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a5b6f7c0c2b730e6f54e181dba74277a5',1,'GW2EIJSON::JsonActor']]],
   ['hitcount',['HitCount',['../class_g_w2_e_i_j_s_o_n_1_1_json_damage_modifier_data_1_1_json_damage_modifier_item.html#a52725f5dbf9b4e660a514f18b6f84302',1,'GW2EIJSON::JsonDamageModifierData::JsonDamageModifierItem']]],
-  ['hits',['Hits',['../class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html#a9f2971f9c9a5d3ae0558cca00895230e',1,'GW2EIJSON::JsonDamageDist']]]
+  ['hits',['Hits',['../class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html#a9f2971f9c9a5d3ae0558cca00895230e',1,'GW2EIJSON.JsonDamageDist.Hits()'],['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_dist.html#a1ce103138442b5ee5c7201be37ecfbba',1,'GW2EIJSON.EXTJsonHealingDist.Hits()']]],
+  ['hps',['Hps',['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html#a97bf54db60afa4ea18e708de20858881',1,'GW2EIJSON::EXTJsonHealingStatistics::EXTJsonOutgoingHealingStatistics']]],
+  ['hybridhealed',['HybridHealed',['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_incoming_healing_statistics.html#a6c1e5baa3f12588a250233f8831700f5',1,'GW2EIJSON::EXTJsonHealingStatistics::EXTJsonIncomingHealingStatistics']]],
+  ['hybridhealing',['HybridHealing',['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html#a071aa73f707c46ec40b0412bff459beb',1,'GW2EIJSON.EXTJsonHealingStatistics.EXTJsonOutgoingHealingStatistics.HybridHealing()'],['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a22621451e19e8db6d3ad13475bde173b',1,'GW2EIJSON.JsonLog.SkillDesc.HybridHealing()'],['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_buff_desc.html#a1d5cce90498986930346ebb4761e6c52',1,'GW2EIJSON.JsonLog.BuffDesc.HybridHealing()']]],
+  ['hybridhealing1s',['HybridHealing1S',['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_healing_stats.html#a5c7e71e7bede9321bbf104738457e3c3',1,'GW2EIJSON::EXTJsonPlayerHealingStats']]],
+  ['hybridhps',['HybridHps',['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html#acfd2159bf370a9ffe79c56cec2e71787',1,'GW2EIJSON::EXTJsonHealingStatistics::EXTJsonOutgoingHealingStatistics']]]
 ];

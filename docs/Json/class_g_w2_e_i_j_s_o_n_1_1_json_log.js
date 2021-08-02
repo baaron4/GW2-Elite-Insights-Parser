@@ -2,6 +2,7 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_log =
 [
     [ "BuffDesc", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_buff_desc.html", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_buff_desc" ],
     [ "DamageModDesc", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_damage_mod_desc.html", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_damage_mod_desc" ],
+    [ "ExtensionDesc", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_extension_desc.html", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_extension_desc" ],
     [ "SkillDesc", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc" ],
     [ "ArcVersion", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a47681fcdcbd7b0cb7456da99fe141bad", null ],
     [ "BuffMap", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a23b06f8c19bd7dbd1c5c8d158f8a620a", null ],
@@ -29,5 +30,6 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_log =
     [ "TimeStart", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#af5d43ad7f496bdf53f36c773930c7abc", null ],
     [ "TimeStartStd", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a005c0638bc9a50b609424337fd14e644", null ],
     [ "TriggerID", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a4003a61ee80e3c7fef014bd904ec5206", null ],
-    [ "UploadLinks", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a21fbdaf3f9e1792936efd93e5f66bafb", null ]
+    [ "UploadLinks", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a21fbdaf3f9e1792936efd93e5f66bafb", null ],
+    [ "UsedExtensions", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#afd2885621101b73d1f33cb2745caddb9", null ]
 ];

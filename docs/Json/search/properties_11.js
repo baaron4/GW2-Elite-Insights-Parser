@@ -4,6 +4,7 @@ var searchData=
   ['selfbuffs',['SelfBuffs',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#acad2d7ba7030578964b2d8309cffbda7',1,'GW2EIJSON::JsonPlayer']]],
   ['selfbuffsactive',['SelfBuffsActive',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a91035d32a6e209b3419e5a7dfc353a9e',1,'GW2EIJSON::JsonPlayer']]],
   ['shielddamage',['ShieldDamage',['../class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html#a8880186b1eb99edad08694b9fad1a35a',1,'GW2EIJSON::JsonDamageDist']]],
+  ['signature',['Signature',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_extension_desc.html#a286388e12ce26b442d8b6c53dc374c97',1,'GW2EIJSON::JsonLog::ExtensionDesc']]],
   ['skillbased',['SkillBased',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_damage_mod_desc.html#a54f67f8cb1f7831576bd995c8defef92',1,'GW2EIJSON::JsonLog::DamageModDesc']]],
   ['skillmap',['SkillMap',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ae3e4ba94e20ae35ce480d98923d3780d',1,'GW2EIJSON::JsonLog']]],
   ['skills',['Skills',['../class_g_w2_e_i_j_s_o_n_1_1_json_rotation.html#afa2cd62e65949326580ba5355a8f16d3',1,'GW2EIJSON::JsonRotation']]],

@@ -2,6 +2,13 @@ var hierarchy =
 [
     [ "GW2EIJSON.JsonLog.BuffDesc", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_buff_desc.html", null ],
     [ "GW2EIJSON.JsonLog.DamageModDesc", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_damage_mod_desc.html", null ],
+    [ "GW2EIJSON.JsonLog.ExtensionDesc", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_extension_desc.html", null ],
+    [ "GW2EIJSON.EXTJsonHealingDist", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_dist.html", null ],
+    [ "GW2EIJSON.EXTJsonHealingStatistics", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics.html", null ],
+    [ "GW2EIJSON.EXTJsonHealingStatistics.EXTJsonIncomingHealingStatistics", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_incoming_healing_statistics.html", null ],
+    [ "GW2EIJSON.EXTJsonMinionsHealingStats", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_minions_healing_stats.html", null ],
+    [ "GW2EIJSON.EXTJsonHealingStatistics.EXTJsonOutgoingHealingStatistics", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html", null ],
+    [ "GW2EIJSON.EXTJsonPlayerHealingStats", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_healing_stats.html", null ],
     [ "GW2EIJSON.JsonActor", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html", [
       [ "GW2EIJSON.JsonNPC", "class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c.html", null ],
       [ "GW2EIJSON.JsonPlayer", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html", null ]

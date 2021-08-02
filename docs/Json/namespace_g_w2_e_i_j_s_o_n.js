@@ -1,5 +1,12 @@
 var namespace_g_w2_e_i_j_s_o_n =
 [
+    [ "EXTJsonHealingDist", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_dist.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_dist" ],
+    [ "EXTJsonHealingStatistics", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics.html", [
+      [ "EXTJsonIncomingHealingStatistics", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_incoming_healing_statistics.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_incoming_healing_statistics" ],
+      [ "EXTJsonOutgoingHealingStatistics", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics" ]
+    ] ],
+    [ "EXTJsonMinionsHealingStats", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_minions_healing_stats.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_minions_healing_stats" ],
+    [ "EXTJsonPlayerHealingStats", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_healing_stats.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_healing_stats" ],
     [ "JsonActor", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html", "class_g_w2_e_i_j_s_o_n_1_1_json_actor" ],
     [ "JsonBuffsUptime", "class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime.html", "class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime" ],
     [ "JsonConsumable", "class_g_w2_e_i_j_s_o_n_1_1_json_consumable.html", "class_g_w2_e_i_j_s_o_n_1_1_json_consumable" ],
