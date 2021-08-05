@@ -61,7 +61,7 @@ namespace GW2EIEvtcParser.Extensions
             {
                 return type;
             }
-            if (log.CombatData.GetDamageData(id).Any(x => (x.ConditionDamageBased(log) || x is DirectHealthDamageEvent) && !x.DoubleProcHit))
+            if (log.CombatData.GetDamageData(id).Any(x => x.HealthDamage > 0 && !x.DoubleProcHit))
             {
                 type = EXTHealingType.ConversionBased;
             }
