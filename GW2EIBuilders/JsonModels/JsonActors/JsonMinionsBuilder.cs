@@ -33,7 +33,7 @@ namespace GW2EIBuilders.JsonModels
                 foreach (AbstractHealthDamageEvent de in minions.GetDamageEvents(null, log, phase.Start, phase.End))
                 {
                     tot += de.HealthDamage;
-                    shdTot = de.ShieldDamage;
+                    shdTot += de.ShieldDamage;
                 }
                 totalDamage.Add(tot);
                 totalShieldDamage.Add(shdTot);
@@ -60,7 +60,7 @@ namespace GW2EIBuilders.JsonModels
                         foreach (AbstractHealthDamageEvent de in minions.GetDamageEvents(tar, log, phase.Start, phase.End))
                         {
                             tot += de.HealthDamage;
-                            shdTot = de.ShieldDamage;
+                            shdTot += de.ShieldDamage;
                         }
                         totalTarDamage.Add(tot);
                         totalTarShieldDamage.Add(shdTot);

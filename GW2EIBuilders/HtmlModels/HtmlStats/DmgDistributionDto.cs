@@ -140,10 +140,11 @@ namespace GW2EIBuilders.HtmlModels
             {
                 Distribution = new List<object[]>()
             };
+            FinalDefensesAll incomingDamageStats = p.GetDefenseStats(log, phase.Start, phase.End);
             IReadOnlyList<AbstractHealthDamageEvent> damageLogs = p.GetDamageTakenEvents(null, log, phase.Start, phase.End);
             var damageLogsBySkill = damageLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
-            dto.ContributedDamage = damageLogs.Sum(x => x.HealthDamage);
-            dto.ContributedShieldDamage = damageLogs.Sum(x => x.ShieldDamage);
+            dto.ContributedDamage = incomingDamageStats.DamageTaken;
+            dto.ContributedShieldDamage = incomingDamageStats.DamageBarrier;
             foreach (KeyValuePair<SkillItem, List<AbstractHealthDamageEvent>> pair in damageLogsBySkill)
             {
                 dto.Distribution.Add(GetDMGDtoItem(pair.Key, pair.Value, null, usedSkills, usedBuffs, log.Buffs, phase));
@@ -226,7 +227,7 @@ namespace GW2EIBuilders.HtmlModels
             IReadOnlyList<AbstractCastEvent> casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End);
             IReadOnlyList<AbstractHealthDamageEvent> damageLogs = p.GetJustActorDamageEvents(target, log, phase.Start, phase.End);
             dto.ContributedDamage = dps.ActorDamage;
-            dto.ContributedShieldDamage = damageLogs.Sum(x => x.ShieldDamage);
+            dto.ContributedShieldDamage = dps.ActorBarrierDamage;
             dto.ContributedBreakbarDamage = dps.ActorBreakbarDamage;
             dto.TotalDamage = dps.Damage;
             dto.TotalBreakbarDamage = dps.BreakbarDamage;
