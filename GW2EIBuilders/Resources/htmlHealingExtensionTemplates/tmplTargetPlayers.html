@@ -1,35 +1,47 @@
 <template>
     <div>
-        <div class="d-flex flex-column" style="max-width: 900px;">
-            <div v-for="group in groups" class="d-flex flex-wrap mb-1">
-                <div v-for="player in group" class="player-cell d-flex flex-column align-items-center justify-content-center" :class="{active: player.targetActive}"
-                    @click="select(player.id)">
-                    <div>
-                        <img :src="player.icon" :alt="player.profession" class="icon"
-                            :data-original-title="player.profession">
-                        <img v-if="player.health > 0" src="https://wiki.guildwars2.com/images/b/be/Vitality.png" alt="Health"
-                            class="icon" :data-original-title="'Health: ' + player.health">
-                    </div>
-                    <div v-if="player.l1Set.length > 0 || player.l2Set.length > 0">
-                        <img v-for="wep in player.l1Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
-                        <span v-if="player.l1Set.length > 0 && player.l2Set.length > 0">/</span>
-                        <img v-for="wep in player.l2Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
-                    </div>
-                    <div v-if="player.a1Set.length > 0 || player.a2Set.length > 0">
-                        <img v-for="wep in player.a1Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
-                        <span v-if="player.a1Set.length > 0 && player.a2Set.length > 0">/</span>
-                        <img v-for="wep in player.a2Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
-                    </div>
-                    <div class="d-flex align-items-center justify-content-center">
-                        <img v-if="player.isCommander"
-                            src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png" alt="Commander"
-                            class="icon" data-original-title="Commander">
-                        <span class="player-cell-shorten" :data-original-title="player.acc">
-                            {{ player.name }}
-                        </span>
+        <div class="d-flex flex-column">
+            <div v-for="group in groups" class="d-flex flex-row">
+                <div>
+                    <ul class="nav nav-tabs">
+                        <li>
+                            <a class="nav-link" @click="selectGroup(group)">
+                                Select
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="d-flex flex-wrap mb-1" style="max-width: 900px;">
+                    <div v-for="player in group" class="player-cell d-flex flex-column align-items-center justify-content-center" :class="{active: player.targetActive}"
+                        @click="select(player.id)">
+                        <div>
+                            <img :src="player.icon" :alt="player.profession" class="icon"
+                                :data-original-title="player.profession">
+                            <img v-if="player.health > 0" src="https://wiki.guildwars2.com/images/b/be/Vitality.png" alt="Health"
+                                class="icon" :data-original-title="'Health: ' + player.health">
+                        </div>
+                        <div v-if="player.l1Set.length > 0 || player.l2Set.length > 0">
+                            <img v-for="wep in player.l1Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
+                            <span v-if="player.l1Set.length > 0 && player.l2Set.length > 0">/</span>
+                            <img v-for="wep in player.l2Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
+                        </div>
+                        <div v-if="player.a1Set.length > 0 || player.a2Set.length > 0">
+                            <img v-for="wep in player.a1Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
+                            <span v-if="player.a1Set.length > 0 && player.a2Set.length > 0">/</span>
+                            <img v-for="wep in player.a2Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
+                        </div>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <img v-if="player.isCommander"
+                                src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png" alt="Commander"
+                                class="icon" data-original-title="Commander">
+                            <span class="player-cell-shorten" :data-original-title="player.acc">
+                                {{ player.name }}
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
+            
         </div>
     </div>
 </template>
@@ -45,6 +57,15 @@
             },
             select: function (id) {
                 this.players[id].targetActive = !this.players[id].targetActive;
+            },
+            selectGroup: function (group) {
+                var enable = true;
+                if (group.filter(x => x.targetActive).length === group.length) {
+                    enable = false;
+                }
+                for( var i = 0; i < group.length; i++) {
+                    this.players[group[i].id].targetActive = enable;
+                }
             }
         },
         computed: {
