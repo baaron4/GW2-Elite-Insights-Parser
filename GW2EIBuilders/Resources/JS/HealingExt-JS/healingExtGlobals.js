@@ -10,7 +10,7 @@ var healingGraphComponent = {
         return {     
             graphhealingdata: {
                 hpsmode: 0,
-                graphmode: GraphType.Damage,
+                graphmode: logData.wvw ? GraphType.Damage : GraphType.DPS,
                 healingmode: HealingType.All,
             },
         };
