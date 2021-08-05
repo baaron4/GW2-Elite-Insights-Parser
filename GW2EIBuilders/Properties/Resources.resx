@@ -341,8 +341,8 @@
   <data name="tmplIncomingHealingTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlHealingExtensionTemplates\tmplIncomingHealingTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="tmpHealingStatTables" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\htmlHealingExtensionTemplates\tmpHealingStatTables.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="tmplHealingStatTables" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\htmlHealingExtensionTemplates\tmplHealingStatTables.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="tmplOutgoingHealingTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlHealingExtensionTemplates\tmplOutgoingHealingTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>

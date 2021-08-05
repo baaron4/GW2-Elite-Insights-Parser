@@ -161,7 +161,7 @@ namespace GW2EIBuilders
                 Properties.Resources.tmplHealingExtensionView,
                 Properties.Resources.tmplTargetPlayers,
                 Properties.Resources.tmplIncomingHealingTable,
-                Properties.Resources.tmpHealingStatTables,
+                Properties.Resources.tmplHealingStatTables,
                 Properties.Resources.tmplOutgoingHealingTable,
                 Properties.Resources.tmplHPSGraphModeSelector,
                 Properties.Resources.tmplHPSGraph,
