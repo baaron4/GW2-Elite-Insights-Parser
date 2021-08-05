@@ -25,7 +25,7 @@ namespace GW2EIEvtcParser.Extensions
 
         internal abstract void InsertEIExtensionEvent(CombatItem c, AgentData agentData, SkillData skillData);
 
-        internal abstract void AttachToCombatData(CombatData combatData, ParserController operation);
+        internal abstract void AttachToCombatData(CombatData combatData, ParserController operation, ulong gw2Build);
 
     }
 }
