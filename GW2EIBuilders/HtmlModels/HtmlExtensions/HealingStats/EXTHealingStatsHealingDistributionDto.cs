@@ -11,6 +11,7 @@ namespace GW2EIBuilders.HtmlModels
     internal class EXTHealingStatsHealingDistributionDto
     {
         public long ContributedHealing { get; set; }
+        public long ContributedDownedHealing { get; set; }
         public long TotalHealing { get; set; }
         public long TotalCasting { get; set; }
         public List<object[]> Distribution { get; set; }
@@ -18,6 +19,7 @@ namespace GW2EIBuilders.HtmlModels
         private static object[] GetHealingToItem(SkillItem skill, List<EXTAbstractHealingEvent> healingLogs, Dictionary<SkillItem, List<AbstractCastEvent>> castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
         {
             int totalhealing = 0,
+                totaldownedhealing = 0,
                     minhealing = int.MaxValue,
                     maxhealing = int.MinValue,
                     hits = 0;
@@ -30,6 +32,10 @@ namespace GW2EIBuilders.HtmlModels
                 hits++;
                 if (curdmg < minhealing) { minhealing = curdmg; }
                 if (curdmg > maxhealing) { maxhealing = curdmg; }
+                if (dl.AgainstDowned)
+                {
+                    totaldownedhealing += dl.HealingDone;
+                }
 
             }
             if (isIndirectHealing)
@@ -93,7 +99,8 @@ namespace GW2EIBuilders.HtmlModels
                     isIndirectHealing ? 0 : -timeWasted / 1000.0,
                     isIndirectHealing ? 0 : timeSaved / 1000.0,
                     hits,
-                    isIndirectHealing ? 0 : timeCasting
+                    isIndirectHealing ? 0 : timeCasting,
+                    totaldownedhealing
                 };
             return skillItem;
         }
@@ -104,9 +111,11 @@ namespace GW2EIBuilders.HtmlModels
             {
                 Distribution = new List<object[]>()
             };
+            EXTFinalIncomingHealingStat incomingHealingStats = p.EXTHealing.GetIncomingHealStats(null, log, phase.Start, phase.End);
             IReadOnlyList<EXTAbstractHealingEvent> healingLogs = p.EXTHealing.GetIncomingHealEvents(null, log, phase.Start, phase.End);
             var healingLogsBySkill = healingLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
-            dto.ContributedHealing = healingLogs.Sum(x => x.HealingDone);
+            dto.ContributedHealing = incomingHealingStats.Healed;
+            dto.ContributedDownedHealing = incomingHealingStats.DownedHealed;
             var conditionsById = log.StatisticsHelper.PresentConditions.ToDictionary(x => x.ID);
             foreach (KeyValuePair<SkillItem, List<EXTAbstractHealingEvent>> pair in healingLogsBySkill)
             {
@@ -183,6 +192,7 @@ namespace GW2EIBuilders.HtmlModels
             IReadOnlyList<AbstractCastEvent> casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End);
             IReadOnlyList<EXTAbstractHealingEvent> healingLogs = p.EXTHealing.GetJustActorOutgoingHealEvents(target, log, phase.Start, phase.End);
             dto.ContributedHealing = outgoingHealingStats.ActorHealing;
+            dto.ContributedDownedHealing = outgoingHealingStats.ActorDownedHealing;
             dto.TotalHealing = outgoingHealingStats.Healing;
             dto.TotalCasting = casting.Sum(cl => Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start));
             dto.Distribution = BuildHealingDistBodyData(log, casting, healingLogs, usedSkills, usedBuffs, phase);

@@ -26,6 +26,10 @@
                                                          class="icon">
                     </th>
                     //-->
+                    <th data-original-title="Downed Healing" class="damage-cell"  >
+                        Target <img src="https://wiki.guildwars2.com/images/3/3d/Downed_ally.png" alt="Downed Healing"
+                            class="icon icon-hover">
+                    </th>
                     <th data-original-title="All" class="damage-cell">
                         All <img src="https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/20px-Healing.png" alt="All"
                                  class="icon">
@@ -45,6 +49,10 @@
                                                       class="icon">
                     </th>
                     //-->
+                    <th data-original-title="Downed Healing" class="damage-cell"  >
+                        All <img src="https://wiki.guildwars2.com/images/3/3d/Downed_ally.png" alt="Downed Healing"
+                            class="icon icon-hover">
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -138,7 +146,7 @@
                 }
                 var rows = [];
                 var sums = [];
-                var total = [0, 0, 0, 0, 0, 0];
+                var total = [0, 0, 0, 0, 0, 0, 0, 0];
                 var groups = [];
                 var i, j;
                 for (i = 0; i < this.hPhase.outgoingHealingStats.length; i++) {
@@ -152,7 +160,7 @@
                     }
                     var player = logData.players[i];
                     if (!groups[player.group]) {
-                        groups[player.group] = [0, 0, 0, 0, 0, 0];
+                        groups[player.group] = [0, 0, 0, 0, 0, 0, 0, 0];
                     }
                     var hps = hpsTargetStat.concat(hpsStat);
                     for (j = 0; j < hps.length; j++) {

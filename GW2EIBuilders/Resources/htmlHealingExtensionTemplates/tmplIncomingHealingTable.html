@@ -20,12 +20,16 @@
                              class="icon icon-hover">
                     </th>
                     <!--  
-                    <th v-if="false" class="damage-cell" data-original-title="Hybrid Healed">
+                    <th class="damage-cell" data-original-title="Hybrid Healed">
                         <img src="https://wiki.guildwars2.com/images/8/81/Healing_Power.png" alt="Hybrid"
                              class="icon"> / <img src="https://wiki.guildwars2.com/images/4/4a/Litany_of_Wrath.png" alt="Hybrid"
                                                   class="icon">
                     </th>
                     //-->
+                    <th class="damage-cell" data-original-title="Downed Healing" >
+                        <img src="https://wiki.guildwars2.com/images/3/3d/Downed_ally.png" alt="Downed Healing"
+                            class="icon icon-hover">
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -96,7 +100,7 @@
                 }
                 var rows = [];
                 var sums = [];
-                var total = [0, 0, 0];
+                var total = [0, 0, 0, 0];
                 var groups = [];
                 var i;
                 for (i = 0; i < this.hPhase.incomingHealingStats.length; i++) {
@@ -110,7 +114,7 @@
                         incomingHeal: incomingHeal
                     });
                     if (!groups[player.group]) {
-                        groups[player.group] = [0, 0, 0];
+                        groups[player.group] = [0, 0, 0, 0];
                     }
                     for (var j = 0; j < total.length; j++) {
                         total[j] += incomingHeal[j];

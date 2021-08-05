@@ -25,6 +25,10 @@
                         <img src="https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/20px-Healing.png" alt="Healing"
                             class="icon icon-hover">
                     </th>
+                    <th data-original-title="Downed Healing" class="damage-cell"  >
+                        <img src="https://wiki.guildwars2.com/images/3/3d/Downed_ally.png" alt="Downed Healing"
+                            class="icon icon-hover">
+                    </th>
                     <th class="damage-dist-cell" data-original-title="Minimum">
                         Min
                     </th>
@@ -71,6 +75,9 @@
                     <td :data-original-title="round2(row[2]/phase.durationS) +' hps'">
                         {{ row[2] }}
                     </td>
+                    <td :data-original-title="round2(row[10]/phase.durationS) +' hps'">
+                        {{ row[10] }}
+                    </td>
                     <td>{{ Math.max(row[3],0) }}</td>
                     <td>{{ round(row[2]/row[8]) }}</td>
                     <td>{{ row[4] }}</td>
@@ -100,6 +107,9 @@
                     <td></td>
                     <td :data-original-title="Math.round(healingdist.contributedHealing/phase.durationS) +' hps'">
                         {{healingdist.contributedHealing}}
+                    </td>
+                    <td :data-original-title="Math.round(healingdist.contributedDownedHealing/phase.durationS) +' hps'">
+                        {{healingdist.contributedDownedHealing}}
                     </td>
                     <td></td>
                     <td></td>

@@ -17,6 +17,11 @@ namespace GW2EIJSON
         public int TotalHealing{ get; set; }
 
         /// <summary>
+        /// Total healing done against downed
+        /// </summary>
+        public int TotalDownedHealing { get; set; }
+
+        /// <summary>
         /// Minimum healing done
         /// </summary>
         public int Min { get; set; }

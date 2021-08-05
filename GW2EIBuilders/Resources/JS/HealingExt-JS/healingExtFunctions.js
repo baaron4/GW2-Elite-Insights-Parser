@@ -34,6 +34,9 @@ function healingTypeEnumToString(mode) {
         case HealingType.Hybrid:
             name = "Healing Power or Conversion";
             break;
+        case HealingType.Downed:
+            name = "Against Downed";
+            break;
         default:
             break;
     }

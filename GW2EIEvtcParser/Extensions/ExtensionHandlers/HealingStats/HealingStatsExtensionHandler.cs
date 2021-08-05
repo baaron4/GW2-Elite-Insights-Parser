@@ -41,6 +41,7 @@ namespace GW2EIEvtcParser.Extensions
             10560, // Life Leech
             10563, // Life Siphon
             10619, // Deadly Feast
+            10640, // Life Leech (UW)
             12424, // Blood Frenzy
             15259, // Nourishment (Omnomberry Ghost)
             21656, // Arcane Brilliance

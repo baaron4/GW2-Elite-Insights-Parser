@@ -45,6 +45,15 @@ namespace GW2EIJSON
             /// </summary>
             public int HybridHealing { get; set; }
 
+            /// <summary>
+            /// Total hps against downed
+            /// </summary>
+            public int DownedHps { get; set; }
+            /// <summary>
+            /// Total healing against downed
+            /// </summary>
+            public int DownedHealing { get; set; }
+
 
             /// <summary>
             /// Total actor only hps
@@ -79,6 +88,15 @@ namespace GW2EIJSON
             /// </summary>
             public int ActorHybridHealing { get; set; }
 
+            /// <summary>
+            /// Total actor only hps against downed
+            /// </summary>
+            public int ActorDownedHps { get; set; }
+            /// <summary>
+            /// Total actor only healing against downed
+            /// </summary>
+            public int ActorDownedHealing { get; set; }
+
             public EXTJsonOutgoingHealingStatistics()
             {
 
@@ -106,6 +124,10 @@ namespace GW2EIJSON
             /// Total received hybrid healing
             /// </summary>
             public int HybridHealed { get; set; }
+            /// <summary>
+            /// Total healing received while downed
+            /// </summary>
+            public int DownedHealed { get; set; }
 
             public EXTJsonIncomingHealingStatistics()
             {
