@@ -10,7 +10,7 @@ namespace GW2EIEvtcParser
 
         internal static readonly AgentItem _unknownAgent = new AgentItem();
 
-        internal const int PollingRate = 150;
+        public const int CombatReplayPollingRate = 150;
 
         internal const int BuffDigit = 3;
         internal const int DamageModGainDigit = 3;

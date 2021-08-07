@@ -32,8 +32,8 @@ namespace GW2EIEvtcParser.EIData
             _maps.Add(new MapItem()
             {
                 Link = link,
-                Start = -1,
-                End = -1
+                Start = 0,
+                End = long.MaxValue
             });
             _urlPixelSize = urlPixelSize;
             _rectInMap = rectInMap;
@@ -145,7 +145,7 @@ namespace GW2EIEvtcParser.EIData
             _maps.RemoveAll(x => x.End - x.Start <= 0);
         }
 
-        public float GetInch()
+        public float GetInchToPixel()
         {
             float ratio = (float)(_rectInMap.bottomX - _rectInMap.topX) / GetPixelMapSize().width;
             return (float)Math.Round(1.0f / ratio, 3);

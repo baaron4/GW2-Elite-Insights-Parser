@@ -179,7 +179,7 @@ namespace GW2EIEvtcParser.EIData
                     x /= activePlayers;
                     y /= activePlayers;
                     z /= activePlayers;
-                    _stackCenterPositions.Add(new Point3D(x, y, z, ParserHelper.PollingRate * time));
+                    _stackCenterPositions.Add(new Point3D(x, y, z, ParserHelper.CombatReplayPollingRate * time));
                 }
             }
         }

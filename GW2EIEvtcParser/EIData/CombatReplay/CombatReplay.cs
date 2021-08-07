@@ -138,8 +138,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal void PollingRate(long fightDuration)
         {
-            PositionPolling(ParserHelper.PollingRate, fightDuration);
-            RotationPolling(ParserHelper.PollingRate, fightDuration);
+            PositionPolling(ParserHelper.CombatReplayPollingRate, fightDuration);
+            RotationPolling(ParserHelper.CombatReplayPollingRate, fightDuration);
         }
     }
 }

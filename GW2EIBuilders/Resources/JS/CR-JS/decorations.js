@@ -96,7 +96,7 @@ class FacingMechanicDrawable extends MechanicDrawable {
             ctx.save(); 
             var coneOpening = ToRadians(animator.coneControl.openingAngle);
             ctx.rotate(0.5 * coneOpening);
-            var coneRadius = animator.inch * animator.coneControl.radius;
+            var coneRadius = animator.inchToPixel * animator.coneControl.radius;
             ctx.beginPath();
             ctx.arc(0, 0, coneRadius, -coneOpening, 0, false);
             ctx.arc(0, 0, 0, 0, coneOpening, true);
