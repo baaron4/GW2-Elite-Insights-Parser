@@ -40,10 +40,10 @@ namespace GW2EIBuilders.HtmlModels
                 {
                     continue;
                 }
-                actors.Add(actor.GetCombatReplayJSON(map, log));
-                foreach (GenericDecoration a in actor.GetCombatReplayActors(log))
+                actors.Add(actor.GetCombatReplayDescription(map, log));
+                foreach (GenericDecoration a in actor.GetCombatReplayDecorations(log))
                 {
-                    actors.Add(a.GetCombatReplayJSON(map, log));
+                    actors.Add(a.GetCombatReplayDescription(map, log));
                 }
             }
             foreach (NPC actor in log.FightData.Logic.TrashMobs)
@@ -52,10 +52,10 @@ namespace GW2EIBuilders.HtmlModels
                 {
                     continue;
                 }
-                actors.Add(actor.GetCombatReplayJSON(map, log));
-                foreach (GenericDecoration a in actor.GetCombatReplayActors(log))
+                actors.Add(actor.GetCombatReplayDescription(map, log));
+                foreach (GenericDecoration a in actor.GetCombatReplayDecorations(log))
                 {
-                    actors.Add(a.GetCombatReplayJSON(map, log));
+                    actors.Add(a.GetCombatReplayDescription(map, log));
                 }
             }
             foreach (AbstractSingleActor actor in log.FightData.Logic.Targets)
@@ -64,10 +64,10 @@ namespace GW2EIBuilders.HtmlModels
                 {
                     continue;
                 }
-                actors.Add(actor.GetCombatReplayJSON(map, log));
-                foreach (GenericDecoration a in actor.GetCombatReplayActors(log))
+                actors.Add(actor.GetCombatReplayDescription(map, log));
+                foreach (GenericDecoration a in actor.GetCombatReplayDecorations(log))
                 {
-                    actors.Add(a.GetCombatReplayJSON(map, log));
+                    actors.Add(a.GetCombatReplayDescription(map, log));
                 }
             }
             return actors;

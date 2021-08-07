@@ -43,13 +43,13 @@ namespace GW2EIEvtcParser.EIData
 
         //
 
-        public override AbstractSingleActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedEvtcLog log)
+        public override AbstractSingleActorCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
         {
             if (CombatReplay == null)
             {
                 InitCombatReplay(log);
             }
-            return new NPCSerializable(this, log, map, CombatReplay);
+            return new NPCCombatReplayDescription(this, log, map, CombatReplay);
         }
         protected override void TrimCombatReplay(ParsedEvtcLog log)
         {

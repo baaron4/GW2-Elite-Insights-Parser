@@ -1,12 +1,12 @@
 ﻿namespace GW2EIEvtcParser.EIData
 {
-    public abstract class FormDecorationSerializable : GenericAttachedDecorationSerializable
+    public abstract class FormDecorationCombatReplayDescription : GenericAttachedDecorationCombatReplayDescription
     {
         public bool Fill { get; }
         public int Growing { get; }
         public string Color { get; }
 
-        internal FormDecorationSerializable(ParsedEvtcLog log, FormDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
+        internal FormDecorationCombatReplayDescription(ParsedEvtcLog log, FormDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
         {
             Fill = decoration.Filled;
             Color = decoration.Color;

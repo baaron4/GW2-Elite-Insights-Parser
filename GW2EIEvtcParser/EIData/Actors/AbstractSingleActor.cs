@@ -338,7 +338,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public IReadOnlyList<GenericDecoration> GetCombatReplayActors(ParsedEvtcLog log)
+        public IReadOnlyList<GenericDecoration> GetCombatReplayDecorations(ParsedEvtcLog log)
         {
             if (!log.CanCombatReplay)
             {
@@ -353,7 +353,7 @@ namespace GW2EIEvtcParser.EIData
         }
         protected abstract void InitAdditionalCombatReplayData(ParsedEvtcLog log);
 
-        public abstract AbstractSingleActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedEvtcLog log);
+        public abstract AbstractSingleActorCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log);
 
         // Cast logs
         public override IReadOnlyList<AbstractCastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end)

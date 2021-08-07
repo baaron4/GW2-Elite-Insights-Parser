@@ -12,9 +12,9 @@
         }
         //
 
-        public override GenericDecorationSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedEvtcLog log)
+        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
         {
-            return new DoughnutDecorationSerializable(log, this, map);
+            return new DoughnutDecorationCombatReplayDescription(log, this, map);
         }
 
     }
