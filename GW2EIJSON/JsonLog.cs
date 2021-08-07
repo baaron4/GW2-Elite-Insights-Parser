@@ -330,6 +330,11 @@ namespace GW2EIJSON
         /// List of used extensions
         /// </summary>
         public IReadOnlyList<ExtensionDesc> UsedExtensions { get; set; }
+        /// <summary>
+        /// Contains combat replay related meta data
+        /// </summary>
+        /// <seealso cref="JsonCombatReplayMetaData"/>
+        public JsonCombatReplayMetaData CombatReplayMetaData { get; set; }
 
 
         public JsonLog()
