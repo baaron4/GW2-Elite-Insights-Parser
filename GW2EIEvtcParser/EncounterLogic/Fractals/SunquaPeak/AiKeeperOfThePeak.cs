@@ -152,15 +152,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Ai not found");
             }
-            CombatItem darkModePhaseEvent = combatData.FirstOrDefault(x => x.SkillID == 53569 && !x.IsExtension);
-            _hasDarkMode = combatData.Exists(x => x.SkillID == 61356 && !x.IsExtension);
+            CombatItem darkModePhaseEvent = combatData.FirstOrDefault(x => x.SkillID == 53569 && !x.IsExtension && x.SrcMatchesAgent(aiAgent));
+            _hasDarkMode = combatData.Exists(x => x.SkillID == 61356 && !x.IsExtension && x.SrcMatchesAgent(aiAgent));
             _hasElementalMode = !_hasDarkMode || darkModePhaseEvent != null;
             if (_hasDarkMode)
             {
                 if (_hasElementalMode)
                 {
-                    long darkModeStart = combatData.FirstOrDefault(x => x.SkillID == 61277 && x.Time >= darkModePhaseEvent.Time && !x.IsExtension).Time;
-                    CombatItem invul895Loss = combatData.FirstOrDefault(x => x.Time <= darkModeStart && x.SkillID == 895 && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && !x.IsExtension);
+                    long darkModeStart = combatData.FirstOrDefault(x => x.SkillID == 61277 && x.Time >= darkModePhaseEvent.Time && !x.IsExtension && x.SrcMatchesAgent(aiAgent)).Time;
+                    CombatItem invul895Loss = combatData.FirstOrDefault(x => x.Time <= darkModeStart && x.SkillID == 895 && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && !x.IsExtension && x.DstMatchesAgent(aiAgent));
                     long lastAwareTime = (invul895Loss != null ? invul895Loss.Time : darkModeStart);
                     AgentItem darkAiAgent = agentData.AddCustomAgent(lastAwareTime + 1, aiAgent.LastAware, AgentItem.AgentType.NPC, aiAgent.Name, aiAgent.Prof, (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2, false, aiAgent.Toughness, aiAgent.Healing, aiAgent.Condition, aiAgent.Concentration, aiAgent.HitboxWidth, aiAgent.HitboxHeight);
                     // Redirect combat events
