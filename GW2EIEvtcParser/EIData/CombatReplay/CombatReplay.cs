@@ -31,58 +31,74 @@ namespace GW2EIEvtcParser.EIData
             _end = Math.Max(_start, Math.Min(end, _end));
         }
 
+        private static int UpdateVelocityIndex(List<Point3D> velocities, int time, int currentIndex)
+        {
+            if (!velocities.Any())
+            {
+                return -1;
+            }
+            int res = Math.Max(currentIndex, 0);
+            Point3D cuvVelocity = velocities[res];
+            while (res < velocities.Count && cuvVelocity.Time < time)
+            {
+                res++;
+                if (res < velocities.Count)
+                {
+                    cuvVelocity = velocities[res];
+                }
+            }
+            return res - 1;
+        }
+
         private void PositionPolling(int rate, long fightDuration)
         {
             if (Positions.Count == 0)
             {
                 Positions.Add(new Point3D(int.MinValue, int.MinValue, 0, 0));
             }
-            int tablePos = 0;
+            int positionTablePos = 0;
+            int velocityTablePos = 0;
             Point3D currentVelocity = null;
+            //
             for (int i = (int)Math.Min(0, rate * ((Positions[0].Time / rate) - 1)); i < fightDuration; i += rate)
             {
-                Point3D pt = Positions[tablePos];
+                Point3D pt = Positions[positionTablePos];
                 if (i <= pt.Time)
                 {
-                    currentVelocity = null;
                     PolledPositions.Add(new Point3D(pt.X, pt.Y, pt.Z, i));
                 }
                 else
                 {
-                    if (tablePos == Positions.Count - 1)
+                    if (positionTablePos == Positions.Count - 1)
                     {
                         PolledPositions.Add(new Point3D(pt.X, pt.Y, pt.Z, i));
                     }
                     else
                     {
-                        Point3D ptn = Positions[tablePos + 1];
+                        Point3D ptn = Positions[positionTablePos + 1];
                         if (ptn.Time < i)
                         {
-                            tablePos++;
-                            currentVelocity = null;
+                            positionTablePos++;
                             i -= rate;
                         }
                         else
                         {
                             Point3D last = PolledPositions.Last().Time > pt.Time ? PolledPositions.Last() : pt;
-                            Point3D velocity = Velocities.Find(x => x.Time <= i && x.Time > last.Time);
-                            currentVelocity = velocity ?? currentVelocity;
-                            if (ptn.Time - pt.Time < 400)
+                            velocityTablePos = UpdateVelocityIndex(Velocities, i, velocityTablePos);
+                            Point3D velocity = null;
+                            if (velocityTablePos >= 0 && velocityTablePos < Velocities.Count)
                             {
-                                float ratio = (float)(i - pt.Time) / (ptn.Time - pt.Time);
-                                PolledPositions.Add(new Point3D(pt, ptn, ratio, i));
+                                velocity = Velocities[velocityTablePos];
+                            }
+                            currentVelocity = velocity ?? currentVelocity;
+                            if (currentVelocity == null || (Math.Abs(currentVelocity.X) <= 1e-1 && Math.Abs(currentVelocity.Y) <= 1e-1))
+                            {
+                                PolledPositions.Add(new Point3D(last.X, last.Y, last.Z, i));
                             }
                             else
                             {
-                                if (currentVelocity == null || (Math.Abs(currentVelocity.X) <= 1e-1 && Math.Abs(currentVelocity.Y) <= 1e-1))
-                                {
-                                    PolledPositions.Add(new Point3D(last.X, last.Y, last.Z, i));
-                                }
-                                else
-                                {
-                                    float ratio = (float)(i - last.Time) / (ptn.Time - last.Time);
-                                    PolledPositions.Add(new Point3D(last, ptn, ratio, i));
-                                }
+                                float ratio = (float)(i - last.Time) / (ptn.Time - last.Time);
+                                PolledPositions.Add(new Point3D(last, ptn, ratio, i));
                             }
 
                         }
@@ -104,26 +120,26 @@ namespace GW2EIEvtcParser.EIData
             {
                 return;
             }
-            int tablePos = 0;
+            int rotationTablePos = 0;
             for (int i = (int)Math.Min(0, rate * ((Rotations[0].Time / rate) - 1)); i < fightDuration; i += rate)
             {
-                Point3D pt = Rotations[tablePos];
+                Point3D pt = Rotations[rotationTablePos];
                 if (i <= pt.Time)
                 {
                     PolledRotations.Add(new Point3D(pt.X, pt.Y, pt.Z, i));
                 }
                 else
                 {
-                    if (tablePos == Rotations.Count - 1)
+                    if (rotationTablePos == Rotations.Count - 1)
                     {
                         PolledRotations.Add(new Point3D(pt.X, pt.Y, pt.Z, i));
                     }
                     else
                     {
-                        Point3D ptn = Rotations[tablePos + 1];
+                        Point3D ptn = Rotations[rotationTablePos + 1];
                         if (ptn.Time < i)
                         {
-                            tablePos++;
+                            rotationTablePos++;
                             i -= rate;
                         }
                         else
