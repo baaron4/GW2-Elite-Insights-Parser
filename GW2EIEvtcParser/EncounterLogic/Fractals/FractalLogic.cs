@@ -83,18 +83,25 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Main target of the fight not found");
             }
-            // check invul gain at the start of the fight (initial or with a small threshold)
+            // check first invul gain at the start of the fight
             CombatItem invulGain = combatData.FirstOrDefault(x => x.DstMatchesAgent(target) && x.IsBuffApply() && x.SkillID == invulID);
             // get invul lost
-            CombatItem invulLost = combatData.FirstOrDefault(x => x.Time >= fightData.LogStart && x.SrcMatchesAgent(target) && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SkillID == invulID);
-            if (invulGain != null && invulGain.Time - fightData.LogStart < invulGainOffset && invulLost != null && invulLost.Time > invulGain.Time)
+            CombatItem invulLost = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target) && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SkillID == invulID);
+            // invul loss matches the gained invul
+            if (invulGain != null && invulLost != null && invulLost.Time > invulGain.Time)
             {
-                return invulLost.Time + 1;
+                // check against offset
+                if (invulGain.Time - fightData.LogStart < invulGainOffset)
+                {
+                    return invulLost.Time + 1;
+                }
             }
             else if (invulLost != null)
             {
-                CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target) && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && Math.Abs(x.Time - invulLost.Time) < ParserHelper.ServerDelayConstant);
-                if (enterCombat != null)
+                // only invul lost, missing buff apply event
+                CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target) && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat);
+                // verify that first enter combat matches the moment invul is lost
+                if (enterCombat != null && Math.Abs(enterCombat.Time - invulLost.Time) < ParserHelper.ServerDelayConstant)
                 {
                     return invulLost.Time + 1;
                 }
