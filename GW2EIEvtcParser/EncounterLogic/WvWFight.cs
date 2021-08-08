@@ -145,6 +145,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 greenTeam = greenTeams.GroupBy(x => x).OrderByDescending(x => x.Count()).Select(x => x.Key).First();
             }
+            var toMerge = new Dictionary<PlayerNonSquad, AbstractSingleActor>();
+            var agentsToNonSquadPlayer = new Dictionary<ulong, PlayerNonSquad>();
             //
             foreach (AgentItem a in aList)
             {
@@ -163,17 +165,35 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     // we merge
                     AbstractSingleActor mainPlayer = actorListToFill.FirstOrDefault(x => x.Character == nonSquadPlayer.Character);
-                    foreach (CombatItem c in combatData)
+                    toMerge[nonSquadPlayer] = mainPlayer;
+                    agentsToNonSquadPlayer[nonSquadPlayer.AgentItem.Agent] = nonSquadPlayer;
+                }
+            }
+            if (toMerge.Any())
+            {
+                foreach (CombatItem c in combatData)
+                {
+                    if (agentsToNonSquadPlayer.TryGetValue(c.SrcAgent, out PlayerNonSquad nonSquadPlayer))
                     {
+                        AbstractSingleActor mainPlayer = toMerge[nonSquadPlayer];
                         if (c.SrcMatchesAgent(nonSquadPlayer.AgentItem, extensions))
                         {
                             c.OverrideSrcAgent(mainPlayer.AgentItem.Agent);
                         }
+                    }
+                    if (agentsToNonSquadPlayer.TryGetValue(c.DstAgent, out nonSquadPlayer))
+                    {
+                        AbstractSingleActor mainPlayer = toMerge[nonSquadPlayer];
                         if (c.DstMatchesAgent(nonSquadPlayer.AgentItem, extensions))
                         {
                             c.OverrideDstAgent(mainPlayer.AgentItem.Agent);
                         }
-                    }
+                    }              
+                }
+                foreach (KeyValuePair<PlayerNonSquad, AbstractSingleActor> pair in toMerge)
+                {
+                    PlayerNonSquad nonSquadPlayer = pair.Key;
+                    AbstractSingleActor mainPlayer = pair.Value;
                     agentData.SwapMasters(nonSquadPlayer.AgentItem, mainPlayer.AgentItem);
                     mainPlayer.AgentItem.OverrideAwareTimes(Math.Min(nonSquadPlayer.FirstAware, mainPlayer.FirstAware), Math.Max(nonSquadPlayer.LastAware, mainPlayer.LastAware));
                     toRemove.Add(nonSquadPlayer.AgentItem);
