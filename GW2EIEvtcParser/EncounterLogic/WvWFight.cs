@@ -145,8 +145,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 greenTeam = greenTeams.GroupBy(x => x).OrderByDescending(x => x.Count()).Select(x => x.Key).First();
             }
-            var toMerge = new Dictionary<PlayerNonSquad, AbstractSingleActor>();
-            var agentsToNonSquadPlayer = new Dictionary<ulong, PlayerNonSquad>();
+            var playersToMerge = new Dictionary<PlayerNonSquad, AbstractSingleActor>();
+            var agentsToPlayersToMerge = new Dictionary<ulong, PlayerNonSquad>();
             //
             foreach (AgentItem a in aList)
             {
@@ -165,32 +165,26 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     // we merge
                     AbstractSingleActor mainPlayer = actorListToFill.FirstOrDefault(x => x.Character == nonSquadPlayer.Character);
-                    toMerge[nonSquadPlayer] = mainPlayer;
-                    agentsToNonSquadPlayer[nonSquadPlayer.AgentItem.Agent] = nonSquadPlayer;
+                    playersToMerge[nonSquadPlayer] = mainPlayer;
+                    agentsToPlayersToMerge[nonSquadPlayer.AgentItem.Agent] = nonSquadPlayer;
                 }
             }
-            if (toMerge.Any())
+            if (playersToMerge.Any())
             {
                 foreach (CombatItem c in combatData)
                 {
-                    if (agentsToNonSquadPlayer.TryGetValue(c.SrcAgent, out PlayerNonSquad nonSquadPlayer))
+                    if (agentsToPlayersToMerge.TryGetValue(c.SrcAgent, out PlayerNonSquad nonSquadPlayer) && c.SrcMatchesAgent(nonSquadPlayer.AgentItem, extensions))
                     {
-                        AbstractSingleActor mainPlayer = toMerge[nonSquadPlayer];
-                        if (c.SrcMatchesAgent(nonSquadPlayer.AgentItem, extensions))
-                        {
-                            c.OverrideSrcAgent(mainPlayer.AgentItem.Agent);
-                        }
+                        AbstractSingleActor mainPlayer = playersToMerge[nonSquadPlayer];
+                        c.OverrideSrcAgent(mainPlayer.AgentItem.Agent);
                     }
-                    if (agentsToNonSquadPlayer.TryGetValue(c.DstAgent, out nonSquadPlayer))
+                    if (agentsToPlayersToMerge.TryGetValue(c.DstAgent, out nonSquadPlayer) && c.DstMatchesAgent(nonSquadPlayer.AgentItem, extensions))
                     {
-                        AbstractSingleActor mainPlayer = toMerge[nonSquadPlayer];
-                        if (c.DstMatchesAgent(nonSquadPlayer.AgentItem, extensions))
-                        {
-                            c.OverrideDstAgent(mainPlayer.AgentItem.Agent);
-                        }
-                    }              
+                        AbstractSingleActor mainPlayer = playersToMerge[nonSquadPlayer];
+                        c.OverrideDstAgent(mainPlayer.AgentItem.Agent);
+                    }
                 }
-                foreach (KeyValuePair<PlayerNonSquad, AbstractSingleActor> pair in toMerge)
+                foreach (KeyValuePair<PlayerNonSquad, AbstractSingleActor> pair in playersToMerge)
                 {
                     PlayerNonSquad nonSquadPlayer = pair.Key;
                     AbstractSingleActor mainPlayer = pair.Value;
