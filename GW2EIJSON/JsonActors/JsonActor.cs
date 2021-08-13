@@ -171,6 +171,11 @@ namespace GW2EIJSON
         /// If i corresponds to the last element that means the health did not change for the remainder of the fight \n
         /// </summary>
         public IReadOnlyList<IReadOnlyList<double>> BarrierPercents { get; set; }
+        /// <summary>
+        /// Contains combat replay related data
+        /// </summary>
+        /// <seealso cref="JsonActorCombatReplayData"/>
+        public JsonActorCombatReplayData CombatReplayData { get; set; }
 
 
         protected JsonActor()
