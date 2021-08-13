@@ -10,11 +10,10 @@ namespace GW2EIEvtcParser.EIData
         {
             public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
             {
-                var positions = ((double x, double y, double z, double angle, double opacity, int time)[])value;
+                var positions = ((float x, float y, float z, float angle, float opacity, int time)[])value;
                 writer.WriteStartArray();
-                foreach ((double x, double y, double z, double angle, double opacity, int time) position in positions)
+                foreach ((float x, float y, float z, float angle, float opacity, int time) in positions)
                 {
-                    (double x, double y, double z, double angle, double opacity, int time) = position;
                     writer.WriteStartArray();
                     writer.WriteValue(x);
                     writer.WriteValue(y);
@@ -38,7 +37,7 @@ namespace GW2EIEvtcParser.EIData
 
             public override bool CanConvert(Type objectType)
             {
-                return objectType == typeof((double x, double y, double z, double angle, double opacity, int time));
+                return objectType == typeof((float x, float y, float z, float angle, float opacity, int time));
             }
         }
 

@@ -114,7 +114,7 @@ namespace GW2EIEvtcParser.EIData
             double scaleY = (double)height / _urlPixelSize.height;
             double x = (realX - _rectInMap.topX) / (_rectInMap.bottomX - _rectInMap.topX);
             double y = (realY - _rectInMap.topY) / (_rectInMap.bottomY - _rectInMap.topY);
-            return ((float)Math.Round(scaleX * _urlPixelSize.width * x, 2), (float)Math.Round(scaleY * (_urlPixelSize.height - _urlPixelSize.height * y), 2));
+            return ((float)Math.Round(scaleX * _urlPixelSize.width * x, ParserHelper.CombatReplayDataDigit), (float)Math.Round(scaleY * (_urlPixelSize.height - _urlPixelSize.height * y), ParserHelper.CombatReplayDataDigit));
         }
 
         /// <summary>

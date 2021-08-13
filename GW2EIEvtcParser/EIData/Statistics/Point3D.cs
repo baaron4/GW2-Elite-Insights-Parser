@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.EIData
 
         public static float GetRotationFromFacing(Point3D facing)
         {
-            return (float)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI, ParserHelper.OrientationDigit);
+            return (float)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI, ParserHelper.CombatReplayDataDigit);
         }
 
         public static Point3D Substract(Point3D a, Point3D b)
