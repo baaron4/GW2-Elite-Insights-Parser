@@ -333,7 +333,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null && targetPosition != null)
                         {
-                            var position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z, targetPosition.Time);
+                            var position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z);
                             replay.Decorations.Add(new CircleDecoration(true, 0, impactRadius, (start, start + delay), "rgba(255, 100, 0, 0.2)", new PositionConnector(position)));
                             replay.Decorations.Add(new CircleDecoration(true, 0, impactRadius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.7)", new PositionConnector(position)));
                             replay.Decorations.Add(new CircleDecoration(false, start + delay + duration, radius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.7)", new PositionConnector(position)));
@@ -376,7 +376,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int span = 2400;
                         if (facing != null)
                         {
-                            int rotation = Point3D.GetRotationFromFacing(facing);
+                            float rotation = Point3D.GetRotationFromFacing(facing);
                             replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, range, span, rotation, range / 2, (start, start + preCast), "rgba(0,100,255,0.2)", new AgentConnector(target)));
                             replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, range, span, rotation, range / 2, (start + preCast, start + duration), "rgba(0,100,255,0.5)", new AgentConnector(target)));
                         }
@@ -415,7 +415,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             for (int i = 0; i < coneAmount; i++)
                             {
-                                int rotation = Point3D.GetRotationFromFacing(facing);
+                                float rotation = Point3D.GetRotationFromFacing(facing);
                                 replay.Decorations.Add(new PieDecoration(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(target)));
                                 replay.Decorations.Add(new PieDecoration(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
 
@@ -465,7 +465,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             for (int i = 0; i < coneAmount; i++)
                             {
-                                int rotation = Point3D.GetRotationFromFacing(facing);
+                                float rotation = Point3D.GetRotationFromFacing(facing);
                                 replay.Decorations.Add(new PieDecoration(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(target)));
                                 replay.Decorations.Add(new PieDecoration(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
                             }
@@ -495,7 +495,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null && targetPosition != null)
                         {
-                            var position = new Point3D(targetPosition.X + facing.X * spellCenterDistance, targetPosition.Y + facing.Y * spellCenterDistance, targetPosition.Z, targetPosition.Time);
+                            var position = new Point3D(targetPosition.X + facing.X * spellCenterDistance, targetPosition.Y + facing.Y * spellCenterDistance, targetPosition.Z);
                             replay.Decorations.Add(new CircleDecoration(true, 0, impactRadius, (start, start + delay), "rgba(255, 100, 0, 0.1)", new PositionConnector(position)));
                             replay.Decorations.Add(new CircleDecoration(true, 0, impactRadius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.5)", new PositionConnector(position)));
                             replay.Decorations.Add(new CircleDecoration(false, start + delay + duration, maxRadius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.5)", new PositionConnector(position)));
@@ -524,7 +524,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             for (int i = 0; i < coneAmount; i++)
                             {
-                                int rotation = Point3D.GetRotationFromFacing(facing);
+                                float rotation = Point3D.GetRotationFromFacing(facing);
                                 replay.Decorations.Add(new PieDecoration(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(target)));
                                 replay.Decorations.Add(new PieDecoration(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
                             }

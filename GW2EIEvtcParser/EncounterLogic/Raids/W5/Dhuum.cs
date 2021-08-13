@@ -221,13 +221,13 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static readonly Dictionary<Point3D, int> ReapersToGreen = new Dictionary<Point3D, int>
         {
-            { new Point3D(16897, 1225, -6215, 0), 0 },
-            { new Point3D(16853, 65, -6215, 0), 1 },
-            { new Point3D(15935, -614, -6215, 0), 2 },
-            { new Point3D(14830, -294, -6215, 0), 3 },
-            { new Point3D(14408, 764, -6215, 0), 4 },
-            { new Point3D(14929, 1762, -6215, 0), 5 },
-            { new Point3D(16062, 1991, -6215, 0), 6 },
+            { new Point3D(16897, 1225, -6215), 0 },
+            { new Point3D(16853, 65, -6215), 1 },
+            { new Point3D(15935, -614, -6215), 2 },
+            { new Point3D(14830, -294, -6215), 3 },
+            { new Point3D(14408, 764, -6215), 4 },
+            { new Point3D(14929, 1762, -6215), 5 },
+            { new Point3D(16062, 1991, -6215), 6 },
         };
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
@@ -258,7 +258,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 3000);
                         if (facing != null && targetPosition != null)
                         {
-                            var position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z, targetPosition.Time);
+                            var position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z);
                             replay.Decorations.Add(new CircleDecoration(true, zoneActive, radius, (start, zoneActive), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
                             replay.Decorations.Add(new CircleDecoration(false, 0, radius, (start, zoneActive), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
                             replay.Decorations.Add(new CircleDecoration(true, 0, radius, (zoneActive, zoneDeadly), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));

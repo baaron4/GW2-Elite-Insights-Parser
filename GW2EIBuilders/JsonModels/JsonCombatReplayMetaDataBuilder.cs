@@ -17,7 +17,7 @@ namespace GW2EIBuilders.JsonModels
     {
         public static JsonCombatReplayMetaData BuildJsonCombatReplayMetaData(ParsedEvtcLog log, RawFormatSettings settings)
         {
-            CombatReplayMap map = log.FightData.Logic.GetCombatMap(log);
+            CombatReplayMap map = log.FightData.Logic.GetCombatReplayMap(log);
             (int width, int height) = map.GetPixelMapSize();
             var maps = new List<JsonCombatReplayMetaData.CombatReplayMap>();
             var jsonCR = new JsonCombatReplayMetaData()

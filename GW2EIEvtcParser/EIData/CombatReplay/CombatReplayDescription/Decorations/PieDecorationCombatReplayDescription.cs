@@ -2,8 +2,8 @@
 {
     public class PieDecorationCombatReplayDescription : CircleDecorationCombatReplayDescription
     {
-        public int Direction { get; set; }
-        public int OpeningAngle { get; set; }
+        public float Direction { get; set; }
+        public float OpeningAngle { get; set; }
 
         internal PieDecorationCombatReplayDescription(ParsedEvtcLog log, PieDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
         {

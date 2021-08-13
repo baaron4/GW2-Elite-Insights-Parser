@@ -1,13 +1,15 @@
-﻿namespace GW2EIEvtcParser.EIData
+﻿using System.Collections.Generic;
+
+namespace GW2EIEvtcParser.EIData
 {
     public class FacingDecorationCombatReplayDescription : GenericAttachedDecorationCombatReplayDescription
     {
-        public int[] FacingData { get; }
+        public IReadOnlyList<float> FacingData { get; }
 
         internal FacingDecorationCombatReplayDescription(ParsedEvtcLog log, FacingDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
         {
             Type = "Facing";
-            FacingData = decoration.Angles.ToArray();
+            FacingData = decoration.Angles;
         }
 
     }

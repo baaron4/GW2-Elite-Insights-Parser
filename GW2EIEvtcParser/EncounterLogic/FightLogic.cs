@@ -64,7 +64,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new CombatReplayMap("", (800, 800), (0, 0, 0, 0)/*, (0, 0, 0, 0), (0, 0, 0, 0)*/);
         }
 
-        public CombatReplayMap GetCombatMap(ParsedEvtcLog log)
+        public CombatReplayMap GetCombatReplayMap(ParsedEvtcLog log)
         {
             if (_map == null)
             {
