@@ -107,14 +107,14 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        internal (double x, double y) GetMapCoord(float realX, float realY)
+        internal (float x, float y) GetMapCoord(float realX, float realY)
         {
             (int width, int height) = GetPixelMapSize();
             double scaleX = (double)width / _urlPixelSize.width;
             double scaleY = (double)height / _urlPixelSize.height;
             double x = (realX - _rectInMap.topX) / (_rectInMap.bottomX - _rectInMap.topX);
             double y = (realY - _rectInMap.topY) / (_rectInMap.bottomY - _rectInMap.topY);
-            return (Math.Round(scaleX * _urlPixelSize.width * x, 2), Math.Round(scaleY * (_urlPixelSize.height - _urlPixelSize.height * y), 2));
+            return ((float)Math.Round(scaleX * _urlPixelSize.width * x, 2), (float)Math.Round(scaleY * (_urlPixelSize.height - _urlPixelSize.height * y), 2));
         }
 
         /// <summary>

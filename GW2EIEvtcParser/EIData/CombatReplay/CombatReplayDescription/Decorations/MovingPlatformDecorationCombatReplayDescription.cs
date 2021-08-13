@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.EIData
         public int Width { get; }
 
         [JsonConverter(typeof(PositionConverter))]
-        public (double x, double y, double z, double angle, double opacity, int time)[] Positions { get; set; }
+        public (float x, float y, float z, float angle, float opacity, int time)[] Positions { get; set; }
 
 
         internal MovingPlatformDecorationCombatReplayDescription(MovingPlatformDecoration decoration, CombatReplayMap map) : base(decoration)
@@ -59,7 +59,7 @@ namespace GW2EIEvtcParser.EIData
             Height = decoration.Height;
             Positions = decoration.Positions.OrderBy(x => x.time).Select(pos =>
             {
-                (double mapX, double mapY) = map.GetMapCoord((float)pos.x, (float)pos.y);
+                (float mapX, float mapY) = map.GetMapCoord((float)pos.x, (float)pos.y);
                 pos.x = mapX;
                 pos.y = mapY;
 
