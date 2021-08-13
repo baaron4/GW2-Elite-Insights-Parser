@@ -68,10 +68,10 @@
                         {{getPlayerCell(4, row)}}</td>
                     <td 
                         :data-original-title="getPlayerTooltip(5, row, tableData.sums)">
-                        {{getPlayerCell(4, row)}}</td>
+                        {{getPlayerCell(5, row)}}</td>
                     <td 
                         :data-original-title="getPlayerTooltip(6, row, tableData.sums)">
-                        {{getPlayerCell(5, row)}}</td>
+                        {{getPlayerCell(6, row)}}</td>
 
                     <td v-if="hasBreakbarDamage"
                         :data-original-title="computeTotalContribution(7, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 7, row.dps,tableData.sums)">
