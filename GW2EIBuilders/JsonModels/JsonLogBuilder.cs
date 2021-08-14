@@ -166,6 +166,10 @@ namespace GW2EIBuilders.JsonModels
             jsonLog.BuffMap = buffMap;
             jsonLog.DamageModMap = damageModMap;
             //
+            if (log.CanCombatReplay)
+            {
+                jsonLog.CombatReplayMetaData = JsonCombatReplayMetaDataBuilder.BuildJsonCombatReplayMetaData(log, settings);
+            }
             return jsonLog;
         }
 

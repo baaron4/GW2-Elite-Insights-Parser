@@ -155,7 +155,7 @@ class IconDrawable {
                 ctx.beginPath();
                 ctx.lineWidth = (2 / animator.scale).toString();
                 ctx.strokeStyle = 'green';
-                ctx.arc(pos.x, pos.y, animator.inch * element.radius, 0, 2 * Math.PI);
+                ctx.arc(pos.x, pos.y, animator.inchToPixel * element.radius, 0, 2 * Math.PI);
                 ctx.stroke();
             });
         }

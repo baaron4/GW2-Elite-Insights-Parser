@@ -173,7 +173,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             phases.AddRange(mainPhases);
             phases.Sort((x, y) => x.Start.CompareTo(y.Start));
-            GetCombatMap(log).MatchMapsToPhases(new List<string> {
+            GetCombatReplayMap(log).MatchMapsToPhases(new List<string> {
                 "https://i.imgur.com/IQn2RJV.png",
                 "https://i.imgur.com/gJ55jKy.png",
                 "https://i.imgur.com/3pO7eCB.png",

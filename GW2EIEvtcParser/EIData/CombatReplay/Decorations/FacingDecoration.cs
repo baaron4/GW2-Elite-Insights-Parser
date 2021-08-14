@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class FacingDecoration : GenericAttachedDecoration
     {
-        public List<int> Angles { get; } = new List<int>();
+        public List<float> Angles { get; } = new List<float>();
 
         public FacingDecoration((int start, int end) lifespan, AgentConnector connector, List<Point3D> facings) : base(lifespan, connector)
         {
@@ -19,9 +19,9 @@ namespace GW2EIEvtcParser.EIData
 
         //
 
-        public override GenericDecorationSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedEvtcLog log)
+        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
         {
-            return new FacingDecorationSerializable(log, this, map);
+            return new FacingDecorationCombatReplayDescription(log, this, map);
         }
     }
 }

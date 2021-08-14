@@ -3,54 +3,58 @@ using System.Linq;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public abstract class AbstractSingleActorSerializable
+    public abstract class AbstractSingleActorCombatReplayDescription
     {
         public string Img { get; }
         public string Type { get; }
         public int ID { get; }
-        public List<double> Positions { get; }
-        public List<long> Dead { get; private set; }
-        public List<long> Down { get; private set; }
-        public List<long> Dc { get; private set; }
+        public IReadOnlyList<float> Positions { get; }
+        public IReadOnlyList<long> Dead { get; private set; }
+        public IReadOnlyList<long> Down { get; private set; }
+        public IReadOnlyList<long> Dc { get; private set; }
         public long Start { get; }
         public long End { get; }
 
-        internal AbstractSingleActorSerializable(AbstractSingleActor actor, ParsedEvtcLog log, CombatReplayMap map, CombatReplay replay, string type)
+        internal AbstractSingleActorCombatReplayDescription(AbstractSingleActor actor, ParsedEvtcLog log, CombatReplayMap map, CombatReplay replay, string type)
         {
             Start = replay.TimeOffsets.start;
             End = replay.TimeOffsets.end;
             Img = actor.GetIcon();
             ID = actor.UniqueID;
-            Positions = new List<double>();
+            var positions = new List<float>();
+            Positions = positions;
             Type = type;
             foreach (Point3D pos in replay.PolledPositions)
             {
-                (double x, double y) = map.GetMapCoord(pos.X, pos.Y);
-                Positions.Add(x);
-                Positions.Add(y);
+                (float x, float y) = map.GetMapCoord(pos.X, pos.Y);
+                positions.Add(x);
+                positions.Add(y);
             }
         }
         protected void SetStatus(ParsedEvtcLog log, AbstractSingleActor a)
         {
-            Dead = new List<long>();
-            Down = new List<long>();
-            Dc = new List<long>();
+            var dead = new List<long>();
+            Dead = dead;
+            var down = new List<long>();
+            Down = down;
+            var dc = new List<long>();
+            Dc = dc;
             (IReadOnlyList<(long start, long end)> deads, IReadOnlyList<(long start, long end)> downs, IReadOnlyList<(long start, long end)> dcs) = a.GetStatus(log);
 
             foreach ((long start, long end) in deads)
             {
-                Dead.Add(start);
-                Dead.Add(end);
+                dead.Add(start);
+                dead.Add(end);
             }
             foreach ((long start, long end) in downs)
             {
-                Down.Add(start);
-                Down.Add(end);
+                down.Add(start);
+                down.Add(end);
             }
             foreach ((long start, long end) in dcs)
             {
-                Dc.Add(start);
-                Dc.Add(end);
+                dc.Add(start);
+                dc.Add(end);
             }
         }
 

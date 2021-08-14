@@ -11,8 +11,8 @@
 
         public override object GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
         {
-            (double x, double y) = map.GetMapCoord(Position.X, Position.Y);
-            return new double[2]
+            (float x, float y) = map.GetMapCoord(Position.X, Position.Y);
+            return new float[2]
                        {
                         x,
                         y

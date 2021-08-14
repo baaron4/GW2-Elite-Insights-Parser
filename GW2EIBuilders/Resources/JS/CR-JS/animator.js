@@ -58,7 +58,7 @@ class Animator {
         this.prevTime = 0;
         this.times = [];
         // simulation params
-        this.inch = 10;
+        this.inchToPixel = 10;
         this.pollingRate = 150;
         this.speed = 1;
         this.backwards = false;
@@ -91,7 +91,7 @@ class Animator {
         this.scale = 1.0;
         // options
         if (options) {
-            if (options.inch) this.inch = options.inch;
+            if (options.inchToPixel) this.inchToPixel = options.inchToPixel;
             if (options.pollingRate) this.pollingRate = options.pollingRate;
             if (options.maps) {
                 for (var i = 0; i < options.maps.length; i++) {
@@ -178,19 +178,19 @@ class Animator {
                     this.friendlyMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc));
                     break;
                 case "Circle":
-                    this.mechanicActorData.push(new CircleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inch * actor.radius, actor.connectedTo, this.inch * actor.minRadius));
+                    this.mechanicActorData.push(new CircleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.radius, actor.connectedTo, this.inchToPixel * actor.minRadius));
                     break;
                 case "Rectangle":
-                    this.mechanicActorData.push(new RectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inch * actor.width, this.inch * actor.height, actor.connectedTo));
+                    this.mechanicActorData.push(new RectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.connectedTo));
                     break;
                 case "RotatedRectangle":
-                    this.mechanicActorData.push(new RotatedRectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inch * actor.width, this.inch * actor.height, actor.rotation, this.inch * actor.radialTranslation, actor.spinAngle, actor.connectedTo));
+                    this.mechanicActorData.push(new RotatedRectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.rotation, this.inchToPixel * actor.radialTranslation, actor.spinAngle, actor.connectedTo));
                     break;
                 case "Doughnut":
-                    this.mechanicActorData.push(new DoughnutMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inch * actor.innerRadius, this.inch * actor.outerRadius, actor.connectedTo));
+                    this.mechanicActorData.push(new DoughnutMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.innerRadius, this.inchToPixel * actor.outerRadius, actor.connectedTo));
                     break;
                 case "Pie":
-                    this.mechanicActorData.push(new PieMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.direction, actor.openingAngle, this.inch * actor.radius, actor.connectedTo));
+                    this.mechanicActorData.push(new PieMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.direction, actor.openingAngle, this.inchToPixel * actor.radius, actor.connectedTo));
                     break;
                 case "Line":
                     this.mechanicActorData.push(new LineMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.connectedFrom, actor.connectedTo));
@@ -199,10 +199,10 @@ class Animator {
                     this.attachedActorData.set(actor.connectedTo, new FacingMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData));
                     break;
                 case "FacingRectangle":
-                    this.mechanicActorData.push(new FacingRectangleMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, this.inch * actor.width, this.inch * actor.height, this.inch * actor.translation, actor.color));
+                    this.mechanicActorData.push(new FacingRectangleMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, this.inchToPixel * actor.width, this.inchToPixel * actor.height, this.inchToPixel * actor.translation, actor.color));
                     break;
                 case "MovingPlatform":
-                    this.backgroundActorData.push(new MovingPlatformDrawable(actor.start, actor.end, actor.image, this.inch * actor.width, this.inch * actor.height, actor.positions));
+                    this.backgroundActorData.push(new MovingPlatformDrawable(actor.start, actor.end, actor.image, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.positions));
                     break;
             }
         }
@@ -504,7 +504,7 @@ class Animator {
         var time = this.reactiveDataStatus.time;
         for (var i = 0; i < this.backgroundImages.length; i++) {
             var imageData = this.backgroundImages[i];
-            if (imageData.start < 0 || imageData.end < 0 || (imageData.start <= time && imageData.end >= time)) {
+            if (imageData.start <= time && imageData.end >= time) {
                 return imageData.image;
             }
         }
@@ -560,7 +560,7 @@ class Animator {
             ctx.font = "bold " + fontSize + "px Comic Sans MS";
             ctx.fillStyle = "#CC2200";
             ctx.textAlign = "center";
-            ctx.fillText((50 / (this.inch * this.scale)).toFixed(1) + " units", resolutionMultiplier * 95, resolutionMultiplier * 60);
+            ctx.fillText((50 / (this.inchToPixel * this.scale)).toFixed(1) + " units", resolutionMultiplier * 95, resolutionMultiplier * 60);
             ctx.restore();
             //ctx.globalCompositeOperation = 'normal';
         }

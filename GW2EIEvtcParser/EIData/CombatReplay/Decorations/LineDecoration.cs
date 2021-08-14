@@ -10,9 +10,9 @@
             ConnectedFrom = targetConnector;
         }
 
-        public override GenericDecorationSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedEvtcLog log)
+        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
         {
-            return new LineDecorationSerializable(log, this, map);
+            return new LineDecorationCombatReplayDescription(log, this, map);
         }
     }
 }
