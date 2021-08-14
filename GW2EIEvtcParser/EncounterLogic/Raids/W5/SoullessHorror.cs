@@ -137,7 +137,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case (int)ArcDPSEnums.TargetID.SoullessHorror:
                     // arena reduction
-                    var center = new Point3D(-10581, 825, -817, 0);
+                    var center = new Point3D(-10581, 825, -817);
                     string destroyedRingColor = "rgba(255, 120, 30, 0.3)";
                     List<(double, int, int)> destroyedRings;
                     if (log.FightData.IsCM)

@@ -86,6 +86,10 @@ namespace GW2EIBuilders.JsonModels
                 jsonActor.HealthPercents = actor.GetHealthUpdates(log).Select(x => new double[2] { x.Start, x.Value }).ToList();
                 jsonActor.BarrierPercents = actor.GetBarrierUpdates(log).Select(x => new double[2] { x.Start, x.Value }).ToList();
             }
+            if (log.CanCombatReplay)
+            {
+                jsonActor.CombatReplayData = JsonActorCombatReplayDataBuilder.BuildJsonActorCombatReplayDataBuilder(actor, log, settings);
+            }
         }
 
         private static List<JsonDamageDist>[] BuildDamageDistData(AbstractSingleActor actor, IReadOnlyList<PhaseData> phases, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)

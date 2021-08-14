@@ -10,11 +10,10 @@ namespace GW2EIEvtcParser.EIData
         {
             public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
             {
-                var positions = ((double x, double y, double z, double angle, double opacity, int time)[])value;
+                var positions = ((float x, float y, float z, float angle, float opacity, int time)[])value;
                 writer.WriteStartArray();
-                foreach ((double x, double y, double z, double angle, double opacity, int time) position in positions)
+                foreach ((float x, float y, float z, float angle, float opacity, int time) in positions)
                 {
-                    (double x, double y, double z, double angle, double opacity, int time) = position;
                     writer.WriteStartArray();
                     writer.WriteValue(x);
                     writer.WriteValue(y);
@@ -38,7 +37,7 @@ namespace GW2EIEvtcParser.EIData
 
             public override bool CanConvert(Type objectType)
             {
-                return objectType == typeof((double x, double y, double z, double angle, double opacity, int time));
+                return objectType == typeof((float x, float y, float z, float angle, float opacity, int time));
             }
         }
 
@@ -48,7 +47,7 @@ namespace GW2EIEvtcParser.EIData
         public int Width { get; }
 
         [JsonConverter(typeof(PositionConverter))]
-        public (double x, double y, double z, double angle, double opacity, int time)[] Positions { get; set; }
+        public (float x, float y, float z, float angle, float opacity, int time)[] Positions { get; set; }
 
 
         internal MovingPlatformDecorationCombatReplayDescription(MovingPlatformDecoration decoration, CombatReplayMap map) : base(decoration)
@@ -59,7 +58,7 @@ namespace GW2EIEvtcParser.EIData
             Height = decoration.Height;
             Positions = decoration.Positions.OrderBy(x => x.time).Select(pos =>
             {
-                (double mapX, double mapY) = map.GetMapCoord((float)pos.x, (float)pos.y);
+                (float mapX, float mapY) = map.GetMapCoord((float)pos.x, (float)pos.y);
                 pos.x = mapX;
                 pos.y = mapY;
 

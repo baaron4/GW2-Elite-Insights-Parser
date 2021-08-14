@@ -26,11 +26,15 @@ namespace GW2EIEvtcParser.EIData
             return length;
         }
 
-        public Point3D(float x, float y, float z, long time)
+        public Point3D(float x, float y, float z)
         {
             X = x;
             Y = y;
             Z = z;
+        }
+
+        public Point3D(float x, float y, float z, long time) : this(x,y,z)
+        {
             Time = time;
         }
 
@@ -42,10 +46,14 @@ namespace GW2EIEvtcParser.EIData
             Time = time;
         }
 
-        public static int GetRotationFromFacing(Point3D facing)
+        public static float GetRotationFromFacing(Point3D facing)
         {
-            int rotation = (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI);
-            return rotation;
+            return (float)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI, ParserHelper.CombatReplayDataDigit);
+        }
+
+        public static Point3D Substract(Point3D a, Point3D b)
+        {
+            return new Point3D(a.X - b.X, a.Y - b.Y, a.Z - b.Z);
         }
     }
 }

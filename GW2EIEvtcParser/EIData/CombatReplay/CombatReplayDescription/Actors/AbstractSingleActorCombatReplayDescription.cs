@@ -8,7 +8,7 @@ namespace GW2EIEvtcParser.EIData
         public string Img { get; }
         public string Type { get; }
         public int ID { get; }
-        public IReadOnlyList<double> Positions { get; }
+        public IReadOnlyList<float> Positions { get; }
         public IReadOnlyList<long> Dead { get; private set; }
         public IReadOnlyList<long> Down { get; private set; }
         public IReadOnlyList<long> Dc { get; private set; }
@@ -21,12 +21,12 @@ namespace GW2EIEvtcParser.EIData
             End = replay.TimeOffsets.end;
             Img = actor.GetIcon();
             ID = actor.UniqueID;
-            var positions = new List<double>();
+            var positions = new List<float>();
             Positions = positions;
             Type = type;
             foreach (Point3D pos in replay.PolledPositions)
             {
-                (double x, double y) = map.GetMapCoord(pos.X, pos.Y);
+                (float x, float y) = map.GetMapCoord(pos.X, pos.Y);
                 positions.Add(x);
                 positions.Add(y);
             }

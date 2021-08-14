@@ -2,7 +2,7 @@
 {
     public class RotatedRectangleDecorationCombatReplayDescription : RectangleDecorationCombatReplayDescription
     {
-        public int Rotation { get; }
+        public float Rotation { get; }
         public int RadialTranslation { get; }
         public int SpinAngle { get; }
 

@@ -16,7 +16,7 @@ namespace GW2EIBuilders.HtmlModels
 
         public CombatReplayDto(ParsedEvtcLog log)
         {
-            CombatReplayMap map = log.FightData.Logic.GetCombatMap(log);
+            CombatReplayMap map = log.FightData.Logic.GetCombatReplayMap(log);
             Actors = GetCombatReplayActors(log, map);
             Maps = map.Maps;
             (int width, int height) = map.GetPixelMapSize();
