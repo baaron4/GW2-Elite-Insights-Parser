@@ -139,6 +139,8 @@
                         return "conversionBasedHealing";
                     case HealingType.Hybrid:
                         return "hybridHealing";
+                    case HealingType.Downed:
+                        return "downedHealing";
                     default:
                         throw new Error("unknown enum in healing graph name");
                 }

@@ -32,7 +32,7 @@
     <None Include="Resources\htmlHealingExtensionTemplates\tmplHPSGraphModeSelector.html" />
     <None Include="Resources\htmlHealingExtensionTemplates\tmplHealingGraphStats.html" />
     <None Include="Resources\htmlHealingExtensionTemplates\tmplHPSGraph.html" />
-    <None Include="Resources\htmlHealingExtensionTemplates\tmpHealingStatTables.html" />
+    <None Include="Resources\htmlHealingExtensionTemplates\tmplHealingStatTables.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayUI.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayDamageData.html" />
     <None Include="Resources\combatReplayTemplates\tmplCombatReplayDamageTable.html" />

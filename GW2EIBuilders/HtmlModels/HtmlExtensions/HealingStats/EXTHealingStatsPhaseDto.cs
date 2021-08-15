@@ -29,9 +29,10 @@ namespace GW2EIBuilders.HtmlModels
             var data = new List<object>
                 {
                     outgoingHealingStats.Healing,
-                    outgoingHealingStats.HealingPowerHealing,
+                    outgoingHealingStats.HealingPowerHealing + outgoingHealingStats.HybridHealing,
                     outgoingHealingStats.ConversionHealing,
-                    outgoingHealingStats.HybridHealing,
+                    //outgoingHealingStats.HybridHealing,
+                    outgoingHealingStats.DownedHealing,
                 };
             return data;
         }
@@ -41,9 +42,10 @@ namespace GW2EIBuilders.HtmlModels
             var data = new List<object>
                 {
                     incomingHealintStats.Healed,
-                    incomingHealintStats.HealingPowerHealed,
+                    incomingHealintStats.HealingPowerHealed + incomingHealintStats.HybridHealed,
                     incomingHealintStats.ConversionHealed,
-                    incomingHealintStats.HybridHealed,
+                    //incomingHealintStats.HybridHealed,
+                    incomingHealintStats.DownedHealed,
                 };
             return data;
         }

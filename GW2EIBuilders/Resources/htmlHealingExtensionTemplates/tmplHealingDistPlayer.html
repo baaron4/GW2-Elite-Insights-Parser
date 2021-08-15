@@ -68,6 +68,7 @@
                 }
                 var dist = {
                     contributedHealing: 0,
+                    contributedDownedHealing: 0,
                     totalHealing: 0,
                     totalCasting: 0,
                     distribution: [],
@@ -77,6 +78,7 @@
                     var targetid = this.activetargets[i];
                     var targetDist = this._healingdisttarget[targetid];
                     dist.contributedHealing += targetDist.contributedHealing;
+                    dist.contributedDownedHealing += targetDist.contributedDownedHealing;
                     dist.totalHealing += targetDist.totalHealing;
                     dist.totalCasting += targetDist.totalCasting;
                     var distribution = targetDist.distribution;
@@ -94,6 +96,7 @@
                             // skip 5 6 7
                             row[8] += targetDistribution[8];
                             // skip 9
+                            row[10] += targetDistribution[10];
                         } else {
                             rows.set(targetDistribution[1], targetDistribution.slice(0));
                         }
@@ -104,6 +107,7 @@
                     dist.distribution.push(value);
                 });
                 dist.contributedHealing = Math.max(dist.contributedHealing, 0);
+                dist.contributedDownedHealing = Math.max(dist.contributedDownedHealing, 0);
                 dist.totalHealing = Math.max(dist.totalHealing, 0);
                 dist.totalCasting = Math.max(dist.totalCasting, 0);
                 this.cacheTarget.set(cacheID, dist);

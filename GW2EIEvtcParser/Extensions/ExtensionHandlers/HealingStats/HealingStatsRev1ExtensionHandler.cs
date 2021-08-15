@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.Extensions
             }
         }
 
-        internal override void AttachToCombatData(CombatData combatData, ParserController operation)
+        internal override void AttachToCombatData(CombatData combatData, ParserController operation, ulong gw2Build)
         {
             operation.UpdateProgressWithCancellationCheck("Attaching healing extension combat events");
             var healData = _healingEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
@@ -64,7 +64,7 @@ namespace GW2EIEvtcParser.Extensions
             var healDataById = _healingEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             operation.UpdateProgressWithCancellationCheck(healData.Count + " has the addon running");
             operation.UpdateProgressWithCancellationCheck("Attached " + _healingEvents.Count + " heal events to CombatData");
-            combatData.EXTHealingCombatData = new EXTHealingCombatData(healData, healReceivedData, healDataById);
+            combatData.EXTHealingCombatData = new EXTHealingCombatData(healData, healReceivedData, healDataById, GetHybridIDs(gw2Build));
             operation.UpdateProgressWithCancellationCheck("Attached healing extension combat events");
         }
 

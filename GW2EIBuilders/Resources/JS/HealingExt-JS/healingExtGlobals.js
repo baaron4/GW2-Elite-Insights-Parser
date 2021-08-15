@@ -10,7 +10,7 @@ var healingGraphComponent = {
         return {     
             graphhealingdata: {
                 hpsmode: 0,
-                graphmode: GraphType.Damage,
+                graphmode: logData.wvw ? GraphType.Damage : GraphType.DPS,
                 healingmode: HealingType.All,
             },
         };
@@ -21,5 +21,6 @@ const HealingType = {
     All: 0,
     HealingPower: 1,
     Conversion: 2,
-    Hybrid: 3
+    Hybrid: 3,
+    Downed: 4
 };

@@ -24,6 +24,8 @@ namespace GW2EIBuilders.JsonModels
                 Hps = stats.Hps,
                 HybridHealing = stats.HybridHealing,
                 HybridHps = stats.HybridHps,
+                DownedHealing = stats.DownedHealing,
+                DownedHps = stats.DownedHps,
 
                 ActorConversionHealing = stats.ActorConversionHealing,
                 ActorConversionHps = stats.ActorConversionHps,
@@ -33,6 +35,8 @@ namespace GW2EIBuilders.JsonModels
                 ActorHps = stats.ActorHps,
                 ActorHybridHealing = stats.ActorHybridHealing,
                 ActorHybridHps = stats.ActorHybridHps,
+                ActorDownedHealing = stats.ActorDownedHealing,
+                ActorDownedHps = stats.ActorDownedHps,
             };
         }
 
@@ -44,6 +48,7 @@ namespace GW2EIBuilders.JsonModels
                 Healed = stats.Healed,
                 HealingPowerHealed = stats.HealingPowerHealed,
                 HybridHealed = stats.HybridHealed,
+                DownedHealed = stats.DownedHealed,
             };
         }
 
@@ -82,6 +87,10 @@ namespace GW2EIBuilders.JsonModels
             {
                 jsonHealingDist.Hits++; ;
                 jsonHealingDist.TotalHealing += healingEvt.HealingDone;
+                if (healingEvt.AgainstDowned)
+                {
+                    jsonHealingDist.TotalDownedHealing += healingEvt.HealingDone;
+                }
                 jsonHealingDist.Min = Math.Min(jsonHealingDist.Min, healingEvt.HealingDone);
                 jsonHealingDist.Max = Math.Max(jsonHealingDist.Max, healingEvt.HealingDone);
             }

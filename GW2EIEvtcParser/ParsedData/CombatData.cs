@@ -310,7 +310,7 @@ namespace GW2EIEvtcParser.ParsedData
             ProfHelper.AttachMasterToRacialGadgets(players, this);
         }
 
-        internal CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players, ParserController operation, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, int arcdpsVersion)
+        internal CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players, ParserController operation, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, int evtcVersion)
         {
             _skillIds = new HashSet<long>();
             var castCombatEvents = new Dictionary<ulong, List<CombatItem>>();
@@ -405,9 +405,9 @@ namespace GW2EIEvtcParser.ParsedData
             fightData.SetCM(this, agentData, fightData);
             foreach (AbstractExtensionHandler handler in extensions.Values)
             {
-                handler.AttachToCombatData(this, operation);
+                handler.AttachToCombatData(this, operation, GetBuildEvent().Build);
             }
-            EIExtraEventProcess(players, skillData, agentData, fightData, operation, arcdpsVersion);
+            EIExtraEventProcess(players, skillData, agentData, fightData, operation, evtcVersion);
         }
 
         // getters
