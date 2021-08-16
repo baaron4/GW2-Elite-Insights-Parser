@@ -2,6 +2,8 @@ var class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outg
 [
     [ "ActorConversionHealing", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html#a855053a8faa0f83a6cc0098bcb162960", null ],
     [ "ActorConversionHps", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html#ae75e02ae894a670fe90cbf763be2c265", null ],
+    [ "ActorDownedHealing", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html#a275fae897e85a7358d985e3abc7d3536", null ],
+    [ "ActorDownedHps", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html#a38559aa8e5be4fb93a11499361f8664d", null ],
     [ "ActorHealing", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html#af49ed716dcf04594da8d068e81959fc2", null ],
     [ "ActorHealingPowerHealing", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html#a1cbc649e0b6da2a19a30b2d73467e715", null ],
     [ "ActorHealingPowerHps", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html#a0fda09b6082ec4601e74238f03604509", null ],
@@ -10,6 +12,8 @@ var class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outg
     [ "ActorHybridHps", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html#ae4f9c0694fee76cadf7d83f7c12dacd4", null ],
     [ "ConversionHealing", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html#ac4f5e4fb522a52a9ce3a88b0e7b72c22", null ],
     [ "ConversionHps", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html#a2fae4d903f24d1d03431465aa6517a6b", null ],
+    [ "DownedHealing", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html#a30c27fc7174930afee4dd40edc2c0844", null ],
+    [ "DownedHps", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html#a0228dc3e083a5104a19fd56547d58f03", null ],
     [ "Healing", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html#af5809449ba0327688a53f6f08fdbeece", null ],
     [ "HealingPowerHealing", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html#aec341cb3d1896363993d9c5983992e4d", null ],
     [ "HealingPowerHps", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html#a3453620480d866ed4c4d418df6d3703f", null ],

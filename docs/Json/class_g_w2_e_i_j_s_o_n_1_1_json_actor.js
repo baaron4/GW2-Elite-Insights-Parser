@@ -4,6 +4,7 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_actor =
     [ "BarrierPercents", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a4707cba9ace6d9630fce69a8407edcbc", null ],
     [ "BoonsStates", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a9dfa1cfdf66f0fc5485b3c00596a9f82", null ],
     [ "BreakbarDamage1S", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#ababaf2cfc816c6c1cfc57a81c632a321", null ],
+    [ "CombatReplayData", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a208fbc86c519f781718e44835e1214e1", null ],
     [ "Concentration", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#afe5b9eec1c6d795718679f1385ce4848", null ],
     [ "Condition", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a57780f2e3a2977095e323b086aa56a42", null ],
     [ "ConditionDamage1S", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#ab44c88ff2ea9e4be783bb435ea7361c6", null ],
