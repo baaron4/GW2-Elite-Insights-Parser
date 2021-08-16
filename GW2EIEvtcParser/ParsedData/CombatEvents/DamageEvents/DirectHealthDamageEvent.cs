@@ -5,7 +5,7 @@
         internal DirectHealthDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, ArcDPSEnums.PhysicalResult result) : base(evtcItem, agentData, skillData)
         {
             HealthDamage = evtcItem.Value;
-            AgainstDowned = evtcItem.IsOffcycle == 1;
+            //AgainstDowned = evtcItem.IsOffcycle == 1;
             IsAbsorbed = result == ArcDPSEnums.PhysicalResult.Absorb;
             IsBlind = result == ArcDPSEnums.PhysicalResult.Blind;
             IsBlocked = result == ArcDPSEnums.PhysicalResult.Block;

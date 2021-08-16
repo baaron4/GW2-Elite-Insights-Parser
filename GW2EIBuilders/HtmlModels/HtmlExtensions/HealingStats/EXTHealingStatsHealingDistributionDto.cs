@@ -16,7 +16,7 @@ namespace GW2EIBuilders.HtmlModels
         public long TotalCasting { get; set; }
         public List<object[]> Distribution { get; set; }
 
-        private static object[] GetHealingToItem(SkillItem skill, List<EXTAbstractHealingEvent> healingLogs, Dictionary<SkillItem, List<AbstractCastEvent>> castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
+        private static object[] GetHealingToItem(ParsedEvtcLog log, SkillItem skill, List<EXTAbstractHealingEvent> healingLogs, Dictionary<SkillItem, List<AbstractCastEvent>> castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
         {
             int totalhealing = 0,
                 totaldownedhealing = 0,
@@ -32,7 +32,7 @@ namespace GW2EIBuilders.HtmlModels
                 hits++;
                 if (curdmg < minhealing) { minhealing = curdmg; }
                 if (curdmg > maxhealing) { maxhealing = curdmg; }
-                if (dl.AgainstDowned)
+                if (dl.AgainstDowned(log))
                 {
                     totaldownedhealing += dl.HealingDone;
                 }
@@ -119,7 +119,7 @@ namespace GW2EIBuilders.HtmlModels
             var conditionsById = log.StatisticsHelper.PresentConditions.ToDictionary(x => x.ID);
             foreach (KeyValuePair<SkillItem, List<EXTAbstractHealingEvent>> pair in healingLogsBySkill)
             {
-                dto.Distribution.Add(GetHealingToItem(pair.Key, pair.Value, null, usedSkills, usedBuffs, log.Buffs, phase));
+                dto.Distribution.Add(GetHealingToItem(log, pair.Key, pair.Value, null, usedSkills, usedBuffs, log.Buffs, phase));
             }
             return dto;
         }
@@ -133,7 +133,7 @@ namespace GW2EIBuilders.HtmlModels
             var conditionsById = log.StatisticsHelper.PresentConditions.ToDictionary(x => x.ID);
             foreach (KeyValuePair<SkillItem, List<EXTAbstractHealingEvent>> pair in healingLogsBySkill)
             {
-                list.Add(GetHealingToItem(pair.Key, pair.Value, castLogsBySkill, usedSkills, usedBuffs, log.Buffs, phase));
+                list.Add(GetHealingToItem(log, pair.Key, pair.Value, castLogsBySkill, usedSkills, usedBuffs, log.Buffs, phase));
             }
             // non damaging
             /*foreach (KeyValuePair<SkillItem, List<AbstractCastEvent>> pair in castLogsBySkill)

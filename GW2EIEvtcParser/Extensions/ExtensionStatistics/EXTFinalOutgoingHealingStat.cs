@@ -75,7 +75,7 @@ namespace GW2EIEvtcParser.Extensions
                     default:
                         break;
                 }
-                if (healingEvent.AgainstDowned)
+                if (healingEvent.AgainstDowned(log))
                 {
                     downedHealing += healingEvent.HealingDone;
                 }

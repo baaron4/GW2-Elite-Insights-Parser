@@ -1,4 +1,8 @@
-﻿namespace GW2EIEvtcParser.ParsedData
+﻿using System.Collections.Generic;
+using GW2EIEvtcParser.EIData;
+using System.Linq;
+
+namespace GW2EIEvtcParser.ParsedData
 {
     public abstract class AbstractDamageEvent : AbstractTimeCombatEvent
     {
@@ -20,7 +24,7 @@
         public bool IsMoving { get; }
         public bool AgainstMoving { get; }
         public bool IsFlanking { get; }
-        public bool AgainstDowned { get; protected set; }
+        private int _againstDowned { get; set; } = -1;
 
         internal AbstractDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem.Time)
         {
@@ -33,6 +37,15 @@
             AgainstMoving = (evtcItem.IsMoving & 2) > 0;
             IsFlanking = evtcItem.IsFlanking > 0; 
             _iff = evtcItem.IFF;
+        }
+
+        public bool AgainstDowned(ParsedEvtcLog log)
+        {
+            if (_againstDowned == -1)
+            {
+                _againstDowned = To.IsDowned(log, Time) ? 1 : 0;
+            }        
+            return _againstDowned == 1;
         }
 
         public abstract bool ConditionDamageBased(ParsedEvtcLog log);
