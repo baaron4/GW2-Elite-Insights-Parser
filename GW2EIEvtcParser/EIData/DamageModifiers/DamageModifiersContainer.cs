@@ -77,7 +77,7 @@ namespace GW2EIEvtcParser.EIData
         public IReadOnlyList<DamageModifier> GetModifiersPerProf(string prof)
         {
             var res = new List<DamageModifier>();
-            List<ParserHelper.Source> srcs = ParserHelper.ProfToEnum(prof);
+            IReadOnlyList<ParserHelper.Source> srcs = ParserHelper.ProfToEnum(prof);
             foreach (ParserHelper.Source src in srcs)
             {
                 if (DamageModifiersPerSource.TryGetValue(src, out IReadOnlyList<DamageModifier> list))

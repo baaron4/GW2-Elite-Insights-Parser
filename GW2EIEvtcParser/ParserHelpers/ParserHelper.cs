@@ -100,7 +100,7 @@ namespace GW2EIEvtcParser
             return final;
         }
 
-        public static List<Source> ProfToEnum(string prof)
+        public static IReadOnlyList<Source> ProfToEnum(string prof)
         {
             switch (prof)
             {
@@ -220,6 +220,9 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/9/95/Reaper_tango_icon_200px.png";
                 case "Scourge":
                     return "https://wiki.guildwars2.com/images/8/8a/Scourge_tango_icon_200px.png";
+                //
+                case "Unknown":
+                    return "https://i.imgur.com/UbvyFSt.png";
             }
             return "";
         }
@@ -282,6 +285,9 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/1/11/Reaper_tango_icon_20px.png";
                 case "Scourge":
                     return "https://wiki.guildwars2.com/images/0/06/Scourge_tango_icon_20px.png";
+                //
+                case "Unknown":
+                    return "https://i.imgur.com/UbvyFSt.png";
             }
             return "";
         }

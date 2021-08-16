@@ -187,7 +187,7 @@ namespace GW2EIEvtcParser
             // 1 byte: skip
             _ = reader.ReadByte();
         }
-        private string GetAgentProfString(uint prof, uint elite)
+        private string GetAgentProfString(uint prof, uint elite, ParserController operation)
         {
             // non player
             if (elite == 0xFFFFFFFF)
@@ -258,7 +258,8 @@ namespace GW2EIEvtcParser
                 GW2APISpec spec = _apiController.GetAPISpec((int)elite);
                 if (spec == null)
                 {
-                    throw new InvalidDataException("Missing or outdated GW2 API Cache");
+                    operation.UpdateProgressWithCancellationCheck("Missing or outdated GW2 API Cache");
+                    return "Unknown";
                 }
                 if (spec.Elite)
                 {
@@ -269,7 +270,8 @@ namespace GW2EIEvtcParser
                     return spec.Profession;
                 }
             }
-            throw new EvtcAgentException("Unknown profession");
+            operation.UpdateProgressWithCancellationCheck("Unknown profession");
+            return "Unknown";
         }
 
         /// <summary>
@@ -307,7 +309,7 @@ namespace GW2EIEvtcParser
                 // 68 bytes: name
                 string name = GetString(reader, 68, false);
                 //Save
-                string agentProf = GetAgentProfString(prof, isElite);
+                string agentProf = GetAgentProfString(prof, isElite, operation);
                 AgentItem.AgentType type;
                 ushort ID = 0;
                 switch (agentProf)

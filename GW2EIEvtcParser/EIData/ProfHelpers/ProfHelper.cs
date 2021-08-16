@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.EIData
             new EXTHealingCastFinder(12836, 12836, EIData.InstantCastFinder.DefaultICD), // Water Blast Combo
         };
 
-        internal static void AttachMasterToGadgetByCastData(CombatData combatData, HashSet<AgentItem> gadgets, List<long> castIDS, long castEndThreshold)
+        internal static void AttachMasterToGadgetByCastData(CombatData combatData, IReadOnlyCollection<AgentItem> gadgets, IReadOnlyList<long> castIDS, long castEndThreshold)
         {
             var possibleCandidates = new HashSet<AgentItem>();
             var gadgetSpawnCastData = new List<AnimatedCastEvent>();
@@ -57,7 +57,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        internal static HashSet<AgentItem> GetOffensiveGadgetAgents(CombatData combatData, long damageSkillID, HashSet<AgentItem> playerAgents)
+        internal static HashSet<AgentItem> GetOffensiveGadgetAgents(CombatData combatData, long damageSkillID, IReadOnlyCollection<AgentItem> playerAgents)
         {
             var res = new HashSet<AgentItem>();
             foreach (AbstractHealthDamageEvent evt in combatData.GetDamageData(damageSkillID))
@@ -72,7 +72,7 @@ namespace GW2EIEvtcParser.EIData
             return res;
         }
 
-        internal static void SetGadgetMaster(HashSet<AgentItem> gadgets, AgentItem master)
+        internal static void SetGadgetMaster(IReadOnlyCollection<AgentItem> gadgets, AgentItem master)
         {
             foreach (AgentItem gadget in gadgets)
             {
@@ -80,7 +80,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        internal static void AttachMasterToRacialGadgets(List<Player> players, CombatData combatData)
+        internal static void AttachMasterToRacialGadgets(IReadOnlyList<Player> players, CombatData combatData)
         {
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
             // Sylvari stuff
@@ -92,7 +92,7 @@ namespace GW2EIEvtcParser.EIData
         }
 
         //
-        public static List<InstantCastEvent> ComputeInstantCastEvents(List<Player> players, CombatData combatData, SkillData skillData, AgentData agentData, FightLogic logic)
+        public static IReadOnlyList<InstantCastEvent> ComputeInstantCastEvents(IReadOnlyList<Player> players, CombatData combatData, SkillData skillData, AgentData agentData, FightLogic logic)
         {
             var instantCastFinders = new HashSet<InstantCastFinder>(_genericInstantCastFinders);
             logic.GetInstantCastFinders().ForEach(x => instantCastFinders.Add(x));
@@ -215,7 +215,7 @@ namespace GW2EIEvtcParser.EIData
             return res;
         }
 
-        private static List<InstantCastEvent> ComputeInstantCastEvents(CombatData combatData, SkillData skillData, AgentData agentData, List<InstantCastFinder> instantCastFinders)
+        private static IReadOnlyList<InstantCastEvent> ComputeInstantCastEvents(CombatData combatData, SkillData skillData, AgentData agentData, IReadOnlyList<InstantCastFinder> instantCastFinders)
         {
             var res = new List<InstantCastEvent>();
             ulong build = combatData.GetBuildEvent().Build;
