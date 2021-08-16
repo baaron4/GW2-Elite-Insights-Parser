@@ -26,63 +26,78 @@ namespace GW2EIEvtcParser.EIData
 
         internal FinalGameplayStats(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor target)
         {
-            IReadOnlyList<AbstractHealthDamageEvent> dls = actor.GetJustActorDamageEvents(target, log, start, end);
+            IReadOnlyList<AbstractHealthDamageEvent> dls = actor.GetDamageEvents(target, log, start, end);
             foreach (AbstractHealthDamageEvent dl in dls)
             {
-                if (!(dl is NonDirectHealthDamageEvent))
+                if (dl.From == actor.AgentItem)
                 {
-                    if (dl.HasHit)
+                    if (!(dl is NonDirectHealthDamageEvent))
                     {
-                        if (SkillItem.CanCrit(dl.SkillId, log.LogData.GW2Build))
+                        if (dl.HasHit)
                         {
-                            if (dl.HasCrit)
+                            if (SkillItem.CanCrit(dl.SkillId, log.LogData.GW2Build))
                             {
-                                CriticalCount++;
-                                CriticalDmg += dl.HealthDamage;
+                                if (dl.HasCrit)
+                                {
+                                    CriticalCount++;
+                                    CriticalDmg += dl.HealthDamage;
+                                }
+                                CritableDirectDamageCount++;
                             }
-                            CritableDirectDamageCount++;
-                        }
-                        if (dl.IsFlanking)
-                        {
-                            FlankingCount++;
+                            if (dl.IsFlanking)
+                            {
+                                FlankingCount++;
+                            }
+
+                            if (dl.HasGlanced)
+                            {
+                                GlanceCount++;
+                            }
+                            ConnectedDirectDamageCount++;
                         }
 
-                        if (dl.HasGlanced)
+                        if (dl.IsBlind)
                         {
-                            GlanceCount++;
+                            Missed++;
                         }
-                        ConnectedDirectDamageCount++;
+                        if (dl.IsEvaded)
+                        {
+                            Evaded++;
+                        }
+                        if (dl.IsBlocked)
+                        {
+                            Blocked++;
+                        }
+                        if (!dl.DoubleProcHit)
+                        {
+                            DirectDamageCount++;
+                        }
+                    }
+                    if (dl.IsAbsorbed)
+                    {
+                        Invulned++;
+                    }
+                    if (!dl.DoubleProcHit)
+                    {
+                        TotalDamageCount++;
                     }
 
+                    if (dl.HasHit)
+                    {
+                        ConnectedDamageCount++;
+                        if (dl.AgainstMoving)
+                        {
+                            AgainstMovingCount++;
+                        }
+                    }
+                }
+
+                if (!(dl is NonDirectHealthDamageEvent))
+                {
                     if (dl.HasInterrupted)
                     {
                         Interrupts++;
                     }
-
-                    if (dl.IsBlind)
-                    {
-                        Missed++;
-                    }
-                    if (dl.IsEvaded)
-                    {
-                        Evaded++;
-                    }
-                    if (dl.IsBlocked)
-                    {
-                        Blocked++;
-                    }
-                    if (!dl.DoubleProcHit)
-                    {
-                        DirectDamageCount++;
-                    }
-                }
-                if (dl.IsAbsorbed)
-                {
-                    Invulned++;
-                }
-                if (!dl.DoubleProcHit)
-                {
-                    TotalDamageCount++;
                 }
                 if (dl.HasKilled)
                 {
@@ -92,15 +107,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     Downed++;
                 }
-                if (dl.HasHit)
-                {
-                    ConnectedDamageCount++;
-                    if (dl.AgainstMoving)
-                    {
-                        AgainstMovingCount++;
-                    }
-                }
-                
+
             }
         }
     }
