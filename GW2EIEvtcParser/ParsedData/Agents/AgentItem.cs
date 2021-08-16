@@ -242,6 +242,42 @@ namespace GW2EIEvtcParser.ParsedData
             return actor.HasBuff(log, buffId, time);
         }
 
+        /// <summary>
+        /// Checks if agent is downed at given time
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public bool IsDowned(ParsedEvtcLog log, long time)
+        {
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.IsDowned(log, time);
+        }
+
+        /// <summary>
+        /// Checks if agent is dead at given time
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public bool IsDead(ParsedEvtcLog log, long time)
+        {
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.IsDead(log, time);
+        }
+
+        /// <summary>
+        /// Checks if agent is dc/not spawned at given time
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public bool IsDC(ParsedEvtcLog log, long time)
+        {
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.IsDC(log, time);
+        }
+
         public double GetCurrentHealthPercent(ParsedEvtcLog log, long time)
         {
             AbstractSingleActor actor = log.FindActor(this);

@@ -72,6 +72,22 @@ namespace GW2EIEvtcParser.EIData
         {
             return _statusHelper.GetActiveDuration(log, start, end);
         }
+        public bool IsDowned(ParsedEvtcLog log, long time)
+        {
+            (_, IReadOnlyList<(long start, long end)> downs, _) = _statusHelper.GetStatus(log);
+            return downs.Any(x => x.start >= time && x.end <= time);
+        }
+        public bool IsDead(ParsedEvtcLog log, long time)
+        {
+            (IReadOnlyList<(long start, long end)> deads,_ , _) = _statusHelper.GetStatus(log);
+            return deads.Any(x => x.start >= time && x.end <= time);
+        }
+        public bool IsDC(ParsedEvtcLog log, long time)
+        {
+            (_, _, IReadOnlyList<(long start, long end)> dcs) = _statusHelper.GetStatus(log);
+            return dcs.Any(x => x.start >= time && x.end <= time);
+        }
+
         //
 
 
