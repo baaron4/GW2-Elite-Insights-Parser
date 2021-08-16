@@ -258,7 +258,7 @@ namespace GW2EIEvtcParser
                 GW2APISpec spec = _apiController.GetAPISpec((int)elite);
                 if (spec == null)
                 {
-                    operation.UpdateProgressWithCancellationCheck("Missing or outdated GW2 API Cache");
+                    operation.UpdateProgressWithCancellationCheck("Missing or outdated GW2 API Cache or unknown player spec");
                     return "Unknown";
                 }
                 if (spec.Elite)
@@ -270,8 +270,7 @@ namespace GW2EIEvtcParser
                     return spec.Profession;
                 }
             }
-            operation.UpdateProgressWithCancellationCheck("Unknown profession");
-            return "Unknown";
+            throw new EvtcAgentException("Unexpected profession pattern in evtc");
         }
 
         /// <summary>
