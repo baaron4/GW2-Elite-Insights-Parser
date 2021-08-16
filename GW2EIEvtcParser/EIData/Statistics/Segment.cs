@@ -24,6 +24,10 @@ namespace GW2EIEvtcParser.EIData
 
         public bool Intersect(long start, long end)
         {
+            if (Start == End)
+            {
+                return false;
+            }
             long maxStart = Math.Max(start, Start);
             long minEnd = Math.Min(end, End);
             return minEnd - maxStart >= 0;

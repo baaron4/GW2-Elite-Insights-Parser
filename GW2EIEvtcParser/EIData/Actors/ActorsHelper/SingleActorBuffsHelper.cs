@@ -118,7 +118,7 @@ namespace GW2EIEvtcParser.EIData
             Dictionary<long, BuffsGraphModel> bgms = GetBuffGraphs(log);
             if (bgms.TryGetValue(buffId, out BuffsGraphModel bgm))
             {
-                return bgm.IsPresent(time, ParserHelper.ServerDelayConstant);
+                return bgm.IsPresent(time);
             }
             else
             {

@@ -23,10 +23,9 @@ namespace GW2EIEvtcParser.EIData
 
         public int GetStackCount(long time)
         {
-            for (int i = BuffChart.Count - 1; i >= 0; i--)
+            foreach (Segment seg in BuffChart)
             {
-                Segment seg = BuffChart[i];
-                if (seg.Start <= time && time <= seg.End)
+                if (seg.Intersect(time, time))
                 {
                     return (int)seg.Value;
                 }
@@ -35,17 +34,9 @@ namespace GW2EIEvtcParser.EIData
         }
 
 
-        public bool IsPresent(long time, long window)
+        public bool IsPresent(long time)
         {
-            int count = 0;
-            foreach (Segment seg in BuffChart)
-            {
-                if (seg.Intersect(time - window, time + window))
-                {
-                    count += (int)seg.Value;
-                }
-            }
-            return count > 0;
+            return GetStackCount(time) > 0;
         }
 
         /// <summary>
