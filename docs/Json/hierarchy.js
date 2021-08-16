@@ -1,6 +1,7 @@
 var hierarchy =
 [
     [ "GW2EIJSON.JsonLog.BuffDesc", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_buff_desc.html", null ],
+    [ "GW2EIJSON.JsonCombatReplayMetaData.CombatReplayMap", "class_g_w2_e_i_j_s_o_n_1_1_json_combat_replay_meta_data_1_1_combat_replay_map.html", null ],
     [ "GW2EIJSON.JsonLog.DamageModDesc", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_damage_mod_desc.html", null ],
     [ "GW2EIJSON.JsonLog.ExtensionDesc", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_extension_desc.html", null ],
     [ "GW2EIJSON.EXTJsonHealingDist", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_dist.html", null ],
@@ -13,9 +14,11 @@ var hierarchy =
       [ "GW2EIJSON.JsonNPC", "class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c.html", null ],
       [ "GW2EIJSON.JsonPlayer", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html", null ]
     ] ],
+    [ "GW2EIJSON.JsonActorCombatReplayData", "class_g_w2_e_i_j_s_o_n_1_1_json_actor_combat_replay_data.html", null ],
     [ "GW2EIJSON.JsonPlayerBuffsGeneration.JsonBuffsGenerationData", "class_g_w2_e_i_j_s_o_n_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html", null ],
     [ "GW2EIJSON.JsonBuffsUptime", "class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime.html", null ],
     [ "GW2EIJSON.JsonBuffsUptime.JsonBuffsUptimeData", "class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime_1_1_json_buffs_uptime_data.html", null ],
+    [ "GW2EIJSON.JsonCombatReplayMetaData", "class_g_w2_e_i_j_s_o_n_1_1_json_combat_replay_meta_data.html", null ],
     [ "GW2EIJSON.JsonConsumable", "class_g_w2_e_i_j_s_o_n_1_1_json_consumable.html", null ],
     [ "GW2EIJSON.JsonDamageDist", "class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html", null ],
     [ "GW2EIJSON.JsonDamageModifierData", "class_g_w2_e_i_j_s_o_n_1_1_json_damage_modifier_data.html", null ],

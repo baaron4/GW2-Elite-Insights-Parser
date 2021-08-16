@@ -1,9 +1,11 @@
 var searchData=
 [
   ['jsonactor',['JsonActor',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html',1,'GW2EIJSON']]],
+  ['jsonactorcombatreplaydata',['JsonActorCombatReplayData',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor_combat_replay_data.html',1,'GW2EIJSON']]],
   ['jsonbuffsgenerationdata',['JsonBuffsGenerationData',['../class_g_w2_e_i_j_s_o_n_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html',1,'GW2EIJSON::JsonPlayerBuffsGeneration']]],
   ['jsonbuffsuptime',['JsonBuffsUptime',['../class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime.html',1,'GW2EIJSON']]],
   ['jsonbuffsuptimedata',['JsonBuffsUptimeData',['../class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime_1_1_json_buffs_uptime_data.html',1,'GW2EIJSON::JsonBuffsUptime']]],
+  ['jsoncombatreplaymetadata',['JsonCombatReplayMetaData',['../class_g_w2_e_i_j_s_o_n_1_1_json_combat_replay_meta_data.html',1,'GW2EIJSON']]],
   ['jsonconsumable',['JsonConsumable',['../class_g_w2_e_i_j_s_o_n_1_1_json_consumable.html',1,'GW2EIJSON']]],
   ['jsondamagedist',['JsonDamageDist',['../class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html',1,'GW2EIJSON']]],
   ['jsondamagemodifierdata',['JsonDamageModifierData',['../class_g_w2_e_i_j_s_o_n_1_1_json_damage_modifier_data.html',1,'GW2EIJSON']]],

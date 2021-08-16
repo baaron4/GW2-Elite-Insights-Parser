@@ -6,6 +6,7 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_log =
     [ "SkillDesc", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc" ],
     [ "ArcVersion", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a47681fcdcbd7b0cb7456da99fe141bad", null ],
     [ "BuffMap", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a23b06f8c19bd7dbd1c5c8d158f8a620a", null ],
+    [ "CombatReplayMetaData", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a17b7decb5b6d8ef4f27f4b1747037199", null ],
     [ "DamageModMap", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ac690f1e12e53b647ad76886155eb5bcc", null ],
     [ "Duration", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a6620fe4750b338fef3b8365f032d7c78", null ],
     [ "EliteInsightsVersion", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a131ac0acbf7ea98cb8d8f19ff6951f91", null ],
