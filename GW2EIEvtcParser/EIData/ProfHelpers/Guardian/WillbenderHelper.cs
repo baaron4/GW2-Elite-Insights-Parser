@@ -16,23 +16,20 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
-            new BuffDamageModifier(-1, "Lethal Tempo", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, "", ulong.MaxValue, ulong.MaxValue, DamageModifierMode.All),
-            new BuffDamageModifier(-1, "Tyrant's Lethal Tempo", "5% per stack", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, "", ulong.MaxValue, ulong.MaxValue, DamageModifierMode.All),
+            new BuffDamageModifier(62509, "Lethal Tempo", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Willbender, ByPresence, "https://wiki.guildwars2.com/images/1/10/Lethal_Tempo.png", 118697, ulong.MaxValue, DamageModifierMode.All),
+            new BuffDamageModifier(62657, "Tyrant's Lethal Tempo", "5% per stack", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Willbender, ByPresence, "https://wiki.guildwars2.com/images/c/c4/Tyrant%27s_Momentum.png", 118697, ulong.MaxValue, DamageModifierMode.All),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
                 //virtues
-                new Buff("Rushing Justice", -1, Source.Willbender, BuffNature.GraphOnlyBuff, "", ulong.MaxValue, ulong.MaxValue),
-                new Buff("Flowing Resolve", -1, Source.Willbender, BuffNature.GraphOnlyBuff, "", ulong.MaxValue, ulong.MaxValue),
-                new Buff("Crashing Courage", -1, Source.Willbender, BuffNature.GraphOnlyBuff, "", ulong.MaxValue, ulong.MaxValue),
-                new Buff("Rushing Justice (Active)", -1, Source.Willbender, BuffNature.GraphOnlyBuff, "", ulong.MaxValue, ulong.MaxValue),
-                new Buff("Flowing Resolve (Active)", -1, Source.Willbender, BuffNature.GraphOnlyBuff, "", ulong.MaxValue, ulong.MaxValue),
-                new Buff("Crashing Courage (Active)", -1, Source.Willbender, BuffNature.GraphOnlyBuff, "", ulong.MaxValue, ulong.MaxValue),
+                new Buff("Rushing Justice", 62529, Source.Willbender, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/74/Rushing_Justice.png", 118697, ulong.MaxValue),
+                new Buff("Flowing Resolve", 62632, Source.Willbender, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/be/Flowing_Resolve.png", 118697, ulong.MaxValue),
+                new Buff("Crashing Courage", 62615, Source.Willbender, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/95/Crashing_Courage.png", 118697, ulong.MaxValue),
                 //
-                new Buff("Repose", -1, Source.Willbender, BuffNature.GraphOnlyBuff, "", ulong.MaxValue, ulong.MaxValue),
-                new Buff("Lethal Tempo", -1, Source.Willbender, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "", ulong.MaxValue, ulong.MaxValue),
-                new Buff("Tyrant's Lethal Tempo", -1, Source.Willbender, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "", ulong.MaxValue, ulong.MaxValue),
+                new Buff("Repose", 62638, Source.Willbender, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/80/Repose.png", 118697, ulong.MaxValue),
+                new Buff("Lethal Tempo", 62509, Source.Willbender, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/10/Lethal_Tempo.png", 118697, ulong.MaxValue),
+                new Buff("Tyrant's Lethal Tempo", 62657, Source.Willbender, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/c4/Tyrant%27s_Momentum.png", 118697, ulong.MaxValue),
         };
     }
 }
