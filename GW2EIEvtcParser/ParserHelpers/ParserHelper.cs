@@ -307,54 +307,68 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/8/80/Berserker_tango_icon_200px.png";
                 case Spec.Spellbreaker:
                     return "https://wiki.guildwars2.com/images/7/78/Spellbreaker_tango_icon_200px.png";
+                //
                 case Spec.Guardian:
                     return "https://wiki.guildwars2.com/images/6/6c/Guardian_tango_icon_200px.png";
                 case Spec.Dragonhunter:
                     return "https://wiki.guildwars2.com/images/1/1f/Dragonhunter_tango_icon_200px.png";
                 case Spec.Firebrand:
                     return "https://wiki.guildwars2.com/images/7/73/Firebrand_tango_icon_200px.png";
+                case Spec.Willbender:
+                    return "https://wiki.guildwars2.com/images/5/57/Willbender_tango_icon_200px.png";
+                //
                 case Spec.Revenant:
                     return "https://wiki.guildwars2.com/images/a/a8/Revenant_tango_icon_200px.png";
                 case Spec.Herald:
                     return "https://wiki.guildwars2.com/images/c/c7/Herald_tango_icon_200px.png";
                 case Spec.Renegade:
                     return "https://wiki.guildwars2.com/images/b/bc/Renegade_tango_icon_200px.png";
+                //
                 case Spec.Engineer:
                     return "https://wiki.guildwars2.com/images/2/2f/Engineer_tango_icon_200px.png";
                 case Spec.Scrapper:
                     return "https://wiki.guildwars2.com/images/3/3a/Scrapper_tango_icon_200px.png";
                 case Spec.Holosmith:
                     return "https://wiki.guildwars2.com/images/a/ae/Holosmith_tango_icon_200px.png";
+                //
                 case Spec.Ranger:
                     return "https://wiki.guildwars2.com/images/5/51/Ranger_tango_icon_200px.png";
                 case Spec.Druid:
                     return "https://wiki.guildwars2.com/images/6/6d/Druid_tango_icon_200px.png";
                 case Spec.Soulbeast:
                     return "https://wiki.guildwars2.com/images/f/f6/Soulbeast_tango_icon_200px.png";
+                //
                 case Spec.Thief:
                     return "https://wiki.guildwars2.com/images/1/19/Thief_tango_icon_200px.png";
                 case Spec.Daredevil:
                     return "https://wiki.guildwars2.com/images/c/ca/Daredevil_tango_icon_200px.png";
                 case Spec.Deadeye:
                     return "https://wiki.guildwars2.com/images/b/b0/Deadeye_tango_icon_200px.png";
+                //
                 case Spec.Elementalist:
                     return "https://wiki.guildwars2.com/images/a/a0/Elementalist_tango_icon_200px.png";
                 case Spec.Tempest:
                     return "https://wiki.guildwars2.com/images/9/90/Tempest_tango_icon_200px.png";
                 case Spec.Weaver:
                     return "https://wiki.guildwars2.com/images/3/31/Weaver_tango_icon_200px.png";
+                //
                 case Spec.Mesmer:
                     return "https://wiki.guildwars2.com/images/7/73/Mesmer_tango_icon_200px.png";
                 case Spec.Chronomancer:
                     return "https://wiki.guildwars2.com/images/8/8b/Chronomancer_tango_icon_200px.png";
                 case Spec.Mirage:
                     return "https://wiki.guildwars2.com/images/a/a9/Mirage_tango_icon_200px.png";
+                case Spec.Virtuoso:
+                    return "https://wiki.guildwars2.com/images/c/cd/Virtuoso_tango_icon_200px.png";
+                //
                 case Spec.Necromancer:
                     return "https://wiki.guildwars2.com/images/c/cd/Necromancer_tango_icon_200px.png";
                 case Spec.Reaper:
                     return "https://wiki.guildwars2.com/images/9/95/Reaper_tango_icon_200px.png";
                 case Spec.Scourge:
                     return "https://wiki.guildwars2.com/images/8/8a/Scourge_tango_icon_200px.png";
+                case Spec.Harbinger:
+                    return "https://wiki.guildwars2.com/images/b/b3/Harbinger_tango_icon_200px.png";
             }
             return "https://i.imgur.com/UbvyFSt.png";
         }
@@ -369,54 +383,68 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/d/da/Berserker_tango_icon_20px.png";
                 case Spec.Spellbreaker:
                     return "https://wiki.guildwars2.com/images/e/ed/Spellbreaker_tango_icon_20px.png";
+                //
                 case Spec.Guardian:
                     return "https://wiki.guildwars2.com/images/8/8c/Guardian_tango_icon_20px.png";
                 case Spec.Dragonhunter:
                     return "https://wiki.guildwars2.com/images/c/c9/Dragonhunter_tango_icon_20px.png";
                 case Spec.Firebrand:
                     return "https://wiki.guildwars2.com/images/0/02/Firebrand_tango_icon_20px.png";
+                case Spec.Willbender:
+                    return "https://wiki.guildwars2.com/images/3/3a/Willbender_tango_icon_20px.png";
+                //
                 case Spec.Revenant:
                     return "https://wiki.guildwars2.com/images/b/b5/Revenant_tango_icon_20px.png";
                 case Spec.Herald:
                     return "https://wiki.guildwars2.com/images/6/67/Herald_tango_icon_20px.png";
                 case Spec.Renegade:
                     return "https://wiki.guildwars2.com/images/7/7c/Renegade_tango_icon_20px.png";
+                //
                 case Spec.Engineer:
                     return "https://wiki.guildwars2.com/images/2/27/Engineer_tango_icon_20px.png";
                 case Spec.Scrapper:
                     return "https://wiki.guildwars2.com/images/3/3a/Scrapper_tango_icon_200px.png";
                 case Spec.Holosmith:
                     return "https://wiki.guildwars2.com/images/2/28/Holosmith_tango_icon_20px.png";
+                //
                 case Spec.Ranger:
                     return "https://wiki.guildwars2.com/images/4/43/Ranger_tango_icon_20px.png";
                 case Spec.Druid:
                     return "https://wiki.guildwars2.com/images/d/d2/Druid_tango_icon_20px.png";
                 case Spec.Soulbeast:
                     return "https://wiki.guildwars2.com/images/7/7c/Soulbeast_tango_icon_20px.png";
+                //
                 case Spec.Thief:
                     return "https://wiki.guildwars2.com/images/7/7a/Thief_tango_icon_20px.png";
                 case Spec.Daredevil:
                     return "https://wiki.guildwars2.com/images/e/e1/Daredevil_tango_icon_20px.png";
                 case Spec.Deadeye:
                     return "https://wiki.guildwars2.com/images/c/c9/Deadeye_tango_icon_20px.png";
+                //
                 case Spec.Elementalist:
                     return "https://wiki.guildwars2.com/images/a/aa/Elementalist_tango_icon_20px.png";
                 case Spec.Tempest:
                     return "https://wiki.guildwars2.com/images/4/4a/Tempest_tango_icon_20px.png";
                 case Spec.Weaver:
                     return "https://wiki.guildwars2.com/images/f/fc/Weaver_tango_icon_20px.png";
+                //
                 case Spec.Mesmer:
                     return "https://wiki.guildwars2.com/images/6/60/Mesmer_tango_icon_20px.png";
                 case Spec.Chronomancer:
                     return "https://wiki.guildwars2.com/images/f/f4/Chronomancer_tango_icon_20px.png";
                 case Spec.Mirage:
                     return "https://wiki.guildwars2.com/images/d/df/Mirage_tango_icon_20px.png";
+                case Spec.Virtuoso:
+                    return "https://wiki.guildwars2.com/images/6/62/Virtuoso_tango_icon_20px.png";
+                //
                 case Spec.Necromancer:
                     return "https://wiki.guildwars2.com/images/4/43/Necromancer_tango_icon_20px.png";
                 case Spec.Reaper:
                     return "https://wiki.guildwars2.com/images/1/11/Reaper_tango_icon_20px.png";
                 case Spec.Scourge:
                     return "https://wiki.guildwars2.com/images/0/06/Scourge_tango_icon_20px.png";
+                case Spec.Harbinger:
+                    return "https://wiki.guildwars2.com/images/7/7f/Harbinger_tango_icon_20px.png";
             }
             return "https://i.imgur.com/UbvyFSt.png";
         }
