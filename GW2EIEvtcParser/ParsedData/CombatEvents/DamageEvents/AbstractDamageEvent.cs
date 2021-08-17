@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.ParsedData
         public bool IsMoving { get; }
         public bool AgainstMoving { get; }
         public bool IsFlanking { get; }
-        private int _againstDowned { get; set; } = -1;
+        public bool AgainstDowned { get; protected set; }
 
         internal AbstractDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem.Time)
         {
@@ -39,14 +39,14 @@ namespace GW2EIEvtcParser.ParsedData
             _iff = evtcItem.IFF;
         }
 
-        public bool AgainstDowned(ParsedEvtcLog log)
+        /*public bool AgainstDowned(ParsedEvtcLog log)
         {
-            if (_againstDowned == -1)
+            if (AgainstDownedInternal == -1)
             {
-                _againstDowned = To.IsDowned(log, Time) ? 1 : 0;
+                AgainstDownedInternal = To.IsDowned(log, Time) ? 1 : 0;
             }        
-            return _againstDowned == 1;
-        }
+            return AgainstDownedInternal == 1;
+        }*/
 
         public abstract bool ConditionDamageBased(ParsedEvtcLog log);
     }
