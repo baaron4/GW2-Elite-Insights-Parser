@@ -87,7 +87,7 @@ namespace GW2EIBuilders.JsonModels
             {
                 jsonHealingDist.Hits++; ;
                 jsonHealingDist.TotalHealing += healingEvt.HealingDone;
-                if (healingEvt.AgainstDowned(log))
+                if (healingEvt.AgainstDowned)
                 {
                     jsonHealingDist.TotalDownedHealing += healingEvt.HealingDone;
                 }
