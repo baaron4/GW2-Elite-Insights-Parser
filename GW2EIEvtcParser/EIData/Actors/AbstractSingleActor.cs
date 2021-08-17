@@ -579,6 +579,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 DamageTakenEvents = new List<AbstractHealthDamageEvent>();
                 DamageTakenEvents.AddRange(log.CombatData.GetDamageTakenData(AgentItem));
+                DamageTakenEvents = DamageTakenEvents.OrderBy(x => x.Time).ToList();
                 DamageTakenEventsBySrc = DamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
@@ -603,6 +604,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 BreakbarDamageTakenEvents = new List<AbstractBreakbarDamageEvent>();
                 BreakbarDamageTakenEvents.AddRange(log.CombatData.GetBreakbarDamageTakenData(AgentItem));
+                BreakbarDamageTakenEvents = BreakbarDamageTakenEvents.OrderBy(x => x.Time).ToList();
                 BreakbarDamageTakenEventsBySrc = BreakbarDamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
