@@ -32,7 +32,7 @@ namespace GW2EIBuilders.HtmlModels
                 hits++;
                 if (curdmg < minhealing) { minhealing = curdmg; }
                 if (curdmg > maxhealing) { maxhealing = curdmg; }
-                if (dl.AgainstDowned(log))
+                if (dl.AgainstDowned)
                 {
                     totaldownedhealing += dl.HealingDone;
                 }
