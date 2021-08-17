@@ -370,6 +370,10 @@ namespace GW2EIBuilders
                 case "Color-Firebrand-NonBoss": return "rgb(88,147,165)";
                 case "Color-Firebrand-Total": return "rgb(62,101,113)";
 
+                case "Color-Willbender": return "rgb(114,193,217)";
+                case "Color-Willbender-NonBoss": return "rgb(88,147,165)";
+                case "Color-Willbender-Total": return "rgb(62,101,113)";
+
                 case "Color-Revenant": return "rgb(209,110,90)";
                 case "Color-Revenant-NonBoss": return "rgb(159,85,70)";
                 case "Color-Revenant-Total": return "rgb(110,60,50)";
@@ -442,6 +446,10 @@ namespace GW2EIBuilders
                 case "Color-Mirage-NonBoss": return "rgb(139,90,162)";
                 case "Color-Mirage-Total": return "rgb(96,60,111)";
 
+                case "Color-Virtuoso": return "rgb(182,121,213)";
+                case "Color-Virtuoso-NonBoss": return "rgb(139,90,162)";
+                case "Color-Virtuoso-Total": return "rgb(96,60,111)";
+
                 case "Color-Necromancer": return "rgb(82,167,111)";
                 case "Color-Necromancer-NonBoss": return "rgb(64,127,85)";
                 case "Color-Necromancer-Total": return "rgb(46,88,60)";
@@ -453,6 +461,10 @@ namespace GW2EIBuilders
                 case "Color-Scourge": return "rgb(82,167,111)";
                 case "Color-Scourge-NonBoss": return "rgb(64,127,85)";
                 case "Color-Scourge-Total": return "rgb(46,88,60)";
+
+                case "Color-Harbinger": return "rgb(82,167,111)";
+                case "Color-Harbinger-NonBoss": return "rgb(64,127,85)";
+                case "Color-Harbinger-Total": return "rgb(46,88,60)";
 
                 case "Color-Boss": return "rgb(82,167,250)";
                 case "Color-Boss-NonBoss": return "rgb(92,177,250)";
