@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
-            new DamageLogApproximateDamageModifier("Mental Focus", "15% to foes within 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Virtuoso, "", (x,log) =>
+            new DamageLogApproximateDamageModifier("Mental Focus", "15% to foes within 600 range", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Virtuoso, "https://wiki.guildwars2.com/images/d/da/Mental_Focus.png", (x,log) =>
             {
                 Point3D currentPosition = x.From.GetCurrentPosition(log, x.Time);
                 Point3D currentTargetPosition = x.To.GetCurrentPosition(log, x.Time);
@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return currentPosition.DistanceToPoint(currentTargetPosition) <= 600;
-            }, ByPresence, ulong.MaxValue, ulong.MaxValue, DamageModifierMode.All)
+            }, ByPresence, 118697, ulong.MaxValue, DamageModifierMode.All)
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
