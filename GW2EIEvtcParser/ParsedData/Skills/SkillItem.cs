@@ -231,10 +231,6 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 Name = overrideName;
             }
-            else if (ApiSkill != null)
-            {
-                Name = ApiSkill.Name;
-            }
             if (_overrideIcons.TryGetValue(ID, out string icon))
             {
                 Icon = icon;
