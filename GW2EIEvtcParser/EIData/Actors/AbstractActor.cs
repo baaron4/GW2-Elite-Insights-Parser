@@ -16,8 +16,8 @@ namespace GW2EIEvtcParser.EIData
         public uint Concentration => AgentItem.Concentration;
         public uint Healing => AgentItem.Healing;
         public string Prof => AgentItem.Prof;
-        public ParserHelper.Spec Spec { get; set; }
-        public ParserHelper.Spec BaseSpec { get; set; }
+        public ParserHelper.Spec Spec { get; }
+        public ParserHelper.Spec BaseSpec { get; }
         public long LastAware => AgentItem.LastAware;
         public long FirstAware => AgentItem.FirstAware;
         public int ID => AgentItem.ID;
