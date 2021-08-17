@@ -196,10 +196,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                             darkAI0HP.OverrideSrcAgent(darkAiAgent.Agent);
                             combatData.Add(darkAI0HP);
                         }
-                        //
-                        var auxCombatData = combatData.OrderBy(x => x.Time).ToList();
-                        combatData.Clear();
-                        combatData.AddRange(auxCombatData);
                     }
                     aiAgent.OverrideAwareTimes(aiAgent.FirstAware, lastAwareTime);
                     // Redirect NPC masters

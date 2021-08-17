@@ -312,6 +312,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players, ParserController operation, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, int evtcVersion)
         {
+            var combatEvents = allCombatItems.OrderBy(x => x.Time).ToList();
             _skillIds = new HashSet<long>();
             var castCombatEvents = new Dictionary<ulong, List<CombatItem>>();
             var buffEvents = new List<AbstractBuffEvent>();
@@ -319,7 +320,7 @@ namespace GW2EIEvtcParser.ParsedData
             var brkDamageData = new List<AbstractBreakbarDamageEvent>();
             var damageData = new List<AbstractHealthDamageEvent>();
             operation.UpdateProgressWithCancellationCheck("Creating EI Combat Data");
-            foreach (CombatItem combatItem in allCombatItems)
+            foreach (CombatItem combatItem in combatEvents)
             {
                 _skillIds.Add(combatItem.SkillID);
                 if (combatItem.IsStateChange != ArcDPSEnums.StateChange.None)

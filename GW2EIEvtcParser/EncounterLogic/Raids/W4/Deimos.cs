@@ -287,9 +287,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 MergeWithGadgets(deimos.AgentItem, gadgetAgents, combatData, extensions);
                 // Add custom spawn event
                 combatData.Add(new CombatItem(_deimos10PercentTime + 1, deimos.AgentItem.Agent, 0, 0, 0, 0, 0, deimos.AgentItem.InstID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0));
-                var auxList = combatData.OrderBy(x => x.Time).ToList();
-                combatData.Clear();
-                combatData.AddRange(auxList);
             }
             deimos.AgentItem.OverrideAwareTimes(deimos.FirstAware, fightData.FightEnd);
             deimos.OverrideName("Deimos");
