@@ -114,7 +114,7 @@ namespace GW2EIEvtcParser.EIData
             HashSet<AgentItem> healingTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, 5958, playerAgents);
             healingTurrets.RemoveWhere(x => thumperTurrets.Contains(x) || rocketTurrets.Contains(x) || netTurrets.Contains(x) || rifleTurrets.Contains(x) || flameTurrets.Contains(x) || harpoonTurrets.Contains(x));
 
-            var engineers = players.Where(x => x.Prof == "Engineer" || x.Prof == "Scrapper" || x.Prof == "Holosmith").ToList();
+            var engineers = players.Where(x => x.BaseSpec == Spec.Engineer).ToList();
             // if only one engineer, could only be that one
             if (engineers.Count == 1)
             {

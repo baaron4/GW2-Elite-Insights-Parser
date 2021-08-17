@@ -19,9 +19,9 @@ namespace GW2EIEvtcParser.EIData
             {
                 return base.CouldBeEssenceOfSpeed(dst, extension, buffID, log);
             }
-            if (extension <= EssenceOfSpeed && dst.Prof == "Soulbeast")
+            if (extension <= EssenceOfSpeed && ParserHelper.ProfToSpec(dst.Prof) == ParserHelper.Spec.Soulbeast)
             {
-                if (log.FriendliesListBySpec.ContainsKey("Herald") || log.FriendliesListBySpec.ContainsKey("Tempest") || log.FriendliesListBySpec.ContainsKey("Chronomancer"))
+                if (log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Herald) || log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Tempest) || log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Chronomancer))
                 {
                     // uncertain, needs to check more
                     return 0;

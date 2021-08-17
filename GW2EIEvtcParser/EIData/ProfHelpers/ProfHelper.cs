@@ -3,6 +3,7 @@ using System.Linq;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.Extensions;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -99,113 +100,125 @@ namespace GW2EIEvtcParser.EIData
             var res = new List<InstantCastEvent>();
             foreach (Player p in players)
             {
-                switch (p.Prof)
+                switch (p.Spec)
                 {
                     //
-                    case "Elementalist":
+                    case Spec.Elementalist:
                         ElementalistHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
-                    case "Tempest":
+                    case Spec.Tempest:
                         ElementalistHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         TempestHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
-                    case "Weaver":
+                    case Spec.Weaver:
                         ElementalistHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         WeaverHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
                     //
-                    case "Necromancer":
+                    case Spec.Necromancer:
                         NecromancerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
-                    case "Reaper":
+                    case Spec.Reaper:
                         NecromancerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         ReaperHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
-                    case "Scourge":
+                    case Spec.Scourge:
                         NecromancerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         ScourgeHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
+                    case Spec.Harbinger:
+                        NecromancerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        HarbingerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        break;
                     //
-                    case "Mesmer":
+                    case Spec.Mesmer:
                         MesmerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
-                    case "Chronomancer":
+                    case Spec.Chronomancer:
                         MesmerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         ChronomancerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
-                    case "Mirage":
+                    case Spec.Mirage:
                         MesmerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         MirageHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
+                    case Spec.Virtuoso:
+                        MesmerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        VirtuosoHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        break;
                     //
-                    case "Thief":
+                    case Spec.Thief:
                         ThiefHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
-                    case "Daredevil":
+                    case Spec.Daredevil:
                         ThiefHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         DaredevilHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
-                    case "Deadeye":
+                    case Spec.Deadeye:
                         ThiefHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         DeadeyeHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
                     //
-                    case "Engineer":
+                    case Spec.Engineer:
                         EngineerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
-                    case "Scrapper":
+                    case Spec.Scrapper:
                         EngineerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         ScrapperHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
-                    case "Holosmith":
+                    case Spec.Holosmith:
                         EngineerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         HolosmithHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
                     //
-                    case "Ranger":
+                    case Spec.Ranger:
                         RangerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
-                    case "Druid":
+                    case Spec.Druid:
                         RangerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         DruidHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
-                    case "Soulbeast":
+                    case Spec.Soulbeast:
                         RangerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         SoulbeastHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
                     //
-                    case "Revenant":
+                    case Spec.Revenant:
                         RevenantHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
-                    case "Herald":
+                    case Spec.Herald:
                         RevenantHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         HeraldHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
-                    case "Renegade":
+                    case Spec.Renegade:
                         RevenantHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         RenegadeHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
                     //
-                    case "Guardian":
+                    case Spec.Guardian:
                         GuardianHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
-                    case "Dragonhunter":
+                    case Spec.Dragonhunter:
                         GuardianHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         DragonhunterHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
-                    case "Firebrand":
+                    case Spec.Firebrand:
                         GuardianHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         FirebrandHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
+                    case Spec.Willbender:
+                        GuardianHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        WillbenderHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        break;
                     //
-                    case "Warrior":
+                    case Spec.Warrior:
                         WarriorHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
-                    case "Berserker":
+                    case Spec.Berserker:
                         WarriorHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         BerserkerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
-                    case "Spellbreaker":
+                    case Spec.Spellbreaker:
                         WarriorHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         SpellbreakerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;

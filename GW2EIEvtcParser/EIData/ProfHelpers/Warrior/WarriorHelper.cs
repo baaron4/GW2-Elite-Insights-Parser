@@ -126,7 +126,7 @@ namespace GW2EIEvtcParser.EIData
                 disBanners = GetBannerAgents(combatData, 14449, playerAgents),
                 tacBanners = GetBannerAgents(combatData, 14450, playerAgents);
             //battleBanner = FindBattleStandards(buffData, playerAgents);
-            var warriors = players.Where(x => x.Prof == "Warrior" || x.Prof == "Spellbreaker" || x.Prof == "Berserker").ToList();
+            var warriors = players.Where(x => x.BaseSpec == Spec.Warrior).ToList();
             // if only one warrior, could only be that one
             if (warriors.Count == 1)
             {

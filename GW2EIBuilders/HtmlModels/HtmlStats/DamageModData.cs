@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIBuilders.HtmlModels
 {
@@ -75,12 +76,12 @@ namespace GW2EIBuilders.HtmlModels
             return pData;
         }
 
-        public static List<DamageModData> BuildPersonalDmgModifiersData(ParsedEvtcLog log, PhaseData phase, IReadOnlyDictionary<string, IReadOnlyList<DamageModifier>> damageModsToUse)
+        public static List<DamageModData> BuildPersonalDmgModifiersData(ParsedEvtcLog log, PhaseData phase, IReadOnlyDictionary<Spec, IReadOnlyList<DamageModifier>> damageModsToUse)
         {
             var pData = new List<DamageModData>();
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                pData.Add(new DamageModData(actor, log, damageModsToUse[actor.Prof], phase));
+                pData.Add(new DamageModData(actor, log, damageModsToUse[actor.Spec], phase));
             }
             return pData;
         }

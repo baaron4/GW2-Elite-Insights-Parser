@@ -35,9 +35,9 @@ namespace GW2EIEvtcParser.EIData
         // Spec specific checks
         protected virtual int CouldBeEssenceOfSpeed(AgentItem dst, long extension, long buffID, ParsedEvtcLog log)
         {
-            if (extension == EssenceOfSpeed && dst.Prof == "Soulbeast")
+            if (extension == EssenceOfSpeed && ParserHelper.ProfToSpec(dst.Prof) == ParserHelper.Spec.Soulbeast)
             {
-                if (log.FriendliesListBySpec.ContainsKey("Herald") || log.FriendliesListBySpec.ContainsKey("Tempest"))
+                if (log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Herald) || log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Tempest))
                 {
                     // uncertain, needs to check more
                     return 0;
@@ -50,7 +50,7 @@ namespace GW2EIEvtcParser.EIData
 
         protected virtual bool CouldBeImbuedMelodies(AgentItem agent, long time, long extension, ParsedEvtcLog log)
         {
-            if (extension == ImbuedMelodies && log.FriendliesListBySpec.TryGetValue("Tempest", out List<AbstractSingleActor> tempests))
+            if (extension == ImbuedMelodies && log.FriendliesListBySpec.TryGetValue(ParserHelper.Spec.Tempest, out List<AbstractSingleActor> tempests))
             {
                 var magAuraApplications = new HashSet<AgentItem>(log.CombatData.GetBuffData(5684).Where(x => x is BuffApplyEvent && Math.Abs(x.Time - time) < ParserHelper.ServerDelayConstant && x.CreditedBy != agent).Select(x => x.CreditedBy));
                 foreach (AbstractSingleActor tempest in tempests)

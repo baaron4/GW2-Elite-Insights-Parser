@@ -45,6 +45,7 @@ namespace GW2EIEvtcParser.EIData
                 GuardianHelper.Buffs,
                 DragonhunterHelper.Buffs,
                 FirebrandHelper.Buffs,
+                WillbenderHelper.Buffs,
                 //
                 RangerHelper.Buffs,
                 DruidHelper.Buffs,
@@ -61,10 +62,12 @@ namespace GW2EIEvtcParser.EIData
                 MesmerHelper.Buffs,
                 ChronomancerHelper.Buffs,
                 MirageHelper.Buffs,
+                VirtuosoHelper.Buffs,
                 //
                 NecromancerHelper.Buffs,
                 ReaperHelper.Buffs,
                 ScourgeHelper.Buffs,
+                HarbingerHelper.Buffs,
                 //
                 ElementalistHelper.Buffs,
                 TempestHelper.Buffs,
@@ -133,10 +136,10 @@ namespace GW2EIEvtcParser.EIData
         }
 
         // Non shareable buffs
-        public IReadOnlyList<Buff> GetPersonalBuffsList(string source)
+        public IReadOnlyList<Buff> GetPersonalBuffsList(ParserHelper.Spec spec)
         {
             var result = new List<Buff>();
-            foreach (ParserHelper.Source src in ParserHelper.ProfToEnum(source))
+            foreach (ParserHelper.Source src in ParserHelper.SpecToSources(spec))
             {
                 if (BuffsBySource.TryGetValue(src, out IReadOnlyList<Buff> list))
                 {
