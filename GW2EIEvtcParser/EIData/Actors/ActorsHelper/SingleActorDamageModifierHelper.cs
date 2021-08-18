@@ -85,7 +85,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 damageMods.AddRange(list);
             }
-            damageMods.AddRange(log.DamageModifiers.GetModifiersPerProf(Actor.Prof));
+            damageMods.AddRange(log.DamageModifiers.GetModifiersPerSpec(Actor.Spec));
             //
             var damageModifierEvents = new List<DamageModifierEvent>();
             foreach (DamageModifier damageMod in damageMods)

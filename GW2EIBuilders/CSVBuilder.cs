@@ -700,7 +700,7 @@ namespace GW2EIBuilders
         {
             NPC boss = _legacyTarget;
             PhaseData phase = _phases[phaseIndex];
-            IReadOnlyDictionary<long, FinalActorBuffs> conditions = _legacyTarget.GetBuffs(BuffEnum.Self,_log, phase.Start, phase.End);
+            IReadOnlyDictionary<long, FinalActorBuffs> conditions = _legacyTarget.GetBuffs(BuffEnum.Self, _log, phase.Start, phase.End);
 
             WriteCell("Name");
             WriteCell("Avg");
@@ -743,7 +743,7 @@ namespace GW2EIBuilders
         {
             NPC boss = _legacyTarget;
             PhaseData phase = _phases[phaseIndex];
-            IReadOnlyDictionary<long, FinalActorBuffs> conditions = _legacyTarget.GetBuffs(BuffEnum.Self,_log, phase.Start, phase.End);
+            IReadOnlyDictionary<long, FinalActorBuffs> conditions = _legacyTarget.GetBuffs(BuffEnum.Self, _log, phase.Start, phase.End);
             WriteCell("Name");
             WriteCell("Avg");
             foreach (Buff boon in _statistics.PresentBoons)

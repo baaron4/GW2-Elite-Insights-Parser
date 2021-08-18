@@ -138,7 +138,7 @@ namespace GW2EIEvtcParser.EIData
             // entangle works fine already
             HashSet<AgentItem> jacarandaEmbraces = ProfHelper.GetOffensiveGadgetAgents(combatData, 1286, playerAgents);
             HashSet<AgentItem> blackHoles = ProfHelper.GetOffensiveGadgetAgents(combatData, 31436, playerAgents);
-            var rangers = players.Where(x => x.Prof == "Ranger" || x.Prof == "Soulbeast" || x.Prof == "Druid").ToList();
+            var rangers = players.Where(x => x.BaseSpec == Spec.Ranger).ToList();
             // if only one ranger, could only be that one
             if (rangers.Count == 1)
             {

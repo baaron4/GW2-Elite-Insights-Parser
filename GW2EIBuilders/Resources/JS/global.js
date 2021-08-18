@@ -107,36 +107,82 @@ const urls = {
 };
 
 const specs = [
-    "Warrior", "Berserker", "Spellbreaker", "Revenant", "Herald", "Renegade", "Guardian", "Dragonhunter", "Firebrand",
-    "Ranger", "Druid", "Soulbeast", "Engineer", "Scrapper", "Holosmith", "Thief", "Daredevil", "Deadeye",
-    "Mesmer", "Chronomancer", "Mirage", "Necromancer", "Reaper", "Scourge", "Elementalist", "Tempest", "Weaver"
+    "Warrior",
+    "Berserker",
+    "Spellbreaker",
+    //
+    "Revenant",
+    "Herald",
+    "Renegade",
+    //
+    "Guardian",
+    "Dragonhunter",
+    "Firebrand",
+    "Willbender",
+    //
+    "Ranger",
+    "Druid",
+    "Soulbeast",
+    //
+    "Engineer",
+    "Scrapper",
+    "Holosmith",
+    //
+    "Thief",
+    "Daredevil",
+    "Deadeye",
+    //
+    "Mesmer",
+    "Chronomancer",
+    "Mirage",
+    "Virtuoso",
+    //
+    "Necromancer",
+    "Reaper",
+    "Scourge",
+    "Harbinger",
+    //
+    "Elementalist",
+    "Tempest",
+    "Weaver"
 ];
 
 const specToBase = {
     Warrior: 'Warrior',
     Berserker: 'Warrior',
     Spellbreaker: 'Warrior',
+    //
     Revenant: "Revenant",
     Herald: "Revenant",
     Renegade: "Revenant",
+    //
     Guardian: "Guardian",
     Dragonhunter: "Guardian",
     Firebrand: "Guardian",
+    Willbender: "Guardian",
+    //
     Ranger: "Ranger",
     Druid: "Ranger",
     Soulbeast: "Ranger",
+    //
     Engineer: "Engineer",
     Scrapper: "Engineer",
     Holosmith: "Engineer",
+    //
     Thief: "Thief",
     Daredevil: "Thief",
     Deadeye: "Thief",
+    //
     Mesmer: "Mesmer",
     Chronomancer: "Mesmer",
     Mirage: "Mesmer",
+    Virtuoso: "Mesmer",
+    //
     Necromancer: "Necromancer",
     Reaper: "Necromancer",
     Scourge: "Necromancer",
+    Harbinger: "Necromancer",
+    //
     Elementalist: "Elementalist",
     Tempest: "Elementalist",
     Weaver: "Elementalist"

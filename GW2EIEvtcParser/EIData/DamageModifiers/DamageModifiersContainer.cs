@@ -32,6 +32,7 @@ namespace GW2EIEvtcParser.EIData
                 GuardianHelper.DamageMods,
                 DragonhunterHelper.DamageMods,
                 FirebrandHelper.DamageMods,
+                WillbenderHelper.DamageMods,
                 //
                 EngineerHelper.DamageMods,
                 ScrapperHelper.DamageMods,
@@ -48,10 +49,12 @@ namespace GW2EIEvtcParser.EIData
                 MesmerHelper.DamageMods,
                 ChronomancerHelper.DamageMods,
                 MirageHelper.DamageMods,
+                VirtuosoHelper.DamageMods,
                 //
                 NecromancerHelper.DamageMods,
                 ReaperHelper.DamageMods,
                 ScourgeHelper.DamageMods,
+                HarbingerHelper.DamageMods,
                 //
                 ElementalistHelper.DamageMods,
                 TempestHelper.DamageMods,
@@ -74,10 +77,10 @@ namespace GW2EIEvtcParser.EIData
             });
         }
 
-        public IReadOnlyList<DamageModifier> GetModifiersPerProf(string prof)
+        public IReadOnlyList<DamageModifier> GetModifiersPerSpec(ParserHelper.Spec spec)
         {
             var res = new List<DamageModifier>();
-            IReadOnlyList<ParserHelper.Source> srcs = ParserHelper.ProfToEnum(prof);
+            IReadOnlyList<ParserHelper.Source> srcs = ParserHelper.SpecToSources(spec);
             foreach (ParserHelper.Source src in srcs)
             {
                 if (DamageModifiersPerSource.TryGetValue(src, out IReadOnlyList<DamageModifier> list))

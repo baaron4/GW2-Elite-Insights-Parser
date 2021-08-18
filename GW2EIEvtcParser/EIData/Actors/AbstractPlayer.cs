@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.EIData
 
         public override string GetIcon()
         {
-            return AgentItem.Type == AgentItem.AgentType.NonSquadPlayer && !AgentItem.IsNotInSquadFriendlyPlayer ? GetHighResolutionProfIcon(Prof) : GetProfIcon(Prof);
+            return AgentItem.Type == AgentItem.AgentType.NonSquadPlayer && !AgentItem.IsNotInSquadFriendlyPlayer ? GetHighResolutionProfIcon(Spec) : GetProfIcon(Spec);
         }
 
         protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log)

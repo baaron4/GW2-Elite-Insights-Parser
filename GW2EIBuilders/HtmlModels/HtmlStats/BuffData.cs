@@ -92,9 +92,9 @@ namespace GW2EIBuilders.HtmlModels
             }
         }
 
-        private BuffData(string prof, IReadOnlyDictionary<string, IReadOnlyList<Buff>> buffsBySpec, IReadOnlyDictionary<long, FinalActorBuffs> uptimes)
+        private BuffData(Spec spec, IReadOnlyDictionary<Spec, IReadOnlyList<Buff>> buffsBySpec, IReadOnlyDictionary<long, FinalActorBuffs> uptimes)
         {
-            foreach (Buff buff in buffsBySpec[prof])
+            foreach (Buff buff in buffsBySpec[spec])
             {
                 var boonVals = new List<object>();
                 Data.Add(boonVals);
@@ -159,22 +159,22 @@ namespace GW2EIBuilders.HtmlModels
         }
 
         //////
-        public static List<BuffData> BuildPersonalBuffUptimeData(ParsedEvtcLog log, IReadOnlyDictionary<string, IReadOnlyList<Buff>> buffsBySpec, PhaseData phase)
+        public static List<BuffData> BuildPersonalBuffUptimeData(ParsedEvtcLog log, IReadOnlyDictionary<Spec, IReadOnlyList<Buff>> buffsBySpec, PhaseData phase)
         {
             var list = new List<BuffData>();
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                list.Add(new BuffData(actor.Prof, buffsBySpec, actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End)));
+                list.Add(new BuffData(actor.Spec, buffsBySpec, actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End)));
             }
             return list;
         }
 
-        public static List<BuffData> BuildActivePersonalBuffUptimeData(ParsedEvtcLog log, IReadOnlyDictionary<string, IReadOnlyList<Buff>> buffsBySpec, PhaseData phase)
+        public static List<BuffData> BuildActivePersonalBuffUptimeData(ParsedEvtcLog log, IReadOnlyDictionary<Spec, IReadOnlyList<Buff>> buffsBySpec, PhaseData phase)
         {
             var list = new List<BuffData>();
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                list.Add(new BuffData(actor.Prof, buffsBySpec, actor.GetActiveBuffs(BuffEnum.Self, log, phase.Start, phase.End)));
+                list.Add(new BuffData(actor.Spec, buffsBySpec, actor.GetActiveBuffs(BuffEnum.Self, log, phase.Start, phase.End)));
             }
             return list;
         }

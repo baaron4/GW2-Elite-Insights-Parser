@@ -38,7 +38,7 @@ namespace GW2EIGW2API
 
             public APIItems(List<T> traits)
             {
-                Items = traits.ToDictionary(x => x.Id);
+                Items = traits.GroupBy(x => x.Id).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
             }
 
             public Dictionary<long, T> Items { get; }
@@ -52,7 +52,7 @@ namespace GW2EIGW2API
             int pagesize = 200;
             while (!maxPageSizeReached)
             {
-                string path = apiPath + "?page=" + page + "&page_size=" + pagesize;
+                string path = apiPath + "?page=" + page + "&page_size=" + pagesize + "&lang=en";
                 HttpResponseMessage response = GetAPIClient().GetAsync(new Uri(path, UriKind.Relative)).Result;
                 if (response.IsSuccessStatusCode)
                 {

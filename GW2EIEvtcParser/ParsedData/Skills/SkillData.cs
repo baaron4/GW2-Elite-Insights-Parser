@@ -20,7 +20,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return value;
             }
-            Add(ID, "UNKNOWN");
+            Add(ID, SkillItem.DefaultName);
             return _skills[ID];
         }
 

@@ -41,11 +41,11 @@ namespace GW2EIEvtcParser.ParsedData
             var toAdd = new List<AbstractBuffEvent>();
             foreach (Player p in players)
             {
-                if (p.Prof == "Weaver")
+                if (p.Spec == ParserHelper.Spec.Weaver)
                 {
                     toAdd.AddRange(WeaverHelper.TransformWeaverAttunements(GetBuffData(p.AgentItem), _buffData, p.AgentItem, skillData));
                 }
-                if (p.Prof == "Elementalist" || p.Prof == "Tempest")
+                if (p.BaseSpec == ParserHelper.Spec.Elementalist && p.Spec != ParserHelper.Spec.Weaver)
                 {
                     ElementalistHelper.RemoveDualBuffs(GetBuffData(p.AgentItem), _buffData, skillData);
                 }

@@ -89,11 +89,11 @@ namespace GW2EIBuilders.HtmlModels
             }
         }
 
-        private static Dictionary<string, IReadOnlyList<Buff>> BuildPersonalBuffData(ParsedEvtcLog log, Dictionary<string, List<long>> dict, Dictionary<long, Buff> usedBuffs)
+        private static Dictionary<Spec, IReadOnlyList<Buff>> BuildPersonalBuffData(ParsedEvtcLog log, Dictionary<string, List<long>> persBuffDict, Dictionary<long, Buff> usedBuffs)
         {
-            var boonsBySpec = new Dictionary<string, IReadOnlyList<Buff>>();
+            var boonsBySpec = new Dictionary<Spec, IReadOnlyList<Buff>>();
             // Collect all personal buffs by spec
-            foreach (KeyValuePair<string, List<AbstractSingleActor>> pair in log.FriendliesListBySpec)
+            foreach (KeyValuePair<Spec, List<AbstractSingleActor>> pair in log.FriendliesListBySpec)
             {
                 List<AbstractSingleActor> friendlies = pair.Value;
                 var specBoonIds = new HashSet<long>(log.Buffs.GetPersonalBuffsList(pair.Key).Select(x => x.ID));
@@ -117,25 +117,25 @@ namespace GW2EIBuilders.HtmlModels
                 }
                 boonsBySpec[pair.Key] = boonToUse.ToList();
             }
-            foreach (KeyValuePair<string, IReadOnlyList<Buff>> pair in boonsBySpec)
+            foreach (KeyValuePair<Spec, IReadOnlyList<Buff>> pair in boonsBySpec)
             {
-                dict[pair.Key] = new List<long>();
+                persBuffDict[pair.Key.ToString()] = new List<long>();
                 foreach (Buff boon in pair.Value)
                 {
-                    dict[pair.Key].Add(boon.ID);
+                    persBuffDict[pair.Key.ToString()].Add(boon.ID);
                     usedBuffs[boon.ID] = boon;
                 }
             }
             return boonsBySpec;
         }
 
-        private static Dictionary<string, IReadOnlyList<DamageModifier>> BuildPersonalDamageModData(ParsedEvtcLog log, Dictionary<string, List<long>> dict, HashSet<DamageModifier> usedDamageMods)
+        private static Dictionary<Spec, IReadOnlyList<DamageModifier>> BuildPersonalDamageModData(ParsedEvtcLog log, Dictionary<string, List<long>> dgmModDict, HashSet<DamageModifier> usedDamageMods)
         {
-            var damageModBySpecs = new Dictionary<string, IReadOnlyList<DamageModifier>>();
+            var damageModBySpecs = new Dictionary<Spec, IReadOnlyList<DamageModifier>>();
             // Collect all personal damage mods by spec
-            foreach (KeyValuePair<string, List<AbstractSingleActor>> pair in log.FriendliesListBySpec)
+            foreach (KeyValuePair<Spec, List<AbstractSingleActor>> pair in log.FriendliesListBySpec)
             {
-                var specDamageModsName = new HashSet<string>(log.DamageModifiers.GetModifiersPerProf(pair.Key).Select(x => x.Name));
+                var specDamageModsName = new HashSet<string>(log.DamageModifiers.GetModifiersPerSpec(pair.Key).Select(x => x.Name));
                 var damageModsToUse = new HashSet<DamageModifier>();
                 foreach (AbstractSingleActor actor in pair.Value)
                 {
@@ -147,12 +147,12 @@ namespace GW2EIBuilders.HtmlModels
                 }
                 damageModBySpecs[pair.Key] = damageModsToUse.ToList();
             }
-            foreach (KeyValuePair<string, IReadOnlyList<DamageModifier>> pair in damageModBySpecs)
+            foreach (KeyValuePair<Spec, IReadOnlyList<DamageModifier>> pair in damageModBySpecs)
             {
-                dict[pair.Key] = new List<long>();
+                dgmModDict[pair.Key.ToString()] = new List<long>();
                 foreach (DamageModifier mod in pair.Value)
                 {
-                    dict[pair.Key].Add(mod.ID);
+                    dgmModDict[pair.Key.ToString()].Add(mod.ID);
                     usedDamageMods.Add(mod);
                 }
             }
@@ -287,8 +287,8 @@ namespace GW2EIBuilders.HtmlModels
             }
             //
             log.UpdateProgressWithCancellationCheck("HTML: building Skill/Buff dictionaries");
-            Dictionary<string, IReadOnlyList<Buff>> persBuffDict = BuildPersonalBuffData(log, logData.PersBuffs, usedBuffs);
-            Dictionary<string, IReadOnlyList<DamageModifier>> persDamageModDict = BuildPersonalDamageModData(log, logData.DmgModifiersPers, usedDamageMods);
+            Dictionary<Spec, IReadOnlyList<Buff>> persBuffDict = BuildPersonalBuffData(log, logData.PersBuffs, usedBuffs);
+            Dictionary<Spec, IReadOnlyList<DamageModifier>> persDamageModDict = BuildPersonalDamageModData(log, logData.DmgModifiersPers, usedDamageMods);
             var allDamageMods = new HashSet<string>();
             var commonDamageModifiers = new List<DamageModifier>();
             var itemDamageModifiers = new List<DamageModifier>();
