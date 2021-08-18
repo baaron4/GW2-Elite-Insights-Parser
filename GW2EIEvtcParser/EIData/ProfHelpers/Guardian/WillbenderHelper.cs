@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
             new BuffDamageModifier(62509, "Lethal Tempo", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Willbender, ByStack, "https://wiki.guildwars2.com/images/1/10/Lethal_Tempo.png", 118697, ulong.MaxValue, DamageModifierMode.All),
-            new BuffDamageModifier(62657, "Tyrant's Lethal Tempo", "5% per stack", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Willbender, ByStack, "https://wiki.guildwars2.com/images/c/c4/Tyrant%27s_Momentum.png", 118697, ulong.MaxValue, DamageModifierMode.All),
+            //new BuffDamageModifier(62657, "Tyrant's Lethal Tempo", "5% per stack", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Willbender, ByStack, "https://wiki.guildwars2.com/images/c/c4/Tyrant%27s_Momentum.png", 118697, ulong.MaxValue, DamageModifierMode.All),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
@@ -29,7 +29,7 @@ namespace GW2EIEvtcParser.EIData
                 //
                 new Buff("Repose", 62638, Source.Willbender, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/80/Repose.png", 118697, ulong.MaxValue),
                 new Buff("Lethal Tempo", 62509, Source.Willbender, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/10/Lethal_Tempo.png", 118697, ulong.MaxValue),
-                new Buff("Tyrant's Lethal Tempo", 62657, Source.Willbender, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/c4/Tyrant%27s_Momentum.png", 118697, ulong.MaxValue),
+                //new Buff("Tyrant's Lethal Tempo", 62657, Source.Willbender, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/c4/Tyrant%27s_Momentum.png", 118697, ulong.MaxValue),
         };
     }
 }

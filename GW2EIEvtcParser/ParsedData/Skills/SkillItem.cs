@@ -132,6 +132,7 @@ namespace GW2EIEvtcParser.ParsedData
             {56885, "https://wiki.guildwars2.com/images/e/e2/Earthen_Blast.png"},
             {40071, "https://wiki.guildwars2.com/images/4/40/Garish_Pillar.png" },
             {46726, "https://wiki.guildwars2.com/images/0/08/Desert_Shroud.png" },
+            {54870, "https://wiki.guildwars2.com/images/3/34/Sandstorm_Shroud.png" },
             {41968,  "https://wiki.guildwars2.com/images/7/79/Chapter_2-_Daring_Challenge.png"},
             {46616, "https://wiki.guildwars2.com/images/7/7e/Flame_Surge.png" },
             {42449,  "https://wiki.guildwars2.com/images/e/e7/Chapter_3-_Heated_Rebuke.png"},
@@ -217,7 +218,9 @@ namespace GW2EIEvtcParser.ParsedData
         internal GW2APISkill ApiSkill { get; }
         private SkillInfoEvent _skillInfo { get; set; }
 
-        public bool UnknownSkill { get; } = false;
+        internal const string DefaultName = "UNKNOWN";
+
+        public bool UnknownSkill => Name == DefaultName;
 
         // Constructor
 
@@ -230,6 +233,10 @@ namespace GW2EIEvtcParser.ParsedData
             if (_overrideNames.TryGetValue(ID, out string overrideName))
             {
                 Name = overrideName;
+            } 
+            else if (ApiSkill != null && UnknownSkill)
+            {
+                Name = ApiSkill.Name;
             }
             if (_overrideIcons.TryGetValue(ID, out string icon))
             {
