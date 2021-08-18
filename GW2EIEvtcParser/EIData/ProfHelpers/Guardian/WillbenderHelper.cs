@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
@@ -16,8 +19,24 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
-            new BuffDamageModifier(62509, "Lethal Tempo", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Willbender, ByStack, "https://wiki.guildwars2.com/images/1/10/Lethal_Tempo.png", 118697, ulong.MaxValue, DamageModifierMode.All),
-            new BuffDamageModifier(62509, "Tyrant's Lethal Tempo", "5% per stack", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Willbender, ByStack, "https://wiki.guildwars2.com/images/c/c4/Tyrant%27s_Momentum.png", 118697, ulong.MaxValue, DamageModifierMode.All),
+            new BuffDamageModifier(62509, "Lethal Tempo", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Willbender, ByStack, "https://wiki.guildwars2.com/images/1/10/Lethal_Tempo.png", 118697, ulong.MaxValue, DamageModifierMode.All, (x, log) => {
+                AgentItem src = x.From;
+                BuffApplyEvent effectApply = log.CombatData.GetBuffData(62509).OfType<BuffApplyEvent>().FirstOrDefault(y => y.To == src && !y.Initial);
+                if (effectApply != null && Math.Abs(effectApply.AppliedDuration - 6000) < ServerDelayConstant)
+                {
+                    return true;
+                }
+                return false;
+            }),
+            new BuffDamageModifier(62509, "Tyrant's Lethal Tempo", "5% per stack", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Willbender, ByStack, "https://wiki.guildwars2.com/images/c/c4/Tyrant%27s_Momentum.png", 118697, ulong.MaxValue, DamageModifierMode.All, (x, log) => {
+                AgentItem src = x.From;
+                BuffApplyEvent effectApply = log.CombatData.GetBuffData(62509).OfType<BuffApplyEvent>().FirstOrDefault(y => y.To == src && !y.Initial);
+                if (effectApply != null && Math.Abs(effectApply.AppliedDuration - 4000) < ServerDelayConstant)
+                {
+                    return true;
+                }
+                return false;
+            }),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
