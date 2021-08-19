@@ -140,7 +140,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phase.AddTarget(mainTarget);
                 phases.Add(phase);
             }
-            string[] intermissionNames = { "Magma Drop 1", "Magma Drop 2", "North Pylon", "SouthWest Pylon", "SouthEast Pylon" };
             // intermission phase never finished, add a "dummy" log end
             if (phaseEnds.Count - 1 == phaseStarts.Count)
             {
@@ -151,9 +150,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
+            string[] intermissionNames = { "Magma Drop 1", "Magma Drop 2", "North Pylon", "SouthWest Pylon", "SouthEast Pylon" };
+            bool skipNames = intermissionNames.Length < phaseEnds.Count;
             for (int i = 0; i < phaseEnds.Count - 1; i++)
             {
-                var phase = new PhaseData(phaseEnds[i], phaseStarts[i + 1], intermissionNames[i]);
+                var phase = new PhaseData(phaseEnds[i], Math.Min(phaseStarts[i + 1], log.FightData.FightEnd), skipNames ? "Intermission " + (i + 1) : intermissionNames[i]);
                 phase.AddTarget(mainTarget);
                 phases.Add(phase);
             }
