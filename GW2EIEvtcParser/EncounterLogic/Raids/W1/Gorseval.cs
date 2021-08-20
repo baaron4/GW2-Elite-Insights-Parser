@@ -96,6 +96,24 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            List<AbstractBuffEvent> eggs = GetFilteredList(log.CombatData, 31623, p, true);
+            int eggStart = 0;
+            foreach (AbstractBuffEvent c in eggs)
+            {
+                if (c is BuffApplyEvent)
+                {
+                    eggStart = (int)c.Time;
+                }
+                else
+                {
+                    int eggEnd = (int)c.Time;
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 180, (eggStart, eggEnd), "rgba(255, 160, 0, 0.3)", new AgentConnector(p)));
+                }
+            }
+        }
+
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
