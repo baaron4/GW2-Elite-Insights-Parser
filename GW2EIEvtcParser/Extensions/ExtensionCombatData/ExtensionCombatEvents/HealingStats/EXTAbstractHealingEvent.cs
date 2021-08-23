@@ -9,8 +9,19 @@ namespace GW2EIEvtcParser.Extensions
     {
         public int HealingDone { get; protected set; }
 
-        internal EXTAbstractHealingEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
+        public bool SrcIsPeer { get; }
+        public bool DstIsPeer { get; }
+
+        internal EXTAbstractHealingEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, bool hasDuplicate) : base(evtcItem, agentData, skillData)
         {
+            if (!hasDuplicate)
+            {
+                SrcIsPeer = From == CreditedFrom;
+            } 
+            else
+            {
+                // TODO: to fill
+            }
         }
 
         public EXTHealingType GetHealingType(ParsedEvtcLog log)

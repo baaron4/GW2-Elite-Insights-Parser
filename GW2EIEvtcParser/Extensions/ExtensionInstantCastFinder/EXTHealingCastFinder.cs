@@ -36,6 +36,7 @@ namespace GW2EIEvtcParser.Extensions
             foreach (KeyValuePair<AgentItem, List<EXTAbstractHealingEvent>> pair in heals)
             {
                 long lastTime = int.MinValue;
+                EXTHealingCombatData.SanitizeForSrc(pair.Value);
                 foreach (EXTAbstractHealingEvent de in pair.Value)
                 {
                     if (de.Time - lastTime < ICD)

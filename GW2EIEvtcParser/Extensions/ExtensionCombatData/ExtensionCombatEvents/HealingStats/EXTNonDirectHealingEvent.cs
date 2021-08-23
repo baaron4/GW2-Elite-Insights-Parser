@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.Extensions
     public class EXTNonDirectHealingEvent : EXTAbstractHealingEvent
     {
 
-        internal EXTNonDirectHealingEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
+        internal EXTNonDirectHealingEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, bool hasDuplicate = false) : base(evtcItem, agentData, skillData, hasDuplicate)
         {
             HealingDone = -evtcItem.BuffDmg;
         }

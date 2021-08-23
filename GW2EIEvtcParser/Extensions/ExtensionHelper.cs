@@ -21,6 +21,8 @@ namespace GW2EIEvtcParser.Extensions
                     {
                         case 1:
                             return new HealingStatsRev1ExtensionHandler(c);
+                        case 2:
+                            return new HealingStatsRev2ExtensionHandler(c);
                         default:
                             break;
                     }

@@ -48,21 +48,36 @@ namespace GW2EIEvtcParser.Extensions
             }
             if (c.IsBuff == 0 && c.Value < 0)
             {
-                _healingEvents.Add(new EXTDirectHealingEvent(c, agentData, skillData));
+                _healingEvents.Add(new EXTDirectHealingEvent(c, agentData, skillData, Revision > 1));
             }
             else if (c.IsBuff != 0 && c.Value == 0 && c.BuffDmg < 0)
             {
-                _healingEvents.Add(new EXTNonDirectHealingEvent(c, agentData, skillData));
+                _healingEvents.Add(new EXTNonDirectHealingEvent(c, agentData, skillData, Revision > 1));
             }
         }
 
         internal override void AttachToCombatData(CombatData combatData, ParserController operation, ulong gw2Build)
         {
-            operation.UpdateProgressWithCancellationCheck("Attaching healing extension combat events");
+            var addongRunning = new HashSet<AgentItem>();
+            operation.UpdateProgressWithCancellationCheck("Attaching healing extension revision 2 combat events");
             var healData = _healingEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+            foreach (KeyValuePair<AgentItem, List<EXTAbstractHealingEvent>> pair in healData)
+            {
+                if (EXTHealingCombatData.SanitizeForSrc(pair.Value))
+                {
+                    addongRunning.Add(pair.Key);
+                }
+            }
             var healReceivedData = _healingEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            foreach (KeyValuePair<AgentItem, List<EXTAbstractHealingEvent>> pair in healReceivedData)
+            {
+                if (EXTHealingCombatData.SanitizeForDst(pair.Value))
+                {
+                    addongRunning.Add(pair.Key);
+                }
+            }
             var healDataById = _healingEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
-            operation.UpdateProgressWithCancellationCheck(healData.Count + " has the addon running");
+            operation.UpdateProgressWithCancellationCheck(addongRunning.Count + " has the addon running");
             operation.UpdateProgressWithCancellationCheck("Attached " + _healingEvents.Count + " heal events to CombatData");
             combatData.EXTHealingCombatData = new EXTHealingCombatData(healData, healReceivedData, healDataById, GetHybridIDs(gw2Build));
             operation.UpdateProgressWithCancellationCheck("Attached healing extension combat events");

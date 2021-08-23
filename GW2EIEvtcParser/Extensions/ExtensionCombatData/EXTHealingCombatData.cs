@@ -83,5 +83,25 @@ namespace GW2EIEvtcParser.Extensions
             return GetHealingType(buff.ID, log);
         }
 
+        public static bool SanitizeForSrc(List<EXTAbstractHealingEvent> healEvents)
+        {
+            if (healEvents.Any(x => x.SrcIsPeer))
+            {
+                healEvents.RemoveAll(x => !x.SrcIsPeer);
+                return true;
+            }
+            return false;
+        }
+
+        public static bool SanitizeForDst(List<EXTAbstractHealingEvent> healEvents)
+        {
+            if (healEvents.Any(x => x.DstIsPeer))
+            {
+                healEvents.RemoveAll(x => !x.DstIsPeer);
+                return true;
+            }
+            return false;
+        }
+
     }
 }
