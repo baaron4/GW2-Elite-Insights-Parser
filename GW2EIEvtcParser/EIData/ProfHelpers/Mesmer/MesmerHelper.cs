@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
@@ -13,7 +14,9 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(10212, 10212, EIData.InstantCastFinder.DefaultICD), // Power spike
+            new DamageCastFinder(10212, 10212, EIData.InstantCastFinder.DefaultICD, 0, 115190), // Power spike
+            new DamageCastFinder(10211, 10211, EIData.InstantCastFinder.DefaultICD, 115190, ulong.MaxValue), // Mantra of Pain
+            new EXTHealingCastFinder(10213, 10213, EIData.InstantCastFinder.DefaultICD, 115190, ulong.MaxValue), // Mantra of Recovery
             new BuffLossCastFinder(10234, 10233, EIData.InstantCastFinder.DefaultICD, (brae, combatData) => {
                 return combatData.GetBuffData(brae.To).Any(x =>
                                     x is BuffApplyEvent bae &&

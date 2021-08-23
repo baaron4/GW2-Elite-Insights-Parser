@@ -9,11 +9,13 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(46618,46618,EIData.InstantCastFinder.DefaultICD), // Flame Rush
-            new DamageCastFinder(46616,46616,EIData.InstantCastFinder.DefaultICD), // Flame Surge
-            //new DamageCastFinder(42360,42360,InstantCastFinder.DefaultICD), // Echo of Truth
-            //new DamageCastFinder(44008,44008,InstantCastFinder.DefaultICD), // Voice of Truth
-            new EXTHealingCastFinder(41714, 41714, EIData.InstantCastFinder.DefaultICD), // Mantra of Solace
+            new DamageCastFinder(46618,46618,EIData.InstantCastFinder.DefaultICD, 0, 115190), // Flame Rush
+            new DamageCastFinder(46616,46616,EIData.InstantCastFinder.DefaultICD, 0, 115190), // Flame Surge
+            //new DamageCastFinder(42360,42360,InstantCastFinder.DefaultICD, 0, 115190), // Echo of Truth
+            //new DamageCastFinder(44008,44008,InstantCastFinder.DefaultICD, 0, 115190), // Voice of Truth
+            new DamageCastFinder(46148,46618,EIData.InstantCastFinder.DefaultICD, 115190, ulong.MaxValue), // Mantra of Flame
+            new DamageCastFinder(44080,46508,EIData.InstantCastFinder.DefaultICD, 115190, ulong.MaxValue), // Mantra of Truth
+            new EXTHealingCastFinder(41714, 41714, EIData.InstantCastFinder.DefaultICD, 115190, ulong.MaxValue), // Mantra of Solace
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
