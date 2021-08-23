@@ -158,6 +158,7 @@ namespace GW2EIEvtcParser.ParsedData
             {13980, "https://wiki.guildwars2.com/images/8/84/Windborne_Notes.png" },
             {43558, "https://wiki.guildwars2.com/images/7/73/Rugged_Growth.png" },
             {12836, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" }, // Water Blast Combo
+            {46508, "https://wiki.guildwars2.com/images/f/ff/Echo_of_Truth.png" }, // Echo of Truth
             // Weaver attunements
             {Buff.FireDual, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
             {Buff.FireWater, "https://i.imgur.com/ar8Hn8G.png" },
