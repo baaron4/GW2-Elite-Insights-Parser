@@ -700,7 +700,7 @@ namespace GW2EIEvtcParser
                 _playerList.ForEach(x => x.MakeSquadless());
             }
             uint minToughness = _playerList.Min(x => x.Toughness);
-            if (minToughness > 0)
+            if (minToughness > 0 && minToughness != 10)
             {
                 operation.UpdateProgressWithCancellationCheck("Adjusting player toughness scores");
                 uint maxToughness = _playerList.Max(x => x.Toughness);

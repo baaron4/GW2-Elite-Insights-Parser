@@ -21,6 +21,7 @@ namespace GW2EIEvtcParser.ParsedData
             HasHit = result == ArcDPSEnums.ConditionResult.ExpectedToHit;
             ShieldDamage = evtcItem.IsShields > 0 ? HealthDamage : 0;
             _cycle = GetBuffCycle(evtcItem.IsOffcycle);
+            AgainstDowned = evtcItem.Pad1 == 1;
         }
 
         public override bool ConditionDamageBased(ParsedEvtcLog log)
