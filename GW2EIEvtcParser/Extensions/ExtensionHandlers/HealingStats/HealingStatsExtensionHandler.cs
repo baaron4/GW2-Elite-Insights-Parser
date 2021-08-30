@@ -83,6 +83,8 @@ namespace GW2EIEvtcParser.Extensions
             57409, // Nourishment (Cilantro and Cured Meat Flatbread)
         };
 
+        private readonly List<EXTAbstractHealingEvent> _healingEvents = new List<EXTAbstractHealingEvent>();
+
         internal virtual void SetVersion(CombatItem c)
         {
             var size = (c.SrcAgent & 0xFF00000000000000) >> 56;
@@ -172,10 +174,27 @@ namespace GW2EIEvtcParser.Extensions
             }
             Version = System.Text.Encoding.UTF8.GetString(bytes);
         }
+        public static bool SanitizeForSrc(List<EXTAbstractHealingEvent> healEvents)
+        {
+            if (healEvents.Any(x => x.SrcIsPeer))
+            {
+                healEvents.RemoveAll(x => !x.SrcIsPeer);
+                return true;
+            }
+            return false;
+        }
 
-        private readonly List<EXTAbstractHealingEvent> _healingEvents = new List<EXTAbstractHealingEvent>();
+        public static bool SanitizeForDst(List<EXTAbstractHealingEvent> healEvents)
+        {
+            if (healEvents.Any(x => x.DstIsPeer))
+            {
+                healEvents.RemoveAll(x => !x.DstIsPeer);
+                return true;
+            }
+            return false;
+        }
 
-        private static bool IsHealingEvent(CombatItem c)
+        internal static bool IsHealingEvent(CombatItem c)
         {
             return (c.IsBuff == 0 && c.Value < 0) || (c.IsBuff != 0 && c.Value == 0 && c.BuffDmg < 0);
         }
@@ -233,7 +252,7 @@ namespace GW2EIEvtcParser.Extensions
             var healData = _healingEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             foreach (KeyValuePair<AgentItem, List<EXTAbstractHealingEvent>> pair in healData)
             {
-                if (EXTHealingCombatData.SanitizeForSrc(pair.Value) && pair.Key.IsPlayer)
+                if (SanitizeForSrc(pair.Value) && pair.Key.IsPlayer)
                 {
                     addongRunning.Add(pair.Key);
                 }
@@ -241,7 +260,7 @@ namespace GW2EIEvtcParser.Extensions
             var healReceivedData = _healingEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             foreach (KeyValuePair<AgentItem, List<EXTAbstractHealingEvent>> pair in healReceivedData)
             {
-                if (EXTHealingCombatData.SanitizeForDst(pair.Value) && pair.Key.IsPlayer)
+                if (SanitizeForDst(pair.Value) && pair.Key.IsPlayer)
                 {
                     addongRunning.Add(pair.Key);
                 }
