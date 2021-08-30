@@ -16,11 +16,12 @@ namespace GW2EIEvtcParser.Extensions
         {
             if (!hasDuplicate)
             {
-                SrcIsPeer = From == CreditedFrom;
+                SrcIsPeer = true;
             } 
             else
             {
-                // TODO: to fill
+                SrcIsPeer = (evtcItem.IsOffcycle & 128) > 0;
+                DstIsPeer = (evtcItem.IsOffcycle & 64) > 0;
             }
         }
 
