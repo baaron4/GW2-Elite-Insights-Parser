@@ -237,11 +237,11 @@ namespace GW2EIEvtcParser.Extensions
             }
             if (c.IsBuff == 0 && c.Value < 0)
             {
-                _healingEvents.Add(new EXTDirectHealingEvent(c, agentData, skillData, Revision > 1));
+                _healingEvents.Add(new EXTDirectHealingEvent(c, agentData, skillData));
             }
             else if (c.IsBuff != 0 && c.Value == 0 && c.BuffDmg < 0)
             {
-                _healingEvents.Add(new EXTNonDirectHealingEvent(c, agentData, skillData, Revision > 1));
+                _healingEvents.Add(new EXTNonDirectHealingEvent(c, agentData, skillData));
             }
         }
 

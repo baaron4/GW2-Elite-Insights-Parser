@@ -12,16 +12,13 @@ namespace GW2EIEvtcParser.Extensions
         public bool SrcIsPeer { get; }
         public bool DstIsPeer { get; }
 
-        internal EXTAbstractHealingEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, bool hasDuplicate) : base(evtcItem, agentData, skillData)
+        internal EXTAbstractHealingEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
-            if (!hasDuplicate)
+            SrcIsPeer = (evtcItem.IsOffcycle & 128) > 0;
+            DstIsPeer = (evtcItem.IsOffcycle & 64) > 0;
+            if (!SrcIsPeer && !DstIsPeer)
             {
                 SrcIsPeer = true;
-            } 
-            else
-            {
-                SrcIsPeer = (evtcItem.IsOffcycle & 128) > 0;
-                DstIsPeer = (evtcItem.IsOffcycle & 64) > 0;
             }
         }
 
