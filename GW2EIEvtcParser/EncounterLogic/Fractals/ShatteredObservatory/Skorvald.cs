@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
@@ -155,6 +156,30 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TrashID.FluxAnomaly2,
                 (int)ArcDPSEnums.TrashID.FluxAnomaly1,
             };
+        }
+
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+        {
+            // check reward
+            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Skorvald);
+            if (skorvald == null)
+            {
+                throw new MissingKeyActorsException("Skorvald not found");
+            }
+            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+            if (!fightData.Success)
+            {
+                AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(skorvald.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
+                if (lastDamageTaken != null)
+                {
+                    BuffApplyEvent invul895Apply = combatData.GetBuffData(895).OfType<BuffApplyEvent>().Where(x => x.To == skorvald.AgentItem && x.Time > lastDamageTaken.Time - 500).LastOrDefault();
+                    if (invul895Apply != null)
+                    {
+                        fightData.SetSuccess(true, Math.Min(invul895Apply.Time, lastDamageTaken.Time));
+                    }
+                }
+            }
+            
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
