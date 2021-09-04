@@ -37,7 +37,8 @@ namespace GW2EIEvtcParser.EIData
         {
             if (extension == EssenceOfSpeed && ParserHelper.ProfToSpec(dst.Prof) == ParserHelper.Spec.Soulbeast)
             {
-                if (log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Herald) || log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Tempest))
+                if (log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Herald) ||
+                    (log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Tempest) && ImbuedMelodies > 0))
                 {
                     // uncertain, needs to check more
                     return 0;
