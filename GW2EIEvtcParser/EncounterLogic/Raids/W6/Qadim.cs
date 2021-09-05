@@ -65,7 +65,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "qadim";
             Icon = "https://wiki.guildwars2.com/images/f/f2/Mini_Qadim.png";
-            GenericFallBackMethod = FallBackMethod.CombatExit;
+            GenericFallBackMethod = FallBackMethod.CombatExitThenDeath;
             EncounterCategoryInformation.InSubCategoryOrder = 2;
         }
 
