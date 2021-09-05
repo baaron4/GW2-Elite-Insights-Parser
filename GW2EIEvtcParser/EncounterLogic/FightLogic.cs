@@ -495,7 +495,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             ExitCombatEvent lastTargetExit = targetExits.Count > 0 ? targetExits.MaxBy(x => x.Time) : null;
             AbstractHealthDamageEvent lastDamageTaken = lastTargetDamages.Count > 0 ? lastTargetDamages.MaxBy(x => x.Time) : null;
             // Make sure the last damage has been done before last combat exit
-            if (lastTargetExit != null && lastDamageTaken != null && lastTargetExit.Time + 100 >= lastDamageTaken.Time)
+            if (lastTargetExit != null && lastDamageTaken != null && lastTargetExit.Time + 150 >= lastDamageTaken.Time)
             {
                 if (!AtLeastOnePlayerAlive(combatData, fightData, lastTargetExit.Time, playerAgents))
                 {
