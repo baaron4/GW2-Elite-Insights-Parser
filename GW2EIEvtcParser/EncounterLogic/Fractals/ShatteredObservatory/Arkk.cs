@@ -90,6 +90,12 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
+            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+            // reward or death worked
+            if (fightData.Success)
+            {
+                return;
+            }
             AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Arkk);
             if (target == null)
             {

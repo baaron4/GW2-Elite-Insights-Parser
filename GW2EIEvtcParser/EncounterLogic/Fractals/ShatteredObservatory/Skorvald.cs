@@ -160,26 +160,26 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            // check reward
+            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+            // reward or death worked
+            if (fightData.Success)
+            {
+                return;
+            }
             AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Skorvald);
             if (skorvald == null)
             {
                 throw new MissingKeyActorsException("Skorvald not found");
             }
-            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-            if (!fightData.Success)
+            AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(skorvald.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
+            if (lastDamageTaken != null)
             {
-                AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(skorvald.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
-                if (lastDamageTaken != null)
+                BuffApplyEvent invul895Apply = combatData.GetBuffData(895).OfType<BuffApplyEvent>().Where(x => x.To == skorvald.AgentItem && x.Time > lastDamageTaken.Time - 500).LastOrDefault();
+                if (invul895Apply != null)
                 {
-                    BuffApplyEvent invul895Apply = combatData.GetBuffData(895).OfType<BuffApplyEvent>().Where(x => x.To == skorvald.AgentItem && x.Time > lastDamageTaken.Time - 500).LastOrDefault();
-                    if (invul895Apply != null)
-                    {
-                        fightData.SetSuccess(true, Math.Min(invul895Apply.Time, lastDamageTaken.Time));
-                    }
+                    fightData.SetSuccess(true, Math.Min(invul895Apply.Time, lastDamageTaken.Time));
                 }
             }
-            
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
