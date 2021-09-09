@@ -478,19 +478,24 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AbstractSingleActor t in targets)
             {
                 EnterCombatEvent enterCombat = combatData.GetEnterCombatEvents(t.AgentItem).LastOrDefault();
+                ExitCombatEvent exitCombat;
                 if (enterCombat != null)
                 {
-                    targetExits.AddRange(combatData.GetExitCombatEvents(t.AgentItem).Where(x => x.Time > enterCombat.Time));
+                    exitCombat = combatData.GetExitCombatEvents(t.AgentItem).Where(x => x.Time > enterCombat.Time).LastOrDefault();
                 }
                 else
                 {
-                    targetExits.AddRange(combatData.GetExitCombatEvents(t.AgentItem));
+                    exitCombat = combatData.GetExitCombatEvents(t.AgentItem).LastOrDefault();
                 }
                 AbstractHealthDamageEvent lastDamage = combatData.GetDamageTakenData(t.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
-                if (lastDamage != null)
+                if (exitCombat == null || lastDamage == null ||
+                    combatData.GetAnimatedCastData(t.AgentItem).Any(x => x.Time > exitCombat.Time + ParserHelper.ServerDelayConstant) ||
+                    combatData.GetDamageData(t.AgentItem).Any(x => x.Time > exitCombat.Time + ParserHelper.ServerDelayConstant && playerAgents.Contains(x.To)))
                 {
-                    lastTargetDamages.Add(lastDamage);
+                    return;
                 }
+                targetExits.Add(exitCombat);
+                lastTargetDamages.Add(lastDamage);
             }
             ExitCombatEvent lastTargetExit = targetExits.Count > 0 ? targetExits.MaxBy(x => x.Time) : null;
             AbstractHealthDamageEvent lastDamageTaken = lastTargetDamages.Count > 0 ? lastTargetDamages.MaxBy(x => x.Time) : null;
