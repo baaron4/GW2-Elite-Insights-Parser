@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 {
     internal abstract class RaidLogic : FightLogic
     {
-        protected enum FallBackMethod { None, Death, CombatExit, DeathThenCombatExit }
+        protected enum FallBackMethod { None, Death, DeathThenCombatExit }
 
         protected FallBackMethod GenericFallBackMethod { get; set; } = FallBackMethod.Death;
 
@@ -52,9 +52,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     case FallBackMethod.Death:
                         SetSuccessByDeath(combatData, fightData, playerAgents, true, GetSuccessCheckIds());
-                        break;
-                    case FallBackMethod.CombatExit:
-                        SetSuccessByCombatExit(new HashSet<int>(GetSuccessCheckIds()), combatData, fightData, playerAgents);
                         break;
                     case FallBackMethod.DeathThenCombatExit:
                         SetSuccessByDeath(combatData, fightData, playerAgents, true, GetSuccessCheckIds());
