@@ -248,7 +248,7 @@ namespace GW2EIEvtcParser.Extensions
         internal override void AttachToCombatData(CombatData combatData, ParserController operation, ulong gw2Build)
         {
             var addongRunning = new HashSet<AgentItem>();
-            operation.UpdateProgressWithCancellationCheck("Attaching healing extension revision 2 combat events");
+            operation.UpdateProgressWithCancellationCheck("Attaching healing extension revision" + Revision + "combat events");
             var healData = _healingEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             foreach (KeyValuePair<AgentItem, List<EXTAbstractHealingEvent>> pair in healData)
             {
