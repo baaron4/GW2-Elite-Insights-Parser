@@ -266,7 +266,8 @@ namespace GW2EIEvtcParser.Extensions
                 }
             }
             var healDataById = _healingEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
-            operation.UpdateProgressWithCancellationCheck(addongRunning.Count + " has the addon running");
+            var running = addongRunning.Count;
+            operation.UpdateProgressWithCancellationCheck(running != 1 ? running + " players have the addon running" : running + " player has the addon running");
             operation.UpdateProgressWithCancellationCheck("Attached " + _healingEvents.Count + " heal events to CombatData");
             combatData.EXTHealingCombatData = new EXTHealingCombatData(healData, healReceivedData, healDataById, GetHybridIDs(gw2Build));
             operation.UpdateProgressWithCancellationCheck("Attached healing extension combat events");
