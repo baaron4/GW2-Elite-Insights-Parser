@@ -154,6 +154,10 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal void SetMaster(AgentItem master)
         {
+            if (IsPlayer)
+            {
+                return;
+            }
             Master = master;
         }
 
