@@ -194,6 +194,10 @@ namespace GW2EIEvtcParser.EIData
                         RevenantHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         RenegadeHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
+                    case Spec.Vindicator:
+                        RevenantHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        VindicatorHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        break;
                     //
                     case Spec.Guardian:
                         GuardianHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));

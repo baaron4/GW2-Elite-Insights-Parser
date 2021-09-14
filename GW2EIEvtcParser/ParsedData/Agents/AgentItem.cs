@@ -24,7 +24,8 @@ namespace GW2EIEvtcParser.ParsedData
         public long FirstAware { get; protected set; }
         public long LastAware { get; protected set; } = long.MaxValue;
         public string Name { get; protected set; } = "UNKNOWN";
-        public string Prof { get; } = "UNKNOWN";
+        public ParserHelper.Spec Spec { get; } = ParserHelper.Spec.Unknown;
+        public ParserHelper.Spec BaseSpec { get; } = ParserHelper.Spec.Unknown;
         public ushort Toughness { get; protected set; }
         public ushort Healing { get; }
         public ushort Condition { get; }
@@ -38,12 +39,13 @@ namespace GW2EIEvtcParser.ParsedData
         public bool HasCommanderTag { get; protected set; }
 
         // Constructors
-        internal AgentItem(ulong agent, string name, string prof, int id, AgentType type, ushort toughness, ushort healing, ushort condition, ushort concentration, uint hbWidth, uint hbHeight)
+        internal AgentItem(ulong agent, string name, ParserHelper.Spec spec, int id, AgentType type, ushort toughness, ushort healing, ushort condition, ushort concentration, uint hbWidth, uint hbHeight)
         {
             UniqueID = AgentCount++;
             Agent = agent;
             Name = name;
-            Prof = prof;
+            Spec = spec;
+            BaseSpec = ParserHelper.SpecToBaseSpec(spec);
             ID = id;
             Type = type;
             Toughness = toughness;
@@ -66,7 +68,7 @@ namespace GW2EIEvtcParser.ParsedData
                         } 
                         else
                         {
-                            Name = Prof + " " + Name;
+                            Name = Spec + " " + Name;
                         }
                         Type = AgentType.NonSquadPlayer;
                     }
@@ -78,12 +80,12 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        internal AgentItem(ulong agent, string name, string prof, int id, ushort instid, AgentType type, ushort toughness, ushort healing, ushort condition, ushort concentration, uint hbWidth, uint hbHeight, long firstAware, long lastAware, bool isDummy) : this(agent, name, prof, id, type, toughness, healing, condition, concentration, hbWidth, hbHeight)
+        internal AgentItem(ulong agent, string name, ParserHelper.Spec spec, int id, ushort instid, AgentType type, ushort toughness, ushort healing, ushort condition, ushort concentration, uint hbWidth, uint hbHeight, long firstAware, long lastAware, bool isFake) : this(agent, name, spec, id, type, toughness, healing, condition, concentration, hbWidth, hbHeight)
         {
             InstID = instid;
             FirstAware = firstAware;
             LastAware = lastAware;
-            IsFake = isDummy;
+            IsFake = isFake;
         }
 
         internal AgentItem(AgentItem other)
@@ -91,7 +93,8 @@ namespace GW2EIEvtcParser.ParsedData
             UniqueID = AgentCount++;
             Agent = other.Agent;
             Name = other.Name;
-            Prof = other.Prof;
+            Spec = other.Spec;
+            BaseSpec = other.BaseSpec;
             ID = other.ID;
             Type = other.Type;
             Toughness = other.Toughness;

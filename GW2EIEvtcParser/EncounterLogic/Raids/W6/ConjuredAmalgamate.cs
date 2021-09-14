@@ -82,7 +82,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             agentData.Refresh();
             ComputeFightTargets(agentData, combatData, extensions);
-            AgentItem sword = agentData.AddCustomAgent(0, fightData.FightEnd, AgentItem.AgentType.NPC, "Conjured Sword\0:Conjured Sword\051", "Sword", (int)ArcDPSEnums.TrashID.ConjuredPlayerSword, true);
+            AgentItem sword = agentData.AddCustomAgent(0, fightData.FightEnd, AgentItem.AgentType.NPC, "Conjured Sword\0:Conjured Sword\051", ParserHelper.Spec.NPC, (int)ArcDPSEnums.TrashID.ConjuredPlayerSword, true);
             friendlies.Add(new NPC(sword));
             foreach (CombatItem c in combatData)
             {

@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser
             Elementalist, Tempest, Weaver,
             Mesmer, Chronomancer, Mirage, Virtuoso, 
             Warrior, Berserker, Spellbreaker,
-            Revenant, Herald, Renegade,
+            Revenant, Herald, Renegade, Vindicator,
             Guardian, Dragonhunter, Firebrand, Willbender,
             Thief, Daredevil, Deadeye,
             Ranger, Druid, Soulbeast,
@@ -51,11 +51,12 @@ namespace GW2EIEvtcParser
             Elementalist, Tempest, Weaver,
             Mesmer, Chronomancer, Mirage, Virtuoso,
             Warrior, Berserker, Spellbreaker,
-            Revenant, Herald, Renegade,
+            Revenant, Herald, Renegade, Vindicator,
             Guardian, Dragonhunter, Firebrand, Willbender,
             Thief, Daredevil, Deadeye,
             Ranger, Druid, Soulbeast,
             Engineer, Scrapper, Holosmith,
+            NPC, Gadget,
             Unknown
         };
 
@@ -114,10 +115,16 @@ namespace GW2EIEvtcParser
             return final;
         }
 
-        public static Spec ProfToSpec(string prof)
+        internal static Spec ProfToSpec(string prof)
         {
             switch (prof)
             {
+                //
+                case "NPC":
+                    return Spec.NPC;
+                case "GDG":
+                    return Spec.Gadget;
+                //
                 case "Druid":
                     return Spec.Druid;
                 case "Soulbeast":
@@ -172,6 +179,8 @@ namespace GW2EIEvtcParser
                     return Spec.Dragonhunter;
                 case "Guardian":
                     return Spec.Guardian;
+                case "Vindicator":
+                    return Spec.Vindicator;
                 case "Renegade":
                     return Spec.Renegade;
                 case "Herald":
@@ -182,51 +191,52 @@ namespace GW2EIEvtcParser
             return Spec.Unknown;
         }
 
-        public static Spec ProfToBaseSpec(string prof)
+        internal static Spec SpecToBaseSpec(Spec spec)
         {
-            switch (prof)
+            switch (spec)
             {
-                case "Druid":
-                case "Soulbeast":
-                case "Ranger":
+                case Spec.Druid:
+                case Spec.Soulbeast:
+                case Spec.Ranger:
                     return Spec.Ranger;
-                case "Scrapper":
-                case "Holosmith":
-                case "Engineer":
+                case Spec.Scrapper:
+                case Spec.Holosmith:
+                case Spec.Engineer:
                     return Spec.Engineer;
-                case "Daredevil":
-                case "Deadeye":
-                case "Thief":
+                case Spec.Daredevil:
+                case Spec.Deadeye:
+                case Spec.Thief:
                     return Spec.Thief;
-                case "Weaver":
-                case "Tempest":
-                case "Elementalist":
+                case Spec.Weaver:
+                case Spec.Tempest:
+                case Spec.Elementalist:
                     return Spec.Elementalist;
-                case "Virtuoso":
-                case "Mirage":
-                case "Chronomancer":
-                case "Mesmer":
+                case Spec.Virtuoso:
+                case Spec.Mirage:
+                case Spec.Chronomancer:
+                case Spec.Mesmer:
                     return Spec.Mesmer;
-                case "Harbinger":
-                case "Scourge":
-                case "Reaper":
-                case "Necromancer":
+                case Spec.Harbinger:
+                case Spec.Scourge:
+                case Spec.Reaper:
+                case Spec.Necromancer:
                     return Spec.Necromancer;
-                case "Spellbreaker":
-                case "Berserker":
-                case "Warrior":
+                case Spec.Spellbreaker:
+                case Spec.Berserker:
+                case Spec.Warrior:
                     return Spec.Warrior;
-                case "Willbender":
-                case "Firebrand":
-                case "Dragonhunter":
-                case "Guardian":
+                case Spec.Willbender:
+                case Spec.Firebrand:
+                case Spec.Dragonhunter:
+                case Spec.Guardian:
                     return Spec.Guardian;
-                case "Renegade":
-                case "Herald":
-                case "Revenant":
+                case Spec.Vindicator:
+                case Spec.Renegade:
+                case Spec.Herald:
+                case Spec.Revenant:
                     return Spec.Revenant;
             }
-            return Spec.Unknown;
+            return spec;
         }
 
         public static IReadOnlyList<Source> SpecToSources(Spec spec)
@@ -287,6 +297,8 @@ namespace GW2EIEvtcParser
                     return new List<Source> { Source.Guardian, Source.Dragonhunter };
                 case Spec.Guardian:
                     return new List<Source> { Source.Guardian };
+                case Spec.Vindicator:
+                    return new List<Source> { Source.Revenant, Source.Vindicator };
                 case Spec.Renegade:
                     return new List<Source> { Source.Revenant, Source.Renegade };
                 case Spec.Herald:

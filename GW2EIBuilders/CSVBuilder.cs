@@ -227,7 +227,7 @@ namespace GW2EIBuilders
                 {
                     build += " Toughness:" + player.Toughness;
                 }
-                WriteLine(new[] { player.Group.ToString(), player.Prof,build,player.Character, player.Account ,wep[0],wep[1],wep[2],wep[3],
+                WriteLine(new[] { player.Group.ToString(), player.Spec.ToString(),build,player.Character, player.Account ,wep[0],wep[1],wep[2],wep[3],
                 dpsBoss.Dps.ToString(),dpsBoss.Damage.ToString(),dpsBoss.PowerDps.ToString(),dpsBoss.PowerDamage.ToString(),dpsBoss.CondiDps.ToString(),dpsBoss.CondiDamage.ToString(),
                 dps.Dps.ToString(),dps.Damage.ToString(),dps.PowerDps.ToString(),dps.PowerDamage.ToString(),dps.CondiDps.ToString(),dps.CondiDamage.ToString(),
                 defense.DownCount.ToString(), deathString, deadthTooltip});
@@ -269,7 +269,7 @@ namespace GW2EIBuilders
                     moving = moveDict;
                 }
 
-                WriteLine(new[] { player.Group.ToString(), player.Prof, player.Character,
+                WriteLine(new[] { player.Group.ToString(), player.Spec.ToString(), player.Character,
                 Math.Round((double)(statsBoss.CriticalCount) / statsBoss.CritableDirectDamageCount * 100,1).ToString(), statsBoss.CriticalCount.ToString(),statsBoss.CriticalDmg.ToString(),
                 Math.Round((double)(scholar.HitCount) / scholar.TotalHitCount * 100,1).ToString(),scholar.HitCount.ToString(),scholar.DamageGain.ToString(),Math.Round(100.0 * (scholar.TotalDamage / (scholar.TotalDamage - scholar.DamageGain) - 1.0), 3).ToString(),
                 Math.Round((double)(moving.HitCount) / moving.TotalHitCount * 100,1).ToString(),moving.HitCount.ToString(),moving.DamageGain.ToString(),Math.Round(100.0 * (moving.TotalDamage / (moving.TotalDamage - moving.DamageGain) - 1.0), 3).ToString(),
@@ -315,7 +315,7 @@ namespace GW2EIBuilders
                     moving = moveDict;
                 }
 
-                WriteLine(new[] { player.Group.ToString(), player.Prof, player.Character,
+                WriteLine(new[] { player.Group.ToString(), player.Spec.ToString(), player.Character,
                 Math.Round((double)(stats.CriticalCount) / stats.CritableDirectDamageCount * 100,1).ToString(), stats.CriticalCount.ToString(),stats.CriticalDmg.ToString(),
                 Math.Round((double)(scholar.HitCount) / scholar.TotalHitCount * 100,1).ToString(),scholar.HitCount.ToString(),scholar.DamageGain.ToString(),Math.Round(100.0 * (scholar.TotalDamage / (scholar.TotalDamage - scholar.DamageGain) - 1.0), 3).ToString(),
                 Math.Round((double)(moving.HitCount) / moving.TotalHitCount * 100,1).ToString(),moving.HitCount.ToString(),moving.DamageGain.ToString(),Math.Round(100.0 * (moving.TotalDamage / (moving.TotalDamage - moving.DamageGain) - 1.0), 3).ToString(),
@@ -343,7 +343,7 @@ namespace GW2EIBuilders
             {
                 FinalDefensesAll defenses = player.GetDefenseStats(_log, phase.Start, phase.End);
 
-                WriteLine(new[] { player.Group.ToString(), player.Prof, player.Character,
+                WriteLine(new[] { player.Group.ToString(), player.Spec.ToString(), player.Character,
                 defenses.DamageTaken.ToString(),defenses.DamageBarrier.ToString(),defenses.BlockedCount.ToString(),defenses.InvulnedCount.ToString(),defenses.EvadedCount.ToString(),defenses.DodgeCount.ToString() });
                 count++;
             }
@@ -364,7 +364,7 @@ namespace GW2EIBuilders
             {
                 FinalToPlayersSupport support = player.GetToPlayerSupportStats(_log, phase.Start, phase.End);
 
-                WriteLine(new[] { player.Group.ToString(), player.Prof, player.Character,
+                WriteLine(new[] { player.Group.ToString(), player.Spec.ToString(), player.Character,
                 support.CondiCleanse.ToString(),support.CondiCleanseTime.ToString(), support.CondiCleanseSelf.ToString(), support.CondiCleanseTimeSelf.ToString(), support.BoonStrips.ToString(), support.BoonStripsTime.ToString(), support.Resurrects.ToString(),support.ResurrectTime.ToString() });
                 count++;
             }

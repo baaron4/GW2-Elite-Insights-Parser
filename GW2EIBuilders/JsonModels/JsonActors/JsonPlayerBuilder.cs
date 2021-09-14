@@ -26,7 +26,7 @@ namespace GW2EIBuilders.JsonModels
             jsonPlayer.Account = player.Account;
             jsonPlayer.Weapons = player.GetWeaponsArray(log).Select(w => w ?? "Unknown").ToArray();
             jsonPlayer.Group = player.Group;
-            jsonPlayer.Profession = player.Prof;
+            jsonPlayer.Profession = player.Spec.ToString();
             jsonPlayer.FriendlyNPC = player is NPC;
             jsonPlayer.NotInSquad = player is PlayerNonSquad;
             jsonPlayer.ActiveTimes = phases.Select(x => player.GetActiveDuration(log, x.Start, x.End)).ToList();
@@ -197,13 +197,13 @@ namespace GW2EIBuilders.JsonModels
                 {
                     if (player.GetBuffDistribution(log, phases[0].Start, phases[0].End).GetUptime(pair.Key) > 0)
                     {
-                        if (personalBuffs.TryGetValue(player.Prof, out HashSet<long> list) && !list.Contains(pair.Key))
+                        if (personalBuffs.TryGetValue(player.Spec.ToString(), out HashSet<long> list) && !list.Contains(pair.Key))
                         {
                             list.Add(pair.Key);
                         }
                         else
                         {
-                            personalBuffs[player.Prof] = new HashSet<long>()
+                            personalBuffs[player.Spec.ToString()] = new HashSet<long>()
                                 {
                                     pair.Key
                                 };
