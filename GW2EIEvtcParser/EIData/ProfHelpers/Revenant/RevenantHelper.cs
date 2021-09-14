@@ -97,6 +97,7 @@ namespace GW2EIEvtcParser.EIData
         private static readonly HashSet<long> _legendSwaps = new HashSet<long>
         {
             28134, 28494, 28419, 28195, 28085, 41858
+            // TODO: add new legend
         };
 
         public static bool IsLegendSwap(long id)

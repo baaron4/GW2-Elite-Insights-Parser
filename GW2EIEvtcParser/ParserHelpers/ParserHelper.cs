@@ -335,6 +335,8 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/c/c7/Herald_tango_icon_200px.png";
                 case Spec.Renegade:
                     return "https://wiki.guildwars2.com/images/b/bc/Renegade_tango_icon_200px.png";
+                case Spec.Vindicator:
+                    return "";
                 //
                 case Spec.Engineer:
                     return "https://wiki.guildwars2.com/images/2/2f/Engineer_tango_icon_200px.png";
@@ -411,6 +413,8 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/6/67/Herald_tango_icon_20px.png";
                 case Spec.Renegade:
                     return "https://wiki.guildwars2.com/images/7/7c/Renegade_tango_icon_20px.png";
+                case Spec.Vindicator:
+                    return "";
                 //
                 case Spec.Engineer:
                     return "https://wiki.guildwars2.com/images/2/27/Engineer_tango_icon_20px.png";
