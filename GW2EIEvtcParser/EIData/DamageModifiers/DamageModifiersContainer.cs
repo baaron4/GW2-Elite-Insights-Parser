@@ -24,10 +24,12 @@ namespace GW2EIEvtcParser.EIData
                 RevenantHelper.DamageMods,
                 HeraldHelper.DamageMods,
                 RenegadeHelper.DamageMods,
+                VindicatorHelper.DamageMods,
                 //
                 WarriorHelper.DamageMods,
                 BerserkerHelper.DamageMods,
                 SpellbreakerHelper.DamageMods,
+                BladeswornHelper.DamageMods,
                 //
                 GuardianHelper.DamageMods,
                 DragonhunterHelper.DamageMods,

@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser
             Necromancer, Reaper, Scourge, Harbinger,
             Elementalist, Tempest, Weaver,
             Mesmer, Chronomancer, Mirage, Virtuoso, 
-            Warrior, Berserker, Spellbreaker,
+            Warrior, Berserker, Spellbreaker, Bladesworn,
             Revenant, Herald, Renegade, Vindicator,
             Guardian, Dragonhunter, Firebrand, Willbender,
             Thief, Daredevil, Deadeye,
@@ -50,7 +50,7 @@ namespace GW2EIEvtcParser
             Necromancer, Reaper, Scourge, Harbinger,
             Elementalist, Tempest, Weaver,
             Mesmer, Chronomancer, Mirage, Virtuoso,
-            Warrior, Berserker, Spellbreaker,
+            Warrior, Berserker, Spellbreaker, Bladesworn,
             Revenant, Herald, Renegade, Vindicator,
             Guardian, Dragonhunter, Firebrand, Willbender,
             Thief, Daredevil, Deadeye,
@@ -131,24 +131,28 @@ namespace GW2EIEvtcParser
                     return Spec.Soulbeast;
                 case "Ranger":
                     return Spec.Ranger;
+                //
                 case "Scrapper":
                     return Spec.Scrapper;
                 case "Holosmith":
                     return Spec.Holosmith;
                 case "Engineer":
                     return Spec.Engineer;
+                //
                 case "Daredevil":
                     return Spec.Daredevil;
                 case "Deadeye":
                     return Spec.Deadeye;
                 case "Thief":
                     return Spec.Thief;
+                //
                 case "Weaver":
                     return Spec.Weaver;
                 case "Tempest":
                     return Spec.Tempest;
                 case "Elementalist":
                     return Spec.Elementalist;
+                //
                 case "Virtuoso":
                     return Spec.Virtuoso;
                 case "Mirage":
@@ -157,6 +161,7 @@ namespace GW2EIEvtcParser
                     return Spec.Chronomancer;
                 case "Mesmer":
                     return Spec.Mesmer;
+                //
                 case "Harbinger":
                     return Spec.Harbinger;
                 case "Scourge":
@@ -165,12 +170,16 @@ namespace GW2EIEvtcParser
                     return Spec.Reaper;
                 case "Necromancer":
                     return Spec.Necromancer;
+                //
+                case "Bladesword":
+                    return Spec.Bladesworn;
                 case "Spellbreaker":
                     return Spec.Spellbreaker;
                 case "Berserker":
                     return Spec.Berserker;
                 case "Warrior":
                     return Spec.Warrior;
+                //
                 case "Willbender":
                     return Spec.Willbender;
                 case "Firebrand":
@@ -179,6 +188,7 @@ namespace GW2EIEvtcParser
                     return Spec.Dragonhunter;
                 case "Guardian":
                     return Spec.Guardian;
+                //
                 case "Vindicator":
                     return Spec.Vindicator;
                 case "Renegade":
@@ -221,6 +231,7 @@ namespace GW2EIEvtcParser
                 case Spec.Reaper:
                 case Spec.Necromancer:
                     return Spec.Necromancer;
+                case Spec.Bladesworn:
                 case Spec.Spellbreaker:
                 case Spec.Berserker:
                 case Spec.Warrior:
@@ -249,24 +260,28 @@ namespace GW2EIEvtcParser
                     return new List<Source> { Source.Ranger, Source.Soulbeast };
                 case Spec.Ranger:
                     return new List<Source> { Source.Ranger };
+                //
                 case Spec.Scrapper:
                     return new List<Source> { Source.Engineer, Source.Scrapper };
                 case Spec.Holosmith:
                     return new List<Source> { Source.Engineer, Source.Holosmith };
                 case Spec.Engineer:
                     return new List<Source> { Source.Engineer };
+                //
                 case Spec.Daredevil:
                     return new List<Source> { Source.Thief, Source.Daredevil };
                 case Spec.Deadeye:
                     return new List<Source> { Source.Thief, Source.Deadeye };
                 case Spec.Thief:
                     return new List<Source> { Source.Thief };
+                //
                 case Spec.Weaver:
                     return new List<Source> { Source.Elementalist, Source.Weaver };
                 case Spec.Tempest:
                     return new List<Source> { Source.Elementalist, Source.Tempest };
                 case Spec.Elementalist:
                     return new List<Source> { Source.Elementalist };
+                //
                 case Spec.Virtuoso:
                     return new List<Source> { Source.Mesmer, Source.Virtuoso };
                 case Spec.Mirage:
@@ -275,6 +290,7 @@ namespace GW2EIEvtcParser
                     return new List<Source> { Source.Mesmer, Source.Chronomancer };
                 case Spec.Mesmer:
                     return new List<Source> { Source.Mesmer };
+                //
                 case Spec.Harbinger:
                     return new List<Source> { Source.Necromancer, Source.Harbinger };
                 case Spec.Scourge:
@@ -283,12 +299,16 @@ namespace GW2EIEvtcParser
                     return new List<Source> { Source.Necromancer, Source.Reaper };
                 case Spec.Necromancer:
                     return new List<Source> { Source.Necromancer };
+                //
+                case Spec.Bladesworn:
+                    return new List<Source> { Source.Warrior, Source.Bladesworn };
                 case Spec.Spellbreaker:
                     return new List<Source> { Source.Warrior, Source.Spellbreaker };
                 case Spec.Berserker:
                     return new List<Source> { Source.Warrior, Source.Berserker };
                 case Spec.Warrior:
                     return new List<Source> { Source.Warrior };
+                //
                 case Spec.Willbender:
                     return new List<Source> { Source.Guardian, Source.Willbender };
                 case Spec.Firebrand:
@@ -297,6 +317,7 @@ namespace GW2EIEvtcParser
                     return new List<Source> { Source.Guardian, Source.Dragonhunter };
                 case Spec.Guardian:
                     return new List<Source> { Source.Guardian };
+                //
                 case Spec.Vindicator:
                     return new List<Source> { Source.Revenant, Source.Vindicator };
                 case Spec.Renegade:
@@ -319,6 +340,8 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/8/80/Berserker_tango_icon_200px.png";
                 case Spec.Spellbreaker:
                     return "https://wiki.guildwars2.com/images/7/78/Spellbreaker_tango_icon_200px.png";
+                case Spec.Bladesworn:
+                    return "";
                 //
                 case Spec.Guardian:
                     return "https://wiki.guildwars2.com/images/6/6c/Guardian_tango_icon_200px.png";
@@ -397,6 +420,8 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/d/da/Berserker_tango_icon_20px.png";
                 case Spec.Spellbreaker:
                     return "https://wiki.guildwars2.com/images/e/ed/Spellbreaker_tango_icon_20px.png";
+                case Spec.Bladesworn:
+                    return "";
                 //
                 case Spec.Guardian:
                     return "https://wiki.guildwars2.com/images/8/8c/Guardian_tango_icon_20px.png";

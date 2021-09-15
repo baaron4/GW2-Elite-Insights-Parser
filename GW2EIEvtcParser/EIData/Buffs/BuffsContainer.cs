@@ -37,10 +37,12 @@ namespace GW2EIEvtcParser.EIData
                 RevenantHelper.Buffs,
                 HeraldHelper.Buffs,
                 RenegadeHelper.Buffs,
+                VindicatorHelper.Buffs,
                 //
                 WarriorHelper.Buffs,
                 BerserkerHelper.Buffs,
                 SpellbreakerHelper.Buffs,
+                BladeswornHelper.Buffs,
                 //
                 GuardianHelper.Buffs,
                 DragonhunterHelper.Buffs,

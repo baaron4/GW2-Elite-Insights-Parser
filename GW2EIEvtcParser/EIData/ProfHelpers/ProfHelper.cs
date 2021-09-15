@@ -226,6 +226,10 @@ namespace GW2EIEvtcParser.EIData
                         WarriorHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         SpellbreakerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
+                    case Spec.Bladesworn:
+                        WarriorHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        BladeswornHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        break;
                 }
             }
             res.AddRange(ComputeInstantCastEvents(combatData, skillData, agentData, instantCastFinders.ToList()));
