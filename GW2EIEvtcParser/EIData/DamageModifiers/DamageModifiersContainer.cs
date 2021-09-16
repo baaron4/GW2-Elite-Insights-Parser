@@ -61,6 +61,7 @@ namespace GW2EIEvtcParser.EIData
                 ElementalistHelper.DamageMods,
                 TempestHelper.DamageMods,
                 WeaverHelper.DamageMods,
+                CatalystHelper.DamageMods,
             };
             var currentDamageMods = new List<DamageModifier>();
             foreach (List<DamageModifier> boons in AllDamageModifiers)

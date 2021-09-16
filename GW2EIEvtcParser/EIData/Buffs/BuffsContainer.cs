@@ -74,6 +74,7 @@ namespace GW2EIEvtcParser.EIData
                 ElementalistHelper.Buffs,
                 TempestHelper.Buffs,
                 WeaverHelper.Buffs,
+                CatalystHelper.Buffs,
             };
             var currentBuffs = new List<Buff>();
             foreach (List<Buff> buffs in AllBuffs)

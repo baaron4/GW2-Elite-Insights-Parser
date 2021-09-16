@@ -32,7 +32,7 @@ namespace GW2EIEvtcParser
             Common,
             Item, Gear,
             Necromancer, Reaper, Scourge, Harbinger,
-            Elementalist, Tempest, Weaver,
+            Elementalist, Tempest, Weaver, Catalyst,
             Mesmer, Chronomancer, Mirage, Virtuoso, 
             Warrior, Berserker, Spellbreaker, Bladesworn,
             Revenant, Herald, Renegade, Vindicator,
@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser
         public enum Spec
         {
             Necromancer, Reaper, Scourge, Harbinger,
-            Elementalist, Tempest, Weaver,
+            Elementalist, Tempest, Weaver, Catalyst,
             Mesmer, Chronomancer, Mirage, Virtuoso,
             Warrior, Berserker, Spellbreaker, Bladesworn,
             Revenant, Herald, Renegade, Vindicator,
@@ -146,6 +146,8 @@ namespace GW2EIEvtcParser
                 case "Thief":
                     return Spec.Thief;
                 //
+                case "Catalyst":
+                    return Spec.Catalyst;
                 case "Weaver":
                     return Spec.Weaver;
                 case "Tempest":
@@ -209,38 +211,47 @@ namespace GW2EIEvtcParser
                 case Spec.Soulbeast:
                 case Spec.Ranger:
                     return Spec.Ranger;
+                //
                 case Spec.Scrapper:
                 case Spec.Holosmith:
                 case Spec.Engineer:
                     return Spec.Engineer;
+                //
                 case Spec.Daredevil:
                 case Spec.Deadeye:
                 case Spec.Thief:
                     return Spec.Thief;
+                //
+                case Spec.Catalyst:
                 case Spec.Weaver:
                 case Spec.Tempest:
                 case Spec.Elementalist:
                     return Spec.Elementalist;
+                //
                 case Spec.Virtuoso:
                 case Spec.Mirage:
                 case Spec.Chronomancer:
                 case Spec.Mesmer:
                     return Spec.Mesmer;
+                //
                 case Spec.Harbinger:
                 case Spec.Scourge:
                 case Spec.Reaper:
                 case Spec.Necromancer:
                     return Spec.Necromancer;
+                //
                 case Spec.Bladesworn:
                 case Spec.Spellbreaker:
                 case Spec.Berserker:
                 case Spec.Warrior:
                     return Spec.Warrior;
+                //
                 case Spec.Willbender:
                 case Spec.Firebrand:
                 case Spec.Dragonhunter:
                 case Spec.Guardian:
                     return Spec.Guardian;
+                //
                 case Spec.Vindicator:
                 case Spec.Renegade:
                 case Spec.Herald:
@@ -275,6 +286,8 @@ namespace GW2EIEvtcParser
                 case Spec.Thief:
                     return new List<Source> { Source.Thief };
                 //
+                case Spec.Catalyst:
+                    return new List<Source> { Source.Elementalist, Source.Catalyst };
                 case Spec.Weaver:
                     return new List<Source> { Source.Elementalist, Source.Weaver };
                 case Spec.Tempest:
@@ -388,6 +401,8 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/9/90/Tempest_tango_icon_200px.png";
                 case Spec.Weaver:
                     return "https://wiki.guildwars2.com/images/3/31/Weaver_tango_icon_200px.png";
+                case Spec.Catalyst:
+                    return "";
                 //
                 case Spec.Mesmer:
                     return "https://wiki.guildwars2.com/images/7/73/Mesmer_tango_icon_200px.png";
@@ -468,6 +483,8 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/4/4a/Tempest_tango_icon_20px.png";
                 case Spec.Weaver:
                     return "https://wiki.guildwars2.com/images/f/fc/Weaver_tango_icon_20px.png";
+                case Spec.Catalyst:
+                    return "";
                 //
                 case Spec.Mesmer:
                     return "https://wiki.guildwars2.com/images/6/60/Mesmer_tango_icon_20px.png";

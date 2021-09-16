@@ -114,6 +114,10 @@ namespace GW2EIEvtcParser.EIData
                         ElementalistHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         WeaverHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
+                    case Spec.Catalyst:
+                        ElementalistHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        CatalystHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        break;
                     //
                     case Spec.Necromancer:
                         NecromancerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
