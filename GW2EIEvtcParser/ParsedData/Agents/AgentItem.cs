@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser.ParsedData
                         } 
                         else
                         {
-                            Name = Spec + " " + Name;
+                            Name = Spec.ToString() + " " + Name;
                         }
                         Type = AgentType.NonSquadPlayer;
                     }
