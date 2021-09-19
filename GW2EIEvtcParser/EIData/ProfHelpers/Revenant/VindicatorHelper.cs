@@ -18,6 +18,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
+            new Buff("Urn of Saint Viktor", -1, Source.Vindicator, BuffNature.GraphOnlyBuff,""),
+            new Buff("Imperial Guard", -1, Source.Vindicator, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, ""),
         };
     }
 }

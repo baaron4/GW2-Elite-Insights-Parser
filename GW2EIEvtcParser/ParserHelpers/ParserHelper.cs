@@ -454,7 +454,7 @@ namespace GW2EIEvtcParser
                 case Spec.Renegade:
                     return "https://wiki.guildwars2.com/images/7/7c/Renegade_tango_icon_20px.png";
                 case Spec.Vindicator:
-                    return "";
+                    return "https://wiki.guildwars2.com/images/5/5a/Vindicator_tango_icon_20px.png";
                 //
                 case Spec.Engineer:
                     return "https://wiki.guildwars2.com/images/2/27/Engineer_tango_icon_20px.png";
