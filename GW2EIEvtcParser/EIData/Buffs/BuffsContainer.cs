@@ -79,7 +79,7 @@ namespace GW2EIEvtcParser.EIData
             var currentBuffs = new List<Buff>();
             foreach (List<Buff> buffs in AllBuffs)
             {
-                currentBuffs.AddRange(buffs.Where(x => x.Available(build)));
+                currentBuffs.AddRange(buffs.Where(x => x.ID > 0 && x.Available(build)));
             }
             _buffsByName = currentBuffs.GroupBy(x => x.Name).ToDictionary(x => x.Key, x =>
             {
