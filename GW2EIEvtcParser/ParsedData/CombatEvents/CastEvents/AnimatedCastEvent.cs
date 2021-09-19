@@ -76,8 +76,8 @@ namespace GW2EIEvtcParser.ParsedData
             _scaledActualDuration = endItem.BuffDmg;
             if (Skill.ID == SkillItem.DodgeId)
             {
-                ExpectedDuration = 750;
-                ActualDuration = 750;
+                ExpectedDuration = (int)(endItem.Time - startItem.Time);
+                ActualDuration = ExpectedDuration;
                 _scaledActualDuration = 0;
             }
             SetAcceleration(endItem);
