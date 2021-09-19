@@ -118,6 +118,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak,
                 (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2,
+                (int)ArcDPSEnums.TrashID.SorrowDemon5,
             };
         }
 
@@ -128,11 +129,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.FearDemon,
                 ArcDPSEnums.TrashID.GuiltDemon,
                 ArcDPSEnums.TrashID.EnrageWaterSprite,
+                // Transition sorrow demons
                 ArcDPSEnums.TrashID.SorrowDemon1,
                 ArcDPSEnums.TrashID.SorrowDemon2,
                 ArcDPSEnums.TrashID.SorrowDemon3,
                 ArcDPSEnums.TrashID.SorrowDemon4,
-                ArcDPSEnums.TrashID.SorrowDemon5,
             };
         }
 
@@ -238,6 +239,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (aiMaxHP != null)
                 {
                     darkAi.SetManualHealth((int)aiMaxHP.DstAgent);
+                }
+            }
+            if (_hasDarkMode)
+            {
+                int sorrowCount = 0;
+                foreach (AbstractSingleActor target in Targets)
+                {
+                    if (target.ID == (int)ArcDPSEnums.TrashID.SorrowDemon5)
+                    {
+                        target.OverrideName(target.Character + " " + (++sorrowCount));
+                    }
                 }
             }
         }
