@@ -354,7 +354,7 @@ namespace GW2EIEvtcParser
                 case Spec.Spellbreaker:
                     return "https://wiki.guildwars2.com/images/7/78/Spellbreaker_tango_icon_200px.png";
                 case Spec.Bladesworn:
-                    return "";
+                    return "https://wiki.guildwars2.com/images/c/c1/Bladesworn_tango_icon_200px.png";
                 //
                 case Spec.Guardian:
                     return "https://wiki.guildwars2.com/images/6/6c/Guardian_tango_icon_200px.png";
@@ -372,7 +372,7 @@ namespace GW2EIEvtcParser
                 case Spec.Renegade:
                     return "https://wiki.guildwars2.com/images/b/bc/Renegade_tango_icon_200px.png";
                 case Spec.Vindicator:
-                    return "";
+                    return "https://wiki.guildwars2.com/images/f/f0/Vindicator_tango_icon_200px.png";
                 //
                 case Spec.Engineer:
                     return "https://wiki.guildwars2.com/images/2/2f/Engineer_tango_icon_200px.png";
