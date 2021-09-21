@@ -28,7 +28,7 @@ namespace GW2EIEvtcParser.EIData
             MissedCount = damageLogs.Count(x => x.IsBlind);
             InvulnedCount = damageLogs.Count(x => x.IsAbsorbed);
             EvadedCount = damageLogs.Count(x => x.IsEvaded);
-            DodgeCount = actor.GetCastEvents(log, start, end).Count(x => x.SkillId == SkillItem.DodgeId || x.SkillId == SkillItem.MirageCloakDodgeId);
+            DodgeCount = actor.GetCastEvents(log, start, end).Count(x => x.Skill.IsDodge);
             DamageBarrier = damageLogs.Sum(x => x.ShieldDamage);
             InterruptedCount = damageLogs.Count(x => x.HasInterrupted);
         }
