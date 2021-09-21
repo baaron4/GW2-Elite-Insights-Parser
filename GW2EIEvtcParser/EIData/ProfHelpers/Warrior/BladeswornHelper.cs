@@ -11,11 +11,11 @@ namespace GW2EIEvtcParser.EIData
         /////////////////////
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(-1, -1, EIData.InstantCastFinder.DefaultICD, ulong.MaxValue, ulong.MaxValue), // Gunsaber
-            new BuffLossCastFinder(-1, -1, EIData.InstantCastFinder.DefaultICD, ulong.MaxValue, ulong.MaxValue), // Gunsaber sheath
-            new BuffGainCastFinder(-1, -1, EIData.InstantCastFinder.DefaultICD, ulong.MaxValue, ulong.MaxValue), // Dragon trigger
-            new BuffLossCastFinder(-1, -1, EIData.InstantCastFinder.DefaultICD, ulong.MaxValue, ulong.MaxValue), // Dragon trigger end
-            new DamageCastFinder(-1, -1, EIData.InstantCastFinder.DefaultICD, ulong.MaxValue, ulong.MaxValue), // Unseen Sword
+            new BuffGainCastFinder(-1, -1, EIData.InstantCastFinder.DefaultICD, 119939, ulong.MaxValue), // Gunsaber
+            new BuffLossCastFinder(-1, -1, EIData.InstantCastFinder.DefaultICD, 119939, ulong.MaxValue), // Gunsaber sheath
+            new BuffGainCastFinder(-1, -1, EIData.InstantCastFinder.DefaultICD, 119939, ulong.MaxValue), // Dragon trigger
+            new BuffLossCastFinder(-1, -1, EIData.InstantCastFinder.DefaultICD, 119939, ulong.MaxValue), // Dragon trigger end
+            new DamageCastFinder(-1, -1, EIData.InstantCastFinder.DefaultICD, 119939, ulong.MaxValue), // Unseen Sword
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
@@ -25,10 +25,10 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-            new Buff("Gunsaber", -1, Source.Bladesworn, BuffNature.GraphOnlyBuff,"", ulong.MaxValue, ulong.MaxValue),
-            new Buff("Dragon Trigger", -1, Source.Bladesworn, BuffNature.GraphOnlyBuff,"", ulong.MaxValue, ulong.MaxValue),
-            new Buff("Stim State", -1, Source.Bladesworn, BuffNature.GraphOnlyBuff,"", ulong.MaxValue, ulong.MaxValue),
-            new Buff("Guns and Glory", -1, Source.Bladesworn, BuffStackType.Queue, 5, BuffNature.GraphOnlyBuff,"", ulong.MaxValue, ulong.MaxValue),
+            new Buff("Gunsaber", -1, Source.Bladesworn, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/f/f0/Unsheathe_Gunsaber.png", 119939, ulong.MaxValue),
+            new Buff("Dragon Trigger", -1, Source.Bladesworn, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/b1/Dragon_Trigger.png", 119939, ulong.MaxValue),
+            new Buff("Stim State", -1, Source.Bladesworn, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/a/ad/Combat_Stimulant.png", 119939, ulong.MaxValue),
+            new Buff("Guns and Glory", -1, Source.Bladesworn, BuffStackType.Queue, 5, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/72/Guns_and_Glory.png", 119939, ulong.MaxValue),
         };
 
 
