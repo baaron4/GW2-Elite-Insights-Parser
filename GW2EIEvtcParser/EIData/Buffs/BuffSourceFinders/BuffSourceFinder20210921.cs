@@ -30,8 +30,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 return new List<AgentItem>();
             }
-            // take a larger window as on dodge stuff tend to happen after animation ends
-            var candidates = _vindicatorDodges.Where(x => x.Time <= time && time <= x.EndTime + 200).ToList();
+            var candidates = _vindicatorDodges.Where(x => x.Time <= time && time <= x.EndTime + ParserHelper.ServerDelayConstant).ToList();
             return candidates.Select(x => x.Caster).ToList();
         }
 
