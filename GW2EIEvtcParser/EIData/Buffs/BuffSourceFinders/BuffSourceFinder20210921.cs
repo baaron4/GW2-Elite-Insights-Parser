@@ -26,6 +26,10 @@ namespace GW2EIEvtcParser.EIData
                 }
                 _vindicatorDodges = new List<AbstractCastEvent>(_vindicatorDodges.OrderBy(x => x.Time));
             }
+            if (extension > 2000)
+            {
+                return new List<AgentItem>();
+            }
             var candidates = _vindicatorDodges.Where(x => x.Time <= time && time <= x.EndTime + ParserHelper.ServerDelayConstant).ToList();
             return candidates.Select(x => x.Caster).ToList();
         }

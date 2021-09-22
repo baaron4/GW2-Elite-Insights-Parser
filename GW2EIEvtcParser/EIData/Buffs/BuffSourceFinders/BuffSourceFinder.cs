@@ -105,7 +105,7 @@ namespace GW2EIEvtcParser.EIData
                 if (cls.Count == 1)
                 {
                     AbstractCastEvent item = cls.First();
-                    // If uncertainty due to essence of speed or imbued melodies, return unknown
+                    // If uncertainty due to essence of speed, imbued melodies or imperial impact, return unknown
                     if (essenceOfSpeedCheck == 0 || CouldBeImbuedMelodies(item.Caster, time, extension, log) || imperialImpactCheck.Any())
                     {
                         return ParserHelper._unknownAgent;
@@ -113,7 +113,7 @@ namespace GW2EIEvtcParser.EIData
                     // otherwise the src is the caster
                     return item.Caster;
                 }
-                // If no cast item and uncertainty due to essence of speed
+                // If no cast item and 
                 else if (!cls.Any())
                 {               
                     // If uncertainty due to imbued melodies, return unknown
@@ -121,14 +121,16 @@ namespace GW2EIEvtcParser.EIData
                     {
                         return ParserHelper._unknownAgent;
                     }
+                    // uncertainty due to essence of speed but not due to imperial impact
                     if (essenceOfSpeedCheck == 0 && !imperialImpactCheck.Any())
                     {
-                        // otherwise return the soulbeast
+                        // the soulbeast
                         return dst;
                     }
+                    // uncertainty due to imperial impact but not due to essence of speed
                     if (essenceOfSpeedCheck == -1 && imperialImpactCheck.Count == 1)
                     {
-                        // otherwise return the vindicator
+                        // the vindicator
                         return imperialImpactCheck.First();
                     }
                 }
