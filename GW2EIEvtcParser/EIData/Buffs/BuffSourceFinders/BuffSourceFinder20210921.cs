@@ -7,20 +7,28 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class BuffSourceFinder20210921 : BuffSourceFinder20210511
     {
+        private List<AbstractCastEvent> _vindicatorDodges = null;
         public BuffSourceFinder20210921(HashSet<long> boonIds) : base(boonIds)
         {
-            ExtensionIDS = new HashSet<long>()
-            {
-                10236,
-                51696,
-                29453,
-                62859
-            };
-            DurationToIDs = new Dictionary<long, HashSet<long>>
-            {
-                {3000, new HashSet<long> { 51696 , 10236 , 29453 } }, // SoI, Treated TN, SandSquall
-                {2000, new HashSet<long> { 51696 , 62859 } }, // TN, Imperial Impact (Vassals of the Empire)
-            };
         }
+
+        protected override List<AgentItem> CouldBeImperialImpact(long extension, long time, ParsedEvtcLog log)
+        {
+            if (_vindicatorDodges == null)
+            {
+                _vindicatorDodges = new List<AbstractCastEvent>();
+                foreach (Player p in log.PlayerList)
+                {
+                    if (p.Spec == ParserHelper.Spec.Vindicator)
+                    {
+                        _vindicatorDodges.AddRange(p.GetIntersectingCastEvents(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == SkillItem.DodgeId));
+                    }
+                }
+                _vindicatorDodges = new List<AbstractCastEvent>(_vindicatorDodges.OrderBy(x => x.Time));
+            }
+            var candidates = _vindicatorDodges.Where(x => x.Time <= time && time <= x.EndTime + ParserHelper.ServerDelayConstant).ToList();
+            return candidates.Select(x => x.Caster).ToList();
+        }
+
     }
 }
