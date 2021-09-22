@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GW2EIEvtcParser.Extensions;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
@@ -22,6 +23,7 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(46854, 46854, EIData.InstantCastFinder.DefaultICD), // Call of the Assassin
             new DamageCastFinder(46843, 46843, EIData.InstantCastFinder.DefaultICD), // Call of the Dwarf
             new DamageCastFinder(46856, 46856, EIData.InstantCastFinder.DefaultICD), // Call of the Demon
+            new EXTHealingCastFinder(46847, 46847, EIData.InstantCastFinder.DefaultICD), // Call of the Centaur
         };
 
 
@@ -96,8 +98,7 @@ namespace GW2EIEvtcParser.EIData
 
         private static readonly HashSet<long> _legendSwaps = new HashSet<long>
         {
-            28134, 28494, 28419, 28195, 28085, 41858
-            // TODO: add new legend
+            28134, 28494, 28419, 28195, 28085, 41858, 62749, 62891
         };
 
         public static bool IsLegendSwap(long id)
