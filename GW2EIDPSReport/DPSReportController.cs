@@ -209,7 +209,8 @@ namespace GW2EIDPSReport
                         T item = JsonConvert.DeserializeObject<T>(stringContents, new JsonSerializerSettings
                         {
                             NullValueHandling = NullValueHandling.Ignore,
-                            ContractResolver = DefaultJsonContractResolver
+                            ContractResolver = DefaultJsonContractResolver,
+                            StringEscapeHandling = StringEscapeHandling.EscapeHtml
                         });
                         traces.Add(requestName + " tentative successful");
                         return item;
@@ -266,7 +267,8 @@ namespace GW2EIDPSReport
                         DPSReportUploadObject item = JsonConvert.DeserializeObject<DPSReportUploadObject>(stringContents, new JsonSerializerSettings
                         {
                             NullValueHandling = NullValueHandling.Ignore,
-                            ContractResolver = DefaultJsonContractResolver
+                            ContractResolver = DefaultJsonContractResolver,
+                            StringEscapeHandling = StringEscapeHandling.EscapeHtml
                         });
                         if (item.Error != null)
                         {
