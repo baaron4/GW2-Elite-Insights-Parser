@@ -21,6 +21,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     if (p.Spec == ParserHelper.Spec.Vindicator)
                     {
+                        // TODO: remove dodges that end up giving Forerunner of Death or Saint of zuHeltzer
                         _vindicatorDodges.AddRange(p.GetIntersectingCastEvents(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == SkillItem.DodgeId));
                     }
                 }
