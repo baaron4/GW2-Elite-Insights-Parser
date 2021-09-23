@@ -230,48 +230,54 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        public static List<AnimatedCastEvent> CreateCastEvents(Dictionary<ulong, List<CombatItem>> castEventsBySrcAgent, AgentData agentData, SkillData skillData)
+        public static List<AnimatedCastEvent> CreateCastEvents(Dictionary<ulong, List<CombatItem>> castEventsBySrcAgent, AgentData agentData, SkillData skillData, FightData fightData)
         {
             var res = new List<AnimatedCastEvent>();
-            foreach (KeyValuePair<ulong, List<CombatItem>> pair in castEventsBySrcAgent)
+            foreach (KeyValuePair<ulong, List<CombatItem>> pairBySrcAgent in castEventsBySrcAgent)
             {
                 var resBySrcAgent = new List<AnimatedCastEvent>();
-                CombatItem startItem = null;
-                foreach (CombatItem c in pair.Value)
+                var castEventsBySrcAgentBySkillID = pairBySrcAgent.Value.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
+                foreach (KeyValuePair<uint, List<CombatItem>> pairBySrcAgentBySkillID in castEventsBySrcAgentBySkillID)
                 {
-                    if (c.StartCasting())
+                    var resBySrcAgentBySkillID = new List<AnimatedCastEvent>();
+                    CombatItem startItem = null;
+                    foreach (CombatItem c in pairBySrcAgentBySkillID.Value)
                     {
-                        // missing end
-                        if (startItem != null)
+                        if (c.StartCasting())
                         {
-                            resBySrcAgent.Add(new AnimatedCastEvent(startItem, agentData, skillData, c.Time));
-                        }
-                        startItem = c;
-                    }
-                    else if (c.EndCasting())
-                    {
-                        if (startItem != null && startItem.SkillID == c.SkillID)
-                        {
-                            resBySrcAgent.Add(new AnimatedCastEvent(startItem, agentData, skillData, c));
-                            startItem = null;
-                        }
-                        // missing start
-                        else
-                        {
-                            var toCheck = new AnimatedCastEvent(agentData, skillData, c);
-                            // only keep if list is empty as we are only interested in animations started before log starts
-                            if (!resBySrcAgent.Any())
+                            // missing end
+                            if (startItem != null)
                             {
-                                resBySrcAgent.Add(toCheck);
+                                resBySrcAgentBySkillID.Add(new AnimatedCastEvent(startItem, agentData, skillData, c.Time));
+                            }
+                            startItem = c;
+                        }
+                        else if (c.EndCasting())
+                        {
+                            if (startItem != null && startItem.SkillID == c.SkillID)
+                            {
+                                resBySrcAgentBySkillID.Add(new AnimatedCastEvent(startItem, agentData, skillData, c));
+                                startItem = null;
+                            }
+                            // missing start
+                            else
+                            {
+                                var toCheck = new AnimatedCastEvent(agentData, skillData, c);
+                                // we are only interested in animations started before log starts
+                                if (toCheck.Time < fightData.LogStart)
+                                {
+                                    resBySrcAgentBySkillID.Add(toCheck);
+                                }
                             }
                         }
                     }
-                }
-                // missing end
-                if (startItem != null)
-                {
-                    resBySrcAgent.Add(new AnimatedCastEvent(startItem, agentData, skillData, long.MaxValue));
-                }
+                    // missing end
+                    if (startItem != null)
+                    {
+                        resBySrcAgentBySkillID.Add(new AnimatedCastEvent(startItem, agentData, skillData, long.MaxValue));
+                    }
+                    resBySrcAgent.AddRange(resBySrcAgentBySkillID);
+                }               
                 res.AddRange(resBySrcAgent);
             }
             res = res.OrderBy(x => x.Time).ToList();

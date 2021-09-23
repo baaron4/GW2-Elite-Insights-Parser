@@ -74,10 +74,17 @@ namespace GW2EIEvtcParser.ParsedData
         {
             ActualDuration = endItem.Value;
             _scaledActualDuration = endItem.BuffDmg;
+            int expectedActualDuration = (int)(endItem.Time - startItem.Time);
             if (Skill.ID == SkillItem.DodgeId)
             {
-                ExpectedDuration = (int)(endItem.Time - startItem.Time);
+                ExpectedDuration = expectedActualDuration;
                 ActualDuration = ExpectedDuration;
+                _scaledActualDuration = 0;
+            }
+            // Sanity check, sometimes the difference is massive
+            if (Math.Abs(ActualDuration - expectedActualDuration) > ParserHelper.ServerDelayConstant)
+            {
+                ActualDuration = expectedActualDuration;
                 _scaledActualDuration = 0;
             }
             SetAcceleration(endItem);

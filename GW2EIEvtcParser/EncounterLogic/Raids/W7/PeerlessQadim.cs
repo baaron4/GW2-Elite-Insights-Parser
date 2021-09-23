@@ -151,7 +151,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return phases;
             }
             string[] intermissionNames = { "Magma Drop 1", "Magma Drop 2", "North Pylon", "SouthWest Pylon", "SouthEast Pylon" };
-            bool skipNames = intermissionNames.Length < phaseEnds.Count;
+            bool skipNames = intermissionNames.Length < phaseEnds.Count - 1;
             for (int i = 0; i < phaseEnds.Count - 1; i++)
             {
                 var phase = new PhaseData(phaseEnds[i], Math.Min(phaseStarts[i + 1], log.FightData.FightEnd), skipNames ? "Intermission " + (i + 1) : intermissionNames[i]);

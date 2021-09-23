@@ -377,7 +377,7 @@ namespace GW2EIEvtcParser.ParsedData
             skillData.CombineWithSkillInfo(_metaDataEvents.SkillInfoEvents);
             //
             operation.UpdateProgressWithCancellationCheck("Creating Cast Events");
-            List<AnimatedCastEvent> animatedCastData = CombatEventFactory.CreateCastEvents(castCombatEvents, agentData, skillData);
+            List<AnimatedCastEvent> animatedCastData = CombatEventFactory.CreateCastEvents(castCombatEvents, agentData, skillData, fightData);
             _weaponSwapData = wepSwaps.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
             _animatedCastData = animatedCastData.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
             _instantCastData = new Dictionary<AgentItem, List<InstantCastEvent>>();
