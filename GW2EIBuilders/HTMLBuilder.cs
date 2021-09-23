@@ -302,7 +302,8 @@ namespace GW2EIBuilders
             var settings = new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = RawFormatBuilder.DefaultJsonContractResolver
+                ContractResolver = RawFormatBuilder.DefaultJsonContractResolver,
+                StringEscapeHandling = StringEscapeHandling.EscapeHtml
             };
             return JsonConvert.SerializeObject(value, settings);
         }

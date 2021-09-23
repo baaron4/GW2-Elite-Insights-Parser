@@ -235,6 +235,7 @@ namespace GW2EIEvtcParser.ParsedData
             var res = new List<AnimatedCastEvent>();
             foreach (KeyValuePair<ulong, List<CombatItem>> pair in castEventsBySrcAgent)
             {
+                var resBySrcAgent = new List<AnimatedCastEvent>();
                 CombatItem startItem = null;
                 foreach (CombatItem c in pair.Value)
                 {
@@ -243,7 +244,7 @@ namespace GW2EIEvtcParser.ParsedData
                         // missing end
                         if (startItem != null)
                         {
-                            res.Add(new AnimatedCastEvent(startItem, agentData, skillData, c.Time));
+                            resBySrcAgent.Add(new AnimatedCastEvent(startItem, agentData, skillData, c.Time));
                         }
                         startItem = c;
                     }
@@ -251,17 +252,17 @@ namespace GW2EIEvtcParser.ParsedData
                     {
                         if (startItem != null && startItem.SkillID == c.SkillID)
                         {
-                            res.Add(new AnimatedCastEvent(startItem, agentData, skillData, c));
+                            resBySrcAgent.Add(new AnimatedCastEvent(startItem, agentData, skillData, c));
                             startItem = null;
-                        } 
+                        }
                         // missing start
                         else
                         {
                             var toCheck = new AnimatedCastEvent(agentData, skillData, c);
                             // only keep if list is empty as we are only interested in animations started before log starts
-                            if (!res.Any())
+                            if (!resBySrcAgent.Any())
                             {
-                                res.Add(toCheck);
+                                resBySrcAgent.Add(toCheck);
                             }
                         }
                     }
@@ -269,10 +270,12 @@ namespace GW2EIEvtcParser.ParsedData
                 // missing end
                 if (startItem != null)
                 {
-                    res.Add(new AnimatedCastEvent(startItem, agentData, skillData, long.MaxValue));
+                    resBySrcAgent.Add(new AnimatedCastEvent(startItem, agentData, skillData, long.MaxValue));
                 }
+                res.AddRange(resBySrcAgent);
             }
             res = res.OrderBy(x => x.Time).ToList();
+            res.RemoveAll(x => x.ActualDuration == 0);
             return res;
         }
 

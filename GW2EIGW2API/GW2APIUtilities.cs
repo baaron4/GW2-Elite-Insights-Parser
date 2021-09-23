@@ -20,12 +20,14 @@ namespace GW2EIGW2API
             NullValueHandling = NullValueHandling.Ignore,
             Formatting = Formatting.None,
             DefaultValueHandling = DefaultValueHandling.Ignore,
-            ContractResolver = DefaultJsonContractResolver
+            ContractResolver = DefaultJsonContractResolver,
+            StringEscapeHandling = StringEscapeHandling.EscapeHtml
         };
 
         internal static readonly JsonSerializer Deserializer = new JsonSerializer
         {
-            ContractResolver = DefaultJsonContractResolver
+            ContractResolver = DefaultJsonContractResolver,
+            StringEscapeHandling = StringEscapeHandling.EscapeHtml
         };
 
         // utilities
@@ -59,7 +61,8 @@ namespace GW2EIGW2API
                     string data = response.Content.ReadAsStringAsync().Result;
                     T[] responseArray = JsonConvert.DeserializeObject<T[]>(data, new JsonSerializerSettings
                     {
-                        ContractResolver = DefaultJsonContractResolver
+                        ContractResolver = DefaultJsonContractResolver,
+                        StringEscapeHandling = StringEscapeHandling.EscapeHtml
                     });
                     itemList.AddRange(responseArray);
                 }

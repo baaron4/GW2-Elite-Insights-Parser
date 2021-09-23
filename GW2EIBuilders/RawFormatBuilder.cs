@@ -38,7 +38,8 @@ namespace GW2EIBuilders
             var sw = new StringWriter();
             var serializer = new JsonSerializer
             {
-                NullValueHandling = NullValueHandling.Ignore
+                NullValueHandling = NullValueHandling.Ignore,
+                StringEscapeHandling = StringEscapeHandling.EscapeHtml
             };
             var writer = new JsonTextWriter(sw)
             {
@@ -74,7 +75,8 @@ namespace GW2EIBuilders
             var serializer = new JsonSerializer
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = DefaultJsonContractResolver
+                ContractResolver = DefaultJsonContractResolver,
+                StringEscapeHandling = StringEscapeHandling.EscapeHtml
             };
             var writer = new JsonTextWriter(sw)
             {
@@ -105,7 +107,8 @@ namespace GW2EIBuilders
             var settings = new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = DefaultJsonContractResolver
+                ContractResolver = DefaultJsonContractResolver,
+                StringEscapeHandling = StringEscapeHandling.EscapeHtml
             };
             var root = new Dictionary<string, JsonLog>()
             {
