@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -199,19 +200,27 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
+        protected override List<int> GetFightTargetsIDs()
+        {
+            return new List<int>
+            {
+                (int)ArcDPSEnums.TargetID.KeepConstruct,
+                (int)ArcDPSEnums.TrashID.Jessica,
+                (int)ArcDPSEnums.TrashID.Olson,
+                (int)ArcDPSEnums.TrashID.Engul,
+                (int)ArcDPSEnums.TrashID.Faerla,
+                (int)ArcDPSEnums.TrashID.Caulle,
+                (int)ArcDPSEnums.TrashID.Henley,
+                (int)ArcDPSEnums.TrashID.Galletta,
+                (int)ArcDPSEnums.TrashID.Ianim,
+            };
+        }
+
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
         {
             return new List<ArcDPSEnums.TrashID>
             {
                 ArcDPSEnums.TrashID.Core,
-                ArcDPSEnums.TrashID.Jessica,
-                ArcDPSEnums.TrashID.Olson,
-                ArcDPSEnums.TrashID.Engul,
-                ArcDPSEnums.TrashID.Faerla,
-                ArcDPSEnums.TrashID.Caulle,
-                ArcDPSEnums.TrashID.Henley,
-                ArcDPSEnums.TrashID.Galletta,
-                ArcDPSEnums.TrashID.Ianim,
                 ArcDPSEnums.TrashID.GreenPhantasm,
                 ArcDPSEnums.TrashID.InsidiousProjection,
                 ArcDPSEnums.TrashID.UnstableLeyRift,
@@ -219,6 +228,39 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.CrimsonPhantasm,
                 ArcDPSEnums.TrashID.RetrieverProjection
             };
+        }
+
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, friendlies, extensions);
+            var countDict = new Dictionary<int, int>();
+            var bigPhantasmIDs = new HashSet<int>
+            {
+                (int)ArcDPSEnums.TrashID.Jessica,
+                (int)ArcDPSEnums.TrashID.Olson,
+                (int)ArcDPSEnums.TrashID.Engul,
+                (int)ArcDPSEnums.TrashID.Faerla,
+                (int)ArcDPSEnums.TrashID.Caulle,
+                (int)ArcDPSEnums.TrashID.Henley,
+                (int)ArcDPSEnums.TrashID.Galletta,
+                (int)ArcDPSEnums.TrashID.Ianim,
+            };
+            foreach (AbstractSingleActor target in Targets)
+            {
+                if (bigPhantasmIDs.Contains(target.ID))
+                {
+                    if (countDict.TryGetValue(target.ID, out int count))
+                    {
+                        target.OverrideName(target.Character + " " + (++count));
+                    } 
+                    else
+                    {
+                        count = 1;
+                        target.OverrideName(target.Character + " " + count);
+                    }
+                    countDict[target.ID] = count;
+                }
+            }
         }
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
