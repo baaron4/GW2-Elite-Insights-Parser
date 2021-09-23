@@ -98,7 +98,14 @@ namespace GW2EIEvtcParser.EIData
 
         private static readonly HashSet<long> _legendSwaps = new HashSet<long>
         {
-            28134, 28494, 28419, 28195, 28085, 41858, 62749, 62891
+            28134, // Assassin
+            28494, // Demon
+            28419, // Dwarf
+            28195, // Centaur
+            28085, // Dragon
+            41858, // Renegade
+            62749, // Alliance
+            62891, // Alliance (UW)
         };
 
         public static bool IsLegendSwap(long id)

@@ -12,7 +12,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffGainCastFinder(62749, -1, EIData.InstantCastFinder.DefaultICD), // Legendary Alliance Stance
-            new BuffGainCastFinder(62891, -1, EIData.InstantCastFinder.DefaultICD), // Legendary Alliance Stance
+            new BuffGainCastFinder(62891, -1, EIData.InstantCastFinder.DefaultICD), // Legendary Alliance Stance (UW)
             new DamageCastFinder(62705, 62705, EIData.InstantCastFinder.DefaultICD), // Call of the Alliance
             new BuffGainCastFinder(62687, -1, EIData.InstantCastFinder.DefaultICD), // Urn of Saint Viktor
             //new EXTHealingCastFinder(-1, -1, EIData.InstantCastFinder.DefaultICD), // Redemptor's Sermon
