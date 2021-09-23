@@ -62,8 +62,8 @@ namespace GW2EIEvtcParser.ParsedData
             _scaledActualDuration = endItem.BuffDmg;
             if (Skill.ID == SkillItem.DodgeId)
             {
-                ExpectedDuration = 750;
-                ActualDuration = 750;
+                // dodge animation start item has always 0 as expected duration
+                ExpectedDuration = ActualDuration;
                 _scaledActualDuration = 0;
             }
             Time -= ActualDuration;
@@ -75,16 +75,16 @@ namespace GW2EIEvtcParser.ParsedData
             ActualDuration = endItem.Value;
             _scaledActualDuration = endItem.BuffDmg;
             int expectedActualDuration = (int)(endItem.Time - startItem.Time);
-            if (Skill.ID == SkillItem.DodgeId)
-            {
-                ExpectedDuration = expectedActualDuration;
-                ActualDuration = ExpectedDuration;
-                _scaledActualDuration = 0;
-            }
             // Sanity check, sometimes the difference is massive
             if (Math.Abs(ActualDuration - expectedActualDuration) > ParserHelper.ServerDelayConstant)
             {
                 ActualDuration = expectedActualDuration;
+                _scaledActualDuration = 0;
+            }
+            if (Skill.ID == SkillItem.DodgeId)
+            {
+                // dodge animation start item has always 0 as expected duration
+                ExpectedDuration = ActualDuration;
                 _scaledActualDuration = 0;
             }
             SetAcceleration(endItem);
@@ -94,6 +94,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
             if (Skill.ID == SkillItem.DodgeId)
             {
+                // TODO: vindicator dodge duration
                 ExpectedDuration = 750;
             }
             ActualDuration = ExpectedDuration;
