@@ -15,8 +15,8 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(62891, 62919, EIData.InstantCastFinder.DefaultICD), // Legendary Alliance Stance (UW)
             new DamageCastFinder(62705, 62705, EIData.InstantCastFinder.DefaultICD), // Call of the Alliance
             new BuffGainCastFinder(62687, 62864, EIData.InstantCastFinder.DefaultICD), // Urn of Saint Viktor
-            new BuffGainCastFinder(62693, -1, EIData.InstantCastFinder.DefaultICD), // Forerunner of Death (Death Drop) 
-            new BuffGainCastFinder(62689, -1, EIData.InstantCastFinder.DefaultICD), // Saint of zu Heltzer (Saint's Shield)
+            new BuffGainCastFinder(62693, 62811, EIData.InstantCastFinder.DefaultICD), // Forerunner of Death (Death Drop) 
+            new BuffGainCastFinder(62689, 62994, EIData.InstantCastFinder.DefaultICD), // Saint of zu Heltzer (Saint's Shield)
             new DamageCastFinder(62859, 62859, EIData.InstantCastFinder.DefaultICD), // Vassals of the Empire (Imperial Impact)
             //new EXTHealingCastFinder(-1, -1, EIData.InstantCastFinder.DefaultICD), // Redemptor's Sermon
         };
