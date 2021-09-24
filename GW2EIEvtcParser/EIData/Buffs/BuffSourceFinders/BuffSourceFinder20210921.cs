@@ -14,6 +14,10 @@ namespace GW2EIEvtcParser.EIData
 
         protected override List<AgentItem> CouldBeImperialImpact(long extension, long time, ParsedEvtcLog log)
         {
+            if (extension > 2000)
+            {
+                return new List<AgentItem>();
+            }
             if (_vindicatorDodges == null)
             {
                 _vindicatorDodges = new List<AbstractCastEvent>();
@@ -21,15 +25,16 @@ namespace GW2EIEvtcParser.EIData
                 {
                     if (p.Spec == ParserHelper.Spec.Vindicator)
                     {
-                        // TODO: remove dodges that end up giving Forerunner of Death or Saint of zuHeltzer
-                        _vindicatorDodges.AddRange(p.GetIntersectingCastEvents(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == SkillItem.DodgeId));
+                        var dodges = p.GetIntersectingCastEvents(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == SkillItem.DodgeId).ToList();
+                        //
+                        var buffApplyTimes = log.CombatData.GetBuffData(62994).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).Select(x => x.Time).ToList(); // Saint of zu Heltzer
+                        buffApplyTimes.AddRange(log.CombatData.GetBuffData(62811).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).Select(x => x.Time)); // Forerunner of Death
+                        dodges.RemoveAll(x => buffApplyTimes.Any(y => y >= x.Time && y <= x.EndTime + ParserHelper.ServerDelayConstant));
+                        //
+                        _vindicatorDodges.AddRange(dodges);
                     }
                 }
                 _vindicatorDodges = new List<AbstractCastEvent>(_vindicatorDodges.OrderBy(x => x.Time));
-            }
-            if (extension > 2000)
-            {
-                return new List<AgentItem>();
             }
             var candidates = _vindicatorDodges.Where(x => x.Time <= time && time <= x.EndTime + ParserHelper.ServerDelayConstant).ToList();
             return candidates.Select(x => x.Caster).ToList();
