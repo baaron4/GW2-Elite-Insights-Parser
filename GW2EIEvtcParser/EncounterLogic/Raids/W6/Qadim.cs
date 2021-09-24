@@ -250,22 +250,22 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AddTargetsToPhaseAndFit(phase, ids, log);
                     if (phase.Targets.Count > 0)
                     {
-                        AbstractSingleActor phaseTar = phase.Targets.Last();
-                        switch (phaseTar.ID)
+                        var phaseTarIDs = new HashSet<int>(phase.Targets.Select(x => x.ID));
+                        if (phaseTarIDs.Contains((int)ArcDPSEnums.TrashID.AncientInvokedHydra))
                         {
-                            case (int)ArcDPSEnums.TrashID.AncientInvokedHydra:
-                                phase.Name = "Hydra";
-                                break;
-                            case (int)ArcDPSEnums.TrashID.ApocalypseBringer:
-                                phase.Name = "Apocalypse";
-                                break;
-                            case (int)ArcDPSEnums.TrashID.WyvernPatriarch:
-                            case (int)ArcDPSEnums.TrashID.WyvernMatriarch:
-                                phase.Name = "Wyvern";
-                                break;
-                            default:
-                                phase.Name = "Unknown";
-                                break;
+                            phase.Name = "Hydra";
+                        }
+                        else if (phaseTarIDs.Contains((int)ArcDPSEnums.TrashID.ApocalypseBringer))
+                        {
+                            phase.Name = "Apocalypse";
+                        }
+                        else if (phaseTarIDs.Contains((int)ArcDPSEnums.TrashID.WyvernPatriarch) || phaseTarIDs.Contains((int)ArcDPSEnums.TrashID.WyvernMatriarch))
+                        {
+                            phase.Name = "Wyvern";
+                        }
+                        else
+                        {
+                            phase.Name = "Unknown";
                         }
                     }
                 }

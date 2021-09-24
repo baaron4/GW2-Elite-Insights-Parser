@@ -15,6 +15,9 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(62891, 62919, EIData.InstantCastFinder.DefaultICD), // Legendary Alliance Stance (UW)
             new DamageCastFinder(62705, 62705, EIData.InstantCastFinder.DefaultICD), // Call of the Alliance
             new BuffGainCastFinder(62687, 62864, EIData.InstantCastFinder.DefaultICD), // Urn of Saint Viktor
+            new BuffGainCastFinder(62693, -1, EIData.InstantCastFinder.DefaultICD), // Forerunner of Death (Death Drop) 
+            new BuffGainCastFinder(62689, -1, EIData.InstantCastFinder.DefaultICD), // Saint of zu Heltzer (Saint's Shield)
+            new DamageCastFinder(62859, 62859, EIData.InstantCastFinder.DefaultICD), // Vassals of the Empire (Imperial Impact)
             //new EXTHealingCastFinder(-1, -1, EIData.InstantCastFinder.DefaultICD), // Redemptor's Sermon
         };
 
@@ -30,13 +33,6 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Saint of zu Heltzer", 62994, Source.Vindicator, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/3/36/Saint_of_zu_Heltzer.png", 119939, ulong.MaxValue),
             new Buff("Forerunner of Death", 62811, Source.Vindicator, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/9/95/Forerunner_of_Death.png", 119939, ulong.MaxValue),
             new Buff("Imperial Guard", 62819, Source.Vindicator, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/7f/Imperial_Guard.png", 119939, ulong.MaxValue),
-        };
-
-        internal static HashSet<long> VindicatorDodges = new HashSet<long>()
-        {
-            62859, // Imperial Impact
-            62693, // Death Drop
-            62689, // Saint's Shield
         };
     }
 }
