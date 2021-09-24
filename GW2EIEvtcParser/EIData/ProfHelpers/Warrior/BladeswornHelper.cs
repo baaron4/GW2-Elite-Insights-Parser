@@ -11,8 +11,8 @@ namespace GW2EIEvtcParser.EIData
         /////////////////////
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(62745, -1, EIData.InstantCastFinder.DefaultICD, 119939, ulong.MaxValue), // Gunsaber
-            new BuffLossCastFinder(62861, -1, EIData.InstantCastFinder.DefaultICD, 119939, ulong.MaxValue), // Gunsaber sheath
+            new BuffGainCastFinder(62745, 62769, EIData.InstantCastFinder.DefaultICD, 119939, ulong.MaxValue), // Gunsaber
+            new BuffLossCastFinder(62861, 62769, EIData.InstantCastFinder.DefaultICD, 119939, ulong.MaxValue), // Gunsaber sheath
             new DamageCastFinder(62847, 62847, EIData.InstantCastFinder.DefaultICD, 119939, ulong.MaxValue), // Unseen Sword
         };
 
@@ -23,11 +23,11 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-            new Buff("Gunsaber", -1, Source.Bladesworn, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/f/f0/Unsheathe_Gunsaber.png", 119939, ulong.MaxValue),
-            new Buff("Dragon Trigger", -1, Source.Bladesworn, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/b1/Dragon_Trigger.png", 119939, ulong.MaxValue),
-            new Buff("Positive Flow", -1, Source.Bladesworn, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/f/f9/Attribute_bonus.png", 119939, ulong.MaxValue),
-            new Buff("Stim State", -1, Source.Bladesworn, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/a/ad/Combat_Stimulant.png", 119939, ulong.MaxValue),
-            new Buff("Guns and Glory", -1, Source.Bladesworn, BuffStackType.Queue, 5, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/72/Guns_and_Glory.png", 119939, ulong.MaxValue),
+            new Buff("Gunsaber Mode", 62769, Source.Bladesworn, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/f/f0/Unsheathe_Gunsaber.png", 119939, ulong.MaxValue),
+            new Buff("Dragon Trigger", 62823, Source.Bladesworn, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/b1/Dragon_Trigger.png", 119939, ulong.MaxValue),
+            new Buff("Positive Flow", 62836, Source.Bladesworn, BuffStackType.StackingConditionalLoss, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/f9/Attribute_bonus.png", 119939, ulong.MaxValue),
+            new Buff("Stim State", 62846, Source.Bladesworn, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/a/ad/Combat_Stimulant.png", 119939, ulong.MaxValue),
+            new Buff("Guns and Glory", 62743, Source.Bladesworn, BuffStackType.Queue, 9, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/72/Guns_and_Glory.png", 119939, ulong.MaxValue),
         };
 
 
