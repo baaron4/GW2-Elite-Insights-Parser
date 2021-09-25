@@ -308,12 +308,12 @@ namespace GW2EIEvtcParser
                 // 68 bytes: name
                 string name = GetString(reader, 68, false);
                 //Save
-                string agentProf = GetAgentProfString(prof, isElite, operation);
+                ParserHelper.Spec agentProf = ParserHelper.ProfToSpec(GetAgentProfString(prof, isElite, operation));
                 AgentItem.AgentType type;
                 ushort ID = 0;
                 switch (agentProf)
                 {
-                    case "NPC":
+                    case ParserHelper.Spec.NPC:
                         // NPC
                         if (!ushort.TryParse(prof.ToString().PadLeft(5, '0'), out ID))
                         {
@@ -321,7 +321,7 @@ namespace GW2EIEvtcParser
                         }
                         type = AgentItem.AgentType.NPC;
                         break;
-                    case "GDG":
+                    case ParserHelper.Spec.Gadget:
                         // Gadget
                         if (!ushort.TryParse((prof & 0x0000ffff).ToString().PadLeft(5, '0'), out ID))
                         {

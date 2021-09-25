@@ -114,6 +114,10 @@ namespace GW2EIEvtcParser.EIData
                         ElementalistHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         WeaverHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
+                    case Spec.Catalyst:
+                        ElementalistHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        CatalystHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        break;
                     //
                     case Spec.Necromancer:
                         NecromancerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
@@ -194,6 +198,10 @@ namespace GW2EIEvtcParser.EIData
                         RevenantHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         RenegadeHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
+                    case Spec.Vindicator:
+                        RevenantHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        VindicatorHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        break;
                     //
                     case Spec.Guardian:
                         GuardianHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
@@ -221,6 +229,10 @@ namespace GW2EIEvtcParser.EIData
                     case Spec.Spellbreaker:
                         WarriorHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         SpellbreakerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        break;
+                    case Spec.Bladesworn:
+                        WarriorHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        BladeswornHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
                 }
             }

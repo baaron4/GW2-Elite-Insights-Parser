@@ -24,10 +24,12 @@ namespace GW2EIEvtcParser.EIData
                 RevenantHelper.DamageMods,
                 HeraldHelper.DamageMods,
                 RenegadeHelper.DamageMods,
+                VindicatorHelper.DamageMods,
                 //
                 WarriorHelper.DamageMods,
                 BerserkerHelper.DamageMods,
                 SpellbreakerHelper.DamageMods,
+                BladeswornHelper.DamageMods,
                 //
                 GuardianHelper.DamageMods,
                 DragonhunterHelper.DamageMods,
@@ -59,6 +61,7 @@ namespace GW2EIEvtcParser.EIData
                 ElementalistHelper.DamageMods,
                 TempestHelper.DamageMods,
                 WeaverHelper.DamageMods,
+                CatalystHelper.DamageMods,
             };
             var currentDamageMods = new List<DamageModifier>();
             foreach (List<DamageModifier> boons in AllDamageModifiers)

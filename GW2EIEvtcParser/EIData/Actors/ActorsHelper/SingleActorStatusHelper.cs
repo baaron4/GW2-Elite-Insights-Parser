@@ -75,12 +75,12 @@ namespace GW2EIEvtcParser.EIData
 
         private void EstimateWeapons(ParsedEvtcLog log)
         {
-            if (Actor.Prof == "Sword")
+            if (!(Actor is AbstractPlayer))
             {
                 _weaponsArray = new string[]
                 {
-                    "Sword",
-                    "2Hand",
+                    null,
+                    null,
                     null,
                     null,
                     null,

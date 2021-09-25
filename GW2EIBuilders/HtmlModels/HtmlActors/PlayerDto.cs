@@ -28,12 +28,12 @@ namespace GW2EIBuilders.HtmlModels
         {
             Group = actor.Group;
             Acc = actor.Account;
-            Profession = actor.Prof;
+            Profession = actor.Spec.ToString();
             IsPoV = log.LogData.PoV == actor.AgentItem;
             IsCommander = actor.HasCommanderTag;
-            ColTarget = HTMLBuilder.GetLink("Color-" + actor.Prof);
-            ColCleave = HTMLBuilder.GetLink("Color-" + actor.Prof + "-NonBoss");
-            ColTotal = HTMLBuilder.GetLink("Color-" + actor.Prof + "-Total");
+            ColTarget = HTMLBuilder.GetLink("Color-" + actor.Spec.ToString());
+            ColCleave = HTMLBuilder.GetLink("Color-" + actor.Spec.ToString() + "-NonBoss");
+            ColTotal = HTMLBuilder.GetLink("Color-" + actor.Spec.ToString() + "-Total");
             IsFake = actor.IsFakeActor;
             NotInSquad = !(actor is Player);
             BuildWeaponSets(actor, log);

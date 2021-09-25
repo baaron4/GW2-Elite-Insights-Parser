@@ -19,16 +19,16 @@ namespace GW2EIEvtcParser.EIData
             {
                 return base.CouldBeEssenceOfSpeed(dst, extension, buffID, log);
             }
-            if (extension <= EssenceOfSpeed && ParserHelper.ProfToSpec(dst.Prof) == ParserHelper.Spec.Soulbeast)
+            if (extension <= EssenceOfSpeed && dst.Spec == ParserHelper.Spec.Soulbeast)
             {
                 if (log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Herald) ||
                     log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Tempest) ||
-                    log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Chronomancer))
+                    log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Chronomancer) ||
+                    log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Vindicator))
                 {
                     // uncertain, needs to check more
                     return 0;
                 }
-                // if not herald, tempest or chrono in squad then can only be the trait
                 return 1;
             }
             return -1;
