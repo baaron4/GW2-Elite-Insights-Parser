@@ -188,18 +188,53 @@ namespace GW2EIEvtcParser.EncounterLogic
             phases.AddRange(mainPhases);
             phases.AddRange(splitPhases);
             phases.Sort((x, y) => x.Start.CompareTo(y.Start));
-            if (mainPhases.Count == splitPhases.Count + 1)
+            //
+            try
             {
-                GetCombatReplayMap(log).MatchMapsToPhases(new List<string> {
-                    "https://i.imgur.com/IQn2RJV.png",
-                    "https://i.imgur.com/gJ55jKy.png",
-                    "https://i.imgur.com/3pO7eCB.png",
-                    "https://i.imgur.com/c2Oz5bj.png",
-                    "https://i.imgur.com/ZFw590w.png",
-                    "https://i.imgur.com/P4SGbrc.png",
-                    "https://i.imgur.com/2P7UE8q.png"
-                }, phases, log.FightData.FightEnd);
-            }        
+                var splitPhasesMap = new List<string>()
+                {
+                        "https://i.imgur.com/gJ55jKy.png",
+                        "https://i.imgur.com/c2Oz5bj.png",
+                        "https://i.imgur.com/P4SGbrc.png",
+                };
+                var mainPhasesMap = new List<string>()
+                {
+                        "https://i.imgur.com/IQn2RJV.png",
+                        "https://i.imgur.com/3pO7eCB.png",
+                        "https://i.imgur.com/ZFw590w.png",
+                        "https://i.imgur.com/2P7UE8q.png"
+                };
+                var crMaps = new List<string>();
+                int mainPhaseIndex = 0;
+                int splitPhaseIndex = 0;
+                for (int i = 1; i < phases.Count; i++)
+                {
+                    PhaseData phaseData = phases[i];
+                    if (mainPhases.Contains(phaseData))
+                    {
+                        if (mainPhasesMap.Contains(crMaps.LastOrDefault()))
+                        {
+                            splitPhaseIndex++;
+                        }
+                        crMaps.Add(mainPhasesMap[mainPhaseIndex++]);
+                    }
+                    else
+                    {
+                        if (splitPhasesMap.Contains(crMaps.LastOrDefault()))
+                        {
+                            mainPhaseIndex++;
+                        }
+                        crMaps.Add(splitPhasesMap[splitPhaseIndex++]);
+                    }
+                }
+                GetCombatReplayMap(log).MatchMapsToPhases(crMaps, phases, log.FightData.FightEnd);
+            } 
+            catch(Exception)
+            {
+                log.UpdateProgressWithCancellationCheck("Failed to associate Adina Combat Replay maps");
+            }
+            
+            //
             return phases;
         }
 
