@@ -118,47 +118,64 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
+            // Split phases
             List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, 762, mainTarget, true);
-            long start = 0, end = 0;
+            long start = 0;
+            var splitPhases = new List<PhaseData>();
+            var splitPhaseEnds = new List<long>();
             for (int i = 0; i < invuls.Count; i++)
             {
+                PhaseData splitPhase;
                 AbstractBuffEvent be = invuls[i];
                 if (be is BuffApplyEvent)
                 {
                     start = be.Time;
                     if (i == invuls.Count - 1)
                     {
-                        phases.Add(new PhaseData(start, log.FightData.FightEnd, "Split " + (i / 2 + 1)));
+                        splitPhase = new PhaseData(start, log.FightData.FightEnd, "Split " + (i / 2 + 1));
+                        splitPhaseEnds.Add(log.FightData.FightEnd);
+                        AddTargetsToPhaseAndFit(splitPhase, new List<int> { (int)ArcDPSEnums.TrashID.HandOfErosion, (int)ArcDPSEnums.TrashID.HandOfEruption }, log);
+                        splitPhases.Add(splitPhase);
                     }
                 }
                 else
                 {
-                    end = be.Time;
-                    phases.Add(new PhaseData(start, end, "Split " + (i / 2 + 1)));
+                    long end = be.Time;
+                    splitPhase = new PhaseData(start, end, "Split " + (i / 2 + 1));
+                    splitPhaseEnds.Add(end);
+                    AddTargetsToPhaseAndFit(splitPhase, new List<int> { (int)ArcDPSEnums.TrashID.HandOfErosion, (int)ArcDPSEnums.TrashID.HandOfEruption }, log);
+                    splitPhases.Add(splitPhase);
                 }
             }
+            // Main phases
             var mainPhases = new List<PhaseData>();
             var quantumQuakes = mainTarget.GetCastEvents(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == 56035 || x.SkillId == 56381).ToList();
             AbstractCastEvent boulderBarrage = mainTarget.GetCastEvents(log, 0, log.FightData.FightEnd).FirstOrDefault(x => x.SkillId == 56648 && x.Time < 6000);
             start = boulderBarrage == null ? 0 : boulderBarrage.EndTime;
-            end = 0;
-            if (phases.Count > 1)
+            if (quantumQuakes.Any())
             {
-                for (int i = 1; i < phases.Count; i++)
+                int phaseIndex = 1;
+                foreach (AbstractCastEvent quantumQake in quantumQuakes)
                 {
-                    AbstractCastEvent qQ = quantumQuakes[i - 1];
-                    end = qQ.Time;
-                    mainPhases.Add(new PhaseData(start, end, "Phase " + i));
-                    PhaseData split = phases[i];
-                    AddTargetsToPhaseAndFit(split, new List<int> { (int)ArcDPSEnums.TrashID.HandOfErosion, (int)ArcDPSEnums.TrashID.HandOfEruption }, log);
-                    start = split.End;
-                    if (i == phases.Count - 1 && start != log.FightData.FightEnd)
+                    var curStart = splitPhaseEnds.LastOrDefault(x => x < quantumQake.Time);
+                    if (curStart == 0)
                     {
-                        mainPhases.Add(new PhaseData(start, log.FightData.FightEnd, "Phase " + (i + 1)));
+                        curStart = start;
                     }
+                    long splitPhaseEnd = splitPhaseEnds.FirstOrDefault(x => x > quantumQake.EndTime);
+                    if (splitPhaseEnd != 0)
+                    {
+                        start = splitPhaseEnd;
+                        phaseIndex = splitPhaseEnds.IndexOf(start) + 1;
+                    }
+                    mainPhases.Add(new PhaseData(curStart, quantumQake.Time, "Phase " + phaseIndex));
                 }
-            }
-            else if (start > 0)
+                if (start != mainPhases.Last().Start)
+                {
+                    mainPhases.Add(new PhaseData(start, log.FightData.FightEnd, "Phase " + (phaseIndex + 1)));
+                }
+            } 
+            else if (start > 0 && !invuls.Any())
             {
                 // no split
                 mainPhases.Add(new PhaseData(start, log.FightData.FightEnd, "Phase 1"));
@@ -169,16 +186,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phase.AddTarget(mainTarget);
             }
             phases.AddRange(mainPhases);
+            phases.AddRange(splitPhases);
             phases.Sort((x, y) => x.Start.CompareTo(y.Start));
-            GetCombatReplayMap(log).MatchMapsToPhases(new List<string> {
-                "https://i.imgur.com/IQn2RJV.png",
-                "https://i.imgur.com/gJ55jKy.png",
-                "https://i.imgur.com/3pO7eCB.png",
-                "https://i.imgur.com/c2Oz5bj.png",
-                "https://i.imgur.com/ZFw590w.png",
-                "https://i.imgur.com/P4SGbrc.png",
-                "https://i.imgur.com/2P7UE8q.png"
-            }, phases, log.FightData.FightEnd);
+            if (mainPhases.Count == splitPhases.Count + 1)
+            {
+                GetCombatReplayMap(log).MatchMapsToPhases(new List<string> {
+                    "https://i.imgur.com/IQn2RJV.png",
+                    "https://i.imgur.com/gJ55jKy.png",
+                    "https://i.imgur.com/3pO7eCB.png",
+                    "https://i.imgur.com/c2Oz5bj.png",
+                    "https://i.imgur.com/ZFw590w.png",
+                    "https://i.imgur.com/P4SGbrc.png",
+                    "https://i.imgur.com/2P7UE8q.png"
+                }, phases, log.FightData.FightEnd);
+            }        
             return phases;
         }
 
