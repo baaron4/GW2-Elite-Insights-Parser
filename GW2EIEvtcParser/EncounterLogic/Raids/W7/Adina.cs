@@ -157,18 +157,18 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int phaseIndex = 1;
                 foreach (AbstractCastEvent quantumQake in quantumQuakes)
                 {
-                    var curStart = splitPhaseEnds.LastOrDefault(x => x < quantumQake.Time);
-                    if (curStart == 0)
+                    var curPhaseStart = splitPhaseEnds.LastOrDefault(x => x < quantumQake.Time);
+                    if (curPhaseStart == 0)
                     {
-                        curStart = start;
+                        curPhaseStart = start;
                     }
-                    long splitPhaseEnd = splitPhaseEnds.FirstOrDefault(x => x > quantumQake.EndTime);
-                    if (splitPhaseEnd != 0)
+                    long nextPhaseStart = splitPhaseEnds.FirstOrDefault(x => x > quantumQake.EndTime);
+                    if (nextPhaseStart != 0)
                     {
-                        start = splitPhaseEnd;
+                        start = nextPhaseStart;
                         phaseIndex = splitPhaseEnds.IndexOf(start) + 1;
                     }
-                    mainPhases.Add(new PhaseData(curStart, quantumQake.Time, "Phase " + phaseIndex));
+                    mainPhases.Add(new PhaseData(curPhaseStart, quantumQake.Time, "Phase " + phaseIndex));
                 }
                 if (start != mainPhases.Last().Start)
                 {
