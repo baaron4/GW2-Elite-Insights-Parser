@@ -402,7 +402,7 @@ namespace GW2EIEvtcParser
                 case Spec.Weaver:
                     return "https://wiki.guildwars2.com/images/3/31/Weaver_tango_icon_200px.png";
                 case Spec.Catalyst:
-                    return "";
+                    return "https://i.imgur.com/UbvyFSt.png";
                 //
                 case Spec.Mesmer:
                     return "https://wiki.guildwars2.com/images/7/73/Mesmer_tango_icon_200px.png";
@@ -436,7 +436,7 @@ namespace GW2EIEvtcParser
                 case Spec.Spellbreaker:
                     return "https://wiki.guildwars2.com/images/e/ed/Spellbreaker_tango_icon_20px.png";
                 case Spec.Bladesworn:
-                    return "";
+                    return "https://wiki.guildwars2.com/images/thumb/c/c1/Bladesworn_tango_icon_200px.png/20px-Bladesworn_tango_icon_200px.png";
                 //
                 case Spec.Guardian:
                     return "https://wiki.guildwars2.com/images/8/8c/Guardian_tango_icon_20px.png";
@@ -484,7 +484,7 @@ namespace GW2EIEvtcParser
                 case Spec.Weaver:
                     return "https://wiki.guildwars2.com/images/f/fc/Weaver_tango_icon_20px.png";
                 case Spec.Catalyst:
-                    return "";
+                    return "https://i.imgur.com/UbvyFSt.png";
                 //
                 case Spec.Mesmer:
                     return "https://wiki.guildwars2.com/images/6/60/Mesmer_tango_icon_20px.png";
