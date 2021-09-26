@@ -281,7 +281,7 @@ namespace GW2EIEvtcParser.ParsedData
                 res.AddRange(resBySrcAgent);
             }
             res = res.OrderBy(x => x.Time).ToList();
-            res.RemoveAll(x => x.ActualDuration == 0);
+            res.RemoveAll(x => x.ActualDuration <= 1);
             return res;
         }
 
