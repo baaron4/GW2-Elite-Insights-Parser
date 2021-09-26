@@ -191,6 +191,10 @@ namespace GW2EIEvtcParser.EIData
 
         internal static BuffSourceFinder GetBuffSourceFinder(ulong version, HashSet<long> boonIds)
         {
+            if (version >= 119939)
+            {
+                return new BuffSourceFinder20210921(boonIds);
+            }
             if (version > 115189)
             {
                 return new BuffSourceFinder20210511(boonIds);

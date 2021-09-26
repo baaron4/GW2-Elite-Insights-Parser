@@ -35,15 +35,15 @@ namespace GW2EIEvtcParser.EIData
         // Spec specific checks
         protected virtual int CouldBeEssenceOfSpeed(AgentItem dst, long extension, long buffID, ParsedEvtcLog log)
         {
-            if (extension == EssenceOfSpeed && ParserHelper.ProfToSpec(dst.Prof) == ParserHelper.Spec.Soulbeast)
+            if (extension == EssenceOfSpeed && dst.Spec == ParserHelper.Spec.Soulbeast)
             {
                 if (log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Herald) ||
-                    log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Tempest))
+                    log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Tempest) ||
+                    log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Vindicator))
                 {
                     // uncertain, needs to check more
                     return 0;
                 }
-                // if not herald or tempest in squad then can only be the trait
                 return 1;
             }
             return -1;
@@ -65,6 +65,11 @@ namespace GW2EIEvtcParser.EIData
             return false;
         }
 
+        protected virtual List<AgentItem> CouldBeImperialImpact(long extension, long time, ParsedEvtcLog log)
+        {
+            return new List<AgentItem>();
+        }
+
         protected virtual HashSet<long> GetIDs(ParsedEvtcLog log, long buffID, long extension)
         {
             if (DurationToIDs.TryGetValue(extension, out HashSet<long> idsToCheck))
@@ -81,6 +86,11 @@ namespace GW2EIEvtcParser.EIData
             {
                 return dst;
             }
+            List<AgentItem> imperialImpactCheck = CouldBeImperialImpact(extension, time, log);
+            if (imperialImpactCheck.Count > 1)
+            {
+                return ParserHelper._unknownAgent;
+            }
             int essenceOfSpeedCheck = CouldBeEssenceOfSpeed(dst, extension, buffID, log);
             // can only be the soulbeast
             if (essenceOfSpeedCheck == 1)
@@ -95,24 +105,34 @@ namespace GW2EIEvtcParser.EIData
                 if (cls.Count == 1)
                 {
                     AbstractCastEvent item = cls.First();
-                    // If uncertainty due to essence of speed or imbued melodies, return unknown
-                    if (essenceOfSpeedCheck == 0 || CouldBeImbuedMelodies(item.Caster, time, extension, log))
+                    // If uncertainty due to essence of speed, imbued melodies or imperial impact, return unknown
+                    if (essenceOfSpeedCheck == 0 || CouldBeImbuedMelodies(item.Caster, time, extension, log) || imperialImpactCheck.Any())
                     {
                         return ParserHelper._unknownAgent;
                     }
                     // otherwise the src is the caster
                     return item.Caster;
                 }
-                // If no cast item and uncertainty due to essence of speed
-                else if (!cls.Any() && essenceOfSpeedCheck == 0)
-                {
+                // If no cast item and 
+                else if (!cls.Any())
+                {               
                     // If uncertainty due to imbued melodies, return unknown
                     if (CouldBeImbuedMelodies(dst, time, extension, log))
                     {
                         return ParserHelper._unknownAgent;
                     }
-                    // otherwise return the soulbeast
-                    return dst;
+                    // uncertainty due to essence of speed but not due to imperial impact
+                    if (essenceOfSpeedCheck == 0 && !imperialImpactCheck.Any())
+                    {
+                        // the soulbeast
+                        return dst;
+                    }
+                    // uncertainty due to imperial impact but not due to essence of speed
+                    if (essenceOfSpeedCheck == -1 && imperialImpactCheck.Count == 1)
+                    {
+                        // the vindicator
+                        return imperialImpactCheck.First();
+                    }
                 }
             }
             return ParserHelper._unknownAgent;

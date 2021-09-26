@@ -10,7 +10,8 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(31600, 33162, EIData.InstantCastFinder.DefaultICD), // bound
+            new BuffGainCastFinder(31600, 33162, EIData.InstantCastFinder.DefaultICD), // Bounding Dodger
+            new BuffGainCastFinder(31267, 32200, EIData.InstantCastFinder.DefaultICD), // Lotus Training
             //new DamageCastFinder(30520, 30520, EIData.InstantCastFinder.DefaultICD), // Debilitating Arc
         };
 

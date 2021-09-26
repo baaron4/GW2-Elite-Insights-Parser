@@ -37,10 +37,12 @@ namespace GW2EIEvtcParser.EIData
                 RevenantHelper.Buffs,
                 HeraldHelper.Buffs,
                 RenegadeHelper.Buffs,
+                VindicatorHelper.Buffs,
                 //
                 WarriorHelper.Buffs,
                 BerserkerHelper.Buffs,
                 SpellbreakerHelper.Buffs,
+                BladeswornHelper.Buffs,
                 //
                 GuardianHelper.Buffs,
                 DragonhunterHelper.Buffs,
@@ -72,6 +74,7 @@ namespace GW2EIEvtcParser.EIData
                 ElementalistHelper.Buffs,
                 TempestHelper.Buffs,
                 WeaverHelper.Buffs,
+                CatalystHelper.Buffs,
             };
             var currentBuffs = new List<Buff>();
             foreach (List<Buff> buffs in AllBuffs)
