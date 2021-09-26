@@ -55,6 +55,7 @@ namespace GW2EIEvtcParser.ParsedData
             Acceleration = Math.Round(Acceleration, ParserHelper.AccelerationDigit);
         }
 
+        // Start missing
         internal AnimatedCastEvent(AgentData agentData, SkillData skillData, CombatItem endItem) : base (endItem, agentData, skillData)
         {
             ActualDuration = endItem.Value;
@@ -70,6 +71,7 @@ namespace GW2EIEvtcParser.ParsedData
             SetAcceleration(endItem);
         }
 
+        // Start and End both present
         internal AnimatedCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData, CombatItem endItem) : this(startItem, agentData, skillData)
         {
             ActualDuration = endItem.Value;
@@ -90,6 +92,7 @@ namespace GW2EIEvtcParser.ParsedData
             SetAcceleration(endItem);
         }
 
+        // End missing
         internal AnimatedCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData, long maxEnd) : this(startItem, agentData, skillData)
         {
             if (Skill.ID == SkillItem.DodgeId)
@@ -98,7 +101,12 @@ namespace GW2EIEvtcParser.ParsedData
                 ExpectedDuration = 750;
             }
             ActualDuration = ExpectedDuration;
-            if (ActualDuration + Time > maxEnd)
+            CutAt(maxEnd);
+        }
+
+        internal void CutAt(long maxEnd)
+        {
+            if (EndTime > maxEnd && Status == AnimationStatus.Unknown)
             {
                 ActualDuration = (int)(maxEnd - Time);
             }

@@ -248,7 +248,7 @@ namespace GW2EIEvtcParser.ParsedData
                             // missing end
                             if (startItem != null)
                             {
-                                resBySrcAgentBySkillID.Add(new AnimatedCastEvent(startItem, agentData, skillData, c.Time));
+                                resBySrcAgentBySkillID.Add(new AnimatedCastEvent(startItem, agentData, skillData, fightData.LogEnd));
                             }
                             startItem = c;
                         }
@@ -274,14 +274,20 @@ namespace GW2EIEvtcParser.ParsedData
                     // missing end
                     if (startItem != null)
                     {
-                        resBySrcAgentBySkillID.Add(new AnimatedCastEvent(startItem, agentData, skillData, long.MaxValue));
+                        resBySrcAgentBySkillID.Add(new AnimatedCastEvent(startItem, agentData, skillData, fightData.LogEnd));
                     }
+                    resBySrcAgentBySkillID.RemoveAll(x => x.ActualDuration <= 1);
                     resBySrcAgent.AddRange(resBySrcAgentBySkillID);
-                }               
+                }
+                resBySrcAgent = resBySrcAgent.OrderBy(x => x.Time).ToList();
+                // sanitize 
+                for (int i = 0; i < resBySrcAgent.Count - 1; i++)
+                {
+                    resBySrcAgent[i].CutAt(resBySrcAgent[i + 1].Time + ParserHelper.ServerDelayConstant);
+                }
                 res.AddRange(resBySrcAgent);
             }
             res = res.OrderBy(x => x.Time).ToList();
-            res.RemoveAll(x => x.ActualDuration <= 1);
             return res;
         }
 
