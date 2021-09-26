@@ -237,10 +237,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override List<ErrorEvent> GetCustomWarningMessages(FightData fightData, int arcdpsVersion)
         {
-            var res = new List<ErrorEvent>()
-            {
-                new ErrorEvent("Missing data due to green ports")
-            };
+            List<ErrorEvent> res = base.GetCustomWarningMessages(fightData, arcdpsVersion);
             if (!fightData.IsCM)
             {
                 res.Add(new ErrorEvent("Missing outgoing Saul damage due to % based damage"));
