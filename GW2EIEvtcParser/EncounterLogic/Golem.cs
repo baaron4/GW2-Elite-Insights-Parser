@@ -146,15 +146,24 @@ namespace GW2EIEvtcParser.EncounterLogic
             AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => x.HealthDamage > 0);
             long fightEndLogTime = fightData.FightEnd;
             bool success = false;
-            if (lastDamageTaken != null)
+            DeadEvent deadEvt = combatData.GetDeadEvents(mainTarget.AgentItem).LastOrDefault();
+            if (deadEvt != null)
             {
-                fightEndLogTime = lastDamageTaken.Time;
-            }
-            IReadOnlyList<HealthUpdateEvent> hpUpdates = combatData.GetHealthUpdateEvents(mainTarget.AgentItem);
-            if (hpUpdates.Count > 0)
+                fightEndLogTime = deadEvt.Time;
+                success = true;
+            } 
+            else
             {
-                success = hpUpdates.Last().HPPercent < 2.00;
-            }
+                if (lastDamageTaken != null)
+                {
+                    fightEndLogTime = lastDamageTaken.Time;
+                }
+                IReadOnlyList<HealthUpdateEvent> hpUpdates = combatData.GetHealthUpdateEvents(mainTarget.AgentItem);
+                if (hpUpdates.Count > 0)
+                {
+                    success = hpUpdates.Last().HPPercent < 2.00;
+                }
+            }          
             fightData.SetSuccess(success, fightEndLogTime);
         }
 
