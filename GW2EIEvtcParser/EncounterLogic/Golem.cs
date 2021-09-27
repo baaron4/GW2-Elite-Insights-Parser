@@ -143,7 +143,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Golem not found");
             }
-            AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => x.HealthDamage > 0);
             long fightEndLogTime = fightData.FightEnd;
             bool success = false;
             DeadEvent deadEvt = combatData.GetDeadEvents(mainTarget.AgentItem).LastOrDefault();
@@ -154,6 +153,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             } 
             else
             {
+                AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => x.HealthDamage > 0);
                 if (lastDamageTaken != null)
                 {
                     fightEndLogTime = lastDamageTaken.Time;
