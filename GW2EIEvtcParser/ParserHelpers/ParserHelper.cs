@@ -173,7 +173,7 @@ namespace GW2EIEvtcParser
                 case "Necromancer":
                     return Spec.Necromancer;
                 //
-                case "Bladesword":
+                case "Bladesworn":
                     return Spec.Bladesworn;
                 case "Spellbreaker":
                     return Spec.Spellbreaker;

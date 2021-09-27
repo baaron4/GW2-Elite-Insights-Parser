@@ -110,10 +110,12 @@ const specs = [
     "Warrior",
     "Berserker",
     "Spellbreaker",
+    "Bladesworn",
     //
     "Revenant",
     "Herald",
     "Renegade",
+    "Vindicator",
     //
     "Guardian",
     "Dragonhunter",
@@ -144,17 +146,20 @@ const specs = [
     //
     "Elementalist",
     "Tempest",
-    "Weaver"
+    "Weaver",
+    "Catalyst"
 ];
 
 const specToBase = {
     Warrior: 'Warrior',
     Berserker: 'Warrior',
     Spellbreaker: 'Warrior',
+    Bladesworn: 'Warrior',
     //
     Revenant: "Revenant",
     Herald: "Revenant",
     Renegade: "Revenant",
+    Vindicator: "Revenant",
     //
     Guardian: "Guardian",
     Dragonhunter: "Guardian",
@@ -185,5 +190,6 @@ const specToBase = {
     //
     Elementalist: "Elementalist",
     Tempest: "Elementalist",
-    Weaver: "Elementalist"
+    Weaver: "Elementalist",
+    Catalyst: "Elementalist"
 };
