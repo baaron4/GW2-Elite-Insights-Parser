@@ -792,6 +792,23 @@ namespace GW2EIEvtcParser
                 }
             }
 
+            // Adjust extension events if needed
+            if (_enabledExtensions.Any())
+            {
+                operation.UpdateProgressWithCancellationCheck("Adjust extension events");
+                foreach (CombatItem combatItem in _combatItems)
+                {
+                    if (combatItem.IsExtension)
+                    {
+                        if (_enabledExtensions.TryGetValue(combatItem.Pad, out AbstractExtensionHandler handler))
+                        {
+                            handler.AdjustCombatEvent(combatItem, _agentData);
+                        }
+                    }
+
+                }
+            }
+
             operation.UpdateProgressWithCancellationCheck("Creating players");
             CompletePlayers(operation);
         }

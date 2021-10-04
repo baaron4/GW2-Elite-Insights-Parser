@@ -196,7 +196,13 @@ namespace GW2EIEvtcParser.Extensions
 
         internal static bool IsHealingEvent(CombatItem c)
         {
-            return (c.IsBuff == 0 && c.Value < 0) || (c.IsBuff != 0 && c.Value == 0 && c.BuffDmg < 0);
+            return c.IsShields == 0 && ((c.IsBuff == 0 && c.Value < 0) || (c.IsBuff != 0 && c.Value == 0 && c.BuffDmg < 0));
+        }
+
+        // To be exploited later
+        internal static bool IsBarrierEvent(CombatItem c)
+        {
+            return c.IsShields > 0 && ((c.IsBuff == 0 && c.Value < 0) || (c.IsBuff != 0 && c.Value == 0 && c.BuffDmg < 0));
         }
 
         internal HashSet<long> GetHybridIDs(ulong gw2Build)
@@ -243,6 +249,19 @@ namespace GW2EIEvtcParser.Extensions
             {
                 _healingEvents.Add(new EXTNonDirectHealingEvent(c, agentData, skillData));
             }
+        }
+
+        internal override void AdjustCombatEvent(CombatItem combatItem, AgentData agentData)
+        {
+            if (!IsHealingEvent(combatItem))
+            {
+                return;
+            }
+            // Prefer instid fetch for healing events
+            AgentItem src = agentData.GetAgentByInstID(combatItem.SrcInstid, combatItem.Time);
+            combatItem.OverrideSrcAgent(src.Agent);
+            AgentItem dst = agentData.GetAgentByInstID(combatItem.DstInstid, combatItem.Time);
+            combatItem.OverrideDstAgent(dst.Agent);
         }
 
         internal override void AttachToCombatData(CombatData combatData, ParserController operation, ulong gw2Build)

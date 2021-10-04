@@ -27,5 +27,7 @@ namespace GW2EIEvtcParser.Extensions
 
         internal abstract void AttachToCombatData(CombatData combatData, ParserController operation, ulong gw2Build);
 
+        internal abstract void AdjustCombatEvent(CombatItem combatItem, AgentData agentData);
+
     }
 }
