@@ -8,7 +8,7 @@
                 <li class="nav-item">
                     <a class="nav-link" @click="mode = 1" :class="{active: mode === 1 }">Generation Self</a>
                 </li>
-                <li class="nav-item">
+                <li v-if="!singlePlayer" class="nav-item">
                     <a class="nav-link" @click="mode = 2" :class="{active: mode === 2 }"
                         data-original-title="Self excluded">Generation Group</a>
                 </li>
@@ -59,6 +59,9 @@
         computed: {
             singleGroup: function () {
                 return logData.singleGroup;
+            },
+            singlePlayer: function () {
+                return logData.players.filter(x => !x.isFake).length <= 1;
             },
             phase: function () {
                 return logData.phases[this.phaseindex];
