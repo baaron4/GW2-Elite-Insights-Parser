@@ -33,13 +33,25 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            var raidRewardsTypes = new HashSet<int>
+            var raidRewardsTypes = new HashSet<int>();
+            ulong build = combatData.GetBuildEvent().Build;
+            if (build < 97235)
+            {
+                raidRewardsTypes = new HashSet<int>
                 {
+                    // Old types, on each kill
                     55821,
-                    60685,
-                    914,
+                    60685
+                };
+            }
+            else
+            {
+                raidRewardsTypes = new HashSet<int>
+                {
+                    // New types, once per week
                     22797
                 };
+            }
             IReadOnlyList<RewardEvent> rewards = combatData.GetRewardEvents();
             RewardEvent reward = rewards.FirstOrDefault(x => raidRewardsTypes.Contains(x.RewardType));
             if (reward != null)
