@@ -71,7 +71,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AgentItem extra = agentData.AddCustomAgent(start, end, AgentItem.AgentType.NPC, hand.Name, hand.Spec, id, false, hand.Toughness, hand.Healing, hand.Condition, hand.Concentration, hand.HitboxWidth, hand.HitboxHeight);
                     foreach (CombatItem c in combatData)
                     {
-                        if (c.Time >= extra.FirstAware && c.Time <= extra.LastAware)
+                        if (extra.InAwareTimes(c.Time))
                         {
                             if (c.SrcMatchesAgent(hand, extensions))
                             {

@@ -49,7 +49,7 @@ namespace GW2EIEvtcParser.ParsedData
                 {
                     foreach (AgentItem a in agents)
                     {
-                        if (a.FirstAware <= time && a.LastAware >= time)
+                        if (a.InAwareTimes(time))
                         {
                             return a;
                         }
@@ -83,18 +83,19 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<AgentItem>();
         }
 
-        public AgentItem GetAgentByInstID(ushort instid, long logTime)
+        public AgentItem GetAgentByInstID(ushort instid, long time)
         {
             if (instid != 0)
             {
-                if (_allAgentsByInstID.TryGetValue(instid, out List<AgentItem> list))
+                if (_allAgentsByInstID.TryGetValue(instid, out List<AgentItem> agents))
                 {
-                    AgentItem a = list.FirstOrDefault(x => x.FirstAware <= logTime && x.LastAware >= logTime);
-                    if (a != null)
+                    foreach (AgentItem a in agents)
                     {
-                        return a;
+                        if (a.InAwareTimes(time))
+                        {
+                            return a;
+                        }
                     }
-                    return ParserHelper._unknownAgent;
                 }
             }
             return ParserHelper._unknownAgent;

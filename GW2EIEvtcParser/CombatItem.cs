@@ -214,7 +214,7 @@ namespace GW2EIEvtcParser
         {
             if (DstIsAgent(extensions))
             {
-                return agentItem.Agent == DstAgent && agentItem.FirstAware <= Time && agentItem.LastAware >= Time;
+                return agentItem.Agent == DstAgent && agentItem.InAwareTimes(Time);
             }
             return false;
         }
@@ -223,7 +223,7 @@ namespace GW2EIEvtcParser
         {
             if (DstIsAgent())
             {
-                return agentItem.Agent == DstAgent && agentItem.FirstAware <= Time && agentItem.LastAware >= Time;
+                return agentItem.Agent == DstAgent && agentItem.InAwareTimes(Time);
             }
             return false;
         }
@@ -232,7 +232,7 @@ namespace GW2EIEvtcParser
         {
             if (SrcIsAgent(extensions))
             {
-                return agentItem.Agent == SrcAgent && agentItem.FirstAware <= Time && agentItem.LastAware >= Time;
+                return agentItem.Agent == SrcAgent && agentItem.InAwareTimes(Time);
             }
             return false;
         }
@@ -241,7 +241,7 @@ namespace GW2EIEvtcParser
         {
             if (SrcIsAgent())
             {
-                return agentItem.Agent == SrcAgent && agentItem.FirstAware <= Time && agentItem.LastAware >= Time;
+                return agentItem.Agent == SrcAgent && agentItem.InAwareTimes(Time);
             }
             return false;
         }
