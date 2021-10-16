@@ -32,7 +32,7 @@ function ToRadians(degrees) {
     return degrees * (Math.PI / 180);
 }
 
-const resolutionMultiplier = 2 * window.devicePixelRatio;
+const resolutionMultiplier = 2.0;
 
 var animator = null;
 // reactive structures
