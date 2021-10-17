@@ -159,6 +159,7 @@ namespace GW2EIEvtcParser.ParsedData
             {43558, "https://wiki.guildwars2.com/images/7/73/Rugged_Growth.png" },
             {12836, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" }, // Water Blast Combo
             {46508, "https://wiki.guildwars2.com/images/f/ff/Echo_of_Truth.png" }, // Echo of Truth
+            {54935, "https://render.guildwars2.com/file/E60C094A2349552EA6F6250D9B14E69BE91E4468/1128595.png" }, // Shredder Gyro damage
             // Weaver attunements
             {Buff.FireDual, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
             {Buff.FireWater, "https://i.imgur.com/ar8Hn8G.png" },
