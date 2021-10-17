@@ -22,6 +22,10 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
             new BuffDamageModifier(NumberOfBoonsID, "Reinforced Potency", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Herald, ByStack, "https://wiki.guildwars2.com/images/0/0a/Envoy_of_Sustenance.png", DamageModifierMode.All),
+            new BuffDamageModifier(51653 , "Burst of Strength", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Herald, ByPresence, "https://wiki.guildwars2.com/images/7/7b/Burst_of_Strength.png", 92069, 97950, DamageModifierMode.All),
+            new BuffDamageModifier(51653 , "Burst of Strength", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Herald, ByPresence, "https://wiki.guildwars2.com/images/7/7b/Burst_of_Strength.png", 97950, ulong.MaxValue, DamageModifierMode.PvE),
+            new BuffDamageModifier(51653 , "Burst of Strength", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Herald, ByPresence, "https://wiki.guildwars2.com/images/7/7b/Burst_of_Strength.png", 97950, 102321, DamageModifierMode.sPvPWvW),
+            new BuffDamageModifier(51653 , "Burst of Strength", "7%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Herald, ByPresence, "https://wiki.guildwars2.com/images/7/7b/Burst_of_Strength.png", 102321, ulong.MaxValue, DamageModifierMode.sPvPWvW),
             // 
             new BuffDamageModifier(new long[] { 27336, 29275, 28036, 28243, 27376, 27983}, "Forceful Persistence (Facets)", "4% per active Facet", DamageSource.NoPets, 4.0, DamageType.Strike, DamageType.All, Source.Herald, ByMultiPresence, "https://wiki.guildwars2.com/images/5/5f/Forceful_Persistence.png", 92069, ulong.MaxValue, DamageModifierMode.PvE),
             new BuffDamageModifier(new long[] { 27336, 29275, 28036, 28243, 27376, 27983}, "Forceful Persistence (Facets)", "3% per active Facet", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Herald, ByMultiPresence, "https://wiki.guildwars2.com/images/5/5f/Forceful_Persistence.png", 92069, ulong.MaxValue, DamageModifierMode.sPvPWvW),
@@ -55,6 +59,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Legendary Dragon Stance",27732, ParserHelper.Source.Herald, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d5/Legendary_Dragon_Stance.png"),
                 new Buff("Hardening Persistence",28957, ParserHelper.Source.Herald, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/0/0f/Hardening_Persistence.png"),
                 new Buff("Soothing Bastion",34136, ParserHelper.Source.Herald, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/0/04/Soothing_Bastion.png"),
+                new Buff("Burst of Strength",51653, ParserHelper.Source.Herald, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/7b/Burst_of_Strength.png"),
         };
     }
 }
