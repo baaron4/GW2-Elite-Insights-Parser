@@ -133,6 +133,7 @@ const specs = [
     "Thief",
     "Daredevil",
     "Deadeye",
+    "Specter",
     //
     "Mesmer",
     "Chronomancer",
@@ -177,6 +178,7 @@ const specToBase = {
     Thief: "Thief",
     Daredevil: "Thief",
     Deadeye: "Thief",
+    Specter: "Thief",
     //
     Mesmer: "Mesmer",
     Chronomancer: "Mesmer",

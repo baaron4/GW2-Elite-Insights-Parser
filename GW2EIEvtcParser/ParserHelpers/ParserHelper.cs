@@ -37,7 +37,7 @@ namespace GW2EIEvtcParser
             Warrior, Berserker, Spellbreaker, Bladesworn,
             Revenant, Herald, Renegade, Vindicator,
             Guardian, Dragonhunter, Firebrand, Willbender,
-            Thief, Daredevil, Deadeye,
+            Thief, Daredevil, Deadeye, Specter,
             Ranger, Druid, Soulbeast,
             Engineer, Scrapper, Holosmith,
             FightSpecific,
@@ -53,7 +53,7 @@ namespace GW2EIEvtcParser
             Warrior, Berserker, Spellbreaker, Bladesworn,
             Revenant, Herald, Renegade, Vindicator,
             Guardian, Dragonhunter, Firebrand, Willbender,
-            Thief, Daredevil, Deadeye,
+            Thief, Daredevil, Deadeye, Specter,
             Ranger, Druid, Soulbeast,
             Engineer, Scrapper, Holosmith,
             NPC, Gadget,
@@ -139,6 +139,8 @@ namespace GW2EIEvtcParser
                 case "Engineer":
                     return Spec.Engineer;
                 //
+                case "Specter":
+                    return Spec.Specter;
                 case "Daredevil":
                     return Spec.Daredevil;
                 case "Deadeye":
@@ -217,6 +219,7 @@ namespace GW2EIEvtcParser
                 case Spec.Engineer:
                     return Spec.Engineer;
                 //
+                case Spec.Specter:
                 case Spec.Daredevil:
                 case Spec.Deadeye:
                 case Spec.Thief:
@@ -279,10 +282,12 @@ namespace GW2EIEvtcParser
                 case Spec.Engineer:
                     return new List<Source> { Source.Engineer };
                 //
-                case Spec.Daredevil:
-                    return new List<Source> { Source.Thief, Source.Daredevil };
+                case Spec.Specter:
+                    return new List<Source> { Source.Thief, Source.Specter };
                 case Spec.Deadeye:
                     return new List<Source> { Source.Thief, Source.Deadeye };
+                case Spec.Daredevil:
+                    return new List<Source> { Source.Thief, Source.Daredevil };
                 case Spec.Thief:
                     return new List<Source> { Source.Thief };
                 //
@@ -394,6 +399,8 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/c/ca/Daredevil_tango_icon_200px.png";
                 case Spec.Deadeye:
                     return "https://wiki.guildwars2.com/images/b/b0/Deadeye_tango_icon_200px.png";
+                case Spec.Specter:
+                    return "https://i.imgur.com/UbvyFSt.png";
                 //
                 case Spec.Elementalist:
                     return "https://wiki.guildwars2.com/images/a/a0/Elementalist_tango_icon_200px.png";
@@ -476,6 +483,8 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/e/e1/Daredevil_tango_icon_20px.png";
                 case Spec.Deadeye:
                     return "https://wiki.guildwars2.com/images/c/c9/Deadeye_tango_icon_20px.png";
+                case Spec.Specter:
+                    return "https://i.imgur.com/UbvyFSt.png";
                 //
                 case Spec.Elementalist:
                     return "https://wiki.guildwars2.com/images/a/aa/Elementalist_tango_icon_20px.png";

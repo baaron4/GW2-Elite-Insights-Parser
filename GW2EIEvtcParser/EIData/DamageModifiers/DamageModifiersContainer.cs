@@ -43,6 +43,7 @@ namespace GW2EIEvtcParser.EIData
                 ThiefHelper.DamageMods,
                 DaredevilHelper.DamageMods,
                 DeadeyeHelper.DamageMods,
+                SpecterHelper.DamageMods,
                 //
                 RangerHelper.DamageMods,
                 DruidHelper.DamageMods,

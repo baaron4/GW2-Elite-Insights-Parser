@@ -56,6 +56,7 @@ namespace GW2EIEvtcParser.EIData
                 ThiefHelper.Buffs,
                 DaredevilHelper.Buffs,
                 DeadeyeHelper.Buffs,
+                SpecterHelper.Buffs,
                 //
                 EngineerHelper.Buffs,
                 ScrapperHelper.Buffs,

@@ -162,6 +162,10 @@ namespace GW2EIEvtcParser.EIData
                         ThiefHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         DeadeyeHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
+                    case Spec.Specter:
+                        ThiefHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        SpecterHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        break;
                     //
                     case Spec.Engineer:
                         EngineerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
