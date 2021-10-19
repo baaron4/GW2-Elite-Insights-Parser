@@ -358,9 +358,35 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> FightSpecific = new List<Buff>
         {
+                // Generic
                 new Buff("Spectral Agony", 38077, Source.FightSpecific,BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/70/Spectral_Agony.png" ),
                 new Buff("Agony", 15773, Source.FightSpecific,BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/be/Agony.png" ),
-                // Whisper of Jormalg
+                new Buff("Enraged (?)", 18711, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Enraged (??)", 23235, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Enraged (100%)", 50070, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Enraged 2 (100%)", 61138, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Enraged (200%)", 60674, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Enraged (300%)", 61006, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                // VG
+                new Buff("Blue Pylon Power", 31413, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6e/Blue_Pylon_Power.png"),
+                new Buff("Pylon Attunement: Red", 31695, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/9/94/Pylon_Attunement-_Red.png"),
+                new Buff("Pylon Attunement: Blue", 31317, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6e/Blue_Pylon_Power.png"),
+                new Buff("Pylon Attunement: Green", 31852, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/a/aa/Pylon_Attunement-_Green.png"),
+                new Buff("Unstable Pylon: Red", 31539, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/3/36/Unstable_Pylon_%28Red%29.png"),
+                new Buff("Unstable Pylon: Blue", 31884, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/c/c3/Unstable_Pylon_%28Blue%29.png"),
+                new Buff("Unstable Pylon: Green", 31828, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/9/9d/Unstable_Pylon_%28Green%29.png"),
+                new Buff("Unbreakable", 34979, Source.FightSpecific, BuffStackType.Stacking, 2, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/56/Xera%27s_Embrace.png"),            
+                // Gorseval
+                new Buff("Spirited Fusion",31722, Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/eb/Spirited_Fusion.png"),
+                new Buff("Protective Shadow", 31877, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/87/Protective_Shadow.png"),
+                new Buff("Ghastly Prison", 31623, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/62/Ghastly_Prison.png"),
+                new Buff("Vivid Echo", 31548, Source.FightSpecific, BuffStackType.Queue, 5, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/4f/Vivid_Echo.png"),
+                new Buff("Spectral Darkness", 31498, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/a/a8/Spectral_Darkness.png"),
+                // Sabetha    
+                new Buff("Shell-Shocked", 34108, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/3/39/Shell-Shocked.png"),
+                new Buff("Sapper Bomb", 31473, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/88/Sapper_Bomb_%28effect%29.png"),
+                new Buff("Time Bomb", 31485, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/9/91/Time_Bomb.png"),
+                // Whisper of Jormag
                 new Buff("Whisper Teleport Out", 59223, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 new Buff("Whisper Teleport Back", 59054, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 new Buff("Frigid Vortex", 59105, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
@@ -399,14 +425,6 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Intervention",35000, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a2/Intervention_%28effect%29.png"),
                 new Buff("Bloodstone Protection",35168, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/4e/Bloodstone_Protection.png"),
                 new Buff("Bloodstone Blessed",34917, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/7a/Bloodstone_Blessed.png"),
-                // Gorseval
-                new Buff("Spirited Fusion",31722, Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/eb/Spirited_Fusion.png"),
-                new Buff("Protective Shadow", 31877, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/87/Protective_Shadow.png"),
-                new Buff("Ghastly Prison", 31623, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/62/Ghastly_Prison.png"),
-                new Buff("Vivid Echo", 31548, Source.FightSpecific, BuffStackType.Queue, 5, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/4f/Vivid_Echo.png"),
-                new Buff("Spectral Darkness", 31498, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/a/a8/Spectral_Darkness.png"),
-                // Sabetha    
-                new Buff("Shell-Shocked", 34108, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/3/39/Shell-Shocked.png"),
                 // Matthias
                 new Buff("Blood Shield Abo",34376, Source.FightSpecific, BuffStackType.Stacking, 18, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
                 new Buff("Blood Shield",34518, Source.FightSpecific, BuffStackType.Stacking, 18, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
@@ -435,15 +453,6 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Waterlogged",51935 , Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/89/Waterlogged.png"),
                 // Slothasor
                 new Buff("Narcolepsy", 34467, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
-                // VG
-                new Buff("Blue Pylon Power", 31413, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6e/Blue_Pylon_Power.png"),
-                new Buff("Pylon Attunement: Red", 31695, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/9/94/Pylon_Attunement-_Red.png"),
-                new Buff("Pylon Attunement: Blue", 31317, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6e/Blue_Pylon_Power.png"),
-                new Buff("Pylon Attunement: Green", 31852, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/a/aa/Pylon_Attunement-_Green.png"),
-                new Buff("Unstable Pylon: Red", 31539, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/3/36/Unstable_Pylon_%28Red%29.png"),
-                new Buff("Unstable Pylon: Blue", 31884, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/c/c3/Unstable_Pylon_%28Blue%29.png"),
-                new Buff("Unstable Pylon: Green", 31828, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/9/9d/Unstable_Pylon_%28Green%29.png"),
-                new Buff("Unbreakable", 34979, Source.FightSpecific, BuffStackType.Stacking, 2, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/56/Xera%27s_Embrace.png"),
                 // Trio
                 new Buff("Not the Bees!", 34434, Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/0/08/Throw_Jar.png"),
                 new Buff("Targeted", 34392, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
