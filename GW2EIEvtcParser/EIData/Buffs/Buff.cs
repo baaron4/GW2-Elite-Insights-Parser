@@ -332,6 +332,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Sigil of Momentum", 22144, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/3/30/Superior_Sigil_of_Momentum.png"),
                 new Buff("Sigil of the Stars", 46953, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/d/dc/Superior_Sigil_of_the_Stars.png"),
                 new Buff("Sigil of Severance", 43930, Source.Gear, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/c/c2/Superior_Sigil_of_Severance.png"),
+                new Buff("Sigil of Doom", 9441, Source.Gear, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/6/67/Superior_Sigil_of_Doom.png"),
         };
 
         internal static readonly List<Buff> FractalInstabilities = new List<Buff>()
@@ -386,6 +387,32 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Shell-Shocked", 34108, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/3/39/Shell-Shocked.png"),
                 new Buff("Sapper Bomb", 31473, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/88/Sapper_Bomb_%28effect%29.png"),
                 new Buff("Time Bomb", 31485, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/9/91/Time_Bomb.png"),
+                // Slothasor
+                new Buff("Narcolepsy", 34467, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                new Buff("Nauseated", 34496, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/3/30/Nauseated.png"),
+                new Buff("Magic Transformation", 34362, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/45/Magic_Transformation.png"),
+                new Buff("Fixated (Slothasor)", 34508, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Volatile Poison", 34387, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/1/12/Volatile_Poison.png"),
+                // Trio
+                new Buff("Not the Bees!", 34434, Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/0/08/Throw_Jar.png"),
+                new Buff("Targeted", 34392, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
+                // Matthias
+                new Buff("Blood Shield Abo",34376, Source.FightSpecific, BuffStackType.Stacking, 18, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
+                new Buff("Blood Shield",34518, Source.FightSpecific, BuffStackType.Stacking, 18, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
+                new Buff("Blood Fueled",34422, Source.FightSpecific, BuffStackType.Stacking, 1, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Buff("Blood Fueled Abo",34428, Source.FightSpecific, BuffStackType.Stacking, 15, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Buff("Unstable Blood Magic", 34450, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/0/09/Unstable_Blood_Magic.png"),
+                new Buff("Corruption", 34416, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/3/34/Locust_Trail.png"),
+                new Buff("Unbalanced", 34367, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/80/Unbalanced.png"),
+                new Buff("Zealous Benediction", 34511, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/45/Unstable.png"),
+                new Buff("Icy Patch", 26766, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/45/Unstable.png"),
+                new Buff("Snowstorm", 34369, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/26/Snowstorm_%28Matthias_Gabrel_effect%29.png"),
+                new Buff("Heat Wave", 34526, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6e/Heat_Wave_%28Matthias_Gabrel_effect%29.png"),
+                new Buff("Downpour",34472, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/4a/Downpour.png"),
+                new Buff("Snowstorm (Matthias)", 34433, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/26/Snowstorm_%28Matthias_Gabrel_effect%29.png"),
+                new Buff("Heat Wave (Matthias)", 34458, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6e/Heat_Wave_%28Matthias_Gabrel_effect%29.png"),
+                new Buff("Downpour (Matthias)",34568, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/4a/Downpour.png"),
+                new Buff("Unstable",34548, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/45/Unstable.png"),
                 // Whisper of Jormag
                 new Buff("Whisper Teleport Out", 59223, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 new Buff("Whisper Teleport Back", 59054, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
@@ -425,11 +452,6 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Intervention",35000, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a2/Intervention_%28effect%29.png"),
                 new Buff("Bloodstone Protection",35168, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/4e/Bloodstone_Protection.png"),
                 new Buff("Bloodstone Blessed",34917, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/7a/Bloodstone_Blessed.png"),
-                // Matthias
-                new Buff("Blood Shield Abo",34376, Source.FightSpecific, BuffStackType.Stacking, 18, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
-                new Buff("Blood Shield",34518, Source.FightSpecific, BuffStackType.Stacking, 18, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
-                new Buff("Blood Fueled",34422, Source.FightSpecific, BuffStackType.Stacking, 1, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Buff("Blood Fueled Abo",34428, Source.FightSpecific, BuffStackType.Stacking, 15, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 // Qadim
                 new Buff("Flame Armor",52568, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e7/Magma_Orb.png"),
                 new Buff("Fiery Surge",52588, Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/f9/Fiery_Surge.png"),
@@ -451,11 +473,6 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Aquatic Aura (Kenut)",52211 , Source.FightSpecific, BuffStackType.Stacking, 80, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/44/Expose_Weakness.png"),
                 new Buff("Aquatic Aura (Nikare)",52929 , Source.FightSpecific, BuffStackType.Stacking, 80, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/fd/Fractured_%28effect%29.png"),
                 new Buff("Waterlogged",51935 , Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/89/Waterlogged.png"),
-                // Slothasor
-                new Buff("Narcolepsy", 34467, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
-                // Trio
-                new Buff("Not the Bees!", 34434, Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/0/08/Throw_Jar.png"),
-                new Buff("Targeted", 34392, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
                 // River
                 new Buff("Soul Siphon", 47470, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/f/f7/Soul_Siphon.png"),
                 new Buff("Desmina's Protection", 47219, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/b3/Desmina%27s_Protection.png"),

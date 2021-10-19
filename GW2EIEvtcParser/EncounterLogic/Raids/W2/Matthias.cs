@@ -78,16 +78,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return phases;
             }
             // Special buff cast check
-            AbstractBuffEvent heatWave = log.CombatData.GetBuffData(34526).FirstOrDefault();
+            AbstractBuffEvent heatWave = log.CombatData.GetBuffData(34458).FirstOrDefault();
             if (heatWave != null)
             {
                 phases.Add(new PhaseData(0, heatWave.Time - 1));
-                AbstractHealthDamageEvent downPour = log.CombatData.GetDamageData(mainTarget.AgentItem).FirstOrDefault(x => x.SkillId == 34554);
+                AbstractBuffEvent downPour = log.CombatData.GetBuffData(34568).FirstOrDefault();
                 if (downPour != null)
                 {
                     phases.Add(new PhaseData(heatWave.Time, downPour.Time - 1));
-                    IReadOnlyList<AbstractCastEvent> castLogs = mainTarget.GetCastEvents(log, 0, log.FightData.FightEnd);
-                    AbstractCastEvent abo = castLogs.FirstOrDefault(x => x.SkillId == 34427);
+                    AbstractBuffEvent abo = log.CombatData.GetBuffData(34548).FirstOrDefault();
                     if (abo != null)
                     {
                         phases.Add(new PhaseData(downPour.Time, abo.Time - 1));
