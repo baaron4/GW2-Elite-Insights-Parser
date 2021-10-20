@@ -190,6 +190,10 @@ namespace GW2EIEvtcParser.EIData
                         RangerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         SoulbeastHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
+                    case Spec.Untamed:
+                        RangerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        UntamedHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        break;
                     //
                     case Spec.Revenant:
                         RevenantHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));

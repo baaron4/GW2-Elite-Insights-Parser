@@ -52,6 +52,7 @@ namespace GW2EIEvtcParser.EIData
                 RangerHelper.Buffs,
                 DruidHelper.Buffs,
                 SoulbeastHelper.Buffs,
+                UntamedHelper.Buffs,
                 //
                 ThiefHelper.Buffs,
                 DaredevilHelper.Buffs,

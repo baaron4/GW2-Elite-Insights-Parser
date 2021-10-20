@@ -125,6 +125,7 @@ const specs = [
     "Ranger",
     "Druid",
     "Soulbeast",
+    "Untamed",
     //
     "Engineer",
     "Scrapper",
@@ -170,6 +171,7 @@ const specToBase = {
     Ranger: "Ranger",
     Druid: "Ranger",
     Soulbeast: "Ranger",
+    Untamed: "Ranger",
     //
     Engineer: "Engineer",
     Scrapper: "Engineer",

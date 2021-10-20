@@ -48,6 +48,7 @@ namespace GW2EIEvtcParser.EIData
                 RangerHelper.DamageMods,
                 DruidHelper.DamageMods,
                 SoulbeastHelper.DamageMods,
+                UntamedHelper.DamageMods,
                 //
                 MesmerHelper.DamageMods,
                 ChronomancerHelper.DamageMods,
