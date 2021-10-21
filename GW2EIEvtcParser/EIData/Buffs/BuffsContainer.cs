@@ -62,6 +62,7 @@ namespace GW2EIEvtcParser.EIData
                 EngineerHelper.Buffs,
                 ScrapperHelper.Buffs,
                 HolosmithHelper.Buffs,
+                MechanistHelper.Buffs,
                 //
                 MesmerHelper.Buffs,
                 ChronomancerHelper.Buffs,

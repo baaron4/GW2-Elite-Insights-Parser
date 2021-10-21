@@ -39,6 +39,7 @@ namespace GW2EIEvtcParser.EIData
                 EngineerHelper.DamageMods,
                 ScrapperHelper.DamageMods,
                 HolosmithHelper.DamageMods,
+                MechanistHelper.DamageMods,
                 //
                 ThiefHelper.DamageMods,
                 DaredevilHelper.DamageMods,

@@ -130,6 +130,7 @@ const specs = [
     "Engineer",
     "Scrapper",
     "Holosmith",
+    "Mechanist",
     //
     "Thief",
     "Daredevil",
@@ -176,6 +177,7 @@ const specToBase = {
     Engineer: "Engineer",
     Scrapper: "Engineer",
     Holosmith: "Engineer",
+    Mechanist: "Engineer",
     //
     Thief: "Thief",
     Daredevil: "Thief",

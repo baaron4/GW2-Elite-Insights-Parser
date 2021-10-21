@@ -39,7 +39,7 @@ namespace GW2EIEvtcParser
             Guardian, Dragonhunter, Firebrand, Willbender,
             Thief, Daredevil, Deadeye, Specter,
             Ranger, Druid, Soulbeast, Untamed,
-            Engineer, Scrapper, Holosmith,
+            Engineer, Scrapper, Holosmith, Mechanist,
             FightSpecific,
             FractalInstability,
             Unknown
@@ -55,7 +55,7 @@ namespace GW2EIEvtcParser
             Guardian, Dragonhunter, Firebrand, Willbender,
             Thief, Daredevil, Deadeye, Specter,
             Ranger, Druid, Soulbeast, Untamed,
-            Engineer, Scrapper, Holosmith,
+            Engineer, Scrapper, Holosmith, Mechanist,
             NPC, Gadget,
             Unknown
         };
@@ -138,6 +138,8 @@ namespace GW2EIEvtcParser
                     return Spec.Scrapper;
                 case "Holosmith":
                     return Spec.Holosmith;
+                case "Mechanist":
+                    return Spec.Mechanist;
                 case "Engineer":
                     return Spec.Engineer;
                 //
@@ -219,6 +221,7 @@ namespace GW2EIEvtcParser
                 //
                 case Spec.Scrapper:
                 case Spec.Holosmith:
+                case Spec.Mechanist:
                 case Spec.Engineer:
                     return Spec.Engineer;
                 //
@@ -284,6 +287,8 @@ namespace GW2EIEvtcParser
                     return new List<Source> { Source.Engineer, Source.Scrapper };
                 case Spec.Holosmith:
                     return new List<Source> { Source.Engineer, Source.Holosmith };
+                case Spec.Mechanist:
+                    return new List<Source> { Source.Engineer, Source.Mechanist };
                 case Spec.Engineer:
                     return new List<Source> { Source.Engineer };
                 //
@@ -390,6 +395,8 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/3/3a/Scrapper_tango_icon_200px.png";
                 case Spec.Holosmith:
                     return "https://wiki.guildwars2.com/images/a/ae/Holosmith_tango_icon_200px.png";
+                case Spec.Mechanist:
+                    return "https://i.imgur.com/UbvyFSt.png";
                 //
                 case Spec.Ranger:
                     return "https://wiki.guildwars2.com/images/5/51/Ranger_tango_icon_200px.png";
@@ -476,6 +483,8 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/3/3a/Scrapper_tango_icon_200px.png";
                 case Spec.Holosmith:
                     return "https://wiki.guildwars2.com/images/2/28/Holosmith_tango_icon_20px.png";
+                case Spec.Mechanist:
+                    return "https://i.imgur.com/UbvyFSt.png";
                 //
                 case Spec.Ranger:
                     return "https://wiki.guildwars2.com/images/4/43/Ranger_tango_icon_20px.png";

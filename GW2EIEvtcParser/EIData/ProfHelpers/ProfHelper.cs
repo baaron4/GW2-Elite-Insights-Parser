@@ -178,6 +178,10 @@ namespace GW2EIEvtcParser.EIData
                         EngineerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         HolosmithHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
+                    case Spec.Mechanist:
+                        EngineerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        MechanistHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        break;
                     //
                     case Spec.Ranger:
                         RangerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
