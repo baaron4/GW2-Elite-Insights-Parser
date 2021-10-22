@@ -312,13 +312,16 @@ namespace GW2EIEvtcParser.ParsedData
                 stat2 += " " + ByteAttr2;
             }
             _solvedDescription += stat1;
+            double variable = Variable;
+            double totalOffset = Math.Round(Level * LevelOffset + ConstantOffset, 4);
+            bool addParenthesis = totalOffset != 0 && Variable != 0;
             if (Attr2 != None)
             {
                 _solvedDescription += " from " + stat2;
+                totalOffset *= 100.0;
+                variable *= 100.0;
             }
             _solvedDescription += ": ";
-            double totalOffset = Math.Round(Level * LevelOffset + ConstantOffset, 4);
-            bool addParenthesis = totalOffset != 0 && Variable != 0;
             if (addParenthesis)
             {
                 _solvedDescription += "(";
@@ -326,7 +329,7 @@ namespace GW2EIEvtcParser.ParsedData
             bool prefix = false;
             if (Variable != 0)
             {
-                _solvedDescription += Variable + " * " + GetVariableStat(Attr1, Type);
+                _solvedDescription += variable + " * " + GetVariableStat(Attr1, Type);
                 prefix = true;
             }
             if (totalOffset != 0)
