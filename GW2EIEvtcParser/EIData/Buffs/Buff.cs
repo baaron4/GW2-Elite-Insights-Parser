@@ -509,6 +509,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Imminent Demise", 47181, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/58/Superheated_Metal.png"),
                 new Buff("Lethal Report", 47202, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/0/02/Mantra_of_Signets.png"),
                 new Buff("Hastened Demise", 48773, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/5b/Hastened_Demise.png"),
+                new Buff("Echo's Pick up", 49125, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/45/Unstable.png"),
                 new Buff("Energy Threshold (Dhuum)", 48848, Source.FightSpecific, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/2e/Spirit_Form_%28Hall_of_Chains%29.png"),
                 //////////////////////////////////////////////
                 // CA
