@@ -474,21 +474,42 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Unseen Burden (Deimos)", 38266, Source.FightSpecific, BuffStackType.Stacking , 99, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/3/38/Unseen_Burden_%28Deimos%29.png"),
                 //////////////////////////////////////////////
                 // Soulless Horror
+                new Buff("Exile's Embrace",48349, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b4/Exile%27s_Embrace.png"),
+                new Buff("Fixated (SH)",47434, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 new Buff("Necrosis",47414, Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/47/Ichor.png"),
                 // River
                 new Buff("Soul Siphon", 47470, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/f/f7/Soul_Siphon.png"),
                 new Buff("Desmina's Protection", 47219, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/b3/Desmina%27s_Protection.png"),
                 new Buff("Follower's Asylum", 47122, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/b3/Desmina%27s_Protection.png"),
+                new Buff("Spirit Form", 48331, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/2e/Spirit_Form_%28Hall_of_Chains%29.png"),
+                new Buff("Mortal Coil (River)",48154, Source.FightSpecific, BuffStackType.Stacking, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/41/Mortal_Coil.png"),
+                new Buff("Energy Threshold (River)", 47758, Source.FightSpecific, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/2e/Spirit_Form_%28Hall_of_Chains%29.png"),
                 // Broken King          
                 new Buff("Frozen Wind", 47776, Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/3/3a/Frozen_Wind.png"),
+                new Buff("Shield of Ice", 47595, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 99, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/3/38/Shield_of_Ice.png"),
+                new Buff("Glaciate", 47022, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/ba/Glaciate.png"),
+                // Eater of Soul         
+                new Buff("Soul Digestion", 48541, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/0/08/Soul_Digestion.png"),
+                new Buff("Reclaimed Energy", 47090, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/21/Reclaimed_Energy.png"),
+                new Buff("Mortal Coil (Statue of Death)", 48583, Source.FightSpecific, BuffStackType.Stacking, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/41/Mortal_Coil.png"),
+                new Buff("Empowered (Statue of Death)", 47473, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/de/Empowered_%28Statue_of_Death%29.png"),
+                new Buff("Energy Threshold (Statue of Death)", 48583, Source.FightSpecific, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/2e/Spirit_Form_%28Hall_of_Chains%29.png"),
+                //  Eyes
+                new Buff("Last Grasp (Judgment)", 47635, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/26/Last_Grasp.png"),
+                new Buff("Last Grasp (Fate)", 47278, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/26/Last_Grasp.png"),
+                new Buff("Exposed (Statue of Darkness)", 47251, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/42/Exposed_%28Statue_of_Darkness%29.png"),
+                new Buff("Light Carrier", 48779, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/f1/Torch_Fielder.png"),
+                new Buff("Empowered (Light Thief)", 48477, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/0/08/Soul_Digestion.png"),
                 // Dhuum
-                new Buff("Spirit Transfrom", 48281, Source.FightSpecific, BuffStackType.Stacking, 30, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/48/Compromised.png"),
+                new Buff("Mortal Coil (Dhuum)", 48281, Source.FightSpecific, BuffStackType.Stacking, 30, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/48/Compromised.png"),
                 new Buff("Fractured Spirit", 46950, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/c/c3/Fractured_Spirit.png"),
                 new Buff("Residual Affliction", 47476, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/1/12/Residual_Affliction.png"),
                 new Buff("Arcing Affliction", 47646, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/f/f0/Arcing_Affliction.png"),
                 new Buff("One-Track Mind", 47929, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/68/Tracked.png"),
                 new Buff("Imminent Demise", 47181, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/58/Superheated_Metal.png"),
                 new Buff("Lethal Report", 47202, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/0/02/Mantra_of_Signets.png"),
+                new Buff("Hastened Demise", 48773, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/5b/Hastened_Demise.png"),
+                new Buff("Energy Threshold (Dhuum)", 48848, Source.FightSpecific, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/2e/Spirit_Form_%28Hall_of_Chains%29.png"),
                 //////////////////////////////////////////////
                 // CA
                 new Buff("Greatsword Power",52667 , Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/3b/Greatsword_Power_%28effect%29.png"),
