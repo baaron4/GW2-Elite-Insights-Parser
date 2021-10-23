@@ -8,7 +8,7 @@ namespace GW2EIEvtcParser.EIData
     {
 
         public delegate bool BuffGainCastChecker(BuffApplyEvent evt, CombatData combatData);
-        protected readonly BuffGainCastChecker TriggerCondition;
+        private readonly BuffGainCastChecker _triggerCondition;
 
         protected virtual AgentItem GetCasterAgent(AgentItem agent)
         {
@@ -17,12 +17,12 @@ namespace GW2EIEvtcParser.EIData
 
         public BuffGainCastFinder(long skillID, long buffID, long icd, BuffGainCastChecker checker = null) : base(skillID, buffID, icd)
         {
-            TriggerCondition = checker;
+            _triggerCondition = checker;
         }
 
         public BuffGainCastFinder(long skillID, long buffID, long icd, ulong minBuild, ulong maxBuild, BuffGainCastChecker checker = null) : base(skillID, buffID, icd, minBuild, maxBuild)
         {
-            TriggerCondition = checker;
+            _triggerCondition = checker;
         }
 
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
@@ -43,9 +43,9 @@ namespace GW2EIEvtcParser.EIData
                         lastTime = bae.Time;
                         continue;
                     }
-                    if (TriggerCondition != null)
+                    if (_triggerCondition != null)
                     {
-                        if (TriggerCondition(bae, combatData))
+                        if (_triggerCondition(bae, combatData))
                         {
                             lastTime = bae.Time;
                             res.Add(new InstantCastEvent(bae.Time, skillData.Get(SkillID), GetCasterAgent(bae.To)));
