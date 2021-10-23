@@ -402,8 +402,8 @@ namespace GW2EIEvtcParser.EIData
                 // Matthias
                 new Buff("Blood Shield Abo",34376, Source.FightSpecific, BuffStackType.Stacking, 18, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
                 new Buff("Blood Shield",34518, Source.FightSpecific, BuffStackType.Stacking, 18, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
-                new Buff("Blood Fueled",34422, Source.FightSpecific, BuffStackType.Stacking, 1, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Buff("Blood Fueled Abo",34428, Source.FightSpecific, BuffStackType.Stacking, 15, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Buff("Blood Fueled",34422, Source.FightSpecific, BuffStackType.Stacking, 1, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Buff("Blood Fueled Abo",34428, Source.FightSpecific, BuffStackType.Stacking, 15, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Buff("Unstable Blood Magic", 34450, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/0/09/Unstable_Blood_Magic.png"),
                 new Buff("Corruption", 34416, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/3/34/Locust_Trail.png"),
                 new Buff("Unbalanced", 34367, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/80/Unbalanced.png"),
@@ -492,7 +492,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Soul Digestion", 48541, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/0/08/Soul_Digestion.png"),
                 new Buff("Reclaimed Energy", 47090, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/21/Reclaimed_Energy.png"),
                 new Buff("Mortal Coil (Statue of Death)", 48583, Source.FightSpecific, BuffStackType.Stacking, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/41/Mortal_Coil.png"),
-                new Buff("Empowered (Statue of Death)", 47473, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/de/Empowered_%28Statue_of_Death%29.png"),
+                new Buff("Empowered (Statue of Death)", 47473, Source.FightSpecific, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/d/de/Empowered_%28Statue_of_Death%29.png"),
                 new Buff("Energy Threshold (Statue of Death)", 48583, Source.FightSpecific, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/2e/Spirit_Form_%28Hall_of_Chains%29.png"),
                 //  Eyes
                 new Buff("Last Grasp (Judgment)", 47635, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/26/Last_Grasp.png"),
@@ -540,7 +540,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Eroding Curse", 56440, Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/d/de/Toxic_Gas.png"),
                 // Sabir
                 new Buff("Ion Shield", 56100, Source.FightSpecific, BuffStackType.Stacking, 80, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/9/94/Ion_Shield.png"),
-                new Buff("Violent Currents", 56123, Source.FightSpecific, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/0/06/Violent_Currents.png"),
+                new Buff("Violent Currents", 56123, Source.FightSpecific, BuffStackType.Stacking, 5, BuffNature.OffensiveBuffTable,"https://wiki.guildwars2.com/images/0/06/Violent_Currents.png"),
                 new Buff("Repulsion Field", 56172, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
                 new Buff("Electrical Repulsion", 56391, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/71/Electrical_Repulsion.png"),
                 new Buff("Electro-Repulsion", 56474, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/74/Unbridled_Chaos.png"),
