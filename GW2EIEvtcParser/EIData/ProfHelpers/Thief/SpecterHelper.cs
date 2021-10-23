@@ -12,6 +12,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
+            //new BuffGainCastFinder(-1, -1, EIData.InstantCastFinder.DefaultICD), // Shadow Shroud Enter
+            //new BuffLossCastFinder(-1, -1, EIData.InstantCastFinder.DefaultICD), // Shadow Shroud Exit
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
@@ -21,6 +23,9 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
+            //new Buff("Shadow Shroud",-1, Source.Specter, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/1a/Palm_Strike.png"),
+            //new Buff("Shrouded Ally",-1, Source.Specter, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/1/1a/Palm_Strike.png"),
+            //new Buff("Rot Wallow Venom",-1, Source.Specter, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/1/1a/Palm_Strike.png"),
         };
 
     }
