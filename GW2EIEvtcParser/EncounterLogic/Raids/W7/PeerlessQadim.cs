@@ -28,6 +28,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new HitOnPlayerMechanic(56616, "Battering Blitz", new MechanicPlotlySetting("bowtie",Colors.Orange), "Rush.H", "Hit by Qadim Rush", "Qadim Rush", 500),
                 new HitOnPlayerMechanic(56332, "Caustic Chaos", new MechanicPlotlySetting("triangle-right",Colors.Red), "A.Prj.H", "Hit by Aimed Projectile", "Aimed Projectile", 0),
                 new HitByEnemyMechanic(56598, "Shower of Chaos", new MechanicPlotlySetting("circle",Colors.Black), "Orb.D", "Pylon Orb not caught", "Shower of Chaos", 1000),
+                new HitByEnemyMechanic(56316, "Eclipsed Backlash", new MechanicPlotlySetting("circle",Colors.Orange), "Entropic.Expl", "Entropic Distortion exploded", "Eclipsed Backlash", 1000),
                 new PlayerBuffApplyMechanic(56510, "Fixated", new MechanicPlotlySetting("star",Colors.Magenta), "Fixated", "Fixated", "Fixated", 0),
                 new PlayerBuffApplyMechanic(56424, "Critical Mass", new MechanicPlotlySetting("circle-open",Colors.Red), "Orb caught", "Collected a Pylon Orb", "Critical Mass", 0),
                 new HitOnPlayerMechanic(56543, "Caustic Chaos", new MechanicPlotlySetting("triangle-right-open",Colors.Red), "A.Prj.E", "Hit by Aimed Projectile Explosion", "Aimed Projectile Explosion", 0),
