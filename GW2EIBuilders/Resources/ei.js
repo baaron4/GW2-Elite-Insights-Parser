@@ -41,6 +41,38 @@ function compileTemplates() {
             }
         }
     });
+    Vue.component("custom-numberform-component", {
+        props: ["minValue", "maxValue", "id", "placeholderValue"],
+        template: `
+        <div>
+            <input class="form-control" type="number" :id="id"
+                @onkeypress="return isNumber(event)" onpaste="return false;" step="2" 
+                    :value="placeholderValue" data-bind="value:replyNumber, fireChange: true"
+                    :min="minValue" :max="maxValue">
+        </div>
+        `,
+        methods: {
+            isNumber: function (evt) {
+                evt = (evt) ? evt : window.event;
+                var charCode = (evt.which) ? evt.which : evt.keyCode;
+                if ((charCode > 31 && charCode < 48) || charCode > 57) {
+                    return false;
+                }
+                return true;
+            }
+        },
+        mounted() {
+            $("#" + this.id).on("input ", function () {
+                var max = parseInt($(this).attr('max')) || 1e12;
+                var min = parseInt($(this).attr('min'));
+                if ($(this).val() > max) {
+                    $(this).val(max);
+                } else if ($(this).val() < min) {
+                    $(this).val(min);
+                }
+            });
+        }
+    });
     TEMPLATE_COMPILE
 };
 
