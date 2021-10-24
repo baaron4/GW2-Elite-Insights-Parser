@@ -88,6 +88,8 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Thermal Vision", 51389, Source.Engineer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/8a/Skilled_Marksman.png"),
                 new Buff("Explosive Entrance",59579, Source.Engineer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/33/Explosive_Entrance.png", 102321, ulong.MaxValue),
                 new Buff("Explosive Temper",59528, Source.Engineer, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/c1/Explosive_Temper.png", 102321, ulong.MaxValue),
+                new Buff("Big Boomer",59601, Source.Engineer, BuffStackType.Queue, 3, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/83/Big_Boomer.png"),
+                new Buff("Med Kit Bonus",50393, Source.Engineer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/14/Med_Kit.png"),
 
         };
 
