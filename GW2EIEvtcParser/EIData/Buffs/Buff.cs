@@ -318,6 +318,8 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Rigorous Certainty", 33652, Source.Common, BuffNature.DefensiveBuffTable,"https://wiki.guildwars2.com/images/6/60/Desert_Carapace.png"),
                 //
                 new Buff("Guild Item Research", 33833, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/c/c6/Guild_Magic_Find_Banner_Boost.png"),
+                //
+                new Buff("Crystalline Heart", 37657, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/56/Crystalline_Heart.png"),
         };
 
         internal static readonly List<Buff> Gear = new List<Buff>

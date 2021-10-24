@@ -59,6 +59,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Spear of Justice", 29632, Source.Dragonhunter, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/f1/Spear_of_Justice.png"),
                 new Buff("Shield of Courage", 29523, Source.Dragonhunter, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/63/Shield_of_Courage.png"),
                 new Buff("Wings of Resolve", 30308, Source.Dragonhunter, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/cb/Wings_of_Resolve.png"),
+                new Buff("Virtue of Resolve (Dragonhunter)", 30308, Source.Dragonhunter, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b2/Virtue_of_Resolve.png"),
         };
 
     }
