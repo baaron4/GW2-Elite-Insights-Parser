@@ -460,7 +460,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int shacklesDmgEnd = (int)c.Time;
                     if (shacklesDmgTarget != null)
                     {
-                        replay.Decorations.Add(new LineDecoration(0, (shacklesDmgStart, shacklesDmgEnd), "rgba(0, 255, 255, 0.5)", new AgentConnector(p), new AgentConnector(shacklesDmgTarget)));
+                        replay.Decorations.Add(new LineDecoration(0, (shacklesDmgStart, shacklesDmgEnd), "rgba(255, 200, 0, 0.5)", new AgentConnector(p), new AgentConnector(shacklesDmgTarget)));
                     }
                 }
             }
