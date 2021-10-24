@@ -592,6 +592,8 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Unbridled Chaos", 56467, Source.FightSpecific, BuffStackType.Stacking, 3, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/42/Exposed_%28Statue_of_Darkness%29.png"),
                 //////////////////////////////////////////////
                 // Ensolyss 
+                new Buff("Fixated (Nightmare)", 36998, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                // Ensolyss 
                 new Buff("Determination (Ensolyss)", 37498, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/41/Gambit_Exhausted.png"),
                 // Artsariiv
                 new Buff("Enraged (Arts)", 36498, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png"),
