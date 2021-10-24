@@ -369,6 +369,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Enraged 2 (100%)", 61138, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 new Buff("Enraged (200%)", 60674, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 new Buff("Enraged (300%)", 61006, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Call of the Mists", 34164, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/79/Call_of_the_Mists_%28raid_effect%29.png" ),
                 //////////////////////////////////////////////
                 // VG
                 new Buff("Blue Pylon Power", 31413, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6e/Blue_Pylon_Power.png"),
@@ -553,6 +554,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Repulsion Field", 56172, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
                 new Buff("Electrical Repulsion", 56391, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/71/Electrical_Repulsion.png"),
                 new Buff("Electro-Repulsion", 56474, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/74/Unbridled_Chaos.png"),
+                new Buff("Eye of the Storm", 56216, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/52/Mending_Waters_%28effect%29.png"),
                 // Peerless Qadim
                 new Buff("Erratic Energy", 56582, Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/45/Unstable.png"),
                 new Buff("Power Share", 56104, Source.FightSpecific, BuffStackType.Stacking, 3, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
@@ -562,6 +564,13 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Magma Drop", 56475, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
                 new Buff("Critical Mass", 56424, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/bf/Orb_of_Ascension_%28effect%29.png"),
                 new Buff("Kinetic Abundance", 56609, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/64/Kinetic_Abundance.png"),
+                new Buff("Enfeebled Force", 56540, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/b6/Enfeebled_Force.png"),
+                new Buff("Backlashing Beam", 56360, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/0/04/Xera%27s_Boon.png"),
+                new Buff("Clutched by Chaos", 56257, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/87/Protective_Shadow.png"),
+                new Buff("Cleansed Conductor", 56237, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/a/a9/Magic_Blast_Intensity.png"),
+                new Buff("Poisoned Power", 56655, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png"),
+                new Buff("Incorporeal", 56250, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/8b/Magic_Aura.png"),
+                new Buff("Flare-Up", 56264, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/8b/Magic_Aura.png"),
                 new Buff("Unbridled Chaos", 56467, Source.FightSpecific, BuffStackType.Stacking, 3, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/42/Exposed_%28Statue_of_Darkness%29.png"),
                 //////////////////////////////////////////////
                 // Artsariiv
