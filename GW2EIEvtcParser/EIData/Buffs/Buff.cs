@@ -591,9 +591,10 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Flare-Up", 56264, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/8b/Magic_Aura.png"),
                 new Buff("Unbridled Chaos", 56467, Source.FightSpecific, BuffStackType.Stacking, 3, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/42/Exposed_%28Statue_of_Darkness%29.png"),
                 //////////////////////////////////////////////
+                // Ensolyss 
+                new Buff("Determination (Ensolyss)", 37498, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/41/Gambit_Exhausted.png"),
                 // Artsariiv
                 new Buff("Enraged (Arts)", 36498, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png"),
-                //////////////////////////////////////////////
                 // Ai, Keeper of the Peak
                 new Buff("Tidal Barrier", 61402, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b1/Primed_Bottle.png"),
                 new Buff("Whirlwind Shield", 61224, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b1/Primed_Bottle.png"),
