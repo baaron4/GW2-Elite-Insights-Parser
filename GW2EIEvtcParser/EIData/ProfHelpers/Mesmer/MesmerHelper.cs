@@ -136,6 +136,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Illusionary Riposte",10279, Source.Mesmer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/91/Illusionary_Riposte.png"),
                 new Buff("Illusionary Leap",10353, Source.Mesmer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/18/Illusionary_Leap.png"),
                 new Buff("Portal Weaving",10198, Source.Mesmer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/81/Portal_Entre.png"),
+                new Buff("Illusion of Life",10346, Source.Mesmer, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/9/92/Illusion_of_Life.png"),
                 //traits
                 new Buff("Fencer's Finesse", 30426 , Source.Mesmer, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e7/Fencer%27s_Finesse.png"),
                 new Buff("Illusionary Defense",49099, Source.Mesmer, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e0/Illusionary_Defense.png"),
