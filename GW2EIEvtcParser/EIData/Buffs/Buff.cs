@@ -520,9 +520,10 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Conjured Protection",52973 , Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/83/Bloodstone-Infused_shield.png"),
                 new Buff("Shielded",53003 , Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/47/Golem-Powered_Shielding.png"),
                 new Buff("Augmented Power",52074  , Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/47/Golem-Powered_Shielding.png"),
-                new Buff("Scepter Lock-on",53075  , Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Buff("Locked On",53075  , Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/39/Target%21.png"),
                 new Buff("CA Invul",52255 , Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Buff("Arm Up",52430 , Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Buff("Fixation", 52943, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 // Twin Largos
                 //new Buff("Aquatic Detainment",52931 , ParseHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Buff("Aquatic Aura (Kenut)",52211 , Source.FightSpecific, BuffStackType.Stacking, 80, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/44/Expose_Weakness.png"),
@@ -531,6 +532,14 @@ namespace GW2EIEvtcParser.EIData
                 // Qadim
                 new Buff("Flame Armor",52568, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e7/Magma_Orb.png"),
                 new Buff("Fiery Surge",52588, Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/f9/Fiery_Surge.png"),
+                new Buff("Power of the Lamp", 52035, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/e5/Break_Out%21.png"),
+                new Buff("Unbearable Flames", 52408, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/21/Expel_Excess_Magic_Poison.png"),
+                new Buff("Parry", 52464, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/28/Parry_%28effect%29.png"),
+                new Buff("Mythwright Surge", 52863, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/7a/Swiftness_%28effect%29.png"),
+                new Buff("Lamp Bond", 51726, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/d/db/Lamp_Bond.png"),
+                new Buff("Enraged (Wywern)", 52040, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png"),
+                new Buff("Resistance (Lava Elemental)", 52075, Source.FightSpecific, BuffStackType.Queue, 5, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/1/18/Fire_Shield.png"),
+                new Buff("Shielded (Lava Elemental)", 53048, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/1/18/Fire_Shield.png"),
                 //////////////////////////////////////////////
                 // Adina
                 new Buff("Pillar Pandemonium", 56204, Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/d/d9/Captain%27s_Inspiration.png"),
@@ -549,7 +558,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Power Share", 56104, Source.FightSpecific, BuffStackType.Stacking, 3, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
                 new Buff("Sapping Surge", 56118, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6f/Guilt_Exploitation.png"),
                 new Buff("Chaos Corrosion", 56182, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/f/fd/Fractured_%28effect%29.png"),
-                new Buff("Peerless Fixated", 56510, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Fixated (Qadim the Peerless)", 56510, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 new Buff("Magma Drop", 56475, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
                 new Buff("Critical Mass", 56424, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/bf/Orb_of_Ascension_%28effect%29.png"),
                 new Buff("Kinetic Abundance", 56609, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/64/Kinetic_Abundance.png"),
