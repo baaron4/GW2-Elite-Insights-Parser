@@ -370,6 +370,24 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Enraged (200%)", 60674, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 new Buff("Enraged (300%)", 61006, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 new Buff("Call of the Mists", 34164, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/79/Call_of_the_Mists_%28raid_effect%29.png" ),
+                // Strike Essences
+                new Buff("Essence of Vigilance Tier 1", 58786, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a4/Essence_of_Vigilance.png" ),
+                new Buff("Essence of Vigilance Tier 2", 58721, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a4/Essence_of_Vigilance.png" ),
+                new Buff("Essence of Vigilance Tier 3", 58182, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a4/Essence_of_Vigilance.png" ),
+                new Buff("Essence of Vigilance Tier 4", 60173, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a4/Essence_of_Vigilance.png" ),
+                new Buff("Power of Vigilance Tier 2", 58254, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/86/Power_of_Vigilance.png" ),
+                new Buff("Power of Vigilance Tier 3", 58712, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/86/Power_of_Vigilance.png" ),
+                new Buff("Essence of Resilience Tier 1", 58623, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b6/Essence_of_Resilience.png" ),
+                new Buff("Essence of Resilience Tier 2", 58841, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b6/Essence_of_Resilience.png" ),
+                new Buff("Essence of Resilience Tier 3", 58839, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b6/Essence_of_Resilience.png" ),
+                new Buff("Essence of Resilience Tier 4", 60057, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b6/Essence_of_Resilience.png" ),
+                new Buff("Power of Resilience Tier 2", 58278, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Power_of_Resilience.png" ),
+                new Buff("Essence of Valor Tier 1", 58480, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6f/Essence_of_Valor.png" ),
+                new Buff("Essence of Valor Tier 2", 58585, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6f/Essence_of_Valor.png" ),
+                new Buff("Essence of Valor Tier 3", 58792, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6f/Essence_of_Valor.png" ),
+                new Buff("Essence of Valor Tier 4", 60062, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6f/Essence_of_Valor.png" ),
+                new Buff("Power of Valor Tier 1", 58385, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/64/Power_of_Valor.png" ),
+                new Buff("Power of Valor Tier 2", 58414, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/64/Power_of_Valor.png" ),
                 //////////////////////////////////////////////
                 // VG
                 new Buff("Blue Pylon Power", 31413, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6e/Blue_Pylon_Power.png"),
@@ -592,6 +610,8 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Snowblind", 58276, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png" ),
                 // Voice and Claw            
                 new Buff("Enraged (V&C)", 58619, Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                // Boneskinner     
+                new Buff("Tormenting Aura", 58860, Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/c0/Darkness.png" ),
                 // Whisper of Jormag
                 new Buff("Whisper Teleport Out", 59223, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 new Buff("Whisper Teleport Back", 59054, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
