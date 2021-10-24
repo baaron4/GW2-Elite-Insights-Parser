@@ -88,12 +88,13 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Legendary Assassin Stance",27890, Source.Revenant, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/0/02/Legendary_Assassin_Stance.png"),
                 //traits
                 new Buff("Vicious Lacerations",29395, Source.Revenant, BuffStackType.Stacking, 3, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", 0, 102321),
-                new Buff("Rising Momentum",51683, Source.Revenant, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/8c/Rising_Momentum.png"),
                 new Buff("Assassin's Presence", 26854, Source.Revenant, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/5/54/Assassin%27s_Presence.png"),
                 new Buff("Expose Defenses", 48894, Source.Revenant, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/5c/Mutilate_Defenses.png"),
                 new Buff("Invoking Harmony",29025, Source.Revenant, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/ec/Invoking_Harmony.png"),
                 new Buff("Unyielding Devotion",55044, Source.Revenant, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/4f/Unyielding_Devotion.png", 96406, ulong.MaxValue),
+                new Buff("Selfless Amplification",30509, Source.Revenant, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/23/Selfless_Amplification.png"),
                 new Buff("Battle Scars", 26646, Source.Revenant, BuffStackType.StackingConditionalLoss, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/30/Thrill_of_Combat.png", 102321, ulong.MaxValue),
+                new Buff("Steadfast Rejuvenation",53500, Source.Revenant, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/bf/Steadfast_Rejuvenation.png"),
         };
 
         private static readonly HashSet<long> _legendSwaps = new HashSet<long>
