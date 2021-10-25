@@ -11,7 +11,7 @@ namespace GW2EIEvtcParser.EIData
         private readonly AgentItem _seedSrc;
         private readonly bool _isExtension;
 
-        public BuffSimulationItemDuration(BuffStackItem other) : base(other.Start, other.Duration)
+        protected internal BuffSimulationItemDuration(BuffStackItem other) : base(other.Start, other.Duration)
         {
             _src = other.Src;
             _seedSrc = other.SeedSrc;
@@ -23,9 +23,19 @@ namespace GW2EIEvtcParser.EIData
             Duration = Math.Min(Math.Max(end - Start, 0), Duration);
         }
 
-        public override int GetStack()
+        public override int GetActiveStacks()
         {
             return 1;
+        }
+
+        public override int GetStacks()
+        {
+            return 1;
+        }
+
+        public override IReadOnlyList<long> GetActualDurationPerStack()
+        {
+            return new List<long>() { OriginalDuration };
         }
 
         public override List<AgentItem> GetSources()
@@ -35,12 +45,12 @@ namespace GW2EIEvtcParser.EIData
 
         public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
         {
-            Dictionary<AgentItem, BuffDistributionItem> distrib = distribs.GetDistrib(buffID);
             long cDur = GetClampedDuration(start, end);
             if (cDur == 0)
             {
                 return;
             }
+            Dictionary<AgentItem, BuffDistributionItem> distrib = distribs.GetDistrib(buffID);
             AgentItem agent = _src;
             AgentItem seedAgent = _seedSrc;
             if (distrib.TryGetValue(agent, out BuffDistributionItem toModify))

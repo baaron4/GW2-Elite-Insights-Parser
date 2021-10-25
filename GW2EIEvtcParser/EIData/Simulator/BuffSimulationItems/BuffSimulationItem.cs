@@ -7,6 +7,7 @@ namespace GW2EIEvtcParser.EIData
     internal abstract class BuffSimulationItem : AbstractSimulationItem
     {
         public long Duration { get; protected set; }
+        protected long OriginalDuration { get; }
         public long Start { get; protected set; }
         public long End => Start + Duration;
 
@@ -14,6 +15,7 @@ namespace GW2EIEvtcParser.EIData
         {
             Start = start;
             Duration = duration;
+            OriginalDuration = duration;
         }
 
         public long GetClampedDuration(long start, long end)
@@ -30,13 +32,15 @@ namespace GW2EIEvtcParser.EIData
 
         public Segment ToSegment()
         {
-            return new Segment(Start, End, GetStack());
+            return new Segment(Start, End, GetActiveStacks());
         }
 
         public abstract void OverrideEnd(long end);
+        public abstract IReadOnlyList<long> GetActualDurationPerStack();
 
         public abstract List<AgentItem> GetSources();
 
-        public abstract int GetStack();
+        public abstract int GetActiveStacks();
+        public abstract int GetStacks();
     }
 }
