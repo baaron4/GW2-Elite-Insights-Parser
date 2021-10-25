@@ -105,7 +105,15 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             //
-            BuffsByIds = currentBuffs.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.First());
+            BuffsByIds = currentBuffs.GroupBy(x => x.ID).ToDictionary(x => x.Key, x =>
+            {
+                var list = x.ToList();
+                if (list.Count > 1 && x.Key != Buff.NoBuff && x.Key != Buff.Unknown)
+                {
+                    throw new InvalidDataException("Same id present multiple times in buffs - " + x.First().ID);
+                }
+                return x.First();
+            });
             operation.UpdateProgressWithCancellationCheck("Adjusting Buffs");
             BuffInfoSolver.AdjustBuffs(combatData, BuffsByIds, operation, build);
             foreach (Buff buff in currentBuffs)

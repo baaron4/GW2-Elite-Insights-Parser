@@ -12,6 +12,7 @@ namespace GW2EIEvtcParser.EIData
     {
 
 
+        public const long Unknown = -1;
         public const long NumberOfConditionsID = -3;
         public const long NumberOfBoonsID = -2;
         public const long NumberOfActiveCombatMinions = -17;
@@ -429,7 +430,6 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Corruption", 34416, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/3/34/Locust_Trail.png"),
                 new Buff("Unbalanced", 34367, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/80/Unbalanced.png"),
                 new Buff("Zealous Benediction", 34511, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/45/Unstable.png"),
-                new Buff("Icy Patch", 26766, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/45/Unstable.png"),
                 new Buff("Snowstorm", 34369, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/26/Snowstorm_%28Matthias_Gabrel_effect%29.png"),
                 new Buff("Heat Wave", 34526, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6e/Heat_Wave_%28Matthias_Gabrel_effect%29.png"),
                 new Buff("Downpour",34472, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/4a/Downpour.png"),
@@ -513,7 +513,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Reclaimed Energy", 47090, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/21/Reclaimed_Energy.png"),
                 new Buff("Mortal Coil (Statue of Death)", 48583, Source.FightSpecific, BuffStackType.Stacking, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/41/Mortal_Coil.png"),
                 new Buff("Empowered (Statue of Death)", 47473, Source.FightSpecific, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/d/de/Empowered_%28Statue_of_Death%29.png"),
-                new Buff("Energy Threshold (Statue of Death)", 48583, Source.FightSpecific, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/2e/Spirit_Form_%28Hall_of_Chains%29.png"),
+                //new Buff("Energy Threshold (Statue of Death)", 48583, Source.FightSpecific, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/2e/Spirit_Form_%28Hall_of_Chains%29.png"),
                 //  Eyes
                 new Buff("Last Grasp (Judgment)", 47635, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/26/Last_Grasp.png"),
                 new Buff("Last Grasp (Fate)", 47278, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/26/Last_Grasp.png"),
@@ -530,7 +530,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Lethal Report", 47202, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/0/02/Mantra_of_Signets.png"),
                 new Buff("Hastened Demise", 48773, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/5b/Hastened_Demise.png"),
                 new Buff("Echo's Pick up", 49125, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/45/Unstable.png"),
-                new Buff("Energy Threshold (Dhuum)", 48848, Source.FightSpecific, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/2e/Spirit_Form_%28Hall_of_Chains%29.png"),
+                new Buff("Energy Threshold", 48848, Source.FightSpecific, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/2e/Spirit_Form_%28Hall_of_Chains%29.png"),
                 //////////////////////////////////////////////
                 // CA
                 new Buff("Greatsword Power",52667 , Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/3b/Greatsword_Power_%28effect%29.png"),
@@ -634,10 +634,10 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Red-Lentil Saobosa",46273, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/a/a8/Red-Lentil_Saobosa.png"),
                 new Buff("Super Veggie Pizza",10008, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/6/66/Super_Veggie_Pizza.png"),
                 new Buff("Rare Veggie Pizza",10009, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/a/a0/Rare_Veggie_Pizza.png"),
-                new Buff("Bowl of Garlic Kale Sautee",-1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/0/04/Bowl_of_Garlic_Kale_Sautee.png"),
-                new Buff("Koi Cake",-1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/1/14/Koi_Cake.png"),
+                new Buff("Bowl of Garlic Kale Sautee",Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/0/04/Bowl_of_Garlic_Kale_Sautee.png"),
+                new Buff("Koi Cake",Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/1/14/Koi_Cake.png"),
                 new Buff("Prickly Pear Pie",24800, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/0/0a/Prickly_Pear_Pie.png"),
-                new Buff("Bowl of Nopalitos Sauté",-1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/f/f1/Bowl_of_Nopalitos_Saut%C3%A9.png"),
+                new Buff("Bowl of Nopalitos Sauté",Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/f/f1/Bowl_of_Nopalitos_Saut%C3%A9.png"),
                 new Buff("Loaf of Candy Cactus Cornbread",24797, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/b/b2/Loaf_of_Candy_Cactus_Cornbread.png"),
                 new Buff("Delicious Rice Ball",26529, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/5/5d/Delicious_Rice_Ball.png"),
                 new Buff("Slice of Allspice Cake",33792, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/1/13/Slice_of_Allspice_Cake.png"),
@@ -649,12 +649,12 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Plate of Beef Rendang",49686, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/d/d0/Plate_of_Beef_Rendang.png"),
                 new Buff("Dragon's Revelry Starcake",19451, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/2/2b/Dragon%27s_Revelry_Starcake.png"),
                 new Buff("Avocado Smoothie",50091, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/8/83/Avocado_Smoothie.png"),
-                new Buff("Carrot Souffle",-1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/7/71/Carrot_Souffl%C3%A9.png"), //same as Dragon's_Breath_Bun
-                new Buff("Plate of Truffle Steak Dinner",-1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/92/Plate_of_Truffle_Steak_Dinner.png"), //same as Dragon's Breath Bun
+                new Buff("Carrot Souffle",Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/7/71/Carrot_Souffl%C3%A9.png"), //same as Dragon's_Breath_Bun
+                new Buff("Plate of Truffle Steak Dinner",Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/92/Plate_of_Truffle_Steak_Dinner.png"), //same as Dragon's Breath Bun
                 new Buff("Dragon's Breath Bun",9750, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/5/53/Dragon%27s_Breath_Bun.png"),
                 new Buff("Karka Egg Omelet",9756, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/9e/Karka_Egg_Omelet.png"),
                 new Buff("Steamed Red Dumpling",26536, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/8/8c/Steamed_Red_Dumpling.png"),
-                new Buff("Saffron Stuffed Mushroom",-1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/e/e2/Saffron_Stuffed_Mushroom.png"), //same as Karka Egg Omelet
+                new Buff("Saffron Stuffed Mushroom",Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/e/e2/Saffron_Stuffed_Mushroom.png"), //same as Karka Egg Omelet
                 new Buff("Soul Pastry",53222, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/2/2c/Soul_Pastry.png"),
                 new Buff("Bowl of Fire Meat Chili",10119, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/b/ba/Bowl_of_Fire_Meat_Chili.png"),
                 new Buff("Plate of Fire Flank Steak",9765, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/2/27/Plate_of_Fire_Flank_Steak.png"),
@@ -780,46 +780,46 @@ namespace GW2EIEvtcParser.EIData
         {
                 // Ascended Food
                 // Feasts with yet unknown IDs are also added with ID of -1, the IDs can be added later on demand
-                new Buff("Bowl of Fruit Salad with Cilantro Garnish", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/0/08/Bowl_of_Fruit_Salad_with_Cilantro_Garnish.png"),
+                new Buff("Bowl of Fruit Salad with Cilantro Garnish", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/0/08/Bowl_of_Fruit_Salad_with_Cilantro_Garnish.png"),
                 new Buff("Bowl of Fruit Salad with Mint Garnish", 57100, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/4/47/Bowl_of_Fruit_Salad_with_Mint_Garnish.png"),
-                new Buff("Bowl of Fruit Salad with Orange-Clove Syrup", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/d/dc/Bowl_of_Fruit_Salad_with_Orange-Clove_Syrup.png"),
-                new Buff("Bowl of Sesame Fruit Salad", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/0/01/Bowl_of_Sesame_Fruit_Salad.png"),
+                new Buff("Bowl of Fruit Salad with Orange-Clove Syrup", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/d/dc/Bowl_of_Fruit_Salad_with_Orange-Clove_Syrup.png"),
+                new Buff("Bowl of Sesame Fruit Salad", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/0/01/Bowl_of_Sesame_Fruit_Salad.png"),
                 new Buff("Bowl of Spiced Fruit Salad", 57276, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/9c/Bowl_of_Spiced_Fruit_Salad.png"),
                 new Buff("Cilantro Lime Sous-Vide Steak", 57244, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/6/65/Cilantro_Lime_Sous-Vide_Steak.png"),
                 new Buff("Cilantro and Cured Meat Flatbread", 57409, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/8/87/Cilantro_and_Cured_Meat_Flatbread.png"),
-                new Buff("Clove and Veggie Flatbread", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/6/6e/Clove_and_Veggie_Flatbread.png"),
-                new Buff("Clove-Spiced Creme Brulee", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/a/a2/Clove-Spiced_Creme_Brulee.png"),
-                new Buff("Clove-Spiced Eggs Benedict", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/7/7d/Clove-Spiced_Eggs_Benedict.png"),
-                new Buff("Clove-Spiced Pear and Cured Meat Flatbread", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/c/c5/Clove-Spiced_Pear_and_Cured_Meat_Flatbread.png"),
-                new Buff("Eggs Benedict with Mint-Parsley Sauce", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/92/Eggs_Benedict_with_Mint-Parsley_Sauce.png"),
+                new Buff("Clove and Veggie Flatbread", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/6/6e/Clove_and_Veggie_Flatbread.png"),
+                new Buff("Clove-Spiced Creme Brulee", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/a/a2/Clove-Spiced_Creme_Brulee.png"),
+                new Buff("Clove-Spiced Eggs Benedict", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/7/7d/Clove-Spiced_Eggs_Benedict.png"),
+                new Buff("Clove-Spiced Pear and Cured Meat Flatbread", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/c/c5/Clove-Spiced_Pear_and_Cured_Meat_Flatbread.png"),
+                new Buff("Eggs Benedict with Mint-Parsley Sauce", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/92/Eggs_Benedict_with_Mint-Parsley_Sauce.png"),
                 new Buff("Mango Cilantro Creme Brulee", 57267, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/3/3d/Mango_Cilantro_Creme_Brulee.png"),
-                new Buff("Mint Creme Brulee", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/3/31/Mint_Creme_Brulee.png"),
+                new Buff("Mint Creme Brulee", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/3/31/Mint_Creme_Brulee.png"),
                 new Buff("Mint Strawberry Cheesecake", 57384, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/6/64/Mint_Strawberry_Cheesecake.png"),
                 new Buff("Mint and Veggie Flatbread", 57263, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/f/f9/Mint_and_Veggie_Flatbread.png"),
-                new Buff("Mint-Pear Cured Meat Flatbread", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/6/60/Mint-Pear_Cured_Meat_Flatbread.png"),
+                new Buff("Mint-Pear Cured Meat Flatbread", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/6/60/Mint-Pear_Cured_Meat_Flatbread.png"),
                 new Buff("Mushroom Clove Sous-Vide Steak", 57393, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/b/ba/Mushroom_Clove_Sous-Vide_Steak.png"),
-                new Buff("Orange Clove Cheesecake", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/3/3f/Orange_Clove_Cheesecake.png"),
+                new Buff("Orange Clove Cheesecake", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/3/3f/Orange_Clove_Cheesecake.png"),
                 new Buff("Peppercorn and Veggie Flatbread", 57382, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/9d/Peppercorn_and_Veggie_Flatbread.png"),
                 new Buff("Peppercorn-Crusted Sous-Vide Steak", 57051, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/2/2e/Peppercorn-Crusted_Sous-Vide_Steak.png"),
-                new Buff("Peppercorn-Spiced Eggs Benedict", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/c/c6/Peppercorn-Spiced_Eggs_Benedict.png"),
+                new Buff("Peppercorn-Spiced Eggs Benedict", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/c/c6/Peppercorn-Spiced_Eggs_Benedict.png"),
                 new Buff("Peppered Cured Meat Flatbread", 57127, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/2/2d/Peppered_Cured_Meat_Flatbread.png"),
-                new Buff("Plate of Beef Carpaccio with Mint Garnish", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/4/42/Plate_of_Beef_Carpaccio_with_Mint_Garnish.png"),
+                new Buff("Plate of Beef Carpaccio with Mint Garnish", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/4/42/Plate_of_Beef_Carpaccio_with_Mint_Garnish.png"),
                 new Buff("Plate of Clear Truffle and Cilantro Ravioli", 57295, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/0/05/Plate_of_Clear_Truffle_and_Cilantro_Ravioli.png"),
                 new Buff("Plate of Clear Truffle and Mint Ravioli", 57112, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/9e/Plate_of_Clear_Truffle_and_Mint_Ravioli.png"),
                 new Buff("Plate of Clear Truffle and Sesame Ravioli", 57213, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/d/de/Plate_of_Clear_Truffle_and_Sesame_Ravioli.png"),
-                new Buff("Plate of Clove-Spiced Beef Carpaccio", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/4/44/Plate_of_Clove-Spiced_Beef_Carpaccio.png"),
-                new Buff("Plate of Clove-Spiced Clear Truffle Ravioli", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/c/c2/Plate_of_Clove-Spiced_Clear_Truffle_Ravioli.png"),
-                new Buff("Plate of Clove-Spiced Coq Au Vin", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/d/dc/Plate_of_Clove-Spiced_Coq_Au_Vin.png"),
+                new Buff("Plate of Clove-Spiced Beef Carpaccio", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/4/44/Plate_of_Clove-Spiced_Beef_Carpaccio.png"),
+                new Buff("Plate of Clove-Spiced Clear Truffle Ravioli", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/c/c2/Plate_of_Clove-Spiced_Clear_Truffle_Ravioli.png"),
+                new Buff("Plate of Clove-Spiced Coq Au Vin", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/d/dc/Plate_of_Clove-Spiced_Coq_Au_Vin.png"),
                 new Buff("Plate of Clove-Spiced Poultry Aspic", 57302, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/5/50/Plate_of_Clove-Spiced_Poultry_Aspic.png"),
                 new Buff("Plate of Coq Au Vin with Mint Garnish", 57362, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/7/7c/Plate_of_Coq_Au_Vin_with_Mint_Garnish.png"),
-                new Buff("Plate of Coq Au Vin with Salsa", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/8/80/Plate_of_Coq_Au_Vin_with_Salsa.png"),
+                new Buff("Plate of Coq Au Vin with Salsa", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/8/80/Plate_of_Coq_Au_Vin_with_Salsa.png"),
                 new Buff("Plate of Peppercorn-Spiced Beef Carpaccio", 57114, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/4/40/Plate_of_Peppercorn-Spiced_Beef_Carpaccio.png"),
                 new Buff("Plate of Peppercorn-Spiced Coq Au Vin", 57260, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/4/43/Plate_of_Peppercorn-Spiced_Coq_Au_Vin.png"),
                 new Buff("Plate of Peppercorn-Spiced Poultry Aspic", 57299, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/4/4f/Plate_of_Peppercorn-Spiced_Poultry_Aspic.png"),
-                new Buff("Plate of Peppered Clear Truffle Ravioli", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/f/fe/Plate_of_Peppered_Clear_Truffle_Ravioli.png"),
+                new Buff("Plate of Peppered Clear Truffle Ravioli", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/f/fe/Plate_of_Peppered_Clear_Truffle_Ravioli.png"),
                 new Buff("Plate of Poultry Aspic with Mint Garnish", 57178, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/91/Plate_of_Poultry_Aspic_with_Mint_Garnish.png"),
-                new Buff("Plate of Poultry Aspic with Salsa Garnish", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/5/5b/Plate_of_Poultry_Aspic_with_Salsa_Garnish.png"),
-                new Buff("Plate of Sesame Poultry Aspic", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/6/64/Plate_of_Sesame_Poultry_Aspic.png"),
+                new Buff("Plate of Poultry Aspic with Salsa Garnish", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/5/5b/Plate_of_Poultry_Aspic_with_Salsa_Garnish.png"),
+                new Buff("Plate of Sesame Poultry Aspic", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/6/64/Plate_of_Sesame_Poultry_Aspic.png"),
                 new Buff("Plate of Sesame-Crusted Coq Au Vin", 57290, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/3/3e/Plate_of_Sesame-Crusted_Coq_Au_Vin.png"),
                 new Buff("Plate of Sesame-Ginger Beef Carpaccio", 57231, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/b/b7/Plate_of_Sesame-Ginger_Beef_Carpaccio.png"),
                 new Buff("Salsa Eggs Benedict", 57117, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/7/79/Salsa_Eggs_Benedict.png"),
@@ -831,14 +831,14 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Sesame-Asparagus and Cured Meat Flatbread", 57222, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/8/87/Sesame-Asparagus_and_Cured_Meat_Flatbread.png"),
                 new Buff("Sous-Vide Steak with Mint-Parsley Sauce", 57342, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/99/Sous-Vide_Steak_with_Mint-Parsley_Sauce.png"),
                 new Buff("Soy-Sesame Sous-Vide Steak", 57241, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/d/da/Soy-Sesame_Sous-Vide_Steak.png"),
-                new Buff("Spherified Cilantro Oyster Soup", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/e/e1/Spherified_Cilantro_Oyster_Soup.png"),
+                new Buff("Spherified Cilantro Oyster Soup", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/e/e1/Spherified_Cilantro_Oyster_Soup.png"),
                 new Buff("Spherified Clove-Spiced Oyster Soup", 57374, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/f/fa/Spherified_Clove-Spiced_Oyster_Soup.png"),
                 new Buff("Spherified Oyster Soup with Mint Garnish", 57201, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/6/63/Spherified_Oyster_Soup_with_Mint_Garnish.png"),
                 new Buff("Spherified Peppercorn-Spiced Oyster Soup", 57165, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/4/43/Spherified_Peppercorn-Spiced_Oyster_Soup.png"),
                 new Buff("Spherified Sesame Oyster Soup", 57037, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/5/51/Spherified_Sesame_Oyster_Soup.png"),
-                new Buff("Spiced Pepper Creme Brulee", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/b/ba/Spiced_Pepper_Creme_Brulee.png"),
-                new Buff("Spiced Peppercorn Cheesecake",-1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/9c/Spiced_Peppercorn_Cheesecake.png"),
-                new Buff("Strawberry Cilantro Cheesecake", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/8/8d/Strawberry_Cilantro_Cheesecake.png"),
+                new Buff("Spiced Pepper Creme Brulee", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/b/ba/Spiced_Pepper_Creme_Brulee.png"),
+                new Buff("Spiced Peppercorn Cheesecake",Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/9c/Spiced_Peppercorn_Cheesecake.png"),
+                new Buff("Strawberry Cilantro Cheesecake", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/8/8d/Strawberry_Cilantro_Cheesecake.png"),
         };
 
     }
