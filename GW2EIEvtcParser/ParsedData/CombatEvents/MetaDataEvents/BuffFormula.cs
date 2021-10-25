@@ -312,8 +312,8 @@ namespace GW2EIEvtcParser.ParsedData
                 stat2 += " " + ByteAttr2;
             }
             _solvedDescription += stat1;
-            double variable = Variable;
-            double totalOffset = Math.Round(Level * LevelOffset + ConstantOffset, 4);
+            double variable = Math.Round(Variable, 6);
+            double totalOffset = Math.Round(Level * LevelOffset + ConstantOffset, 6);
             bool addParenthesis = totalOffset != 0 && Variable != 0;
             if (Attr2 != None)
             {
