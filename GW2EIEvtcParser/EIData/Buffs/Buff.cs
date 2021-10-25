@@ -458,7 +458,6 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Soothing Waters", 34955, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/8f/Soothing_Waters.png" ),
                 new Buff("Chaotic Haze", 34963, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/48/Lava_Font.png" ),
                 new Buff("Creeping Pursuit", 34927, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/f8/Creeping_Pursuit.png" ),
-                new Buff("Timed Bomb", 31485, Source.FightSpecific, BuffStackType.Queue, 1, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/91/Time_Bomb.png" ),
                 // Xera      
                 new Buff("Derangement",34965, Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/ca/Derangement.png"),
                 new Buff("Bending Chaos",35084, Source.FightSpecific, BuffStackType.Stacking, 11, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/39/Target%21.png"),
