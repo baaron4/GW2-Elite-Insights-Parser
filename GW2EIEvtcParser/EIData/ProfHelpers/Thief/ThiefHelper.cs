@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGiveCastFinder(13093,13094,EIData.InstantCastFinder.DefaultICD), // Devourer Venom
             new BuffGiveCastFinder(13096,13095,EIData.InstantCastFinder.DefaultICD), // Ice Drake Venom
             new BuffGiveCastFinder(13055,13054,EIData.InstantCastFinder.DefaultICD), // Skale Venom
-            new BuffGiveCastFinder(49052,49083,EIData.InstantCastFinder.DefaultICD), // Skale Venom
+            new BuffGiveCastFinder(49052,49083,EIData.InstantCastFinder.DefaultICD), // Soul Stone Venom
             //new BuffGiveCastFinder(13037,13036,InstantCastFinder.DefaultICD), // Spider Venom - same id as leeching venom trait?
         };
 
