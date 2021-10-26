@@ -77,6 +77,11 @@ namespace GW2EIBuilders.JsonModels
                 jsonPlayer.TargetPowerDamage1S = targetPowerDamage1S;
                 jsonPlayer.TargetConditionDamage1S = targetConditionDamage1S;
                 jsonPlayer.TargetBreakbarDamage1S = targetBreakbarDamage1S;
+                Dictionary<long, BuffsGraphModel> buffGraphs = player.GetBuffGraphs(log);
+                if (buffGraphs.TryGetValue(Buff.NumberOfClonesID, out BuffsGraphModel states))
+                {
+                    jsonPlayer.ActiveClones = JsonBuffsUptimeBuilder.GetBuffStates(states);
+                }
             }
             jsonPlayer.TargetDamageDist = targetDamageDist;
             jsonPlayer.DpsTargets = dpsTargets;

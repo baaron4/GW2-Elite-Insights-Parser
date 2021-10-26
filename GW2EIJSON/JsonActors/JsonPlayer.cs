@@ -47,7 +47,15 @@ namespace GW2EIJSON
         /// If 2 handed weapon even indices will have "2Hand" as value
         /// </summary>
         public IReadOnlyList<string> Weapons { get; set; }
-        
+
+        /// <summary>
+        /// Array of int[2] that represents the number of active clones \n
+        /// Array[i][0] will be the time, Array[i][1] will be the number of clones present from Array[i][0] to Array[i+1][0] \n
+        /// If i corresponds to the last element that means the status did not change for the remainder of the fight \n
+        /// Only relevant for clone summoning capable specs.
+        /// </summary>
+        public IReadOnlyList<IReadOnlyList<int>> ActiveClones { get; set; }
+
         /// <summary>
         /// Array of Total DPS stats \n
         /// Length == # of targets and the length of each sub array is equal to # of phases

@@ -15,7 +15,8 @@ namespace GW2EIEvtcParser.EIData
         public const long Unknown = -1;
         public const long NumberOfConditionsID = -3;
         public const long NumberOfBoonsID = -2;
-        public const long NumberOfActiveCombatMinions = -17;
+        public const long NumberOfActiveCombatMinionsID = -17;
+        public const long NumberOfClonesID = -18;
         public const long NoBuff = -4;
 
         // Weaver attunements
@@ -274,7 +275,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Commons = new List<Buff>
         {
-                new Buff("Number of Active Combat Minions", NumberOfActiveCombatMinions, Source.Common, BuffStackType.Stacking, 0, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/ad/Superior_Rune_of_the_Ranger.png"),
+                new Buff("Number of Active Combat Minions", NumberOfActiveCombatMinionsID, Source.Common, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/ad/Superior_Rune_of_the_Ranger.png"),
+                new Buff("Number of Clones", NumberOfClonesID, Source.Common, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/24/Superior_Rune_of_the_Mesmer.png"),
                 new Buff("Downed", 770, Source.Common, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/dd/Downed.png"),
                 new Buff("Exhaustion", 46842, Source.Common, BuffStackType.Queue, 3, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/88/Exhaustion.png"),
                 new Buff("Stealth", 13017, Source.Common, BuffStackType.Queue, 5, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),

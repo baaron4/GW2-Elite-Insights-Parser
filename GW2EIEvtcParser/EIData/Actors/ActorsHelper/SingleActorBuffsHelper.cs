@@ -201,7 +201,13 @@ namespace GW2EIEvtcParser.EIData
             long dur = log.FightData.FightEnd;
             int fightDuration = (int)(dur) / 1000;
             var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[NumberOfBoonsID]);
-            var activeCombatMinionsGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[NumberOfActiveCombatMinions]);
+            var activeCombatMinionsGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[NumberOfActiveCombatMinionsID]);
+            BuffsGraphModel numberOfClonesGraph = null;
+            var canSummonClones = MesmerHelper.CanSummonClones(Actor.Spec);
+            if (canSummonClones)
+            {
+                numberOfClonesGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[NumberOfClonesID]);
+            }
             var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[NumberOfConditionsID]);
             var boonIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Boon].Select(x => x.ID));
             var condiIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Condition].Select(x => x.ID));
@@ -266,14 +272,26 @@ namespace GW2EIEvtcParser.EIData
             _buffGraphs[NumberOfConditionsID] = condiPresenceGraph;
             foreach (Minions minions in Actor.GetMinions(log).Values)
             {
-                foreach (List<Segment> minionsSegments in minions.GetLifeSpanSegments(log))
+                IReadOnlyList<IReadOnlyList<Segment>> segments = minions.GetLifeSpanSegments(log);
+                foreach (IReadOnlyList<Segment> minionsSegments in segments)
                 {
                     activeCombatMinionsGraph.MergePresenceInto(minionsSegments);
+                }
+                if (canSummonClones && MesmerHelper.IsClone(minions.ID))
+                {
+                    foreach (IReadOnlyList<Segment> minionsSegments in segments)
+                    {
+                        numberOfClonesGraph.MergePresenceInto(minionsSegments);
+                    }
                 }
             }
             if (activeCombatMinionsGraph.BuffChart.Any())
             {
-                _buffGraphs[NumberOfActiveCombatMinions] = activeCombatMinionsGraph;
+                _buffGraphs[NumberOfActiveCombatMinionsID] = activeCombatMinionsGraph;
+            }
+            if (canSummonClones && numberOfClonesGraph.BuffChart.Any())
+            {
+                _buffGraphs[NumberOfClonesID] = numberOfClonesGraph;
             }
         }
 
