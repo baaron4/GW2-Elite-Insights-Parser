@@ -41,16 +41,18 @@ namespace GW2EIEvtcParser.ParsedData
                     return "Outgoing Strike Damage";
                 case CondInc:
                     return "Outgoing Condition Damage";
-                case OutgoingLifeLeechEffectiveness:
+                case SiphonInc:
                     return "Outgoing Life Leech Damage";
+                case SiphonRec:
+                    return "Incoming Life Leech Damage";
                 case CondRec:
                     return "Incoming Condition Damage";
                 case PhysRec:
                     return "Incoming Strike Damage";
                 case AttackSpeed:
                     return "Attack Speed";
-                case ConditionDurationIncrease:
-                    return "Condition Duration Increase";
+                case ConditionDurationInc:
+                    return "Outgoing Condition Duration";
                 case DamageFormulaSquaredLevel:
                 case DamageFormula:
                     return "Damage Formula";
@@ -68,10 +70,10 @@ namespace GW2EIEvtcParser.ParsedData
                     return "Damage Formula based on Movement";
                 case EnduranceRegeneration:
                     return "Endurance Regeneration";
-                case IncomingHealingEffectiveness:
+                case HealingEffectivenessRec:
                     return "Incoming Healing Effectiveness";
-                case OutgoingHealingEffectivenessConvInc:
-                case OutgoingHealingEffectivenessFlatInc:
+                case HealingEffectivenessConvInc:
+                case HealingEffectivenessFlatInc:
                     return "Outgoing Healing Effectiveness";
                 case HealingOutputFormula:
                     return "Healing Formula";
@@ -130,16 +132,17 @@ namespace GW2EIEvtcParser.ParsedData
                 case CondRec:
                 case PhysRec:
                 case AttackSpeed:
-                case ConditionDurationIncrease:
+                case ConditionDurationInc:
                 case GlancingBlow:
                 case CriticalChance:
                 case StrikeDamageToHP:
                 case ConditionDamageToHP:
                 case EnduranceRegeneration:
-                case IncomingHealingEffectiveness:
-                case OutgoingLifeLeechEffectiveness:
-                case OutgoingHealingEffectivenessConvInc:
-                case OutgoingHealingEffectivenessFlatInc:
+                case HealingEffectivenessRec:
+                case SiphonInc:
+                case SiphonRec:
+                case HealingEffectivenessConvInc:
+                case HealingEffectivenessFlatInc:
                 case ExperienceFromKills:
                 case ExperienceFromAll:
                 case GoldFind:
