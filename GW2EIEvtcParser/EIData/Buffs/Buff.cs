@@ -606,8 +606,11 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Resilient Form", 61220, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"),
                 new Buff("Cacophonous Mind", 61435, Source.FightSpecific, BuffStackType.Stacking, 20, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"),
                 new Buff("Crushing Guilt", 61208, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"),
-                //new Buff("Sunqua Fixated 1", 61503, ParserHelper.Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"),
-                //new Buff("Sunqua Fixated 2", 61506, ParserHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"), // what are those exactly?
+                new Buff("Fixated (Fear 3)", 61304, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Fixated (Fear 2)", 61306, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Fixated (Fear 1)", 61503, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                //new Buff("Fixated (3)", 61506, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Fixated (Fear 4)", 61566, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 new Buff("Charged Leap", 61444, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 3, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"),
                 new Buff("Tidal Bargain", 61512, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"),
                 //////////////////////////////////////////////
