@@ -50,7 +50,7 @@ namespace GW2EIEvtcParser.EIData
                 long leftOver = 0;
                 if (_activeStack != null && _activeStack.Duration > 0)
                 {
-                    var toAdd = new BuffSimulationItemQueue(BuffStack);
+                    var toAdd = new BuffSimulationItemDuration(BuffStack);
                     GenerationSimulation.Add(toAdd);
                     long timeDiff = _activeStack.Duration - timePassed;
                     if (timeDiff < 0)

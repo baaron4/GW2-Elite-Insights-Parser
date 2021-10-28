@@ -7,7 +7,6 @@ namespace GW2EIEvtcParser.EIData
     internal abstract class BuffSimulationItem : AbstractSimulationItem
     {
         public long Duration { get; protected set; }
-        protected long OriginalDuration { get; }
         public long Start { get; protected set; }
         public long End => Start + Duration;
 
@@ -15,7 +14,6 @@ namespace GW2EIEvtcParser.EIData
         {
             Start = start;
             Duration = duration;
-            OriginalDuration = duration;
         }
 
         public long GetClampedDuration(long start, long end)

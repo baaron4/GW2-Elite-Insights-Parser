@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.EIData
 
         public override void OverrideEnd(long end)
         {
-            foreach (BuffSimulationItemDuration stack in Stacks)
+            foreach (BuffSimulationItemBase stack in Stacks)
             {
                 stack.OverrideEnd(end);
             }
@@ -32,7 +32,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 return;
             }
-            foreach (BuffSimulationItemDuration item in Stacks)
+            foreach (BuffSimulationItemBase item in Stacks)
             {
                 item.SetBuffDistributionItem(distribs, start, end, boonid);
             }

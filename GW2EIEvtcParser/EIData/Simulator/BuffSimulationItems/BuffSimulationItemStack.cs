@@ -8,17 +8,17 @@ namespace GW2EIEvtcParser.EIData
 {
     internal abstract class BuffSimulationItemStack : BuffSimulationItem
     {
-        protected readonly List<BuffSimulationItemDuration> Stacks = new List<BuffSimulationItemDuration>();
+        protected readonly List<BuffSimulationItemBase> Stacks = new List<BuffSimulationItemBase>();
         private readonly List<AgentItem> _sources;
 
         public BuffSimulationItemStack(IEnumerable<BuffStackItem> stacks) : base(stacks.First().Start, stacks.First().Duration)
         {
             foreach (BuffStackItem stack in stacks)
             {
-                Stacks.Add(new BuffSimulationItemDuration(stack));
+                Stacks.Add(new BuffSimulationItemBase(stack));
             }
             _sources = new List<AgentItem>();
-            foreach (BuffSimulationItemDuration item in Stacks)
+            foreach (BuffSimulationItemBase item in Stacks)
             {
                 _sources.AddRange(item.GetSources());
             }
