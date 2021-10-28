@@ -12,8 +12,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            //new BuffGainCastFinder(-1, -1, EIData.InstantCastFinder.DefaultICD), // Shadow Shroud Enter
-            //new BuffLossCastFinder(-1, -1, EIData.InstantCastFinder.DefaultICD), // Shadow Shroud Exit
+            new BuffGainCastFinder(63155, 63239, EIData.InstantCastFinder.DefaultICD), // Shadow Shroud Enter
+            new BuffLossCastFinder(63251, 63239, EIData.InstantCastFinder.DefaultICD), // Shadow Shroud Exit
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
@@ -23,9 +23,9 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-            //new Buff("Shadow Shroud",-1, Source.Specter, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/1a/Palm_Strike.png"),
-            //new Buff("Shrouded Ally",-1, Source.Specter, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/1/1a/Palm_Strike.png"),
-            //new Buff("Rot Wallow Venom",-1, Source.Specter, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/1/1a/Palm_Strike.png"),
+            new Buff("Shadow Shroud",63239, Source.Specter, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/f3/Enter_Shadow_Shroud.png"),
+            new Buff("Shrouded Ally",63207, Source.Specter, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/3a/Siphon.png"),
+            new Buff("Rot Wallow Venom",63168, Source.Specter, ArcDPSEnums.BuffStackType.StackingConditionalLoss, 100, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/5/57/Dark_Sentry.png"),
         };
 
     }
