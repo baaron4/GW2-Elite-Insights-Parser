@@ -368,6 +368,7 @@ namespace GW2EIEvtcParser.EIData
                 // Generic
                 new Buff("Spectral Agony", 38077, Source.FightSpecific,BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/70/Spectral_Agony.png" ),
                 new Buff("Agony", 15773, Source.FightSpecific,BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/be/Agony.png" ),
+                new Buff("Harmstrung", 47856, Source.FightSpecific,BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b9/Unseen_Burden.png" ),
                 new Buff("Enraged (?)", 18711, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 new Buff("Enraged (??)", 23235, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 new Buff("Enraged (100%)", 50070, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
