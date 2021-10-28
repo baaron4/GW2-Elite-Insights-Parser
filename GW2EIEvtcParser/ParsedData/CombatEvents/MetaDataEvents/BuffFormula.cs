@@ -46,8 +46,10 @@ namespace GW2EIEvtcParser.ParsedData
                 case SiphonRec:
                     return "Incoming Life Leech Damage";
                 case CondRec:
+                case CondRec2:
                     return "Incoming Condition Damage";
                 case PhysRec:
+                case PhysRec2:
                     return "Incoming Strike Damage";
                 case AttackSpeed:
                     return "Attack Speed";
@@ -130,7 +132,9 @@ namespace GW2EIEvtcParser.ParsedData
                 case PhysInc:
                 case CondInc:
                 case CondRec:
+                case CondRec2:
                 case PhysRec:
+                case PhysRec2:
                 case AttackSpeed:
                 case ConditionDurationInc:
                 case GlancingBlow:
@@ -190,6 +194,8 @@ namespace GW2EIEvtcParser.ParsedData
         private bool IsExtraNumberBuffID => ExtraNumberState == 2;
         private bool IsExtraNumberNone => ExtraNumberState == 0;
         private bool IsExtraNumberSomething => ExtraNumberState == 1;
+
+        private bool IsFlipedVariable => Attr1 == PhysRec2 || Attr1 == CondRec2;
 
         private string _solvedDescription = null;
 
@@ -315,7 +321,7 @@ namespace GW2EIEvtcParser.ParsedData
                 stat2 += " " + ByteAttr2;
             }
             _solvedDescription += stat1;
-            double variable = Math.Round(Variable, 6);
+            double variable = Math.Round(IsFlipedVariable ? 100.0 - Variable : Variable, 6);
             double totalOffset = Math.Round(Level * LevelOffset + ConstantOffset, 6);
             bool addParenthesis = totalOffset != 0 && Variable != 0;
             if (Attr2 != None)
