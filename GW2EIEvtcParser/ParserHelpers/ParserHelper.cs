@@ -37,9 +37,9 @@ namespace GW2EIEvtcParser
             Warrior, Berserker, Spellbreaker, Bladesworn,
             Revenant, Herald, Renegade, Vindicator,
             Guardian, Dragonhunter, Firebrand, Willbender,
-            Thief, Daredevil, Deadeye,
-            Ranger, Druid, Soulbeast,
-            Engineer, Scrapper, Holosmith,
+            Thief, Daredevil, Deadeye, Specter,
+            Ranger, Druid, Soulbeast, Untamed,
+            Engineer, Scrapper, Holosmith, Mechanist,
             FightSpecific,
             FractalInstability,
             Unknown
@@ -53,9 +53,9 @@ namespace GW2EIEvtcParser
             Warrior, Berserker, Spellbreaker, Bladesworn,
             Revenant, Herald, Renegade, Vindicator,
             Guardian, Dragonhunter, Firebrand, Willbender,
-            Thief, Daredevil, Deadeye,
-            Ranger, Druid, Soulbeast,
-            Engineer, Scrapper, Holosmith,
+            Thief, Daredevil, Deadeye, Specter,
+            Ranger, Druid, Soulbeast, Untamed,
+            Engineer, Scrapper, Holosmith, Mechanist,
             NPC, Gadget,
             Unknown
         };
@@ -125,6 +125,8 @@ namespace GW2EIEvtcParser
                 case "GDG":
                     return Spec.Gadget;
                 //
+                case "Untamed":
+                    return Spec.Untamed;
                 case "Druid":
                     return Spec.Druid;
                 case "Soulbeast":
@@ -136,9 +138,13 @@ namespace GW2EIEvtcParser
                     return Spec.Scrapper;
                 case "Holosmith":
                     return Spec.Holosmith;
+                case "Mechanist":
+                    return Spec.Mechanist;
                 case "Engineer":
                     return Spec.Engineer;
                 //
+                case "Specter":
+                    return Spec.Specter;
                 case "Daredevil":
                     return Spec.Daredevil;
                 case "Deadeye":
@@ -209,14 +215,17 @@ namespace GW2EIEvtcParser
             {
                 case Spec.Druid:
                 case Spec.Soulbeast:
+                case Spec.Untamed:
                 case Spec.Ranger:
                     return Spec.Ranger;
                 //
                 case Spec.Scrapper:
                 case Spec.Holosmith:
+                case Spec.Mechanist:
                 case Spec.Engineer:
                     return Spec.Engineer;
                 //
+                case Spec.Specter:
                 case Spec.Daredevil:
                 case Spec.Deadeye:
                 case Spec.Thief:
@@ -265,6 +274,8 @@ namespace GW2EIEvtcParser
         {
             switch (spec)
             {
+                case Spec.Untamed:
+                    return new List<Source> { Source.Ranger, Source.Untamed };
                 case Spec.Druid:
                     return new List<Source> { Source.Ranger, Source.Druid };
                 case Spec.Soulbeast:
@@ -276,13 +287,17 @@ namespace GW2EIEvtcParser
                     return new List<Source> { Source.Engineer, Source.Scrapper };
                 case Spec.Holosmith:
                     return new List<Source> { Source.Engineer, Source.Holosmith };
+                case Spec.Mechanist:
+                    return new List<Source> { Source.Engineer, Source.Mechanist };
                 case Spec.Engineer:
                     return new List<Source> { Source.Engineer };
                 //
-                case Spec.Daredevil:
-                    return new List<Source> { Source.Thief, Source.Daredevil };
+                case Spec.Specter:
+                    return new List<Source> { Source.Thief, Source.Specter };
                 case Spec.Deadeye:
                     return new List<Source> { Source.Thief, Source.Deadeye };
+                case Spec.Daredevil:
+                    return new List<Source> { Source.Thief, Source.Daredevil };
                 case Spec.Thief:
                     return new List<Source> { Source.Thief };
                 //
@@ -380,6 +395,8 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/3/3a/Scrapper_tango_icon_200px.png";
                 case Spec.Holosmith:
                     return "https://wiki.guildwars2.com/images/a/ae/Holosmith_tango_icon_200px.png";
+                case Spec.Mechanist:
+                    return "https://i.imgur.com/UbvyFSt.png";
                 //
                 case Spec.Ranger:
                     return "https://wiki.guildwars2.com/images/5/51/Ranger_tango_icon_200px.png";
@@ -387,6 +404,8 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/6/6d/Druid_tango_icon_200px.png";
                 case Spec.Soulbeast:
                     return "https://wiki.guildwars2.com/images/f/f6/Soulbeast_tango_icon_200px.png";
+                case Spec.Untamed:
+                    return "https://i.imgur.com/UbvyFSt.png";
                 //
                 case Spec.Thief:
                     return "https://wiki.guildwars2.com/images/1/19/Thief_tango_icon_200px.png";
@@ -394,6 +413,8 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/c/ca/Daredevil_tango_icon_200px.png";
                 case Spec.Deadeye:
                     return "https://wiki.guildwars2.com/images/b/b0/Deadeye_tango_icon_200px.png";
+                case Spec.Specter:
+                    return "https://i.imgur.com/UbvyFSt.png";
                 //
                 case Spec.Elementalist:
                     return "https://wiki.guildwars2.com/images/a/a0/Elementalist_tango_icon_200px.png";
@@ -462,6 +483,8 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/3/3a/Scrapper_tango_icon_200px.png";
                 case Spec.Holosmith:
                     return "https://wiki.guildwars2.com/images/2/28/Holosmith_tango_icon_20px.png";
+                case Spec.Mechanist:
+                    return "https://i.imgur.com/UbvyFSt.png";
                 //
                 case Spec.Ranger:
                     return "https://wiki.guildwars2.com/images/4/43/Ranger_tango_icon_20px.png";
@@ -469,6 +492,8 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/d/d2/Druid_tango_icon_20px.png";
                 case Spec.Soulbeast:
                     return "https://wiki.guildwars2.com/images/7/7c/Soulbeast_tango_icon_20px.png";
+                case Spec.Untamed:
+                    return "https://i.imgur.com/UbvyFSt.png";
                 //
                 case Spec.Thief:
                     return "https://wiki.guildwars2.com/images/7/7a/Thief_tango_icon_20px.png";
@@ -476,6 +501,8 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/e/e1/Daredevil_tango_icon_20px.png";
                 case Spec.Deadeye:
                     return "https://wiki.guildwars2.com/images/c/c9/Deadeye_tango_icon_20px.png";
+                case Spec.Specter:
+                    return "https://i.imgur.com/UbvyFSt.png";
                 //
                 case Spec.Elementalist:
                     return "https://wiki.guildwars2.com/images/a/aa/Elementalist_tango_icon_20px.png";
