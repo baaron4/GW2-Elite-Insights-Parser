@@ -46,11 +46,13 @@ namespace GW2EIEvtcParser.ParsedData
                 case SiphonRec:
                     return "Incoming Life Leech Damage";
                 case CondRec:
-                case CondRec2:
                     return "Incoming Condition Damage";
+                case CondRec2:
+                    return "Incoming Condition Damage (Mult)";
                 case PhysRec:
-                case PhysRec2:
                     return "Incoming Strike Damage";
+                case PhysRec2:
+                    return "Incoming Strike Damage (Mult)";
                 case AttackSpeed:
                     return "Attack Speed";
                 case ConditionDurationInc:
