@@ -195,7 +195,7 @@ namespace GW2EIEvtcParser.ParsedData
         private bool IsExtraNumberNone => ExtraNumberState == 0;
         private bool IsExtraNumberSomething => ExtraNumberState == 1;
 
-        private bool IsFlipedVariable => Attr1 == PhysRec2 || Attr1 == CondRec2;
+        private bool IsFlippedFormula => Attr1 == PhysRec2 || Attr1 == CondRec2;
 
         private string _solvedDescription = null;
 
@@ -321,14 +321,19 @@ namespace GW2EIEvtcParser.ParsedData
                 stat2 += " " + ByteAttr2;
             }
             _solvedDescription += stat1;
-            double variable = Math.Round(IsFlipedVariable ? 100.0 - Variable : Variable, 6);
-            double totalOffset = Math.Round(Level * LevelOffset + ConstantOffset, 6);
+            double variable = Math.Round(Variable, 6);
+            double totalOffset = Math.Round(Level * LevelOffset + ConstantOffset, 6);      
             bool addParenthesis = totalOffset != 0 && Variable != 0;
             if (Attr2 != None)
             {
                 _solvedDescription += " from " + stat2;
                 totalOffset *= 100.0;
                 variable *= 100.0;
+            }
+            if (IsFlippedFormula)
+            {
+                variable = variable - 100.0;
+                totalOffset = totalOffset - 100.0;
             }
             _solvedDescription += ": ";
             if (addParenthesis)
