@@ -12,9 +12,11 @@ namespace GW2EIEvtcParser.EIData
     {
 
 
+        public const long Unknown = -1;
         public const long NumberOfConditionsID = -3;
         public const long NumberOfBoonsID = -2;
-        public const long NumberOfActiveCombatMinions = -17;
+        public const long NumberOfActiveCombatMinionsID = -17;
+        public const long NumberOfClonesID = -18;
         public const long NoBuff = -4;
 
         // Weaver attunements
@@ -273,7 +275,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Commons = new List<Buff>
         {
-                new Buff("Number of Active Combat Minions", NumberOfActiveCombatMinions, Source.Common, BuffStackType.Stacking, 0, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/ad/Superior_Rune_of_the_Ranger.png"),
+                new Buff("Number of Active Combat Minions", NumberOfActiveCombatMinionsID, Source.Common, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/ad/Superior_Rune_of_the_Ranger.png"),
+                new Buff("Number of Clones", NumberOfClonesID, Source.Common, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/24/Superior_Rune_of_the_Mesmer.png"),
                 new Buff("Downed", 770, Source.Common, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/dd/Downed.png"),
                 new Buff("Exhaustion", 46842, Source.Common, BuffStackType.Queue, 3, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/88/Exhaustion.png"),
                 new Buff("Stealth", 13017, Source.Common, BuffStackType.Queue, 5, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
@@ -288,6 +291,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Determined (31450)", 31450, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Buff("Determined (52271)", 52271, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Buff("Invulnerability (757)", 757, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                new Buff("Invulnerability (56227)", 56227, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Buff("Invulnerability (801)", 801, Source.Common, BuffStackType.Queue, 25, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Buff("Spawn Protection?", 34113, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Buff("Stun", 872, Source.Common, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/97/Stun.png"),
@@ -317,6 +321,8 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Rigorous Certainty", 33652, Source.Common, BuffNature.DefensiveBuffTable,"https://wiki.guildwars2.com/images/6/60/Desert_Carapace.png"),
                 //
                 new Buff("Guild Item Research", 33833, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/c/c6/Guild_Magic_Find_Banner_Boost.png"),
+                //
+                new Buff("Crystalline Heart", 37657, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/56/Crystalline_Heart.png"),
         };
 
         internal static readonly List<Buff> Gear = new List<Buff>
@@ -332,6 +338,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Sigil of Momentum", 22144, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/3/30/Superior_Sigil_of_Momentum.png"),
                 new Buff("Sigil of the Stars", 46953, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/d/dc/Superior_Sigil_of_the_Stars.png"),
                 new Buff("Sigil of Severance", 43930, Source.Gear, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/c/c2/Superior_Sigil_of_Severance.png"),
+                new Buff("Sigil of Doom", 9441, Source.Gear, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/6/67/Superior_Sigil_of_Doom.png"),
         };
 
         internal static readonly List<Buff> FractalInstabilities = new List<Buff>()
@@ -358,83 +365,35 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> FightSpecific = new List<Buff>
         {
+                // Generic
                 new Buff("Spectral Agony", 38077, Source.FightSpecific,BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/70/Spectral_Agony.png" ),
                 new Buff("Agony", 15773, Source.FightSpecific,BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/be/Agony.png" ),
-                // Whisper of Jormalg
-                new Buff("Whisper Teleport Out", 59223, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
-                new Buff("Whisper Teleport Back", 59054, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
-                new Buff("Frigid Vortex", 59105, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
-                new Buff("Chains of Frost Active", 59100, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/63/Use_Soul_Binder.png" ),
-                new Buff("Chains of Frost Application", 59120, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png" ),
-                new Buff("Brain Freeze", 59073, Source.FightSpecific, BuffStackType.Stacking, 20, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png" ),
-                // Voice and Claw            
-                new Buff("Enraged (V&C)", 58619, Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
-                // Fraenir of Jormag
-                new Buff("Frozen", 58376, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png" ),
-                new Buff("Snowblind", 58276, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png" ),
-                // Twisted Castle
-                new Buff("Spatial Distortion", 34918, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/7a/Bloodstone_Blessed.png" ),
-                new Buff("Madness", 35006, Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/ee/Madness.png" ),
-                new Buff("Still Waters", 35106, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/5c/Still_Waters_%28effect%29.png" ),
-                new Buff("Soothing Waters", 34955, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/8f/Soothing_Waters.png" ),
-                new Buff("Chaotic Haze", 34963, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/48/Lava_Font.png" ),
-                new Buff("Timed Bomb", 31485, Source.FightSpecific, BuffStackType.Queue, 1, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/91/Time_Bomb.png" ),
-                // Deimos
-                new Buff("Unnatural Signet",38224, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png"),
-                new Buff("Weak Minded",38187, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/38/Unseen_Burden_%28Deimos%29.png"),
-                new Buff("Tear Instability",37733, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/11/Tear_Instability.png"),
-                // KC
-                new Buff("Compromised",35096, Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/48/Compromised.png"),
-                new Buff("Xera's Boon",35025, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/0/04/Xera%27s_Boon.png"),
-                new Buff("Xera's Fury",35103, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/dd/Xera%27s_Fury.png"),
-                new Buff("Statue Fixated",34912, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/dd/Xera%27s_Fury.png"),
-                new Buff("Crimson Attunement (Orb)",35091, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/3e/Crimson_Attunement.png"),
-                new Buff("Radiant Attunement (Orb)",35109, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/68/Radiant_Attunement.png"),
-                new Buff("Magic Blast",35119, Source.FightSpecific, BuffStackType.Stacking, 35, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a9/Magic_Blast_Intensity.png"),
-                // Xera      
-                new Buff("Derangement",34965, Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/ca/Derangement.png"),
-                new Buff("Bending Chaos",35084, Source.FightSpecific, BuffStackType.Stacking, 11, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/39/Target%21.png"),
-                new Buff("Shifting Chaos",35162, Source.FightSpecific, BuffStackType.Stacking, 11, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/0/04/Shifting_Chaos.png"),
-                new Buff("Twisting Chaos",35032, Source.FightSpecific, BuffStackType.Stacking, 11, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/60/Twisting_Chaos.png"),
-                new Buff("Intervention",35000, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a2/Intervention_%28effect%29.png"),
-                new Buff("Bloodstone Protection",35168, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/4e/Bloodstone_Protection.png"),
-                new Buff("Bloodstone Blessed",34917, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/7a/Bloodstone_Blessed.png"),
-                // Gorseval
-                new Buff("Spirited Fusion",31722, Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/eb/Spirited_Fusion.png"),
-                new Buff("Protective Shadow", 31877, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/87/Protective_Shadow.png"),
-                new Buff("Ghastly Prison", 31623, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/62/Ghastly_Prison.png"),
-                new Buff("Vivid Echo", 31548, Source.FightSpecific, BuffStackType.Queue, 5, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/4f/Vivid_Echo.png"),
-                new Buff("Spectral Darkness", 31498, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/a/a8/Spectral_Darkness.png"),
-                // Sabetha    
-                new Buff("Shell-Shocked", 34108, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/3/39/Shell-Shocked.png"),
-                // Matthias
-                new Buff("Blood Shield Abo",34376, Source.FightSpecific, BuffStackType.Stacking, 18, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
-                new Buff("Blood Shield",34518, Source.FightSpecific, BuffStackType.Stacking, 18, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
-                new Buff("Blood Fueled",34422, Source.FightSpecific, BuffStackType.Stacking, 1, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Buff("Blood Fueled Abo",34428, Source.FightSpecific, BuffStackType.Stacking, 15, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                // Qadim
-                new Buff("Flame Armor",52568, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e7/Magma_Orb.png"),
-                new Buff("Fiery Surge",52588, Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/f9/Fiery_Surge.png"),
-                // Soulless Horror
-                new Buff("Necrosis",47414, Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/47/Ichor.png"),
-                // CA
-                new Buff("Greatsword Power",52667 , Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/3b/Greatsword_Power_%28effect%29.png"),
-                new Buff("Fractured - Enemy",53030, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Branded_Aura.png"),
-                new Buff("Fractured - Allied",52213, Source.FightSpecific, BuffStackType.Stacking, 2, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Branded_Aura.png"),
-                new Buff("Conjured Shield",52754 , Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/83/Conjured_Shield_%28effect%29.png"),
-                new Buff("Conjured Protection",52973 , Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/83/Bloodstone-Infused_shield.png"),
-                new Buff("Shielded",53003 , Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/47/Golem-Powered_Shielding.png"),
-                new Buff("Augmented Power",52074  , Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/47/Golem-Powered_Shielding.png"),
-                new Buff("Scepter Lock-on",53075  , Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Buff("CA Invul",52255 , Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Buff("Arm Up",52430 , Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                // Twin Largos
-                //new Buff("Aquatic Detainment",52931 , ParseHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Buff("Aquatic Aura (Kenut)",52211 , Source.FightSpecific, BuffStackType.Stacking, 80, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/44/Expose_Weakness.png"),
-                new Buff("Aquatic Aura (Nikare)",52929 , Source.FightSpecific, BuffStackType.Stacking, 80, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/fd/Fractured_%28effect%29.png"),
-                new Buff("Waterlogged",51935 , Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/89/Waterlogged.png"),
-                // Slothasor
-                new Buff("Narcolepsy", 34467, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                new Buff("Enraged (?)", 18711, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Enraged (??)", 23235, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Enraged (100%)", 50070, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Enraged 2 (100%)", 61138, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Enraged (200%)", 60674, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Enraged (300%)", 61006, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Call of the Mists", 34164, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/79/Call_of_the_Mists_%28raid_effect%29.png" ),
+                // Strike Essences
+                new Buff("Essence of Vigilance Tier 1", 58786, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a4/Essence_of_Vigilance.png" ),
+                new Buff("Essence of Vigilance Tier 2", 58721, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a4/Essence_of_Vigilance.png" ),
+                new Buff("Essence of Vigilance Tier 3", 58182, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a4/Essence_of_Vigilance.png" ),
+                new Buff("Essence of Vigilance Tier 4", 60173, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a4/Essence_of_Vigilance.png" ),
+                new Buff("Power of Vigilance Tier 2", 58254, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/86/Power_of_Vigilance.png" ),
+                new Buff("Power of Vigilance Tier 3", 58712, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/86/Power_of_Vigilance.png" ),
+                new Buff("Essence of Resilience Tier 1", 58623, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b6/Essence_of_Resilience.png" ),
+                new Buff("Essence of Resilience Tier 2", 58841, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b6/Essence_of_Resilience.png" ),
+                new Buff("Essence of Resilience Tier 3", 58839, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b6/Essence_of_Resilience.png" ),
+                new Buff("Essence of Resilience Tier 4", 60057, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b6/Essence_of_Resilience.png" ),
+                new Buff("Power of Resilience Tier 2", 58278, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Power_of_Resilience.png" ),
+                new Buff("Essence of Valor Tier 1", 58480, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6f/Essence_of_Valor.png" ),
+                new Buff("Essence of Valor Tier 2", 58585, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6f/Essence_of_Valor.png" ),
+                new Buff("Essence of Valor Tier 3", 58792, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6f/Essence_of_Valor.png" ),
+                new Buff("Essence of Valor Tier 4", 60062, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6f/Essence_of_Valor.png" ),
+                new Buff("Power of Valor Tier 1", 58385, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/64/Power_of_Valor.png" ),
+                new Buff("Power of Valor Tier 2", 58414, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/64/Power_of_Valor.png" ),
+                //////////////////////////////////////////////
                 // VG
                 new Buff("Blue Pylon Power", 31413, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6e/Blue_Pylon_Power.png"),
                 new Buff("Pylon Attunement: Red", 31695, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/9/94/Pylon_Attunement-_Red.png"),
@@ -443,21 +402,167 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Unstable Pylon: Red", 31539, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/3/36/Unstable_Pylon_%28Red%29.png"),
                 new Buff("Unstable Pylon: Blue", 31884, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/c/c3/Unstable_Pylon_%28Blue%29.png"),
                 new Buff("Unstable Pylon: Green", 31828, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/9/9d/Unstable_Pylon_%28Green%29.png"),
-                new Buff("Unbreakable", 34979, Source.FightSpecific, BuffStackType.Stacking, 2, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/56/Xera%27s_Embrace.png"),
+                new Buff("Unbreakable", 34979, Source.FightSpecific, BuffStackType.Stacking, 2, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/56/Xera%27s_Embrace.png"),            
+                // Gorseval
+                new Buff("Spirited Fusion",31722, Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/eb/Spirited_Fusion.png"),
+                new Buff("Protective Shadow", 31877, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/87/Protective_Shadow.png"),
+                new Buff("Ghastly Prison", 31623, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/62/Ghastly_Prison.png"),
+                new Buff("Vivid Echo", 31548, Source.FightSpecific, BuffStackType.Queue, 5, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/4f/Vivid_Echo.png"),
+                new Buff("Spectral Darkness", 31498, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/a/a8/Spectral_Darkness.png"),
+                // Sabetha    
+                new Buff("Shell-Shocked", 34108, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/3/39/Shell-Shocked.png"),
+                new Buff("Sapper Bomb", 31473, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/88/Sapper_Bomb_%28effect%29.png"),
+                new Buff("Time Bomb", 31485, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/9/91/Time_Bomb.png"),
+                //////////////////////////////////////////////
+                // Slothasor
+                new Buff("Narcolepsy", 34467, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                new Buff("Nauseated", 34496, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/3/30/Nauseated.png"),
+                new Buff("Magic Transformation", 34362, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/45/Magic_Transformation.png"),
+                new Buff("Fixated (Slothasor)", 34508, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Volatile Poison", 34387, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/1/12/Volatile_Poison.png"),
                 // Trio
                 new Buff("Not the Bees!", 34434, Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/0/08/Throw_Jar.png"),
                 new Buff("Targeted", 34392, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
+                // Matthias
+                new Buff("Blood Shield Abo",34376, Source.FightSpecific, BuffStackType.Stacking, 18, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
+                new Buff("Blood Shield",34518, Source.FightSpecific, BuffStackType.Stacking, 18, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
+                new Buff("Blood Fueled",34422, Source.FightSpecific, BuffStackType.Stacking, 1, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Buff("Blood Fueled Abo",34428, Source.FightSpecific, BuffStackType.Stacking, 15, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Buff("Unstable Blood Magic", 34450, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/0/09/Unstable_Blood_Magic.png"),
+                new Buff("Corruption", 34416, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/3/34/Locust_Trail.png"),
+                new Buff("Unbalanced", 34367, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/80/Unbalanced.png"),
+                new Buff("Zealous Benediction", 34511, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/45/Unstable.png"),
+                new Buff("Snowstorm", 34369, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/26/Snowstorm_%28Matthias_Gabrel_effect%29.png"),
+                new Buff("Heat Wave", 34526, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6e/Heat_Wave_%28Matthias_Gabrel_effect%29.png"),
+                new Buff("Downpour",34472, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/4a/Downpour.png"),
+                new Buff("Snowstorm (Matthias)", 34433, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/26/Snowstorm_%28Matthias_Gabrel_effect%29.png"),
+                new Buff("Heat Wave (Matthias)", 34458, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6e/Heat_Wave_%28Matthias_Gabrel_effect%29.png"),
+                new Buff("Downpour (Matthias)",34568, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/4a/Downpour.png"),
+                new Buff("Unstable",34548, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/45/Unstable.png"),      
+                //////////////////////////////////////////////
+                // KC
+                new Buff("Compromised",35096, Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/48/Compromised.png"),
+                new Buff("Xera's Boon",35025, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/0/04/Xera%27s_Boon.png"),
+                new Buff("Xera's Fury",35103, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/dd/Xera%27s_Fury.png"),
+                new Buff("Statue Fixated",34912, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Statue Fixated 2",34925, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Incoming!",35140, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png"),
+                new Buff("Crimson Attunement (Orb)",35091, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/3e/Crimson_Attunement.png"),
+                new Buff("Radiant Attunement (Orb)",35109, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/68/Radiant_Attunement.png"),
+                new Buff("Crimson Attunement (Phantasm)",35014, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/3e/Crimson_Attunement.png"),
+                new Buff("Radiant Attunement (Phantasm)",34992, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/68/Radiant_Attunement.png"),
+                new Buff("Magic Blast",35119, Source.FightSpecific, BuffStackType.Stacking, 35, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a9/Magic_Blast_Intensity.png"),
+                new Buff("Gaining Power",35075, Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png"),            
+                // Twisted Castle
+                new Buff("Spatial Distortion", 34918, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/7a/Bloodstone_Blessed.png" ),
+                new Buff("Madness", 35006, Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/ee/Madness.png" ),
+                new Buff("Still Waters", 35106, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/5c/Still_Waters_%28effect%29.png" ),
+                new Buff("Soothing Waters", 34955, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/8f/Soothing_Waters.png" ),
+                new Buff("Chaotic Haze", 34963, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/48/Lava_Font.png" ),
+                new Buff("Creeping Pursuit", 34927, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/f8/Creeping_Pursuit.png" ),
+                // Xera      
+                new Buff("Derangement",34965, Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/ca/Derangement.png"),
+                new Buff("Bending Chaos",35084, Source.FightSpecific, BuffStackType.Stacking, 11, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/39/Target%21.png"),
+                new Buff("Shifting Chaos",35162, Source.FightSpecific, BuffStackType.Stacking, 11, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/0/04/Shifting_Chaos.png"),
+                new Buff("Twisting Chaos",35032, Source.FightSpecific, BuffStackType.Stacking, 11, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/60/Twisting_Chaos.png"),
+                new Buff("Intervention",35000, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a2/Intervention_%28effect%29.png"),
+                new Buff("Bloodstone Protection",35168, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/4e/Bloodstone_Protection.png"),
+                new Buff("Bloodstone Blessed",34917, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/7a/Bloodstone_Blessed.png"),
+                //////////////////////////////////////////////
+                // Cairn        
+                new Buff("Shared Agony", 38049, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/53/Shared_Agony.png"),
+                new Buff("Enraged (Cairn)", 37675, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png"),
+                new Buff("Unseen Burden", 38153, Source.FightSpecific, BuffStackType.Stacking , 99, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/b9/Unseen_Burden.png"),
+                new Buff("Gaze Avoidance", 37714, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/1/10/Gaze_Avoidance.png"),
+                // MO             
+                new Buff("Empowered", 37626, Source.FightSpecific, BuffStackType.Stacking , 4, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/9/9c/Empowered_%28Mursaat_Overseer%29.png"),
+                new Buff("Mursaat Overseer's Shield", 38155, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/84/Mursaat_Overseer%27s_Shield.png"),
+                new Buff("Protect (SAK)", 37813, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/f/f6/Protect.png"),
+                new Buff("Dispel (SAK)", 37697, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/84/Mursaat_Overseer%27s_Shield.png"),
+                new Buff("Claim (SAK)", 37779, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/ef/Claim.png"),
+                // Samarog            
+                new Buff("Fixated (Samarog)",37868, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Fixated (Guldhem)",38223, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Fixated (Rigom)",37693, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Inevitable Betrayal (Big)",37966, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b8/Feeding_Frenzy_%28GW1%29.png"),
+                new Buff("Inevitable Betrayal (Small)",38247, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b8/Feeding_Frenzy_%28GW1%29.png"),
+                new Buff("Soul Swarm",37892, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/0/0e/Soul_Swarm_%28effect%29.png"),
+                // Deimos
+                new Buff("Unnatural Signet",38224, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png"),
+                new Buff("Weak Minded",38187, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/38/Unseen_Burden_%28Deimos%29.png"),
+                new Buff("Tear Instability",37733, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/11/Tear_Instability.png"),
+                new Buff("Form Up and Advance!",37871, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/56/Form_Up_and_Advance%21.png"),
+                new Buff("Devour", 37718, Source.FightSpecific, BuffStackType.Stacking , 99, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/3/3d/Devour.png"),
+                new Buff("Unseen Burden (Deimos)", 38266, Source.FightSpecific, BuffStackType.Stacking , 99, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/3/38/Unseen_Burden_%28Deimos%29.png"),
+                //////////////////////////////////////////////
+                // Soulless Horror
+                new Buff("Exile's Embrace",48349, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b4/Exile%27s_Embrace.png"),
+                new Buff("Fixated (SH)",47434, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Necrosis",47414, Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/47/Ichor.png"),
                 // River
                 new Buff("Soul Siphon", 47470, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/f/f7/Soul_Siphon.png"),
                 new Buff("Desmina's Protection", 47219, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/b3/Desmina%27s_Protection.png"),
                 new Buff("Follower's Asylum", 47122, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/b3/Desmina%27s_Protection.png"),
+                new Buff("Spirit Form", 48331, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/2e/Spirit_Form_%28Hall_of_Chains%29.png"),
+                new Buff("Mortal Coil (River)",48154, Source.FightSpecific, BuffStackType.Stacking, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/41/Mortal_Coil.png"),
+                new Buff("Energy Threshold (River)", 47758, Source.FightSpecific, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/2e/Spirit_Form_%28Hall_of_Chains%29.png"),
                 // Broken King          
                 new Buff("Frozen Wind", 47776, Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/3/3a/Frozen_Wind.png"),
+                new Buff("Shield of Ice", 47595, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 99, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/3/38/Shield_of_Ice.png"),
+                new Buff("Glaciate", 47022, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/ba/Glaciate.png"),
+                // Eater of Soul         
+                new Buff("Soul Digestion", 48541, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/0/08/Soul_Digestion.png"),
+                new Buff("Reclaimed Energy", 47090, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/21/Reclaimed_Energy.png"),
+                new Buff("Mortal Coil (Statue of Death)", 48583, Source.FightSpecific, BuffStackType.Stacking, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/41/Mortal_Coil.png"),
+                new Buff("Empowered (Statue of Death)", 47473, Source.FightSpecific, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/d/de/Empowered_%28Statue_of_Death%29.png"),
+                //new Buff("Energy Threshold (Statue of Death)", 48583, Source.FightSpecific, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/2e/Spirit_Form_%28Hall_of_Chains%29.png"),
+                //  Eyes
+                new Buff("Last Grasp (Judgment)", 47635, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/26/Last_Grasp.png"),
+                new Buff("Last Grasp (Fate)", 47278, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/26/Last_Grasp.png"),
+                new Buff("Exposed (Statue of Darkness)", 47251, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/42/Exposed_%28Statue_of_Darkness%29.png"),
+                new Buff("Light Carrier", 48779, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/f1/Torch_Fielder.png"),
+                new Buff("Empowered (Light Thief)", 48477, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/0/08/Soul_Digestion.png"),
                 // Dhuum
-                new Buff("Spirit Transfrom", 48281, Source.FightSpecific, BuffStackType.Stacking, 30, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/48/Compromised.png"),
+                new Buff("Mortal Coil (Dhuum)", 48281, Source.FightSpecific, BuffStackType.Stacking, 30, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/48/Compromised.png"),
                 new Buff("Fractured Spirit", 46950, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/c/c3/Fractured_Spirit.png"),
                 new Buff("Residual Affliction", 47476, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/1/12/Residual_Affliction.png"),
                 new Buff("Arcing Affliction", 47646, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/f/f0/Arcing_Affliction.png"),
+                new Buff("One-Track Mind", 47929, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/68/Tracked.png"),
+                new Buff("Imminent Demise", 47181, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/58/Superheated_Metal.png"),
+                new Buff("Lethal Report", 47202, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/0/02/Mantra_of_Signets.png"),
+                new Buff("Hastened Demise", 48773, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/5b/Hastened_Demise.png"),
+                new Buff("Echo's Pick up", 49125, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/45/Unstable.png"),
+                new Buff("Energy Threshold", 48848, Source.FightSpecific, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/2e/Spirit_Form_%28Hall_of_Chains%29.png"),
+                //////////////////////////////////////////////
+                // CA
+                new Buff("Greatsword Power",52667 , Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/3b/Greatsword_Power_%28effect%29.png"),
+                new Buff("Fractured - Enemy",53030, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Branded_Aura.png"),
+                new Buff("Fractured - Allied",52213, Source.FightSpecific, BuffStackType.Stacking, 2, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Branded_Aura.png"),
+                new Buff("Conjured Shield",52754 , Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/83/Conjured_Shield_%28effect%29.png"),
+                new Buff("Conjured Protection",52973 , Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/83/Bloodstone-Infused_shield.png"),
+                new Buff("Shielded",53003 , Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/47/Golem-Powered_Shielding.png"),
+                new Buff("Augmented Power",52074  , Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/47/Golem-Powered_Shielding.png"),
+                new Buff("Locked On",53075  , Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/39/Target%21.png"),
+                new Buff("CA Invul",52255 , Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Buff("Arm Up",52430 , Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Buff("Fixation", 52943, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                // Twin Largos
+                //new Buff("Aquatic Detainment",52931 , ParseHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Buff("Aquatic Aura (Kenut)",52211 , Source.FightSpecific, BuffStackType.Stacking, 80, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/44/Expose_Weakness.png"),
+                new Buff("Aquatic Aura (Nikare)",52929 , Source.FightSpecific, BuffStackType.Stacking, 80, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/fd/Fractured_%28effect%29.png"),
+                new Buff("Waterlogged",51935 , Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/89/Waterlogged.png"),
+                // Qadim
+                new Buff("Flame Armor",52568, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e7/Magma_Orb.png"),
+                new Buff("Fiery Surge",52588, Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/f9/Fiery_Surge.png"),
+                new Buff("Power of the Lamp", 52035, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/e5/Break_Out%21.png"),
+                new Buff("Unbearable Flames", 52408, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/21/Expel_Excess_Magic_Poison.png"),
+                new Buff("Parry", 52464, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/28/Parry_%28effect%29.png"),
+                new Buff("Mythwright Surge", 52863, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/7a/Swiftness_%28effect%29.png"),
+                new Buff("Lamp Bond", 51726, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/d/db/Lamp_Bond.png"),
+                new Buff("Enraged (Wywern)", 52040, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png"),
+                new Buff("Resistance (Lava Elemental)", 52075, Source.FightSpecific, BuffStackType.Queue, 5, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/1/18/Fire_Shield.png"),
+                new Buff("Shielded (Lava Elemental)", 53048, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/1/18/Fire_Shield.png"),
+                //////////////////////////////////////////////
                 // Adina
                 new Buff("Pillar Pandemonium", 56204, Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/d/d9/Captain%27s_Inspiration.png"),
                 new Buff("Radiant Blindness", 56593, Source.FightSpecific, BuffStackType.Queue, 25, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6c/Radiant_Blindness.png"),
@@ -466,24 +571,33 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Eroding Curse", 56440, Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/d/de/Toxic_Gas.png"),
                 // Sabir
                 new Buff("Ion Shield", 56100, Source.FightSpecific, BuffStackType.Stacking, 80, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/9/94/Ion_Shield.png"),
-                new Buff("Violent Currents", 56123, Source.FightSpecific, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/0/06/Violent_Currents.png"),
+                new Buff("Violent Currents", 56123, Source.FightSpecific, BuffStackType.Stacking, 5, BuffNature.OffensiveBuffTable,"https://wiki.guildwars2.com/images/0/06/Violent_Currents.png"),
                 new Buff("Repulsion Field", 56172, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
                 new Buff("Electrical Repulsion", 56391, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/71/Electrical_Repulsion.png"),
                 new Buff("Electro-Repulsion", 56474, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/74/Unbridled_Chaos.png"),
+                new Buff("Eye of the Storm", 56216, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/52/Mending_Waters_%28effect%29.png"),
                 // Peerless Qadim
                 new Buff("Erratic Energy", 56582, Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/45/Unstable.png"),
                 new Buff("Power Share", 56104, Source.FightSpecific, BuffStackType.Stacking, 3, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
                 new Buff("Sapping Surge", 56118, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6f/Guilt_Exploitation.png"),
                 new Buff("Chaos Corrosion", 56182, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/f/fd/Fractured_%28effect%29.png"),
-                new Buff("Peerless Fixated", 56510, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Fixated (Qadim the Peerless)", 56510, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 new Buff("Magma Drop", 56475, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
                 new Buff("Critical Mass", 56424, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/bf/Orb_of_Ascension_%28effect%29.png"),
                 new Buff("Kinetic Abundance", 56609, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/64/Kinetic_Abundance.png"),
+                new Buff("Enfeebled Force", 56540, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/b6/Enfeebled_Force.png"),
+                new Buff("Backlashing Beam", 56360, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/0/04/Xera%27s_Boon.png"),
+                new Buff("Clutched by Chaos", 56257, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/87/Protective_Shadow.png"),
+                new Buff("Cleansed Conductor", 56237, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/a/a9/Magic_Blast_Intensity.png"),
+                new Buff("Poisoned Power", 56655, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png"),
+                new Buff("Incorporeal", 56250, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/8b/Magic_Aura.png"),
+                new Buff("Flare-Up", 56264, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/8b/Magic_Aura.png"),
                 new Buff("Unbridled Chaos", 56467, Source.FightSpecific, BuffStackType.Stacking, 3, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/42/Exposed_%28Statue_of_Darkness%29.png"),
-                // Cairn        
-                new Buff("Shared Agony", 38049, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/53/Shared_Agony.png"),
-                new Buff("Enraged (Cairn)", 37675, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png"),
-                new Buff("Unseen Burden", 38153, Source.FightSpecific, BuffStackType.Stacking , 99, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/b9/Unseen_Burden.png"),
+                //////////////////////////////////////////////
+                // Siax 
+                new Buff("Fixated (Nightmare)", 36998, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                // Ensolyss 
+                new Buff("Determination (Ensolyss)", 37498, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/41/Gambit_Exhausted.png"),
                 // Artsariiv
                 new Buff("Enraged (Arts)", 36498, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png"),
                 // Ai, Keeper of the Peak
@@ -496,6 +610,21 @@ namespace GW2EIEvtcParser.EIData
                 //new Buff("Sunqua Fixated 2", 61506, ParserHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"), // what are those exactly?
                 new Buff("Charged Leap", 61444, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 3, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"),
                 new Buff("Tidal Bargain", 61512, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"),
+                //////////////////////////////////////////////
+                // Fraenir of Jormag
+                new Buff("Frozen", 58376, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png" ),
+                new Buff("Snowblind", 58276, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png" ),
+                // Voice and Claw            
+                new Buff("Enraged (V&C)", 58619, Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                // Boneskinner     
+                new Buff("Tormenting Aura", 58860, Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/c0/Darkness.png" ),
+                // Whisper of Jormag
+                new Buff("Whisper Teleport Out", 59223, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Whisper Teleport Back", 59054, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Frigid Vortex", 59105, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Chains of Frost Active", 59100, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/63/Use_Soul_Binder.png" ),
+                new Buff("Chains of Frost Application", 59120, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png" ),
+                new Buff("Brain Freeze", 59073, Source.FightSpecific, BuffStackType.Stacking, 20, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png" ),
         };
 
         internal static readonly List<Buff> NormalFoods = new List<Buff>
@@ -507,10 +636,10 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Red-Lentil Saobosa",46273, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/a/a8/Red-Lentil_Saobosa.png"),
                 new Buff("Super Veggie Pizza",10008, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/6/66/Super_Veggie_Pizza.png"),
                 new Buff("Rare Veggie Pizza",10009, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/a/a0/Rare_Veggie_Pizza.png"),
-                new Buff("Bowl of Garlic Kale Sautee",-1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/0/04/Bowl_of_Garlic_Kale_Sautee.png"),
-                new Buff("Koi Cake",-1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/1/14/Koi_Cake.png"),
+                new Buff("Bowl of Garlic Kale Sautee",Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/0/04/Bowl_of_Garlic_Kale_Sautee.png"),
+                new Buff("Koi Cake",Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/1/14/Koi_Cake.png"),
                 new Buff("Prickly Pear Pie",24800, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/0/0a/Prickly_Pear_Pie.png"),
-                new Buff("Bowl of Nopalitos Sauté",-1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/f/f1/Bowl_of_Nopalitos_Saut%C3%A9.png"),
+                new Buff("Bowl of Nopalitos Sauté",Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/f/f1/Bowl_of_Nopalitos_Saut%C3%A9.png"),
                 new Buff("Loaf of Candy Cactus Cornbread",24797, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/b/b2/Loaf_of_Candy_Cactus_Cornbread.png"),
                 new Buff("Delicious Rice Ball",26529, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/5/5d/Delicious_Rice_Ball.png"),
                 new Buff("Slice of Allspice Cake",33792, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/1/13/Slice_of_Allspice_Cake.png"),
@@ -522,12 +651,12 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Plate of Beef Rendang",49686, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/d/d0/Plate_of_Beef_Rendang.png"),
                 new Buff("Dragon's Revelry Starcake",19451, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/2/2b/Dragon%27s_Revelry_Starcake.png"),
                 new Buff("Avocado Smoothie",50091, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/8/83/Avocado_Smoothie.png"),
-                new Buff("Carrot Souffle",-1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/7/71/Carrot_Souffl%C3%A9.png"), //same as Dragon's_Breath_Bun
-                new Buff("Plate of Truffle Steak Dinner",-1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/92/Plate_of_Truffle_Steak_Dinner.png"), //same as Dragon's Breath Bun
+                new Buff("Carrot Souffle",Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/7/71/Carrot_Souffl%C3%A9.png"), //same as Dragon's_Breath_Bun
+                new Buff("Plate of Truffle Steak Dinner",Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/92/Plate_of_Truffle_Steak_Dinner.png"), //same as Dragon's Breath Bun
                 new Buff("Dragon's Breath Bun",9750, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/5/53/Dragon%27s_Breath_Bun.png"),
                 new Buff("Karka Egg Omelet",9756, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/9e/Karka_Egg_Omelet.png"),
                 new Buff("Steamed Red Dumpling",26536, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/8/8c/Steamed_Red_Dumpling.png"),
-                new Buff("Saffron Stuffed Mushroom",-1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/e/e2/Saffron_Stuffed_Mushroom.png"), //same as Karka Egg Omelet
+                new Buff("Saffron Stuffed Mushroom",Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/e/e2/Saffron_Stuffed_Mushroom.png"), //same as Karka Egg Omelet
                 new Buff("Soul Pastry",53222, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/2/2c/Soul_Pastry.png"),
                 new Buff("Bowl of Fire Meat Chili",10119, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/b/ba/Bowl_of_Fire_Meat_Chili.png"),
                 new Buff("Plate of Fire Flank Steak",9765, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/2/27/Plate_of_Fire_Flank_Steak.png"),
@@ -653,46 +782,46 @@ namespace GW2EIEvtcParser.EIData
         {
                 // Ascended Food
                 // Feasts with yet unknown IDs are also added with ID of -1, the IDs can be added later on demand
-                new Buff("Bowl of Fruit Salad with Cilantro Garnish", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/0/08/Bowl_of_Fruit_Salad_with_Cilantro_Garnish.png"),
+                new Buff("Bowl of Fruit Salad with Cilantro Garnish", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/0/08/Bowl_of_Fruit_Salad_with_Cilantro_Garnish.png"),
                 new Buff("Bowl of Fruit Salad with Mint Garnish", 57100, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/4/47/Bowl_of_Fruit_Salad_with_Mint_Garnish.png"),
-                new Buff("Bowl of Fruit Salad with Orange-Clove Syrup", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/d/dc/Bowl_of_Fruit_Salad_with_Orange-Clove_Syrup.png"),
-                new Buff("Bowl of Sesame Fruit Salad", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/0/01/Bowl_of_Sesame_Fruit_Salad.png"),
+                new Buff("Bowl of Fruit Salad with Orange-Clove Syrup", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/d/dc/Bowl_of_Fruit_Salad_with_Orange-Clove_Syrup.png"),
+                new Buff("Bowl of Sesame Fruit Salad", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/0/01/Bowl_of_Sesame_Fruit_Salad.png"),
                 new Buff("Bowl of Spiced Fruit Salad", 57276, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/9c/Bowl_of_Spiced_Fruit_Salad.png"),
                 new Buff("Cilantro Lime Sous-Vide Steak", 57244, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/6/65/Cilantro_Lime_Sous-Vide_Steak.png"),
                 new Buff("Cilantro and Cured Meat Flatbread", 57409, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/8/87/Cilantro_and_Cured_Meat_Flatbread.png"),
-                new Buff("Clove and Veggie Flatbread", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/6/6e/Clove_and_Veggie_Flatbread.png"),
-                new Buff("Clove-Spiced Creme Brulee", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/a/a2/Clove-Spiced_Creme_Brulee.png"),
-                new Buff("Clove-Spiced Eggs Benedict", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/7/7d/Clove-Spiced_Eggs_Benedict.png"),
-                new Buff("Clove-Spiced Pear and Cured Meat Flatbread", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/c/c5/Clove-Spiced_Pear_and_Cured_Meat_Flatbread.png"),
-                new Buff("Eggs Benedict with Mint-Parsley Sauce", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/92/Eggs_Benedict_with_Mint-Parsley_Sauce.png"),
+                new Buff("Clove and Veggie Flatbread", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/6/6e/Clove_and_Veggie_Flatbread.png"),
+                new Buff("Clove-Spiced Creme Brulee", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/a/a2/Clove-Spiced_Creme_Brulee.png"),
+                new Buff("Clove-Spiced Eggs Benedict", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/7/7d/Clove-Spiced_Eggs_Benedict.png"),
+                new Buff("Clove-Spiced Pear and Cured Meat Flatbread", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/c/c5/Clove-Spiced_Pear_and_Cured_Meat_Flatbread.png"),
+                new Buff("Eggs Benedict with Mint-Parsley Sauce", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/92/Eggs_Benedict_with_Mint-Parsley_Sauce.png"),
                 new Buff("Mango Cilantro Creme Brulee", 57267, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/3/3d/Mango_Cilantro_Creme_Brulee.png"),
-                new Buff("Mint Creme Brulee", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/3/31/Mint_Creme_Brulee.png"),
+                new Buff("Mint Creme Brulee", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/3/31/Mint_Creme_Brulee.png"),
                 new Buff("Mint Strawberry Cheesecake", 57384, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/6/64/Mint_Strawberry_Cheesecake.png"),
                 new Buff("Mint and Veggie Flatbread", 57263, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/f/f9/Mint_and_Veggie_Flatbread.png"),
-                new Buff("Mint-Pear Cured Meat Flatbread", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/6/60/Mint-Pear_Cured_Meat_Flatbread.png"),
+                new Buff("Mint-Pear Cured Meat Flatbread", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/6/60/Mint-Pear_Cured_Meat_Flatbread.png"),
                 new Buff("Mushroom Clove Sous-Vide Steak", 57393, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/b/ba/Mushroom_Clove_Sous-Vide_Steak.png"),
-                new Buff("Orange Clove Cheesecake", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/3/3f/Orange_Clove_Cheesecake.png"),
+                new Buff("Orange Clove Cheesecake", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/3/3f/Orange_Clove_Cheesecake.png"),
                 new Buff("Peppercorn and Veggie Flatbread", 57382, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/9d/Peppercorn_and_Veggie_Flatbread.png"),
                 new Buff("Peppercorn-Crusted Sous-Vide Steak", 57051, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/2/2e/Peppercorn-Crusted_Sous-Vide_Steak.png"),
-                new Buff("Peppercorn-Spiced Eggs Benedict", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/c/c6/Peppercorn-Spiced_Eggs_Benedict.png"),
+                new Buff("Peppercorn-Spiced Eggs Benedict", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/c/c6/Peppercorn-Spiced_Eggs_Benedict.png"),
                 new Buff("Peppered Cured Meat Flatbread", 57127, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/2/2d/Peppered_Cured_Meat_Flatbread.png"),
-                new Buff("Plate of Beef Carpaccio with Mint Garnish", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/4/42/Plate_of_Beef_Carpaccio_with_Mint_Garnish.png"),
+                new Buff("Plate of Beef Carpaccio with Mint Garnish", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/4/42/Plate_of_Beef_Carpaccio_with_Mint_Garnish.png"),
                 new Buff("Plate of Clear Truffle and Cilantro Ravioli", 57295, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/0/05/Plate_of_Clear_Truffle_and_Cilantro_Ravioli.png"),
                 new Buff("Plate of Clear Truffle and Mint Ravioli", 57112, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/9e/Plate_of_Clear_Truffle_and_Mint_Ravioli.png"),
                 new Buff("Plate of Clear Truffle and Sesame Ravioli", 57213, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/d/de/Plate_of_Clear_Truffle_and_Sesame_Ravioli.png"),
-                new Buff("Plate of Clove-Spiced Beef Carpaccio", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/4/44/Plate_of_Clove-Spiced_Beef_Carpaccio.png"),
-                new Buff("Plate of Clove-Spiced Clear Truffle Ravioli", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/c/c2/Plate_of_Clove-Spiced_Clear_Truffle_Ravioli.png"),
-                new Buff("Plate of Clove-Spiced Coq Au Vin", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/d/dc/Plate_of_Clove-Spiced_Coq_Au_Vin.png"),
+                new Buff("Plate of Clove-Spiced Beef Carpaccio", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/4/44/Plate_of_Clove-Spiced_Beef_Carpaccio.png"),
+                new Buff("Plate of Clove-Spiced Clear Truffle Ravioli", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/c/c2/Plate_of_Clove-Spiced_Clear_Truffle_Ravioli.png"),
+                new Buff("Plate of Clove-Spiced Coq Au Vin", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/d/dc/Plate_of_Clove-Spiced_Coq_Au_Vin.png"),
                 new Buff("Plate of Clove-Spiced Poultry Aspic", 57302, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/5/50/Plate_of_Clove-Spiced_Poultry_Aspic.png"),
                 new Buff("Plate of Coq Au Vin with Mint Garnish", 57362, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/7/7c/Plate_of_Coq_Au_Vin_with_Mint_Garnish.png"),
-                new Buff("Plate of Coq Au Vin with Salsa", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/8/80/Plate_of_Coq_Au_Vin_with_Salsa.png"),
+                new Buff("Plate of Coq Au Vin with Salsa", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/8/80/Plate_of_Coq_Au_Vin_with_Salsa.png"),
                 new Buff("Plate of Peppercorn-Spiced Beef Carpaccio", 57114, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/4/40/Plate_of_Peppercorn-Spiced_Beef_Carpaccio.png"),
                 new Buff("Plate of Peppercorn-Spiced Coq Au Vin", 57260, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/4/43/Plate_of_Peppercorn-Spiced_Coq_Au_Vin.png"),
                 new Buff("Plate of Peppercorn-Spiced Poultry Aspic", 57299, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/4/4f/Plate_of_Peppercorn-Spiced_Poultry_Aspic.png"),
-                new Buff("Plate of Peppered Clear Truffle Ravioli", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/f/fe/Plate_of_Peppered_Clear_Truffle_Ravioli.png"),
+                new Buff("Plate of Peppered Clear Truffle Ravioli", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/f/fe/Plate_of_Peppered_Clear_Truffle_Ravioli.png"),
                 new Buff("Plate of Poultry Aspic with Mint Garnish", 57178, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/91/Plate_of_Poultry_Aspic_with_Mint_Garnish.png"),
-                new Buff("Plate of Poultry Aspic with Salsa Garnish", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/5/5b/Plate_of_Poultry_Aspic_with_Salsa_Garnish.png"),
-                new Buff("Plate of Sesame Poultry Aspic", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/6/64/Plate_of_Sesame_Poultry_Aspic.png"),
+                new Buff("Plate of Poultry Aspic with Salsa Garnish", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/5/5b/Plate_of_Poultry_Aspic_with_Salsa_Garnish.png"),
+                new Buff("Plate of Sesame Poultry Aspic", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/6/64/Plate_of_Sesame_Poultry_Aspic.png"),
                 new Buff("Plate of Sesame-Crusted Coq Au Vin", 57290, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/3/3e/Plate_of_Sesame-Crusted_Coq_Au_Vin.png"),
                 new Buff("Plate of Sesame-Ginger Beef Carpaccio", 57231, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/b/b7/Plate_of_Sesame-Ginger_Beef_Carpaccio.png"),
                 new Buff("Salsa Eggs Benedict", 57117, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/7/79/Salsa_Eggs_Benedict.png"),
@@ -704,14 +833,14 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Sesame-Asparagus and Cured Meat Flatbread", 57222, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/8/87/Sesame-Asparagus_and_Cured_Meat_Flatbread.png"),
                 new Buff("Sous-Vide Steak with Mint-Parsley Sauce", 57342, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/99/Sous-Vide_Steak_with_Mint-Parsley_Sauce.png"),
                 new Buff("Soy-Sesame Sous-Vide Steak", 57241, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/d/da/Soy-Sesame_Sous-Vide_Steak.png"),
-                new Buff("Spherified Cilantro Oyster Soup", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/e/e1/Spherified_Cilantro_Oyster_Soup.png"),
+                new Buff("Spherified Cilantro Oyster Soup", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/e/e1/Spherified_Cilantro_Oyster_Soup.png"),
                 new Buff("Spherified Clove-Spiced Oyster Soup", 57374, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/f/fa/Spherified_Clove-Spiced_Oyster_Soup.png"),
                 new Buff("Spherified Oyster Soup with Mint Garnish", 57201, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/6/63/Spherified_Oyster_Soup_with_Mint_Garnish.png"),
                 new Buff("Spherified Peppercorn-Spiced Oyster Soup", 57165, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/4/43/Spherified_Peppercorn-Spiced_Oyster_Soup.png"),
                 new Buff("Spherified Sesame Oyster Soup", 57037, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/5/51/Spherified_Sesame_Oyster_Soup.png"),
-                new Buff("Spiced Pepper Creme Brulee", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/b/ba/Spiced_Pepper_Creme_Brulee.png"),
-                new Buff("Spiced Peppercorn Cheesecake",-1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/9c/Spiced_Peppercorn_Cheesecake.png"),
-                new Buff("Strawberry Cilantro Cheesecake", -1, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/8/8d/Strawberry_Cilantro_Cheesecake.png"),
+                new Buff("Spiced Pepper Creme Brulee", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/b/ba/Spiced_Pepper_Creme_Brulee.png"),
+                new Buff("Spiced Peppercorn Cheesecake",Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/9/9c/Spiced_Peppercorn_Cheesecake.png"),
+                new Buff("Strawberry Cilantro Cheesecake", Unknown, Source.Item, BuffNature.Consumable, "https://wiki.guildwars2.com/images/8/8d/Strawberry_Cilantro_Cheesecake.png"),
         };
 
     }

@@ -26,6 +26,7 @@ namespace GW2EIEvtcParser.EIData
         {
                 new Buff("Sight beyond Sight",40616, Source.Spellbreaker, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/d/d7/Sight_beyond_Sight.png"),
                 new Buff("Full Counter",43949, Source.Spellbreaker, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/fb/Full_Counter.png"),
+                new Buff("Disenchantment",44633, Source.Spellbreaker, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e1/Winds_of_Disenchantment.png"),
                 new Buff("Attacker's Insight",41963, Source.Spellbreaker, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/89/Attacker%27s_Insight.png"),
         };
 

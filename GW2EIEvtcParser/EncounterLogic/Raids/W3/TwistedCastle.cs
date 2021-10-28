@@ -36,6 +36,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (1920, 12160, 2944, 14464)*/);
         }
 
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+        {
+            RewardEvent reward = combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == 60685);
+            if (reward != null)
+            {
+                fightData.SetSuccess(true, reward.Time);
+            }
+        }
+
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             agentData.AddCustomAgent(0, fightData.FightEnd, AgentItem.AgentType.NPC, "Twisted Castle", ParserHelper.Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);

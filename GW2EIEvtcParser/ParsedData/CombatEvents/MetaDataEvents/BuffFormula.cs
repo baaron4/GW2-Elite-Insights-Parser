@@ -41,16 +41,18 @@ namespace GW2EIEvtcParser.ParsedData
                     return "Outgoing Strike Damage";
                 case CondInc:
                     return "Outgoing Condition Damage";
-                case OutgoingLifeLeechEffectiveness:
+                case SiphonInc:
                     return "Outgoing Life Leech Damage";
+                case SiphonRec:
+                    return "Incoming Life Leech Damage";
                 case CondRec:
                     return "Incoming Condition Damage";
                 case PhysRec:
                     return "Incoming Strike Damage";
                 case AttackSpeed:
                     return "Attack Speed";
-                case ConditionDurationIncrease:
-                    return "Condition Duration Increase";
+                case ConditionDurationInc:
+                    return "Outgoing Condition Duration";
                 case DamageFormulaSquaredLevel:
                 case DamageFormula:
                     return "Damage Formula";
@@ -68,10 +70,10 @@ namespace GW2EIEvtcParser.ParsedData
                     return "Damage Formula based on Movement";
                 case EnduranceRegeneration:
                     return "Endurance Regeneration";
-                case IncomingHealingEffectiveness:
+                case HealingEffectivenessRec:
                     return "Incoming Healing Effectiveness";
-                case OutgoingHealingEffectivenessConvInc:
-                case OutgoingHealingEffectivenessFlatInc:
+                case HealingEffectivenessConvInc:
+                case HealingEffectivenessFlatInc:
                     return "Outgoing Healing Effectiveness";
                 case HealingOutputFormula:
                     return "Healing Formula";
@@ -130,16 +132,17 @@ namespace GW2EIEvtcParser.ParsedData
                 case CondRec:
                 case PhysRec:
                 case AttackSpeed:
-                case ConditionDurationIncrease:
+                case ConditionDurationInc:
                 case GlancingBlow:
                 case CriticalChance:
                 case StrikeDamageToHP:
                 case ConditionDamageToHP:
                 case EnduranceRegeneration:
-                case IncomingHealingEffectiveness:
-                case OutgoingLifeLeechEffectiveness:
-                case OutgoingHealingEffectivenessConvInc:
-                case OutgoingHealingEffectivenessFlatInc:
+                case HealingEffectivenessRec:
+                case SiphonInc:
+                case SiphonRec:
+                case HealingEffectivenessConvInc:
+                case HealingEffectivenessFlatInc:
                 case ExperienceFromKills:
                 case ExperienceFromAll:
                 case GoldFind:
@@ -312,13 +315,16 @@ namespace GW2EIEvtcParser.ParsedData
                 stat2 += " " + ByteAttr2;
             }
             _solvedDescription += stat1;
+            double variable = Math.Round(Variable, 6);
+            double totalOffset = Math.Round(Level * LevelOffset + ConstantOffset, 6);
+            bool addParenthesis = totalOffset != 0 && Variable != 0;
             if (Attr2 != None)
             {
                 _solvedDescription += " from " + stat2;
+                totalOffset *= 100.0;
+                variable *= 100.0;
             }
             _solvedDescription += ": ";
-            double totalOffset = Math.Round(Level * LevelOffset + ConstantOffset, 4);
-            bool addParenthesis = totalOffset != 0 && Variable != 0;
             if (addParenthesis)
             {
                 _solvedDescription += "(";
@@ -326,7 +332,7 @@ namespace GW2EIEvtcParser.ParsedData
             bool prefix = false;
             if (Variable != 0)
             {
-                _solvedDescription += Variable + " * " + GetVariableStat(Attr1, Type);
+                _solvedDescription += variable + " * " + GetVariableStat(Attr1, Type);
                 prefix = true;
             }
             if (totalOffset != 0)

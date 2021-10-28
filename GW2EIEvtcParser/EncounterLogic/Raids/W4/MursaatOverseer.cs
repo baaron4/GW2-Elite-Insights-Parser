@@ -18,6 +18,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             //new Mechanic(37697, "Dispel", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting("circle",Colors.Yellow), "Dispel",0), //Buff remove only
             //new Mechanic(37813, "Protect", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting("circle",Colors.Teal), "Protect",0), //Buff remove only
             new PlayerBuffApplyMechanic(757, "Invulnerability", new MechanicPlotlySetting("circle-open",Colors.Teal), "Protect","Protected by the Protect Shield","Protect Shield",0, (ba, log) => ba.AppliedDuration == 1000),
+            new PlayerBuffApplyMechanic(37813, "Protect (SAK)", new MechanicPlotlySetting("circle",Colors.Blue), "Protect (SAK)","Took protect","Protect (SAK)",0),
+            new PlayerBuffApplyMechanic(37697, "Dispel (SAK)", new MechanicPlotlySetting("circle",Colors.Purple), "Dispel (SAK)","Took dispel","Dispel (SAK)",0),
+            new PlayerBuffApplyMechanic(37779, "Claim (SAK)", new MechanicPlotlySetting("circle",Colors.Yellow), "Claim (SAK)","Took claim","Claim (SAK)",0),
             new EnemyBuffApplyMechanic(38155, "Mursaat Overseer's Shield", new MechanicPlotlySetting("circle-open",Colors.Yellow), "Shield","Jade Soldier Shield", "Soldier Shield",0),
             new EnemyBuffRemoveMechanic(38155, "Mursaat Overseer's Shield", new MechanicPlotlySetting("square-open",Colors.Yellow), "Dispel","Dispelled Jade Soldier Shield", "Dispel",0),
             //new Mechanic(38184, "Enemy Tile", ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting("square-open",Colors.Yellow), "Floor","Enemy Tile damage", "Tile dmg",0) //Fixed damage (3500), not trackable

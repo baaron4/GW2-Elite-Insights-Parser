@@ -70,13 +70,16 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Virtue of Justice", 9114, Source.Guardian, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/10/Virtue_of_Justice.png"),
                 new Buff("Virtue of Courage", 9113, Source.Guardian, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a9/Virtue_of_Courage.png"),
                 new Buff("Virtue of Resolve", 9119, Source.Guardian, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b2/Virtue_of_Resolve.png"),
+                new Buff("Justice", 9116, Source.Guardian, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/10/Virtue_of_Justice.png"),
                 //traits
                 new Buff("Strength in Numbers",13796, Source.Guardian, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/7/7b/Strength_in_Numbers.png"),
                 new Buff("Invigorated Bulwark",30207, Source.Guardian, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/0/00/Invigorated_Bulwark.png"),
-                new Buff("Battle Presence", 17046, Source.Guardian, BuffStackType.Queue, 2, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/2/27/Battle_Presence.png"),
+                new Buff("Virtue of Resolve (Battle Presence)", 17046, Source.Guardian, BuffStackType.Queue, 2, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/2/27/Battle_Presence.png"),
+                new Buff("Virtue of Resolve (Battle Presence - Absolute Resolve)", 17047, Source.Guardian, BuffStackType.Queue, 2, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/b/b2/Virtue_of_Resolve.png"),
                 new Buff("Symbolic Avenger",56890, Source.Guardian, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e5/Symbolic_Avenger.png", 97950, ulong.MaxValue),
                 new Buff("Inspiring Virtue",59592, Source.Guardian, BuffStackType.Queue, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/8f/Virtuous_Solace.png", 102321, 102389),
                 new Buff("Inspiring Virtue",59592, Source.Guardian, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/8f/Virtuous_Solace.png", 102389, ulong.MaxValue),
+                new Buff("Force of Will",29485, Source.Guardian, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d2/Force_of_Will.png"),
         };
 
     }

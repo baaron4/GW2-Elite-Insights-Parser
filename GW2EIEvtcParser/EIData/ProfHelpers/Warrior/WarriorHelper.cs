@@ -91,6 +91,8 @@ namespace GW2EIEvtcParser.EIData
                 //new Boon("Health Gain per Adrenaline bar Spent",-1, BoonSource.Warrior, BoonType.Intensity, 3, BoonEnum.GraphOnlyBuff,RemoveType.Normal),
                 new Buff("Rousing Resilience",24383, Source.Warrior, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/ca/Rousing_Resilience.png"),
                 new Buff("Berserker's Power",42539, Source.Warrior, BuffStackType.Stacking, 3, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6f/Berserker%27s_Power.png"),
+                new Buff("Signet of Ferocity",41922, Source.Warrior, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/ef/Signet_Mastery.png"),
+                new Buff("Adrenal Health",34766, Source.Warrior, BuffStackType.Stacking, 3, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/24/Adrenal_Health.png"),
         };
 
 

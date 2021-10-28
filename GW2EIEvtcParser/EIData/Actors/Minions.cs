@@ -170,7 +170,7 @@ namespace GW2EIEvtcParser.EIData
             return CastEvents.Where(x => KeepIntersectingCastLog(x, start, end)).ToList();
         }
 
-        internal List<List<Segment>> GetLifeSpanSegments(ParsedEvtcLog log)
+        internal IReadOnlyList<IReadOnlyList<Segment>> GetLifeSpanSegments(ParsedEvtcLog log)
         {
             var minionsSegments = new List<List<Segment>>();
             long fightDur = log.FightData.FightEnd;
@@ -180,11 +180,6 @@ namespace GW2EIEvtcParser.EIData
                 long start = Math.Max(minion.FirstAware, 0);
                 // Find end
                 long end = minion.LastAware;
-                DownEvent down = log.CombatData.GetDownEvents(minion.AgentItem).LastOrDefault();
-                if (down != null)
-                {
-                    end = Math.Min(down.Time, end);
-                }
                 DeadEvent dead = log.CombatData.GetDeadEvents(minion.AgentItem).LastOrDefault();
                 if (dead != null)
                 {

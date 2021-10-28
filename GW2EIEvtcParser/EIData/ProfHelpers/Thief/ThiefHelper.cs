@@ -17,6 +17,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGiveCastFinder(13093,13094,EIData.InstantCastFinder.DefaultICD), // Devourer Venom
             new BuffGiveCastFinder(13096,13095,EIData.InstantCastFinder.DefaultICD), // Ice Drake Venom
             new BuffGiveCastFinder(13055,13054,EIData.InstantCastFinder.DefaultICD), // Skale Venom
+            new BuffGiveCastFinder(49052,49083,EIData.InstantCastFinder.DefaultICD), // Soul Stone Venom
             //new BuffGiveCastFinder(13037,13036,InstantCastFinder.DefaultICD), // Spider Venom - same id as leeching venom trait?
         };
 
@@ -49,6 +50,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Devourer Venom", 13094, Source.Thief, BuffStackType.StackingConditionalLoss, 2, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/4/4d/Devourer_Venom.png"),
                 new Buff("Skale Venom", 13054, Source.Thief, BuffStackType.StackingConditionalLoss, 4, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/1/14/Skale_Venom.png"),
                 new Buff("Spider Venom",13036, Source.Thief, BuffStackType.StackingConditionalLoss, 6, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/3/39/Spider_Venom.png"),
+                new Buff("Soul Stone Venom",49083, Source.Thief, BuffStackType.Stacking, 25, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/d/d6/Soul_Stone_Venom.png"),
                 new Buff("Basilisk Venom", 13133, Source.Thief, BuffStackType.StackingConditionalLoss, 2, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/3/3a/Basilisk_Venom.png"),
                 new Buff("Infiltration",13135, Source.Thief, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/25/Shadowstep.png"),
                 //transforms

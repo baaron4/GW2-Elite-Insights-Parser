@@ -12,6 +12,59 @@ namespace GW2EIEvtcParser.EIData
 {
     internal static class MesmerHelper
     {
+
+        private static readonly HashSet<Spec> _canSummonClones = new HashSet<Spec>()
+        {
+            Spec.Mesmer,
+            Spec.Chronomancer,
+            Spec.Mirage
+        };
+
+        internal static bool CanSummonClones(Spec spec)
+        {
+            return _canSummonClones.Contains(spec);
+        }
+
+        private static readonly HashSet<long> _cloneIDs = new HashSet<long>()
+        {
+            6479,
+            8106,
+            8107,
+            8108,
+            8110,
+            8111,
+            10542,
+            15003,
+            15032,
+            15044,
+            15084,
+            15090,
+            15114,
+            15117,
+            15131,
+            15156,
+            15181,
+            15196,
+            15199,
+            15233,
+            15240,
+            15249,
+            18922,
+            18939,
+            19134,
+            19257,
+        };
+
+        internal static bool IsClone(AgentItem agentItem)
+        {
+            return _cloneIDs.Contains(agentItem.ID);
+        }
+
+        internal static bool IsClone(long id)
+        {
+            return _cloneIDs.Contains(id);
+        }
+
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new DamageCastFinder(10212, 10212, EIData.InstantCastFinder.DefaultICD, 0, 115190), // Power spike
@@ -136,6 +189,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Illusionary Riposte",10279, Source.Mesmer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/91/Illusionary_Riposte.png"),
                 new Buff("Illusionary Leap",10353, Source.Mesmer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/18/Illusionary_Leap.png"),
                 new Buff("Portal Weaving",10198, Source.Mesmer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/81/Portal_Entre.png"),
+                new Buff("Illusion of Life",10346, Source.Mesmer, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/9/92/Illusion_of_Life.png"),
                 //traits
                 new Buff("Fencer's Finesse", 30426 , Source.Mesmer, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e7/Fencer%27s_Finesse.png"),
                 new Buff("Illusionary Defense",49099, Source.Mesmer, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e0/Illusionary_Defense.png"),

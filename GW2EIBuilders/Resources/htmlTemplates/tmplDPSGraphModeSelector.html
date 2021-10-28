@@ -3,13 +3,13 @@
         <ul class="nav nav-pills d-flex flex-wrap justify-content-center mr-3 scale85" :class="{'flex-row': !column, 'flex-column': column}">
             <li class="nav-item">
                 <a class="nav-link" @click="data.dpsmode = 0" :class="{active: data.dpsmode === 0}">Full</a>
-            </li>            
+            </li>
             <li v-if="phaseduration > 4" class="nav-item">
                 <a class="nav-link" @click="data.dpsmode = 4" :class="{active: data.dpsmode === 4}">4s</a>
             </li>
             <li v-if="phaseduration > 10" class="nav-item">
                 <a class="nav-link" @click="data.dpsmode = 10" :class="{active: data.dpsmode === 10}">10s</a>
-            </li>    
+            </li>
             <li v-if="phaseduration > 20" class="nav-item">
                 <a class="nav-link" @click="data.dpsmode = 20" :class="{active: data.dpsmode === 20}">20s</a>
             </li>
@@ -19,6 +19,10 @@
             <li v-if="phasehassubphases" class="nav-item">
                 <a class="nav-link" @click="data.dpsmode = -1" :class="{active: data.dpsmode === -1}">Phase</a>
             </li>
+            <li class="nav-item d-flex flex-row justify-content-center align-items-center">
+                <custom-numberform-component :minValue="0" :maxValue="Math.floor(phaseduration / 2) * 2" :id="'customDPS'"
+                                                   :placeholderValue="0"></custom-numberform-component>
+            </li>        
         </ul>    
         <ul class="nav nav-pills d-flex flex-wrap justify-content-center ml-3 scale85" :class="{'flex-row': !column, 'flex-column': column}">
             <li class="nav-item" data-original-title="Power + Condition">
@@ -56,6 +60,15 @@
     Vue.component("dps-graph-mode-selector-component", {
         props: ['data', 'phaseduration', 'phasehassubphases', 'ignorebreakbar', "column"],
         template: `${template}`,
+        mounted() {
+            var _this = this;
+            $('#customDPS').on("input ", function () {
+                _this.data.dpsmode = Math.ceil($(this).val() / 2) * 2;
+            });
+            $('#customDPS').on("click ", function () {
+                _this.data.dpsmode = Math.ceil($(this).val() / 2) * 2;
+            });
+        },
         computed: {
             graphModeEnum: function() {
                 return GraphType;

@@ -90,6 +90,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Weaver's Prowess",42061, Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/75/Weaver%27s_Prowess.png"),
                 new Buff("Elements of Rage",42416, Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a2/Elements_of_Rage.png"),
                 new Buff("Stone Resonance",45097, Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/57/Stone_Resonance.png"),
+                new Buff("Grinding Stones",51658, Source.Weaver, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/3d/Grinding_Stones.png"),
         };
 
 

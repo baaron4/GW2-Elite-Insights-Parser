@@ -202,6 +202,8 @@ namespace GW2EIEvtcParser
             PhysRec = 16,
             CondRec = 17,
             AttackSpeed = 18,
+            //SiphonInc = 19,
+            SiphonRec = 20,
             //
             Unknown = short.MaxValue,
             //
@@ -228,7 +230,7 @@ namespace GW2EIEvtcParser
             ExperienceFromAll = 100,
             WXP = 112,*/
             // Custom Ids, matched using a very simple pattern detection, see BuffInfoSolver.cs
-            ConditionDurationIncrease = -1,
+            ConditionDurationInc = -1,
             DamageFormulaSquaredLevel = -2,
             CriticalChance = -3,
             StrikeDamageToHP = -4,
@@ -238,9 +240,9 @@ namespace GW2EIEvtcParser
             DamageFormula = -8,
             MovementActivationDamageFormula = -9,
             EnduranceRegeneration = -10,
-            IncomingHealingEffectiveness = -11,
-            OutgoingHealingEffectivenessFlatInc = -12,
-            OutgoingHealingEffectivenessConvInc = -13,
+            HealingEffectivenessRec = -11,
+            HealingEffectivenessFlatInc = -12,
+            HealingEffectivenessConvInc = -13,
             HealingOutputFormula = -14,
             ExperienceFromKills = -15,
             GoldFind = -16,
@@ -250,7 +252,7 @@ namespace GW2EIEvtcParser
             MagicFind = -20,
             ExperienceFromAll = -21,
             WXP = -22,
-            OutgoingLifeLeechEffectiveness = -23,
+            SiphonInc = -23,
         }
         internal static BuffAttribute GetBuffAttribute(short bt)
         {
