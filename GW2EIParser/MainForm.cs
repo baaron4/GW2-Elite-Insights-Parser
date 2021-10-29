@@ -202,15 +202,9 @@ namespace GW2EIParser
         /// </summary>
         private void _RunNextOperation()
         {
+            AutoUpdateDiscordBatch();
             if (_logQueue.Count > 0 && (Properties.Settings.Default.ParseMultipleLogs || !_anyRunning))
             {
-                if (!_anyRunning)
-                {
-                    if (Properties.Settings.Default.AutoDiscordBatch)
-                    {
-                        AutoUpdateDiscordBatch();
-                    }
-                }
                 _RunOperation(_logQueue.Dequeue());
             }
             else
@@ -222,10 +216,6 @@ namespace GW2EIParser
                     BtnCancelAll.Enabled = false;
                     BtnDiscordBatch.Enabled = true;
                     _settingsForm.ConditionalSettingDisable(_anyRunning);
-                    if (Properties.Settings.Default.AutoDiscordBatch)
-                    {
-                        AutoUpdateDiscordBatch();
-                    }
                 }
             }
         }
@@ -688,6 +678,10 @@ namespace GW2EIParser
 
         private void AutoUpdateDiscordBatch()
         {
+            if (!Properties.Settings.Default.AutoDiscordBatch || _anyRunning)
+            {
+                return;
+            }
             ChkAutoDiscordBatch.Enabled = false;
             foreach (ulong id in _currentDiscordMessageIDs)
             {
