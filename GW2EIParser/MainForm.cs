@@ -206,12 +206,10 @@ namespace GW2EIParser
             {
                 if (!_anyRunning)
                 {
-                    ChkAutoDiscordBatch.Enabled = false;
                     if (Properties.Settings.Default.AutoDiscordBatch)
                     {
                         AutoUpdateDiscordBatch();
                     }
-                    ChkAutoDiscordBatch.Enabled = true;
                 }
                 _RunOperation(_logQueue.Dequeue());
             }
@@ -223,13 +221,11 @@ namespace GW2EIParser
                     BtnClearAll.Enabled = true;
                     BtnCancelAll.Enabled = false;
                     BtnDiscordBatch.Enabled = true;
-                    ChkAutoDiscordBatch.Enabled = false;
                     _settingsForm.ConditionalSettingDisable(_anyRunning);
                     if (Properties.Settings.Default.AutoDiscordBatch)
                     {
                         AutoUpdateDiscordBatch();
                     }
-                    ChkAutoDiscordBatch.Enabled = true;
                 }
             }
         }
@@ -692,6 +688,7 @@ namespace GW2EIParser
 
         private void AutoUpdateDiscordBatch()
         {
+            ChkAutoDiscordBatch.Enabled = false;
             foreach (ulong id in _currentDiscordMessageIDs)
             {
                 WebhookController.DeleteMessage(Properties.Settings.Default.WebhookURL, id, out _);
@@ -699,6 +696,7 @@ namespace GW2EIParser
             _currentDiscordMessageIDs.Clear();
             DiscordBatch(out List<ulong> list);
             _currentDiscordMessageIDs.AddRange(list);
+            ChkAutoDiscordBatch.Enabled = true;
         }
 
         /// <summary>
