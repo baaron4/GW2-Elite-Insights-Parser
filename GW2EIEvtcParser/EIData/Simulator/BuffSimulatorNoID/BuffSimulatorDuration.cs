@@ -31,7 +31,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 BuffStackItem activeStack = BuffStack[0];
                 _lastSrcRemove = (ParserHelper._unknownAgent, false);
-                var toAdd = new BuffSimulationItemDuration(activeStack);
+                var toAdd = new BuffSimulationItemDuration(BuffStack);
                 GenerationSimulation.Add(toAdd);
                 long timeDiff = activeStack.Duration - timePassed;
                 long diff = timePassed;

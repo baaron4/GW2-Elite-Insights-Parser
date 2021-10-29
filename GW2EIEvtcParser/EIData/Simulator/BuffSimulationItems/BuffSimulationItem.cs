@@ -30,13 +30,15 @@ namespace GW2EIEvtcParser.EIData
 
         public Segment ToSegment()
         {
-            return new Segment(Start, End, GetStack());
+            return new Segment(Start, End, GetActiveStacks());
         }
 
         public abstract void OverrideEnd(long end);
+        public abstract IReadOnlyList<long> GetActualDurationPerStack();
 
         public abstract List<AgentItem> GetSources();
 
-        public abstract int GetStack();
+        public abstract int GetActiveStacks();
+        public abstract int GetStacks();
     }
 }
