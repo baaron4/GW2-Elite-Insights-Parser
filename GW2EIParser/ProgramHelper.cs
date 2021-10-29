@@ -99,25 +99,16 @@ namespace GW2EIParser
 
         private static string[] UploadOperation(List<string> traces, FileInfo fInfo)
         {
-            var controller = new DPSReportController(Properties.Settings.Default.DPSReportUserToken,
-                Properties.Settings.Default.Anonymous,
-                Properties.Settings.Default.DetailledWvW
-                );
             //Upload Process
-            string[] uploadresult = new string[3] { "", "", "" };
+            string[] uploadresult = new string[2] { "", "" };
             if (Properties.Settings.Default.UploadToDPSReports)
             {
                 traces.Add("Uploading to DPSReports using EI");
-                DPSReportUploadObject response = controller.UploadUsingEI(fInfo, traces);
+                DPSReportUploadObject response = DPSReportController.UploadUsingEI(fInfo, traces, Properties.Settings.Default.DPSReportUserToken,
+                Properties.Settings.Default.Anonymous,
+                Properties.Settings.Default.DetailledWvW);
                 uploadresult[0] = response != null ? response.Permalink : "Upload process failed";
                 traces.Add("DPSReports using EI: " + uploadresult[0]);
-            }
-            if (Properties.Settings.Default.UploadToDPSReportsRH)
-            {
-                traces.Add("Uploading to DPSReports using RH");
-                DPSReportUploadObject response = controller.UploadUsingRH(fInfo, traces);
-                uploadresult[1] = response != null ? response.Permalink : "Upload process failed";
-                traces.Add("DPSReports using RH: " + uploadresult[1]);
             }
             /*if (settings.UploadToRaidar)
             {
@@ -166,11 +157,13 @@ namespace GW2EIParser
                 {
                     if (Properties.Settings.Default.SendSimpleMessageToWebhook)
                     {
-                        operation.UpdateProgressWithCancellationCheck(new WebhookController(Properties.Settings.Default.WebhookURL, uploadStrings[0]).SendMessage());
+                        WebhookController.SendMessage(Properties.Settings.Default.WebhookURL, uploadStrings[0], out string message);
+                        operation.UpdateProgressWithCancellationCheck(message);
                     } 
                     else
                     {
-                        operation.UpdateProgressWithCancellationCheck(new WebhookController(Properties.Settings.Default.WebhookURL, BuildEmbed(log, uploadStrings[0])).SendMessage());
+                        WebhookController.SendMessage(Properties.Settings.Default.WebhookURL, BuildEmbed(log, uploadStrings[0]),out string message);
+                        operation.UpdateProgressWithCancellationCheck(message);
                     }
                 }
                 if (uploadStrings[0].Contains("https"))
@@ -351,7 +344,7 @@ namespace GW2EIParser
                     }
                 });
             }
-            var uploadResults = new UploadResults(uploadStrings[0], uploadStrings[1], uploadStrings[2]);
+            var uploadResults = new UploadResults(uploadStrings[0], uploadStrings[1]);
             if (Properties.Settings.Default.SaveOutHTML)
             {
                 operation.UpdateProgressWithCancellationCheck("Creating HTML");

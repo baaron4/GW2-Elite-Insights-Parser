@@ -11,30 +11,12 @@ using Newtonsoft.Json.Serialization;
 
 namespace GW2EIDPSReport
 {
-    public class DPSReportController
+    public static class DPSReportController
     {
-        private string _userToken { get; }
 
-        private bool _userTokenValid => _userToken != null && _userToken.Length > 0;
-
-        private readonly bool _anonymous = false;
-
-        private readonly bool _detailedWvW = false;
-
-        public DPSReportController()
+        private static bool IsUserTokenValid(string userToken)
         {
-
-        }
-
-        public DPSReportController(string userToken)
-        {
-            _userToken = userToken;
-        }
-
-        public DPSReportController(string userToken, bool anomymous, bool detailedWvW) : this(userToken)
-        {
-            _anonymous = anomymous;
-            _detailedWvW = detailedWvW;
+            return userToken != null && userToken.Length > 0;
         }
 
         private static readonly DefaultContractResolver DefaultJsonContractResolver = new DefaultContractResolver
@@ -53,47 +35,38 @@ namespace GW2EIDPSReport
         private static string BaseGetUploadMetadataURL { get; } = "https://dps.report/getUploadMetadata?";
         private static string BaseGetJsonURL { get; } = "https://dps.report/getJson?";
 
-        private string GetURL(string baseURL)
+        private static string GetURL(string baseURL, string userToken)
         {
             string url = baseURL;
-            if (_userTokenValid)
+            if (IsUserTokenValid(userToken))
             {
-                url += "&userToken=" + _userToken;
+                url += "&userToken=" + userToken;
             }
             return url;
         }
 
-        private string GetUploadURL(string baseURL)
+        private static string GetUploadURL(string baseURL, string userToken, bool anonymous = false, bool detailedWvW = false)
         {
-            string url = GetURL(baseURL);
-            if (_anonymous)
+            string url = GetURL(baseURL, userToken);
+            if (anonymous)
             {
                 url += "&anonymous=true";
             }
-            if (_detailedWvW)
+            if (detailedWvW)
             {
                 url += "&detailedwvw=true";
             }
             return url;
         }
 
-        public DPSReportUploadObject UploadUsingEI(FileInfo fi, List<string> traces)
+        public static DPSReportUploadObject UploadUsingEI(FileInfo fi, List<string> traces, string userToken, bool anonymous = false, bool detailedWvW = false)
         {
-            return UploadToDPSR(fi, GetUploadURL(BaseUploadContentURL) + "&generator=ei", traces);
+            return UploadToDPSR(fi, GetUploadURL(BaseUploadContentURL, userToken, anonymous, detailedWvW) + "&generator=ei", traces);
         }
 
-        public DPSReportUploadObject UploadUsingRH(FileInfo fi, List<string> traces)
+        public static DPSReportGetUploadsObject GetUploads(List<string> traces, string userToken, int page = 1)
         {
-            return UploadToDPSR(fi, GetUploadURL(BaseUploadContentURL) + "&generator=rh", traces);
-        }
-
-        public DPSReportGetUploadsObject GetUploads(List<string> traces, int page = 1)
-        {
-            if (!_userTokenValid)
-            {
-                throw new InvalidDataException("Missing User Token for GetUploads end point");
-            }
-            return GetDPSReportResponse<DPSReportGetUploadsObject>("GetUploads", GetURL(BaseGetUploadsURL + page), traces);
+            return GetDPSReportResponse<DPSReportGetUploadsObject>("GetUploads", GetURL(BaseGetUploadsURL + page, userToken), traces);
         }
         public static string GenerateUserToken(List<string> traces)
         {
