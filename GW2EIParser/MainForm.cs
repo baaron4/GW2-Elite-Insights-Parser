@@ -17,6 +17,7 @@ namespace GW2EIParser
     {
         private readonly SettingsForm _settingsForm;
         private readonly List<string> _logsFiles;
+        private List<ulong> _currentDiscordMessageIDs = new List<ulong>();
         private int _runningCount = 0;
         private bool _anyRunning => _runningCount > 0;
         private readonly Queue<FormOperationController> _logQueue = new Queue<FormOperationController>();
@@ -31,6 +32,7 @@ namespace GW2EIParser
             InitializeComponent();
             // Traces
             ChkApplicationTraces.Checked = Properties.Settings.Default.ApplicationTraces;
+            ChkAutoDiscordBatch.Checked = Properties.Settings.Default.AutoDiscordBatch;
             //display version
             string version = Application.ProductVersion;
             LblVersion.Text = version;
@@ -40,8 +42,16 @@ namespace GW2EIParser
             UpdateWatchDirectory();
             _settingsForm = new SettingsForm();
             _settingsForm.SettingsClosedEvent += EnableSettingsWatcher;
+            _settingsForm.SettingsLoadedEvent += LoadSettingsWatcher;
             _settingsForm.WatchDirectoryUpdatedEvent += UpdateWatchDirectoryWatcher;
             FormClosing += new FormClosingEventHandler((sender, e) => Properties.Settings.Default.Save());
+        }
+
+        private void LoadSettingsWatcher(object sender, EventArgs e)
+        {
+            AddTraceMessage("Loaded settings");
+            ChkApplicationTraces.Checked = Properties.Settings.Default.ApplicationTraces;
+            ChkAutoDiscordBatch.Checked = Properties.Settings.Default.AutoDiscordBatch;
         }
 
         public MainForm(IEnumerable<string> filesArray) : this()
@@ -175,6 +185,7 @@ namespace GW2EIParser
             BtnParse.Enabled = false;
             BtnCancelAll.Enabled = true;
             BtnDiscordBatch.Enabled = false;
+            ChkAutoDiscordBatch.Enabled = false;
             if (Properties.Settings.Default.ParseMultipleLogs && _runningCount < ProgramHelper.GetMaxParallelRunning())
             {
                 _RunOperation(operation);
@@ -199,6 +210,7 @@ namespace GW2EIParser
         /// </summary>
         private void _RunNextOperation()
         {
+            AutoUpdateDiscordBatch();
             if (_logQueue.Count > 0 && (Properties.Settings.Default.ParseMultipleLogs || !_anyRunning))
             {
                 _RunOperation(_logQueue.Dequeue());
@@ -271,6 +283,7 @@ namespace GW2EIParser
             BtnParse.Enabled = true;
             BtnCancelAll.Enabled = false;
             BtnDiscordBatch.Enabled = true;
+            ChkAutoDiscordBatch.Enabled = true;
         }
 
         /// <summary>
@@ -566,20 +579,15 @@ namespace GW2EIParser
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BtnDiscordBatchClick(object sender, EventArgs e)
+        private string DiscordBatch(out List<ulong> ids)
         {
+            ids = new List<ulong>();
             AddTraceMessage("Sending batch to Discord");
             if (Properties.Settings.Default.WebhookURL == null)
             {
-                MessageBox.Show("Set a discord webhook url in settings first");
-                return;
+                return "Set a discord webhook url in settings first";
             }
-            var fullDpsReportLogs = new List<FormOperationController>();         
+            var fullDpsReportLogs = new List<FormOperationController>();
             foreach (FormOperationController operation in OperatorBindingSource)
             {
                 if (operation.DPSReportLink != null && operation.DPSReportLink.Contains("https"))
@@ -589,11 +597,8 @@ namespace GW2EIParser
             }
             if (!fullDpsReportLogs.Any())
             {
-                MessageBox.Show("Nothing to send");
-                return;
+                return "Nothing to send";
             }
-            BtnDiscordBatch.Enabled = false;
-            BtnParse.Enabled = false;
             // first sort by time
             fullDpsReportLogs.Sort((x, y) =>
             {
@@ -672,13 +677,44 @@ namespace GW2EIParser
                         fieldValue += toAdd;
                     }
                     embedFieldBuilder.WithValue(fieldValue);
-                    message += new WebhookController(Properties.Settings.Default.WebhookURL, embedBuilder.Build()).SendMessage() + " - ";
+                    ids.Add(WebhookController.SendMessage(Properties.Settings.Default.WebhookURL, embedBuilder.Build(), out string curMessage));
+                    message += curMessage + " - ";
                 }
             }
-           
-            MessageBox.Show(message);
+            return message;
+        }
+
+        private void AutoUpdateDiscordBatch()
+        {
+            if (!Properties.Settings.Default.AutoDiscordBatch || _anyRunning)
+            {
+                return;
+            }
+            AddTraceMessage("Auto update Discord Batch");
+            ChkAutoDiscordBatch.Enabled = false;
+            foreach (ulong id in _currentDiscordMessageIDs)
+            {
+                WebhookController.DeleteMessage(Properties.Settings.Default.WebhookURL, id, out _);
+            }
+            DiscordBatch(out _currentDiscordMessageIDs);
+            ChkAutoDiscordBatch.Enabled = true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnDiscordBatchClick(object sender, EventArgs e)
+        {
+            BtnDiscordBatch.Enabled = false;
+            ChkAutoDiscordBatch.Enabled = false;
+            BtnParse.Enabled = false;
+            AddTraceMessage("Manual Discord Batch");
+            MessageBox.Show(DiscordBatch(out _));
             //    
             BtnDiscordBatch.Enabled = !_anyRunning;
+            ChkAutoDiscordBatch.Enabled = !_anyRunning;
             BtnParse.Enabled = !_anyRunning;
         }
 
@@ -741,6 +777,11 @@ namespace GW2EIParser
         {
             Properties.Settings.Default.ApplicationTraces = ChkApplicationTraces.Checked;
             AddTraceMessage(Properties.Settings.Default.ApplicationTraces ? "Enabled traces" : "Disabled traces");
+        }
+        private void ChkAutoDiscordBatchCheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.AutoDiscordBatch = ChkAutoDiscordBatch.Checked;
+            AddTraceMessage(Properties.Settings.Default.AutoDiscordBatch ? "Enabled automatic discord batching" : "Disabled automatic discord batching");
         }
 
         private void EnableSettingsWatcher(object sender, EventArgs e)

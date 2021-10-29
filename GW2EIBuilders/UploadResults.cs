@@ -4,14 +4,12 @@
     {
 
         public string DPSReportEILink { get; }
-        public string DPSReportRHLink { get; }
         public string RaidarLink { get; }
 
         public UploadResults()
         {
             DPSReportEILink = "";
             RaidarLink = "";
-            DPSReportRHLink = "";
         }
 
         /// <summary>
@@ -20,16 +18,15 @@
         /// <param name="dpsReportEI"></param>
         /// <param name="dpsReportRH"></param>
         /// <param name="raidar"></param>
-        public UploadResults(string dpsReportEI, string dpsReportRH, string raidar)
+        public UploadResults(string dpsReportEI, string raidar)
         {
             DPSReportEILink = dpsReportEI ?? "";
-            DPSReportRHLink = dpsReportRH ?? "";
             RaidarLink = raidar ?? "";
         }
 
         internal string[] ToArray()
         {
-            return new string[] { DPSReportEILink, DPSReportRHLink, RaidarLink };
+            return new string[] { DPSReportEILink, RaidarLink };
         }
     }
 }

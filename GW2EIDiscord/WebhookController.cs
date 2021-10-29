@@ -1,59 +1,101 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Discord;
 using Discord.Webhook;
 
 namespace GW2EIDiscord
 {
-    public class WebhookController
+    public static class WebhookController
     {
-        private string _webhookURL { get; }
-        private Embed _embed { get; }
-        private string _message { get; }
-
-        private bool _webhookURLValid => _webhookURL != null && _webhookURL.Length > 0;
-
-        public WebhookController(string webhookURL, Embed embed)
+        private static bool IsWebhookURLValid(string webhookURL)
         {
-            _webhookURL = webhookURL;
-            _embed = embed;
-        }
-        public WebhookController(string webhookURL, string message)
-        {
-            _webhookURL = webhookURL;
-            _message = message;
+            return webhookURL != null && webhookURL.Length > 0;
         }
 
-        public string SendMessage()
+        public static void DeleteMessage(string webhookURL, ulong id, out string message)
         {
-            if (_webhookURLValid)
+            if (IsWebhookURLValid(webhookURL))
             {
                 try
                 {
-                    var client = new DiscordWebhookClient(_webhookURL);
+                    var client = new DiscordWebhookClient(webhookURL);
                     try
                     {
-                        if (_embed == null)
-                        {
-                            _ = client.SendMessageAsync(text: _message).Result;
-                        }
-                        else
-                        {
-                            _ = client.SendMessageAsync(embeds: new[] { _embed }).Result;
-                        }
+                        client.DeleteMessageAsync(id).Wait();
                     }
                     finally
                     {
                         client.Dispose();
                     }
-                    return "Sent Embed";
+                    message = "Deleted message";
+                    return;
                 }
                 catch (Exception e)
                 {
-                    return "Couldn't send embed: " + e.Message;
+                    message = "Couldn't delete message: " + e.Message;
+                    return;
                 }
             }
-            return "Webhook url invalid";
+            message = "Webhook url invalid";
+        }
+
+        public static ulong SendMessage(string webhookURL, Embed embed, out string message)
+        {
+            if (IsWebhookURLValid(webhookURL))
+            {
+                try
+                {
+                    var client = new DiscordWebhookClient(webhookURL);
+                    ulong id;
+                    try
+                    {
+                        id = client.SendMessageAsync(embeds: new[] { embed }).Result;
+                    }
+                    finally
+                    {
+                        client.Dispose();
+                    }
+                    message = "Sent Embed";
+                    return id;
+                }
+                catch (Exception e)
+                {
+                    message = "Couldn't send embed: " + e.Message;
+                    return 0;
+                }
+            }
+            message = "Webhook url invalid";
+            return 0;
+        }
+
+        public static ulong SendMessage(string webhookURL, string embed, out string message)
+        {
+            if (IsWebhookURLValid(webhookURL))
+            {
+                try
+                {
+                    var client = new DiscordWebhookClient(webhookURL);
+                    ulong id;
+                    try
+                    {
+                        id = client.SendMessageAsync(text: embed).Result;
+                    }
+                    finally
+                    {
+                        client.Dispose();
+                    }
+                    message = "Sent Embed";
+                    return id;
+                }
+                catch (Exception e)
+                {
+                    message = "Couldn't send embed: " + e.Message;
+                    return 0;
+                }
+            }
+            message = "Webhook url invalid";
+            return 0;
         }
 
     }

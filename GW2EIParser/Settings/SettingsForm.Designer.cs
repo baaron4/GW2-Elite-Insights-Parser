@@ -47,7 +47,6 @@
             this.ChkCombatReplay = new System.Windows.Forms.CheckBox();
             this.ChkUploadDPSReports = new System.Windows.Forms.CheckBox();
             this.TxtDPSReportUserToken = new System.Windows.Forms.TextBox();
-            this.ChkUploadDRRH = new System.Windows.Forms.CheckBox();
             this.ChkUploadRaidar = new System.Windows.Forms.CheckBox();
             this.ChkUploadWebhook = new System.Windows.Forms.CheckBox();
             this.ChkUploadSimpleMessageWebhook = new System.Windows.Forms.CheckBox();
@@ -302,7 +301,7 @@
             // ChkUploadDPSReports
             // 
             this.ChkUploadDPSReports.AutoSize = true;
-            this.ChkUploadDPSReports.Location = new System.Drawing.Point(12, 12);
+            this.ChkUploadDPSReports.Location = new System.Drawing.Point(12, 15);
             this.ChkUploadDPSReports.Name = "ChkUploadDPSReports";
             this.ChkUploadDPSReports.Size = new System.Drawing.Size(196, 17);
             this.ChkUploadDPSReports.TabIndex = 43;
@@ -312,28 +311,17 @@
             // 
             // TxtDPSReportUserToken
             // 
-            this.TxtDPSReportUserToken.Location = new System.Drawing.Point(91, 59);
+            this.TxtDPSReportUserToken.Location = new System.Drawing.Point(91, 38);
             this.TxtDPSReportUserToken.Name = "TxtDPSReportUserToken";
             this.TxtDPSReportUserToken.Size = new System.Drawing.Size(225, 20);
             this.TxtDPSReportUserToken.TabIndex = 15;
             this.TxtDPSReportUserToken.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.TxtDPSReportUserToken.TextChanged += new System.EventHandler(this.ChkDPSReportUserTokenTextChanged);
             // 
-            // ChkUploadDRRH
-            // 
-            this.ChkUploadDRRH.AutoSize = true;
-            this.ChkUploadDRRH.Location = new System.Drawing.Point(12, 36);
-            this.ChkUploadDRRH.Name = "ChkUploadDRRH";
-            this.ChkUploadDRRH.Size = new System.Drawing.Size(193, 17);
-            this.ChkUploadDRRH.TabIndex = 44;
-            this.ChkUploadDRRH.Text = "Upload to DPSReports RaidHeroes";
-            this.ChkUploadDRRH.UseVisualStyleBackColor = true;
-            this.ChkUploadDRRH.CheckedChanged += new System.EventHandler(this.ChkUploadDRRHCheckedChanged);
-            // 
             // ChkUploadRaidar
             // 
             this.ChkUploadRaidar.AutoSize = true;
-            this.ChkUploadRaidar.Location = new System.Drawing.Point(12, 85);
+            this.ChkUploadRaidar.Location = new System.Drawing.Point(12, 64);
             this.ChkUploadRaidar.Name = "ChkUploadRaidar";
             this.ChkUploadRaidar.Size = new System.Drawing.Size(175, 17);
             this.ChkUploadRaidar.TabIndex = 45;
@@ -404,7 +392,7 @@
             this.GroupWebhookSettings.Controls.Add(this.TxtUploadWebhookUrl);
             this.GroupWebhookSettings.Controls.Add(this.ChkUploadWebhook);
             this.GroupWebhookSettings.Controls.Add(this.ChkUploadSimpleMessageWebhook);
-            this.GroupWebhookSettings.Location = new System.Drawing.Point(12, 124);
+            this.GroupWebhookSettings.Location = new System.Drawing.Point(12, 103);
             this.GroupWebhookSettings.Name = "GroupWebhookSettings";
             this.GroupWebhookSettings.Size = new System.Drawing.Size(404, 92);
             this.GroupWebhookSettings.TabIndex = 45;
@@ -858,7 +846,6 @@
             this.TabUpload.Controls.Add(this.DPSReportUserTokenLabel);
             this.TabUpload.Controls.Add(this.ChkUploadDPSReports);
             this.TabUpload.Controls.Add(this.TxtDPSReportUserToken);
-            this.TabUpload.Controls.Add(this.ChkUploadDRRH);
             this.TabUpload.Controls.Add(this.ChkUploadRaidar);
             this.TabUpload.Controls.Add(this.GroupWebhookSettings);
             this.TabUpload.Location = new System.Drawing.Point(4, 22);
@@ -871,7 +858,7 @@
             // DPSReportUserTokenLabel
             // 
             this.DPSReportUserTokenLabel.AutoSize = true;
-            this.DPSReportUserTokenLabel.Location = new System.Drawing.Point(19, 62);
+            this.DPSReportUserTokenLabel.Location = new System.Drawing.Point(19, 41);
             this.DPSReportUserTokenLabel.Name = "DPSReportUserTokenLabel";
             this.DPSReportUserTokenLabel.Size = new System.Drawing.Size(66, 13);
             this.DPSReportUserTokenLabel.TabIndex = 46;
@@ -1025,7 +1012,6 @@
         private System.Windows.Forms.CheckBox ChkCombatReplay;
         private System.Windows.Forms.CheckBox ChkUploadDPSReports;
         private System.Windows.Forms.TextBox TxtDPSReportUserToken;
-        private System.Windows.Forms.CheckBox ChkUploadDRRH;
         private System.Windows.Forms.CheckBox ChkUploadRaidar;
         private System.Windows.Forms.GroupBox GroupWebhookSettings;
         private System.Windows.Forms.CheckBox ChkUploadWebhook;

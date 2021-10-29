@@ -253,6 +253,8 @@ namespace GW2EIEvtcParser
             ExperienceFromAll = -21,
             WXP = -22,
             SiphonInc = -23,
+            PhysRec2 = -24,
+            CondRec2 = -25,
         }
         internal static BuffAttribute GetBuffAttribute(short bt)
         {

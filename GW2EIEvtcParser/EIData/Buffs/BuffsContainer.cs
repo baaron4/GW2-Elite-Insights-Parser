@@ -52,14 +52,17 @@ namespace GW2EIEvtcParser.EIData
                 RangerHelper.Buffs,
                 DruidHelper.Buffs,
                 SoulbeastHelper.Buffs,
+                UntamedHelper.Buffs,
                 //
                 ThiefHelper.Buffs,
                 DaredevilHelper.Buffs,
                 DeadeyeHelper.Buffs,
+                SpecterHelper.Buffs,
                 //
                 EngineerHelper.Buffs,
                 ScrapperHelper.Buffs,
                 HolosmithHelper.Buffs,
+                MechanistHelper.Buffs,
                 //
                 MesmerHelper.Buffs,
                 ChronomancerHelper.Buffs,

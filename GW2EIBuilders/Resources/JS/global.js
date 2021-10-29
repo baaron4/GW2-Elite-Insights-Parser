@@ -125,14 +125,17 @@ const specs = [
     "Ranger",
     "Druid",
     "Soulbeast",
+    "Untamed",
     //
     "Engineer",
     "Scrapper",
     "Holosmith",
+    "Mechanist",
     //
     "Thief",
     "Daredevil",
     "Deadeye",
+    "Specter",
     //
     "Mesmer",
     "Chronomancer",
@@ -169,14 +172,17 @@ const specToBase = {
     Ranger: "Ranger",
     Druid: "Ranger",
     Soulbeast: "Ranger",
+    Untamed: "Ranger",
     //
     Engineer: "Engineer",
     Scrapper: "Engineer",
     Holosmith: "Engineer",
+    Mechanist: "Engineer",
     //
     Thief: "Thief",
     Daredevil: "Thief",
     Deadeye: "Thief",
+    Specter: "Thief",
     //
     Mesmer: "Mesmer",
     Chronomancer: "Mesmer",

@@ -47,8 +47,12 @@ namespace GW2EIEvtcParser.ParsedData
                     return "Incoming Life Leech Damage";
                 case CondRec:
                     return "Incoming Condition Damage";
+                case CondRec2:
+                    return "Incoming Condition Damage (Mult)";
                 case PhysRec:
                     return "Incoming Strike Damage";
+                case PhysRec2:
+                    return "Incoming Strike Damage (Mult)";
                 case AttackSpeed:
                     return "Attack Speed";
                 case ConditionDurationInc:
@@ -130,7 +134,9 @@ namespace GW2EIEvtcParser.ParsedData
                 case PhysInc:
                 case CondInc:
                 case CondRec:
+                case CondRec2:
                 case PhysRec:
+                case PhysRec2:
                 case AttackSpeed:
                 case ConditionDurationInc:
                 case GlancingBlow:
@@ -190,6 +196,8 @@ namespace GW2EIEvtcParser.ParsedData
         private bool IsExtraNumberBuffID => ExtraNumberState == 2;
         private bool IsExtraNumberNone => ExtraNumberState == 0;
         private bool IsExtraNumberSomething => ExtraNumberState == 1;
+
+        private bool IsFlippedFormula => Attr1 == PhysRec2 || Attr1 == CondRec2;
 
         private string _solvedDescription = null;
 
@@ -316,13 +324,18 @@ namespace GW2EIEvtcParser.ParsedData
             }
             _solvedDescription += stat1;
             double variable = Math.Round(Variable, 6);
-            double totalOffset = Math.Round(Level * LevelOffset + ConstantOffset, 6);
+            double totalOffset = Math.Round(Level * LevelOffset + ConstantOffset, 6);      
             bool addParenthesis = totalOffset != 0 && Variable != 0;
             if (Attr2 != None)
             {
                 _solvedDescription += " from " + stat2;
                 totalOffset *= 100.0;
                 variable *= 100.0;
+            }
+            if (IsFlippedFormula)
+            {
+                variable = variable - 100.0;
+                totalOffset = totalOffset - 100.0;
             }
             _solvedDescription += ": ";
             if (addParenthesis)

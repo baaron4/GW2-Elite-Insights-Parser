@@ -50,6 +50,7 @@
             this.LblVersion = new System.Windows.Forms.Label();
             this.LblWatchingDir = new System.Windows.Forms.Label();
             this.ChkApplicationTraces = new System.Windows.Forms.CheckBox();
+            this.ChkAutoDiscordBatch = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.DgvFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.OperatorBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.LogFileWatcher)).BeginInit();
@@ -237,7 +238,7 @@
             // 
             // ChkApplicationTraces
             // 
-            this.ChkApplicationTraces.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.ChkApplicationTraces.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ChkApplicationTraces.AutoSize = true;
             this.ChkApplicationTraces.Location = new System.Drawing.Point(19, 325);
@@ -246,6 +247,18 @@
             this.ChkApplicationTraces.TabIndex = 0;
             this.ChkApplicationTraces.Text = "Application Traces";
             this.ChkApplicationTraces.CheckedChanged += new System.EventHandler(this.ChkApplicationTracesCheckedChanged);
+            // 
+            // ChkAutoDiscordBatch
+            // 
+            this.ChkAutoDiscordBatch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ChkAutoDiscordBatch.AutoSize = true;
+            this.ChkAutoDiscordBatch.Location = new System.Drawing.Point(259, 325);
+            this.ChkAutoDiscordBatch.Name = "ChkAutoDiscordBatch";
+            this.ChkAutoDiscordBatch.Size = new System.Drawing.Size(118, 17);
+            this.ChkAutoDiscordBatch.TabIndex = 0;
+            this.ChkAutoDiscordBatch.Text = "Auto Discord Batch";
+            this.ChkAutoDiscordBatch.CheckedChanged += new System.EventHandler(this.ChkAutoDiscordBatchCheckedChanged);
             // 
             // MainForm
             // 
@@ -265,6 +278,7 @@
             this.Controls.Add(this.BtnPopulate);
             this.Controls.Add(this.LblHeader);
             this.Controls.Add(this.ChkApplicationTraces);
+            this.Controls.Add(this.ChkAutoDiscordBatch);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(600, 300);
             this.Name = "MainForm";
@@ -275,6 +289,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.LogFileWatcher)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion
@@ -297,6 +312,7 @@
         private System.Windows.Forms.ToolTip TlpMainWindow;
         private System.Windows.Forms.Button BtnDiscordBatch;
         private System.Windows.Forms.CheckBox ChkApplicationTraces;
+        private System.Windows.Forms.CheckBox ChkAutoDiscordBatch;
     }
 }
 

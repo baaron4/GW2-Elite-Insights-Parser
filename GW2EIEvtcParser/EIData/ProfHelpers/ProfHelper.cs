@@ -162,6 +162,10 @@ namespace GW2EIEvtcParser.EIData
                         ThiefHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         DeadeyeHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
+                    case Spec.Specter:
+                        ThiefHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        SpecterHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        break;
                     //
                     case Spec.Engineer:
                         EngineerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
@@ -174,6 +178,10 @@ namespace GW2EIEvtcParser.EIData
                         EngineerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         HolosmithHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
+                    case Spec.Mechanist:
+                        EngineerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        MechanistHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        break;
                     //
                     case Spec.Ranger:
                         RangerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
@@ -185,6 +193,10 @@ namespace GW2EIEvtcParser.EIData
                     case Spec.Soulbeast:
                         RangerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         SoulbeastHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        break;
+                    case Spec.Untamed:
+                        RangerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                        UntamedHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                         break;
                     //
                     case Spec.Revenant:
