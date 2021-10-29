@@ -28,12 +28,12 @@ namespace GW2EIDiscord
                     {
                         client.Dispose();
                     }
-                    message = "Sent Embed";
+                    message = "Deleted message";
                     return;
                 }
                 catch (Exception e)
                 {
-                    message = "Couldn't send embed: " + e.Message;
+                    message = "Couldn't delete message: " + e.Message;
                     return;
                 }
             }
