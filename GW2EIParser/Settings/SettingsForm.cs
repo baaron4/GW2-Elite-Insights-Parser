@@ -8,6 +8,7 @@ namespace GW2EIParser.Setting
     public partial class SettingsForm : Form
     {
         public event EventHandler SettingsClosedEvent;
+        public event EventHandler SettingsLoadedEvent;
         public event EventHandler WatchDirectoryUpdatedEvent;
 
         public SettingsForm()
@@ -370,6 +371,7 @@ namespace GW2EIParser.Setting
                 {
                     CustomSettingsManager.ReadConfig(loadFile.FileName);
                     SetValues();
+                    SettingsLoadedEvent(this, null);
                 }
             }
         }

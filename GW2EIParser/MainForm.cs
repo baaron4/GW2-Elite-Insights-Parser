@@ -42,8 +42,16 @@ namespace GW2EIParser
             UpdateWatchDirectory();
             _settingsForm = new SettingsForm();
             _settingsForm.SettingsClosedEvent += EnableSettingsWatcher;
+            _settingsForm.SettingsLoadedEvent += LoadSettingsWatcher;
             _settingsForm.WatchDirectoryUpdatedEvent += UpdateWatchDirectoryWatcher;
             FormClosing += new FormClosingEventHandler((sender, e) => Properties.Settings.Default.Save());
+        }
+
+        private void LoadSettingsWatcher(object sender, EventArgs e)
+        {
+            AddTraceMessage("Loaded settings");
+            ChkApplicationTraces.Checked = Properties.Settings.Default.ApplicationTraces;
+            ChkAutoDiscordBatch.Checked = Properties.Settings.Default.AutoDiscordBatch;
         }
 
         public MainForm(IEnumerable<string> filesArray) : this()
@@ -682,14 +690,13 @@ namespace GW2EIParser
             {
                 return;
             }
+            AddTraceMessage("Auto update Discord Batch");
             ChkAutoDiscordBatch.Enabled = false;
             foreach (ulong id in _currentDiscordMessageIDs)
             {
                 WebhookController.DeleteMessage(Properties.Settings.Default.WebhookURL, id, out _);
             }
-            _currentDiscordMessageIDs.Clear();
-            DiscordBatch(out List<ulong> list);
-            _currentDiscordMessageIDs.AddRange(list);
+            DiscordBatch(out _currentDiscordMessageIDs);
             ChkAutoDiscordBatch.Enabled = true;
         }
 
@@ -703,6 +710,7 @@ namespace GW2EIParser
             BtnDiscordBatch.Enabled = false;
             ChkAutoDiscordBatch.Enabled = false;
             BtnParse.Enabled = false;
+            AddTraceMessage("Manual Discord Batch");
             MessageBox.Show(DiscordBatch(out _));
             //    
             BtnDiscordBatch.Enabled = !_anyRunning;
