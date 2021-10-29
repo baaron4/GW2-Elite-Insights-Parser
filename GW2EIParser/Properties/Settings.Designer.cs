@@ -145,18 +145,6 @@ namespace GW2EIParser.Properties {
                 this["DPSReportUserToken"] = value;
             }
         }
-
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool UploadToDPSReportsRH {
-            get {
-                return ((bool)(this["UploadToDPSReportsRH"]));
-            }
-            set {
-                this["UploadToDPSReportsRH"] = value;
-            }
-        }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -425,6 +413,21 @@ namespace GW2EIParser.Properties {
             set
             {
                 this["ApplicationTraces"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoDiscordBatch
+        {
+            get
+            {
+                return ((bool)(this["AutoDiscordBatch"]));
+            }
+            set
+            {
+                this["AutoDiscordBatch"] = value;
             }
         }
 

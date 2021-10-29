@@ -161,10 +161,6 @@ function mainLoad() {
                         url: "" 
                     },
                     { 
-                        key: "DPS Reports Link (RH)", 
-                        url: "" 
-                    },
-                    { 
                         key: "Raidar Link", 
                         url: "" 
                     }

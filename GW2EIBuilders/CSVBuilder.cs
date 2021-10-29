@@ -81,7 +81,7 @@ namespace GW2EIBuilders
             WriteLine(new[] { "Time End", _log.LogData.LogEndStd });
             if (_uploadResult.Any(x => x != null && x.Length > 0))
             {
-                WriteLine(new[] { "Links", _uploadResult[0], _uploadResult[1], _uploadResult[2] });
+                WriteLine(new[] { "Links", _uploadResult[0], _uploadResult[1] });
             }
             else
             {

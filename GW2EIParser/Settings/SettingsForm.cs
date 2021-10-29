@@ -31,7 +31,6 @@ namespace GW2EIParser.Setting
             ChkMultiThreaded.Enabled = !busy;
             ChkMultiLogs.Enabled = !busy;
             ChkUploadDPSReports.Enabled = !busy;
-            ChkUploadDRRH.Enabled = !busy;
             TxtDPSReportUserToken.Enabled = !busy;
             BtnResetSkillList.Enabled = !busy;
             BtnResetSpecList.Enabled = !busy;
@@ -79,7 +78,6 @@ namespace GW2EIParser.Setting
             ChkIndentXML.Checked = Properties.Settings.Default.IndentXML;
             ChkUploadDPSReports.Checked = Properties.Settings.Default.UploadToDPSReports;
             TxtDPSReportUserToken.Text = Properties.Settings.Default.DPSReportUserToken;
-            ChkUploadDRRH.Checked = Properties.Settings.Default.UploadToDPSReportsRH;
             ChkUploadRaidar.Checked = Properties.Settings.Default.UploadToRaidar;
             ChkUploadWebhook.Checked = Properties.Settings.Default.SendEmbedToWebhook;
             ChkUploadSimpleMessageWebhook.Checked = Properties.Settings.Default.SendSimpleMessageToWebhook;
@@ -221,11 +219,6 @@ namespace GW2EIParser.Setting
         private void ChkUploadSimpleMessageWebhookCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SendSimpleMessageToWebhook = ChkUploadSimpleMessageWebhook.Checked;
-        }
-
-        private void ChkUploadDRRHCheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.UploadToDPSReportsRH = ChkUploadDRRH.Checked;
         }
 
         private void ChkSkipFailedTriesCheckedChanged(object sender, EventArgs e)
