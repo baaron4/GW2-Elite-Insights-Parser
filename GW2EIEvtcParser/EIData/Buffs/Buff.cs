@@ -299,6 +299,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Exposed (48209)", 48209, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6b/Exposed.png"),
                 new Buff("Exposed (31589)", 31589, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6b/Exposed.png"),
                 new Buff("Unblockable",36781, Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/f0/Unblockable_%28effect%29.png",102321 , ulong.MaxValue),
+                new Buff("Encumbered",1159, Source.Common, BuffStackType.Queue, 9, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d7/Encumbered.png"),
                 //Auras
                 new Buff("Chaos Aura", 10332, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/e/ec/Chaos_Aura.png"),
                 new Buff("Fire Aura", 5677, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/c/ce/Fire_Aura.png"),
@@ -368,6 +369,7 @@ namespace GW2EIEvtcParser.EIData
                 // Generic
                 new Buff("Spectral Agony", 38077, Source.FightSpecific,BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/70/Spectral_Agony.png" ),
                 new Buff("Agony", 15773, Source.FightSpecific,BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/be/Agony.png" ),
+                new Buff("Harmstrung", 47856, Source.FightSpecific,BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b9/Unseen_Burden.png" ),
                 new Buff("Enraged (?)", 18711, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 new Buff("Enraged (??)", 23235, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 new Buff("Enraged (100%)", 50070, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
@@ -600,17 +602,32 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Determination (Ensolyss)", 37498, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/41/Gambit_Exhausted.png"),
                 // Artsariiv
                 new Buff("Enraged (Arts)", 36498, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png"),
+                new Buff("Corporeal Reassignment", 38880, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/9/94/Redirect_Anomaly.png"),
+                new Buff("Blinding Radiance", 39442, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png"),
+                new Buff("Determination (Viirastra)", 38841, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/41/Gambit_Exhausted.png"),
+                // Arkk 
+                new Buff("Fixated (Bloom 3)", 39558, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Fixated (Bloom 2)", 39928, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Fixated (Bloom 1)", 39131, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Fixated (Bloom 4)", 38985, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Cosmic Meteor", 39268, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png"),
+                new Buff("Diaphanous Shielding", 39111, Source.FightSpecific, BuffStackType.Stacking, 4, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/57/Diaphanous_Shielding.png"),
+                new Buff("Electrocuted", 33750, Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/91/Air_Attunement.png"),
                 // Ai, Keeper of the Peak
                 new Buff("Tidal Barrier", 61402, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b1/Primed_Bottle.png"),
                 new Buff("Whirlwind Shield", 61224, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b1/Primed_Bottle.png"),
                 new Buff("Resilient Form", 61220, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"),
                 new Buff("Cacophonous Mind", 61435, Source.FightSpecific, BuffStackType.Stacking, 20, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"),
                 new Buff("Crushing Guilt", 61208, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"),
-                //new Buff("Sunqua Fixated 1", 61503, ParserHelper.Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"),
-                //new Buff("Sunqua Fixated 2", 61506, ParserHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"), // what are those exactly?
+                new Buff("Fixated (Fear 3)", 61304, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Fixated (Fear 2)", 61306, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Fixated (Fear 1)", 61503, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Fixated (Fear 4)", 61566, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 new Buff("Charged Leap", 61444, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 3, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"),
                 new Buff("Tidal Bargain", 61512, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"),
                 //////////////////////////////////////////////
+                // Icebrood
+                new Buff("Hypothermia", 57969, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d5/Hypothermia_%28story_effect%29.png" ),
                 // Fraenir of Jormag
                 new Buff("Frozen", 58376, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png" ),
                 new Buff("Snowblind", 58276, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png" ),

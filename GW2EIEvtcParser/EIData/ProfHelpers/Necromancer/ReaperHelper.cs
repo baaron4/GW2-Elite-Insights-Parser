@@ -40,6 +40,7 @@ namespace GW2EIEvtcParser.EIData
         {
                 new Buff("Reaper's Shroud", 29446, Source.Reaper, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/11/Reaper%27s_Shroud.png"),
                 new Buff("Infusing Terror", 30129, Source.Reaper, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/db/Infusing_Terror.png"),
+                new Buff("Dark Bond", 31247, Source.Reaper, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/64/%22Rise%21%22.png"),
         };
     }
 }
