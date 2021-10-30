@@ -299,6 +299,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Exposed (48209)", 48209, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6b/Exposed.png"),
                 new Buff("Exposed (31589)", 31589, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6b/Exposed.png"),
                 new Buff("Unblockable",36781, Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/f0/Unblockable_%28effect%29.png",102321 , ulong.MaxValue),
+                new Buff("Encumbered",1159, Source.Common, BuffStackType.Queue, 9, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d7/Encumbered.png"),
                 //Auras
                 new Buff("Chaos Aura", 10332, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/e/ec/Chaos_Aura.png"),
                 new Buff("Fire Aura", 5677, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/c/ce/Fire_Aura.png"),
@@ -604,6 +605,14 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Corporeal Reassignment", 38880, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/9/94/Redirect_Anomaly.png"),
                 new Buff("Blinding Radiance", 39442, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png"),
                 new Buff("Determination (Viirastra)", 38841, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/41/Gambit_Exhausted.png"),
+                // Arkk 
+                new Buff("Fixated (Bloom 3)", 39558, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Fixated (Bloom 2)", 39928, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Fixated (Bloom 1)", 39131, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Fixated (Bloom 4)", 38985, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Cosmic Meteor", 39268, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png"),
+                new Buff("Diaphanous Shielding", 39111, Source.FightSpecific, BuffStackType.Stacking, 4, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/57/Diaphanous_Shielding.png"),
+                new Buff("Electrocuted", 33750, Source.FightSpecific, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/91/Air_Attunement.png"),
                 // Ai, Keeper of the Peak
                 new Buff("Tidal Barrier", 61402, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b1/Primed_Bottle.png"),
                 new Buff("Whirlwind Shield", 61224, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b1/Primed_Bottle.png"),
@@ -613,7 +622,6 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Fixated (Fear 3)", 61304, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 new Buff("Fixated (Fear 2)", 61306, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 new Buff("Fixated (Fear 1)", 61503, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
-                //new Buff("Fixated (3)", 61506, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 new Buff("Fixated (Fear 4)", 61566, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 new Buff("Charged Leap", 61444, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 3, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"),
                 new Buff("Tidal Bargain", 61512, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"),
