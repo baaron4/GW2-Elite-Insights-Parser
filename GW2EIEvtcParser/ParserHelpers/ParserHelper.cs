@@ -417,7 +417,7 @@ namespace GW2EIEvtcParser
                 case Spec.Holosmith:
                     return "https://wiki.guildwars2.com/images/a/ae/Holosmith_tango_icon_200px.png";
                 case Spec.Mechanist:
-                    return "https://i.imgur.com/UbvyFSt.png";
+                    return "https://wiki.guildwars2.com/images/8/8a/Mechanist_tango_icon_200px.png";
                 //
                 case Spec.Ranger:
                     return "https://wiki.guildwars2.com/images/5/51/Ranger_tango_icon_200px.png";
@@ -426,7 +426,7 @@ namespace GW2EIEvtcParser
                 case Spec.Soulbeast:
                     return "https://wiki.guildwars2.com/images/f/f6/Soulbeast_tango_icon_200px.png";
                 case Spec.Untamed:
-                    return "https://i.imgur.com/UbvyFSt.png";
+                    return "https://wiki.guildwars2.com/images/3/33/Untamed_tango_icon_200px.png";
                 //
                 case Spec.Thief:
                     return "https://wiki.guildwars2.com/images/1/19/Thief_tango_icon_200px.png";
@@ -505,7 +505,7 @@ namespace GW2EIEvtcParser
                 case Spec.Holosmith:
                     return "https://wiki.guildwars2.com/images/2/28/Holosmith_tango_icon_20px.png";
                 case Spec.Mechanist:
-                    return "https://i.imgur.com/UbvyFSt.png";
+                    return "https://wiki.guildwars2.com/images/thumb/8/8a/Mechanist_tango_icon_200px.png/20px-Mechanist_tango_icon_200px.png";
                 //
                 case Spec.Ranger:
                     return "https://wiki.guildwars2.com/images/4/43/Ranger_tango_icon_20px.png";
@@ -514,7 +514,7 @@ namespace GW2EIEvtcParser
                 case Spec.Soulbeast:
                     return "https://wiki.guildwars2.com/images/7/7c/Soulbeast_tango_icon_20px.png";
                 case Spec.Untamed:
-                    return "https://i.imgur.com/UbvyFSt.png";
+                    return "https://wiki.guildwars2.com/images/thumb/3/33/Untamed_tango_icon_200px.png/20px-Untamed_tango_icon_200px.png";
                 //
                 case Spec.Thief:
                     return "https://wiki.guildwars2.com/images/7/7a/Thief_tango_icon_20px.png";
