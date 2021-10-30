@@ -25,11 +25,11 @@
             </li>
         </ul>    
         <ul class="nav nav-pills d-flex flex-wrap justify-content-center ml-3 scale85" :class="{'flex-row': !column, 'flex-column': column}">
-            <li class="nav-item" data-original-title="All">
-                <a class="nav-link d-flex flex-row justify-content-center align-items-center" @click="data.healingmode = healingModeEnum.All" :class="{active: data.healingmode === healingModeEnum.All}"><img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="All"
+            <li class="nav-item d-flex flex-row justify-content-center align-items-center" data-original-title="All">
+                <a class="nav-link" @click="data.healingmode = healingModeEnum.All" :class="{active: data.healingmode === healingModeEnum.All}"><img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="All"
                     class="icon"></a>
             </li>    
-            <li class="nav-ite d-flex flex-row justify-content-center align-items-centerm" data-original-title="Healing Power">
+            <li class="nav-iteù d-flex flex-row justify-content-center align-items-centerm" data-original-title="Healing Power">
                 <a class="nav-link" @click="data.healingmode = healingModeEnum.HealingPower" :class="{active: data.healingmode === healingModeEnum.HealingPower}"><img src="https://wiki.guildwars2.com/images/8/81/Healing_Power.png" alt="Healing Power"
                     class="icon"></a>
             </li>                     
@@ -49,11 +49,11 @@
             <li class="nav-item d-flex flex-row justify-content-center align-items-center">
                 <a class="nav-link" @click="data.graphmode = graphModeEnum.DPS" :class="{active: data.graphmode === graphModeEnum.DPS}">HPS</a>
             </li>    
-            <li class="nav-item" data-original-title="Centered DPS">
-                <a class="nav-link d-flex flex-row justify-content-center align-items-center" @click="data.graphmode = graphModeEnum.CenteredDPS" :class="{active: data.graphmode === graphModeEnum.CenteredDPS}">Ctrd.HPS</a>
+            <li class="nav-item d-flex flex-row justify-content-center align-items-center" data-original-title="Centered DPS">
+                <a class="nav-link" @click="data.graphmode = graphModeEnum.CenteredDPS" :class="{active: data.graphmode === graphModeEnum.CenteredDPS}">Ctrd.HPS</a>
             </li>                     
-            <li class="nav-item">
-                <a class="nav-link d-flex flex-row justify-content-center align-items-center" @click="data.graphmode = graphModeEnum.Damage" :class="{active: data.graphmode === graphModeEnum.Damage}">Healing</a>
+            <li class="nav-item d-flex flex-row justify-content-center align-items-center">
+                <a class="nav-link" @click="data.graphmode = graphModeEnum.Damage" :class="{active: data.graphmode === graphModeEnum.Damage}">Healing</a>
             </li>
         </ul>
     </div>
