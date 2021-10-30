@@ -64,6 +64,27 @@ namespace GW2EIEvtcParser
         public enum DamageType { All, Power, Strike, Condition, StrikeAndCondition, StrikeAndConditionAndLifeLeech };
         public enum BuffEnum { Self, Group, OffGroup, Squad };
 
+        internal static Dictionary<long, List<T>> GroupByTime<T>(IReadOnlyList<T> list) where T : AbstractTimeCombatEvent
+        {
+            var groupByTime = new Dictionary<long, List<T>>();
+            foreach (T c in list)
+            {
+                long key = groupByTime.Keys.FirstOrDefault(x => Math.Abs(x - c.Time) < ServerDelayConstant);
+                if (key != 0)
+                {
+                    groupByTime[key].Add(c);
+                }
+                else
+                {
+                    groupByTime[c.Time] = new List<T>
+                            {
+                                c
+                            };
+                }
+            }
+            return groupByTime;
+        }
+
         internal static T MaxBy<T, TComparable>(this IEnumerable<T> en, Func<T, TComparable> evaluate) where TComparable : IComparable<TComparable>
         {
             return en.Select(t => (value: t, eval: evaluate(t)))

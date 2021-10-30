@@ -211,22 +211,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 return res;
             }
-            var groupByTime = new Dictionary<long, List<AbstractBuffEvent>>();
-            foreach (AbstractBuffEvent c in weaverAttuns)
-            {
-                long key = groupByTime.Keys.FirstOrDefault(x => Math.Abs(x - c.Time) < ServerDelayConstant);
-                if (key != 0)
-                {
-                    groupByTime[key].Add(c);
-                }
-                else
-                {
-                    groupByTime[c.Time] = new List<AbstractBuffEvent>
-                            {
-                                c
-                            };
-                }
-            }
+            Dictionary<long, List<AbstractBuffEvent>> groupByTime = GroupByTime(weaverAttuns);
             long prevID = 0;
             foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in groupByTime)
             {

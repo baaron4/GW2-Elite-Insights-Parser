@@ -149,26 +149,35 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             // Main phases
             var mainPhases = new List<PhaseData>();
-            var quantumQuakes = mainTarget.GetCastEvents(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == 56035 || x.SkillId == 56381).ToList();
+            var pillarApplies = log.CombatData.GetBuffData(56204).OfType<BuffApplyEvent>().Where(x => x.To == mainTarget.AgentItem).ToList();
+            Dictionary<long, List<BuffApplyEvent>> pillarAppliesGroupByTime = ParserHelper.GroupByTime(pillarApplies);
+            var mainPhaseEnds = new List<long>();
+            foreach (KeyValuePair<long, List<BuffApplyEvent>> pair in pillarAppliesGroupByTime)
+            {
+                if (pair.Value.Count == 6)
+                {
+                    mainPhaseEnds.Add(pair.Key);
+                }
+            }
             AbstractCastEvent boulderBarrage = mainTarget.GetCastEvents(log, 0, log.FightData.FightEnd).FirstOrDefault(x => x.SkillId == 56648 && x.Time < 6000);
             start = boulderBarrage == null ? 0 : boulderBarrage.EndTime;
-            if (quantumQuakes.Any())
+            if (mainPhaseEnds.Any())
             {
                 int phaseIndex = 1;
-                foreach (AbstractCastEvent quantumQake in quantumQuakes)
+                foreach (long quantumQake in mainPhaseEnds)
                 {
-                    var curPhaseStart = splitPhaseEnds.LastOrDefault(x => x < quantumQake.Time);
+                    var curPhaseStart = splitPhaseEnds.LastOrDefault(x => x < quantumQake);
                     if (curPhaseStart == 0)
                     {
                         curPhaseStart = start;
                     }
-                    long nextPhaseStart = splitPhaseEnds.FirstOrDefault(x => x > quantumQake.EndTime);
+                    long nextPhaseStart = splitPhaseEnds.FirstOrDefault(x => x > quantumQake);
                     if (nextPhaseStart != 0)
                     {
                         start = nextPhaseStart;
                         phaseIndex = splitPhaseEnds.IndexOf(start) + 1;
                     }
-                    mainPhases.Add(new PhaseData(curPhaseStart, quantumQake.Time, "Phase " + phaseIndex));
+                    mainPhases.Add(new PhaseData(curPhaseStart, quantumQake, "Phase " + phaseIndex));
                 }
                 if (start != mainPhases.Last().Start)
                 {
