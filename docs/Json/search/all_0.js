@@ -1,6 +1,7 @@
 var searchData=
 [
   ['account',['Account',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#ad69e7836ac6e6e88d7948a1475956e20',1,'GW2EIJSON::JsonPlayer']]],
+  ['activeclones',['ActiveClones',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a9925b6262d5390e63a8a6f697cb83abf',1,'GW2EIJSON::JsonPlayer']]],
   ['activecombatminions',['ActiveCombatMinions',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a2340e47f3a86be7f048ce21b58c21114',1,'GW2EIJSON::JsonActor']]],
   ['activetimes',['ActiveTimes',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#af2828bf40a85961b2947f89ea7a7b676',1,'GW2EIJSON::JsonPlayer']]],
   ['actor',['Actor',['../class_g_w2_e_i_j_s_o_n_1_1_json_mechanics_1_1_json_mechanic.html#a1f5600f2441d616c3babdaed60b4e686',1,'GW2EIJSON::JsonMechanics::JsonMechanic']]],
