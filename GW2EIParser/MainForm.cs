@@ -222,6 +222,7 @@ namespace GW2EIParser
                     BtnClearAll.Enabled = true;
                     BtnCancelAll.Enabled = false;
                     BtnDiscordBatch.Enabled = true;
+                    ChkAutoDiscordBatch.Enabled = true;
                     _settingsForm.ConditionalSettingDisable(_anyRunning);
                     AutoUpdateDiscordBatch();
                 }
