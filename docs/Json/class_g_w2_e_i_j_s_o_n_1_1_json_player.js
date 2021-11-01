@@ -1,6 +1,7 @@
 var class_g_w2_e_i_j_s_o_n_1_1_json_player =
 [
     [ "Account", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#ad69e7836ac6e6e88d7948a1475956e20", null ],
+    [ "ActiveClones", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a9925b6262d5390e63a8a6f697cb83abf", null ],
     [ "ActiveTimes", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#af2828bf40a85961b2947f89ea7a7b676", null ],
     [ "BuffUptimes", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a5327a117260ac39307cbeb3ef49bec77", null ],
     [ "BuffUptimesActive", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#ad541adf295387d0334e758c62790f853", null ],
