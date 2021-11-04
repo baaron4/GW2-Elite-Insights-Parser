@@ -103,17 +103,90 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (33530, 34050, 35450, 35970)*/);
         }
 
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            List<AbstractBuffEvent> boltBreaks = GetFilteredList(log.CombatData, 56394, p, true);
+            int boltBreakStart = 0;
+            foreach (AbstractBuffEvent c in boltBreaks)
+            {
+                if (c is BuffApplyEvent)
+                {
+                    boltBreakStart = (int)c.Time;
+                }
+                else
+                {
+                    int boltBreakEnd = (int)c.Time;
+                    int radius = 180;
+                    replay.Decorations.Add(new CircleDecoration(true, 0, radius, (boltBreakStart, boltBreakEnd), "rgba(255, 150, 0, 0.3)", new AgentConnector(p)));
+                    replay.Decorations.Add(new CircleDecoration(true, boltBreakEnd, radius, (boltBreakStart, boltBreakEnd), "rgba(255, 150, 0, 0.3)", new AgentConnector(p)));
+                }
+            }
+        }
+
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            int start = (int)replay.TimeOffsets.start;
-            int end = (int)replay.TimeOffsets.end;
+            int crStart = (int)replay.TimeOffsets.start;
+            int crEnd = (int)replay.TimeOffsets.end;
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
+                case (int)ArcDPSEnums.TargetID.Sabir:
+                    List<AbstractBuffEvent> repulsionFields = GetFilteredList(log.CombatData, 56172, target, true);
+                    int repulsionFieldStart = 0;
+                    foreach (AbstractBuffEvent c in repulsionFields)
+                    {
+                        if (c is BuffApplyEvent)
+                        {
+                            repulsionFieldStart = (int)c.Time;
+                        }
+                        else
+                        {
+                            int repulsionFieldEnd = (int)c.Time;
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 120, (repulsionFieldStart, repulsionFieldEnd), "rgba(80, 0, 255, 0.3)", new AgentConnector(target)));
+                        }
+                    }
+                    List<AbstractBuffEvent> ionShields = GetFilteredList(log.CombatData, 56100, target, true);
+                    int ionShieldStart = 0;
+                    foreach (AbstractBuffEvent c in ionShields)
+                    {
+                        if (c is BuffApplyEvent)
+                        {
+                            ionShieldStart = (int)c.Time;
+                        }
+                        else
+                        {
+                            int ionShieldEnd = (int)c.Time;
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 120, (ionShieldStart, ionShieldEnd), "rgba(0, 80, 255, 0.3)", new AgentConnector(target)));
+                        }
+                    }
+                    //
+                    var furyOfTheStorm = cls.Where(x => x.SkillId == 56372).ToList();
+                    foreach (AbstractCastEvent c in furyOfTheStorm)
+                    {
+                        replay.Decorations.Add(new CircleDecoration(true, (int)c.EndTime, 1200, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                    }
+                    //
+                    var unbridledTempest = cls.Where(x => x.SkillId == 56643).ToList();
+                    foreach (AbstractCastEvent c in unbridledTempest)
+                    {
+                        int start = (int)c.Time;
+                        int delay = 3000; // casttime 0 from skill def
+                        int duration = 5000;
+                        int radius = 1200;
+                        Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 1000);
+                        if (targetPosition != null)
+                        {
+                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, start + delay), "rgba(255, 100, 0, 0.2)", new PositionConnector(targetPosition)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.5)", new PositionConnector(targetPosition)));
+                            replay.Decorations.Add(new CircleDecoration(false, start + duration, radius, (start + delay, start + duration), "rgba(255, 150, 0, 0.7)", new PositionConnector(targetPosition)));
+                        }
+                    }
+                    break;
                 case (int)ArcDPSEnums.TrashID.BigKillerTornado:
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 420, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 480, (crStart, crEnd), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.SmallKillerTornado:
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 120, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 120, (crStart, crEnd), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.SmallJumpyTornado:
                 case (int)ArcDPSEnums.TrashID.ParalyzingWisp:
