@@ -69,18 +69,26 @@ namespace GW2EIEvtcParser.EncounterLogic
             phases.AddRange(unmergedPhases);
             //
             int voiceAndClawCount = 0;
-            int offset = 1;
             foreach (AbstractSingleActor voiceAndClaw in Targets.Where(x => x.ID == (int)ArcDPSEnums.TargetID.VoiceAndClaw))
             {
                 EnterCombatEvent enterCombat = log.CombatData.GetEnterCombatEvents(voiceAndClaw.AgentItem).FirstOrDefault();
-                PhaseData nextUnmergedPhase = unmergedPhases.Count > offset + 1 ? unmergedPhases[offset] : null;
+                long phaseStart = 0;
                 if (enterCombat != null)
                 {
-                    var phase = new PhaseData(enterCombat.Time, nextUnmergedPhase != null ? nextUnmergedPhase.Start : Math.Min(fightEnd, voiceAndClaw.LastAware), "Voice and Claw " + ++voiceAndClawCount);
-                    phase.AddTarget(voiceAndClaw);
-                    phases.Add(phase);
-                    offset++;
+                    phaseStart = enterCombat.Time;
+                } else
+                {
+                    phaseStart = voiceAndClaw.FirstAware;
                 }
+                PhaseData nextUnmergedPhase = unmergedPhases.FirstOrDefault(x => x.Start > phaseStart);
+                long phaseEnd = Math.Min(fightEnd, voiceAndClaw.LastAware);
+                if (nextUnmergedPhase != null)
+                {
+                    phaseEnd = nextUnmergedPhase.Start - 1;
+                }
+                var phase = new PhaseData(phaseStart, phaseEnd , "Voice and Claw " + ++voiceAndClawCount);
+                phase.AddTarget(voiceAndClaw);
+                phases.Add(phase);
             }
             //
             AbstractBuffEvent enrage = log.CombatData.GetBuffData(58619).FirstOrDefault(x => x is BuffApplyEvent);
