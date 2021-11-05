@@ -73,6 +73,8 @@ namespace GW2EIEvtcParser.ParsedData
             {56375, "Teleport Center" },
             {56446, "Eat Pylon" },
             {56329, "Big Magma Drop" },
+            // Voice and Claw
+            {58382, "Kodan Teleport" },
             // Weaver attunements
             {Buff.FireDual, "Dual Fire Attunement" },
             {Buff.FireWater, "Fire Water Attunement" },
