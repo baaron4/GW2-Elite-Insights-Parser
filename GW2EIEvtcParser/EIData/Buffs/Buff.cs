@@ -324,6 +324,10 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Guild Item Research", 33833, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/c/c6/Guild_Magic_Find_Banner_Boost.png"),
                 //
                 new Buff("Crystalline Heart", 37657, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/56/Crystalline_Heart.png"),
+                // WvW
+                new Buff("Minor Borderlands Bloodlust", 14772, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/f/f7/Major_Borderlands_Bloodlust.png"),
+                new Buff("Major Borderlands Bloodlust", 14773, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/f/f7/Major_Borderlands_Bloodlust.png"),
+                new Buff("Superior Borderlands Bloodlust", 14774, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/f/f7/Major_Borderlands_Bloodlust.png"),
         };
 
         internal static readonly List<Buff> Gear = new List<Buff>
