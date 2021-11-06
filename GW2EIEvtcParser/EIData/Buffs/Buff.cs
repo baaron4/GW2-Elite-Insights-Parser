@@ -479,6 +479,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Shared Agony", 38049, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/53/Shared_Agony.png"),
                 new Buff("Enraged (Cairn)", 37675, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png"),
                 new Buff("Unseen Burden", 38153, Source.FightSpecific, BuffStackType.Stacking , 99, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/b9/Unseen_Burden.png"),
+                new Buff("Countdown", 38098, Source.FightSpecific, BuffStackType.Stacking , 10, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/0/05/Countdown.png"),
                 new Buff("Gaze Avoidance", 37714, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/1/10/Gaze_Avoidance.png"),
                 // MO             
                 new Buff("Empowered", 37626, Source.FightSpecific, BuffStackType.Stacking , 4, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/9/9c/Empowered_%28Mursaat_Overseer%29.png"),
