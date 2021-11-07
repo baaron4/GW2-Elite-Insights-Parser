@@ -29,6 +29,11 @@ namespace GW2EIBuilders.JsonModels
             jsonPlayer.Profession = player.Spec.ToString();
             jsonPlayer.FriendlyNPC = player is NPC;
             jsonPlayer.NotInSquad = player is PlayerNonSquad;
+            GuildEvent guildEvent = log.CombatData.GetGuildEvents(player.AgentItem).FirstOrDefault();
+            if (guildEvent != null)
+            {
+                jsonPlayer.GuildID = guildEvent.APIString;
+            }
             jsonPlayer.ActiveTimes = phases.Select(x => player.GetActiveDuration(log, x.Start, x.End)).ToList();
             jsonPlayer.HasCommanderTag = player.HasCommanderTag;
             //

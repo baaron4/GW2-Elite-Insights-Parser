@@ -40,6 +40,11 @@ namespace GW2EIJSON
         public bool NotInSquad { get; set; }
 
         /// <summary>
+        /// Guild id to be used to fetch from the official API
+        /// </summary>
+        public string GuildID { get; set; }
+
+        /// <summary>
         /// Weapons of the player \n
         /// 0-1 are the first land set, 1-2 are the second land set \n
         /// 3-4 are the first aquatic set, 5-6 are the second aquatic set \n
