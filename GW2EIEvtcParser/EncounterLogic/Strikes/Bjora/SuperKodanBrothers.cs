@@ -105,12 +105,71 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phases.Add(phase);
             }
             //
+            var teleports = voice.GetCastEvents(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 58382).ToList();
+            long tpCount = 0;
+            long preTPPhaseStart = 0;
+            foreach (AbstractCastEvent teleport in teleports)
+            {
+                long preTPPhaseEnd = Math.Min(teleport.Time, log.FightData.FightDuration);
+                AbstractSingleActor voiceAndClaw = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.VoiceAndClaw && x.FirstAware >= preTPPhaseStart);
+                if (voiceAndClaw != null)
+                {
+                    var oldEnd = preTPPhaseEnd;
+                    preTPPhaseEnd = Math.Min(preTPPhaseEnd, voiceAndClaw.FirstAware);
+                    // To handle position phase after merge phase end
+                    if (oldEnd != preTPPhaseEnd)
+                    {
+                        PhaseData nextUnmergedPhase = unmergedPhases.FirstOrDefault(x => x.Start > voiceAndClaw.LastAware);
+                        if (nextUnmergedPhase != null) 
+                        {
+                            long postMergedStart = nextUnmergedPhase.Start + 1;
+                            long postMergedEnd = oldEnd;
+                            var phase = new PhaseData(postMergedStart, postMergedEnd, "Position " + (++tpCount));
+                            phase.AddTarget(claw);
+                            phase.AddTarget(voice);
+                            phases.Add(phase);
+                        }
+                        
+                    }
+                }
+                if (preTPPhaseEnd - preTPPhaseStart > 2000)
+                {
+                    var phase = new PhaseData(preTPPhaseStart, preTPPhaseEnd, "Position " + (++tpCount));
+                    phase.AddTarget(claw);
+                    phase.AddTarget(voice);
+                    phases.Add(phase);
+                }
+                preTPPhaseStart = teleport.EndTime;
+            }
+            
+            //
             AbstractBuffEvent enrage = log.CombatData.GetBuffData(58619).FirstOrDefault(x => x is BuffApplyEvent);
             if (enrage != null)
             {
                 var phase = new PhaseData(enrage.Time, log.FightData.FightEnd, "Enrage");
                 phase.AddTarget(claw.AgentItem == enrage.To ? claw : voice);
                 phases.Add(phase);
+            }
+            // Missing final position event
+            {
+                PhaseData nextUnmergedPhase = unmergedPhases.FirstOrDefault(x => x.Start > preTPPhaseStart);
+                long finalStart = preTPPhaseStart;
+                long finalPositionEnd = log.FightData.FightDuration;
+                if (nextUnmergedPhase != null)
+                {
+                    finalStart = nextUnmergedPhase.Start + 1;
+                }
+                if (enrage != null)
+                {
+                    finalPositionEnd = enrage.Time;
+                }
+                if (finalPositionEnd - finalStart > 2000)
+                {
+                    var phase = new PhaseData(finalStart, finalPositionEnd, "Position " + (++tpCount));
+                    phase.AddTarget(claw);
+                    phase.AddTarget(voice);
+                    phases.Add(phase);
+                }
             }
             return phases;
         }
