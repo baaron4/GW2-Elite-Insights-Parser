@@ -393,6 +393,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Essence of Resilience Tier 3", 58839, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b6/Essence_of_Resilience.png" ),
                 new Buff("Essence of Resilience Tier 4", 60057, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b6/Essence_of_Resilience.png" ),
                 new Buff("Power of Resilience Tier 2", 58278, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Power_of_Resilience.png" ),
+                new Buff("Power of Resilience Tier 4", 60312, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Power_of_Resilience.png" ),
                 new Buff("Essence of Valor Tier 1", 58480, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6f/Essence_of_Valor.png" ),
                 new Buff("Essence of Valor Tier 2", 58585, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6f/Essence_of_Valor.png" ),
                 new Buff("Essence of Valor Tier 3", 58792, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6f/Essence_of_Valor.png" ),
