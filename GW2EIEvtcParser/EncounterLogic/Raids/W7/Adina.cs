@@ -105,6 +105,101 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            List<AbstractBuffEvent> radiantBlindnesses = GetFilteredList(log.CombatData, 56593, p, true);
+            int radiantBlindnessStart = 0;
+            foreach (AbstractBuffEvent c in radiantBlindnesses)
+            {
+                if (c is BuffApplyEvent)
+                {
+                    radiantBlindnessStart = (int)c.Time;
+                }
+                else
+                {
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, (radiantBlindnessStart, (int)c.Time), "rgba(200, 0, 200, 0.3)", new AgentConnector(p)));
+                }
+            }
+        }
+
+
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            int crStart = (int)replay.TimeOffsets.start;
+            int crEnd = (int)replay.TimeOffsets.end;
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
+            switch (target.ID)
+            {
+                case (int)ArcDPSEnums.TargetID.Adina:
+                    var doubleQuantumQuakes = cls.Where(x => x.SkillId == 56035).ToList();
+                    foreach (AbstractCastEvent c in doubleQuantumQuakes)
+                    {
+                        int start = (int)c.Time;
+                        int preCastTime = 2990; // casttime 0
+                        int duration = c.ActualDuration;
+                        int width = 1100; int height = 60;
+                        foreach (int angle in new List<int> { 90, 270 })
+                        {
+                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, angle, width / 2, (start, start + preCastTime), "rgba(255, 100, 0, 0.2)", new AgentConnector(target)));
+                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, angle, width / 2, 360, (start + preCastTime, start + duration), "rgba(255, 50, 0, 0.5)", new AgentConnector(target)));
+                        }
+                    }
+                    //
+                    var tripleQuantumQuakes = cls.Where(x => x.SkillId == 56381).ToList();
+                    foreach (AbstractCastEvent c in tripleQuantumQuakes)
+                    {
+                        int start = (int)c.Time;
+                        int preCastTime = 2990; // casttime 0
+                        int duration = c.ActualDuration;
+                        int width = 1100; int height = 60;
+                        foreach (int angle in new List<int> { 30, 150, 270})
+                        {
+                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, angle, width / 2, (start, start + preCastTime), "rgba(255, 100, 0, 0.2)", new AgentConnector(target)));
+                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, angle, width / 2, 360, (start + preCastTime, start + duration), "rgba(255, 50, 0, 0.5)", new AgentConnector(target)));
+                        }
+
+                    }
+                    //
+                    var terraforms = cls.Where(x => x.SkillId == 56049).ToList();
+                    foreach (AbstractCastEvent c in terraforms)
+                    {
+                        int start = (int)c.Time;
+                        int delay = 2000; // casttime 0 from skill def
+                        int duration = 5000;
+                        int radius = 1100;
+                        replay.Decorations.Add(new CircleDecoration(false, start + duration, radius, (start + delay, start + duration), "rgba(255, 150, 0, 0.7)", new AgentConnector(target)));
+                    }
+                    //
+                    List<AbstractBuffEvent> diamondPalisades = GetFilteredList(log.CombatData, 56636, target, true);
+                    int diamondPalisadeStart = 0;
+                    foreach (AbstractBuffEvent c in diamondPalisades)
+                    {
+                        if (c is BuffApplyEvent)
+                        {
+                            diamondPalisadeStart = (int)c.Time;
+                        }
+                        else
+                        {
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 90, (diamondPalisadeStart, (int)c.Time), "rgba(200, 0, 0, 0.3)", new AgentConnector(target)));
+                        }
+                    }
+                    //
+                    var boulderBarrages = cls.Where(x => x.SkillId == 56648).ToList();
+                    foreach (AbstractCastEvent c in boulderBarrages)
+                    {
+                        int start = (int)c.Time;
+                        int duration = 4600; // cycle 3 from skill def
+                        int radius = 1100;
+                        replay.Decorations.Add(new CircleDecoration(true, start + duration, radius, (start, start + duration), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
+                    }
+                    break;
+                default:
+                    break;
+
+            }
+        }
+
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);

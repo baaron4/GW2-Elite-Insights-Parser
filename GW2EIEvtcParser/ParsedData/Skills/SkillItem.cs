@@ -64,6 +64,10 @@ namespace GW2EIEvtcParser.ParsedData
             // CA
             {52325, "Conjured Slash" },
             {52780, "Conjured Protection" },
+            // Adina
+            {56035, "Double Rotating Earth Rays" },
+            {56381, "Triple Rotating Earth Rays" },
+            {56049, "Terraform" },
             // Sabir
             {56349, "Regenerative Breakbar" },
             // P.Qadim
