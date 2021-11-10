@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.IO;
 using System.Linq;
-using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -13,7 +11,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (agent.IsPlayer)
             {
-                throw new EvtcAgentException("Agent is a player");
+                throw new InvalidDataException("Agent is a player");
             }
         }
 
