@@ -127,7 +127,12 @@ namespace GW2EIEvtcParser
             InitActorDictionaries();
             if (!_agentToActorDictionary.TryGetValue(agentItem, out AbstractSingleActor actor))
             {
-                if (agentItem.Type == AgentItem.AgentType.NonSquadPlayer)
+                if (agentItem.Type == AgentItem.AgentType.Player)
+                {
+                    actor = new Player(agentItem, true);
+                    _operation.UpdateProgressWithCancellationCheck("Found player " + actor.Character + " not in player list");
+                } 
+                else if (agentItem.Type == AgentItem.AgentType.NonSquadPlayer)
                 {
                     actor = new PlayerNonSquad(agentItem);
                 } 

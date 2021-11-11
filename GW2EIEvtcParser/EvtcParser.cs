@@ -674,12 +674,6 @@ namespace GW2EIEvtcParser
                             p.AgentItem.OverrideAwareTimes(Math.Min(p.AgentItem.FirstAware, player.AgentItem.FirstAware), Math.Max(p.AgentItem.LastAware, player.AgentItem.LastAware));
                             break;
                         }
-                        // different character in raid mode, discard it as it can't have any influence, otherwise add as a separate entity
-                        else if (_fightData.Logic.Mode == FightLogic.ParseMode.Instanced10)
-                        {
-                            skip = true;
-                            break;
-                        }
                     }
                 }
                 if (!skip)
@@ -828,6 +822,7 @@ namespace GW2EIEvtcParser
             {
                 a.OverrideAwareTimes(a.FirstAware - offset, a.LastAware - offset);
             }
+            //
             _fightData.ApplyOffset(offset);
         }
 
@@ -838,6 +833,46 @@ namespace GW2EIEvtcParser
         {
             operation.UpdateProgressWithCancellationCheck("Offset time");
             OffsetEvtcData();
+            // Removal of players present before the fight but not during
+            var agentsToRemove = new HashSet<AgentItem>();
+            foreach (Player p in _playerList)
+            {
+                if (p.LastAware < 0)
+                {
+                    agentsToRemove.Add(p.AgentItem);
+                    operation.UpdateProgressWithCancellationCheck("Removing player " + p.Character + " from player list (gone before fight start)");
+                }
+            }
+            //
+            if (_fightData.Logic.Mode == FightLogic.ParseMode.Instanced10)
+            {
+                foreach (Player p in _playerList)
+                {
+                    // check for players who have spawned after fight start
+                    if (p.FirstAware > 100)
+                    {
+                        // look for a spawn event close to first aware
+                        CombatItem spawnEvent = _combatItems.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Spawn 
+                            && x.SrcMatchesAgent(p.AgentItem) && x.Time <= p.FirstAware + 500);
+                        if (spawnEvent != null)
+                        {
+                            var damageEvents = _combatItems.Where(x => x.IsDamage()
+                                 && x.SrcMatchesAgent(p.AgentItem) && ((x.IsBuff > 0 && x.Value == 0) || (x.IsBuff == 0 && x.Value > 0))).ToList();
+                            if (!damageEvents.Any())
+                            {
+                                agentsToRemove.Add(p.AgentItem);
+                                operation.UpdateProgressWithCancellationCheck("Removing player " + p.Character + " from player list (spawned after fight start in 10 men content)");
+                            }
+                        }
+                    }
+                }
+            }
+            _playerList.RemoveAll(x => agentsToRemove.Contains(x.AgentItem));
+            if (_playerList.Count == 0)
+            {
+                throw new EvtcAgentException("No valid players");
+            }
+            //
             _friendlies = new List<AbstractSingleActor>();
             _friendlies.AddRange(_playerList);
             operation.UpdateProgressWithCancellationCheck("Encounter specific processing");
