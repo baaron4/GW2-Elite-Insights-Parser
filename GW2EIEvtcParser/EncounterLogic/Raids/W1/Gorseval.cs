@@ -13,11 +13,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new HitOnPlayerMechanic(31875, "Spectral Impact", new MechanicPlotlySetting("hexagram",Colors.Red), "Slam","Spectral Impact (KB Slam)", "Slam",4000, (de, log) => !de.To.HasBuff(log, 1122, de.Time)),
+            new HitOnPlayerMechanic(31875, "Spectral Impact", new MechanicPlotlySetting("hexagram",Colors.Red), "Slam","Spectral Impact (KB Slam)", "Slam",4000, (de, log) => !de.To.HasBuff(log, 1122, de.Time - ParserHelper.ServerDelayConstant)),
             new PlayerBuffApplyMechanic(31623, "Ghastly Prison", new MechanicPlotlySetting("circle",Colors.LightOrange), "Egg","Ghastly Prison (Egged)", "Egged",500),
             new PlayerBuffApplyMechanic(31498, "Spectral Darkness", new MechanicPlotlySetting("circle",Colors.Blue), "Orb Debuff","Spectral Darkness (Stood in Orb AoE)", "Orb Debuff",100),
             new EnemyBuffApplyMechanic(31722, "Spirited Fusion", new MechanicPlotlySetting("square",Colors.LightOrange), "Spirit Buff","Spirited Fusion (Consumed a Spirit)", "Ate Spirit",0),
-            new HitOnPlayerMechanic(31720, "Kick", new MechanicPlotlySetting("triangle-right",Colors.Magenta), "Kick","Kicked by small add", "Spirit Kick",0, (de, log) => !de.To.HasBuff(log, 1122, de.Time)),
+            new HitOnPlayerMechanic(31720, "Kick", new MechanicPlotlySetting("triangle-right",Colors.Magenta), "Kick","Kicked by small add", "Spirit Kick",0, (de, log) => !de.To.HasBuff(log, 1122, de.Time - ParserHelper.ServerDelayConstant)),
             new PlayerBuffApplyMechanic(738, "Ghastly Rampage Black Goo Hit", new MechanicPlotlySetting("circle",Colors.Black), "Black","Hit by Black Goo","Black Goo",3000, (ba,log) => ba.AppliedDuration == 10000),
             new EnemyCastStartMechanic(31834, "Ghastly Rampage", new MechanicPlotlySetting("diamond-tall",Colors.DarkTeal), "CC","Ghastly Rampage (Breakbar)", "Breakbar",0),
             new EnemyCastEndMechanic(31834, "Ghastly Rampage", new MechanicPlotlySetting("diamond-tall",Colors.Red), "CC End","Ghastly Rampage (Full duration)", "CC ran out",0, (ce,log) => ce.ActualDuration > 21985),

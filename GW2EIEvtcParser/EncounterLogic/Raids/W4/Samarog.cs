@@ -15,8 +15,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {
 
-            new HitOnPlayerMechanic(37996, "Shockwave", new MechanicPlotlySetting("circle",Colors.Blue), "Schk.Wv","Shockwave from Spears", "Shockwave",0,(de, log) => !de.To.HasBuff(log, 1122, de.Time)),
-            new HitOnPlayerMechanic(38168, "Prisoner Sweep", new MechanicPlotlySetting("hexagon",Colors.Blue), "Swp","Prisoner Sweep (horizontal)", "Sweep",0,(de, log) => !de.To.HasBuff(log, 1122, de.Time)),
+            new HitOnPlayerMechanic(37996, "Shockwave", new MechanicPlotlySetting("circle",Colors.Blue), "Schk.Wv","Shockwave from Spears", "Shockwave",0,(de, log) => !de.To.HasBuff(log, 1122, de.Time - ParserHelper.ServerDelayConstant)),
+            new HitOnPlayerMechanic(38168, "Prisoner Sweep", new MechanicPlotlySetting("hexagon",Colors.Blue), "Swp","Prisoner Sweep (horizontal)", "Sweep",0,(de, log) => !de.To.HasBuff(log, 1122, de.Time - ParserHelper.ServerDelayConstant)),
             new HitOnPlayerMechanic(37797, "Trampling Rush", new MechanicPlotlySetting("triangle-right",Colors.Red), "Trpl","Trampling Rush (hit by stampede towards home)", "Trampling Rush",0),
             new HitOnPlayerMechanic(38305, "Bludgeon", new MechanicPlotlySetting("triangle-down",Colors.Blue), "Slam","Bludgeon (vertical Slam)", "Slam",0),
             new PlayerBuffApplyMechanic(37868, "Fixate: Samarog", new MechanicPlotlySetting("star",Colors.Magenta), "S.Fix","Fixated by Samarog", "Fixate: Samarog",0),

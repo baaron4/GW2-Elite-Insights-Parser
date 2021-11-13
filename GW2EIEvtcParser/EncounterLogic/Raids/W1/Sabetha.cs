@@ -42,7 +42,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(31544, "Flak Shot", new MechanicPlotlySetting("hexagram-open",Colors.LightOrange), "Flak","Flak Shot (Fire Patches)", "Flak Shot",0),
             new HitOnPlayerMechanic(31643, "Cannon Barrage", new MechanicPlotlySetting("circle",Colors.Yellow), "Cannon","Cannon Barrage (stood in AoE)", "Cannon Shot",0),
             new HitOnPlayerMechanic(31761, "Flame Blast", new MechanicPlotlySetting("triangle-left-open",Colors.Yellow), "Karde Flame","Flame Blast (Karde's Flamethrower)", "Flamethrower (Karde)",0),
-            new HitOnPlayerMechanic(31408, "Kick", new MechanicPlotlySetting("triangle-right",Colors.Magenta), "Kick","Kicked by Bandit", "Bandit Kick",0, (de, log) => !de.To.HasBuff(log, 1122, de.Time)),
+            new HitOnPlayerMechanic(31408, "Kick", new MechanicPlotlySetting("triangle-right",Colors.Magenta), "Kick","Kicked by Bandit", "Bandit Kick",0, (de, log) => !de.To.HasBuff(log, 1122, de.Time - ParserHelper.ServerDelayConstant)),
             new EnemyCastStartMechanic(31763, "Platform Quake", new MechanicPlotlySetting("diamond-tall",Colors.DarkTeal), "CC","Platform Quake (Breakbar)","Breakbar",0),
             new EnemyCastEndMechanic(31763, "Platform Quake", new MechanicPlotlySetting("diamond-tall",Colors.DarkGreen), "CCed","Platform Quake (Breakbar broken) ", "CCed",0, (ce, log) => ce.ActualDuration <= 4400),
             new EnemyCastEndMechanic(31763, "Platform Quake", new MechanicPlotlySetting("diamond-tall",Colors.Red), "CC Fail","Platform Quake (Breakbar failed) ", "CC Fail",0, (ce,log) =>  ce.ActualDuration > 4400),
