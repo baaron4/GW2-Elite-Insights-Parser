@@ -14,6 +14,7 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_player =
     [ "Group", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a32d905a979ecfbb52c44d77f76900a55", null ],
     [ "GroupBuffs", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#abf1e6ce5e9e9628e47f2e590df7ceb7f", null ],
     [ "GroupBuffsActive", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a9f244795cec16408d2ad64d00ab4b7fa", null ],
+    [ "GuildID", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#aa016e962ac12987c8f80233890b16df9", null ],
     [ "HasCommanderTag", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a66c207adcd20b26b2179ec82e1ba9e69", null ],
     [ "NotInSquad", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a83e27c7f3a17dc3ef02fab1562b9e258", null ],
     [ "OffGroupBuffs", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#af21236a95ebd98814daf7dba13dfdeaa", null ],
