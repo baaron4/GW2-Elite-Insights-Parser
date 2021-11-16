@@ -131,10 +131,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
                 foreach (AgentItem agentItem in agents)
                 {
-                    if (agentItem.LastAware - agentItem.FirstAware > 200)
-                    {
-                        _targets.Add(new NPC(agentItem));
-                    }
+                    _targets.Add(new NPC(agentItem));
                 }
             }
             _targets.Sort((x, y) => x.FirstAware.CompareTo(y.FirstAware));
