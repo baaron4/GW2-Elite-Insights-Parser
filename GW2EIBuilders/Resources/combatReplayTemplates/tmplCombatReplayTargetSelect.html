@@ -32,7 +32,7 @@
                 var mainFight = logData.phases[0];
                 var res = [];
                 for (var i = 0; i < logData.targets.length; i++) {
-                    if (mainFight.targets.indexOf(i) > -1) {
+                    if (mainFight.targets.indexOf(i) > -1 && !!animator.getActorData(logData.targets[i].uniqueID)) {
                         res.push(logData.targets[i]);
                     }
                 }
@@ -42,7 +42,7 @@
                 var mainFight = logData.phases[0];
                 var res = [];
                 for (var i = 0; i < logData.targets.length; i++) {
-                    if (mainFight.targets.indexOf(i) === -1) {
+                    if (mainFight.targets.indexOf(i) === -1 && !!animator.getActorData(logData.targets[i].uniqueID)) {
                         res.push(logData.targets[i]);
                     }
                 }
