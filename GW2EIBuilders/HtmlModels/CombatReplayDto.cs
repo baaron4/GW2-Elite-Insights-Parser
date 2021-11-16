@@ -48,7 +48,7 @@ namespace GW2EIBuilders.HtmlModels
             }
             foreach (NPC actor in log.FightData.Logic.TrashMobs)
             {
-                if (actor.GetCombatReplayPolledPositions(log).Count == 0)
+                if ((actor.LastAware - actor.FirstAware < 200) || actor.GetCombatReplayPolledPositions(log).Count == 0)
                 {
                     continue;
                 }
@@ -60,7 +60,7 @@ namespace GW2EIBuilders.HtmlModels
             }
             foreach (AbstractSingleActor actor in log.FightData.Logic.Targets)
             {
-                if (actor.GetCombatReplayPolledPositions(log).Count == 0)
+                if ((actor.LastAware - actor.FirstAware < 200) || actor.GetCombatReplayPolledPositions(log).Count == 0)
                 {
                     continue;
                 }

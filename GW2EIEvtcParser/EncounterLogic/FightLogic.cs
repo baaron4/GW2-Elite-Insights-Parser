@@ -140,10 +140,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             //aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
             foreach (AgentItem a in aList)
             {
-                if (a.LastAware - a.FirstAware > 200)
-                {
-                    _trashMobs.Add(new NPC(a));
-                }
+                _trashMobs.Add(new NPC(a));
             }
             _trashMobs.Sort((x, y) => x.FirstAware.CompareTo(y.FirstAware));
             //
