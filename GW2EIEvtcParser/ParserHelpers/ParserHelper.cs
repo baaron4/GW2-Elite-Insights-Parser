@@ -561,6 +561,8 @@ namespace GW2EIEvtcParser
             {
                 case ArcDPSEnums.TargetID.WorldVersusWorld:
                     return "https://wiki.guildwars2.com/images/d/db/PvP_Server_Browser_%28map_icon%29.png";
+                case ArcDPSEnums.TargetID.Mordremoth:
+                    return "https://i.imgur.com/xcQ3AFW.png";
                 case ArcDPSEnums.TargetID.ValeGuardian:
                     return "https://i.imgur.com/MIpP5pK.png";
                 case ArcDPSEnums.TargetID.Gorseval:
@@ -674,6 +676,35 @@ namespace GW2EIEvtcParser
             }
             switch (ArcDPSEnums.GetTrashID(id))
             {
+                case ArcDPSEnums.TrashID.Canach:
+                    return "https://i.imgur.com/UuxqFko.png";
+                case ArcDPSEnums.TrashID.Braham:
+                    return "https://i.imgur.com/IZwGr7N.png";
+                /*case ArcDPSEnums.TrashID.Caithe:
+                    return "https://i.imgur.com/gxBNudo.png";*/
+                case ArcDPSEnums.TrashID.BlightedRytlock:
+                    return "https://i.imgur.com/iDvXEZj.png";
+                /*case ArcDPSEnums.TrashID.BlightedCanach:
+                    return "https://i.imgur.com/ObZJXxd.png";
+                case ArcDPSEnums.TrashID.BlightedBraham:
+                    return "https://i.imgur.com/wcLwsIg.png";*/
+                case ArcDPSEnums.TrashID.BlightedMarjory:
+                    return "https://i.imgur.com/SqKNAzN.png";
+                case ArcDPSEnums.TrashID.BlightedCaithe:
+                    return "https://i.imgur.com/hruf4mI.png";
+                case ArcDPSEnums.TrashID.BlightedForgal:
+                    return "https://i.imgur.com/LIioL0V.png";
+                /*case ArcDPSEnums.TrashID.BlightedSieran:
+                    return "https://i.imgur.com/8EaXVPP.png";
+                case ArcDPSEnums.TrashID.BlightedTybalt:
+                    return "https://i.imgur.com/TgHJKB3.png";
+                case ArcDPSEnums.TrashID.BlightedPaleTree:
+                    return "https://i.imgur.com/l6ADzRj.png";
+                case ArcDPSEnums.TrashID.BlightedTrahearne:
+                    return "https://i.imgur.com/MIH8rLB.png";
+                case ArcDPSEnums.TrashID.BlightedEir:
+                    return "https://i.imgur.com/aAIFLgG.png";*/
+                    //
                 case ArcDPSEnums.TrashID.Spirit:
                 case ArcDPSEnums.TrashID.Spirit2:
                 case ArcDPSEnums.TrashID.ChargedSoul:
@@ -797,6 +828,7 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.Scythe:
                     return "https://i.imgur.com/INCGLIK.png";
                 case ArcDPSEnums.TrashID.BanditBombardier:
+                case ArcDPSEnums.TrashID.SmotheringShadow:
                 case ArcDPSEnums.TrashID.SurgingSoul:
                 case ArcDPSEnums.TrashID.MazeMinotaur:
                 case ArcDPSEnums.TrashID.Enervator:
