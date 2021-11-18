@@ -44,7 +44,7 @@ namespace GW2EIEvtcParser
             _operation = operation;
             var friendlies = new List<AbstractSingleActor>();
             friendlies.AddRange(playerList);
-            friendlies.AddRange(fightData.Logic.Friendlies);
+            friendlies.AddRange(fightData.Logic.NonPlayerFriendlies);
             Friendlies = friendlies;
             //
             FriendliesListBySpec = friendlies.GroupBy(x => x.Spec).ToDictionary(x => x.Key, x => x.ToList());

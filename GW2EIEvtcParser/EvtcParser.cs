@@ -879,7 +879,7 @@ namespace GW2EIEvtcParser
                 throw new MissingKeyActorsException("No Targets found");
             }
             operation.UpdateProgressWithCancellationCheck("Player count: " + _playerList.Count);
-            operation.UpdateProgressWithCancellationCheck("Friendlies count: " + _fightData.Logic.Friendlies.Count);
+            operation.UpdateProgressWithCancellationCheck("Friendlies count: " + _fightData.Logic.NonPlayerFriendlies.Count);
             operation.UpdateProgressWithCancellationCheck("Targets count: " + _fightData.Logic.Targets.Count);
             operation.UpdateProgressWithCancellationCheck("Trash Mobs count: " + _fightData.Logic.TrashMobs.Count);
         }

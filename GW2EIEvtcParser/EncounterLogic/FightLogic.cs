@@ -21,13 +21,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         private readonly int _basicMechanicsCount;
         public bool HasNoFightSpecificMechanics => MechanicList.Count == _basicMechanicsCount;
         public IReadOnlyCollection<AgentItem> TargetAgents { get; protected set; }
-        public IReadOnlyCollection<AgentItem> FriendlyAgents { get; protected set; }
+        public IReadOnlyCollection<AgentItem> NonPlayerFriendlyAgents { get; protected set; }
         public IReadOnlyCollection<AgentItem> TrashMobAgents { get; protected set; }
         public IReadOnlyList<NPC> TrashMobs => _trashMobs;
-        public IReadOnlyList<AbstractSingleActor> Friendlies => _friendlies;
+        public IReadOnlyList<AbstractSingleActor> NonPlayerFriendlies => _nonPlayerFriendlies;
         public IReadOnlyList<AbstractSingleActor> Targets => _targets;
         protected readonly List<NPC> _trashMobs = new List<NPC>();
-        protected readonly List<AbstractSingleActor> _friendlies = new List<AbstractSingleActor>();
+        protected readonly List<AbstractSingleActor> _nonPlayerFriendlies = new List<AbstractSingleActor>();
         protected readonly List<AbstractSingleActor> _targets = new List<AbstractSingleActor>();
 
         public bool Targetless { get; protected set; } = false;
@@ -170,13 +170,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
                 foreach (AgentItem agentItem in agents)
                 {
-                    _friendlies.Add(new NPC(agentItem));
+                    _nonPlayerFriendlies.Add(new NPC(agentItem));
                 }
             }
-            _friendlies.Sort((x, y) => x.FirstAware.CompareTo(y.FirstAware));
+            _nonPlayerFriendlies.Sort((x, y) => x.FirstAware.CompareTo(y.FirstAware));
             //
             TargetAgents = new HashSet<AgentItem>(_targets.Select(x => x.AgentItem));
-            FriendlyAgents = new HashSet<AgentItem>(_friendlies.Select(x => x.AgentItem));
+            NonPlayerFriendlyAgents = new HashSet<AgentItem>(_nonPlayerFriendlies.Select(x => x.AgentItem));
             TrashMobAgents = new HashSet<AgentItem>(_trashMobs.Select(x => x.AgentItem));
         }
 

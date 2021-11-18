@@ -154,7 +154,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     a.OverrideIsNotInSquadFriendlyPlayer(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(x => x.DstAgent).Any(x => x == greenTeam));
                 }
-                List<AbstractSingleActor> actorListToFill = a.IsNotInSquadFriendlyPlayer ? _friendlies : _detailed ? _targets : garbageList;
+                List<AbstractSingleActor> actorListToFill = a.IsNotInSquadFriendlyPlayer ? _nonPlayerFriendlies : _detailed ? _targets : garbageList;
                 var nonSquadPlayer = new PlayerNonSquad(a);
                 if (!set.Contains(nonSquadPlayer.Character))
                 {
@@ -203,7 +203,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             SolveWvWPlayers(agentData, combatData, extensions);
             if (!_detailed)
             {
-                var friendlyAgents = new HashSet<AgentItem>(Friendlies.Select(x => x.AgentItem));
+                var friendlyAgents = new HashSet<AgentItem>(NonPlayerFriendlies.Select(x => x.AgentItem));
                 var aList = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer).Where(x => !friendlyAgents.Contains(x)).ToList();
                 var enemyPlayerDicts = aList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
                 foreach (CombatItem c in combatData)
