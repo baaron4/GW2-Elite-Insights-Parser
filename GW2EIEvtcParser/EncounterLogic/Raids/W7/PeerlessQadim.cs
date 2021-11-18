@@ -39,7 +39,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterCategoryInformation.InSubCategoryOrder = 1;
         }
 
-        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
             return new List<ArcDPSEnums.TrashID>()
             {

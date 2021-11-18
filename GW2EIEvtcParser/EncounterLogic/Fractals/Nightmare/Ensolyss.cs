@@ -51,7 +51,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return FightData.CMStatus.CMnoName;
         }
 
-        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
             return new List<ArcDPSEnums.TrashID>
             {

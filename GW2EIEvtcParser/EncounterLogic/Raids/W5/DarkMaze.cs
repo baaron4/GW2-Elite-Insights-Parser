@@ -36,7 +36,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (19072, 15484, 20992, 16508)*/);
         }
 
-        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
             return new List<ArcDPSEnums.TrashID>
             {

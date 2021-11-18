@@ -84,7 +84,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 GenericTriggerID
             };
         }
-        protected virtual List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
+        protected virtual List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
             return new List<ArcDPSEnums.TrashID>();
         }
@@ -152,7 +152,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             _targets.Sort((x, y) => x.FirstAware.CompareTo(y.FirstAware));
             //
-            List<ArcDPSEnums.TrashID> trashIDs = GetTrashMobsIDS();
+            List<ArcDPSEnums.TrashID> trashIDs = GetTrashMobsIDs();
             var aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => trashIDs.Contains(ArcDPSEnums.GetTrashID(x.ID))).ToList();
             //aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
             foreach (AgentItem a in aList)
