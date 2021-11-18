@@ -327,6 +327,22 @@ namespace GW2EIEvtcParser
 
         public enum TrashID : int
         {
+            // Mordremoth
+            SmotheringShadow = 15640,
+            Canach = 15501,
+            Braham = 15778,
+            //Caithe = 15778,
+            BlightedRytlock = 15999,
+            //BlightedCanach = 15999,
+            //BlightedBraham = 15999,
+            BlightedMarjory = 15572,
+            BlightedCaithe = 15916,
+            BlightedForgal = 15597,
+            //BlightedSieran = 15597,
+            //BlightedTybalt = 15597,
+            //BlightedPaleTree = 15597,
+            //BlightedTrahearne = 15597,
+            //BlightedEir = 15597,
             // VG
             Seekers = 15426,
             RedGuardian = 15433,
@@ -578,6 +594,7 @@ namespace GW2EIEvtcParser
         {
             WorldVersusWorld = 1,
             DummyTarget = ArcDPSEnums.DummyTarget,
+            Mordremoth = 15884,
             // Raid
             ValeGuardian = 15438,
             Gorseval = 15429,
