@@ -110,6 +110,22 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             switch (target.ID)
             {
+                case (int)ArcDPSEnums.TargetID.Desmina:
+                    List<AbstractBuffEvent> asylums = GetFilteredList(log.CombatData, 47122, target, true);
+                    int asylumStart = 0;
+                    foreach (AbstractBuffEvent asylum in asylums)
+                    {
+                        if (asylum is BuffApplyEvent)
+                        {
+                            asylumStart = (int)asylum.Time;
+                        }
+                        else
+                        {
+                            int asylumEnd = (int)asylum.Time;
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 300, (asylumStart, asylumEnd), "rgba(0, 160, 255, 0.3)", new AgentConnector(target)));
+                        }
+                    }
+                    break;
                 case (int)ArcDPSEnums.TrashID.HollowedBomber:
                     Point3D firstBomberMovement = replay.Velocities.FirstOrDefault(x => x.Length() != 0);
                     if (firstBomberMovement != null)

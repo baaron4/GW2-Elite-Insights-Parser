@@ -580,7 +580,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (filtered.Any() && filtered.Last() is BuffApplyEvent)
             {
                 AbstractBuffEvent last = filtered.Last();
-                filtered.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, last.To, long.MaxValue, int.MaxValue, last.BuffSkill, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
+                filtered.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, last.To, target.LastAware, int.MaxValue, last.BuffSkill, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
             }
             return filtered;
         }
