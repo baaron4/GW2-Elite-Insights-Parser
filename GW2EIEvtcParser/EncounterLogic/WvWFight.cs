@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterCategoryInformation.Category = FightCategory.WvW;
         }
 
-        protected override HashSet<int> GetUniqueTargetIDs()
+        protected override HashSet<int> GetUniqueNPCIDs()
         {
             return new HashSet<int>();
         }

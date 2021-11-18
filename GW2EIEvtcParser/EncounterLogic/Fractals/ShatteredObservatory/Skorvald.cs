@@ -146,7 +146,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        protected override List<int> GetFightTargetsIDs()
+        protected override List<int> GetTargetsIDs()
         {
             return new List<int>()
             {

@@ -43,7 +43,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (13440, 14336, 15360, 16256)*/);
         }
 
-        protected override List<int> GetFightTargetsIDs()
+        protected override List<int> GetTargetsIDs()
         {
             return new List<int>
             {
@@ -109,7 +109,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return res;
         }*/
 
-        protected override HashSet<int> GetUniqueTargetIDs()
+        protected override HashSet<int> GetUniqueNPCIDs()
         {
             return new HashSet<int>
             {

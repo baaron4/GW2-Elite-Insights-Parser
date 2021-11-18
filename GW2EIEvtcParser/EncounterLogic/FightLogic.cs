@@ -77,7 +77,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return _map;
         }
 
-        protected virtual List<int> GetFightTargetsIDs()
+        protected virtual List<int> GetTargetsIDs()
         {
             return new List<int>
             {
@@ -129,16 +129,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        protected abstract HashSet<int> GetUniqueTargetIDs();
+        protected abstract HashSet<int> GetUniqueNPCIDs();
 
         internal virtual void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            foreach (int id in GetUniqueTargetIDs())
+            foreach (int id in GetUniqueNPCIDs())
             {
                 RegroupTargetsByID(id, agentData, combatItems, extensions);
             }
             //
-            List<int> targetIDs = GetFightTargetsIDs();
+            List<int> targetIDs = GetTargetsIDs();
             foreach (int id in targetIDs)
             {
                 IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);

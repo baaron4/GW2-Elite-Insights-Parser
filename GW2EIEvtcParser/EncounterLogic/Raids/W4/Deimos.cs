@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new DamageCastFinder(37872, 37872, InstantCastFinder.DefaultICD), // Demonic Aura
             };
         }
-        protected override HashSet<int> GetUniqueTargetIDs()
+        protected override HashSet<int> GetUniqueNPCIDs()
         {
             return new HashSet<int>
             {
@@ -390,7 +390,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        protected override List<int> GetFightTargetsIDs()
+        protected override List<int> GetTargetsIDs()
         {
             return new List<int>
             {
