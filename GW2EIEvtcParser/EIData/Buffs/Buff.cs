@@ -300,6 +300,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Exposed (31589)", 31589, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6b/Exposed.png"),
                 new Buff("Unblockable",36781, Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/f0/Unblockable_%28effect%29.png",102321 , ulong.MaxValue),
                 new Buff("Encumbered",1159, Source.Common, BuffStackType.Queue, 9, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d7/Encumbered.png"),
+                new Buff("Celeritas Spores", 27048, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/7b/Blazing_Speed_Mushrooms.png"),
                 //Auras
                 new Buff("Chaos Aura", 10332, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/e/ec/Chaos_Aura.png"),
                 new Buff("Fire Aura", 5677, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/c/ce/Fire_Aura.png"),
@@ -400,6 +401,23 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Essence of Valor Tier 4", 60062, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6f/Essence_of_Valor.png" ),
                 new Buff("Power of Valor Tier 1", 58385, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/64/Power_of_Valor.png" ),
                 new Buff("Power of Valor Tier 2", 58414, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/64/Power_of_Valor.png" ),
+                //////////////////////////////////////////////
+                // Mordremoth
+                new Buff("Parietal Mastery", 32208, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/76/Parietal_Mastery.png"),
+                new Buff("Parietal Origin", 33305, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/76/Parietal_Mastery.png"),
+                new Buff("Temporal Mastery", 33705, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/80/Temporal_Mastery.png"),
+                new Buff("Temporal Origin", 33009, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/80/Temporal_Mastery.png"),
+                new Buff("Occipital Mastery", 33834, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/9/9a/Occipital_Mastery.png"),
+                new Buff("Occipital Origin", 32218, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/9/9a/Occipital_Mastery.png"),
+                new Buff("Frontal Mastery", 33194, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/44/Frontal_Mastery.png"),
+                new Buff("Frontal Origin", 33095, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/44/Frontal_Mastery.png"),
+                new Buff("Exposed (Mordremoth)", 33470, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6b/Exposed.png"),
+                new Buff("Weakened (Effect 1)", 33378, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/8a/Weakened.png"),
+                new Buff("Weakened (Effect 2)", 33904, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/8a/Weakened.png"),
+                new Buff("Empowered (Hearts and Minds)", 33763, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/5e/Empowered_%28Hearts_and_Minds%29.png"),
+                new Buff("Power (Hearts and Minds)", 32762, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/ec/Power_%28Hearts_and_Minds%29.png"),
+                new Buff("Shifty Aura", 33131, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/78/Branded_Aura.png"),
+                new Buff("Fiery Block", 18981, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/d/de/Shield_Stance.png"),
                 //////////////////////////////////////////////
                 // VG
                 new Buff("Blue Pylon Power", 31413, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6e/Blue_Pylon_Power.png"),
