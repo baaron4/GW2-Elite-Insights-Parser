@@ -62,7 +62,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        protected override List<int> GetFriendlyNPCIDs()
+        {
+            return new List<int>()
+            {
+                (int)ArcDPSEnums.TrashID.ConjuredPlayerSword
+            };
+        }
+
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             // make those into npcs
             IReadOnlyList<AgentItem> cas = agentData.GetGadgetsByID((int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
@@ -81,9 +89,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 rightArm.OverrideType(AgentItem.AgentType.NPC);
             }
             agentData.Refresh();
-            ComputeFightTargets(agentData, combatData, extensions);
             AgentItem sword = agentData.AddCustomAgent(0, fightData.FightEnd, AgentItem.AgentType.NPC, "Conjured Sword\0:Conjured Sword\051", ParserHelper.Spec.NPC, (int)ArcDPSEnums.TrashID.ConjuredPlayerSword, true);
-            friendlies.Add(new NPC(sword));
+            ComputeFightTargets(agentData, combatData, extensions);
             foreach (CombatItem c in combatData)
             {
                 if (c.IsDamage(extensions) && c.SkillID == 52370)

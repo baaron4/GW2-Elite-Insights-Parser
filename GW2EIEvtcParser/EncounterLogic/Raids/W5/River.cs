@@ -48,6 +48,22 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        protected override HashSet<int> GetUniqueTargetIDs()
+        {
+            return new HashSet<int>()
+            {
+                (int)ArcDPSEnums.TargetID.Desmina
+            };
+        }
+
+        protected override List<int> GetFriendlyNPCIDs()
+        {
+            return new List<int>()
+            {
+                (int)ArcDPSEnums.TargetID.Desmina
+            };
+        }
+
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
@@ -79,15 +95,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             agentData.AddCustomAgent(0, fightData.FightEnd, AgentItem.AgentType.NPC, "River of Souls", Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
             ComputeFightTargets(agentData, combatData, extensions);
-            AgentItem desmina = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Desmina).FirstOrDefault();
-            if (desmina != null)
-            {
-                friendlies.Add(new NPC(desmina));
-            }
         }
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)

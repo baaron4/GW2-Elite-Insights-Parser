@@ -80,6 +80,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        protected override List<int> GetFriendlyNPCIDs()
+        {
+            return new List<int>
+            {
+                (int)ArcDPSEnums.TrashID.Saul
+            };
+        }
+
         private static void MergeWithGadgets(AgentItem target, HashSet<ulong> gadgetAgents, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             foreach (CombatItem c in combatData)
@@ -245,7 +253,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return res;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             ComputeFightTargets(agentData, combatData, extensions);
             // Find target
@@ -295,11 +303,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                     string name = (target.ID == (int)ArcDPSEnums.TrashID.Thief ? "Thief" : (target.ID == (int)ArcDPSEnums.TrashID.Drunkard ? "Drunkard" : (target.ID == (int)ArcDPSEnums.TrashID.Gambler ? "Gambler" : "")));
                     target.OverrideName(name);
                 }
-            }
-            AgentItem saul = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.Saul).FirstOrDefault();
-            if (saul != null)
-            {
-                friendlies.Add(new NPC(saul));
             }
         }
 
