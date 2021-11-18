@@ -28,6 +28,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+        {
+            return new CombatReplayMap("https://i.imgur.com/HHDVDPb.png",
+                            (899, 1172),
+                            (-9059, 1171, -6183, 13149));
+        }
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
@@ -103,7 +110,21 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new HashSet<int>()
             {
-                (int)ArcDPSEnums.TargetID.Mordremoth,            
+                (int)ArcDPSEnums.TargetID.Mordremoth, 
+                (int)ArcDPSEnums.TrashID.Canach,
+                (int)ArcDPSEnums.TrashID.Braham,
+                //(int)ArcDPSEnums.TrashID.Caithe,
+                (int)ArcDPSEnums.TrashID.BlightedRytlock,
+                //ArcDPSEnums.TrashID.BlightedCanach,
+                //ArcDPSEnums.TrashID.BlightedBraham,
+                (int)ArcDPSEnums.TrashID.BlightedMarjory,
+                (int)ArcDPSEnums.TrashID.BlightedCaithe,
+                (int)ArcDPSEnums.TrashID.BlightedForgal,
+                //ArcDPSEnums.TrashID.BlightedSieran,
+                //ArcDPSEnums.TrashID.BlightedTybalt,
+                //ArcDPSEnums.TrashID.BlightedPaleTree,
+                //ArcDPSEnums.TrashID.BlightedTrahearne,
+                //ArcDPSEnums.TrashID.BlightedEir,           
             };
         }
     }
