@@ -48,6 +48,9 @@ namespace GW2EIEvtcParser.ParsedData
             TriggerID = id;
             switch (ArcDPSEnums.GetTargetID(id))
             {
+                case ArcDPSEnums.TargetID.Mordremoth:
+                    Logic = new Mordremoth(id);
+                    break;
                 //
                 case ArcDPSEnums.TargetID.ValeGuardian:
                     Logic = new ValeGuardian(id);
