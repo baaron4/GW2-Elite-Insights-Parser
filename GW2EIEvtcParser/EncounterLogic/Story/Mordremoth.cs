@@ -89,10 +89,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new EvtcAgentException("Mordremoth not found");
             }
             BuffApplyEvent buffApply = combatData.GetBuffData(895).OfType<BuffApplyEvent>().LastOrDefault(x => x.To == mordremoth.AgentItem);
-            AbstractDamageEvent finisher = combatData.GetDamageData(21825).LastOrDefault(x => x.To == mordremoth.AgentItem);
-            if (buffApply != null && finisher != null)
+            if (buffApply != null)
             {
-                fightData.SetSuccess(true, finisher.Time);
+                fightData.SetSuccess(true, mordremoth.LastAware);
             }
         }
 
