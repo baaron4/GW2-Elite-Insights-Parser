@@ -97,7 +97,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            agentData.AddCustomAgent(0, fightData.FightEnd, AgentItem.AgentType.NPC, "River of Souls", Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
+            agentData.AddCustomNPCAgent(0, fightData.FightEnd, "River of Souls", Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
             ComputeFightTargets(agentData, combatData, extensions);
         }
 

@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         end = attackOff[i];
                     }
-                    AgentItem extra = agentData.AddCustomAgent(start, end, AgentItem.AgentType.NPC, hand.Name, hand.Spec, id, false, hand.Toughness, hand.Healing, hand.Condition, hand.Concentration, hand.HitboxWidth, hand.HitboxHeight);
+                    AgentItem extra = agentData.AddCustomNPCAgent(start, end, hand.Name, hand.Spec, id, false, hand.Toughness, hand.Healing, hand.Condition, hand.Concentration, hand.HitboxWidth, hand.HitboxHeight);
                     foreach (CombatItem c in combatData)
                     {
                         if (extra.InAwareTimes(c.Time))
