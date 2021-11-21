@@ -20,7 +20,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterCategoryInformation.SubCategory = EncounterCategory.SubFightCategory.Story;
         }
 
-        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
             return new List<ArcDPSEnums.TrashID>
             {
@@ -32,7 +32,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new CombatReplayMap("https://i.imgur.com/HHDVDPb.png",
                             (899, 1172),
-                            (-9059, 1171, -6183, 13149));
+                            (-9059, 10171, -6183, 13149));
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -59,14 +59,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        protected override List<int> GetFightTargetsIDs()
+        protected override List<int> GetTargetsIDs()
         {
             return new List<int>
             {
                 (int)ArcDPSEnums.TargetID.Mordremoth,
-                //(int)ArcDPSEnums.TrashID.Canach, // to be put to friendly
-                //(int)ArcDPSEnums.TrashID.Braham,
-                //(int)ArcDPSEnums.TrashID.Caithe,
                 (int)ArcDPSEnums.TrashID.BlightedRytlock,
                 //ArcDPSEnums.TrashID.BlightedCanach,
                 (int)ArcDPSEnums.TrashID.BlightedBraham,
@@ -105,7 +102,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             return (mordremoth.GetHealth(combatData) > 9e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
         }
 
-        protected override HashSet<int> GetUniqueTargetIDs()
+        protected override List<int> GetFriendlyNPCIDs()
+        {
+            return new List<int>()
+            {
+                (int)ArcDPSEnums.TrashID.Canach,
+                (int)ArcDPSEnums.TrashID.Braham,
+                (int)ArcDPSEnums.TrashID.Caithe,
+            };
+        }
+
+        protected override HashSet<int> GetUniqueNPCIDs()
         {
             return new HashSet<int>()
             {
