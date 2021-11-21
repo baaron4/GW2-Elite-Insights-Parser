@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (19072, 15484, 20992, 16508)*/);
         }
 
-        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
             return new List<ArcDPSEnums.TrashID>
             {
@@ -45,6 +45,22 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.SpiritHorde1,
                 ArcDPSEnums.TrashID.SpiritHorde2,
                 ArcDPSEnums.TrashID.SpiritHorde3
+            };
+        }
+
+        protected override HashSet<int> GetUniqueNPCIDs()
+        {
+            return new HashSet<int>()
+            {
+                (int)ArcDPSEnums.TargetID.Desmina
+            };
+        }
+
+        protected override List<int> GetFriendlyNPCIDs()
+        {
+            return new List<int>()
+            {
+                (int)ArcDPSEnums.TargetID.Desmina
             };
         }
 
@@ -79,15 +95,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            agentData.AddCustomAgent(0, fightData.FightEnd, AgentItem.AgentType.NPC, "River of Souls", Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
+            agentData.AddCustomNPCAgent(0, fightData.FightEnd, "River of Souls", Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
             ComputeFightTargets(agentData, combatData, extensions);
-            AgentItem desmina = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Desmina).FirstOrDefault();
-            if (desmina != null)
-            {
-                friendlies.Add(new NPC(desmina));
-            }
         }
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
@@ -99,6 +110,22 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             switch (target.ID)
             {
+                case (int)ArcDPSEnums.TargetID.Desmina:
+                    List<AbstractBuffEvent> asylums = GetFilteredList(log.CombatData, 47122, target, true);
+                    int asylumStart = 0;
+                    foreach (AbstractBuffEvent asylum in asylums)
+                    {
+                        if (asylum is BuffApplyEvent)
+                        {
+                            asylumStart = (int)asylum.Time;
+                        }
+                        else
+                        {
+                            int asylumEnd = (int)asylum.Time;
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 300, (asylumStart, asylumEnd), "rgba(0, 160, 255, 0.3)", new AgentConnector(target)));
+                        }
+                    }
+                    break;
                 case (int)ArcDPSEnums.TrashID.HollowedBomber:
                     Point3D firstBomberMovement = replay.Velocities.FirstOrDefault(x => x.Length() != 0);
                     if (firstBomberMovement != null)

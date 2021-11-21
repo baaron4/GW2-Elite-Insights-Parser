@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.ParsedData
             Refresh();
         }
 
-        internal AgentItem AddCustomAgent(long start, long end, AgentItem.AgentType type, string name, ParserHelper.Spec spec, int ID, bool isFake, ushort toughness = 0, ushort healing = 0, ushort condition = 0, ushort concentration = 0, uint hitboxWidth = 0, uint hitboxHeight = 0)
+        internal AgentItem AddCustomNPCAgent(long start, long end, string name, ParserHelper.Spec spec, int ID, bool isFake, ushort toughness = 0, ushort healing = 0, ushort condition = 0, ushort concentration = 0, uint hitboxWidth = 0, uint hitboxHeight = 0)
         {
             var rnd = new Random();
             ulong agentValue = 0;
@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
             }
-            var agent = new AgentItem(agentValue, name, spec, ID, instID, type, toughness, healing, condition, concentration, hitboxWidth, hitboxHeight, start, end, isFake);
+            var agent = new AgentItem(agentValue, name, spec, ID, instID, AgentItem.AgentType.NPC, toughness, healing, condition, concentration, hitboxWidth, hitboxHeight, start, end, isFake);
             _allAgentsList.Add(agent);
             Refresh();
             return agent;

@@ -34,14 +34,17 @@ namespace GW2EIEvtcParser
         private Dictionary<AgentItem, AbstractSingleActor> _agentToActorDictionary;
 
         internal ParsedEvtcLog(int evtcVersion, FightData fightData, AgentData agentData, SkillData skillData,
-                List<CombatItem> combatItems, List<Player> playerList, List<AbstractSingleActor> friendlies, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, long evtcLogDuration, EvtcParserSettings parserSettings, ParserController operation)
+                List<CombatItem> combatItems, List<Player> playerList, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, long evtcLogDuration, EvtcParserSettings parserSettings, ParserController operation)
         {
             FightData = fightData;
             AgentData = agentData;
             SkillData = skillData;
-            PlayerList = playerList;
+            PlayerList = playerList; 
             ParserSettings = parserSettings;
             _operation = operation;
+            var friendlies = new List<AbstractSingleActor>();
+            friendlies.AddRange(playerList);
+            friendlies.AddRange(fightData.Logic.NonPlayerFriendlies);
             Friendlies = friendlies;
             //
             FriendliesListBySpec = friendlies.GroupBy(x => x.Spec).ToDictionary(x => x.Key, x => x.ToList());

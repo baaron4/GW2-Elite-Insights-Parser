@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new DamageCastFinder(37872, 37872, InstantCastFinder.DefaultICD), // Demonic Aura
             };
         }
-        protected override HashSet<int> GetUniqueTargetIDs()
+        protected override HashSet<int> GetUniqueNPCIDs()
         {
             return new HashSet<int>
             {
@@ -77,6 +77,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TrashID.Thief,
                 (int)ArcDPSEnums.TrashID.Drunkard,
                 (int)ArcDPSEnums.TrashID.Gambler,
+            };
+        }
+
+        protected override List<int> GetFriendlyNPCIDs()
+        {
+            return new List<int>
+            {
+                (int)ArcDPSEnums.TrashID.Saul
             };
         }
 
@@ -245,7 +253,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return res;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             ComputeFightTargets(agentData, combatData, extensions);
             // Find target
@@ -295,11 +303,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                     string name = (target.ID == (int)ArcDPSEnums.TrashID.Thief ? "Thief" : (target.ID == (int)ArcDPSEnums.TrashID.Drunkard ? "Drunkard" : (target.ID == (int)ArcDPSEnums.TrashID.Gambler ? "Gambler" : "")));
                     target.OverrideName(name);
                 }
-            }
-            AgentItem saul = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.Saul).FirstOrDefault();
-            if (saul != null)
-            {
-                friendlies.Add(new NPC(saul));
             }
         }
 
@@ -387,7 +390,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        protected override List<int> GetFightTargetsIDs()
+        protected override List<int> GetTargetsIDs()
         {
             return new List<int>
             {
@@ -398,7 +401,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
             return new List<ArcDPSEnums.TrashID>
             {

@@ -25,7 +25,6 @@ namespace GW2EIEvtcParser
         private readonly SkillData _skillData;
         private readonly List<CombatItem> _combatItems;
         private List<Player> _playerList;
-        private List<AbstractSingleActor> _friendlies;
         private byte _revision;
         private ushort _id;
         private long _logStartTime;
@@ -136,7 +135,7 @@ namespace GW2EIEvtcParser
                     operation.UpdateProgressWithCancellationCheck("Preparing data for log generation");
                     PreProcessEvtcData(operation);
                     operation.UpdateProgressWithCancellationCheck("Data parsed");
-                    return new ParsedEvtcLog(_evtcVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _friendlies, _enabledExtensions, _logEndTime - _logStartTime, _parserSettings, operation);
+                    return new ParsedEvtcLog(_evtcVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _enabledExtensions, _logEndTime - _logStartTime, _parserSettings, operation);
                 }
             }
             catch (Exception ex)
@@ -873,16 +872,14 @@ namespace GW2EIEvtcParser
                 throw new EvtcAgentException("No valid players");
             }
             //
-            _friendlies = new List<AbstractSingleActor>();
-            _friendlies.AddRange(_playerList);
             operation.UpdateProgressWithCancellationCheck("Encounter specific processing");
-            _fightData.Logic.EIEvtcParse(_gw2Build, _fightData, _agentData, _combatItems, _friendlies, _enabledExtensions);
+            _fightData.Logic.EIEvtcParse(_gw2Build, _fightData, _agentData, _combatItems, _enabledExtensions);
             if (!_fightData.Logic.Targets.Any())
             {
                 throw new MissingKeyActorsException("No Targets found");
             }
             operation.UpdateProgressWithCancellationCheck("Player count: " + _playerList.Count);
-            operation.UpdateProgressWithCancellationCheck("Friendlies count: " + (_friendlies.Count - _playerList.Count));
+            operation.UpdateProgressWithCancellationCheck("Friendlies count: " + _fightData.Logic.NonPlayerFriendlies.Count);
             operation.UpdateProgressWithCancellationCheck("Targets count: " + _fightData.Logic.Targets.Count);
             operation.UpdateProgressWithCancellationCheck("Trash Mobs count: " + _fightData.Logic.TrashMobs.Count);
         }

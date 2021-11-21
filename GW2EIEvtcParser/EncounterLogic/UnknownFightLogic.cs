@@ -17,14 +17,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterCategoryInformation.SubCategory = SubFightCategory.UnknownEncounter;
         }
 
-        protected override HashSet<int> GetUniqueTargetIDs()
+        protected override HashSet<int> GetUniqueNPCIDs()
         {
             return new HashSet<int>();
         }
 
         internal override void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            int id = GetFightTargetsIDs().First();
+            int id = GetTargetsIDs().First();
             AgentItem agentItem = agentData.GetNPCsByID(id).FirstOrDefault();
             // Trigger ID is not NPC
             if (agentItem == null)

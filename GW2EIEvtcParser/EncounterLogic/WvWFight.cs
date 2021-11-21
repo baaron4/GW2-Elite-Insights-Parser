@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterCategoryInformation.Category = FightCategory.WvW;
         }
 
-        protected override HashSet<int> GetUniqueTargetIDs()
+        protected override HashSet<int> GetUniqueNPCIDs()
         {
             return new HashSet<int>();
         }
@@ -123,7 +123,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             fightData.SetSuccess(true, fightData.FightEnd);
         }
 
-        private void SolveWvWPlayers(AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        private void SolveWvWPlayers(AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             IReadOnlyList<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer);
             var set = new HashSet<string>();
@@ -154,7 +154,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     a.OverrideIsNotInSquadFriendlyPlayer(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(x => x.DstAgent).Any(x => x == greenTeam));
                 }
-                List<AbstractSingleActor> actorListToFill = a.IsNotInSquadFriendlyPlayer ? friendlies : _detailed ? _targets : garbageList;
+                List<AbstractSingleActor> actorListToFill = a.IsNotInSquadFriendlyPlayer ? _nonPlayerFriendlies : _detailed ? _targets : garbageList;
                 var nonSquadPlayer = new PlayerNonSquad(a);
                 if (!set.Contains(nonSquadPlayer.Character))
                 {
@@ -196,14 +196,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             agentData.RemoveAllFrom(toRemove);
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            AgentItem dummyAgent = agentData.AddCustomAgent(0, fightData.FightEnd, AgentItem.AgentType.NPC, _detailed ? "Dummy WvW Agent" : "Enemy Players", ParserHelper.Spec.NPC, (int)ArcDPSEnums.TargetID.WorldVersusWorld, true);
+            AgentItem dummyAgent = agentData.AddCustomNPCAgent(0, fightData.FightEnd, _detailed ? "Dummy WvW Agent" : "Enemy Players", ParserHelper.Spec.NPC, (int)ArcDPSEnums.TargetID.WorldVersusWorld, true);
 
-            SolveWvWPlayers(agentData, combatData, friendlies, extensions);
-            var friendlyAgents = new HashSet<AgentItem>(friendlies.Select(x => x.AgentItem));
+            SolveWvWPlayers(agentData, combatData, extensions);
             if (!_detailed)
             {
+                var friendlyAgents = new HashSet<AgentItem>(NonPlayerFriendlies.Select(x => x.AgentItem));
                 var aList = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer).Where(x => !friendlyAgents.Contains(x)).ToList();
                 var enemyPlayerDicts = aList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
                 foreach (CombatItem c in combatData)

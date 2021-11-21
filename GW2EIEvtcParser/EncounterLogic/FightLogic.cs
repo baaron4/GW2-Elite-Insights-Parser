@@ -21,10 +21,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         private readonly int _basicMechanicsCount;
         public bool HasNoFightSpecificMechanics => MechanicList.Count == _basicMechanicsCount;
         public IReadOnlyCollection<AgentItem> TargetAgents { get; protected set; }
+        public IReadOnlyCollection<AgentItem> NonPlayerFriendlyAgents { get; protected set; }
         public IReadOnlyCollection<AgentItem> TrashMobAgents { get; protected set; }
         public IReadOnlyList<NPC> TrashMobs => _trashMobs;
+        public IReadOnlyList<AbstractSingleActor> NonPlayerFriendlies => _nonPlayerFriendlies;
         public IReadOnlyList<AbstractSingleActor> Targets => _targets;
         protected readonly List<NPC> _trashMobs = new List<NPC>();
+        protected readonly List<AbstractSingleActor> _nonPlayerFriendlies = new List<AbstractSingleActor>();
         protected readonly List<AbstractSingleActor> _targets = new List<AbstractSingleActor>();
 
         public bool Targetless { get; protected set; } = false;
@@ -74,12 +77,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             return _map;
         }
 
-        protected virtual List<int> GetFightTargetsIDs()
+        protected virtual List<int> GetTargetsIDs()
         {
             return new List<int>
             {
                 GenericTriggerID
             };
+        }
+        protected virtual List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+        {
+            return new List<ArcDPSEnums.TrashID>();
+        }
+
+        protected virtual List<int> GetFriendlyNPCIDs()
+        {
+            return new List<int>();
         }
 
         internal virtual string GetLogicName(ParsedEvtcLog log)
@@ -117,16 +129,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        protected abstract HashSet<int> GetUniqueTargetIDs();
+        protected abstract HashSet<int> GetUniqueNPCIDs();
 
         internal virtual void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            foreach (int id in GetUniqueTargetIDs())
+            foreach (int id in GetUniqueNPCIDs())
             {
                 RegroupTargetsByID(id, agentData, combatItems, extensions);
             }
-            List<int> ids = GetFightTargetsIDs();
-            foreach (int id in ids)
+            //
+            List<int> targetIDs = GetTargetsIDs();
+            foreach (int id in targetIDs)
             {
                 IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
                 foreach (AgentItem agentItem in agents)
@@ -135,8 +148,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             _targets.Sort((x, y) => x.FirstAware.CompareTo(y.FirstAware));
-            List<ArcDPSEnums.TrashID> ids2 = GetTrashMobsIDS();
-            var aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids2.Contains(ArcDPSEnums.GetTrashID(x.ID))).ToList();
+            //
+            List<ArcDPSEnums.TrashID> trashIDs = GetTrashMobsIDs();
+            var aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => trashIDs.Contains(ArcDPSEnums.GetTrashID(x.ID))).ToList();
             //aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
             foreach (AgentItem a in aList)
             {
@@ -144,7 +158,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             _trashMobs.Sort((x, y) => x.FirstAware.CompareTo(y.FirstAware));
             //
+            List<int> friendlyNPCIDs = GetFriendlyNPCIDs();
+            foreach (int id in friendlyNPCIDs)
+            {
+                IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
+                foreach (AgentItem agentItem in agents)
+                {
+                    _nonPlayerFriendlies.Add(new NPC(agentItem));
+                }
+            }
+            _nonPlayerFriendlies.Sort((x, y) => x.FirstAware.CompareTo(y.FirstAware));
+            //
             TargetAgents = new HashSet<AgentItem>(_targets.Select(x => x.AgentItem));
+            NonPlayerFriendlyAgents = new HashSet<AgentItem>(_nonPlayerFriendlies.Select(x => x.AgentItem));
             TrashMobAgents = new HashSet<AgentItem>(_trashMobs.Select(x => x.AgentItem));
         }
 
@@ -295,7 +321,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal virtual List<ErrorEvent> GetCustomWarningMessages(FightData fightData, int arcdpsVersion)
         {
-            if (arcdpsVersion > 20210923)
+            if (arcdpsVersion >= 20210923)
             {
                 return new List<ErrorEvent>
                 {
@@ -391,11 +417,6 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal virtual void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-        }
-
-        protected virtual List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
-        {
-            return new List<ArcDPSEnums.TrashID>();
         }
 
         internal virtual FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
@@ -521,7 +542,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return fightData.LogStart;
         }
 
-        internal virtual void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal virtual void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             ComputeFightTargets(agentData, combatData, extensions);
         }
@@ -553,7 +574,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (filtered.Any() && filtered.Last() is BuffApplyEvent)
             {
                 AbstractBuffEvent last = filtered.Last();
-                filtered.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, last.To, long.MaxValue, int.MaxValue, last.BuffSkill, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
+                filtered.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, last.To, target.LastAware, int.MaxValue, last.BuffSkill, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
             }
             return filtered;
         }

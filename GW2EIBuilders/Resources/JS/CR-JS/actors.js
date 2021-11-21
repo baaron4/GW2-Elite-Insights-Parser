@@ -107,7 +107,7 @@ class IconDrawable {
     }
 
     getPosition() {
-        if (this.pos === null || this.pos.length === 0) {
+        if (this.pos === null || this.pos.length === 0 || this.disconnected()) {
             return null;
         }
         var time = animator.reactiveDataStatus.time;
