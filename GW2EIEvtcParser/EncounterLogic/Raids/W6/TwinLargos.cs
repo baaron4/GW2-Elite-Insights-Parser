@@ -43,7 +43,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (13440, 14336, 15360, 16256)*/);
         }
 
-        protected override List<int> GetFightTargetsIDs()
+        protected override List<int> GetTargetsIDs()
         {
             return new List<int>
             {
@@ -63,7 +63,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override List<int> GetSuccessCheckIds()
         {
-            return GetFightTargetsIDs();
+            return GetTargetsIDs();
         }
 
         internal override List<AbstractHealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
@@ -113,7 +113,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return targetPhases;
         }
 
-        protected override HashSet<int> GetUniqueTargetIDs()
+        protected override HashSet<int> GetUniqueNPCIDs()
         {
             return new HashSet<int>
             {

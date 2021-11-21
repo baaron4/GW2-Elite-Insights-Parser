@@ -120,7 +120,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, List<AbstractSingleActor> friendlies, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             // has breakbar state into
             if (combatData.Any(x => x.IsStateChange == ArcDPSEnums.StateChange.BreakbarState))
@@ -136,19 +136,19 @@ namespace GW2EIEvtcParser.EncounterLogic
                     long sacrificeStartTime = sacrificeStartList[i].Time;
                     long sacrificeEndTime = i < sacrificeEndList.Count ? sacrificeEndList[i].Time : fightData.FightEnd;
                     //
-                    Player sacrifice = friendlies.OfType<Player>().FirstOrDefault(x => x.AgentItem == agentData.GetAgent(sacrificeStartList[i].DstAgent, sacrificeStartList[i].Time));
+                    AgentItem sacrifice = agentData.GetAgentByType(AgentItem.AgentType.Player).FirstOrDefault(x => x == agentData.GetAgent(sacrificeStartList[i].DstAgent, sacrificeStartList[i].Time));
                     if (sacrifice == null)
                     {
                         continue;
                     }
-                    AgentItem sacrificeCrystal = agentData.AddCustomAgent(sacrificeStartTime, sacrificeEndTime + 100, AgentItem.AgentType.NPC, "Sacrificed " + (i + 1) + " " + sacrifice.Character, sacrifice.Spec, (int)ArcDPSEnums.TrashID.MatthiasSacrificeCrystal, false);
+                    AgentItem sacrificeCrystal = agentData.AddCustomNPCAgent(sacrificeStartTime, sacrificeEndTime + 100, "Sacrificed " + (i + 1) + " " + sacrifice.Name.Split('\0')[0], sacrifice.Spec, (int)ArcDPSEnums.TrashID.MatthiasSacrificeCrystal, false);
                     foreach (CombatItem cbt in combatData)
                     {
                         if (!sacrificeCrystal.InAwareTimes(cbt.Time))
                         {
                             continue;
                         }
-                        bool skip = !(cbt.DstMatchesAgent(sacrifice.AgentItem, extensions) || cbt.SrcMatchesAgent(sacrifice.AgentItem, extensions));
+                        bool skip = !(cbt.DstMatchesAgent(sacrifice, extensions) || cbt.SrcMatchesAgent(sacrifice, extensions));
                         if (skip)
                         {
                             continue;
@@ -157,7 +157,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (cbt.IsDamage(extensions))
                         {
                             // only redirect incoming damage
-                            if (cbt.DstMatchesAgent(sacrifice.AgentItem, extensions))
+                            if (cbt.DstMatchesAgent(sacrifice, extensions))
                             {
                                 cbt.OverrideDstAgent(sacrificeCrystal.Agent);
                             }
@@ -166,11 +166,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                         else
                         {
                             var copy = new CombatItem(cbt);
-                            if (copy.DstMatchesAgent(sacrifice.AgentItem, extensions))
+                            if (copy.DstMatchesAgent(sacrifice, extensions))
                             {
                                 copy.OverrideDstAgent(sacrificeCrystal.Agent);
                             }
-                            if (copy.SrcMatchesAgent(sacrifice.AgentItem, extensions))
+                            if (copy.SrcMatchesAgent(sacrifice, extensions))
                             {
                                 copy.OverrideSrcAgent(sacrificeCrystal.Agent);
                             }
@@ -193,7 +193,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        protected override List<int> GetFightTargetsIDs()
+        protected override List<int> GetTargetsIDs()
         {
             return new List<int>
             {
@@ -202,7 +202,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDS()
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
             return new List<ArcDPSEnums.TrashID>
             {
