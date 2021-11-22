@@ -256,6 +256,7 @@ namespace GW2EIEvtcParser
             PhysRec2 = -24,
             CondRec2 = -25,
             BoonDurationInc = -26,
+            HealingEffectivenessRec2 = -27,
         }
         internal static BuffAttribute GetBuffAttribute(short bt)
         {

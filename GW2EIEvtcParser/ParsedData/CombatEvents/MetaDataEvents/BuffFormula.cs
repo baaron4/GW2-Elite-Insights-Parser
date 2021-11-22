@@ -77,6 +77,7 @@ namespace GW2EIEvtcParser.ParsedData
                 case EnduranceRegeneration:
                     return "Endurance Regeneration";
                 case HealingEffectivenessRec:
+                case HealingEffectivenessRec2:
                     return "Incoming Healing Effectiveness";
                 case HealingEffectivenessConvInc:
                 case HealingEffectivenessFlatInc:
@@ -148,6 +149,7 @@ namespace GW2EIEvtcParser.ParsedData
                 case ConditionDamageToHP:
                 case EnduranceRegeneration:
                 case HealingEffectivenessRec:
+                case HealingEffectivenessRec2:
                 case SiphonInc:
                 case SiphonRec:
                 case HealingEffectivenessConvInc:

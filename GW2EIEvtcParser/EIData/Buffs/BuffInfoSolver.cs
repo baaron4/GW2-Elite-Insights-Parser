@@ -130,8 +130,8 @@ namespace GW2EIEvtcParser.EIData
             {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.ExperienceFromKills), 9968 },
             // Experience from all
             {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.ExperienceFromAll), 46273 },
-            // HealingEffectivenessRec
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.HealingEffectivenessRec), 44871 },
+            // HealingEffectivenessRec2
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.HealingEffectivenessRec2), 44871 },
             // MagicFind
             {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.MagicFind), 33833 },
         };
