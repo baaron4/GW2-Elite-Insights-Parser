@@ -57,6 +57,8 @@ namespace GW2EIEvtcParser.ParsedData
                     return "Attack Speed";
                 case ConditionDurationInc:
                     return "Outgoing Condition Duration";
+                case BoonDurationInc:
+                    return "Outgoing Boon Duration";
                 case DamageFormulaSquaredLevel:
                 case DamageFormula:
                     return "Damage Formula";
@@ -139,6 +141,7 @@ namespace GW2EIEvtcParser.ParsedData
                 case PhysRec2:
                 case AttackSpeed:
                 case ConditionDurationInc:
+                case BoonDurationInc:
                 case GlancingBlow:
                 case CriticalChance:
                 case StrikeDamageToHP:
