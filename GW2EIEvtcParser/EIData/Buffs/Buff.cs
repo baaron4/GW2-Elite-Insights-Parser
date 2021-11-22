@@ -411,7 +411,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Occipital Origin", 32218, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/9/9a/Occipital_Mastery.png"),
                 new Buff("Frontal Mastery", 33194, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/44/Frontal_Mastery.png"),
                 new Buff("Frontal Origin", 33095, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/44/Frontal_Mastery.png"),
-                new Buff("Exposed (Mordremoth)", 33470, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6b/Exposed.png"),
+                new Buff("Exposed (Mordremoth)", 33470, Source.Common, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6b/Exposed.png"),
                 new Buff("Weakened (Effect 1)", 33378, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/8a/Weakened.png"),
                 new Buff("Weakened (Effect 2)", 33904, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/8a/Weakened.png"),
                 new Buff("Empowered (Hearts and Minds)", 33763, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/5e/Empowered_%28Hearts_and_Minds%29.png"),
