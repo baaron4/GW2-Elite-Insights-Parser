@@ -92,6 +92,8 @@ namespace GW2EIEvtcParser.ParsedData
                     return "Gold Find";
                 case MovementSpeed:
                     return "Movement Speed";
+                case MovementSpeedStacking:
+                    return "Movement Speed (Stacking)";
                 case KarmaBonus:
                     return "Karma Bonus";
                 case SkillRechargeSpeedIncrease:
@@ -158,6 +160,7 @@ namespace GW2EIEvtcParser.ParsedData
                 case ExperienceFromAll:
                 case GoldFind:
                 case MovementSpeed:
+                case MovementSpeedStacking:
                 case KarmaBonus:
                 case SkillRechargeSpeedIncrease:
                 case MagicFind:
