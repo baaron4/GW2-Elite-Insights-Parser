@@ -358,7 +358,7 @@ namespace GW2EIBuilders.HtmlModels
                 data.Add("0% downed");
             }
 
-            if (defenses.DeadDuration > 0)
+            if (defenses.DeadCount > 0)
             {
                 var deathDuration = TimeSpan.FromMilliseconds(defenses.DeadDuration);
                 data.Add(defenses.DeadCount);
