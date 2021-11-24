@@ -190,7 +190,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         return;
                     }
-                    fightData.SetSuccess(true, lastDamageTaken.Time);
+                    fightData.SetSuccess(true, notAttackableEvent.Time);
                 }
             }
         }
