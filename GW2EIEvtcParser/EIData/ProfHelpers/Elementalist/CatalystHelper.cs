@@ -15,6 +15,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
+            //new BuffGainCastFinder(62982, 62726, EIData.InstantCastFinder.DefaultICD), // 62726
         };
 
 
