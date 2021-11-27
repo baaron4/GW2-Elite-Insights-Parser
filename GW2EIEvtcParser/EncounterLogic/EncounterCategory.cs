@@ -9,6 +9,7 @@
             Raid,
             WvW,
             Golem,
+            Story,
             UnknownEncounter,
             Unknown
         };
@@ -41,6 +42,8 @@
             ArmisticeBastion,
             //
             Golem,
+            //
+            Story,
             //
             UnknownEncounter,
             Unknown
