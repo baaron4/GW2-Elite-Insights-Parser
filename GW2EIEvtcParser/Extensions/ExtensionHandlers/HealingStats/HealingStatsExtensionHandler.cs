@@ -81,6 +81,10 @@ namespace GW2EIEvtcParser.Extensions
             57356, // Nourishment (Spherified Cilantro Oyster Soup)
             57401, // Nourishment (Fruit Salad with Cilantro Garnish)
             57409, // Nourishment (Cilantro and Cured Meat Flatbread)
+            10594, // Life Transfer (Transfusion)
+            10643, // Gathering Plague (Transfusion)
+            30504, // Soul Spiral (Transfusion)
+            44428, // Garish Pillar (Transfusion)
         };
 
         private readonly List<EXTAbstractHealingEvent> _healingEvents = new List<EXTAbstractHealingEvent>();
