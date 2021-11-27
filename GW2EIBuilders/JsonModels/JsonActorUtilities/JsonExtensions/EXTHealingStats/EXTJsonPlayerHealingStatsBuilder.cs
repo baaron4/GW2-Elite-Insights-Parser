@@ -60,7 +60,7 @@ namespace GW2EIBuilders.JsonModels
                 var allyConversionHealingHealing1S = new List<IReadOnlyList<int>>();
                 alliedConversionHealingHealing1S.Add(allyConversionHealingHealing1S);
                 var allyHybridHealing1S = new List<IReadOnlyList<int>>();
-                alliedHybridHealing1S.Add(allyConversionHealingHealing1S);
+                alliedHybridHealing1S.Add(allyHybridHealing1S);
                 //
                 var allyHealingDist = new List<List<EXTJsonHealingDist>>();
                 alliedHealingDist.Add(allyHealingDist);
