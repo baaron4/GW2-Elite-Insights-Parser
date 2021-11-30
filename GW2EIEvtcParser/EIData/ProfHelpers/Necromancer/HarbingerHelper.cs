@@ -18,8 +18,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
-            new BuffDamageModifier(62653, "Wicked Corruption", "1% per blight stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Harbinger, ByStack, "https://wiki.guildwars2.com/images/0/00/Wicked_Corruption.png", 118697, ulong.MaxValue, DamageModifierMode.All),
-            new BuffDamageModifier(62653, "Septic Corruption", "1% per blight stack", DamageSource.NoPets, 1.0, DamageType.Condition, DamageType.All, Source.Harbinger, ByStack, "https://wiki.guildwars2.com/images/f/f7/Septic_Corruption.png", 118697, ulong.MaxValue, DamageModifierMode.All),
+            new BuffDamageModifier(62653, "Wicked Corruption", "1% per blight stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Harbinger, ByStack, "https://wiki.guildwars2.com/images/0/00/Wicked_Corruption.png", GW2Builds.EODBeta1, ulong.MaxValue, DamageModifierMode.All),
+            new BuffDamageModifier(62653, "Septic Corruption", "1% per blight stack", DamageSource.NoPets, 1.0, DamageType.Condition, DamageType.All, Source.Harbinger, ByStack, "https://wiki.guildwars2.com/images/f/f7/Septic_Corruption.png", GW2Builds.EODBeta1, ulong.MaxValue, DamageModifierMode.All),
             //new BuffDamageModifier(62653, "Wicked Corruption", "0.5% per blight stack", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Harbinger, ByStack, "https://wiki.guildwars2.com/images/0/00/Wicked_Corruption.png", 118697, ulong.MaxValue, DamageModifierMode.All),
             //new BuffDamageModifier(62653, "Septic Corruption", "0.5% per blight stack", DamageSource.NoPets, 0.5, DamageType.Condition, DamageType.All, Source.Harbinger, ByStack, "https://wiki.guildwars2.com/images/f/f7/Septic_Corruption.png", 118697, ulong.MaxValue, DamageModifierMode.All),
         };

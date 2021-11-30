@@ -11,9 +11,9 @@ namespace GW2EIEvtcParser.EIData
         /////////////////////
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffLossCastFinder(62861, 62769, EIData.InstantCastFinder.DefaultICD, 119939, ulong.MaxValue), // Gunsaber sheath
-            new BuffGainCastFinder(62745, 62769, EIData.InstantCastFinder.DefaultICD, 119939, ulong.MaxValue), // Gunsaber         
-            new DamageCastFinder(62847, 62847, EIData.InstantCastFinder.DefaultICD, 119939, ulong.MaxValue), // Unseen Sword
+            new BuffLossCastFinder(62861, 62769, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta2, ulong.MaxValue), // Gunsaber sheath
+            new BuffGainCastFinder(62745, 62769, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta2, ulong.MaxValue), // Gunsaber         
+            new DamageCastFinder(62847, 62847, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta2, ulong.MaxValue), // Unseen Sword
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
