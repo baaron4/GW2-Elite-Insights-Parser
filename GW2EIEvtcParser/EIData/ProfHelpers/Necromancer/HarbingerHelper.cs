@@ -26,8 +26,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-                new Buff("Harbinger Shroud",59964, Source.Harbinger, BuffNature.GraphOnlyBuff, "https://render.guildwars2.com/file/C9CA706909A104A509F594AADA150D680AA948BC/2479400.png", 118697, ulong.MaxValue),
-                new Buff("Blight",62653, Source.Harbinger, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/ac/Blight.png", 118697, ulong.MaxValue),
+                new Buff("Harbinger Shroud",59964, Source.Harbinger, BuffNature.GraphOnlyBuff, "https://render.guildwars2.com/file/C9CA706909A104A509F594AADA150D680AA948BC/2479400.png"),
+                new Buff("Blight",62653, Source.Harbinger, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/ac/Blight.png"),
         };
     }
 }

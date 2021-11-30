@@ -24,6 +24,25 @@ namespace GW2EIEvtcParser
         internal const long WeaponSwapDelayConstant = 75;
         internal const long MinimumInCombatDuration = 2200;
 
+        internal static class GW2Builds
+        {
+            internal const long May2018Balance = 88541;
+            internal const long August2018Balance = 92069;
+            internal const long October2018Balance = 92715;
+            internal const long December2018Balance = 94051;
+            internal const long March2019Balance = 95535;
+            internal const long April2019Balance = 96406;
+            internal const long July2019Balance = 97950;
+            internal const long October2019Balance = 99526;
+            internal const long February2020Balance = 102321;
+            internal const long May2021Balance = 115190;
+            internal const long May2021BalanceHotFix = 115728;
+            internal const long EODBeta1 = 118697;
+            internal const long EODBeta2 = 119939;
+            internal const long EODBeta3 = 121168;
+            internal const long EODBeta4 = 122479;
+        }
+
         internal const int PhaseTimeLimit = 1000;
 
 

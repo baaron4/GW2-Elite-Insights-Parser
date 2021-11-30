@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIGW2API;
 using GW2EIGW2API.GW2API;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -195,23 +196,23 @@ namespace GW2EIEvtcParser.ParsedData
         private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>
                     {
                         { 9292, ulong.MaxValue }, // Lightning Strike (Sigil)
-                        { 5492, 94051 },  // Fire Attunement
+                        { 5492, GW2Builds.December2018Balance },  // Fire Attunement
                         { 13014, ulong.MaxValue }, // Mug
                         { 30770, 54485 }, // Pulmonary Impact
                         { 52370, ulong.MaxValue },
                         { 31686, ulong.MaxValue }, // Lightning Jolt
-                        { 56883, 94051 }, // Sunspot
-                        { 56885, 94051 }, // Earthen Blast
-                        { 29604, 94051 }, // Chilling Nova
-                                         // Spontaneous Destruction 94051
-                        {13907, 94051 }, // Weakening Shroud
-                        {29560, 94051 }, // Spiteful Spirit
-                        {13906, 94051 }, // Chill of Death
-                                         // Power block 94051
-                        {22499, 94051 }, // Shattered Aegis
-                        {21795, 94051 }, // Glacial Heart
-                        {43630, 94051 }, // Thermal Release Valve
-                        {45534, 82356 }, // Loss Aversion
+                        { 56883, GW2Builds.December2018Balance }, // Sunspot
+                        { 56885, GW2Builds.December2018Balance }, // Earthen Blast
+                        { 29604, GW2Builds.December2018Balance }, // Chilling Nova
+                                         // Spontaneous Destruction GW2Builds.December2018Balance
+                        {13907, GW2Builds.December2018Balance }, // Weakening Shroud
+                        {29560, GW2Builds.December2018Balance }, // Spiteful Spirit
+                        {13906, GW2Builds.December2018Balance }, // Chill of Death
+                                         // Power block GW2Builds.December2018Balance
+                        {22499, GW2Builds.December2018Balance }, // Shattered Aegis
+                        {21795, GW2Builds.December2018Balance }, // Glacial Heart
+                        {43630, GW2Builds.December2018Balance }, // Thermal Release Valve
+                        {45534, GW2Builds.December2018Balance }, // Loss Aversion
                         // 
                     };
 
