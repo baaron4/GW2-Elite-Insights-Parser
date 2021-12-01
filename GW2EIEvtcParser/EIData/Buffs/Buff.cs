@@ -205,7 +205,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 return new BuffSourceFinder20191001(boonIds);
             }
-            if (version > 95112)
+            if (version >= GW2Builds.March2019Balance)
             {
                 return new BuffSourceFinder20190305(boonIds);
             }
