@@ -3,14 +3,14 @@
         <div v-if="rotation.current">
             <img :src="rotation.current.skill.icon" :alt="rotation.current.skill.name"
                 :title="rotation.current.skill.name" class="icon-ll"
-                :class="{'rot-cancelled': rotation.current.end === 2}">
+                :class="{'rot-cancelled': rotation.current.type === 2, 'rot-unknown': rotation.current.type === 0, 'rot-animfull': rotation.current.type === 3, 'rot-instant': rotation.current.type === 4}">
         </div>
         <div v-else class="empty-icon-ll">
 
         </div>
         <div v-for="next in rotation.nexts">
             <img :src="next.skill.icon" :alt="next.skill.name" :title="next.skill.name" class="icon-l"
-                :class="{'rot-cancelled': next.end === 2}">
+                :class="{'rot-cancelled': next.type === 2, 'rot-unknown': next.type === 0, 'rot-animfull': next.type === 3, 'rot-instant': next.type === 4}">
         </div>
     </div>
 </template>
@@ -86,15 +86,16 @@
                 if (x <= time && time <= x + duration) {
                     res.current = {
                         skill: findSkill(false, item[1]),
-                        end: item[3]
+                        type: item[3]
                     };
+                    id++;
                 }
-                for (var j = id + 1; j < this.actorRotation.length; j++) {
+                for (var j = id; j < this.actorRotation.length; j++) {
                     var next = this.actorRotation[j];
                     if (next[0] >= time) {
                         res.nexts.push({
                             skill: findSkill(false, next[1]),
-                            end: next[3]
+                            type: next[3]
                         });
                     }
                     if (res.nexts.length == 3) {
