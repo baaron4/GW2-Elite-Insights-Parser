@@ -16,8 +16,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
-            new BuffDamageModifier(63191, "Ferocious Symbiosis", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Untamed, ByStack, "https://wiki.guildwars2.com/images/7/73/Ferocious_Symbiosis.png", DamageModifierMode.All),
-            new BuffDamageModifier(63317, "Vow of the Untamed", "15% when unleashed", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, "https://wiki.guildwars2.com/images/b/bd/Vow_of_the_Untamed.png", DamageModifierMode.All),
+            new BuffDamageModifier(63191, "Ferocious Symbiosis", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Untamed, ByStack, "https://wiki.guildwars2.com/images/7/73/Ferocious_Symbiosis.png", GW2Builds.EODBeta1, GW2Builds.EndOfLife, DamageModifierMode.All),
+            new BuffDamageModifier(63317, "Vow of the Untamed", "15% when unleashed", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, "https://wiki.guildwars2.com/images/b/bd/Vow_of_the_Untamed.png", GW2Builds.EODBeta1, GW2Builds.EndOfLife, DamageModifierMode.All),
         };
 
 
