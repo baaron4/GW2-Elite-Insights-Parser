@@ -405,7 +405,7 @@ namespace GW2EIEvtcParser.EIData
                     CastEvents.Add(wepSwap);
                 }
             }
-            CastEvents = CastEvents.OrderBy(x => x.Time).ThenBy(x => x.Skill.IsSwap).ToList();
+            CastEvents = CastEvents.OrderBy(x => x.Time).ThenBy(x => !x.Skill.IsSwap).ToList();
         }
 
         // DPS Stats
