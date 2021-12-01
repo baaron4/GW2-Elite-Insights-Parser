@@ -329,6 +329,8 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Minor Borderlands Bloodlust", 14772, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/f/f7/Major_Borderlands_Bloodlust.png"),
                 new Buff("Major Borderlands Bloodlust", 14773, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/f/f7/Major_Borderlands_Bloodlust.png"),
                 new Buff("Superior Borderlands Bloodlust", 14774, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/f/f7/Major_Borderlands_Bloodlust.png"),
+                new Buff("Blessing of Elements", 33120, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/3/3c/Blessing_of_Air.png"),
+                new Buff("Flame's Embrace", 34031, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/5/53/Flame%27s_Embrace.png"),
         };
 
         internal static readonly List<Buff> Gear = new List<Buff>
