@@ -21,7 +21,7 @@ namespace GW2EIEvtcParser.EIData
             private readonly ulong _maxBuild;
             private readonly ArcDPSEnums.BuffAttribute _result;
 
-            public BuffFormulaDescriptor(float constantOffset, float levelOffset, float variable, int traitSelf, int traitSrc, ArcDPSEnums.BuffAttribute result, ulong minBuild = 0, ulong maxBuild = ulong.MaxValue)
+            public BuffFormulaDescriptor(float constantOffset, float levelOffset, float variable, int traitSelf, int traitSrc, ArcDPSEnums.BuffAttribute result, ulong minBuild = GW2Builds.StartOfLife, ulong maxBuild = GW2Builds.EndOfLife)
             {
                 _constantOffset = constantOffset;
                 _levelOffset = levelOffset;

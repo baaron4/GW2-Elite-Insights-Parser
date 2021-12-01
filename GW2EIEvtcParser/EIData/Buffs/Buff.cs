@@ -85,8 +85,8 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        private ulong _maxBuild { get; } = ulong.MaxValue;
-        private ulong _minBuild { get; } = ulong.MinValue;
+        private ulong _maxBuild { get; } = GW2Builds.EndOfLife;
+        private ulong _minBuild { get; } = GW2Builds.StartOfLife;
         public int Capacity { get; }
         public string Link { get; }
 
@@ -241,7 +241,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Swiftness", 719, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Boon, "https://wiki.guildwars2.com/images/a/af/Swiftness.png", GW2Builds.May2021Balance, ulong.MaxValue),
                 new Buff("Resolution", 873, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Boon, "https://wiki.guildwars2.com/images/0/06/Resolution.png", GW2Builds.May2021Balance, ulong.MaxValue),
                 new Buff("Resistance", 26980, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Boon, "https://wiki.guildwars2.com/images/4/4b/Resistance.png", GW2Builds.May2021Balance, ulong.MaxValue),*/
-                new Buff("Resolution", 873, Source.Common, BuffStackType.Queue, 5, BuffNature.Boon, "https://wiki.guildwars2.com/images/0/06/Resolution.png", GW2Builds.May2021Balance, ulong.MaxValue),
+                new Buff("Resolution", 873, Source.Common, BuffStackType.Queue, 5, BuffNature.Boon, "https://wiki.guildwars2.com/images/0/06/Resolution.png", GW2Builds.May2021Balance, GW2Builds.EndOfLife),
                 //
                 new Buff("Number of Boons", NumberOfBoonsID, Source.Common, BuffStackType.Stacking, 0, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/44/Boon_Duration.png"),
         };
@@ -283,7 +283,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Hide in Shadows", 10269, Source.Common, BuffStackType.Queue, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
                 new Buff("Revealed", 890, Source.Common, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/d/db/Revealed.png"),
                 new Buff("Superspeed", 5974, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/c/c8/Superspeed.png", 0, 116210),
-                new Buff("Superspeed", 5974, Source.Common, BuffStackType.Queue, 9, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/c/c8/Superspeed.png", 116210, ulong.MaxValue),
+                new Buff("Superspeed", 5974, Source.Common, BuffStackType.Queue, 9, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/c/c8/Superspeed.png", 116210, GW2Builds.EndOfLife),
                 new Buff("Determined (762)", 762, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Buff("Determined (788)", 788, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Buff("Determined (895)", 895, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
@@ -298,7 +298,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Daze", 833, Source.Common, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/79/Daze.png"),
                 new Buff("Exposed (48209)", 48209, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6b/Exposed.png"),
                 new Buff("Exposed (31589)", 31589, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/6b/Exposed.png"),
-                new Buff("Unblockable",36781, Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/f0/Unblockable_%28effect%29.png",GW2Builds.February2020Balance , ulong.MaxValue),
+                new Buff("Unblockable",36781, Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/f0/Unblockable_%28effect%29.png",GW2Builds.February2020Balance , GW2Builds.EndOfLife),
                 new Buff("Encumbered",1159, Source.Common, BuffStackType.Queue, 9, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d7/Encumbered.png"),
                 //Auras
                 new Buff("Chaos Aura", 10332, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/e/ec/Chaos_Aura.png"),
@@ -307,7 +307,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Light Aura", 25518, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/5/5a/Light_Aura.png"),
                 new Buff("Magnetic Aura", 5684, Source.Common, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/0/0b/Magnetic_Aura_%28effect%29.png"),
                 new Buff("Shocking Aura", 5577, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/5/5d/Shocking_Aura_%28effect%29.png"),
-                new Buff("Dark Aura", 39978, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/e/ef/Dark_Aura.png", GW2Builds.April2019Balance, ulong.MaxValue),
+                new Buff("Dark Aura", 39978, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/e/ef/Dark_Aura.png", GW2Builds.April2019Balance, GW2Builds.EndOfLife),
                 //race
                 new Buff("Take Root", 12459, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/b2/Take_Root.png"),
                 new Buff("Become the Bear",12426, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/7e/Become_the_Bear.png"),
@@ -333,7 +333,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> Gear = new List<Buff>
         {
                 new Buff("Sigil of Concentration", 33719, Source.Gear, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/b/b3/Superior_Sigil_of_Concentration.png",0 , 93543),
-                new Buff("Superior Rune of the Monk", 53285, Source.Gear, BuffStackType.Stacking, 10, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/1/18/Superior_Rune_of_the_Monk.png", 93543, ulong.MaxValue),
+                new Buff("Superior Rune of the Monk", 53285, Source.Gear, BuffStackType.Stacking, 10, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/1/18/Superior_Rune_of_the_Monk.png", 93543, GW2Builds.EndOfLife),
                 new Buff("Sigil of Corruption", 9374, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/1/18/Superior_Sigil_of_Corruption.png"),
                 new Buff("Sigil of Life", 9386, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/a/a7/Superior_Sigil_of_Life.png"),
                 new Buff("Sigil of Perception", 9385, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/c/cc/Superior_Sigil_of_Perception.png"),

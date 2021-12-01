@@ -17,8 +17,14 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
             // Need to check mech specy id for those
-            //new BuffDamageModifier(63243, "Force Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Mechanist, ByPresence, "https://wiki.guildwars2.com/images/b/b3/Force_Signet.png", 119939, ulong.MaxValue, DamageModifierMode.All),
-            //new BuffDamageModifier(63322, "Superconducting Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Condition, DamageType.All, Source.Catalyst, ByPresence, "https://wiki.guildwars2.com/images/5/51/Superconducting_Signet.png", 119939, ulong.MaxValue, DamageModifierMode.All),
+            new BuffDamageModifier(63243, "Force Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Mechanist, ByPresence, "https://wiki.guildwars2.com/images/b/b3/Force_Signet.png", GW2Builds.EODBeta4, GW2Builds.EndOfLife, DamageModifierMode.All, (x,log) =>
+            {
+                return x.From == x.CreditedFrom || x.From.ID == 0;
+            }),
+            new BuffDamageModifier(63322, "Superconducting Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Condition, DamageType.All, Source.Catalyst, ByPresence, "https://wiki.guildwars2.com/images/5/51/Superconducting_Signet.png", GW2Builds.EODBeta4, GW2Builds.EndOfLife, DamageModifierMode.All, (x,log) =>
+            {
+                return x.From == x.CreditedFrom || x.From.ID == 0;
+            }),
         };
 
 

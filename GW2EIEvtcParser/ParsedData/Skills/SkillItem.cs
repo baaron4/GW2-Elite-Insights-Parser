@@ -195,12 +195,12 @@ namespace GW2EIEvtcParser.ParsedData
 
         private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>
                     {
-                        { 9292, ulong.MaxValue }, // Lightning Strike (Sigil)
+                        { 9292, GW2Builds.EndOfLife }, // Lightning Strike (Sigil)
                         { 5492, GW2Builds.December2018Balance },  // Fire Attunement
-                        { 13014, ulong.MaxValue }, // Mug
+                        { 13014, GW2Builds.EndOfLife }, // Mug
                         { 30770, 54485 }, // Pulmonary Impact
-                        { 52370, ulong.MaxValue },
-                        { 31686, ulong.MaxValue }, // Lightning Jolt
+                        { 52370, GW2Builds.EndOfLife },
+                        { 31686, GW2Builds.EndOfLife }, // Lightning Jolt
                         { 56883, GW2Builds.December2018Balance }, // Sunspot
                         { 56885, GW2Builds.December2018Balance }, // Earthen Blast
                         { 29604, GW2Builds.December2018Balance }, // Chilling Nova

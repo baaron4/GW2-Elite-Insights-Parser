@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using GW2EIEvtcParser.Interfaces;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -13,8 +14,8 @@ namespace GW2EIEvtcParser.EIData
 
         protected long ICD { get; }
 
-        private ulong _maxBuild { get; } = ulong.MaxValue;
-        private ulong _minBuild { get; } = ulong.MinValue;
+        private ulong _maxBuild { get; } = GW2Builds.EndOfLife;
+        private ulong _minBuild { get; } = GW2Builds.StartOfLife;
 
         protected InstantCastFinder(long skillID, long icd)
         {

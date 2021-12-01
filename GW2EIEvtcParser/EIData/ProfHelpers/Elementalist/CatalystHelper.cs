@@ -15,15 +15,15 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            //new BuffGainCastFinder(62982, 62726, EIData.InstantCastFinder.DefaultICD), // 62726
+            new BuffGainCastFinder(62982, 62726, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta4, GW2Builds.EndOfLife), // Invigorating Air
         };
 
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
-            new BuffDamageModifier(62931, "Flame Wheel", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, "https://wiki.guildwars2.com/images/f/f3/Flame_Wheel.png", GW2Builds.EODBeta2, ulong.MaxValue, DamageModifierMode.All),
-            new BuffDamageModifier(62805, "Relentless Fire", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, "https://wiki.guildwars2.com/images/7/70/Relentless_Fire.png", GW2Builds.EODBeta2, ulong.MaxValue, DamageModifierMode.All),
-            new BuffDamageModifier(62939, "Empowering Auras", "2%", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, "https://wiki.guildwars2.com/images/4/44/Empowering_Auras.png", GW2Builds.EODBeta2, ulong.MaxValue, DamageModifierMode.All),
+            new BuffDamageModifier(62931, "Flame Wheel", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, "https://wiki.guildwars2.com/images/f/f3/Flame_Wheel.png", GW2Builds.EODBeta2, GW2Builds.EndOfLife, DamageModifierMode.All),
+            new BuffDamageModifier(62805, "Relentless Fire", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, "https://wiki.guildwars2.com/images/7/70/Relentless_Fire.png", GW2Builds.EODBeta2, GW2Builds.EndOfLife, DamageModifierMode.All),
+            new BuffDamageModifier(62939, "Empowering Auras", "2%", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, "https://wiki.guildwars2.com/images/4/44/Empowering_Auras.png", GW2Builds.EODBeta2, GW2Builds.EndOfLife, DamageModifierMode.All),
         };
 
 

@@ -24,14 +24,14 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return currentPosition.DistanceToPoint(currentTargetPosition) <= 600;
-            }, ByPresence, 118697, ulong.MaxValue, DamageModifierMode.PvE),
-            //new BuffDamageModifier(62529, "Deadly Blades", "3% per stack", DamageSource.NoPets, 5.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Virtuoso, ByPresence, "https://wiki.guildwars2.com/images/1/15/Deadly_Blades.png", 118697, ulong.MaxValue, DamageModifierMode.All),
+            }, ByPresence, 118697, GW2Builds.EndOfLife, DamageModifierMode.PvE),
+            //new BuffDamageModifier(62529, "Deadly Blades", "3% per stack", DamageSource.NoPets, 5.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Virtuoso, ByPresence, "https://wiki.guildwars2.com/images/1/15/Deadly_Blades.png", 118697, GW2Builds.EndOfLife, DamageModifierMode.All),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             // blade?
-             //new Buff("Deadly Blades", 62529, Source.Virtuoso, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/15/Deadly_Blades.png", 118697, ulong.MaxValue),
+             //new Buff("Deadly Blades", 62529, Source.Virtuoso, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/15/Deadly_Blades.png", 118697, GW2Builds.EndOfLife),
         };
     }
 }

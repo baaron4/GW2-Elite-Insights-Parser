@@ -47,7 +47,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return false;
             }),
-            new BuffDamageModifier(33902, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png", GW2Builds.May2021Balance, ulong.MaxValue, DamageModifierMode.All, (x, log) => {
+            new BuffDamageModifier(33902, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png", GW2Builds.May2021Balance, GW2Builds.EndOfLife, DamageModifierMode.All, (x, log) => {
                 AgentItem src = x.From;
                 AbstractBuffEvent effectApply = log.CombatData.GetBuffData(33902).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
                 if (effectApply != null)
@@ -69,7 +69,7 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return currentPosition.DistanceToPoint(currentTargetPosition) <= 600.0;
-            }, ByPresence, 90455, ulong.MaxValue, DamageModifierMode.All),
+            }, ByPresence, 90455, GW2Builds.EndOfLife, DamageModifierMode.All),
             new DamageLogApproximateDamageModifier("Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, "https://wiki.guildwars2.com/images/2/2f/Steady_Focus.png", (x, log) => {
                 if (!x.Skill.IsWeaponSkill)
                 {
@@ -82,10 +82,10 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return currentPosition.DistanceToPoint(currentTargetPosition) > 600.0;
-            }, ByPresence, 90455, ulong.MaxValue, DamageModifierMode.All),
+            }, ByPresence, 90455, GW2Builds.EndOfLife, DamageModifierMode.All),
             new BuffDamageModifierTarget(new long[] { 872, 833, 721, 727, 791, 722, 27705}, "Predator's Onslaught", "15% to disabled or movement-impaired foes", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/a/ac/Predator%27s_Onslaught.png", DamageModifierMode.All),
             // Skirmishing
-            new DamageLogDamageModifier("Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger,"https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png", (x, log) => x.IsFlanking , ByPresence, GW2Builds.February2020Balance, ulong.MaxValue, DamageModifierMode.All),
+            new DamageLogDamageModifier("Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger,"https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png", (x, log) => x.IsFlanking , ByPresence, GW2Builds.February2020Balance, GW2Builds.EndOfLife, DamageModifierMode.All),
             new BuffDamageModifier(30673, "Light on your Feet", "10% (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/2/22/Light_on_your_Feet.png", DamageModifierMode.All),
             // Nature Magic
             // We can't check buffs on minions yet
@@ -110,11 +110,11 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Stone Spirit", 12547, Source.Ranger, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/3/35/Stone_Spirit.png/20px-Stone_Spirit.png", 0, GW2Builds.May2018Balance),
                 //new Boon("Storm Spirit (old)", 50381, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/2/25/Storm_Spirit.png/30px-Storm_Spirit.png"),
                 //reworked
-                new Buff("Water Spirit", 50386, Source.Ranger, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/0/06/Water_Spirit.png/33px-Water_Spirit.png", GW2Builds.May2018Balance, ulong.MaxValue),
-                new Buff("Frost Spirit", 50421, Source.Ranger, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png", GW2Builds.May2018Balance, ulong.MaxValue),
-                new Buff("Sun Spirit", 50413, Source.Ranger, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/d/dd/Sun_Spirit.png/33px-Sun_Spirit.png", GW2Builds.May2018Balance, ulong.MaxValue),
-                new Buff("Stone Spirit", 50415, Source.Ranger, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/3/35/Stone_Spirit.png/20px-Stone_Spirit.png", GW2Builds.May2018Balance, ulong.MaxValue),
-                new Buff("Storm Spirit", 50381, Source.Ranger, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/thumb/2/25/Storm_Spirit.png/30px-Storm_Spirit.png", GW2Builds.May2018Balance, ulong.MaxValue),
+                new Buff("Water Spirit", 50386, Source.Ranger, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/0/06/Water_Spirit.png/33px-Water_Spirit.png", GW2Builds.May2018Balance, GW2Builds.EndOfLife),
+                new Buff("Frost Spirit", 50421, Source.Ranger, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png", GW2Builds.May2018Balance, GW2Builds.EndOfLife),
+                new Buff("Sun Spirit", 50413, Source.Ranger, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/d/dd/Sun_Spirit.png/33px-Sun_Spirit.png", GW2Builds.May2018Balance, GW2Builds.EndOfLife),
+                new Buff("Stone Spirit", 50415, Source.Ranger, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/3/35/Stone_Spirit.png/20px-Stone_Spirit.png", GW2Builds.May2018Balance, GW2Builds.EndOfLife),
+                new Buff("Storm Spirit", 50381, Source.Ranger, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/thumb/2/25/Storm_Spirit.png/30px-Storm_Spirit.png", GW2Builds.May2018Balance, GW2Builds.EndOfLife),
                 //skills
                 new Buff("Attack of Opportunity",12574, Source.Ranger, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/47/Moment_of_Clarity.png"),
                 new Buff("Call of the Wild",36781, Source.Ranger, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/8d/Call_of_the_Wild.png",0 , GW2Builds.July2019Balance),

@@ -26,21 +26,25 @@ namespace GW2EIEvtcParser
 
         internal static class GW2Builds
         {
-            internal const long May2018Balance = 88541;
-            internal const long August2018Balance = 92069;
-            internal const long October2018Balance = 92715;
-            internal const long December2018Balance = 94051;
-            internal const long March2019Balance = 95535;
-            internal const long April2019Balance = 96406;
-            internal const long July2019Balance = 97950;
-            internal const long October2019Balance = 99526;
-            internal const long February2020Balance = 102321;
-            internal const long May2021Balance = 115190;
-            internal const long May2021BalanceHotFix = 115728;
-            internal const long EODBeta1 = 118697;
-            internal const long EODBeta2 = 119939;
-            internal const long EODBeta3 = 121168;
-            internal const long EODBeta4 = 122479;
+            internal const ulong StartOfLife = ulong.MinValue;
+            //
+            internal const ulong May2018Balance = 88541;
+            internal const ulong August2018Balance = 92069;
+            internal const ulong October2018Balance = 92715;
+            internal const ulong December2018Balance = 94051;
+            internal const ulong March2019Balance = 95535;
+            internal const ulong April2019Balance = 96406;
+            internal const ulong July2019Balance = 97950;
+            internal const ulong October2019Balance = 99526;
+            internal const ulong February2020Balance = 102321;
+            internal const ulong May2021Balance = 115190;
+            internal const ulong May2021BalanceHotFix = 115728;
+            internal const ulong EODBeta1 = 118697;
+            internal const ulong EODBeta2 = 119939;
+            internal const ulong EODBeta3 = 121168;
+            internal const ulong EODBeta4 = 122479;
+            //
+            internal const ulong EndOfLife = ulong.MaxValue;
         }
 
         internal const int PhaseTimeLimit = 1000;
