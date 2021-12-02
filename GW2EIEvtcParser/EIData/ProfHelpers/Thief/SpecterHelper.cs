@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Shadow Shroud",63239, Source.Specter, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/f3/Enter_Shadow_Shroud.png"),
             new Buff("Shrouded Ally",63207, Source.Specter, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/3a/Siphon.png"),
             new Buff("Rot Wallow Venom",63168, Source.Specter, ArcDPSEnums.BuffStackType.StackingConditionalLoss, 100, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/5/57/Dark_Sentry.png"),
-            new Buff("Consume Shadows", Unknown, Source.Specter, ArcDPSEnums.BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/94/Consume_Shadows.png"),
+            new Buff("Consume Shadows", 63456, Source.Specter, ArcDPSEnums.BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/94/Consume_Shadows.png"),
         };
 
     }
