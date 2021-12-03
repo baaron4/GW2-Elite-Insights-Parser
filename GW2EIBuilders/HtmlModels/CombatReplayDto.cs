@@ -30,13 +30,12 @@ namespace GW2EIBuilders.HtmlModels
         private static List<object> GetCombatReplayActors(ParsedEvtcLog log, CombatReplayMap map)
         {
             var actors = new List<object>();
+            var fromNonFriendliesSet = new HashSet<AbstractSingleActor>();
+            fromNonFriendliesSet.UnionWith(log.FightData.Logic.TrashMobs);
+            fromNonFriendliesSet.UnionWith(log.FightData.Logic.Targets);
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                if (actor.IsFakeActor)
-                {
-                    continue;
-                }
-                if (actor.GetCombatReplayPolledPositions(log).Count == 0)
+                if (actor.IsFakeActor || actor.GetCombatReplayPolledPositions(log).Count == 0)
                 {
                     continue;
                 }
@@ -45,20 +44,15 @@ namespace GW2EIBuilders.HtmlModels
                 {
                     actors.Add(a.GetCombatReplayDescription(map, log));
                 }
-            }
-            foreach (NPC actor in log.FightData.Logic.TrashMobs)
-            {
-                if ((actor.LastAware - actor.FirstAware < 200) || actor.GetCombatReplayPolledPositions(log).Count == 0)
+                foreach (Minions minions in actor.GetMinions(log).Values)
                 {
-                    continue;
-                }
-                actors.Add(actor.GetCombatReplayDescription(map, log));
-                foreach (GenericDecoration a in actor.GetCombatReplayDecorations(log))
-                {
-                    actors.Add(a.GetCombatReplayDescription(map, log));
+                    if (ArcDPSEnums.IsKnownMinionID(minions.ID, actor.Spec))
+                    {
+                        fromNonFriendliesSet.UnionWith(minions.MinionList);
+                    }
                 }
             }
-            foreach (AbstractSingleActor actor in log.FightData.Logic.Targets)
+            foreach (AbstractSingleActor actor in fromNonFriendliesSet.ToList())
             {
                 if ((actor.LastAware - actor.FirstAware < 200) || actor.GetCombatReplayPolledPositions(log).Count == 0)
                 {

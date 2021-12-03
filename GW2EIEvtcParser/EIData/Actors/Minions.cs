@@ -20,6 +20,9 @@ namespace GW2EIEvtcParser.EIData
             Master = master;
             EXTHealing = new EXTMinionsHealingHelper(this);
             Character = firstMinion.Character;
+#if DEBUG
+            Character += " (" + ID + ")";
+#endif
         }
 
         internal void AddMinion(NPC minion)

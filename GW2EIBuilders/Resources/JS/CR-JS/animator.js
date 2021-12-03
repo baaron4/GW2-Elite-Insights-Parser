@@ -64,7 +64,7 @@ class Animator {
         this.backwards = false;
         this.rangeControl = [{ enabled: false, radius: 180 }, { enabled: false, radius: 360 }, { enabled: false, radius: 720 }];
         this.highlightSelectedGroup = true;
-        this.displayAllMinions = true;
+        this.displayAllMinions = false;
         this.displaySelectedMinions = true;
         this.displayMechanics = true;
         this.displayTrashMobs = true;
@@ -162,7 +162,7 @@ class Animator {
             const actor = actors[i];
             switch (actor.type) {
                 case "Player":
-                    this.playerData.set(actor.id, new SquadIconDrawable(actor.start, actor.end, actor.img, 20, actor.group, actor.positions, actor.dead, actor.down, actor.dc));
+                    this.playerData.set(actor.id, new SquadIconDrawable(actor.start, actor.end, actor.img, 23, actor.group, actor.positions, actor.dead, actor.down, actor.dc));
                     if (this.times.length === 0) {
                         for (let j = 0; j < actor.positions.length / 2; j++) {
                             this.times.push(j * this.pollingRate);
@@ -177,7 +177,7 @@ class Animator {
                     this.trashMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc, actor.masterID));
                     break;
                 case "Friendly":
-                    this.friendlyMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc, actor.masterID));
+                    this.friendlyMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 20, actor.positions, actor.dead, actor.down, actor.dc, actor.masterID));
                     break;
                 case "Circle":
                     this.mechanicActorData.push(new CircleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.radius, actor.connectedTo, this.inchToPixel * actor.minRadius));

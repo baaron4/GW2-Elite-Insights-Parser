@@ -33,7 +33,7 @@ namespace GW2EIEvtcParser.EIData
         {
             log.FightData.Logic.ComputeNPCCombatReplayActors(this, log, CombatReplay);
             AgentItem master = AgentItem.GetFinalMaster();
-            bool isMinionOfPlayer = master.Type == AgentItem.AgentType.Player && ProfHelper.IsKnownMinionID(ID, master.Spec);
+            bool isMinionOfPlayer = master.Type == AgentItem.AgentType.Player && ArcDPSEnums.IsKnownMinionID(ID, master.Spec);
             if (CombatReplay.Rotations.Any() && (log.FightData.Logic.TargetAgents.Contains(AgentItem) || log.FriendlyAgents.Contains(AgentItem) || isMinionOfPlayer))
             {
                 CombatReplay.Decorations.Add(new FacingDecoration(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));
