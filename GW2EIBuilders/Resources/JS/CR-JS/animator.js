@@ -64,6 +64,8 @@ class Animator {
         this.backwards = false;
         this.rangeControl = [{ enabled: false, radius: 180 }, { enabled: false, radius: 360 }, { enabled: false, radius: 720 }];
         this.highlightSelectedGroup = true;
+        this.displayAllMinions = true;
+        this.displaySelectedMinions = true;
         this.displayMechanics = true;
         this.displayTrashMobs = true;
         this.coneControl = {
@@ -169,13 +171,13 @@ class Animator {
                     break;
                 case "Target":
                 case "TargetPlayer":
-                    this.targetData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 30, actor.positions, actor.dead, actor.down, actor.dc));
+                    this.targetData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 30, actor.positions, actor.dead, actor.down, actor.dc, actor.masterID));
                     break;
                 case "Mob":
-                    this.trashMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc));
+                    this.trashMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc, actor.masterID));
                     break;
                 case "Friendly":
-                    this.friendlyMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc));
+                    this.friendlyMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc, actor.masterID));
                     break;
                 case "Circle":
                     this.mechanicActorData.push(new CircleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.radius, actor.connectedTo, this.inchToPixel * actor.minRadius));
@@ -297,6 +299,16 @@ class Animator {
 
     toggleHighlightSelectedGroup() {
         this.highlightSelectedGroup = !this.highlightSelectedGroup;
+        animateCanvas(noUpdateTime);
+    }
+
+    toggleDisplayAllMinions() {
+        this.displayAllMinions = !this.displayAllMinions;
+        animateCanvas(noUpdateTime);
+    }
+
+    toggleDisplaySelectedMinions() {
+        this.displaySelectedMinions = !this.displaySelectedMinions;
         animateCanvas(noUpdateTime);
     }
 

@@ -106,6 +106,10 @@ class IconDrawable {
         return pt;
     }
 
+    canDraw() {
+        return true;
+    }
+
     getPosition() {
         if (this.pos === null || this.pos.length === 0 || this.disconnected()) {
             return null;
@@ -128,7 +132,7 @@ class IconDrawable {
 
     draw() {
         const pos = this.getPosition();
-        if (pos === null) {
+        if (pos === null || !this.canDraw()) {
             return;
         }
         var ctx = animator.mainContext;
@@ -178,7 +182,19 @@ class SquadIconDrawable extends IconDrawable {
 }
 
 class NonSquadIconDrawable extends IconDrawable {
-    constructor(start, end, imgSrc, pixelSize, pos, dead, down, dc) {
+    constructor(start, end, imgSrc, pixelSize, pos, dead, down, dc, masterID) {
         super(pos, start, end, imgSrc, pixelSize, dead, down, dc);
+        this.masterID = typeof masterID === "undefined" ? -1 : masterID;
+        this.master = null;
+    }
+
+    canDraw() {
+        if (this.master === null) {
+            this.master = animator.getActorData(this.masterID);
+        }
+        if (this.master && !animator.displayAllMinions) {
+            return this.master.isSelected() && animator.displaySelectedMinions;
+        }
+        return true;
     }
 }

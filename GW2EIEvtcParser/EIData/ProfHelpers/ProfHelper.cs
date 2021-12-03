@@ -269,5 +269,15 @@ namespace GW2EIEvtcParser.EIData
             }
             return res;
         }
+        public static bool IsKnownMinionID(long id, Spec spec)
+        {
+            return false;
+        }
+
+        public static void LinkMinionCombatReplayToMaster(AbstractSingleActor minion, AbstractSingleActor master, ParsedEvtcLog log, CombatReplay combatReplay)
+        {
+
+        }
+
     }
 }

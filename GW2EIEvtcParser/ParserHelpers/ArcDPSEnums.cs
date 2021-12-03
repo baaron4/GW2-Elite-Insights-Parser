@@ -1,4 +1,5 @@
 ﻿using System;
+using GW2EIEvtcParser.EIData;
 
 namespace GW2EIEvtcParser
 {
@@ -668,6 +669,11 @@ namespace GW2EIEvtcParser
         public static TargetID GetTargetID(int id)
         {
             return Enum.IsDefined(typeof(TargetID), id) ? (TargetID)id : TargetID.Unknown;
+        }
+
+        public static bool IsKnownMinionID(long id, ParserHelper.Spec spec)
+        {
+            return ProfHelper.IsKnownMinionID(id, spec);
         }
 
     }
