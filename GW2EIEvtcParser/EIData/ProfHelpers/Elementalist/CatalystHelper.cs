@@ -15,6 +15,10 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
+            new BuffGainCastFinder(62758, 62931, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta4, GW2Builds.EndOfLife), // Flame Wheel
+            new BuffGainCastFinder(62834, 62984, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta4, GW2Builds.EndOfLife), // Icy Coil
+            new BuffGainCastFinder(62887, 62707, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta4, GW2Builds.EndOfLife), // Crescent Wind
+            new BuffGainCastFinder(62975, 62768, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta4, GW2Builds.EndOfLife), // Invigorating Air
             new BuffGainCastFinder(62982, 62726, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta4, GW2Builds.EndOfLife), // Invigorating Air
         };
 
