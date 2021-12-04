@@ -277,7 +277,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     activeCombatMinionsGraph.MergePresenceInto(minionsSegments);
                 }
-                if (canSummonClones && MesmerHelper.IsClone(minions.ID))
+                if (canSummonClones && MesmerHelper.IsClone(minions.ReferenceAgentItem))
                 {
                     foreach (IReadOnlyList<Segment> minionsSegments in segments)
                     {

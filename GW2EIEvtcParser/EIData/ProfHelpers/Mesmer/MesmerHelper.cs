@@ -45,10 +45,14 @@ namespace GW2EIEvtcParser.EIData
 
         internal static bool IsClone(AgentItem agentItem)
         {
+            if (agentItem.Type == AgentItem.AgentType.Gadget)
+            {
+                return false;
+            }
             return _cloneIDs.Contains(agentItem.ID);
         }
 
-        internal static bool IsClone(long id)
+        private static bool IsClone(long id)
         {
             return _cloneIDs.Contains(id);
         }

@@ -9,6 +9,7 @@ namespace GW2EIEvtcParser.EIData
     public class Minions : AbstractActor
     {
         private List<NPC> _minionList { get; }
+        public AgentItem ReferenceAgentItem => AgentItem;
 
         public IReadOnlyList<NPC> MinionList => _minionList;
         public AbstractSingleActor Master { get; }
