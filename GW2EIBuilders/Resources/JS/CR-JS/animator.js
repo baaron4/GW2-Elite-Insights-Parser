@@ -601,7 +601,7 @@ class Animator {
             }
         }
         
-        this.playerData.forEach(function (value, key, map) {
+        this.friendlyMobData.forEach(function (value, key, map) {
             if (!value.isSelected()) {
                 value.draw();
                 if (_this.attachedActorData.has(key)) {
@@ -610,7 +610,7 @@ class Animator {
             }
         });
         
-        this.friendlyMobData.forEach(function (value, key, map) {
+        this.playerData.forEach(function (value, key, map) {
             if (!value.isSelected()) {
                 value.draw();
                 if (_this.attachedActorData.has(key)) {
