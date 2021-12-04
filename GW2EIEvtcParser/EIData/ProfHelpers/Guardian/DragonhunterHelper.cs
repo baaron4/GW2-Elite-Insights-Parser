@@ -20,7 +20,7 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffDamageModifierTarget(721, "Zealot's Aggression", "10% on crippled target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, "https://wiki.guildwars2.com/images/7/7e/Zealot%27s_Aggression.png", DamageModifierMode.All),
             // Pur of Sight unclear. Max is very likely to be 1200, as it is the maximum tooltip range for a DH but what is the distance at witch the minimum is reached? Is the scaling linear?
-            new BuffDamageModifierTarget(30232, "Big Game Hunter", "10% to tethered target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, "https://wiki.guildwars2.com/images/7/76/Big_Game_Hunter.png", 0, 92715, DamageModifierMode.All, (x, log) => {
+            new BuffDamageModifierTarget(30232, "Big Game Hunter", "10% to tethered target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, "https://wiki.guildwars2.com/images/7/76/Big_Game_Hunter.png", 0, GW2Builds.October2018Balance, DamageModifierMode.All, (x, log) => {
                 AgentItem src = x.From;
                 AgentItem dst = x.To;
                 AbstractBuffEvent effectApply = log.CombatData.GetBuffData(30232).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 8000) < ServerDelayConstant && bae.By == src && bae.To == dst).LastOrDefault(y => y.Time <= x.Time);
@@ -30,7 +30,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return false;
             }),
-            new BuffDamageModifierTarget(30232, "Big Game Hunter", "20% to tethered target", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, "https://wiki.guildwars2.com/images/7/76/Big_Game_Hunter.png", 92715, 102321, DamageModifierMode.All, (x, log) => {
+            new BuffDamageModifierTarget(30232, "Big Game Hunter", "20% to tethered target", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, "https://wiki.guildwars2.com/images/7/76/Big_Game_Hunter.png", GW2Builds.October2018Balance, GW2Builds.February2020Balance, DamageModifierMode.All, (x, log) => {
                 AgentItem src = x.From;
                 AgentItem dst = x.To;
                 AbstractBuffEvent effectApply = log.CombatData.GetBuffData(30232).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 8000) < ServerDelayConstant && bae.By == src && bae.To == dst).LastOrDefault(y => y.Time <= x.Time);
@@ -40,7 +40,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return false;
             }),
-            new BuffDamageModifierTarget(30232, "Big Game Hunter", "15% to tethered target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, "https://wiki.guildwars2.com/images/7/76/Big_Game_Hunter.png", 102321, ulong.MaxValue, DamageModifierMode.All, (x, log) => {
+            new BuffDamageModifierTarget(30232, "Big Game Hunter", "15% to tethered target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, "https://wiki.guildwars2.com/images/7/76/Big_Game_Hunter.png", GW2Builds.February2020Balance, GW2Builds.EndOfLife, DamageModifierMode.All, (x, log) => {
                 AgentItem src = x.From;
                 AgentItem dst = x.To;
                 AbstractBuffEvent effectApply = log.CombatData.GetBuffData(30232).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 10000) < ServerDelayConstant && bae.By == src && bae.To == dst).LastOrDefault(y => y.Time <= x.Time);

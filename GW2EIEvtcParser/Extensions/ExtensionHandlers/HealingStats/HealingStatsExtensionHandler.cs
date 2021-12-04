@@ -85,11 +85,16 @@ namespace GW2EIEvtcParser.Extensions
             10643, // Gathering Plague (Transfusion)
             30504, // Soul Spiral (Transfusion)
             44428, // Garish Pillar (Transfusion)
+            30783, // Wings of Resolve
         };
 
         private readonly List<EXTAbstractHealingEvent> _healingEvents = new List<EXTAbstractHealingEvent>();
-
-        internal virtual void SetVersion(CombatItem c)
+        internal HealingStatsExtensionHandler(CombatItem c, uint revision) : base(EXT_HealingStats, "Healing Stats")
+        {
+            Revision = revision;
+            SetVersion(c);
+        }
+        private void SetVersion(CombatItem c)
         {
             var size = (c.SrcAgent & 0xFF00000000000000) >> 56;
             byte[] bytes = new byte[size * 1]; // 32 * sizeof(char), char as in C not C#
@@ -198,26 +203,20 @@ namespace GW2EIEvtcParser.Extensions
             return false;
         }
 
-        internal static bool IsHealingEvent(CombatItem c)
+        private static bool IsHealingEvent(CombatItem c)
         {
             return c.IsShields == 0 && ((c.IsBuff == 0 && c.Value < 0) || (c.IsBuff != 0 && c.Value == 0 && c.BuffDmg < 0));
         }
 
         // To be exploited later
-        internal static bool IsBarrierEvent(CombatItem c)
+        private static bool IsBarrierEvent(CombatItem c)
         {
             return c.IsShields > 0 && ((c.IsBuff == 0 && c.Value < 0) || (c.IsBuff != 0 && c.Value == 0 && c.BuffDmg < 0));
         }
 
-        internal HashSet<long> GetHybridIDs(ulong gw2Build)
+        private HashSet<long> GetHybridIDs(ulong gw2Build)
         {
             return new HashSet<long>(HybridHealIDs);
-        }
-
-        internal HealingStatsExtensionHandler(CombatItem c, uint revision) : base(EXT_HealingStats, "Healing Stats")
-        {
-            Revision = revision;
-            SetVersion(c);
         }
 
         internal override bool HasTime(CombatItem c)
@@ -270,14 +269,13 @@ namespace GW2EIEvtcParser.Extensions
 
         internal override void AttachToCombatData(CombatData combatData, ParserController operation, ulong gw2Build)
         {
-            var addongRunning = new HashSet<AgentItem>();
             operation.UpdateProgressWithCancellationCheck("Attaching healing extension revision " + Revision + " combat events");
             var healData = _healingEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             foreach (KeyValuePair<AgentItem, List<EXTAbstractHealingEvent>> pair in healData)
             {
                 if (SanitizeForSrc(pair.Value) && pair.Key.IsPlayer)
                 {
-                    addongRunning.Add(pair.Key);
+                    RunningAddonInternal.Add(pair.Key);
                 }
             }
             var healReceivedData = _healingEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
@@ -285,11 +283,11 @@ namespace GW2EIEvtcParser.Extensions
             {
                 if (SanitizeForDst(pair.Value) && pair.Key.IsPlayer)
                 {
-                    addongRunning.Add(pair.Key);
+                    RunningAddonInternal.Add(pair.Key);
                 }
             }
             var healDataById = _healingEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
-            var running = addongRunning.Count;
+            var running = RunningAddonInternal.Count;
             operation.UpdateProgressWithCancellationCheck(running != 1 ? running + " players have the addon running" : running + " player has the addon running");
             operation.UpdateProgressWithCancellationCheck("Attached " + _healingEvents.Count + " heal events to CombatData");
             combatData.EXTHealingCombatData = new EXTHealingCombatData(healData, healReceivedData, healDataById, GetHybridIDs(gw2Build));

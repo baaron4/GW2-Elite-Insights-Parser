@@ -12,8 +12,8 @@ namespace GW2EIEvtcParser.Extensions
         public bool SrcIsPeer { get; }
         public bool DstIsPeer { get; }
 
-        protected const byte SrcPeerMask = 64;
-        protected const byte DstPeerMask = 128;
+        protected const byte SrcPeerMask = 128;
+        protected const byte DstPeerMask = 64;
 
         internal EXTAbstractHealingEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {

@@ -2,6 +2,7 @@
 using GW2EIEvtcParser.Extensions;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -9,13 +10,13 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(46618,46618,EIData.InstantCastFinder.DefaultICD, 0, 115190), // Flame Rush
-            new DamageCastFinder(46616,46616,EIData.InstantCastFinder.DefaultICD, 0, 115190), // Flame Surge
-            //new DamageCastFinder(42360,42360,InstantCastFinder.DefaultICD, 0, 115190), // Echo of Truth
-            //new DamageCastFinder(44008,44008,InstantCastFinder.DefaultICD, 0, 115190), // Voice of Truth
-            new DamageCastFinder(46148,46618,EIData.InstantCastFinder.DefaultICD, 115190, ulong.MaxValue), // Mantra of Flame
-            new DamageCastFinder(44080,46508,EIData.InstantCastFinder.DefaultICD, 115190, ulong.MaxValue), // Mantra of Truth
-            new EXTHealingCastFinder(41714, 41714, EIData.InstantCastFinder.DefaultICD, 115190, ulong.MaxValue), // Mantra of Solace
+            new DamageCastFinder(46618,46618,EIData.InstantCastFinder.DefaultICD, 0, GW2Builds.May2021Balance), // Flame Rush
+            new DamageCastFinder(46616,46616,EIData.InstantCastFinder.DefaultICD, 0, GW2Builds.May2021Balance), // Flame Surge
+            //new DamageCastFinder(42360,42360,InstantCastFinder.DefaultICD, 0, GW2Builds.May2021Balance), // Echo of Truth
+            //new DamageCastFinder(44008,44008,InstantCastFinder.DefaultICD, 0, GW2Builds.May2021Balance), // Voice of Truth
+            new DamageCastFinder(46148,46618,EIData.InstantCastFinder.DefaultICD, GW2Builds.May2021Balance, GW2Builds.EndOfLife), // Mantra of Flame
+            new DamageCastFinder(44080,46508,EIData.InstantCastFinder.DefaultICD, GW2Builds.May2021Balance, GW2Builds.EndOfLife), // Mantra of Truth
+            new EXTHealingCastFinder(41714, 41714, EIData.InstantCastFinder.DefaultICD, GW2Builds.May2021Balance, GW2Builds.EndOfLife), // Mantra of Solace
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

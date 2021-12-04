@@ -277,7 +277,7 @@ namespace GW2EIEvtcParser
         /// </summary>
         private void ParseAgentData(BinaryReader reader, ParserController operation)
         {        // 4 bytes: player count
-            int agentCount = reader.ReadInt32();
+            uint agentCount = reader.ReadUInt32();
 
             operation.UpdateProgressWithCancellationCheck("Agent Count " + agentCount);
             // 96 bytes: each player
