@@ -33,14 +33,17 @@ namespace GW2EIEvtcParser.EIData
         {
             log.FightData.Logic.ComputeNPCCombatReplayActors(this, log, CombatReplay);
             AgentItem master = AgentItem.GetFinalMaster();
-            bool isMinionOfPlayer = master.Type == AgentItem.AgentType.Player && ArcDPSEnums.IsKnownMinionID(ID, master.Spec);
-            if (CombatReplay.Rotations.Any() && (log.FightData.Logic.TargetAgents.Contains(AgentItem) || log.FriendlyAgents.Contains(AgentItem) || isMinionOfPlayer))
+            if (CombatReplay.Rotations.Any() && (log.FightData.Logic.TargetAgents.Contains(AgentItem) || log.FriendlyAgents.Contains(AgentItem)))
             {
                 CombatReplay.Decorations.Add(new FacingDecoration(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));
             }
-            if (isMinionOfPlayer)
+            if (master != AgentItem)
             {
-                ProfHelper.LinkMinionCombatReplayToMaster(this, log.FindActor(master), log, CombatReplay);
+                AbstractSingleActor masterActor = log.FindActor(master);
+                // Basic linkage
+                CombatReplay.Decorations.Add(new LineDecoration(0, ((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), "rgba(0, 255, 0, 0.5)", new AgentConnector(this), new AgentConnector(masterActor)));
+                // Prof specific treatment
+                ProfHelper.LinkMinionCombatReplayToMaster(this, masterActor, log, CombatReplay);
             }
         }
 
