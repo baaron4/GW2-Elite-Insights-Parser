@@ -1,5 +1,6 @@
 ﻿using System;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser
 {
@@ -671,9 +672,13 @@ namespace GW2EIEvtcParser
             return Enum.IsDefined(typeof(TargetID), id) ? (TargetID)id : TargetID.Unknown;
         }
 
-        public static bool IsKnownMinionID(long id, ParserHelper.Spec spec)
+        public static bool IsKnownMinionID(AbstractSingleActor minion, ParserHelper.Spec spec)
         {
-            return ProfHelper.IsKnownMinionID(id, spec);
+            if (minion.AgentItem.Type == AgentItem.AgentType.Gadget)
+            {
+                return false;
+            }
+            return ProfHelper.IsKnownMinionID(minion, spec);
         }
 
     }

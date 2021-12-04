@@ -285,8 +285,13 @@ namespace GW2EIEvtcParser.EIData
 
         private static HashSet<long> CommonMinions = new HashSet<long>();
 
-        public static bool IsKnownMinionID(long id, Spec spec)
+        public static bool IsKnownMinionID(AbstractSingleActor minion, Spec spec)
         {
+            if (minion.AgentItem.Type == AgentItem.AgentType.Gadget)
+            {
+                return false;
+            }
+            long id = minion.ID;
             bool res = CommonMinions.Contains(id);
             switch (spec)
             {
