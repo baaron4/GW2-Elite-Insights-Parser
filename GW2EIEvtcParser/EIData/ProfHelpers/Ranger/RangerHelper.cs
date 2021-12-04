@@ -153,5 +153,24 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
+        private static readonly HashSet<long> SpiritIDs = new HashSet<long>()
+        {
+            6370, // Stone Spirit
+            6330, // Sun Spirit
+            6369, // Frost Spirit
+            6371, // Storm Spirit
+        };
+
+        private static HashSet<long> NonSpiritMinions = new HashSet<long>()
+        {
+            6887, // Juvenile Black Moa
+            15436, // Juvenile Eletric Wywern
+            18688, // Juvenile Fanged Iboga
+        };
+        internal static bool IsKnownMinionID(long id)
+        {
+            return NonSpiritMinions.Contains(id) || SpiritIDs.Contains(id);
+        }
+
     }
 }

@@ -13,18 +13,6 @@ namespace GW2EIEvtcParser.EIData
     internal static class MesmerHelper
     {
 
-        private static readonly HashSet<Spec> _canSummonClones = new HashSet<Spec>()
-        {
-            Spec.Mesmer,
-            Spec.Chronomancer,
-            Spec.Mirage
-        };
-
-        internal static bool CanSummonClones(Spec spec)
-        {
-            return _canSummonClones.Contains(spec);
-        }
-
         private static readonly HashSet<long> _cloneIDs = new HashSet<long>()
         {
             6479,
@@ -198,6 +186,17 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Reflection", 10225 , Source.Mesmer, BuffStackType.Queue, 9, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/9d/Arcane_Shield.png"),
                 new Buff("Reflection 2", 24014 , Source.Mesmer, BuffStackType.Queue, 9, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/9d/Arcane_Shield.png"),
         };
+
+        private static HashSet<long> NonCloneMinions = new HashSet<long>()
+        {
+            6449 , // Illusionary Warlock
+            6487 , // Illusionary Swordsman
+            7981 , // Illusionary Warden
+        };
+        internal static bool IsKnownMinionID(long id)
+        {
+            return NonCloneMinions.Contains(id) || IsClone(id);
+        }
 
     }
 }

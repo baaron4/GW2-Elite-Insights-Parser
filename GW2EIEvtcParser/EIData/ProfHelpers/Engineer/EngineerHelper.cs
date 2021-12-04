@@ -141,5 +141,11 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
+        private static HashSet<long> Minions = new HashSet<long>();
+        internal static bool IsKnownMinionID(long id)
+        {
+            return Minions.Contains(id);
+        }
+
     }
 }

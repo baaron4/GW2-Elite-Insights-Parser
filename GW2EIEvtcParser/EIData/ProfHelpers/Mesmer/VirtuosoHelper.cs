@@ -32,5 +32,11 @@ namespace GW2EIEvtcParser.EIData
         {
             new Buff("Deadly Blades", 63409, Source.Virtuoso, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/15/Deadly_Blades.png"),
         };
+
+        private static HashSet<long> Minions = new HashSet<long>();
+        internal static bool IsKnownMinionID(long id)
+        {
+            return Minions.Contains(id);
+        }
     }
 }

@@ -81,5 +81,17 @@ namespace GW2EIEvtcParser.EIData
         {
             return _shroudTransform.Contains(id);
         }*/
+
+        private static HashSet<long> Minions = new HashSet<long>()
+        {
+            1104, // Blood Fiend
+            1792, // Flesh Golem
+            5673, // Shadow Fiend
+            6002, // Flesh Wurm
+        };
+        internal static bool IsKnownMinionID(long id)
+        {
+            return Minions.Contains(id);
+        }
     }
 }

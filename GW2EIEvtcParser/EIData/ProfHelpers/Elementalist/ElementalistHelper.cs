@@ -132,5 +132,11 @@ namespace GW2EIEvtcParser.EIData
                 buffsByID[buffID].RemoveAll(x => x.BuffID == NoBuff);
             }
         }
+
+        private static HashSet<long> Minions = new HashSet<long>();
+        internal static bool IsKnownMinionID(long id)
+        {
+            return Minions.Contains(id);
+        }
     }
 }
