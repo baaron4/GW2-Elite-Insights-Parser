@@ -85,6 +85,7 @@ namespace GW2EIEvtcParser.Extensions
             10643, // Gathering Plague (Transfusion)
             30504, // Soul Spiral (Transfusion)
             44428, // Garish Pillar (Transfusion)
+            30783, // Wings of Resolve
         };
 
         private readonly List<EXTAbstractHealingEvent> _healingEvents = new List<EXTAbstractHealingEvent>();
