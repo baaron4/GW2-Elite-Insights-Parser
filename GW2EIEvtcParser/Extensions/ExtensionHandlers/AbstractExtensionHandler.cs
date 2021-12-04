@@ -11,10 +11,14 @@ namespace GW2EIEvtcParser.Extensions
         public string Name { get; } = "Unknown";
         public string Version { get; protected set; } = "Unknown";
 
+        protected readonly HashSet<AgentItem> RunningAddonInternal;
+        public IReadOnlyCollection<AgentItem> RunningAddon => RunningAddonInternal;
+
         internal AbstractExtensionHandler(uint sig, string name)
         {
             Signature = sig;
             Name = name;
+            RunningAddonInternal = new HashSet<AgentItem>();
         }
 
         internal abstract bool HasTime(CombatItem c);
