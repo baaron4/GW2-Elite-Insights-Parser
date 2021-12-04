@@ -6,6 +6,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -134,7 +135,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     else if ((Math.Abs(x + 8951) < 10 && Math.Abs(y - 9429) < 10) || (Math.Abs(x + 5716) < 10 && Math.Abs(y - 9325) < 10) || (Math.Abs(x + 7846) < 10 && Math.Abs(y - 10612) < 10))
                     {
-                        pyre.OverrideID(gw2Build >= 115190 ? ArcDPSEnums.TrashID.PyreGuardianResolution : ArcDPSEnums.TrashID.PyreGuardianRetal);
+                        pyre.OverrideID(gw2Build >= GW2Builds.May2021Balance ? ArcDPSEnums.TrashID.PyreGuardianResolution : ArcDPSEnums.TrashID.PyreGuardianRetal);
                         refresh = true;
                     }
                 }

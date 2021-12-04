@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.EIData
             Tooltip += "<br>Approximate";
         }
 
-        internal DamageLogApproximateDamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ParserHelper.Source src, string icon, DamageLogChecker checker, GainComputer gainComputer, DamageModifierMode mode) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, icon, checker, gainComputer, ulong.MinValue, ulong.MaxValue, mode)
+        internal DamageLogApproximateDamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ParserHelper.Source src, string icon, DamageLogChecker checker, GainComputer gainComputer, DamageModifierMode mode) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, icon, checker, gainComputer, GW2Builds.StartOfLife, GW2Builds.EndOfLife, mode)
         {
             Approximate = true;
             Tooltip += "<br>Approximate";

@@ -24,6 +24,31 @@ namespace GW2EIEvtcParser
         internal const long WeaponSwapDelayConstant = 75;
         internal const long MinimumInCombatDuration = 2200;
 
+        internal static class GW2Builds
+        {
+            internal const ulong StartOfLife = ulong.MinValue;
+            //
+            internal const ulong May2018Balance = 88541;
+            internal const ulong July2018Balance = 90455;
+            internal const ulong August2018Balance = 92069;
+            internal const ulong October2018Balance = 92715;
+            internal const ulong December2018Balance = 94051;
+            internal const ulong March2019Balance = 95535;
+            internal const ulong April2019Balance = 96406;
+            internal const ulong July2019Balance = 97950;
+            internal const ulong October2019Balance = 99526;
+            internal const ulong February2020Balance = 102321;
+            internal const ulong May2021Balance = 115190;
+            internal const ulong May2021BalanceHotFix = 115728;
+            internal const ulong June2021Balance = 116210;
+            internal const ulong EODBeta1 = 118697;
+            internal const ulong EODBeta2 = 119939;
+            internal const ulong EODBeta3 = 121168;
+            internal const ulong EODBeta4 = 122479;
+            //
+            internal const ulong EndOfLife = ulong.MaxValue;
+        }
+
         internal const int PhaseTimeLimit = 1000;
 
 
