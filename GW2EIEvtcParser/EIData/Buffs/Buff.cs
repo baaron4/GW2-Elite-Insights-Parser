@@ -319,8 +319,6 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Power Suit",12326, Source.Common, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/89/Summon_Power_Suit.png"),
                 new Buff("Reaper of Grenth", 12366, Source.Common, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/0/07/Reaper_of_Grenth.png"),
                 new Buff("Charrzooka",43503, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/1/17/Charrzooka.png"),
-                // Fractals 
-                new Buff("Rigorous Certainty", 33652, Source.Common, BuffNature.DefensiveBuffTable,"https://wiki.guildwars2.com/images/6/60/Desert_Carapace.png"),
                 //
                 new Buff("Guild Item Research", 33833, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/c/c6/Guild_Magic_Find_Banner_Boost.png"),
                 //
@@ -627,6 +625,12 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Flare-Up", 56264, Source.FightSpecific, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/8b/Magic_Aura.png"),
                 new Buff("Unbridled Chaos", 56467, Source.FightSpecific, BuffStackType.Stacking, 3, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/42/Exposed_%28Statue_of_Darkness%29.png"),
                 //////////////////////////////////////////////
+                // Fractals 
+                new Buff("Rigorous Certainty", 33652, Source.Common, BuffNature.DefensiveBuffTable,"https://wiki.guildwars2.com/images/6/60/Desert_Carapace.png"),
+                new Buff("Fractal Savant", 47248, Source.Common, BuffNature.OffensiveBuffTable,"https://wiki.guildwars2.com/images/c/cb/Malign_9_Agony_Infusion.png"),
+                new Buff("Fractal Prodigy", 48191, Source.Common, BuffNature.OffensiveBuffTable,"https://wiki.guildwars2.com/images/1/11/Mighty_9_Agony_Infusion.png"),
+                new Buff("Fractal Champion", 48414, Source.Common, BuffNature.OffensiveBuffTable,"https://wiki.guildwars2.com/images/3/3d/Precise_9_Agony_Infusion.png"),
+                new Buff("Fractal God", 47222, Source.Common, BuffNature.OffensiveBuffTable,"https://wiki.guildwars2.com/images/2/22/Healing_9_Agony_Infusion.png"),
                 // Siax 
                 new Buff("Fixated (Nightmare)", 36998, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 // Ensolyss 
