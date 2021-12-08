@@ -9,11 +9,11 @@ namespace GW2EIEvtcParser.Extensions
 {
     public class EXTFinalIncomingHealingStat
     {
-        public int Healed { get; internal set; }
-        public int HealingPowerHealed { get; internal set; }
-        public int ConversionHealed { get; internal set; }
-        public int HybridHealed { get; internal set; }
-        public int DownedHealed { get; internal set; }
+        public int Healed { get; }
+        public int HealingPowerHealed { get; }
+        public int ConversionHealed { get; }
+        public int HybridHealed { get; }
+        public int DownedHealed { get; }
 
         internal EXTFinalIncomingHealingStat(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor target)
         {

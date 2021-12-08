@@ -14,8 +14,8 @@ namespace GW2EIEvtcParser.Extensions
 
         private CachingCollectionWithTarget<int[]> _healing1S;
 
-        private CachingCollectionWithTarget<EXTFinalOutgoingHealingStat> _outgoingHealStats { get; set; }
-        private CachingCollectionWithTarget<EXTFinalIncomingHealingStat> _incomingHealStats { get; set; }
+        private CachingCollectionWithTarget<EXTFinalOutgoingBarrierStat> _outgoingHealStats { get; set; }
+        private CachingCollectionWithTarget<EXTFinalIncomingBarrierStat> _incomingHealStats { get; set; }
 
         internal EXTAbstractSingleActorBarrierHelper(AbstractSingleActor actor) : base()
         {
@@ -122,29 +122,29 @@ namespace GW2EIEvtcParser.Extensions
             return graph;
         }
 
-        public EXTFinalOutgoingHealingStat GetOutgoingBarrierStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public EXTFinalOutgoingBarrierStat GetOutgoingBarrierStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (_outgoingHealStats == null)
             {
-                _outgoingHealStats = new CachingCollectionWithTarget<EXTFinalOutgoingHealingStat>(log);
+                _outgoingHealStats = new CachingCollectionWithTarget<EXTFinalOutgoingBarrierStat>(log);
             }
-            if (!_outgoingHealStats.TryGetValue(start, end, target, out EXTFinalOutgoingHealingStat value))
+            if (!_outgoingHealStats.TryGetValue(start, end, target, out EXTFinalOutgoingBarrierStat value))
             {
-                value = new EXTFinalOutgoingHealingStat(log, start, end, _actor, target);
+                value = new EXTFinalOutgoingBarrierStat(log, start, end, _actor, target);
                 _outgoingHealStats.Set(start, end, target, value);
             }
             return value;
         }
 
-        public EXTFinalIncomingHealingStat GetIncomingBarrierStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public EXTFinalIncomingBarrierStat GetIncomingBarrierStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (_incomingHealStats == null)
             {
-                _incomingHealStats = new CachingCollectionWithTarget<EXTFinalIncomingHealingStat>(log);
+                _incomingHealStats = new CachingCollectionWithTarget<EXTFinalIncomingBarrierStat>(log);
             }
-            if (!_incomingHealStats.TryGetValue(start, end, target, out EXTFinalIncomingHealingStat value))
+            if (!_incomingHealStats.TryGetValue(start, end, target, out EXTFinalIncomingBarrierStat value))
             {
-                value = new EXTFinalIncomingHealingStat(log, start, end, _actor, target);
+                value = new EXTFinalIncomingBarrierStat(log, start, end, _actor, target);
                 _incomingHealStats.Set(start, end, target, value);
             }
             return value;
