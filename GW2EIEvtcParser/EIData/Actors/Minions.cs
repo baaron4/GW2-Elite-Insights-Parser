@@ -13,12 +13,14 @@ namespace GW2EIEvtcParser.EIData
         public IReadOnlyList<NPC> MinionList => _minionList;
         public AbstractSingleActor Master { get; }
         public EXTMinionsHealingHelper EXTHealing { get; }
+        public EXTMinionsHelper EXTBarrier { get; }
 
         internal Minions(AbstractSingleActor master, NPC firstMinion) : base(firstMinion.AgentItem)
         {
             _minionList = new List<NPC> { firstMinion };
             Master = master;
             EXTHealing = new EXTMinionsHealingHelper(this);
+            EXTBarrier = new EXTMinionsHelper(this);
             Character = firstMinion.Character;
         }
 
