@@ -5,17 +5,12 @@ using static GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler;
 
 namespace GW2EIEvtcParser.Extensions
 {
-    public abstract class EXTAbstractHealingEvent : EXTAbstractHealingExtensionEvent
+    public abstract class EXTAbstractBarrierEvent : EXTAbstractHealingExtensionEvent
     {
-        public int HealingDone { get; protected set; }
+        public int BarrierGiven { get; protected set; }
 
-        internal EXTAbstractHealingEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
+        internal EXTAbstractBarrierEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
-        }
-
-        public EXTHealingType GetHealingType(ParsedEvtcLog log)
-        {
-            return log.CombatData.EXTHealingCombatData.GetHealingType(Skill, log);
         }
 
     }
