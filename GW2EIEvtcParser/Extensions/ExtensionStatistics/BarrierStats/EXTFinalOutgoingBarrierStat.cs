@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.Extensions
         internal EXTFinalOutgoingBarrierStat(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor target)
         {
             (Barrier, DownedBarrier) = ComputeBarrierFrom(log, actor.EXTBarrier.GetOutgoingBarrierEvents(target, log, start, end));
-            (ActorBarrier, ActorDownedBarrier) = ComputeBarrierFrom(log, actor.EXTBarrier.GetJustActorOutgoingHealEvents(target, log, start, end));
+            (ActorBarrier, ActorDownedBarrier) = ComputeBarrierFrom(log, actor.EXTBarrier.GetJustActorOutgoingBarrierEvents(target, log, start, end));
             double phaseDuration = (end - start) / 1000.0;
             if (phaseDuration > 0)
             {

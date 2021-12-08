@@ -81,7 +81,7 @@ namespace GW2EIEvtcParser.Extensions
             return BarrierReceivedEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public IReadOnlyList<EXTAbstractBarrierEvent> GetJustActorOutgoingHealEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public IReadOnlyList<EXTAbstractBarrierEvent> GetJustActorOutgoingBarrierEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             return GetOutgoingBarrierEvents(target, log, start, end).Where(x => x.From == _agentItem).ToList();
         }
