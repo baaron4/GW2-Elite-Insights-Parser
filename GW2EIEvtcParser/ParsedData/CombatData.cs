@@ -30,7 +30,9 @@ namespace GW2EIEvtcParser.ParsedData
         private readonly List<RewardEvent> _rewardEvents = new List<RewardEvent>();
         // EXTENSIONS
         public EXTHealingCombatData EXTHealingCombatData { get; internal set; }
+        public EXTBarrierCombatData EXTBarrierCombatData { get; internal set; }
         public bool HasEXTHealing => EXTHealingCombatData != null;
+        public bool HasEXTBarrier => EXTBarrierCombatData != null;
 
         internal bool HasStackIDs { get; } = false;
 
