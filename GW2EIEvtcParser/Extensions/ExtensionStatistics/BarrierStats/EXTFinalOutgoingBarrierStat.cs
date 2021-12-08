@@ -34,19 +34,19 @@ namespace GW2EIEvtcParser.Extensions
             }
         }
 
-        private static (int healing, int downedHealing) ComputeBarrierFrom(ParsedEvtcLog log, IReadOnlyList<EXTAbstractBarrierEvent> barrierEvents)
+        private static (int barrier, int downedBarrier) ComputeBarrierFrom(ParsedEvtcLog log, IReadOnlyList<EXTAbstractBarrierEvent> barrierEvents)
         {
-            int healing = 0;
-            int downedHealing = 0;
+            int barrier = 0;
+            int downedBarrier = 0;
             foreach (EXTAbstractBarrierEvent barrierEvent in barrierEvents)
             {
-                healing += barrierEvent.BarrierGiven;
+                barrier += barrierEvent.BarrierGiven;
                 if (barrierEvent.AgainstDowned)
                 {
-                    downedHealing += barrierEvent.BarrierGiven;
+                    downedBarrier += barrierEvent.BarrierGiven;
                 }
             }
-            return (healing, downedHealing);
+            return (barrier, downedBarrier);
         }
 
     }
