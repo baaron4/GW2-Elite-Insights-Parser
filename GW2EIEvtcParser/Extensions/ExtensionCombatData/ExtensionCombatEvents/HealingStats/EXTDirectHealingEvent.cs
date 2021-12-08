@@ -4,12 +4,12 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.Extensions
 {
-    public class EXTDirectBarrierEvent : EXTAbstractBarrierEvent
+    public class EXTDirectHealingEvent : EXTAbstractHealingEvent
     {
 
-        internal EXTDirectBarrierEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
+        internal EXTDirectHealingEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
-            BarrierGiven = -evtcItem.Value;
+            HealingDone = -evtcItem.Value;
             AgainstDowned = ((evtcItem.IsOffcycle & ~SrcPeerMask) & ~DstPeerMask) == 1;
         }
     }
