@@ -5,41 +5,41 @@ namespace GW2EIEvtcParser.Extensions
 {
     public class EXTBarrierCombatData
     {
-        private readonly Dictionary<AgentItem, List<EXTAbstractHealingEvent>> _barrierData;
-        private readonly Dictionary<AgentItem, List<EXTAbstractHealingEvent>> _barrierReceivedData;
-        private readonly Dictionary<long, List<EXTAbstractHealingEvent>> _barrierDataByID;
+        private readonly Dictionary<AgentItem, List<EXTAbstractBarrierEvent>> _barrierData;
+        private readonly Dictionary<AgentItem, List<EXTAbstractBarrierEvent>> _barrierReceivedData;
+        private readonly Dictionary<long, List<EXTAbstractBarrierEvent>> _barrierDataByID;
 
-        internal EXTBarrierCombatData(Dictionary<AgentItem, List<EXTAbstractHealingEvent>> barrierData, Dictionary<AgentItem, List<EXTAbstractHealingEvent>> barrierReceivedData, Dictionary<long, List<EXTAbstractHealingEvent>> barrierDataByID)
+        internal EXTBarrierCombatData(Dictionary<AgentItem, List<EXTAbstractBarrierEvent>> barrierData, Dictionary<AgentItem, List<EXTAbstractBarrierEvent>> barrierReceivedData, Dictionary<long, List<EXTAbstractBarrierEvent>> barrierDataByID)
         {
             _barrierData = barrierData;
             _barrierReceivedData = barrierReceivedData;
             _barrierDataByID = barrierDataByID;
         }
 
-        public IReadOnlyList<EXTAbstractHealingEvent> GetHealData(AgentItem key)
+        public IReadOnlyList<EXTAbstractBarrierEvent> GetHealData(AgentItem key)
         {
-            if (_barrierData.TryGetValue(key, out List<EXTAbstractHealingEvent> res))
+            if (_barrierData.TryGetValue(key, out List<EXTAbstractBarrierEvent> res))
             {
                 return res;
             }
-            return new List<EXTAbstractHealingEvent>();
+            return new List<EXTAbstractBarrierEvent>();
         }
-        public IReadOnlyList<EXTAbstractHealingEvent> GetHealReceivedData(AgentItem key)
+        public IReadOnlyList<EXTAbstractBarrierEvent> GetHealReceivedData(AgentItem key)
         {
-            if (_barrierReceivedData.TryGetValue(key, out List<EXTAbstractHealingEvent> res))
+            if (_barrierReceivedData.TryGetValue(key, out List<EXTAbstractBarrierEvent> res))
             {
                 return res;
             }
-            return new List<EXTAbstractHealingEvent>();
+            return new List<EXTAbstractBarrierEvent>();
         }
 
-        public IReadOnlyList<EXTAbstractHealingEvent> GetHealData(long key)
+        public IReadOnlyList<EXTAbstractBarrierEvent> GetHealData(long key)
         {
-            if (_barrierDataByID.TryGetValue(key, out List<EXTAbstractHealingEvent> res))
+            if (_barrierDataByID.TryGetValue(key, out List<EXTAbstractBarrierEvent> res))
             {
                 return res;
             }
-            return new List<EXTAbstractHealingEvent>();
+            return new List<EXTAbstractBarrierEvent>();
         }
     }
 }
