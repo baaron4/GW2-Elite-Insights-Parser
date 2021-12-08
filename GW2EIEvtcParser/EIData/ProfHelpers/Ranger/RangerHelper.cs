@@ -23,6 +23,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(42470,12543,EIData.InstantCastFinder.DefaultICD, (evt, combatData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant), // Lesser Signet of Stone
             new BuffGainCastFinder(12537,12536,EIData.InstantCastFinder.DefaultICD), // Sharpening Stone
             new EXTHealingCastFinder(13980, 13980, EIData.InstantCastFinder.DefaultICD), // Windborne Notes
+            new EXTBarrierCastFinder(12631, 12631, EIData.InstantCastFinder.DefaultICD), // Protect Me!
         };
 
 
