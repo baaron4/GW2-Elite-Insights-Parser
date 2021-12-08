@@ -12,10 +12,10 @@ namespace GW2EIEvtcParser.Extensions
         private AbstractSingleActor _actor { get; }
         private AgentItem _agentItem => _actor.AgentItem;
 
-        private CachingCollectionWithTarget<int[]> _healing1S;
+        private CachingCollectionWithTarget<int[]> _barrier1S;
 
-        private CachingCollectionWithTarget<EXTFinalOutgoingBarrierStat> _outgoingHealStats { get; set; }
-        private CachingCollectionWithTarget<EXTFinalIncomingBarrierStat> _incomingHealStats { get; set; }
+        private CachingCollectionWithTarget<EXTFinalOutgoingBarrierStat> _outgoinBarrierStats { get; set; }
+        private CachingCollectionWithTarget<EXTFinalIncomingBarrierStat> _incomingBarrierStats { get; set; }
 
         internal EXTAbstractSingleActorBarrierHelper(AbstractSingleActor actor) : base()
         {
@@ -28,21 +28,21 @@ namespace GW2EIEvtcParser.Extensions
             {
                 throw new InvalidOperationException("Healing Stats extension not present");
             }
-            if (HealEvents == null)
+            if (BarrierEvents == null)
             {
-                HealEvents = new List<EXTAbstractBarrierEvent>();
-                HealEvents.AddRange(log.CombatData.EXTBarrierCombatData.GetBarrierData(_agentItem).Where(x => x.ToFriendly));
+                BarrierEvents = new List<EXTAbstractBarrierEvent>();
+                BarrierEvents.AddRange(log.CombatData.EXTBarrierCombatData.GetBarrierData(_agentItem).Where(x => x.ToFriendly));
                 IReadOnlyDictionary<long, Minions> minionsList = _actor.GetMinions(log);
                 foreach (Minions mins in minionsList.Values)
                 {
-                    HealEvents.AddRange(mins.EXTBarrier.GetOutgoingBarrierEvents(null, log, 0, log.FightData.FightEnd));
+                    BarrierEvents.AddRange(mins.EXTBarrier.GetOutgoingBarrierEvents(null, log, 0, log.FightData.FightEnd));
                 }
-                HealEvents = HealEvents.OrderBy(x => x.Time).ToList();
-                HealEventsByDst = HealEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+                BarrierEvents = BarrierEvents.OrderBy(x => x.Time).ToList();
+                BarrierEventsByDst = BarrierEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
             {
-                if (HealEventsByDst.TryGetValue(target.AgentItem, out List<EXTAbstractBarrierEvent> list))
+                if (BarrierEventsByDst.TryGetValue(target.AgentItem, out List<EXTAbstractBarrierEvent> list))
                 {
                     return list.Where(x => x.Time >= start && x.Time <= end).ToList();
                 }
@@ -51,7 +51,7 @@ namespace GW2EIEvtcParser.Extensions
                     return new List<EXTAbstractBarrierEvent>();
                 }
             }
-            return HealEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+            return BarrierEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
         public override IReadOnlyList<EXTAbstractBarrierEvent> GetIncomingBarrierEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
@@ -60,16 +60,16 @@ namespace GW2EIEvtcParser.Extensions
             {
                 throw new InvalidOperationException("Healing Stats extension not present");
             }
-            if (HealReceivedEvents == null)
+            if (BarrierReceivedEvents == null)
             {
-                HealReceivedEvents = new List<EXTAbstractBarrierEvent>();
-                HealReceivedEvents.AddRange(log.CombatData.EXTBarrierCombatData.GetBarrierReceivedData(_agentItem).Where(x => x.ToFriendly));
-                HealReceivedEvents = HealReceivedEvents.OrderBy(x => x.Time).ToList();
-                HealReceivedEventsBySrc = HealReceivedEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+                BarrierReceivedEvents = new List<EXTAbstractBarrierEvent>();
+                BarrierReceivedEvents.AddRange(log.CombatData.EXTBarrierCombatData.GetBarrierReceivedData(_agentItem).Where(x => x.ToFriendly));
+                BarrierReceivedEvents = BarrierReceivedEvents.OrderBy(x => x.Time).ToList();
+                BarrierReceivedEventsBySrc = BarrierReceivedEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
             {
-                if (HealReceivedEventsBySrc.TryGetValue(target.AgentItem, out List<EXTAbstractBarrierEvent> list))
+                if (BarrierReceivedEventsBySrc.TryGetValue(target.AgentItem, out List<EXTAbstractBarrierEvent> list))
                 {
                     return list.Where(x => x.Time >= start && x.Time <= end).ToList();
                 }
@@ -78,7 +78,7 @@ namespace GW2EIEvtcParser.Extensions
                     return new List<EXTAbstractBarrierEvent>();
                 }
             }
-            return HealReceivedEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+            return BarrierReceivedEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
         public IReadOnlyList<EXTAbstractBarrierEvent> GetJustActorOutgoingHealEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
@@ -88,11 +88,11 @@ namespace GW2EIEvtcParser.Extensions
 
         public IReadOnlyList<int> Get1SHealingList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target)
         {
-            if (_healing1S == null)
+            if (_barrier1S == null)
             {
-                _healing1S = new CachingCollectionWithTarget<int[]>(log);
+                _barrier1S = new CachingCollectionWithTarget<int[]>(log);
             }
-            if (!_healing1S.TryGetValue(start, end, target, out int[] graph))
+            if (!_barrier1S.TryGetValue(start, end, target, out int[] graph))
             {
                 int durationInMS = (int)(end - start);
                 int durationInS = durationInMS / 1000;
@@ -117,35 +117,35 @@ namespace GW2EIEvtcParser.Extensions
                     graph[i] = graph[previousTime];
                 }
                 //
-                _healing1S.Set(start, end, target, graph);
+                _barrier1S.Set(start, end, target, graph);
             }
             return graph;
         }
 
         public EXTFinalOutgoingBarrierStat GetOutgoingBarrierStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
-            if (_outgoingHealStats == null)
+            if (_outgoinBarrierStats == null)
             {
-                _outgoingHealStats = new CachingCollectionWithTarget<EXTFinalOutgoingBarrierStat>(log);
+                _outgoinBarrierStats = new CachingCollectionWithTarget<EXTFinalOutgoingBarrierStat>(log);
             }
-            if (!_outgoingHealStats.TryGetValue(start, end, target, out EXTFinalOutgoingBarrierStat value))
+            if (!_outgoinBarrierStats.TryGetValue(start, end, target, out EXTFinalOutgoingBarrierStat value))
             {
                 value = new EXTFinalOutgoingBarrierStat(log, start, end, _actor, target);
-                _outgoingHealStats.Set(start, end, target, value);
+                _outgoinBarrierStats.Set(start, end, target, value);
             }
             return value;
         }
 
         public EXTFinalIncomingBarrierStat GetIncomingBarrierStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
-            if (_incomingHealStats == null)
+            if (_incomingBarrierStats == null)
             {
-                _incomingHealStats = new CachingCollectionWithTarget<EXTFinalIncomingBarrierStat>(log);
+                _incomingBarrierStats = new CachingCollectionWithTarget<EXTFinalIncomingBarrierStat>(log);
             }
-            if (!_incomingHealStats.TryGetValue(start, end, target, out EXTFinalIncomingBarrierStat value))
+            if (!_incomingBarrierStats.TryGetValue(start, end, target, out EXTFinalIncomingBarrierStat value))
             {
                 value = new EXTFinalIncomingBarrierStat(log, start, end, _actor, target);
-                _incomingHealStats.Set(start, end, target, value);
+                _incomingBarrierStats.Set(start, end, target, value);
             }
             return value;
         }

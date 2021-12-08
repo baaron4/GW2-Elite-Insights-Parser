@@ -9,10 +9,10 @@ namespace GW2EIEvtcParser.Extensions
 {
     public abstract class EXTActorBarrierHelper
     {
-        protected List<EXTAbstractBarrierEvent> HealEvents { get; set; }
-        protected Dictionary<AgentItem, List<EXTAbstractBarrierEvent>> HealEventsByDst { get; set; }
-        protected List<EXTAbstractBarrierEvent> HealReceivedEvents { get; set; }
-        protected Dictionary<AgentItem, List<EXTAbstractBarrierEvent>> HealReceivedEventsBySrc { get; set; }
+        protected List<EXTAbstractBarrierEvent> BarrierEvents { get; set; }
+        protected Dictionary<AgentItem, List<EXTAbstractBarrierEvent>> BarrierEventsByDst { get; set; }
+        protected List<EXTAbstractBarrierEvent> BarrierReceivedEvents { get; set; }
+        protected Dictionary<AgentItem, List<EXTAbstractBarrierEvent>> BarrierReceivedEventsBySrc { get; set; }
 
         internal EXTActorBarrierHelper()
         {
