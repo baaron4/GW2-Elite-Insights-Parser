@@ -43,6 +43,7 @@ namespace GW2EIEvtcParser.Extensions
                 ConversionHps = (int)Math.Round(ConversionHealing / phaseDuration);
                 HybridHps = (int)Math.Round(HybridHealing / phaseDuration);
                 DownedHps = (int)Math.Round(DownedHealing / phaseDuration);
+
                 ActorHps = (int)Math.Round(ActorHealing / phaseDuration);
                 ActorHealingPowerHps = (int)Math.Round(ActorHealingPowerHealing / phaseDuration);
                 ActorConversionHps = (int)Math.Round(ActorConversionHealing / phaseDuration);
@@ -51,14 +52,14 @@ namespace GW2EIEvtcParser.Extensions
             }
         }
 
-        private static (int healing, int healingPowerHealing, int conversionHealing, int hybridHealing, int downedHealing) ComputeHealingFrom(ParsedEvtcLog log, IReadOnlyList<EXTAbstractHealingEvent> damageEvents)
+        private static (int healing, int healingPowerHealing, int conversionHealing, int hybridHealing, int downedHealing) ComputeHealingFrom(ParsedEvtcLog log, IReadOnlyList<EXTAbstractHealingEvent> healingEvents)
         {
             int healing = 0;
             int healingPowerHealing = 0;
             int conversionhealing = 0;
             int hybridHealing = 0;
             int downedHealing = 0;
-            foreach (EXTAbstractHealingEvent healingEvent in damageEvents)
+            foreach (EXTAbstractHealingEvent healingEvent in healingEvents)
             {
                 healing += healingEvent.HealingDone;
                 switch (healingEvent.GetHealingType(log))
