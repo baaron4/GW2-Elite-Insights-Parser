@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.Extensions
             _barrierDataByID = barrierDataByID;
         }
 
-        public IReadOnlyList<EXTAbstractBarrierEvent> GetHealData(AgentItem key)
+        public IReadOnlyList<EXTAbstractBarrierEvent> GetBarrierData(AgentItem key)
         {
             if (_barrierData.TryGetValue(key, out List<EXTAbstractBarrierEvent> res))
             {
@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.Extensions
             }
             return new List<EXTAbstractBarrierEvent>();
         }
-        public IReadOnlyList<EXTAbstractBarrierEvent> GetHealReceivedData(AgentItem key)
+        public IReadOnlyList<EXTAbstractBarrierEvent> GetBarrierReceivedData(AgentItem key)
         {
             if (_barrierReceivedData.TryGetValue(key, out List<EXTAbstractBarrierEvent> res))
             {
@@ -33,7 +33,7 @@ namespace GW2EIEvtcParser.Extensions
             return new List<EXTAbstractBarrierEvent>();
         }
 
-        public IReadOnlyList<EXTAbstractBarrierEvent> GetHealData(long key)
+        public IReadOnlyList<EXTAbstractBarrierEvent> GetBarrierData(long key)
         {
             if (_barrierDataByID.TryGetValue(key, out List<EXTAbstractBarrierEvent> res))
             {
