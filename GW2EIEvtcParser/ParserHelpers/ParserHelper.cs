@@ -935,9 +935,83 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
             }
             //
-            ArcDPSEnums.MinionID minionID = ArcDPSEnums.GetMinionID(id);
             switch (ArcDPSEnums.GetMinionID(id))
             {
+                case ArcDPSEnums.MinionID.Clone1:
+                case ArcDPSEnums.MinionID.Clone2:
+                case ArcDPSEnums.MinionID.Clone3:
+                case ArcDPSEnums.MinionID.Clone4:
+                case ArcDPSEnums.MinionID.Clone5:
+                case ArcDPSEnums.MinionID.Clone6:
+                case ArcDPSEnums.MinionID.Clone7:
+                case ArcDPSEnums.MinionID.Clone8:
+                case ArcDPSEnums.MinionID.Clone9:
+                case ArcDPSEnums.MinionID.Clone10:
+                case ArcDPSEnums.MinionID.Clone11:
+                case ArcDPSEnums.MinionID.Clone12:
+                case ArcDPSEnums.MinionID.Clone13:
+                case ArcDPSEnums.MinionID.Clone14:
+                case ArcDPSEnums.MinionID.Clone15:
+                case ArcDPSEnums.MinionID.Clone16:
+                case ArcDPSEnums.MinionID.Clone17:
+                case ArcDPSEnums.MinionID.Clone18:
+                case ArcDPSEnums.MinionID.Clone19:
+                case ArcDPSEnums.MinionID.Clone20:
+                case ArcDPSEnums.MinionID.Clone21:
+                case ArcDPSEnums.MinionID.Clone22:
+                case ArcDPSEnums.MinionID.Clone23:
+                case ArcDPSEnums.MinionID.Clone24:
+                case ArcDPSEnums.MinionID.Clone25:
+                case ArcDPSEnums.MinionID.Clone26:
+                    return "https://i.imgur.com/5Hknsa6.png";
+                case ArcDPSEnums.MinionID.EraBreakrazor:
+                    return "https://i.imgur.com/2X3G3Fl.png";
+                case ArcDPSEnums.MinionID.JadeMech:
+                    return "https://i.imgur.com/54evTaq.png";
+                case ArcDPSEnums.MinionID.KusDarkrazor:
+                    return "https://i.imgur.com/rJq4Ngh.png";
+                case ArcDPSEnums.MinionID.IllusionaryAvenger:
+                    return "https://i.imgur.com/SmEAtBo.png";
+                case ArcDPSEnums.MinionID.FrostSpirit:
+                    return "https://i.imgur.com/dfbRWGh.png";
+                case ArcDPSEnums.MinionID.ViskIcerazor:
+                    return "https://i.imgur.com/SlTx8R5.png";
+                case ArcDPSEnums.MinionID.JuvenileBlackMoa:
+                    return "https://i.imgur.com/l47XZUw.png";
+                case ArcDPSEnums.MinionID.JuvenileEletricWywern:
+                    return "https://i.imgur.com/RsSNDV3.png";
+                case ArcDPSEnums.MinionID.JuvenileFangedIboga:
+                    return "https://i.imgur.com/cRE9fwE.png";
+                case ArcDPSEnums.MinionID.IllusionarySwordsman:
+                    return "https://i.imgur.com/ReUwrAL.png";
+                case ArcDPSEnums.MinionID.IllusionaryWarden:
+                    return "https://i.imgur.com/dId5lC2.png";
+                case ArcDPSEnums.MinionID.IllusionaryWarlock:
+                    return "https://i.imgur.com/ZRCcbBM.png";
+                case ArcDPSEnums.MinionID.JasRazorclaw:
+                    return "https://i.imgur.com/SkSsLmw.png";
+                case ArcDPSEnums.MinionID.OfelaSoulcleave:
+                    return "https://i.imgur.com/xFsl0gj.png";
+                case ArcDPSEnums.MinionID.SpiritOfNatureRenewal:
+                    return "https://i.imgur.com/sGMfD5j.png";
+                case ArcDPSEnums.MinionID.StoneSpirit:
+                    return "https://i.imgur.com/4r6Ytj5.png";
+                case ArcDPSEnums.MinionID.StormSpirit:
+                    return "https://i.imgur.com/jXmencD.png";
+                case ArcDPSEnums.MinionID.BloodFiend:
+                    return "https://i.imgur.com/PrOpULe.png";
+                case ArcDPSEnums.MinionID.FleshGolem:
+                    return "https://i.imgur.com/JkYUNug.png";
+                case ArcDPSEnums.MinionID.ShadowFiend:
+                    return "https://i.imgur.com/Undu5EU.png";
+                case ArcDPSEnums.MinionID.SunSpirit:
+                    return "https://i.imgur.com/HtCusPF.png";
+                case ArcDPSEnums.MinionID.Thief1:
+                case ArcDPSEnums.MinionID.Thief2:
+                case ArcDPSEnums.MinionID.Daredevil:
+                    return "https://i.imgur.com/6YkM5zY.png";
+                case ArcDPSEnums.MinionID.FleshWurm:
+                    return "https://i.imgur.com/Bc1VfLm.png";
             }
             //
             return "https://i.imgur.com/HuJHqRZ.png";
