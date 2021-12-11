@@ -171,7 +171,7 @@ class Animator {
                     break;
                 case "Target":
                 case "TargetPlayer":
-                    this.targetData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 30, actor.positions, actor.dead, actor.down, actor.dc, actor.masterID));
+                    this.targetData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 30, actor.positions, actor.dead, actor.down, actor.dc));
                     break;
                 case "Mob":
                     this.trashMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc, actor.masterID));
