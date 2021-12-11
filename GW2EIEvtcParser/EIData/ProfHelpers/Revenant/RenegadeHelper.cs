@@ -35,11 +35,11 @@ namespace GW2EIEvtcParser.EIData
 
         private static HashSet<long> Minions = new HashSet<long>()
         {
-            18791, // Jas Razorclaw
-            18524, // Visk Icerazor
-            18594, // Kus Darkrazor
-            18806, // Era Breakrazor
-            19002, // Ofela Soulcleave
+            (int)MinionID.JasRazorclaw,
+            (int)MinionID.ViskIcerazor,
+            (int)MinionID.KusDarkrazor,
+            (int)MinionID.EraBreakrazor,
+            (int)MinionID.OfelaSoulcleave,
         };
         internal static bool IsKnownMinionID(long id)
         {

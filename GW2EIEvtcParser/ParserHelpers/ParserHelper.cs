@@ -934,6 +934,12 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.CloneArtsariiv:
                     return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
             }
+            //
+            ArcDPSEnums.MinionID minionID = ArcDPSEnums.GetMinionID(id);
+            switch (ArcDPSEnums.GetMinionID(id))
+            {
+            }
+            //
             return "https://i.imgur.com/HuJHqRZ.png";
         }
 

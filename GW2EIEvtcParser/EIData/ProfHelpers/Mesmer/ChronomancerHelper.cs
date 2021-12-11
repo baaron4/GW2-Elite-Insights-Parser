@@ -30,7 +30,7 @@ namespace GW2EIEvtcParser.EIData
 
         private static HashSet<long> NonCloneMinions = new HashSet<long>()
         {
-            15188 , // Illusionary Avenger
+            (int)MinionID.IllusionaryAvenger,
         };
         internal static bool IsKnownMinionID(long id)
         {

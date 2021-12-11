@@ -672,13 +672,80 @@ namespace GW2EIEvtcParser
             return Enum.IsDefined(typeof(TargetID), id) ? (TargetID)id : TargetID.Unknown;
         }
 
-        public static bool IsKnownMinionID(AbstractSingleActor minion, ParserHelper.Spec spec)
+        public enum MinionID : int
         {
-            if (minion.AgentItem.Type == AgentItem.AgentType.Gadget)
+            BloodFiend = 1104,
+            FleshGolem = 1792,
+            ShadowFiend = 5673,
+            FleshWurm = 6002,
+            StoneSpirit = 6370,
+            SunSpirit = 6330,
+            FrostSpirit = 6369,
+            StormSpirit = 6371,
+            IllusionaryWarlock = 6449,
+            Clone1 = 6479,
+            IllusionarySwordsman = 6487,
+            SpiritOfNatureRenewal = 6649,
+            JuvenileBlackMoa = 6887,
+            Thief1 = 7580,
+            Thief2 = 7581,
+            IllusionaryWarden = 7981,
+            Clone2 = 8106,
+            Clone3 = 8107,
+            Clone4 = 8108,
+            Clone5 = 8110,
+            Clone6 = 8111,
+            Clone7 = 10542,
+            Clone8 = 15003,
+            Clone9 = 15032,
+            Clone10 = 15044,
+            Clone11 = 15084,
+            Clone12 = 15090,
+            Clone13 = 15114,
+            Clone14 = 15117,
+            Clone15 = 15131,
+            Clone16 = 15156,
+            Clone17 = 15181,
+            IllusionaryAvenger = 15188,
+            Clone18 = 15196,
+            Clone19 = 15199,
+            Clone20 = 15233,
+            Clone21 = 15240,
+            Clone22 = 15249,
+            JuvenileEletricWywern = 15436,
+            Daredevil = 18369,
+            ViskIcerazor = 18524,
+            KusDarkrazor = 18594,
+            JuvenileFangedIboga = 18688,
+            JasRazorclaw = 18791,
+            EraBreakrazor = 18806,
+            Clone23 = 18922,
+            Clone24 = 18939,
+            OfelaSoulcleave = 19002,
+            Clone25 = 19134,
+            Clone26 = 19257,
+            JadeMech = 23549,
+            //
+            Unknown,
+        }
+
+        public static MinionID GetMinionID(int id)
+        {
+            return Enum.IsDefined(typeof(MinionID), id) ? (MinionID)id : MinionID.Unknown;
+        }
+
+        public static bool IsKnownMinionID(AgentItem minion, ParserHelper.Spec spec)
+        {
+            if (minion.Type == AgentItem.AgentType.Gadget)
             {
                 return false;
             }
             return ProfHelper.IsKnownMinionID(minion, spec);
+        }
+
+        public static bool IsKnownMinionID(AbstractSingleActor minion, ParserHelper.Spec spec)
+        {
+            return IsKnownMinionID(minion.AgentItem, spec);
         }
 
     }

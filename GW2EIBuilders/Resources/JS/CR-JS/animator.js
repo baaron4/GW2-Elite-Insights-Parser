@@ -162,7 +162,7 @@ class Animator {
             const actor = actors[i];
             switch (actor.type) {
                 case "Player":
-                    this.playerData.set(actor.id, new SquadIconDrawable(actor.start, actor.end, actor.img, 23, actor.group, actor.positions, actor.dead, actor.down, actor.dc));
+                    this.playerData.set(actor.id, new SquadIconDrawable(actor.start, actor.end, actor.img, 22, actor.group, actor.positions, actor.dead, actor.down, actor.dc));
                     if (this.times.length === 0) {
                         for (let j = 0; j < actor.positions.length / 2; j++) {
                             this.times.push(j * this.pollingRate);

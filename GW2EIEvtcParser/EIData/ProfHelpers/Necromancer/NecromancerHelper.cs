@@ -84,10 +84,10 @@ namespace GW2EIEvtcParser.EIData
 
         private static HashSet<long> Minions = new HashSet<long>()
         {
-            1104, // Blood Fiend
-            1792, // Flesh Golem
-            5673, // Shadow Fiend
-            6002, // Flesh Wurm
+            (int)MinionID.BloodFiend,
+            (int)MinionID.FleshGolem,
+            (int)MinionID.ShadowFiend,
+            (int)MinionID.FleshWurm
         };
         internal static bool IsKnownMinionID(long id)
         {
