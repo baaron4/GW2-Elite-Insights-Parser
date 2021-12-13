@@ -23,11 +23,11 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-            new Buff("Ferocious Symbiosis",63191, Source.Untamed, ArcDPSEnums.BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/73/Ferocious_Symbiosis.png"),
-            new Buff("Unleashed",63317, Source.Untamed, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/91/Unleash_Ranger.png"),
-            new Buff("Pet Unleashed",63145, Source.Untamed, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/43/Unleash_Pet.png"),
-            new Buff("Perilous Gift",63284, Source.Untamed, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d6/Perilous_Gift.png"),
-            new Buff("Forest's Fortification",63240, Source.Untamed, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/43/Forest%27s_Fortification.png"),
+            new Buff("Ferocious Symbiosis",63191, Source.Untamed, ArcDPSEnums.BuffStackType.Stacking, 5, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/7/73/Ferocious_Symbiosis.png"),
+            new Buff("Unleashed",63317, Source.Untamed, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/9/91/Unleash_Ranger.png"),
+            new Buff("Pet Unleashed",63145, Source.Untamed, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/4/43/Unleash_Pet.png"),
+            new Buff("Perilous Gift",63284, Source.Untamed, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/d/d6/Perilous_Gift.png"),
+            new Buff("Forest's Fortification",63240, Source.Untamed, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/4/43/Forest%27s_Fortification.png"),
         };
 
     }

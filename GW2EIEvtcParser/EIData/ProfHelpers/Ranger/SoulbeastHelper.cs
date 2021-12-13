@@ -55,19 +55,19 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-                new Buff("Dolyak Stance",41815, Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.DefensiveBuff, "https://wiki.guildwars2.com/images/7/71/Dolyak_Stance.png"),
-                new Buff("Griffon Stance",46280, Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.SupportBuff, "https://wiki.guildwars2.com/images/9/98/Griffon_Stance.png"),
-                new Buff("Moa Stance",45038, Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.SupportBuff, "https://wiki.guildwars2.com/images/6/66/Moa_Stance.png"),
-                new Buff("Vulture Stance",44651, Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.OffensiveBuff, "https://wiki.guildwars2.com/images/8/8f/Vulture_Stance.png"),
-                new Buff("Bear Stance",40045, Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.DefensiveBuff, "https://wiki.guildwars2.com/images/f/f0/Bear_Stance.png"),
-                new Buff("One Wolf Pack",44139, Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.OffensiveBuff, "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png"),
-                new Buff("Deadly",44932, Source.Soulbeast, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/94/Deadly_%28Archetype%29.png"),
-                new Buff("Ferocious",41720, Source.Soulbeast, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e9/Ferocious_%28Archetype%29.png"),
-                new Buff("Supportive",40069, Source.Soulbeast, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/32/Supportive_%28Archetype%29.png"),
-                new Buff("Versatile",44693, Source.Soulbeast, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/bb/Versatile_%28Archetype%29.png"),
-                new Buff("Stout",40272, Source.Soulbeast, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/80/Stout_%28Archetype%29.png"),
-                new Buff("Unstoppable Union",44439, Source.Soulbeast, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b2/Unstoppable_Union.png"),
-                new Buff("Twice as Vicious",45600, Source.Soulbeast, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/0/00/Twice_as_Vicious.png"),
+                new Buff("Dolyak Stance",41815, Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.Defensive, "https://wiki.guildwars2.com/images/7/71/Dolyak_Stance.png"),
+                new Buff("Griffon Stance",46280, Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.Support, "https://wiki.guildwars2.com/images/9/98/Griffon_Stance.png"),
+                new Buff("Moa Stance",45038, Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.Support, "https://wiki.guildwars2.com/images/6/66/Moa_Stance.png"),
+                new Buff("Vulture Stance",44651, Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.Offensive, "https://wiki.guildwars2.com/images/8/8f/Vulture_Stance.png"),
+                new Buff("Bear Stance",40045, Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.Defensive, "https://wiki.guildwars2.com/images/f/f0/Bear_Stance.png"),
+                new Buff("One Wolf Pack",44139, Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.Offensive, "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png"),
+                new Buff("Deadly",44932, Source.Soulbeast, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/9/94/Deadly_%28Archetype%29.png"),
+                new Buff("Ferocious",41720, Source.Soulbeast, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/e/e9/Ferocious_%28Archetype%29.png"),
+                new Buff("Supportive",40069, Source.Soulbeast, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/3/32/Supportive_%28Archetype%29.png"),
+                new Buff("Versatile",44693, Source.Soulbeast, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/b/bb/Versatile_%28Archetype%29.png"),
+                new Buff("Stout",40272, Source.Soulbeast, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/8/80/Stout_%28Archetype%29.png"),
+                new Buff("Unstoppable Union",44439, Source.Soulbeast, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/b/b2/Unstoppable_Union.png"),
+                new Buff("Twice as Vicious",45600, Source.Soulbeast, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/0/00/Twice_as_Vicious.png"),
         };
 
     }

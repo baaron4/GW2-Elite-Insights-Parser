@@ -29,12 +29,12 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-                new Buff("Palm Strike",30423, Source.Daredevil, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/1a/Palm_Strike.png"),
-                new Buff("Pulmonary Impact",30510, Source.Daredevil, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/1a/Palm_Strike.png"),
-                new Buff("Lotus Training", 32200, Source.Daredevil, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/ea/Lotus_Training.png"),
-                new Buff("Unhindered Combatant", 32931, Source.Daredevil, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a1/Unhindered_Combatant.png"),
-                new Buff("Bounding Dodger", 33162, Source.Daredevil, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/30/Bounding_Dodger.png"),
-                new Buff("Weakening Strikes", 34081, Source.Daredevil, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/7c/Weakening_Strikes.png", GW2Builds.April2019Balance, GW2Builds.EndOfLife),
+                new Buff("Palm Strike",30423, Source.Daredevil, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/1/1a/Palm_Strike.png"),
+                new Buff("Pulmonary Impact",30510, Source.Daredevil, BuffStackType.Stacking, 25, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/1/1a/Palm_Strike.png"),
+                new Buff("Lotus Training", 32200, Source.Daredevil, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/e/ea/Lotus_Training.png"),
+                new Buff("Unhindered Combatant", 32931, Source.Daredevil, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/a/a1/Unhindered_Combatant.png"),
+                new Buff("Bounding Dodger", 33162, Source.Daredevil, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/3/30/Bounding_Dodger.png"),
+                new Buff("Weakening Strikes", 34081, Source.Daredevil, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/7/7c/Weakening_Strikes.png", GW2Builds.April2019Balance, GW2Builds.EndOfLife),
         };
 
     }

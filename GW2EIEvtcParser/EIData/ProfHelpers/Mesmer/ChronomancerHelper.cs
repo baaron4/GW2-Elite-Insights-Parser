@@ -24,8 +24,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-                new Buff("Time Echo",29582, Source.Chronomancer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/8d/Deja_Vu.png"),
-                new Buff("Time Anchored",30136, Source.Chronomancer, BuffStackType.Queue, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/db/Continuum_Split.png"),
+                new Buff("Time Echo",29582, Source.Chronomancer, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/8/8d/Deja_Vu.png"),
+                new Buff("Time Anchored",30136, Source.Chronomancer, BuffStackType.Queue, 25, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/d/db/Continuum_Split.png"),
         };
 
     }

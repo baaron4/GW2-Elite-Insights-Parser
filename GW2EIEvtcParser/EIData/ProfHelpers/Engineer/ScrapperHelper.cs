@@ -18,8 +18,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-                new Buff("Watchful Eye",31229, Source.Scrapper, BuffNature.DefensiveBuff, "https://wiki.guildwars2.com/images/2/29/Bulwark_Gyro.png"),
-                new Buff("Watchful Eye PvP",46910, Source.Scrapper, BuffNature.DefensiveBuff, "https://wiki.guildwars2.com/images/2/29/Bulwark_Gyro.png"),
+                new Buff("Watchful Eye",31229, Source.Scrapper, BuffNature.Defensive, "https://wiki.guildwars2.com/images/2/29/Bulwark_Gyro.png"),
+                new Buff("Watchful Eye PvP",46910, Source.Scrapper, BuffNature.Defensive, "https://wiki.guildwars2.com/images/2/29/Bulwark_Gyro.png"),
 
         };
     }

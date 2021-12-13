@@ -31,7 +31,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Important class specific boons
-            foreach (Buff offensiveBuff in buffs.BuffsByNature[BuffNature.OffensiveBuff])
+            foreach (Buff offensiveBuff in buffs.BuffsByNature[BuffNature.Offensive])
             {
                 if (skillIDs.Contains(offensiveBuff.ID))
                 {
@@ -39,7 +39,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
 
-            foreach (Buff supportBuff in buffs.BuffsByNature[BuffNature.SupportBuff])
+            foreach (Buff supportBuff in buffs.BuffsByNature[BuffNature.Support])
             {
                 if (skillIDs.Contains(supportBuff.ID))
                 {
@@ -47,7 +47,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
 
-            foreach (Buff defensiveBuff in buffs.BuffsByNature[BuffNature.DefensiveBuff])
+            foreach (Buff defensiveBuff in buffs.BuffsByNature[BuffNature.Defensive])
             {
                 if (skillIDs.Contains(defensiveBuff.ID))
                 {
@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.EIData
 
             }
 
-            foreach (Buff gearBuff in buffs.BuffsByNature[BuffNature.GearBuff])
+            foreach (Buff gearBuff in buffs.BuffsByNature[BuffNature.Gear])
             {
                 if (skillIDs.Contains(gearBuff.ID))
                 {
@@ -74,7 +74,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // All class specific boons
-            var remainingBuffsByIds = buffs.BuffsByNature[BuffNature.GraphOnlyBuff].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
+            var remainingBuffsByIds = buffs.BuffsByNature[BuffNature.GraphOnly].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
             foreach (Player player in players)
             {
                 _presentRemainingBuffsPerPlayer[player] = new HashSet<Buff>();

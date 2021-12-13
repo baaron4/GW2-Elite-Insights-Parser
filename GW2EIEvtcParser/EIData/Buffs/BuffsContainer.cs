@@ -157,7 +157,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (BuffsBySource.TryGetValue(src, out IReadOnlyList<Buff> list))
                 {
-                    result.AddRange(list.Where(x => x.Nature == BuffNature.GraphOnlyBuff));
+                    result.AddRange(list.Where(x => x.Nature == BuffNature.GraphOnly));
                 }
             }
             return result;
