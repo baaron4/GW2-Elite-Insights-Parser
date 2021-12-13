@@ -86,7 +86,7 @@ namespace GW2EIEvtcParser.Extensions
             return GetOutgoingBarrierEvents(target, log, start, end).Where(x => x.From == _agentItem).ToList();
         }
 
-        public IReadOnlyList<int> Get1SHealingList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target)
+        public IReadOnlyList<int> Get1SBarrierList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target)
         {
             if (_barrier1S == null)
             {
