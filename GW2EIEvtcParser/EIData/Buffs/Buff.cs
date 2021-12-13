@@ -43,10 +43,11 @@ namespace GW2EIEvtcParser.EIData
         {
             Condition,
             Boon,
-            OffensiveBuffTable,
-            DefensiveBuffTable,
-            SupportBuffTable,
-            GearBuffTable,
+            OffensiveBuff,
+            DefensiveBuff,
+            SupportBuff,
+            Debuff,
+            GearBuff,
             GraphOnlyBuff,
             Consumable,
             Unknown
@@ -279,11 +280,11 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Number of Clones", NumberOfClonesID, Source.Common, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/24/Superior_Rune_of_the_Mesmer.png"),
                 new Buff("Downed", 770, Source.Common, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/dd/Downed.png"),
                 new Buff("Exhaustion", 46842, Source.Common, BuffStackType.Queue, 3, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/88/Exhaustion.png"),
-                new Buff("Stealth", 13017, Source.Common, BuffStackType.Queue, 5, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
+                new Buff("Stealth", 13017, Source.Common, BuffStackType.Queue, 5, BuffNature.SupportBuff, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
                 new Buff("Hide in Shadows", 10269, Source.Common, BuffStackType.Queue, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
-                new Buff("Revealed", 890, Source.Common, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/d/db/Revealed.png"),
-                new Buff("Superspeed", 5974, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/c/c8/Superspeed.png", 0, GW2Builds.June2021Balance),
-                new Buff("Superspeed", 5974, Source.Common, BuffStackType.Queue, 9, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/c/c8/Superspeed.png", GW2Builds.June2021Balance, GW2Builds.EndOfLife),
+                new Buff("Revealed", 890, Source.Common, BuffNature.SupportBuff, "https://wiki.guildwars2.com/images/d/db/Revealed.png"),
+                new Buff("Superspeed", 5974, Source.Common, BuffNature.SupportBuff,"https://wiki.guildwars2.com/images/c/c8/Superspeed.png", 0, GW2Builds.June2021Balance),
+                new Buff("Superspeed", 5974, Source.Common, BuffStackType.Queue, 9, BuffNature.SupportBuff,"https://wiki.guildwars2.com/images/c/c8/Superspeed.png", GW2Builds.June2021Balance, GW2Builds.EndOfLife),
                 new Buff("Determined (762)", 762, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Buff("Determined (788)", 788, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Buff("Determined (895)", 895, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
@@ -302,13 +303,13 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Encumbered",1159, Source.Common, BuffStackType.Queue, 9, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d7/Encumbered.png"),
                 new Buff("Celeritas Spores", 27048, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/7b/Blazing_Speed_Mushrooms.png"),
                 //Auras
-                new Buff("Chaos Aura", 10332, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/e/ec/Chaos_Aura.png"),
-                new Buff("Fire Aura", 5677, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/c/ce/Fire_Aura.png"),
-                new Buff("Frost Aura", 5579, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/8/87/Frost_Aura_%28effect%29.png"),
-                new Buff("Light Aura", 25518, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/5/5a/Light_Aura.png"),
-                new Buff("Magnetic Aura", 5684, Source.Common, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/0/0b/Magnetic_Aura_%28effect%29.png"),
-                new Buff("Shocking Aura", 5577, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/5/5d/Shocking_Aura_%28effect%29.png"),
-                new Buff("Dark Aura", 39978, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/e/ef/Dark_Aura.png", GW2Builds.April2019Balance, GW2Builds.EndOfLife),
+                new Buff("Chaos Aura", 10332, Source.Common, BuffNature.SupportBuff,"https://wiki.guildwars2.com/images/e/ec/Chaos_Aura.png"),
+                new Buff("Fire Aura", 5677, Source.Common, BuffNature.SupportBuff,"https://wiki.guildwars2.com/images/c/ce/Fire_Aura.png"),
+                new Buff("Frost Aura", 5579, Source.Common, BuffNature.SupportBuff,"https://wiki.guildwars2.com/images/8/87/Frost_Aura_%28effect%29.png"),
+                new Buff("Light Aura", 25518, Source.Common, BuffNature.SupportBuff,"https://wiki.guildwars2.com/images/5/5a/Light_Aura.png"),
+                new Buff("Magnetic Aura", 5684, Source.Common, BuffNature.SupportBuff, "https://wiki.guildwars2.com/images/0/0b/Magnetic_Aura_%28effect%29.png"),
+                new Buff("Shocking Aura", 5577, Source.Common, BuffNature.SupportBuff,"https://wiki.guildwars2.com/images/5/5d/Shocking_Aura_%28effect%29.png"),
+                new Buff("Dark Aura", 39978, Source.Common, BuffNature.SupportBuff,"https://wiki.guildwars2.com/images/e/ef/Dark_Aura.png", GW2Builds.April2019Balance, GW2Builds.EndOfLife),
                 //race
                 new Buff("Take Root", 12459, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/b/b2/Take_Root.png"),
                 new Buff("Become the Bear",12426, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/7/7e/Become_the_Bear.png"),
@@ -324,27 +325,27 @@ namespace GW2EIEvtcParser.EIData
                 //
                 new Buff("Crystalline Heart", 37657, Source.Common, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/5/56/Crystalline_Heart.png"),
                 // WvW
-                new Buff("Minor Borderlands Bloodlust", 14772, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/f/f7/Major_Borderlands_Bloodlust.png"),
-                new Buff("Major Borderlands Bloodlust", 14773, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/f/f7/Major_Borderlands_Bloodlust.png"),
-                new Buff("Superior Borderlands Bloodlust", 14774, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/f/f7/Major_Borderlands_Bloodlust.png"),
-                new Buff("Blessing of Elements", 33120, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/3/3c/Blessing_of_Air.png"),
-                new Buff("Flame's Embrace", 34031, Source.Common, BuffNature.SupportBuffTable,"https://wiki.guildwars2.com/images/5/53/Flame%27s_Embrace.png"),
+                new Buff("Minor Borderlands Bloodlust", 14772, Source.Common, BuffNature.SupportBuff,"https://wiki.guildwars2.com/images/f/f7/Major_Borderlands_Bloodlust.png"),
+                new Buff("Major Borderlands Bloodlust", 14773, Source.Common, BuffNature.SupportBuff,"https://wiki.guildwars2.com/images/f/f7/Major_Borderlands_Bloodlust.png"),
+                new Buff("Superior Borderlands Bloodlust", 14774, Source.Common, BuffNature.SupportBuff,"https://wiki.guildwars2.com/images/f/f7/Major_Borderlands_Bloodlust.png"),
+                new Buff("Blessing of Elements", 33120, Source.Common, BuffNature.SupportBuff,"https://wiki.guildwars2.com/images/3/3c/Blessing_of_Air.png"),
+                new Buff("Flame's Embrace", 34031, Source.Common, BuffNature.SupportBuff,"https://wiki.guildwars2.com/images/5/53/Flame%27s_Embrace.png"),
         };
 
         internal static readonly List<Buff> Gear = new List<Buff>
         {
-                new Buff("Sigil of Concentration", 33719, Source.Gear, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/b/b3/Superior_Sigil_of_Concentration.png",0 , 93543),
-                new Buff("Superior Rune of the Monk", 53285, Source.Gear, BuffStackType.Stacking, 10, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/1/18/Superior_Rune_of_the_Monk.png", 93543, GW2Builds.EndOfLife),
-                new Buff("Sigil of Corruption", 9374, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/1/18/Superior_Sigil_of_Corruption.png"),
-                new Buff("Sigil of Life", 9386, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/a/a7/Superior_Sigil_of_Life.png"),
-                new Buff("Sigil of Perception", 9385, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/c/cc/Superior_Sigil_of_Perception.png"),
-                new Buff("Sigil of Bloodlust", 9286, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/f/fb/Superior_Sigil_of_Bloodlust.png"),
-                new Buff("Sigil of Bounty", 38588, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/f/f8/Superior_Sigil_of_Bounty.png"),
-                new Buff("Sigil of Benevolence", 9398, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/5/59/Superior_Sigil_of_Benevolence.png"),
-                new Buff("Sigil of Momentum", 22144, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/3/30/Superior_Sigil_of_Momentum.png"),
-                new Buff("Sigil of the Stars", 46953, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/d/dc/Superior_Sigil_of_the_Stars.png"),
-                new Buff("Sigil of Severance", 43930, Source.Gear, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/c/c2/Superior_Sigil_of_Severance.png"),
-                new Buff("Sigil of Doom", 9441, Source.Gear, BuffNature.GearBuffTable, "https://wiki.guildwars2.com/images/6/67/Superior_Sigil_of_Doom.png"),
+                new Buff("Sigil of Concentration", 33719, Source.Gear, BuffNature.GearBuff, "https://wiki.guildwars2.com/images/b/b3/Superior_Sigil_of_Concentration.png",0 , 93543),
+                new Buff("Superior Rune of the Monk", 53285, Source.Gear, BuffStackType.Stacking, 10, BuffNature.GearBuff, "https://wiki.guildwars2.com/images/1/18/Superior_Rune_of_the_Monk.png", 93543, GW2Builds.EndOfLife),
+                new Buff("Sigil of Corruption", 9374, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuff, "https://wiki.guildwars2.com/images/1/18/Superior_Sigil_of_Corruption.png"),
+                new Buff("Sigil of Life", 9386, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuff, "https://wiki.guildwars2.com/images/a/a7/Superior_Sigil_of_Life.png"),
+                new Buff("Sigil of Perception", 9385, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuff, "https://wiki.guildwars2.com/images/c/cc/Superior_Sigil_of_Perception.png"),
+                new Buff("Sigil of Bloodlust", 9286, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuff, "https://wiki.guildwars2.com/images/f/fb/Superior_Sigil_of_Bloodlust.png"),
+                new Buff("Sigil of Bounty", 38588, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuff, "https://wiki.guildwars2.com/images/f/f8/Superior_Sigil_of_Bounty.png"),
+                new Buff("Sigil of Benevolence", 9398, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuff, "https://wiki.guildwars2.com/images/5/59/Superior_Sigil_of_Benevolence.png"),
+                new Buff("Sigil of Momentum", 22144, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuff, "https://wiki.guildwars2.com/images/3/30/Superior_Sigil_of_Momentum.png"),
+                new Buff("Sigil of the Stars", 46953, Source.Gear, BuffStackType.Stacking, 25, BuffNature.GearBuff, "https://wiki.guildwars2.com/images/d/dc/Superior_Sigil_of_the_Stars.png"),
+                new Buff("Sigil of Severance", 43930, Source.Gear, BuffNature.GearBuff, "https://wiki.guildwars2.com/images/c/c2/Superior_Sigil_of_Severance.png"),
+                new Buff("Sigil of Doom", 9441, Source.Gear, BuffNature.GearBuff, "https://wiki.guildwars2.com/images/6/67/Superior_Sigil_of_Doom.png"),
         };
 
         internal static readonly List<Buff> FractalInstabilities = new List<Buff>()
@@ -454,8 +455,8 @@ namespace GW2EIEvtcParser.EIData
                 // Matthias
                 new Buff("Blood Shield Abo",34376, Source.FightSpecific, BuffStackType.Stacking, 18, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
                 new Buff("Blood Shield",34518, Source.FightSpecific, BuffStackType.Stacking, 18, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
-                new Buff("Blood Fueled",34422, Source.FightSpecific, BuffStackType.Stacking, 1, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Buff("Blood Fueled Abo",34428, Source.FightSpecific, BuffStackType.Stacking, 15, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Buff("Blood Fueled",34422, Source.FightSpecific, BuffStackType.Stacking, 1, BuffNature.OffensiveBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
+                new Buff("Blood Fueled Abo",34428, Source.FightSpecific, BuffStackType.Stacking, 15, BuffNature.OffensiveBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Buff("Unstable Blood Magic", 34450, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/0/09/Unstable_Blood_Magic.png"),
                 new Buff("Corruption", 34416, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/3/34/Locust_Trail.png"),
                 new Buff("Unbalanced", 34367, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/80/Unbalanced.png"),
@@ -544,7 +545,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Soul Digestion", 48541, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/0/08/Soul_Digestion.png"),
                 new Buff("Reclaimed Energy", 47090, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/21/Reclaimed_Energy.png"),
                 new Buff("Mortal Coil (Statue of Death)", 48583, Source.FightSpecific, BuffStackType.Stacking, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/41/Mortal_Coil.png"),
-                new Buff("Empowered (Statue of Death)", 47473, Source.FightSpecific, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/d/de/Empowered_%28Statue_of_Death%29.png"),
+                new Buff("Empowered (Statue of Death)", 47473, Source.FightSpecific, BuffNature.OffensiveBuff, "https://wiki.guildwars2.com/images/d/de/Empowered_%28Statue_of_Death%29.png"),
                 //new Buff("Energy Threshold (Statue of Death)", 48583, Source.FightSpecific, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/2e/Spirit_Form_%28Hall_of_Chains%29.png"),
                 //  Eyes
                 new Buff("Last Grasp (Judgment)", 47635, Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/26/Last_Grasp.png"),
@@ -601,7 +602,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Eroding Curse", 56440, Source.FightSpecific, BuffStackType.Stacking, 99, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/d/de/Toxic_Gas.png"),
                 // Sabir
                 new Buff("Ion Shield", 56100, Source.FightSpecific, BuffStackType.Stacking, 80, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/9/94/Ion_Shield.png"),
-                new Buff("Violent Currents", 56123, Source.FightSpecific, BuffStackType.Stacking, 5, BuffNature.OffensiveBuffTable,"https://wiki.guildwars2.com/images/0/06/Violent_Currents.png"),
+                new Buff("Violent Currents", 56123, Source.FightSpecific, BuffStackType.Stacking, 5, BuffNature.OffensiveBuff,"https://wiki.guildwars2.com/images/0/06/Violent_Currents.png"),
                 new Buff("Repulsion Field", 56172, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
                 new Buff("Electrical Repulsion", 56391, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/d/dd/Xera%27s_Fury.png"),
                 new Buff("Electro-Repulsion", 56474, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/42/Exposed_%28Statue_of_Darkness%29.png"),
@@ -626,11 +627,11 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Unbridled Chaos", 56467, Source.FightSpecific, BuffStackType.Stacking, 3, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/4/42/Exposed_%28Statue_of_Darkness%29.png"),
                 //////////////////////////////////////////////
                 // Fractals 
-                new Buff("Rigorous Certainty", 33652, Source.Common, BuffNature.DefensiveBuffTable,"https://wiki.guildwars2.com/images/6/60/Desert_Carapace.png"),
-                new Buff("Fractal Savant", 47248, Source.Common, BuffNature.OffensiveBuffTable,"https://wiki.guildwars2.com/images/c/cb/Malign_9_Agony_Infusion.png"),
-                new Buff("Fractal Prodigy", 48191, Source.Common, BuffNature.OffensiveBuffTable,"https://wiki.guildwars2.com/images/1/11/Mighty_9_Agony_Infusion.png"),
-                new Buff("Fractal Champion", 48414, Source.Common, BuffNature.OffensiveBuffTable,"https://wiki.guildwars2.com/images/3/3d/Precise_9_Agony_Infusion.png"),
-                new Buff("Fractal God", 47222, Source.Common, BuffNature.OffensiveBuffTable,"https://wiki.guildwars2.com/images/2/22/Healing_9_Agony_Infusion.png"),
+                new Buff("Rigorous Certainty", 33652, Source.Common, BuffNature.DefensiveBuff,"https://wiki.guildwars2.com/images/6/60/Desert_Carapace.png"),
+                new Buff("Fractal Savant", 47248, Source.Common, BuffNature.OffensiveBuff,"https://wiki.guildwars2.com/images/c/cb/Malign_9_Agony_Infusion.png"),
+                new Buff("Fractal Prodigy", 48191, Source.Common, BuffNature.OffensiveBuff,"https://wiki.guildwars2.com/images/1/11/Mighty_9_Agony_Infusion.png"),
+                new Buff("Fractal Champion", 48414, Source.Common, BuffNature.OffensiveBuff,"https://wiki.guildwars2.com/images/3/3d/Precise_9_Agony_Infusion.png"),
+                new Buff("Fractal God", 47222, Source.Common, BuffNature.OffensiveBuff,"https://wiki.guildwars2.com/images/2/22/Healing_9_Agony_Infusion.png"),
                 // Siax 
                 new Buff("Fixated (Nightmare)", 36998, Source.FightSpecific, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 // Ensolyss 

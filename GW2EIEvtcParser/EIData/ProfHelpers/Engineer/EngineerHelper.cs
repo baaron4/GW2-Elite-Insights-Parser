@@ -84,7 +84,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Iron Blooded",49065, Source.Engineer, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/1e/Iron_Blooded.png"),
                 new Buff("Streamlined Kits",18687, Source.Engineer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/cb/Streamlined_Kits.png"),
                 new Buff("Kinetic Charge",45781, Source.Engineer, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e0/Kinetic_Battery.png"),
-                new Buff("Pinpoint Distribution", 38333, Source.Engineer, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/b/bf/Pinpoint_Distribution.png"),
+                new Buff("Pinpoint Distribution", 38333, Source.Engineer, BuffNature.OffensiveBuff, "https://wiki.guildwars2.com/images/b/bf/Pinpoint_Distribution.png"),
                 new Buff("Thermal Vision", 51389, Source.Engineer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/8a/Skilled_Marksman.png"),
                 new Buff("Explosive Entrance",59579, Source.Engineer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/33/Explosive_Entrance.png", GW2Builds.February2020Balance, GW2Builds.EndOfLife),
                 new Buff("Explosive Temper",59528, Source.Engineer, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/c1/Explosive_Temper.png", GW2Builds.February2020Balance, GW2Builds.EndOfLife),

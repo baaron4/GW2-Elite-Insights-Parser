@@ -76,8 +76,8 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
                 new Buff("Vengeful Hammers", 27273, Source.Revenant, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/c/c8/Vengeful_Hammers.png"),
-                new Buff("Rite of the Great Dwarf", 26596, Source.Revenant, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/6/69/Rite_of_the_Great_Dwarf.png"),
-                new Buff("Rite of the Great Dwarf (Traited)", 33330, Source.Revenant, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/6/69/Rite_of_the_Great_Dwarf.png"),
+                new Buff("Rite of the Great Dwarf", 26596, Source.Revenant, BuffNature.DefensiveBuff, "https://wiki.guildwars2.com/images/6/69/Rite_of_the_Great_Dwarf.png"),
+                new Buff("Rite of the Great Dwarf (Traited)", 33330, Source.Revenant, BuffNature.DefensiveBuff, "https://wiki.guildwars2.com/images/6/69/Rite_of_the_Great_Dwarf.png"),
                 new Buff("Embrace the Darkness", 28001, Source.Revenant, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/51/Embrace_the_Darkness.png"),
                 new Buff("Enchanted Daggers", 28557, Source.Revenant, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/fa/Enchanted_Daggers.png"),
                 new Buff("Phase Traversal", 28395, Source.Revenant, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/f2/Phase_Traversal.png"),
@@ -88,7 +88,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Legendary Assassin Stance",27890, Source.Revenant, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/0/02/Legendary_Assassin_Stance.png"),
                 //traits
                 new Buff("Vicious Lacerations",29395, Source.Revenant, BuffStackType.Stacking, 3, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", 0, GW2Builds.February2020Balance),
-                new Buff("Assassin's Presence", 26854, Source.Revenant, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/5/54/Assassin%27s_Presence.png"),
+                new Buff("Assassin's Presence", 26854, Source.Revenant, BuffNature.OffensiveBuff, "https://wiki.guildwars2.com/images/5/54/Assassin%27s_Presence.png"),
                 new Buff("Expose Defenses", 48894, Source.Revenant, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/5c/Mutilate_Defenses.png"),
                 new Buff("Invoking Harmony",29025, Source.Revenant, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/ec/Invoking_Harmony.png"),
                 new Buff("Unyielding Devotion",55044, Source.Revenant, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/4f/Unyielding_Devotion.png", GW2Builds.April2019Balance, GW2Builds.EndOfLife),

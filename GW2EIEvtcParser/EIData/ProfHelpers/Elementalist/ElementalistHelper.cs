@@ -83,11 +83,11 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Whirlpool",5601, Source.Elementalist, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/41/Whirlpool.png"),
                 new Buff("Electrified Tornado",5749, Source.Elementalist, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/29/Chain_Lightning.png"),
                 //conjures
-                new Buff("Conjure Earth Shield", 15788, Source.Elementalist, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/7/7a/Conjure_Earth_Shield.png"),
-                new Buff("Conjure Flame Axe", 15789, Source.Elementalist, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/a/a1/Conjure_Flame_Axe.png"),
-                new Buff("Conjure Frost Bow", 15790, Source.Elementalist, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/c/c3/Conjure_Frost_Bow.png"),
-                new Buff("Conjure Lightning Hammer", 15791, Source.Elementalist, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/1/1f/Conjure_Lightning_Hammer.png"),
-                new Buff("Conjure Fiery Greatsword", 15792, Source.Elementalist, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/e/e2/Conjure_Fiery_Greatsword.png"),
+                new Buff("Conjure Earth Shield", 15788, Source.Elementalist, BuffNature.SupportBuff, "https://wiki.guildwars2.com/images/7/7a/Conjure_Earth_Shield.png"),
+                new Buff("Conjure Flame Axe", 15789, Source.Elementalist, BuffNature.SupportBuff, "https://wiki.guildwars2.com/images/a/a1/Conjure_Flame_Axe.png"),
+                new Buff("Conjure Frost Bow", 15790, Source.Elementalist, BuffNature.SupportBuff, "https://wiki.guildwars2.com/images/c/c3/Conjure_Frost_Bow.png"),
+                new Buff("Conjure Lightning Hammer", 15791, Source.Elementalist, BuffNature.SupportBuff, "https://wiki.guildwars2.com/images/1/1f/Conjure_Lightning_Hammer.png"),
+                new Buff("Conjure Fiery Greatsword", 15792, Source.Elementalist, BuffNature.SupportBuff, "https://wiki.guildwars2.com/images/e/e2/Conjure_Fiery_Greatsword.png"),
                 //skills
                 new Buff("Arcane Power",5582, Source.Elementalist, BuffStackType.Stacking, 6, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/72/Arcane_Power.png"),
                 new Buff("Arcane Shield",5640, Source.Elementalist, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/9d/Arcane_Shield.png"),
@@ -97,8 +97,8 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Obsidian Flesh",5667, Source.Elementalist, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/c1/Obsidian_Flesh.png"),
                 new Buff("Persisting Flames",13342, Source.Elementalist, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/5f/Persisting_Flames.png", 104844, GW2Builds.EndOfLife),
                 new Buff("Fresh Air",34241, Source.Elementalist, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d8/Fresh_Air.png"),
-                new Buff("Soothing Mist", 5587, Source.Elementalist, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/f/f7/Soothing_Mist.png"),
-                new Buff("Stone Heart", 24304, Source.Elementalist, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/6/60/Stone_Heart.png"),
+                new Buff("Soothing Mist", 5587, Source.Elementalist, BuffNature.DefensiveBuff, "https://wiki.guildwars2.com/images/f/f7/Soothing_Mist.png"),
+                new Buff("Stone Heart", 24304, Source.Elementalist, BuffNature.DefensiveBuff, "https://wiki.guildwars2.com/images/6/60/Stone_Heart.png"),
         };
 
 

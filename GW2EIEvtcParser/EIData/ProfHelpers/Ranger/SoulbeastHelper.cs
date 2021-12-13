@@ -55,12 +55,12 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-                new Buff("Dolyak Stance",41815, Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/7/71/Dolyak_Stance.png"),
-                new Buff("Griffon Stance",46280, Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/9/98/Griffon_Stance.png"),
-                new Buff("Moa Stance",45038, Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/6/66/Moa_Stance.png"),
-                new Buff("Vulture Stance",44651, Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/8/8f/Vulture_Stance.png"),
-                new Buff("Bear Stance",40045, Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/f/f0/Bear_Stance.png"),
-                new Buff("One Wolf Pack",44139, Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png"),
+                new Buff("Dolyak Stance",41815, Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.DefensiveBuff, "https://wiki.guildwars2.com/images/7/71/Dolyak_Stance.png"),
+                new Buff("Griffon Stance",46280, Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.SupportBuff, "https://wiki.guildwars2.com/images/9/98/Griffon_Stance.png"),
+                new Buff("Moa Stance",45038, Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.SupportBuff, "https://wiki.guildwars2.com/images/6/66/Moa_Stance.png"),
+                new Buff("Vulture Stance",44651, Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.OffensiveBuff, "https://wiki.guildwars2.com/images/8/8f/Vulture_Stance.png"),
+                new Buff("Bear Stance",40045, Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.DefensiveBuff, "https://wiki.guildwars2.com/images/f/f0/Bear_Stance.png"),
+                new Buff("One Wolf Pack",44139, Source.Soulbeast, BuffStackType.Queue, 25, BuffNature.OffensiveBuff, "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png"),
                 new Buff("Deadly",44932, Source.Soulbeast, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/94/Deadly_%28Archetype%29.png"),
                 new Buff("Ferocious",41720, Source.Soulbeast, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e9/Ferocious_%28Archetype%29.png"),
                 new Buff("Supportive",40069, Source.Soulbeast, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/32/Supportive_%28Archetype%29.png"),

@@ -66,9 +66,9 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Corrupter's Defense",30845, Source.Necromancer, BuffStackType.Stacking, 10, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/11/Corrupter%27s_Fervor.png", 0, GW2Builds.October2019Balance),
                 new Buff("Death's Carapace",30845, Source.Necromancer, BuffStackType.Stacking, 30, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/5/58/Death%27s_Carapace.png", GW2Builds.October2019Balance, GW2Builds.EndOfLife),
                 new Buff("Flesh of the Master",13810, Source.Necromancer, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e9/Flesh_of_the_Master.png", 0, GW2Builds.October2019Balance),
-                new Buff("Vampiric Aura", 30285, Source.Necromancer, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/d/da/Vampiric_Presence.png"),
+                new Buff("Vampiric Aura", 30285, Source.Necromancer, BuffNature.DefensiveBuff, "https://wiki.guildwars2.com/images/d/da/Vampiric_Presence.png"),
                 new Buff("Vampiric Strikes", 30398, Source.Necromancer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/da/Vampiric_Presence.png"),
-                new Buff("Last Rites",29726, Source.Necromancer, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/1/1a/Last_Rites_%28effect%29.png"),
+                new Buff("Last Rites",29726, Source.Necromancer, BuffNature.DefensiveBuff, "https://wiki.guildwars2.com/images/1/1a/Last_Rites_%28effect%29.png"),
                 new Buff("Soul Barbs",53489, Source.Necromancer, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/bd/Soul_Barbs.png"),
         };
 

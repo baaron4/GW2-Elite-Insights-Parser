@@ -71,10 +71,10 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Signet of Stamina",14478, Source.Warrior, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/6b/Signet_of_Stamina.png"),
                 new Buff("Signet of Rage",14496, Source.Warrior, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/bc/Signet_of_Rage.png"),
                 //banners
-                new Buff("Banner of Strength", 14417, Source.Warrior, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/e/e1/Banner_of_Strength.png/33px-Banner_of_Strength.png"),
-                new Buff("Banner of Discipline", 14449, Source.Warrior, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/5/5f/Banner_of_Discipline.png/33px-Banner_of_Discipline.png"),
-                new Buff("Banner of Tactics",14450, Source.Warrior, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/thumb/3/3f/Banner_of_Tactics.png/33px-Banner_of_Tactics.png"),
-                new Buff("Banner of Defense",14543, Source.Warrior, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/f/f1/Banner_of_Defense.png/33px-Banner_of_Defense.png"),
+                new Buff("Banner of Strength", 14417, Source.Warrior, BuffNature.OffensiveBuff, "https://wiki.guildwars2.com/images/thumb/e/e1/Banner_of_Strength.png/33px-Banner_of_Strength.png"),
+                new Buff("Banner of Discipline", 14449, Source.Warrior, BuffNature.OffensiveBuff, "https://wiki.guildwars2.com/images/thumb/5/5f/Banner_of_Discipline.png/33px-Banner_of_Discipline.png"),
+                new Buff("Banner of Tactics",14450, Source.Warrior, BuffNature.SupportBuff, "https://wiki.guildwars2.com/images/thumb/3/3f/Banner_of_Tactics.png/33px-Banner_of_Tactics.png"),
+                new Buff("Banner of Defense",14543, Source.Warrior, BuffNature.DefensiveBuff, "https://wiki.guildwars2.com/images/thumb/f/f1/Banner_of_Defense.png/33px-Banner_of_Defense.png"),
                 //stances
                 new Buff("Shield Stance",756, Source.Warrior, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/d/de/Shield_Stance.png"),
                 new Buff("Berserker's Stance",14453, Source.Warrior, BuffNature.GraphOnlyBuff,"https://wiki.guildwars2.com/images/8/8a/Berserker_Stance.png"),
@@ -85,7 +85,7 @@ namespace GW2EIEvtcParser.EIData
                 //traits
                 new Buff("Soldier's Focus", 58102, Source.Warrior, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/29/Soldier%27s_Focus.png", GW2Builds.October2019Balance, GW2Builds.EndOfLife),
                 new Buff("Brave Stride", 43063, Source.Warrior, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b8/Death_from_Above.png"),
-                new Buff("Empower Allies", 14222, Source.Warrior, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/4/4c/Empower_Allies.png/20px-Empower_Allies.png"),
+                new Buff("Empower Allies", 14222, Source.Warrior, BuffNature.OffensiveBuff, "https://wiki.guildwars2.com/images/thumb/4/4c/Empower_Allies.png/20px-Empower_Allies.png"),
                 new Buff("Peak Performance",46853, Source.Warrior, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/98/Peak_Performance.png"),
                 new Buff("Furious Surge", 30204, Source.Warrior, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/65/Furious.png"),
                 //new Boon("Health Gain per Adrenaline bar Spent",-1, BoonSource.Warrior, BoonType.Intensity, 3, BoonEnum.GraphOnlyBuff,RemoveType.Normal),

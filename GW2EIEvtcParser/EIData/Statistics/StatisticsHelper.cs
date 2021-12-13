@@ -31,7 +31,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Important class specific boons
-            foreach (Buff offensiveBuff in buffs.BuffsByNature[BuffNature.OffensiveBuffTable])
+            foreach (Buff offensiveBuff in buffs.BuffsByNature[BuffNature.OffensiveBuff])
             {
                 if (skillIDs.Contains(offensiveBuff.ID))
                 {
@@ -39,7 +39,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
 
-            foreach (Buff supportBuff in buffs.BuffsByNature[BuffNature.SupportBuffTable])
+            foreach (Buff supportBuff in buffs.BuffsByNature[BuffNature.SupportBuff])
             {
                 if (skillIDs.Contains(supportBuff.ID))
                 {
@@ -47,7 +47,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
 
-            foreach (Buff defensiveBuff in buffs.BuffsByNature[BuffNature.DefensiveBuffTable])
+            foreach (Buff defensiveBuff in buffs.BuffsByNature[BuffNature.DefensiveBuff])
             {
                 if (skillIDs.Contains(defensiveBuff.ID))
                 {
@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.EIData
 
             }
 
-            foreach (Buff gearBuff in buffs.BuffsByNature[BuffNature.GearBuffTable])
+            foreach (Buff gearBuff in buffs.BuffsByNature[BuffNature.GearBuff])
             {
                 if (skillIDs.Contains(gearBuff.ID))
                 {

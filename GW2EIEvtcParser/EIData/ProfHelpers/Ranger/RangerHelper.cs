@@ -106,16 +106,16 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Signet of the Hunt (Active)",12541, Source.Ranger, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/df/Signet_of_the_Hunt.png"),
                 //spirits
                 // new Boon("Water Spirit (old)", 50386, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/0/06/Water_Spirit.png/33px-Water_Spirit.png"),
-                new Buff("Frost Spirit", 12544, Source.Ranger, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png", 0, GW2Builds.May2018Balance),
-                new Buff("Sun Spirit", 12540, Source.Ranger, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/d/dd/Sun_Spirit.png/33px-Sun_Spirit.png", 0, GW2Builds.May2018Balance),
-                new Buff("Stone Spirit", 12547, Source.Ranger, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/3/35/Stone_Spirit.png/20px-Stone_Spirit.png", 0, GW2Builds.May2018Balance),
+                new Buff("Frost Spirit", 12544, Source.Ranger, BuffNature.OffensiveBuff, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png", 0, GW2Builds.May2018Balance),
+                new Buff("Sun Spirit", 12540, Source.Ranger, BuffNature.OffensiveBuff, "https://wiki.guildwars2.com/images/thumb/d/dd/Sun_Spirit.png/33px-Sun_Spirit.png", 0, GW2Builds.May2018Balance),
+                new Buff("Stone Spirit", 12547, Source.Ranger, BuffNature.DefensiveBuff, "https://wiki.guildwars2.com/images/thumb/3/35/Stone_Spirit.png/20px-Stone_Spirit.png", 0, GW2Builds.May2018Balance),
                 //new Boon("Storm Spirit (old)", 50381, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/2/25/Storm_Spirit.png/30px-Storm_Spirit.png"),
                 //reworked
-                new Buff("Water Spirit", 50386, Source.Ranger, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/0/06/Water_Spirit.png/33px-Water_Spirit.png", GW2Builds.May2018Balance, GW2Builds.EndOfLife),
-                new Buff("Frost Spirit", 50421, Source.Ranger, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png", GW2Builds.May2018Balance, GW2Builds.EndOfLife),
-                new Buff("Sun Spirit", 50413, Source.Ranger, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/d/dd/Sun_Spirit.png/33px-Sun_Spirit.png", GW2Builds.May2018Balance, GW2Builds.EndOfLife),
-                new Buff("Stone Spirit", 50415, Source.Ranger, BuffNature.DefensiveBuffTable, "https://wiki.guildwars2.com/images/thumb/3/35/Stone_Spirit.png/20px-Stone_Spirit.png", GW2Builds.May2018Balance, GW2Builds.EndOfLife),
-                new Buff("Storm Spirit", 50381, Source.Ranger, BuffNature.SupportBuffTable, "https://wiki.guildwars2.com/images/thumb/2/25/Storm_Spirit.png/30px-Storm_Spirit.png", GW2Builds.May2018Balance, GW2Builds.EndOfLife),
+                new Buff("Water Spirit", 50386, Source.Ranger, BuffNature.DefensiveBuff, "https://wiki.guildwars2.com/images/thumb/0/06/Water_Spirit.png/33px-Water_Spirit.png", GW2Builds.May2018Balance, GW2Builds.EndOfLife),
+                new Buff("Frost Spirit", 50421, Source.Ranger, BuffNature.OffensiveBuff, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png", GW2Builds.May2018Balance, GW2Builds.EndOfLife),
+                new Buff("Sun Spirit", 50413, Source.Ranger, BuffNature.OffensiveBuff, "https://wiki.guildwars2.com/images/thumb/d/dd/Sun_Spirit.png/33px-Sun_Spirit.png", GW2Builds.May2018Balance, GW2Builds.EndOfLife),
+                new Buff("Stone Spirit", 50415, Source.Ranger, BuffNature.DefensiveBuff, "https://wiki.guildwars2.com/images/thumb/3/35/Stone_Spirit.png/20px-Stone_Spirit.png", GW2Builds.May2018Balance, GW2Builds.EndOfLife),
+                new Buff("Storm Spirit", 50381, Source.Ranger, BuffNature.SupportBuff, "https://wiki.guildwars2.com/images/thumb/2/25/Storm_Spirit.png/30px-Storm_Spirit.png", GW2Builds.May2018Balance, GW2Builds.EndOfLife),
                 //skills
                 new Buff("Attack of Opportunity",12574, Source.Ranger, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/47/Moment_of_Clarity.png"),
                 new Buff("Call of the Wild",36781, Source.Ranger, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/8/8d/Call_of_the_Wild.png",0 , GW2Builds.July2019Balance),
@@ -126,7 +126,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Sharpening Stones",12536, Source.Ranger, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/a/af/Sharpening_Stone.png"),
                 new Buff("Sharpen Spines",43266, Source.Ranger, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/9/95/Sharpen_Spines.png"),
                 //traits
-                new Buff("Spotter", 14055, Source.Ranger, BuffNature.OffensiveBuffTable, "https://wiki.guildwars2.com/images/b/b0/Spotter.png"),
+                new Buff("Spotter", 14055, Source.Ranger, BuffNature.OffensiveBuff, "https://wiki.guildwars2.com/images/b/b0/Spotter.png"),
                 new Buff("Opening Strike",13988, Source.Ranger, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/44/Opening_Strike_%28effect%29.png"),
                 new Buff("Quick Draw",29703, Source.Ranger, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/39/Quick_Draw.png"),
                 new Buff("Light on your Feet",30673, Source.Ranger, BuffStackType.Queue, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/2/22/Light_on_your_Feet.png"),
