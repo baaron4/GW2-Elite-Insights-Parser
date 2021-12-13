@@ -6,8 +6,8 @@ namespace GW2EIEvtcParser.EIData
     public class FinalSupportAll : FinalSupport
     {
         //public long allHeal;
-        public int Resurrects { get; internal set; }
-        public long ResurrectTime { get; internal set; }
+        public int Resurrects { get; }
+        public long ResurrectTime { get; }
 
         private static long[] GetReses(ParsedEvtcLog log, AbstractSingleActor actor, long start, long end)
         {

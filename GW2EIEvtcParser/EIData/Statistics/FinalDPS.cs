@@ -8,33 +8,33 @@ namespace GW2EIEvtcParser.EIData
     public class FinalDPS
     {
         // Total
-        public int Dps { get; internal set; }
-        public int Damage { get; internal set; }
-        public int CondiDps { get; internal set; }
-        public int CondiDamage { get; internal set; }
-        public int PowerDps { get; internal set; }
-        public int PowerDamage { get; internal set; }
-        public int StrikeDps { get; internal set; }
-        public int StrikeDamage { get; internal set; }
-        public int LifeLeechDps { get; internal set; }
-        public int LifeLeechDamage { get; internal set; }
-        public double BreakbarDamage { get; internal set; }
-        public int BarrierDps { get; internal set; }
-        public int BarrierDamage { get; internal set; }
+        public int Dps { get; }
+        public int Damage { get; }
+        public int CondiDps { get; }
+        public int CondiDamage { get; }
+        public int PowerDps { get; }
+        public int PowerDamage { get; }
+        public int StrikeDps { get; }
+        public int StrikeDamage { get; }
+        public int LifeLeechDps { get; }
+        public int LifeLeechDamage { get; }
+        public double BreakbarDamage { get; }
+        public int BarrierDps { get; }
+        public int BarrierDamage { get; }
         // Actor only
-        public int ActorDps { get; internal set; }
-        public int ActorDamage { get; internal set; }
-        public int ActorCondiDps { get; internal set; }
-        public int ActorCondiDamage { get; internal set; }
-        public int ActorPowerDps { get; internal set; }
-        public int ActorPowerDamage { get; internal set; }
-        public int ActorStrikeDps { get; internal set; }
-        public int ActorStrikeDamage { get; internal set; }
-        public int ActorLifeLeechDps { get; internal set; }
-        public int ActorLifeLeechDamage { get; internal set; }
-        public double ActorBreakbarDamage { get; internal set; }
-        public int ActorBarrierDps { get; internal set; }
-        public int ActorBarrierDamage { get; internal set; }
+        public int ActorDps { get; }
+        public int ActorDamage { get; }
+        public int ActorCondiDps { get; }
+        public int ActorCondiDamage { get; }
+        public int ActorPowerDps { get; }
+        public int ActorPowerDamage { get; }
+        public int ActorStrikeDps { get; }
+        public int ActorStrikeDamage { get; }
+        public int ActorLifeLeechDps { get; }
+        public int ActorLifeLeechDamage { get; }
+        public double ActorBreakbarDamage { get; }
+        public int ActorBarrierDps { get; }
+        public int ActorBarrierDamage { get; }
 
 
         internal FinalDPS(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor target)

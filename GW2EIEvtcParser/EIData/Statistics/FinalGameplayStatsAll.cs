@@ -9,21 +9,21 @@ namespace GW2EIEvtcParser.EIData
     public class FinalGameplayStatsAll : FinalGameplayStats
     {
         // Rates
-        public int Wasted { get; internal set; }
-        public double TimeWasted { get; internal set; }
-        public int Saved { get; internal set; }
-        public double TimeSaved { get; internal set; }
-        public double StackDist { get; internal set; }
-        public double DistToCom { get; internal set; }
+        public int Wasted { get; }
+        public double TimeWasted { get; }
+        public int Saved { get; }
+        public double TimeSaved { get; }
+        public double StackDist { get; }
+        public double DistToCom { get; }
 
         // boons
-        public double AvgBoons { get; internal set; }
-        public double AvgActiveBoons { get; internal set; }
-        public double AvgConditions { get; internal set; }
-        public double AvgActiveConditions { get; internal set; }
+        public double AvgBoons { get; }
+        public double AvgActiveBoons { get; }
+        public double AvgConditions { get; }
+        public double AvgActiveConditions { get; }
 
         // Counts
-        public int SwapCount { get; internal set; }
+        public int SwapCount { get; }
 
         private static double GetDistanceToTarget(AbstractSingleActor actor, ParsedEvtcLog log, long start, long end, IReadOnlyList<Point3D> reference)
         {

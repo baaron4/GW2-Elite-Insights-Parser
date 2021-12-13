@@ -89,6 +89,7 @@ namespace GW2EIEvtcParser.Extensions
         };
 
         private readonly List<EXTAbstractHealingEvent> _healingEvents = new List<EXTAbstractHealingEvent>();
+        private readonly List<EXTAbstractBarrierEvent> _barrierEvents = new List<EXTAbstractBarrierEvent>();
         internal HealingStatsExtensionHandler(CombatItem c, uint revision) : base(EXT_HealingStats, "Healing Stats")
         {
             Revision = revision;
@@ -183,21 +184,21 @@ namespace GW2EIEvtcParser.Extensions
             }
             Version = System.Text.Encoding.UTF8.GetString(bytes);
         }
-        public static bool SanitizeForSrc(List<EXTAbstractHealingEvent> healEvents)
+        public static bool SanitizeForSrc<T>(List<T> events) where T : EXTAbstractHealingExtensionEvent
         {
-            if (healEvents.Any(x => x.SrcIsPeer))
+            if (events.Any(x => x.SrcIsPeer))
             {
-                healEvents.RemoveAll(x => !x.SrcIsPeer);
+                events.RemoveAll(x => !x.SrcIsPeer);
                 return true;
             }
             return false;
         }
 
-        public static bool SanitizeForDst(List<EXTAbstractHealingEvent> healEvents)
+        public static bool SanitizeForDst<T>(List<T> events) where T : EXTAbstractHealingExtensionEvent
         {
-            if (healEvents.Any(x => x.DstIsPeer))
+            if (events.Any(x => x.DstIsPeer))
             {
-                healEvents.RemoveAll(x => !x.DstIsPeer);
+                events.RemoveAll(x => !x.DstIsPeer);
                 return true;
             }
             return false;
@@ -226,37 +227,53 @@ namespace GW2EIEvtcParser.Extensions
 
         internal override bool SrcIsAgent(CombatItem c)
         {
-            return IsHealingEvent(c);
+            return IsHealingEvent(c) || IsBarrierEvent(c);
         }
         internal override bool DstIsAgent(CombatItem c)
         {
-            return IsHealingEvent(c);
+            return SrcIsAgent(c);
         }
 
         internal override bool IsDamage(CombatItem c)
         {
-            return IsHealingEvent(c);
+            return SrcIsAgent(c);
         }
 
         internal override void InsertEIExtensionEvent(CombatItem c, AgentData agentData, SkillData skillData)
         {
-            if (!IsHealingEvent(c))
+            bool isHealing = IsHealingEvent(c);
+            bool isBarrier = IsBarrierEvent(c);
+            if (!isHealing || !isBarrier)
             {
                 return;
             }
             if (c.IsBuff == 0 && c.Value < 0)
             {
-                _healingEvents.Add(new EXTDirectHealingEvent(c, agentData, skillData));
+                if (isHealing)
+                {
+                    _healingEvents.Add(new EXTDirectHealingEvent(c, agentData, skillData));
+                } 
+                else if (isBarrier)
+                {
+                    _barrierEvents.Add(new EXTDirectBarrierEvent(c, agentData, skillData));
+                }
             }
             else if (c.IsBuff != 0 && c.Value == 0 && c.BuffDmg < 0)
             {
-                _healingEvents.Add(new EXTNonDirectHealingEvent(c, agentData, skillData));
+                if (isHealing)
+                {
+                    _healingEvents.Add(new EXTNonDirectHealingEvent(c, agentData, skillData));
+                }
+                else if (isBarrier)
+                {
+                    _barrierEvents.Add(new EXTNonDirectBarrierEvent(c, agentData, skillData));
+                }
             }
         }
 
         internal override void AdjustCombatEvent(CombatItem combatItem, AgentData agentData)
         {
-            if (!IsHealingEvent(combatItem))
+            if (!IsHealingEvent(combatItem) || !IsBarrierEvent(combatItem))
             {
                 return;
             }
@@ -270,27 +287,54 @@ namespace GW2EIEvtcParser.Extensions
         internal override void AttachToCombatData(CombatData combatData, ParserController operation, ulong gw2Build)
         {
             operation.UpdateProgressWithCancellationCheck("Attaching healing extension revision " + Revision + " combat events");
-            var healData = _healingEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
-            foreach (KeyValuePair<AgentItem, List<EXTAbstractHealingEvent>> pair in healData)
+            //
             {
-                if (SanitizeForSrc(pair.Value) && pair.Key.IsPlayer)
+                var healData = _healingEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+                foreach (KeyValuePair<AgentItem, List<EXTAbstractHealingEvent>> pair in healData)
                 {
-                    RunningAddonInternal.Add(pair.Key);
+                    if (SanitizeForSrc(pair.Value) && pair.Key.IsPlayer)
+                    {
+                        RunningAddonInternal.Add(pair.Key);
+                    }
                 }
-            }
-            var healReceivedData = _healingEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
-            foreach (KeyValuePair<AgentItem, List<EXTAbstractHealingEvent>> pair in healReceivedData)
+                var healReceivedData = _healingEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+                foreach (KeyValuePair<AgentItem, List<EXTAbstractHealingEvent>> pair in healReceivedData)
+                {
+                    if (SanitizeForDst(pair.Value) && pair.Key.IsPlayer)
+                    {
+                        RunningAddonInternal.Add(pair.Key);
+                    }
+                }
+                var healDataById = _healingEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
+                combatData.EXTHealingCombatData = new EXTHealingCombatData(healData, healReceivedData, healDataById, GetHybridIDs(gw2Build));
+                operation.UpdateProgressWithCancellationCheck("Attached " + _healingEvents.Count + " heal events to CombatData");
+            }          
+            //
+            if (_barrierEvents.Any())
             {
-                if (SanitizeForDst(pair.Value) && pair.Key.IsPlayer)
+                var barrierData = _barrierEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+                foreach (KeyValuePair<AgentItem, List<EXTAbstractBarrierEvent>> pair in barrierData)
                 {
-                    RunningAddonInternal.Add(pair.Key);
+                    if (SanitizeForSrc(pair.Value) && pair.Key.IsPlayer)
+                    {
+                        RunningAddonInternal.Add(pair.Key);
+                    }
                 }
+                var barrierReceivedData = _barrierEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+                foreach (KeyValuePair<AgentItem, List<EXTAbstractBarrierEvent>> pair in barrierReceivedData)
+                {
+                    if (SanitizeForDst(pair.Value) && pair.Key.IsPlayer)
+                    {
+                        RunningAddonInternal.Add(pair.Key);
+                    }
+                }
+                var barrierDataById = _barrierEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
+                combatData.EXTBarrierCombatData = new EXTBarrierCombatData(barrierData, barrierReceivedData, barrierDataById);
+                operation.UpdateProgressWithCancellationCheck("Attached " + _barrierEvents.Count + " barrier events to CombatData");
             }
-            var healDataById = _healingEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             var running = RunningAddonInternal.Count;
             operation.UpdateProgressWithCancellationCheck(running != 1 ? running + " players have the addon running" : running + " player has the addon running");
-            operation.UpdateProgressWithCancellationCheck("Attached " + _healingEvents.Count + " heal events to CombatData");
-            combatData.EXTHealingCombatData = new EXTHealingCombatData(healData, healReceivedData, healDataById, GetHybridIDs(gw2Build));
+            //
             operation.UpdateProgressWithCancellationCheck("Attached healing extension combat events");
         }
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GW2EIEvtcParser.Extensions;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 
@@ -9,7 +10,10 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            // Trail of Anguish
+            // Trail of Anguish ? Unique effect?
+            new EXTBarrierCastFinder(44663, 44663, EIData.InstantCastFinder.DefaultICD), // Desert Shroud
+            new EXTBarrierCastFinder(43448, 43448, EIData.InstantCastFinder.DefaultICD), // Sand Cascade
+            // Sandstorm Shroud ? The detonation part is problematic
         };
 
 

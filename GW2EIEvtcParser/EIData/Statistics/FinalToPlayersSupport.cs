@@ -7,14 +7,14 @@ namespace GW2EIEvtcParser.EIData
     public class FinalToPlayersSupport
     {
         //public long allHeal;
-        public int Resurrects { get; internal set; }
-        public double ResurrectTime { get; internal set; }
-        public int CondiCleanse { get; internal set; }
-        public double CondiCleanseTime { get; internal set; }
-        public int CondiCleanseSelf { get; internal set; }
-        public double CondiCleanseTimeSelf { get; internal set; }
-        public int BoonStrips { get; internal set; }
-        public double BoonStripsTime { get; internal set; }
+        public int Resurrects { get; }
+        public double ResurrectTime { get; }
+        public int CondiCleanse { get; }
+        public double CondiCleanseTime { get; }
+        public int CondiCleanseSelf { get; }
+        public double CondiCleanseTimeSelf { get; }
+        public int BoonStrips { get; }
+        public double BoonStripsTime { get; }
 
         internal FinalToPlayersSupport(ParsedEvtcLog log, AbstractSingleActor actor, long start, long end)
         {
