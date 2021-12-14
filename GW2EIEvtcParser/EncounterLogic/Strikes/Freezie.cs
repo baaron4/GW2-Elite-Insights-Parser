@@ -2,10 +2,11 @@
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Freezie : RaidLogic
+    internal class Freezie : StrikeMissionLogic
     {
         public Freezie(int triggerID) : base(triggerID)
         {
@@ -43,6 +44,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             return phases;
+        }
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+        {
+            RewardEvent reward = combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == 55821);
+            if (reward != null)
+            {
+                fightData.SetSuccess(true, reward.Time);
+            }
         }
 
         protected override HashSet<int> GetUniqueNPCIDs()
