@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Threading.Tasks;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Exceptions;
@@ -11,6 +12,7 @@ using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;
 using GW2EIGW2API.GW2API;
+using static GW2EIEvtcParser.ParserHelper;
 
 //recommend CTRL+M+O to collapse all
 namespace GW2EIEvtcParser
@@ -56,8 +58,9 @@ namespace GW2EIEvtcParser
         /// <param name="operation">Operation object bound to the UI</param>
         /// <param name="evtc">The path to the log to parse</param>
         /// <param name="parsingFailureReason">The reason why the parsing failed, if applicable</param>
+        /// <param name="multiThreadAccelerationForBuffs">Will preprocess buff simulation using multi threading </param>
         /// <returns>the ParsedEvtcLog</returns>
-        public ParsedEvtcLog ParseLog(ParserController operation, FileInfo evtc, out ParsingFailureReason parsingFailureReason)
+        public ParsedEvtcLog ParseLog(ParserController operation, FileInfo evtc, out ParsingFailureReason parsingFailureReason, bool multiThreadAccelerationForBuffs = false)
         {
             parsingFailureReason = null;
             try
@@ -87,14 +90,14 @@ namespace GW2EIEvtcParser
                                 {
                                     data.CopyTo(ms);
                                     ms.Position = 0;
-                                    evtcLog = ParseLog(operation, ms, out parsingFailureReason);
+                                    evtcLog = ParseLog(operation, ms, out parsingFailureReason, multiThreadAccelerationForBuffs);
                                 };
                             }
                         }
                     }
                     else
                     {
-                        evtcLog = ParseLog(operation, fs, out parsingFailureReason);
+                        evtcLog = ParseLog(operation, fs, out parsingFailureReason, multiThreadAccelerationForBuffs);
                     }
                 }
                 return evtcLog;
@@ -113,8 +116,9 @@ namespace GW2EIEvtcParser
         /// <param name="operation">Operation object bound to the UI</param>
         /// <param name="evtcStream">The stream of the log</param>
         /// <param name="parsingFailureReason">The reason why the parsing failed, if applicable</param>
+        /// <param name="multiThreadAccelerationForBuffs">Will preprocess buff simulation using multi threading </param>
         /// <returns>the ParsedEvtcLog</returns>
-        public ParsedEvtcLog ParseLog(ParserController operation, Stream evtcStream, out ParsingFailureReason parsingFailureReason)
+        public ParsedEvtcLog ParseLog(ParserController operation, Stream evtcStream, out ParsingFailureReason parsingFailureReason, bool multiThreadAccelerationForBuffs = false)
         {
             parsingFailureReason = null;
             try
@@ -135,7 +139,101 @@ namespace GW2EIEvtcParser
                     operation.UpdateProgressWithCancellationCheck("Preparing data for log generation");
                     PreProcessEvtcData(operation);
                     operation.UpdateProgressWithCancellationCheck("Data parsed");
-                    return new ParsedEvtcLog(_evtcVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _enabledExtensions, _logEndTime - _logStartTime, _parserSettings, operation);
+                    var log = new ParsedEvtcLog(_evtcVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _enabledExtensions, _logEndTime - _logStartTime, _parserSettings, operation);
+                    //
+                    if (multiThreadAccelerationForBuffs)
+                    {
+                        IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+                        operation.UpdateProgressWithCancellationCheck("Multi threading");
+                        var friendliesAndTargets = new List<AbstractSingleActor>(log.Friendlies);
+                        friendliesAndTargets.AddRange(log.FightData.Logic.Targets);
+                        var friendliesAndTargetsAndMobs = new List<AbstractSingleActor>(log.FightData.Logic.TrashMobs);
+                        friendliesAndTargetsAndMobs.AddRange(friendliesAndTargets);
+                        foreach (AbstractSingleActor actor in friendliesAndTargetsAndMobs)
+                        {
+                            // that part can't be // due to buff extensions
+                            actor.GetTrackedBuffs(log);
+                            actor.GetMinions(log);
+                        }
+                        Parallel.ForEach(friendliesAndTargets, actor => actor.GetStatus(log));
+                        /*if (log.CombatData.HasMovementData)
+                        {
+                            // init all positions
+                            Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.GetCombatReplayPolledPositions(log));
+                        }*/
+                        Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.GetBuffGraphs(log));
+                        Parallel.ForEach(friendliesAndTargets, actor =>
+                        {
+                            foreach (PhaseData phase in phases)
+                            {
+                                actor.GetBuffDistribution(log, phase.Start, phase.End);
+                            }
+                        });
+                        Parallel.ForEach(friendliesAndTargets, actor =>
+                        {
+                            foreach (PhaseData phase in phases)
+                            {
+                                actor.GetBuffPresence(log, phase.Start, phase.End);
+                            }
+                        });
+                        //
+                        //Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
+                        Parallel.ForEach(log.Friendlies, actor =>
+                        {
+                            foreach (PhaseData phase in phases)
+                            {
+                                actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
+                            }
+                        });
+                        Parallel.ForEach(log.PlayerList, actor =>
+                        {
+                            foreach (PhaseData phase in phases)
+                            {
+                                actor.GetBuffs(BuffEnum.Group, log, phase.Start, phase.End);
+                            }
+                        });
+                        Parallel.ForEach(log.PlayerList, actor =>
+                        {
+                            foreach (PhaseData phase in phases)
+                            {
+                                actor.GetBuffs(BuffEnum.OffGroup, log, phase.Start, phase.End);
+                            }
+                        });
+                        Parallel.ForEach(log.PlayerList, actor =>
+                        {
+                            foreach (PhaseData phase in phases)
+                            {
+                                actor.GetBuffs(BuffEnum.Squad, log, phase.Start, phase.End);
+                            }
+                        });
+                        Parallel.ForEach(log.FightData.Logic.Targets, actor =>
+                        {
+                            foreach (PhaseData phase in phases)
+                            {
+                                actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
+                            }
+                        });
+                    }
+                    // Hack to adjust condi damage in fractals
+                    if (log.FightData.Logic is FractalLogic && log.LogData.EvtcVersion < 20211214 && log.LogData.GW2Build > 120381)
+                    {
+                        foreach (Player p in log.PlayerList)
+                        {
+                            // mist offensive potion
+                            if (p.GetBuffGraphs(log).TryGetValue(32473, out BuffsGraphModel bgm))
+                            {
+                                foreach (AbstractHealthDamageEvent dEvt in p.GetJustActorDamageEvents(null, log, log.FightData.LogStart, log.FightData.LogEnd))
+                                {
+                                    if (dEvt.ConditionDamageBased(log))
+                                    {
+                                        dEvt.PercentAdjust(bgm.GetStackCount(dEvt.Time) * 0.03);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    //
+                    return log;
                 }
             }
             catch (Exception ex)

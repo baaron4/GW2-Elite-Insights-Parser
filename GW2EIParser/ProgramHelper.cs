@@ -141,7 +141,7 @@ namespace GW2EIParser
                                             APIController);
 
                 //Process evtc here
-                ParsedEvtcLog log = parser.ParseLog(operation, fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason);
+                ParsedEvtcLog log = parser.ParseLog(operation, fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason, Properties.Settings.Default.MultiThreaded && HasFormat());
                 if (failureReason != null)
                 {
                     failureReason.Throw();
@@ -270,80 +270,6 @@ namespace GW2EIParser
             string fName = fInfo.Name.Split('.')[0];
             fName = $"{fName}{PoVClassTerm}_{log.FightData.Logic.Extension}{encounterLengthTerm}_{result}";
 
-            // parallel stuff
-            if (Properties.Settings.Default.MultiThreaded && HasFormat())
-            {
-                IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
-                operation.UpdateProgressWithCancellationCheck("Multi threading");
-                var friendliesAndTargets = new List<AbstractSingleActor>(log.Friendlies);
-                friendliesAndTargets.AddRange(log.FightData.Logic.Targets);
-                var friendliesAndTargetsAndMobs = new List<AbstractSingleActor>(log.FightData.Logic.TrashMobs);
-                friendliesAndTargetsAndMobs.AddRange(friendliesAndTargets);
-                foreach (AbstractSingleActor actor in friendliesAndTargetsAndMobs)
-                {
-                    // that part can't be // due to buff extensions
-                    actor.GetTrackedBuffs(log);
-                    actor.GetMinions(log);
-                }
-                Parallel.ForEach(friendliesAndTargets, actor => actor.GetStatus(log));
-                /*if (log.CombatData.HasMovementData)
-                {
-                    // init all positions
-                    Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.GetCombatReplayPolledPositions(log));
-                }*/
-                Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.GetBuffGraphs(log));
-                Parallel.ForEach(friendliesAndTargets, actor =>
-                {
-                    foreach (PhaseData phase in phases)
-                    {
-                        actor.GetBuffDistribution(log, phase.Start, phase.End);
-                    }
-                });
-                Parallel.ForEach(friendliesAndTargets, actor =>
-                {
-                    foreach (PhaseData phase in phases)
-                    {
-                        actor.GetBuffPresence(log, phase.Start, phase.End);
-                    }
-                });
-                //
-                //Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
-                Parallel.ForEach(log.Friendlies, actor =>
-                {
-                    foreach (PhaseData phase in phases)
-                    {
-                        actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
-                    }
-                });
-                Parallel.ForEach(log.PlayerList, actor =>
-                {
-                    foreach (PhaseData phase in phases)
-                    {
-                        actor.GetBuffs(BuffEnum.Group, log, phase.Start, phase.End);
-                    }
-                });
-                Parallel.ForEach(log.PlayerList, actor =>
-                {
-                    foreach (PhaseData phase in phases)
-                    {
-                        actor.GetBuffs(BuffEnum.OffGroup, log, phase.Start, phase.End);
-                    }
-                });
-                Parallel.ForEach(log.PlayerList, actor =>
-                {
-                    foreach (PhaseData phase in phases)
-                    {
-                        actor.GetBuffs(BuffEnum.Squad, log, phase.Start, phase.End);
-                    }
-                });
-                Parallel.ForEach(log.FightData.Logic.Targets, actor =>
-                {
-                    foreach (PhaseData phase in phases)
-                    {
-                        actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
-                    }
-                });
-            }
             var uploadResults = new UploadResults(uploadStrings[0], uploadStrings[1]);
             if (Properties.Settings.Default.SaveOutHTML)
             {

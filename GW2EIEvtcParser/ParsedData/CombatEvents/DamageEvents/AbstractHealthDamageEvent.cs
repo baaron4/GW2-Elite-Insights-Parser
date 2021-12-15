@@ -28,5 +28,11 @@ namespace GW2EIEvtcParser.ParsedData
             //_damage = Damage;
             HealthDamage = Math.Max(HealthDamage - ShieldDamage, 0);
         }
+
+        internal void PercentAdjust(double percent)
+        {
+            double newDamage = HealthDamage / (1.0 + percent);
+            HealthDamage = (int) Math.Round(newDamage);
+        }
     }
 }
