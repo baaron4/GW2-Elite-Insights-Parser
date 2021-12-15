@@ -214,24 +214,6 @@ namespace GW2EIEvtcParser
                             }
                         });
                     }
-                    // Hack to adjust condi damage in fractals
-                    if (log.FightData.Logic is FractalLogic && log.LogData.EvtcVersion < 20211214 && log.LogData.GW2Build > 120381)
-                    {
-                        foreach (Player p in log.PlayerList)
-                        {
-                            // mist offensive potion
-                            if (p.GetBuffGraphs(log).TryGetValue(32473, out BuffsGraphModel bgm))
-                            {
-                                foreach (AbstractHealthDamageEvent dEvt in p.GetJustActorDamageEvents(null, log, log.FightData.LogStart, log.FightData.LogEnd))
-                                {
-                                    if (dEvt.ConditionDamageBased(log))
-                                    {
-                                        dEvt.PercentAdjust(bgm.GetStackCount(dEvt.Time) * 0.03);
-                                    }
-                                }
-                            }
-                        }
-                    }
                     //
                     return log;
                 }
