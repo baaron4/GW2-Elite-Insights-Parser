@@ -132,7 +132,7 @@
                 case SubFightCategory.Drizzlewood:
                     return "Drizzlewood Coast";
                 default:
-                    return Category.ToString();
+                    return SubCategory.ToString();
             }
         }
 
