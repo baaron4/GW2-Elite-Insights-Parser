@@ -20,6 +20,7 @@ namespace GW2EIEvtcParser.ParsedData
         private readonly Dictionary<AgentItem, List<AbstractBuffEvent>> _buffDataByDst;
         private readonly Dictionary<AgentItem, List<AbstractHealthDamageEvent>> _damageData;
         private readonly Dictionary<AgentItem, List<AbstractBreakbarDamageEvent>> _breakbarDamageData;
+        private readonly Dictionary<long, List<AbstractBreakbarDamageEvent>> _breakbarDamageDataById;
         private readonly Dictionary<long, List<AbstractHealthDamageEvent>> _damageDataById;
         private readonly Dictionary<AgentItem, List<AnimatedCastEvent>> _animatedCastData;
         private readonly Dictionary<AgentItem, List<InstantCastEvent>> _instantCastData;
@@ -394,6 +395,7 @@ namespace GW2EIEvtcParser.ParsedData
             _damageTakenData = damageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             _damageDataById = damageData.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             _breakbarDamageData = brkDamageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+            _breakbarDamageDataById = brkDamageData.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             _breakbarDamageTakenData = brkDamageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             _buffRemoveAllData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffRemoveAllEvent>().ToList());
             //
@@ -699,6 +701,20 @@ namespace GW2EIEvtcParser.ParsedData
         public IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageData(AgentItem key)
         {
             if (_breakbarDamageData.TryGetValue(key, out List<AbstractBreakbarDamageEvent> res))
+            {
+                return res;
+            }
+            return new List<AbstractBreakbarDamageEvent>();
+        }
+
+        /// <summary>
+        /// Returns list of breakbar damage events done by skill id
+        /// </summary>
+        /// <param name="long"></param> ID
+        /// <returns></returns>
+        public IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageData(long id)
+        {
+            if (_breakbarDamageDataById.TryGetValue(id, out List<AbstractBreakbarDamageEvent> res))
             {
                 return res;
             }
