@@ -740,7 +740,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         (xGapsRightRight, yGapsDownDown, zDefault, 0.0, hiddenOpacity), // TODO: Unknown position while hidden
                         (xGapsLeftLeft, yGapsDownDown, zDefault, Math.PI, hiddenOpacity), // TODO: Unknown position while hidden
                         (xDestroyerLeftLeft, yMid, zDefault, Math.PI, 1.0),
-                        (xDestroyerLeft, yUp, zDefault, 0.0, 1.0),
+                        (xDestroyerLeft, yUp, zDefault, 0.0, isCM ? hiddenOpacity : 1.0),
                         (xDestroyerRight, yUp, zDefault, Math.PI, 1.0),
                         (xDestroyerRightRight, yMid, zDefault, 0.0, 1.0),
                         (xDestroyerRight, yDown, zDefault, Math.PI, 1.0),
