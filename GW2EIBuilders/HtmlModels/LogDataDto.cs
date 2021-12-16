@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EncounterLogic;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
 
@@ -59,6 +60,7 @@ namespace GW2EIBuilders.HtmlModels
         public string RecordedBy { get; set; }
         public List<string> UploadLinks { get; set; }
         public List<string> UsedExtensions { get; set; }
+        public List<List<string>> PlayersRunningExtensions { get; set; }
         //
         private LogDataDto(ParsedEvtcLog log, bool light, Version parserVersion, string[] uploadLinks)
         {
@@ -72,7 +74,26 @@ namespace GW2EIBuilders.HtmlModels
             Parser = "Elite Insights " + parserVersion.ToString();
             RecordedBy = log.LogData.PoVName;
             UploadLinks = uploadLinks.ToList();
-            UsedExtensions = log.LogData.UsedExtensions.Any() ? log.LogData.UsedExtensions.Select(x => x.Name + " - " + x.Version).ToList() : null;
+            if (log.LogData.UsedExtensions.Any())
+            {
+                UsedExtensions = new List<string>();
+                PlayersRunningExtensions = new List<List<string>>();
+                foreach (AbstractExtensionHandler extension in log.LogData.UsedExtensions)
+                {
+                    UsedExtensions.Add(extension.Name + " - " + extension.Version);
+                    var set = new HashSet<string>();
+                    if (log.LogData.PoV != null)
+                    {
+                        set.Add(log.FindActor(log.LogData.PoV).Character);
+                        foreach (AgentItem agent in extension.RunningExtension)
+                        {
+                            set.Add(log.FindActor(agent).Character);
+                        }
+                    }
+                    PlayersRunningExtensions.Add(set.ToList());
+                }
+            }
+
             EncounterDuration = log.FightData.DurationString;
             Success = log.FightData.Success;
             Wvw = log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;
