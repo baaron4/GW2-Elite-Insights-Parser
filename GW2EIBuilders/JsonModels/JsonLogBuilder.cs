@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
 using Newtonsoft.Json;
@@ -150,15 +151,27 @@ namespace GW2EIBuilders.JsonModels
             }
             if (log.LogData.UsedExtensions.Any())
             {
-                jsonLog.UsedExtensions = log.LogData.UsedExtensions.Select(x => {
-                    return new ExtensionDesc()
+                var usedExtensions = new List<ExtensionDesc>();
+                foreach (AbstractExtensionHandler extension in log.LogData.UsedExtensions)
+                {
+                    var set = new HashSet<string>();
+                    if (log.LogData.PoV != null)
                     {
-                        Name = x.Name,
-                        Version = x.Version,
-                        Signature = x.Signature,
-                        Revision = x.Revision
-                    };
-                }).ToList();
+                        set.Add(log.FindActor(log.LogData.PoV).Character);
+                        foreach (AgentItem agent in extension.RunningExtension)
+                        {
+                            set.Add(log.FindActor(agent).Character);
+                        }
+                    }
+                    usedExtensions.Add(new ExtensionDesc()
+                    {
+                        Name = extension.Name,
+                        Version = extension.Version,
+                        Signature = extension.Signature,
+                        Revision = extension.Revision,
+                        RunningExtension = set.ToList()
+                    });
+                }
             }
             //
             jsonLog.PersonalBuffs = personalBuffs.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>) x.Value);
