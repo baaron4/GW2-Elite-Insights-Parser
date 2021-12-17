@@ -288,7 +288,6 @@ namespace GW2EIEvtcParser.Extensions
         {
             operation.UpdateProgressWithCancellationCheck("Attaching healing extension revision " + Revision + " combat events");
             //
-            if (_healingEvents.Any())
             {
                 var healData = _healingEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
                 foreach (KeyValuePair<AgentItem, List<EXTAbstractHealingEvent>> pair in healData)
