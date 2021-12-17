@@ -103,6 +103,15 @@
             hasMechanics: function() {
                 return logData.mechanicMap.length > 0 && !logData.noMechanics;
             },
+            everybodyRunning: function() {
+                for (var i = 0; i < logData.usedExtensions.length; i++) {
+                    var usedExtension = logData.usedExtensions[i];
+                    if (usedExtension.inclused("Healint Stats")) {
+                        return logData.playersRunningExtensions[i].length === logData.players.filter(x => !x.notInSquad).length;
+                    }
+                }
+                return false;
+            },
         }
     });
 </script>
