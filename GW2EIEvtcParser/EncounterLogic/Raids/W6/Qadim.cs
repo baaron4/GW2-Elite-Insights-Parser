@@ -559,6 +559,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             const string platformImageUrl = "https://i.imgur.com/DbXr5Fo.png";
             const double hiddenOpacity = 0.2;
 
+            bool isCM = log.FightData.IsCM;
+
             const int xLeft = -7975;
             const int xLeftLeft = -8537;
             const int xLeftLeftLeft = -9661;
@@ -659,10 +661,10 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             const int platformCount = 12;
 
-            // The following monstrosity is needed to avoid the final platform rotating all the way back
+            // The following monstrosity is needed to avoid the final platform rotating all the way back, must be an odd multiple of PI
             int finalPlatformHalfRotationCount =
                 (int)Math.Round((Math.PI + jumpingPuzzleDuration / 1000.0 * jumpingPuzzleRotationRate) / Math.PI,
-                    MidpointRounding.AwayFromZero);
+                    MidpointRounding.ToEven) + 1;
             double finalPlatformRotation = Math.PI * finalPlatformHalfRotationCount;
 
 
@@ -738,7 +740,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         (xGapsRightRight, yGapsDownDown, zDefault, 0.0, hiddenOpacity), // TODO: Unknown position while hidden
                         (xGapsLeftLeft, yGapsDownDown, zDefault, Math.PI, hiddenOpacity), // TODO: Unknown position while hidden
                         (xDestroyerLeftLeft, yMid, zDefault, Math.PI, 1.0),
-                        (xDestroyerLeft, yUp, zDefault, 0.0, 1.0),
+                        (xDestroyerLeft, yUp, zDefault, 0.0, isCM ? hiddenOpacity : 1.0),
                         (xDestroyerRight, yUp, zDefault, Math.PI, 1.0),
                         (xDestroyerRightRight, yMid, zDefault, 0.0, 1.0),
                         (xDestroyerRight, yDown, zDefault, Math.PI, 1.0),

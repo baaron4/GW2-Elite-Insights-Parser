@@ -28,5 +28,6 @@ namespace GW2EIEvtcParser.ParsedData
             //_damage = Damage;
             HealthDamage = Math.Max(HealthDamage - ShieldDamage, 0);
         }
+
     }
 }

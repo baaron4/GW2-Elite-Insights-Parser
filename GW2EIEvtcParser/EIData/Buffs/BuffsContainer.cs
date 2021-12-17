@@ -11,7 +11,7 @@ namespace GW2EIEvtcParser.EIData
     {
 
         public IReadOnlyDictionary<long, Buff> BuffsByIds { get; }
-        public IReadOnlyDictionary<BuffNature, IReadOnlyList<Buff>> BuffsByNature { get; }
+        public IReadOnlyDictionary<BuffClassification, IReadOnlyList<Buff>> BuffsByClassification { get; }
         public IReadOnlyDictionary<ParserHelper.Source, IReadOnlyList<Buff>> BuffsBySource { get; }
         private readonly Dictionary<string, Buff> _buffsByName;
 
@@ -133,10 +133,10 @@ namespace GW2EIEvtcParser.EIData
                     }
                 }
             }
-            BuffsByNature = currentBuffs.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => (IReadOnlyList<Buff>)x.ToList());
+            BuffsByClassification = currentBuffs.GroupBy(x => x.Classification).ToDictionary(x => x.Key, x => (IReadOnlyList<Buff>)x.ToList());
             BuffsBySource = currentBuffs.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => (IReadOnlyList<Buff>)x.ToList());
             //
-            _buffSourceFinder = GetBuffSourceFinder(build, new HashSet<long>(BuffsByNature[BuffNature.Boon].Select(x => x.ID)));
+            _buffSourceFinder = GetBuffSourceFinder(build, new HashSet<long>(BuffsByClassification[BuffClassification.Boon].Select(x => x.ID)));
         }
 
         public bool TryGetBuffByName(string name, out Buff buff)
@@ -157,7 +157,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (BuffsBySource.TryGetValue(src, out IReadOnlyList<Buff> list))
                 {
-                    result.AddRange(list.Where(x => x.Nature == BuffNature.GraphOnlyBuff));
+                    result.AddRange(list.Where(x => x.Classification == BuffClassification.Other));
                 }
             }
             return result;

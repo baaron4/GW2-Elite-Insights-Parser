@@ -9,21 +9,21 @@ namespace GW2EIEvtcParser.EIData
     public class FinalGameplayStatsAll : FinalGameplayStats
     {
         // Rates
-        public int Wasted { get; internal set; }
-        public double TimeWasted { get; internal set; }
-        public int Saved { get; internal set; }
-        public double TimeSaved { get; internal set; }
-        public double StackDist { get; internal set; }
-        public double DistToCom { get; internal set; }
+        public int Wasted { get; }
+        public double TimeWasted { get; }
+        public int Saved { get; }
+        public double TimeSaved { get; }
+        public double StackDist { get; }
+        public double DistToCom { get; }
 
         // boons
-        public double AvgBoons { get; internal set; }
-        public double AvgActiveBoons { get; internal set; }
-        public double AvgConditions { get; internal set; }
-        public double AvgActiveConditions { get; internal set; }
+        public double AvgBoons { get; }
+        public double AvgActiveBoons { get; }
+        public double AvgConditions { get; }
+        public double AvgActiveConditions { get; }
 
         // Counts
-        public int SwapCount { get; internal set; }
+        public int SwapCount { get; }
 
         private static double GetDistanceToTarget(AbstractSingleActor actor, ParsedEvtcLog log, long start, long end, IReadOnlyList<Point3D> reference)
         {
@@ -80,7 +80,7 @@ namespace GW2EIEvtcParser.EIData
             TimeWasted = -Math.Round(TimeWasted / 1000.0, ParserHelper.TimeDigit);
 
             double avgBoons = 0;
-            foreach (long boonDuration in actor.GetBuffPresence(log, start, end).Where(x => log.Buffs.BuffsByIds[x.Key].Nature == BuffNature.Boon).Select(x => x.Value))
+            foreach (long boonDuration in actor.GetBuffPresence(log, start, end).Where(x => log.Buffs.BuffsByIds[x.Key].Classification == BuffClassification.Boon).Select(x => x.Value))
             {
                 avgBoons += boonDuration;
             }
@@ -89,7 +89,7 @@ namespace GW2EIEvtcParser.EIData
             AvgActiveBoons = activeDuration > 0 ? Math.Round(avgBoons / activeDuration, ParserHelper.BuffDigit) : 0.0;
 
             double avgCondis = 0;
-            foreach (long conditionDuration in actor.GetBuffPresence(log, start, end).Where(x => log.Buffs.BuffsByIds[x.Key].Nature == BuffNature.Condition).Select(x => x.Value))
+            foreach (long conditionDuration in actor.GetBuffPresence(log, start, end).Where(x => log.Buffs.BuffsByIds[x.Key].Classification == BuffClassification.Condition).Select(x => x.Value))
             {
                 avgCondis += conditionDuration;
             }

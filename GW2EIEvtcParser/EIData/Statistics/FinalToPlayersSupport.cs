@@ -7,14 +7,14 @@ namespace GW2EIEvtcParser.EIData
     public class FinalToPlayersSupport
     {
         //public long allHeal;
-        public int Resurrects { get; internal set; }
-        public double ResurrectTime { get; internal set; }
-        public int CondiCleanse { get; internal set; }
-        public double CondiCleanseTime { get; internal set; }
-        public int CondiCleanseSelf { get; internal set; }
-        public double CondiCleanseTimeSelf { get; internal set; }
-        public int BoonStrips { get; internal set; }
-        public double BoonStripsTime { get; internal set; }
+        public int Resurrects { get; }
+        public double ResurrectTime { get; }
+        public int CondiCleanse { get; }
+        public double CondiCleanseTime { get; }
+        public int CondiCleanseSelf { get; }
+        public double CondiCleanseTimeSelf { get; }
+        public int BoonStrips { get; }
+        public double BoonStripsTime { get; }
 
         internal FinalToPlayersSupport(ParsedEvtcLog log, AbstractSingleActor actor, long start, long end)
         {
@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EIData
             Resurrects = totals.Resurrects;
             ResurrectTime = Math.Round(totals.ResurrectTime / 1000.0, ParserHelper.TimeDigit);
             FinalSupport self = actor.GetSupportStats(actor, log, start, end);
-            foreach (Buff boon in log.Buffs.BuffsByNature[BuffNature.Boon])
+            foreach (Buff boon in log.Buffs.BuffsByClassification[BuffClassification.Boon])
             {
                 // add everything from total
                 if (totals.Removals.TryGetValue(boon.ID, out (int count, long time) item))
@@ -37,7 +37,7 @@ namespace GW2EIEvtcParser.EIData
                     BoonStripsTime -= item.time;
                 }
             }
-            foreach (Buff condition in log.Buffs.BuffsByNature[BuffNature.Condition])
+            foreach (Buff condition in log.Buffs.BuffsByClassification[BuffClassification.Condition])
             {
                 // add everything from self
                 if (self.Removals.TryGetValue(condition.ID, out (int count, long time) item))

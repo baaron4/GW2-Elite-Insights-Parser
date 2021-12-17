@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
             }
-            var agent = new AgentItem(agentValue, name, spec, ID, instID, AgentItem.AgentType.NPC, toughness, healing, condition, concentration, hitboxWidth, hitboxHeight, start, end, isFake);
+            var agent = new AgentItem(agentValue, name, spec, ID, instID, toughness, healing, condition, concentration, hitboxWidth, hitboxHeight, start, end, isFake);
             _allAgentsList.Add(agent);
             Refresh();
             return agent;

@@ -54,12 +54,12 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-                new Buff("Justice (Dragonhunter)",30232, Source.Dragonhunter, BuffStackType.Stacking, 25, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/b/b0/Spear_of_Light.png"),
-                new Buff("Shield of Courage (Active)", 29906, Source.Dragonhunter, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/63/Shield_of_Courage.png"),
-                new Buff("Spear of Justice", 29632, Source.Dragonhunter, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/f/f1/Spear_of_Justice.png"),
-                new Buff("Shield of Courage", 29523, Source.Dragonhunter, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/6/63/Shield_of_Courage.png"),
-                new Buff("Wings of Resolve", 30308, Source.Dragonhunter, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/cb/Wings_of_Resolve.png"),
-                new Buff("Hunter's Mark", 30778, Source.Dragonhunter, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/e/e6/Hunter%27s_Ward.png"),
+                new Buff("Justice (Dragonhunter)",30232, Source.Dragonhunter, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b0/Spear_of_Light.png"),
+                new Buff("Shield of Courage (Active)", 29906, Source.Dragonhunter, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/63/Shield_of_Courage.png"),
+                new Buff("Spear of Justice", 29632, Source.Dragonhunter, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/f1/Spear_of_Justice.png"),
+                new Buff("Shield of Courage", 29523, Source.Dragonhunter, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/63/Shield_of_Courage.png"),
+                new Buff("Wings of Resolve", 30308, Source.Dragonhunter, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/cb/Wings_of_Resolve.png"),
+                new Buff("Hunter's Mark", 30778, Source.Dragonhunter, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e6/Hunter%27s_Ward.png"),
         };
 
     }

@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.EIData
         {
             IReadOnlyCollection<long> skillIDs = combatData.GetSkills();
             // Main boons
-            foreach (Buff boon in buffs.BuffsByNature[BuffNature.Boon])
+            foreach (Buff boon in buffs.BuffsByClassification[BuffClassification.Boon])
             {
                 if (skillIDs.Contains(boon.ID))
                 {
@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Main Conditions
-            foreach (Buff condition in buffs.BuffsByNature[BuffNature.Condition])
+            foreach (Buff condition in buffs.BuffsByClassification[BuffClassification.Condition])
             {
                 if (skillIDs.Contains(condition.ID))
                 {
@@ -31,7 +31,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Important class specific boons
-            foreach (Buff offensiveBuff in buffs.BuffsByNature[BuffNature.OffensiveBuffTable])
+            foreach (Buff offensiveBuff in buffs.BuffsByClassification[BuffClassification.Offensive])
             {
                 if (skillIDs.Contains(offensiveBuff.ID))
                 {
@@ -39,7 +39,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
 
-            foreach (Buff supportBuff in buffs.BuffsByNature[BuffNature.SupportBuffTable])
+            foreach (Buff supportBuff in buffs.BuffsByClassification[BuffClassification.Support])
             {
                 if (skillIDs.Contains(supportBuff.ID))
                 {
@@ -47,7 +47,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
 
-            foreach (Buff defensiveBuff in buffs.BuffsByNature[BuffNature.DefensiveBuffTable])
+            foreach (Buff defensiveBuff in buffs.BuffsByClassification[BuffClassification.Defensive])
             {
                 if (skillIDs.Contains(defensiveBuff.ID))
                 {
@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.EIData
 
             }
 
-            foreach (Buff gearBuff in buffs.BuffsByNature[BuffNature.GearBuffTable])
+            foreach (Buff gearBuff in buffs.BuffsByClassification[BuffClassification.Gear])
             {
                 if (skillIDs.Contains(gearBuff.ID))
                 {
@@ -74,7 +74,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // All class specific boons
-            var remainingBuffsByIds = buffs.BuffsByNature[BuffNature.GraphOnlyBuff].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
+            var remainingBuffsByIds = buffs.BuffsByClassification[BuffClassification.Other].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
             foreach (Player player in players)
             {
                 _presentRemainingBuffsPerPlayer[player] = new HashSet<Buff>();

@@ -117,8 +117,8 @@ namespace GW2EIBuilders.HtmlModels
         public static List<BuffData> BuildBuffUptimeData(ParsedEvtcLog log, IReadOnlyList<Buff> listToUse, PhaseData phase)
         {
             var list = new List<BuffData>();
-            bool boonTable = listToUse.Any(x => x.Nature == Buff.BuffNature.Boon);
-            bool conditionTable = listToUse.Any(x => x.Nature == Buff.BuffNature.Condition);
+            bool boonTable = listToUse.Any(x => x.Classification == Buff.BuffClassification.Boon);
+            bool conditionTable = listToUse.Any(x => x.Classification == Buff.BuffClassification.Condition);
 
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
@@ -139,8 +139,8 @@ namespace GW2EIBuilders.HtmlModels
         public static List<BuffData> BuildActiveBuffUptimeData(ParsedEvtcLog log, IReadOnlyList<Buff> listToUse, PhaseData phase)
         {
             var list = new List<BuffData>();
-            bool boonTable = listToUse.Any(x => x.Nature == Buff.BuffNature.Boon);
-            bool conditionTable = listToUse.Any(x => x.Nature == Buff.BuffNature.Condition);
+            bool boonTable = listToUse.Any(x => x.Classification == Buff.BuffClassification.Boon);
+            bool conditionTable = listToUse.Any(x => x.Classification == Buff.BuffClassification.Condition);
 
             foreach (AbstractSingleActor actor in log.Friendlies)
             {

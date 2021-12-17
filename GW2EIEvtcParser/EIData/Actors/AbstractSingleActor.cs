@@ -22,6 +22,7 @@ namespace GW2EIEvtcParser.EIData
         private readonly SingleActorDamageModifierHelper _damageModifiersHelper;
         private readonly SingleActorStatusHelper _statusHelper;
         public EXTAbstractSingleActorHealingHelper EXTHealing { get; }
+        public EXTAbstractSingleActorBarrierHelper EXTBarrier { get; }
         // Minions
         private Dictionary<long, Minions> _minions;
         // Replay
@@ -43,6 +44,7 @@ namespace GW2EIEvtcParser.EIData
             _damageModifiersHelper = new SingleActorDamageModifierHelper(this);
             _statusHelper = new SingleActorStatusHelper(this);
             EXTHealing = new EXTAbstractSingleActorHealingHelper(this);
+            EXTBarrier = new EXTAbstractSingleActorBarrierHelper(this);
         }
 
         // Status

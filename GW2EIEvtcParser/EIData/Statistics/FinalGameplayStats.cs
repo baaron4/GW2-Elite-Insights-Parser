@@ -5,23 +5,23 @@ namespace GW2EIEvtcParser.EIData
 {
     public class FinalGameplayStats
     {
-        public int TotalDamageCount { get; internal set; }
-        public int DirectDamageCount { get; internal set; }
-        public int ConnectedDamageCount { get; internal set; }
-        public int ConnectedDirectDamageCount { get; internal set; }
-        public int CritableDirectDamageCount { get; internal set; }
-        public int CriticalCount { get; internal set; }
-        public int CriticalDmg { get; internal set; }
-        public int FlankingCount { get; internal set; }
-        public int GlanceCount { get; internal set; }
-        public int AgainstMovingCount { get; internal set; }
-        public int Missed { get; internal set; }
-        public int Blocked { get; internal set; }
-        public int Evaded { get; internal set; }
-        public int Interrupts { get; internal set; }
-        public int Invulned { get; internal set; }
-        public int Killed { get; internal set; }
-        public int Downed { get; internal set; }
+        public int TotalDamageCount { get; }
+        public int DirectDamageCount { get; }
+        public int ConnectedDamageCount { get; }
+        public int ConnectedDirectDamageCount { get; }
+        public int CritableDirectDamageCount { get; }
+        public int CriticalCount { get; }
+        public int CriticalDmg { get; }
+        public int FlankingCount { get; }
+        public int GlanceCount { get; }
+        public int AgainstMovingCount { get; }
+        public int Missed { get; }
+        public int Blocked { get; }
+        public int Evaded { get; }
+        public int Interrupts { get; }
+        public int Invulned { get; }
+        public int Killed { get; }
+        public int Downed { get; }
 
 
         internal FinalGameplayStats(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor target)
