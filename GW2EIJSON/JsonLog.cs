@@ -130,6 +130,11 @@ namespace GW2EIJSON
             /// Signature of the extension
             /// </summary>
             public uint Signature { get; set; }
+
+            /// <summary>
+            /// List of <see cref="JsonActor.Name"/> running the extension.
+            /// </summary>
+            public IReadOnlyList<string> RunningExtension { get; set; }
         }
 
         /// <summary>

@@ -12,7 +12,7 @@
             </div>
         </div>     
         <h2 class="text-center">{{ name }}</h2>
-        <h6 class="text-center">Data may be incomplete due to not everybody running the <a href="https://github.com/Krappa322/arcdps_healing_stats/releases">healing stats addon</a>. Make sure to enable its logging features.</h6>
+        <h6 class="text-center" v-if="!everybodyRunning">Data may be incomplete due to not everybody running the <a href="https://github.com/Krappa322/arcdps_healing_stats/releases">healing stats addon</a>. Make sure to enable its logging features.</h6>
         <ul class="nav nav-tabs">
             <li>
                 <a class="nav-link" :class="{active: tab === 0}" @click="tab = 0">Healing Stats</a>
@@ -102,6 +102,15 @@
             },
             hasMechanics: function() {
                 return logData.mechanicMap.length > 0 && !logData.noMechanics;
+            },
+            everybodyRunning: function() {
+                for (var i = 0; i < logData.usedExtensions.length; i++) {
+                    var usedExtension = logData.usedExtensions[i];
+                    if (usedExtension.includes("Healing Stats")) {
+                        return logData.playersRunningExtensions[i].length === logData.players.filter(x => !x.notInSquad).length;
+                    }
+                }
+                return false;
             },
         }
     });

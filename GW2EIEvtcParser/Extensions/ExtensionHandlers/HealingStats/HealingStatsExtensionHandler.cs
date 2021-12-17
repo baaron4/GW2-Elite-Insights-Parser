@@ -243,7 +243,7 @@ namespace GW2EIEvtcParser.Extensions
         {
             bool isHealing = IsHealingEvent(c);
             bool isBarrier = IsBarrierEvent(c);
-            if (!isHealing || !isBarrier)
+            if (!isHealing && !isBarrier)
             {
                 return;
             }
@@ -273,7 +273,7 @@ namespace GW2EIEvtcParser.Extensions
 
         internal override void AdjustCombatEvent(CombatItem combatItem, AgentData agentData)
         {
-            if (!IsHealingEvent(combatItem) || !IsBarrierEvent(combatItem))
+            if (!IsHealingEvent(combatItem) && !IsBarrierEvent(combatItem))
             {
                 return;
             }
@@ -294,7 +294,7 @@ namespace GW2EIEvtcParser.Extensions
                 {
                     if (SanitizeForSrc(pair.Value) && pair.Key.IsPlayer)
                     {
-                        RunningAddonInternal.Add(pair.Key);
+                        RunningExtensioInternal.Add(pair.Key);
                     }
                 }
                 var healReceivedData = _healingEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
@@ -302,7 +302,7 @@ namespace GW2EIEvtcParser.Extensions
                 {
                     if (SanitizeForDst(pair.Value) && pair.Key.IsPlayer)
                     {
-                        RunningAddonInternal.Add(pair.Key);
+                        RunningExtensioInternal.Add(pair.Key);
                     }
                 }
                 var healDataById = _healingEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
@@ -317,7 +317,7 @@ namespace GW2EIEvtcParser.Extensions
                 {
                     if (SanitizeForSrc(pair.Value) && pair.Key.IsPlayer)
                     {
-                        RunningAddonInternal.Add(pair.Key);
+                        RunningExtensioInternal.Add(pair.Key);
                     }
                 }
                 var barrierReceivedData = _barrierEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
@@ -325,15 +325,15 @@ namespace GW2EIEvtcParser.Extensions
                 {
                     if (SanitizeForDst(pair.Value) && pair.Key.IsPlayer)
                     {
-                        RunningAddonInternal.Add(pair.Key);
+                        RunningExtensioInternal.Add(pair.Key);
                     }
                 }
                 var barrierDataById = _barrierEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
                 combatData.EXTBarrierCombatData = new EXTBarrierCombatData(barrierData, barrierReceivedData, barrierDataById);
                 operation.UpdateProgressWithCancellationCheck("Attached " + _barrierEvents.Count + " barrier events to CombatData");
             }
-            var running = RunningAddonInternal.Count;
-            operation.UpdateProgressWithCancellationCheck(running != 1 ? running + " players have the addon running" : running + " player has the addon running");
+            var running = RunningExtensioInternal.Count;
+            operation.UpdateProgressWithCancellationCheck(running != 1 ? running + " players have the extesnion running" : running + " player has the extension running");
             //
             operation.UpdateProgressWithCancellationCheck("Attached healing extension combat events");
         }
