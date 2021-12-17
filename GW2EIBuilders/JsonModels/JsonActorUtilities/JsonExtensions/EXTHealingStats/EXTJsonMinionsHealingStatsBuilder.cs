@@ -37,14 +37,14 @@ namespace GW2EIBuilders.JsonModels
                 {
                     IReadOnlyList<GW2EIEvtcParser.Extensions.EXTAbstractHealingEvent> list = minions.EXTHealing.GetOutgoingHealEvents(friendly, log, phase.Start, phase.End);
                     totalAllyHealing.Add(list.Sum(x => x.HealingDone));
-                    allyHealingDist.Add(EXTJsonStatsBuilderCommons.BuildHealingDistList(list.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc));
+                    allyHealingDist.Add(EXTJsonHealingStatsBuilderCommons.BuildHealingDistList(list.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc));
                 }
             }
             foreach (PhaseData phase in phases)
             {
                 IReadOnlyList<GW2EIEvtcParser.Extensions.EXTAbstractHealingEvent> list = minions.EXTHealing.GetOutgoingHealEvents(null, log, phase.Start, phase.End);
                 totalHealing.Add(list.Sum(x => x.HealingDone));
-                totalHealingDist.Add(EXTJsonStatsBuilderCommons.BuildHealingDistList(list.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc));
+                totalHealingDist.Add(EXTJsonHealingStatsBuilderCommons.BuildHealingDistList(list.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc));
             }
             return res;
         }
