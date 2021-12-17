@@ -61,7 +61,7 @@
                 return logData.singleGroup;
             },
             singlePlayer: function () {
-                return logData.players.filter(x => !x.isFake && !x.notInSquad).length <= 1;
+                return logData.players.filter(x => !x.notInSquad).length <= 1;
             },
             phase: function () {
                 return logData.phases[this.phaseindex];
