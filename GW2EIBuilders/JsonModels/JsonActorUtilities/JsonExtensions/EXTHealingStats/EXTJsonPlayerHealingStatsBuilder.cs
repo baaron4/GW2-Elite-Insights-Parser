@@ -96,9 +96,11 @@ namespace GW2EIBuilders.JsonModels
                 res.AlliedHealing1S = null;
                 res.AlliedHealingPowerHealing1S = null;
                 res.AlliedConversionHealingHealing1S = null;
+                res.AlliedHybridHealing1S = null;
                 res.Healing1S = null;
                 res.HealingPowerHealing1S = null;
                 res.ConversionHealingHealing1S = null;
+                res.HybridHealing1S = null;
             }
             return res;
         }
