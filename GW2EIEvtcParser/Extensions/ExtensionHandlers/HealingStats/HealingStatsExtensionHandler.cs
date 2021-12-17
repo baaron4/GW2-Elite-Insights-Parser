@@ -243,7 +243,7 @@ namespace GW2EIEvtcParser.Extensions
         {
             bool isHealing = IsHealingEvent(c);
             bool isBarrier = IsBarrierEvent(c);
-            if (!isHealing || !isBarrier)
+            if (!isHealing && !isBarrier)
             {
                 return;
             }
@@ -273,7 +273,7 @@ namespace GW2EIEvtcParser.Extensions
 
         internal override void AdjustCombatEvent(CombatItem combatItem, AgentData agentData)
         {
-            if (!IsHealingEvent(combatItem) || !IsBarrierEvent(combatItem))
+            if (!IsHealingEvent(combatItem) && !IsBarrierEvent(combatItem))
             {
                 return;
             }

@@ -78,10 +78,9 @@ function compileTemplates() {
 
 function mainLoad() {
     // make some additional variables reactive
-    var i;
     var nonDummyPhases = logData.phases.filter(x => !x.dummy);
     var firstActive = nonDummyPhases[0];
-    for (i = 0; i < logData.phases.length; i++) {
+    for (var i = 0; i < logData.phases.length; i++) {
         var phase = logData.phases[i];
         phase.durationS = phase.duration / 1000.0
         var times = [];
@@ -100,15 +99,25 @@ function mainLoad() {
             focus: -1
         });
     }
-    for (i = 0; i < logData.targets.length; i++) {
+    for (var i = 0; i < logData.targets.length; i++) {
         simpleLogData.targets.push({
             active: true
         });
         logData.targets[i].id = i;
         logData.targets[i].dpsGraphCache = new Map();
     }
-    for (i = 0; i < logData.players.length; i++) {
+    var healingStatsRunnings = null;
+    if (logData.usedExtensions) {
+       for (var j = 0; j < logData.usedExtensions.length; j++) {
+            var usedExtension = logData.usedExtensions[j];
+            if (usedExtension.includes("Healing Stats")) {
+                healingStatsRunnings = logData.playersRunningExtensions[j];
+            }
+       }
+    }
+    for (var i = 0; i < logData.players.length; i++) {
         var playerData = logData.players[i];
+        playerData.healingExt = healingStatsRunnings ? healingStatsRunnings.includes(playerData.name) : false;   
         simpleLogData.players.push({
             active: !!playerData.isPoV,
             targetActive: !playerData.isFake
