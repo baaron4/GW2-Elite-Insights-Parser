@@ -106,18 +106,8 @@ function mainLoad() {
         logData.targets[i].id = i;
         logData.targets[i].dpsGraphCache = new Map();
     }
-    var healingStatsRunnings = null;
-    if (logData.usedExtensions) {
-       for (var j = 0; j < logData.usedExtensions.length; j++) {
-            var usedExtension = logData.usedExtensions[j];
-            if (usedExtension.includes("Healing Stats")) {
-                healingStatsRunnings = logData.playersRunningExtensions[j];
-            }
-       }
-    }
     for (var i = 0; i < logData.players.length; i++) {
         var playerData = logData.players[i];
-        playerData.healingExt = healingStatsRunnings ? healingStatsRunnings.includes(playerData.name) : false;   
         simpleLogData.players.push({
             active: !!playerData.isPoV,
             targetActive: !playerData.isFake
