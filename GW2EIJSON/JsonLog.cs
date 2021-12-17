@@ -134,7 +134,7 @@ namespace GW2EIJSON
             /// <summary>
             /// List of <see cref="JsonActor.Name"/> running the extension.
             /// </summary>
-            public List<string> RunningExtension { get; set; }
+            public IReadOnlyList<string> RunningExtension { get; set; }
         }
 
         /// <summary>

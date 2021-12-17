@@ -172,6 +172,7 @@ namespace GW2EIBuilders.JsonModels
                         RunningExtension = set.ToList()
                     });
                 }
+                jsonLog.UsedExtensions = usedExtensions;
             }
             //
             jsonLog.PersonalBuffs = personalBuffs.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>) x.Value);
