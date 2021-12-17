@@ -203,7 +203,7 @@ namespace GW2EIBuilders.JsonModels
                         data.Add(value);
                     }
                 }
-                if (buff.Nature == Buff.BuffNature.GraphOnly && profEnums.Contains(buff.Source))
+                if (buff.Classification == Buff.BuffClassification.Other && profEnums.Contains(buff.Source))
                 {
                     if (player.GetBuffDistribution(log, phases[0].Start, phases[0].End).GetUptime(pair.Key) > 0)
                     {

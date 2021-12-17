@@ -37,11 +37,11 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-                new Buff("Sight beyond Sight",40616, Source.Spellbreaker, BuffNature.GraphOnly,"https://wiki.guildwars2.com/images/d/d7/Sight_beyond_Sight.png"),
-                new Buff("Full Counter",43949, Source.Spellbreaker, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/f/fb/Full_Counter.png"),
-                new Buff("Disenchantment",44633, Source.Spellbreaker, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/e/e1/Winds_of_Disenchantment.png"),
-                new Buff("Attacker's Insight",41963, Source.Spellbreaker, BuffStackType.Stacking, 5, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/8/89/Attacker%27s_Insight.png"),
-                new Buff("Magebane Tether",42428, Source.Spellbreaker, BuffStackType.Stacking, 25, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/e/e5/Magebane_Tether.png"),
+                new Buff("Sight beyond Sight",40616, Source.Spellbreaker, BuffClassification.Other,"https://wiki.guildwars2.com/images/d/d7/Sight_beyond_Sight.png"),
+                new Buff("Full Counter",43949, Source.Spellbreaker, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/fb/Full_Counter.png"),
+                new Buff("Disenchantment",44633, Source.Spellbreaker, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e1/Winds_of_Disenchantment.png"),
+                new Buff("Attacker's Insight",41963, Source.Spellbreaker, BuffStackType.Stacking, 5, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/89/Attacker%27s_Insight.png"),
+                new Buff("Magebane Tether",42428, Source.Spellbreaker, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e5/Magebane_Tether.png"),
         };
 
 

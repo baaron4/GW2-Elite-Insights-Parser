@@ -74,22 +74,22 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-                new Buff("Static Shield",6055, Source.Engineer, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/9/90/Static_Shield.png"),
-                new Buff("Absorb",6056, Source.Engineer, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/8/8a/Absorb.png"),
-                new Buff("A.E.D.",21660, Source.Engineer, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/e/e6/A.E.D..png"),
-                new Buff("Elixir S",5863, Source.Engineer, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/d/d8/Elixir_S.png"),
-                new Buff("Utility Goggles",5864, Source.Engineer, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/0/02/Utility_Goggles.png"),
-                new Buff("Slick Shoes",5833, Source.Engineer, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/3/3d/Slick_Shoes.png"),
-                new Buff("Gear Shield",5997, Source.Engineer, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/c/ca/Gear_Shield.png"),
-                new Buff("Iron Blooded",49065, Source.Engineer, BuffStackType.Stacking, 25, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/1/1e/Iron_Blooded.png"),
-                new Buff("Streamlined Kits",18687, Source.Engineer, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/c/cb/Streamlined_Kits.png"),
-                new Buff("Kinetic Charge",45781, Source.Engineer, BuffStackType.Stacking, 5, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/e/e0/Kinetic_Battery.png"),
-                new Buff("Pinpoint Distribution", 38333, Source.Engineer, BuffNature.Offensive, "https://wiki.guildwars2.com/images/b/bf/Pinpoint_Distribution.png"),
-                new Buff("Thermal Vision", 51389, Source.Engineer, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/8/8a/Skilled_Marksman.png"),
-                new Buff("Explosive Entrance",59579, Source.Engineer, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/3/33/Explosive_Entrance.png", GW2Builds.February2020Balance, GW2Builds.EndOfLife),
-                new Buff("Explosive Temper",59528, Source.Engineer, BuffStackType.Stacking, 10, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/c/c1/Explosive_Temper.png", GW2Builds.February2020Balance, GW2Builds.EndOfLife),
-                new Buff("Big Boomer",59601, Source.Engineer, BuffStackType.Queue, 3, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/8/83/Big_Boomer.png"),
-                new Buff("Med Kit Bonus",50393, Source.Engineer, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/1/14/Med_Kit.png"),
+                new Buff("Static Shield",6055, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/90/Static_Shield.png"),
+                new Buff("Absorb",6056, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/8a/Absorb.png"),
+                new Buff("A.E.D.",21660, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e6/A.E.D..png"),
+                new Buff("Elixir S",5863, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d8/Elixir_S.png"),
+                new Buff("Utility Goggles",5864, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/0/02/Utility_Goggles.png"),
+                new Buff("Slick Shoes",5833, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/3d/Slick_Shoes.png"),
+                new Buff("Gear Shield",5997, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/ca/Gear_Shield.png"),
+                new Buff("Iron Blooded",49065, Source.Engineer, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/1e/Iron_Blooded.png"),
+                new Buff("Streamlined Kits",18687, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/cb/Streamlined_Kits.png"),
+                new Buff("Kinetic Charge",45781, Source.Engineer, BuffStackType.Stacking, 5, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e0/Kinetic_Battery.png"),
+                new Buff("Pinpoint Distribution", 38333, Source.Engineer, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/b/bf/Pinpoint_Distribution.png"),
+                new Buff("Thermal Vision", 51389, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/8a/Skilled_Marksman.png"),
+                new Buff("Explosive Entrance",59579, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/33/Explosive_Entrance.png", GW2Builds.February2020Balance, GW2Builds.EndOfLife),
+                new Buff("Explosive Temper",59528, Source.Engineer, BuffStackType.Stacking, 10, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/c1/Explosive_Temper.png", GW2Builds.February2020Balance, GW2Builds.EndOfLife),
+                new Buff("Big Boomer",59601, Source.Engineer, BuffStackType.Queue, 3, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/83/Big_Boomer.png"),
+                new Buff("Med Kit Bonus",50393, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/14/Med_Kit.png"),
 
         };
 

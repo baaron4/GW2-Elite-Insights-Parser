@@ -17,7 +17,7 @@ namespace GW2EIBuilders.HtmlModels
         public BuffDto(Buff buff, ParsedEvtcLog log) : base(buff, log)
         {
             Stacking = (buff.Type == Buff.BuffType.Intensity);
-            Consumable = (buff.Nature == Buff.BuffNature.Consumable);
+            Consumable = (buff.Classification == Buff.BuffClassification.Consumable);
             FightSpecific = (buff.Source == ParserHelper.Source.FightSpecific || buff.Source == ParserHelper.Source.FractalInstability);
             BuffInfoEvent buffInfoEvent = log.CombatData.GetBuffInfoEvent(buff.ID);
             if (buffInfoEvent != null)

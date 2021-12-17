@@ -60,45 +60,45 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> Buffs = new List<Buff>
         {       
                 //signets
-                new Buff("Signet of Restoration",739, Source.Elementalist, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/d/dd/Signet_of_Restoration.png"),
-                new Buff("Signet of Air",5590, Source.Elementalist, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/9/92/Signet_of_Air.png"),
-                new Buff("Signet of Earth",5592, Source.Elementalist, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/c/ce/Signet_of_Earth.png"),
-                new Buff("Signet of Fire",5544, Source.Elementalist, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/b/b0/Signet_of_Fire.png"),
-                new Buff("Signet of Water",5591, Source.Elementalist, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/f/fd/Signet_of_Water.png"),
+                new Buff("Signet of Restoration",739, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/dd/Signet_of_Restoration.png"),
+                new Buff("Signet of Air",5590, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/92/Signet_of_Air.png"),
+                new Buff("Signet of Earth",5592, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/ce/Signet_of_Earth.png"),
+                new Buff("Signet of Fire",5544, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b0/Signet_of_Fire.png"),
+                new Buff("Signet of Water",5591, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/fd/Signet_of_Water.png"),
                 ///attunements
                 // Fire
-                new Buff("Fire Attunement", 5585, Source.Elementalist, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png"),
+                new Buff("Fire Attunement", 5585, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png"),
                 // Water
-                new Buff("Water Attunement", 5586, Source.Elementalist, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/3/31/Water_Attunement.png"),
+                new Buff("Water Attunement", 5586, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/31/Water_Attunement.png"),
                 // Air
-                new Buff("Air Attunement", 5575, Source.Elementalist, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/9/91/Air_Attunement.png"),
+                new Buff("Air Attunement", 5575, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/91/Air_Attunement.png"),
                 // Earth
-                new Buff("Earth Attunement", 5580, Source.Elementalist, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/a/a8/Earth_Attunement.png"),
+                new Buff("Earth Attunement", 5580, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/a8/Earth_Attunement.png"),
                 //forms
-                new Buff("Mist Form",5543, Source.Elementalist, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/1/1b/Mist_Form.png"),
-                new Buff("Mist Form 2",19718, Source.Elementalist, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/1/1b/Mist_Form.png"),
-                new Buff("Ride the Lightning",5588, Source.Elementalist, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/5/59/Ride_the_Lightning.png"),
-                new Buff("Vapor Form",5620, Source.Elementalist, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/6/6c/Vapor_Form.png"),
-                new Buff("Tornado",5583, Source.Elementalist, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/4/40/Tornado.png"),
-                new Buff("Whirlpool",5601, Source.Elementalist, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/4/41/Whirlpool.png"),
-                new Buff("Electrified Tornado",5749, Source.Elementalist, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/2/29/Chain_Lightning.png"),
+                new Buff("Mist Form",5543, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/1b/Mist_Form.png"),
+                new Buff("Mist Form 2",19718, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/1b/Mist_Form.png"),
+                new Buff("Ride the Lightning",5588, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/59/Ride_the_Lightning.png"),
+                new Buff("Vapor Form",5620, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/6c/Vapor_Form.png"),
+                new Buff("Tornado",5583, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/40/Tornado.png"),
+                new Buff("Whirlpool",5601, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/41/Whirlpool.png"),
+                new Buff("Electrified Tornado",5749, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/29/Chain_Lightning.png"),
                 //conjures
-                new Buff("Conjure Earth Shield", 15788, Source.Elementalist, BuffNature.Support, "https://wiki.guildwars2.com/images/7/7a/Conjure_Earth_Shield.png"),
-                new Buff("Conjure Flame Axe", 15789, Source.Elementalist, BuffNature.Support, "https://wiki.guildwars2.com/images/a/a1/Conjure_Flame_Axe.png"),
-                new Buff("Conjure Frost Bow", 15790, Source.Elementalist, BuffNature.Support, "https://wiki.guildwars2.com/images/c/c3/Conjure_Frost_Bow.png"),
-                new Buff("Conjure Lightning Hammer", 15791, Source.Elementalist, BuffNature.Support, "https://wiki.guildwars2.com/images/1/1f/Conjure_Lightning_Hammer.png"),
-                new Buff("Conjure Fiery Greatsword", 15792, Source.Elementalist, BuffNature.Support, "https://wiki.guildwars2.com/images/e/e2/Conjure_Fiery_Greatsword.png"),
+                new Buff("Conjure Earth Shield", 15788, Source.Elementalist, BuffClassification.Support, "https://wiki.guildwars2.com/images/7/7a/Conjure_Earth_Shield.png"),
+                new Buff("Conjure Flame Axe", 15789, Source.Elementalist, BuffClassification.Support, "https://wiki.guildwars2.com/images/a/a1/Conjure_Flame_Axe.png"),
+                new Buff("Conjure Frost Bow", 15790, Source.Elementalist, BuffClassification.Support, "https://wiki.guildwars2.com/images/c/c3/Conjure_Frost_Bow.png"),
+                new Buff("Conjure Lightning Hammer", 15791, Source.Elementalist, BuffClassification.Support, "https://wiki.guildwars2.com/images/1/1f/Conjure_Lightning_Hammer.png"),
+                new Buff("Conjure Fiery Greatsword", 15792, Source.Elementalist, BuffClassification.Support, "https://wiki.guildwars2.com/images/e/e2/Conjure_Fiery_Greatsword.png"),
                 //skills
-                new Buff("Arcane Power",5582, Source.Elementalist, BuffStackType.Stacking, 6, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/7/72/Arcane_Power.png"),
-                new Buff("Arcane Shield",5640, Source.Elementalist, BuffStackType.Stacking, 25, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/9/9d/Arcane_Shield.png"),
-                new Buff("Renewal of Fire",5764, Source.Elementalist, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/6/63/Renewal_of_Fire.png"),
-                new Buff("Rock Barrier",34633, Source.Elementalist, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/d/dd/Rock_Barrier.png"),//750?
-                new Buff("Magnetic Wave",15794, Source.Elementalist, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/3/32/Magnetic_Wave.png"),
-                new Buff("Obsidian Flesh",5667, Source.Elementalist, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/c/c1/Obsidian_Flesh.png"),
-                new Buff("Persisting Flames",13342, Source.Elementalist, BuffStackType.Stacking, 10, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/5/5f/Persisting_Flames.png", 104844, GW2Builds.EndOfLife),
-                new Buff("Fresh Air",34241, Source.Elementalist, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/d/d8/Fresh_Air.png"),
-                new Buff("Soothing Mist", 5587, Source.Elementalist, BuffNature.Defensive, "https://wiki.guildwars2.com/images/f/f7/Soothing_Mist.png"),
-                new Buff("Stone Heart", 24304, Source.Elementalist, BuffNature.Defensive, "https://wiki.guildwars2.com/images/6/60/Stone_Heart.png"),
+                new Buff("Arcane Power",5582, Source.Elementalist, BuffStackType.Stacking, 6, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/72/Arcane_Power.png"),
+                new Buff("Arcane Shield",5640, Source.Elementalist, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/9d/Arcane_Shield.png"),
+                new Buff("Renewal of Fire",5764, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/63/Renewal_of_Fire.png"),
+                new Buff("Rock Barrier",34633, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/dd/Rock_Barrier.png"),//750?
+                new Buff("Magnetic Wave",15794, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/32/Magnetic_Wave.png"),
+                new Buff("Obsidian Flesh",5667, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/c1/Obsidian_Flesh.png"),
+                new Buff("Persisting Flames",13342, Source.Elementalist, BuffStackType.Stacking, 10, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/5f/Persisting_Flames.png", 104844, GW2Builds.EndOfLife),
+                new Buff("Fresh Air",34241, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d8/Fresh_Air.png"),
+                new Buff("Soothing Mist", 5587, Source.Elementalist, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/f/f7/Soothing_Mist.png"),
+                new Buff("Stone Heart", 24304, Source.Elementalist, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/6/60/Stone_Heart.png"),
         };
 
 

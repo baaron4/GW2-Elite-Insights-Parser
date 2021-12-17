@@ -19,8 +19,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-                new Buff("Mirage Cloak",40408, ParserHelper.Source.Mirage, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/a/a5/Mirage_Cloak_%28effect%29.png"),
-                new Buff("False Oasis",40802, ParserHelper.Source.Mirage, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/3/32/False_Oasis.png"),
+                new Buff("Mirage Cloak",40408, ParserHelper.Source.Mirage, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/a5/Mirage_Cloak_%28effect%29.png"),
+                new Buff("False Oasis",40802, ParserHelper.Source.Mirage, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/32/False_Oasis.png"),
         };
     }
 }

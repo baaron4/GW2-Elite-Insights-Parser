@@ -23,10 +23,10 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-            new Buff("Shadow Shroud",63239, Source.Specter, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/f/f3/Enter_Shadow_Shroud.png"),
-            new Buff("Shrouded Ally",63207, Source.Specter, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/3/3a/Siphon.png"),
-            new Buff("Rot Wallow Venom",63168, Source.Specter, ArcDPSEnums.BuffStackType.StackingConditionalLoss, 100, BuffNature.Offensive, "https://wiki.guildwars2.com/images/5/57/Dark_Sentry.png"),
-            new Buff("Consume Shadows", 63456, Source.Specter, ArcDPSEnums.BuffStackType.Stacking, 5, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/9/94/Consume_Shadows.png"),
+            new Buff("Shadow Shroud",63239, Source.Specter, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/f3/Enter_Shadow_Shroud.png"),
+            new Buff("Shrouded Ally",63207, Source.Specter, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/3a/Siphon.png"),
+            new Buff("Rot Wallow Venom",63168, Source.Specter, ArcDPSEnums.BuffStackType.StackingConditionalLoss, 100, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/5/57/Dark_Sentry.png"),
+            new Buff("Consume Shadows", 63456, Source.Specter, ArcDPSEnums.BuffStackType.Stacking, 5, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/94/Consume_Shadows.png"),
         };
 
     }

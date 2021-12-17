@@ -23,8 +23,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-                new Buff("Sadistic Searing",43626, ParserHelper.Source.Scourge, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/d/dd/Sadistic_Searing.png"),
-                new Buff("Path Uses",43410, ParserHelper.Source.Scourge, BuffStackType.Stacking, 25, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/2/20/Sand_Swell.png"),
+                new Buff("Sadistic Searing",43626, ParserHelper.Source.Scourge, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/dd/Sadistic_Searing.png"),
+                new Buff("Path Uses",43410, ParserHelper.Source.Scourge, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/20/Sand_Swell.png"),
         };
     }
 }

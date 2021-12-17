@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EIData
             Resurrects = totals.Resurrects;
             ResurrectTime = Math.Round(totals.ResurrectTime / 1000.0, ParserHelper.TimeDigit);
             FinalSupport self = actor.GetSupportStats(actor, log, start, end);
-            foreach (Buff boon in log.Buffs.BuffsByNature[BuffNature.Boon])
+            foreach (Buff boon in log.Buffs.BuffsByClassification[BuffClassification.Boon])
             {
                 // add everything from total
                 if (totals.Removals.TryGetValue(boon.ID, out (int count, long time) item))
@@ -37,7 +37,7 @@ namespace GW2EIEvtcParser.EIData
                     BoonStripsTime -= item.time;
                 }
             }
-            foreach (Buff condition in log.Buffs.BuffsByNature[BuffNature.Condition])
+            foreach (Buff condition in log.Buffs.BuffsByClassification[BuffClassification.Condition])
             {
                 // add everything from self
                 if (self.Removals.TryGetValue(condition.ID, out (int count, long time) item))

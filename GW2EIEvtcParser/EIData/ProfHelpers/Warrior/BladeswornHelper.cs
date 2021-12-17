@@ -23,12 +23,12 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-            new Buff("Gunsaber Mode", 62769, Source.Bladesworn, BuffNature.GraphOnly,"https://wiki.guildwars2.com/images/f/f0/Unsheathe_Gunsaber.png"),
-            new Buff("Dragon Trigger", 62823, Source.Bladesworn, BuffNature.GraphOnly,"https://wiki.guildwars2.com/images/b/b1/Dragon_Trigger.png"),
-            new Buff("Positive Flow", 62836, Source.Bladesworn, BuffStackType.StackingConditionalLoss, 25, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/f/f9/Attribute_bonus.png"),
-            new Buff("Fierce as Fire", 63433, Source.Bladesworn, BuffStackType.Stacking, 10, BuffNature.GraphOnly, "https://wiki.guildwars2.com/images/8/8e/Fierce_as_Fire.png"),
-            new Buff("Stim State", 62846, Source.Bladesworn, BuffNature.GraphOnly,"https://wiki.guildwars2.com/images/a/ad/Combat_Stimulant.png"),
-            new Buff("Guns and Glory", 62743, Source.Bladesworn, BuffStackType.Queue, 9, BuffNature.GraphOnly,"https://wiki.guildwars2.com/images/7/72/Guns_and_Glory.png"),
+            new Buff("Gunsaber Mode", 62769, Source.Bladesworn, BuffClassification.Other,"https://wiki.guildwars2.com/images/f/f0/Unsheathe_Gunsaber.png"),
+            new Buff("Dragon Trigger", 62823, Source.Bladesworn, BuffClassification.Other,"https://wiki.guildwars2.com/images/b/b1/Dragon_Trigger.png"),
+            new Buff("Positive Flow", 62836, Source.Bladesworn, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/f9/Attribute_bonus.png"),
+            new Buff("Fierce as Fire", 63433, Source.Bladesworn, BuffStackType.Stacking, 10, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/8e/Fierce_as_Fire.png"),
+            new Buff("Stim State", 62846, Source.Bladesworn, BuffClassification.Other,"https://wiki.guildwars2.com/images/a/ad/Combat_Stimulant.png"),
+            new Buff("Guns and Glory", 62743, Source.Bladesworn, BuffStackType.Queue, 9, BuffClassification.Other,"https://wiki.guildwars2.com/images/7/72/Guns_and_Glory.png"),
         };
 
 

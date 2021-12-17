@@ -209,8 +209,8 @@ namespace GW2EIEvtcParser.EIData
                 numberOfClonesGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[NumberOfClonesID]);
             }
             var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[NumberOfConditionsID]);
-            var boonIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Boon].Select(x => x.ID));
-            var condiIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Condition].Select(x => x.ID));
+            var boonIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Boon].Select(x => x.ID));
+            var condiIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Condition].Select(x => x.ID));
             // Init status
             _buffDistribution = new CachingCollection<BuffDistribution>(log);
             _buffPresence = new CachingCollection<Dictionary<long, long>>(log);
@@ -338,7 +338,7 @@ namespace GW2EIEvtcParser.EIData
         }
         private void SetConsumablesList(ParsedEvtcLog log)
         {
-            IReadOnlyList<Buff> consumableList = log.Buffs.BuffsByNature[BuffNature.Consumable];
+            IReadOnlyList<Buff> consumableList = log.Buffs.BuffsByClassification[BuffClassification.Consumable];
             _consumeList = new List<Consumable>();
             long fightDuration = log.FightData.FightEnd;
             foreach (Buff consumable in consumableList)
