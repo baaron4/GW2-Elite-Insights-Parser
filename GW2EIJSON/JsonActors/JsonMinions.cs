@@ -71,7 +71,15 @@ namespace GW2EIJSON
         /// <seealso cref="JsonRotation"/>
         public IReadOnlyList<JsonRotation> Rotation { get; set; }
 
+        /// <summary>
+        /// Healing stats data
+        /// </summary>
         public EXTJsonMinionsHealingStats EXTHealingStats { get; set; }
+
+        /// <summary>
+        /// Barrier stats data
+        /// </summary>
+        public EXTJsonMinionsBarrierStats EXTBarrierStats { get; set; }
 
 
         public JsonMinions()

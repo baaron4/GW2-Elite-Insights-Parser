@@ -107,6 +107,10 @@ namespace GW2EIBuilders.JsonModels
             {
                 jsonMinions.EXTHealingStats = EXTJsonMinionsHealingStatsBuilder.BuildMinionsHealingStats(minions, log, skillDesc, buffDesc);
             }
+            if (log.CombatData.HasEXTBarrier && !isEnemyMinion)
+            {
+                jsonMinions.EXTBarrierStats = EXTJsonMinionsBarrierStatsBuilder.BuildMinionsBarrierStats(minions, log, skillDesc, buffDesc);
+            }
             return jsonMinions;
         }
 

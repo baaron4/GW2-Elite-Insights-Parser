@@ -26,8 +26,8 @@ namespace GW2EIBuilders.JsonModels
                 CanCrit = SkillItem.CanCrit(item.ID, log.LogData.GW2Build),
                 IsSwap = item.IsSwap,
                 IsNotAccurate = log.SkillData.IsNotAccurate(item.ID),
-                ConversionBasedHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(item, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.ConversionBased : false,
-                HybridHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(item, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.Hybrid : false
+                ConversionBasedHealing = log.CombatData.HasEXTHealing && log.CombatData.EXTHealingCombatData.GetHealingType(item, log) == HealingStatsExtensionHandler.EXTHealingType.ConversionBased,
+                HybridHealing = log.CombatData.HasEXTHealing && log.CombatData.EXTHealingCombatData.GetHealingType(item, log) == HealingStatsExtensionHandler.EXTHealingType.Hybrid
             };
             return skillDesc;
         }
