@@ -16,6 +16,16 @@ namespace GW2EIEvtcParser.EIData
             new BuffLossCastFinder(63251, 63239, EIData.InstantCastFinder.DefaultICD), // Shadow Shroud Exit
         };
 
+        private static readonly HashSet<long> _shroudTransform = new HashSet<long>
+        {
+            63155, 63251,
+        };
+
+        public static bool IsShroudTransform(long id)
+        {
+            return _shroudTransform.Contains(id);
+        }
+
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
         };

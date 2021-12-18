@@ -72,14 +72,16 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Soul Barbs",53489, Source.Necromancer, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/bd/Soul_Barbs.png"),
         };
 
-        /*private static readonly HashSet<long> _shroudTransform = new HashSet<long>
+        private static readonly HashSet<long> _shroudTransform = new HashSet<long>
         {
-            10574,10585,30792, 30961,
+            10574, 10585, 
+            30792, 30961, 
+            62567, 62540
         };
 
         public static bool IsShroudTransform(long id)
         {
             return _shroudTransform.Contains(id);
-        }*/
+        }
     }
 }

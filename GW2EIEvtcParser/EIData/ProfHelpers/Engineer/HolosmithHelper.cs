@@ -17,6 +17,16 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(43630, 43630, EIData.InstantCastFinder.DefaultICD), // Thermal Release Valve
         };
 
+        private static readonly HashSet<long> _photonForce = new HashSet<long>
+        {
+            42938, 41123
+        };
+
+        public static bool IsPhotonForgeTransform(long id)
+        {
+            return _photonForce.Contains(id);
+        }
+
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
             new BuffApproximateDamageModifier(44414, "Laser's Edge", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Holosmith, ByPresence, "https://wiki.guildwars2.com/images/5/5d/Laser%27s_Edge.png", 0, GW2Builds.July2019Balance, DamageModifierMode.PvE),
