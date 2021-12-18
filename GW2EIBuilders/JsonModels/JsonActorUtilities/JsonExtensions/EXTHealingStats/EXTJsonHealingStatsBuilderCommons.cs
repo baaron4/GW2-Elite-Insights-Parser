@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace GW2EIBuilders.JsonModels
 {
-    internal static class EXTJsonStatsBuilderCommons
+    internal static class EXTJsonHealingStatsBuilderCommons
     {
         internal static EXTJsonHealingStatistics.EXTJsonOutgoingHealingStatistics BuildOutgoingHealingStatistics(EXTFinalOutgoingHealingStat stats)
         {

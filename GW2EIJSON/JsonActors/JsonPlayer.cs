@@ -220,9 +220,17 @@ namespace GW2EIJSON
         /// </summary>
         public IReadOnlyList<long> ActiveTimes { get; set; }
 
+        /// <summary>
+        /// Healing stats data
+        /// </summary>
         public EXTJsonPlayerHealingStats EXTHealingStats { get; set; }
 
-        
+        /// <summary>
+        /// Barrier stats data
+        /// </summary>
+        public EXTJsonPlayerBarrierStats EXTBarrierStats { get; set; }
+
+
         public JsonPlayer()
         {
 

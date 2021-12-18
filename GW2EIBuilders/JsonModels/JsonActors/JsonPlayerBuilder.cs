@@ -135,6 +135,10 @@ namespace GW2EIBuilders.JsonModels
             {
                 jsonPlayer.EXTHealingStats = EXTJsonPlayerHealingStatsBuilder.BuildPlayerHealingStats(player, log, settings, skillDesc, buffDesc);
             }
+            if (log.CombatData.HasEXTBarrier)
+            {
+                jsonPlayer.EXTBarrierStats = EXTJsonPlayerBarrierStatsBuilder.BuildPlayerBarrierStats(player, log, settings, skillDesc, buffDesc);
+            }
             return jsonPlayer;
         }
 
