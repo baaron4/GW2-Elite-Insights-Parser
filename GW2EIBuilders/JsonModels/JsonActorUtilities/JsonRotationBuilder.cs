@@ -6,7 +6,7 @@ using GW2EIJSON;
 using Newtonsoft.Json;
 using static GW2EIJSON.JsonRotation;
 
-namespace GW2EIBuilders.JsonModels
+namespace GW2EIBuilders.JsonModels.JsonActorUtilities
 {
     /// <summary>
     /// Class corresponding to a rotation

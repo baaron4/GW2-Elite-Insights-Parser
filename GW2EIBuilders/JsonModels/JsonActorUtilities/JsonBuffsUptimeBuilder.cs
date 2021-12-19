@@ -6,7 +6,7 @@ using GW2EIJSON;
 using Newtonsoft.Json;
 using static GW2EIJSON.JsonBuffsUptime;
 
-namespace GW2EIBuilders.JsonModels
+namespace GW2EIBuilders.JsonModels.JsonActorUtilities
 {
     /// <summary>
     /// Class representing buff on targets

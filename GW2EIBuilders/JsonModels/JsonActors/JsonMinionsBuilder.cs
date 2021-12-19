@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIBuilders.JsonModels.JsonActorUtilities;
+using GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTBarrier;
+using GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTHealing;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
 using Newtonsoft.Json;
 
-namespace GW2EIBuilders.JsonModels
+namespace GW2EIBuilders.JsonModels.JsonActors
 {
     /// <summary>
     /// Class corresponding to the regrouping of the same type of minions
