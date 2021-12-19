@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData.BuffSourceFinders
 {
     internal class BuffSourceFinder20210921 : BuffSourceFinder20210511
     {

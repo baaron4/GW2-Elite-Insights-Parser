@@ -5,7 +5,7 @@ using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData.BuffSimulators
 {
     internal abstract class BuffSimulator : AbstractBuffSimulator
     {

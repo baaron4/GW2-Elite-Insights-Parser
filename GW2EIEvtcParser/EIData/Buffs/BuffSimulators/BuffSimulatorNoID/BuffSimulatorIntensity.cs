@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData.BuffSimulators
 {
     internal class BuffSimulatorIntensity : BuffSimulator
     {

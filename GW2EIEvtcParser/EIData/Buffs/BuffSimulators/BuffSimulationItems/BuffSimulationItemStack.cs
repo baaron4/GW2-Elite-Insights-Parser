@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EIData.AbstractBuffSimulator;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData.BuffSimulators
 {
     internal abstract class BuffSimulationItemStack : BuffSimulationItem
     {
