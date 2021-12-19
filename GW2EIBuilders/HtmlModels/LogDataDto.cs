@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIBuilders.HtmlModels.EXTBarrier;
+using GW2EIBuilders.HtmlModels.EXTHealing;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EncounterLogic;
@@ -37,6 +39,7 @@ namespace GW2EIBuilders.HtmlModels
         public CombatReplayDto CrData { get; set; } = null;
         public ChartDataDto GraphData { get; set; } = null;
         public HealingStatsExtension HealingStatsExtension { get; set; } = null;
+        public BarrierStatsExtension BarrierStatsExtension { get; set; } = null;
         // meta data
         public string EncounterDuration { get; set; }
         public bool Success { get; set; }
@@ -328,6 +331,11 @@ namespace GW2EIBuilders.HtmlModels
             {
                 log.UpdateProgressWithCancellationCheck("HTML: building Healing Extension");
                 logData.HealingStatsExtension = new HealingStatsExtension(log, usedSkills, usedBuffs);
+                if (log.CombatData.HasEXTBarrier)
+                {
+                    log.UpdateProgressWithCancellationCheck("HTML: building Barrier Extension");
+                    logData.BarrierStatsExtension = new BarrierStatsExtension(log, usedSkills, usedBuffs);
+                }
             }
             //
             SkillDto.AssembleSkills(usedSkills.Values, logData.SkillMap, log);

@@ -6,7 +6,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.Extensions;
 
-namespace GW2EIBuilders.HtmlModels
+namespace GW2EIBuilders.HtmlModels.EXTHealing
 {
     internal class EXTHealingStatsHealingDistributionDto
     {

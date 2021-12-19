@@ -4,7 +4,7 @@ using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIBuilders.HtmlModels
+namespace GW2EIBuilders.HtmlModels.EXTHealing
 {
     internal class EXTHealingStatsPlayerDetailsDto
     {
