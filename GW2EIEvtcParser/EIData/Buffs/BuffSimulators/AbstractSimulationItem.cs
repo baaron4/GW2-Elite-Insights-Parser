@@ -1,4 +1,4 @@
-﻿namespace GW2EIEvtcParser.EIData
+﻿namespace GW2EIEvtcParser.EIData.BuffSimulators
 {
     internal abstract class AbstractSimulationItem
     {

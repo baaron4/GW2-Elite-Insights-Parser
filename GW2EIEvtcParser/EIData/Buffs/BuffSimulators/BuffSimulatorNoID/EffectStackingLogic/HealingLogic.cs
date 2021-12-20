@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using static GW2EIEvtcParser.EIData.AbstractBuffSimulator;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData.BuffSimulators
 {
     internal class HealingLogic : QueueLogic
     {

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using GW2EIEvtcParser.EIData.BuffSimulators;
+using GW2EIEvtcParser.EIData.BuffSourceFinders;
 using GW2EIEvtcParser.Interfaces;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
