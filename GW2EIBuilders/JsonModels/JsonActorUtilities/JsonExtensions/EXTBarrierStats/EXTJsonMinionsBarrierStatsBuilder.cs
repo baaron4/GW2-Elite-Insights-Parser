@@ -7,7 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
 using Newtonsoft.Json;
 
-namespace GW2EIBuilders.JsonModels
+namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTBarrier
 {
     internal static class EXTJsonMinionsBarrierStatsBuilder
     {

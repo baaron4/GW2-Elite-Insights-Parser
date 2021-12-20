@@ -5,7 +5,7 @@ using GW2EIJSON;
 using Newtonsoft.Json;
 using static GW2EIJSON.JsonDeathRecap;
 
-namespace GW2EIBuilders.JsonModels
+namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonPlayerUtilities
 {
     /// <summary>
     /// Class corresponding to a death recap

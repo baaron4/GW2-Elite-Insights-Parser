@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using GW2EIBuilders.HtmlModels.HTMLCharts;
+using GW2EIBuilders.HtmlModels.HTMLStats;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using static GW2EIEvtcParser.ParserHelper;

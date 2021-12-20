@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using static GW2EIJSON.JsonStatistics;
 
-namespace GW2EIBuilders.JsonModels
+namespace GW2EIBuilders.JsonModels.JsonActorUtilities
 {
     /// <summary>
     /// Class representing general statistics

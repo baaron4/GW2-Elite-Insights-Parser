@@ -2,7 +2,7 @@
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 
-namespace GW2EIBuilders.HtmlModels
+namespace GW2EIBuilders.HtmlModels.HTMLActors
 {
 
     internal class PlayerDto : ActorDto
