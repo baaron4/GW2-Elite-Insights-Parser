@@ -352,6 +352,27 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> FractalInstabilities = new List<Buff>()
         {
+            // Legacy
+            new Buff("Mistlock Instability: Fleeting Precision", 22272, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7d/Mistlock_Instability.png"),
+            new Buff("Mistlock Instability: Impaired Immunity", 22221, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7d/Mistlock_Instability.png"),
+            new Buff("Mistlock Instability: Losing Control", 22280, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7d/Mistlock_Instability.png"),
+            new Buff("Mistlock Instability: Mist Stalker", 22296, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7d/Mistlock_Instability.png"),
+            new Buff("Mistlock Instability: Mist Stalker", 22296, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7d/Mistlock_Instability.png"),
+            new Buff("Mistlock Instability: Slippery Slope 1", 54559, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/c2/Mistlock_Instability_Slippery_Slope.png"),
+            new Buff("Mistlock Instability: Slippery Slope 2", 54817, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/c2/Mistlock_Instability_Slippery_Slope.png"),
+            new Buff("Mistlock Instability: Stormy Weather", 22231, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7d/Mistlock_Instability.png"),
+            new Buff("Mistlock Instability: Birds", 54131, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e8/Mistlock_Instability_Birds.png"),
+            new Buff("Mistlock Instability: Tainted Renewal", 22261, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7d/Mistlock_Instability.png"),
+            new Buff("Mistlock Instability: Stamina", 22301, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7d/Mistlock_Instability.png"),
+            new Buff("Mistlock Instability: Playing Favorites", 22299, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7d/Mistlock_Instability.png"),
+            new Buff("Mistlock Instability: Overextended", 22271, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7d/Mistlock_Instability.png"),
+            new Buff("Mistlock Instability: Keep Them in Line", 22298, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7d/Mistlock_Instability.png"),
+            new Buff("Mistlock Instability: Ill and Chill", 22269, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7d/Mistlock_Instability.png"),
+            new Buff("Mistlock Instability: Frosty", 22233, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7d/Mistlock_Instability.png"),
+            new Buff("Mistlock Instability: Bloodlust", 22300, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7d/Mistlock_Instability.png"),
+            new Buff("Mistlock Instability: Antielitism", 22291, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7d/Mistlock_Instability.png"),
+            new Buff("Mistlock Instability: Agonizing Expedition", 22249, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7d/Mistlock_Instability.png"),
+            //
             new Buff("Mistlock Instability: Adrenaline Rush", 36341, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/72/Mistlock_Instability_Adrenaline_Rush.png"),
             new Buff("Mistlock Instability: Afflicted", 22228, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/3f/Mistlock_Instability_Afflicted.png"),
             new Buff("Mistlock Instability: Boon Overload", 53673, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d7/Mistlock_Instability_Boon_Overload.png"),
