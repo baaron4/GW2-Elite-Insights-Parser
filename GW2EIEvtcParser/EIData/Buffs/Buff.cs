@@ -380,10 +380,14 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Hamstrung", 47856, Source.FightSpecific,BuffStackType.Stacking, 99, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b9/Unseen_Burden.png" ),
                 new Buff("Enraged (?)", 18711, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 new Buff("Enraged (??)", 23235, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
-                new Buff("Enraged (100%)", 50070, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Enraged 1 (100%)", 50070, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 new Buff("Enraged 2 (100%)", 61138, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
-                new Buff("Enraged (200%)", 60674, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Enraged 1 (200%)", 31648, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Enraged 2 (200%)", 36078, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Enraged 3 (200%)", 53498, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Enraged 4 (200%)", 60674, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 new Buff("Enraged (300%)", 61006, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Enraged (500%)", 31534, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 new Buff("Call of the Mists", 34164, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/79/Call_of_the_Mists_%28raid_effect%29.png" ),
                 // Strike Essences
                 new Buff("Essence of Vigilance Tier 1", 58786, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/a4/Essence_of_Vigilance.png" ),
@@ -404,6 +408,9 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Essence of Valor Tier 4", 60062, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/6f/Essence_of_Valor.png" ),
                 new Buff("Power of Valor Tier 1", 58385, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/64/Power_of_Valor.png" ),
                 new Buff("Power of Valor Tier 2", 58414, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/64/Power_of_Valor.png" ),
+                // Unknown Fixation            
+                new Buff("Fixated 1(???)",48533, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Fixated 2(???)",58136, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 //////////////////////////////////////////////
                 // Mordremoth
                 new Buff("Parietal Mastery", 32208, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/7/76/Parietal_Mastery.png"),
@@ -584,6 +591,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Aquatic Aura (Kenut)",52211 , Source.FightSpecific, BuffStackType.Stacking, 80, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/44/Expose_Weakness.png"),
                 new Buff("Aquatic Aura (Nikare)",52929 , Source.FightSpecific, BuffStackType.Stacking, 80, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/fd/Fractured_%28effect%29.png"),
                 new Buff("Waterlogged",51935 , Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/89/Waterlogged.png"),
+                new Buff("Enraged (Twin Largos)", 52626, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png"),
                 // Qadim
                 new Buff("Flame Armor",52568, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e7/Magma_Orb.png"),
                 new Buff("Fiery Surge",52588, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/f9/Fiery_Surge.png"),
@@ -593,6 +601,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Mythwright Surge", 52863, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/7/7a/Swiftness_%28effect%29.png"),
                 new Buff("Lamp Bond", 51726, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/d/db/Lamp_Bond.png"),
                 new Buff("Enraged (Wywern)", 52040, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png"),
+                new Buff("Enraged (Qadim)", 51933, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png"),
                 new Buff("Resistance (Lava Elemental)", 52075, Source.FightSpecific, BuffStackType.Queue, 5, BuffClassification.Other,"https://wiki.guildwars2.com/images/1/18/Fire_Shield.png"),
                 new Buff("Shielded (Lava Elemental)", 53048, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/1/18/Fire_Shield.png"),
                 //////////////////////////////////////////////
@@ -680,6 +689,8 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Chains of Frost Active", 59100, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/63/Use_Soul_Binder.png" ),
                 new Buff("Chains of Frost Application", 59120, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png" ),
                 new Buff("Brain Freeze", 59073, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png" ),
+                // Frezie      
+                new Buff("Icy Barrier", 53510, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/38/Shield_of_Ice.png" ),
         };
 
         internal static readonly List<Buff> NormalFoods = new List<Buff>
