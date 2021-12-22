@@ -29,6 +29,22 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
+        private static readonly HashSet<long> _engineerKit = new HashSet<long>
+        {
+            5812,
+            5933,
+            5927,
+            6020,
+            5802,
+            5904,
+            30800,
+        };
+
+        public static bool IsEngineerKit(long id)
+        {
+            return _engineerKit.Contains(id);
+        }
+
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {

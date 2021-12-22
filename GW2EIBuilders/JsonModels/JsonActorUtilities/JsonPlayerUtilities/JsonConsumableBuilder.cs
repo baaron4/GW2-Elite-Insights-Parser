@@ -2,7 +2,7 @@
 using GW2EIJSON;
 using Newtonsoft.Json;
 
-namespace GW2EIBuilders.JsonModels
+namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonPlayerUtilities
 {
     /// <summary>
     /// Class representing consumables

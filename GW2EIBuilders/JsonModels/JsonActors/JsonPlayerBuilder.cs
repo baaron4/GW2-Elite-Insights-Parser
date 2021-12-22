@@ -1,5 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using GW2EIBuilders.JsonModels.JsonActorUtilities;
+using GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTBarrier;
+using GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTHealing;
+using GW2EIBuilders.JsonModels.JsonActorUtilities.JsonPlayerUtilities;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
@@ -9,7 +13,7 @@ using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIJSON.JsonBuffsUptime;
 using static GW2EIJSON.JsonPlayerBuffsGeneration;
 
-namespace GW2EIBuilders.JsonModels
+namespace GW2EIBuilders.JsonModels.JsonActors
 {
     /// <summary>
     /// Class representing a player
@@ -134,6 +138,10 @@ namespace GW2EIBuilders.JsonModels
             if (log.CombatData.HasEXTHealing)
             {
                 jsonPlayer.EXTHealingStats = EXTJsonPlayerHealingStatsBuilder.BuildPlayerHealingStats(player, log, settings, skillDesc, buffDesc);
+            }
+            if (log.CombatData.HasEXTBarrier)
+            {
+                jsonPlayer.EXTBarrierStats = EXTJsonPlayerBarrierStatsBuilder.BuildPlayerBarrierStats(player, log, settings, skillDesc, buffDesc);
             }
             return jsonPlayer;
         }

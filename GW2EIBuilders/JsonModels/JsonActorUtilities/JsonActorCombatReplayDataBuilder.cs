@@ -8,7 +8,7 @@ using GW2EIJSON;
 using Newtonsoft.Json;
 using static GW2EIJSON.JsonLog;
 
-namespace GW2EIBuilders.JsonModels
+namespace GW2EIBuilders.JsonModels.JsonActorUtilities
 {
     /// <summary>
     /// The root of the JSON

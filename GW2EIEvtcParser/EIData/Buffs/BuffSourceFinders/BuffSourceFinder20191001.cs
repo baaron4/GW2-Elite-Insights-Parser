@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData.BuffSourceFinders
 {
     internal class BuffSourceFinder20191001 : BuffSourceFinder20190305
     {

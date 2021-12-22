@@ -3,7 +3,7 @@ using GW2EIEvtcParser.EIData;
 using Newtonsoft.Json;
 using static GW2EIJSON.JsonPlayerBuffsGeneration;
 
-namespace GW2EIBuilders.JsonModels
+namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonPlayerUtilities
 {
     /// <summary>
     /// Class representing buffs generation by player actors

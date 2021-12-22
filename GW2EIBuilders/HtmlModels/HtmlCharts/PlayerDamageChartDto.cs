@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GW2EIBuilders.HtmlModels
+namespace GW2EIBuilders.HtmlModels.HTMLCharts
 {
     internal class PlayerDamageChartDto<T>
     {

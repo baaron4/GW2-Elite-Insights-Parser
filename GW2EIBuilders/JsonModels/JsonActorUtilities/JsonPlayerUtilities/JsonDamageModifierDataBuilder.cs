@@ -6,7 +6,7 @@ using GW2EIJSON;
 using Newtonsoft.Json;
 using static GW2EIJSON.JsonDamageModifierData;
 
-namespace GW2EIBuilders.JsonModels
+namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonPlayerUtilities
 {
     /// <summary>
     /// Class representing damage modifier data

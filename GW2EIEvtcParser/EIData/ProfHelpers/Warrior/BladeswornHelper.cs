@@ -16,6 +16,16 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(62847, 62847, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta2, GW2Builds.EndOfLife), // Unseen Sword
         };
 
+        private static readonly HashSet<long> _gunsaberForm = new HashSet<long>
+        {
+            62861, 62745,
+        };
+
+        public static bool IsGunsaberForm(long id)
+        {
+            return _gunsaberForm.Contains(id);
+        }
+
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
             new BuffDamageModifier(63433, "Fierce as Fire", "1%", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Bladesworn, ByStack, "https://wiki.guildwars2.com/images/8/8e/Fierce_as_Fire.png", GW2Builds.EODBeta4, GW2Builds.EndOfLife, DamageModifierMode.All),

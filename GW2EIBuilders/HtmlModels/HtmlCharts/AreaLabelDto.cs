@@ -1,4 +1,4 @@
-﻿namespace GW2EIBuilders.HtmlModels
+﻿namespace GW2EIBuilders.HtmlModels.HTMLCharts
 {
     internal class AreaLabelDto
     {

@@ -14,6 +14,16 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(31658, 31658, EIData.InstantCastFinder.DefaultICD), // Glyph of Equality (non-CA)
         };
 
+        private static readonly HashSet<long> _celestialAvatar = new HashSet<long>
+        {
+            31869, 31411
+        };
+
+        public static bool IsCelestialAvatarTransform(long id)
+        {
+            return _celestialAvatar.Contains(id);
+        }
+
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
         };

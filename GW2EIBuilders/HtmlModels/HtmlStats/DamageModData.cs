@@ -3,7 +3,7 @@ using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using static GW2EIEvtcParser.ParserHelper;
 
-namespace GW2EIBuilders.HtmlModels
+namespace GW2EIBuilders.HtmlModels.HTMLStats
 {
     internal class DamageModData
     {

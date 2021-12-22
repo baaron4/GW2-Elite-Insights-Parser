@@ -4,7 +4,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIBuilders.HtmlModels
+namespace GW2EIBuilders.HtmlModels.HTMLMetaData
 {
     internal class SkillDto : AbstractSkillDto
     {

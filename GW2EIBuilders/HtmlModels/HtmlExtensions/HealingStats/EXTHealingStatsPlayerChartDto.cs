@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using GW2EIBuilders.HtmlModels.HTMLCharts;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 
-namespace GW2EIBuilders.HtmlModels
+namespace GW2EIBuilders.HtmlModels.EXTHealing
 {
     internal class EXTHealingStatsPlayerChartDto
     {
