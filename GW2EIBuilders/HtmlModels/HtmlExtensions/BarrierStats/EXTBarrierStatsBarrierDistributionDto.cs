@@ -122,7 +122,6 @@ namespace GW2EIBuilders.HtmlModels.EXTBarrier
             var list = new List<object[]>();
             var castLogsBySkill = casting.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
             var barrierLogsBySkill = barrierLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
-            var conditionsById = log.StatisticsHelper.PresentConditions.ToDictionary(x => x.ID);
             foreach (KeyValuePair<SkillItem, List<EXTAbstractBarrierEvent>> pair in barrierLogsBySkill)
             {
                 list.Add(GetBarrierToItem(pair.Key, pair.Value, castLogsBySkill, usedSkills, usedBuffs, log.Buffs, phase));
