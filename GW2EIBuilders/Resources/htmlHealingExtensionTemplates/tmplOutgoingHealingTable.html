@@ -30,6 +30,10 @@
                         Target <img src="https://wiki.guildwars2.com/images/3/3d/Downed_ally.png" alt="Downed Healing"
                             class="icon icon-hover">
                     </th>
+                    <th v-if="hasBarrier" data-original-title="Barrier" class="damage-cell">
+                        Target <img src="https://wiki.guildwars2.com/images/thumb/c/cc/Barrier.png/30px-Barrier.png" alt="Barrier"
+                                 class="icon">
+                    </th>
                     <th data-original-title="All" class="damage-cell">
                         All <img src="https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/20px-Healing.png" alt="All"
                                  class="icon">
@@ -53,6 +57,10 @@
                         All <img src="https://wiki.guildwars2.com/images/3/3d/Downed_ally.png" alt="Downed Healing"
                             class="icon icon-hover">
                     </th>
+                    <th v-if="hasBarrier" data-original-title="Barrier" class="damage-cell">
+                        All <img src="https://wiki.guildwars2.com/images/thumb/c/cc/Barrier.png/30px-Barrier.png" alt="Barrier"
+                                 class="icon">
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -64,10 +72,10 @@
                     </td>
                     <td class="text-left">{{row.player.name}}</td>
                     <td>{{row.player.acc}}</td>
-                    <td v-if="!showHealing" v-for="(value, id) in row.hps" :data-original-title="value + ' healing'+ '<br>' + computeTotalContribution(id, row.hps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, id, row.hps,tableData.sums)">
+                    <td v-if="!showHealing" v-for="(value, id) in row.hps" :data-original-title="value + ' total' + '<br>' + computeTotalContribution(id, row.hps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, id, row.hps,tableData.sums)">
                         {{round(value/phase.durationS)}}                
                     </td>
-                    <td v-if="showHealing" v-for="(value, id) in row.hps" :data-original-title="round(value/phase.durationS) + ' hps'+ '<br>' + computeTotalContribution(id, row.hps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, id, row.hps,tableData.sums)">
+                    <td v-if="showHealing" v-for="(value, id) in row.hps" :data-original-title="round(value/phase.durationS) + ' per second' + '<br>' + computeTotalContribution(id, row.hps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, id, row.hps,tableData.sums)">
                         {{value}}               
                     </td>
                 </tr>
@@ -138,6 +146,12 @@
             hPhase: function () {
                 return healingStatsExtension.healingPhases[this.phaseindex];
             },
+            hasBarrier: function() {
+                return !!barrierStatsExtension;
+            },
+            bPhase: function () {
+                return barrierStatsExtension.barrierPhases[this.phaseindex];
+            },
             tableData: function () {
                 var cacheID = this.phaseindex + '-';
                 cacheID += getTargetCacheID(this.activetargets);
@@ -148,22 +162,33 @@
                 var sums = [];
                 var total = [0, 0, 0, 0, 0, 0, 0, 0];
                 var groups = [];
-                var i, j;
-                for (i = 0; i < this.hPhase.outgoingHealingStats.length; i++) {
-                    var hpsStat = this.hPhase.outgoingHealingStats[i];
+                for (var i = 0; i < this.hPhase.outgoingHealingStats.length; i++) {
+                    var hpsStat = this.hPhase.outgoingHealingStats[i].slice();
                     var hpsTargetStat = [0, 0, 0, 0];
-                    for (j = 0; j < this.activetargets.length; j++) {
+                    for (var j = 0; j < this.activetargets.length; j++) {
                         var tar = this.hPhase.outgoingHealingStatsTargets[i][this.activetargets[j]];
                         for (var k = 0; k < hpsTargetStat.length; k++) {
                             hpsTargetStat[k] += tar[k];
                         }
                     }
-                    var player = logData.players[i];
-                    if (!groups[player.group]) {
-                        groups[player.group] = [0, 0, 0, 0, 0, 0, 0, 0];
+                    if (this.hasBarrier) {
+                        hpsStat = hpsStat.concat(this.bPhase.outgoingBarrierStats[i]);
+                        var bpsTargetStat = [0];
+                        for (var j = 0; j < this.activetargets.length; j++) {
+                            var tar = this.bPhase.outgoingBarrierStatsTargets[i][this.activetargets[j]];
+                            for (var k = 0; k < bpsTargetStat.length; k++) {
+                                bpsTargetStat[k] += tar[k];
+                            }
+                        }
+                        hpsTargetStat = hpsTargetStat.concat(bpsTargetStat);
                     }
                     var hps = hpsTargetStat.concat(hpsStat);
-                    for (j = 0; j < hps.length; j++) {
+                    //
+                    var player = logData.players[i];
+                    if (!groups[player.group]) {
+                        groups[player.group] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                    }
+                    for (var j = 0; j < hps.length; j++) {
                         total[j] += hps[j];
                         groups[player.group][j] += hps[j];
                     }
@@ -172,7 +197,7 @@
                         hps: hps
                     });
                 }
-                for (i = 0; i < groups.length; i++) {
+                for (var i = 0; i < groups.length; i++) {
                     if (groups[i]) {
                         sums.push({
                             name: "Group " + i,

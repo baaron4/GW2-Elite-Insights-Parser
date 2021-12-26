@@ -30,6 +30,10 @@
                         <img src="https://wiki.guildwars2.com/images/3/3d/Downed_ally.png" alt="Downed Healing"
                             class="icon icon-hover">
                     </th>
+                    <th v-if="hasBarrier" data-original-title="Barrier Received" class="damage-cell">
+                        <img src="https://wiki.guildwars2.com/images/thumb/c/cc/Barrier.png/30px-Barrier.png" alt="Barrier Received"
+                                 class="icon">
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -94,17 +98,26 @@
             hPhase: function () {
                 return healingStatsExtension.healingPhases[this.phaseindex];
             },
+            hasBarrier: function() {
+                return !!barrierStatsExtension;
+            },
+            bPhase: function () {
+                return barrierStatsExtension.barrierPhases[this.phaseindex];
+            },
             tableData: function () {
                 if (this.cache.has(this.phaseindex)) {
                     return this.cache.get(this.phaseindex);
                 }
                 var rows = [];
                 var sums = [];
-                var total = [0, 0, 0, 0];
+                var total = [0, 0, 0, 0, 0];
                 var groups = [];
                 var i;
                 for (i = 0; i < this.hPhase.incomingHealingStats.length; i++) {
-                    var incomingHeal = this.hPhase.incomingHealingStats[i];
+                    var incomingHeal = this.hPhase.incomingHealingStats[i].slice();
+                    if (this.hasBarrier) {
+                        incomingHeal = incomingHeal.concat(this.bPhase.incomingBarrierStats[i])
+                    }
                     var player = logData.players[i];
                     if (player.isFake) {
                         continue;
@@ -114,7 +127,7 @@
                         incomingHeal: incomingHeal
                     });
                     if (!groups[player.group]) {
-                        groups[player.group] = [0, 0, 0, 0];
+                        groups[player.group] = [0, 0, 0, 0, 0];
                     }
                     for (var j = 0; j < total.length; j++) {
                         total[j] += incomingHeal[j];
