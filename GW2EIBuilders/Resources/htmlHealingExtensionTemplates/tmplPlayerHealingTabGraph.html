@@ -50,7 +50,7 @@
             var hasBuffs = oldOffset !== this.playerOffset;
             this.graphOffset = this.playerOffset;
             this.playerOffset += computePlayersHealthData(this.graph, this.data, 'y3');
-            this.playerOffset += computePlayerBarrierData(this.barrierGraph, this.player, this.data, 'y3');
+            this.playerOffset += computePlayersBarrierData(this.graph, this.data, 'y3');
             this.data.push({
                 x: this.phase.times,
                 y: [],
@@ -107,36 +107,17 @@
             });
         },
         computed: {
-            healthGraph: function () {
-                return this.graph.players[this.playerindex].healthStates;
-            },
-            barrierGraph: function () {
-                return this.graph.players[this.playerindex].barrierStates;
-            },
             hGraph: function () {
                 return healingStatsExtension.playerHealingCharts[this.phaseindex][this.playerindex];
+            },
+            bGraph: function () {
+                return barrierStatsExtension.playerBarrierCharts[this.phaseindex][this.playerindex];
             },
             graphid: function () {
                 return "playerhealinggraph-" + this.playerindex + '-' + this.phaseindex;
             },
             player: function() {
                 return logData.players[this.playerindex];
-            },
-            healingGraphName: function () {
-                switch (this.graphhealingdata.healingmode) {
-                    case HealingType.All:
-                        return "healing";
-                    case HealingType.HealingPower:
-                        return "healingPowerHealing";
-                    case HealingType.Conversion:
-                        return "conversionBasedHealing";
-                    case HealingType.Hybrid:
-                        return "hybridHealing";                 
-                    case HealingType.Downed:
-                        return "downedHealing";
-                    default:
-                        throw new Error("unknown enum in healing graph name");
-                }
             },
             graphname: function () {
                 var name = getHealingGraphName(this.graphhealingdata.healingmode, this.graphhealingdata.graphmode);
@@ -169,18 +150,34 @@
             }
         },
         methods: {
+            graphToUse: function () {
+                switch (this.graphhealingdata.healingmode) {
+                    case HealingType.All:
+                        return this.hGraph.healing;
+                    case HealingType.HealingPower:
+                        return this.hGraph.healingPowerHealing;
+                    case HealingType.Conversion:
+                        return this.hGraph.conversionBasedHealing;
+                    case HealingType.Hybrid:
+                        return this.hGraph.hybridHealing;
+                    case HealingType.Downed:
+                        return this.hGraph.downedHealing;
+                    case HealingType.Barrier:
+                        return this.bGraph.barrier;
+                    default:
+                        throw new Error("unknown enum in healing graph name");
+                }
+            },
             computeDPSData: function () {
                 var cacheID = getHPSGraphCacheID(this.graphhealingdata.hpsmode, this.graphhealingdata.healingmode, this.graphhealingdata.graphmode, this.activetargets, this.phaseindex, null);
                 if (this.dpsCache.has(cacheID)) {
                     return this.dpsCache.get(cacheID);
                 }
                 var data;
-                var graphData = this.hGraph;
-                var damageArrayToUse = this.healingGraphName;
                 if (this.graphhealingdata.hpsmode >= 0) {
-                    data = computePlayerDPS(this.player, graphData[damageArrayToUse], this.graphhealingdata.hpsmode, null, this.activetargets, cacheID, this.phase.times, this.graphhealingdata.graphmode, this.graphhealingdata.healingmode);
+                    data = computePlayerDPS(this.player, this.graphToUse(), this.graphhealingdata.hpsmode, null, this.activetargets, cacheID, this.phase.times, this.graphhealingdata.graphmode, this.graphhealingdata.healingmode);
                 } else {
-                    data = computePlayerDPS(this.player, graphData[damageArrayToUse], 0, this.computePhaseBreaks, this.activetargets, cacheID, this.phase.times, this.graphhealingdata.graphmode, this.graphhealingdata.healingmode);
+                    data = computePlayerDPS(this.player, this.graphToUse(), 0, this.computePhaseBreaks, this.activetargets, cacheID, this.phase.times, this.graphhealingdata.graphmode, this.graphhealingdata.healingmode);
                 }
                 var res = {
                     maxHPS: data.maxDPS.total,
@@ -200,9 +197,17 @@
                 res.push(hpsData.playerHPS.target);
                 res.push(hpsData.playerHPS.cleave);
                 for (var i = 0; i < this.graph.players.length; i++) {
+                    if (logData.players[i].isFake) {
+                        continue;
+                    }
                     addPointsToGraph(res, this.graph.players[i].healthStates, hpsData.maxHPS);
                 }
-                addPointsToGraph(res, this.barrierGraph, hpsData.maxHPS);
+                for (var i = 0; i < this.graph.players.length; i++) {
+                    if (logData.players[i].isFake) {
+                        continue;
+                    }
+                    addPointsToGraph(res, this.graph.players[i].barrierStates, hpsData.maxHPS);
+                }
                 this.dataCache.set(cacheID, res);
                 return res;
             },

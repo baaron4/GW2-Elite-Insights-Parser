@@ -94,6 +94,7 @@
             });
             // targets health
             computePlayersHealthData(this.graph, this.data, null); 
+            computePlayersBarrierData(this.graph, this.data, null); 
             // mechanics          
             addMechanicsToGraph(data, this.phase, this.phaseindex);
         },
@@ -129,21 +130,8 @@
             hGraph: function () {
                 return healingStatsExtension.playerHealingCharts[this.phaseindex];
             },
-            healingGraphName: function () {
-                switch (this.graphhealingdata.healingmode) {
-                    case HealingType.All:
-                        return "healing";
-                    case HealingType.HealingPower:
-                        return "healingPowerHealing";
-                    case HealingType.Conversion:
-                        return "conversionBasedHealing";
-                    case HealingType.Hybrid:
-                        return "hybridHealing";
-                    case HealingType.Downed:
-                        return "downedHealing";
-                    default:
-                        throw new Error("unknown enum in healing graph name");
-                }
+            bGraph: function () {
+                return barrierStatsExtension.playerBarrierCharts[this.phaseindex];
             },
             graphname: function () {
                 var name = getHealingGraphName(this.graphhealingdata.healingmode, this.graphhealingdata.graphmode);
@@ -173,6 +161,24 @@
             }
         },
         methods: {
+            graphToUse: function (i) {
+                switch (this.graphhealingdata.healingmode) {
+                    case HealingType.All:
+                        return this.hGraph[i].healing;
+                    case HealingType.HealingPower:
+                        return this.hGraph[i].healingPowerHealing;
+                    case HealingType.Conversion:
+                        return this.hGraph[i].conversionBasedHealing;
+                    case HealingType.Hybrid:
+                        return this.hGraph[i].hybridHealing;
+                    case HealingType.Downed:
+                        return this.hGraph[i].downedHealing;
+                    case HealingType.Barrier:
+                        return this.bGraph[i].barrier;
+                    default:
+                        throw new Error("unknown enum in healing graph name");
+                }
+            },
             computeHPS: function (lim, phasebreaks, cacheID) {
                 var maxHPS = {
                     total: 0,
@@ -185,9 +191,8 @@
                     target: []
                 };
                 var playerHPS = [];
-                var healingArrayToUse = this.healingGraphName;
                 for (var i = 0; i < logData.players.length; i++) {
-                    var data = computePlayerDPS(logData.players[i], this.hGraph[i][healingArrayToUse], lim, phasebreaks,
+                    var data = computePlayerDPS(logData.players[i], this.graphToUse(i), lim, phasebreaks,
                         this.activetargets, cacheID, this.phase.times, this.graphhealingdata.graphmode, this.graphhealingdata.healingmode);
                     playerHPS.push(data.dps);
                     maxHPS.total = Math.max(maxHPS.total, data.maxDPS.total);
@@ -241,6 +246,13 @@
                     }
                     var health = this.graph.players[i].healthStates;
                     addPointsToGraph(res, health, maxHPS);
+                }
+                for (var i = 0; i < this.graph.players.length; i++) {
+                    if (logData.players[i].isFake) {
+                        continue;
+                    }
+                    var barrier = this.graph.players[i].barrierStates;
+                    addPointsToGraph(res, barrier, maxHPS);
                 }
                 updateMechanicsYValues(res, this.phase, this.phaseindex, this.graph, maxHPS);
                 this.dataCache.set(cacheID, res);
