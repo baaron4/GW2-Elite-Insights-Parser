@@ -65,3 +65,15 @@ function computePlayersHealthData(graph, data, yaxis) {
     }
     return offset;
 }
+
+function computePlayersBarrierData(graph, data, yaxis) {
+    var offset = 0;
+    for (var i = 0; i < logData.players.length; i++) {
+        var player = logData.players[i];
+        if (player.isFake) {
+            continue;
+        }
+        offset += computePlayerBarrierData(graph.players[i].barrierStates, player, data, yaxis)
+    }
+    return offset;
+}
