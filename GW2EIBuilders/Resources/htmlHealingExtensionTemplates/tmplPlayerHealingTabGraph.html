@@ -49,8 +49,7 @@
             this.playerOffset += computeBuffData(this.player.details.boonGraph[this.phaseindex], this.data);
             var hasBuffs = oldOffset !== this.playerOffset;
             this.graphOffset = this.playerOffset;
-            this.playerOffset += computePlayersHealthData(this.graph, this.data, 'y3');
-            this.playerOffset += computePlayersBarrierData(this.graph, this.data, 'y3');
+            this.playerOffset += computePlayersHealingGraphData(this.graph, this.data, 'y3');
             this.data.push({
                 x: this.phase.times,
                 y: [],
@@ -201,11 +200,6 @@
                         continue;
                     }
                     addPointsToGraph(res, this.graph.players[i].healthStates, hpsData.maxHPS);
-                }
-                for (var i = 0; i < this.graph.players.length; i++) {
-                    if (logData.players[i].isFake) {
-                        continue;
-                    }
                     addPointsToGraph(res, this.graph.players[i].barrierStates, hpsData.maxHPS);
                 }
                 this.dataCache.set(cacheID, res);
