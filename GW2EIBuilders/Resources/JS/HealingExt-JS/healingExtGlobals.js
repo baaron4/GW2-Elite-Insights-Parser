@@ -22,5 +22,6 @@ const HealingType = {
     HealingPower: 1,
     Conversion: 2,
     Hybrid: 3,
-    Downed: 4
+    Downed: 4,
+    Barrier: 5
 };

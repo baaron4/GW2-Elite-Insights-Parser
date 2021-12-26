@@ -155,7 +155,7 @@
             },
             computeData: function () {
                 this.layout.datarevision = new Date().getTime();
-                this.layout.yaxis3.title = healingGraphTypeEnumToString(this.graphhealingdata.graphmode);
+                this.layout.yaxis3.title = healingGraphTypeEnumToString(this.graphhealingdata.graphmode, this.graphhealingdata.healingmode);
                 var res = this.data;
                 var data = this.computeHPSRelatedData();
                 this.data[this.playerOffset].y = data[0];

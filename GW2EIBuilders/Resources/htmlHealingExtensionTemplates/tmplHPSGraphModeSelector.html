@@ -44,6 +44,11 @@
                     class="icon"></a>
             </li>
             //-->
+                                 
+            <li v-if="hasBarrier" class="nav-item d-flex flex-row justify-content-center align-items-center" data-original-title="Conversion">
+                <a class="nav-link" @click="data.healingmode = healingModeEnum.Barrier" :class="{active: data.healingmode === healingModeEnum.Barrier}"><img src="https://wiki.guildwars2.com/images/thumb/c/cc/Barrier.png/30px-Barrier.png" alt="Barrier"
+                    class="icon"></a>
+            </li>  
         </ul>
         <ul class="nav nav-pills d-flex flex-wrap justify-content-center ml-3 scale85" :class="{'flex-row': !column, 'flex-column': column}">
             <li class="nav-item d-flex flex-row justify-content-center align-items-center">
@@ -78,6 +83,9 @@
             },
             healingModeEnum: function() {
                 return HealingType;
+            },
+            hasBarrier: function() {
+                return !!barrierStatsExtension;
             },
         }
     });

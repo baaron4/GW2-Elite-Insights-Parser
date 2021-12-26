@@ -163,7 +163,7 @@
             },
             computeData: function () {
                 this.layout.datarevision = new Date().getTime();
-                this.layout.yaxis.title = healingGraphTypeEnumToString(this.graphhealingdata.graphmode);
+                this.layout.yaxis.title = healingGraphTypeEnumToString(this.graphhealingdata.graphmode, this.graphhealingdata.healingmode);
                 var points = this.computeHPSRelatedData();
                 var res = this.data;
                 for (var i = 0; i < points.length; i++) {

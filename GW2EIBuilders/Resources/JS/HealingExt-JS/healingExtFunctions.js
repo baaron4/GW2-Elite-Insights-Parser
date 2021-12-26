@@ -1,17 +1,17 @@
 /*jshint esversion: 6 */
 "use strict";
 
-function healingGraphTypeEnumToString(mode) {
+function healingGraphTypeEnumToString(mode, healingMode) {
     var name = "";
     switch (mode) {
         case GraphType.DPS:
-            name = "HPS";
+            name = healingMode === HealingType.Barrier ? "BPS" : "HPS";
             break;
         case GraphType.CenteredDPS:
-            name = "Centered HPS";
+            name = healingMode === HealingType.Barrier ? "Centered BPS" : "Centered HPS";
             break;
         case GraphType.Damage:
-            name = "Healing";
+            name = healingMode === HealingType.Barrier ? "Barrier" : "Healing";
             break;
         default:
             break;
@@ -37,6 +37,9 @@ function healingTypeEnumToString(mode) {
         case HealingType.Downed:
             name = "Against Downed";
             break;
+        case HealingType.Barrier:
+            name = "Healing Power";
+            break;
         default:
             break;
     }
@@ -48,7 +51,7 @@ function getHPSGraphCacheID(hpsmode, healingmode, graphmode, activetargets, phas
 }
 
 function getHealingGraphName(healingMode, graphMode) {
-    return healingTypeEnumToString(healingMode) + " " + healingGraphTypeEnumToString(graphMode) + " Graph";
+    return healingTypeEnumToString(healingMode) + " " + healingGraphTypeEnumToString(graphMode, healingMode) + " Graph";
 }
 
 function computePlayersHealthData(graph, data, yaxis) {
