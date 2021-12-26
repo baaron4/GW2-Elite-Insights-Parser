@@ -108,6 +108,7 @@ namespace GW2EIEvtcParser.ParsedData
             {51713, "True Nature - Centaur" },
             {49052, "Soul Stone Venom" },
             {49077, "Soul Stone Venom Strike" },
+            {41714, "Mantra of Solace" }
         };
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
         {
@@ -171,6 +172,15 @@ namespace GW2EIEvtcParser.ParsedData
             {54935, "https://render.guildwars2.com/file/E60C094A2349552EA6F6250D9B14E69BE91E4468/1128595.png" }, // Shredder Gyro damage
             {49052, "https://wiki.guildwars2.com/images/d/d6/Soul_Stone_Venom.png" }, // Soul Stone Venom
             {49077, "https://wiki.guildwars2.com/images/d/d6/Soul_Stone_Venom.png" }, // Soul Stone Venom Strike
+            {20479, "https://wiki.guildwars2.com/images/e/ec/Superior_Rune_of_Tormenting.png" },
+            {31707, "https://wiki.guildwars2.com/images/a/a2/Cultivated_Synergy.png" },
+            {31629, "https://wiki.guildwars2.com/images/a/a2/Cultivated_Synergy.png" },
+            {24241, "https://wiki.guildwars2.com/images/f/f9/Superior_Sigil_of_Water.png" },
+            {31371, "https://wiki.guildwars2.com/images/a/a9/Solar_Beam.png" },
+            {12567, "https://wiki.guildwars2.com/images/a/a3/Spirit_of_Nature.png" },
+            {29997, "https://wiki.guildwars2.com/images/f/f4/Healing_Prism.png" },
+            {29901, "https://wiki.guildwars2.com/images/5/5e/Life_from_Death.png" },
+            {46232, "https://wiki.guildwars2.com/images/a/a7/Breakrazor%27s_Bastion.png" },
             // Weaver attunements
             {Buff.FireDual, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
             {Buff.FireWater, "https://i.imgur.com/ar8Hn8G.png" },
