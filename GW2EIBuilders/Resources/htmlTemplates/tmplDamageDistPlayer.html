@@ -81,7 +81,7 @@
                     dist.totalDamage += targetDist.totalDamage;
                     dist.totalBreakbarDamage += targetDist.totalBreakbarDamage;
                     dist.contributedShieldDamage += targetDist.contributedShieldDamage;
-                    dist.totalCasting += targetDist.totalCasting;
+                    dist.totalCasting = targetDist.totalCasting;
                     var distribution = targetDist.distribution;
                     for (var k = 0; k < distribution.length; k++) {
                         var targetDistribution = distribution[k];
