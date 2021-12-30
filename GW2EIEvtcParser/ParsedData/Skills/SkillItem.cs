@@ -169,6 +169,7 @@ namespace GW2EIEvtcParser.ParsedData
             {13980, "https://wiki.guildwars2.com/images/8/84/Windborne_Notes.png" },
             {43558, "https://wiki.guildwars2.com/images/7/73/Rugged_Growth.png" },
             {12836, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" }, // Water Blast Combo
+            {12825, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" }, // Water Blast Combo
             {46508, "https://wiki.guildwars2.com/images/f/ff/Echo_of_Truth.png" }, // Echo of Truth
             {54935, "https://render.guildwars2.com/file/E60C094A2349552EA6F6250D9B14E69BE91E4468/1128595.png" }, // Shredder Gyro damage
             {49052, "https://wiki.guildwars2.com/images/d/d6/Soul_Stone_Venom.png" }, // Soul Stone Venom
@@ -185,6 +186,8 @@ namespace GW2EIEvtcParser.ParsedData
             {40774, "https://wiki.guildwars2.com/images/f/f0/Sand_Flare.png" },
             {43759, "https://wiki.guildwars2.com/images/1/1e/Sand_Cascade.png" },
             {31536, "https://wiki.guildwars2.com/images/f/ff/Astral_Wisp.png" },
+            {29863, "https://wiki.guildwars2.com/images/6/64/Live_Vicariously.png" },
+            {49103, "https://wiki.guildwars2.com/images/7/7a/Signet_of_the_Ether.png" },
             // Weaver attunements
             {Buff.FireDual, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
             {Buff.FireWater, "https://i.imgur.com/ar8Hn8G.png" },
