@@ -134,6 +134,7 @@ namespace GW2EIEvtcParser.ParsedData
             {45128, "https://wiki.guildwars2.com/images/b/bf/Chapter_3-_Azure_Sun.png"},
             {41258, "https://wiki.guildwars2.com/images/d/d3/Chapter_1-_Searing_Spell.png"},
             {45022, "https://wiki.guildwars2.com/images/f/fd/Chapter_1-_Desert_Bloom.png"},
+            {40787, "https://wiki.guildwars2.com/images/f/fd/Chapter_1-_Desert_Bloom.png"},
             {46618, "https://wiki.guildwars2.com/images/a/a8/Flame_Rush.png"},
             {40635, "https://wiki.guildwars2.com/images/5/53/Chapter_2-_Igniting_Burst.png"},
             {42898, "https://wiki.guildwars2.com/images/6/6d/Epilogue-_Ashes_of_the_Just.png"},
@@ -183,6 +184,7 @@ namespace GW2EIEvtcParser.ParsedData
             {46232, "https://wiki.guildwars2.com/images/a/a7/Breakrazor%27s_Bastion.png" },
             {40774, "https://wiki.guildwars2.com/images/f/f0/Sand_Flare.png" },
             {43759, "https://wiki.guildwars2.com/images/1/1e/Sand_Cascade.png" },
+            {31536, "https://wiki.guildwars2.com/images/f/ff/Astral_Wisp.png" },
             // Weaver attunements
             {Buff.FireDual, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
             {Buff.FireWater, "https://i.imgur.com/ar8Hn8G.png" },
