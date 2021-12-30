@@ -16,6 +16,7 @@ namespace GW2EIEvtcParser.Extensions
         {
             2654,  // Crashing Waves
             5549,  // Water Blast (Elementalist)
+            5510,  // Water Trident
             5570,  // Signet of Water
             5595,  // Water Arrow
             9080,  // Leap of Faith
