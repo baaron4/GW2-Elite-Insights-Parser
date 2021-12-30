@@ -181,6 +181,8 @@ namespace GW2EIEvtcParser.ParsedData
             {29997, "https://wiki.guildwars2.com/images/f/f4/Healing_Prism.png" },
             {29901, "https://wiki.guildwars2.com/images/5/5e/Life_from_Death.png" },
             {46232, "https://wiki.guildwars2.com/images/a/a7/Breakrazor%27s_Bastion.png" },
+            {40774, "https://wiki.guildwars2.com/images/f/f0/Sand_Flare.png" },
+            {43759, "https://wiki.guildwars2.com/images/1/1e/Sand_Cascade.png" },
             // Weaver attunements
             {Buff.FireDual, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
             {Buff.FireWater, "https://i.imgur.com/ar8Hn8G.png" },
