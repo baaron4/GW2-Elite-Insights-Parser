@@ -357,7 +357,6 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Mistlock Instability: Impaired Immunity", 22221, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7d/Mistlock_Instability.png"),
             new Buff("Mistlock Instability: Losing Control", 22280, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7d/Mistlock_Instability.png"),
             new Buff("Mistlock Instability: Mist Stalker", 22296, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7d/Mistlock_Instability.png"),
-            new Buff("Mistlock Instability: Mist Stalker", 22296, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7d/Mistlock_Instability.png"),
             new Buff("Mistlock Instability: Slippery Slope 1", 54559, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/c2/Mistlock_Instability_Slippery_Slope.png"),
             new Buff("Mistlock Instability: Slippery Slope 2", 54817, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/c2/Mistlock_Instability_Slippery_Slope.png"),
             new Buff("Mistlock Instability: Stormy Weather", 22231, Source.FractalInstability, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7d/Mistlock_Instability.png"),
