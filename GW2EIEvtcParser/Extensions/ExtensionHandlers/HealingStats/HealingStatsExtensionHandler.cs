@@ -44,6 +44,7 @@ namespace GW2EIEvtcParser.Extensions
             10619, // Deadly Feast
             10640, // Life Leech (UW)
             12424, // Blood Frenzy
+            13684, // Lesser Symbol of Protection (Writ of Persistence)
             15259, // Nourishment (Omnomberry Ghost)
             21656, // Arcane Brilliance
             24800, // Nourishment (Prickly Pear Pie AND Bowl of Cactus Fruit Salad)
