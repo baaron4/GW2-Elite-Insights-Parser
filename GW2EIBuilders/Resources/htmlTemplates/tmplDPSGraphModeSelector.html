@@ -44,13 +44,13 @@
         </ul>
         <ul class="nav nav-pills d-flex flex-wrap justify-content-center ml-3 scale85" :class="{'flex-row': !column, 'flex-column': column}">
             <li class="nav-item d-flex flex-row justify-content-center align-items-center">
-                <a class="nav-link" @click="data.graphmode = graphModeEnum.DPS" :class="{active: data.graphmode === graphModeEnum.DPS}">DPS</a>
+                <a class="nav-link" @click="data.graphmode = graphModeEnum.DPS" :class="{active: data.graphmode === graphModeEnum.DPS}">PS</a>
             </li>    
-            <li class="nav-item d-flex flex-row justify-content-center align-items-center" data-original-title="Centered DPS">
-                <a class="nav-link" @click="data.graphmode = graphModeEnum.CenteredDPS" :class="{active: data.graphmode === graphModeEnum.CenteredDPS}">Ctrd.DPS</a>
+            <li class="nav-item d-flex flex-row justify-content-center align-items-center" data-original-title="Centered">
+                <a class="nav-link" @click="data.graphmode = graphModeEnum.CenteredDPS" :class="{active: data.graphmode === graphModeEnum.CenteredDPS}">Ctrd.PS</a>
             </li>                     
             <li class="nav-item d-flex flex-row justify-content-center align-items-center">
-                <a class="nav-link" @click="data.graphmode = graphModeEnum.Damage" :class="{active: data.graphmode === graphModeEnum.Damage}">Damage</a>
+                <a class="nav-link" @click="data.graphmode = graphModeEnum.Damage" :class="{active: data.graphmode === graphModeEnum.Damage}">Cumulative</a>
             </li>
         </ul>
     </div>

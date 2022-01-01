@@ -44,16 +44,21 @@
                     class="icon"></a>
             </li>
             //-->
+                                 
+            <li v-if="hasBarrier" class="nav-item d-flex flex-row justify-content-center align-items-center" data-original-title="Barrier">
+                <a class="nav-link" @click="data.healingmode = healingModeEnum.Barrier" :class="{active: data.healingmode === healingModeEnum.Barrier}"><img src="https://wiki.guildwars2.com/images/thumb/c/cc/Barrier.png/30px-Barrier.png" alt="Barrier"
+                    class="icon"></a>
+            </li>  
         </ul>
         <ul class="nav nav-pills d-flex flex-wrap justify-content-center ml-3 scale85" :class="{'flex-row': !column, 'flex-column': column}">
             <li class="nav-item d-flex flex-row justify-content-center align-items-center">
-                <a class="nav-link" @click="data.graphmode = graphModeEnum.DPS" :class="{active: data.graphmode === graphModeEnum.DPS}">HPS</a>
+                <a class="nav-link" @click="data.graphmode = graphModeEnum.DPS" :class="{active: data.graphmode === graphModeEnum.DPS}">PS</a>
             </li>    
-            <li class="nav-item d-flex flex-row justify-content-center align-items-center" data-original-title="Centered DPS">
-                <a class="nav-link" @click="data.graphmode = graphModeEnum.CenteredDPS" :class="{active: data.graphmode === graphModeEnum.CenteredDPS}">Ctrd.HPS</a>
+            <li class="nav-item d-flex flex-row justify-content-center align-items-center" data-original-title="Centered">
+                <a class="nav-link" @click="data.graphmode = graphModeEnum.CenteredDPS" :class="{active: data.graphmode === graphModeEnum.CenteredDPS}">Ctrd.PS</a>
             </li>                     
             <li class="nav-item d-flex flex-row justify-content-center align-items-center">
-                <a class="nav-link" @click="data.graphmode = graphModeEnum.Damage" :class="{active: data.graphmode === graphModeEnum.Damage}">Healing</a>
+                <a class="nav-link" @click="data.graphmode = graphModeEnum.Damage" :class="{active: data.graphmode === graphModeEnum.Damage}">Cumulative</a>
             </li>
         </ul>
     </div>
@@ -78,6 +83,9 @@
             },
             healingModeEnum: function() {
                 return HealingType;
+            },
+            hasBarrier: function() {
+                return !!barrierStatsExtension;
             },
         }
     });

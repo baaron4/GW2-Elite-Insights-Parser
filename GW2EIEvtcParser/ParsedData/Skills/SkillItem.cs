@@ -108,6 +108,7 @@ namespace GW2EIEvtcParser.ParsedData
             {51713, "True Nature - Centaur" },
             {49052, "Soul Stone Venom" },
             {49077, "Soul Stone Venom Strike" },
+            {41714, "Mantra of Solace" }
         };
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
         {
@@ -133,6 +134,7 @@ namespace GW2EIEvtcParser.ParsedData
             {45128, "https://wiki.guildwars2.com/images/b/bf/Chapter_3-_Azure_Sun.png"},
             {41258, "https://wiki.guildwars2.com/images/d/d3/Chapter_1-_Searing_Spell.png"},
             {45022, "https://wiki.guildwars2.com/images/f/fd/Chapter_1-_Desert_Bloom.png"},
+            {40787, "https://wiki.guildwars2.com/images/f/fd/Chapter_1-_Desert_Bloom.png"},
             {46618, "https://wiki.guildwars2.com/images/a/a8/Flame_Rush.png"},
             {40635, "https://wiki.guildwars2.com/images/5/53/Chapter_2-_Igniting_Burst.png"},
             {42898, "https://wiki.guildwars2.com/images/6/6d/Epilogue-_Ashes_of_the_Just.png"},
@@ -167,10 +169,25 @@ namespace GW2EIEvtcParser.ParsedData
             {13980, "https://wiki.guildwars2.com/images/8/84/Windborne_Notes.png" },
             {43558, "https://wiki.guildwars2.com/images/7/73/Rugged_Growth.png" },
             {12836, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" }, // Water Blast Combo
+            {12825, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" }, // Water Blast Combo
             {46508, "https://wiki.guildwars2.com/images/f/ff/Echo_of_Truth.png" }, // Echo of Truth
             {54935, "https://render.guildwars2.com/file/E60C094A2349552EA6F6250D9B14E69BE91E4468/1128595.png" }, // Shredder Gyro damage
             {49052, "https://wiki.guildwars2.com/images/d/d6/Soul_Stone_Venom.png" }, // Soul Stone Venom
             {49077, "https://wiki.guildwars2.com/images/d/d6/Soul_Stone_Venom.png" }, // Soul Stone Venom Strike
+            {20479, "https://wiki.guildwars2.com/images/e/ec/Superior_Rune_of_Tormenting.png" },
+            {31707, "https://wiki.guildwars2.com/images/a/a2/Cultivated_Synergy.png" },
+            {31629, "https://wiki.guildwars2.com/images/a/a2/Cultivated_Synergy.png" },
+            {24241, "https://wiki.guildwars2.com/images/f/f9/Superior_Sigil_of_Water.png" },
+            {31371, "https://wiki.guildwars2.com/images/a/a9/Solar_Beam.png" },
+            {12567, "https://wiki.guildwars2.com/images/a/a3/Spirit_of_Nature.png" },
+            {29997, "https://wiki.guildwars2.com/images/f/f4/Healing_Prism.png" },
+            {29901, "https://wiki.guildwars2.com/images/5/5e/Life_from_Death.png" },
+            {46232, "https://wiki.guildwars2.com/images/a/a7/Breakrazor%27s_Bastion.png" },
+            {40774, "https://wiki.guildwars2.com/images/f/f0/Sand_Flare.png" },
+            {43759, "https://wiki.guildwars2.com/images/1/1e/Sand_Cascade.png" },
+            {31536, "https://wiki.guildwars2.com/images/f/ff/Astral_Wisp.png" },
+            {29863, "https://wiki.guildwars2.com/images/6/64/Live_Vicariously.png" },
+            {49103, "https://wiki.guildwars2.com/images/7/7a/Signet_of_the_Ether.png" },
             // Weaver attunements
             {Buff.FireDual, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
             {Buff.FireWater, "https://i.imgur.com/ar8Hn8G.png" },

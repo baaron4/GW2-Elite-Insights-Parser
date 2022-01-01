@@ -12,7 +12,7 @@ namespace GW2EIEvtcParser.EIData
         {
             // Trail of Anguish ? Unique effect?
             new EXTBarrierCastFinder(44663, 44663, EIData.InstantCastFinder.DefaultICD), // Desert Shroud
-            new EXTBarrierCastFinder(43448, 43448, EIData.InstantCastFinder.DefaultICD), // Sand Cascade
+            new EXTBarrierCastFinder(43448, 43759, EIData.InstantCastFinder.DefaultICD), // Sand Cascade
             // Sandstorm Shroud ? The detonation part is problematic
         };
 

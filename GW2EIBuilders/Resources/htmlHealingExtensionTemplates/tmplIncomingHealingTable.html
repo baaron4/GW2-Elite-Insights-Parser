@@ -8,16 +8,16 @@
                     <th class="text-left">Name</th>
                     <th>Account</th>
                     <th class="damage-cell" data-original-title="Healed">
-                        <img src="https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/20px-Healing.png" alt="Healed"
-                             class="icon icon-hover">
+                        <img src="https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/20px-Healing.png"
+                            alt="Healed" class="icon icon-hover">
                     </th>
                     <th class="damage-cell" data-original-title="Healing Power Healed">
                         <img src="https://wiki.guildwars2.com/images/8/81/Healing_Power.png" alt="Healing Power Healed"
-                             class="icon icon-hover">
+                            class="icon icon-hover">
                     </th>
                     <th class="damage-cell" data-original-title="Conversion Healed">
                         <img src="https://wiki.guildwars2.com/images/4/4a/Litany_of_Wrath.png" alt="Conversion Healed"
-                             class="icon icon-hover">
+                            class="icon icon-hover">
                     </th>
                     <!--  
                     <th class="damage-cell" data-original-title="Hybrid Healed">
@@ -26,9 +26,13 @@
                                                   class="icon">
                     </th>
                     //-->
-                    <th class="damage-cell" data-original-title="Downed Healed" >
+                    <th class="damage-cell" data-original-title="Downed Healed">
                         <img src="https://wiki.guildwars2.com/images/3/3d/Downed_ally.png" alt="Downed Healing"
                             class="icon icon-hover">
+                    </th>
+                    <th v-if="hasBarrier" data-original-title="Barrier Received" class="damage-cell">
+                        <img src="https://wiki.guildwars2.com/images/thumb/c/cc/Barrier.png/30px-Barrier.png"
+                            alt="Barrier Received" class="icon">
                     </th>
                 </tr>
             </thead>
@@ -40,10 +44,10 @@
                             style="display:none">{{row.player.profession}}</span>
                     </td>
                     <td class="text-left">{{row.player.name}}</td>
-                    <td>{{row.player.acc}}</td>               
+                    <td>{{row.player.acc}}</td>
                     <td v-for="(value, id) in row.incomingHeal">
-                        {{value}}                
-                    </td>              
+                        {{value}}
+                    </td>
                 </tr>
             </tbody>
             <tfoot>
@@ -51,10 +55,10 @@
                     <td></td>
                     <td></td>
                     <td class="text-left">{{sum.name}}</td>
-                    <td></td>             
+                    <td></td>
                     <td v-for="(value, id) in sum.incomingHeal">
-                        {{value}}                
-                    </td>               
+                        {{value}}
+                    </td>
                 </tr>
             </tfoot>
         </table>
@@ -68,7 +72,7 @@
         mixins: [numberComponent],
         data: function () {
             return {
-                cache: new Map(),               
+                cache: new Map(),
                 sortdata: {
                     order: "desc",
                     index: 4
@@ -85,7 +89,7 @@
             initializeTable(this.tableid, this.sortdata);
         },
         computed: {
-            tableid: function() {
+            tableid: function () {
                 return "incoming-heal-table";
             },
             phase: function () {
@@ -94,6 +98,12 @@
             hPhase: function () {
                 return healingStatsExtension.healingPhases[this.phaseindex];
             },
+            hasBarrier: function () {
+                return !!barrierStatsExtension;
+            },
+            bPhase: function () {
+                return barrierStatsExtension.barrierPhases[this.phaseindex];
+            },
             tableData: function () {
                 if (this.cache.has(this.phaseindex)) {
                     return this.cache.get(this.phaseindex);
@@ -101,10 +111,16 @@
                 var rows = [];
                 var sums = [];
                 var total = [0, 0, 0, 0];
+                if (this.hasBarrier) {
+                    total.push(0);
+                }
                 var groups = [];
                 var i;
                 for (i = 0; i < this.hPhase.incomingHealingStats.length; i++) {
-                    var incomingHeal = this.hPhase.incomingHealingStats[i];
+                    var incomingHeal = this.hPhase.incomingHealingStats[i].slice();
+                    if (this.hasBarrier) {
+                        incomingHeal = incomingHeal.concat(this.bPhase.incomingBarrierStats[i])
+                    }
                     var player = logData.players[i];
                     if (player.isFake) {
                         continue;
@@ -115,6 +131,9 @@
                     });
                     if (!groups[player.group]) {
                         groups[player.group] = [0, 0, 0, 0];
+                        if (this.hasBarrier) {
+                            groups[player.group].push(0);
+                        }
                     }
                     for (var j = 0; j < total.length; j++) {
                         total[j] += incomingHeal[j];
