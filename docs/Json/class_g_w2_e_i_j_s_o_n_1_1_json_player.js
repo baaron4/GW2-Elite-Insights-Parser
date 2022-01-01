@@ -10,6 +10,8 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_player =
     [ "DamageModifiersTarget", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a66dfa3821ed381c868664705249bd7af", null ],
     [ "DeathRecap", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a49deae171a69000e6c2b7d95b1708944", null ],
     [ "DpsTargets", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a1353f113c4abc3b85f8e99296ecd9ccd", null ],
+    [ "EXTBarrierStats", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#abada015c3db296976d3b9b3d657e0916", null ],
+    [ "EXTHealingStats", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#af072de11689689ee7ae67eea8140035b", null ],
     [ "FriendlyNPC", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a2c1c95eacc9d6e6ef230e113c1377896", null ],
     [ "Group", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a32d905a979ecfbb52c44d77f76900a55", null ],
     [ "GroupBuffs", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#abf1e6ce5e9e9628e47f2e590df7ceb7f", null ],

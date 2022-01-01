@@ -1,11 +1,14 @@
 var searchData=
 [
+  ['barrier',['Barrier',['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_barrier_statistics_1_1_e_x_t_json_outgoing_barrier_statistics.html#ade4e92ffd844fb8d3e23cd24b60d618f',1,'GW2EIJSON.EXTJsonBarrierStatistics.EXTJsonOutgoingBarrierStatistics.Barrier()'],['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_barrier_statistics_1_1_e_x_t_json_incoming_barrier_statistics.html#a03cfc11d77045f2005b14a3a2cba7c74',1,'GW2EIJSON.EXTJsonBarrierStatistics.EXTJsonIncomingBarrierStatistics.Barrier()']]],
+  ['barrier1s',['Barrier1S',['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_barrier_stats.html#af32fc2ecd001d3923d9644b96bc0d93a',1,'GW2EIJSON::EXTJsonPlayerBarrierStats']]],
   ['barrierpercents',['BarrierPercents',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a4707cba9ace6d9630fce69a8407edcbc',1,'GW2EIJSON::JsonActor']]],
   ['blocked',['Blocked',['../class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html#a4d097e45c3e26855a73a610028ca3299',1,'GW2EIJSON.JsonDamageDist.Blocked()'],['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#ad4387cf7a62f1133e221e0a5d843d2a1',1,'GW2EIJSON.JsonStatistics.JsonGameplayStats.Blocked()']]],
   ['blockedcount',['BlockedCount',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#ac13b1dad85a76462662b862e18cfc319',1,'GW2EIJSON::JsonStatistics::JsonDefensesAll']]],
   ['boonsstates',['BoonsStates',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a9dfa1cfdf66f0fc5485b3c00596a9f82',1,'GW2EIJSON::JsonActor']]],
   ['boonstrips',['BoonStrips',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_player_support.html#adbb845e8274a18940f2bab7d5faeee36',1,'GW2EIJSON::JsonStatistics::JsonPlayerSupport']]],
   ['boonstripstime',['BoonStripsTime',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_player_support.html#a716993d309daba77afa21fcf1b88c12c',1,'GW2EIJSON::JsonStatistics::JsonPlayerSupport']]],
+  ['bps',['Bps',['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_barrier_statistics_1_1_e_x_t_json_outgoing_barrier_statistics.html#aebf887d094b2ae0bd1b2efdce510b5e6',1,'GW2EIJSON::EXTJsonBarrierStatistics::EXTJsonOutgoingBarrierStatistics']]],
   ['breakbardamage',['BreakbarDamage',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_d_p_s.html#a2b0a1a0382750dd30d5e14bec1c1de16',1,'GW2EIJSON::JsonStatistics::JsonDPS']]],
   ['breakbardamage1s',['BreakbarDamage1S',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#ababaf2cfc816c6c1cfc57a81c632a321',1,'GW2EIJSON::JsonActor']]],
   ['breakbardamagetaken',['BreakbarDamageTaken',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#a93cdf7072fcd876b2aaaa3210b7fd77b',1,'GW2EIJSON::JsonStatistics::JsonDefensesAll']]],

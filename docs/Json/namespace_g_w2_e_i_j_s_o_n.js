@@ -1,11 +1,18 @@
 var namespace_g_w2_e_i_j_s_o_n =
 [
+    [ "EXTJsonBarrierDist", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_barrier_dist.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_barrier_dist" ],
+    [ "EXTJsonBarrierStatistics", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_barrier_statistics.html", [
+      [ "EXTJsonIncomingBarrierStatistics", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_barrier_statistics_1_1_e_x_t_json_incoming_barrier_statistics.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_barrier_statistics_1_1_e_x_t_json_incoming_barrier_statistics" ],
+      [ "EXTJsonOutgoingBarrierStatistics", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_barrier_statistics_1_1_e_x_t_json_outgoing_barrier_statistics.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_barrier_statistics_1_1_e_x_t_json_outgoing_barrier_statistics" ]
+    ] ],
     [ "EXTJsonHealingDist", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_dist.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_dist" ],
     [ "EXTJsonHealingStatistics", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics.html", [
       [ "EXTJsonIncomingHealingStatistics", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_incoming_healing_statistics.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_incoming_healing_statistics" ],
       [ "EXTJsonOutgoingHealingStatistics", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics" ]
     ] ],
+    [ "EXTJsonMinionsBarrierStats", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_minions_barrier_stats.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_minions_barrier_stats" ],
     [ "EXTJsonMinionsHealingStats", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_minions_healing_stats.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_minions_healing_stats" ],
+    [ "EXTJsonPlayerBarrierStats", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_barrier_stats.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_barrier_stats" ],
     [ "EXTJsonPlayerHealingStats", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_healing_stats.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_healing_stats" ],
     [ "JsonActor", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html", "class_g_w2_e_i_j_s_o_n_1_1_json_actor" ],
     [ "JsonActorCombatReplayData", "class_g_w2_e_i_j_s_o_n_1_1_json_actor_combat_replay_data.html", "class_g_w2_e_i_j_s_o_n_1_1_json_actor_combat_replay_data" ],
