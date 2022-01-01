@@ -161,6 +161,9 @@
                 var rows = [];
                 var sums = [];
                 var total = [0, 0, 0, 0, 0, 0, 0, 0];
+                if (this.hasBarrier) {
+                    total = tocal.concat([0,0]);
+                }
                 var groups = [];
                 for (var i = 0; i < this.hPhase.outgoingHealingStats.length; i++) {
                     var hpsStat = this.hPhase.outgoingHealingStats[i].slice();
@@ -186,7 +189,10 @@
                     //
                     var player = logData.players[i];
                     if (!groups[player.group]) {
-                        groups[player.group] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                        groups[player.group] = [0, 0, 0, 0, 0, 0, 0, 0];
+                        if (this.hasBarrier) {
+                            groups[player.group] = groups[player.group].concat([0,0]);
+                        }
                     }
                     for (var j = 0; j < hps.length; j++) {
                         total[j] += hps[j];
