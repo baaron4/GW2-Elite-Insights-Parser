@@ -285,26 +285,17 @@ namespace GW2EIBuilders.Properties {
         ///   Looks up a localized string similar to /*jshint esversion: 6 */
         ///&quot;use strict&quot;;
         ///
-        ///function healingGraphTypeEnumToString(mode) {
+        ///function healingGraphTypeEnumToString(mode, healingMode) {
         ///    var name = &quot;&quot;;
         ///    switch (mode) {
         ///        case GraphType.DPS:
-        ///            name = &quot;HPS&quot;;
+        ///            name = healingMode === HealingType.Barrier ? &quot;BPS&quot; : &quot;HPS&quot;;
         ///            break;
         ///        case GraphType.CenteredDPS:
-        ///            name = &quot;Centered HPS&quot;;
+        ///            name = healingMode === HealingType.Barrier ? &quot;Centered BPS&quot; : &quot;Centered HPS&quot;;
         ///            break;
         ///        case GraphType.Damage:
-        ///            name = &quot;Healing&quot;;
-        ///            break;
-        ///        default:
-        ///            break;
-        ///    }
-        ///    return name;
-        ///}
-        ///
-        ///function healingTypeEnumToString(mode) {
-        ///    var name = &quot;&quot;;        /// [rest of string was truncated]&quot;;.
+        ///            name = healingMode === HealingType.Barrier ? &quot;Barrier&quot; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string healingExtFunctions {
             get {
@@ -418,6 +409,68 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
+        ///        &lt;div v-if=&quot;player.minions.length &gt; 0&quot;&gt;
+        ///            &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///                &lt;li&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === -1}&quot; @click=&quot;distmode = -1&quot;&gt;{{player.name}}&lt;/a&gt;
+        ///                &lt;/li&gt;
+        ///                &lt;li v-for=&quot;(minion, mindex) in player.minions&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === mindex}&quot;
+        ///                        @click=&quot;distmode = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
+        ///                &lt;/li&gt; [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplBarrierDistPlayer {
+            get {
+                return ResourceManager.GetString("tmplBarrierDistPlayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;div v-if=&quot;actor !== null&quot; class=&quot;mb-1 mt-1&quot;&gt;
+        ///            &lt;div v-if=&quot;isminion&quot;&gt;
+        ///                &lt;p style=&quot;display: table-row;&quot;&gt;
+        ///                    {{actor.name}} did {{round3(100*barrierdist.contributedBarrier/barrierdist.totalBarrier)}}% of its master&apos;s total
+        ///                    {{istarget ? &apos;Target&apos; :&apos;&apos;}} barrier ({{barrierdist.contributedBarrier}})
+        ///                &lt;/p&gt;
+        ///            &lt;/div&gt;
+        ///            &lt;div v-else&gt;
+        ///                &lt;p style=&quot;display: table-row;&quot;&gt;
+        ///     [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplBarrierDistTable {
+            get {
+                return ResourceManager.GetString("tmplBarrierDistTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;barrierdist-table-component :barrierist=&quot;barriertaken&quot; :tableid=&quot;tableid&quot; :actorindex=&quot;-1&quot; :minionindex=&quot;-1&quot; :istarget=&quot;false&quot; :player=&quot;true&quot;
+        ///        :phaseindex=&quot;phaseindex&quot;&gt;
+        ///    &lt;/barrierdist-table-component&gt;
+        ///&lt;/template&gt;
+        ///
+        ///&lt;script&gt;
+        ///    Vue.component(&apos;barriertaken-component&apos;, {
+        ///        props: [&apos;actorindex&apos;, &apos;tableid&apos;,
+        ///            &apos;phaseindex&apos;
+        ///        ],
+        ///        template: `${template}`,
+        ///        computed: {
+        ///            barriertaken: function () {
+        ///                return barrierSta [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplBarrierTaken {
+            get {
+                return ResourceManager.GetString("tmplBarrierTaken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
         ///        &lt;div class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;
         ///            &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center scale85&quot;&gt;
         ///                &lt;li class=&quot;nav-item&quot;&gt;
@@ -513,14 +566,11 @@ namespace GW2EIBuilders.Properties {
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div class=&quot;d-flex align-items-center actor-rotation&quot;&gt;
         ///        &lt;div v-if=&quot;rotation.current&quot;&gt;
-        ///            &lt;img :src=&quot;rotation.current.skill.icon&quot; :alt=&quot;rotation.current.skill.name&quot; :title=&quot;rotation.current.skill.name&quot;
-        ///                class=&quot;icon-ll&quot; :class=&quot;{&apos;rot-cancelled&apos;: rotation.current.end === 2}&quot;&gt;
+        ///            &lt;img :src=&quot;rotation.current.skill.icon&quot; :alt=&quot;rotation.current.skill.name&quot;
+        ///                :title=&quot;rotation.current.skill.name&quot; class=&quot;icon-ll&quot;
+        ///                :class=&quot;{&apos;rot-cancelled&apos;: rotation.current.type === 2, &apos;rot-unknown&apos;: rotation.current.type === 0, &apos;rot-animfull&apos;: rotation.current.type === 3, &apos;rot-instant&apos;: rotation.current.type === 4}&quot;&gt;
         ///        &lt;/div&gt;
-        ///        &lt;div v-else class=&quot;empty-icon-ll&quot;&gt;
-        ///    
-        ///        &lt;/div&gt;
-        ///        &lt;div v-for=&quot;next in rotation.nexts&quot;&gt;
-        ///            &lt;img :src=&quot;next.skill.icon&quot; :alt=&quot;next.skill.na [rest of string was truncated]&quot;;.
+        ///        &lt;div v-else  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayActorRotation {
             get {
@@ -598,12 +648,13 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div class=&quot;d-flex flex-row flex-wrap justify-content-center align-items-center&quot;&gt;
-        ///        &lt;div class=&quot;combat-replay-mechanics-list-container d-flex d-flex-row justify-content-center w-100 scrollable-y&quot; style=&quot;max-width:450px&quot;&gt;
+        ///        &lt;div class=&quot;combat-replay-mechanics-list-container d-flex d-flex-row justify-content-center w-100 scrollable-y&quot;
+        ///            style=&quot;max-width:450px&quot;&gt;
         ///            &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
         ///                &lt;thead&gt;
         ///                    &lt;tr&gt;
         ///                        &lt;th style=&quot;min-width:80px&quot;&gt;Time&lt;/th&gt;
-        ///                        &lt;th style=&quot;min-width:120px&quot; cla [rest of string was truncated]&quot;;.
+        ///                        &lt;th style=&quot;min-wid [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayMechanicsList {
             get {
@@ -616,8 +667,8 @@ namespace GW2EIBuilders.Properties {
         ///    &lt;div class=&quot;d-flex flex-row flex-wrap justify-content-center align-items-start mb-2&quot;&gt;
         ///        &lt;div class=&quot;d-flex flex-column scrollable-y&quot; style=&quot;max-height: 250px;&quot;&gt;
         ///            &lt;div v-for=&quot;group in groups&quot; class=&quot;d-flex flex-row align-items-center ml-2 mt-1&quot; style=&quot;width:450px;&quot;&gt;
-        ///                &lt;h5 class=&quot;mt-2&quot; style=&quot;min-width:80px;max-width:80px; text-align: center;&quot;&gt;Group {{group.id}}&lt;/h5&gt;
-        ///                &lt;div class=&quot;d-flex flex-row flex-wrap align-items-center ml-1&quot; style=&quot;max-wid [rest of string was truncated]&quot;;.
+        ///                &lt;h5 v-show=&quot;!singleGroup&quot; class=&quot;mt-2&quot; style=&quot;min-width:80px;max-width:80px; text-align: center;&quot;&gt;Group {{group.id}}&lt;/h5&gt;
+        ///                &lt;div class=&quot;d-flex flex-row flex-wrap align-items-cente [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayPlayerSelect {
             get {
@@ -1018,11 +1069,10 @@ namespace GW2EIBuilders.Properties {
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;     
         ///        &lt;ul class=&quot;nav nav-pills d-flex flex-wrap justify-content-center mr-3 scale85&quot; :class=&quot;{&apos;flex-row&apos;: !column, &apos;flex-column&apos;: column}&quot;&gt;
-        ///            &lt;li class=&quot;nav-item&quot;&gt;
+        ///            &lt;li class=&quot;nav-item d-flex flex-row justify-content-center align-items-center&quot;&gt;
         ///                &lt;a class=&quot;nav-link&quot; @click=&quot;data.dpsmode = 0&quot; :class=&quot;{active: data.dpsmode === 0}&quot;&gt;Full&lt;/a&gt;
-        ///            &lt;/li&gt;            
-        ///            &lt;li v-if=&quot;phaseduration &gt; 4&quot; class=&quot;nav-item&quot;&gt;
-        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;data [rest of string was truncated]&quot;;.
+        ///            &lt;/li&gt;
+        ///            &lt;li v-if=&quot;phaseduration &gt; 4&quot; class=&quot;nav-item d-fle [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplDPSGraphModeSelector {
             get {
@@ -1278,11 +1328,10 @@ namespace GW2EIBuilders.Properties {
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;     
         ///        &lt;ul class=&quot;nav nav-pills d-flex flex-wrap justify-content-center mr-3 scale85&quot; :class=&quot;{&apos;flex-row&apos;: !column, &apos;flex-column&apos;: column}&quot;&gt;
-        ///            &lt;li class=&quot;nav-item&quot;&gt;
+        ///            &lt;li class=&quot;nav-item d-flex flex-row justify-content-center align-items-center&quot;&gt;
         ///                &lt;a class=&quot;nav-link&quot; @click=&quot;data.hpsmode = 0&quot; :class=&quot;{active: data.hpsmode === 0}&quot;&gt;Full&lt;/a&gt;
-        ///            &lt;/li&gt;            
-        ///            &lt;li v-if=&quot;phaseduration &gt; 4&quot; class=&quot;nav-item&quot;&gt;
-        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;data [rest of string was truncated]&quot;;.
+        ///            &lt;/li&gt;
+        ///            &lt;li v-if=&quot;phaseduration &gt; 4&quot; class=&quot;nav-item d-fle [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplHPSGraphModeSelector {
             get {
@@ -1474,14 +1523,13 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div&gt;
-        ///        &lt;img class=&quot;icon mb-1&quot; src=&quot;https://i.imgur.com/nSYuby8.png&quot; :data-original-title=&quot;scoreExpl&quot; /&gt;
+        ///    &lt;div class=&quot;d-flex flex-row&quot;&gt;
+        ///        &lt;img class=&quot;icon mr-1&quot; src=&quot;https://i.imgur.com/nSYuby8.png&quot; :data-original-title=&quot;scoreExpl&quot; /&gt;
         ///        &lt;div class=&quot;d-flex flex-column&quot; style=&quot;max-width: 900px;&quot;&gt;
         ///            &lt;div v-for=&quot;group in groups&quot; class=&quot;d-flex flex-wrap mb-1&quot;&gt;
-        ///                &lt;div v-for=&quot;player in group&quot; class=&quot;player-cell d-flex flex-column align-items-center justify-content-center&quot; :class=&quot;{active: player.active}&quot;
-        ///                    @click=&quot;select(player.id)&quot;&gt;
-        ///                    &lt;div&gt;
-        ///       [rest of string was truncated]&quot;;.
+        ///                &lt;div v-for=&quot;player in group&quot;
+        ///                    class=&quot;player-cell d-flex flex-column align-items-center justify-content-center&quot;
+        ///                    :class=&quot;{active: player.active}&quot; @click=&quot;select(pl [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayers {
             get {
@@ -1687,13 +1735,17 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;div class=&quot;d-flex flex-column&quot; style=&quot;max-width: 900px;&quot;&gt;
-        ///            &lt;div v-for=&quot;group in groups&quot; class=&quot;d-flex flex-wrap mb-1&quot;&gt;
-        ///                &lt;div v-for=&quot;player in group&quot; class=&quot;player-cell d-flex flex-column align-items-center justify-content-center&quot; :class=&quot;{active: player.targetActive}&quot;
-        ///                    @click=&quot;select(player.id)&quot;&gt;
-        ///                    &lt;div&gt;
-        ///                        &lt;img :src=&quot;player.icon&quot; :alt=&quot;player.profession&quot; class=&quot;icon&quot;
-        ///                    [rest of string was truncated]&quot;;.
+        ///        &lt;div class=&quot;d-flex flex-column&quot;&gt;
+        ///            &lt;div v-for=&quot;group in groups&quot; class=&quot;d-flex flex-row mb-1 align-items-center&quot;&gt;
+        ///                &lt;div&gt;
+        ///                    &lt;ul class=&quot;scale85 nav nav-pills&quot;&gt;
+        ///                        &lt;li class=&quot;nav-item&quot;&gt;
+        ///                            &lt;a class=&quot;nav-link&quot; @click=&quot;selectGroup(group)&quot;&gt;
+        ///                                Select
+        ///                            &lt;/a&gt;
+        ///                        &lt;/li&gt;
+        ///                    &lt;/ul&gt;
+        ///                &lt;/di [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplTargetPlayers {
             get {

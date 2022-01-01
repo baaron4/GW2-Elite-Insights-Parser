@@ -80,7 +80,7 @@
                     dist.contributedHealing += targetDist.contributedHealing;
                     dist.contributedDownedHealing += targetDist.contributedDownedHealing;
                     dist.totalHealing += targetDist.totalHealing;
-                    dist.totalCasting += targetDist.totalCasting;
+                    dist.totalCasting = targetDist.totalCasting;
                     var distribution = targetDist.distribution;
                     for (var k = 0; k < distribution.length; k++) {
                         var targetDistribution = distribution[k];
