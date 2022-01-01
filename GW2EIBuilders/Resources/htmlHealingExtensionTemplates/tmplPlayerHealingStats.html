@@ -6,13 +6,21 @@
             <li>
                 <a class="nav-link" :class="{active: tabmode === 0}" @click="tabmode = 0">
                     Outgoing Healing
-                    Distribution
+                </a>
+            </li>
+            <li v-if="hasBarrier">
+                <a class="nav-link" :class="{active: tabmode === 6}" @click="tabmode = 6">
+                    Outgoing Barrier
                 </a>
             </li>
             <li>
                 <a class="nav-link" :class="{active: tabmode === 1}" @click="tabmode = 1">
                     Incoming Healing
-                    Distribution
+                </a>
+            </li>
+            <li v-if="hasBarrier">
+                <a class="nav-link" :class="{active: tabmode === 7}" @click="tabmode = 7">
+                    Incoming Barrier
                 </a>
             </li>
             <li>
@@ -59,7 +67,10 @@
         computed: {
             players: function () {
                 return logData.players;
-            }
+            },
+            hasBarrier: function() {
+                return !!barrierStatsExtension;
+            },
         }
     });
 </script>

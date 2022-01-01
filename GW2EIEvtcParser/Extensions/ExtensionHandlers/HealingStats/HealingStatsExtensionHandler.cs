@@ -16,6 +16,7 @@ namespace GW2EIEvtcParser.Extensions
         {
             2654,  // Crashing Waves
             5549,  // Water Blast (Elementalist)
+            5510,  // Water Trident
             5570,  // Signet of Water
             5595,  // Water Arrow
             9080,  // Leap of Faith
@@ -43,6 +44,7 @@ namespace GW2EIEvtcParser.Extensions
             10619, // Deadly Feast
             10640, // Life Leech (UW)
             12424, // Blood Frenzy
+            13684, // Lesser Symbol of Protection (Writ of Persistence)
             15259, // Nourishment (Omnomberry Ghost)
             21656, // Arcane Brilliance
             24800, // Nourishment (Prickly Pear Pie AND Bowl of Cactus Fruit Salad)
@@ -333,7 +335,7 @@ namespace GW2EIEvtcParser.Extensions
                 operation.UpdateProgressWithCancellationCheck("Attached " + _barrierEvents.Count + " barrier events to CombatData");
             }
             var running = RunningExtensioInternal.Count;
-            operation.UpdateProgressWithCancellationCheck(running != 1 ? running + " players have the extesnion running" : running + " player has the extension running");
+            operation.UpdateProgressWithCancellationCheck(running != 1 ? running + " players have the extension running" : running + " player has the extension running");
             //
             operation.UpdateProgressWithCancellationCheck("Attached healing extension combat events");
         }

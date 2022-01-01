@@ -172,6 +172,9 @@ namespace GW2EIBuilders
                 Properties.Resources.tmplPlayerHealingTab,
                 Properties.Resources.tmplHealingTaken,
                 Properties.Resources.tmplPlayerHealingTabGraph,
+                Properties.Resources.tmplBarrierDistPlayer,
+                Properties.Resources.tmplBarrierDistTable,
+                Properties.Resources.tmplBarrierTaken,
             };
             var res = new List<string>();
             foreach (string template in templates)
