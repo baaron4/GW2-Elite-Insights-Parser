@@ -281,7 +281,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Number of Active Combat Minions", NumberOfActiveCombatMinionsID, Source.Common, BuffStackType.Stacking, 99, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/ad/Superior_Rune_of_the_Ranger.png"),
                 new Buff("Number of Clones", NumberOfClonesID, Source.Common, BuffStackType.Stacking, 99, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/24/Superior_Rune_of_the_Mesmer.png"),
                 new Buff("Downed", 770, Source.Common, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/dd/Downed.png"),
-                new Buff("Exhaustion", 46842, Source.Common, BuffStackType.Queue, 3, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/88/Exhaustion.png"),
+                new Buff("Exhaustion", 46842, Source.Common, BuffStackType.Queue, 3, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/8/88/Exhaustion.png"),
                 new Buff("Stealth", 13017, Source.Common, BuffStackType.Queue, 5, BuffClassification.Support, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
                 new Buff("Hide in Shadows", 10269, Source.Common, BuffStackType.Queue, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
                 new Buff("Revealed", 890, Source.Common, BuffClassification.Support, "https://wiki.guildwars2.com/images/d/db/Revealed.png"),
@@ -302,7 +302,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Exposed (48209)", 48209, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/6b/Exposed.png"),
                 new Buff("Exposed (31589)", 31589, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/6b/Exposed.png"),
                 new Buff("Unblockable",36781, Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/f0/Unblockable_%28effect%29.png",GW2Builds.February2020Balance , GW2Builds.EndOfLife),
-                new Buff("Encumbered",1159, Source.Common, BuffStackType.Queue, 9, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d7/Encumbered.png"),
+                new Buff("Encumbered",1159, Source.Common, BuffStackType.Queue, 9, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/d/d7/Encumbered.png"),
                 new Buff("Celeritas Spores", 27048, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/7/7b/Blazing_Speed_Mushrooms.png"),
                 //Auras
                 new Buff("Chaos Aura", 10332, Source.Common, BuffClassification.Support,"https://wiki.guildwars2.com/images/e/ec/Chaos_Aura.png"),
@@ -395,9 +395,9 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> FightSpecific = new List<Buff>
         {
                 // Generic
-                new Buff("Spectral Agony", 38077, Source.FightSpecific,BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/70/Spectral_Agony.png" ),
-                new Buff("Agony", 15773, Source.FightSpecific,BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/be/Agony.png" ),
-                new Buff("Hamstrung", 47856, Source.FightSpecific,BuffStackType.Stacking, 99, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b9/Unseen_Burden.png" ),
+                new Buff("Spectral Agony", 38077, Source.FightSpecific,BuffStackType.Stacking, 25, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/7/70/Spectral_Agony.png" ),
+                new Buff("Agony", 15773, Source.FightSpecific,BuffStackType.Stacking, 25, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/b/be/Agony.png" ),
+                new Buff("Hamstrung", 47856, Source.FightSpecific,BuffStackType.Stacking, 99, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/b/b9/Unseen_Burden.png" ),
                 new Buff("Enraged (?)", 18711, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 new Buff("Enraged (??)", 23235, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 new Buff("Enraged 1 (100%)", 50070, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
@@ -461,7 +461,7 @@ namespace GW2EIEvtcParser.EIData
                 // Gorseval
                 new Buff("Spirited Fusion",31722, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/eb/Spirited_Fusion.png"),
                 new Buff("Protective Shadow", 31877, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/8/87/Protective_Shadow.png"),
-                new Buff("Ghastly Prison", 31623, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/62/Ghastly_Prison.png"),
+                new Buff("Ghastly Prison", 31623, Source.FightSpecific, BuffClassification.Debuff,"https://wiki.guildwars2.com/images/6/62/Ghastly_Prison.png"),
                 new Buff("Vivid Echo", 31548, Source.FightSpecific, BuffStackType.Queue, 5, BuffClassification.Other,"https://wiki.guildwars2.com/images/4/4f/Vivid_Echo.png"),
                 new Buff("Spectral Darkness", 31498, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other,"https://wiki.guildwars2.com/images/a/a8/Spectral_Darkness.png"),
                 // Sabetha    
@@ -480,7 +480,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Slow Burn", 34464, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/6e/Heat_Wave_%28Matthias_Gabrel_effect%29.png"),
                 new Buff("Targeted", 34392, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
                 new Buff("Target!", 34393, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other,"https://wiki.guildwars2.com/images/0/09/Target.png"),
-                new Buff("Locust Trail", 34439, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/0/09/Target.png"),
+                new Buff("Locust Trail", 34439, Source.FightSpecific, BuffClassification.Debuff,"https://wiki.guildwars2.com/images/0/09/Target.png"),
                 // Matthias
                 new Buff("Blood Shield Abo",34376, Source.FightSpecific, BuffStackType.Stacking, 18, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
                 new Buff("Blood Shield",34518, Source.FightSpecific, BuffStackType.Stacking, 18, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/a6/Blood_Shield.png"),
@@ -513,13 +513,13 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Gaining Power",35075, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png"),            
                 // Twisted Castle
                 new Buff("Spatial Distortion", 34918, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7a/Bloodstone_Blessed.png" ),
-                new Buff("Madness", 35006, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/ee/Madness.png" ),
+                new Buff("Madness", 35006, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/e/ee/Madness.png" ),
                 new Buff("Still Waters", 35106, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/5c/Still_Waters_%28effect%29.png" ),
                 new Buff("Soothing Waters", 34955, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/8f/Soothing_Waters.png" ),
                 new Buff("Chaotic Haze", 34963, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/48/Lava_Font.png" ),
                 new Buff("Creeping Pursuit", 34927, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/f8/Creeping_Pursuit.png" ),
                 // Xera      
-                new Buff("Derangement",34965, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/ca/Derangement.png"),
+                new Buff("Derangement",34965, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/c/ca/Derangement.png"),
                 new Buff("Bending Chaos",35084, Source.FightSpecific, BuffStackType.Stacking, 11, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/39/Target%21.png"),
                 new Buff("Shifting Chaos",35162, Source.FightSpecific, BuffStackType.Stacking, 11, BuffClassification.Other, "https://wiki.guildwars2.com/images/0/04/Shifting_Chaos.png"),
                 new Buff("Twisting Chaos",35032, Source.FightSpecific, BuffStackType.Stacking, 11, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/60/Twisting_Chaos.png"),
@@ -529,9 +529,9 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Void Zone",34883, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/56/Void_Zone.png"),
                 //////////////////////////////////////////////
                 // Cairn        
-                new Buff("Shared Agony", 38049, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/5/53/Shared_Agony.png"),
+                new Buff("Shared Agony", 38049, Source.FightSpecific, BuffClassification.Debuff,"https://wiki.guildwars2.com/images/5/53/Shared_Agony.png"),
                 new Buff("Enraged (Cairn)", 37675, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png"),
-                new Buff("Unseen Burden", 38153, Source.FightSpecific, BuffStackType.Stacking , 99, BuffClassification.Other,"https://wiki.guildwars2.com/images/b/b9/Unseen_Burden.png"),
+                new Buff("Unseen Burden", 38153, Source.FightSpecific, BuffStackType.Stacking , 99, BuffClassification.Debuff,"https://wiki.guildwars2.com/images/b/b9/Unseen_Burden.png"),
                 new Buff("Countdown", 38098, Source.FightSpecific, BuffStackType.Stacking , 10, BuffClassification.Other,"https://wiki.guildwars2.com/images/0/05/Countdown.png"),
                 new Buff("Gaze Avoidance", 37714, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/1/10/Gaze_Avoidance.png"),
                 // MO             
@@ -549,7 +549,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Soul Swarm",37892, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/0/0e/Soul_Swarm_%28effect%29.png"),
                 // Deimos
                 new Buff("Unnatural Signet",38224, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png"),
-                new Buff("Weak Minded",38187, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/38/Unseen_Burden_%28Deimos%29.png"),
+                new Buff("Weak Minded",38187, Source.FightSpecific, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/3/38/Unseen_Burden_%28Deimos%29.png"),
                 new Buff("Tear Instability",37733, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/11/Tear_Instability.png"),
                 new Buff("Form Up and Advance!",37871, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/56/Form_Up_and_Advance%21.png"),
                 new Buff("Devour", 37718, Source.FightSpecific, BuffStackType.Stacking , 99, BuffClassification.Other,"https://wiki.guildwars2.com/images/3/3d/Devour.png"),
@@ -558,18 +558,18 @@ namespace GW2EIEvtcParser.EIData
                 // Soulless Horror
                 new Buff("Exile's Embrace",48349, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b4/Exile%27s_Embrace.png"),
                 new Buff("Fixated (SH)",47434, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
-                new Buff("Necrosis",47414, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/47/Ichor.png"),
+                new Buff("Necrosis",47414, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/4/47/Ichor.png"),
                 // River
-                new Buff("Soul Siphon", 47470, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/f/f7/Soul_Siphon.png"),
+                new Buff("Soul Siphon", 47470, Source.FightSpecific, BuffClassification.Debuff,"https://wiki.guildwars2.com/images/f/f7/Soul_Siphon.png"),
                 new Buff("Desmina's Protection", 47219, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/b/b3/Desmina%27s_Protection.png"),
                 new Buff("Follower's Asylum", 47122, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/b/b3/Desmina%27s_Protection.png"),
                 new Buff("Spirit Form", 48331, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/2/2e/Spirit_Form_%28Hall_of_Chains%29.png"),
                 new Buff("Mortal Coil (River)",48154, Source.FightSpecific, BuffStackType.Stacking, 30, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/41/Mortal_Coil.png"),
                 new Buff("Energy Threshold (River)", 47758, Source.FightSpecific, BuffStackType.Stacking, 5, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/2e/Spirit_Form_%28Hall_of_Chains%29.png"),
                 // Broken King          
-                new Buff("Frozen Wind", 47776, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other,"https://wiki.guildwars2.com/images/3/3a/Frozen_Wind.png"),
+                new Buff("Frozen Wind", 47776, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Debuff,"https://wiki.guildwars2.com/images/3/3a/Frozen_Wind.png"),
                 new Buff("Shield of Ice", 47595, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 99, BuffClassification.Other,"https://wiki.guildwars2.com/images/3/38/Shield_of_Ice.png"),
-                new Buff("Glaciate", 47022, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/b/ba/Glaciate.png"),
+                new Buff("Glaciate", 47022, Source.FightSpecific, BuffClassification.Debuff,"https://wiki.guildwars2.com/images/b/ba/Glaciate.png"),
                 // Eater of Soul         
                 new Buff("Soul Digestion", 48541, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/0/08/Soul_Digestion.png"),
                 new Buff("Reclaimed Energy", 47090, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/2/21/Reclaimed_Energy.png"),
@@ -602,7 +602,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Conjured Protection",52973 , Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/83/Bloodstone-Infused_shield.png"),
                 new Buff("Shielded",53003 , Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/47/Golem-Powered_Shielding.png"),
                 new Buff("Augmented Power",52074  , Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/47/Golem-Powered_Shielding.png"),
-                new Buff("Locked On",53075  , Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/39/Target%21.png"),
+                new Buff("Locked On",53075  , Source.FightSpecific, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/3/39/Target%21.png"),
                 new Buff("CA Invul",52255 , Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Buff("Arm Up",52430 , Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Buff("Fixation", 52943, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
@@ -610,7 +610,7 @@ namespace GW2EIEvtcParser.EIData
                 //new Buff("Aquatic Detainment",52931 , ParseHelper.Source.FightSpecific, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Buff("Aquatic Aura (Kenut)",52211 , Source.FightSpecific, BuffStackType.Stacking, 80, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/44/Expose_Weakness.png"),
                 new Buff("Aquatic Aura (Nikare)",52929 , Source.FightSpecific, BuffStackType.Stacking, 80, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/fd/Fractured_%28effect%29.png"),
-                new Buff("Waterlogged",51935 , Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/89/Waterlogged.png"),
+                new Buff("Waterlogged",51935 , Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/8/89/Waterlogged.png"),
                 new Buff("Enraged (Twin Largos)", 52626, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png"),
                 // Qadim
                 new Buff("Flame Armor",52568, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e7/Magma_Orb.png"),
@@ -627,7 +627,7 @@ namespace GW2EIEvtcParser.EIData
                 //////////////////////////////////////////////
                 // Adina
                 new Buff("Pillar Pandemonium", 56204, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other,"https://wiki.guildwars2.com/images/d/d9/Captain%27s_Inspiration.png"),
-                new Buff("Radiant Blindness", 56593, Source.FightSpecific, BuffStackType.Queue, 25, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/6c/Radiant_Blindness.png"),
+                new Buff("Radiant Blindness", 56593, Source.FightSpecific, BuffStackType.Queue, 25, BuffClassification.Debuff,"https://wiki.guildwars2.com/images/6/6c/Radiant_Blindness.png"),
                 new Buff("Diamond Palisade (Damage)", 56099, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png"),
                 new Buff("Diamond Palisade", 56636, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png"),
                 new Buff("Eroding Curse", 56440, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other,"https://wiki.guildwars2.com/images/d/de/Toxic_Gas.png"),
@@ -685,18 +685,18 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Whirlwind Shield", 61224, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b1/Primed_Bottle.png"),
                 new Buff("Resilient Form", 61220, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"),
                 new Buff("Cacophonous Mind", 61435, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"),
-                new Buff("Crushing Guilt", 61208, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"),
+                new Buff("Crushing Guilt", 61208, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"),
                 new Buff("Fixated (Fear 3)", 61304, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 new Buff("Fixated (Fear 2)", 61306, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 new Buff("Fixated (Fear 1)", 61503, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 new Buff("Fixated (Fear 4)", 61566, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 new Buff("Charged Leap", 61444, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 3, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"),
-                new Buff("Tidal Bargain", 61512, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"),
+                new Buff("Tidal Bargain", 61512, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"),
                 //////////////////////////////////////////////
                 // Icebrood
-                new Buff("Hypothermia", 57969, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d5/Hypothermia_%28story_effect%29.png" ),
+                new Buff("Hypothermia", 57969, Source.FightSpecific, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/d/d5/Hypothermia_%28story_effect%29.png" ),
                 // Fraenir of Jormag
-                new Buff("Frozen", 58376, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png" ),
+                new Buff("Frozen", 58376, Source.FightSpecific, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png" ),
                 new Buff("Snowblind", 58276, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png" ),
                 // Voice and Claw            
                 new Buff("Enraged (V&C)", 58619, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),

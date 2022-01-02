@@ -93,6 +93,7 @@ namespace GW2EIBuilders
                 Properties.Resources.tmplStatTables,
                 Properties.Resources.tmplMechanicsTable,
                 Properties.Resources.tmplGearBuffTable,
+                Properties.Resources.tmplDebuffTable,
                 Properties.Resources.tmplConditionsTable,
                 Properties.Resources.tmplPersonalBuffTable,
                 Properties.Resources.tmplPhase,

@@ -19,6 +19,9 @@
             <li v-if="hasGearBuffs">
                 <a class="nav-link" :class="{active: tab === 4}" @click="tab = 4">Gear Buffs</a>
             </li>
+            <li v-if="hasDebuffs">
+                <a class="nav-link" :class="{active: tab === 7}" @click="tab = 7">Debuffs</a>
+            </li>
             <li v-if="hasPersBuffs">
                 <a class="nav-link" :class="{active: tab === 6}" @click="tab = 6">Personal Buffs</a>
             </li>
@@ -26,27 +29,29 @@
         <div :key="'activeduration'" class="d-flex flex-row justify-content-center mt-1 mb-1">
             <ul class="nav nav-pills d-flex flex-row justify-content-center scale85">
                 <li class="nav-item">
-                    <a class="nav-link" @click="activeduration = 0" :class="{active: activeduration === 0}">Phase duration</a>
+                    <a class="nav-link" @click="activeduration = 0" :class="{active: activeduration === 0}">Phase
+                        duration</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" @click="activeduration = 1" data-original-title="Removed dead time and dc time"
                         :class="{active: activeduration === 1 }">Phase active duration</a>
                 </li>
             </ul>
-        </div>   
+        </div>
         <keep-alive>
-            <buff-stats-component v-if="tab < 4"
-                :key="'buffs'" :type="tab" :phaseindex="phaseindex"
+            <buff-stats-component v-if="tab < 4" :key="'buffs'" :type="tab" :phaseindex="phaseindex"
                 :playerindex="playerindex" :activeduration="activeduration"></buff-stats-component>
-            <gear-buff-table-component v-if="tab === 4" :key="'gearbuffs'"
-                    :phaseindex="phaseindex" :playerindex="playerindex" :activeduration="activeduration"></gear-buff-table-component>
-            <conditions-table-component v-if="tab === 5" :key="'conditions'"
-                    :phaseindex="phaseindex" :playerindex="playerindex" :activeduration="activeduration"></conditions-table-component>
-            <personal-buff-table-component v-if="tab === 6" :key="'persbuffs'"
-                :phaseindex="phaseindex" :playerindex="playerindex" :activeduration="activeduration"></personal-buff-table-component>
-        </keep-alive>     
+            <gear-buff-table-component v-if="tab === 4" :key="'gearbuffs'" :phaseindex="phaseindex"
+                :playerindex="playerindex" :activeduration="activeduration"></gear-buff-table-component>
+            <conditions-table-component v-if="tab === 5" :key="'conditions'" :phaseindex="phaseindex"
+                :playerindex="playerindex" :activeduration="activeduration"></conditions-table-component>
+            <debuff-table-component v-if="tab === 7" :key="'debuffs'" :phaseindex="phaseindex"
+                :playerindex="playerindex" :activeduration="activeduration"></debuff-table-component>
+            <personal-buff-table-component v-if="tab === 6" :key="'persbuffs'" :phaseindex="phaseindex"
+                :playerindex="playerindex" :activeduration="activeduration"></personal-buff-table-component>
+        </keep-alive>
     </div>
-    
+
 </template>
 
 <script>
@@ -60,19 +65,22 @@
             };
         },
         computed: {
-            hasOffBuffs: function() {
+            hasOffBuffs: function () {
                 return logData.offBuffs.length > 0;
             },
-            hasDefBuffs: function() {
+            hasDefBuffs: function () {
                 return logData.defBuffs.length > 0;
             },
-            hasSupBuffs: function() {
+            hasSupBuffs: function () {
                 return logData.supBuffs.length > 0;
             },
-            hasGearBuffs: function() {
+            hasGearBuffs: function () {
                 return logData.gearBuffs.length > 0;
             },
-            hasConditions: function() {
+            hasDebuffs: function () {
+                return logData.debuffs.length > 0;
+            },
+            hasConditions: function () {
                 return logData.conditions.length > 0;
             },
             hasPersBuffs: function () {
