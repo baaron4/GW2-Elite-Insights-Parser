@@ -127,7 +127,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // hp could be unreliable or missing, fall back (around 200 ms more)
             if (!fightData.Success)
             {
-                SetSuccessByDeath(combatData, fightData, playerAgents, false, (int)ArcDPSEnums.TargetID.EyeOfFate, (int)ArcDPSEnums.TargetID.EyeOfJudgement);
+                SetSuccessByDeath(combatData, fightData, playerAgents, true, (int)ArcDPSEnums.TargetID.EyeOfFate, (int)ArcDPSEnums.TargetID.EyeOfJudgement);
             }
         }
 
