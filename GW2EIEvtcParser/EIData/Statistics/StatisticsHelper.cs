@@ -65,6 +65,15 @@ namespace GW2EIEvtcParser.EIData
 
             }
 
+            foreach (Buff debuff in buffs.BuffsByClassification[BuffClassification.Debuff])
+            {
+                if (skillIDs.Contains(debuff.ID))
+                {
+                    _presentDebuffs.Add(debuff);
+                }
+
+            }
+
             foreach (Buff fractalInstability in buffs.BuffsBySource[ParserHelper.Source.FractalInstability])
             {
                 if (skillIDs.Contains(fractalInstability.ID))
@@ -95,6 +104,7 @@ namespace GW2EIEvtcParser.EIData
         public IReadOnlyList<Buff> PresentOffbuffs => _presentOffbuffs;//Used only for Off Buff tables
         public IReadOnlyList<Buff> PresentSupbuffs => _presentSupbuffs;//Used only for Off Buff tables
         public IReadOnlyList<Buff> PresentDefbuffs => _presentDefbuffs;//Used only for Def Buff tables
+        public IReadOnlyList<Buff> PresentDebuffs => _presentDebuffs;//Used only for Debuff tables
         public IReadOnlyList<Buff> PresentGearbuffs => _presentGearbuffs;//Used only for Gear Buff tables
         public IReadOnlyList<Buff> PresentFractalInstabilities => _presentFractalInstabilities;
 
@@ -118,6 +128,7 @@ namespace GW2EIEvtcParser.EIData
         private readonly List<Buff> _presentOffbuffs  = new List<Buff>();//Used only for Off Buff tables
         private readonly List<Buff> _presentSupbuffs  = new List<Buff>();//Used only for Off Buff tables
         private readonly List<Buff> _presentDefbuffs = new List<Buff>();//Used only for Def Buff tables
+        private readonly List<Buff> _presentDebuffs = new List<Buff>();//Used only for Debuff tables
         private readonly List<Buff> _presentGearbuffs = new List<Buff>();//Used only for Gear Buff tables
         private readonly List<Buff> _presentFractalInstabilities = new List<Buff>();
         private readonly Dictionary<Player, HashSet<Buff>> _presentRemainingBuffsPerPlayer  = new Dictionary<Player, HashSet<Buff>>();
