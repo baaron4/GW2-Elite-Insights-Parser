@@ -447,7 +447,7 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;barrierdist-table-component :barrierist=&quot;barriertaken&quot; :tableid=&quot;tableid&quot; :actorindex=&quot;-1&quot; :minionindex=&quot;-1&quot; :istarget=&quot;false&quot; :player=&quot;true&quot;
+        ///    &lt;barrierdist-table-component :barrierdist=&quot;barriertaken&quot; :tableid=&quot;tableid&quot; :actorindex=&quot;-1&quot; :minionindex=&quot;-1&quot; :istarget=&quot;false&quot; :player=&quot;true&quot;
         ///        :phaseindex=&quot;phaseindex&quot;&gt;
         ///    &lt;/barrierdist-table-component&gt;
         ///&lt;/template&gt;
@@ -460,7 +460,7 @@ namespace GW2EIBuilders.Properties {
         ///        template: `${template}`,
         ///        computed: {
         ///            barriertaken: function () {
-        ///                return barrierSta [rest of string was truncated]&quot;;.
+        ///                return barrierSt [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplBarrierTaken {
             get {
@@ -1029,6 +1029,28 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
+        ///        &lt;buff-table-component :key=&quot;&apos;debuff-stats-table&apos;&quot; :condition=&quot;false&quot; :generation=&quot;false&quot;
+        ///            :id=&quot;&apos;debuff-stats-table&apos;&quot; :buffs=&quot;debuffs&quot; :playerdata=&quot;buffData&quot; :sums=&quot;[]&quot; :playerindex=&quot;playerindex&quot; :hidecustom=&quot;false&quot;&gt;
+        ///        &lt;/buff-table-component&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/template&gt;
+        ///
+        ///&lt;script&gt;
+        ///    Vue.component(&quot;debuff-table-component&quot;, {
+        ///        props: [&apos;phaseindex&apos;, &apos;playerindex&apos;, &apos;activeduration&apos;],
+        ///        template: `${template}`,
+        ///        data: function () {
+        ///        [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplDebuffTable {
+            get {
+                return ResourceManager.GetString("tmplDebuffTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
         ///        &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot; :id=&quot;tableid&quot;&gt;
         ///            &lt;thead&gt;
         ///                &lt;tr&gt;
@@ -1476,9 +1498,9 @@ namespace GW2EIBuilders.Properties {
         ///            &lt;li&gt;
         ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: tabmode === 0}&quot; @click=&quot;tabmode = 0&quot;&gt;
         ///                    Outgoing Healing
-        ///                    Distribution
         ///                &lt;/a&gt;
-        ///           [rest of string was truncated]&quot;;.
+        ///            &lt;/li&gt;
+        ///            &lt;li v-if=&quot;has [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayerHealingStats {
             get {
@@ -1595,9 +1617,10 @@ namespace GW2EIBuilders.Properties {
         ///            &lt;li&gt;
         ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: tabmode === 0}&quot; @click=&quot;tabmode = 0&quot;&gt;
         ///                    Outgoing Damage
-        ///                    Distribution
         ///                &lt;/a&gt;
-        ///            [rest of string was truncated]&quot;;.
+        ///            &lt;/li&gt;
+        ///            &lt;li&gt;
+        ///         [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayerStats {
             get {

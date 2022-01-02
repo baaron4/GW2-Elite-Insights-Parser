@@ -280,7 +280,7 @@ namespace GW2EIEvtcParser.EIData
         {
                 new Buff("Number of Active Combat Minions", NumberOfActiveCombatMinionsID, Source.Common, BuffStackType.Stacking, 99, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/ad/Superior_Rune_of_the_Ranger.png"),
                 new Buff("Number of Clones", NumberOfClonesID, Source.Common, BuffStackType.Stacking, 99, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/24/Superior_Rune_of_the_Mesmer.png"),
-                new Buff("Downed", 770, Source.Common, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/d/dd/Downed.png"),
+                new Buff("Downed", 770, Source.Common, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/dd/Downed.png"),
                 new Buff("Exhaustion", 46842, Source.Common, BuffStackType.Queue, 3, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/8/88/Exhaustion.png"),
                 new Buff("Stealth", 13017, Source.Common, BuffStackType.Queue, 5, BuffClassification.Support, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
                 new Buff("Hide in Shadows", 10269, Source.Common, BuffStackType.Queue, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
