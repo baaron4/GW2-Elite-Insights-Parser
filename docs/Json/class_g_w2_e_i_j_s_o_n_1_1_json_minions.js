@@ -1,5 +1,7 @@
 var class_g_w2_e_i_j_s_o_n_1_1_json_minions =
 [
+    [ "EXTBarrierStats", "class_g_w2_e_i_j_s_o_n_1_1_json_minions.html#a10a477b403958c0a6f8cf6cb0951ebd7", null ],
+    [ "EXTHealingStats", "class_g_w2_e_i_j_s_o_n_1_1_json_minions.html#ab3744477bfc8d1155477123b08536259", null ],
     [ "Name", "class_g_w2_e_i_j_s_o_n_1_1_json_minions.html#afc2d06aeb1627bb3526bedf9e26163e6", null ],
     [ "Rotation", "class_g_w2_e_i_j_s_o_n_1_1_json_minions.html#a1d2c2efd0a25a069d877903dbed8b33e", null ],
     [ "TargetDamageDist", "class_g_w2_e_i_j_s_o_n_1_1_json_minions.html#a84cca384e86edd3c13c0d36af7208747", null ],
