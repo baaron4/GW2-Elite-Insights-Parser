@@ -64,70 +64,94 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        private static List<PhaseData> GetSubPhases(AbstractSingleActor eye, ParsedEvtcLog log)
+        {
+            var res = new List<PhaseData>();
+            BuffRemoveAllEvent det762Loss = log.CombatData.GetBuffData(762).OfType<BuffRemoveAllEvent>().Where(x => x.To == eye.AgentItem).FirstOrDefault();
+            if (det762Loss != null)
+            {
+                int count = 0;
+                long start = det762Loss.Time;
+                List<AbstractBuffEvent> det895s = GetFilteredList(log.CombatData, 895, eye, true);
+                foreach (AbstractBuffEvent abe in det895s)
+                {
+                    if (abe is BuffApplyEvent)
+                    {
+                        var phase = new PhaseData(start, Math.Min(abe.Time, log.FightData.FightDuration))
+                        {
+                            Name = eye.Character + " " + (++count)
+                        };
+                        phase.AddTarget(eye);
+                        res.Add(phase);
+                    } else
+                    {
+                        start = Math.Min(abe.Time, log.FightData.FightDuration);
+                    }
+                }
+                if (start < log.FightData.FightDuration)
+                {
+                    var phase = new PhaseData(start, log.FightData.FightDuration)
+                    {
+                        Name = eye.Character + " " + (++count)
+                    };
+                    phase.AddTarget(eye);
+                    res.Add(phase);
+                }
+            }
+            return res;
+        }
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor eye1 = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfFate);
-            AbstractSingleActor eye2 = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfJudgement);
-            if (eye2 == null || eye1 == null)
+            AbstractSingleActor eyeFate = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfFate);
+            AbstractSingleActor eyeJudgement = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfJudgement);
+            if (eyeJudgement == null || eyeFate == null)
             {
                 throw new MissingKeyActorsException("Eyes not found");
             }
-            phases[0].AddTarget(eye2);
-            phases[0].AddTarget(eye1);
+            phases[0].AddTarget(eyeJudgement);
+            phases[0].AddTarget(eyeFate);
+            phases.AddRange(GetSubPhases(eyeFate, log));
+            phases.AddRange(GetSubPhases(eyeJudgement, log));
             return phases;
-        }
-
-        private void HPCheck(CombatData combatData, FightData fightData)
-        {
-            AbstractSingleActor eye1 = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfFate);
-            AbstractSingleActor eye2 = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfJudgement);
-            if (eye2 == null || eye1 == null)
-            {
-                throw new MissingKeyActorsException("Eyes not found");
-            }
-            IReadOnlyList<HealthUpdateEvent> eye1HPs = combatData.GetHealthUpdateEvents(eye1.AgentItem);
-            IReadOnlyList<HealthUpdateEvent> eye2HPs = combatData.GetHealthUpdateEvents(eye2.AgentItem);
-            if (eye1HPs.Count == 0 || eye2HPs.Count == 0)
-            {
-                return;
-            }
-            double lastEye1Hp = eye1HPs.LastOrDefault().HPPercent;
-            double lastEye2Hp = eye2HPs.LastOrDefault().HPPercent;
-            double margin1 = Math.Min(0.80, lastEye1Hp);
-            double margin2 = Math.Min(0.80, lastEye2Hp);
-            if (lastEye1Hp <= margin1 && lastEye2Hp <= margin2)
-            {
-                int lastIEye1;
-                for (lastIEye1 = eye1HPs.Count - 1; lastIEye1 >= 0; lastIEye1--)
-                {
-                    if (eye1HPs[lastIEye1].HPPercent > margin1)
-                    {
-                        lastIEye1++;
-                        break;
-                    }
-                }
-                int lastIEye2;
-                for (lastIEye2 = eye2HPs.Count - 1; lastIEye2 >= 0; lastIEye2--)
-                {
-                    if (eye2HPs[lastIEye2].HPPercent > margin2)
-                    {
-                        lastIEye2++;
-                        break;
-                    }
-                }
-                fightData.SetSuccess(true, Math.Max(eye1HPs[lastIEye1].Time, eye2HPs[lastIEye2].Time));
-            }
         }
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            // First check using hp, best
-            HPCheck(combatData, fightData);
-            // hp could be unreliable or missing, fall back (around 200 ms more)
+            SetSuccessByDeath(combatData, fightData, playerAgents, true, (int)ArcDPSEnums.TargetID.EyeOfFate, (int)ArcDPSEnums.TargetID.EyeOfJudgement);
             if (!fightData.Success)
             {
-                SetSuccessByDeath(combatData, fightData, playerAgents, true, (int)ArcDPSEnums.TargetID.EyeOfFate, (int)ArcDPSEnums.TargetID.EyeOfJudgement);
+                AbstractSingleActor eyeFate = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfFate);
+                AbstractSingleActor eyeJudgement = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfJudgement);
+                if (eyeJudgement == null || eyeFate == null)
+                {
+                    throw new MissingKeyActorsException("Eyes not found");
+                }
+                //
+                List<AbstractBuffEvent> lastGraspsJudgement = GetFilteredList(combatData, 47635, eyeJudgement, true);
+                var lastGraspsJudgementSegments = new List<Segment>();
+                for (var i = 0; i < lastGraspsJudgement.Count; i += 2)
+                {
+                    lastGraspsJudgementSegments.Add(new Segment(lastGraspsJudgement[i].Time, lastGraspsJudgement[i + 1].Time, 1));
+                }
+                List<AbstractBuffEvent> lastGraspsFate = GetFilteredList(combatData, 47278, eyeFate, true);
+                var lastGraspsFateSegments = new List<Segment>();
+                for (var i = 0; i < lastGraspsFate.Count; i += 2)
+                {
+                    lastGraspsFateSegments.Add(new Segment(lastGraspsFate[i].Time, lastGraspsFate[i + 1].Time, 1));
+                }
+                //
+                Segment lastJudge = lastGraspsJudgementSegments.LastOrDefault();
+                Segment lastFate = lastGraspsFateSegments.LastOrDefault();
+                if (lastFate == null || lastJudge == null)
+                {
+                    return;
+                }
+                if (lastFate.Intersect(lastJudge))
+                {
+                    fightData.SetSuccess(true, Math.Max(lastJudge.Start, lastFate.Start));
+                }
             }
         }
 
