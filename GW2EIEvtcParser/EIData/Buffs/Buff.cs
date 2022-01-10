@@ -289,6 +289,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Superspeed", 5974, Source.Common, BuffStackType.Queue, 9, BuffClassification.Support,"https://wiki.guildwars2.com/images/c/c8/Superspeed.png", GW2Builds.June2021Balance, GW2Builds.EndOfLife),
                 new Buff("Determined (762)", 762, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Buff("Determined (788)", 788, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                new Buff("Resurrection", 848, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Buff("Determined (895)", 895, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Buff("Determined (3892)", 3892, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Buff("Determined (31450)", 31450, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
