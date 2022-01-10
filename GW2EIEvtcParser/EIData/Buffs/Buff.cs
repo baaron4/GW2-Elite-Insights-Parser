@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using GW2EIEvtcParser.EIData.BuffSimulators;
@@ -930,5 +930,11 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Strawberry Cilantro Cheesecake", Unknown, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/8/8d/Strawberry_Cilantro_Cheesecake.png"),
         };
 
+        internal static readonly List<Buff> FoodProcs = new List<Buff>
+        {
+            // Effect procs for On Kill Food
+            new Buff("Nourishment (Bonus Power)", 10110, Source.Item, BuffClassification.Gear, "https://wiki.guildwars2.com/images/d/d6/Champion_of_the_Crown.png"),
+            new Buff("Malice (Bonus Condition Damage)", 10104, Source.Item, BuffClassification.Gear, "https://wiki.guildwars2.com/images/d/d6/Champion_of_the_Crown.png"),
+        };
     }
 }

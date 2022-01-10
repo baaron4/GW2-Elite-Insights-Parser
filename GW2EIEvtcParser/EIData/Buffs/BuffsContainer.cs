@@ -29,6 +29,7 @@ namespace GW2EIEvtcParser.EIData
                 Gear,
                 NormalFoods,
                 AscendedFood,
+                FoodProcs,
                 Utilities,
                 Potions,
                 Writs,
