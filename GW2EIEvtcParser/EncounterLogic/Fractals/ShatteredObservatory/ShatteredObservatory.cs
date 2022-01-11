@@ -33,7 +33,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return false;
             }
-            var invulsTarget = GetFilteredList(combatData, buffID, target, true).Where(x => x.Time >= 0).ToList();
+            var invulsTarget = GetFilteredList(combatData, buffID, target, true, false).Where(x => x.Time >= 0).ToList();
             if (invulsTarget.Count == count)
             {
                 AbstractBuffEvent last = invulsTarget.Last();

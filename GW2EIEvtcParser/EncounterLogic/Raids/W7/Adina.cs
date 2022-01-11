@@ -107,7 +107,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
-            List<AbstractBuffEvent> radiantBlindnesses = GetFilteredList(log.CombatData, 56593, p, true);
+            List<AbstractBuffEvent> radiantBlindnesses = GetFilteredList(log.CombatData, 56593, p, true, true);
             int radiantBlindnessStart = 0;
             foreach (AbstractBuffEvent c in radiantBlindnesses)
             {
@@ -170,7 +170,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(false, start + duration, radius, (start + delay, start + duration), "rgba(255, 150, 0, 0.7)", new AgentConnector(target)));
                     }
                     //
-                    List<AbstractBuffEvent> diamondPalisades = GetFilteredList(log.CombatData, 56636, target, true);
+                    List<AbstractBuffEvent> diamondPalisades = GetFilteredList(log.CombatData, 56636, target, true, true);
                     int diamondPalisadeStart = 0;
                     foreach (AbstractBuffEvent c in diamondPalisades)
                     {
@@ -214,7 +214,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return phases;
             }
             // Split phases
-            List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, 762, mainTarget, true);
+            List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, 762, mainTarget, true, true);
             long start = 0;
             var splitPhases = new List<PhaseData>();
             var splitPhaseEnds = new List<long>();

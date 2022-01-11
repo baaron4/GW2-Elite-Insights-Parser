@@ -235,7 +235,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 replay.Decorations.Add(new CircleDecoration(true, end, 280, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(p)));
             }
             // Sapper bombs
-            List<AbstractBuffEvent> sapperBombs = GetFilteredList(log.CombatData, 31473, p, true);
+            List<AbstractBuffEvent> sapperBombs = GetFilteredList(log.CombatData, 31473, p, true, true);
             int sapperStart = 0;
             foreach (AbstractBuffEvent c in sapperBombs)
             {

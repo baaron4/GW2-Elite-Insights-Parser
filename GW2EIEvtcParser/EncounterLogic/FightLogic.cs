@@ -216,7 +216,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             long fightDuration = log.FightData.FightEnd;
             var phases = new List<PhaseData>();
             long last = 0;
-            List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, skillID, mainTarget, beginWithStart);
+            List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, skillID, mainTarget, beginWithStart, true);
             invuls.RemoveAll(x => x.Time < 0);
             for (int i = 0; i < invuls.Count; i++)
             {
@@ -548,7 +548,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         }
 
         //
-        protected static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, long buffID, AbstractSingleActor target, bool beginWithStart)
+        protected static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, long buffID, AbstractSingleActor target, bool beginWithStart, bool padEnd)
         {
             bool needStart = beginWithStart;
             var main = combatData.GetBuffData(buffID).Where(x => x.To == target.AgentItem && (x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();
@@ -571,7 +571,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
-            if (filtered.Any() && filtered.Last() is BuffApplyEvent)
+            if (padEnd && filtered.Any() && filtered.Last() is BuffApplyEvent)
             {
                 AbstractBuffEvent last = filtered.Last();
                 filtered.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, last.To, target.LastAware, int.MaxValue, last.BuffSkill, BuffRemoveAllEvent.FullRemoval, int.MaxValue));

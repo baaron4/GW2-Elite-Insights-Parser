@@ -72,7 +72,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 int count = 0;
                 long start = det762Loss.Time;
-                List<AbstractBuffEvent> det895s = GetFilteredList(log.CombatData, 895, eye, true);
+                List<AbstractBuffEvent> det895s = GetFilteredList(log.CombatData, 895, eye, true, true);
                 foreach (AbstractBuffEvent abe in det895s)
                 {
                     if (abe is BuffApplyEvent)
@@ -129,13 +129,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                     throw new MissingKeyActorsException("Eyes not found");
                 }
                 //
-                List<AbstractBuffEvent> lastGraspsJudgement = GetFilteredList(combatData, 47635, eyeJudgement, true);
+                List<AbstractBuffEvent> lastGraspsJudgement = GetFilteredList(combatData, 47635, eyeJudgement, true, true);
                 var lastGraspsJudgementSegments = new List<Segment>();
                 for (var i = 0; i < lastGraspsJudgement.Count; i += 2)
                 {
                     lastGraspsJudgementSegments.Add(new Segment(lastGraspsJudgement[i].Time, lastGraspsJudgement[i + 1].Time, 1));
                 }
-                List<AbstractBuffEvent> lastGraspsFate = GetFilteredList(combatData, 47278, eyeFate, true);
+                List<AbstractBuffEvent> lastGraspsFate = GetFilteredList(combatData, 47278, eyeFate, true, true);
                 var lastGraspsFateSegments = new List<Segment>();
                 for (var i = 0; i < lastGraspsFate.Count; i += 2)
                 {

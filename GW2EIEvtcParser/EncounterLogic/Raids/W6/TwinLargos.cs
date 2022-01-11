@@ -80,7 +80,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var targetPhases = new List<PhaseData>();
             var states = new List<AbstractTimeCombatEvent>();
             states.AddRange(log.CombatData.GetEnterCombatEvents(target.AgentItem));
-            states.AddRange(GetFilteredList(log.CombatData, 762, target, true).Where(x => x is BuffApplyEvent));
+            states.AddRange(GetFilteredList(log.CombatData, 762, target, true, true).Where(x => x is BuffApplyEvent));
             states.AddRange(log.CombatData.GetDeadEvents(target.AgentItem));
             states.Sort((x, y) => x.Time.CompareTo(y.Time));
             for (int i = 0; i < states.Count; i++)
@@ -296,7 +296,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // Water "Poison Bomb"
-            List<AbstractBuffEvent> waterToDrop = GetFilteredList(log.CombatData, 53097, p, true);
+            List<AbstractBuffEvent> waterToDrop = GetFilteredList(log.CombatData, 53097, p, true, true);
             int toDropStart = 0;
             foreach (AbstractBuffEvent c in waterToDrop)
             {
@@ -323,7 +323,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             // Bubble (Aquatic Detainment)
-            List<AbstractBuffEvent> bubble = GetFilteredList(log.CombatData, 51755, p, true);
+            List<AbstractBuffEvent> bubble = GetFilteredList(log.CombatData, 51755, p, true, true);
             int bubbleStart = 0;
             foreach (AbstractBuffEvent c in bubble)
             {

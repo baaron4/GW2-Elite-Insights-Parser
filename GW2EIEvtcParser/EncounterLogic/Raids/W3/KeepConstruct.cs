@@ -93,7 +93,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return phases;
             }
             // Main phases 35025
-            List<AbstractBuffEvent> kcPhaseInvuls = GetFilteredList(log.CombatData, 35025, mainTarget, true);
+            List<AbstractBuffEvent> kcPhaseInvuls = GetFilteredList(log.CombatData, 35025, mainTarget, true, true);
             foreach (AbstractBuffEvent c in kcPhaseInvuls)
             {
                 if (c is BuffApplyEvent)
@@ -151,7 +151,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // pre burn phases
             int preBurnCount = 1;
             var preBurnPhase = new List<PhaseData>();
-            List<AbstractBuffEvent> kcInvuls = GetFilteredList(log.CombatData, 762, mainTarget, true);
+            List<AbstractBuffEvent> kcInvuls = GetFilteredList(log.CombatData, 762, mainTarget, true, true);
             foreach (AbstractBuffEvent invul in kcInvuls)
             {
                 if (invul is BuffApplyEvent)
@@ -272,7 +272,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case (int)ArcDPSEnums.TargetID.KeepConstruct:
 
-                    List<AbstractBuffEvent> kcOrbCollect = GetFilteredList(log.CombatData, 35025, target, true);
+                    List<AbstractBuffEvent> kcOrbCollect = GetFilteredList(log.CombatData, 35025, target, true, true);
                     int kcOrbStart = 0, kcOrbEnd = 0;
                     foreach (AbstractBuffEvent c in kcOrbCollect)
                     {
@@ -405,7 +405,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // Bombs
-            List<AbstractBuffEvent> xeraFury = GetFilteredList(log.CombatData, 35103, p, true);
+            List<AbstractBuffEvent> xeraFury = GetFilteredList(log.CombatData, 35103, p, true, true);
             int xeraFuryStart = 0;
             foreach (AbstractBuffEvent c in xeraFury)
             {
@@ -422,7 +422,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             }
             //fixated Statue
-            var fixatedStatue = GetFilteredList(log.CombatData, 34912, p, true).Concat(GetFilteredList(log.CombatData, 34925, p, true)).ToList();
+            var fixatedStatue = GetFilteredList(log.CombatData, 34912, p, true, true).Concat(GetFilteredList(log.CombatData, 34925, p, true, true)).ToList();
             int fixationStatueStart = 0;
             NPC statue = null;
             foreach (AbstractBuffEvent c in fixatedStatue)

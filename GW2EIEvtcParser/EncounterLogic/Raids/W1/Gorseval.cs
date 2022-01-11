@@ -98,7 +98,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
-            List<AbstractBuffEvent> eggs = GetFilteredList(log.CombatData, 31623, p, true);
+            List<AbstractBuffEvent> eggs = GetFilteredList(log.CombatData, 31623, p, true, true);
             int eggStart = 0;
             foreach (AbstractBuffEvent c in eggs)
             {
@@ -258,7 +258,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, radius, (impactTime, impactTime + 100), "rgba(255, 0, 0, 0.4)", new AgentConnector(target)));
                     }
-                    List<AbstractBuffEvent> protection = GetFilteredList(log.CombatData, 31877, target, true);
+                    List<AbstractBuffEvent> protection = GetFilteredList(log.CombatData, 31877, target, true, true);
                     int protectionStart = 0;
                     foreach (AbstractBuffEvent c in protection)
                     {

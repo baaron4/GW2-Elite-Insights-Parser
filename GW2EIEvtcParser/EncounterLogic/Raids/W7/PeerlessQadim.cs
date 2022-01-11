@@ -286,7 +286,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TrashID.EntropicDistortion:
                     //sapping surge, red tether
-                    List<AbstractBuffEvent> sappingSurge = GetFilteredList(log.CombatData, 56118, target, true);
+                    List<AbstractBuffEvent> sappingSurge = GetFilteredList(log.CombatData, 56118, target, true, true);
                     int surgeStart = 0;
                     AbstractSingleActor source = null;
                     foreach (AbstractBuffEvent c in sappingSurge)
@@ -332,7 +332,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // fixated
-            List<AbstractBuffEvent> fixated = GetFilteredList(log.CombatData, 56510, p, true);
+            List<AbstractBuffEvent> fixated = GetFilteredList(log.CombatData, 56510, p, true, true);
             int fixatedStart = 0;
             foreach (AbstractBuffEvent c in fixated)
             {
@@ -347,7 +347,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             // Chaos Corrosion
-            List<AbstractBuffEvent> chaosCorrosion = GetFilteredList(log.CombatData, 56182, p, true);
+            List<AbstractBuffEvent> chaosCorrosion = GetFilteredList(log.CombatData, 56182, p, true, true);
             int corrosionStart = 0;
             foreach (AbstractBuffEvent c in chaosCorrosion)
             {
@@ -362,7 +362,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             // Critical Mass, debuff while carrying an orb
-            List<AbstractBuffEvent> criticalMass = GetFilteredList(log.CombatData, 56424, p, true);
+            List<AbstractBuffEvent> criticalMass = GetFilteredList(log.CombatData, 56424, p, true, true);
             int criticalMassStart = 0;
             foreach (AbstractBuffEvent c in criticalMass)
             {
@@ -377,7 +377,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             // Magma drop
-            List<AbstractBuffEvent> magmaDrop = GetFilteredList(log.CombatData, 56475, p, true);
+            List<AbstractBuffEvent> magmaDrop = GetFilteredList(log.CombatData, 56475, p, true, true);
             int magmaDropStart = 0;
             int magmaRadius = 420;
             int magmaOffset = 4000;
@@ -408,7 +408,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             }
             //sapping surge, bad red tether
-            List<AbstractBuffEvent> sappingSurge = GetFilteredList(log.CombatData, 56118, p, true);
+            List<AbstractBuffEvent> sappingSurge = GetFilteredList(log.CombatData, 56118, p, true, true);
             int surgeStart = 0;
             AbstractSingleActor source = null;
             foreach (AbstractBuffEvent c in sappingSurge)
@@ -429,7 +429,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             // kinetic abundance, good (blue) tether
-            List<AbstractBuffEvent> kineticAbundance = GetFilteredList(log.CombatData, 56609, p, true);
+            List<AbstractBuffEvent> kineticAbundance = GetFilteredList(log.CombatData, 56609, p, true, true);
             int kinStart = 0;
             AbstractSingleActor kinSource = null;
             foreach (AbstractBuffEvent c in kineticAbundance)
