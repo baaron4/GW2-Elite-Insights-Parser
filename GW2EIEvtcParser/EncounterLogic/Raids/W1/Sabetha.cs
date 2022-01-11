@@ -111,9 +111,23 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 else
                 {
-                    phase.Name = "Phase " + (i + 1) / 2;
+                    int phaseID = (i + 1) / 2;
+                    phase.Name = "Phase " + phaseID;
                     phase.AddTarget(mainTarget);
-                    AddTargetsToPhaseAndFit(phase, ids, log);
+                    switch(phaseID)
+                    {
+                        case 2:
+                            phase.AddTargets(Targets.Where(x => x.ID == (int)ArcDPSEnums.TrashID.Kernan));
+                            break;
+                        case 3:
+                            phase.AddTargets(Targets.Where(x => x.ID == (int)ArcDPSEnums.TrashID.Knuckles));
+                            break;
+                        case 4:
+                            phase.AddTargets(Targets.Where(x => x.ID == (int)ArcDPSEnums.TrashID.Karde));
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
             return phases;
