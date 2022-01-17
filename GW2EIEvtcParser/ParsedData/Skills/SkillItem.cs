@@ -108,7 +108,8 @@ namespace GW2EIEvtcParser.ParsedData
             {51713, "True Nature - Centaur" },
             {49052, "Soul Stone Venom" },
             {49077, "Soul Stone Venom Strike" },
-            {41714, "Mantra of Solace" }
+            {41714, "Mantra of Solace" },
+            {43260, "Desert Empowerment" },
         };
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
         {
@@ -190,6 +191,11 @@ namespace GW2EIEvtcParser.ParsedData
             {49103, "https://wiki.guildwars2.com/images/7/7a/Signet_of_the_Ether.png" },
             {14024, "https://wiki.guildwars2.com/images/c/c1/Natural_Healing_%28ranger_trait%29.png" },
             {46299, "https://wiki.guildwars2.com/images/c/cc/Predator%27s_Cunning.png" },
+            {21776, "https://wiki.guildwars2.com/images/0/07/Aqua_Surge.png" },
+            {43260, "https://wiki.guildwars2.com/images/c/c3/Desert_Empowerment.png" },
+            {26997, "https://wiki.guildwars2.com/images/d/d9/Natural_Harmony.png" },
+            {27101, "https://wiki.guildwars2.com/images/e/e7/Project_Tranquility.png" },
+            {35417, "https://wiki.guildwars2.com/images/b/b6/Ventari%27s_Will.png" },
             // Weaver attunements
             {Buff.FireDual, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
             {Buff.FireWater, "https://i.imgur.com/ar8Hn8G.png" },
