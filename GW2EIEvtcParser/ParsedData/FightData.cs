@@ -128,6 +128,7 @@ namespace GW2EIEvtcParser.ParsedData
                     Logic = new Dhuum(id);
                     break;
                 case ArcDPSEnums.TargetID.ConjuredAmalgamate:
+                case ArcDPSEnums.TargetID.ConjuredAmalgamate_CHINA:
                     Logic = new ConjuredAmalgamate(id);
                     break;
                 case ArcDPSEnums.TargetID.Kenut:

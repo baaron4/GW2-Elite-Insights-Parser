@@ -9,6 +9,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 {
     internal class ConjuredAmalgamate : MythwrightGambit
     {
+        private readonly bool _cn;
         public ConjuredAmalgamate(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
@@ -28,6 +29,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new EnemyBuffApplyMechanic(52074, "Augmented Power", new MechanicPlotlySetting("asterisk-open",Colors.Red), "Augmented Power","Augmented Power", "Augmented Power",50),
             new EnemyBuffApplyMechanic(53003, "Shielded", new MechanicPlotlySetting("asterisk-open",Colors.Green), "Shielded","Shielded", "Shielded",50),
             });
+            _cn = triggerID == (int)ArcDPSEnums.TargetID.ConjuredAmalgamate_CHINA;
             Extension = "ca";
             GenericFallBackMethod = FallBackMethod.None;
             Icon = "https://i.imgur.com/eLyIWd2.png";
@@ -73,10 +75,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             // make those into npcs
-            var cn = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Language && x.SrcAgent == (byte)LanguageEvent.LanguageEnum.Chinese) != null;
-            IReadOnlyList<AgentItem> cas = agentData.GetGadgetsByID(cn ? (int)ArcDPSEnums.TargetID.ConjuredAmalgamate_CHINA : (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
-            IReadOnlyList<AgentItem> leftArms = agentData.GetGadgetsByID(cn ? (int)ArcDPSEnums.TargetID.CALeftArm_CHINA : (int)ArcDPSEnums.TargetID.CALeftArm);
-            IReadOnlyList<AgentItem> rightArms = agentData.GetGadgetsByID(cn ? (int)ArcDPSEnums.TargetID.CARightArm_CHINA : (int)ArcDPSEnums.TargetID.CARightArm);
+            IReadOnlyList<AgentItem> cas = agentData.GetGadgetsByID(_cn ? (int)ArcDPSEnums.TargetID.ConjuredAmalgamate_CHINA : (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
+            if (!cas.Any())
+            {
+                throw new MissingKeyActorsException("Conjured Amalgamate not found");
+            }
+            IReadOnlyList<AgentItem> leftArms = agentData.GetGadgetsByID(_cn ? (int)ArcDPSEnums.TargetID.CALeftArm_CHINA : (int)ArcDPSEnums.TargetID.CALeftArm);
+            IReadOnlyList<AgentItem> rightArms = agentData.GetGadgetsByID(_cn ? (int)ArcDPSEnums.TargetID.CARightArm_CHINA : (int)ArcDPSEnums.TargetID.CARightArm);
             foreach (AgentItem ca in cas)
             {
                 ca.OverrideType(AgentItem.AgentType.NPC);
