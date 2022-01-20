@@ -625,6 +625,9 @@ namespace GW2EIEvtcParser
             ConjuredAmalgamate = 43974, // Gadget
             CARightArm = 10142, // Gadget
             CALeftArm = 37464, // Gadget
+            ConjuredAmalgamate_CHINA = 44885, // Gadget
+            CARightArm_CHINA = 11053, // Gadget
+            CALeftArm_CHINA = 38375, // Gadget
             Nikare = 21105,
             Kenut = 21089,
             Qadim = 20934,

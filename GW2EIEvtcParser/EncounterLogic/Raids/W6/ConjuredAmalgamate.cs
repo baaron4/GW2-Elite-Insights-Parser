@@ -73,20 +73,24 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             // make those into npcs
-            IReadOnlyList<AgentItem> cas = agentData.GetGadgetsByID((int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
-            IReadOnlyList<AgentItem> leftArms = agentData.GetGadgetsByID((int)ArcDPSEnums.TargetID.CALeftArm);
-            IReadOnlyList<AgentItem> rightArms = agentData.GetGadgetsByID((int)ArcDPSEnums.TargetID.CARightArm);
+            var cn = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Language && x.SrcAgent == (byte)LanguageEvent.LanguageEnum.Chinese) != null;
+            IReadOnlyList<AgentItem> cas = agentData.GetGadgetsByID(cn ? (int)ArcDPSEnums.TargetID.ConjuredAmalgamate_CHINA : (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
+            IReadOnlyList<AgentItem> leftArms = agentData.GetGadgetsByID(cn ? (int)ArcDPSEnums.TargetID.CALeftArm_CHINA : (int)ArcDPSEnums.TargetID.CALeftArm);
+            IReadOnlyList<AgentItem> rightArms = agentData.GetGadgetsByID(cn ? (int)ArcDPSEnums.TargetID.CARightArm_CHINA : (int)ArcDPSEnums.TargetID.CARightArm);
             foreach (AgentItem ca in cas)
             {
                 ca.OverrideType(AgentItem.AgentType.NPC);
+                ca.OverrideID(ArcDPSEnums.TargetID.ConjuredAmalgamate);
             }
             foreach (AgentItem leftArm in leftArms)
             {
                 leftArm.OverrideType(AgentItem.AgentType.NPC);
+                leftArm.OverrideID(ArcDPSEnums.TargetID.CALeftArm);
             }
             foreach (AgentItem rightArm in rightArms)
             {
                 rightArm.OverrideType(AgentItem.AgentType.NPC);
+                rightArm.OverrideID(ArcDPSEnums.TargetID.CARightArm);
             }
             agentData.Refresh();
             AgentItem sword = agentData.AddCustomNPCAgent(0, fightData.FightEnd, "Conjured Sword\0:Conjured Sword\051", ParserHelper.Spec.NPC, (int)ArcDPSEnums.TrashID.ConjuredPlayerSword, true);
