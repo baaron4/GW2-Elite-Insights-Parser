@@ -10,7 +10,7 @@ namespace GW2EIEvtcParser.EncounterLogic
     internal class ConjuredAmalgamate : MythwrightGambit
     {
         private readonly bool _cn;
-        public ConjuredAmalgamate(int triggerID) : base(triggerID)
+        public ConjuredAmalgamate(int triggerID) : base((int)ArcDPSEnums.TargetID.ConjuredAmalgamate)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
