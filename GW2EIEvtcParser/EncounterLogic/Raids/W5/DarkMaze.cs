@@ -19,6 +19,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerCastStartMechanic(47074, "Flare", new MechanicPlotlySetting("circle",Colors.Green), "Detonate","Flare (detonate light orb to incapacitate eye)", "Detonate orb",0),
             new HitOnPlayerMechanic(47518, "Piercing Shadow", new MechanicPlotlySetting("hexagram-open",Colors.Blue), "Spin","Piercing Shadow (damaging spin to all players in sight)", "Eye Spin",0),
             new HitOnPlayerMechanic(48150, "Deep Abyss", new MechanicPlotlySetting("triangle-right-open",Colors.Red), "Beam","Deep Abyss (ticking eye beam)", "Eye Beam",0),
+            new PlayerBuffApplyToMechanic(833, "Hard CC Eye of Fate", new MechanicPlotlySetting("triangle",Colors.Red), "Hard CC Fate","Applied hard CC on Eye of Fate", "Hard CC Fate",50, (ba, log) => ba.To.ID == (int) ArcDPSEnums.TargetID.EyeOfFate),
+            new PlayerBuffApplyToMechanic(872, "Hard CC Eye of Fate", new MechanicPlotlySetting("triangle",Colors.Red), "Hard CC Fate","Applied hard CC on Eye of Fate", "Hard CC Fate",50, (ba, log) => ba.To.ID == (int) ArcDPSEnums.TargetID.EyeOfFate),
+            new PlayerBuffApplyToMechanic(791, "Hard CC Eye of Fate", new MechanicPlotlySetting("triangle",Colors.Red), "Hard CC Fate","Applied hard CC on Eye of Fate", "Hard CC Fate",50, (ba, log) => ba.To.ID == (int) ArcDPSEnums.TargetID.EyeOfFate),
+            new PlayerBuffApplyToMechanic(833, "Hard CC Eye of Judge", new MechanicPlotlySetting("square",Colors.Red), "Hard CC Judge","Applied hard CC on Eye of Judgement", "Daze Judge",50, (ba, log) => ba.To.ID == (int) ArcDPSEnums.TargetID.EyeOfJudgement),
+            new PlayerBuffApplyToMechanic(872, "Hard CC Eye of Judge", new MechanicPlotlySetting("square",Colors.Red), "Hard CC Judge","Applied hard CC on Eye of Judgement", "Daze Judge",50, (ba, log) => ba.To.ID == (int) ArcDPSEnums.TargetID.EyeOfJudgement),
+            new PlayerBuffApplyToMechanic(791, "Hard CC Eye of Judge", new MechanicPlotlySetting("square",Colors.Red), "Hard CC Judge","Applied hard CC on Eye of Judgement", "Daze Judge",50, (ba, log) => ba.To.ID == (int) ArcDPSEnums.TargetID.EyeOfJudgement),
             //47857 <- teleport + fear skill? 
             }
             );
