@@ -17,7 +17,32 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
         public long TotalCasting { get; set; }
         public List<object[]> Distribution { get; set; }
 
-        private static object[] GetDMGDtoItem(SkillItem skill, List<AbstractHealthDamageEvent> damageLogs, Dictionary<SkillItem, List<AbstractCastEvent>> castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
+        private static (long timeCasting, int casts, int timeSaved, int timeWasted) GetCastValues(IReadOnlyList<AbstractCastEvent> clList, PhaseData phase)
+        {
+            long timeCasting = 0;
+            int casts = 0, timeWasted = 0, timeSaved = 0;
+            foreach (AbstractCastEvent cl in clList)
+            {
+                if (phase.InInterval(cl.Time))
+                {
+                    casts++;
+                    switch (cl.Status)
+                    {
+                        case AbstractCastEvent.AnimationStatus.Interrupted:
+                            timeWasted += cl.SavedDuration;
+                            break;
+
+                        case AbstractCastEvent.AnimationStatus.Reduced:
+                            timeSaved += cl.SavedDuration;
+                            break;
+                    }
+                }
+                timeCasting += Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start);
+            }
+            return (timeCasting, casts, timeSaved, timeWasted);
+        }
+
+        private static object[] GetDMGDtoItem(SkillItem skill, List<AbstractHealthDamageEvent> damageLogs, Dictionary<SkillItem, List<AbstractCastEvent>> castLogsBySkill, Dictionary<SkillItem, List<AbstractBreakbarDamageEvent>> breakbarLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
         {
             int totaldamage = 0,
                     mindamage = int.MaxValue,
@@ -92,25 +117,14 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
             int casts = 0, timeWasted = 0, timeSaved = 0;
             if (!IsIndirectDamage && castLogsBySkill != null && castLogsBySkill.TryGetValue(skill, out List<AbstractCastEvent> clList))
             {
-                foreach (AbstractCastEvent cl in clList)
-                {
-                    if (phase.InInterval(cl.Time))
-                    {
-                        casts++;
-                        switch (cl.Status)
-                        {
-                            case AbstractCastEvent.AnimationStatus.Interrupted:
-                                timeWasted += cl.SavedDuration;
-                                break;
-
-                            case AbstractCastEvent.AnimationStatus.Reduced:
-                                timeSaved += cl.SavedDuration;
-                                break;
-                        }
-                    }
-                    timeCasting += Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start);
-
-                }
+                (timeCasting, casts, timeSaved, timeWasted) = GetCastValues(clList, phase);
+                castLogsBySkill.Remove(skill);
+            }
+            double breakbarDamage = 0.0;
+            if (breakbarLogsBySkill.TryGetValue(skill, out List<AbstractBreakbarDamageEvent> brList))
+            {
+                breakbarDamage = brList.Sum(x => x.BreakbarDamage);
+                breakbarLogsBySkill.Remove(skill);
             }
             object[] skillItem = {
                     IsIndirectDamage,
@@ -129,7 +143,8 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
                     IsIndirectDamage ? 0 : critDamage,
                     hits,
                     IsIndirectDamage ? 0 : timeCasting,
-                    againstMoving
+                    againstMoving,
+                    Math.Round(breakbarDamage, 1)
                 };
             return skillItem;
         }
@@ -142,60 +157,45 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
             };
             FinalDefensesAll incomingDamageStats = p.GetDefenseStats(log, phase.Start, phase.End);
             IReadOnlyList<AbstractHealthDamageEvent> damageLogs = p.GetDamageTakenEvents(null, log, phase.Start, phase.End);
+            IReadOnlyList<AbstractBreakbarDamageEvent> breakbarLogs = p.GetBreakbarDamageTakenEvents(null, log, phase.Start, phase.End);
             var damageLogsBySkill = damageLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
+            var breakbarLogsBySkill = breakbarLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
             dto.ContributedDamage = incomingDamageStats.DamageTaken;
             dto.ContributedShieldDamage = incomingDamageStats.DamageBarrier;
             foreach (KeyValuePair<SkillItem, List<AbstractHealthDamageEvent>> pair in damageLogsBySkill)
             {
-                dto.Distribution.Add(GetDMGDtoItem(pair.Key, pair.Value, null, usedSkills, usedBuffs, log.Buffs, phase));
+                dto.Distribution.Add(GetDMGDtoItem(pair.Key, pair.Value, null, breakbarLogsBySkill, usedSkills, usedBuffs, log.Buffs, phase));
             }
             return dto;
         }
 
 
-        private static List<object[]> BuildDMGDistBodyData(ParsedEvtcLog log, IReadOnlyList<AbstractCastEvent> casting, IReadOnlyList<AbstractHealthDamageEvent> damageLogs, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, PhaseData phase)
+        private static List<object[]> BuildDMGDistBodyData(ParsedEvtcLog log, IReadOnlyList<AbstractCastEvent> casting, IReadOnlyList<AbstractHealthDamageEvent> damageLogs, IReadOnlyList<AbstractBreakbarDamageEvent> breakbarLogs, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, PhaseData phase)
         {
             var list = new List<object[]>();
             var castLogsBySkill = casting.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
             var damageLogsBySkill = damageLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
+            var breakbarLogsBySkill = breakbarLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
             var conditionsById = log.StatisticsHelper.PresentConditions.ToDictionary(x => x.ID);
             foreach (KeyValuePair<SkillItem, List<AbstractHealthDamageEvent>> pair in damageLogsBySkill)
             {
-                list.Add(GetDMGDtoItem(pair.Key, pair.Value, castLogsBySkill, usedSkills, usedBuffs, log.Buffs, phase));
+                list.Add(GetDMGDtoItem(pair.Key, pair.Value, castLogsBySkill, breakbarLogsBySkill, usedSkills, usedBuffs, log.Buffs, phase));
             }
             // non damaging
             foreach (KeyValuePair<SkillItem, List<AbstractCastEvent>> pair in castLogsBySkill)
             {
-                if (damageLogsBySkill.ContainsKey(pair.Key))
-                {
-                    continue;
-                }
-
                 if (!usedSkills.ContainsKey(pair.Key.ID))
                 {
                     usedSkills.Add(pair.Key.ID, pair.Key);
                 }
-                long timeCasting = 0;
-                int casts = 0;
-                int timeWasted = 0, timeSaved = 0;
-                foreach (AbstractCastEvent cl in pair.Value)
+                double breakbarDamage = 0.0;
+                if (breakbarLogsBySkill.TryGetValue(pair.Key, out List<AbstractBreakbarDamageEvent> brList))
                 {
-                    if (phase.InInterval(cl.Time))
-                    {
-                        casts++;
-                        switch (cl.Status)
-                        {
-                            case AbstractCastEvent.AnimationStatus.Interrupted:
-                                timeWasted += cl.SavedDuration;
-                                break;
-
-                            case AbstractCastEvent.AnimationStatus.Reduced:
-                                timeSaved += cl.SavedDuration;
-                                break;
-                        }
-                    }
-                    timeCasting += Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start);
+                    breakbarDamage = brList.Sum(x => x.BreakbarDamage);
+                    breakbarLogsBySkill.Remove(pair.Key);
                 }
+
+                (long timeCasting, int casts, int timeSaved, int timeWasted) = GetCastValues(pair.Value, phase);
 
                 object[] skillData = {
                     false,
@@ -214,7 +214,39 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
                     0,
                     0,
                     timeCasting,
-                    0
+                    0,
+                    breakbarDamage
+                };
+                list.Add(skillData);
+            }
+            // breakbar only
+            foreach (KeyValuePair<SkillItem, List<AbstractBreakbarDamageEvent>> pair in breakbarLogsBySkill)
+            {
+                if (!usedSkills.ContainsKey(pair.Key.ID))
+                {
+                    usedSkills.Add(pair.Key.ID, pair.Key);
+                }
+                double breakbarDamage = pair.Value.Sum(x => x.BreakbarDamage);
+
+                object[] skillData = {
+                    false,
+                    pair.Key.ID,
+                    0,
+                    -1,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    breakbarDamage
                 };
                 list.Add(skillData);
             }
@@ -226,13 +258,14 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
             var dto = new DmgDistributionDto();
             IReadOnlyList<AbstractCastEvent> casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End);
             IReadOnlyList<AbstractHealthDamageEvent> damageLogs = p.GetJustActorDamageEvents(target, log, phase.Start, phase.End);
+            IReadOnlyList<AbstractBreakbarDamageEvent> breakbarLogs = p.GetJustActorBreakbarDamageEvents(target, log, phase.Start, phase.End);
             dto.ContributedDamage = dps.ActorDamage;
             dto.ContributedShieldDamage = dps.ActorBarrierDamage;
             dto.ContributedBreakbarDamage = dps.ActorBreakbarDamage;
             dto.TotalDamage = dps.Damage;
             dto.TotalBreakbarDamage = dps.BreakbarDamage;
             dto.TotalCasting = casting.Sum(cl => Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start));
-            dto.Distribution = BuildDMGDistBodyData(log, casting, damageLogs, usedSkills, usedBuffs, phase);
+            dto.Distribution = BuildDMGDistBodyData(log, casting, damageLogs, breakbarLogs, usedSkills, usedBuffs, phase);
             return dto;
         }
 
@@ -262,7 +295,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
             dto.TotalDamage = dps.Damage;
             dto.TotalBreakbarDamage = dps.BreakbarDamage;
             dto.TotalCasting = casting.Sum(cl => Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start));
-            dto.Distribution = BuildDMGDistBodyData(log, casting, damageLogs, usedSkills, usedBuffs, phase);
+            dto.Distribution = BuildDMGDistBodyData(log, casting, damageLogs, brkDamageLogs, usedSkills, usedBuffs, phase);
             return dto;
         }
 
