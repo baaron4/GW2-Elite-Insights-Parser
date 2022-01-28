@@ -11,6 +11,7 @@ namespace GW2EIEvtcParser.ParsedData
     public class SkillItem
     {
         public const long DodgeId = 65001;
+        public const long GenericBreakbarId = 65001;
         public const long MirageCloakDodgeId = -17;
         public const long ResurrectId = 1066;
         public const long BandageId = 1175;
@@ -33,6 +34,7 @@ namespace GW2EIEvtcParser.ParsedData
             {ResurrectId, "Resurrect"},
             {BandageId, "Bandage" },
             {DodgeId, "Dodge" },
+            {GenericBreakbarId, "Generic Breakbar" },
             {MirageCloakDodgeId, "Mirage Cloak" },
             {WeaponSwapId, "Weapon Swap" },
             {13594, "Selfless Daring"}, // The game maps this name incorrectly to "Selflessness Daring"
@@ -114,6 +116,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
             {ResurrectId, "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png"},
             {BandageId, "https://wiki.guildwars2.com/images/0/0c/Bandage.png"},
+            {GenericBreakbarId, "https://wiki.guildwars2.com/images/a/ae/Unshakable.png"},
             {DodgeId, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png"},
             {MirageCloakDodgeId, "https://wiki.guildwars2.com/images/a/a5/Mirage_Cloak_%28effect%29.png"},
             {WeaponSwapId, "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png"},
