@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
             new PlayerBuffApplyMechanic(791, "Fear", new MechanicPlotlySetting("star-square",Colors.Black), "Feared","Feared by Eye Teleport Skill", "Feared",0),
             new PlayerBuffApplyMechanic(48779, "Light Carrier", new MechanicPlotlySetting("circle-open",Colors.Yellow), "Light Orb","Light Carrier (picked up a light orb)", "Picked up orb",0),
-            new PlayerCastStartMechanic(47074, "Flare", new MechanicPlotlySetting("circle",Colors.Green), "Detonate","Flare (detonate light orb to incapacitate eye)", "Detonate orb",0),
+            new PlayerCastStartMechanic(47074, "Flare", new MechanicPlotlySetting("circle",Colors.Green), "Detonate","Flare (detonate light orb to incapacitate eye)", "Detonate orb",0, (evt, log) => evt.Status != AbstractCastEvent.AnimationStatus.Interrupted),
             new HitOnPlayerMechanic(47518, "Piercing Shadow", new MechanicPlotlySetting("hexagram-open",Colors.Blue), "Spin","Piercing Shadow (damaging spin to all players in sight)", "Eye Spin",0),
             new HitOnPlayerMechanic(48150, "Deep Abyss", new MechanicPlotlySetting("triangle-right-open",Colors.Red), "Beam","Deep Abyss (ticking eye beam)", "Eye Beam",0),
             new PlayerBuffApplyToMechanic(833, "Hard CC Eye of Fate", new MechanicPlotlySetting("triangle",Colors.Red), "Hard CC Fate","Applied hard CC on Eye of Fate", "Hard CC Fate",50, (ba, log) => ba.To.ID == (int) ArcDPSEnums.TargetID.EyeOfFate),
