@@ -15,7 +15,12 @@ namespace GW2EIJSON
         /// Total damage done
         /// </summary>
         public int TotalDamage { get; set; }
-        
+
+        /// <summary>
+        /// Total breakbar damage done
+        /// </summary>
+        public double TotalBreakbarDamage { get; set; }
+
         /// <summary>
         /// Minimum damage done
         /// </summary>

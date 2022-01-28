@@ -88,7 +88,13 @@ namespace GW2EIBuilders.JsonModels.JsonActors
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                totalDamageDist[i] = JsonDamageDistBuilder.BuildJsonDamageDistList(minions.GetDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
+                totalDamageDist[i] = JsonDamageDistBuilder.BuildJsonDamageDistList(
+                    minions.GetDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), 
+                    minions.GetBreakbarDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), 
+                    log, 
+                    skillDesc, 
+                    buffDesc
+                );
             }
             jsonMinions.TotalDamageDist = totalDamageDist;
             if (!isEnemyMinion)
@@ -101,7 +107,13 @@ namespace GW2EIBuilders.JsonModels.JsonActors
                     for (int j = 0; j < phases.Count; j++)
                     {
                         PhaseData phase = phases[j];
-                        targetDamageDist[i][j] = JsonDamageDistBuilder.BuildJsonDamageDistList(minions.GetDamageEvents(target, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillDesc, buffDesc);
+                        targetDamageDist[i][j] = JsonDamageDistBuilder.BuildJsonDamageDistList(
+                            minions.GetDamageEvents(target, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), 
+                            minions.GetBreakbarDamageEvents(target, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), 
+                            log, 
+                            skillDesc, 
+                            buffDesc
+                        );
                     }
                 }
                 jsonMinions.TargetDamageDist = targetDamageDist;
