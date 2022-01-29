@@ -162,6 +162,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
             var breakbarLogsBySkill = breakbarLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
             dto.ContributedDamage = incomingDamageStats.DamageTaken;
             dto.ContributedShieldDamage = incomingDamageStats.DamageBarrier;
+            dto.ContributedBreakbarDamage = incomingDamageStats.BreakbarDamageTaken;
             foreach (KeyValuePair<SkillItem, List<AbstractHealthDamageEvent>> pair in damageLogsBySkill)
             {
                 dto.Distribution.Add(GetDMGDtoItem(pair.Key, pair.Value, null, breakbarLogsBySkill, usedSkills, usedBuffs, log.Buffs, phase));
