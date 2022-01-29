@@ -13,6 +13,7 @@ namespace GW2EIEvtcParser.EncounterLogic
     {
         private bool _hasDarkMode = false;
         private bool _hasElementalMode = false;
+        private bool _china = false;
         public AiKeeperOfThePeak(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
@@ -155,15 +156,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Ai not found");
             }
-            bool china = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Language && x.SrcAgent == (ulong)LanguageEvent.LanguageEnum.Chinese) != null;
+            _china = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Language && x.SrcAgent == (ulong)LanguageEvent.LanguageEnum.Chinese) != null;
             CombatItem darkModePhaseEvent = combatData.FirstOrDefault(x => x.SkillID == 53569 && x.SrcMatchesAgent(aiAgent));
-            _hasDarkMode = combatData.Exists(x => (china ? x.SkillID == 61279 : x.SkillID == 61356) && x.SrcMatchesAgent(aiAgent));
+            _hasDarkMode = combatData.Exists(x => (_china ? x.SkillID == 61358 : x.SkillID == 61356) && x.SrcMatchesAgent(aiAgent));
             _hasElementalMode = !_hasDarkMode || darkModePhaseEvent != null;
             if (_hasDarkMode)
             {
                 if (_hasElementalMode)
                 {
-                    long darkModeStart = combatData.FirstOrDefault(x => x.SkillID == 61277 && x.Time >= darkModePhaseEvent.Time && x.SrcMatchesAgent(aiAgent)).Time;
+                    long darkModeStart = combatData.FirstOrDefault(x => (_china ? x.SkillID == 61279 : x.SkillID == 61277) && x.Time >= darkModePhaseEvent.Time && x.SrcMatchesAgent(aiAgent)).Time;
                     CombatItem invul895Loss = combatData.FirstOrDefault(x => x.Time <= darkModeStart && x.SkillID == 895 && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SrcMatchesAgent(aiAgent));
                     long lastAwareTime = (invul895Loss != null ? invul895Loss.Time : darkModeStart);
                     AgentItem darkAiAgent = agentData.AddCustomNPCAgent(lastAwareTime + 1, aiAgent.LastAware, aiAgent.Name, aiAgent.Spec, (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2, false, aiAgent.Toughness, aiAgent.Healing, aiAgent.Condition, aiAgent.Concentration, aiAgent.HitboxWidth, aiAgent.HitboxHeight);
@@ -320,7 +321,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         subPhase.AddTarget(elementalAi);
                         phases.Add(subPhase);
                         long invul762Loss = invul762Losses[i].Time;
-                        AbstractCastEvent castEvt = elementalAi.GetCastEvents(log, eleStart, eleEnd).FirstOrDefault(x => x.SkillId == 61385 && x.Time >= invul762Loss);
+                        long skillID = _china ? 61388 : 61385;
+                        AbstractCastEvent castEvt = elementalAi.GetCastEvents(log, eleStart, eleEnd).FirstOrDefault(x => x.SkillId == skillID && x.Time >= invul762Loss);
                         if (castEvt == null)
                         {
                             break;
@@ -349,13 +351,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                     phases.Add(darkPhase);
                 }
                 // sub phases
-                AbstractCastEvent fearToSorrow = darkAi.GetCastEvents(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillId == 61606);
+                long fearToSorrowSkillID = _china ? 61571 : 61606;
+                AbstractCastEvent fearToSorrow = darkAi.GetCastEvents(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillId == fearToSorrowSkillID);
                 if (fearToSorrow != null)
                 {
                     var fearPhase = new PhaseData(darkStart + 1, fearToSorrow.Time, "Fear");
                     fearPhase.AddTarget(darkAi);
                     phases.Add(fearPhase);
-                    AbstractCastEvent sorrowToGuilt = darkAi.GetCastEvents(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillId == 61602);
+                    long sorrowToGuiltSkillID = _china ? 61361 : 61602;
+                    AbstractCastEvent sorrowToGuilt = darkAi.GetCastEvents(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillId == sorrowToGuiltSkillID);
                     if (sorrowToGuilt != null)
                     {
                         var sorrowPhase = new PhaseData(fearToSorrow.Time + 1, sorrowToGuilt.Time, "Sorrow");
