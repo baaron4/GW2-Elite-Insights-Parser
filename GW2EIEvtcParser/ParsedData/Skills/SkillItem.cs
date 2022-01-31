@@ -274,7 +274,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 Name = overrideName;
             } 
-            else if (ApiSkill != null && UnknownSkill)
+            else if (ApiSkill != null && (UnknownSkill || Name.All(char.IsDigit)))
             {
                 Name = ApiSkill.Name;
             }
