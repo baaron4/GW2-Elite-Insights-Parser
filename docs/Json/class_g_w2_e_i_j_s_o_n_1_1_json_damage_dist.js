@@ -17,5 +17,6 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist =
     [ "Min", "class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html#a736e1b77bf183e2337d579368799c532", null ],
     [ "Missed", "class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html#a9270ad6bf755814079cc5e2fda293069", null ],
     [ "ShieldDamage", "class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html#a8880186b1eb99edad08694b9fad1a35a", null ],
+    [ "TotalBreakbarDamage", "class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html#ae529b4f469ae3ef22a2461f23b5b0cd1", null ],
     [ "TotalDamage", "class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html#aa051f1e3117d8a7c75aa2b828b06e3c1", null ]
 ];
