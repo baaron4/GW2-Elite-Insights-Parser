@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"class_g_w2_e_i_j_s_o_n_1_1_json_mechanics_1_1_json_mechanic.html":[1,0,0,17,0],
 "class_g_w2_e_i_j_s_o_n_1_1_json_mechanics_1_1_json_mechanic.html#a1f5600f2441d616c3babdaed60b4e686":[1,0,0,17,0,0],
 "class_g_w2_e_i_j_s_o_n_1_1_json_mechanics_1_1_json_mechanic.html#a690120eb7fe9774cc4abf162a0f2db2f":[1,0,0,17,0,1],
 "class_g_w2_e_i_j_s_o_n_1_1_json_minions.html":[1,0,0,18],
@@ -156,8 +157,8 @@ var NAVTREEINDEX1 =
 "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_player_support.html#adbb845e8274a18940f2bab7d5faeee36":[1,0,0,24,4,0],
 "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_player_support.html#af18d4004a889cbdfcac78aad6b88df2d":[1,0,0,24,4,3],
 "classes.html":[1,1],
-"functions.html":[1,3,0,0],
 "functions.html":[1,3,0],
+"functions.html":[1,3,0,0],
 "functions_b.html":[1,3,0,1],
 "functions_c.html":[1,3,0,2],
 "functions_d.html":[1,3,0,3],
@@ -204,8 +205,8 @@ var NAVTREEINDEX1 =
 "functions_w.html":[1,3,0,21],
 "hierarchy.html":[1,2],
 "index.html":[],
-"namespace_g_w2_e_i_j_s_o_n.html":[0,0,0],
 "namespace_g_w2_e_i_j_s_o_n.html":[1,0,0],
+"namespace_g_w2_e_i_j_s_o_n.html":[0,0,0],
 "namespaces.html":[0,0],
 "pages.html":[]
 };
