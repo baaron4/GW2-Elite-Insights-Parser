@@ -590,6 +590,11 @@ namespace GW2EIEvtcParser.ParsedData
             return _metaDataEvents.LanguageEvent;
         }
 
+        public InstanceStartEvent GetInstanceStartEvent()
+        {
+            return _metaDataEvents.InstanceStartEvent;
+        }
+
         public LogStartEvent GetLogStartEvent()
         {
             return _metaDataEvents.LogStartEvent;

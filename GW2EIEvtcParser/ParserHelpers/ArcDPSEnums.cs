@@ -141,6 +141,7 @@ namespace GW2EIEvtcParser
             StatReset = 39, 
             Extension = 40,
             APIDelayed = 41,
+            InstanceStart = 42,
             Unknown
         };
 
@@ -597,6 +598,7 @@ namespace GW2EIEvtcParser
         public enum TargetID : int
         {
             WorldVersusWorld = 1,
+            Instance = 2,
             DummyTarget = ArcDPSEnums.DummyTarget,
             Mordremoth = 15884,
             // Raid

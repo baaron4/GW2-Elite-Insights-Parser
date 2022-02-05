@@ -5,6 +5,7 @@ namespace GW2EIEvtcParser.ParsedData
     internal class MetaEventsContainer
     {
         public BuildEvent BuildEvent { get; set; }
+        public InstanceStartEvent InstanceStartEvent { get; set; }
         public LanguageEvent LanguageEvent { get; set; }
         public LogEndEvent LogEndEvent { get; set; }
         public LogStartEvent LogStartEvent { get; set; }

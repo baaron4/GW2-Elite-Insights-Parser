@@ -18,6 +18,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         public long LogStart { get; private set; }
         public long LogEnd { get; private set; }
+        public long LogOffset { get; private set; }
 
         public long FightStartOffset => -LogStart;
         public string DurationString
@@ -212,6 +213,9 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.MedGolem:
                     Logic = new Golem(id);
                     break;
+                case ArcDPSEnums.TargetID.Instance:
+                    Logic = new Instance(id);
+                    break;
                 //
                 default:
                     switch (ArcDPSEnums.GetTrashID(id))
@@ -289,6 +293,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal void ApplyOffset(long offset)
         {
+            LogOffset = offset;
             FightEnd += LogStart - offset;
             LogStart -= offset;
             LogEnd -= offset;
