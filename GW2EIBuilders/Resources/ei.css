@@ -26,11 +26,9 @@
 
 .scrollable-y {
     overflow-y: auto;
-    overflow-x: hidden;
 }
 
 .scrollable-x {
-    overflow-y: hidden;
     overflow-x: auto;
 }
 
