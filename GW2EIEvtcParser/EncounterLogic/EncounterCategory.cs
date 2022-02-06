@@ -25,6 +25,8 @@
             MythwrightGambit,
             TheKeyOfAhdashim,
             //Fractals
+            CaptainMaiTrinBossFractal,
+            Deepstone,
             Nightmare,
             ShatteredObservatory,
             SunquaPeak,
@@ -102,6 +104,8 @@
                 case SubFightCategory.TheKeyOfAhdashim:
                     return "The Key of Ahdashim";
                 // 
+                case SubFightCategory.CaptainMaiTrinBossFractal:
+                    return "Captain Mai Trin Boss Fractal";
                 case SubFightCategory.ShatteredObservatory:
                     return "Shattered Observatory";
                 case SubFightCategory.SunquaPeak:

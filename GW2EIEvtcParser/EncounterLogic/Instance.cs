@@ -25,10 +25,23 @@ namespace GW2EIEvtcParser.EncounterLogic
         private void FillSubLogics(AgentData agentData)
         {
             var allTargetIDs = Enum.GetValues(typeof(ArcDPSEnums.TargetID)).Cast<int>().ToList();
+            var blackList = new HashSet<int>()
+            {
+                (int) ArcDPSEnums.TargetID.Artsariiv,
+                (int) ArcDPSEnums.TargetID.Deimos,
+                (int) ArcDPSEnums.TargetID.ConjuredAmalgamate,
+                (int) ArcDPSEnums.TargetID.CALeftArm_CHINA,
+                (int) ArcDPSEnums.TargetID.CARightArm_CHINA,
+                (int) ArcDPSEnums.TargetID.ConjuredAmalgamate_CHINA,
+            };
             foreach (int targetID in allTargetIDs)
             {
                 if (agentData.GetNPCsByID(targetID).Any())
                 {
+                    if (blackList.Contains(targetID))
+                    {
+                        continue;
+                    }
                     _targetIDs.Add(targetID);
                     /*switch (targetID)
                     {
@@ -71,9 +84,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 _nonPlayerFriendlies.AddRange(logic.NonPlayerFriendlies);
             }
             _targets.RemoveAll(x => x.ID == (int)ArcDPSEnums.TargetID.DummyTarget);
-            Targetless = !_targets.Any();
             AgentItem dummyAgent = agentData.AddCustomNPCAgent(0, fightData.FightEnd, "Dummy Instance Target", ParserHelper.Spec.NPC, (int)ArcDPSEnums.TargetID.Instance, true);
             ComputeFightTargets(agentData, combatData, extensions);
+            _targets.RemoveAll(x => x.LastAware - x.FirstAware < 2200);
+            TargetAgents = new HashSet<AgentItem>(_targets.Select(x => x.AgentItem));
         }
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
@@ -98,6 +112,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             switch(mapID.MapID)
             {
+                // Raids
                 case 1062:
                     EncounterCategoryInformation.Category = FightCategory.Raid;
                     EncounterCategoryInformation.SubCategory = SubFightCategory.SpiritVale;
@@ -140,6 +155,27 @@ namespace GW2EIEvtcParser.EncounterLogic
                     Icon = "https://i.imgur.com/3YGv1wH.png";
                     Extension = "keyadash";
                     return "The Key Of Ahdashim";
+                // Fractals
+                case 960:
+                    EncounterCategoryInformation.Category = FightCategory.Fractal;
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.CaptainMaiTrinBossFractal;
+                    Extension = "captnmai";
+                    return "Captain Mai Trin Boss Fractal";
+                case 1177:
+                    EncounterCategoryInformation.Category = FightCategory.Fractal;
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.Nightmare;
+                    Extension = "nightmare";
+                    return "Nightmare";
+                case 1205:
+                    EncounterCategoryInformation.Category = FightCategory.Fractal;
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.ShatteredObservatory;
+                    Extension = "shatrdobs";
+                    return "Shattered Observatory";
+                case 1290:
+                    EncounterCategoryInformation.Category = FightCategory.Fractal;
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.Deepstone;
+                    Extension = "deepstone";
+                    return "Deepstone";
                 case 1384:
                     EncounterCategoryInformation.Category = FightCategory.Fractal;
                     EncounterCategoryInformation.SubCategory = SubFightCategory.SunquaPeak;
