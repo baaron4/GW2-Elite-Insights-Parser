@@ -16,6 +16,7 @@ namespace GW2EIEvtcParser.ParsedData
         public long FightEnd { get; private set; } = long.MaxValue;
         public long FightDuration => FightEnd;
 
+        public string FightName { get; private set; }
         public long LogStart { get; private set; }
         public long LogEnd { get; private set; }
         public long LogOffset { get; private set; }
@@ -43,6 +44,10 @@ namespace GW2EIEvtcParser.ParsedData
         // Constructors
         internal FightData(int id, AgentData agentData, EvtcParserSettings parserSettings, long start, long end)
         {
+            if (!agentData.GetNPCsByID(id).Any())
+            {
+                id = 2;
+            }
             LogStart = start;
             LogEnd = end;
             FightEnd = end - start;
@@ -232,9 +237,9 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        public string GetFightName(ParsedEvtcLog log)
+        internal void SetFightName(CombatData combatData, AgentData agentData)
         {
-            return Logic.GetLogicName(log) + (_isCM == CMStatus.CM ? " CM" : "");
+            FightName = Logic.GetLogicName(combatData, agentData) + (_isCM == CMStatus.CM ? " CM" : "");
         }
         public IReadOnlyList<PhaseData> GetPhases(ParsedEvtcLog log)
         {
@@ -277,11 +282,11 @@ namespace GW2EIEvtcParser.ParsedData
         }
 
         // Setters
-        internal void SetCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal void SetCM(CombatData combatData, AgentData agentData)
         {
             if (_isCM == CMStatus.NotSet)
             {
-                _isCM = Logic.IsCM(combatData, agentData, fightData);
+                _isCM = Logic.IsCM(combatData, agentData, this);
             }
         }
 

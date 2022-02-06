@@ -84,9 +84,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             return base.GetCombatMapInternal(log);
         }
-        internal override string GetLogicName(ParsedEvtcLog log)
+        internal override string GetLogicName(CombatData combatData, AgentData agentData)
         {
-            MapIDEvent mapID = log.CombatData.GetMapIDEvents().LastOrDefault();
+            MapIDEvent mapID = combatData.GetMapIDEvents().LastOrDefault();
             if (mapID == null)
             {
                 return _defaultName;

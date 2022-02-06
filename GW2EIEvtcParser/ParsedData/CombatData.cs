@@ -407,7 +407,8 @@ namespace GW2EIEvtcParser.ParsedData
                                             ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
                                                 (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
             operation.UpdateProgressWithCancellationCheck("Checking CM");
-            fightData.SetCM(this, agentData, fightData);
+            fightData.SetCM(this, agentData);
+            fightData.SetFightName(this, agentData);
             foreach (AbstractExtensionHandler handler in extensions.Values)
             {
                 handler.AttachToCombatData(this, operation, GetBuildEvent().Build);

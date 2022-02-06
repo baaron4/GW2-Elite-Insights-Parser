@@ -94,7 +94,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<int>();
         }
 
-        internal virtual string GetLogicName(ParsedEvtcLog log)
+        internal virtual string GetLogicName(CombatData combatData, AgentData agentData)
         {
             AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);
             if (target == null)
@@ -104,7 +104,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return target.Character;
         }
 
-        private static void RegroupTargetsByID(int id, AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal static void RegroupTargetsByID(int id, AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
             if (agents.Count > 1)

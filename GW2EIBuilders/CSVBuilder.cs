@@ -91,7 +91,7 @@ namespace GW2EIBuilders
             NewLine();
             NewLine();
             //Boss card
-            WriteLine(new[] { "Boss", _log.FightData.GetFightName(_log) });
+            WriteLine(new[] { "Boss", _log.FightData.FightName });
             WriteLine(new[] { "Success", _log.FightData.Success.ToString() });
             WriteLine(new[] { "Total Boss Health", _legacyTarget.GetHealth(_log.CombatData).ToString() });
             IReadOnlyList<HealthUpdateEvent> hpUpdates = _log.CombatData.GetHealthUpdateEvents(_legacyTarget.AgentItem);
