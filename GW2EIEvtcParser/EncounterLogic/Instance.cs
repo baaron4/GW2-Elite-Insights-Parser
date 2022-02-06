@@ -13,6 +13,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         public bool StartedLate { get; private set; }
         public bool EndedBeforeExpectedEnd { get; private set; }
         private readonly List<FightLogic> _subLogics = new List<FightLogic>();
+        private readonly List<int> _targetIDs = new List<int>();
         public Instance(int id) : base(id)
         {
             Extension = "instance";
@@ -28,16 +29,35 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (agentData.GetNPCsByID(targetID).Any())
                 {
-                    switch(targetID)
+                    _targetIDs.Add(targetID);
+                    /*switch (targetID)
                     {
                         case (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak:
                             //_subLogics.Add(new AiKeeperOfThePeak(targetID));
                             break;
                         default:
                             break;
-                    }
+                    }*/
                 }
             }
+        }
+
+        internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+        {
+            if (!_targetIDs.Any())
+            {
+                return base.GetPhases(log, requirePhases);
+            }
+            List<PhaseData> phases = GetInitialPhase(log);
+            phases[0].AddTargets(Targets);
+            int phaseCount = 0;
+            foreach (NPC target in Targets)
+            {
+                var phase = new PhaseData(Math.Max(0, target.FirstAware), Math.Min(target.LastAware, log.FightData.FightEnd), "Phase " + (++phaseCount));
+                phase.AddTarget(target);
+                phases.Add(phase);
+            }
+            return phases;
         }
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -78,6 +98,48 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             switch(mapID.MapID)
             {
+                case 1062:
+                    EncounterCategoryInformation.Category = FightCategory.Raid;
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.SpiritVale;
+                    Icon = "https://i.imgur.com/DcuOUHQ.png";
+                    Extension = "sprtvale";
+                    return "Spirit Vale";
+                case 1149:
+                    EncounterCategoryInformation.Category = FightCategory.Raid;
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.SalvationPass;
+                    Icon = "https://i.imgur.com/ihpaEpv.png";
+                    Extension = "salvpass";
+                    return "Salvation Pass";
+                case 1156:
+                    EncounterCategoryInformation.Category = FightCategory.Raid;
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.StrongholdOfTheFaithful;
+                    Icon = "https://i.imgur.com/i1sOswI.png";
+                    Extension = "strgldfaith";
+                    return "Stronghold Of The Faithful";
+                case 1188:
+                    EncounterCategoryInformation.Category = FightCategory.Raid;
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.BastionOfThePenitent;
+                    Icon = "https://i.imgur.com/UA9F5cy.png";
+                    Extension = "bstpen";
+                    return "Bastion Of The Penitent";
+                case 1264:
+                    EncounterCategoryInformation.Category = FightCategory.Raid;
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.HallOfChains;
+                    Icon = "https://i.imgur.com/GjUeL1x.png";
+                    Extension = "hallchains";
+                    return "Hall Of Chains";
+                case 1303:
+                    EncounterCategoryInformation.Category = FightCategory.Raid;
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.MythwrightGambit;
+                    Icon = "https://i.imgur.com/1dSCf2T.png";
+                    Extension = "mythgamb";
+                    return "Mythwright Gambit";
+                case 1323:
+                    EncounterCategoryInformation.Category = FightCategory.Raid;
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.TheKeyOfAhdashim;
+                    Icon = "https://i.imgur.com/3YGv1wH.png";
+                    Extension = "keyadash";
+                    return "The Key Of Ahdashim";
                 case 1384:
                     EncounterCategoryInformation.Category = FightCategory.Fractal;
                     EncounterCategoryInformation.SubCategory = SubFightCategory.SunquaPeak;
@@ -148,9 +210,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         }
         protected override List<int> GetTargetsIDs()
         {
-            if (!Targetless)
+            if (_targetIDs.Any())
             {
-                return new List<int>();
+                return _targetIDs;
             }
             return new List<int>()
             {
