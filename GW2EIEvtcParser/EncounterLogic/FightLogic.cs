@@ -104,7 +104,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return target.Character;
         }
 
-        internal static void RegroupTargetsByID(int id, AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        private static void RegroupTargetsByID(int id, AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
             if (agents.Count > 1)

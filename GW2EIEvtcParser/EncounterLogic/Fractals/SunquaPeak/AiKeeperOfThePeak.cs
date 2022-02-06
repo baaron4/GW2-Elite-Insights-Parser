@@ -151,7 +151,6 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            RegroupTargetsByID((int)ArcDPSEnums.TargetID.AiKeeperOfThePeak, agentData, combatData, extensions);
             AgentItem aiAgent = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.AiKeeperOfThePeak).FirstOrDefault();
             if (aiAgent == null)
             {
