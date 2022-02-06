@@ -44,10 +44,6 @@ namespace GW2EIEvtcParser.ParsedData
         // Constructors
         internal FightData(int id, AgentData agentData, EvtcParserSettings parserSettings, long start, long end)
         {
-            if (!agentData.GetNPCsByID(id).Any())
-            {
-                id = 2;
-            }
             LogStart = start;
             LogEnd = end;
             FightEnd = end - start;
