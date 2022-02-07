@@ -16,8 +16,10 @@ namespace GW2EIEvtcParser.ParsedData
         public long FightEnd { get; private set; } = long.MaxValue;
         public long FightDuration => FightEnd;
 
+        public string FightName { get; private set; }
         public long LogStart { get; private set; }
         public long LogEnd { get; private set; }
+        public long LogOffset { get; private set; }
 
         public long FightStartOffset => -LogStart;
         public string DurationString
@@ -212,6 +214,9 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.MedGolem:
                     Logic = new Golem(id);
                     break;
+                case ArcDPSEnums.TargetID.Instance:
+                    Logic = new Instance(id);
+                    break;
                 //
                 default:
                     switch (ArcDPSEnums.GetTrashID(id))
@@ -228,9 +233,9 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        public string GetFightName(ParsedEvtcLog log)
+        internal void SetFightName(CombatData combatData, AgentData agentData)
         {
-            return Logic.GetLogicName(log) + (_isCM == CMStatus.CM ? " CM" : "");
+            FightName = Logic.GetLogicName(combatData, agentData) + (_isCM == CMStatus.CM ? " CM" : "");
         }
         public IReadOnlyList<PhaseData> GetPhases(ParsedEvtcLog log)
         {
@@ -273,11 +278,11 @@ namespace GW2EIEvtcParser.ParsedData
         }
 
         // Setters
-        internal void SetCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal void SetCM(CombatData combatData, AgentData agentData)
         {
             if (_isCM == CMStatus.NotSet)
             {
-                _isCM = Logic.IsCM(combatData, agentData, fightData);
+                _isCM = Logic.IsCM(combatData, agentData, this);
             }
         }
 
@@ -289,6 +294,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal void ApplyOffset(long offset)
         {
+            LogOffset = offset;
             FightEnd += LogStart - offset;
             LogStart -= offset;
             LogEnd -= offset;

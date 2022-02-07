@@ -52,6 +52,10 @@ namespace GW2EIEvtcParser
             FriendlyAgents = new HashSet<AgentItem>(friendlies.Select(x => x.AgentItem));
             _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Combat Events");
             CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList, operation, extensions, evtcVersion);
+            operation.UpdateProgressWithCancellationCheck("Checking CM");
+            FightData.SetCM(CombatData, AgentData);
+            operation.UpdateProgressWithCancellationCheck("Setting Fight Name");
+            FightData.SetFightName(CombatData, AgentData);
             //
             _operation.UpdateProgressWithCancellationCheck("Checking Success");
             FightData.Logic.CheckSuccess(CombatData, AgentData, FightData, PlayerAgents);

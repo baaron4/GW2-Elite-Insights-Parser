@@ -105,7 +105,7 @@ namespace GW2EIBuilders.HtmlModels
             Success = log.FightData.Success;
             Wvw = log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;
             Targetless = log.FightData.Logic.Targetless;
-            FightName = log.FightData.GetFightName(log);
+            FightName = log.FightData.FightName;
             FightIcon = log.FightData.Logic.Icon;
             LightTheme = light;
             SingleGroup = log.PlayerList.Select(x => x.Group).Distinct().Count() == 1;

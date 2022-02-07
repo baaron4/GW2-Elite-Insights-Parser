@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -26,7 +27,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (1920, 12160, 2944, 14464));
         }*/
 
-        internal override string GetLogicName(ParsedEvtcLog log)
+        internal override string GetLogicName(CombatData combatData, AgentData agentData)
         {
             return "Escort";
         }

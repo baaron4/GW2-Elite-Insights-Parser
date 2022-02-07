@@ -94,7 +94,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<int>();
         }
 
-        internal virtual string GetLogicName(ParsedEvtcLog log)
+        internal virtual string GetLogicName(CombatData combatData, AgentData agentData)
         {
             AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);
             if (target == null)

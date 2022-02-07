@@ -78,7 +78,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override string GetLogicName(ParsedEvtcLog log)
+        internal override string GetLogicName(CombatData combatData, AgentData agentData)
         {
             return "Twisted Castle";
         }

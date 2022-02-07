@@ -16,7 +16,7 @@ namespace GW2EIParser
             public OperationBasicMetaData(ParsedEvtcLog log)
             {
                 FightDuration = log.FightData.DurationString;
-                FightName = log.FightData.GetFightName(log);
+                FightName = log.FightData.FightName;
                 FightSuccess = log.FightData.Success;
                 FightCategory = log.FightData.Logic.EncounterCategoryInformation;
                 Icon = log.FightData.Logic.Icon;

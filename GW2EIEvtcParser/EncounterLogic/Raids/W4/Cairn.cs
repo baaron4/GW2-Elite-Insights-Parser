@@ -199,7 +199,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return combatData.GetSkills().Contains(38098) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
         }
 
-        internal override string GetLogicName(ParsedEvtcLog log)
+        internal override string GetLogicName(CombatData combatData, AgentData agentData)
         {
             return "Cairn";
         }

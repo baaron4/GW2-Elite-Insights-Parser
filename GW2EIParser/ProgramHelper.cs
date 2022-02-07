@@ -81,7 +81,7 @@ namespace GW2EIParser
             //
             builder.AddField("Game Data", "ARC: " + log.LogData.ArcVersion + " | " + "GW2 Build: " + log.LogData.GW2Build);
             //
-            builder.WithTitle(log.FightData.GetFightName(log));
+            builder.WithTitle(log.FightData.FightName);
             //builder.WithTimestamp(DateTime.Now);
             builder.WithFooter(log.LogData.LogStartStd + " / " + log.LogData.LogEndStd);
             builder.WithColor(log.FightData.Success ? Color.Green : Color.Red);

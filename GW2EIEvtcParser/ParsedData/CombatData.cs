@@ -406,8 +406,6 @@ namespace GW2EIEvtcParser.ParsedData
             healing_received_data = allCombatItems.Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                             ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
                                                 (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
-            operation.UpdateProgressWithCancellationCheck("Checking CM");
-            fightData.SetCM(this, agentData, fightData);
             foreach (AbstractExtensionHandler handler in extensions.Values)
             {
                 handler.AttachToCombatData(this, operation, GetBuildEvent().Build);
@@ -588,6 +586,11 @@ namespace GW2EIEvtcParser.ParsedData
         public LanguageEvent GetLanguageEvent()
         {
             return _metaDataEvents.LanguageEvent;
+        }
+
+        public InstanceStartEvent GetInstanceStartEvent()
+        {
+            return _metaDataEvents.InstanceStartEvent;
         }
 
         public LogStartEvent GetLogStartEvent()
