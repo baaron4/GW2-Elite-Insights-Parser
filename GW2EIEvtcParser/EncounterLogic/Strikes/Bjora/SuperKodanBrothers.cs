@@ -174,7 +174,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override string GetLogicName(ParsedEvtcLog log)
+        internal override string GetLogicName(CombatData combatData, AgentData agentData)
         {
             return "Super Kodan Brothers";
         }

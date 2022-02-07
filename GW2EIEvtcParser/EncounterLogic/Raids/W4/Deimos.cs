@@ -369,7 +369,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static List<PhaseData> AddBurstPhases(List<PhaseData> phases, ParsedEvtcLog log, AbstractSingleActor mainTarget)
         {
-            List<AbstractBuffEvent> signets = GetFilteredList(log.CombatData, 38224, mainTarget, true);
+            List<AbstractBuffEvent> signets = GetFilteredList(log.CombatData, 38224, mainTarget, true, true);
             long sigStart = 0;
             int burstID = 1;
             for (int i = 0; i < signets.Count; i++)
@@ -458,7 +458,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                         }
                     }
-                    List<AbstractBuffEvent> signets = GetFilteredList(log.CombatData, 38224, target, true);
+                    List<AbstractBuffEvent> signets = GetFilteredList(log.CombatData, 38224, target, true, true);
                     int sigStart = 0;
                     int sigEnd = 0;
                     foreach (AbstractBuffEvent signet in signets)
@@ -501,7 +501,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // teleport zone
-            List<AbstractBuffEvent> tpDeimos = GetFilteredList(log.CombatData, 37730, p, true);
+            List<AbstractBuffEvent> tpDeimos = GetFilteredList(log.CombatData, 37730, p, true, true);
             int tpStart = 0;
             foreach (AbstractBuffEvent c in tpDeimos)
             {

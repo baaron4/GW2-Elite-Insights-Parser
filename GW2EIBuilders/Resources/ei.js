@@ -38,6 +38,16 @@ function compileTemplates() {
                     });
                 },
                 deep: true
+            },
+            data: {
+                handler: function () {
+                    var div = document.querySelector(this.queryID);
+                    if (!div) {
+                        return;
+                    }
+                    Plotly.react(div, this.data, this.layout, { showEditInChartStudio: true, plotlyServerURL: "https://chart-studio.plotly.com" });
+                },
+                deep: true
             }
         }
     });
@@ -115,7 +125,7 @@ function mainLoad() {
         playerData.dpsGraphCache = new Map();
         playerData.id = i;
     }
-    compileTemplates()
+    compileTemplates();
     if (!!crData) {
         compileCRTemplates();
     }

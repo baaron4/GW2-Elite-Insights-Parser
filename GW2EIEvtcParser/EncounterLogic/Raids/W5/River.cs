@@ -111,7 +111,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Desmina:
-                    List<AbstractBuffEvent> asylums = GetFilteredList(log.CombatData, 47122, target, true);
+                    List<AbstractBuffEvent> asylums = GetFilteredList(log.CombatData, 47122, target, true, true);
                     int asylumStart = 0;
                     foreach (AbstractBuffEvent asylum in asylums)
                     {
@@ -167,7 +167,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
-        internal override string GetLogicName(ParsedEvtcLog log)
+        internal override string GetLogicName(CombatData combatData, AgentData agentData)
         {
             return "River of Souls";
         }

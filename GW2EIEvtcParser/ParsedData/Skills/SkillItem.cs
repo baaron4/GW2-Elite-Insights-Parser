@@ -11,6 +11,7 @@ namespace GW2EIEvtcParser.ParsedData
     public class SkillItem
     {
         public const long DodgeId = 65001;
+        public const long GenericBreakbarId = 65002;
         public const long MirageCloakDodgeId = -17;
         public const long ResurrectId = 1066;
         public const long BandageId = 1175;
@@ -33,6 +34,7 @@ namespace GW2EIEvtcParser.ParsedData
             {ResurrectId, "Resurrect"},
             {BandageId, "Bandage" },
             {DodgeId, "Dodge" },
+            {GenericBreakbarId, "Generic Breakbar" },
             {MirageCloakDodgeId, "Mirage Cloak" },
             {WeaponSwapId, "Weapon Swap" },
             {13594, "Selfless Daring"}, // The game maps this name incorrectly to "Selflessness Daring"
@@ -108,12 +110,14 @@ namespace GW2EIEvtcParser.ParsedData
             {51713, "True Nature - Centaur" },
             {49052, "Soul Stone Venom" },
             {49077, "Soul Stone Venom Strike" },
-            {41714, "Mantra of Solace" }
+            {41714, "Mantra of Solace" },
+            {43260, "Desert Empowerment" },
         };
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
         {
             {ResurrectId, "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png"},
             {BandageId, "https://wiki.guildwars2.com/images/0/0c/Bandage.png"},
+            {GenericBreakbarId, "https://wiki.guildwars2.com/images/a/ae/Unshakable.png"},
             {DodgeId, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png"},
             {MirageCloakDodgeId, "https://wiki.guildwars2.com/images/a/a5/Mirage_Cloak_%28effect%29.png"},
             {WeaponSwapId, "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png"},
@@ -188,6 +192,13 @@ namespace GW2EIEvtcParser.ParsedData
             {31536, "https://wiki.guildwars2.com/images/f/ff/Astral_Wisp.png" },
             {29863, "https://wiki.guildwars2.com/images/6/64/Live_Vicariously.png" },
             {49103, "https://wiki.guildwars2.com/images/7/7a/Signet_of_the_Ether.png" },
+            {14024, "https://wiki.guildwars2.com/images/c/c1/Natural_Healing_%28ranger_trait%29.png" },
+            {46299, "https://wiki.guildwars2.com/images/c/cc/Predator%27s_Cunning.png" },
+            {21776, "https://wiki.guildwars2.com/images/0/07/Aqua_Surge.png" },
+            {43260, "https://wiki.guildwars2.com/images/c/c3/Desert_Empowerment.png" },
+            {26997, "https://wiki.guildwars2.com/images/d/d9/Natural_Harmony.png" },
+            {27101, "https://wiki.guildwars2.com/images/e/e7/Project_Tranquility.png" },
+            {35417, "https://wiki.guildwars2.com/images/b/b6/Ventari%27s_Will.png" },
             // Weaver attunements
             {Buff.FireDual, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
             {Buff.FireWater, "https://i.imgur.com/ar8Hn8G.png" },
@@ -266,7 +277,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 Name = overrideName;
             } 
-            else if (ApiSkill != null && UnknownSkill)
+            else if (ApiSkill != null && (UnknownSkill || Name.All(char.IsDigit)))
             {
                 Name = ApiSkill.Name;
             }

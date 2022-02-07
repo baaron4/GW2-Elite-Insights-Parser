@@ -54,6 +54,7 @@ namespace GW2EIBuilders.HtmlModels
         public List<BuffData> ConditionsStats { get; set; }
         public List<BuffData> PersBuffStats { get; set; }
         public List<BuffData> GearBuffStats { get; set; }
+        public List<BuffData> DebuffStats { get; set; }
 
         // active
         public List<BuffData> BoonActiveStats { get; set; }
@@ -83,6 +84,7 @@ namespace GW2EIBuilders.HtmlModels
         public List<BuffData> ConditionsActiveStats { get; set; }
         public List<BuffData> PersBuffActiveStats { get; set; }
         public List<BuffData> GearBuffActiveStats { get; set; }
+        public List<BuffData> DebuffActiveStats { get; set; }
 
         public List<DamageModData> DmgModifiersCommon { get; set; }
         public List<DamageModData> DmgModifiersItem { get; set; }
@@ -181,6 +183,7 @@ namespace GW2EIBuilders.HtmlModels
             DefBuffStats = BuffData.BuildBuffUptimeData(log, statistics.PresentDefbuffs, phase);
             PersBuffStats = BuffData.BuildPersonalBuffUptimeData(log, persBuffDict, phase);
             GearBuffStats = BuffData.BuildBuffUptimeData(log, statistics.PresentGearbuffs, phase);
+            DebuffStats = BuffData.BuildBuffUptimeData(log, statistics.PresentDebuffs, phase);
             ConditionsStats = BuffData.BuildBuffUptimeData(log, statistics.PresentConditions, phase);
             BoonGenSelfStats = BuffData.BuildBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.Self);
             BoonGenGroupStats = BuffData.BuildBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.Group);
@@ -205,6 +208,7 @@ namespace GW2EIBuilders.HtmlModels
             DefBuffActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentDefbuffs, phase);
             PersBuffActiveStats = BuffData.BuildActivePersonalBuffUptimeData(log, persBuffDict, phase);
             GearBuffActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentGearbuffs, phase);
+            DebuffActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentDebuffs, phase);
             ConditionsActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentConditions, phase);
             BoonGenActiveSelfStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.Self);
             BoonGenActiveGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.Group);
@@ -236,7 +240,7 @@ namespace GW2EIBuilders.HtmlModels
             {
                 TargetsCondiStats.Add(BuffData.BuildTargetCondiData(log, phase.Start, phase.End, target));
                 TargetsCondiTotals.Add(BuffData.BuildTargetCondiUptimeData(log, phase, target));
-                TargetsBoonTotals.Add(HasBoons(log, phase, target) ? BuffData.BuildTargetBoonData(log, phase, target) : null);
+                TargetsBoonTotals.Add(BuffData.BuildTargetBoonData(log, phase, target));
             }
         }
 

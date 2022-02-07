@@ -57,6 +57,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts
             BuildBoonGraphData(list, log.StatisticsHelper.PresentOffbuffs, boonGraphData, phase, usedBuffs);
             BuildBoonGraphData(list, log.StatisticsHelper.PresentSupbuffs, boonGraphData, phase, usedBuffs);
             BuildBoonGraphData(list, log.StatisticsHelper.PresentDefbuffs, boonGraphData, phase, usedBuffs);
+            BuildBoonGraphData(list, log.StatisticsHelper.PresentDebuffs, boonGraphData, phase, usedBuffs);
             BuildBoonGraphData(list, log.StatisticsHelper.PresentGearbuffs, boonGraphData, phase, usedBuffs);
             foreach (BuffsGraphModel bgm in boonGraphData.Values)
             {

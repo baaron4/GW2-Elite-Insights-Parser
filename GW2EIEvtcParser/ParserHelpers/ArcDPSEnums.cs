@@ -143,6 +143,7 @@ namespace GW2EIEvtcParser
             StatReset = 39, 
             Extension = 40,
             APIDelayed = 41,
+            InstanceStart = 42,
             Unknown
         };
 
@@ -599,6 +600,7 @@ namespace GW2EIEvtcParser
         public enum TargetID : int
         {
             WorldVersusWorld = 1,
+            Instance = 2,
             DummyTarget = ArcDPSEnums.DummyTarget,
             Mordremoth = 15884,
             // Raid
@@ -627,6 +629,9 @@ namespace GW2EIEvtcParser
             ConjuredAmalgamate = 43974, // Gadget
             CARightArm = 10142, // Gadget
             CALeftArm = 37464, // Gadget
+            ConjuredAmalgamate_CHINA = 44885, // Gadget
+            CARightArm_CHINA = 11053, // Gadget
+            CALeftArm_CHINA = 38375, // Gadget
             Nikare = 21105,
             Kenut = 21089,
             Qadim = 20934,
@@ -651,6 +656,10 @@ namespace GW2EIEvtcParser
             Skorvald = 17632,
             Artsariiv = 17949,
             Arkk = 17759,
+            MaiTrin = 19697,
+            ShadowMinotaur = 20682,
+            BroodQueen = 20742,
+            TheVoice = 20497,
             AiKeeperOfThePeak = 23254,
             AiKeeperOfThePeak2 = ArcDPSEnums.AiKeeperOfThePeak2,
             // Golems

@@ -144,7 +144,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // Poison
-            List<AbstractBuffEvent> poisonToDrop = GetFilteredList(log.CombatData, 34387, p, true);
+            List<AbstractBuffEvent> poisonToDrop = GetFilteredList(log.CombatData, 34387, p, true, true);
             int toDropStart = 0;
             foreach (AbstractBuffEvent c in poisonToDrop)
             {
@@ -166,7 +166,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             // Transformation
-            List<AbstractBuffEvent> slubTrans = GetFilteredList(log.CombatData, 34362, p, true);
+            List<AbstractBuffEvent> slubTrans = GetFilteredList(log.CombatData, 34362, p, true, true);
             int transfoStart = 0;
             foreach (AbstractBuffEvent c in slubTrans)
             {
@@ -181,7 +181,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             // fixated
-            List<AbstractBuffEvent> fixatedSloth = GetFilteredList(log.CombatData, 34508, p, true);
+            List<AbstractBuffEvent> fixatedSloth = GetFilteredList(log.CombatData, 34508, p, true, true);
             int fixatedSlothStart = 0;
             foreach (AbstractBuffEvent c in fixatedSloth)
             {

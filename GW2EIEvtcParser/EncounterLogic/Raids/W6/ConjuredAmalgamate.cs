@@ -9,7 +9,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 {
     internal class ConjuredAmalgamate : MythwrightGambit
     {
-        public ConjuredAmalgamate(int triggerID) : base(triggerID)
+        private readonly bool _cn;
+        public ConjuredAmalgamate(int triggerID) : base((int)ArcDPSEnums.TargetID.ConjuredAmalgamate)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -28,6 +29,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new EnemyBuffApplyMechanic(52074, "Augmented Power", new MechanicPlotlySetting("asterisk-open",Colors.Red), "Augmented Power","Augmented Power", "Augmented Power",50),
             new EnemyBuffApplyMechanic(53003, "Shielded", new MechanicPlotlySetting("asterisk-open",Colors.Green), "Shielded","Shielded", "Shielded",50),
             });
+            _cn = triggerID != (int)ArcDPSEnums.TargetID.ConjuredAmalgamate;
             Extension = "ca";
             GenericFallBackMethod = FallBackMethod.None;
             Icon = "https://i.imgur.com/eLyIWd2.png";
@@ -73,20 +75,27 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             // make those into npcs
-            IReadOnlyList<AgentItem> cas = agentData.GetGadgetsByID((int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
-            IReadOnlyList<AgentItem> leftArms = agentData.GetGadgetsByID((int)ArcDPSEnums.TargetID.CALeftArm);
-            IReadOnlyList<AgentItem> rightArms = agentData.GetGadgetsByID((int)ArcDPSEnums.TargetID.CARightArm);
+            IReadOnlyList<AgentItem> cas = agentData.GetGadgetsByID(_cn ? (int)ArcDPSEnums.TargetID.ConjuredAmalgamate_CHINA : (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
+            if (!cas.Any())
+            {
+                throw new MissingKeyActorsException("Conjured Amalgamate not found");
+            }
+            IReadOnlyList<AgentItem> leftArms = agentData.GetGadgetsByID(_cn ? (int)ArcDPSEnums.TargetID.CALeftArm_CHINA : (int)ArcDPSEnums.TargetID.CALeftArm);
+            IReadOnlyList<AgentItem> rightArms = agentData.GetGadgetsByID(_cn ? (int)ArcDPSEnums.TargetID.CARightArm_CHINA : (int)ArcDPSEnums.TargetID.CARightArm);
             foreach (AgentItem ca in cas)
             {
                 ca.OverrideType(AgentItem.AgentType.NPC);
+                ca.OverrideID(ArcDPSEnums.TargetID.ConjuredAmalgamate);
             }
             foreach (AgentItem leftArm in leftArms)
             {
                 leftArm.OverrideType(AgentItem.AgentType.NPC);
+                leftArm.OverrideID(ArcDPSEnums.TargetID.CALeftArm);
             }
             foreach (AgentItem rightArm in rightArms)
             {
                 rightArm.OverrideType(AgentItem.AgentType.NPC);
+                rightArm.OverrideID(ArcDPSEnums.TargetID.CARightArm);
             }
             agentData.Refresh();
             AgentItem sword = agentData.AddCustomNPCAgent(0, fightData.FightEnd, "Conjured Sword\0:Conjured Sword\051", ParserHelper.Spec.NPC, (int)ArcDPSEnums.TrashID.ConjuredPlayerSword, true);
@@ -124,7 +133,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.ConjuredAmalgamate:
-                    List<AbstractBuffEvent> shieldCA = GetFilteredList(log.CombatData, 53003, target, true);
+                    List<AbstractBuffEvent> shieldCA = GetFilteredList(log.CombatData, 53003, target, true, true);
                     int shieldCAStart = 0;
                     foreach (AbstractBuffEvent c in shieldCA)
                     {
@@ -146,7 +155,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.ConjuredGreatsword:
                     break;
                 case (int)ArcDPSEnums.TrashID.ConjuredShield:
-                    List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, 53003, target, true);
+                    List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, 53003, target, true, true);
                     int shieldStart = 0;
                     foreach (AbstractBuffEvent c in shield)
                     {

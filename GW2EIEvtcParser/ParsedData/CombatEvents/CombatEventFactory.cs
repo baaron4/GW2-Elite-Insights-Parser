@@ -60,6 +60,9 @@ namespace GW2EIEvtcParser.ParsedData
                     var barrierEvt = new BarrierUpdateEvent(stateChangeEvent, agentData);
                     Add(statusEvents.BarrierUpdateEvents, barrierEvt.Src, barrierEvt);
                     break;
+                case ArcDPSEnums.StateChange.InstanceStart:
+                    metaDataEvents.InstanceStartEvent = new InstanceStartEvent(stateChangeEvent);
+                    break;
                 case ArcDPSEnums.StateChange.LogStart:
                     if (stateChangeEvent.Value == 0 || stateChangeEvent.BuffDmg == 0)
                     {

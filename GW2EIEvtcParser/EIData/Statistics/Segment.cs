@@ -22,6 +22,15 @@ namespace GW2EIEvtcParser.EIData
 
         }
 
+        public bool Intersect(Segment seg)
+        {
+            if (seg.Start == seg.End)
+            {
+                return false;
+            }
+            return Intersect(seg.Start, seg.End);
+        }
+
         public bool Intersect(long start, long end)
         {
             if (Start == End)

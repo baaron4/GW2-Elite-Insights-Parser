@@ -1,5 +1,31 @@
 <template>
     <div>
+        <div style="position:absolute; margin-top: 60px; z-index: 1;">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Filter Players" style="font-size: 1.1em;">
+                Players <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu p-2 font-weight-normal" style="min-width: 145px; max-width: 145px;">
+                <div class="d-flex flex-column justify-content-center align-items-center mb-1"
+                    style="border-bottom: 2px solid #bbb;">
+                    <li>
+                        <button style="width:130px; padding: 0.4rem 0.4rem;" type="button" class="btn btn-primary btn-sm"
+                            @click="for (var i = 0; i < selectedPlayers.length; i++) {selectedPlayers[i].selected = true;}" @click.stop="stopClickEvent">Select all</button>
+                    </li>
+                    <li class="mb-1">
+                        <button style="width:130px; padding: 0.4rem 0.4rem;" type="button" class="btn btn-primary btn-sm"
+                            @click="for (var i = 0; i < selectedPlayers.length; i++) {selectedPlayers[i].selected = false;}" @click.stop="stopClickEvent">Deselect all</button>
+                    </li>
+                </div>
+                <li v-for="(player, index) in _players" :key="index">
+                    <input :id="'rotations-player-' + index  + '-' + phaseindex" type="checkbox"
+                        v-model="selectedPlayers[index].selected" @click.stop="stopClickEvent" />
+                    <label :for="'rotations-player-' + index + '-' + phaseindex" @click.stop="stopClickEvent"
+                        style="font-size: 0.8em; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; width: 110px; margin-top: 2px; margin-left: 5px; position: absolute;">
+                        {{player.name}}
+                    </label>
+                </li>
+            </ul>
+        </div>
         <graph-component :id="graphid" :layout="layout" :data="data"></graph-component>
         <rotation-legend-component></rotation-legend-component>
     </div>
@@ -65,8 +91,13 @@
         template: `${template}`,
         mixins: [graphComponent],
         data: function () {
+            var selectedPlayers = [];
+            for (var i = 0; i < logData.players.length; i++) {
+                selectedPlayers.push({ selected: true });
+            }
             return {
-                annotationsOffset: 0
+                annotationsOffset: 0,
+                selectedPlayers: selectedPlayers
             };
         },
         watch: {
@@ -104,43 +135,23 @@
                     }
                     this.layout.datarevision = new Date().getTime();
                 }
+            },
+            selectedPlayers: {
+                deep: true,
+                handler: function () {
+                    this.computeLayout();
+                }
             }
         },
         created: function () {
-            this.data = [];
-            var images = [];
-            for (var i = 0; i < this.players.length; i++) {
-                var player = this.players[i];
-                computeRotationData(player.details.rotation[this.phaseindex], images, this.data, this.phase, player, i);
-            }
-            this.layout = getActorsRotationLayout(images, this.light ? '#495057' : '#cccccc', this.players, this.phase);
-            computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
-            this.annotationsOffset = this.layout.annotations.length;
-            for (var i = 0; i < this.players.length; i++) {
-                var player = this.players[i];
-                this.layout.annotations.push({
-                    xref: 'paper',
-                    yref: i === 0 ? 'y' : 'y' + (i + 1),
-                    x: 0,
-                    y: 1,
-                    xanchor: 'right',
-                    yanchor: 'middle',
-                    align: 'left',
-                    text: player.name,
-                    showarrow: false,
-                    width: 145,
-                    height: 62,
-                    bgcolor: player.id === this.playerindex ? (this.light ? 'rgba(120, 240, 0, 0.5)' : 'rgba(50, 120, 0, 0.5)') : 'rgba(0,0,0,0)'
-                });
-            }
-            this.updateVisibily(this.layout.images, this.phase.start, this.phase.end);
+            this.computeLayout();
         },
         activated: function () {
             var div = document.getElementById(this.graphid);
-            var layout = this.layout;
-            var images = layout.images;
             var _this = this;
             div.on('plotly_relayout', function (evt) {
+                var layout = _this.layout;
+                var images = layout.images;
                 var x0 = layout.xaxis.range[0];
                 var x1 = layout.xaxis.range[1];
                 //console.log("re-layout " + x0 + " " + x1);
@@ -150,11 +161,61 @@
                 }
             });
         },
+        methods: {
+            stopClickEvent: function (event) {
+                event.stopPropagation();
+            },
+            computeLayout: function () {
+                var backUpXAxis = null;
+                if (this.layout) {
+                    backUpXAxis = this.layout.xaxis;
+                }
+                this.data = [];
+                var images = [];
+                for (var i = 0; i < this.players.length; i++) {
+                    var player = this.players[i];
+                    computeRotationData(player.details.rotation[this.phaseindex], images, this.data, this.phase, player, i);
+                }
+                this.updateVisibily(images, this.phase.start, this.phase.end);
+                this.layout = getActorsRotationLayout(images, this.light ? '#495057' : '#cccccc', this.players, this.phase);
+                if (backUpXAxis) {
+                    this.layout.xaxis = backUpXAxis;
+                }
+                computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
+                this.annotationsOffset = this.layout.annotations.length;
+                for (var i = 0; i < this.players.length; i++) {
+                    var player = this.players[i];
+                    this.layout.annotations.push({
+                        xref: 'paper',
+                        yref: i === 0 ? 'y' : 'y' + (i + 1),
+                        x: 0,
+                        y: 1,
+                        xanchor: 'right',
+                        yanchor: 'middle',
+                        align: 'left',
+                        text: player.name,
+                        showarrow: false,
+                        width: 145,
+                        height: 62,
+                        bgcolor: player.id === this.playerindex ? (this.light ? 'rgba(120, 240, 0, 0.5)' : 'rgba(50, 120, 0, 0.5)') : 'rgba(0,0,0,0)'
+                    });
+                }
+            },
+        },
         computed: {
             phase: function () {
                 return logData.phases[this.phaseindex];
             },
             players: function () {
+                var res = [];
+                for (var i = 0; i < logData.players.length; i++) {
+                    if (this.selectedPlayers[i].selected) {
+                        res.push(logData.players[i]);
+                    }
+                }
+                return res;
+            },
+            _players: function () {
                 return logData.players;
             },
             graphid: function () {

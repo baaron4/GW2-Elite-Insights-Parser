@@ -14,10 +14,10 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
     /// </summary>
     internal static class JsonDamageDistBuilder
     {
-        private static JsonDamageDist BuildJsonDamageDist(long id, List<AbstractHealthDamageEvent> list, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        private static JsonDamageDist BuildJsonDamageDist(long id, List<AbstractHealthDamageEvent> dmList, List<AbstractBreakbarDamageEvent> brList, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
             var jsonDamageDist = new JsonDamageDist();
-            jsonDamageDist.IndirectDamage = list.Exists(x => x is NonDirectHealthDamageEvent);
+            jsonDamageDist.IndirectDamage = dmList.Exists(x => x is NonDirectHealthDamageEvent) || brList.Exists(x => x is NonDirectBreakbarDamageEvent);
             if (jsonDamageDist.IndirectDamage)
             {
                 if (!buffDesc.ContainsKey("b" + id))
@@ -28,7 +28,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
                     }
                     else
                     {
-                        SkillItem skill = list.First().Skill;
+                        SkillItem skill = log.SkillData.Get(id);
                         var auxBoon = new Buff(skill.Name, id, skill.Icon);
                         buffDesc["b" + id] = JsonLogBuilder.BuildBuffDesc(auxBoon, log);
                     }
@@ -38,14 +38,14 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
             {
                 if (!skillDesc.ContainsKey("s" + id))
                 {
-                    SkillItem skill = list.First().Skill;
+                    SkillItem skill = log.SkillData.Get(id);
                     skillDesc["s" + id] = JsonLogBuilder.BuildSkillDesc(skill, log);
                 }
             }
             jsonDamageDist.Id = id;
             jsonDamageDist.Min = int.MaxValue;
             jsonDamageDist.Max = int.MinValue;
-            foreach (AbstractHealthDamageEvent dmgEvt in list)
+            foreach (AbstractHealthDamageEvent dmgEvt in dmList)
             {
                 jsonDamageDist.Hits += dmgEvt.DoubleProcHit ? 0 : 1;
                 jsonDamageDist.TotalDamage += dmgEvt.HealthDamage;
@@ -75,15 +75,28 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
             }
             jsonDamageDist.Min = jsonDamageDist.Min == int.MaxValue ? 0 : jsonDamageDist.Min;
             jsonDamageDist.Max = jsonDamageDist.Max == int.MinValue ? 0 : jsonDamageDist.Max;
+            jsonDamageDist.TotalBreakbarDamage = Math.Round(brList.Sum(x => x.BreakbarDamage), 1);
             return jsonDamageDist;
         }
 
-        internal static List<JsonDamageDist> BuildJsonDamageDistList(Dictionary<long, List<AbstractHealthDamageEvent>> dlsByID, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        internal static List<JsonDamageDist> BuildJsonDamageDistList(Dictionary<long, List<AbstractHealthDamageEvent>> dlsByID, Dictionary<long, List<AbstractBreakbarDamageEvent>> brlsByID, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
             var res = new List<JsonDamageDist>();
             foreach (KeyValuePair<long, List<AbstractHealthDamageEvent>> pair in dlsByID)
             {
-                res.Add(BuildJsonDamageDist(pair.Key, pair.Value, log, skillDesc, buffDesc));
+                if (!brlsByID.TryGetValue(pair.Key, out List<AbstractBreakbarDamageEvent> brls))
+                {
+                    brls = new List<AbstractBreakbarDamageEvent>();
+                }
+                res.Add(BuildJsonDamageDist(pair.Key, pair.Value, brls, log, skillDesc, buffDesc));
+            }
+            foreach (KeyValuePair<long, List<AbstractBreakbarDamageEvent>> pair in brlsByID)
+            {
+                if (dlsByID.ContainsKey(pair.Key))
+                {
+                    continue;
+                }
+                res.Add(BuildJsonDamageDist(pair.Key, new List<AbstractHealthDamageEvent>(), pair.Value, log, skillDesc, buffDesc));
             }
             return res;
         }

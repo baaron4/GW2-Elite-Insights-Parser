@@ -26,6 +26,7 @@ namespace GW2EIBuilders.HtmlModels
         public List<long> OffBuffs { get; } = new List<long>();
         public List<long> SupBuffs { get; } = new List<long>();
         public List<long> DefBuffs { get; } = new List<long>();
+        public List<long> Debuffs { get; } = new List<long>();
         public List<long> GearBuffs { get; } = new List<long>();
         public List<long> FractalInstabilities { get; } = new List<long>();
         public List<long> DmgModifiersItem { get; } = new List<long>();
@@ -104,7 +105,7 @@ namespace GW2EIBuilders.HtmlModels
             Success = log.FightData.Success;
             Wvw = log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;
             Targetless = log.FightData.Logic.Targetless;
-            FightName = log.FightData.GetFightName(log);
+            FightName = log.FightData.FightName;
             FightIcon = log.FightData.Logic.Icon;
             LightTheme = light;
             SingleGroup = log.PlayerList.Select(x => x.Group).Distinct().Count() == 1;
@@ -246,35 +247,40 @@ namespace GW2EIBuilders.HtmlModels
                 logData.Boons.Add(boon.ID);
                 usedBuffs[boon.ID] = boon;
             }
-            foreach (Buff boon in statistics.PresentConditions)
+            foreach (Buff condition in statistics.PresentConditions)
             {
-                logData.Conditions.Add(boon.ID);
-                usedBuffs[boon.ID] = boon;
+                logData.Conditions.Add(condition.ID);
+                usedBuffs[condition.ID] = condition;
             }
-            foreach (Buff boon in statistics.PresentOffbuffs)
+            foreach (Buff offBuff in statistics.PresentOffbuffs)
             {
-                logData.OffBuffs.Add(boon.ID);
-                usedBuffs[boon.ID] = boon;
+                logData.OffBuffs.Add(offBuff.ID);
+                usedBuffs[offBuff.ID] = offBuff;
             }
-            foreach (Buff boon in statistics.PresentSupbuffs)
+            foreach (Buff supBuff in statistics.PresentSupbuffs)
             {
-                logData.SupBuffs.Add(boon.ID);
-                usedBuffs[boon.ID] = boon;
+                logData.SupBuffs.Add(supBuff.ID);
+                usedBuffs[supBuff.ID] = supBuff;
             }
-            foreach (Buff boon in statistics.PresentDefbuffs)
+            foreach (Buff defBuff in statistics.PresentDefbuffs)
             {
-                logData.DefBuffs.Add(boon.ID);
-                usedBuffs[boon.ID] = boon;
+                logData.DefBuffs.Add(defBuff.ID);
+                usedBuffs[defBuff.ID] = defBuff;
             }
-            foreach (Buff boon in statistics.PresentGearbuffs)
+            foreach (Buff debuff in statistics.PresentDebuffs)
             {
-                logData.GearBuffs.Add(boon.ID);
-                usedBuffs[boon.ID] = boon;
+                logData.Debuffs.Add(debuff.ID);
+                usedBuffs[debuff.ID] = debuff;
             }
-            foreach (Buff boon in statistics.PresentFractalInstabilities)
+            foreach (Buff gearBuff in statistics.PresentGearbuffs)
             {
-                logData.FractalInstabilities.Add(boon.ID);
-                usedBuffs[boon.ID] = boon;
+                logData.GearBuffs.Add(gearBuff.ID);
+                usedBuffs[gearBuff.ID] = gearBuff;
+            }
+            foreach (Buff fractalInstab in statistics.PresentFractalInstabilities)
+            {
+                logData.FractalInstabilities.Add(fractalInstab.ID);
+                usedBuffs[fractalInstab.ID] = fractalInstab;
             }
         }
 

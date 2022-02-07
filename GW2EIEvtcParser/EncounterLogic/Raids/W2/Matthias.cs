@@ -216,7 +216,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static void AddMatthiasBubbles(long buffID, NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            List<AbstractBuffEvent> shields = GetFilteredList(log.CombatData, buffID, target, true);
+            List<AbstractBuffEvent> shields = GetFilteredList(log.CombatData, buffID, target, true, true);
             int start = 0;
             for (int i = 0; i < shields.Count; i++)
             {
@@ -292,8 +292,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // Corruption
-            List<AbstractBuffEvent> corruptedMatthias = GetFilteredList(log.CombatData, 34416, p, true);
-            corruptedMatthias.AddRange(GetFilteredList(log.CombatData, 34473, p, true));
+            List<AbstractBuffEvent> corruptedMatthias = GetFilteredList(log.CombatData, 34416, p, true, true);
+            corruptedMatthias.AddRange(GetFilteredList(log.CombatData, 34473, p, true, true));
             int corruptedMatthiasStart = 0;
             foreach (AbstractBuffEvent c in corruptedMatthias)
             {
@@ -315,7 +315,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             // Well of profane
-            List<AbstractBuffEvent> wellMatthias = GetFilteredList(log.CombatData, 34450, p, true);
+            List<AbstractBuffEvent> wellMatthias = GetFilteredList(log.CombatData, 34450, p, true, true);
             int wellMatthiasStart = 0;
             foreach (AbstractBuffEvent c in wellMatthias)
             {
@@ -337,7 +337,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             // Sacrifice
-            List<AbstractBuffEvent> sacrificeMatthias = GetFilteredList(log.CombatData, 34442, p, true);
+            List<AbstractBuffEvent> sacrificeMatthias = GetFilteredList(log.CombatData, 34442, p, true, true);
             int sacrificeMatthiasStart = 0;
             foreach (AbstractBuffEvent c in sacrificeMatthias)
             {
