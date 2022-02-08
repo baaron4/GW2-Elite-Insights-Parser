@@ -366,7 +366,7 @@ namespace GW2EIEvtcParser.EIData
             return res;
         }
 
-        public static void LinkMinionCombatReplayToMaster(AbstractSingleActor minion, AbstractSingleActor master, ParsedEvtcLog log, CombatReplay combatReplay)
+        public static void ComputeMinionCombatReplayActors(AbstractSingleActor minion, AbstractSingleActor master, ParsedEvtcLog log, CombatReplay combatReplay)
         {
 
         }

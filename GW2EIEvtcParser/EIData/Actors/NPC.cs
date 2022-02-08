@@ -43,7 +43,7 @@ namespace GW2EIEvtcParser.EIData
                 // Basic linkage
                 CombatReplay.Decorations.Add(new LineDecoration(0, ((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), "rgba(0, 255, 0, 0.5)", new AgentConnector(this), new AgentConnector(masterActor)));
                 // Prof specific treatment
-                ProfHelper.LinkMinionCombatReplayToMaster(this, masterActor, log, CombatReplay);
+                ProfHelper.ComputeMinionCombatReplayActors(this, masterActor, log, CombatReplay);
             }
         }
 
