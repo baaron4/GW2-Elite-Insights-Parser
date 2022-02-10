@@ -637,8 +637,9 @@ namespace GW2EIParser
                 foreach (List<FormOperationController> dpsReportLogs in splitDpsReportLogs)
                 {
                     EmbedBuilder embedBuilder = ProgramHelper.GetEmbedBuilder();
-                    embedBuilder.WithCurrentTimestamp();
-                    embedBuilder.WithFooter(pair.Key.ToString("yyyy-MM-dd"));
+                    var first = DateTime.Parse(dpsReportLogs.First().BasicMetaData.LogStart);
+                    var last = DateTime.Parse(dpsReportLogs.Last().BasicMetaData.LogEnd);
+                    embedBuilder.WithFooter(pair.Key.ToString("dd/MM/yyyy") + " - " + first.ToString("T") + " - " + last.ToString("T"));
                     dpsReportLogs.Sort((x, y) =>
                     {
                         var categoryCompare = x.BasicMetaData.FightCategory.CompareTo(y.BasicMetaData.FightCategory);

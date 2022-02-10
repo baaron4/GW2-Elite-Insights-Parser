@@ -21,6 +21,7 @@ namespace GW2EIParser
                 FightCategory = log.FightData.Logic.EncounterCategoryInformation;
                 Icon = log.FightData.Logic.Icon;
                 LogStart = log.LogData.LogStartStd;
+                LogEnd = log.LogData.LogEndStd;
             }
 
             public string FightDuration { get; }
@@ -28,7 +29,8 @@ namespace GW2EIParser
             public bool FightSuccess { get; set; }
             public EncounterCategory FightCategory { get; }
             public string Icon { get; }
-            public string LogStart { get;  }
+            public string LogStart { get; }
+            public string LogEnd { get; }
         }
 
         /// <summary>
