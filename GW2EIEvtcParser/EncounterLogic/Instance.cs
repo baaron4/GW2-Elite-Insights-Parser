@@ -17,6 +17,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         public Instance(int id) : base(id)
         {
             Extension = "instance";
+            Mode = ParseMode.FullInstance;
             Icon = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
             EncounterCategoryInformation.Category = FightCategory.UnknownEncounter;
             EncounterCategoryInformation.SubCategory = SubFightCategory.UnknownEncounter;

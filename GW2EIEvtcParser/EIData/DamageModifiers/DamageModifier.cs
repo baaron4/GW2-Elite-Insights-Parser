@@ -142,6 +142,7 @@ namespace GW2EIEvtcParser.EIData
             switch (mode)
             {
                 case FightLogic.ParseMode.Unknown:
+                case FightLogic.ParseMode.FullInstance:
                 case FightLogic.ParseMode.Instanced5:
                 case FightLogic.ParseMode.Instanced10:
                 case FightLogic.ParseMode.Benchmark:
