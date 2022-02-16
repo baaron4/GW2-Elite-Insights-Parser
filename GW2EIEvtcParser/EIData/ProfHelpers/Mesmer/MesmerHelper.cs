@@ -13,58 +13,6 @@ namespace GW2EIEvtcParser.EIData
     internal static class MesmerHelper
     {
 
-        private static readonly HashSet<Spec> _canSummonClones = new HashSet<Spec>()
-        {
-            Spec.Mesmer,
-            Spec.Chronomancer,
-            Spec.Mirage
-        };
-
-        internal static bool CanSummonClones(Spec spec)
-        {
-            return _canSummonClones.Contains(spec);
-        }
-
-        private static readonly HashSet<long> _cloneIDs = new HashSet<long>()
-        {
-            6479,
-            8106,
-            8107,
-            8108,
-            8110,
-            8111,
-            10542,
-            15003,
-            15032,
-            15044,
-            15084,
-            15090,
-            15114,
-            15117,
-            15131,
-            15156,
-            15181,
-            15196,
-            15199,
-            15233,
-            15240,
-            15249,
-            18922,
-            18939,
-            19134,
-            19257,
-        };
-
-        internal static bool IsClone(AgentItem agentItem)
-        {
-            return _cloneIDs.Contains(agentItem.ID);
-        }
-
-        internal static bool IsClone(long id)
-        {
-            return _cloneIDs.Contains(id);
-        }
-
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new DamageCastFinder(10212, 10212, EIData.InstantCastFinder.DefaultICD, 0, GW2Builds.May2021Balance), // Power spike
@@ -198,6 +146,61 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Reflection", 10225 , Source.Mesmer, BuffStackType.Queue, 9, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/9d/Arcane_Shield.png"),
                 new Buff("Reflection 2", 24014 , Source.Mesmer, BuffStackType.Queue, 9, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/9d/Arcane_Shield.png"),
         };
+
+
+        private static readonly HashSet<long> _cloneIDs = new HashSet<long>()
+        {
+            (int)MinionID.Clone1,
+            (int)MinionID.Clone2,
+            (int)MinionID.Clone3,
+            (int)MinionID.Clone4,
+            (int)MinionID.Clone5,
+            (int)MinionID.Clone6,
+            (int)MinionID.Clone7,
+            (int)MinionID.Clone8,
+            (int)MinionID.Clone9,
+            (int)MinionID.Clone10,
+            (int)MinionID.Clone11,
+            (int)MinionID.Clone12,
+            (int)MinionID.Clone13,
+            (int)MinionID.Clone14,
+            (int)MinionID.Clone15,
+            (int)MinionID.Clone16,
+            (int)MinionID.Clone17,
+            (int)MinionID.Clone18,
+            (int)MinionID.Clone19,
+            (int)MinionID.Clone20,
+            (int)MinionID.Clone21,
+            (int)MinionID.Clone22,
+            (int)MinionID.Clone23,
+            (int)MinionID.Clone24,
+            (int)MinionID.Clone25,
+            (int)MinionID.Clone26,
+        };
+        internal static bool IsClone(AgentItem agentItem)
+        {
+            if (agentItem.Type == AgentItem.AgentType.Gadget)
+            {
+                return false;
+            }
+            return _cloneIDs.Contains(agentItem.ID);
+        }
+
+        private static bool IsClone(long id)
+        {
+            return _cloneIDs.Contains(id);
+        }
+
+        private static HashSet<long> NonCloneMinions = new HashSet<long>()
+        {
+            (int)MinionID.IllusionaryWarlock,
+            (int)MinionID.IllusionaryWarden,
+            (int)MinionID.IllusionarySwordsman,
+        };
+        internal static bool IsKnownMinionID(long id)
+        {
+            return NonCloneMinions.Contains(id) || IsClone(id);
+        }
 
     }
 }

@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EIData
     {
         public int Group { get; }
 
-        internal PlayerCombatReplayDescription(AbstractPlayer player, ParsedEvtcLog log, CombatReplayMap map, CombatReplay replay) : base(player, log, map, replay, !log.FriendlyAgents.Contains(player.AgentItem) ? "TargetPlayer" : "Player")
+        internal PlayerCombatReplayDescription(AbstractPlayer player, ParsedEvtcLog log, CombatReplayMap map, CombatReplay replay) : base(player, log, map, replay, !log.PlayerAgents.Contains(player.AgentItem) ? "TargetPlayer" : "Player")
         {
             Group = player.Group;
             SetStatus(log, player);

@@ -64,6 +64,8 @@ class Animator {
         this.backwards = false;
         this.rangeControl = [{ enabled: false, radius: 180 }, { enabled: false, radius: 360 }, { enabled: false, radius: 720 }];
         this.highlightSelectedGroup = true;
+        this.displayAllMinions = false;
+        this.displaySelectedMinions = true;
         this.displayMechanics = true;
         this.displayTrashMobs = true;
         this.coneControl = {
@@ -160,7 +162,7 @@ class Animator {
             const actor = actors[i];
             switch (actor.type) {
                 case "Player":
-                    this.playerData.set(actor.id, new SquadIconDrawable(actor.start, actor.end, actor.img, 20, actor.group, actor.positions, actor.dead, actor.down, actor.dc));
+                    this.playerData.set(actor.id, new SquadIconDrawable(actor.start, actor.end, actor.img, 22, actor.group, actor.positions, actor.dead, actor.down, actor.dc));
                     if (this.times.length === 0) {
                         for (let j = 0; j < actor.positions.length / 2; j++) {
                             this.times.push(j * this.pollingRate);
@@ -172,10 +174,10 @@ class Animator {
                     this.targetData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 30, actor.positions, actor.dead, actor.down, actor.dc));
                     break;
                 case "Mob":
-                    this.trashMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc));
+                    this.trashMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc, actor.masterID));
                     break;
                 case "Friendly":
-                    this.friendlyMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc));
+                    this.friendlyMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, actor.masterID ? 18 : 20, actor.positions, actor.dead, actor.down, actor.dc, actor.masterID));
                     break;
                 case "Circle":
                     this.mechanicActorData.push(new CircleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.radius, actor.connectedTo, this.inchToPixel * actor.minRadius));
@@ -297,6 +299,16 @@ class Animator {
 
     toggleHighlightSelectedGroup() {
         this.highlightSelectedGroup = !this.highlightSelectedGroup;
+        animateCanvas(noUpdateTime);
+    }
+
+    toggleDisplayAllMinions() {
+        this.displayAllMinions = !this.displayAllMinions;
+        animateCanvas(noUpdateTime);
+    }
+
+    toggleDisplaySelectedMinions() {
+        this.displaySelectedMinions = !this.displaySelectedMinions;
         animateCanvas(noUpdateTime);
     }
 
@@ -589,7 +601,7 @@ class Animator {
             }
         }
         
-        this.playerData.forEach(function (value, key, map) {
+        this.friendlyMobData.forEach(function (value, key, map) {
             if (!value.isSelected()) {
                 value.draw();
                 if (_this.attachedActorData.has(key)) {
@@ -598,7 +610,7 @@ class Animator {
             }
         });
         
-        this.friendlyMobData.forEach(function (value, key, map) {
+        this.playerData.forEach(function (value, key, map) {
             if (!value.isSelected()) {
                 value.draw();
                 if (_this.attachedActorData.has(key)) {

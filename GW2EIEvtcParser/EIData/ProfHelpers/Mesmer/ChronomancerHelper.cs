@@ -28,5 +28,14 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Time Anchored",30136, Source.Chronomancer, BuffStackType.Queue, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/db/Continuum_Split.png"),
         };
 
+        private static HashSet<long> NonCloneMinions = new HashSet<long>()
+        {
+            (int)MinionID.IllusionaryAvenger,
+        };
+        internal static bool IsKnownMinionID(long id)
+        {
+            return NonCloneMinions.Contains(id);
+        }
+
     }
 }

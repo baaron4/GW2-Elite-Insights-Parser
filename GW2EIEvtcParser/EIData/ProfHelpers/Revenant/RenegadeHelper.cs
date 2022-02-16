@@ -32,5 +32,18 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Kalla's Fervor",42883, Source.Renegade, BuffStackType.Stacking, 5, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/9e/Kalla%27s_Fervor.png"),
                 new Buff("Improved Kalla's Fervor",45614, Source.Renegade, BuffStackType.Stacking, 5, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/9e/Kalla%27s_Fervor.png"),
         };
+
+        private static HashSet<long> Minions = new HashSet<long>()
+        {
+            (int)MinionID.JasRazorclaw,
+            (int)MinionID.ViskIcerazor,
+            (int)MinionID.KusDarkrazor,
+            (int)MinionID.EraBreakrazor,
+            (int)MinionID.OfelaSoulcleave,
+        };
+        internal static bool IsKnownMinionID(long id)
+        {
+            return Minions.Contains(id);
+        }
     }
 }

@@ -154,5 +154,25 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
+        private static readonly HashSet<long> SpiritIDs = new HashSet<long>()
+        {
+            (int)MinionID.FrostSpirit,
+            (int)MinionID.StoneSpirit,
+            (int)MinionID.StormSpirit,
+            (int)MinionID.SunSpirit,
+            (int)MinionID.SpiritOfNatureRenewal,
+        };
+
+        private static HashSet<long> NonSpiritMinions = new HashSet<long>()
+        {
+            (int)MinionID.JuvenileBlackMoa,
+            (int)MinionID.JuvenileEletricWywern,
+            (int)MinionID.JuvenileFangedIboga,
+        };
+        internal static bool IsKnownMinionID(long id)
+        {
+            return NonSpiritMinions.Contains(id) || SpiritIDs.Contains(id);
+        }
+
     }
 }
