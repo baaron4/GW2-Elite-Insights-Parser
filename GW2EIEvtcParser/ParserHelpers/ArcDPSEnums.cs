@@ -745,10 +745,6 @@ namespace GW2EIEvtcParser
 
         public static bool IsKnownMinionID(AgentItem minion, ParserHelper.Spec spec)
         {
-            if (minion.Type == AgentItem.AgentType.Gadget)
-            {
-                return false;
-            }
             return ProfHelper.IsKnownMinionID(minion, spec);
         }
 
