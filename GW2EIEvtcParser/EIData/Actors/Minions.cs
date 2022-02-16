@@ -9,6 +9,7 @@ namespace GW2EIEvtcParser.EIData
     public class Minions : AbstractActor
     {
         private List<NPC> _minionList { get; }
+        public AgentItem ReferenceAgentItem => AgentItem;
 
         public IReadOnlyList<NPC> MinionList => _minionList;
         public AbstractSingleActor Master { get; }
@@ -22,6 +23,9 @@ namespace GW2EIEvtcParser.EIData
             EXTHealing = new EXTMinionsHealingHelper(this);
             EXTBarrier = new EXTMinionsBarrierHelper(this);
             Character = firstMinion.Character;
+#if DEBUG
+            Character += " (" + ID + ")";
+#endif
         }
 
         internal void AddMinion(NPC minion)

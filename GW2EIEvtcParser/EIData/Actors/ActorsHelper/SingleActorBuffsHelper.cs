@@ -204,7 +204,7 @@ namespace GW2EIEvtcParser.EIData
             var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[NumberOfBoonsID]);
             var activeCombatMinionsGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[NumberOfActiveCombatMinionsID]);
             BuffsGraphModel numberOfClonesGraph = null;
-            var canSummonClones = MesmerHelper.CanSummonClones(Actor.Spec);
+            var canSummonClones = ProfHelper.CanSummonClones(Actor.Spec);
             if (canSummonClones)
             {
                 numberOfClonesGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[NumberOfClonesID]);
@@ -278,7 +278,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     activeCombatMinionsGraph.MergePresenceInto(minionsSegments);
                 }
-                if (canSummonClones && MesmerHelper.IsClone(minions.ID))
+                if (canSummonClones && MesmerHelper.IsClone(minions.ReferenceAgentItem))
                 {
                     foreach (IReadOnlyList<Segment> minionsSegments in segments)
                     {

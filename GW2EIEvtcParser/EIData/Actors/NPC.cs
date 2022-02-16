@@ -32,9 +32,18 @@ namespace GW2EIEvtcParser.EIData
         protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log)
         {
             log.FightData.Logic.ComputeNPCCombatReplayActors(this, log, CombatReplay);
+            AgentItem master = AgentItem.GetFinalMaster();
             if (CombatReplay.Rotations.Any() && (log.FightData.Logic.TargetAgents.Contains(AgentItem) || log.FriendlyAgents.Contains(AgentItem)))
             {
                 CombatReplay.Decorations.Add(new FacingDecoration(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));
+            }
+            if (master != AgentItem)
+            {
+                AbstractSingleActor masterActor = log.FindActor(master);
+                // Basic linkage
+                CombatReplay.Decorations.Add(new LineDecoration(0, ((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), "rgba(0, 255, 0, 0.5)", new AgentConnector(this), new AgentConnector(masterActor)));
+                // Prof specific treatment
+                ProfHelper.ComputeMinionCombatReplayActors(this, masterActor, log, CombatReplay);
             }
         }
 
