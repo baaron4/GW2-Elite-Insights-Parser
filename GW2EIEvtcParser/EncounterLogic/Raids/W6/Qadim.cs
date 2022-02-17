@@ -661,10 +661,14 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             const int platformCount = 12;
 
-            // The following monstrosity is needed to avoid the final platform rotating all the way back, must be an odd multiple of PI
+            // The following monstrosity is needed to avoid the final platform rotating all the way back
+            // must be an odd multiple of PI
             int finalPlatformHalfRotationCount =
-                (int)Math.Round((Math.PI + jumpingPuzzleDuration / 1000.0 * jumpingPuzzleRotationRate) / Math.PI,
-                    MidpointRounding.ToEven) + 1;
+                (int)Math.Round((Math.PI + jumpingPuzzleDuration / 1000.0 * jumpingPuzzleRotationRate) / Math.PI);
+            if (finalPlatformHalfRotationCount % 2 == 0)
+            {
+                finalPlatformHalfRotationCount++;
+            }
             double finalPlatformRotation = Math.PI * finalPlatformHalfRotationCount;
 
 
@@ -774,7 +778,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         (-9704, 15323, zDefault, Math.PI, 1.0),
                         (-7425, 15312, zDefault, 0.0, 1.0),
                         (-5160, yMid, zDefault, Math.PI, hiddenOpacity), // TODO: Unknown position while hidden
-                        (-5169, 8846, zDefault, 0.0, 1.0),
+                        (-5169, 8846, zDefault, 0.0, isCM ? hiddenOpacity : 1.0),
                         (-7414, 8846, zDefault, Math.PI, hiddenOpacity),
                         (-7728, 11535, zDefault, Math.PI + wyvernPhaseMiddleRotation, 1.0),
                         (-9108, 14335, zDefault, 0.0, 1.0),
