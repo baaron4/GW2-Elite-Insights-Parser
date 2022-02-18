@@ -283,7 +283,10 @@ namespace GW2EIEvtcParser.EIData
             return _canSummonClones.Contains(spec);
         }
 
-        private static HashSet<long> CommonMinions = new HashSet<long>();
+        private static HashSet<long> CommonMinions = new HashSet<long>()
+        {
+            (int)ArcDPSEnums.MinionID.RuneJaggedHorror,
+        };
 
         internal static bool IsKnownMinionID(AgentItem minion, Spec spec)
         {

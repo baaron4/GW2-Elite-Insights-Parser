@@ -683,6 +683,8 @@ namespace GW2EIEvtcParser
 
         public enum MinionID : int
         {
+            RuneJaggedHorror = 21314,
+            //
             IllusionarySwordsman = 6487,
             IllusionaryBerserker = 6535,
             IllusionaryDisenchanter = 6621,
