@@ -727,6 +727,8 @@ namespace GW2EIEvtcParser
             ShadowFiend = 5673,
             FleshWurm = 6002,
             BoneMinion = 1192,
+            UnstableHorror = 18802,
+            ShamblingHorror = 15314,
             //
             StoneSpirit = 6370,
             SunSpirit = 6330,
