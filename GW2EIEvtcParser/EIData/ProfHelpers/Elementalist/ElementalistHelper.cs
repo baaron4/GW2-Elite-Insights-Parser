@@ -88,6 +88,15 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Conjure Frost Bow", 15790, Source.Elementalist, BuffClassification.Support, "https://wiki.guildwars2.com/images/c/c3/Conjure_Frost_Bow.png"),
                 new Buff("Conjure Lightning Hammer", 15791, Source.Elementalist, BuffClassification.Support, "https://wiki.guildwars2.com/images/1/1f/Conjure_Lightning_Hammer.png"),
                 new Buff("Conjure Fiery Greatsword", 15792, Source.Elementalist, BuffClassification.Support, "https://wiki.guildwars2.com/images/e/e2/Conjure_Fiery_Greatsword.png"),
+                // Summons
+                new Buff("Lesser Air Elemental Summoned", 25481, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/af/Glyph_of_Lesser_Elementals_%28air%29.png"),
+                new Buff("Air Elemental Summoned", 25496, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/84/Glyph_of_Elementals_%28air%29.png"),
+                new Buff("Lesser Water Elemental Summoned", 25483, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/49/Glyph_of_Lesser_Elementals_%28water%29.png"),
+                new Buff("Water Elemental Summoned", 25493, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/c6/Glyph_of_Elementals_%28water%29.png"),
+                new Buff("Lesser Fire Elemental Summoned", 25479, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/18/Glyph_of_Lesser_Elementals_%28fire%29.png"),
+                new Buff("Fire Elemental Summoned", 25475, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/0/01/Glyph_of_Elementals_%28fire%29.png"),
+                new Buff("Lesser Earth Elemental Summoned", 25484, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/0/0f/Glyph_of_Lesser_Elementals_%28earth%29.png"),
+                new Buff("Earth Elemental Summoned", 25477, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e4/Glyph_of_Elementals_%28earth%29.png"),
                 //skills
                 new Buff("Arcane Power",5582, Source.Elementalist, BuffStackType.Stacking, 6, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/72/Arcane_Power.png"),
                 new Buff("Arcane Shield",5640, Source.Elementalist, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/9d/Arcane_Shield.png"),
@@ -133,7 +142,17 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        private static HashSet<long> Minions = new HashSet<long>();
+        private static HashSet<long> Minions = new HashSet<long>()
+        {
+            (int)MinionID.LesserAirElemental,
+            (int)MinionID.LesserEarthElemental,
+            (int)MinionID.LesserFireElemental,
+            (int)MinionID.LesserIceElemental,
+            (int)MinionID.AirElemental,
+            (int)MinionID.EarthElemental,
+            (int)MinionID.FireElemental,
+            (int)MinionID.IceElemental,
+        };
         internal static bool IsKnownMinionID(long id)
         {
             return Minions.Contains(id);
