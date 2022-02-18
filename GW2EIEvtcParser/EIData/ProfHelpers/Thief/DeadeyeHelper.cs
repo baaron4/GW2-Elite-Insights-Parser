@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.ParserHelper;
@@ -34,6 +35,24 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Kneeling",42869, Source.Deadeye, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/56/Kneel.png"),
                 new Buff("Deadeye's Gaze", 46333, Source.Deadeye, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Deadeye%27s_Mark.png"),
         };
+
+        private static HashSet<long> Minions = new HashSet<long>()
+        {
+            (int)MinionID.Deadeye1,
+            (int)MinionID.Deadeye2,
+            (int)MinionID.Deadeye3,
+            (int)MinionID.Deadeye4,
+            (int)MinionID.Deadeye5,
+            (int)MinionID.Deadeye6,
+            (int)MinionID.Deadeye7,
+            (int)MinionID.Deadeye8,
+            (int)MinionID.Deadeye9,
+            (int)MinionID.Deadeye10,
+        };
+        internal static bool IsKnownMinionID(long id)
+        {
+            return Minions.Contains(id);
+        }
 
     }
 }

@@ -39,5 +39,13 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Consume Shadows", 63456, Source.Specter, ArcDPSEnums.BuffStackType.Stacking, 5, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/94/Consume_Shadows.png"),
         };
 
+        private static HashSet<long> Minions = new HashSet<long>()
+        {
+        };
+        internal static bool IsKnownMinionID(long id)
+        {
+            return Minions.Contains(id);
+        }
+
     }
 }

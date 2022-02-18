@@ -1008,7 +1008,46 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/HtCusPF.png";
                 case ArcDPSEnums.MinionID.Thief1:
                 case ArcDPSEnums.MinionID.Thief2:
-                case ArcDPSEnums.MinionID.Daredevil:
+                case ArcDPSEnums.MinionID.Thief3:
+                case ArcDPSEnums.MinionID.Thief4:
+                case ArcDPSEnums.MinionID.Thief5:
+                case ArcDPSEnums.MinionID.Thief6:
+                case ArcDPSEnums.MinionID.Thief7:
+                case ArcDPSEnums.MinionID.Thief8:
+                case ArcDPSEnums.MinionID.Thief9:
+                case ArcDPSEnums.MinionID.Thief10:
+                case ArcDPSEnums.MinionID.Thief11:
+                case ArcDPSEnums.MinionID.Thief12:
+                case ArcDPSEnums.MinionID.Thief13:
+                case ArcDPSEnums.MinionID.Thief14:
+                case ArcDPSEnums.MinionID.Thief15:
+                case ArcDPSEnums.MinionID.Thief16:
+                case ArcDPSEnums.MinionID.Thief17:
+                case ArcDPSEnums.MinionID.Thief18:
+                case ArcDPSEnums.MinionID.Thief19:
+                case ArcDPSEnums.MinionID.Thief20:
+                case ArcDPSEnums.MinionID.Thief21:
+                case ArcDPSEnums.MinionID.Thief22:
+                case ArcDPSEnums.MinionID.Daredevil1:
+                case ArcDPSEnums.MinionID.Daredevil2:
+                case ArcDPSEnums.MinionID.Daredevil3:
+                case ArcDPSEnums.MinionID.Daredevil4:
+                case ArcDPSEnums.MinionID.Daredevil5:
+                case ArcDPSEnums.MinionID.Daredevil6:
+                case ArcDPSEnums.MinionID.Daredevil7:
+                case ArcDPSEnums.MinionID.Daredevil8:
+                case ArcDPSEnums.MinionID.Daredevil9:
+                case ArcDPSEnums.MinionID.Daredevil10:
+                case ArcDPSEnums.MinionID.Deadeye1:
+                case ArcDPSEnums.MinionID.Deadeye2:
+                case ArcDPSEnums.MinionID.Deadeye3:
+                case ArcDPSEnums.MinionID.Deadeye4:
+                case ArcDPSEnums.MinionID.Deadeye5:
+                case ArcDPSEnums.MinionID.Deadeye6:
+                case ArcDPSEnums.MinionID.Deadeye7:
+                case ArcDPSEnums.MinionID.Deadeye8:
+                case ArcDPSEnums.MinionID.Deadeye9:
+                case ArcDPSEnums.MinionID.Deadeye10:
                     return "https://i.imgur.com/6YkM5zY.png";
                 case ArcDPSEnums.MinionID.FleshWurm:
                     return "https://i.imgur.com/Bc1VfLm.png";

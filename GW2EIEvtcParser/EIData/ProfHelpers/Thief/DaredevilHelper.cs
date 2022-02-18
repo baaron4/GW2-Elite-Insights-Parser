@@ -37,5 +37,23 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Weakening Strikes", 34081, Source.Daredevil, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7c/Weakening_Strikes.png", GW2Builds.April2019Balance, GW2Builds.EndOfLife),
         };
 
+        private static HashSet<long> Minions = new HashSet<long>()
+        {
+            (int)MinionID.Daredevil1,
+            (int)MinionID.Daredevil2,
+            (int)MinionID.Daredevil3,
+            (int)MinionID.Daredevil4,
+            (int)MinionID.Daredevil5,
+            (int)MinionID.Daredevil6,
+            (int)MinionID.Daredevil7,
+            (int)MinionID.Daredevil8,
+            (int)MinionID.Daredevil9,
+            (int)MinionID.Daredevil10,
+        };
+        internal static bool IsKnownMinionID(long id)
+        {
+            return Minions.Contains(id);
+        }
+
     }
 }

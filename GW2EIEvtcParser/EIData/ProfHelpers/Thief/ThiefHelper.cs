@@ -66,7 +66,26 @@ namespace GW2EIEvtcParser.EIData
         {
             (int)MinionID.Thief1,
             (int)MinionID.Thief2,
-            (int)MinionID.Daredevil,
+            (int)MinionID.Thief3,
+            (int)MinionID.Thief4,
+            (int)MinionID.Thief5,
+            (int)MinionID.Thief6,
+            (int)MinionID.Thief7,
+            (int)MinionID.Thief8,
+            (int)MinionID.Thief9,
+            (int)MinionID.Thief10,
+            (int)MinionID.Thief11,
+            (int)MinionID.Thief12,
+            (int)MinionID.Thief13,
+            (int)MinionID.Thief14,
+            (int)MinionID.Thief15,
+            (int)MinionID.Thief16,
+            (int)MinionID.Thief17,
+            (int)MinionID.Thief18,
+            (int)MinionID.Thief19,
+            (int)MinionID.Thief20,
+            (int)MinionID.Thief21,
+            (int)MinionID.Thief22,
         };
         internal static bool IsKnownMinionID(long id)
         {

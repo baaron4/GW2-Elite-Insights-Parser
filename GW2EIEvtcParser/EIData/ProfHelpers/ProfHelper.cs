@@ -330,10 +330,19 @@ namespace GW2EIEvtcParser.EIData
                     break;
                 //
                 case Spec.Thief:
+                    res |= ThiefHelper.IsKnownMinionID(id);
+                    break;
                 case Spec.Daredevil:
+                    res |= ThiefHelper.IsKnownMinionID(id);
+                    res |= DaredevilHelper.IsKnownMinionID(id);
+                    break;
                 case Spec.Deadeye:
+                    res |= ThiefHelper.IsKnownMinionID(id);
+                    res |= DeadeyeHelper.IsKnownMinionID(id);
+                    break;
                 case Spec.Specter:
                     res |= ThiefHelper.IsKnownMinionID(id);
+                    res |= SpecterHelper.IsKnownMinionID(id);
                     break;
                 //
                 case Spec.Engineer:
