@@ -196,6 +196,12 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.IllusionaryWarlock,
             (int)MinionID.IllusionaryWarden,
             (int)MinionID.IllusionarySwordsman,
+            (int)MinionID.IllusionaryMage,
+            (int)MinionID.IllusionaryDuelist,
+            (int)MinionID.IllusionaryBerserker,
+            (int)MinionID.IllusionaryDisenchanter,
+            (int)MinionID.IllusionaryRogue,
+            (int)MinionID.IllusionaryDefender,
         };
         internal static bool IsKnownMinionID(long id)
         {
