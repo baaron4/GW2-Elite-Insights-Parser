@@ -722,9 +722,11 @@ namespace GW2EIEvtcParser
             Clone26 = 19257,
             //
             BloodFiend = 1104,
+            BoneFiend = 1458,
             FleshGolem = 1792,
             ShadowFiend = 5673,
             FleshWurm = 6002,
+            BoneMinion = 1192,
             //
             StoneSpirit = 6370,
             SunSpirit = 6330,
@@ -734,6 +736,11 @@ namespace GW2EIEvtcParser
             JuvenileBlackMoa = 6887,
             JuvenileEletricWywern = 15436,
             JuvenileFangedIboga = 18688,
+            //
+            BowOfTruth = 6383,
+            HammerOfWisdom = 5791,
+            ShieldOfTheAvenger = 6382,
+            SwordOfJustice = 6381,
             //
             Thief1 = 7580,
             Thief2 = 7581,

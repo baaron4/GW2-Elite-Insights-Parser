@@ -371,6 +371,13 @@ namespace GW2EIEvtcParser.EIData
                     res |= RevenantHelper.IsKnownMinionID(id);
                     res |= RenegadeHelper.IsKnownMinionID(id);
                     break;
+                //
+                case Spec.Guardian:
+                case Spec.Dragonhunter:
+                case Spec.Firebrand:
+                case Spec.Willbender:
+                    res |= GuardianHelper.IsKnownMinionID(id);
+                    break;
             }
             return res;
         }

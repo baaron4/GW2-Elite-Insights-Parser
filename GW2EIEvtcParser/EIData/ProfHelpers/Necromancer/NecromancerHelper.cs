@@ -89,7 +89,9 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.BloodFiend,
             (int)MinionID.FleshGolem,
             (int)MinionID.ShadowFiend,
-            (int)MinionID.FleshWurm
+            (int)MinionID.FleshWurm,
+            (int)MinionID.BoneFiend,
+            (int)MinionID.BoneMinion
         };
         internal static bool IsKnownMinionID(long id)
         {

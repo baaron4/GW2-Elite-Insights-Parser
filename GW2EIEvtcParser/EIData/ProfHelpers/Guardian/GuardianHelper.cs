@@ -82,5 +82,17 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Force of Will",29485, Source.Guardian, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d2/Force_of_Will.png"),
         };
 
+        private static HashSet<long> Minions = new HashSet<long>()
+        {
+            (int)MinionID.BowOfTruth,
+            (int)MinionID.HammerOfWisdom,
+            (int)MinionID.ShieldOfTheAvenger,
+            (int)MinionID.SwordOfJustice,
+        };
+        internal static bool IsKnownMinionID(long id)
+        {
+            return Minions.Contains(id);
+        }
+
     }
 }
