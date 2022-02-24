@@ -937,6 +937,9 @@ namespace GW2EIEvtcParser
             //
             switch (ArcDPSEnums.GetMinionID(id))
             {
+                case ArcDPSEnums.MinionID.RuneJaggedHorror:
+                    return "TODO";
+                //
                 case ArcDPSEnums.MinionID.Clone1:
                 case ArcDPSEnums.MinionID.Clone2:
                 case ArcDPSEnums.MinionID.Clone3:
@@ -964,48 +967,152 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.MinionID.Clone25:
                 case ArcDPSEnums.MinionID.Clone26:
                     return "https://i.imgur.com/5Hknsa6.png";
-                case ArcDPSEnums.MinionID.EraBreakrazor:
-                    return "https://i.imgur.com/2X3G3Fl.png";
-                case ArcDPSEnums.MinionID.JadeMech:
-                    return "https://i.imgur.com/54evTaq.png";
-                case ArcDPSEnums.MinionID.KusDarkrazor:
-                    return "https://i.imgur.com/rJq4Ngh.png";
-                case ArcDPSEnums.MinionID.IllusionaryAvenger:
-                    return "https://i.imgur.com/SmEAtBo.png";
-                case ArcDPSEnums.MinionID.FrostSpirit:
-                    return "https://i.imgur.com/dfbRWGh.png";
-                case ArcDPSEnums.MinionID.ViskIcerazor:
-                    return "https://i.imgur.com/SlTx8R5.png";
-                case ArcDPSEnums.MinionID.JuvenileBlackMoa:
-                    return "https://i.imgur.com/l47XZUw.png";
-                case ArcDPSEnums.MinionID.JuvenileEletricWywern:
-                    return "https://i.imgur.com/RsSNDV3.png";
-                case ArcDPSEnums.MinionID.JuvenileFangedIboga:
-                    return "https://i.imgur.com/cRE9fwE.png";
                 case ArcDPSEnums.MinionID.IllusionarySwordsman:
                     return "https://i.imgur.com/ReUwrAL.png";
+                case ArcDPSEnums.MinionID.IllusionaryBerserker:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.IllusionaryDisenchanter:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.IllusionaryRogue:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.IllusionaryDefender:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.IllusionaryMage:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.IllusionaryDuelist:
+                    return "TODO";
                 case ArcDPSEnums.MinionID.IllusionaryWarden:
                     return "https://i.imgur.com/dId5lC2.png";
                 case ArcDPSEnums.MinionID.IllusionaryWarlock:
                     return "https://i.imgur.com/ZRCcbBM.png";
+                case ArcDPSEnums.MinionID.IllusionaryAvenger:
+                    return "https://i.imgur.com/SmEAtBo.png";
+                //
+                case ArcDPSEnums.MinionID.JadeMech:
+                    return "https://i.imgur.com/54evTaq.png";
+                    //
+                case ArcDPSEnums.MinionID.EraBreakrazor:
+                    return "https://i.imgur.com/2X3G3Fl.png";
+                case ArcDPSEnums.MinionID.KusDarkrazor:
+                    return "https://i.imgur.com/rJq4Ngh.png";
+                case ArcDPSEnums.MinionID.ViskIcerazor:
+                    return "https://i.imgur.com/SlTx8R5.png";
                 case ArcDPSEnums.MinionID.JasRazorclaw:
                     return "https://i.imgur.com/SkSsLmw.png";
                 case ArcDPSEnums.MinionID.OfelaSoulcleave:
                     return "https://i.imgur.com/xFsl0gj.png";
+                //
+                case ArcDPSEnums.MinionID.FrostSpirit:
+                    return "https://i.imgur.com/dfbRWGh.png";
+                case ArcDPSEnums.MinionID.SunSpirit:
+                    return "https://i.imgur.com/HtCusPF.png";
                 case ArcDPSEnums.MinionID.SpiritOfNatureRenewal:
                     return "https://i.imgur.com/sGMfD5j.png";
                 case ArcDPSEnums.MinionID.StoneSpirit:
                     return "https://i.imgur.com/4r6Ytj5.png";
                 case ArcDPSEnums.MinionID.StormSpirit:
                     return "https://i.imgur.com/jXmencD.png";
+                //
+                case ArcDPSEnums.MinionID.JuvenileAlpineWolf:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileArctodus:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileArmorFish:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileBlackBear:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileBlackMoa:
+                    return "https://i.imgur.com/l47XZUw.png";
+                case ArcDPSEnums.MinionID.JuvenileBlackWidowSpider:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileBlueJellyfish:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileBlueMoa:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileBoar:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileBristleback:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileBrownBear:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileCheetah:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileEagle:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileEletricWywern:
+                    return "https://i.imgur.com/RsSNDV3.png";
+                case ArcDPSEnums.MinionID.JuvenileFangedIboga:
+                    return "https://i.imgur.com/cRE9fwE.png";
+                case ArcDPSEnums.MinionID.JuvenileFernHound:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileFireWywern:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileForestSpider:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileIceDrake:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileJacaranda:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileJungleSpider:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileJungleStalker:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileKrytanDrakehound:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileLashtailDevourer:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileLynx:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileMarshDrake:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileOwl:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenilePig:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenilePinkMoa:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileRainbowJellyfish:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileRedJellyfish:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileRedMoa:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileRiverDrake:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileRockGazelle:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileSalamanderDraker:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileSandLion:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileShark:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileSmokescale:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileTiger:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileWarthog:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileWhiptailDevourer:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileWolf:
+                    return "TODO";
+                //
                 case ArcDPSEnums.MinionID.BloodFiend:
                     return "https://i.imgur.com/PrOpULe.png";
+                case ArcDPSEnums.MinionID.BoneFiend:
+                    return "TODO";
                 case ArcDPSEnums.MinionID.FleshGolem:
                     return "https://i.imgur.com/JkYUNug.png";
                 case ArcDPSEnums.MinionID.ShadowFiend:
                     return "https://i.imgur.com/Undu5EU.png";
-                case ArcDPSEnums.MinionID.SunSpirit:
-                    return "https://i.imgur.com/HtCusPF.png";
+                case ArcDPSEnums.MinionID.FleshWurm:
+                    return "https://i.imgur.com/Bc1VfLm.png";
+                case ArcDPSEnums.MinionID.UnstableHorror:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.ShamblingHorror:
+                    return "TODO";
+                //
                 case ArcDPSEnums.MinionID.Thief1:
                 case ArcDPSEnums.MinionID.Thief2:
                 case ArcDPSEnums.MinionID.Thief3:
@@ -1049,8 +1156,32 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.MinionID.Deadeye9:
                 case ArcDPSEnums.MinionID.Deadeye10:
                     return "https://i.imgur.com/6YkM5zY.png";
-                case ArcDPSEnums.MinionID.FleshWurm:
-                    return "https://i.imgur.com/Bc1VfLm.png";
+                //
+                case ArcDPSEnums.MinionID.BowOfTruth:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.HammerOfWisdom:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.ShieldOfTheAvenger:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.SwordOfJustice:
+                    return "TODO";
+                //
+                case ArcDPSEnums.MinionID.LesserAirElemental:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.LesserEarthElemental:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.LesserFireElemental:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.LesserIceElemental:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.AirElemental:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.EarthElemental:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.FireElemental:
+                    return "TODO";
+                case ArcDPSEnums.MinionID.IceElemental:
+                    return "TODO";
             }
             //
             return "https://i.imgur.com/HuJHqRZ.png";
