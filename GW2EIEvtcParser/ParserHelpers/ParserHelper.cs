@@ -1100,7 +1100,7 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.MinionID.BloodFiend:
                     return "https://i.imgur.com/PrOpULe.png";
                 case ArcDPSEnums.MinionID.BoneFiend:
-                    return "TODO";
+                    return "https://i.imgur.com/BEntBIt.png";
                 case ArcDPSEnums.MinionID.FleshGolem:
                     return "https://i.imgur.com/JkYUNug.png";
                 case ArcDPSEnums.MinionID.ShadowFiend:
@@ -1108,9 +1108,9 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.MinionID.FleshWurm:
                     return "https://i.imgur.com/Bc1VfLm.png";
                 case ArcDPSEnums.MinionID.UnstableHorror:
-                    return "TODO";
+                    return "https://i.imgur.com/zHPC8BX.png";
                 case ArcDPSEnums.MinionID.ShamblingHorror:
-                    return "TODO";
+                    return "https://i.imgur.com/eeE34so.png";
                 //
                 case ArcDPSEnums.MinionID.Thief1:
                 case ArcDPSEnums.MinionID.Thief2:
