@@ -85,7 +85,6 @@ namespace GW2EIEvtcParser
             Unknown
         };
 
-        // TODO: add life leech stuff
         public enum DamageType { All, Power, Strike, Condition, StrikeAndCondition, StrikeAndConditionAndLifeLeech };
         public enum BuffEnum { Self, Group, OffGroup, Squad };
 
@@ -938,7 +937,7 @@ namespace GW2EIEvtcParser
             switch (ArcDPSEnums.GetMinionID(id))
             {
                 case ArcDPSEnums.MinionID.RuneJaggedHorror:
-                    return "TODO";
+                    return "https://i.imgur.com/opMTn10.png";
                 //
                 case ArcDPSEnums.MinionID.Clone1:
                 case ArcDPSEnums.MinionID.Clone2:
@@ -970,17 +969,17 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.MinionID.IllusionarySwordsman:
                     return "https://i.imgur.com/ReUwrAL.png";
                 case ArcDPSEnums.MinionID.IllusionaryBerserker:
-                    return "TODO";
+                    return "https://i.imgur.com/VNcYhXZ.png";
                 case ArcDPSEnums.MinionID.IllusionaryDisenchanter:
-                    return "TODO";
+                    return "https://i.imgur.com/Jbg96sq.png";
                 case ArcDPSEnums.MinionID.IllusionaryRogue:
-                    return "TODO";
+                    return "https://i.imgur.com/3v4pj2C.png";
                 case ArcDPSEnums.MinionID.IllusionaryDefender:
-                    return "TODO";
+                    return "https://i.imgur.com/jXp8Q9M.png";
                 case ArcDPSEnums.MinionID.IllusionaryMage:
-                    return "TODO";
+                    return "https://i.imgur.com/xIGA5Xj.png";
                 case ArcDPSEnums.MinionID.IllusionaryDuelist:
-                    return "TODO";
+                    return "https://i.imgur.com/ZY54uOt.png";
                 case ArcDPSEnums.MinionID.IllusionaryWarden:
                     return "https://i.imgur.com/dId5lC2.png";
                 case ArcDPSEnums.MinionID.IllusionaryWarlock:

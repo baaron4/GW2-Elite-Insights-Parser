@@ -224,6 +224,9 @@ namespace GW2EIEvtcParser.ParsedData
         private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>
                     {
                         { 9292, GW2Builds.EndOfLife }, // Lightning Strike (Sigil)
+                        { 9291, GW2Builds.EndOfLife }, // Lightning Strike (Sigil)
+                        { 9447, GW2Builds.EndOfLife }, // Lightning Strike (Sigil)
+                        { 9448, GW2Builds.EndOfLife }, // Lightning Strike (Sigil)
                         { 5492, GW2Builds.December2018Balance },  // Fire Attunement
                         { 13014, GW2Builds.EndOfLife }, // Mug
                         { 30770, 54485 }, // Pulmonary Impact
