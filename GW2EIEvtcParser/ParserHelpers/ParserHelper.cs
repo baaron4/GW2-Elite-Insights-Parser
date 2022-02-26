@@ -1166,21 +1166,21 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/BKJz3br.png";
                 //
                 case ArcDPSEnums.MinionID.LesserAirElemental:
-                    return "TODO";
+                    return "https://i.imgur.com/T8Qb5j7.png";
                 case ArcDPSEnums.MinionID.LesserEarthElemental:
-                    return "TODO";
+                    return "https://i.imgur.com/E4M9YXp.png";
                 case ArcDPSEnums.MinionID.LesserFireElemental:
-                    return "TODO";
+                    return "https://i.imgur.com/X2QIo3j.png";
                 case ArcDPSEnums.MinionID.LesserIceElemental:
-                    return "TODO";
+                    return "https://i.imgur.com/ldzBrLt.png";
                 case ArcDPSEnums.MinionID.AirElemental:
-                    return "TODO";
+                    return "https://i.imgur.com/2cjYTg3.png";
                 case ArcDPSEnums.MinionID.EarthElemental:
-                    return "TODO";
+                    return "https://i.imgur.com/OrueMCk.png";
                 case ArcDPSEnums.MinionID.FireElemental:
-                    return "TODO";
+                    return "https://i.imgur.com/7Qhev66.png";
                 case ArcDPSEnums.MinionID.IceElemental:
-                    return "TODO";
+                    return "https://i.imgur.com/BTf2r0D.png";
             }
             //
             return "https://i.imgur.com/HuJHqRZ.png";
