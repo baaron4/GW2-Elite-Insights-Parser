@@ -1013,89 +1013,88 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/jXmencD.png";
                 //
                 case ArcDPSEnums.MinionID.JuvenileAlpineWolf:
-                    return "TODO";
+                    return "https://i.imgur.com/6NJ4PJx.png";
                 case ArcDPSEnums.MinionID.JuvenileArctodus:
-                    return "TODO";
+                    return "https://i.imgur.com/of68C0V.png";
                 case ArcDPSEnums.MinionID.JuvenileArmorFish:
-                    return "TODO";
+                    return "https://i.imgur.com/s6jE8ex.png";
                 case ArcDPSEnums.MinionID.JuvenileBlackBear:
-                    return "TODO";
+                    return "https://i.imgur.com/VAza7ac.png";
                 case ArcDPSEnums.MinionID.JuvenileBlackMoa:
                     return "https://i.imgur.com/l47XZUw.png";
                 case ArcDPSEnums.MinionID.JuvenileBlackWidowSpider:
-                    return "TODO";
+                    return "https://i.imgur.com/dNRN5Cd.png";
                 case ArcDPSEnums.MinionID.JuvenileBlueJellyfish:
-                    return "TODO";
+                case ArcDPSEnums.MinionID.JuvenileRainbowJellyfish:
+                    return "https://i.imgur.com/kS5xGdi.png";
                 case ArcDPSEnums.MinionID.JuvenileBlueMoa:
-                    return "TODO";
+                    return "https://i.imgur.com/8lC1l7N.png";
                 case ArcDPSEnums.MinionID.JuvenileBoar:
-                    return "TODO";
+                    return "https://i.imgur.com/l9ZDJoG.png";
                 case ArcDPSEnums.MinionID.JuvenileBristleback:
-                    return "TODO";
+                    return "https://i.imgur.com/rLFL4JL.png";
                 case ArcDPSEnums.MinionID.JuvenileBrownBear:
-                    return "TODO";
+                    return "https://i.imgur.com/tTR3z9V.png";
                 case ArcDPSEnums.MinionID.JuvenileCheetah:
-                    return "TODO";
+                    return "https://i.imgur.com/IosaqHc.png";
                 case ArcDPSEnums.MinionID.JuvenileEagle:
-                    return "TODO";
+                    return "https://i.imgur.com/WuOl5qh.png";
                 case ArcDPSEnums.MinionID.JuvenileEletricWywern:
                     return "https://i.imgur.com/RsSNDV3.png";
                 case ArcDPSEnums.MinionID.JuvenileFangedIboga:
                     return "https://i.imgur.com/cRE9fwE.png";
                 case ArcDPSEnums.MinionID.JuvenileFernHound:
-                    return "TODO";
+                    return "https://i.imgur.com/j1c43bj.png";
                 case ArcDPSEnums.MinionID.JuvenileFireWywern:
-                    return "TODO";
+                    return "https://i.imgur.com/WjODNiP.png";
                 case ArcDPSEnums.MinionID.JuvenileForestSpider:
-                    return "TODO";
+                    return "https://i.imgur.com/Xu5kRnv.png";
                 case ArcDPSEnums.MinionID.JuvenileIceDrake:
-                    return "TODO";
+                    return "https://i.imgur.com/SlbkLrD.png";
                 case ArcDPSEnums.MinionID.JuvenileJacaranda:
-                    return "TODO";
+                    return "https://i.imgur.com/IrmdDqo.png";
                 case ArcDPSEnums.MinionID.JuvenileJungleSpider:
-                    return "TODO";
+                    return "https://i.imgur.com/4zNZcn8.png";
                 case ArcDPSEnums.MinionID.JuvenileJungleStalker:
-                    return "TODO";
+                    return "https://i.imgur.com/jM51zQ0.png";
                 case ArcDPSEnums.MinionID.JuvenileKrytanDrakehound:
-                    return "TODO";
+                    return "https://i.imgur.com/KZZ0YPw.png";
                 case ArcDPSEnums.MinionID.JuvenileLashtailDevourer:
-                    return "TODO";
+                    return "https://i.imgur.com/CnRTFH8.png";
                 case ArcDPSEnums.MinionID.JuvenileLynx:
-                    return "TODO";
+                    return "https://i.imgur.com/fCjd2Qz.png";
                 case ArcDPSEnums.MinionID.JuvenileMarshDrake:
-                    return "TODO";
+                    return "https://i.imgur.com/5EuKe2F.png";
                 case ArcDPSEnums.MinionID.JuvenileOwl:
-                    return "TODO";
+                    return "https://i.imgur.com/dh3thfS.png";
                 case ArcDPSEnums.MinionID.JuvenilePig:
-                    return "TODO";
+                    return "https://i.imgur.com/kjj0810.png";
                 case ArcDPSEnums.MinionID.JuvenilePinkMoa:
-                    return "TODO";
-                case ArcDPSEnums.MinionID.JuvenileRainbowJellyfish:
-                    return "TODO";
+                    return "https://i.imgur.com/AdzQreO.png";
                 case ArcDPSEnums.MinionID.JuvenileRedJellyfish:
-                    return "TODO";
+                    return "https://i.imgur.com/BlQij3o.png";
                 case ArcDPSEnums.MinionID.JuvenileRedMoa:
-                    return "TODO";
+                    return "https://i.imgur.com/N97LXIO.png";
                 case ArcDPSEnums.MinionID.JuvenileRiverDrake:
-                    return "TODO";
+                    return "https://i.imgur.com/K56jP8H.png";
                 case ArcDPSEnums.MinionID.JuvenileRockGazelle:
-                    return "TODO";
+                    return "https://i.imgur.com/XV1ySBt.png";
                 case ArcDPSEnums.MinionID.JuvenileSalamanderDraker:
-                    return "TODO";
+                    return "https://i.imgur.com/2EK2OBE.png";
                 case ArcDPSEnums.MinionID.JuvenileSandLion:
-                    return "TODO";
+                    return "https://i.imgur.com/XDkpvp9.png";
                 case ArcDPSEnums.MinionID.JuvenileShark:
-                    return "TODO";
+                    return "https://i.imgur.com/vZ9jIE9.png";
                 case ArcDPSEnums.MinionID.JuvenileSmokescale:
-                    return "TODO";
+                    return "https://i.imgur.com/30k6BmC.png";
                 case ArcDPSEnums.MinionID.JuvenileTiger:
-                    return "TODO";
+                    return "https://i.imgur.com/vALPpMJ.png";
                 case ArcDPSEnums.MinionID.JuvenileWarthog:
-                    return "TODO";
+                    return "https://i.imgur.com/MPPsWBH.png";
                 case ArcDPSEnums.MinionID.JuvenileWhiptailDevourer:
-                    return "TODO";
+                    return "https://i.imgur.com/hqWNZkD.png";
                 case ArcDPSEnums.MinionID.JuvenileWolf:
-                    return "TODO";
+                    return "https://i.imgur.com/GQLiFky.png";
                 //
                 case ArcDPSEnums.MinionID.BloodFiend:
                     return "https://i.imgur.com/PrOpULe.png";
