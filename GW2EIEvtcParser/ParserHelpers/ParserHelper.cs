@@ -1157,13 +1157,13 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/6YkM5zY.png";
                 //
                 case ArcDPSEnums.MinionID.BowOfTruth:
-                    return "TODO";
+                    return "https://i.imgur.com/i9uCT6p.png";
                 case ArcDPSEnums.MinionID.HammerOfWisdom:
-                    return "TODO";
+                    return "https://i.imgur.com/XXrlAma.png";
                 case ArcDPSEnums.MinionID.ShieldOfTheAvenger:
-                    return "TODO";
+                    return "https://i.imgur.com/86a9LQ3.png";
                 case ArcDPSEnums.MinionID.SwordOfJustice:
-                    return "TODO";
+                    return "https://i.imgur.com/BKJz3br.png";
                 //
                 case ArcDPSEnums.MinionID.LesserAirElemental:
                     return "TODO";
