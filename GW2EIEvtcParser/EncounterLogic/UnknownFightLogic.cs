@@ -41,6 +41,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             //
             TargetAgents = new HashSet<AgentItem>(_targets.Select(x => x.AgentItem));
+            NonPlayerFriendlyAgents = new HashSet<AgentItem>(_nonPlayerFriendlies.Select(x => x.AgentItem));
             TrashMobAgents = new HashSet<AgentItem>(_trashMobs.Select(x => x.AgentItem));
         }
     }
