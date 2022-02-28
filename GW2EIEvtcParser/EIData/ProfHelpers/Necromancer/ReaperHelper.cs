@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.ParserHelper;
@@ -43,7 +44,10 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Dark Bond", 31247, Source.Reaper, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/64/%22Rise%21%22.png"),
         };
 
-        private static HashSet<long> Minions = new HashSet<long>();
+        private static HashSet<long> Minions = new HashSet<long>()
+        {
+            (int)MinionID.ShamblingHorror,
+        };
         internal static bool IsKnownMinionID(long id)
         {
             return Minions.Contains(id);
