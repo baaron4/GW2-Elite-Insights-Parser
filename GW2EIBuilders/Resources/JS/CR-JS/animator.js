@@ -177,7 +177,7 @@ class Animator {
                     this.trashMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc, actor.masterID));
                     break;
                 case "Friendly":
-                    this.friendlyMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, actor.masterID ? 18 : 20, actor.positions, actor.dead, actor.down, actor.dc, actor.masterID));
+                    this.friendlyMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 20, actor.positions, actor.dead, actor.down, actor.dc, actor.masterID));
                     break;
                 case "Circle":
                     this.mechanicActorData.push(new CircleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.radius, actor.connectedTo, this.inchToPixel * actor.minRadius));
