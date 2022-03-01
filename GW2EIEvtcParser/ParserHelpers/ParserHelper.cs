@@ -459,7 +459,7 @@ namespace GW2EIEvtcParser
                 case Spec.Deadeye:
                     return "https://wiki.guildwars2.com/images/b/b0/Deadeye_tango_icon_200px.png";
                 case Spec.Specter:
-                    return "https://i.imgur.com/UbvyFSt.png";
+                    return "https://wiki.guildwars2.com/images/e/eb/Specter_tango_icon_200px.png";
                 //
                 case Spec.Elementalist:
                     return "https://wiki.guildwars2.com/images/a/a0/Elementalist_tango_icon_200px.png";
@@ -468,7 +468,7 @@ namespace GW2EIEvtcParser
                 case Spec.Weaver:
                     return "https://wiki.guildwars2.com/images/3/31/Weaver_tango_icon_200px.png";
                 case Spec.Catalyst:
-                    return "https://i.imgur.com/UbvyFSt.png";
+                    return "https://wiki.guildwars2.com/images/9/92/Catalyst_tango_icon_200px.png";
                 //
                 case Spec.Mesmer:
                     return "https://wiki.guildwars2.com/images/7/73/Mesmer_tango_icon_200px.png";
@@ -547,7 +547,7 @@ namespace GW2EIEvtcParser
                 case Spec.Deadeye:
                     return "https://wiki.guildwars2.com/images/c/c9/Deadeye_tango_icon_20px.png";
                 case Spec.Specter:
-                    return "https://i.imgur.com/UbvyFSt.png";
+                    return "https://wiki.guildwars2.com/images/5/5c/Specter_tango_icon_20px.png";
                 //
                 case Spec.Elementalist:
                     return "https://wiki.guildwars2.com/images/a/aa/Elementalist_tango_icon_20px.png";
@@ -556,7 +556,7 @@ namespace GW2EIEvtcParser
                 case Spec.Weaver:
                     return "https://wiki.guildwars2.com/images/f/fc/Weaver_tango_icon_20px.png";
                 case Spec.Catalyst:
-                    return "https://i.imgur.com/UbvyFSt.png";
+                    return "https://wiki.guildwars2.com/images/d/d5/Catalyst_tango_icon_20px.png";
                 //
                 case Spec.Mesmer:
                     return "https://wiki.guildwars2.com/images/6/60/Mesmer_tango_icon_20px.png";
