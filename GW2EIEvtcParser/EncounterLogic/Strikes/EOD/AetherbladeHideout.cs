@@ -174,14 +174,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                         break;
                 }
             }
-            foreach (NPC trash in TrashMobs)
-            {
-                switch(trash.ID)
-                {
-                    default:
-                        break;
-                }
-            }
         }
 
 
