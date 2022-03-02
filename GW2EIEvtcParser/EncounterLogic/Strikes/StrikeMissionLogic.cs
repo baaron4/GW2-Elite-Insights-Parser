@@ -19,24 +19,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             SetSuccessByDeath(combatData, fightData, playerAgents, all, GetSuccessCheckIds());
         }
 
-        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
-        {
-            var strikeRewardIDs = new HashSet<ulong>
-                {
-                    993
-                };
-            IReadOnlyList<RewardEvent> rewards = combatData.GetRewardEvents();
-            RewardEvent reward = rewards.FirstOrDefault(x => strikeRewardIDs.Contains(x.RewardID));
-            if (reward != null)
-            {
-                fightData.SetSuccess(true, reward.Time);
-            }
-            else
-            {
-                SetSuccessByDeath(combatData, fightData, playerAgents, true);
-            }
-        }
-
         protected override HashSet<int> GetUniqueNPCIDs()
         {
             return new HashSet<int>
