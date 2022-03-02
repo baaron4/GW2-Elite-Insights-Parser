@@ -78,6 +78,15 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+        {
+            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+            if (!fightData.Success)
+            {
+                // TODO find a reliable way here, death events are not consistent
+            }
+        }
+
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
@@ -105,7 +114,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 mainPhase.AddTarget(maiTrin);
                 phases.Add(mainPhase);
                 List<PhaseData> maiPhases = GetPhasesByInvul(log, 38793, maiTrin, false, true, maiTrinEnd);
-                maiPhases.RemoveAll(x => x.DurationInMS < 2200);
                 for (int i = 0; i < maiPhases.Count; i++)
                 {
                     PhaseData subPhase = maiPhases[i];

@@ -246,7 +246,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 phases.Add(new PhaseData(last, finalEnd));
             }
-            return phases;
+            return phases.Where(x => x.DurationInMS > ParserHelper.PhaseTimeLimit).ToList();
         }
 
         protected static List<PhaseData> GetInitialPhase(ParsedEvtcLog log)

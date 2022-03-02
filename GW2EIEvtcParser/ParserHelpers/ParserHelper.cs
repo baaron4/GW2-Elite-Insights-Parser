@@ -880,6 +880,9 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.TheMindblade:
                 case ArcDPSEnums.TrashID.TheRitualist:
                 case ArcDPSEnums.TrashID.TheSniper:
+                case ArcDPSEnums.TrashID.AnkkaHallucination1:
+                case ArcDPSEnums.TrashID.AnkkaHallucination2:
+                case ArcDPSEnums.TrashID.AnkkaHallucination3:
                     return "https://i.imgur.com/k79t7ZA.png";
                 case ArcDPSEnums.TrashID.HandOfErosion:
                 case ArcDPSEnums.TrashID.HandOfEruption:

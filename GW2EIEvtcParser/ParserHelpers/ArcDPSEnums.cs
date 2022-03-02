@@ -546,6 +546,16 @@ namespace GW2EIEvtcParser
             ScarletPhantomBreakbar = 23656,
             ScarletPhantomHP = 24431,
             ScarletPhantom2 = 24396,
+            // Xunlai Jade Junkyard
+            Ankka = 24634,
+            AnkkaHallucination1 = 24258,
+            AnkkaHallucination2 = 24158,
+            AnkkaHallucination3 = 24969,
+            ReanimatedSpite = 24348,
+            ReanimatedMalice1 = 24976,
+            ReanimatedMalice2 = 24171,
+            ZhaitansReach = 23839,
+            ReanimatedHatred = 23673,
             // Kaineng Overlook
             TheSniper = 23612,
             TheMechRider = 24660,
@@ -567,7 +577,7 @@ namespace GW2EIEvtcParser
             BlueKnight = 16899,
             TwistedHorror = 17009,
             // Siax
-            Hallucination = 17002,
+            SiaxHallucination = 17002,
             EchoOfTheUnclean = 17068,
             // Ensolyss
             NightmareHallucination1 = 16912, // (exploding after jump and charging in last phase)
