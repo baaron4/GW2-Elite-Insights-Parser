@@ -541,6 +541,19 @@ namespace GW2EIEvtcParser
             DoppelgangerThief1 = 22656,
             DoppelgangerThief2 = 22612,
             DoppelgangerRevenant = 22610,
+            // Aetherblade Hideout
+            ScarletPhantom1 = 24404,
+            ScarletPhantomBreakbar = 23656,
+            ScarletPhantomHP = 24431,
+            ScarletPhantom2 = 24396,
+            // Kaineng Overlook
+            TheSniper = 23612,
+            TheMechRider = 24660,
+            TheEnforcer = 24261,
+            TheRitualist = 23618,
+            TheMindblade = 24254,
+            SpiritOfPain = 23793,
+            SpiritOfDestruction = 23961,
             // Void Amalgamate
             VoidAmalgamateOrb = 24375,
             // Freezie
@@ -653,6 +666,7 @@ namespace GW2EIEvtcParser
             WhisperOfJormag = 22711,
             VariniaStormsounder = 22836,
             MaiTrinStrike = 24033,
+            MaiTrinStrikeDuringEcho = 23826,
             DummyMaiTrinStrike = ArcDPSEnums.DummyMaiTrinStrike,
             EchoOfScarletBriar = 24768,
             Ankka = 23957,

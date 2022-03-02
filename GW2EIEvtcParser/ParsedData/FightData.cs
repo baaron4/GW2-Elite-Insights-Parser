@@ -176,13 +176,13 @@ namespace GW2EIEvtcParser.ParsedData
                     Logic = new ColdWar(id);
                     break;
                 case ArcDPSEnums.TargetID.MaiTrinStrike:
-                    Logic = new MaiTrin(id);
+                    Logic = new AetherbladeHideout(id);
                     break;
                 case ArcDPSEnums.TargetID.MinisterLi:
-                    Logic = new MinisterLi(id);
+                    Logic = new KainengOverlook(id);
                     break;
                 case ArcDPSEnums.TargetID.Ankka:
-                    Logic = new MinisterLi(id);
+                    Logic = new XunlaiJadeJunkyard(id);
                     break;
                 //
                 case ArcDPSEnums.TargetID.MAMA:

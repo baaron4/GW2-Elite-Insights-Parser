@@ -4,16 +4,16 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class MinisterLi : CanthaStrike
+    internal class HarvestTemple : CanthaStrike
     {
-        public MinisterLi(int triggerID) : base(triggerID)
+        public HarvestTemple(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
             }
             );
-            Extension = "minli";
-            EncounterCategoryInformation.InSubCategoryOrder = 2;
+            Extension = "harvsttmpl";
+            EncounterCategoryInformation.InSubCategoryOrder = 3;
         }
 
         /*protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

@@ -4,15 +4,15 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Ankka : CanthaStrike
+    internal class XunlaiJadeJunkyard : CanthaStrike
     {
-        public Ankka(int triggerID) : base(triggerID)
+        public XunlaiJadeJunkyard(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
             }
             );
-            Extension = "ankka";
+            Extension = "xunjadejunk";
             EncounterCategoryInformation.InSubCategoryOrder = 1;
         }
 

@@ -7,15 +7,15 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class MaiTrin : CanthaStrike
+    internal class AetherbladeHideout : CanthaStrike
     {
-        public MaiTrin(int triggerID) : base(triggerID)
+        public AetherbladeHideout(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
             }
             );
-            Extension = "maitrin";
+            Extension = "aetherhide";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
         }
 
@@ -24,7 +24,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<int>
             {
                 (int)ArcDPSEnums.TargetID.MaiTrinStrike,
-                (int)ArcDPSEnums.TargetID.EchoOfScarletBriar
+                (int)ArcDPSEnums.TargetID.MaiTrinStrikeDuringEcho,
+                (int)ArcDPSEnums.TargetID.EchoOfScarletBriar,
+                (int)ArcDPSEnums.TrashID.ScarletPhantomBreakbar,
+                (int)ArcDPSEnums.TrashID.ScarletPhantomHP,
             };
         }
 
@@ -37,6 +40,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+        {
+            return new List<ArcDPSEnums.TrashID>
+            {
+                ArcDPSEnums.TrashID.ScarletPhantom1,
+                ArcDPSEnums.TrashID.ScarletPhantom2,
+            };
+        }
+
+        internal override string GetLogicName(CombatData combatData, AgentData agentData)
+        {
+            return "Aetherblade Hideout";
+        }
+
         protected override HashSet<int> GetUniqueNPCIDs()
         {
             return new HashSet<int>
@@ -45,6 +62,22 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TargetID.EchoOfScarletBriar
             };
         }
+
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            switch (target.ID)
+            {
+                case (int)ArcDPSEnums.TargetID.MaiTrinStrike:
+                    HealthUpdateEvent lastHPUpdate = log.CombatData.GetHealthUpdateEvents(target.AgentItem).LastOrDefault();
+                    var maiTrinEnd = lastHPUpdate.Time;
+                    replay.Trim(replay.TimeOffsets.start, maiTrinEnd);
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
@@ -76,7 +109,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 for (int i = 0; i < maiPhases.Count; i++)
                 {
                     PhaseData subPhase = maiPhases[i];
-                    subPhase.Name = "Mai Tring Phase " + (i + 1);
+                    subPhase.Name = "Mai Trin Phase " + (i + 1);
                     subPhase.AddTarget(maiTrin);
                 }
                 phases.AddRange(maiPhases);
@@ -117,6 +150,28 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (hpUpdates.Count > 1 && hpUpdates.LastOrDefault().DstAgent == 10000)
                 {
                     hpUpdates.LastOrDefault().OverrideSrcAgent(ParserHelper._unknownAgent.Agent);
+                }
+            }
+            foreach (NPC target in Targets)
+            {
+                switch (target.ID)
+                {
+                    case (int)ArcDPSEnums.TrashID.ScarletPhantomBreakbar:
+                        target.OverrideName("Elite " + target.Character + " CC");
+                        break;
+                    case (int)ArcDPSEnums.TrashID.ScarletPhantomHP:
+                        target.OverrideName("Elite " + target.Character + " HP");
+                        break;
+                    default:
+                        break;
+                }
+            }
+            foreach (NPC trash in TrashMobs)
+            {
+                switch(trash.ID)
+                {
+                    default:
+                        break;
                 }
             }
         }
