@@ -49,7 +49,7 @@
                 return this.phase.targets.indexOf(this.targetindex);
             },
             hasBoons: function () {
-                return this.phase.targetsBoonTotals[this.targetPhaseIndex];
+                return this.phase.targetsBoonTotals[this.targetPhaseIndex].avg > 0;
             },
             condiData: function () {
                 if (this.cacheCondi.has(this.phaseindex)) {
