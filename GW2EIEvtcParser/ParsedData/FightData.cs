@@ -175,6 +175,15 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.VariniaStormsounder:
                     Logic = new ColdWar(id);
                     break;
+                case ArcDPSEnums.TargetID.MaiTrinStrike:
+                    Logic = new MaiTrin(id);
+                    break;
+                case ArcDPSEnums.TargetID.MinisterLi:
+                    Logic = new MinisterLi(id);
+                    break;
+                case ArcDPSEnums.TargetID.Ankka:
+                    Logic = new MinisterLi(id);
+                    break;
                 //
                 case ArcDPSEnums.TargetID.MAMA:
                     Logic = new MAMA(id);

@@ -34,6 +34,7 @@
             Grothmar,
             Bjora,
             Drizzlewood,
+            Cantha,
             //
             GreenAlpineBorderlands,
             BlueAlpineBorderlands,

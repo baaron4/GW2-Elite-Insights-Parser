@@ -328,6 +328,7 @@ namespace GW2EIEvtcParser
         private const int PyreGuardianResolution = -13;
         private const int CASword = -14;
         private const int SubArtsariiv = -15;
+        private const int DummyMaiTrinStrike = -16;
 
 
         //
@@ -540,6 +541,8 @@ namespace GW2EIEvtcParser
             DoppelgangerThief1 = 22656,
             DoppelgangerThief2 = 22612,
             DoppelgangerRevenant = 22610,
+            // Void Amalgamate
+            VoidAmalgamateOrb = 24375,
             // Freezie
             FreeziesFrozenHeart = 21328,
             // Fractals
@@ -649,6 +652,12 @@ namespace GW2EIEvtcParser
             Boneskinner = 22521,
             WhisperOfJormag = 22711,
             VariniaStormsounder = 22836,
+            MaiTrinStrike = 24033,
+            DummyMaiTrinStrike = ArcDPSEnums.DummyMaiTrinStrike,
+            EchoOfScarletBriar = 24768,
+            Ankka = 23957,
+            MinisterLi = 24485,
+            //VoidAmalgamate = 
             // Fract
             MAMA = 17021,
             Siax = 17028,
@@ -656,7 +665,7 @@ namespace GW2EIEvtcParser
             Skorvald = 17632,
             Artsariiv = 17949,
             Arkk = 17759,
-            MaiTrin = 19697,
+            MaiTrinFract = 19697,
             ShadowMinotaur = 20682,
             BroodQueen = 20742,
             TheVoice = 20497,
