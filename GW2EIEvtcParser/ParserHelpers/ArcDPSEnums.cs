@@ -329,6 +329,12 @@ namespace GW2EIEvtcParser
         private const int CASword = -14;
         private const int SubArtsariiv = -15;
         private const int DummyMaiTrinStrike = -16;
+        private const int TheDragonVoidZhaitan = -17;
+        private const int TheDragonVoidSonWoo = -18;
+        private const int TheDragonVoidKralkatorik = -18;
+        private const int TheDragonVoidMordremoth = -18;
+        private const int TheDragonVoidJormag = -18;
+        private const int TheDragonVoidPrimordious = -18;
 
 
         //
@@ -565,7 +571,22 @@ namespace GW2EIEvtcParser
             SpiritOfPain = 23793,
             SpiritOfDestruction = 23961,
             // Void Amalgamate
-            VoidAmalgamateOrb = 24375,
+            VoidAmalgamate1 = 24375,
+            VoidAmalgamate2 = 23956,
+            VoidTangler = 25138,
+            VoidColdsteel = 23945,
+            VoidAbomination = 23936,
+            VoidSaltsprayDragon = 23846,
+            VoidRotswarmer = 24590,
+            VoidGiant = 24450,
+            VoidSkullpiercer = 25177,
+            VoidTimeCaster = 25025,
+            VoidBrandbomber = 24783,
+            VoidBurster = 24464,
+            VoidWarforged1 = 24129,
+            VoidWarforged2 = 24855,
+            VoidStormseer = 24677,
+            VoidMelter = 24223,
             // Freezie
             FreeziesFrozenHeart = 21328,
             // Fractals
@@ -681,6 +702,12 @@ namespace GW2EIEvtcParser
             EchoOfScarletBriar = 24768,
             Ankka = 23957,
             MinisterLi = 24485,
+            TheDragonVoidZhaitan = ArcDPSEnums.TheDragonVoidZhaitan,
+            TheDragonVoidJormag = ArcDPSEnums.TheDragonVoidJormag,
+            TheDragonVoidKralkatorik = ArcDPSEnums.TheDragonVoidKralkatorik,
+            TheDragonVoidSonWoo = ArcDPSEnums.TheDragonVoidSonWoo,
+            TheDragonVoidPrimordious = ArcDPSEnums.TheDragonVoidPrimordious,
+            TheDragonVoidMordremoth = ArcDPSEnums.TheDragonVoidMordremoth,
             //VoidAmalgamate = 
             // Fract
             MAMA = 17021,

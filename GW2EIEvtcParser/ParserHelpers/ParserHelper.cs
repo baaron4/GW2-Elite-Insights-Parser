@@ -883,6 +883,8 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.AnkkaHallucination1:
                 case ArcDPSEnums.TrashID.AnkkaHallucination2:
                 case ArcDPSEnums.TrashID.AnkkaHallucination3:
+                case ArcDPSEnums.TrashID.VoidSaltsprayDragon:
+                case ArcDPSEnums.TrashID.VoidTimeCaster:
                     return "https://i.imgur.com/k79t7ZA.png";
                 case ArcDPSEnums.TrashID.HandOfErosion:
                 case ArcDPSEnums.TrashID.HandOfEruption:
