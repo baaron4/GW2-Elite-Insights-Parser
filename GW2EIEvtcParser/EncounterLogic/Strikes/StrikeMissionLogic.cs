@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected virtual void SetSuccessByDeath(CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all)
         {
-            SetSuccessByDeath(combatData, fightData, playerAgents, all, GenericTriggerID);
+            SetSuccessByDeath(combatData, fightData, playerAgents, all, GetSuccessCheckIds());
         }
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)

@@ -211,9 +211,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        protected static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart)
+        protected static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long optionalEnd = -1)
         {
-            long fightDuration = log.FightData.FightEnd;
+            long finalEnd = optionalEnd > 0 ? optionalEnd : log.FightData.FightEnd;
             var phases = new List<PhaseData>();
             long last = 0;
             List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, skillID, mainTarget, beginWithStart, true);
@@ -223,7 +223,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AbstractBuffEvent c = invuls[i];
                 if (c is BuffApplyEvent)
                 {
-                    long end = Math.Min(c.Time, fightDuration);
+                    long end = Math.Min(c.Time, finalEnd);
                     phases.Add(new PhaseData(last, end));
                     /*if (i == invuls.Count - 1)
                     {
@@ -233,7 +233,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 else
                 {
-                    long end = Math.Min(c.Time, fightDuration);
+                    long end = Math.Min(c.Time, finalEnd);
                     if (addSkipPhases)
                     {
                         phases.Add(new PhaseData(last, end));
@@ -242,9 +242,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     last = end;
                 }
             }
-            if (fightDuration - last > ParserHelper.PhaseTimeLimit)
+            if (finalEnd - last > ParserHelper.PhaseTimeLimit)
             {
-                phases.Add(new PhaseData(last, fightDuration));
+                phases.Add(new PhaseData(last, finalEnd));
             }
             return phases;
         }
@@ -530,6 +530,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 fightData.SetSuccess(true, lastDamageTaken.Time);
             }
+        }
+
+        protected virtual List<int> GetSuccessCheckIds()
+        {
+            return new List<int>
+            {
+                GenericTriggerID
+            };
         }
 
         internal virtual void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
