@@ -71,7 +71,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 else
                 {
-                    SetSuccessByDeath(combatData, fightData, playerAgents, true, GenericTriggerID);
+                    SetSuccessByDeath(combatData, fightData, playerAgents, true, GetSuccessCheckIds());
                 }
             }
         }

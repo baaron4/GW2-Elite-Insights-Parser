@@ -542,7 +542,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal virtual void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            SetSuccessByDeath(combatData, fightData, playerAgents, true, GenericTriggerID);
+            SetSuccessByDeath(combatData, fightData, playerAgents, true, GetSuccessCheckIds());
         }
 
         internal virtual long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
