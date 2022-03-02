@@ -113,6 +113,24 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+        {
+            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+            if (!fightData.Success)
+            {
+                AbstractSingleActor ministerLi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.MinisterLi);
+                if (ministerLi == null)
+                {
+                    throw new MissingKeyActorsException("Minister Li not found");
+                }
+                var buffApplies = combatData.GetBuffData(762).OfType<BuffApplyEvent>().Where(x => x.To == ministerLi.AgentItem).ToList();
+                if (buffApplies.Count == 3)
+                {
+                    fightData.SetSuccess(true, buffApplies.LastOrDefault().Time);
+                }
+            }
+        }
+
         /*protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
             return new CombatReplayMap("https://i.imgur.com/kLjZ7eU.png",
