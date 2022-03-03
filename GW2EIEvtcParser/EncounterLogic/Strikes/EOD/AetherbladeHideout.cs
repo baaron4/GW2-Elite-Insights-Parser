@@ -144,13 +144,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             if (echoOfScarlet != null)
             {
-                long echoStart = echoOfScarlet.FirstAware;
-                // Todo find a better start
-                EnterCombatEvent echoCombat = log.CombatData.GetEnterCombatEvents(echoOfScarlet.AgentItem).FirstOrDefault();
-                if (echoCombat != null)
-                {
-                    echoStart = echoCombat.Time;
-                }
+                long echoStart = echoOfScarlet.FirstAware + 10000;
                 var phase = new PhaseData(echoStart, log.FightData.FightEnd, "Echo of Scarlet Briar");
                 phase.AddTarget(echoOfScarlet);
                 phases.Add(phase);
