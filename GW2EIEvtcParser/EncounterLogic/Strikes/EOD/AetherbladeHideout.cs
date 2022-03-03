@@ -84,7 +84,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                // TODO find a reliable way here, death events are not consistent
+                AbstractSingleActor echoOfScarlet = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EchoOfScarletBriar);
+                if (echoOfScarlet != null)
+                {
+                    AbstractSingleActor maiTrin = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.MaiTrinStrike);
+                    if (maiTrin == null)
+                    {
+                        throw new MissingKeyActorsException("Mai Trin not found");
+                    }
+                    var buffApply = combatData.GetBuffData(895).OfType<BuffApplyEvent>().Where(x => x.To == maiTrin.AgentItem).LastOrDefault();
+                    if (buffApply != null && buffApply.Time > echoOfScarlet.FirstAware)
+                    {
+                        fightData.SetSuccess(true, buffApply.Time);
+                    }
+                }
             }
         }
 
