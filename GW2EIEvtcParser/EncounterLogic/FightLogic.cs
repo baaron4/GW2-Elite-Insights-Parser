@@ -211,11 +211,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        protected static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long optionalEnd = -1)
+        protected static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end)
         {
-            long finalEnd = optionalEnd > 0 ? optionalEnd : log.FightData.FightEnd;
             var phases = new List<PhaseData>();
-            long last = 0;
+            long last = start;
             List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, skillID, mainTarget, beginWithStart, true);
             invuls.RemoveAll(x => x.Time < 0);
             for (int i = 0; i < invuls.Count; i++)
@@ -223,30 +222,30 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AbstractBuffEvent c = invuls[i];
                 if (c is BuffApplyEvent)
                 {
-                    long end = Math.Min(c.Time, finalEnd);
-                    phases.Add(new PhaseData(last, end));
-                    /*if (i == invuls.Count - 1)
-                    {
-                        mainTarget.AddCustomCastLog(end, -5, (int)(fightDuration - end), ParseEnum.Activation.None, (int)(fightDuration - end), ParseEnum.Activation.None, log);
-                    }*/
-                    last = end;
+                    long curEnd = Math.Min(c.Time, end);
+                    phases.Add(new PhaseData(last, curEnd));
+                    last = curEnd;
                 }
                 else
                 {
-                    long end = Math.Min(c.Time, finalEnd);
+                    long curEnd = Math.Min(c.Time, end);
                     if (addSkipPhases)
                     {
-                        phases.Add(new PhaseData(last, end));
+                        phases.Add(new PhaseData(last, curEnd));
                     }
-                    //mainTarget.AddCustomCastLog(last, -5, (int)(end - last), ParseEnum.Activation.None, (int)(end - last), ParseEnum.Activation.None, log);
-                    last = end;
+                    last = curEnd;
                 }
             }
-            if (finalEnd - last > ParserHelper.PhaseTimeLimit)
+            if (end - last > ParserHelper.PhaseTimeLimit)
             {
-                phases.Add(new PhaseData(last, finalEnd));
+                phases.Add(new PhaseData(last, end));
             }
             return phases.Where(x => x.DurationInMS > ParserHelper.PhaseTimeLimit).ToList();
+        }
+
+        protected static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart)
+        {
+            return GetPhasesByInvul(log, skillID, mainTarget, addSkipPhases, beginWithStart, 0, log.FightData.FightEnd);
         }
 
         protected static List<PhaseData> GetInitialPhase(ParsedEvtcLog log)

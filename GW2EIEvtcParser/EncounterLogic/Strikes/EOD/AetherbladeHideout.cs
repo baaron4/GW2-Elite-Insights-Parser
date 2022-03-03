@@ -110,11 +110,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (log.CombatData.GetDamageTakenData(maiTrin.AgentItem).Any())
             {
                 HealthUpdateEvent lastHPUpdate = log.CombatData.GetHealthUpdateEvents(maiTrin.AgentItem).LastOrDefault();
-                var maiTrinEnd = lastHPUpdate.Time;
+                long maiTrinEnd = lastHPUpdate.Time;
+                long maiTrinStart = 0;
+                var buffRemove = log.CombatData.GetBuffData(895).OfType<BuffRemoveAllEvent>().Where(x => x.To == maiTrin.AgentItem).FirstOrDefault();
+                if (buffRemove != null)
+                {
+                    maiTrinStart = buffRemove.Time;
+                }
                 var mainPhase = new PhaseData(0, maiTrinEnd, "Mai Trin");
                 mainPhase.AddTarget(maiTrin);
                 phases.Add(mainPhase);
-                List<PhaseData> maiPhases = GetPhasesByInvul(log, 38793, maiTrin, false, true, maiTrinEnd);
+                List<PhaseData> maiPhases = GetPhasesByInvul(log, 38793, maiTrin, false, true, maiTrinStart, maiTrinEnd);
                 for (int i = 0; i < maiPhases.Count; i++)
                 {
                     PhaseData subPhase = maiPhases[i];
@@ -135,6 +141,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var phase = new PhaseData(echoStart, log.FightData.FightEnd, "Echo of Scarlet Briar");
                 phase.AddTarget(echoOfScarlet);
                 phases.Add(phase);
+                List<PhaseData> echoPhases = GetPhasesByInvul(log, 38793, echoOfScarlet, false, true, echoStart, log.FightData.FightEnd);
+                for (int i = 0; i < echoPhases.Count; i++)
+                {
+                    PhaseData subPhase = echoPhases[i];
+                    subPhase.Name = "Echo Phase " + (i + 1);
+                    subPhase.AddTarget(echoOfScarlet);
+                }
+                phases.AddRange(echoPhases);
             }
             return phases;
         }

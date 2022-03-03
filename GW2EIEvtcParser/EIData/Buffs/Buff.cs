@@ -410,6 +410,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Enraged (300%)", 61006, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 new Buff("Enraged (500%)", 31534, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 new Buff("Call of the Mists", 34164, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/79/Call_of_the_Mists_%28raid_effect%29.png" ),
+                new Buff("Untargetable", 38793, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/eb/Determined.png" ),
                 // Strike Essences
                 new Buff("Essence of Vigilance Tier 1", 58786, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/a4/Essence_of_Vigilance.png" ),
                 new Buff("Essence of Vigilance Tier 2", 58721, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/a4/Essence_of_Vigilance.png" ),
@@ -712,6 +713,12 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Brain Freeze", 59073, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png" ),
                 // Frezie      
                 new Buff("Icy Barrier", 53510, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/38/Shield_of_Ice.png" ),
+                // Mai Trin
+                new Buff("Shared Destruction", 65900, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Immune to damage and conditions.", 64843, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                //new Buff("Mai Trin ???", 63858, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Mai Trin ?????", 65238, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Chaos and Destruction", 66409, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 // Ankka
                 new Buff("Necrotic Ritual", 67447, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Ankka ???", 66962, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
