@@ -715,6 +715,8 @@ namespace GW2EIEvtcParser.EIData
                 // Ankka
                 new Buff("Necrotic Ritual", 67447, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Ankka ???", 66962, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Hallucinations", 64179, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Energy Transfer", 63621, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 // Minister Li   
                 new Buff("Target Order: 1", 65869, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Target Order: 2", 65088, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
