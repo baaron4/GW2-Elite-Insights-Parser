@@ -15,6 +15,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
             }
             );
+            Icon = "https://i.imgur.com/UZmW8Sd.png";
             Extension = "aetherhide";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
         }
