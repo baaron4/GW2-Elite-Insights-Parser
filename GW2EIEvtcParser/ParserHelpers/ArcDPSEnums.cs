@@ -330,11 +330,11 @@ namespace GW2EIEvtcParser
         private const int SubArtsariiv = -15;
         private const int DummyMaiTrinStrike = -16;
         private const int TheDragonVoidZhaitan = -17;
-        private const int TheDragonVoidSonWoo = -18;
-        private const int TheDragonVoidKralkatorik = -18;
-        private const int TheDragonVoidMordremoth = -18;
-        private const int TheDragonVoidJormag = -18;
-        private const int TheDragonVoidPrimordious = -18;
+        private const int TheDragonVoidSooWon = -18;
+        private const int TheDragonVoidKralkatorik = -19;
+        private const int TheDragonVoidMordremoth = -20;
+        private const int TheDragonVoidJormag = -21;
+        private const int TheDragonVoidPrimordious = -22;
 
 
         //
@@ -577,6 +577,7 @@ namespace GW2EIEvtcParser
             VoidColdsteel = 23945,
             VoidAbomination = 23936,
             VoidSaltsprayDragon = 23846,
+            VoidObliterator = 23995,
             VoidRotswarmer = 24590,
             VoidGiant = 24450,
             VoidSkullpiercer = 25177,
@@ -704,8 +705,8 @@ namespace GW2EIEvtcParser
             MinisterLi = 24485,
             TheDragonVoidZhaitan = ArcDPSEnums.TheDragonVoidZhaitan,
             TheDragonVoidJormag = ArcDPSEnums.TheDragonVoidJormag,
-            TheDragonVoidKralkatorik = ArcDPSEnums.TheDragonVoidKralkatorik,
-            TheDragonVoidSonWoo = ArcDPSEnums.TheDragonVoidSonWoo,
+            TheDragonVoidKralkatorrik = ArcDPSEnums.TheDragonVoidKralkatorik,
+            TheDragonVoidSooWon = ArcDPSEnums.TheDragonVoidSooWon,
             TheDragonVoidPrimordious = ArcDPSEnums.TheDragonVoidPrimordious,
             TheDragonVoidMordremoth = ArcDPSEnums.TheDragonVoidMordremoth,
             //VoidAmalgamate = 

@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -22,17 +24,74 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor dragonVoid = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.TheDragonVoidJormag);
-            if (dragonVoid == null)
+            List<(long start, long end, string name, NPC target)> subPhasesData = new List<(long start, long end, string name, NPC target)>();
+            foreach (NPC target in Targets)
             {
-                throw new MissingKeyActorsException("The Dragon Void not found");
+                switch (target.ID)
+                {
+                    case (int)ArcDPSEnums.TrashID.VoidSaltsprayDragon:
+                    case (int)ArcDPSEnums.TrashID.VoidTimeCaster:
+                    case (int)ArcDPSEnums.TrashID.VoidObliterator:
+                        subPhasesData.Add((target.FirstAware, Math.Min(target.LastAware, log.FightData.FightEnd), target.Character, target));
+                        break;
+                    case (int)ArcDPSEnums.TargetID.TheDragonVoidJormag:
+                        phases[0].AddTarget(target);
+                        subPhasesData.Add((target.FirstAware, target.LastAware, "Jormag", target));
+                        break;
+                    case (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik:
+                        phases[0].AddTarget(target);
+                        subPhasesData.Add((target.FirstAware, target.LastAware, "Kralkatorrik", target));
+                        break;
+                    case (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth:
+                        phases[0].AddTarget(target);
+                        subPhasesData.Add((target.FirstAware, target.LastAware, "Mordremoth", target));
+                        break;
+                    case (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordious:
+                        phases[0].AddTarget(target);
+                        subPhasesData.Add((target.FirstAware, target.LastAware, "Primordious", target));
+                        break;
+                    case (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon:
+                        phases[0].AddTarget(target);
+                        subPhasesData.Add((target.FirstAware, target.LastAware, "Soo-Won", target));
+                        var attackTargetEvent = log.CombatData.GetAttackTargetEvents(target.AgentItem).FirstOrDefault();
+                        if (attackTargetEvent != null)
+                        {
+                            var targetables = log.CombatData.GetTargetableEvents(attackTargetEvent.AttackTarget).Where(x => x.Time >= target.FirstAware).ToList();
+                            var targetOns = targetables.Where(x => x.Targetable).ToList();
+                            var targetOffs = targetables.Where(x => !x.Targetable).ToList();
+                            var id = 0;
+                            foreach (var targetOn in targetOns)
+                            {
+                                long start = targetOn.Time;
+                                long end = log.FightData.FightEnd;
+                                var targetOff = targetOffs.FirstOrDefault(x => x.Time > start);
+                                if (targetOff != null)
+                                {
+                                    end = targetOff.Time;
+                                }
+                                subPhasesData.Add((start, end, "Soo-Won " + (++id), target));
+                            }
+                        }
+                        break;
+                    case (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan:
+                        phases[0].AddTarget(target);
+                        subPhasesData.Add((target.FirstAware, target.LastAware, "Zhaitan", target));
+                        break;
+                    case (int)ArcDPSEnums.TargetID.DummyTarget:
+                        phases[0].AddTarget(target);
+                        break;
+                }
             }
-            phases[0].AddTarget(dragonVoid);
             if (!requirePhases)
             {
                 return phases;
             }
-            var attackTargets = log.CombatData.GetAttackTargetEvents(dragonVoid.AgentItem);
+            foreach (var subPhaseData in subPhasesData)
+            {
+                var subPhase = new PhaseData(subPhaseData.start, subPhaseData.end, subPhaseData.name);
+                subPhase.AddTarget(subPhaseData.target);
+                phases.Add(subPhase);
+            }
             return phases;
         }
 
@@ -47,13 +106,15 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<int>
             {
+                (int)ArcDPSEnums.TargetID.DummyTarget,
                 (int)ArcDPSEnums.TargetID.TheDragonVoidJormag,
-                (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorik,
+                (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik,
                 (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth,
                 (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordious,
-                (int)ArcDPSEnums.TargetID.TheDragonVoidSonWoo,
+                (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon,
                 (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan,
                 (int)ArcDPSEnums.TrashID.VoidSaltsprayDragon,
+                (int)ArcDPSEnums.TrashID.VoidObliterator,
                 (int)ArcDPSEnums.TrashID.VoidTimeCaster,
             };
         }
@@ -88,25 +149,137 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        internal override string GetLogicName(CombatData combatData, AgentData agentData)
+        {
+            return "The Dragonvoid";
+        }
+
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+        {
+            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+            if (!fightData.Success)
+            {
+                AbstractSingleActor soowon = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon);
+                if (soowon != null)
+                {
+                    var attackTargetEvent = combatData.GetAttackTargetEvents(soowon.AgentItem).FirstOrDefault();
+                    var targetables = combatData.GetTargetableEvents(attackTargetEvent.AttackTarget).Where(x => x.Time >= soowon.FirstAware).ToList();
+                    var targetOffs = targetables.Where(x => !x.Targetable).ToList();
+                    if (targetOffs.Count == 2)
+                    {
+                        fightData.SetSuccess(true, targetOffs[1].Time);
+                    }
+                }
+            }
+        }
+
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            // We remove extra Mai trins if present
             var attackTargetEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).ToList();
-            var linkedTargets = new HashSet<AgentItem>();
-            foreach (CombatItem ate in attackTargetEvents)
+            var idsToUse = new List<ArcDPSEnums.TargetID> { 
+                ArcDPSEnums.TargetID.TheDragonVoidJormag,
+                ArcDPSEnums.TargetID.TheDragonVoidPrimordious,
+                ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik, 
+                ArcDPSEnums.TargetID.TheDragonVoidMordremoth, 
+                ArcDPSEnums.TargetID.TheDragonVoidZhaitan,
+                ArcDPSEnums.TargetID.TheDragonVoidSooWon,
+            };
+            var index = 0;
+            foreach (CombatItem at in attackTargetEvents)
             {
-                linkedTargets.Add(agentData.GetAgent(ate.DstAgent, ate.Time));
-            }
-            if (linkedTargets.Any())
-            {
-                foreach (AgentItem a in linkedTargets)
+                AgentItem dragonVoid = agentData.GetAgent(at.DstAgent, at.Time);
+                AgentItem atAgent = agentData.GetAgent(at.SrcAgent, at.Time);
+                // We take attack events, filter out the first one, present at spawn, that is always a non targetable event
+                var targetables = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.SrcMatchesAgent(atAgent) && x.Time > 2000).ToList();
+                // There are only two relevant attack targets, one represents the first five and the last one Soo Won
+                if (!targetables.Any())
                 {
-                    var maxHPUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && x.SrcMatchesAgent(a));
-                    a.OverrideType(AgentItem.AgentType.NPC);
+                    continue;
                 }
-                agentData.Refresh();
+                var targetOns = targetables.Where(x => x.DstAgent == 1).ToList();
+                var targetOffs = targetables.Where(x => x.DstAgent == 0).ToList();
+                // Events to be copied
+                var posFacingHP = combatData.Where(x => x.SrcMatchesAgent(dragonVoid) && (x.IsStateChange == ArcDPSEnums.StateChange.Position || x.IsStateChange == ArcDPSEnums.StateChange.Rotation || x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)).ToList();
+                CombatItem pos = posFacingHP.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Position);
+                //
+                foreach (CombatItem targetOn in targetOns)
+                {
+                    // If Soo Wo, has been already created, we break
+                    if (index >= idsToUse.Count)
+                    {
+                        break;
+                    }
+                    int id = (int)idsToUse[index++];
+                    long start = targetOn.Time;
+                    long end = fightData.FightEnd;
+                    var targetOff = targetOffs.FirstOrDefault(x => x.Time > start);
+                    // Don't split Soo won into two
+                    if (targetOff != null && id != (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon)
+                    {
+                        end = targetOff.Time;
+                    }
+                    AgentItem extra = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, id, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, dragonVoid.HitboxWidth, dragonVoid.HitboxHeight);
+                    foreach (CombatItem c in combatData)
+                    {
+                        if (extra.InAwareTimes(c.Time))
+                        {
+                            if (c.SrcMatchesAgent(dragonVoid, extensions))
+                            {
+                                if (c.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && c.DstAgent == 10000 && c.Time > extra.LastAware - 2000) {
+                                    continue;
+                                }
+                                c.OverrideSrcAgent(extra.Agent);
+                            }
+                            if (c.DstMatchesAgent(dragonVoid, extensions))
+                            {
+                                c.OverrideDstAgent(extra.Agent);
+                            }
+                        }
+                    }
+                    var attackTargetCopy = new CombatItem(at);
+                    attackTargetCopy.OverrideTime(extra.FirstAware);
+                    attackTargetCopy.OverrideDstAgent(extra.Agent);
+                    combatData.Add(attackTargetCopy);
+                    foreach (CombatItem c in posFacingHP)
+                    {
+                        var cExtra = new CombatItem(c);
+                        cExtra.OverrideTime(extra.FirstAware);
+                        cExtra.OverrideSrcAgent(extra.Agent);
+                        combatData.Add(cExtra);
+                    }
+                }
+            }
+            if (index == 0)
+            {
+                // Add dummy target as there are no dragon voids
+                agentData.AddCustomNPCAgent(0, fightData.FightEnd, "River of Souls", Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
+                Targetless = true;
             }
             ComputeFightTargets(agentData, combatData, extensions);
+            foreach (NPC target in Targets)
+            {
+                switch(target.ID)
+                {
+                    case (int)ArcDPSEnums.TargetID.TheDragonVoidJormag:
+                        target.OverrideName("The JormagVoid");
+                        break;
+                    case (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik:
+                        target.OverrideName("The KralkatorrikVoid");
+                        break;
+                    case (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth:
+                        target.OverrideName("The MordremothVoid");
+                        break;
+                    case (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordious:
+                        target.OverrideName("The PrimordiusVoid");
+                        break;
+                    case (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon:
+                        target.OverrideName("The SooWonVoid");
+                        break;
+                    case (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan:
+                        target.OverrideName("The ZhaitanVoid");
+                        break;
+                }
+            }
         }
     }
 }

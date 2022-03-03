@@ -435,6 +435,10 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected void SetSuccessByDeath(CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all, List<int> idsToUse)
         {
+            if (!idsToUse.Any())
+            {
+                return;
+            }
             int success = 0;
             long maxTime = long.MinValue;
             foreach (int id in idsToUse)
