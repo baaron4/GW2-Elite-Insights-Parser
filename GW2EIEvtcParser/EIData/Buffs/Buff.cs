@@ -715,6 +715,19 @@ namespace GW2EIEvtcParser.EIData
                 // Ankka
                 new Buff("Necrotic Ritual", 67447, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Ankka ???", 66962, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                // Minister Li   
+                new Buff("Target Order: 1", 65869, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Target Order: 2", 65088, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Target Order: 3", 64377, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Target Order: 4", 64999, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Stronger Together", 64465, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Vitality Equalizer 1", 63840, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Vitality Equalizer 2", 66894, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Destructive Aura", 65250, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 10, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Equalization Matrix", 67047, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Lethal Inspiration", 64834, Source.FightSpecific, BuffStackType.Stacking, 1, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Extreme Vulnerability", 65662, Source.FightSpecific, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Fixated (Kaineng Overlook)",66140, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
         };
 
         internal static readonly List<Buff> NormalFoods = new List<Buff>
