@@ -712,6 +712,9 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Brain Freeze", 59073, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png" ),
                 // Frezie      
                 new Buff("Icy Barrier", 53510, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/38/Shield_of_Ice.png" ),
+                // Ankka
+                new Buff("Necrotic Ritual", 67447, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Ankka ???", 66962, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
         };
 
         internal static readonly List<Buff> NormalFoods = new List<Buff>
