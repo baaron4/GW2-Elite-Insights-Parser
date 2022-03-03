@@ -81,18 +81,20 @@
         },
         created() {
             var i, cacheID;
+            var allTargets = [];
             for (var j = 0; j < this.targets.length; j++) {
                 var activeTargets = [j];
+                allTargets.push(j);
                 cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, activeTargets, 0, null);
                 // compute dps for all players
                 for (i = 0; i < logData.players.length; i++) {
                     computePlayerDPS(logData.players[i], this.graph[i].damage, this.graphdata.dpsmode, null, activeTargets, cacheID, this.phase.times, this.graphdata.graphmode, this.graphdata.damagemode);
                 }
             }
-            cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, this.targets, 0, null);
+            cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, allTargets, 0, null);
             // compute dps for all players
             for (i = 0; i < logData.players.length; i++) {
-                computePlayerDPS(logData.players[i], this.graph[i].damage, this.graphdata.dpsmode, null, this.targets, cacheID, this.phase.times, this.graphdata.graphmode, this.graphdata.damagemode);
+                computePlayerDPS(logData.players[i], this.graph[i].damage, this.graphdata.dpsmode, null, allTargets, cacheID, this.phase.times, this.graphdata.graphmode, this.graphdata.damagemode);
             }
         },
         mounted() {
@@ -150,8 +152,10 @@
                     nextTime = this.phase.end - this.phase.start;
                 }
                 var i, j;
+                var allTargets = [];
                 for (j = 0; j < this.targets.length; j++) {
                     var target = logData.targets[this.targets[j]];
+                    allTargets.push(j);
                     cols.push(target);
                 }
                 var damageArrayToUse = this.damageGraphName;
@@ -173,8 +177,8 @@
                             dps[j] = cur;
                         }
                     }
-                    cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, this.targets, 0, null);
-                    data = computePlayerDPS(player, graphData[damageArrayToUse], this.graphdata.dpsmode, null, this.targets, cacheID, this.phase.times, this.graphdata.graphmode, this.graphdata.damagemode).dps.total;
+                    cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, allTargets, 0, null);
+                    data = computePlayerDPS(player, graphData[damageArrayToUse], this.graphdata.dpsmode, null, allTargets, cacheID, this.phase.times, this.graphdata.graphmode, this.graphdata.damagemode).dps.total;
                     cur = data[curTime];
                     next = data[curTime + 1];
                     if (typeof next !== "undefined") {
