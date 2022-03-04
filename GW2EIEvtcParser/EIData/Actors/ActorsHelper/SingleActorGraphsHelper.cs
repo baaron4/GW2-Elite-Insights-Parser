@@ -105,7 +105,7 @@ namespace GW2EIEvtcParser.EIData
             }
             int durationInMS = (int)(end - start);
             int durationInS = durationInMS / 1000;
-            var brkDmgList = durationInS * 1000 != durationInMS ? new double[durationInS + 2] : new double[durationInS + 1];
+            double[] brkDmgList = durationInS * 1000 != durationInMS ? new double[durationInS + 2] : new double[durationInS + 1];
             IReadOnlyList<AbstractBreakbarDamageEvent> breakbarDamageEvents = Actor.GetBreakbarDamageEvents(target, log, start, end);
             // fill the graph
             int previousTime = 0;

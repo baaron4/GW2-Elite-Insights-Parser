@@ -27,44 +27,45 @@ namespace GW2EIEvtcParser.EncounterLogic
             List<(long start, long end, string name, NPC target)> subPhasesData = new List<(long start, long end, string name, NPC target)>();
             foreach (NPC target in Targets)
             {
+                long mainPhaseEnd = Math.Min(target.LastAware, log.FightData.FightEnd);
                 switch (target.ID)
                 {
                     case (int)ArcDPSEnums.TrashID.VoidSaltsprayDragon:
                     case (int)ArcDPSEnums.TrashID.VoidTimeCaster:
                     case (int)ArcDPSEnums.TrashID.VoidObliterator:
-                        subPhasesData.Add((target.FirstAware, Math.Min(target.LastAware, log.FightData.FightEnd), target.Character, target));
+                        subPhasesData.Add((target.FirstAware, mainPhaseEnd, target.Character, target));
                         break;
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidJormag:
                         phases[0].AddTarget(target);
-                        subPhasesData.Add((target.FirstAware, target.LastAware, "Jormag", target));
+                        subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Jormag", target));
                         break;
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik:
                         phases[0].AddTarget(target);
-                        subPhasesData.Add((target.FirstAware, target.LastAware, "Kralkatorrik", target));
+                        subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Kralkatorrik", target));
                         break;
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth:
                         phases[0].AddTarget(target);
-                        subPhasesData.Add((target.FirstAware, target.LastAware, "Mordremoth", target));
+                        subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Mordremoth", target));
                         break;
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordious:
                         phases[0].AddTarget(target);
-                        subPhasesData.Add((target.FirstAware, target.LastAware, "Primordious", target));
+                        subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Primordious", target));
                         break;
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon:
                         phases[0].AddTarget(target);
-                        subPhasesData.Add((target.FirstAware, target.LastAware, "Soo-Won", target));
-                        var attackTargetEvent = log.CombatData.GetAttackTargetEvents(target.AgentItem).FirstOrDefault();
+                        subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Soo-Won", target));
+                        AttackTargetEvent attackTargetEvent = log.CombatData.GetAttackTargetEvents(target.AgentItem).FirstOrDefault();
                         if (attackTargetEvent != null)
                         {
                             var targetables = log.CombatData.GetTargetableEvents(attackTargetEvent.AttackTarget).Where(x => x.Time >= target.FirstAware).ToList();
                             var targetOns = targetables.Where(x => x.Targetable).ToList();
                             var targetOffs = targetables.Where(x => !x.Targetable).ToList();
-                            var id = 0;
-                            foreach (var targetOn in targetOns)
+                            int id = 0;
+                            foreach (TargetableEvent targetOn in targetOns)
                             {
                                 long start = targetOn.Time;
                                 long end = log.FightData.FightEnd;
-                                var targetOff = targetOffs.FirstOrDefault(x => x.Time > start);
+                                TargetableEvent targetOff = targetOffs.FirstOrDefault(x => x.Time > start);
                                 if (targetOff != null)
                                 {
                                     end = targetOff.Time;
@@ -75,7 +76,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         break;
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan:
                         phases[0].AddTarget(target);
-                        subPhasesData.Add((target.FirstAware, target.LastAware, "Zhaitan", target));
+                        subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Zhaitan", target));
                         break;
                     case (int)ArcDPSEnums.TargetID.DummyTarget:
                         phases[0].AddTarget(target);
@@ -86,7 +87,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            foreach (var subPhaseData in subPhasesData)
+            foreach ((long start, long end, string name, NPC target) subPhaseData in subPhasesData)
             {
                 var subPhase = new PhaseData(subPhaseData.start, subPhaseData.end, subPhaseData.name);
                 subPhase.AddTarget(subPhaseData.target);
@@ -162,7 +163,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AbstractSingleActor soowon = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon);
                 if (soowon != null)
                 {
-                    var attackTargetEvent = combatData.GetAttackTargetEvents(soowon.AgentItem).FirstOrDefault();
+                    AttackTargetEvent attackTargetEvent = combatData.GetAttackTargetEvents(soowon.AgentItem).FirstOrDefault();
                     var targetables = combatData.GetTargetableEvents(attackTargetEvent.AttackTarget).Where(x => x.Time >= soowon.FirstAware).ToList();
                     var targetOffs = targetables.Where(x => !x.Targetable).ToList();
                     if (targetOffs.Count == 2)
@@ -184,7 +185,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TargetID.TheDragonVoidZhaitan,
                 ArcDPSEnums.TargetID.TheDragonVoidSooWon,
             };
-            var index = 0;
+            int index = 0;
             foreach (CombatItem at in attackTargetEvents)
             {
                 AgentItem dragonVoid = agentData.GetAgent(at.DstAgent, at.Time);
@@ -212,7 +213,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int id = (int)idsToUse[index++];
                     long start = targetOn.Time;
                     long end = fightData.FightEnd;
-                    var targetOff = targetOffs.FirstOrDefault(x => x.Time > start);
+                    CombatItem targetOff = targetOffs.FirstOrDefault(x => x.Time > start);
                     // Don't split Soo won into two
                     if (targetOff != null && id != (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon)
                     {

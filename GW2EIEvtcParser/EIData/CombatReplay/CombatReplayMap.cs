@@ -41,14 +41,14 @@ namespace GW2EIEvtcParser.EIData
 
         internal static (double TopX, double TopY, double bottomX, double bottomY) ComputeSimpleMapRect(double width, double height, double offsetX, double offsetY, double centerXPercent, double centerYPercent, double scale)
         {
-            var centerOffsetX = centerXPercent * width;
-            var centerOffsetY = centerYPercent * height;
-            var fixedX = offsetX + centerOffsetX;
-            var fixedY = offsetY + centerOffsetY;
-            var topX = fixedX - centerOffsetX * scale;
-            var topY = fixedY - centerOffsetY * scale;
-            var bottomX = topX + width * scale;
-            var bottomY = topY + height * scale;
+            double centerOffsetX = centerXPercent * width;
+            double centerOffsetY = centerYPercent * height;
+            double fixedX = offsetX + centerOffsetX;
+            double fixedY = offsetY + centerOffsetY;
+            double topX = fixedX - centerOffsetX * scale;
+            double topY = fixedY - centerOffsetY * scale;
+            double bottomX = topX + width * scale;
+            double bottomY = topY + height * scale;
             return (topX, topY, bottomX, bottomY);
         }
 

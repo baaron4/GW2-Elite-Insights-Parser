@@ -99,7 +99,7 @@ namespace GW2EIEvtcParser.Extensions
         }
         private void SetVersion(CombatItem c)
         {
-            var size = (c.SrcAgent & 0xFF00000000000000) >> 56;
+            ulong size = (c.SrcAgent & 0xFF00000000000000) >> 56;
             byte[] bytes = new byte[size * 1]; // 32 * sizeof(char), char as in C not C#
             uint offset = 0;
             // 8 bytes
@@ -334,7 +334,7 @@ namespace GW2EIEvtcParser.Extensions
                 combatData.EXTBarrierCombatData = new EXTBarrierCombatData(barrierData, barrierReceivedData, barrierDataById);
                 operation.UpdateProgressWithCancellationCheck("Attached " + _barrierEvents.Count + " barrier events to CombatData");
             }
-            var running = RunningExtensioInternal.Count;
+            int running = RunningExtensioInternal.Count;
             operation.UpdateProgressWithCancellationCheck(running != 1 ? running + " players have the extension running" : running + " player has the extension running");
             //
             operation.UpdateProgressWithCancellationCheck("Attached healing extension combat events");

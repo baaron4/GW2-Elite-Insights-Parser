@@ -204,7 +204,7 @@ namespace GW2EIEvtcParser.EIData
             var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[NumberOfBoonsID]);
             var activeCombatMinionsGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[NumberOfActiveCombatMinionsID]);
             BuffsGraphModel numberOfClonesGraph = null;
-            var canSummonClones = ProfHelper.CanSummonClones(Actor.Spec);
+            bool canSummonClones = ProfHelper.CanSummonClones(Actor.Spec);
             if (canSummonClones)
             {
                 numberOfClonesGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[NumberOfClonesID]);

@@ -43,8 +43,8 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifier(new long[] { 40272, 44932, 44693, 41720, 40069}, "Loud Whistle", "10% while merged and hp > 90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByPresence, "https://wiki.guildwars2.com/images/b/b6/Loud_Whistle.png", GW2Builds.May2018Balance, GW2Builds.EndOfLife, DamageModifierMode.All, (x,log) => x.IsOverNinety),
             new DamageLogApproximateDamageModifier("Oppressive Superiority", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, "https://wiki.guildwars2.com/images/f/fc/Oppressive_Superiority.png", (x,log) =>
             {
-                var selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
-                var dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
+                double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
+                double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
                 if (selfHP < 0.0 || dstHP < 0.0)
                 {
                     return false;

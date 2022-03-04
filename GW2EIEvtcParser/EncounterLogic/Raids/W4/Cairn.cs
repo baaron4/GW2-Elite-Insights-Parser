@@ -169,7 +169,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // Adds around 10 to 15 ms diff compared to buff loss
                     if (firstCastEnd.BuffDmg > 0)
                     {
-                        var nonScaledToScaledRatio = (double)firstCastEnd.Value / firstCastEnd.BuffDmg;
+                        double nonScaledToScaledRatio = (double)firstCastEnd.Value / firstCastEnd.BuffDmg;
                         return firstCastEnd.Time - firstCastEnd.Value + (long)Math.Round(nonScaledToScaledRatio * actionHappened) - 1;
                     }
                     // Adds around 15 to 20 ms diff compared to buff loss
