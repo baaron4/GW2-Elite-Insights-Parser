@@ -137,13 +137,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 //
                 List<AbstractBuffEvent> lastGraspsJudgement = GetFilteredList(combatData, 47635, eyeJudgement, true, true);
                 var lastGraspsJudgementSegments = new List<Segment>();
-                for (var i = 0; i < lastGraspsJudgement.Count; i += 2)
+                for (int i = 0; i < lastGraspsJudgement.Count; i += 2)
                 {
                     lastGraspsJudgementSegments.Add(new Segment(lastGraspsJudgement[i].Time, lastGraspsJudgement[i + 1].Time, 1));
                 }
                 List<AbstractBuffEvent> lastGraspsFate = GetFilteredList(combatData, 47278, eyeFate, true, true);
                 var lastGraspsFateSegments = new List<Segment>();
-                for (var i = 0; i < lastGraspsFate.Count; i += 2)
+                for (int i = 0; i < lastGraspsFate.Count; i += 2)
                 {
                     lastGraspsFateSegments.Add(new Segment(lastGraspsFate[i].Time, lastGraspsFate[i + 1].Time, 1));
                 }

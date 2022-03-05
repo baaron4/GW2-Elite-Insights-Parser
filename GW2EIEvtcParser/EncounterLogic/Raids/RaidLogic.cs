@@ -17,14 +17,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterCategoryInformation.Category = FightCategory.Raid;
         }
 
-        protected virtual List<int> GetSuccessCheckIds()
-        {
-            return new List<int>
-            {
-                GenericTriggerID
-            };
-        }
-
         protected void SetSuccessByCombatExit(HashSet<int> targetIds, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             var targets = Targets.Where(x => targetIds.Contains(x.ID)).ToList();

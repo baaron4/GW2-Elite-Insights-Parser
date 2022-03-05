@@ -211,11 +211,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        protected static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart)
+        protected static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end)
         {
-            long fightDuration = log.FightData.FightEnd;
             var phases = new List<PhaseData>();
-            long last = 0;
+            long last = start;
             List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, skillID, mainTarget, beginWithStart, true);
             invuls.RemoveAll(x => x.Time < 0);
             for (int i = 0; i < invuls.Count; i++)
@@ -223,30 +222,30 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AbstractBuffEvent c = invuls[i];
                 if (c is BuffApplyEvent)
                 {
-                    long end = Math.Min(c.Time, fightDuration);
-                    phases.Add(new PhaseData(last, end));
-                    /*if (i == invuls.Count - 1)
-                    {
-                        mainTarget.AddCustomCastLog(end, -5, (int)(fightDuration - end), ParseEnum.Activation.None, (int)(fightDuration - end), ParseEnum.Activation.None, log);
-                    }*/
-                    last = end;
+                    long curEnd = Math.Min(c.Time, end);
+                    phases.Add(new PhaseData(last, curEnd));
+                    last = curEnd;
                 }
                 else
                 {
-                    long end = Math.Min(c.Time, fightDuration);
+                    long curEnd = Math.Min(c.Time, end);
                     if (addSkipPhases)
                     {
-                        phases.Add(new PhaseData(last, end));
+                        phases.Add(new PhaseData(last, curEnd));
                     }
-                    //mainTarget.AddCustomCastLog(last, -5, (int)(end - last), ParseEnum.Activation.None, (int)(end - last), ParseEnum.Activation.None, log);
-                    last = end;
+                    last = curEnd;
                 }
             }
-            if (fightDuration - last > ParserHelper.PhaseTimeLimit)
+            if (end - last > ParserHelper.PhaseTimeLimit)
             {
-                phases.Add(new PhaseData(last, fightDuration));
+                phases.Add(new PhaseData(last, end));
             }
-            return phases;
+            return phases.Where(x => x.DurationInMS > ParserHelper.PhaseTimeLimit).ToList();
+        }
+
+        protected static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart)
+        {
+            return GetPhasesByInvul(log, skillID, mainTarget, addSkipPhases, beginWithStart, 0, log.FightData.FightEnd);
         }
 
         protected static List<PhaseData> GetInitialPhase(ParsedEvtcLog log)
@@ -436,6 +435,10 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected void SetSuccessByDeath(CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all, List<int> idsToUse)
         {
+            if (!idsToUse.Any())
+            {
+                return;
+            }
             int success = 0;
             long maxTime = long.MinValue;
             foreach (int id in idsToUse)
@@ -532,9 +535,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        protected virtual List<int> GetSuccessCheckIds()
+        {
+            return new List<int>
+            {
+                GenericTriggerID
+            };
+        }
+
         internal virtual void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            SetSuccessByDeath(combatData, fightData, playerAgents, true, GenericTriggerID);
+            SetSuccessByDeath(combatData, fightData, playerAgents, true, GetSuccessCheckIds());
         }
 
         internal virtual long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)

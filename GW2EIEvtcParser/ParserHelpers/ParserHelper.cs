@@ -696,7 +696,25 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TargetID.MedGolem:
                     return "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
                 //case ArcDPSEnums.TargetID.DummyTarget:
-                    //return "https://i.imgur.com/ZBm5Uga.png";
+                //return "https://i.imgur.com/ZBm5Uga.png";
+                case ArcDPSEnums.TargetID.MaiTrinFract:
+                case ArcDPSEnums.TargetID.MaiTrinStrike:
+                case ArcDPSEnums.TargetID.MaiTrinStrikeDuringEcho:
+                    return "https://i.imgur.com/GjHgAtX.png";
+                case ArcDPSEnums.TargetID.MinisterLi:
+                    return "https://i.imgur.com/2nPBLcp.png";
+                case ArcDPSEnums.TargetID.TheDragonVoidJormag:
+                    return "https://i.imgur.com/UqHxOqi.png";
+                case ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik:
+                    return "https://i.imgur.com/x9id5iH.png";
+                case ArcDPSEnums.TargetID.TheDragonVoidMordremoth:
+                    return "https://i.imgur.com/6gec61w.png";
+                case ArcDPSEnums.TargetID.TheDragonVoidPrimordious:
+                    return "https://i.imgur.com/O77QoPM.png";
+                case ArcDPSEnums.TargetID.TheDragonVoidSooWon:
+                    return "https://i.imgur.com/NHs4OFG.png";
+                case ArcDPSEnums.TargetID.TheDragonVoidZhaitan:
+                    return "https://i.imgur.com/9dpoFqR.png";
             }
             switch (ArcDPSEnums.GetTrashID(id))
             {
@@ -865,6 +883,22 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.SorrowDemon3:
                 case ArcDPSEnums.TrashID.SorrowDemon4:
                 case ArcDPSEnums.TrashID.SorrowDemon5:
+                case ArcDPSEnums.TrashID.ScarletPhantom2:
+                case ArcDPSEnums.TrashID.ScarletPhantom1:
+                case ArcDPSEnums.TrashID.ScarletPhantomHP:
+                case ArcDPSEnums.TrashID.ScarletPhantomBreakbar:
+                case ArcDPSEnums.TrashID.TheEnforcer:
+                case ArcDPSEnums.TrashID.TheMechRider:
+                case ArcDPSEnums.TrashID.TheMindblade:
+                case ArcDPSEnums.TrashID.TheRitualist:
+                case ArcDPSEnums.TrashID.TheSniper:
+                case ArcDPSEnums.TrashID.AnkkaHallucination1:
+                case ArcDPSEnums.TrashID.AnkkaHallucination2:
+                case ArcDPSEnums.TrashID.AnkkaHallucination3:
+                case ArcDPSEnums.TrashID.VoidSaltsprayDragon:
+                case ArcDPSEnums.TrashID.VoidGiant:
+                case ArcDPSEnums.TrashID.VoidObliterator:
+                case ArcDPSEnums.TrashID.VoidTimeCaster:
                     return "https://i.imgur.com/k79t7ZA.png";
                 case ArcDPSEnums.TrashID.HandOfErosion:
                 case ArcDPSEnums.TrashID.HandOfEruption:

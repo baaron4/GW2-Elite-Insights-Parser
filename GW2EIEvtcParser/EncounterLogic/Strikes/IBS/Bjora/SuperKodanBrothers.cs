@@ -114,7 +114,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AbstractSingleActor voiceAndClaw = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.VoiceAndClaw && x.FirstAware >= preTPPhaseStart);
                 if (voiceAndClaw != null)
                 {
-                    var oldEnd = preTPPhaseEnd;
+                    long oldEnd = preTPPhaseEnd;
                     preTPPhaseEnd = Math.Min(preTPPhaseEnd, voiceAndClaw.FirstAware);
                     // To handle position phase after merge phase end
                     if (oldEnd != preTPPhaseEnd)

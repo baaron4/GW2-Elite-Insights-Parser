@@ -175,6 +175,15 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.VariniaStormsounder:
                     Logic = new ColdWar(id);
                     break;
+                case ArcDPSEnums.TargetID.MaiTrinStrike:
+                    Logic = new AetherbladeHideout(id);
+                    break;
+                case ArcDPSEnums.TargetID.MinisterLi:
+                    Logic = new KainengOverlook(id);
+                    break;
+                case ArcDPSEnums.TargetID.Ankka:
+                    Logic = new XunlaiJadeJunkyard(id);
+                    break;
                 //
                 case ArcDPSEnums.TargetID.MAMA:
                     Logic = new MAMA(id);
@@ -223,6 +232,9 @@ namespace GW2EIEvtcParser.ParsedData
                     {
                         case ArcDPSEnums.TrashID.HauntingStatue:
                             Logic = new TwistedCastle((int)ArcDPSEnums.TargetID.DummyTarget);
+                            break;
+                        case ArcDPSEnums.TrashID.VoidAmalgamate1:
+                            Logic = new HarvestTemple(id);
                             break;
                         default:
                             // Unknown

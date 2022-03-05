@@ -42,7 +42,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifier(29395, "Vicious Lacerations", "2% per Stack", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", 0, GW2Builds.October2018Balance, DamageModifierMode.PvE),
             new DamageLogApproximateDamageModifier("Unsuspecting Strikes", "25% if target hp > 80%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Revenant, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", (x,log) =>
             {
-                var foeHP = x.To.GetCurrentHealthPercent(log, x.Time);
+                double foeHP = x.To.GetCurrentHealthPercent(log, x.Time);
                 if (foeHP < 0.0)
                 {
                     return false;
@@ -51,7 +51,7 @@ namespace GW2EIEvtcParser.EIData
             }, ByPresence, GW2Builds.February2020Balance, GW2Builds.May2021BalanceHotFix, DamageModifierMode.PvE ),
             new DamageLogApproximateDamageModifier("Unsuspecting Strikes", "20% if target hp > 80%", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Revenant, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", (x,log) =>
             {
-                var foeHP = x.To.GetCurrentHealthPercent(log, x.Time);
+                double foeHP = x.To.GetCurrentHealthPercent(log, x.Time);
                 if (foeHP < 0.0)
                 {
                     return false;
@@ -60,7 +60,7 @@ namespace GW2EIEvtcParser.EIData
             }, ByPresence, GW2Builds.May2021BalanceHotFix, GW2Builds.EndOfLife, DamageModifierMode.PvE ),
             new DamageLogApproximateDamageModifier("Unsuspecting Strikes", "10% if target hp > 80%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", (x,log) =>
             {
-                var foeHP = x.To.GetCurrentHealthPercent(log, x.Time);
+                double foeHP = x.To.GetCurrentHealthPercent(log, x.Time);
                 if (foeHP < 0.0)
                 {
                     return false;

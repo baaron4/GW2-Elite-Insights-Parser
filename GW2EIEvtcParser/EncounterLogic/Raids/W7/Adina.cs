@@ -261,7 +261,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int phaseIndex = 1;
                 foreach (long quantumQake in mainPhaseEnds)
                 {
-                    var curPhaseStart = splitPhaseEnds.LastOrDefault(x => x < quantumQake);
+                    long curPhaseStart = splitPhaseEnds.LastOrDefault(x => x < quantumQake);
                     if (curPhaseStart == 0)
                     {
                         curPhaseStart = start;

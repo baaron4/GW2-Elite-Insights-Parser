@@ -3,7 +3,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal abstract class Bjora : StrikeMissionLogic
+    internal abstract class Bjora : IBSStrike
     {
         public Bjora(int triggerID) : base(triggerID)
         {

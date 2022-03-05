@@ -96,7 +96,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     phase1.AddTarget(mainTarget);
                     phases.Add(phase1);
 
-                    var glidingEndTime = _xeraSecondPhaseStartTime > 0 ? _xeraSecondPhaseStartTime : fightDuration;
+                    long glidingEndTime = _xeraSecondPhaseStartTime > 0 ? _xeraSecondPhaseStartTime : fightDuration;
                     var glidingPhase = new PhaseData(invulXera.Time, glidingEndTime, "Gliding");
                     glidingPhase.AddTargets(Targets.Where(t => t.ID == (int)ArcDPSEnums.TrashID.ChargedBloodstone));
                     phases.Add(glidingPhase);

@@ -642,7 +642,7 @@ namespace GW2EIParser
                     embedBuilder.WithFooter(pair.Key.ToString("dd/MM/yyyy") + " - " + first.ToString("T") + " - " + last.ToString("T"));
                     dpsReportLogs.Sort((x, y) =>
                     {
-                        var categoryCompare = x.BasicMetaData.FightCategory.CompareTo(y.BasicMetaData.FightCategory);
+                        int categoryCompare = x.BasicMetaData.FightCategory.CompareTo(y.BasicMetaData.FightCategory);
                         if (categoryCompare == 0)
                         {
                             return DateTime.Parse(x.BasicMetaData.LogStart).CompareTo(DateTime.Parse(y.BasicMetaData.LogStart));
@@ -651,7 +651,7 @@ namespace GW2EIParser
                     });
                     string currentSubCategory = "";
                     var embedFieldBuilder = new EmbedFieldBuilder();
-                    var fieldValue = "I can not be empty";
+                    string fieldValue = "I can not be empty";
                     foreach (FormOperationController controller in dpsReportLogs)
                     {
                         string subCategory = controller.BasicMetaData.FightCategory.GetSubCategoryName();

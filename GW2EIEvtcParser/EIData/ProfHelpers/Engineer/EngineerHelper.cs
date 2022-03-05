@@ -72,8 +72,8 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifierTarget(738, "Shaped Charge", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, "https://wiki.guildwars2.com/images/f/f3/Explosive_Powder.png", GW2Builds.October2019Balance, GW2Builds.EndOfLife, DamageModifierMode.All),
             new DamageLogApproximateDamageModifier("Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, "https://wiki.guildwars2.com/images/8/83/Big_Boomer.png", (x,log) =>
             {
-                var selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
-                var dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
+                double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
+                double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
                 if (selfHP < 0.0 || dstHP < 0.0)
                 {
                     return false;

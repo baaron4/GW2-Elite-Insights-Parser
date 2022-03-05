@@ -91,8 +91,8 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifierTarget(NumberOfBoonsID, "Vicious Expression", "15% on boonless target",  DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, "https://wiki.guildwars2.com/images/f/f6/Confounding_Suggestions.png", 102389, GW2Builds.EndOfLife, DamageModifierMode.All),
             new DamageLogApproximateDamageModifier("Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, "https://wiki.guildwars2.com/images/7/78/Temporal_Enchanter.png", (x,log) =>
             {
-                var selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
-                var dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
+                double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
+                double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
                 if (selfHP < 0.0 || dstHP < 0.0)
                 {
                     return false;
@@ -101,8 +101,8 @@ namespace GW2EIEvtcParser.EIData
             }, ByPresence, GW2Builds.October2018Balance, GW2Builds.EndOfLife, DamageModifierMode.PvE),
             new DamageLogApproximateDamageModifier("Egotism", "5% if target hp% lower than self hp%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Mesmer, "https://wiki.guildwars2.com/images/7/78/Temporal_Enchanter.png", (x,log) =>
             {
-                var selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
-                var dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
+                double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
+                double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
                 if (selfHP < 0.0 || dstHP < 0.0)
                 {
                     return false;

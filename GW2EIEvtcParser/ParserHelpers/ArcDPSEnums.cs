@@ -328,6 +328,13 @@ namespace GW2EIEvtcParser
         private const int PyreGuardianResolution = -13;
         private const int CASword = -14;
         private const int SubArtsariiv = -15;
+        private const int DummyMaiTrinStrike = -16;
+        private const int TheDragonVoidZhaitan = -17;
+        private const int TheDragonVoidSooWon = -18;
+        private const int TheDragonVoidKralkatorik = -19;
+        private const int TheDragonVoidMordremoth = -20;
+        private const int TheDragonVoidJormag = -21;
+        private const int TheDragonVoidPrimordious = -22;
 
 
         //
@@ -540,6 +547,47 @@ namespace GW2EIEvtcParser
             DoppelgangerThief1 = 22656,
             DoppelgangerThief2 = 22612,
             DoppelgangerRevenant = 22610,
+            // Aetherblade Hideout
+            ScarletPhantom1 = 24404,
+            ScarletPhantomBreakbar = 23656,
+            ScarletPhantomHP = 24431,
+            ScarletPhantom2 = 24396,
+            // Xunlai Jade Junkyard
+            Ankka = 24634,
+            AnkkaHallucination1 = 24258,
+            AnkkaHallucination2 = 24158,
+            AnkkaHallucination3 = 24969,
+            ReanimatedSpite = 24348,
+            ReanimatedMalice1 = 24976,
+            ReanimatedMalice2 = 24171,
+            ZhaitansReach = 23839,
+            ReanimatedHatred = 23673,
+            // Kaineng Overlook
+            TheSniper = 23612,
+            TheMechRider = 24660,
+            TheEnforcer = 24261,
+            TheRitualist = 23618,
+            TheMindblade = 24254,
+            SpiritOfPain = 23793,
+            SpiritOfDestruction = 23961,
+            // Void Amalgamate
+            VoidAmalgamate1 = 24375,
+            VoidAmalgamate2 = 23956,
+            VoidTangler = 25138,
+            VoidColdsteel = 23945,
+            VoidAbomination = 23936,
+            VoidSaltsprayDragon = 23846,
+            VoidObliterator = 23995,
+            VoidRotswarmer = 24590,
+            VoidGiant = 24450,
+            VoidSkullpiercer = 25177,
+            VoidTimeCaster = 25025,
+            VoidBrandbomber = 24783,
+            VoidBurster = 24464,
+            VoidWarforged1 = 24129,
+            VoidWarforged2 = 24855,
+            VoidStormseer = 24677,
+            VoidMelter = 24223,
             // Freezie
             FreeziesFrozenHeart = 21328,
             // Fractals
@@ -551,7 +599,7 @@ namespace GW2EIEvtcParser
             BlueKnight = 16899,
             TwistedHorror = 17009,
             // Siax
-            Hallucination = 17002,
+            SiaxHallucination = 17002,
             EchoOfTheUnclean = 17068,
             // Ensolyss
             NightmareHallucination1 = 16912, // (exploding after jump and charging in last phase)
@@ -649,6 +697,19 @@ namespace GW2EIEvtcParser
             Boneskinner = 22521,
             WhisperOfJormag = 22711,
             VariniaStormsounder = 22836,
+            MaiTrinStrike = 24033,
+            MaiTrinStrikeDuringEcho = 23826,
+            DummyMaiTrinStrike = ArcDPSEnums.DummyMaiTrinStrike,
+            EchoOfScarletBriar = 24768,
+            Ankka = 23957,
+            MinisterLi = 24485,
+            TheDragonVoidZhaitan = ArcDPSEnums.TheDragonVoidZhaitan,
+            TheDragonVoidJormag = ArcDPSEnums.TheDragonVoidJormag,
+            TheDragonVoidKralkatorrik = ArcDPSEnums.TheDragonVoidKralkatorik,
+            TheDragonVoidSooWon = ArcDPSEnums.TheDragonVoidSooWon,
+            TheDragonVoidPrimordious = ArcDPSEnums.TheDragonVoidPrimordious,
+            TheDragonVoidMordremoth = ArcDPSEnums.TheDragonVoidMordremoth,
+            //VoidAmalgamate = 
             // Fract
             MAMA = 17021,
             Siax = 17028,
@@ -656,7 +717,7 @@ namespace GW2EIEvtcParser
             Skorvald = 17632,
             Artsariiv = 17949,
             Arkk = 17759,
-            MaiTrin = 19697,
+            MaiTrinFract = 19697,
             ShadowMinotaur = 20682,
             BroodQueen = 20742,
             TheVoice = 20497,
