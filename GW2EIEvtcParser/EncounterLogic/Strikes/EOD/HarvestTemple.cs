@@ -253,7 +253,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (index == 0)
             {
                 // Add dummy target as there are no dragon voids
-                agentData.AddCustomNPCAgent(0, fightData.FightEnd, "River of Souls", Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
+                agentData.AddCustomNPCAgent(0, fightData.FightEnd, "Dummy Harvest Temple", Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
                 Targetless = true;
             }
             ComputeFightTargets(agentData, combatData, extensions);
