@@ -11,19 +11,10 @@ namespace GW2EIEvtcParser.ParsedData
         public long GenericBreakbarId { get; }
         // Public Methods
 
-        internal SkillData(GW2EIGW2API.GW2APIController apiController, int arcdpsVersion)
+        internal SkillData(GW2EIGW2API.GW2APIController apiController, int evtcVersion)
         {
             _apiController = apiController;
-            if (arcdpsVersion >= 20220307)
-            {
-                DodgeId = SkillItem._DodgeId20220307;
-                GenericBreakbarId = SkillItem._GenericBreakbarId20220307;
-            } 
-            else
-            {
-                DodgeId = SkillItem._DodgeId;
-                GenericBreakbarId = SkillItem._GenericBreakbarId;
-            }
+            (DodgeId, GenericBreakbarId) = SkillItem.GetArcDPSCustomIDs(evtcVersion);
         }
 
         public SkillItem Get(long ID)

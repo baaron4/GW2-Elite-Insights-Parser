@@ -10,10 +10,23 @@ namespace GW2EIEvtcParser.ParsedData
 {
     public class SkillItem
     {
-        internal const long _DodgeId = 65001;
-        internal const long _GenericBreakbarId = 65002;
-        internal const long _DodgeId20220307 = 23275;
-        internal const long _GenericBreakbarId20220307 = 23276;
+        private const long DodgeId = 65001;
+        private const long GenericBreakbarId = 65002;
+        private const long DodgeId20220307 = 23275;
+        private const long GenericBreakbarId20220307 = 23276;
+
+        internal static (long, long) GetArcDPSCustomIDs(int evtcVersion)
+        {
+            if (evtcVersion >= 20220307)
+            {
+                return (DodgeId20220307, GenericBreakbarId20220307);
+            }
+            else
+            {
+                return (DodgeId, GenericBreakbarId);
+            }
+        }
+
         public const long MirageCloakDodgeId = -17;
         public const long ResurrectId = 1066;
         public const long BandageId = 1175;
@@ -35,10 +48,10 @@ namespace GW2EIEvtcParser.ParsedData
         {
             {ResurrectId, "Resurrect"},
             {BandageId, "Bandage" },
-            {_DodgeId, "Dodge" },
-            {_DodgeId20220307, "Dodge" },
-            {_GenericBreakbarId, "Generic Breakbar" },
-            {_GenericBreakbarId20220307, "Generic Breakbar" },
+            {DodgeId, "Dodge" },
+            {DodgeId20220307, "Dodge" },
+            {GenericBreakbarId, "Generic Breakbar" },
+            {GenericBreakbarId20220307, "Generic Breakbar" },
             {MirageCloakDodgeId, "Mirage Cloak" },
             {WeaponSwapId, "Weapon Swap" },
             {13594, "Selfless Daring"}, // The game maps this name incorrectly to "Selflessness Daring"
@@ -121,10 +134,10 @@ namespace GW2EIEvtcParser.ParsedData
         {
             {ResurrectId, "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png"},
             {BandageId, "https://wiki.guildwars2.com/images/0/0c/Bandage.png"},
-            {_GenericBreakbarId, "https://wiki.guildwars2.com/images/a/ae/Unshakable.png"},
-            {_DodgeId, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png"},
-            {_GenericBreakbarId20220307, "https://wiki.guildwars2.com/images/a/ae/Unshakable.png"},
-            {_DodgeId20220307, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png"},
+            {GenericBreakbarId, "https://wiki.guildwars2.com/images/a/ae/Unshakable.png"},
+            {DodgeId, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png"},
+            {GenericBreakbarId20220307, "https://wiki.guildwars2.com/images/a/ae/Unshakable.png"},
+            {DodgeId20220307, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png"},
             {MirageCloakDodgeId, "https://wiki.guildwars2.com/images/a/a5/Mirage_Cloak_%28effect%29.png"},
             {WeaponSwapId, "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png"},
             {49112, "https://wiki.guildwars2.com/images/e/e7/Throw_Magnetic_Bomb.png"},
