@@ -61,7 +61,7 @@ namespace GW2EIEvtcParser.ParsedData
             ActualDuration = endItem.Value;
             ExpectedDuration = ActualDuration;
             _scaledActualDuration = endItem.BuffDmg;
-            if (Skill.ID == SkillItem.DodgeId)
+            if (Skill.ID == skillData.DodgeId)
             {
                 // dodge animation start item has always 0 as expected duration
                 ExpectedDuration = ActualDuration;
@@ -83,7 +83,7 @@ namespace GW2EIEvtcParser.ParsedData
                 ActualDuration = expectedActualDuration;
                 _scaledActualDuration = 0;
             }
-            if (Skill.ID == SkillItem.DodgeId)
+            if (Skill.ID == skillData.DodgeId)
             {
                 // dodge animation start item has always 0 as expected duration
                 ExpectedDuration = ActualDuration;
@@ -95,7 +95,7 @@ namespace GW2EIEvtcParser.ParsedData
         // End missing
         internal AnimatedCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData, long maxEnd) : this(startItem, agentData, skillData)
         {
-            if (Skill.ID == SkillItem.DodgeId)
+            if (Skill.ID == skillData.DodgeId)
             {
                 // TODO: vindicator dodge duration
                 ExpectedDuration = 750;
