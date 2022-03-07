@@ -65,7 +65,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
             if (lastDamageTaken != null)
             {
-                if (reward != null && Math.Abs(lastDamageTaken.Time - reward.Time) < 100)
+                if (reward != null && Math.Abs(lastDamageTaken.Time - reward.Time) < 1000)
                 {
                     fightData.SetSuccess(true, Math.Min(lastDamageTaken.Time, reward.Time));
                 }
