@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            List<(long start, long end, string name, NPC target)> subPhasesData = new List<(long start, long end, string name, NPC target)>();
+            var subPhasesData = new List<(long start, long end, string name, NPC target)>();
             foreach (NPC target in Targets)
             {
                 long mainPhaseEnd = Math.Min(target.LastAware, log.FightData.FightEnd);
@@ -201,11 +201,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var targetOffs = targetables.Where(x => x.DstAgent == 0).ToList();
                 // Events to be copied
                 var posFacingHP = combatData.Where(x => x.SrcMatchesAgent(dragonVoid) && (x.IsStateChange == ArcDPSEnums.StateChange.Position || x.IsStateChange == ArcDPSEnums.StateChange.Rotation || x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)).ToList();
-                CombatItem pos = posFacingHP.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Position);
                 //
                 foreach (CombatItem targetOn in targetOns)
                 {
-                    // If Soo Wo, has been already created, we break
+                    // If Soo Won has been already created, we break
                     if (index >= idsToUse.Count)
                     {
                         break;
@@ -226,6 +225,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             if (c.SrcMatchesAgent(dragonVoid, extensions))
                             {
+                                // Avoid making the gadget go back to 100% hp on "death"
                                 if (c.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && c.DstAgent == 10000 && c.Time > extra.LastAware - 2000) {
                                     continue;
                                 }

@@ -184,6 +184,11 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.Ankka:
                     Logic = new XunlaiJadeJunkyard(id);
                     break;
+                // This will most likely require a chinese client version
+                case ArcDPSEnums.TargetID.GadgetTheDragonVoid1:
+                case ArcDPSEnums.TargetID.GadgetTheDragonVoid2:
+                    Logic = new HarvestTemple(id);
+                    break;
                 //
                 case ArcDPSEnums.TargetID.MAMA:
                     Logic = new MAMA(id);
