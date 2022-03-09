@@ -14,6 +14,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
             }
             );
+            Icon = "https://i.imgur.com/orWH6qw.png";
             Extension = "xunjadejunk";
             EncounterCategoryInformation.InSubCategoryOrder = 1;
         }

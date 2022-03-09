@@ -17,6 +17,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
             }
             );
+            Icon = "https://i.imgur.com/gZRqzlr.png";
             Extension = "harvsttmpl";
             EncounterCategoryInformation.InSubCategoryOrder = 3;
         }
