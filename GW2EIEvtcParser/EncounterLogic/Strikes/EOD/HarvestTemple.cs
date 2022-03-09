@@ -158,19 +158,16 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-            if (!fightData.Success)
+            // no bouny chest detection, the reward is delayed
+            AbstractSingleActor soowon = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon);
+            if (soowon != null)
             {
-                AbstractSingleActor soowon = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon);
-                if (soowon != null)
+                AttackTargetEvent attackTargetEvent = combatData.GetAttackTargetEvents(soowon.AgentItem).FirstOrDefault();
+                var targetables = combatData.GetTargetableEvents(attackTargetEvent.AttackTarget).Where(x => x.Time >= soowon.FirstAware).ToList();
+                var targetOffs = targetables.Where(x => !x.Targetable).ToList();
+                if (targetOffs.Count == 2)
                 {
-                    AttackTargetEvent attackTargetEvent = combatData.GetAttackTargetEvents(soowon.AgentItem).FirstOrDefault();
-                    var targetables = combatData.GetTargetableEvents(attackTargetEvent.AttackTarget).Where(x => x.Time >= soowon.FirstAware).ToList();
-                    var targetOffs = targetables.Where(x => !x.Targetable).ToList();
-                    if (targetOffs.Count == 2)
-                    {
-                        fightData.SetSuccess(true, targetOffs[1].Time);
-                    }
+                    fightData.SetSuccess(true, targetOffs[1].Time);
                 }
             }
         }

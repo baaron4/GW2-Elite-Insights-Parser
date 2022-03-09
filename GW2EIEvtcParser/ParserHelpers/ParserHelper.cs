@@ -49,7 +49,7 @@ namespace GW2EIEvtcParser
             internal const ulong EndOfLife = ulong.MaxValue;
         }
 
-        internal const int PhaseTimeLimit = 1000;
+        internal const int PhaseTimeLimit = 2000;
 
 
         public enum Source
@@ -699,8 +699,9 @@ namespace GW2EIEvtcParser
                 //return "https://i.imgur.com/ZBm5Uga.png";
                 case ArcDPSEnums.TargetID.MaiTrinFract:
                 case ArcDPSEnums.TargetID.MaiTrinStrike:
-                case ArcDPSEnums.TargetID.MaiTrinStrikeDuringEcho:
                     return "https://i.imgur.com/GjHgAtX.png";
+                case ArcDPSEnums.TargetID.Ankka:
+                    return "https://i.imgur.com/3OQwlpP.png";
                 case ArcDPSEnums.TargetID.MinisterLi:
                     return "https://i.imgur.com/2nPBLcp.png";
                 case ArcDPSEnums.TargetID.TheDragonVoidJormag:
@@ -966,6 +967,8 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/lpBm4d6.png";
                 case ArcDPSEnums.TrashID.CloneArtsariiv:
                     return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
+                case ArcDPSEnums.TrashID.MaiTrinStrikeDuringEcho:
+                    return "https://i.imgur.com/GjHgAtX.png";
             }
             //
             switch (ArcDPSEnums.GetMinionID(id))

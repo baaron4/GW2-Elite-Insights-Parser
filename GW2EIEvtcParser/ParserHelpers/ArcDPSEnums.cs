@@ -548,6 +548,7 @@ namespace GW2EIEvtcParser
             DoppelgangerThief2 = 22612,
             DoppelgangerRevenant = 22610,
             // Aetherblade Hideout
+            MaiTrinStrikeDuringEcho = 23826,
             ScarletPhantom1 = 24404,
             ScarletPhantomBreakbar = 23656,
             ScarletPhantomHP = 24431,
@@ -698,7 +699,6 @@ namespace GW2EIEvtcParser
             WhisperOfJormag = 22711,
             VariniaStormsounder = 22836,
             MaiTrinStrike = 24033,
-            MaiTrinStrikeDuringEcho = 23826,
             DummyMaiTrinStrike = ArcDPSEnums.DummyMaiTrinStrike,
             EchoOfScarletBriar = 24768,
             Ankka = 23957,
