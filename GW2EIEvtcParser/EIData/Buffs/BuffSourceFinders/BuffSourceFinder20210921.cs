@@ -25,7 +25,7 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders
                 {
                     if (p.Spec == ParserHelper.Spec.Vindicator)
                     {
-                        var dodges = p.GetIntersectingCastEvents(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == SkillItem.DodgeId).ToList();
+                        var dodges = p.GetIntersectingCastEvents(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == log.SkillData.DodgeId).ToList();
                         //
                         var buffApplyTimes = log.CombatData.GetBuffData(62994).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).Select(x => x.Time).ToList(); // Saint of zu Heltzer
                         buffApplyTimes.AddRange(log.CombatData.GetBuffData(62811).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).Select(x => x.Time)); // Forerunner of Death

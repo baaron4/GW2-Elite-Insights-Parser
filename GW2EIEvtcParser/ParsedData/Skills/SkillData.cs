@@ -7,11 +7,14 @@ namespace GW2EIEvtcParser.ParsedData
         // Fields
         private readonly Dictionary<long, SkillItem> _skills = new Dictionary<long, SkillItem>();
         private readonly GW2EIGW2API.GW2APIController _apiController;
+        public long DodgeId { get; }
+        public long GenericBreakbarId { get; }
         // Public Methods
 
-        internal SkillData(GW2EIGW2API.GW2APIController apiController)
+        internal SkillData(GW2EIGW2API.GW2APIController apiController, int evtcVersion)
         {
             _apiController = apiController;
+            (DodgeId, GenericBreakbarId) = SkillItem.GetArcDPSCustomIDs(evtcVersion);
         }
 
         public SkillItem Get(long ID)

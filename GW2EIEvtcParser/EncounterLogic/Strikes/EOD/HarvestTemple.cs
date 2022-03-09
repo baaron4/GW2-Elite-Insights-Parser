@@ -17,6 +17,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
             }
             );
+            Icon = "https://i.imgur.com/gZRqzlr.png";
             Extension = "harvsttmpl";
             EncounterCategoryInformation.InSubCategoryOrder = 3;
         }
@@ -24,7 +25,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            List<(long start, long end, string name, NPC target)> subPhasesData = new List<(long start, long end, string name, NPC target)>();
+            var subPhasesData = new List<(long start, long end, string name, NPC target)>();
             foreach (NPC target in Targets)
             {
                 long mainPhaseEnd = Math.Min(target.LastAware, log.FightData.FightEnd);
@@ -157,19 +158,16 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-            if (!fightData.Success)
+            // no bouny chest detection, the reward is delayed
+            AbstractSingleActor soowon = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon);
+            if (soowon != null)
             {
-                AbstractSingleActor soowon = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon);
-                if (soowon != null)
+                AttackTargetEvent attackTargetEvent = combatData.GetAttackTargetEvents(soowon.AgentItem).FirstOrDefault();
+                var targetables = combatData.GetTargetableEvents(attackTargetEvent.AttackTarget).Where(x => x.Time >= soowon.FirstAware).ToList();
+                var targetOffs = targetables.Where(x => !x.Targetable).ToList();
+                if (targetOffs.Count == 2)
                 {
-                    AttackTargetEvent attackTargetEvent = combatData.GetAttackTargetEvents(soowon.AgentItem).FirstOrDefault();
-                    var targetables = combatData.GetTargetableEvents(attackTargetEvent.AttackTarget).Where(x => x.Time >= soowon.FirstAware).ToList();
-                    var targetOffs = targetables.Where(x => !x.Targetable).ToList();
-                    if (targetOffs.Count == 2)
-                    {
-                        fightData.SetSuccess(true, targetOffs[1].Time);
-                    }
+                    fightData.SetSuccess(true, targetOffs[1].Time);
                 }
             }
         }
@@ -201,11 +199,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var targetOffs = targetables.Where(x => x.DstAgent == 0).ToList();
                 // Events to be copied
                 var posFacingHP = combatData.Where(x => x.SrcMatchesAgent(dragonVoid) && (x.IsStateChange == ArcDPSEnums.StateChange.Position || x.IsStateChange == ArcDPSEnums.StateChange.Rotation || x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)).ToList();
-                CombatItem pos = posFacingHP.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Position);
                 //
                 foreach (CombatItem targetOn in targetOns)
                 {
-                    // If Soo Wo, has been already created, we break
+                    // If Soo Won has been already created, we break
                     if (index >= idsToUse.Count)
                     {
                         break;
@@ -226,6 +223,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             if (c.SrcMatchesAgent(dragonVoid, extensions))
                             {
+                                // Avoid making the gadget go back to 100% hp on "death"
                                 if (c.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && c.DstAgent == 10000 && c.Time > extra.LastAware - 2000) {
                                     continue;
                                 }
@@ -253,7 +251,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (index == 0)
             {
                 // Add dummy target as there are no dragon voids
-                agentData.AddCustomNPCAgent(0, fightData.FightEnd, "River of Souls", Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
+                agentData.AddCustomNPCAgent(0, fightData.FightEnd, "Dummy Harvest Temple", Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
                 Targetless = true;
             }
             ComputeFightTargets(agentData, combatData, extensions);

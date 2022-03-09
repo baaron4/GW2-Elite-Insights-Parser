@@ -14,6 +14,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
             }
             );
+            Icon = "https://i.imgur.com/7OutZup.png";
             Extension = "kaiover";
             EncounterCategoryInformation.InSubCategoryOrder = 2;
         }

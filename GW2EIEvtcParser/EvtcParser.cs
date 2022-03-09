@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser
         private FightData _fightData;
         private AgentData _agentData;
         private readonly List<AgentItem> _allAgentsList;
-        private readonly SkillData _skillData;
+        private SkillData _skillData;
         private readonly List<CombatItem> _combatItems;
         private List<Player> _playerList;
         private byte _revision;
@@ -37,12 +37,11 @@ namespace GW2EIEvtcParser
         private readonly GW2APIController _apiController;
         private readonly Dictionary<uint, AbstractExtensionHandler> _enabledExtensions;
 
-        public EvtcParser(EvtcParserSettings parserSettings, GW2EIGW2API.GW2APIController apiController)
+        public EvtcParser(EvtcParserSettings parserSettings, GW2APIController apiController)
         {
             _apiController = apiController;
             _parserSettings = parserSettings;
             _allAgentsList = new List<AgentItem>();
-            _skillData = new SkillData(apiController);
             _combatItems = new List<CombatItem>();
             _playerList = new List<Player>();
             _logStartTime = 0;
@@ -423,6 +422,7 @@ namespace GW2EIEvtcParser
         private void ParseSkillData(BinaryReader reader, ParserController operation)
         {
 
+            _skillData = new SkillData(_apiController, _evtcVersion);
             // 4 bytes: player count
             uint skillCount = reader.ReadUInt32();
             operation.UpdateProgressWithCancellationCheck("Skill Count " + skillCount);

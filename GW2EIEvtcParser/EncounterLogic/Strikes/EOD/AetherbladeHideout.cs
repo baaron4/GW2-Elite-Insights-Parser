@@ -25,7 +25,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<int>
             {
                 (int)ArcDPSEnums.TargetID.MaiTrinStrike,
-                (int)ArcDPSEnums.TargetID.MaiTrinStrikeDuringEcho,
                 (int)ArcDPSEnums.TargetID.EchoOfScarletBriar,
                 (int)ArcDPSEnums.TrashID.ScarletPhantomBreakbar,
                 (int)ArcDPSEnums.TrashID.ScarletPhantomHP,
@@ -47,6 +46,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 ArcDPSEnums.TrashID.ScarletPhantom1,
                 ArcDPSEnums.TrashID.ScarletPhantom2,
+                ArcDPSEnums.TrashID.MaiTrinStrikeDuringEcho,
             };
         }
 
