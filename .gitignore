@@ -275,3 +275,4 @@ __pycache__/
 /GW2EIParser.tst/EvtcLogs/Crashes/**/*.evtc.zip
 /GW2EIParser.tst/EvtcLogs/Crashes/**/*.zevtc
 /GW2EIParser.tst/EvtcLogs/Crashes/**/*.evtc
+/GW2EIEvtcParser/EncounterLogic/Raids/W1/Mordremoth.cs
