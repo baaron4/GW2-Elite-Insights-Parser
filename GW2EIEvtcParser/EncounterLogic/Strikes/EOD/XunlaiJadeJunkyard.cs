@@ -19,6 +19,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterCategoryInformation.InSubCategoryOrder = 1;
         }
 
+        protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+        {
+            return new CombatReplayMap("https://i.imgur.com/bwTO5Xg.png",
+                            (1485, 1292),
+                            (-7090, -2785, 3647, 6556)/*,
+                            (-15360, -36864, 15360, 39936),
+                            (3456, 11012, 4736, 14212)*/);
+        }
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);

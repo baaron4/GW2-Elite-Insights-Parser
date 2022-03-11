@@ -19,7 +19,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterCategoryInformation.InSubCategoryOrder = 2;
         }
 
-
+        protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+        {
+            return new CombatReplayMap("https://i.imgur.com/4QeDiit.png",
+                            (942, 835),
+                            (-23828, -16565, -20362,-13482)/*,
+                            (-15360, -36864, 15360, 39936),
+                            (3456, 11012, 4736, 14212)*/);
+        }
 
         protected override List<int> GetTargetsIDs()
         {
