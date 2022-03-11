@@ -23,10 +23,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="EncounterLogic\Raids\W1\Mordremoth.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\GW2EIGW2API\GW2EIGW2API.csproj" />
   </ItemGroup>
 
