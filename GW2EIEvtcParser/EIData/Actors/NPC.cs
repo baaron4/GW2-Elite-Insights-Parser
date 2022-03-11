@@ -32,12 +32,13 @@ namespace GW2EIEvtcParser.EIData
         protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log)
         {
             log.FightData.Logic.ComputeNPCCombatReplayActors(this, log, CombatReplay);
-            AgentItem master = AgentItem.GetFinalMaster();
             if (CombatReplay.Rotations.Any() && (log.FightData.Logic.TargetAgents.Contains(AgentItem) || log.FriendlyAgents.Contains(AgentItem)))
             {
                 CombatReplay.Decorations.Add(new FacingDecoration(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));
             }
-            if (master != AgentItem)
+            // Don't put minions of NPC into the minion display system
+            AgentItem master = AgentItem.GetFinalMaster();
+            if (master != AgentItem && master.IsPlayer)
             {
                 AbstractSingleActor masterActor = log.FindActor(master);
                 // Basic linkage

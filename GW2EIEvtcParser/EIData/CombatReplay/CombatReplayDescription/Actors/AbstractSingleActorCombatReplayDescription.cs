@@ -15,7 +15,24 @@ namespace GW2EIEvtcParser.EIData
         public long Start { get; }
         public long End { get; }
 
-        internal AbstractSingleActorCombatReplayDescription(AbstractSingleActor actor, ParsedEvtcLog log, CombatReplayMap map, CombatReplay replay, string type)
+        private static string GetActorType(AbstractSingleActor actor, ParsedEvtcLog log)
+        {
+            if (actor.AgentItem.IsPlayer)
+            {
+                return !log.PlayerAgents.Contains(actor.AgentItem) ? "TargetPlayer" : "Player";
+            }
+            if (log.FightData.Logic.TargetAgents.Contains(actor.AgentItem))
+            {
+                return "Target";
+            }
+            if (log.FightData.Logic.NonPlayerFriendlyAgents.Contains(actor.AgentItem) || actor.AgentItem.GetFinalMaster().Type == ParsedData.AgentItem.AgentType.Player)
+            {
+                return "Friendly";
+            }
+            return "Mob";
+        }
+
+        internal AbstractSingleActorCombatReplayDescription(AbstractSingleActor actor, ParsedEvtcLog log, CombatReplayMap map, CombatReplay replay)
         {
             Start = replay.TimeOffsets.start;
             End = replay.TimeOffsets.end;
@@ -23,7 +40,7 @@ namespace GW2EIEvtcParser.EIData
             ID = actor.UniqueID;
             var positions = new List<float>();
             Positions = positions;
-            Type = type;
+            Type = GetActorType(actor, log);
             foreach (Point3D pos in replay.PolledPositions)
             {
                 (float x, float y) = map.GetMapCoord(pos.X, pos.Y);
