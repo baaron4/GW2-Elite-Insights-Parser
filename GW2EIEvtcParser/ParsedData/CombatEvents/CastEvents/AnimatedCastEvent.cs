@@ -111,5 +111,15 @@ namespace GW2EIEvtcParser.ParsedData
                 ActualDuration = (int)(maxEnd - Time);
             }
         }
+
+        // Custom
+        internal AnimatedCastEvent(AgentItem caster, SkillItem skill, long start, long dur) : base(start, skill, caster)
+        {
+            ActualDuration = (int)dur;
+            ExpectedDuration = ActualDuration;
+            Acceleration = 0;
+            Status = AnimationStatus.Full;
+            SavedDuration = 0;
+        }
     }
 }

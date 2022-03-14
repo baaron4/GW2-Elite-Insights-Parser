@@ -16,6 +16,18 @@ namespace GW2EIEvtcParser.EIData
         {
         };
 
+        public static IReadOnlyList<AnimatedCastEvent> ComputeFlowingResolveCastEvents(Player willbender, CombatData combatData, SkillData skillData, AgentData agentData)
+        {
+            var res = new List<AnimatedCastEvent>();
+            SkillItem skill = skillData.Get(62603);
+            var applies = combatData.GetBuffData(62632).OfType<BuffApplyEvent>().Where(x => x.To == willbender.AgentItem).ToList();
+            foreach (BuffApplyEvent bae in applies)
+            {
+                res.Add(new AnimatedCastEvent(willbender.AgentItem, skill, bae.Time - 440, 500));
+            }
+            return res;
+        }
+
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {

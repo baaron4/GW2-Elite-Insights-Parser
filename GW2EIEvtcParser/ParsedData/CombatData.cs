@@ -160,6 +160,16 @@ namespace GW2EIEvtcParser.ParsedData
         {
             List<AbstractCastEvent> toAdd = fightData.Logic.SpecialCastEventProcess(this, skillData);
             toAdd.AddRange(ProfHelper.ComputeInstantCastEvents(players, this, skillData, agentData, fightData.Logic));
+            foreach (Player p in players) {
+                switch(p.Spec)
+                {
+                    case ParserHelper.Spec.Willbender:
+                        toAdd.AddRange(WillbenderHelper.ComputeFlowingResolveCastEvents(p, this, skillData, agentData));
+                        break;
+                    default:
+                        break;
+                }
+            }
             //
             var castIDsToSort = new HashSet<long>();
             var castAgentsToSort = new HashSet<AgentItem>();
