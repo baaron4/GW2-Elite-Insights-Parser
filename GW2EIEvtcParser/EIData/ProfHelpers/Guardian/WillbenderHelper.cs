@@ -80,7 +80,7 @@ namespace GW2EIEvtcParser.EIData
         {
                 //virtues
                 new Buff("Rushing Justice", 62529, Source.Willbender, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/74/Rushing_Justice.png"),
-                new Buff("Flowing Resolve", 62632, Source.Willbender, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/be/Flowing_Resolve.png"),
+                new Buff("Flowing Resolve", 62632, Source.Willbender, BuffStackType.Queue, 9, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/be/Flowing_Resolve.png"),
                 new Buff("Crashing Courage", 62615, Source.Willbender, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/95/Crashing_Courage.png"),
                 //
                 new Buff("Repose", 62638, Source.Willbender, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/80/Repose.png"),
