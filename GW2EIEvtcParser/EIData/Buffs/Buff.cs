@@ -775,6 +775,12 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Plate of Orrian Steak Frittes",9773, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/4/4d/Plate_of_Orrian_Steak_Frittes.png"),
                 new Buff("Spicier Flank Steak",9764, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/0/01/Spicier_Flank_Steak.png"),
                 new Buff("Mango Pie",9993, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/3/3d/Mango_Pie.png"),
+                new Buff("Block of Tofu", 65937, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/f/fa/Block_of_Tofu.png"),
+                new Buff("Fishy Rice Bowl", 66503, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/1/14/Fishy_Rice_Bowl.png"),
+                new Buff("Meaty Rice Bowl", 65354, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/6/65/Meaty_Rice_Bowl.png"),
+                new Buff("Plate of Kimchi Pancakes", 65769, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/3/34/Plate_of_Kimchi_Pancakes.png"),
+                new Buff("Bowl of Kimchi Tofu Stew", 65197, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/2/22/Bowl_of_Kimchi_Tofu_Stew.png"),
+                new Buff("Meaty Asparagus Skewer", 64568, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/d/d6/Meaty_Asparagus_Skewer.png"),
         };
 
         internal static readonly List<Buff> Utilities = new List<Buff>
@@ -959,6 +965,7 @@ namespace GW2EIEvtcParser.EIData
         {
             // Effect procs for On Kill Food
             new Buff("Nourishment (Bonus Power)", 10110, Source.Item, BuffClassification.Gear, "https://wiki.guildwars2.com/images/d/d6/Champion_of_the_Crown.png"),
+            new Buff("Nourishment (Bonus Power & Ferocity)", 64528, Source.Item, BuffClassification.Gear, "https://wiki.guildwars2.com/images/d/d6/Champion_of_the_Crown.png"),
             new Buff("Malice (Bonus Condition Damage)", 10104, Source.Item, BuffClassification.Gear, "https://wiki.guildwars2.com/images/d/d6/Champion_of_the_Crown.png"),
         };
     }
