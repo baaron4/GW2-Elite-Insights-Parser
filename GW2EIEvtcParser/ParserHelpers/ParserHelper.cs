@@ -49,6 +49,17 @@ namespace GW2EIEvtcParser
             internal const ulong EndOfLife = ulong.MaxValue;
         }
 
+        internal static class ArcDPSBuilds
+        {
+            internal const int StartOfLife = int.MinValue;
+            //
+            internal const int ConfusionDamageSimulation = 20210529;
+            internal const int InternalSkillIDChange = 20220307;
+            internal const int DirectX11 = 20210923;
+            //
+            internal const int EndOfLife = int.MaxValue;
+        }
+
         internal const int PhaseTimeLimit = 2000;
 
 
