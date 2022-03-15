@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal static (long, long) GetArcDPSCustomIDs(int evtcVersion)
         {
-            if (evtcVersion >= ArcDPSBuilds.InternalSkillIDChange)
+            if (evtcVersion >= ArcDPSBuilds.InternalSkillIDsChange)
             {
                 return (DodgeId20220307, GenericBreakbarId20220307);
             }

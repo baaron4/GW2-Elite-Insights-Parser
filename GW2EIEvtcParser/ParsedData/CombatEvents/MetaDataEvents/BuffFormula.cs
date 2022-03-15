@@ -215,7 +215,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         private int Level => (_buffInfoEvent.Category == ArcDPSEnums.BuffCategory.Food || _buffInfoEvent.Category == ArcDPSEnums.BuffCategory.Enhancement) ? 0 : (Attr1 == DamageFormulaSquaredLevel ? 6400 : 80);
 
-        internal BuffFormula(CombatItem evtcItem, BuffInfoEvent buffInfoEvent)
+        internal BuffFormula(CombatItem evtcItem, BuffInfoEvent buffInfoEvent, int evtcVersion)
         {
             _buffInfoEvent = buffInfoEvent;
             Npc = evtcItem.IsFlanking == 0;
@@ -274,9 +274,9 @@ namespace GW2EIEvtcParser.ParsedData
             //
             Type = (int)formulaFloats[0];
             ByteAttr1 = (byte)formulaFloats[1];
-            ByteAttr2 = (byte)formulaFloats[2];
-            Attr1 = ArcDPSEnums.GetBuffAttribute(ByteAttr1);
-            Attr2 = ArcDPSEnums.GetBuffAttribute(ByteAttr2);
+            ByteAttr2 = (byte)formulaFloats[2];          
+            Attr1 = ArcDPSEnums.GetBuffAttribute(ByteAttr1, evtcVersion);
+            Attr2 = ArcDPSEnums.GetBuffAttribute(ByteAttr2, evtcVersion);
             ConstantOffset = formulaFloats[3];
             LevelOffset = formulaFloats[4];
             Variable = formulaFloats[5];

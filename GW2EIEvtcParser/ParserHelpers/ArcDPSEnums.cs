@@ -205,7 +205,7 @@ namespace GW2EIEvtcParser
             PhysRec = 16,
             CondRec = 17,
             AttackSpeed = 18,
-            //SiphonInc = 19,
+            UnusedSiphonInc_Arc = 19, // Unused due to being auto detected by the solver
             SiphonRec = 20,
             //
             Unknown = short.MaxValue,
@@ -263,9 +263,21 @@ namespace GW2EIEvtcParser
             MovementSpeedStacking = -28,
             MovementSpeedStacking2 = -29,
         }
-        internal static BuffAttribute GetBuffAttribute(short bt)
+        internal static BuffAttribute GetBuffAttribute(short bt, int evtcVersion)
         {
-            return Enum.IsDefined(typeof(BuffAttribute), bt) ? (BuffAttribute)bt : BuffAttribute.Unknown;
+            BuffAttribute res;
+            if (evtcVersion >= ParserHelper.ArcDPSBuilds.BuffAttrFlatIncRemoved)
+            {
+                res = bt <= (byte)BuffAttribute.SiphonRec - 1 ? (BuffAttribute)(bt + 1) : BuffAttribute.Unknown;
+            } else
+            {
+                res = bt <= (byte)BuffAttribute.SiphonRec ? (BuffAttribute)bt : BuffAttribute.Unknown;
+            }
+            if (res == BuffAttribute.UnusedSiphonInc_Arc)
+            {
+                res = BuffAttribute.Unknown;
+            }
+            return res;
         }
 
         public enum BuffCategory : byte

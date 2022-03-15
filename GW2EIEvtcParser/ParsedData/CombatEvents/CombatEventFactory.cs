@@ -20,7 +20,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        public static void AddStateChangeEvent(CombatItem stateChangeEvent, AgentData agentData, SkillData skillData, MetaEventsContainer metaDataEvents, StatusEventsContainer statusEvents, List<RewardEvent> rewardEvents, List<WeaponSwapEvent> wepSwaps, List<AbstractBuffEvent> buffEvents)
+        public static void AddStateChangeEvent(CombatItem stateChangeEvent, AgentData agentData, SkillData skillData, MetaEventsContainer metaDataEvents, StatusEventsContainer statusEvents, List<RewardEvent> rewardEvents, List<WeaponSwapEvent> wepSwaps, List<AbstractBuffEvent> buffEvents, int evtcVersion)
         {
             switch (stateChangeEvent.IsStateChange)
             {
@@ -129,11 +129,11 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.StateChange.BuffFormula:
                     if (metaDataEvents.BuffInfoEvents.TryGetValue(stateChangeEvent.SkillID, out BuffInfoEvent buffInfoEvent))
                     {
-                        buffInfoEvent.CompleteBuffInfoEvent(stateChangeEvent);
+                        buffInfoEvent.CompleteBuffInfoEvent(stateChangeEvent, evtcVersion);
                     }
                     else
                     {
-                        buffInfoEvent = new BuffInfoEvent(stateChangeEvent);
+                        buffInfoEvent = new BuffInfoEvent(stateChangeEvent, evtcVersion);
                         metaDataEvents.BuffInfoEvents[stateChangeEvent.SkillID] = buffInfoEvent;
                     }
                     if (stateChangeEvent.IsStateChange == ArcDPSEnums.StateChange.BuffInfo)

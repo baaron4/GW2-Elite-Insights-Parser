@@ -53,9 +53,10 @@ namespace GW2EIEvtcParser
         {
             internal const int StartOfLife = int.MinValue;
             //
-            internal const int ConfusionDamageSimulation = 20210529;
-            internal const int InternalSkillIDChange = 20220307;
-            internal const int DirectX11 = 20210923;
+            internal const int ProperConfusionDamageSimulation = 20210529;
+            internal const int DirectX11Updated = 20210923;
+            internal const int InternalSkillIDsChange = 20220307;
+            internal const int BuffAttrFlatIncRemoved = 20220306;
             //
             internal const int EndOfLife = int.MaxValue;
         }

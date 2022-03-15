@@ -320,7 +320,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal virtual List<ErrorEvent> GetCustomWarningMessages(FightData fightData, int arcdpsVersion)
         {
-            if (arcdpsVersion >= ParserHelper.ArcDPSBuilds.DirectX11)
+            if (arcdpsVersion >= ParserHelper.ArcDPSBuilds.DirectX11Updated)
             {
                 return new List<ErrorEvent>
                 {
@@ -332,7 +332,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected static List<ErrorEvent> GetConfusionDamageMissingMessage(int arcdpsVersion)
         {
-            if (arcdpsVersion > ParserHelper.ArcDPSBuilds.ConfusionDamageSimulation)
+            if (arcdpsVersion > ParserHelper.ArcDPSBuilds.ProperConfusionDamageSimulation)
             {
                 return new List<ErrorEvent>();
             }

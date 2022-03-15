@@ -23,13 +23,13 @@ namespace GW2EIEvtcParser.ParsedData
         public uint DurationCap { get; private set; }
         public List<BuffFormula> Formulas { get; } = new List<BuffFormula>();
 
-        internal BuffInfoEvent(CombatItem evtcItem) : base(evtcItem)
+        internal BuffInfoEvent(CombatItem evtcItem, int evtcVersion) : base(evtcItem)
         {
             BuffID = evtcItem.SkillID;
-            CompleteBuffInfoEvent(evtcItem);
+            CompleteBuffInfoEvent(evtcItem, evtcVersion);
         }
 
-        internal void CompleteBuffInfoEvent(CombatItem evtcItem)
+        internal void CompleteBuffInfoEvent(CombatItem evtcItem, int evtcVersion)
         {
             if (evtcItem.SkillID != BuffID)
             {
@@ -38,7 +38,7 @@ namespace GW2EIEvtcParser.ParsedData
             switch (evtcItem.IsStateChange)
             {
                 case ArcDPSEnums.StateChange.BuffFormula:
-                    BuildFromBuffFormula(evtcItem);
+                    BuildFromBuffFormula(evtcItem, evtcVersion);
                     break;
                 case ArcDPSEnums.StateChange.BuffInfo:
                     BuildFromBuffInfo(evtcItem);
@@ -73,9 +73,9 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        private void BuildFromBuffFormula(CombatItem evtcItem)
+        private void BuildFromBuffFormula(CombatItem evtcItem, int evtcVersion)
         {
-            Formulas.Add(new BuffFormula(evtcItem, this));
+            Formulas.Add(new BuffFormula(evtcItem, this, evtcVersion));
         }
 
     }
