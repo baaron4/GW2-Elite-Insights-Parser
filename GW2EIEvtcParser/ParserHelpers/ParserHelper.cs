@@ -888,11 +888,6 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.ScarletPhantom1:
                 case ArcDPSEnums.TrashID.ScarletPhantomHP:
                 case ArcDPSEnums.TrashID.ScarletPhantomBreakbar:
-                case ArcDPSEnums.TrashID.TheEnforcer:
-                case ArcDPSEnums.TrashID.TheMechRider:
-                case ArcDPSEnums.TrashID.TheMindblade:
-                case ArcDPSEnums.TrashID.TheRitualist:
-                case ArcDPSEnums.TrashID.TheSniper:
                 case ArcDPSEnums.TrashID.AnkkaHallucination1:
                 case ArcDPSEnums.TrashID.AnkkaHallucination2:
                 case ArcDPSEnums.TrashID.AnkkaHallucination3:
@@ -969,6 +964,16 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
                 case ArcDPSEnums.TrashID.MaiTrinStrikeDuringEcho:
                     return "https://i.imgur.com/GjHgAtX.png";
+                case ArcDPSEnums.TrashID.TheEnforcer:
+                    return "https://i.imgur.com/GNQCYda.png";
+                case ArcDPSEnums.TrashID.TheMechRider:
+                    return "https://i.imgur.com/JSsBc6a.png";
+                case ArcDPSEnums.TrashID.TheMindblade:
+                    return "https://i.imgur.com/KyMgGQD.png";
+                case ArcDPSEnums.TrashID.TheRitualist:
+                    return "https://i.imgur.com/gG5p3Hz.png";
+                case ArcDPSEnums.TrashID.TheSniper:
+                    return "https://i.imgur.com/RWIjUoe.png";
             }
             //
             switch (ArcDPSEnums.GetMinionID(id))
