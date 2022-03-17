@@ -959,6 +959,10 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Spiced Pepper Creme Brulee", Unknown, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/b/ba/Spiced_Pepper_Creme_Brulee.png"),
                 new Buff("Spiced Peppercorn Cheesecake",Unknown, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/9/9c/Spiced_Peppercorn_Cheesecake.png"),
                 new Buff("Strawberry Cilantro Cheesecake", Unknown, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/8/8d/Strawberry_Cilantro_Cheesecake.png"),
+                new Buff("Plate of Imperial Palace Special", 67265 , Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/c/c4/Plate_of_Imperial_Palace_Special.png"),
+                new Buff("Plate of Crispy Fish Pancakes", 64562 , Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/f/f5/Plate_of_Crispy_Fish_Pancakes.png"),
+                new Buff("Bowl of Jade Sea Bounty", 64357, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/4/40/Bowl_of_Jade_Sea_Bounty.png"),
+                new Buff("Bowl of Echovald Hotpot", 66663 , Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/e/e1/Bowl_of_Echovald_Hotpot.png"),
         };
 
         internal static readonly List<Buff> FoodProcs = new List<Buff>
