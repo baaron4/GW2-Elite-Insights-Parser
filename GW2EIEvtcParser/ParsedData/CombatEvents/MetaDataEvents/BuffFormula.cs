@@ -29,6 +29,8 @@ namespace GW2EIEvtcParser.ParsedData
                     return "Concentration";
                 case Expertise:
                     return "Expertise";
+                case FishingPower:
+                    return "Fishing Power";
                 case Armor:
                     return "Armor";
                 case Agony:

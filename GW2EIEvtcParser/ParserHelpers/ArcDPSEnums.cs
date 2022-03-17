@@ -262,6 +262,7 @@ namespace GW2EIEvtcParser
             HealingEffectivenessRec2 = -27,
             MovementSpeedStacking = -28,
             MovementSpeedStacking2 = -29,
+            FishingPower = -30,
         }
         internal static BuffAttribute GetBuffAttribute(short bt, int evtcVersion)
         {

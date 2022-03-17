@@ -74,6 +74,11 @@ namespace GW2EIEvtcParser.EIData
             {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.CondRec2, GW2Builds.EODBeta3), 873 },
             // CriticalChance
             {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.CriticalChance), 725 },
+            // Fishing Power      
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.FishingPower), 67265 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.FishingPower), 64562 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.FishingPower), 64357 },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.FishingPower), 66663 },
             // Life Leech      
             { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.SiphonInc, GW2Builds.May2021Balance), 42883 },
             { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.SiphonInc, GW2Builds.May2021Balance), 45614 },
