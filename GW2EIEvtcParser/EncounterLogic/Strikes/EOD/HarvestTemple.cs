@@ -276,7 +276,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         target.OverrideName("The MordremothVoid");
                         break;
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordious:
-                        target.OverrideName("The PrimordiusVoid");
+                        target.OverrideName("The PrimordusVoid");
                         break;
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon:
                         target.OverrideName("The SooWonVoid");
