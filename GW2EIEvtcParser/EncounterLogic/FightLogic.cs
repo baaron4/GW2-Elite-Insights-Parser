@@ -42,7 +42,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList = new List<Mechanic>() {
                 new PlayerStatusMechanic(SkillIDs.DeathId, "Dead", new MechanicPlotlySetting("x","rgb(0,0,0)"), "Dead",0),
                 new PlayerStatusMechanic(SkillIDs.DownId, "Downed", new MechanicPlotlySetting("cross","rgb(255,0,0)"), "Downed",0),
-                new PlayerStatusMechanic(SkillIDs.ResurrectId, "Resurrect", new MechanicPlotlySetting("cross-open","rgb(0,255,255)"), "Res",0),
+                new PlayerStatusMechanic(SkillIDs.Resurrect, "Resurrect", new MechanicPlotlySetting("cross-open","rgb(0,255,255)"), "Res",0),
                 new PlayerStatusMechanic(SkillIDs.AliveId, "Got up", new MechanicPlotlySetting("cross","rgb(0,255,0)"), "Got up",0),
                 new PlayerStatusMechanic(SkillIDs.DCId, "Disconnected", new MechanicPlotlySetting("x","rgb(120,120,120)"), "DC",0),
                 new PlayerStatusMechanic(SkillIDs.RespawnId, "Respawn", new MechanicPlotlySetting("cross","rgb(120,120,255)"), "Resp",0)

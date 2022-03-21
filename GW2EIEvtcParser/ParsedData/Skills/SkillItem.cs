@@ -32,8 +32,8 @@ namespace GW2EIEvtcParser.ParsedData
 
         private static readonly Dictionary<long, string> _overrideNames = new Dictionary<long, string>()
         {
-            {SkillIDs.ResurrectId, "Resurrect"},
-            {SkillIDs.BandageId, "Bandage" },
+            {SkillIDs.Resurrect, "Resurrect"},
+            {SkillIDs.Bandage, "Bandage" },
             {SkillIDs.ArcDPSDodge, "Dodge" },
             {SkillIDs.ArcDPSDodge20220307, "Dodge" },
             {SkillIDs.ArcDPSGenericBreakbar, "Generic Breakbar" },
@@ -118,8 +118,8 @@ namespace GW2EIEvtcParser.ParsedData
         };
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
         {
-            {SkillIDs.ResurrectId, "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png"},
-            {SkillIDs.BandageId, "https://wiki.guildwars2.com/images/0/0c/Bandage.png"},
+            {SkillIDs.Resurrect, "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png"},
+            {SkillIDs.Bandage, "https://wiki.guildwars2.com/images/0/0c/Bandage.png"},
             {SkillIDs.ArcDPSGenericBreakbar, "https://wiki.guildwars2.com/images/a/ae/Unshakable.png"},
             {SkillIDs.ArcDPSDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png"},
             {SkillIDs.ArcDPSGenericBreakbar20220307, "https://wiki.guildwars2.com/images/a/ae/Unshakable.png"},

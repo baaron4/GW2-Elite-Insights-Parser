@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser.ParsedData
                 }
                 Acceleration = Math.Max(Math.Min(Acceleration, 1.0), -1.0);
             }
-            if (SkillId != SkillIDs.ResurrectId)
+            if (SkillId != SkillIDs.Resurrect)
             {
                 switch (endItem.IsActivation)
                 {

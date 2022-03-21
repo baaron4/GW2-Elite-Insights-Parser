@@ -46,8 +46,8 @@ namespace GW2EIEvtcParser.EIData
                             cList.RemoveAll(x => Math.Abs(x - time) < 20);
                         }
                         break;
-                    case SkillIDs.ResurrectId:
-                        cList = log.CombatData.GetAnimatedCastData(p.AgentItem).Where(x => x.SkillId == SkillIDs.ResurrectId).Select(x => x.Time).ToList();
+                    case SkillIDs.Resurrect:
+                        cList = log.CombatData.GetAnimatedCastData(p.AgentItem).Where(x => x.SkillId == SkillIDs.Resurrect).Select(x => x.Time).ToList();
                         break;
                 }
                 foreach (long time in cList)

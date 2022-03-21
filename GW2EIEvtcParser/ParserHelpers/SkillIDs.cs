@@ -50,9 +50,9 @@ namespace GW2EIEvtcParser
         public const long Aegis = 743;
         public const long Retaliation = 873;
         public const long Resolution = 873;
-        public const long ResurrectId = 1066;
+        public const long Resurrect = 1066;
         public const long Stability = 1122;
-        public const long BandageId = 1175;
+        public const long Bandage = 1175;
         public const long Quickness = 1187;
         public const long Resistance = 26980;
         public const long Alacrity = 30328;
