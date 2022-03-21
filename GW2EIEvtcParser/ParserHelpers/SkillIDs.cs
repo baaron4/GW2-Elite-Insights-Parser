@@ -5,8 +5,15 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser
 {
+    /// <summary>
+    /// Pool of skill ids used in the parser, custom or official.
+    /// Naming convention: 
+    /// no "id" inside the name
+    /// should the skill name collide with its cast form and buff form, use XXX for the cast and XXXEffect for the buff
+    /// </summary>
     public static class SkillIDs
     {
+
         /////////////// Custom IDS
         public const long Unknown = -1;
         public const long WeaponSwap = -2;
