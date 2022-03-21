@@ -93,9 +93,9 @@ namespace GW2EIEvtcParser.EIData
         //
 
 
-        public IReadOnlyList<string> GetWeaponsArray(ParsedEvtcLog log)
+        public WeaponSets GetWeaponSets(ParsedEvtcLog log)
         {
-            return _statusHelper.GetWeaponsArray(log);
+            return _statusHelper.GetWeaponSets(log);
         }
 
         //
