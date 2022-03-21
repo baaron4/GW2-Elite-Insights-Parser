@@ -82,19 +82,19 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 switch(swapped)
                 {
-                    case SkillItem.FirstLandSet:
+                    case ParserHelper.WeaponSetIDs.FirstLandSet:
                         SetLand1MainHand(ApiSkill.WeaponType);
                         SetLand1OffHand(ApiSkill.DualWield);
                         break;
-                    case SkillItem.SecondLandSet:
+                    case ParserHelper.WeaponSetIDs.SecondLandSet:
                         SetLand2MainHand(ApiSkill.WeaponType);
                         SetLand2OffHand(ApiSkill.DualWield);
                         break;
-                    case SkillItem.FirstWaterSet:
+                    case ParserHelper.WeaponSetIDs.FirstWaterSet:
                         SetWater1MainHand(ApiSkill.WeaponType);
                         SetWater1OffHand(ApiSkill.DualWield);
                         break;
-                    case SkillItem.SecondWaterSet:
+                    case ParserHelper.WeaponSetIDs.SecondWaterSet:
                         SetWater2MainHand(ApiSkill.WeaponType);
                         SetWater2OffHand(ApiSkill.DualWield);
                         break;
@@ -104,16 +104,16 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 switch (swapped)
                 {
-                    case SkillItem.FirstLandSet:
+                    case ParserHelper.WeaponSetIDs.FirstLandSet:
                         SetLand1TwoHand(ApiSkill.WeaponType);
                         break;
-                    case SkillItem.SecondLandSet:
+                    case ParserHelper.WeaponSetIDs.SecondLandSet:
                         SetLand2TwoHand(ApiSkill.WeaponType);
                         break;
-                    case SkillItem.FirstWaterSet:
+                    case ParserHelper.WeaponSetIDs.FirstWaterSet:
                         SetWater1TwoHand(ApiSkill.WeaponType);
                         break;
-                    case SkillItem.SecondWaterSet:
+                    case ParserHelper.WeaponSetIDs.SecondWaterSet:
                         SetWater2TwoHand(ApiSkill.WeaponType);
                         break;
                 }
@@ -122,16 +122,16 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 switch (swapped)
                 {
-                    case SkillItem.FirstLandSet:
+                    case ParserHelper.WeaponSetIDs.FirstLandSet:
                         SetLand1MainHand(ApiSkill.WeaponType);
                         break;
-                    case SkillItem.SecondLandSet:
+                    case ParserHelper.WeaponSetIDs.SecondLandSet:
                         SetLand2MainHand(ApiSkill.WeaponType);
                         break;
-                    case SkillItem.FirstWaterSet:
+                    case ParserHelper.WeaponSetIDs.FirstWaterSet:
                         SetWater1MainHand(ApiSkill.WeaponType);
                         break;
-                    case SkillItem.SecondWaterSet:
+                    case ParserHelper.WeaponSetIDs.SecondWaterSet:
                         SetWater2MainHand(ApiSkill.WeaponType);
                         break;
                 }
@@ -140,16 +140,16 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 switch (swapped)
                 {
-                    case SkillItem.FirstLandSet:
+                    case ParserHelper.WeaponSetIDs.FirstLandSet:
                         SetLand1OffHand(ApiSkill.WeaponType);
                         break;
-                    case SkillItem.SecondLandSet:
+                    case ParserHelper.WeaponSetIDs.SecondLandSet:
                         SetLand2OffHand(ApiSkill.WeaponType);
                         break;
-                    case SkillItem.FirstWaterSet:
+                    case ParserHelper.WeaponSetIDs.FirstWaterSet:
                         SetWater1OffHand(ApiSkill.WeaponType);
                         break;
-                    case SkillItem.SecondWaterSet:
+                    case ParserHelper.WeaponSetIDs.SecondWaterSet:
                         SetWater2OffHand(ApiSkill.WeaponType);
                         break;
                 }

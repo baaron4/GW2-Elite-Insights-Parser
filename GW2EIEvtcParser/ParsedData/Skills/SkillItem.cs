@@ -37,12 +37,6 @@ namespace GW2EIEvtcParser.ParsedData
         public const long AliveId = -6;
         public const long RespawnId = -7;
 
-        public const int FirstLandSet = 4;
-        public const int SecondLandSet = 5;
-        public const int FirstWaterSet = 0;
-        public const int SecondWaterSet = 1;
-        public const int TransformSet = 3;
-        public const int KitSet = 2;
 
         private static readonly Dictionary<long, string> _overrideNames = new Dictionary<long, string>()
         {
@@ -355,7 +349,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal bool EstimateWeapons(WeaponSets weaponSets, int swapped, bool validForCurrentSwap)
         {
-            bool keep = swapped == FirstLandSet || swapped == SecondLandSet || swapped == FirstWaterSet || swapped == SecondWaterSet;
+            bool keep = swapped == ParserHelper.WeaponSetIDs.FirstLandSet || swapped == ParserHelper.WeaponSetIDs.SecondLandSet || swapped == ParserHelper.WeaponSetIDs.FirstWaterSet || swapped == ParserHelper.WeaponSetIDs.SecondWaterSet;
             if (_weaponDescriptor == null || !keep || !validForCurrentSwap)
             {
                 return false;

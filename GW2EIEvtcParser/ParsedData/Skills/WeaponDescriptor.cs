@@ -43,25 +43,25 @@ namespace GW2EIEvtcParser.ParsedData
             if (IsLand)
             {
                 // if the first swap is not a land set that means the next time we get to a land set was the first set to begin with
-                if (firstSwap != SkillItem.FirstLandSet && firstSwap != SkillItem.SecondLandSet)
+                if (firstSwap != ParserHelper.WeaponSetIDs.FirstLandSet && firstSwap != ParserHelper.WeaponSetIDs.SecondLandSet)
                 {
-                    swapped = swaps.Exists(x => x == SkillItem.FirstLandSet || x == SkillItem.SecondLandSet) ? swaps.First(x => x == SkillItem.FirstLandSet || x == SkillItem.SecondLandSet) : SkillItem.FirstLandSet;
+                    swapped = swaps.Exists(x => x == ParserHelper.WeaponSetIDs.FirstLandSet || x == ParserHelper.WeaponSetIDs.SecondLandSet) ? swaps.First(x => x == ParserHelper.WeaponSetIDs.FirstLandSet || x == ParserHelper.WeaponSetIDs.SecondLandSet) : ParserHelper.WeaponSetIDs.FirstLandSet;
                 }
                 else
                 {
-                    swapped = firstSwap == SkillItem.FirstLandSet ? SkillItem.SecondLandSet : SkillItem.FirstLandSet;
+                    swapped = firstSwap == ParserHelper.WeaponSetIDs.FirstLandSet ? ParserHelper.WeaponSetIDs.SecondLandSet : ParserHelper.WeaponSetIDs.FirstLandSet;
                 }
             }
             else
             {
                 // if the first swap is not a water set that means the next time we get to a water set was the first set to begin with
-                if (firstSwap != SkillItem.FirstWaterSet && firstSwap != SkillItem.SecondWaterSet)
+                if (firstSwap != ParserHelper.WeaponSetIDs.FirstWaterSet && firstSwap != ParserHelper.WeaponSetIDs.SecondWaterSet)
                 {
-                    swapped = swaps.Exists(x => x == SkillItem.FirstWaterSet || x == SkillItem.SecondWaterSet) ? swaps.First(x => x == SkillItem.FirstWaterSet || x == SkillItem.SecondWaterSet) : SkillItem.FirstWaterSet;
+                    swapped = swaps.Exists(x => x == ParserHelper.WeaponSetIDs.FirstWaterSet || x == ParserHelper.WeaponSetIDs.SecondWaterSet) ? swaps.First(x => x == ParserHelper.WeaponSetIDs.FirstWaterSet || x == ParserHelper.WeaponSetIDs.SecondWaterSet) : ParserHelper.WeaponSetIDs.FirstWaterSet;
                 }
                 else
                 {
-                    swapped = firstSwap == SkillItem.FirstWaterSet ? SkillItem.SecondWaterSet : SkillItem.FirstWaterSet;
+                    swapped = firstSwap == ParserHelper.WeaponSetIDs.FirstWaterSet ? ParserHelper.WeaponSetIDs.SecondWaterSet : ParserHelper.WeaponSetIDs.FirstWaterSet;
                 }
             }
             return swapped;
