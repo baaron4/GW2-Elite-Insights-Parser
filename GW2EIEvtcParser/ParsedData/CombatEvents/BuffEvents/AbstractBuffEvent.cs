@@ -26,10 +26,10 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal void Invalidate(SkillData skillData)
         {
-            if (BuffID != Buff.NoBuff)
+            if (BuffID != SkillIDs.NoBuff)
             {
                 //_originalBuffID = BuffID;
-                BuffSkill = skillData.Get(Buff.NoBuff);
+                BuffSkill = skillData.Get(SkillIDs.NoBuff);
             }
         }
 

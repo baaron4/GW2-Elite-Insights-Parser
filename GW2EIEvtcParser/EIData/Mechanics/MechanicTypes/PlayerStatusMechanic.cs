@@ -26,19 +26,19 @@ namespace GW2EIEvtcParser.EIData
                 var cList = new List<long>();
                 switch (SkillId)
                 {
-                    case SkillItem.DeathId:
+                    case SkillIDs.DeathId:
                         cList = combatData.GetDeadEvents(p.AgentItem).Select(x => x.Time).ToList();
                         break;
-                    case SkillItem.DCId:
+                    case SkillIDs.DCId:
                         cList = combatData.GetDespawnEvents(p.AgentItem).Select(x => x.Time).ToList();
                         break;
-                    case SkillItem.RespawnId:
+                    case SkillIDs.RespawnId:
                         cList = combatData.GetSpawnEvents(p.AgentItem).Select(x => x.Time).ToList();
                         break;
-                    case SkillItem.AliveId:
+                    case SkillIDs.AliveId:
                         cList = combatData.GetAliveEvents(p.AgentItem).Select(x => x.Time).ToList();
                         break;
-                    case SkillItem.DownId:
+                    case SkillIDs.DownId:
                         cList = combatData.GetDownEvents(p.AgentItem).Select(x => x.Time).ToList();
                         var downByVaporForm = combatData.GetBuffRemoveAllData(5620).Where(x => x.To == p.AgentItem).Select(x => x.Time).ToList();
                         foreach (long time in downByVaporForm)
@@ -46,8 +46,8 @@ namespace GW2EIEvtcParser.EIData
                             cList.RemoveAll(x => Math.Abs(x - time) < 20);
                         }
                         break;
-                    case SkillItem.ResurrectId:
-                        cList = log.CombatData.GetAnimatedCastData(p.AgentItem).Where(x => x.SkillId == SkillItem.ResurrectId).Select(x => x.Time).ToList();
+                    case SkillIDs.ResurrectId:
+                        cList = log.CombatData.GetAnimatedCastData(p.AgentItem).Where(x => x.SkillId == SkillIDs.ResurrectId).Select(x => x.Time).ToList();
                         break;
                 }
                 foreach (long time in cList)

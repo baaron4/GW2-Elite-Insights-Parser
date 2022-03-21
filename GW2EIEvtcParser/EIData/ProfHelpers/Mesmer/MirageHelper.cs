@@ -10,7 +10,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new DamageCastFinder(45449, 45449, EIData.InstantCastFinder.DefaultICD), // Jaunt
-            new BuffGainCastFinder(SkillItem.MirageCloakDodgeId, 40408, EIData.InstantCastFinder.DefaultICD), // Mirage Cloak
+            new BuffGainCastFinder(SkillIDs.MirageCloakDodge, 40408, EIData.InstantCastFinder.DefaultICD), // Mirage Cloak
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

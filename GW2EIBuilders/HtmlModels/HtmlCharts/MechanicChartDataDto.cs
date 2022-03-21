@@ -19,7 +19,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts
             Color = mech.PlotlySetting.Color;
             Symbol = mech.PlotlySetting.Symbol;
             Size = mech.PlotlySetting.Size;
-            Visible = (mech.SkillId == SkillItem.DeathId || mech.SkillId == SkillItem.DownId);
+            Visible = (mech.SkillId == SkillIDs.DeathId || mech.SkillId == SkillIDs.DownId);
             Points = BuildMechanicGraphPointData(log, log.MechanicData.GetMechanicLogs(log, mech), mech.IsEnemyMechanic);
         }
 

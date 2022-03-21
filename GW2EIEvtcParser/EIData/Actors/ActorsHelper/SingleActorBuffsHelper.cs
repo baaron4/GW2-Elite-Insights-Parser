@@ -201,15 +201,15 @@ namespace GW2EIEvtcParser.EIData
             BuffDictionary buffMap = _buffMap;
             long dur = log.FightData.FightEnd;
             int fightDuration = (int)(dur) / 1000;
-            var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[NumberOfBoonsID]);
-            var activeCombatMinionsGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[NumberOfActiveCombatMinionsID]);
+            var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfBoons]);
+            var activeCombatMinionsGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfActiveCombatMinions]);
             BuffsGraphModel numberOfClonesGraph = null;
             bool canSummonClones = ProfHelper.CanSummonClones(Actor.Spec);
             if (canSummonClones)
             {
-                numberOfClonesGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[NumberOfClonesID]);
+                numberOfClonesGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfClones]);
             }
-            var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[NumberOfConditionsID]);
+            var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfConditions]);
             var boonIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Boon].Select(x => x.ID));
             var condiIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Condition].Select(x => x.ID));
             // Init status
@@ -269,8 +269,8 @@ namespace GW2EIEvtcParser.EIData
 
                 }
             }
-            _buffGraphs[NumberOfBoonsID] = boonPresenceGraph;
-            _buffGraphs[NumberOfConditionsID] = condiPresenceGraph;
+            _buffGraphs[SkillIDs.NumberOfBoons] = boonPresenceGraph;
+            _buffGraphs[SkillIDs.NumberOfConditions] = condiPresenceGraph;
             foreach (Minions minions in Actor.GetMinions(log).Values)
             {
                 IReadOnlyList<IReadOnlyList<Segment>> segments = minions.GetLifeSpanSegments(log);
@@ -288,11 +288,11 @@ namespace GW2EIEvtcParser.EIData
             }
             if (activeCombatMinionsGraph.BuffChart.Any())
             {
-                _buffGraphs[NumberOfActiveCombatMinionsID] = activeCombatMinionsGraph;
+                _buffGraphs[SkillIDs.NumberOfActiveCombatMinions] = activeCombatMinionsGraph;
             }
             if (canSummonClones && numberOfClonesGraph.BuffChart.Any())
             {
-                _buffGraphs[NumberOfClonesID] = numberOfClonesGraph;
+                _buffGraphs[SkillIDs.NumberOfClones] = numberOfClonesGraph;
             }
         }
 

@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser.EIData
         {
             // Fire
             new BuffDamageModifier(13342, "Persisting Flames", "1% per stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, "https://wiki.guildwars2.com/images/5/5f/Persisting_Flames.png", 104844 , GW2Builds.EndOfLife, DamageModifierMode.All),
-            new BuffDamageModifier(new long[] { 5585, FireWater, FireAir, FireEarth, FireDual }, "Pyromancer's Training", "10% while fire attuned", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, "https://wiki.guildwars2.com/images/e/e6/Pyromancer%27s_Training.png", 0, GW2Builds.July2019Balance, DamageModifierMode.PvE),
+            new BuffDamageModifier(new long[] { 5585, SkillIDs.FireWater, SkillIDs.FireAir, SkillIDs.FireEarth, SkillIDs.FireDual }, "Pyromancer's Training", "10% while fire attuned", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, "https://wiki.guildwars2.com/images/e/e6/Pyromancer%27s_Training.png", 0, GW2Builds.July2019Balance, DamageModifierMode.PvE),
             new BuffDamageModifierTarget(737, "Burning Rage", "10% on burning target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, "https://wiki.guildwars2.com/images/b/bd/Burning_Rage.png", 0, GW2Builds.July2019Balance, DamageModifierMode.PvE),
             new BuffDamageModifierTarget(737, "Pyromancer's Training", "10% on burning target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, "https://wiki.guildwars2.com/images/e/e6/Pyromancer%27s_Training.png", GW2Builds.July2019Balance, GW2Builds.EndOfLife, DamageModifierMode.All),
             // Air
@@ -43,17 +43,17 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifierTarget(736, "Serrated Stones", "5% to bleeding target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, "https://wiki.guildwars2.com/images/6/60/Serrated_Stones.png", DamageModifierMode.All),
             // Water
             new DamageLogDamageModifier("Aquamancer's Training", "10% over 90% HP", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist,"https://wiki.guildwars2.com/images/8/81/Aquamancer%27s_Training.png", (x, log) => x.IsOverNinety, ByPresence, 0, GW2Builds.July2019Balance, DamageModifierMode.PvE),
-            new BuffDamageModifierTarget(738, new long[] { 5586, WaterAir, WaterEarth, WaterFire, WaterDual}, "Piercing Shards w/ Water", "20% on vuln target while on water", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, ByPresence, "https://wiki.guildwars2.com/images/4/4b/Piercing_Shards.png", GW2Builds.July2019Balance, GW2Builds.EndOfLife, DamageModifierMode.PvE),
-            new BuffDamageModifierTarget(738, new long[] { 5586, WaterAir, WaterEarth, WaterFire, WaterDual}, "Piercing Shards", "10% on vuln target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, ByAbsence, "https://wiki.guildwars2.com/images/4/4b/Piercing_Shards.png", GW2Builds.July2019Balance, GW2Builds.EndOfLife, DamageModifierMode.PvE),
-            new BuffDamageModifierTarget(738, new long[] { 5586, WaterAir, WaterEarth, WaterFire, WaterDual}, "Piercing Shards w/ Water", "10% on vuln target while on water", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, ByPresence, "https://wiki.guildwars2.com/images/4/4b/Piercing_Shards.png", GW2Builds.July2019Balance, GW2Builds.EndOfLife, DamageModifierMode.sPvPWvW),
-            new BuffDamageModifierTarget(738, new long[] { 5586, WaterAir, WaterEarth, WaterFire, WaterDual}, "Piercing Shards", "5% on vuln target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, ByAbsence, "https://wiki.guildwars2.com/images/4/4b/Piercing_Shards.png", GW2Builds.July2019Balance, GW2Builds.EndOfLife, DamageModifierMode.sPvPWvW),
-            new BuffDamageModifierTarget(738, new long[] { 5586, WaterAir, WaterEarth, WaterFire, WaterDual}, "Piercing Shards", "20% on vuln target while on water", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, ByPresence, "https://wiki.guildwars2.com/images/4/4b/Piercing_Shards.png", 0, GW2Builds.July2019Balance, DamageModifierMode.PvE),
+            new BuffDamageModifierTarget(738, new long[] { 5586, SkillIDs.WaterAir, SkillIDs.WaterEarth, SkillIDs.WaterFire, SkillIDs.WaterDual }, "Piercing Shards w/ Water", "20% on vuln target while on water", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, ByPresence, "https://wiki.guildwars2.com/images/4/4b/Piercing_Shards.png", GW2Builds.July2019Balance, GW2Builds.EndOfLife, DamageModifierMode.PvE),
+            new BuffDamageModifierTarget(738, new long[] { 5586, SkillIDs.WaterAir, SkillIDs.WaterEarth, SkillIDs.WaterFire, SkillIDs.WaterDual }, "Piercing Shards", "10% on vuln target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, ByAbsence, "https://wiki.guildwars2.com/images/4/4b/Piercing_Shards.png", GW2Builds.July2019Balance, GW2Builds.EndOfLife, DamageModifierMode.PvE),
+            new BuffDamageModifierTarget(738, new long[] { 5586, SkillIDs.WaterAir, SkillIDs.WaterEarth, SkillIDs.WaterFire, SkillIDs.WaterDual }, "Piercing Shards w/ Water", "10% on vuln target while on water", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, ByPresence, "https://wiki.guildwars2.com/images/4/4b/Piercing_Shards.png", GW2Builds.July2019Balance, GW2Builds.EndOfLife, DamageModifierMode.sPvPWvW),
+            new BuffDamageModifierTarget(738, new long[] { 5586, SkillIDs.WaterAir, SkillIDs.WaterEarth, SkillIDs.WaterFire, SkillIDs.WaterDual }, "Piercing Shards", "5% on vuln target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, ByAbsence, "https://wiki.guildwars2.com/images/4/4b/Piercing_Shards.png", GW2Builds.July2019Balance, GW2Builds.EndOfLife, DamageModifierMode.sPvPWvW),
+            new BuffDamageModifierTarget(738, new long[] { 5586, SkillIDs.WaterAir, SkillIDs.WaterEarth, SkillIDs.WaterFire, SkillIDs.WaterDual }, "Piercing Shards", "20% on vuln target while on water", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, ByPresence, "https://wiki.guildwars2.com/images/4/4b/Piercing_Shards.png", 0, GW2Builds.July2019Balance, DamageModifierMode.PvE),
             new DamageLogApproximateDamageModifier("Flow like Water", "10% over >75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, "https://wiki.guildwars2.com/images/0/0a/Flow_like_Water.png", (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, ByPresence, GW2Builds.July2019Balance, GW2Builds.February2020Balance, DamageModifierMode.All),
             new DamageLogApproximateDamageModifier("Flow like Water", "10% over >75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, "https://wiki.guildwars2.com/images/0/0a/Flow_like_Water.png", (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, ByPresence, GW2Builds.February2020Balance, GW2Builds.EndOfLife, DamageModifierMode.PvE),
             new DamageLogApproximateDamageModifier("Flow like Water", "5% over >75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, "https://wiki.guildwars2.com/images/0/0a/Flow_like_Water.png", (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, ByPresence, GW2Builds.February2020Balance, GW2Builds.EndOfLife, DamageModifierMode.sPvPWvW),
             //new DamageLogDamageModifier("Flow like Water", "10% over 75% HP", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ParseHelper.Source.Elementalist,"https://wiki.guildwars2.com/images/0/0a/Flow_like_Water.png", x => x.IsOverNinety, ByPresence, GW2Builds.July2019Balance, GW2Builds.EndOfLife),
             // Arcane
-            new BuffDamageModifier(NumberOfBoonsID, "Bountiful Power", "2% per boon", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, "https://wiki.guildwars2.com/images/7/75/Bountiful_Power.png", DamageModifierMode.All),
+            new BuffDamageModifier(SkillIDs.NumberOfBoons, "Bountiful Power", "2% per boon", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, "https://wiki.guildwars2.com/images/7/75/Bountiful_Power.png", DamageModifierMode.All),
         };
 
 
@@ -113,7 +113,7 @@ namespace GW2EIEvtcParser.EIData
 
         private static readonly HashSet<long> _elementalSwaps = new HashSet<long>
         {
-            5492,5493,5494, 5495, FireDual, FireWater, FireAir, FireEarth, WaterFire, WaterDual, WaterAir, WaterEarth, AirFire, AirWater, AirDual, AirEarth, EarthFire, EarthWater, EarthAir, EarthDual
+            5492,5493,5494, 5495, SkillIDs.FireDual, SkillIDs.FireWater, SkillIDs.FireAir, SkillIDs.FireEarth, SkillIDs.WaterFire, SkillIDs.WaterDual, SkillIDs.WaterAir, SkillIDs.WaterEarth, SkillIDs.AirFire, SkillIDs.AirWater, SkillIDs.AirDual, SkillIDs.AirEarth, SkillIDs.EarthFire, SkillIDs.EarthWater, SkillIDs.EarthAir, SkillIDs.EarthDual
         };
 
         public static bool IsElementalSwap(long id)
@@ -125,10 +125,10 @@ namespace GW2EIEvtcParser.EIData
         {
             var duals = new HashSet<long>
             {
-                FireDual,
-                WaterDual,
-                AirDual,
-                EarthDual,
+                SkillIDs.FireDual,
+                SkillIDs.WaterDual,
+                SkillIDs.AirDual,
+                SkillIDs.EarthDual,
             };
             var toClean = new HashSet<long>();
             foreach (AbstractBuffEvent c in buffsPerDst.Where(x => duals.Contains(x.BuffID)))
@@ -138,7 +138,7 @@ namespace GW2EIEvtcParser.EIData
             }
             foreach (long buffID in toClean)
             {
-                buffsByID[buffID].RemoveAll(x => x.BuffID == NoBuff);
+                buffsByID[buffID].RemoveAll(x => x.BuffID == SkillIDs.NoBuff);
             }
         }
 

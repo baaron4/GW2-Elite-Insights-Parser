@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.EIData
             long[] reses = { 0, 0 };
             foreach (AbstractCastEvent cl in cls)
             {
-                if (cl.SkillId == SkillItem.ResurrectId)
+                if (cl.SkillId == SkillIDs.ResurrectId)
                 {
                     reses[0]++;
                     reses[1] += cl.ActualDuration;

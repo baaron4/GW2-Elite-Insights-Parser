@@ -21,7 +21,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
-            new BuffDamageModifier(NumberOfBoonsID, "Reinforced Potency", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Herald, ByStack, "https://wiki.guildwars2.com/images/0/0a/Envoy_of_Sustenance.png", DamageModifierMode.All),
+            new BuffDamageModifier(SkillIDs.NumberOfBoons, "Reinforced Potency", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Herald, ByStack, "https://wiki.guildwars2.com/images/0/0a/Envoy_of_Sustenance.png", DamageModifierMode.All),
             new BuffDamageModifier(51653 , "Burst of Strength", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Herald, ByPresence, "https://wiki.guildwars2.com/images/7/7b/Burst_of_Strength.png", GW2Builds.August2018Balance, GW2Builds.July2019Balance, DamageModifierMode.All),
             new BuffDamageModifier(51653 , "Burst of Strength", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Herald, ByPresence, "https://wiki.guildwars2.com/images/7/7b/Burst_of_Strength.png", GW2Builds.July2019Balance, GW2Builds.EndOfLife, DamageModifierMode.PvE),
             new BuffDamageModifier(51653 , "Burst of Strength", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Herald, ByPresence, "https://wiki.guildwars2.com/images/7/7b/Burst_of_Strength.png", GW2Builds.July2019Balance, GW2Builds.February2020Balance, DamageModifierMode.sPvPWvW),
