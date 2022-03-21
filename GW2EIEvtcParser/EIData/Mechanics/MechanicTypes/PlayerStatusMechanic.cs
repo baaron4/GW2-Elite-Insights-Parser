@@ -26,19 +26,19 @@ namespace GW2EIEvtcParser.EIData
                 var cList = new List<long>();
                 switch (SkillId)
                 {
-                    case SkillIDs.DeathId:
+                    case SkillIDs.Death:
                         cList = combatData.GetDeadEvents(p.AgentItem).Select(x => x.Time).ToList();
                         break;
-                    case SkillIDs.DCId:
+                    case SkillIDs.Despawn:
                         cList = combatData.GetDespawnEvents(p.AgentItem).Select(x => x.Time).ToList();
                         break;
-                    case SkillIDs.RespawnId:
+                    case SkillIDs.Respawn:
                         cList = combatData.GetSpawnEvents(p.AgentItem).Select(x => x.Time).ToList();
                         break;
-                    case SkillIDs.AliveId:
+                    case SkillIDs.Alive:
                         cList = combatData.GetAliveEvents(p.AgentItem).Select(x => x.Time).ToList();
                         break;
-                    case SkillIDs.DownId:
+                    case SkillIDs.Down:
                         cList = combatData.GetDownEvents(p.AgentItem).Select(x => x.Time).ToList();
                         var downByVaporForm = combatData.GetBuffRemoveAllData(5620).Where(x => x.To == p.AgentItem).Select(x => x.Time).ToList();
                         foreach (long time in downByVaporForm)
