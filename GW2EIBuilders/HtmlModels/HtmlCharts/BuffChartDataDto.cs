@@ -12,11 +12,44 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts
         public bool Visible { get; set; }
         public List<object[]> States { get; set; }
 
+        private static string GetBuffColor(string name)
+        {
+            switch (name)
+            {
+
+                case "Aegis": return "rgb(102,255,255)";
+                case "Fury": return "rgb(255,153,0)";
+                case "Might": return "rgb(153,0,0)";
+                case "Protection": return "rgb(102,255,255)";
+                case "Quickness": return "rgb(255,0,255)";
+                case "Regeneration": return "rgb(0,204,0)";
+                case "Resistance": return "rgb(255, 153, 102)";
+                case "Retaliation": return "rgb(255, 51, 0)";
+                case "Resolution": return "rgb(255, 51, 0)";
+                case "Stability": return "rgb(153, 102, 0)";
+                case "Swiftness": return "rgb(255,255,0)";
+                case "Vigor": return "rgb(102, 153, 0)";
+                case "Alacrity": return "rgb(0,102,255)";
+
+                case "Glyph of Empowerment": return "rgb(204, 153, 0)";
+                case "Sun Spirit": return "rgb(255, 102, 0)";
+                case "Banner of Strength": return "rgb(153, 0, 0)";
+                case "Banner of Discipline": return "rgb(0, 51, 0)";
+                case "Spotter": return "rgb(0,255,0)";
+                case "Stone Spirit": return "rgb(204, 102, 0)";
+                case "Storm Spirit": return "rgb(102, 0, 102)";
+                case "Empower Allies": return "rgb(255, 153, 0)";
+                default:
+                    return "";
+            }
+
+        }
+
         private BuffChartDataDto(BuffsGraphModel bgm, List<Segment> bChart, PhaseData phase)
         {
             Id = bgm.Buff.ID;
             Visible = (bgm.Buff.Name == "Might" || bgm.Buff.Name == "Quickness" || bgm.Buff.Name == "Vulnerability");
-            Color = HTMLBuilder.GetLink("Color-" + bgm.Buff.Name);
+            Color = GetBuffColor(bgm.Buff.Name);
             States = Segment.ToObjectList(bChart, phase.Start, phase.End);
         }
 
