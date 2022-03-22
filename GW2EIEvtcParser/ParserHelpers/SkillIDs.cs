@@ -84,10 +84,16 @@ namespace GW2EIEvtcParser
         public const long Bandage = 1175;
         public const long Quickness = 1187;
         public const long Determined3892 = 3892;
+        public const long ShockingAura = 5577;
+        public const long FrostAura = 5579;
+        public const long FireAura = 5677;
+        public const long MagneticAura = 5684;
         public const long SuperSpeed = 5974;
         public const long HideInShadows = 10269;
+        public const long ChaosAura = 10332;
         public const long Stealth = 13017;
         public const long Torment = 19426;
+        public const long LightAura = 25518;
         public const long Slow = 26766;
         public const long Resistance = 26980;
         public const long CeleritasSpores = 27048;
@@ -97,6 +103,7 @@ namespace GW2EIEvtcParser
         public const long Exposed31589 = 31589;
         public const long SpawnProtection = 34113;
         public const long Unblockable = 36781;
+        public const long DarkAura = 39978;
         public const long FireMajor = 40926;
         public const long WaterDual = 41166;
         public const long AirMajor = 41692;
