@@ -21,6 +21,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
         public static JsonMinions BuildJsonMinions(Minions minions, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
             var jsonMinions = new JsonMinions();
+            jsonMinions.Id = minions.ID;
             IReadOnlyList<PhaseData> phases = log.FightData.GetNonDummyPhases(log);
             bool isEnemyMinion = !log.FriendlyAgents.Contains(minions.Master.AgentItem);
             //
