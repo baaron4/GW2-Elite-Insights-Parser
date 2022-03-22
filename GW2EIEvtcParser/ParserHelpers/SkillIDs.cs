@@ -64,19 +64,39 @@ namespace GW2EIEvtcParser
         public const long Might = 740;
         public const long Weakness = 742;
         public const long Aegis = 743;
+        public const long Invulnerability757 = 757;
+        public const long Determined762 = 762;
+        public const long Downed = 770;
+        public const long Determined788 = 788;
         public const long Fear = 791;
+        public const long Invulnerability801 = 801;
+        public const long Daze = 833;
+        public const long Resurrection = 848;
         public const long Confusion = 861;
+        public const long Stun = 872;
         public const long Retaliation = 873;
         public const long Resolution = 873;
+        public const long Revealed = 890;
+        public const long Determined895 = 895;
         public const long Resurrect = 1066;
         public const long Stability = 1122;
+        public const long Encumbered = 1159;
         public const long Bandage = 1175;
         public const long Quickness = 1187;
+        public const long Determined3892 = 3892;
+        public const long SuperSpeed = 5974;
+        public const long HideInShadows = 10269;
+        public const long Stealth = 13017;
         public const long Torment = 19426;
         public const long Slow = 26766;
         public const long Resistance = 26980;
+        public const long CeleritasSpores = 27048;
         public const long Taunt = 27705;
         public const long Alacrity = 30328;
+        public const long Determined31450 = 31450;
+        public const long Exposed31589 = 31589;
+        public const long SpawnProtection = 34113;
+        public const long Unblockable = 36781;
         public const long FireMajor = 40926;
         public const long WaterDual = 41166;
         public const long AirMajor = 41692;
@@ -89,6 +109,10 @@ namespace GW2EIEvtcParser
         public const long EarthMajor = 43740;
         public const long EarthMinor = 44822;
         public const long EarthDual = 44857;
+        public const long Exhaustion = 46842;
+        public const long Exposed48209 = 48209;
+        public const long Determined52271 = 52271;
+        public const long Invulnerability56227 = 56227;
 
     }
 
