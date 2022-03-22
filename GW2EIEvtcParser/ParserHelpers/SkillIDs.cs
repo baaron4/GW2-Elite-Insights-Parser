@@ -91,6 +91,14 @@ namespace GW2EIEvtcParser
         public const long SuperSpeed = 5974;
         public const long HideInShadows = 10269;
         public const long ChaosAura = 10332;
+        public const long PowerSuit = 12326;
+        public const long ReaperOfGrenth = 12366;
+        public const long AvatarOfMelandru = 12368;
+        public const long BecomeTheWolf = 12393;
+        public const long BecomeTheSnowLeopard = 12400;
+        public const long BecomeTheRaven = 12405;
+        public const long BecomeTheBear = 12426;
+        public const long TakeRoot = 12459;
         public const long Stealth = 13017;
         public const long Torment = 19426;
         public const long LightAura = 25518;
@@ -113,6 +121,7 @@ namespace GW2EIEvtcParser
         public const long WaterMajor = 43236;
         public const long WaterMinor = 43370;
         public const long FireDual = 43470;
+        public const long Charrzooka = 43503;
         public const long EarthMajor = 43740;
         public const long EarthMinor = 44822;
         public const long EarthDual = 44857;
