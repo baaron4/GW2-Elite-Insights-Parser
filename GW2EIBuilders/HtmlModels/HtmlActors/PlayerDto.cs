@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIBuilders.HtmlModels.HTMLActors
 {
@@ -66,53 +67,26 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
             BuildWeaponSets(actor, log);
         }
 
-        private static void BuildWeaponSets(IReadOnlyList<string> weps, int offset, List<string> set1, List<string> set2)
+        private static void BuildWeaponSets((string mh, string oh) set, List<string> listToSet)
         {
-
-            for (int j = 0; j < 4; j++)
+            if (set.mh == WeaponSets.Unknown && set.oh == WeaponSets.Unknown)
             {
-                string wep = weps[j + offset];
-                if (wep != null)
-                {
-                    if (wep != "2Hand")
-                    {
-                        if (j > 1)
-                        {
-                            set2.Add(wep);
-                        }
-                        else
-                        {
-                            set1.Add(wep);
-                        }
-                    }
-                }
-                else
-                {
-                    if (j > 1)
-                    {
-                        set2.Add("Unknown");
-                    }
-                    else
-                    {
-                        set1.Add("Unknown");
-                    }
-                }
+                return;
             }
-            if (set1[0] == "Unknown" && set1[1] == "Unknown")
+            listToSet.Add(set.mh);
+            if (set.oh != WeaponSets.TwoHand)
             {
-                set1.Clear();
-            }
-            if (set2[0] == "Unknown" && set2[1] == "Unknown")
-            {
-                set2.Clear();
+                listToSet.Add(set.oh);
             }
         }
 
         private void BuildWeaponSets(AbstractSingleActor actor, ParsedEvtcLog log)
         {
-            IReadOnlyList<string> weps = actor.GetWeaponsArray(log);
-            BuildWeaponSets(weps, 0, L1Set, L2Set);
-            BuildWeaponSets(weps, 4, A1Set, A2Set);
+            WeaponSets weps = actor.GetWeaponSets(log);
+            BuildWeaponSets(weps.LandSet1, L1Set);
+            BuildWeaponSets(weps.LandSet2, L2Set);
+            BuildWeaponSets(weps.WaterSet1, A1Set);
+            BuildWeaponSets(weps.WaterSet2, A2Set);
         }
     }
 }

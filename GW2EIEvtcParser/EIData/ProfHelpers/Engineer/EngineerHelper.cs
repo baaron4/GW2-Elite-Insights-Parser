@@ -12,7 +12,7 @@ namespace GW2EIEvtcParser.EIData
     {
         private class EngineerKitFinder : WeaponSwapCastFinder
         {
-            public EngineerKitFinder(long skillID, long icd, ulong minBuild = GW2Builds.StartOfLife, ulong maxBuild = GW2Builds.EndOfLife) : base(skillID, SkillItem.KitSet, icd, minBuild, maxBuild, (swap, combatData, skillData) =>
+            public EngineerKitFinder(long skillID, long icd, ulong minBuild = GW2Builds.StartOfLife, ulong maxBuild = GW2Builds.EndOfLife) : base(skillID, ParserHelper.WeaponSetIDs.KitSet, icd, minBuild, maxBuild, (swap, combatData, skillData) =>
             {
                 SkillItem skill = skillData.Get(skillID);
                 if (skill.ApiSkill == null || skill.ApiSkill.BundleSkills == null)

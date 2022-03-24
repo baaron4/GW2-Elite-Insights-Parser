@@ -62,6 +62,16 @@ namespace GW2EIEvtcParser
             internal const int EndOfLife = int.MaxValue;
         }
 
+        public static class WeaponSetIDs
+        {
+            public const int FirstLandSet = 4;
+            public const int SecondLandSet = 5;
+            public const int FirstWaterSet = 0;
+            public const int SecondWaterSet = 1;
+            public const int TransformSet = 3;
+            public const int KitSet = 2;
+        }
+
         internal const int PhaseTimeLimit = 2000;
 
 

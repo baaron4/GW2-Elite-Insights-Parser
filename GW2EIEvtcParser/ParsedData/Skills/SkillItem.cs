@@ -37,12 +37,6 @@ namespace GW2EIEvtcParser.ParsedData
         public const long AliveId = -6;
         public const long RespawnId = -7;
 
-        public const int FirstLandSet = 4;
-        public const int SecondLandSet = 5;
-        public const int FirstWaterSet = 0;
-        public const int SecondWaterSet = 1;
-        public const int TransformSet = 3;
-        public const int KitSet = 2;
 
         private static readonly Dictionary<long, string> _overrideNames = new Dictionary<long, string>()
         {
@@ -348,64 +342,19 @@ namespace GW2EIEvtcParser.ParsedData
             // we started on a proper weapon set
             if (_weaponDescriptor != null)
             {
-                int firstSwap = swaps.Count > 0 ? swaps[0] : -1;
-                if (_weaponDescriptor.IsLand)
-                {
-                    // if the first swap is not a land set that means the next time we get to a land set was the first set to begin with
-                    if (firstSwap != FirstLandSet && firstSwap != SecondLandSet)
-                    {
-                        swapped = swaps.Exists(x => x == FirstLandSet || x == SecondLandSet) ? swaps.First(x => x == FirstLandSet || x == SecondLandSet) : FirstLandSet;
-                    }
-                    else
-                    {
-                        swapped = firstSwap == FirstLandSet ? SecondLandSet : FirstLandSet;
-                    }
-                }
-                else
-                {
-                    // if the first swap is not a water set that means the next time we get to a water set was the first set to begin with
-                    if (firstSwap != FirstWaterSet && firstSwap != SecondWaterSet)
-                    {
-                        swapped = swaps.Exists(x => x == FirstWaterSet || x == SecondWaterSet) ? swaps.First(x => x == FirstWaterSet || x == SecondWaterSet) : FirstWaterSet;
-                    }
-                    else
-                    {
-                        swapped = firstSwap == FirstWaterSet ? SecondWaterSet : FirstWaterSet;
-                    }
-                }
+                swapped = _weaponDescriptor.FindWeaponSlot(swaps);
             }
             return swapped;
         }
 
-        internal bool EstimateWeapons(string[] weapons, int swapped, bool validForCurrentSwap)
+        internal bool EstimateWeapons(WeaponSets weaponSets, int swapped, bool validForCurrentSwap)
         {
-            if (weapons.Length != 8)
-            {
-                throw new InvalidOperationException("Invalid count in weapons array");
-            }
-            int id = swapped == FirstLandSet ? 0 : swapped == SecondLandSet ? 2 : swapped == FirstWaterSet ? 4 : swapped == SecondWaterSet ? 6 : -1;
-            if (_weaponDescriptor == null || id == -1 || !validForCurrentSwap)
+            bool keep = swapped == ParserHelper.WeaponSetIDs.FirstLandSet || swapped == ParserHelper.WeaponSetIDs.SecondLandSet || swapped == ParserHelper.WeaponSetIDs.FirstWaterSet || swapped == ParserHelper.WeaponSetIDs.SecondWaterSet;
+            if (_weaponDescriptor == null || !keep || !validForCurrentSwap)
             {
                 return false;
             }
-            if (_weaponDescriptor.WeaponSlot == WeaponDescriptor.Hand.Dual)
-            {
-                weapons[id] = ApiSkill.WeaponType;
-                weapons[id + 1] = ApiSkill.DualWield;
-            }
-            else if (_weaponDescriptor.WeaponSlot == WeaponDescriptor.Hand.TwoHand)
-            {
-                weapons[id] = ApiSkill.WeaponType;
-                weapons[id + 1] = "2Hand";
-            }
-            else if (_weaponDescriptor.WeaponSlot == WeaponDescriptor.Hand.MainHand)
-            {
-                weapons[id] = ApiSkill.WeaponType;
-            }
-            else
-            {
-                weapons[id + 1] = ApiSkill.WeaponType;
-            }
+            weaponSets.SetWeapons(_weaponDescriptor, ApiSkill, swapped);
             return true;
         }
 
