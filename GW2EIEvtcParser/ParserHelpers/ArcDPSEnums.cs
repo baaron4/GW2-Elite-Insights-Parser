@@ -651,6 +651,13 @@ namespace GW2EIEvtcParser
             DoubtDemon = 23268,
             FearDemon = 23264,
             GuiltDemon = 23252,
+            // Open world Soo-Won
+            SooWonTail = 51756,
+            VoidGiantOW = 24310,
+            VoidTimeCasterOW = 24586,
+            VoidBrandstalkerOW = 24951,
+            VoidColdsteelOW = 23791,
+            VoidObliteratorOW = 24947,
             //
             Unknown = int.MaxValue,
         };
@@ -750,6 +757,8 @@ namespace GW2EIEvtcParser
             MedGolem = 19645,
             ConditionGolem = 16174,
             PowerGolem = 16176,
+            // Open world
+            SooWonOW = 35552,
             //
             Unknown = int.MaxValue,
         };
