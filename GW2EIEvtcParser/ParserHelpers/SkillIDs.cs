@@ -100,6 +100,9 @@ namespace GW2EIEvtcParser
         public const long BecomeTheBear = 12426;
         public const long TakeRoot = 12459;
         public const long Stealth = 13017;
+        public const long MinorBorderlandsBloodlust = 14772;
+        public const long MajorBorderlandsBloodlust = 14773;
+        public const long SuperiorBorderlandsBloodlust = 14774;
         public const long Torment = 19426;
         public const long LightAura = 25518;
         public const long Slow = 26766;
@@ -109,8 +112,12 @@ namespace GW2EIEvtcParser
         public const long Alacrity = 30328;
         public const long Determined31450 = 31450;
         public const long Exposed31589 = 31589;
+        public const long BlessingOfElements = 33120;
+        public const long GuildItemResearch = 33833;
+        public const long FlamesEmbrace = 34031;
         public const long SpawnProtection = 34113;
         public const long Unblockable = 36781;
+        public const long CrystallineHeart = 37657;
         public const long DarkAura = 39978;
         public const long FireMajor = 40926;
         public const long WaterDual = 41166;

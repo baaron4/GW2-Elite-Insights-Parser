@@ -297,15 +297,15 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Reaper of Grenth", SkillIDs.ReaperOfGrenth, Source.Common, BuffClassification.Other, "https://wiki.guildwars2.com/images/0/07/Reaper_of_Grenth.png"),
                 new Buff("Charrzooka",SkillIDs.Charrzooka, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/1/17/Charrzooka.png"),
                 //
-                new Buff("Guild Item Research", 33833, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/c/c6/Guild_Magic_Find_Banner_Boost.png"),
+                new Buff("Guild Item Research", SkillIDs.GuildItemResearch, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/c/c6/Guild_Magic_Find_Banner_Boost.png"),
                 //
-                new Buff("Crystalline Heart", 37657, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/5/56/Crystalline_Heart.png"),
+                new Buff("Crystalline Heart", SkillIDs.CrystallineHeart, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/5/56/Crystalline_Heart.png"),
                 // WvW
-                new Buff("Minor Borderlands Bloodlust", 14772, Source.Common, BuffClassification.Support,"https://wiki.guildwars2.com/images/f/f7/Major_Borderlands_Bloodlust.png"),
-                new Buff("Major Borderlands Bloodlust", 14773, Source.Common, BuffClassification.Support,"https://wiki.guildwars2.com/images/f/f7/Major_Borderlands_Bloodlust.png"),
-                new Buff("Superior Borderlands Bloodlust", 14774, Source.Common, BuffClassification.Support,"https://wiki.guildwars2.com/images/f/f7/Major_Borderlands_Bloodlust.png"),
-                new Buff("Blessing of Elements", 33120, Source.Common, BuffClassification.Support,"https://wiki.guildwars2.com/images/3/3c/Blessing_of_Air.png"),
-                new Buff("Flame's Embrace", 34031, Source.Common, BuffClassification.Support,"https://wiki.guildwars2.com/images/5/53/Flame%27s_Embrace.png"),
+                new Buff("Minor Borderlands Bloodlust", SkillIDs.MinorBorderlandsBloodlust, Source.Common, BuffClassification.Support,"https://wiki.guildwars2.com/images/f/f7/Major_Borderlands_Bloodlust.png"),
+                new Buff("Major Borderlands Bloodlust", SkillIDs.MajorBorderlandsBloodlust, Source.Common, BuffClassification.Support,"https://wiki.guildwars2.com/images/f/f7/Major_Borderlands_Bloodlust.png"),
+                new Buff("Superior Borderlands Bloodlust", SkillIDs.SuperiorBorderlandsBloodlust, Source.Common, BuffClassification.Support,"https://wiki.guildwars2.com/images/f/f7/Major_Borderlands_Bloodlust.png"),
+                new Buff("Blessing of Elements", SkillIDs.BlessingOfElements, Source.Common, BuffClassification.Support,"https://wiki.guildwars2.com/images/3/3c/Blessing_of_Air.png"),
+                new Buff("Flame's Embrace", SkillIDs.FlamesEmbrace, Source.Common, BuffClassification.Support,"https://wiki.guildwars2.com/images/5/53/Flame%27s_Embrace.png"),
         };
 
         internal static readonly List<Buff> Gear = new List<Buff>
