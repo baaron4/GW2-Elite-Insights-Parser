@@ -347,7 +347,7 @@ namespace GW2EIEvtcParser
         private const int TheDragonVoidKralkatorik = -19;
         private const int TheDragonVoidMordremoth = -20;
         private const int TheDragonVoidJormag = -21;
-        private const int TheDragonVoidPrimordious = -22;
+        private const int TheDragonVoidPrimordus = -22;
 
 
         //
@@ -723,7 +723,7 @@ namespace GW2EIEvtcParser
             TheDragonVoidJormag = ArcDPSEnums.TheDragonVoidJormag,
             TheDragonVoidKralkatorrik = ArcDPSEnums.TheDragonVoidKralkatorik,
             TheDragonVoidSooWon = ArcDPSEnums.TheDragonVoidSooWon,
-            TheDragonVoidPrimordious = ArcDPSEnums.TheDragonVoidPrimordious,
+            TheDragonVoidPrimordus = ArcDPSEnums.TheDragonVoidPrimordus,
             TheDragonVoidMordremoth = ArcDPSEnums.TheDragonVoidMordremoth,
             //VoidAmalgamate = 
             // Fract

@@ -733,7 +733,7 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/x9id5iH.png";
                 case ArcDPSEnums.TargetID.TheDragonVoidMordremoth:
                     return "https://i.imgur.com/6gec61w.png";
-                case ArcDPSEnums.TargetID.TheDragonVoidPrimordious:
+                case ArcDPSEnums.TargetID.TheDragonVoidPrimordus:
                     return "https://i.imgur.com/O77QoPM.png";
                 case ArcDPSEnums.TargetID.TheDragonVoidSooWon:
                     return "https://i.imgur.com/NHs4OFG.png";

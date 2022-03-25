@@ -55,7 +55,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         phases[0].AddTarget(target);
                         subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Mordremoth", target));
                         break;
-                    case (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordious:
+                    case (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus:
                         phases[0].AddTarget(target);
                         subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Primordious", target));
                         break;
@@ -119,7 +119,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TargetID.TheDragonVoidJormag,
                 (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik,
                 (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth,
-                (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordious,
+                (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus,
                 (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon,
                 (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan,
                 (int)ArcDPSEnums.TrashID.VoidSaltsprayDragon,
@@ -184,7 +184,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var attackTargetEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).ToList();
             var idsToUse = new List<ArcDPSEnums.TargetID> { 
                 ArcDPSEnums.TargetID.TheDragonVoidJormag,
-                ArcDPSEnums.TargetID.TheDragonVoidPrimordious,
+                ArcDPSEnums.TargetID.TheDragonVoidPrimordus,
                 ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik, 
                 ArcDPSEnums.TargetID.TheDragonVoidMordremoth, 
                 ArcDPSEnums.TargetID.TheDragonVoidZhaitan,
@@ -275,7 +275,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth:
                         target.OverrideName("The MordremothVoid");
                         break;
-                    case (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordious:
+                    case (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus:
                         target.OverrideName("The PrimordusVoid");
                         break;
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon:
