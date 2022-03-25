@@ -925,11 +925,11 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.VoidGiant:
                 case ArcDPSEnums.TrashID.VoidObliterator:
                 case ArcDPSEnums.TrashID.VoidTimeCaster:
-                case ArcDPSEnums.TrashID.VoidGiantOW:
-                case ArcDPSEnums.TrashID.VoidTimeCasterOW:
-                case ArcDPSEnums.TrashID.VoidBrandstalkerOW:
-                case ArcDPSEnums.TrashID.VoidColdsteelOW:
-                case ArcDPSEnums.TrashID.VoidObliteratorOW:
+                case ArcDPSEnums.TrashID.VoidGiant2:
+                case ArcDPSEnums.TrashID.VoidTimeCaster2:
+                case ArcDPSEnums.TrashID.VoidBrandstalker:
+                case ArcDPSEnums.TrashID.VoidColdsteel2:
+                case ArcDPSEnums.TrashID.VoidObliterator2:
                     return "https://i.imgur.com/k79t7ZA.png";
                 case ArcDPSEnums.TrashID.HandOfErosion:
                 case ArcDPSEnums.TrashID.HandOfEruption:

@@ -132,8 +132,8 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
                     case 5:
                         phase.Name = "First Champions";
                         phase.AddTargets(Targets.Where(x =>
-                            x.ID == (int)ArcDPSEnums.TrashID.VoidGiantOW ||
-                            x.ID == (int)ArcDPSEnums.TrashID.VoidTimeCasterOW));
+                            x.ID == (int)ArcDPSEnums.TrashID.VoidGiant2 ||
+                            x.ID == (int)ArcDPSEnums.TrashID.VoidTimeCaster2));
                         break;
                     case 6:
                         phase.Name = "60% - 40%";
@@ -156,9 +156,9 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
                     case 10:
                         phase.Name = "Second Champions";
                         phase.AddTargets(Targets.Where(x =>
-                            x.ID == (int)ArcDPSEnums.TrashID.VoidBrandstalkerOW ||
-                            x.ID == (int)ArcDPSEnums.TrashID.VoidColdsteelOW ||
-                            x.ID == (int)ArcDPSEnums.TrashID.VoidObliteratorOW));
+                            x.ID == (int)ArcDPSEnums.TrashID.VoidBrandstalker ||
+                            x.ID == (int)ArcDPSEnums.TrashID.VoidColdsteel2 ||
+                            x.ID == (int)ArcDPSEnums.TrashID.VoidObliterator2));
                         break;
                     case 11:
                         phase.Name = "20% - 0%";
@@ -211,11 +211,11 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
             {
                 (int)ArcDPSEnums.TargetID.SooWonOW,
                 (int)ArcDPSEnums.TrashID.SooWonTail,
-                (int)ArcDPSEnums.TrashID.VoidGiantOW,
-                (int)ArcDPSEnums.TrashID.VoidTimeCasterOW,
-                (int)ArcDPSEnums.TrashID.VoidBrandstalkerOW,
-                (int)ArcDPSEnums.TrashID.VoidColdsteelOW,
-                (int)ArcDPSEnums.TrashID.VoidObliteratorOW,
+                (int)ArcDPSEnums.TrashID.VoidGiant2,
+                (int)ArcDPSEnums.TrashID.VoidTimeCaster2,
+                (int)ArcDPSEnums.TrashID.VoidBrandstalker,
+                (int)ArcDPSEnums.TrashID.VoidColdsteel2,
+                (int)ArcDPSEnums.TrashID.VoidObliterator2,
             };
         }
 
@@ -225,17 +225,59 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
             {
                 (int)ArcDPSEnums.TargetID.SooWonOW,
                 (int)ArcDPSEnums.TrashID.SooWonTail,
-                (int)ArcDPSEnums.TrashID.VoidGiantOW,
-                (int)ArcDPSEnums.TrashID.VoidTimeCasterOW,
-                (int)ArcDPSEnums.TrashID.VoidBrandstalkerOW,
-                (int)ArcDPSEnums.TrashID.VoidColdsteelOW,
-                (int)ArcDPSEnums.TrashID.VoidObliteratorOW,
+                (int)ArcDPSEnums.TrashID.VoidGiant2,
+                (int)ArcDPSEnums.TrashID.VoidTimeCaster2,
+                (int)ArcDPSEnums.TrashID.VoidBrandstalker,
+                (int)ArcDPSEnums.TrashID.VoidColdsteel2,
+                (int)ArcDPSEnums.TrashID.VoidObliterator2,
             };
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID> { };
+            return new List<ArcDPSEnums.TrashID>
+            {
+                ArcDPSEnums.TrashID.VoidAbomination,
+                ArcDPSEnums.TrashID.VoidAbomination2,
+                ArcDPSEnums.TrashID.VoidBomber,
+                ArcDPSEnums.TrashID.VoidBrandbeast,
+                ArcDPSEnums.TrashID.VoidBrandcharger1,
+                ArcDPSEnums.TrashID.VoidBrandcharger2,
+                ArcDPSEnums.TrashID.VoidBrandfang1,
+                ArcDPSEnums.TrashID.VoidBrandfang2,
+                ArcDPSEnums.TrashID.VoidBrandscale1,
+                ArcDPSEnums.TrashID.VoidBrandscale2,
+                ArcDPSEnums.TrashID.VoidColdsteel,
+                ArcDPSEnums.TrashID.VoidColdsteel3,
+                ArcDPSEnums.TrashID.VoidCorpseknitter1,
+                ArcDPSEnums.TrashID.VoidCorpseknitter2,
+                ArcDPSEnums.TrashID.VoidDespoiler1,
+                ArcDPSEnums.TrashID.VoidDespoiler2,
+                ArcDPSEnums.TrashID.VoidFiend1,
+                ArcDPSEnums.TrashID.VoidFiend2,
+                ArcDPSEnums.TrashID.VoidFoulmaw,
+                ArcDPSEnums.TrashID.VoidFrostwing,
+                ArcDPSEnums.TrashID.VoidGlacier1,
+                ArcDPSEnums.TrashID.VoidGlacier2,
+                ArcDPSEnums.TrashID.VoidInfested1,
+                ArcDPSEnums.TrashID.VoidInfested2,
+                ArcDPSEnums.TrashID.VoidMelter1,
+                ArcDPSEnums.TrashID.VoidMelter2,
+                ArcDPSEnums.TrashID.VoidRimewolf1,
+                ArcDPSEnums.TrashID.VoidRimewolf2,
+                ArcDPSEnums.TrashID.VoidRotspinner1,
+                ArcDPSEnums.TrashID.VoidRotswarmer,
+                ArcDPSEnums.TrashID.VoidStorm,
+                ArcDPSEnums.TrashID.VoidStormseer,
+                ArcDPSEnums.TrashID.VoidStormseer2,
+                ArcDPSEnums.TrashID.VoidStormseer3,
+                ArcDPSEnums.TrashID.VoidTangler,
+                ArcDPSEnums.TrashID.VoidTangler2,
+                ArcDPSEnums.TrashID.VoidThornheart1,
+                ArcDPSEnums.TrashID.VoidThornheart2,
+                ArcDPSEnums.TrashID.VoidWarforged2,
+                ArcDPSEnums.TrashID.VoidWorm,
+            };
         }
     }
 }
