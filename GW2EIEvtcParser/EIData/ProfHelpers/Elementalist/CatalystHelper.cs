@@ -25,7 +25,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
-            new BuffDamageModifier(62931, "Flame Wheel", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, "https://wiki.guildwars2.com/images/f/f3/Flame_Wheel.png", GW2Builds.EODBeta2, GW2Builds.EndOfLife, DamageModifierMode.All),
+            new BuffDamageModifier(62931, "Flame Wheel", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, "https://wiki.guildwars2.com/images/f/f3/Flame_Wheel.png", GW2Builds.EODBeta2, GW2Builds.March2022Balance2, DamageModifierMode.All),
+            new BuffDamageModifier(62931, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, "https://wiki.guildwars2.com/images/f/f3/Flame_Wheel.png", GW2Builds.March2022Balance2, GW2Builds.EndOfLife, DamageModifierMode.All),
             new BuffDamageModifier(62805, "Relentless Fire", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, "https://wiki.guildwars2.com/images/7/70/Relentless_Fire.png", GW2Builds.EODBeta2, GW2Builds.March2022Balance, DamageModifierMode.All),
             new BuffDamageModifier(62805, "Relentless Fire", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, "https://wiki.guildwars2.com/images/7/70/Relentless_Fire.png", GW2Builds.March2022Balance, GW2Builds.EndOfLife, DamageModifierMode.PvE),
             new BuffDamageModifier(62805, "Relentless Fire", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, "https://wiki.guildwars2.com/images/7/70/Relentless_Fire.png", GW2Builds.March2022Balance, GW2Builds.EndOfLife, DamageModifierMode.sPvPWvW),
