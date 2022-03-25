@@ -10,6 +10,7 @@
             WvW,
             Golem,
             Story,
+            OpenWorld,
             UnknownEncounter,
             Unknown
         };
@@ -47,6 +48,8 @@
             Golem,
             //
             Story,
+            //
+            OpenWorld,
             //
             UnknownEncounter,
             Unknown
