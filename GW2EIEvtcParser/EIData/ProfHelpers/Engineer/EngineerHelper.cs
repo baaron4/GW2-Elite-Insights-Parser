@@ -105,6 +105,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Explosive Entrance",59579, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/33/Explosive_Entrance.png", GW2Builds.February2020Balance, GW2Builds.EndOfLife),
                 new Buff("Explosive Temper",59528, Source.Engineer, BuffStackType.Stacking, 10, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/c1/Explosive_Temper.png", GW2Builds.February2020Balance, GW2Builds.EndOfLife),
                 new Buff("Big Boomer",59601, Source.Engineer, BuffStackType.Queue, 3, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/83/Big_Boomer.png"),
+                new Buff("Med Kit",5943, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/14/Med_Kit.png"),
                 new Buff("Med Kit Bonus",50393, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/14/Med_Kit.png"),
 
         };
