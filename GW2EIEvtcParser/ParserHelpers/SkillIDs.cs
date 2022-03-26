@@ -89,6 +89,12 @@ namespace GW2EIEvtcParser
         public const long FireAura = 5677;
         public const long MagneticAura = 5684;
         public const long SuperSpeed = 5974;
+        public const long SigilOfBloodlust = 9286;
+        public const long SigilOfCorruption = 9374;
+        public const long SigilOfPerception = 9385;
+        public const long SigilOfLife = 9386;
+        public const long SigilOfBenevolence = 9398;
+        public const long SigilOfDoom = 9441;
         public const long HideInShadows = 10269;
         public const long ChaosAura = 10332;
         public const long PowerSuit = 12326;
@@ -104,6 +110,7 @@ namespace GW2EIEvtcParser
         public const long MajorBorderlandsBloodlust = 14773;
         public const long SuperiorBorderlandsBloodlust = 14774;
         public const long Torment = 19426;
+        public const long SigilOfMomentum = 22144;
         public const long LightAura = 25518;
         public const long Slow = 26766;
         public const long Resistance = 26980;
@@ -113,11 +120,13 @@ namespace GW2EIEvtcParser
         public const long Determined31450 = 31450;
         public const long Exposed31589 = 31589;
         public const long BlessingOfElements = 33120;
+        public const long SigilOfConcentration = 33719;
         public const long GuildItemResearch = 33833;
         public const long FlamesEmbrace = 34031;
         public const long SpawnProtection = 34113;
         public const long Unblockable = 36781;
         public const long CrystallineHeart = 37657;
+        public const long SigilOfBounty = 38588;
         public const long DarkAura = 39978;
         public const long FireMajor = 40926;
         public const long WaterDual = 41166;
@@ -130,11 +139,14 @@ namespace GW2EIEvtcParser
         public const long FireDual = 43470;
         public const long Charrzooka = 43503;
         public const long EarthMajor = 43740;
+        public const long SigilOfSeverance = 43930;
         public const long EarthMinor = 44822;
         public const long EarthDual = 44857;
         public const long Exhaustion = 46842;
+        public const long SigilOfTheStars = 46953;
         public const long Exposed48209 = 48209;
         public const long Determined52271 = 52271;
+        public const long SuperiorRuneOfTheMonk = 53285;
         public const long Invulnerability56227 = 56227;
 
     }
