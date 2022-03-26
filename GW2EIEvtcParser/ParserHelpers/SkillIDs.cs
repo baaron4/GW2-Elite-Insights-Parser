@@ -575,7 +575,7 @@ namespace GW2EIEvtcParser
         public const long DeterminationEnsolyss = 37498;
         public const long Empowered = 37626;
         public const long CrystallineHeart = 37657;
-        public const long EnragedCairn = 37675;
+        public const long Enraged_Cairn = 37675;
         public const long FixatedRigom = 37693;
         public const long DispelSAK = 37697;
         public const long GazeAvoidance = 37714;
