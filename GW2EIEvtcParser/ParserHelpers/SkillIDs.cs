@@ -95,6 +95,8 @@ namespace GW2EIEvtcParser
         public const long SigilOfLife = 9386;
         public const long SigilOfBenevolence = 9398;
         public const long SigilOfDoom = 9441;
+        public const long NourishementBonusCondition = 10104;
+        public const long NourishementBonusPower = 10110;
         public const long HideInShadows = 10269;
         public const long ChaosAura = 10332;
         public const long PowerSuit = 12326;
@@ -148,6 +150,7 @@ namespace GW2EIEvtcParser
         public const long Determined52271 = 52271;
         public const long SuperiorRuneOfTheMonk = 53285;
         public const long Invulnerability56227 = 56227;
+        public const long NourishementBonusPowerAndFerocity = 64528;
 
     }
 

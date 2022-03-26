@@ -942,9 +942,9 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> FoodProcs = new List<Buff>
         {
             // Effect procs for On Kill Food
-            new Buff("Nourishment (Bonus Power)", 10110, Source.Item, BuffClassification.Gear, "https://wiki.guildwars2.com/images/d/d6/Champion_of_the_Crown.png"),
-            new Buff("Nourishment (Bonus Power & Ferocity)", 64528, Source.Item, BuffClassification.Gear, "https://wiki.guildwars2.com/images/d/d6/Champion_of_the_Crown.png"),
-            new Buff("Malice (Bonus Condition Damage)", 10104, Source.Item, BuffClassification.Gear, "https://wiki.guildwars2.com/images/d/d6/Champion_of_the_Crown.png"),
+            new Buff("Nourishment (Bonus Power)", NourishementBonusPower, Source.Item, BuffClassification.Gear, "https://wiki.guildwars2.com/images/d/d6/Champion_of_the_Crown.png"),
+            new Buff("Nourishment (Bonus Power & Ferocity)", NourishementBonusPowerAndFerocity, Source.Item, BuffClassification.Gear, "https://wiki.guildwars2.com/images/d/d6/Champion_of_the_Crown.png"),
+            new Buff("Malice (Bonus Condition Damage)", NourishementBonusCondition, Source.Item, BuffClassification.Gear, "https://wiki.guildwars2.com/images/d/d6/Champion_of_the_Crown.png"),
         };
     }
 }
