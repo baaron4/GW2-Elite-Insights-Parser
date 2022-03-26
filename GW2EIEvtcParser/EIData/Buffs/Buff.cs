@@ -302,9 +302,11 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Daze", 833, Source.Common, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/79/Daze.png"),
                 new Buff("Exposed (48209)", 48209, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/6b/Exposed.png"),
                 new Buff("Exposed (31589)", 31589, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/6b/Exposed.png"),
+                new Buff("Exposed (64936)", 64936, Source.Common, BuffStackType.Stacking, 10, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/6/6b/Exposed.png" ),
                 new Buff("Unblockable",36781, Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/f0/Unblockable_%28effect%29.png",GW2Builds.February2020Balance , GW2Builds.EndOfLife),
                 new Buff("Encumbered",1159, Source.Common, BuffStackType.Queue, 9, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/d/d7/Encumbered.png"),
                 new Buff("Celeritas Spores", 27048, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/7/7b/Blazing_Speed_Mushrooms.png"),
+                new Buff("Branded Accumulation", 52182, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/55/Achilles_Bane.png" ),
                 //Auras
                 new Buff("Chaos Aura", 10332, Source.Common, BuffClassification.Support,"https://wiki.guildwars2.com/images/e/ec/Chaos_Aura.png"),
                 new Buff("Fire Aura", 5677, Source.Common, BuffClassification.Support,"https://wiki.guildwars2.com/images/c/ce/Fire_Aura.png"),
@@ -737,6 +739,14 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Lethal Inspiration", 64834, Source.FightSpecific, BuffStackType.Stacking, 1, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Extreme Vulnerability", 65662, Source.FightSpecific, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Fixated (Kaineng Overlook)",66140, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                //     
+                new Buff("Influence of the Void", 64524, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Targeted (Dragon Void)", 60517, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Void Repulsion 1", 65729, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Void Repulsion 2", 65577, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Aerial Defense", 63605, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Void Immunity", 66800, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Void Shell", 65563, Source.FightSpecific, BuffStackType.Stacking, 3, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
         };
 
         internal static readonly List<Buff> NormalFoods = new List<Buff>
