@@ -18,25 +18,25 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(44926, 45097, 500), // Stone Resonance
             new BuffGainCastFinder(44612, 42683, EIData.InstantCastFinder.DefaultICD), // Unravel
             // Fire       
-            new BuffGainCastFinder(SkillIDs.FireDual, SkillIDs.FireDual, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(SkillIDs.FireWater, SkillIDs.FireWater, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(SkillIDs.FireAir, SkillIDs.FireAir, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(SkillIDs.FireEarth, SkillIDs.FireEarth, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(SkillIDs.DualFireAttunement, SkillIDs.DualFireAttunement, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(SkillIDs.FireWaterAttunement, SkillIDs.FireWaterAttunement, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(SkillIDs.FireAirAttunement, SkillIDs.FireAirAttunement, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(SkillIDs.FireEarthAttunement, SkillIDs.FireEarthAttunement, EIData.InstantCastFinder.DefaultICD),
             // Water
-            new BuffGainCastFinder(SkillIDs.WaterFire, SkillIDs.WaterFire, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(SkillIDs.WaterDual, SkillIDs.WaterDual, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(SkillIDs.WaterAir, SkillIDs.WaterAir, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(SkillIDs.WaterEarth, SkillIDs.WaterEarth, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(SkillIDs.WaterFireAttunement, SkillIDs.WaterFireAttunement, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(SkillIDs.DualWaterAttunement, SkillIDs.DualWaterAttunement, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(SkillIDs.WaterAirAttunement, SkillIDs.WaterAirAttunement, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(SkillIDs.WaterEarthAttunement, SkillIDs.WaterEarthAttunement, EIData.InstantCastFinder.DefaultICD),
             // Air
-            new BuffGainCastFinder(SkillIDs.AirFire, SkillIDs.AirFire, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(SkillIDs.AirWater, SkillIDs.AirWater, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(SkillIDs.AirDual, SkillIDs.AirDual, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(SkillIDs.AirEarth, SkillIDs.AirEarth, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(SkillIDs.AirFireAttunement, SkillIDs.AirFireAttunement, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(SkillIDs.AirWaterAttunement, SkillIDs.AirWaterAttunement, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(SkillIDs.DualAirAttunement, SkillIDs.DualAirAttunement, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(SkillIDs.AirEarthAttunement, SkillIDs.AirEarthAttunement, EIData.InstantCastFinder.DefaultICD),
             // Earth
-            new BuffGainCastFinder(SkillIDs.EarthFire, SkillIDs.EarthFire, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(SkillIDs.EarthWater, SkillIDs.EarthWater, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(SkillIDs.EarthAir, SkillIDs.EarthAir, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(SkillIDs.EarthDual, SkillIDs.EarthDual, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(SkillIDs.EarthFireAttunement, SkillIDs.EarthFireAttunement, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(SkillIDs.EarthWaterAttunement, SkillIDs.EarthWaterAttunement, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(SkillIDs.EarthAirAttunement, SkillIDs.EarthAirAttunement, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(SkillIDs.DualEarthAttunement, SkillIDs.DualEarthAttunement, EIData.InstantCastFinder.DefaultICD),
         };
 
 
@@ -54,22 +54,22 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-                new Buff("Dual Fire Attunement", SkillIDs.FireDual, Source.Weaver, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png"),
-                new Buff("Fire Water Attunement", SkillIDs.FireWater, Source.Weaver, BuffClassification.Other, "https://i.imgur.com/ar8Hn8G.png"),
-                new Buff("Fire Air Attunement", SkillIDs.FireAir, Source.Weaver, BuffClassification.Other, "https://i.imgur.com/YU31LwG.png"),
-                new Buff("Fire Earth Attunement", SkillIDs.FireEarth, Source.Weaver, BuffClassification.Other, "https://i.imgur.com/64g3rto.png"),
-                new Buff("Dual Water Attunement", SkillIDs.WaterDual, Source.Weaver, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/31/Water_Attunement.png"),
-                new Buff("Water Fire Attunement", SkillIDs.WaterFire, Source.Weaver, BuffClassification.Other, "https://i.imgur.com/H1peqpz.png"),
-                new Buff("Water Air Attunement", SkillIDs.WaterAir, Source.Weaver, BuffClassification.Other, "https://i.imgur.com/Gz1XwEw.png"),
-                new Buff("Water Earth Attunement", SkillIDs.WaterEarth, Source.Weaver, BuffClassification.Other, "https://i.imgur.com/zqX3y4c.png"),
-                new Buff("Dual Air Attunement", SkillIDs.AirDual, Source.Weaver, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/91/Air_Attunement.png"),
-                new Buff("Air Fire Attunement", SkillIDs.AirFire, Source.Weaver, BuffClassification.Other, "https://i.imgur.com/4ekncW5.png"),
-                new Buff("Air Water Attunement", SkillIDs.AirWater, Source.Weaver, BuffClassification.Other, "https://i.imgur.com/HIcUaXG.png"),
-                new Buff("Air Earth Attunement", SkillIDs.AirEarth, Source.Weaver, BuffClassification.Other, "https://i.imgur.com/MCCrMls.png"),
-                new Buff("Dual Earth Attunement", SkillIDs.EarthDual, Source.Weaver, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/a8/Earth_Attunement.png"),
-                new Buff("Earth Fire Attunement", SkillIDs.EarthFire, Source.Weaver, BuffClassification.Other, "https://i.imgur.com/Vgu0B54.png"),
-                new Buff("Earth Water Attunement", SkillIDs.EarthWater, Source.Weaver, BuffClassification.Other, "https://i.imgur.com/exrTKSW.png"),
-                new Buff("Earth Air Attunement", SkillIDs.EarthAir, Source.Weaver, BuffClassification.Other, "https://i.imgur.com/Z3P8cPa.png"),
+                new Buff("Dual Fire Attunement", SkillIDs.DualFireAttunement, Source.Weaver, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png"),
+                new Buff("Fire Water Attunement", SkillIDs.FireWaterAttunement, Source.Weaver, BuffClassification.Other, "https://i.imgur.com/ar8Hn8G.png"),
+                new Buff("Fire Air Attunement", SkillIDs.FireAirAttunement, Source.Weaver, BuffClassification.Other, "https://i.imgur.com/YU31LwG.png"),
+                new Buff("Fire Earth Attunement", SkillIDs.FireEarthAttunement, Source.Weaver, BuffClassification.Other, "https://i.imgur.com/64g3rto.png"),
+                new Buff("Dual Water Attunement", SkillIDs.DualWaterAttunement, Source.Weaver, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/31/Water_Attunement.png"),
+                new Buff("Water Fire Attunement", SkillIDs.WaterFireAttunement, Source.Weaver, BuffClassification.Other, "https://i.imgur.com/H1peqpz.png"),
+                new Buff("Water Air Attunement", SkillIDs.WaterAirAttunement, Source.Weaver, BuffClassification.Other, "https://i.imgur.com/Gz1XwEw.png"),
+                new Buff("Water Earth Attunement", SkillIDs.WaterEarthAttunement, Source.Weaver, BuffClassification.Other, "https://i.imgur.com/zqX3y4c.png"),
+                new Buff("Dual Air Attunement", SkillIDs.DualAirAttunement, Source.Weaver, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/91/Air_Attunement.png"),
+                new Buff("Air Fire Attunement", SkillIDs.AirFireAttunement, Source.Weaver, BuffClassification.Other, "https://i.imgur.com/4ekncW5.png"),
+                new Buff("Air Water Attunement", SkillIDs.AirWaterAttunement, Source.Weaver, BuffClassification.Other, "https://i.imgur.com/HIcUaXG.png"),
+                new Buff("Air Earth Attunement", SkillIDs.AirEarthAttunement, Source.Weaver, BuffClassification.Other, "https://i.imgur.com/MCCrMls.png"),
+                new Buff("Dual Earth Attunement", SkillIDs.DualEarthAttunement, Source.Weaver, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/a8/Earth_Attunement.png"),
+                new Buff("Earth Fire Attunement", SkillIDs.EarthFireAttunement, Source.Weaver, BuffClassification.Other, "https://i.imgur.com/Vgu0B54.png"),
+                new Buff("Earth Water Attunement", SkillIDs.EarthWaterAttunement, Source.Weaver, BuffClassification.Other, "https://i.imgur.com/exrTKSW.png"),
+                new Buff("Earth Air Attunement", SkillIDs.EarthAirAttunement, Source.Weaver, BuffClassification.Other, "https://i.imgur.com/Z3P8cPa.png"),
                 new Buff("Primordial Stance",42086, Source.Weaver, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/3a/Primordial_Stance.png"),
                 new Buff("Unravel",42683, Source.Weaver, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/4b/Unravel.png"),
                 new Buff("Weave Self",42951, Source.Weaver, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/2a/Weave_Self.png"),
@@ -88,18 +88,18 @@ namespace GW2EIEvtcParser.EIData
 
         private static readonly Dictionary<long, HashSet<long>> _minorsTranslation = new Dictionary<long, HashSet<long>>
         {
-            { SkillIDs.FireMinor, new HashSet<long> { SkillIDs.WaterFire, SkillIDs.AirFire, SkillIDs.EarthFire, SkillIDs.FireDual }},
-            { SkillIDs.WaterMinor, new HashSet<long> { SkillIDs.FireWater, SkillIDs.AirWater, SkillIDs.EarthWater, SkillIDs.WaterDual }},
-            { SkillIDs.AirMinor, new HashSet<long> { SkillIDs.FireAir, SkillIDs.WaterAir, SkillIDs.EarthAir, SkillIDs.AirDual }},
-            { SkillIDs.EarthMinor, new HashSet<long> { SkillIDs.FireEarth, SkillIDs.WaterEarth, SkillIDs.AirEarth, SkillIDs.EarthDual }},
+            { SkillIDs.FireMinorAttunement, new HashSet<long> { SkillIDs.WaterFireAttunement, SkillIDs.AirFireAttunement, SkillIDs.EarthFireAttunement, SkillIDs.DualFireAttunement }},
+            { SkillIDs.WaterMinorAttunement, new HashSet<long> { SkillIDs.FireWaterAttunement, SkillIDs.AirWaterAttunement, SkillIDs.EarthWaterAttunement, SkillIDs.DualWaterAttunement }},
+            { SkillIDs.AirMinorAttunement, new HashSet<long> { SkillIDs.FireAirAttunement, SkillIDs.WaterAirAttunement, SkillIDs.EarthAirAttunement, SkillIDs.DualAirAttunement }},
+            { SkillIDs.EarthMinorAttunement, new HashSet<long> { SkillIDs.FireEarthAttunement, SkillIDs.WaterEarthAttunement, SkillIDs.AirEarthAttunement, SkillIDs.DualEarthAttunement }},
         };
 
         private static readonly Dictionary<long, HashSet<long>> _majorsTranslation = new Dictionary<long, HashSet<long>>
         {
-            { SkillIDs.FireMajor, new HashSet<long> { SkillIDs.FireWater, SkillIDs.FireAir, SkillIDs.FireEarth, SkillIDs.FireDual }},
-            { SkillIDs.WaterMajor, new HashSet<long> { SkillIDs.WaterFire, SkillIDs.WaterAir, SkillIDs.WaterEarth, SkillIDs.WaterDual }},
-            { SkillIDs.AirMajor, new HashSet<long> { SkillIDs.AirFire, SkillIDs.AirWater, SkillIDs.AirEarth, SkillIDs.AirDual }},
-            { SkillIDs.EarthMajor, new HashSet<long> { SkillIDs.EarthFire, SkillIDs.EarthWater, SkillIDs.EarthAir, SkillIDs.EarthDual }},
+            { SkillIDs.FireMajorAttunement, new HashSet<long> { SkillIDs.FireWaterAttunement, SkillIDs.FireAirAttunement, SkillIDs.FireEarthAttunement, SkillIDs.DualFireAttunement }},
+            { SkillIDs.WaterMajorAttunement, new HashSet<long> { SkillIDs.WaterFireAttunement, SkillIDs.WaterAirAttunement, SkillIDs.WaterEarthAttunement, SkillIDs.DualWaterAttunement }},
+            { SkillIDs.AirMajorAttunement, new HashSet<long> { SkillIDs.AirFireAttunement, SkillIDs.AirWaterAttunement, SkillIDs.AirEarthAttunement, SkillIDs.DualAirAttunement }},
+            { SkillIDs.EarthMajorAttunement, new HashSet<long> { SkillIDs.EarthFireAttunement, SkillIDs.EarthWaterAttunement, SkillIDs.EarthAirAttunement, SkillIDs.DualEarthAttunement }},
         };
 
         private static long TranslateWeaverAttunement(List<BuffApplyEvent> buffApplies)
@@ -113,10 +113,10 @@ namespace GW2EIEvtcParser.EIData
             }*/
             var duals = new HashSet<long>
             {
-                SkillIDs.FireDual,
-                SkillIDs.WaterDual,
-                SkillIDs.AirDual,
-                SkillIDs.EarthDual
+                SkillIDs.DualFireAttunement,
+                SkillIDs.DualWaterAttunement,
+                SkillIDs.DualAirAttunement,
+                SkillIDs.DualEarthAttunement
             };
             HashSet<long> major = null;
             HashSet<long> minor = null;
@@ -168,19 +168,19 @@ namespace GW2EIEvtcParser.EIData
 
             var weaverAttunements = new HashSet<long>
             {
-                SkillIDs.FireMajor,
-                SkillIDs.FireMinor,
-                SkillIDs.WaterMajor,
-                SkillIDs.WaterMinor,
-                SkillIDs.AirMajor,
-                SkillIDs.AirMinor,
-                SkillIDs.EarthMajor,
-                SkillIDs.EarthMinor,
+                SkillIDs.FireMajorAttunement,
+                SkillIDs.FireMinorAttunement,
+                SkillIDs.WaterMajorAttunement,
+                SkillIDs.WaterMinorAttunement,
+                SkillIDs.AirMajorAttunement,
+                SkillIDs.AirMinorAttunement,
+                SkillIDs.EarthMajorAttunement,
+                SkillIDs.EarthMinorAttunement,
 
-                SkillIDs.FireDual,
-                SkillIDs.WaterDual,
-                SkillIDs.AirDual,
-                SkillIDs.EarthDual,
+                SkillIDs.DualFireAttunement,
+                SkillIDs.DualWaterAttunement,
+                SkillIDs.DualAirAttunement,
+                SkillIDs.DualEarthAttunement,
 
                 /*fireAir,
                 fireEarth,
