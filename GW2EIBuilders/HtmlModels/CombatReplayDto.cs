@@ -44,7 +44,11 @@ namespace GW2EIBuilders.HtmlModels
                 {
                     actors.Add(a.GetCombatReplayDescription(map, log));
                 }
-                foreach (Minions minions in actor.GetMinions(log).Values)
+                IReadOnlyDictionary<long, Minions> allMinions = actor.GetMinions(log);
+                if (allMinions.Any(x => x.Value.MinionList.Count > ParserHelper.MinionLimit)) {
+                    continue;
+                }
+                foreach (Minions minions in allMinions.Values)
                 {
                     if (ArcDPSEnums.IsKnownMinionID(minions.ReferenceAgentItem, actor.Spec))
                     {
