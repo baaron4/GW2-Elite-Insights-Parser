@@ -18,6 +18,7 @@
         public int ActualDuration { get; protected set; }
 
         public long EndTime => Time + ActualDuration;
+        public long ExpectedEndTime => Time + ExpectedDuration;
 
         public double Acceleration { get; protected set; } = 0;
 
