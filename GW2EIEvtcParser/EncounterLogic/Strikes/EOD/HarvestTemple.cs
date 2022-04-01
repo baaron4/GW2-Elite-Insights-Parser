@@ -224,6 +224,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         end = targetOff.Time;
                     }
                     AgentItem extra = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, id, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, dragonVoid.HitboxWidth, dragonVoid.HitboxHeight);
+                    ulong lastHPUpdate = ulong.MaxValue;
                     foreach (CombatItem c in combatData)
                     {
                         if (extra.InAwareTimes(c.Time))
@@ -231,8 +232,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                             if (c.SrcMatchesAgent(dragonVoid, extensions))
                             {
                                 // Avoid making the gadget go back to 100% hp on "death"
-                                if (c.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && c.DstAgent == 10000 && c.Time > extra.LastAware - 2000) {
-                                    continue;
+                                if (c.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate) {
+                                    // Discard hp update that goes up close to death time
+                                    if (c.DstAgent >= lastHPUpdate && c.Time > extra.LastAware - 2000)
+                                    {
+                                        continue;
+                                    }
+                                    // Remember last hp
+                                    lastHPUpdate = c.DstAgent;
                                 }
                                 c.OverrideSrcAgent(extra.Agent);
                             }

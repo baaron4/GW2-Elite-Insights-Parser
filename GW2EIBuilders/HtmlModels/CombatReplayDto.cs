@@ -46,6 +46,10 @@ namespace GW2EIBuilders.HtmlModels
                 }
                 foreach (Minions minions in actor.GetMinions(log).Values)
                 {
+                    if (minions.MinionList.Count > ParserHelper.MinionLimit)
+                    {
+                        continue;
+                    }
                     if (ArcDPSEnums.IsKnownMinionID(minions.ReferenceAgentItem, actor.Spec))
                     {
                         fromNonFriendliesSet.UnionWith(minions.MinionList);

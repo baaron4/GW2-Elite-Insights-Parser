@@ -12,6 +12,8 @@ namespace GW2EIEvtcParser
 
         public const int CombatReplayPollingRate = 150;
 
+        public const int MinionLimit = 1500;
+
         internal const int BuffDigit = 3;
         internal const int DamageModGainDigit = 3;
         internal const int AccelerationDigit = 3;
@@ -46,6 +48,7 @@ namespace GW2EIEvtcParser
             internal const ulong EODBeta3 = 121168;
             internal const ulong EODBeta4 = 122479;
             internal const ulong March2022Balance = 126520;
+            internal const ulong March2022Balance2 = 127285;
             //
             internal const ulong EndOfLife = ulong.MaxValue;
         }
@@ -55,6 +58,7 @@ namespace GW2EIEvtcParser
             internal const int StartOfLife = int.MinValue;
             //
             internal const int ProperConfusionDamageSimulation = 20210529;
+            internal const int ScoringSystemChange = 20210800; // was somewhere around there
             internal const int DirectX11Updated = 20210923;
             internal const int InternalSkillIDsChange = 20220304;
             internal const int BuffAttrFlatIncRemoved = 20220308;
@@ -723,6 +727,8 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TargetID.MaiTrinFract:
                 case ArcDPSEnums.TargetID.MaiTrinStrike:
                     return "https://i.imgur.com/GjHgAtX.png";
+                case ArcDPSEnums.TargetID.EchoOfScarletBriar:
+                    return "https://i.imgur.com/O9CzW46.png";
                 case ArcDPSEnums.TargetID.Ankka:
                     return "https://i.imgur.com/3OQwlpP.png";
                 case ArcDPSEnums.TargetID.MinisterLi:
@@ -913,11 +919,6 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.ScarletPhantom1:
                 case ArcDPSEnums.TrashID.ScarletPhantomHP:
                 case ArcDPSEnums.TrashID.ScarletPhantomBreakbar:
-                case ArcDPSEnums.TrashID.TheEnforcer:
-                case ArcDPSEnums.TrashID.TheMechRider:
-                case ArcDPSEnums.TrashID.TheMindblade:
-                case ArcDPSEnums.TrashID.TheRitualist:
-                case ArcDPSEnums.TrashID.TheSniper:
                 case ArcDPSEnums.TrashID.AnkkaHallucination1:
                 case ArcDPSEnums.TrashID.AnkkaHallucination2:
                 case ArcDPSEnums.TrashID.AnkkaHallucination3:
@@ -1001,6 +1002,16 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/GjHgAtX.png";
                 case ArcDPSEnums.TrashID.SooWonTail:
                     return "https://i.imgur.com/O8VEP57.png";
+                case ArcDPSEnums.TrashID.TheEnforcer:
+                    return "https://i.imgur.com/GNQCYda.png";
+                case ArcDPSEnums.TrashID.TheMechRider:
+                    return "https://i.imgur.com/JSsBc6a.png";
+                case ArcDPSEnums.TrashID.TheMindblade:
+                    return "https://i.imgur.com/KyMgGQD.png";
+                case ArcDPSEnums.TrashID.TheRitualist:
+                    return "https://i.imgur.com/gG5p3Hz.png";
+                case ArcDPSEnums.TrashID.TheSniper:
+                    return "https://i.imgur.com/RWIjUoe.png";
             }
             //
             switch (ArcDPSEnums.GetMinionID(id))
