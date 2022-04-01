@@ -12,6 +12,8 @@ namespace GW2EIEvtcParser
 
         public const int CombatReplayPollingRate = 150;
 
+        public const int MinionLimit = 1500;
+
         internal const int BuffDigit = 3;
         internal const int DamageModGainDigit = 3;
         internal const int AccelerationDigit = 3;
@@ -46,6 +48,7 @@ namespace GW2EIEvtcParser
             internal const ulong EODBeta3 = 121168;
             internal const ulong EODBeta4 = 122479;
             internal const ulong March2022Balance = 126520;
+            internal const ulong March2022Balance2 = 127285;
             //
             internal const ulong EndOfLife = ulong.MaxValue;
         }
@@ -55,11 +58,22 @@ namespace GW2EIEvtcParser
             internal const int StartOfLife = int.MinValue;
             //
             internal const int ProperConfusionDamageSimulation = 20210529;
+            internal const int ScoringSystemChange = 20210800; // was somewhere around there
             internal const int DirectX11Updated = 20210923;
-            internal const int InternalSkillIDsChange = 20220307;
-            internal const int BuffAttrFlatIncRemoved = 20220306;
+            internal const int InternalSkillIDsChange = 20220304;
+            internal const int BuffAttrFlatIncRemoved = 20220308;
             //
             internal const int EndOfLife = int.MaxValue;
+        }
+
+        public static class WeaponSetIDs
+        {
+            public const int FirstLandSet = 4;
+            public const int SecondLandSet = 5;
+            public const int FirstWaterSet = 0;
+            public const int SecondWaterSet = 1;
+            public const int TransformSet = 3;
+            public const int KitSet = 2;
         }
 
         internal const int PhaseTimeLimit = 2000;
@@ -713,6 +727,8 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TargetID.MaiTrinFract:
                 case ArcDPSEnums.TargetID.MaiTrinStrike:
                     return "https://i.imgur.com/GjHgAtX.png";
+                case ArcDPSEnums.TargetID.EchoOfScarletBriar:
+                    return "https://i.imgur.com/O9CzW46.png";
                 case ArcDPSEnums.TargetID.Ankka:
                     return "https://i.imgur.com/3OQwlpP.png";
                 case ArcDPSEnums.TargetID.MinisterLi:
@@ -723,12 +739,14 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/x9id5iH.png";
                 case ArcDPSEnums.TargetID.TheDragonVoidMordremoth:
                     return "https://i.imgur.com/6gec61w.png";
-                case ArcDPSEnums.TargetID.TheDragonVoidPrimordious:
+                case ArcDPSEnums.TargetID.TheDragonVoidPrimordus:
                     return "https://i.imgur.com/O77QoPM.png";
                 case ArcDPSEnums.TargetID.TheDragonVoidSooWon:
                     return "https://i.imgur.com/NHs4OFG.png";
                 case ArcDPSEnums.TargetID.TheDragonVoidZhaitan:
                     return "https://i.imgur.com/9dpoFqR.png";
+                case ArcDPSEnums.TargetID.SooWonOW:
+                    return "https://i.imgur.com/lcZGgBC.png";
             }
             switch (ArcDPSEnums.GetTrashID(id))
             {
@@ -901,11 +919,6 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.ScarletPhantom1:
                 case ArcDPSEnums.TrashID.ScarletPhantomHP:
                 case ArcDPSEnums.TrashID.ScarletPhantomBreakbar:
-                case ArcDPSEnums.TrashID.TheEnforcer:
-                case ArcDPSEnums.TrashID.TheMechRider:
-                case ArcDPSEnums.TrashID.TheMindblade:
-                case ArcDPSEnums.TrashID.TheRitualist:
-                case ArcDPSEnums.TrashID.TheSniper:
                 case ArcDPSEnums.TrashID.AnkkaHallucination1:
                 case ArcDPSEnums.TrashID.AnkkaHallucination2:
                 case ArcDPSEnums.TrashID.AnkkaHallucination3:
@@ -913,6 +926,11 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.VoidGiant:
                 case ArcDPSEnums.TrashID.VoidObliterator:
                 case ArcDPSEnums.TrashID.VoidTimeCaster:
+                case ArcDPSEnums.TrashID.VoidGiant2:
+                case ArcDPSEnums.TrashID.VoidTimeCaster2:
+                case ArcDPSEnums.TrashID.VoidBrandstalker:
+                case ArcDPSEnums.TrashID.VoidColdsteel2:
+                case ArcDPSEnums.TrashID.VoidObliterator2:
                     return "https://i.imgur.com/k79t7ZA.png";
                 case ArcDPSEnums.TrashID.HandOfErosion:
                 case ArcDPSEnums.TrashID.HandOfEruption:
@@ -982,6 +1000,18 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
                 case ArcDPSEnums.TrashID.MaiTrinStrikeDuringEcho:
                     return "https://i.imgur.com/GjHgAtX.png";
+                case ArcDPSEnums.TrashID.SooWonTail:
+                    return "https://i.imgur.com/O8VEP57.png";
+                case ArcDPSEnums.TrashID.TheEnforcer:
+                    return "https://i.imgur.com/GNQCYda.png";
+                case ArcDPSEnums.TrashID.TheMechRider:
+                    return "https://i.imgur.com/JSsBc6a.png";
+                case ArcDPSEnums.TrashID.TheMindblade:
+                    return "https://i.imgur.com/KyMgGQD.png";
+                case ArcDPSEnums.TrashID.TheRitualist:
+                    return "https://i.imgur.com/gG5p3Hz.png";
+                case ArcDPSEnums.TrashID.TheSniper:
+                    return "https://i.imgur.com/RWIjUoe.png";
             }
             //
             switch (ArcDPSEnums.GetMinionID(id))

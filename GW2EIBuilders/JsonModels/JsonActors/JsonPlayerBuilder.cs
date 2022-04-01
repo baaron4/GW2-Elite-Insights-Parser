@@ -28,7 +28,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
             IReadOnlyList<PhaseData> phases = log.FightData.GetNonDummyPhases(log);
             //
             jsonPlayer.Account = player.Account;
-            jsonPlayer.Weapons = player.GetWeaponsArray(log).Select(w => w ?? "Unknown").ToArray();
+            jsonPlayer.Weapons = player.GetWeaponSets(log).ToArray();
             jsonPlayer.Group = player.Group;
             jsonPlayer.Profession = player.Spec.ToString();
             jsonPlayer.FriendlyNPC = player is NPC;

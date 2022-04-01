@@ -55,7 +55,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         phases[0].AddTarget(target);
                         subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Mordremoth", target));
                         break;
-                    case (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordious:
+                    case (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus:
                         phases[0].AddTarget(target);
                         subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Primordious", target));
                         break;
@@ -119,7 +119,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TargetID.TheDragonVoidJormag,
                 (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik,
                 (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth,
-                (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordious,
+                (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus,
                 (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon,
                 (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan,
                 (int)ArcDPSEnums.TrashID.VoidSaltsprayDragon,
@@ -184,7 +184,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var attackTargetEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).ToList();
             var idsToUse = new List<ArcDPSEnums.TargetID> { 
                 ArcDPSEnums.TargetID.TheDragonVoidJormag,
-                ArcDPSEnums.TargetID.TheDragonVoidPrimordious,
+                ArcDPSEnums.TargetID.TheDragonVoidPrimordus,
                 ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik, 
                 ArcDPSEnums.TargetID.TheDragonVoidMordremoth, 
                 ArcDPSEnums.TargetID.TheDragonVoidZhaitan,
@@ -224,6 +224,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         end = targetOff.Time;
                     }
                     AgentItem extra = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, id, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, dragonVoid.HitboxWidth, dragonVoid.HitboxHeight);
+                    ulong lastHPUpdate = ulong.MaxValue;
                     foreach (CombatItem c in combatData)
                     {
                         if (extra.InAwareTimes(c.Time))
@@ -231,8 +232,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                             if (c.SrcMatchesAgent(dragonVoid, extensions))
                             {
                                 // Avoid making the gadget go back to 100% hp on "death"
-                                if (c.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && c.DstAgent == 10000 && c.Time > extra.LastAware - 2000) {
-                                    continue;
+                                if (c.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate) {
+                                    // Discard hp update that goes up close to death time
+                                    if (c.DstAgent >= lastHPUpdate && c.Time > extra.LastAware - 2000)
+                                    {
+                                        continue;
+                                    }
+                                    // Remember last hp
+                                    lastHPUpdate = c.DstAgent;
                                 }
                                 c.OverrideSrcAgent(extra.Agent);
                             }
@@ -275,8 +282,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth:
                         target.OverrideName("The MordremothVoid");
                         break;
-                    case (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordious:
-                        target.OverrideName("The PrimordiusVoid");
+                    case (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus:
+                        target.OverrideName("The PrimordusVoid");
                         break;
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon:
                         target.OverrideName("The SooWonVoid");

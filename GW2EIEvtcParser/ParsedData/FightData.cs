@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EncounterLogic;
+using GW2EIEvtcParser.EncounterLogic.OpenWorld;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -214,6 +215,10 @@ namespace GW2EIEvtcParser.ParsedData
                 //
                 case ArcDPSEnums.TargetID.WorldVersusWorld:
                     Logic = new WvWFight(id, parserSettings.DetailedWvWParse);
+                    break;
+                //
+                case ArcDPSEnums.TargetID.SooWonOW:
+                    Logic = new SooWon(id);
                     break;
                 //
                 case ArcDPSEnums.TargetID.MassiveGolem10M:

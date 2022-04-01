@@ -14,7 +14,12 @@ namespace GW2EIJSON
         /// Name of the minion
         /// </summary>
         public string Name { get; set; }
-        
+
+        /// <summary>
+        /// Game ID of the minion
+        /// </summary>
+        public int Id { get; set; }
+
         /// <summary>
         /// Total Damage done by minions \n
         /// Length == # of phases

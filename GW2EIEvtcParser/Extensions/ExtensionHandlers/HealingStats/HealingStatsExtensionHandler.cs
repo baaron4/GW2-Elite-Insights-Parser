@@ -297,7 +297,7 @@ namespace GW2EIEvtcParser.Extensions
                 {
                     if (SanitizeForSrc(pair.Value) && pair.Key.IsPlayer)
                     {
-                        RunningExtensioInternal.Add(pair.Key);
+                        RunningExtensionInternal.Add(pair.Key);
                     }
                 }
                 var healReceivedData = _healingEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
@@ -305,7 +305,7 @@ namespace GW2EIEvtcParser.Extensions
                 {
                     if (SanitizeForDst(pair.Value) && pair.Key.IsPlayer)
                     {
-                        RunningExtensioInternal.Add(pair.Key);
+                        RunningExtensionInternal.Add(pair.Key);
                     }
                 }
                 var healDataById = _healingEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
@@ -320,7 +320,7 @@ namespace GW2EIEvtcParser.Extensions
                 {
                     if (SanitizeForSrc(pair.Value) && pair.Key.IsPlayer)
                     {
-                        RunningExtensioInternal.Add(pair.Key);
+                        RunningExtensionInternal.Add(pair.Key);
                     }
                 }
                 var barrierReceivedData = _barrierEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
@@ -328,14 +328,14 @@ namespace GW2EIEvtcParser.Extensions
                 {
                     if (SanitizeForDst(pair.Value) && pair.Key.IsPlayer)
                     {
-                        RunningExtensioInternal.Add(pair.Key);
+                        RunningExtensionInternal.Add(pair.Key);
                     }
                 }
                 var barrierDataById = _barrierEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
                 combatData.EXTBarrierCombatData = new EXTBarrierCombatData(barrierData, barrierReceivedData, barrierDataById);
                 operation.UpdateProgressWithCancellationCheck("Attached " + _barrierEvents.Count + " barrier events to CombatData");
             }
-            int running = RunningExtensioInternal.Count;
+            int running = RunningExtensionInternal.Count;
             operation.UpdateProgressWithCancellationCheck(running != 1 ? running + " players have the extension running" : running + " player has the extension running");
             //
             operation.UpdateProgressWithCancellationCheck("Attached healing extension combat events");

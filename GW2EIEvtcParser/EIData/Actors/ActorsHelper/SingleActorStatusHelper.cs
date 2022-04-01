@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.EIData
         //
         private List<DeathRecap> _deathRecaps;
         //weaponslist
-        private string[] _weaponsArray;
+        private WeaponSets _weaponSets;
 
         public SingleActorStatusHelper(AbstractSingleActor actor) : base(actor)
         {
@@ -64,33 +64,22 @@ namespace GW2EIEvtcParser.EIData
         }
 
 
-        public IReadOnlyList<string> GetWeaponsArray(ParsedEvtcLog log)
+        public WeaponSets GetWeaponSets(ParsedEvtcLog log)
         {
-            if (_weaponsArray == null)
+            if (_weaponSets == null)
             {
                 EstimateWeapons(log);
             }
-            return _weaponsArray;
+            return _weaponSets;
         }
 
         private void EstimateWeapons(ParsedEvtcLog log)
         {
+            _weaponSets = new WeaponSets();
             if (!(Actor is AbstractPlayer))
             {
-                _weaponsArray = new string[]
-                {
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null
-                };
                 return;
             }
-            string[] weapons = new string[8];//first 2 for first set next 2 for second set, second sets of 4 for underwater
             IReadOnlyList<AbstractCastEvent> casting = Actor.GetCastEvents(log, 0, log.FightData.FightEnd);
             int swapped = -1;
             long swappedTime = 0;
@@ -110,14 +99,13 @@ namespace GW2EIEvtcParser.EIData
                 {
                     swapped = skill.FindWeaponSlot(swaps);
                 }
-                if (!skill.EstimateWeapons(weapons, swapped, cl.Time > swappedTime + WeaponSwapDelayConstant) && cl is WeaponSwapEvent swe)
+                if (!skill.EstimateWeapons(_weaponSets, swapped, cl.Time > swappedTime + WeaponSwapDelayConstant) && cl is WeaponSwapEvent swe)
                 {
                     //wepswap  
                     swapped = swe.SwappedTo;
                     swappedTime = swe.Time;
                 }
             }
-            _weaponsArray = weapons;
         }
         public IReadOnlyList<DeathRecap> GetDeathRecaps(ParsedEvtcLog log)
         {

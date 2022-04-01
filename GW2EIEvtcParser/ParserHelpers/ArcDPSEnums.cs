@@ -269,7 +269,16 @@ namespace GW2EIEvtcParser
             BuffAttribute res;
             if (evtcVersion >= ParserHelper.ArcDPSBuilds.BuffAttrFlatIncRemoved)
             {
-                res = bt <= (byte)BuffAttribute.SiphonRec - 1 ? (BuffAttribute)(bt + 1) : BuffAttribute.Unknown;
+                // Enum has shifted by -1
+                if (bt <= (byte)BuffAttribute.SiphonRec - 1)
+                {
+                    // only apply +1 shift to enum higher or equal to the one removed
+                    res = bt < (byte)BuffAttribute.FlatInc ? (BuffAttribute)(bt) : (BuffAttribute)(bt + 1);
+                } 
+                else
+                {
+                    res = BuffAttribute.Unknown;
+                }
             } else
             {
                 res = bt <= (byte)BuffAttribute.SiphonRec ? (BuffAttribute)bt : BuffAttribute.Unknown;
@@ -347,7 +356,7 @@ namespace GW2EIEvtcParser
         private const int TheDragonVoidKralkatorik = -19;
         private const int TheDragonVoidMordremoth = -20;
         private const int TheDragonVoidJormag = -21;
-        private const int TheDragonVoidPrimordious = -22;
+        private const int TheDragonVoidPrimordus = -22;
 
 
         //
@@ -651,6 +660,47 @@ namespace GW2EIEvtcParser
             DoubtDemon = 23268,
             FearDemon = 23264,
             GuiltDemon = 23252,
+            // Open world Soo-Won
+            SooWonTail = 51756,
+            VoidGiant2 = 24310,
+            VoidTimeCaster2 = 24586,
+            VoidBrandstalker = 24951,
+            VoidColdsteel2 = 23791,
+            VoidObliterator2 = 24947,
+            VoidAbomination2 = 23886,
+            VoidBomber = 24714,
+            VoidBrandbeast = 23917,
+            VoidBrandcharger1 = 24936,
+            VoidBrandcharger2 = 24039,
+            VoidBrandfang1 = 24912,
+            VoidBrandfang2 = 24772,
+            VoidBrandscale1 = 24053,
+            VoidBrandscale2 = 24426,
+            VoidColdsteel3 = 24063,
+            VoidCorpseknitter1 = 24756,
+            VoidCorpseknitter2 = 24607,
+            VoidDespoiler1 = 23874,
+            VoidDespoiler2 = 25179,
+            VoidFiend1 = 23707,
+            VoidFiend2 = 24737,
+            VoidFoulmaw = 24766,
+            VoidFrostwing = 24780,
+            VoidGlacier1 = 23753,
+            VoidGlacier2 = 24235,
+            VoidInfested1 = 24390,
+            VoidInfested2 = 24997,
+            VoidMelter1 = 24497,
+            VoidMelter2 = 24807,
+            VoidRimewolf1 = 24698,
+            VoidRimewolf2 = 23798,
+            VoidRotspinner1 = 25057,
+            VoidStorm = 24007,
+            VoidStormseer2 = 24419,
+            VoidStormseer3 = 23962,
+            VoidTangler2 = 23567,
+            VoidThornheart1 = 24406,
+            VoidThornheart2 = 23688,
+            VoidWorm = 23701,
             //
             Unknown = int.MaxValue,
         };
@@ -723,7 +773,7 @@ namespace GW2EIEvtcParser
             TheDragonVoidJormag = ArcDPSEnums.TheDragonVoidJormag,
             TheDragonVoidKralkatorrik = ArcDPSEnums.TheDragonVoidKralkatorik,
             TheDragonVoidSooWon = ArcDPSEnums.TheDragonVoidSooWon,
-            TheDragonVoidPrimordious = ArcDPSEnums.TheDragonVoidPrimordious,
+            TheDragonVoidPrimordus = ArcDPSEnums.TheDragonVoidPrimordus,
             TheDragonVoidMordremoth = ArcDPSEnums.TheDragonVoidMordremoth,
             //VoidAmalgamate = 
             // Fract
@@ -750,6 +800,8 @@ namespace GW2EIEvtcParser
             MedGolem = 19645,
             ConditionGolem = 16174,
             PowerGolem = 16176,
+            // Open world
+            SooWonOW = 35552,
             //
             Unknown = int.MaxValue,
         };

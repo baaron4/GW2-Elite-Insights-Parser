@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -55,22 +56,27 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="to"></param>
         internal void MergePresenceInto(IReadOnlyList<Segment> from)
         {
-            List<Segment> segmentsToFill = _buffChart;
-            bool firstPass = segmentsToFill.Count == 0;
-            foreach (Segment seg in from)
+            if (_buffChart.Count == 0)
             {
-                long start = seg.Start;
-                long end = seg.End;
-                int presence = seg.Value > 0 ? 1 : 0;
-                if (firstPass)
+                _buffChart = new List<Segment>(from);
+            }
+            else
+            {
+                var segmentsToFill = new LinkedList<Segment>(_buffChart);
+                LinkedListNode<Segment> node = segmentsToFill.Find(segmentsToFill.First());
+                foreach (Segment seg in from)
                 {
-                    segmentsToFill.Add(new Segment(start, end, presence));
-                }
-                else
-                {
-                    for (int i = 0; i < segmentsToFill.Count; i++)
+                    long start = seg.Start;
+                    long end = seg.End;
+                    int presence = seg.Value > 0 ? 1 : 0;
+                    // No need to process this segment
+                    if (presence == 0)
                     {
-                        Segment curSeg = segmentsToFill[i];
+                        continue;
+                    }
+                    while (node != null)
+                    {
+                        Segment curSeg = node.Value;
                         long curEnd = curSeg.End;
                         long curStart = curSeg.Start;
                         int curVal = (int)curSeg.Value;
@@ -80,24 +86,31 @@ namespace GW2EIEvtcParser.EIData
                         }
                         if (curEnd < start)
                         {
+                            node = node.Next;
                             continue;
                         }
+                        // The segment in inside current one
                         if (end <= curEnd)
                         {
                             curSeg.End = start;
-                            segmentsToFill.Insert(i + 1, new Segment(start, end, curVal + presence));
-                            segmentsToFill.Insert(i + 2, new Segment(end, curEnd, curVal));
+                            segmentsToFill.AddAfter(node, new Segment(start, end, curVal + presence));
+                            node = node.Next;
+                            segmentsToFill.AddAfter(node, new Segment(end, curEnd, curVal));
+                            node = node.Next;
                             break;
                         }
                         else
                         {
+                            // the segment straddles cur and next
                             curSeg.End = start;
-                            segmentsToFill.Insert(i + 1, new Segment(start, curEnd, curVal + presence));
+                            segmentsToFill.AddAfter(node, new Segment(start, curEnd, curVal + presence));
+                            node = node.Next;
                             start = curEnd;
-                            i++;
                         }
+                        node = node.Next;
                     }
                 }
+                _buffChart = segmentsToFill.ToList();
             }
             // Merge consecutive segments with same value, otherwise expect exponential growth
             FuseSegments();
