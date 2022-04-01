@@ -792,6 +792,7 @@ namespace GW2EIEvtcParser
         public const long EnragedWywern = 52040;
         public const long AugmentedPower = 52074;
         public const long ResistanceLavaElemental = 52075;
+        public const long BrandedAccumulation = 52182;
         public const long AquaticAuraKenut = 52211;
         public const long FracturedAllied = 52213;
         public const long CAInvul = 52255;
@@ -936,6 +937,7 @@ namespace GW2EIEvtcParser
         public const long EssenceOfValorTier4 = 60062;
         public const long EssenceOfVigilanceTier4 = 60173;
         public const long PowerOfResilienceTier4 = 60312;
+        public const long Targeted_DragonVoid = 60517;
         public const long Enraged4_200 = 60674;
         public const long Enraged_300 = 61006;
         public const long Enraged2_100 = 61138;
@@ -997,6 +999,7 @@ namespace GW2EIEvtcParser
         public const long DeadlyBlades = 63409;
         public const long FierceasFire = 63433;
         public const long ConsumeShadows = 63456;
+        public const long AerialDefense = 63605;
         public const long EnergyTransfer = 63621;
         public const long VitalityEqualizer1 = 63840;
         public const long Hallucinations = 64179;
@@ -1008,13 +1011,17 @@ namespace GW2EIEvtcParser
         public const long MeatyAsparagusSkewer = 64568;
         public const long LethalInspiration = 64834;
         public const long ImmuneToDamageAndConditions = 64843;
+        public const long Exposed64936 = 64936;
         public const long TargetOrder4 = 64999;
         public const long TargetOrder2 = 65088;
         public const long BowlOfKimchiTofuStew = 65197;
         public const long MaiTrin = 65238;
         public const long DestructiveAura = 65250;
         public const long MeatyRiceBowl = 65354;
+        public const long VoidShell = 65563;
+        public const long VoidRepulsion2 = 65577;
         public const long ExtremeVulnerability = 65662;
+        public const long VoidRepulsion1 = 65729;
         public const long PlateOfKimchiPancakes = 65769;
         public const long TargetOrder1 = 65869;
         public const long SharedDestruction = 65900;
@@ -1023,6 +1030,7 @@ namespace GW2EIEvtcParser
         public const long ChaosAndDestruction = 66409;
         public const long FishyRiceBowl = 66503;
         public const long BowlOfEchovaldHotpot = 66663;
+        public const long VoidImmunity = 66800;
         public const long VitalityEqualizer2 = 66894;
         public const long Ankka = 66962;
         public const long EqualizationMatrix = 67047;
