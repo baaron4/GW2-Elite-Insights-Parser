@@ -745,6 +745,8 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/NHs4OFG.png";
                 case ArcDPSEnums.TargetID.TheDragonVoidZhaitan:
                     return "https://i.imgur.com/9dpoFqR.png";
+                case ArcDPSEnums.TargetID.SooWonOW:
+                    return "https://i.imgur.com/lcZGgBC.png";
             }
             switch (ArcDPSEnums.GetTrashID(id))
             {
@@ -924,6 +926,11 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.VoidGiant:
                 case ArcDPSEnums.TrashID.VoidObliterator:
                 case ArcDPSEnums.TrashID.VoidTimeCaster:
+                case ArcDPSEnums.TrashID.VoidGiant2:
+                case ArcDPSEnums.TrashID.VoidTimeCaster2:
+                case ArcDPSEnums.TrashID.VoidBrandstalker:
+                case ArcDPSEnums.TrashID.VoidColdsteel2:
+                case ArcDPSEnums.TrashID.VoidObliterator2:
                     return "https://i.imgur.com/k79t7ZA.png";
                 case ArcDPSEnums.TrashID.HandOfErosion:
                 case ArcDPSEnums.TrashID.HandOfEruption:
@@ -993,6 +1000,8 @@ namespace GW2EIEvtcParser
                     return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
                 case ArcDPSEnums.TrashID.MaiTrinStrikeDuringEcho:
                     return "https://i.imgur.com/GjHgAtX.png";
+                case ArcDPSEnums.TrashID.SooWonTail:
+                    return "https://i.imgur.com/O8VEP57.png";
                 case ArcDPSEnums.TrashID.TheEnforcer:
                     return "https://i.imgur.com/GNQCYda.png";
                 case ArcDPSEnums.TrashID.TheMechRider:

@@ -211,12 +211,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        protected static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end)
+        protected static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, IEnumerable<long> skillIDs, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end)
         {
             var phases = new List<PhaseData>();
             long last = start;
-            List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, skillID, mainTarget, beginWithStart, true);
+            var invuls = skillIDs.SelectMany(skillID => GetFilteredList(log.CombatData, skillID, mainTarget, beginWithStart, true)).ToList();
             invuls.RemoveAll(x => x.Time < 0);
+            invuls.Sort((event1, event2) => event1.Time.CompareTo(event2.Time)); // Sort in case there were multiple skillIDs
             for (int i = 0; i < invuls.Count; i++)
             {
                 AbstractBuffEvent c = invuls[i];
@@ -241,6 +242,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phases.Add(new PhaseData(last, end));
             }
             return phases.Where(x => x.DurationInMS > ParserHelper.PhaseTimeLimit).ToList();
+        }
+
+        protected static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end)
+        {
+            return GetPhasesByInvul(log, new[] { skillID }, mainTarget, addSkipPhases, beginWithStart, start, end);
         }
 
         protected static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart)
