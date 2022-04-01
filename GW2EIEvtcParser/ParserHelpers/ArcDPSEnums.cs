@@ -269,7 +269,16 @@ namespace GW2EIEvtcParser
             BuffAttribute res;
             if (evtcVersion >= ParserHelper.ArcDPSBuilds.BuffAttrFlatIncRemoved)
             {
-                res = bt <= (byte)BuffAttribute.SiphonRec - 1 ? (BuffAttribute)(bt + 1) : BuffAttribute.Unknown;
+                // Enum has shifted by -1
+                if (bt <= (byte)BuffAttribute.SiphonRec - 1)
+                {
+                    // only apply +1 shift to enum higher or equal to the one removed
+                    res = bt < (byte)BuffAttribute.FlatInc ? (BuffAttribute)(bt) : (BuffAttribute)(bt + 1);
+                } 
+                else
+                {
+                    res = BuffAttribute.Unknown;
+                }
             } else
             {
                 res = bt <= (byte)BuffAttribute.SiphonRec ? (BuffAttribute)bt : BuffAttribute.Unknown;
