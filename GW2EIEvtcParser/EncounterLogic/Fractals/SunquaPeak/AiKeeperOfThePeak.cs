@@ -52,7 +52,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(61251, "Aquatic Burst", new MechanicPlotlySetting("triangle-down","rgb(0,125,255)"), "Aq.Brst.","Aquatic Burst", "Aquatic Burst",0),
             new EnemyBuffApplyMechanic(61402, "Tidal Barrier", new MechanicPlotlySetting("asterisk-open","rgb(0,125,255)"), "Tdl.Bar.", "Tidal Barrier", "Tidal Barrier", 0),
             new PlayerBuffApplyMechanic(61512, "Tidal Bargain", new MechanicPlotlySetting("star-open","rgb(0,125,255)"), "Tdl.Brgn.","Downed by Tidal Bargain", "Tidal Bargain",0),
-            new PlayerBuffRemoveMechanic(61512, "Tidal Bargain Downed", new MechanicPlotlySetting("star","rgb(0,125,255)"), "Tdl.Brgn.Dwn.","Downed by Tidal Bargain", "Tidal Bargain Downed",0, (evt, log) => evt.RemovedStacks == 10 && Math.Abs(evt.RemovedDuration - 90000) < 10 * ParserHelper.ServerDelayConstant && log.CombatData.GetBuffData(770).Any(x => Math.Abs(x.Time - evt.Time) < 50 && x is BuffApplyEvent bae && bae.To == evt.To)),
+            new PlayerBuffRemoveMechanic(61512, "Tidal Bargain Downed", new MechanicPlotlySetting("star","rgb(0,125,255)"), "Tdl.Brgn.Dwn.","Downed by Tidal Bargain", "Tidal Bargain Downed",0, (evt, log) => evt.RemovedStacks == 10 && Math.Abs(evt.RemovedDuration - 90000) < 10 * ParserHelper.ServerDelayConstant && log.CombatData.GetBuffData(SkillIDs.Downed).Any(x => Math.Abs(x.Time - evt.Time) < 50 && x is BuffApplyEvent bae && bae.To == evt.To)),
             // Dark
             new HitOnPlayerMechanic(61602, "Empathic Manipulation", new MechanicPlotlySetting("square","rgb(150,125,255)"), "Emp.Mnp.","Empathic Manipulation", "Empathic Manipulation",0),
             new HitOnPlayerMechanic(61606, "Empathic Manipulation", new MechanicPlotlySetting("square","rgb(150,125,255)"), "Emp.Mnp.","Empathic Manipulation", "Empathic Manipulation",0),
@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(61289, "Negative Burst", new MechanicPlotlySetting("diamond-wide","rgb(150,125,255)"), "N.Brst.","Negative Burst", "Negative Burst",500),
             new HitOnPlayerMechanic(61184, "Terrorstorm", new MechanicPlotlySetting("diamond-tall","rgb(150,125,255)"), "TrrStrm","Terrorstorm", "Terrorstorm",0),
             new PlayerBuffApplyMechanic(61208, "Crushing Guilt", new MechanicPlotlySetting("star-open","rgb(150,125,255)"), "Crsh.Glt.","Crushing Guilt", "Crushing Guilt",0),
-            new PlayerBuffRemoveMechanic(61208, "Crushing Guilt Down", new MechanicPlotlySetting("star","rgb(150,125,255)"), "Crsh.Glt.Dwn.","Downed by Crushing Guilt", "Crushing Guilt Down",0, (evt, log) => evt.RemovedStacks == 10 && Math.Abs(evt.RemovedDuration - 90000) < 10 * ParserHelper.ServerDelayConstant && log.CombatData.GetBuffData(770).Any(x => Math.Abs(x.Time - evt.Time) < 50 && x is BuffApplyEvent bae && bae.To == evt.To)),
+            new PlayerBuffRemoveMechanic(61208, "Crushing Guilt Down", new MechanicPlotlySetting("star","rgb(150,125,255)"), "Crsh.Glt.Dwn.","Downed by Crushing Guilt", "Crushing Guilt Down",0, (evt, log) => evt.RemovedStacks == 10 && Math.Abs(evt.RemovedDuration - 90000) < 10 * ParserHelper.ServerDelayConstant && log.CombatData.GetBuffData(SkillIDs.Downed).Any(x => Math.Abs(x.Time - evt.Time) < 50 && x is BuffApplyEvent bae && bae.To == evt.To)),
             new EnemyCastStartMechanic(61508, "Empathic Manipulation (Fear)", new MechanicPlotlySetting("triangle-up","rgb(150,125,255)"), "Fear Mnp.", "Empathic Manipulation (Fear)", "Empathic Manipulation (Fear)", 0),
             new EnemyCastEndMechanic(61508, "Empathic Manipulation (Fear) Interrupt", new MechanicPlotlySetting("triangle-up-open","rgb(150,125,255)"), "IntFear.Mnp.", "Empathic Manipulation (Fear) Interrupt", "Empathic Manipulation (Fear) Interrupt", 0, (evt, log) => evt is AnimatedCastEvent ace && ace.Status == AbstractCastEvent.AnimationStatus.Interrupted),
             new EnemyCastStartMechanic(61606, "Empathic Manipulation (Sorrow)", new MechanicPlotlySetting("triangle-left","rgb(150,125,255)"), "Sor.Mnp.", "Empathic Manipulation (Sorrow)", "Empathic Manipulation (Sorrow)", 0),
@@ -292,7 +292,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             if (_hasElementalMode)
             {
-                BuffApplyEvent invul895Gain = log.CombatData.GetBuffData(895).OfType<BuffApplyEvent>().Where(x => x.To == elementalAi.AgentItem).FirstOrDefault();
+                BuffApplyEvent invul895Gain = log.CombatData.GetBuffData(SkillIDs.Determined895).OfType<BuffApplyEvent>().Where(x => x.To == elementalAi.AgentItem).FirstOrDefault();
                 long eleStart = Math.Max(elementalAi.FirstAware, 0);
                 long eleEnd = invul895Gain != null ? invul895Gain.Time : log.FightData.FightEnd;
                 if (_hasDarkMode)
@@ -305,8 +305,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
 
                     //
-                    var invul762Gains = log.CombatData.GetBuffData(762).OfType<BuffApplyEvent>().Where(x => x.To == elementalAi.AgentItem).ToList();
-                    var invul762Losses = log.CombatData.GetBuffData(762).OfType<BuffRemoveAllEvent>().Where(x => x.To == elementalAi.AgentItem).ToList();
+                    var invul762Gains = log.CombatData.GetBuffData(SkillIDs.Determined762).OfType<BuffApplyEvent>().Where(x => x.To == elementalAi.AgentItem).ToList();
+                    var invul762Losses = log.CombatData.GetBuffData(SkillIDs.Determined762).OfType<BuffRemoveAllEvent>().Where(x => x.To == elementalAi.AgentItem).ToList();
                     // sub phases
                     string[] eleNames = { "Air", "Fire", "Water" };
                     long subStart = eleStart;
@@ -341,7 +341,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             if (_hasDarkMode)
             {
-                BuffApplyEvent invul895Gain = log.CombatData.GetBuffData(895).OfType<BuffApplyEvent>().Where(x => x.To == darkAi.AgentItem).FirstOrDefault();
+                BuffApplyEvent invul895Gain = log.CombatData.GetBuffData(SkillIDs.Determined895).OfType<BuffApplyEvent>().Where(x => x.To == darkAi.AgentItem).FirstOrDefault();
                 long darkStart = Math.Max(darkAi.FirstAware, 0);
                 long darkEnd = invul895Gain != null ? invul895Gain.Time : log.FightData.FightEnd;
                 if (_hasElementalMode)
@@ -398,14 +398,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case 1:
                 case 2:
-                    BuffApplyEvent invul895Gain = combatData.GetBuffData(895).OfType<BuffApplyEvent>().Where(x => x.To == Targets[0].AgentItem).FirstOrDefault();
+                    BuffApplyEvent invul895Gain = combatData.GetBuffData(SkillIDs.Determined895).OfType<BuffApplyEvent>().Where(x => x.To == Targets[0].AgentItem).FirstOrDefault();
                     if (invul895Gain != null)
                     {
                         fightData.SetSuccess(true, invul895Gain.Time);
                     }
                     break;
                 case 3:
-                    BuffApplyEvent darkInvul895Gain = combatData.GetBuffData(895).OfType<BuffApplyEvent>().Where(x => x.To == Targets.FirstOrDefault(y => y.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2).AgentItem).FirstOrDefault();
+                    BuffApplyEvent darkInvul895Gain = combatData.GetBuffData(SkillIDs.Determined895).OfType<BuffApplyEvent>().Where(x => x.To == Targets.FirstOrDefault(y => y.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2).AgentItem).FirstOrDefault();
                     if (darkInvul895Gain != null)
                     {
                         fightData.SetSuccess(true, darkInvul895Gain.Time);

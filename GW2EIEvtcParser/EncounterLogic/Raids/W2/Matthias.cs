@@ -78,19 +78,19 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return phases;
             }
             // Special buff cast check
-            AbstractBuffEvent heatWave = log.CombatData.GetBuffData(34458).FirstOrDefault();
+            AbstractBuffEvent heatWave = log.CombatData.GetBuffData(SkillIDs.HeatWaveMatthias).FirstOrDefault();
             if (heatWave != null)
             {
                 phases.Add(new PhaseData(0, heatWave.Time - 1));
-                AbstractBuffEvent downPour = log.CombatData.GetBuffData(34568).FirstOrDefault();
+                AbstractBuffEvent downPour = log.CombatData.GetBuffData(SkillIDs.DownpourMatthias).FirstOrDefault();
                 if (downPour != null)
                 {
                     phases.Add(new PhaseData(heatWave.Time, downPour.Time - 1));
-                    AbstractBuffEvent abo = log.CombatData.GetBuffData(34548).FirstOrDefault();
+                    AbstractBuffEvent abo = log.CombatData.GetBuffData(SkillIDs.Unstable).FirstOrDefault();
                     if (abo != null)
                     {
                         phases.Add(new PhaseData(downPour.Time, abo.Time - 1));
-                        AbstractBuffEvent invulRemove = log.CombatData.GetBuffData(mainTarget.AgentItem).FirstOrDefault(x => x.Time >= abo.Time && x.Time <= abo.Time + 10000 && x.BuffID == 757 && !(x is BuffApplyEvent));
+                        AbstractBuffEvent invulRemove = log.CombatData.GetBuffData(mainTarget.AgentItem).FirstOrDefault(x => x.Time >= abo.Time && x.Time <= abo.Time + 10000 && x.BuffID == SkillIDs.Invulnerability757 && !(x is BuffApplyEvent));
                         if (invulRemove != null)
                         {
                             phases.Add(new PhaseData(invulRemove.Time, fightDuration));
@@ -353,7 +353,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             // Bombs
-            var zealousBenediction = log.CombatData.GetBuffData(34511).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            var zealousBenediction = log.CombatData.GetBuffData(SkillIDs.ZealousBenediction).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent c in zealousBenediction)
             {
                 int zealousStart = (int)c.Time;

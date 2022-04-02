@@ -332,7 +332,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Conjured Amalgamate not found");
             }
-            return combatData.GetBuffData(53075).Count > 0 ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            return combatData.GetBuffData(SkillIDs.LockedOn).Count > 0 ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
         }
     }
 }

@@ -73,7 +73,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         private static List<PhaseData> GetSubPhases(AbstractSingleActor eye, ParsedEvtcLog log)
         {
             var res = new List<PhaseData>();
-            BuffRemoveAllEvent det762Loss = log.CombatData.GetBuffData(762).OfType<BuffRemoveAllEvent>().Where(x => x.To == eye.AgentItem).FirstOrDefault();
+            BuffRemoveAllEvent det762Loss = log.CombatData.GetBuffData(SkillIDs.Determined762).OfType<BuffRemoveAllEvent>().Where(x => x.To == eye.AgentItem).FirstOrDefault();
             if (det762Loss != null)
             {
                 int count = 0;

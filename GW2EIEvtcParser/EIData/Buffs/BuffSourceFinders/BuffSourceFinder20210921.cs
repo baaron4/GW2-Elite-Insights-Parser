@@ -27,8 +27,8 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders
                     {
                         var dodges = p.GetIntersectingCastEvents(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == log.SkillData.DodgeId).ToList();
                         //
-                        var buffApplyTimes = log.CombatData.GetBuffData(62994).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).Select(x => x.Time).ToList(); // Saint of zu Heltzer
-                        buffApplyTimes.AddRange(log.CombatData.GetBuffData(62811).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).Select(x => x.Time)); // Forerunner of Death
+                        var buffApplyTimes = log.CombatData.GetBuffData(SkillIDs.SaintOfzuHeltzer).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).Select(x => x.Time).ToList(); // Saint of zu Heltzer
+                        buffApplyTimes.AddRange(log.CombatData.GetBuffData(SkillIDs.ForerunnerOfDeath).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).Select(x => x.Time)); // Forerunner of Death
                         dodges.RemoveAll(x => buffApplyTimes.Any(y => y >= x.Time && y <= x.EndTime + ParserHelper.ServerDelayConstant));
                         //
                         _vindicatorDodges.AddRange(dodges);

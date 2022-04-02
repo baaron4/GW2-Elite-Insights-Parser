@@ -508,7 +508,7 @@ namespace GW2EIEvtcParser.EIData
                 //////////////////////////////////////////////
                 // Cairn        
                 new Buff("Shared Agony", SharedAgony, Source.FightSpecific, BuffClassification.Debuff,"https://wiki.guildwars2.com/images/5/53/Shared_Agony.png"),
-                new Buff("Enraged (Cairn)", Enraged_Cairn, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png"),
+                new Buff("Enraged (Cairn)", EnragedCairn, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png"),
                 new Buff("Unseen Burden", UnseenBurden, Source.FightSpecific, BuffStackType.Stacking , 99, BuffClassification.Debuff,"https://wiki.guildwars2.com/images/b/b9/Unseen_Burden.png"),
                 new Buff("Countdown", Countdown, Source.FightSpecific, BuffStackType.Stacking , 10, BuffClassification.Other,"https://wiki.guildwars2.com/images/0/05/Countdown.png"),
                 new Buff("Gaze Avoidance", GazeAvoidance, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/1/10/Gaze_Avoidance.png"),

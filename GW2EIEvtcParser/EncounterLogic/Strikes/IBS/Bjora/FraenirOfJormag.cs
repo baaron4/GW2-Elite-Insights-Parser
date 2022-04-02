@@ -59,7 +59,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            AbstractBuffEvent invulApplyFraenir = log.CombatData.GetBuffData(762).Where(x => x.To == fraenir.AgentItem && x is BuffApplyEvent).FirstOrDefault();
+            AbstractBuffEvent invulApplyFraenir = log.CombatData.GetBuffData(SkillIDs.Determined762).Where(x => x.To == fraenir.AgentItem && x is BuffApplyEvent).FirstOrDefault();
             if (invulApplyFraenir != null)
             {
                 // split happened
@@ -71,15 +71,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (enterCombatIce != null)
                     {
                         // icebrood phasing
-                        AbstractBuffEvent invulApplyIce = log.CombatData.GetBuffData(757).Where(x => x.To == icebrood.AgentItem && x is BuffApplyEvent).FirstOrDefault();
-                        AbstractBuffEvent invulRemoveIce = log.CombatData.GetBuffData(757).Where(x => x.To == icebrood.AgentItem && x is BuffRemoveAllEvent).FirstOrDefault();
+                        AbstractBuffEvent invulApplyIce = log.CombatData.GetBuffData(SkillIDs.Invulnerability757).Where(x => x.To == icebrood.AgentItem && x is BuffApplyEvent).FirstOrDefault();
+                        AbstractBuffEvent invulRemoveIce = log.CombatData.GetBuffData(SkillIDs.Invulnerability757).Where(x => x.To == icebrood.AgentItem && x is BuffRemoveAllEvent).FirstOrDefault();
                         long icebroodStart = enterCombatIce.Time;
                         long icebroodEnd = log.FightData.FightEnd;
                         if (invulApplyIce != null && invulRemoveIce != null)
                         {
                             long icebrood2Start = invulRemoveIce.Time;
                             phases.Add(new PhaseData(icebroodStart + 1, invulApplyIce.Time, "Icebrood 1"));
-                            AbstractBuffEvent invulRemoveFraenir = log.CombatData.GetBuffData(762).Where(x => x.To == fraenir.AgentItem && x is BuffRemoveAllEvent).FirstOrDefault();
+                            AbstractBuffEvent invulRemoveFraenir = log.CombatData.GetBuffData(SkillIDs.Determined762).Where(x => x.To == fraenir.AgentItem && x is BuffRemoveAllEvent).FirstOrDefault();
                             if (invulRemoveFraenir != null)
                             {
                                 // fraenir came back

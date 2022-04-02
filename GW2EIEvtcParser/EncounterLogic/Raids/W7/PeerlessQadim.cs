@@ -61,7 +61,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<AbstractBuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
         {
             var res = new List<AbstractBuffEvent>();
-            IReadOnlyList<AbstractBuffEvent> sappingSurges = combatData.GetBuffData(56118);
+            IReadOnlyList<AbstractBuffEvent> sappingSurges = combatData.GetBuffData(SkillIDs.SappingSurge);
             var sappingSurgeByDst = sappingSurges.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             foreach (KeyValuePair<AgentItem, List<AbstractBuffEvent>> pair in sappingSurgeByDst.Where(x => x.Value.Exists(y => y is BuffRemoveSingleEvent)))
             {
@@ -95,7 +95,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var phaseStarts = new List<long>();
             var phaseEnds = new List<long>();
             //
-            var magmaDrops = log.CombatData.GetBuffData(56475).Where(x => x is BuffApplyEvent).ToList();
+            var magmaDrops = log.CombatData.GetBuffData(SkillIDs.MagmaDrop).Where(x => x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent magmaDrop in magmaDrops)
             {
                 if (phaseEnds.Count > 0)

@@ -80,7 +80,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            BuffApplyEvent enrageApply = log.CombatData.GetBuffData(37675).OfType<BuffApplyEvent>().FirstOrDefault(x => x.To == cairn.AgentItem);
+            BuffApplyEvent enrageApply = log.CombatData.GetBuffData(SkillIDs.EnragedCairn).OfType<BuffApplyEvent>().FirstOrDefault(x => x.To == cairn.AgentItem);
             if (enrageApply != null)
             {
                 var normalPhase = new PhaseData(0, enrageApply.Time)
@@ -185,7 +185,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // shared agony
-            var agony = log.CombatData.GetBuffData(38049).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
+            var agony = log.CombatData.GetBuffData(SkillIDs.SharedAgony).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
             foreach (AbstractBuffEvent c in agony)
             {
                 int agonyStart = (int)c.Time;

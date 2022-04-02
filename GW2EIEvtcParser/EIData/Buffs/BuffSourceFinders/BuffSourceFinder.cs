@@ -53,7 +53,7 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders
         {
             if (extension == ImbuedMelodies && log.FriendliesListBySpec.TryGetValue(ParserHelper.Spec.Tempest, out List<AbstractSingleActor> tempests))
             {
-                var magAuraApplications = new HashSet<AgentItem>(log.CombatData.GetBuffData(5684).Where(x => x is BuffApplyEvent && Math.Abs(x.Time - time) < ParserHelper.ServerDelayConstant && x.CreditedBy != agent).Select(x => x.CreditedBy));
+                var magAuraApplications = new HashSet<AgentItem>(log.CombatData.GetBuffData(SkillIDs.MagneticAura).Where(x => x is BuffApplyEvent && Math.Abs(x.Time - time) < ParserHelper.ServerDelayConstant && x.CreditedBy != agent).Select(x => x.CreditedBy));
                 foreach (AbstractSingleActor tempest in tempests)
                 {
                     if (magAuraApplications.Contains(tempest.AgentItem))
