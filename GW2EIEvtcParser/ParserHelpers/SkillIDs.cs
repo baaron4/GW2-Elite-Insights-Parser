@@ -739,6 +739,7 @@ namespace GW2EIEvtcParser
         public const long MortalCoilRiver = 48154;
         public const long FractalProdigy = 48191;
         public const long Exposed48209 = 48209;
+        public const long GreaterDeathMark = 48210;
         public const long MortalCoilDhuum = 48281;
         public const long MistlockInstabilityFractalVindicators = 48296;
         public const long SpiritForm = 48331;

@@ -29,7 +29,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     return false;
                 }
                 // Greater Death mark check
-                if (log.CombatData.GetDamageData(48210).Any(x => Math.Abs(x.Time - br.Time) < 100 && x.To == br.To)) {
+                if (log.CombatData.GetDamageData(SkillIDs.GreaterDeathMark).Any(x => Math.Abs(x.Time - br.Time) < 100 && x.To == br.To)) {
                     return false;
                 }
                 // Spirit transformation check
