@@ -751,7 +751,7 @@ namespace GW2EIEvtcParser
         public const long MortalCoilStatueOfDeath = 48583;
         public const long HastenedDemise = 48773;
         public const long LightCarrier = 48779;
-        public const long EnergyThreshold = 48848;
+        public const long EnergyThresholdDhuum = 48848;
         public const long ExposeDefenses = 48894;
         public const long CompoundingPower = 49058;
         public const long IronBlooded = 49065;
