@@ -40,7 +40,7 @@ namespace GW2EIEvtcParser.EIData
                         break;
                     case SkillIDs.Down:
                         cList = combatData.GetDownEvents(p.AgentItem).Select(x => x.Time).ToList();
-                        var downByVaporForm = combatData.GetBuffRemoveAllData(5620).Where(x => x.To == p.AgentItem).Select(x => x.Time).ToList();
+                        var downByVaporForm = combatData.GetBuffRemoveAllData(SkillIDs.VaporForm).Where(x => x.To == p.AgentItem).Select(x => x.Time).ToList();
                         foreach (long time in downByVaporForm)
                         {
                             cList.RemoveAll(x => Math.Abs(x - time) < 20);

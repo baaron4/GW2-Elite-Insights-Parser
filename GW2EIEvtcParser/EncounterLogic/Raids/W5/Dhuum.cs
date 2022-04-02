@@ -396,7 +396,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     duration = 30000;
                 }
-                AbstractBuffEvent removedBuff = log.CombatData.GetBuffRemoveAllData(48281).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
+                AbstractBuffEvent removedBuff = log.CombatData.GetBuffRemoveAllData(SkillIDs.MortalCoilDhuum).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
                 int start = (int)c.Time;
                 int end = start + duration;
                 if (removedBuff != null)
