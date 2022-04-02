@@ -48,10 +48,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(35064, "Phantasmal Blades", new MechanicPlotlySetting("hexagram-open",Colors.Magenta), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
             new HitOnPlayerMechanic(35086, "Tower Drop", new MechanicPlotlySetting("circle",Colors.LightOrange), "Jump","Tower Drop (KC Jump)", "Tower Drop",0),
             new PlayerBuffApplyMechanic(35103, "Xera's Fury", new MechanicPlotlySetting("circle",Colors.Orange), "Bomb","Xera's Fury (Large Bombs) application", "Bombs",0),
-            new HitOnPlayerMechanic(34914, "Good White Orb", new MechanicPlotlySetting("circle",Colors.White), "GW.Orb","Good White Orb", "Good White Orb",0, (de,log) => de.To.HasBuff(log, 35109, de.Time)),
-            new HitOnPlayerMechanic(34972, "Good Red Orb", new MechanicPlotlySetting("circle",Colors.DarkRed), "GR.Orb","Good Red Orb", "Good Red Orb",0, (de,log) => de.To.HasBuff(log, 35091, de.Time)),
-            new HitOnPlayerMechanic(34914, "Bad White Orb", new MechanicPlotlySetting("circle",Colors.Grey), "BW.Orb","Bad White Orb", "Bad White Orb",0, (de,log) => !de.To.HasBuff(log, 35109, de.Time)),
-            new HitOnPlayerMechanic(34972, "Bad Red Orb", new MechanicPlotlySetting("circle",Colors.Red), "BR.Orb","Bad Red Orb", "Bad Red Orb",0, (de,log) => !de.To.HasBuff(log, 35091, de.Time)),
+            new HitOnPlayerMechanic(34914, "Good White Orb", new MechanicPlotlySetting("circle",Colors.White), "GW.Orb","Good White Orb", "Good White Orb",0, (de,log) => de.To.HasBuff(log, SkillIDs.RadiantAttunementOrb, de.Time)),
+            new HitOnPlayerMechanic(34972, "Good Red Orb", new MechanicPlotlySetting("circle",Colors.DarkRed), "GR.Orb","Good Red Orb", "Good Red Orb",0, (de,log) => de.To.HasBuff(log, SkillIDs.CrimsonAttunementOrb, de.Time)),
+            new HitOnPlayerMechanic(34914, "Bad White Orb", new MechanicPlotlySetting("circle",Colors.Grey), "BW.Orb","Bad White Orb", "Bad White Orb",0, (de,log) => !de.To.HasBuff(log, SkillIDs.RadiantAttunementOrb, de.Time)),
+            new HitOnPlayerMechanic(34972, "Bad Red Orb", new MechanicPlotlySetting("circle",Colors.Red), "BR.Orb","Bad Red Orb", "Bad Red Orb",0, (de,log) => !de.To.HasBuff(log, SkillIDs.CrimsonAttunementOrb, de.Time)),
             new HitOnEnemyMechanic(16261, "Core Hit", new MechanicPlotlySetting("star-open",Colors.LightOrange), "Core Hit","Core was Hit by Player", "Core Hit",1000)
             });
             Extension = "kc";

@@ -33,7 +33,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     return false;
                 }
                 // Spirit transformation check
-                if (br.To.HasBuff(log, 48281, br.Time))
+                if (br.To.HasBuff(log, SkillIDs.MortalCoilDhuum, br.Time))
                 {
                     return false;
                 }

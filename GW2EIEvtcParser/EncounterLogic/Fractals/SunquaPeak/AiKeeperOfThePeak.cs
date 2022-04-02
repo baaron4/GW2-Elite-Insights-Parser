@@ -28,7 +28,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(61565, "Fulgor Sphere", new MechanicPlotlySetting("circle","rgb(255,0,255)"), "Flg.Sph.","Fulgor Sphere", "Fulgor Sphere",0),
             new HitOnPlayerMechanic(61470, "Volatile Wind", new MechanicPlotlySetting("triangle-left","rgb(255,0,255)"), "Vlt.Wnd.","Volatile Wind", "Volatile Wind",0),
             new HitOnPlayerMechanic(61205, "Wind Burst", new MechanicPlotlySetting("triangle-down-open","rgb(255,0,255)"), "Wnd.Brst.","Wind Burst", "Wind Burst",0),
-            new HitOnPlayerMechanic(61205, "Wind Burst Launch", new MechanicPlotlySetting("triangle-down","rgb(255,0,255)"), "L.Wnd.Burst","Launched up by Wind Burst", "Wind Burst Launch",0,(de, log) => !de.To.HasBuff(log, 1122, de.Time - ParserHelper.ServerDelayConstant)),
+            new HitOnPlayerMechanic(61205, "Wind Burst Launch", new MechanicPlotlySetting("triangle-down","rgb(255,0,255)"), "L.Wnd.Burst","Launched up by Wind Burst", "Wind Burst Launch",0,(de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
             new HitOnPlayerMechanic(61190 , "Call of Storms", new MechanicPlotlySetting("triangle-up","rgb(255,0,255)"), "Call.Strs","Call of Storms", "Call of Storms",0),
             new EnemyBuffApplyMechanic(61224, "Whirlwind Shield",new MechanicPlotlySetting("asterisk-open","rgb(255,0,255)"), "W.Shield" ,"Whirlwind Shield","Whirlwind Shield",0),
             // Fire

@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerBuffApplyMechanic(56593, "Radiant Blindness", new MechanicPlotlySetting("circle",Colors.Magenta), "R.Blind", "Unremovable blindness", "Radiant Blindness", 0),
                 new PlayerBuffApplyMechanic(56440, "Eroding Curse", new MechanicPlotlySetting("square",Colors.LightPurple), "Curse", "Stacking damage debuff from Hand of Erosion", "Eroding Curse", 0),
                 new HitOnPlayerMechanic(56648, "Boulder Barrage", new MechanicPlotlySetting("hexagon",Colors.Red), "Boulder", "Hit by boulder thrown during pillars", "Boulder Barrage", 0),
-                new HitOnPlayerMechanic(56390, "Perilous Pulse", new MechanicPlotlySetting("triangle-right",Colors.Pink), "Perilous Pulse", "Perilous Pulse", "Perilous Pulse", 0, (de, log) => !de.To.HasBuff(log, 1122, de.Time - ParserHelper.ServerDelayConstant)),
+                new HitOnPlayerMechanic(56390, "Perilous Pulse", new MechanicPlotlySetting("triangle-right",Colors.Pink), "Perilous Pulse", "Perilous Pulse", "Perilous Pulse", 0, (de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
                 new HitOnPlayerMechanic(56141, "Stalagmites", new MechanicPlotlySetting("pentagon",Colors.Red), "Mines", "Hit by mines", "Mines", 0),
                 new HitOnPlayerMechanic(56114, "Diamond Palisade", new MechanicPlotlySetting("star-diamond",Colors.Pink), "Eye", "Looked at Eye", "Looked at Eye", 0),
                 new SkillOnPlayerMechanic(56035, "Quantum Quake", new MechanicPlotlySetting("hourglass",Colors.Brown), "S.Thrower", "Hit by rotating SandThrower", "SandThrower", 0, (de, log) => de.HasKilled),
