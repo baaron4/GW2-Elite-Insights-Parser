@@ -611,6 +611,7 @@ namespace GW2EIEvtcParser
         public const long CosmicMeteor = 39268;
         public const long BlindingRadiance = 39442;
         public const long FixatedBloom3 = 39558;
+        public const long ArkkBreakbarCast = 39645;
         public const long FixatedBloom2 = 39928;
         public const long DarkAura = 39978;
         public const long BearStance = 40045;
@@ -851,8 +852,10 @@ namespace GW2EIEvtcParser
         public const long ClutchedbyChaos = 56257;
         public const long FlareUp = 56264;
         public const long BacklashingBeam = 56360;
+        public const long PeerlessQadimTPCenter = 56375;
         public const long ElectricalRepulsion = 56391;
         public const long BoltBreak = 56394;
+        public const long ForceOfRetaliationCast = 56405;
         public const long CriticalMass = 56424;
         public const long ErodingCurse = 56440;
         public const long UnbridledChaos = 56467;
@@ -863,6 +866,7 @@ namespace GW2EIEvtcParser
         public const long ErraticEnergy = 56582;
         public const long RadiantBlindness = 56593;
         public const long KineticAbundance = 56609;
+        public const long BatteringBlitz = 56616;
         public const long DiamondPalisade = 56636;
         public const long PoisonedPower = 56655;
         public const long SymbolicAvenger = 56890;

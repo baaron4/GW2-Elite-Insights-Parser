@@ -72,8 +72,8 @@ namespace GW2EIEvtcParser.ParsedData
             // P.Qadim
             {56296, "Ruinous Nova Charge" },
             //{56036, "Magma Bomb" },
-            {56405, "Force of Retaliation Cast" },
-            {56375, "Teleport Center" },
+            {SkillIDs.ForceOfRetaliationCast, "Force of Retaliation Cast" },
+            {SkillIDs.PeerlessQadimTPCenter, "Teleport Center" },
             {56446, "Eat Pylon" },
             {56329, "Big Magma Drop" },
             // Voice and Claw
