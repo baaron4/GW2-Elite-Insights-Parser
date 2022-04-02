@@ -636,11 +636,11 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Unbridled Chaos", UnbridledChaos, Source.FightSpecific, BuffStackType.Stacking, 3, BuffClassification.Other,"https://wiki.guildwars2.com/images/4/42/Exposed_%28Statue_of_Darkness%29.png"),
                 //////////////////////////////////////////////
                 // Fractals 
-                new Buff("Rigorous Certainty", 33652, Source.Common, BuffClassification.Defensive,"https://wiki.guildwars2.com/images/6/60/Desert_Carapace.png"),
-                new Buff("Fractal Savant", 47248, Source.Common, BuffClassification.Offensive,"https://wiki.guildwars2.com/images/c/cb/Malign_9_Agony_Infusion.png"),
-                new Buff("Fractal Prodigy", 48191, Source.Common, BuffClassification.Offensive,"https://wiki.guildwars2.com/images/1/11/Mighty_9_Agony_Infusion.png"),
-                new Buff("Fractal Champion", 48414, Source.Common, BuffClassification.Offensive,"https://wiki.guildwars2.com/images/3/3d/Precise_9_Agony_Infusion.png"),
-                new Buff("Fractal God", 47222, Source.Common, BuffClassification.Offensive,"https://wiki.guildwars2.com/images/2/22/Healing_9_Agony_Infusion.png"),
+                new Buff("Rigorous Certainty", RigorousCertainty, Source.Common, BuffClassification.Defensive,"https://wiki.guildwars2.com/images/6/60/Desert_Carapace.png"),
+                new Buff("Fractal Savant", FractalSavant, Source.Common, BuffClassification.Offensive,"https://wiki.guildwars2.com/images/c/cb/Malign_9_Agony_Infusion.png"),
+                new Buff("Fractal Prodigy", FractalProdigy, Source.Common, BuffClassification.Offensive,"https://wiki.guildwars2.com/images/1/11/Mighty_9_Agony_Infusion.png"),
+                new Buff("Fractal Champion", FractalChampion, Source.Common, BuffClassification.Offensive,"https://wiki.guildwars2.com/images/3/3d/Precise_9_Agony_Infusion.png"),
+                new Buff("Fractal God", FractalGod, Source.Common, BuffClassification.Offensive,"https://wiki.guildwars2.com/images/2/22/Healing_9_Agony_Infusion.png"),
                 // Siax 
                 new Buff("Fixated (Nightmare)", 36998, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 // Ensolyss 
