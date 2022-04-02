@@ -937,7 +937,7 @@ namespace GW2EIEvtcParser
         public const long EssenceOfValorTier4 = 60062;
         public const long EssenceOfVigilanceTier4 = 60173;
         public const long PowerOfResilienceTier4 = 60312;
-        public const long Targeted_DragonVoid = 60517;
+        public const long TargetedDragonVoid = 60517;
         public const long Enraged4_200 = 60674;
         public const long Enraged_300 = 61006;
         public const long Enraged2_100 = 61138;
@@ -1006,6 +1006,7 @@ namespace GW2EIEvtcParser
         public const long BowlOfJadeSeaBounty = 64357;
         public const long TargetOrder3 = 64377;
         public const long StrongerTogether = 64465;
+        public const long InfluenceOfTheVoid = 64524;
         public const long NourishmentBonusPowerFerocity = 64528;
         public const long PlateOfCrispyFishPancakes = 64562;
         public const long MeatyAsparagusSkewer = 64568;
@@ -1015,7 +1016,7 @@ namespace GW2EIEvtcParser
         public const long TargetOrder4 = 64999;
         public const long TargetOrder2 = 65088;
         public const long BowlOfKimchiTofuStew = 65197;
-        public const long MaiTrin = 65238;
+        public const long MaiTrinSomething = 65238;
         public const long DestructiveAura = 65250;
         public const long MeatyRiceBowl = 65354;
         public const long VoidShell = 65563;
@@ -1032,7 +1033,7 @@ namespace GW2EIEvtcParser
         public const long BowlOfEchovaldHotpot = 66663;
         public const long VoidImmunity = 66800;
         public const long VitalityEqualizer2 = 66894;
-        public const long Ankka = 66962;
+        public const long AnkkaSomething = 66962;
         public const long EqualizationMatrix = 67047;
         public const long PlateOfImperialPalaceSpecial = 67265;
         public const long NecroticRitual = 67447;
