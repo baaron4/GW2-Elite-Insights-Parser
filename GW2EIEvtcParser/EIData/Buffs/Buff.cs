@@ -672,23 +672,23 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Tidal Bargain", TidalBargain, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png"),
                 //////////////////////////////////////////////
                 // Icebrood
-                new Buff("Hypothermia", 57969, Source.FightSpecific, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/d/d5/Hypothermia_%28story_effect%29.png" ),
+                new Buff("Hypothermia", Hypothermia, Source.FightSpecific, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/d/d5/Hypothermia_%28story_effect%29.png" ),
                 // Fraenir of Jormag
-                new Buff("Frozen", 58376, Source.FightSpecific, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png" ),
-                new Buff("Snowblind", 58276, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png" ),
+                new Buff("Frozen", Frozen, Source.FightSpecific, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png" ),
+                new Buff("Snowblind", Snowblind, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png" ),
                 // Voice and Claw            
-                new Buff("Enraged (V&C)", 58619, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Enraged (V&C)", EnragedVC, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
                 // Boneskinner     
-                new Buff("Tormenting Aura", 58860, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/c0/Darkness.png" ),
+                new Buff("Tormenting Aura", TormentingAura, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/c0/Darkness.png" ),
                 // Whisper of Jormag
-                new Buff("Whisper Teleport Out", 59223, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
-                new Buff("Whisper Teleport Back", 59054, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
-                new Buff("Frigid Vortex", 59105, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
-                new Buff("Chains of Frost Active", 59100, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/63/Use_Soul_Binder.png" ),
-                new Buff("Chains of Frost Application", 59120, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png" ),
-                new Buff("Brain Freeze", 59073, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png" ),
+                new Buff("Whisper Teleport Out", WhisperTeleportOut, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Whisper Teleport Back", WhisperTeleportBack, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png" ),
+                new Buff("Frigid Vortex", FrigidVortex, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Chains of Frost Active", ChainsOfFrostActive, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/63/Use_Soul_Binder.png" ),
+                new Buff("Chains of Frost Application", ChainsOfFrostApplication, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png" ),
+                new Buff("Brain Freeze", BrainFreeze, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png" ),
                 // Frezie      
-                new Buff("Icy Barrier", 53510, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/38/Shield_of_Ice.png" ),
+                new Buff("Icy Barrier", IcyBarrier, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/38/Shield_of_Ice.png" ),
                 // Mai Trin
                 new Buff("Shared Destruction", 65900, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Immune to damage and conditions.", 64843, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
