@@ -637,6 +637,7 @@ namespace GW2EIEvtcParser
         public const long AttackersInsight = 41963;
         public const long WeaversProwess = 42061;
         public const long PrimordialStance = 42086;
+        public const long OneWolfPack = 42145;
         public const long Afterburner = 42210;
         public const long DualAirAttunement = 42264;
         public const long ElementsOfRage = 42416;
@@ -670,7 +671,7 @@ namespace GW2EIEvtcParser
         public const long SignetOfVampirismShroud = 43885;
         public const long SigilOfSeverance = 43930;
         public const long FullCounter = 43949;
-        public const long OneWolfPack = 44139;
+        public const long OneWolfPackEffect = 44139;
         public const long PlagueSignetShroud = 44164;
         public const long LegendaryRenegadeStance = 44272;
         public const long LasersEdge = 44414;
