@@ -215,7 +215,7 @@
         },
         methods: {
             getTooltip: function (item, mod) {
-                if (item[2] === 0) {
+                if (item[0] === 0) {
                     return null;
                 }
                 var hits = item[0] + " out of " + item[1] + " hits";
@@ -224,6 +224,10 @@
                     percent = this.round3(1000.0 * item[1] / this.phase.duration) + " hits/s";
                 } else {
                     percent = this.round3(100.0 * item[0] / item[1]) + " hit %";
+                }
+                var res = hits + "<br>" + percent;
+                if (item[2] === 0) {
+                    return res;
                 }
                 var gain;
                 if (mod.nonMultiplier) {
@@ -235,10 +239,13 @@
                 if (mod.nonMultiplier) {
                     gain += "<br>Total Damage: " + this.round3(100.0 * item[2] / item[3]) + "%";
                 }
-                return hits + "<br>" + percent + "<br>" + gain;
+                return res + "<br>" + gain;
             },
             getCellValue: function (item, mod) {
                 if (item[2] === 0) {
+                    if (item[0] > 0) {
+                        return 'Tooltip';
+                    }
                     return '-';
                 }
                 if (mod.nonMultiplier) {
