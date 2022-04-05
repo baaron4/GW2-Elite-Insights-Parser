@@ -4,6 +4,7 @@ using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.Extensions;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -12,10 +13,10 @@ namespace GW2EIEvtcParser.EIData
 
         private static readonly List<InstantCastFinder> _genericInstantCastFinders = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(9433, 9433, 500), // Earth Sigil
-            new DamageCastFinder(9292, 9292, 500), // Air Sigil
-            new DamageCastFinder(9428, 9428, 500), // Hydro Sigil
-            new EXTHealingCastFinder(12836, 12836, EIData.InstantCastFinder.DefaultICD), // Water Blast Combo
+            new DamageCastFinder(SigilOfEarth, SigilOfEarth, 500), // Earth Sigil
+            new DamageCastFinder(SigilOfAir, SigilOfAir, 500), // Air Sigil
+            new DamageCastFinder(SigilOfHydromancy, SigilOfHydromancy, 500), // Hydro Sigil
+            new EXTHealingCastFinder(WaterBlastCombo1, WaterBlastCombo1, EIData.InstantCastFinder.DefaultICD), // Water Blast Combo
         };
 
         internal static void AttachMasterToGadgetByCastData(CombatData combatData, IReadOnlyCollection<AgentItem> gadgets, IReadOnlyList<long> castIDS, long castEndThreshold)
@@ -85,10 +86,10 @@ namespace GW2EIEvtcParser.EIData
         {
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
             // Sylvari stuff
-            HashSet<AgentItem> seedTurrets = GetOffensiveGadgetAgents(combatData, 12455, playerAgents);
-            HashSet<AgentItem> graspingWines = GetOffensiveGadgetAgents(combatData, 1290, playerAgents);
-            AttachMasterToGadgetByCastData(combatData, seedTurrets, new List<long> { 12456, 12457 }, 1000);
-            AttachMasterToGadgetByCastData(combatData, graspingWines, new List<long> { 12453 }, 1000);
+            HashSet<AgentItem> seedTurrets = GetOffensiveGadgetAgents(combatData, SeedTurretDamage, playerAgents);
+            HashSet<AgentItem> graspingWines = GetOffensiveGadgetAgents(combatData, GraspingVinesDamage, playerAgents);
+            AttachMasterToGadgetByCastData(combatData, seedTurrets, new List<long> { SeedTurret, TakeRoot }, 1000);
+            AttachMasterToGadgetByCastData(combatData, graspingWines, new List<long> { GraspingVines }, 1000);
             // melandru avatar works fine already
         }
 

@@ -290,7 +290,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Shocking Aura", ShockingAura, Source.Common, BuffClassification.Support,"https://wiki.guildwars2.com/images/5/5d/Shocking_Aura_%28effect%29.png"),
                 new Buff("Dark Aura", DarkAura, Source.Common, BuffClassification.Support,"https://wiki.guildwars2.com/images/e/ef/Dark_Aura.png", GW2Builds.April2019Balance, GW2Builds.EndOfLife),
                 //race
-                new Buff("Take Root", TakeRoot, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/b/b2/Take_Root.png"),
+                new Buff("Take Root", TakeRootEffect, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/b/b2/Take_Root.png"),
                 new Buff("Become the Bear",BecomeTheBear, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/7/7e/Become_the_Bear.png"),
                 new Buff("Become the Raven",BecomeTheRaven, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/2/2c/Become_the_Raven.png"),
                 new Buff("Become the Snow Leopard",BecomeTheSnowLeopard, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/7/78/Become_the_Snow_Leopard.png"),

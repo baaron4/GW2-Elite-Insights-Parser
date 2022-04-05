@@ -89,6 +89,7 @@ namespace GW2EIEvtcParser
         public const long Resurrect = 1066;
         public const long Bandage = 1175;
         public const long Quickness = 1187;
+        public const long GraspingVinesDamage = 1290;
         public const long Determined3892 = 3892;
         public const long MistForm = 5543;
         public const long SignetOfFire = 5544;
@@ -139,10 +140,13 @@ namespace GW2EIEvtcParser
         public const long BaneSignetPI = 9240;
         public const long RenewedFocus = 9255;
         public const long SigilOfBloodlust = 9286;
+        public const long SigilOfAir = 9292;
         public const long SigilOfCorruption = 9374;
         public const long SigilOfPerception = 9385;
         public const long SigilOfLife = 9386;
         public const long SigilOfBenevolence = 9398;
+        public const long SigilOfHydromancy = 9428;
+        public const long SigilOfEarth = 9433;
         public const long SigilOfDoom = 9441;
         public const long DragonsBreathBun = 9750;
         public const long KarkaEggOmelet = 9756;
@@ -221,7 +225,11 @@ namespace GW2EIEvtcParser
         public const long BecomeTheSnowLeopard = 12400;
         public const long BecomeTheRaven = 12405;
         public const long BecomeTheBear = 12426;
-        public const long TakeRoot = 12459;
+        public const long GraspingVines = 12453;
+        public const long SeedTurretDamage = 12455;
+        public const long SeedTurret = 12456;
+        public const long TakeRoot = 12457;
+        public const long TakeRootEffect = 12459;
         public const long SignetOfTheWild = 12518;
         public const long SharpeningStones = 12536;
         public const long SunSpiritOld = 12540;
@@ -234,6 +242,7 @@ namespace GW2EIEvtcParser
         public const long SignetOfTheHuntPassive = 12626;
         public const long SignetOfStonePassive = 12627;
         public const long SignetOfTheWildPet = 12636;
+        public const long WaterBlastCombo1 = 12836;
         public const long Stealth = 13017;
         public const long SpiderVenom = 13036;
         public const long AssassinsSignetPassive = 13047;
