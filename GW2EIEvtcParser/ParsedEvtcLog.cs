@@ -42,20 +42,22 @@ namespace GW2EIEvtcParser
             PlayerList = playerList; 
             ParserSettings = parserSettings;
             _operation = operation;
-            var friendlies = new List<AbstractSingleActor>();
-            friendlies.AddRange(playerList);
-            friendlies.AddRange(fightData.Logic.NonPlayerFriendlies);
-            Friendlies = friendlies;
             //
-            FriendliesListBySpec = friendlies.GroupBy(x => x.Spec).ToDictionary(x => x.Key, x => x.ToList());
-            PlayerAgents = new HashSet<AgentItem>(playerList.Select(x => x.AgentItem));
-            FriendlyAgents = new HashSet<AgentItem>(friendlies.Select(x => x.AgentItem));
             _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Combat Events");
-            CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList, operation, extensions, evtcVersion);
+            CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, PlayerList, operation, extensions, evtcVersion);
+            //
             operation.UpdateProgressWithCancellationCheck("Checking CM");
             FightData.SetCM(CombatData, AgentData);
             operation.UpdateProgressWithCancellationCheck("Setting Fight Name");
             FightData.SetFightName(CombatData, AgentData);
+            //
+            var friendlies = new List<AbstractSingleActor>();
+            friendlies.AddRange(PlayerList);
+            friendlies.AddRange(fightData.Logic.NonPlayerFriendlies);
+            Friendlies = friendlies;
+            FriendliesListBySpec = friendlies.GroupBy(x => x.Spec).ToDictionary(x => x.Key, x => x.ToList());
+            PlayerAgents = new HashSet<AgentItem>(PlayerList.Select(x => x.AgentItem));
+            FriendlyAgents = new HashSet<AgentItem>(Friendlies.Select(x => x.AgentItem));
             //
             _operation.UpdateProgressWithCancellationCheck("Checking Success");
             FightData.Logic.CheckSuccess(CombatData, AgentData, FightData, PlayerAgents);

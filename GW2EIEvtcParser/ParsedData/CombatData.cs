@@ -39,7 +39,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         public bool HasBreakbarDamageData { get; } = false;
 
-        private void EIBuffParse(List<Player> players, SkillData skillData, FightData fightData)
+        private void EIBuffParse(IReadOnlyList<Player> players, SkillData skillData, FightData fightData)
         {
             var toAdd = new List<AbstractBuffEvent>();
             foreach (Player p in players)
@@ -156,7 +156,7 @@ namespace GW2EIEvtcParser.ParsedData
                 _damageData[a] = _damageData[a].OrderBy(x => x.Time).ToList();
             }
         }
-        private void EICastParse(List<Player> players, SkillData skillData, FightData fightData, AgentData agentData)
+        private void EICastParse(IReadOnlyList<Player> players, SkillData skillData, FightData fightData, AgentData agentData)
         {
             List<AbstractCastEvent> toAdd = fightData.Logic.SpecialCastEventProcess(this, skillData);
             toAdd.AddRange(ProfHelper.ComputeInstantCastEvents(players, this, skillData, agentData, fightData.Logic));
@@ -302,7 +302,7 @@ namespace GW2EIEvtcParser.ParsedData
             _metaDataEvents.ErrorEvents.AddRange(fightData.Logic.GetCustomWarningMessages(fightData, arcdpsVersion));
         }
 
-        private void EIExtraEventProcess(List<Player> players, SkillData skillData, AgentData agentData, FightData fightData, ParserController operation, int arcdpsVersion)
+        private void EIExtraEventProcess(IReadOnlyList<Player> players, SkillData skillData, AgentData agentData, FightData fightData, ParserController operation, int arcdpsVersion)
         {
             operation.UpdateProgressWithCancellationCheck("Creating Custom Buff Events");
             EIBuffParse(players, skillData, fightData);
@@ -323,7 +323,7 @@ namespace GW2EIEvtcParser.ParsedData
             ProfHelper.AttachMasterToRacialGadgets(players, this);
         }
 
-        internal CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players, ParserController operation, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, int evtcVersion)
+        internal CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, IReadOnlyList<Player> players, ParserController operation, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, int evtcVersion)
         {
             var combatEvents = allCombatItems.OrderBy(x => x.Time).ToList();
             _skillIds = new HashSet<long>();

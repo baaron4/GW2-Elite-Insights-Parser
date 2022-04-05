@@ -760,13 +760,6 @@ namespace GW2EIEvtcParser
                     _playerList.Add(player);
                 }
             }
-            if (_parserSettings.AnonymousPlayer)
-            {
-                for (int i = 0; i < _playerList.Count; i++)
-                {
-                    _playerList[i].Anonymize(i + 1);
-                }
-            }
             _playerList = _playerList.OrderBy(a => a.Group).ToList();
             if (_playerList.Exists(x => x.Group == 0))
             {
@@ -935,8 +928,7 @@ namespace GW2EIEvtcParser
                             && x.SrcMatchesAgent(p.AgentItem) && x.Time <= p.FirstAware + 500);
                         if (spawnEvent != null)
                         {
-                            var damageEvents = _combatItems.Where(x => x.IsDamage()
-                                 && x.SrcMatchesAgent(p.AgentItem) && ((x.IsBuff > 0 && x.Value == 0) || (x.IsBuff == 0 && x.Value > 0))).ToList();
+                            var damageEvents = _combatItems.Where(x => x.IsDamage() && x.SrcMatchesAgent(p.AgentItem)).ToList();
                             if (!damageEvents.Any())
                             {
                                 agentsToRemove.Add(p.AgentItem);
@@ -950,6 +942,15 @@ namespace GW2EIEvtcParser
             if (_playerList.Count == 0)
             {
                 throw new EvtcAgentException("No valid players");
+            }
+
+            if (_parserSettings.AnonymousPlayer)
+            {
+                operation.UpdateProgressWithCancellationCheck("Anonymous players");
+                for (int i = 0; i < _playerList.Count; i++)
+                {
+                    _playerList[i].Anonymize(i + 1);
+                }
             }
             //
             operation.UpdateProgressWithCancellationCheck("Encounter specific processing");
