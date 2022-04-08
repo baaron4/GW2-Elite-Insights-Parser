@@ -3,6 +3,7 @@ using GW2EIEvtcParser.Extensions;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -25,13 +26,13 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-                new Buff("Ashes of the Just",41957, ParserHelper.Source.Firebrand, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/6/6d/Epilogue-_Ashes_of_the_Just.png"),
-                new Buff("Eternal Oasis",44871, ParserHelper.Source.Firebrand, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/5/5f/Epilogue-_Eternal_Oasis.png"),
-                new Buff("Unbroken Lines",43194, ParserHelper.Source.Firebrand, BuffStackType.Stacking, 3, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/d/d8/Epilogue-_Unbroken_Lines.png"),
-                new Buff("Tome of Justice",40530, ParserHelper.Source.Firebrand, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/ae/Tome_of_Justice.png"),
-                new Buff("Tome of Courage",43508,ParserHelper.Source.Firebrand, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/54/Tome_of_Courage.png"),
-                new Buff("Tome of Resolve",46298, ParserHelper.Source.Firebrand, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/a9/Tome_of_Resolve.png"),
-                new Buff("Quickfire",45123, ParserHelper.Source.Firebrand, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d6/Quickfire.png"),
+                new Buff("Ashes of the Just",AshesOfTheJust, Source.Firebrand, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/6/6d/Epilogue-_Ashes_of_the_Just.png"),
+                new Buff("Eternal Oasis",EternalOasis, Source.Firebrand, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/5/5f/Epilogue-_Eternal_Oasis.png"),
+                new Buff("Unbroken Lines",UnbrokenLines, Source.Firebrand, BuffStackType.Stacking, 3, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/d/d8/Epilogue-_Unbroken_Lines.png"),
+                new Buff("Tome of Justice",TomeOfJustice, Source.Firebrand, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/ae/Tome_of_Justice.png"),
+                new Buff("Tome of Courage",TomeOfCourage,Source.Firebrand, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/54/Tome_of_Courage.png"),
+                new Buff("Tome of Resolve",TomeOfResolve, Source.Firebrand, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/a9/Tome_of_Resolve.png"),
+                new Buff("Quickfire",Quickfire, Source.Firebrand, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d6/Quickfire.png"),
         };
 
     }

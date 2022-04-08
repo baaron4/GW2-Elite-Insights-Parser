@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser
     /// Pool of skill ids used in the parser, custom or official.
     /// Naming convention: 
     /// no "id" inside the name
-    /// should the skill name collide with its cast form and buff form, use XXXSkill for the cast and XXXEffect for the buff
+    /// should the skill name collide with its cast form, damage form and buff form, use XXXCast for the cast, XXXSkill for for the damage and XXXEffect for the buff
     /// </summary>
     public static class SkillIDs
     {
@@ -126,6 +126,7 @@ namespace GW2EIEvtcParser
         public const long SlickShoes = 5833;
         public const long ElixirS = 5863;
         public const long UtilityGoggles = 5864;
+        public const long MedKit = 5943;
         public const long Superspeed = 5974;
         public const long GearShield = 5997;
         public const long StaticShield = 6055;
@@ -985,8 +986,9 @@ namespace GW2EIEvtcParser
         public const long FixatedFear4 = 61566;
         public const long LethalTempo = 62509;
         public const long RushingJustice = 62529;
+        public const long FlowingResolveSkill = 62603;
         public const long CrashingCourage = 62615;
-        public const long FlowingResolve = 62632;
+        public const long FlowingResolveEffect = 62632;
         public const long Repose = 62638;
         public const long Blight = 62653;
         public const long ShatteringIce = 62686;
