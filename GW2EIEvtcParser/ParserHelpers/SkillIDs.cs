@@ -636,6 +636,7 @@ namespace GW2EIEvtcParser
         public const long DarkAura = 39978;
         public const long BearStance = 40045;
         public const long Supportive = 40069;
+        public const long PrimordialStanceSkill = 40183;
         public const long Stout = 40272;
         public const long SignetOfTheLocustShroud = 40283;
         public const long MirageCloak = 40408;
@@ -656,14 +657,14 @@ namespace GW2EIEvtcParser
         public const long AshesOfTheJust = 41957;
         public const long AttackersInsight = 41963;
         public const long WeaversProwess = 42061;
-        public const long PrimordialStance = 42086;
+        public const long PrimordialStanceEffect = 42086;
         public const long OneWolfPackSkill = 42145;
         public const long Afterburner = 42210;
         public const long DualAirAttunement = 42264;
         public const long ElementsOfRage = 42416;
         public const long MagebaneTether = 42428;
         public const long BerserkersPower = 42539;
-        public const long Unravel = 42683;
+        public const long UnravelEffect = 42683;
         public const long HiddenKiller = 42720;
         public const long Kneeling = 42869;
         public const long FireMinorAttunement = 42811;
@@ -698,6 +699,7 @@ namespace GW2EIEvtcParser
         public const long UnstoppableUnion = 44439;
         public const long EarthMinorAttunement = 44822;
         public const long AssassinsSignetActive = 44597;
+        public const long UnravelSkill = 44612;
         public const long Disenchantment = 44633;
         public const long VultureStance = 44651;
         public const long BreakrazorsBastion = 44682;
@@ -705,10 +707,11 @@ namespace GW2EIEvtcParser
         public const long Versatile = 44693;
         public const long DualEarthAttunement = 44857;
         public const long EternalOasis = 44871;
+        public const long StoneResonanceSkill = 44926;
         public const long Deadly = 44932;
         public const long SoulcleavesSummit = 45026;
         public const long MoaStance = 45038;
-        public const long StoneResonance = 45097;
+        public const long StoneResonanceEffect = 45097;
         public const long WovenFire = 45110;
         public const long Quickfire = 45123;
         public const long PerfectWeave = 45267;
