@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser
     /// Pool of skill ids used in the parser, custom or official.
     /// Naming convention: 
     /// no "id" inside the name
-    /// should the skill name collide with its cast form and buff form, use XXX for the cast and XXXEffect for the buff
+    /// should the skill name collide with its cast form and buff form, use XXXSkill for the cast and XXXEffect for the buff
     /// </summary>
     public static class SkillIDs
     {
@@ -91,24 +91,33 @@ namespace GW2EIEvtcParser
         public const long Quickness = 1187;
         public const long GraspingVinesDamage = 1290;
         public const long Determined3892 = 3892;
+        public const long ArcaneBlast = 5539;
         public const long MistForm = 5543;
         public const long SignetOfFire = 5544;
-        public const long AirAttunement = 5575;
+        public const long FireAttunementSkill = 5492;
+        public const long WaterAttunementSkill = 5493;
+        public const long AirAttunementSkill = 5494;
+        public const long EarthAttunementSkill = 5495;
+        public const long LightningStrike = 5561;
+        public const long SignetOfAirSkill = 5572;
+        public const long AirAttunementEffect = 5575;
         public const long ShockingAura = 5577;
         public const long FrostAura = 5579;
-        public const long EarthAttunement = 5580;
-        public const long ArcanePower = 5582;
+        public const long EarthAttunementEffect = 5580;
+        public const long ArcanePowerEffect = 5582;
         public const long Tornado = 5583;
-        public const long FireAttunement = 5585;
-        public const long WaterAttunement = 5586;
+        public const long FireAttunementEffect = 5585;
+        public const long WaterAttunementEffect = 5586;
         public const long SoothingMist = 5587;
         public const long RideTheLightning = 5588;
-        public const long SignetOfAir = 5590;
+        public const long SignetOfAirEffect = 5590;
         public const long SignetOfWater = 5591;
         public const long SignetOfEarth = 5592;
         public const long Whirlpool = 5601;
         public const long VaporForm = 5620;
-        public const long ArcaneShield = 5640;
+        public const long AranePowerSkill = 5635;
+        public const long ArcaneShieldEffect = 5640;
+        public const long ArcaneShieldSkill = 5641;
         public const long ObsidianFlesh = 5667;
         public const long FireAura = 5677;
         public const long MagneticAura = 5684;
@@ -228,7 +237,7 @@ namespace GW2EIEvtcParser
         public const long GraspingVines = 12453;
         public const long SeedTurretDamage = 12455;
         public const long SeedTurret = 12456;
-        public const long TakeRoot = 12457;
+        public const long TakeRootSkill = 12457;
         public const long TakeRootEffect = 12459;
         public const long SignetOfTheWild = 12518;
         public const long SharpeningStones = 12536;
@@ -327,11 +336,13 @@ namespace GW2EIEvtcParser
         public const long MistlockInstabilityPlayingFavorites = 22299;
         public const long MistlockInstabilityBloodlust = 22300;
         public const long MistlockInstabilityStamina = 22301;
+        public const long ArcaneWave = 22572;
         public const long PowerfulPotionOfSlayingScarletsArmies = 23228;
         public const long Enraged2_Unknown = 23235;
         public const long SwiftMoaFeather = 23239;
         public const long Reflection2 = 24014;
         public const long StoneHeart = 24304;
+        public const long LightningRod = 24305;
         public const long RousingResilience = 24383;
         public const long LoafOfCandyCactusCornbread = 24797;
         public const long PricklyPearPie = 24800;
@@ -646,7 +657,7 @@ namespace GW2EIEvtcParser
         public const long AttackersInsight = 41963;
         public const long WeaversProwess = 42061;
         public const long PrimordialStance = 42086;
-        public const long OneWolfPack = 42145;
+        public const long OneWolfPackSkill = 42145;
         public const long Afterburner = 42210;
         public const long DualAirAttunement = 42264;
         public const long ElementsOfRage = 42416;
@@ -879,6 +890,8 @@ namespace GW2EIEvtcParser
         public const long BatteringBlitz = 56616;
         public const long DiamondPalisade = 56636;
         public const long PoisonedPower = 56655;
+        public const long Sunspot = 56883;
+        public const long EarthBlast = 56885;
         public const long SymbolicAvenger = 56890;
         public const long SicEmPvP = 56923;
         public const long SpherifiedSesameOysterSoup = 57037;
@@ -985,18 +998,18 @@ namespace GW2EIEvtcParser
         public const long ForerunnerOfDeath = 62811;
         public const long ImperialGuard = 62819;
         public const long DragonTrigger = 62823;
-        public const long IcyCoil = 62834;
+        public const long IcyCoilSkill = 62834;
         public const long PositiveFlow = 62836;
         public const long StimState = 62846;
         public const long FortifiedEarth = 62858;
         public const long UrnOfSaintViktor = 62864;
-        public const long CrescentWind = 62887;
+        public const long CrescentWindSkill = 62887;
         public const long ElementalCelerity = 62915;
         public const long LegendaryAllianceStance = 62919;
         public const long FlameWheelEffect = 62931;
         public const long EmpoweringAuras = 62939;
-        public const long RockyLoop = 62975;
-        public const long InvigoratingAir = 62982;
+        public const long RockyLoopSkill = 62975;
+        public const long InvigoratingAirSkill = 62982;
         public const long IcyCoilEffect = 62984;
         public const long HardenedAuras = 62986;
         public const long SaintOfzuHeltzer = 62994;
