@@ -9,7 +9,8 @@ namespace GW2EIEvtcParser
     /// Pool of skill ids used in the parser, custom or official.
     /// Naming convention: 
     /// no "id" inside the name
-    /// should the skill name collide with its cast form, damage form and buff form, use XXXCast for the cast, XXXSkill for for the damage and XXXEffect for the buff
+    /// should the skill name collide with its cast/damage form and buff form, XXXSkill for for the damage/cast and XXXEffect for the buff
+    /// should the skill name collide with its cast form and damage form, XXXCast for for the cast and XXXDamage for the damage
     /// </summary>
     public static class SkillIDs
     {
