@@ -324,7 +324,7 @@ namespace GW2EIEvtcParser
         public const long MinorBorderlandsBloodlust = 14772;
         public const long MajorBorderlandsBloodlust = 14773;
         public const long SuperiorBorderlandsBloodlust = 14774;
-        public const long SpectralWalk = 15083;
+        public const long SpectralWalkOld = 15083;
         public const long PowerfulPotionOfHalloweenSlaying = 15279;
         public const long Agony = 15773;
         public const long ConjureEarthShield = 15788;
@@ -468,7 +468,7 @@ namespace GW2EIEvtcParser
         public const long HeatSync = 30462;
         public const long SelflessAmplification = 30509;
         public const long PulmonaryImpact = 30510;
-        public const long LightonyourFeet = 30673;
+        public const long LightOnYourFeet = 30673;
         public const long SignetOfHumility = 30739;
         public const long ContinuumShift = 30747;
         public const long HuntersMark = 30778;
@@ -688,7 +688,7 @@ namespace GW2EIEvtcParser
         public const long MirageCloak = 40408;
         public const long TomeOfJustice = 40530;
         public const long SignetOfUndeathShroud = 40583;
-        public const long SightbeyondSight = 40616;
+        public const long SightBeyondSight = 40616;
         public const long HeatTherapy = 40694;
         public const long FalseOasis = 40802;
         public const long FireMajorAttunement = 40926;
@@ -769,7 +769,7 @@ namespace GW2EIEvtcParser
         public const long Quickfire = 45123;
         public const long PerfectWeave = 45267;
         public const long Jaunt = 45449;
-        public const long TwiceasVicious = 45600;
+        public const long TwiceAsVicious = 45600;
         public const long ImprovedKallasFervor = 45614;
         public const long WovenEarth = 45662;
         public const long KineticCharge = 45781;
@@ -902,7 +902,7 @@ namespace GW2EIEvtcParser
         public const long SuperiorRuneOfTheMonk = 53285;
         public const long EnhancedLucentOil = 53304;
         public const long PotentLucentOil = 53374;
-        public const long SpectralWalk2 = 53476;
+        public const long SpectralWalk = 53476;
         public const long SoulBarbs = 53489;
         public const long Enraged3_200 = 53498;
         public const long SteadfastRejuvenation = 53500;
@@ -1094,7 +1094,7 @@ namespace GW2EIEvtcParser
         public const long SuperconductingSignet = 63322;
         public const long OverclockSignetJDrive = 63378;
         public const long DeadlyBlades = 63409;
-        public const long FierceasFire = 63433;
+        public const long FierceAsFire = 63433;
         public const long ConsumeShadows = 63456;
         public const long AerialDefense = 63605;
         public const long EnergyTransfer = 63621;
