@@ -236,10 +236,15 @@ namespace GW2EIEvtcParser
         public const long ApprenticeTuningCrystal = 10113;
         public const long JourneymanTuningCrystal = 10114;
         public const long BowlOfFireMeatChili = 10119;
+        public const long PortalEntre = 10197;
         public const long PortalWeaving = 10198;
+        public const long MantraOfPain = 10211;
+        public const long PowerSpike = 10212;
+        public const long MantraOfRecovery = 10213;
         public const long Reflection = 10225;
         public const long SignetOfDomination = 10231;
-        public const long SignetOfMidnight = 10233;
+        public const long SignetOfMidnightEffect = 10233;
+        public const long SignetOfMidnightSkill = 10234;
         public const long SignetOfInspiration = 10235;
         public const long Distortion = 10243;
         public const long SignetOfIllusions = 10246;
@@ -444,9 +449,11 @@ namespace GW2EIEvtcParser
         public const long Echo = 29664;
         public const long QuickDraw = 29703;
         public const long LastRites = 29726;
+        public const long ContinuumSplit = 29830;
         public const long ShieldOfCourageActive = 29906;
         public const long InfusingTerror = 30129;
         public const long TimeAnchored = 30136;
+        public const long LesserPhantasmalDefender = 30192;
         public const long FuriousSurge = 30204;
         public const long InvigoratedBulwark = 30207;
         public const long JusticeDragonhunter = 30232;
@@ -463,6 +470,7 @@ namespace GW2EIEvtcParser
         public const long PulmonaryImpact = 30510;
         public const long LightonyourFeet = 30673;
         public const long SignetOfHumility = 30739;
+        public const long ContinuumShift = 30747;
         public const long HuntersMark = 30778;
         public const long EliteMortarKit = 30800;
         public const long CorruptersDefense = 30845;
@@ -760,6 +768,7 @@ namespace GW2EIEvtcParser
         public const long WovenFire = 45110;
         public const long Quickfire = 45123;
         public const long PerfectWeave = 45267;
+        public const long Jaunt = 45449;
         public const long TwiceasVicious = 45600;
         public const long ImprovedKallasFervor = 45614;
         public const long WovenEarth = 45662;
