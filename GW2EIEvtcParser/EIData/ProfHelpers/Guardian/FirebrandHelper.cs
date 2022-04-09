@@ -11,13 +11,13 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(46618,46618,EIData.InstantCastFinder.DefaultICD, 0, GW2Builds.May2021Balance), // Flame Rush
-            new DamageCastFinder(46616,46616,EIData.InstantCastFinder.DefaultICD, 0, GW2Builds.May2021Balance), // Flame Surge
+            new DamageCastFinder(FlameRush,FlameRush,EIData.InstantCastFinder.DefaultICD, 0, GW2Builds.May2021Balance), // Flame Rush
+            new DamageCastFinder(FlameSurge,FlameSurge,EIData.InstantCastFinder.DefaultICD, 0, GW2Builds.May2021Balance), // Flame Surge
             //new DamageCastFinder(42360,42360,InstantCastFinder.DefaultICD, 0, GW2Builds.May2021Balance), // Echo of Truth
             //new DamageCastFinder(44008,44008,InstantCastFinder.DefaultICD, 0, GW2Builds.May2021Balance), // Voice of Truth
-            new DamageCastFinder(46148,46618,EIData.InstantCastFinder.DefaultICD, GW2Builds.May2021Balance, GW2Builds.EndOfLife), // Mantra of Flame
-            new DamageCastFinder(44080,46508,EIData.InstantCastFinder.DefaultICD, GW2Builds.May2021Balance, GW2Builds.EndOfLife), // Mantra of Truth
-            new EXTHealingCastFinder(41714, 41714, EIData.InstantCastFinder.DefaultICD, GW2Builds.May2021Balance, GW2Builds.EndOfLife), // Mantra of Solace
+            new DamageCastFinder(MantraOfFlameCast,MantraOfFlameDamage,EIData.InstantCastFinder.DefaultICD, GW2Builds.May2021Balance, GW2Builds.EndOfLife), // Mantra of Flame
+            new DamageCastFinder(MantraOfTruthCast,MantraOfTruthDamage,EIData.InstantCastFinder.DefaultICD, GW2Builds.May2021Balance, GW2Builds.EndOfLife), // Mantra of Truth
+            new EXTHealingCastFinder(MantraOfSolace, MantraOfSolace, EIData.InstantCastFinder.DefaultICD, GW2Builds.May2021Balance, GW2Builds.EndOfLife), // Mantra of Solace
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

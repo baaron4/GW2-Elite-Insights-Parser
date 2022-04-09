@@ -12,19 +12,19 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(9082, ShieldOfWrath, EIData.InstantCastFinder.DefaultICD), // Shield of Wrath
-            new BuffGainCastFinder(9104, ZealotsFlame, 0), // Zealot's Flame
+            new BuffGainCastFinder(ShieldOfWrathSkill, ShieldOfWrathEffect, EIData.InstantCastFinder.DefaultICD), // Shield of Wrath
+            new BuffGainCastFinder(ZealotsFlameSkill, ZealotsFlameEffect, 0), // Zealot's Flame
             //new BuffLossCastFinder(9115,9114,InstantCastFinder.DefaultICD), // Virtue of Justice
             //new BuffLossCastFinder(9120,9119,InstantCastFinder.DefaultICD), // Virtue of Resolve
             //new BuffLossCastFinder(9118,9113,InstantCastFinder.DefaultICD), // Virtue of Courage
-            new DamageCastFinder(9247,9247, EIData.InstantCastFinder.DefaultICD), // Judge's Intervention
-            new DamageCastFinder(30255,30255, EIData.InstantCastFinder.DefaultICD), // Wrath of Justice
-            new DamageCastFinder(9101,9101, EIData.InstantCastFinder.DefaultICD), // Smiter's Boon
-            new DamageCastFinder(9245,9245, EIData.InstantCastFinder.DefaultICD), // Smite Condition
+            new DamageCastFinder(JudgesIntervention,JudgesIntervention, EIData.InstantCastFinder.DefaultICD), // Judge's Intervention
+            new DamageCastFinder(WrathOfJustice,WrathOfJustice, EIData.InstantCastFinder.DefaultICD), // Wrath of Justice
+            new DamageCastFinder(SmitersBoon,SmitersBoon, EIData.InstantCastFinder.DefaultICD), // Smiter's Boon
+            new DamageCastFinder(SmiteCondition,SmiteCondition, EIData.InstantCastFinder.DefaultICD), // Smite Condition
             //new DamageCastFinder(9097,9097, EIData.InstantCastFinder.DefaultICD), // Symbol of Blades
-            new DamageCastFinder(21795, 21795, EIData.InstantCastFinder.DefaultICD), // Glacial Heart
-            new DamageCastFinder(22499, 22499, EIData.InstantCastFinder.DefaultICD), // Shattered Aegis
-            new EXTHealingCastFinder(13594, 13594, EIData.InstantCastFinder.DefaultICD), // Selfless Daring
+            new DamageCastFinder(GlacialHeart, GlacialHeart, EIData.InstantCastFinder.DefaultICD), // Glacial Heart
+            new DamageCastFinder(ShatteredAegis, ShatteredAegis, EIData.InstantCastFinder.DefaultICD), // Shattered Aegis
+            new EXTHealingCastFinder(SelflessDaring, SelflessDaring, EIData.InstantCastFinder.DefaultICD), // Selfless Daring
         };
 
 
@@ -47,11 +47,11 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> Buffs = new List<Buff>
         {        
                 //skills
-                new Buff("Zealot's Flame", ZealotsFlame, Source.Guardian, BuffStackType.Queue, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7a/Zealot%27s_Flame.png"),
+                new Buff("Zealot's Flame", ZealotsFlameEffect, Source.Guardian, BuffStackType.Queue, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7a/Zealot%27s_Flame.png"),
                 new Buff("Purging Flames",PurgingFlames, Source.Guardian, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/28/Purging_Flames.png"),
                 new Buff("Litany of Wrath",LitanyOfWrath, Source.Guardian, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/4a/Litany_of_Wrath.png"),
                 new Buff("Renewed Focus",RenewedFocus, Source.Guardian, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/10/Renewed_Focus.png"),
-                new Buff("Shield of Wrath",ShieldOfWrath, Source.Guardian, BuffStackType.Stacking, 3, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/bc/Shield_of_Wrath.png"),
+                new Buff("Shield of Wrath",ShieldOfWrathEffect, Source.Guardian, BuffStackType.Stacking, 3, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/bc/Shield_of_Wrath.png"),
                 new Buff("Binding Blade (Self)",BindingBladeSelf, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/de/Binding_Blade.png"),
                 new Buff("Binding Blade",BindingBlade, Source.Guardian, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/de/Binding_Blade.png"),
                 //signets

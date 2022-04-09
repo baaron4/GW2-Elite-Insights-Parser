@@ -156,14 +156,17 @@ namespace GW2EIEvtcParser
         public const long RocketTurretDamage = 6108;
         public const long OverchargedShot = 6154;
         public const long SupplyCrateUW = 6183;
+        public const long ShieldOfWrathSkill = 9082;
         public const long BaneSignet = 9092;
         public const long SignetOfWrath = 9100;
-        public const long ZealotsFlame = 9103;
+        public const long SmitersBoon = 9101;
+        public const long ZealotsFlameEffect = 9103;
+        public const long ZealotsFlameSkill = 9104;
         public const long VirtueOfCourage = 9113;
         public const long VirtueOfJustice = 9114;
         public const long Justice = 9116;
         public const long VirtueOfResolve = 9119;
-        public const long ShieldOfWrath = 9123;
+        public const long ShieldOfWrathEffect = 9123;
         public const long BindingBlade = 9148;
         public const long SignetOfJudgment = 9156;
         public const long SignetOfMercy = 9162;
@@ -173,6 +176,8 @@ namespace GW2EIEvtcParser
         public const long SignetOfMercyPI = 9238;
         public const long SignetOfJudgmentPI = 9239;
         public const long BaneSignetPI = 9240;
+        public const long SmiteCondition = 9245;
+        public const long JudgesIntervention = 9247;
         public const long RenewedFocus = 9255;
         public const long SigilOfBloodlust = 9286;
         public const long SigilOfAir = 9292;
@@ -292,6 +297,7 @@ namespace GW2EIEvtcParser
         public const long DaggerStorm = 13134;
         public const long Infiltration = 13135;
         public const long PersistingFlames = 13342;
+        public const long SelflessDaring = 13594;
         public const long StrengthinNumbers = 13796;
         public const long FleshOfTheMaster = 13810;
         public const long OpeningStrike = 13988;
@@ -339,6 +345,7 @@ namespace GW2EIEvtcParser
         public const long SignetOfVampirism = 21761;
         public const long VampiricMark = 21766;
         public const long SkelkVenom = 21780;
+        public const long GlacialHeart = 21795;
         public const long DefiantStance = 21816;
         public const long ToxicSharpeningStone = 21826;
         public const long ToxicMaintenanceOil = 21827;
@@ -363,6 +370,7 @@ namespace GW2EIEvtcParser
         public const long MistlockInstabilityPlayingFavorites = 22299;
         public const long MistlockInstabilityBloodlust = 22300;
         public const long MistlockInstabilityStamina = 22301;
+        public const long ShatteredAegis = 22499;
         public const long ArcaneWave = 22572;
         public const long RocketTurretCast2 = 22574;
         public const long PowerfulPotionOfSlayingScarletsArmies = 23228;
@@ -442,6 +450,7 @@ namespace GW2EIEvtcParser
         public const long FuriousSurge = 30204;
         public const long InvigoratedBulwark = 30207;
         public const long JusticeDragonhunter = 30232;
+        public const long WrathOfJustice = 30255;
         public const long VampiricAura = 30285;
         public const long WingsOfResolve = 30308;
         public const long Alacrity = 30328;
@@ -682,6 +691,7 @@ namespace GW2EIEvtcParser
         public const long DualWaterAttunement = 41166;
         public const long SpectrumShieldSkill = 41218;
         public const long AirMajorAttunement = 41692;
+        public const long MantraOfSolace = 41714;
         public const long Ferocious = 41720;
         public const long DolyakStance = 41815;
         public const long SignetOfFerocity = 41922;
@@ -726,6 +736,7 @@ namespace GW2EIEvtcParser
         public const long SigilOfSeverance = 43930;
         public const long OverheatSkill = 43937;
         public const long FullCounter = 43949;
+        public const long MantraOfTruthCast = 44080;
         public const long OneWolfPackEffect = 44139;
         public const long PlagueSignetShroud = 44164;
         public const long LegendaryRenegadeStance = 44272;
@@ -754,13 +765,18 @@ namespace GW2EIEvtcParser
         public const long WovenEarth = 45662;
         public const long KineticCharge = 45781;
         public const long PhotonWallDeployed = 46094;
+        public const long MantraOfFlameCast = 46148;
         public const long RedLentilSaobosa = 46273;
         public const long GriffonStance = 46280;
         public const long TomeOfResolve = 46298;
         public const long DeadeyesGaze = 46333;
         public const long CoolingVapor = 46444;
+        public const long MantraOfTruthDamage = 46508;
         public const long SignetOfResolveShared = 46554;
         public const long Malnourished = 46587;
+        public const long FlameSurge = 46616;
+        public const long FlameRush = 46618;
+        public const long MantraOfFlameDamage = 46618;
         public const long Diminished = 46668;
         public const long PlagueSending = 46832;
         public const long Exhaustion = 46842;
