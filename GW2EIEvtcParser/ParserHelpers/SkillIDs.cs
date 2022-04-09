@@ -1055,7 +1055,7 @@ namespace GW2EIEvtcParser
         public const long InvigoratingAirEffect = 62726;
         public const long ElementalEmpowerment = 62733;
         public const long GunsAndGlory = 62743;
-        public const long FlameWheel = 62758;
+        public const long FlameWheelSkill = 62758;
         public const long RockyLoopEffect = 62768;
         public const long GunsaberMode = 62769;
         public const long RelentlessFire = 62805;

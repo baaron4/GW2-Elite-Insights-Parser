@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(FlameWheel, FlameWheelEffect, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta4, GW2Builds.EndOfLife), // Flame Wheel
+            new BuffGainCastFinder(FlameWheelSkill, FlameWheelEffect, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta4, GW2Builds.EndOfLife), // Flame Wheel
             new BuffGainCastFinder(IcyCoilSkill, IcyCoilEffect, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta4, GW2Builds.EndOfLife), // Icy Coil
             new BuffGainCastFinder(CrescentWindSkill, CrescentWindEffect, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta4, GW2Builds.EndOfLife), // Crescent Wind
             new BuffGainCastFinder(RockyLoopSkill, RockyLoopEffect, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta4, GW2Builds.EndOfLife), // Rockyh Loop
@@ -30,7 +30,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifier(FlameWheelEffect, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, "https://wiki.guildwars2.com/images/f/f3/Flame_Wheel.png", GW2Builds.March2022Balance2, GW2Builds.EndOfLife, DamageModifierMode.All),
             new BuffDamageModifier(RelentlessFire, "Relentless Fire", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, "https://wiki.guildwars2.com/images/7/70/Relentless_Fire.png", GW2Builds.EODBeta2, GW2Builds.March2022Balance, DamageModifierMode.All),
             new BuffDamageModifier(RelentlessFire, "Relentless Fire", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, "https://wiki.guildwars2.com/images/7/70/Relentless_Fire.png", GW2Builds.March2022Balance, GW2Builds.EndOfLife, DamageModifierMode.PvE),
-            new BuffDamageModifier(FlameWheel, "Relentless Fire", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, "https://wiki.guildwars2.com/images/7/70/Relentless_Fire.png", GW2Builds.March2022Balance, GW2Builds.EndOfLife, DamageModifierMode.sPvPWvW),
+            new BuffDamageModifier(FlameWheelSkill, "Relentless Fire", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, "https://wiki.guildwars2.com/images/7/70/Relentless_Fire.png", GW2Builds.March2022Balance, GW2Builds.EndOfLife, DamageModifierMode.sPvPWvW),
             new BuffDamageModifier(EmpoweringAuras, "Empowering Auras", "2%", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, "https://wiki.guildwars2.com/images/4/44/Empowering_Auras.png", GW2Builds.EODBeta2, GW2Builds.EndOfLife, DamageModifierMode.All),
         };
 
