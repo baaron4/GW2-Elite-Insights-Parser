@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.EIData
     {
         private class EngineerKitFinder : WeaponSwapCastFinder
         {
-            public EngineerKitFinder(long skillID, long icd, ulong minBuild = GW2Builds.StartOfLife, ulong maxBuild = GW2Builds.EndOfLife) : base(skillID, ParserHelper.WeaponSetIDs.KitSet, icd, minBuild, maxBuild, (swap, combatData, skillData) =>
+            public EngineerKitFinder(long skillID, long icd, ulong minBuild = GW2Builds.StartOfLife, ulong maxBuild = GW2Builds.EndOfLife) : base(skillID, WeaponSetIDs.KitSet, icd, minBuild, maxBuild, (swap, combatData, skillData) =>
             {
                 SkillItem skill = skillData.Get(skillID);
                 if (skill.ApiSkill == null || skill.ApiSkill.BundleSkills == null)
@@ -32,13 +32,13 @@ namespace GW2EIEvtcParser.EIData
 
         private static readonly HashSet<long> _engineerKit = new HashSet<long>
         {
-            5812,
-            5933,
-            5927,
-            6020,
-            5802,
-            5904,
-            30800,
+            BombKit,
+            ElixirGun,
+            Flamethrower,
+            GrenadeKit,
+            MedKitSkill,
+            ToolKit,
+            EliteMortarKit,
         };
 
         public static bool IsEngineerKit(long id)
@@ -49,17 +49,17 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffLossCastFinder(59562, ExplosiveEntrance, EIData.InstantCastFinder.DefaultICD, GW2Builds.February2020Balance, GW2Builds.EndOfLife), // Explosive Entrance
-            new BuffGainCastFinder(5861, ElixirS,EIData.InstantCastFinder.DefaultICD), // Elixir S
-            new DamageCastFinder(6154,6154,EIData.InstantCastFinder.DefaultICD), // Overcharged Shot
+            new BuffLossCastFinder(ExplosiveEntranceSkill, ExplosiveEntranceEffect, EIData.InstantCastFinder.DefaultICD, GW2Builds.February2020Balance, GW2Builds.EndOfLife), // Explosive Entrance
+            new BuffGainCastFinder(ElixirSSkill, ElixirSEffect,EIData.InstantCastFinder.DefaultICD), // Elixir S
+            new DamageCastFinder(OverchargedShot,OverchargedShot,EIData.InstantCastFinder.DefaultICD), // Overcharged Shot
             // Kits
-            new EngineerKitFinder(5812, EIData.InstantCastFinder.DefaultICD), // Bomb Kit
-            new EngineerKitFinder(5933, EIData.InstantCastFinder.DefaultICD), // Elixir Gun
-            new EngineerKitFinder(5927, EIData.InstantCastFinder.DefaultICD), // Flamethrower
-            new EngineerKitFinder(6020, EIData.InstantCastFinder.DefaultICD), // Grenade Kit
-            new EngineerKitFinder(5802, EIData.InstantCastFinder.DefaultICD), // Med Kit
-            new EngineerKitFinder(5904, EIData.InstantCastFinder.DefaultICD), // Tool Kit
-            new EngineerKitFinder(30800, EIData.InstantCastFinder.DefaultICD), // Elite Mortar Kit
+            new EngineerKitFinder(BombKit, EIData.InstantCastFinder.DefaultICD), // Bomb Kit
+            new EngineerKitFinder(ElixirGun, EIData.InstantCastFinder.DefaultICD), // Elixir Gun
+            new EngineerKitFinder(Flamethrower, EIData.InstantCastFinder.DefaultICD), // Flamethrower
+            new EngineerKitFinder(GrenadeKit, EIData.InstantCastFinder.DefaultICD), // Grenade Kit
+            new EngineerKitFinder(MedKitSkill, EIData.InstantCastFinder.DefaultICD), // Med Kit
+            new EngineerKitFinder(ToolKit, EIData.InstantCastFinder.DefaultICD), // Tool Kit
+            new EngineerKitFinder(EliteMortarKit, EIData.InstantCastFinder.DefaultICD), // Elite Mortar Kit
         };
 
 
@@ -94,7 +94,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Static Shield",StaticShield, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/90/Static_Shield.png"),
                 new Buff("Absorb",Absorb, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/8a/Absorb.png"),
                 new Buff("A.E.D.",AED, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e6/A.E.D..png"),
-                new Buff("Elixir S",ElixirS, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d8/Elixir_S.png"),
+                new Buff("Elixir S",ElixirSEffect, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d8/Elixir_S.png"),
                 new Buff("Utility Goggles",UtilityGoggles, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/0/02/Utility_Goggles.png"),
                 new Buff("Slick Shoes",SlickShoes, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/3d/Slick_Shoes.png"),
                 new Buff("Gear Shield",GearShield, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/ca/Gear_Shield.png"),
@@ -103,10 +103,10 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Kinetic Charge",KineticCharge, Source.Engineer, BuffStackType.Stacking, 5, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e0/Kinetic_Battery.png"),
                 new Buff("Pinpoint Distribution", PinpointDistribution, Source.Engineer, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/b/bf/Pinpoint_Distribution.png"),
                 new Buff("Thermal Vision", ThermalVision, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/8a/Skilled_Marksman.png"),
-                new Buff("Explosive Entrance",ExplosiveEntrance, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/33/Explosive_Entrance.png", GW2Builds.February2020Balance, GW2Builds.EndOfLife),
+                new Buff("Explosive Entrance",ExplosiveEntranceEffect, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/33/Explosive_Entrance.png", GW2Builds.February2020Balance, GW2Builds.EndOfLife),
                 new Buff("Explosive Temper",ExplosiveTemper, Source.Engineer, BuffStackType.Stacking, 10, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/c1/Explosive_Temper.png", GW2Builds.February2020Balance, GW2Builds.EndOfLife),
                 new Buff("Big Boomer",BigBoomer, Source.Engineer, BuffStackType.Queue, 3, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/83/Big_Boomer.png"),
-                new Buff("Med Kit",MedKit, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/14/Med_Kit.png"),
+                new Buff("Med Kit",MedKitEffect, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/14/Med_Kit.png"),
                 new Buff("Med Kit Bonus",MedKitBonus, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/14/Med_Kit.png"),
 
         };
@@ -115,23 +115,23 @@ namespace GW2EIEvtcParser.EIData
         {
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
 
-            HashSet<AgentItem> flameTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, 5903, playerAgents);
+            HashSet<AgentItem> flameTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, FireTurretDamage, playerAgents);
 
-            HashSet<AgentItem> rifleTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, 5841, playerAgents);
-            rifleTurrets.UnionWith(ProfHelper.GetOffensiveGadgetAgents(combatData, 5875, playerAgents));
+            HashSet<AgentItem> rifleTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, RifleTurretDamage, playerAgents);
+            rifleTurrets.UnionWith(ProfHelper.GetOffensiveGadgetAgents(combatData, RifleTurretDamageUW, playerAgents));
 
-            HashSet<AgentItem> netTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, 5896, playerAgents);
-            netTurrets.UnionWith(ProfHelper.GetOffensiveGadgetAgents(combatData, 22137, playerAgents));
+            HashSet<AgentItem> netTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, NetTurretDamage, playerAgents);
+            netTurrets.UnionWith(ProfHelper.GetOffensiveGadgetAgents(combatData, NetTurretDamageUW, playerAgents));
 
-            HashSet<AgentItem> rocketTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, 6108, playerAgents);
-            rocketTurrets.UnionWith(ProfHelper.GetOffensiveGadgetAgents(combatData, 5914, playerAgents));
+            HashSet<AgentItem> rocketTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, RocketTurretDamage, playerAgents);
+            rocketTurrets.UnionWith(ProfHelper.GetOffensiveGadgetAgents(combatData, RocketTurretDamageUW, playerAgents));
 
-            HashSet<AgentItem> thumperTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, 5856, playerAgents);
-            thumperTurrets.UnionWith(ProfHelper.GetOffensiveGadgetAgents(combatData, 5890, playerAgents));
+            HashSet<AgentItem> thumperTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, ThumperTurret, playerAgents);
+            thumperTurrets.UnionWith(ProfHelper.GetOffensiveGadgetAgents(combatData, ThumperTurretUW, playerAgents));
             // TODO: need ID here
-            HashSet<AgentItem> harpoonTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, -1, playerAgents);
+            HashSet<AgentItem> harpoonTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, Unknown, playerAgents);
 
-            HashSet<AgentItem> healingTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, 5958, playerAgents);
+            HashSet<AgentItem> healingTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, TurretExplosion, playerAgents);
             healingTurrets.RemoveWhere(x => thumperTurrets.Contains(x) || rocketTurrets.Contains(x) || netTurrets.Contains(x) || rifleTurrets.Contains(x) || flameTurrets.Contains(x) || harpoonTurrets.Contains(x));
 
             var engineers = players.Where(x => x.BaseSpec == Spec.Engineer).ToList();
@@ -149,11 +149,11 @@ namespace GW2EIEvtcParser.EIData
             }
             else if (engineers.Count > 1)
             {
-                ProfHelper.AttachMasterToGadgetByCastData(combatData, flameTurrets, new List<long> { 5836, 5868 }, 1000);
-                ProfHelper.AttachMasterToGadgetByCastData(combatData, rifleTurrets, new List<long> { 5818 }, 1000);
-                ProfHelper.AttachMasterToGadgetByCastData(combatData, netTurrets, new List<long> { 5837, 5868, 6183 }, 1000);
-                ProfHelper.AttachMasterToGadgetByCastData(combatData, rocketTurrets, new List<long> { 5912, 22574, 6183 }, 1000);
-                ProfHelper.AttachMasterToGadgetByCastData(combatData, thumperTurrets, new List<long> { 5838 }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(combatData, flameTurrets, new List<long> { FlameTurretCast, SupplyCrate }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(combatData, rifleTurrets, new List<long> { RifleTurretCast }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(combatData, netTurrets, new List<long> { NetTurretCast, SupplyCrate, SupplyCrateUW }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(combatData, rocketTurrets, new List<long> { RocketTurretCast, RocketTurretCast2, SupplyCrateUW }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(combatData, thumperTurrets, new List<long> { ThumperTurretCast }, 1000);
                 //AttachMasterToGadgetByCastData(castData, harpoonTurrets, new List<long> { 6093, 6183 }, 1000);
                 //AttachMasterToGadgetByCastData(castData, healingTurrets, new List<long> { 5857, 5868 }, 1000);
             }
