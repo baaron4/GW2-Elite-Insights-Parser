@@ -11,13 +11,13 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(30792, ReapersShroud, EIData.InstantCastFinder.DefaultICD), // Reaper shroud
-            new BuffLossCastFinder(30961, ReapersShroud, EIData.InstantCastFinder.DefaultICD), // Reaper shroud
-            new BuffGainCastFinder(29958, InfusingTerror, EIData.InstantCastFinder.DefaultICD), // Infusing Terror
-            new DamageCastFinder(29414, 29414, EIData.InstantCastFinder.DefaultICD), // "You Are All Weaklings!"
-            new DamageCastFinder(30670, 30670, EIData.InstantCastFinder.DefaultICD), // "Suffer!"
-            new DamageCastFinder(30772, 30772, EIData.InstantCastFinder.DefaultICD), // "Rise!" --> better to check dark bond?
-            new DamageCastFinder(29604, 29604, EIData.InstantCastFinder.DefaultICD), // Chilling Nova
+            new BuffGainCastFinder(EnterKnightShroud, ReapersShroud, EIData.InstantCastFinder.DefaultICD), // Reaper shroud
+            new BuffLossCastFinder(ExitKnightShroud, ReapersShroud, EIData.InstantCastFinder.DefaultICD), // Reaper shroud
+            new BuffGainCastFinder(InfusingTerrorSkill, InfusingTerrorEffect, EIData.InstantCastFinder.DefaultICD), // Infusing Terror
+            new DamageCastFinder(YouAreAllWeaklings, YouAreAllWeaklings, EIData.InstantCastFinder.DefaultICD), // "You Are All Weaklings!"
+            new DamageCastFinder(Suffer, Suffer, EIData.InstantCastFinder.DefaultICD), // "Suffer!"
+            new BuffGainCastFinder(Rise, DarkBond, 500), // "Rise!"
+            new DamageCastFinder(ChillingNova, ChillingNova, EIData.InstantCastFinder.DefaultICD), // Chilling Nova
         };
 
 
@@ -41,7 +41,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
                 new Buff("Reaper's Shroud", ReapersShroud, Source.Reaper, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/11/Reaper%27s_Shroud.png"),
-                new Buff("Infusing Terror", InfusingTerror, Source.Reaper, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/db/Infusing_Terror.png"),
+                new Buff("Infusing Terror", InfusingTerrorEffect, Source.Reaper, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/db/Infusing_Terror.png"),
                 new Buff("Dark Bond", DarkBond, Source.Reaper, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/64/%22Rise%21%22.png"),
         };
 

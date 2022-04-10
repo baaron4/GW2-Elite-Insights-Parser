@@ -12,8 +12,8 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             // Trail of Anguish ? Unique effect?
-            new EXTBarrierCastFinder(44663, 44663, EIData.InstantCastFinder.DefaultICD), // Desert Shroud
-            new EXTBarrierCastFinder(43448, 43759, EIData.InstantCastFinder.DefaultICD), // Sand Cascade
+            new EXTBarrierCastFinder(DesertShroud, DesertShroud, EIData.InstantCastFinder.DefaultICD), // Desert Shroud
+            new EXTBarrierCastFinder(SandCascadeSkill, SandCascadeBarrier, EIData.InstantCastFinder.DefaultICD), // Sand Cascade
             // Sandstorm Shroud ? The detonation part is problematic
         };
 

@@ -11,21 +11,21 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(10574, DeathShroud, EIData.InstantCastFinder.DefaultICD), // Death shroud
-            new BuffLossCastFinder(10585, DeathShroud, EIData.InstantCastFinder.DefaultICD), // Death shroud
-            new DamageCastFinder(29560, 29560, EIData.InstantCastFinder.DefaultICD), // Spiteful Spirit
-            new DamageCastFinder(13907, 13907, EIData.InstantCastFinder.DefaultICD), // Lesser Enfeeble
-            new DamageCastFinder(13906, 13906, EIData.InstantCastFinder.DefaultICD), // Lesser Spinal Shivers
-            new BuffGainCastFinder(10583, SpectralArmor, EIData.InstantCastFinder.DefaultICD, GW2Builds.December2018Balance, GW2Builds.EndOfLife), // Spectral Armor
-            new BuffGainCastFinder(10685, SpectralWalkOld, EIData.InstantCastFinder.DefaultICD, 0, GW2Builds.December2018Balance), // Spectral Walk
-            new BuffGainCastFinder(10685, SpectralWalk, EIData.InstantCastFinder.DefaultICD, GW2Builds.December2018Balance, GW2Builds.EndOfLife), // Spectral Walk
+            new BuffGainCastFinder(EnterDeathShroud, DeathShroud, EIData.InstantCastFinder.DefaultICD), // Death shroud
+            new BuffLossCastFinder(ExitDeathShroud, DeathShroud, EIData.InstantCastFinder.DefaultICD), // Death shroud
+            new DamageCastFinder(SpitefulSpirit, SpitefulSpirit, EIData.InstantCastFinder.DefaultICD), // Spiteful Spirit
+            new DamageCastFinder(LesserEnfeeble, LesserEnfeeble, EIData.InstantCastFinder.DefaultICD), // Lesser Enfeeble
+            new DamageCastFinder(lesserSpinalShivers, lesserSpinalShivers, EIData.InstantCastFinder.DefaultICD), // Lesser Spinal Shivers
+            new BuffGainCastFinder(SpectralArmorSkill, SpectralArmorEffect, EIData.InstantCastFinder.DefaultICD, GW2Builds.December2018Balance, GW2Builds.EndOfLife), // Spectral Armor
+            new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffectOld, EIData.InstantCastFinder.DefaultICD, 0, GW2Builds.December2018Balance), // Spectral Walk
+            new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffect, EIData.InstantCastFinder.DefaultICD, GW2Builds.December2018Balance, GW2Builds.EndOfLife), // Spectral Walk
         };
 
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
             // Spite
-            new BuffDamageModifierTarget(SkillIDs.NumberOfBoons, "Spiteful Talisman", "10% on boonless target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByAbsence, "https://wiki.guildwars2.com/images/9/96/Spiteful_Talisman.png", DamageModifierMode.All),
+            new BuffDamageModifierTarget(NumberOfBoons, "Spiteful Talisman", "10% on boonless target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByAbsence, "https://wiki.guildwars2.com/images/9/96/Spiteful_Talisman.png", DamageModifierMode.All),
             new BuffDamageModifier(Downed, "Death's Embrace", "25% on while downed", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, "https://wiki.guildwars2.com/images/5/5d/Death%27s_Embrace.png",0, GW2Builds.February2020Balance, DamageModifierMode.All),
             new BuffDamageModifier(Downed, "Death's Embrace", "25% on while downed", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, "https://wiki.guildwars2.com/images/5/5d/Death%27s_Embrace.png",GW2Builds.February2020Balance, GW2Builds.EndOfLife, DamageModifierMode.PvE),
             new BuffDamageModifier(Downed, "Death's Embrace", "5% on while downed", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, "https://wiki.guildwars2.com/images/5/5d/Death%27s_Embrace.png",GW2Builds.February2020Balance, GW2Builds.EndOfLife, DamageModifierMode.sPvPWvW),
@@ -58,9 +58,9 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Signet of Undeath",SignetOfUndeath, Source.Necromancer, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/9c/Signet_of_Undeath.png"),
                 new Buff("Signet of Undeath (Shroud)",SignetOfUndeathShroud, Source.Necromancer, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/9c/Signet_of_Undeath.png"),
                 //skills
-                new Buff("Spectral Walk",SpectralWalkOld, Source.Necromancer, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/33/Spectral_Walk.png", 0, GW2Builds.December2018Balance),
-                new Buff("Spectral Walk",SpectralWalk, Source.Necromancer, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/33/Spectral_Walk.png", GW2Builds.December2018Balance, GW2Builds.EndOfLife),
-                new Buff("Spectral Armor",SpectralArmor, Source.Necromancer, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d1/Spectral_Armor.png"),
+                new Buff("Spectral Walk",SpectralWalkEffectOld, Source.Necromancer, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/33/Spectral_Walk.png", 0, GW2Builds.December2018Balance),
+                new Buff("Spectral Walk",SpectralWalkEffect, Source.Necromancer, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/33/Spectral_Walk.png", GW2Builds.December2018Balance, GW2Builds.EndOfLife),
+                new Buff("Spectral Armor",SpectralArmorEffect, Source.Necromancer, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d1/Spectral_Armor.png"),
                 new Buff("Locust Swarm", LocustSwarm, Source.Necromancer, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/77/Locust_Swarm.png"),
                 //new Boon("Sand Cascade", 43759, BoonSource.Necromancer, BoonType.Duration, 1, BoonNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/1e/Sand_Cascade.png"),
                 //traits
@@ -75,9 +75,9 @@ namespace GW2EIEvtcParser.EIData
 
         private static readonly HashSet<long> _shroudTransform = new HashSet<long>
         {
-            10574, 10585, 
-            30792, 30961, 
-            62567, 62540
+            EnterDeathShroud, ExitDeathShroud,
+            EnterKnightShroud, ExitKnightShroud, 
+            EnterHarbingerShroud, ExitHarbingerShroud
         };
 
         public static bool IsShroudTransform(long id)
