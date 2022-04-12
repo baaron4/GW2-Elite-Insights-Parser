@@ -18,40 +18,40 @@ namespace GW2EIEvtcParser.EIData
         {
             //new DamageCastFinder(12573,12573,EIData.InstantCastFinder.DefaultICD), // Hunter's Shot
             //new DamageCastFinder(12507,12507,EIData.InstantCastFinder.DefaultICD), // Crippling Shot
-            new BuffGainWithMinionsCastFinder(12633,SicEm,EIData.InstantCastFinder.DefaultICD), // "Sic 'Em!"
-            new BuffGainWithMinionsCastFinder(12633,SicEmPvP,EIData.InstantCastFinder.DefaultICD), // "Sic 'Em!" PvP
-            new BuffGainCastFinder(12500,SignetOfStoneActive,EIData.InstantCastFinder.DefaultICD, (evt, combatData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
-            new BuffGainCastFinder(42470,SignetOfStoneActive,EIData.InstantCastFinder.DefaultICD, (evt, combatData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant), // Lesser Signet of Stone
-            new BuffGainCastFinder(12537,SharpeningStones,EIData.InstantCastFinder.DefaultICD), // Sharpening Stone
-            new EXTHealingCastFinder(13980, 13980, EIData.InstantCastFinder.DefaultICD), // Windborne Notes
-            new EXTBarrierCastFinder(12631, 12631, EIData.InstantCastFinder.DefaultICD), // Protect Me!
+            new BuffGainWithMinionsCastFinder(SicEmSkill,SicEmEffect,EIData.InstantCastFinder.DefaultICD), // "Sic 'Em!"
+            new BuffGainWithMinionsCastFinder(SicEmSkill,SicEmEffectPvP,EIData.InstantCastFinder.DefaultICD), // "Sic 'Em!" PvP
+            new BuffGainCastFinder(SignetOfStone,SignetOfStoneActive,EIData.InstantCastFinder.DefaultICD, (evt, combatData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
+            new BuffGainCastFinder(LesserSignetOfStone,SignetOfStoneActive,EIData.InstantCastFinder.DefaultICD, (evt, combatData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant), // Lesser Signet of Stone
+            new BuffGainCastFinder(SharpeningStonesSkill,SharpeningStonesEffect,EIData.InstantCastFinder.DefaultICD), // Sharpening Stone
+            new EXTHealingCastFinder(WindbornNotes, WindbornNotes, EIData.InstantCastFinder.DefaultICD), // Windborne Notes
+            new EXTBarrierCastFinder(ProtectMe, ProtectMe, EIData.InstantCastFinder.DefaultICD), // Protect Me!
         };
 
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
             // Skills
-            new BuffDamageModifier(SicEm, "Sic 'Em!", "40%", DamageSource.NoPets, 40.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png", 0, GW2Builds.May2021Balance, DamageModifierMode.PvE, (x, log) => {
+            new BuffDamageModifier(SicEmEffect, "Sic 'Em!", "40%", DamageSource.NoPets, 40.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png", 0, GW2Builds.May2021Balance, DamageModifierMode.PvE, (x, log) => {
                 AgentItem src = x.From;
-                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(SicEm).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
+                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(SicEmEffect).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
                 if (effectApply != null)
                 {
                     return x.To == effectApply.By;
                 }
                 return false;
             }),
-            new BuffDamageModifier(SicEm, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png", 0, GW2Builds.May2021Balance, DamageModifierMode.sPvPWvW, (x, log) => {
+            new BuffDamageModifier(SicEmEffect, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png", 0, GW2Builds.May2021Balance, DamageModifierMode.sPvPWvW, (x, log) => {
                 AgentItem src = x.From;
-                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(SicEm).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
+                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(SicEmEffect).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
                 if (effectApply != null)
                 {
                     return x.To == effectApply.By;
                 }
                 return false;
             }),
-            new BuffDamageModifier(SicEm, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png", GW2Builds.May2021Balance, GW2Builds.EndOfLife, DamageModifierMode.All, (x, log) => {
+            new BuffDamageModifier(SicEmEffect, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png", GW2Builds.May2021Balance, GW2Builds.EndOfLife, DamageModifierMode.All, (x, log) => {
                 AgentItem src = x.From;
-                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(SicEm).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
+                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(SicEmEffect).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
                 if (effectApply != null)
                 {
                     return x.To == effectApply.By;
@@ -122,9 +122,9 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Call of the Wild",CallOfTheWild, Source.Ranger, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/8d/Call_of_the_Wild.png",0 , GW2Builds.July2019Balance),
                 new Buff("Call of the Wild",CallOfTheWild, Source.Ranger, BuffStackType.Stacking, 3, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/8d/Call_of_the_Wild.png",GW2Builds.July2019Balance , GW2Builds.February2020Balance),
                 new Buff("Strength of the Pack!",StrengthOfThePack, Source.Ranger, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/4b/%22Strength_of_the_Pack%21%22.png"),
-                new Buff("Sic 'Em!",SicEm, Source.Ranger, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png"),
-                new Buff("Sic 'Em! (PvP)",SicEmPvP, Source.Ranger, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png"),
-                new Buff("Sharpening Stones",SharpeningStones, Source.Ranger, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/af/Sharpening_Stone.png"),
+                new Buff("Sic 'Em!",SicEmEffect, Source.Ranger, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png"),
+                new Buff("Sic 'Em! (PvP)",SicEmEffectPvP, Source.Ranger, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png"),
+                new Buff("Sharpening Stones",SharpeningStonesEffect, Source.Ranger, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/af/Sharpening_Stone.png"),
                 new Buff("Sharpen Spines",SharpenSpines, Source.Ranger, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/95/Sharpen_Spines.png"),
                 //traits
                 new Buff("Spotter", Spotter, Source.Ranger, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/b/b0/Spotter.png"),

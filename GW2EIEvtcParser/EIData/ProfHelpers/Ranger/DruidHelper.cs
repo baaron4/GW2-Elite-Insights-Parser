@@ -10,14 +10,14 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(31869,CelestialAvatar,EIData.InstantCastFinder.DefaultICD), // Celestial Avatar
-            new BuffLossCastFinder(31411,CelestialAvatar,EIData.InstantCastFinder.DefaultICD), // Release Celestial Avatar
-            new DamageCastFinder(31658, 31658, EIData.InstantCastFinder.DefaultICD), // Glyph of Equality (non-CA)
+            new BuffGainCastFinder(EnterCelestialAvatar,CelestialAvatar,EIData.InstantCastFinder.DefaultICD), // Celestial Avatar
+            new BuffLossCastFinder(ExitCelestialAvatar,CelestialAvatar,EIData.InstantCastFinder.DefaultICD), // Release Celestial Avatar
+            new DamageCastFinder(GlyphOfEquality, GlyphOfEquality, EIData.InstantCastFinder.DefaultICD), // Glyph of Equality (non-CA)
         };
 
         private static readonly HashSet<long> _celestialAvatar = new HashSet<long>
         {
-            31869, 31411
+            EnterCelestialAvatar, ExitCelestialAvatar
         };
 
         public static bool IsCelestialAvatarTransform(long id)

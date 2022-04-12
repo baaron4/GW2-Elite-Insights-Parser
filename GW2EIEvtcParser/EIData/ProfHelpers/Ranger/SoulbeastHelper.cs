@@ -12,24 +12,24 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             // Stout
-            new BuffGainCastFinder(42944,Stout,EIData.InstantCastFinder.DefaultICD), // Beastmode
-            new BuffLossCastFinder(43014,Stout,EIData.InstantCastFinder.DefaultICD), // Leave Beastmode
+            new BuffGainCastFinder(EnterBeastMode,Stout,EIData.InstantCastFinder.DefaultICD), // Beastmode
+            new BuffLossCastFinder(ExitBeastMode,Stout,EIData.InstantCastFinder.DefaultICD), // Leave Beastmode
             // Deadly
-            new BuffGainCastFinder(42944,Deadly,EIData.InstantCastFinder.DefaultICD), // Beastmode
-            new BuffLossCastFinder(43014,Deadly,EIData.InstantCastFinder.DefaultICD), // Leave Beastmode
+            new BuffGainCastFinder(EnterBeastMode,Deadly,EIData.InstantCastFinder.DefaultICD), // Beastmode
+            new BuffLossCastFinder(ExitBeastMode,Deadly,EIData.InstantCastFinder.DefaultICD), // Leave Beastmode
             // Versatile
-            new BuffGainCastFinder(42944,Versatile,EIData.InstantCastFinder.DefaultICD), // Beastmode
-            new BuffLossCastFinder(43014,Versatile,EIData.InstantCastFinder.DefaultICD), // Leave Beastmode
+            new BuffGainCastFinder(EnterBeastMode,Versatile,EIData.InstantCastFinder.DefaultICD), // Beastmode
+            new BuffLossCastFinder(ExitBeastMode,Versatile,EIData.InstantCastFinder.DefaultICD), // Leave Beastmode
             // Ferocious
-            new BuffGainCastFinder(42944,Ferocious,EIData.InstantCastFinder.DefaultICD), // Beastmode
-            new BuffLossCastFinder(43014,Ferocious,EIData.InstantCastFinder.DefaultICD), // Leave Beastmode
+            new BuffGainCastFinder(EnterBeastMode,Ferocious,EIData.InstantCastFinder.DefaultICD), // Beastmode
+            new BuffLossCastFinder(ExitBeastMode,Ferocious,EIData.InstantCastFinder.DefaultICD), // Leave Beastmode
             // Supportive
-            new BuffGainCastFinder(42944,Supportive,EIData.InstantCastFinder.DefaultICD), // Beastmode
-            new BuffLossCastFinder(43014,Supportive,EIData.InstantCastFinder.DefaultICD), // Leave Beastmode
+            new BuffGainCastFinder(EnterBeastMode,Supportive,EIData.InstantCastFinder.DefaultICD), // Beastmode
+            new BuffLossCastFinder(ExitBeastMode,Supportive,EIData.InstantCastFinder.DefaultICD), // Leave Beastmode
             // 
-            new BuffGiveCastFinder(45789,DolyakSignet,EIData.InstantCastFinder.DefaultICD), // Dolyak Stance
-            new BuffGiveCastFinder(45970,MoaStance,EIData.InstantCastFinder.DefaultICD), // Moa Stance
-            new BuffGiveCastFinder(40498,VultureStance,EIData.InstantCastFinder.DefaultICD), // Vulture Stance
+            new BuffGiveCastFinder(DolyakStanceSkill,DolyakStanceEffect,EIData.InstantCastFinder.DefaultICD), // Dolyak Stance
+            new BuffGiveCastFinder(MoaStanceSkill,MoaStanceEffect,EIData.InstantCastFinder.DefaultICD), // Moa Stance
+            new BuffGiveCastFinder(VultureStanceSkill,VultureStanceEffect,EIData.InstantCastFinder.DefaultICD), // Vulture Stance
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
@@ -56,10 +56,10 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-                new Buff("Dolyak Stance",DolyakStance, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/7/71/Dolyak_Stance.png"),
+                new Buff("Dolyak Stance",DolyakStanceEffect, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/7/71/Dolyak_Stance.png"),
                 new Buff("Griffon Stance",GriffonStance, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Support, "https://wiki.guildwars2.com/images/9/98/Griffon_Stance.png"),
-                new Buff("Moa Stance",MoaStance, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Support, "https://wiki.guildwars2.com/images/6/66/Moa_Stance.png"),
-                new Buff("Vulture Stance",VultureStance, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/8/8f/Vulture_Stance.png"),
+                new Buff("Moa Stance",MoaStanceEffect, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Support, "https://wiki.guildwars2.com/images/6/66/Moa_Stance.png"),
+                new Buff("Vulture Stance",VultureStanceEffect, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/8/8f/Vulture_Stance.png"),
                 new Buff("Bear Stance",BearStance, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/f/f0/Bear_Stance.png"),
                 new Buff("One Wolf Pack",OneWolfPackEffect, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png"),
                 new Buff("Deadly",Deadly, Source.Soulbeast, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/94/Deadly_%28Archetype%29.png"),

@@ -279,8 +279,10 @@ namespace GW2EIEvtcParser
         public const long SeedTurret = 12456;
         public const long TakeRootSkill = 12457;
         public const long TakeRootEffect = 12459;
+        public const long SignetOfStone = 12500;
         public const long SignetOfTheWild = 12518;
-        public const long SharpeningStones = 12536;
+        public const long SharpeningStonesEffect = 12536;
+        public const long SharpeningStonesSkill = 12537;
         public const long SunSpiritOld = 12540;
         public const long SignetOfTheHuntActive = 12541;
         public const long SignetOfStoneActive = 12543;
@@ -290,6 +292,8 @@ namespace GW2EIEvtcParser
         public const long AttackOfOpportunity = 12574;
         public const long SignetOfTheHuntPassive = 12626;
         public const long SignetOfStonePassive = 12627;
+        public const long ProtectMe = 12631;
+        public const long SicEmSkill = 12633;
         public const long SignetOfTheWildPet = 12636;
         public const long WaterBlastCombo1 = 12836;
         public const long Stealth = 13017;
@@ -311,7 +315,8 @@ namespace GW2EIEvtcParser
         public const long FleshOfTheMaster = 13810;
         public const long lesserSpinalShivers = 13906;
         public const long LesserEnfeeble = 13907;
-        public const long OpeningStrike = 13988;
+        public const long OpeningStrike = 13980;
+        public const long WindbornNotes = 13988;
         public const long Spotter = 14055;
         public const long EmpowerAllies = 14222;
         public const long BannerOfStrength = 14417;
@@ -496,6 +501,7 @@ namespace GW2EIEvtcParser
         public const long HarmoniousConduit = 31353;
         public const long TranscendentTempest = 31353;
         public const long GlyphOfUnity = 31385;
+        public const long ExitCelestialAvatar = 31411;
         public const long BluePylonPower = 31413;
         public const long Determined31450 = 31450;
         public const long SapperBomb = 31473;
@@ -511,12 +517,14 @@ namespace GW2EIEvtcParser
         public const long Exposed31589 = 31589;
         public const long GhastlyPrison = 31623;
         public const long Enraged1_200 = 31648;
+        public const long GlyphOfEquality = 31658;
         public const long PylonAttunementRed = 31695;
         public const long FlamesOfWar = 31708;
         public const long SpiritedFusion = 31722;
         public const long GlyphOfEmpowerment = 31803;
         public const long UnstablePylonGreen = 31828;
         public const long PylonAttunementGreen = 31852;
+        public const long EnterCelestialAvatar = 31869;
         public const long ProtectiveShadow = 31877;
         public const long UnstablePylonBlue = 31884;
         public const long WritOfLearnedMalice = 31959;
@@ -569,7 +577,7 @@ namespace GW2EIEvtcParser
         public const long GuildItemResearch = 33833;
         public const long OccipitalMastery = 33834;
         public const long WritOfMasterfulMalice = 33836;
-        public const long SicEm = 33902;
+        public const long SicEmEffect = 33902;
         public const long WeakenedEffect2 = 33904;
         public const long FlamesEmbrace = 34031;
         public const long WeakeningStrikes = 34081;
@@ -700,6 +708,7 @@ namespace GW2EIEvtcParser
         public const long Stout = 40272;
         public const long SignetOfTheLocustShroud = 40283;
         public const long MirageCloak = 40408;
+        public const long VultureStanceSkill = 40498;
         public const long TomeOfJustice = 40530;
         public const long SignetOfUndeathShroud = 40583;
         public const long SightBeyondSight = 40616;
@@ -715,7 +724,7 @@ namespace GW2EIEvtcParser
         public const long AirMajorAttunement = 41692;
         public const long MantraOfSolace = 41714;
         public const long Ferocious = 41720;
-        public const long DolyakStance = 41815;
+        public const long DolyakStanceEffect = 41815;
         public const long SignetOfFerocity = 41922;
         public const long AshesOfTheJust = 41957;
         public const long AttackersInsight = 41963;
@@ -726,6 +735,7 @@ namespace GW2EIEvtcParser
         public const long DualAirAttunement = 42264;
         public const long ElementsOfRage = 42416;
         public const long MagebaneTether = 42428;
+        public const long LesserSignetOfStone = 42470;
         public const long BerserkersPower = 42539;
         public const long UnravelEffect = 42683;
         public const long HiddenKiller = 42720;
@@ -733,7 +743,9 @@ namespace GW2EIEvtcParser
         public const long FireMinorAttunement = 42811;
         public const long KallasFervor = 42883;
         public const long EnterPhotonForge = 42938;
+        public const long EnterBeastMode = 42944;
         public const long WeaveSelf = 42951;
+        public const long ExitBeastMode = 43014;
         public const long WovenAir = 43038;
         public const long BraveStride = 43063;
         public const long SpectrumShieldEffect = 43066;
@@ -770,7 +782,7 @@ namespace GW2EIEvtcParser
         public const long AssassinsSignetActive = 44597;
         public const long UnravelSkill = 44612;
         public const long Disenchantment = 44633;
-        public const long VultureStance = 44651;
+        public const long VultureStanceEffect = 44651;
         public const long DesertShroud = 44663;
         public const long BreakrazorsBastion = 44682;
         public const long PhantasmalForce = 44691;
@@ -780,7 +792,7 @@ namespace GW2EIEvtcParser
         public const long StoneResonanceSkill = 44926;
         public const long Deadly = 44932;
         public const long SoulcleavesSummit = 45026;
-        public const long MoaStance = 45038;
+        public const long MoaStanceEffect = 45038;
         public const long StoneResonanceEffect = 45097;
         public const long WovenFire = 45110;
         public const long Quickfire = 45123;
@@ -790,6 +802,8 @@ namespace GW2EIEvtcParser
         public const long ImprovedKallasFervor = 45614;
         public const long WovenEarth = 45662;
         public const long KineticCharge = 45781;
+        public const long DolyakStanceSkill = 45789;
+        public const long MoaStanceSkill = 45970;
         public const long PhotonWallDeployed = 46094;
         public const long MantraOfFlameCast = 46148;
         public const long RedLentilSaobosa = 46273;
@@ -972,7 +986,7 @@ namespace GW2EIEvtcParser
         public const long Sunspot = 56883;
         public const long EarthBlast = 56885;
         public const long SymbolicAvenger = 56890;
-        public const long SicEmPvP = 56923;
+        public const long SicEmEffectPvP = 56923;
         public const long SpherifiedSesameOysterSoup = 57037;
         public const long SesameVeggieFlatbread = 57050;
         public const long PeppercornCrustedSousVideSteak = 57051;
