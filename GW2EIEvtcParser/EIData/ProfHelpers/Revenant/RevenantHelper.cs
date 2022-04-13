@@ -12,19 +12,19 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(28134, LegendaryAssassinStance, EIData.InstantCastFinder.DefaultICD), // Legendary Assassin Stance
-            new BuffGainCastFinder(28494, LegendaryDemonStance, EIData.InstantCastFinder.DefaultICD), // Legendary Demon Stance
-            new BuffGainCastFinder(28419, LegendaryDwarfStance, EIData.InstantCastFinder.DefaultICD), // Legendary Dwarf Stance
-            new BuffGainCastFinder(28195, LegendaryCentaurStance, EIData.InstantCastFinder.DefaultICD), // Legendary Centaur Stance
-            new BuffGainCastFinder(27107, ImpossibleOdds, 500), // Impossible Odds
-            new BuffLossCastFinder(28382, ImpossibleOdds, 500), // Relinquish Power
-            new BuffGainCastFinder(26557, VengefulHammers, EIData.InstantCastFinder.DefaultICD), // Vengeful Hammers
-            new BuffLossCastFinder(26956, VengefulHammers, EIData.InstantCastFinder.DefaultICD), // Release Hammers
-            new DamageCastFinder(59591, 59591, EIData.InstantCastFinder.DefaultICD, GW2Builds.February2020Balance, GW2Builds.EndOfLife), // Invoking Torment
-            new DamageCastFinder(46854, 46854, EIData.InstantCastFinder.DefaultICD), // Call of the Assassin
-            new DamageCastFinder(46843, 46843, EIData.InstantCastFinder.DefaultICD), // Call of the Dwarf
-            new DamageCastFinder(46856, 46856, EIData.InstantCastFinder.DefaultICD), // Call of the Demon
-            new EXTHealingCastFinder(46847, 46847, EIData.InstantCastFinder.DefaultICD), // Call of the Centaur
+            new BuffGainCastFinder(LegendaryAssassinStanceSkill, LegendaryAssassinStanceEffect, EIData.InstantCastFinder.DefaultICD), // Legendary Assassin Stance
+            new BuffGainCastFinder(LegendaryDemonStanceSkill, LegendaryDemonStanceEffect, EIData.InstantCastFinder.DefaultICD), // Legendary Demon Stance
+            new BuffGainCastFinder(LegendaryDwarfStanceSkill, LegendaryDwarfStanceEffect, EIData.InstantCastFinder.DefaultICD), // Legendary Dwarf Stance
+            new BuffGainCastFinder(LegendaryCentaurStanceSkill, LegendaryCentaurStanceEffect, EIData.InstantCastFinder.DefaultICD), // Legendary Centaur Stance
+            new BuffGainCastFinder(ImpossibleOddsSkill, ImpossibleOddsEffect, 500), // Impossible Odds
+            new BuffLossCastFinder(RelinquishPower, ImpossibleOddsEffect, 500), // Relinquish Power
+            new BuffGainCastFinder(VengefulHammersSkill, VengefulHammersEffect, EIData.InstantCastFinder.DefaultICD), // Vengeful Hammers
+            new BuffLossCastFinder(ReleaseHammers, VengefulHammersEffect, EIData.InstantCastFinder.DefaultICD), // Release Hammers
+            new DamageCastFinder(InvokingTorment, InvokingTorment, EIData.InstantCastFinder.DefaultICD, GW2Builds.February2020Balance, GW2Builds.EndOfLife), // Invoking Torment
+            new DamageCastFinder(CallOfTheAssassin, CallOfTheAssassin, EIData.InstantCastFinder.DefaultICD), // Call of the Assassin
+            new DamageCastFinder(CallOfTheDwarf, CallOfTheDwarf, EIData.InstantCastFinder.DefaultICD), // Call of the Dwarf
+            new DamageCastFinder(CallOfTheDemon, CallOfTheDemon, EIData.InstantCastFinder.DefaultICD), // Call of the Demon
+            new EXTHealingCastFinder(CallOfTheCentaur, CallOfTheCentaur, EIData.InstantCastFinder.DefaultICD), // Call of the Centaur
         };
 
 
@@ -76,17 +76,17 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-                new Buff("Vengeful Hammers", VengefulHammers, Source.Revenant, BuffClassification.Other,"https://wiki.guildwars2.com/images/c/c8/Vengeful_Hammers.png"),
+                new Buff("Vengeful Hammers", VengefulHammersEffect, Source.Revenant, BuffClassification.Other,"https://wiki.guildwars2.com/images/c/c8/Vengeful_Hammers.png"),
                 new Buff("Rite of the Great Dwarf", RiteOfTheGreatDwarf, Source.Revenant, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/6/69/Rite_of_the_Great_Dwarf.png"),
                 new Buff("Rite of the Great Dwarf (Traited)", RiteOfTheGreatDwarfTraited, Source.Revenant, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/6/69/Rite_of_the_Great_Dwarf.png"),
                 new Buff("Embrace the Darkness", EmbraceTheDarkness, Source.Revenant, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/51/Embrace_the_Darkness.png"),
                 new Buff("Enchanted Daggers", EnchantedDaggers, Source.Revenant, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/fa/Enchanted_Daggers.png"),
                 new Buff("Phase Traversal", PhaseTraversal, Source.Revenant, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/f2/Phase_Traversal.png"),
-                new Buff("Impossible Odds", ImpossibleOdds, Source.Revenant, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/87/Impossible_Odds.png"),
-                new Buff("Legendary Centaur Stance",LegendaryCentaurStance, Source.Revenant, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/8a/Legendary_Centaur_Stance.png"),
-                new Buff("Legendary Dwarf Stance",LegendaryDwarfStance, Source.Revenant, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b2/Legendary_Dwarf_Stance.png"),
-                new Buff("Legendary Demon Stance",LegendaryDemonStance, Source.Revenant, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d1/Legendary_Demon_Stance.png"),
-                new Buff("Legendary Assassin Stance",LegendaryAssassinStance, Source.Revenant, BuffClassification.Other, "https://wiki.guildwars2.com/images/0/02/Legendary_Assassin_Stance.png"),
+                new Buff("Impossible Odds", ImpossibleOddsEffect, Source.Revenant, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/87/Impossible_Odds.png"),
+                new Buff("Legendary Centaur Stance",LegendaryCentaurStanceEffect, Source.Revenant, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/8a/Legendary_Centaur_Stance.png"),
+                new Buff("Legendary Dwarf Stance",LegendaryDwarfStanceEffect, Source.Revenant, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b2/Legendary_Dwarf_Stance.png"),
+                new Buff("Legendary Demon Stance",LegendaryDemonStanceEffect, Source.Revenant, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d1/Legendary_Demon_Stance.png"),
+                new Buff("Legendary Assassin Stance",LegendaryAssassinStanceEffect, Source.Revenant, BuffClassification.Other, "https://wiki.guildwars2.com/images/0/02/Legendary_Assassin_Stance.png"),
                 //traits
                 new Buff("Vicious Lacerations",ViciousLacerations, Source.Revenant, BuffStackType.Stacking, 3, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", 0, GW2Builds.February2020Balance),
                 new Buff("Assassin's Presence", AssassinsPresence, Source.Revenant, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/5/54/Assassin%27s_Presence.png"),
@@ -100,14 +100,14 @@ namespace GW2EIEvtcParser.EIData
 
         private static readonly HashSet<long> _legendSwaps = new HashSet<long>
         {
-            28134, // Assassin
-            28494, // Demon
-            28419, // Dwarf
-            28195, // Centaur
-            28085, // Dragon
-            41858, // Renegade
-            62749, // Alliance
-            62891, // Alliance (UW)
+            LegendaryAssassinStanceSkill, // Assassin
+            LegendaryDemonStanceSkill, // Demon
+            LegendaryDwarfStanceSkill, // Dwarf
+            LegendaryCentaurStanceSkill, // Centaur
+            LegendaryDragonStanceSkill, // Dragon
+            LegendaryRenegadeStanceSkill, // Renegade
+            LegendaryAllianceStanceSkill, // Alliance
+            LegendaryAllianceStanceUWSkill, // Alliance (UW)
         };
 
         public static bool IsLegendSwap(long id)

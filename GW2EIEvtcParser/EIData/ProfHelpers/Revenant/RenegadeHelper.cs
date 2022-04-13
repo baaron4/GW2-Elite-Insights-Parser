@@ -12,8 +12,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(41858, LegendaryRenegadeStance, EIData.InstantCastFinder.DefaultICD), // Legendary Renegade Stance
-            new DamageCastFinder(46849, 46849, EIData.InstantCastFinder.DefaultICD), // Call of the Renegade
+            new BuffGainCastFinder(LegendaryRenegadeStanceSkill, LegendaryRenegadeStanceEffect, EIData.InstantCastFinder.DefaultICD), // Legendary Renegade Stance
+            new DamageCastFinder(CallOfTheRenegade, CallOfTheRenegade, EIData.InstantCastFinder.DefaultICD), // Call of the Renegade
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-                new Buff("Legendary Renegade Stance",LegendaryRenegadeStance, Source.Renegade, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/19/Legendary_Renegade_Stance.png"),
+                new Buff("Legendary Renegade Stance",LegendaryRenegadeStanceEffect, Source.Renegade, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/19/Legendary_Renegade_Stance.png"),
                 new Buff("Breakrazor's Bastion",BreakrazorsBastion, Source.Renegade, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/a/a7/Breakrazor%27s_Bastion.png"),
                 new Buff("Razorclaw's Rage",RazorclawsRage, Source.Renegade, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/7/73/Razorclaw%27s_Rage.png"),
                 new Buff("Soulcleave's Summit",SoulcleavesSummit, Source.Renegade, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png"),
