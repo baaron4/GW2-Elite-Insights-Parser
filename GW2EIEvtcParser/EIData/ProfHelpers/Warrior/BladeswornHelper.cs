@@ -12,14 +12,14 @@ namespace GW2EIEvtcParser.EIData
         /////////////////////
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffLossCastFinder(62861, GunsaberMode, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta2, GW2Builds.EndOfLife), // Gunsaber sheath
-            new BuffGainCastFinder(62745, GunsaberMode, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta2, GW2Builds.EndOfLife), // Gunsaber         
-            new DamageCastFinder(62847, 62847, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta2, GW2Builds.EndOfLife), // Unseen Sword
+            new BuffLossCastFinder(GunsaberSheath, GunsaberMode, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta2, GW2Builds.EndOfLife), // Gunsaber sheath
+            new BuffGainCastFinder(Gunsaber, GunsaberMode, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta2, GW2Builds.EndOfLife), // Gunsaber         
+            new DamageCastFinder(UnseenSword, UnseenSword, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta2, GW2Builds.EndOfLife), // Unseen Sword
         };
 
         private static readonly HashSet<long> _gunsaberForm = new HashSet<long>
         {
-            62861, 62745,
+            GunsaberSheath, Gunsaber,
         };
 
         public static bool IsGunsaberForm(long id)

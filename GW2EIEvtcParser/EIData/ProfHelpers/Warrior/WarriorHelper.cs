@@ -14,10 +14,10 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(14268, 14268, EIData.InstantCastFinder.DefaultICD, 84794, GW2Builds.EndOfLife), // Reckless Impact
-            new BuffGainCastFinder(14406, BerserkersStance, EIData.InstantCastFinder.DefaultICD), // Berserker Stance
-            new BuffGainCastFinder(14412, BalancedStance, EIData.InstantCastFinder.DefaultICD), // Balanced Stance
-            new BuffGainCastFinder(14392, EnduringPain, EIData.InstantCastFinder.DefaultICD), // Endure Pain
+            new DamageCastFinder(RecklessImpact, RecklessImpact, EIData.InstantCastFinder.DefaultICD, 84794, GW2Builds.EndOfLife), // Reckless Impact
+            new BuffGainCastFinder(BerserkersStanceSkill, BerserkersStanceEffecct, EIData.InstantCastFinder.DefaultICD), // Berserker Stance
+            new BuffGainCastFinder(BalancedStanceSKill, BalancedStanceEffect, EIData.InstantCastFinder.DefaultICD), // Balanced Stance
+            new BuffGainCastFinder(EndurePainSkill, EnduringPainEffect, EIData.InstantCastFinder.DefaultICD), // Endure Pain
         };
 
         private static HashSet<AgentItem> GetBannerAgents(CombatData combatData, long id, HashSet<AgentItem> playerAgents)
@@ -72,15 +72,15 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Signet of Stamina",SignetOfStamina, Source.Warrior, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/6b/Signet_of_Stamina.png"),
                 new Buff("Signet of Rage",SignetOfRage, Source.Warrior, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/bc/Signet_of_Rage.png"),
                 //banners
-                new Buff("Banner of Strength", BannerOfStrength, Source.Warrior, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/thumb/e/e1/Banner_of_Strength.png/33px-Banner_of_Strength.png"),
-                new Buff("Banner of Discipline", BannerOfDiscipline, Source.Warrior, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/thumb/5/5f/Banner_of_Discipline.png/33px-Banner_of_Discipline.png"),
-                new Buff("Banner of Tactics",BannerOfTactics, Source.Warrior, BuffClassification.Support, "https://wiki.guildwars2.com/images/thumb/3/3f/Banner_of_Tactics.png/33px-Banner_of_Tactics.png"),
-                new Buff("Banner of Defense",BannerOfDefense, Source.Warrior, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/thumb/f/f1/Banner_of_Defense.png/33px-Banner_of_Defense.png"),
+                new Buff("Banner of Strength", BannerOfStrengthEffect, Source.Warrior, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/thumb/e/e1/Banner_of_Strength.png/33px-Banner_of_Strength.png"),
+                new Buff("Banner of Discipline", BannerOfDisciplineEffect, Source.Warrior, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/thumb/5/5f/Banner_of_Discipline.png/33px-Banner_of_Discipline.png"),
+                new Buff("Banner of Tactics",BannerOfTacticsEffect, Source.Warrior, BuffClassification.Support, "https://wiki.guildwars2.com/images/thumb/3/3f/Banner_of_Tactics.png/33px-Banner_of_Tactics.png"),
+                new Buff("Banner of Defense",BannerOfDefenseEffect, Source.Warrior, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/thumb/f/f1/Banner_of_Defense.png/33px-Banner_of_Defense.png"),
                 //stances
                 new Buff("Shield Stance",ShieldStance, Source.Warrior, BuffClassification.Other,"https://wiki.guildwars2.com/images/d/de/Shield_Stance.png"),
-                new Buff("Berserker's Stance",BerserkersStance, Source.Warrior, BuffClassification.Other,"https://wiki.guildwars2.com/images/8/8a/Berserker_Stance.png"),
-                new Buff("Enduring Pain",EnduringPain, Source.Warrior, BuffStackType.Queue, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/24/Endure_Pain.png"),
-                new Buff("Balanced Stance",BalancedStance, Source.Warrior, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/27/Balanced_Stance.png"),
+                new Buff("Berserker's Stance",BerserkersStanceEffecct, Source.Warrior, BuffClassification.Other,"https://wiki.guildwars2.com/images/8/8a/Berserker_Stance.png"),
+                new Buff("Enduring Pain",EnduringPainEffect, Source.Warrior, BuffStackType.Queue, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/24/Endure_Pain.png"),
+                new Buff("Balanced Stance",BalancedStanceEffect, Source.Warrior, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/27/Balanced_Stance.png"),
                 new Buff("Defiant Stance",DefiantStance, Source.Warrior, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/db/Defiant_Stance.png"),
                 new Buff("Rampage",Rampage, Source.Warrior, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e4/Rampage.png"),
                 //traits
@@ -124,10 +124,10 @@ namespace GW2EIEvtcParser.EIData
         public static void AttachMasterToWarriorBanners(IReadOnlyList<Player> players, CombatData combatData)
         {
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
-            HashSet<AgentItem> strBanners = GetBannerAgents(combatData, BannerOfStrength, playerAgents),
-                defBanners = GetBannerAgents(combatData, BannerOfDefense, playerAgents),
-                disBanners = GetBannerAgents(combatData, BannerOfDiscipline, playerAgents),
-                tacBanners = GetBannerAgents(combatData, BannerOfTactics, playerAgents);
+            HashSet<AgentItem> strBanners = GetBannerAgents(combatData, BannerOfStrengthEffect, playerAgents),
+                defBanners = GetBannerAgents(combatData, BannerOfDefenseEffect, playerAgents),
+                disBanners = GetBannerAgents(combatData, BannerOfDisciplineEffect, playerAgents),
+                tacBanners = GetBannerAgents(combatData, BannerOfTacticsEffect, playerAgents);
             //battleBanner = FindBattleStandards(buffData, playerAgents);
             var warriors = players.Where(x => x.BaseSpec == Spec.Warrior).ToList();
             // if only one warrior, could only be that one
@@ -143,10 +143,10 @@ namespace GW2EIEvtcParser.EIData
             else if (warriors.Count > 1)
             {
                 // land and under water cast ids
-                ProfHelper.AttachMasterToGadgetByCastData(combatData, strBanners, new List<long> { 14405, 14572 }, 1000);
-                ProfHelper.AttachMasterToGadgetByCastData(combatData, defBanners, new List<long> { 14528, 14570 }, 1000);
-                ProfHelper.AttachMasterToGadgetByCastData(combatData, disBanners, new List<long> { 14407, 14571 }, 1000);
-                ProfHelper.AttachMasterToGadgetByCastData(combatData, tacBanners, new List<long> { 14408, 14573 }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(combatData, strBanners, new List<long> { BannerOfStrengthSkill, BannerOfStrengthSkillUW }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(combatData, defBanners, new List<long> { BannerOfDefenseSkill, BannerOfDefenseSkillUW }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(combatData, disBanners, new List<long> { BannerOfDisciplineSkill, BannerOfDisciplineSkillUW }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(combatData, tacBanners, new List<long> { BannerOfTacticsSkill, BannerOfTacticsSkillUW }, 1000);
                 //AttachMasterToBanner(castData, battleBanner, 14419, 14569);
             }
         }

@@ -15,8 +15,8 @@ namespace GW2EIEvtcParser.EIData
         /////////////////////
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(43745, SightBeyondSight, EIData.InstantCastFinder.DefaultICD), // Sight beyond Sight
-            new DamageCastFinder(45534, 45534, EIData.InstantCastFinder.DefaultICD), // Loss Aversion
+            new BuffGainCastFinder(SightBeyondSightSkill, SightBeyondSightEffect, EIData.InstantCastFinder.DefaultICD), // Sight beyond Sight
+            new DamageCastFinder(LossAversion, LossAversion, EIData.InstantCastFinder.DefaultICD), // Loss Aversion
 
         };
 
@@ -38,7 +38,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-                new Buff("Sight beyond Sight",SightBeyondSight, Source.Spellbreaker, BuffClassification.Other,"https://wiki.guildwars2.com/images/d/d7/Sight_beyond_Sight.png"),
+                new Buff("Sight beyond Sight",SightBeyondSightEffect, Source.Spellbreaker, BuffClassification.Other,"https://wiki.guildwars2.com/images/d/d7/Sight_beyond_Sight.png"),
                 new Buff("Full Counter",FullCounter, Source.Spellbreaker, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/fb/Full_Counter.png"),
                 new Buff("Disenchantment",Disenchantment, Source.Spellbreaker, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e1/Winds_of_Disenchantment.png"),
                 new Buff("Attacker's Insight",AttackersInsight, Source.Spellbreaker, BuffStackType.Stacking, 5, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/89/Attacker%27s_Insight.png"),
