@@ -143,7 +143,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             
             //
-            AbstractBuffEvent enrage = log.CombatData.GetBuffData(58619).FirstOrDefault(x => x is BuffApplyEvent);
+            AbstractBuffEvent enrage = log.CombatData.GetBuffData(SkillIDs.EnragedVC).FirstOrDefault(x => x is BuffApplyEvent);
             if (enrage != null)
             {
                 var phase = new PhaseData(enrage.Time, log.FightData.FightEnd, "Enrage");

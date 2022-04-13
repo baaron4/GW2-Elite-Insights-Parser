@@ -9,7 +9,7 @@
         {
             Status = AnimationStatus.Instant;
             SwappedTo = (int)evtcItem.DstAgent;
-            Skill = skillData.Get(SkillItem.WeaponSwapId);
+            Skill = skillData.Get(SkillIDs.WeaponSwap);
             ActualDuration = 0;
             ExpectedDuration = 0;
         }

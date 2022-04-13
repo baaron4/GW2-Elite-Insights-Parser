@@ -21,7 +21,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
         {
-            if (BuffID == Buff.NoBuff || Time > fightEnd - ParserHelper.BuffSimulatorDelayConstant)
+            if (BuffID == SkillIDs.NoBuff || Time > fightEnd - ParserHelper.BuffSimulatorDelayConstant)
             {
                 // don't take into account removal that are close to the end of the fight
                 return false;

@@ -31,9 +31,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerBuffApplyMechanic(38985, "Fixate", new MechanicPlotlySetting("star-open","rgb(255,0,255)"), "Bloom Fix","Fixated by Solar Bloom", "Bloom Fixate",0),
             new PlayerBuffApplyMechanic(39268, "Cosmic Meteor", new MechanicPlotlySetting("circle-open","rgb(0,255,0)"), "Green","Temporal Realignment (Green) application", "Green",0),
             new PlayerBuffApplyMechanic(791, "Fear", new MechanicPlotlySetting("square-open","rgb(255,0,0)"), "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)",0, (ba, log) => ba.AppliedDuration == 3000), // //not triggered under stab, still get blinded/damaged, seperate tracking desired?
-            new EnemyCastStartMechanic(39645, "Breakbar Start", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "Breakbar","Start Breakbar", "CC",0),
-            new EnemyBuffApplyMechanic(31589, "Breakbar End", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC.Fail","Breakbar (Failed CC)", "CC Fail",0, (bae,log) => bae.To.ID == (int)ArcDPSEnums.TargetID.Arkk && !log.CombatData.GetAnimatedCastData(39645).Any(x => bae.To == x.Caster && x.Time < bae.Time && bae.Time < x.ExpectedEndTime + ParserHelper.ServerDelayConstant)),
-            new EnemyBuffApplyMechanic(31589, "Breakbar End", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Breakbar broken", "CCed",0, (bae,log) => bae.To.ID == (int)ArcDPSEnums.TargetID.Arkk && log.CombatData.GetAnimatedCastData(39645).Any(x => bae.To == x.Caster && x.Time < bae.Time && bae.Time < x.ExpectedEndTime + ParserHelper.ServerDelayConstant)),
+            new EnemyCastStartMechanic(SkillIDs.ArkkBreakbarCast, "Breakbar Start", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "Breakbar","Start Breakbar", "CC",0),
+            new EnemyBuffApplyMechanic(31589, "Breakbar End", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "CC.Fail","Breakbar (Failed CC)", "CC Fail",0, (bae,log) => bae.To.ID == (int)ArcDPSEnums.TargetID.Arkk && !log.CombatData.GetAnimatedCastData(SkillIDs.ArkkBreakbarCast).Any(x => bae.To == x.Caster && x.Time < bae.Time && bae.Time < x.ExpectedEndTime + ParserHelper.ServerDelayConstant)),
+            new EnemyBuffApplyMechanic(31589, "Breakbar End", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "CCed","Breakbar broken", "CCed",0, (bae,log) => bae.To.ID == (int)ArcDPSEnums.TargetID.Arkk && log.CombatData.GetAnimatedCastData(SkillIDs.ArkkBreakbarCast).Any(x => bae.To == x.Caster && x.Time < bae.Time && bae.Time < x.ExpectedEndTime + ParserHelper.ServerDelayConstant)),
             new HitOnPlayerMechanic(34748, "Overhead Smash", new MechanicPlotlySetting("triangle-left-open","rgb(200,0,0)"), "A.Smsh","Overhead Smash (Arcdiviner)", "Smash (Add)",0),
             new HitOnPlayerMechanic(39674, "Rolling Chaos", new MechanicPlotlySetting("circle","rgb(255,50,50)"), "KD Marble","Rolling Chaos (Arrow marble)", "KD Marble",0),
             new HitOnPlayerMechanic(39298, "Solar Stomp", new MechanicPlotlySetting("triangle-up","rgb(200,0,200)"), "Stomp","Solar Stomp (Evading Stomp)", "Evading Jump",0),
@@ -106,7 +106,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // removes should be present
             if (SetSuccessByBuffCount(combatData, fightData, adjustedPlayers, target, 762, 10))
             {
-                var invulsRemoveTarget = combatData.GetBuffData(762).OfType<BuffRemoveAllEvent>().Where(x => x.To == target.AgentItem).ToList();
+                var invulsRemoveTarget = combatData.GetBuffData(SkillIDs.Determined762).OfType<BuffRemoveAllEvent>().Where(x => x.To == target.AgentItem).ToList();
                 if (invulsRemoveTarget.Count == 5)
                 {
                     SetSuccessByCombatExit(new List<AbstractSingleActor> { target }, combatData, fightData, adjustedPlayers);

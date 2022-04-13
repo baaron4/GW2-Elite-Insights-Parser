@@ -29,11 +29,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     return false;
                 }
                 // Greater Death mark check
-                if (log.CombatData.GetDamageData(48210).Any(x => Math.Abs(x.Time - br.Time) < 100 && x.To == br.To)) {
+                if (log.CombatData.GetDamageData(SkillIDs.GreaterDeathMark).Any(x => Math.Abs(x.Time - br.Time) < 100 && x.To == br.To)) {
                     return false;
                 }
                 // Spirit transformation check
-                if (br.To.HasBuff(log, 48281, br.Time))
+                if (br.To.HasBuff(log, SkillIDs.MortalCoilDhuum, br.Time))
                 {
                     return false;
                 }
@@ -165,7 +165,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             else
             {
                 // full fight contains the pre event
-                AbstractBuffEvent invulDhuum = log.CombatData.GetBuffData(762).FirstOrDefault(x => x is BuffRemoveManualEvent && x.To == dhuum.AgentItem && x.Time > 115000);
+                AbstractBuffEvent invulDhuum = log.CombatData.GetBuffData(SkillIDs.Determined762).FirstOrDefault(x => x is BuffRemoveManualEvent && x.To == dhuum.AgentItem && x.Time > 115000);
                 // pre event done
                 if (invulDhuum != null)
                 {
@@ -326,7 +326,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         if (_greenStart == 0)
                         {
-                            AbstractBuffEvent greenTaken = log.CombatData.GetBuffData(46950).Where(x => x is BuffApplyEvent).FirstOrDefault();
+                            AbstractBuffEvent greenTaken = log.CombatData.GetBuffData(SkillIDs.FracturedSpirit).Where(x => x is BuffApplyEvent).FirstOrDefault();
                             if (greenTaken != null)
                             {
                                 _greenStart = (int)greenTaken.Time - 5000;
@@ -382,7 +382,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // spirit transform
-            var spiritTransform = log.CombatData.GetBuffData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            var spiritTransform = log.CombatData.GetBuffData(SkillIDs.FracturedSpirit).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
             if (mainTarget == null)
             {
@@ -396,7 +396,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     duration = 30000;
                 }
-                AbstractBuffEvent removedBuff = log.CombatData.GetBuffRemoveAllData(48281).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
+                AbstractBuffEvent removedBuff = log.CombatData.GetBuffRemoveAllData(SkillIDs.MortalCoilDhuum).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
                 int start = (int)c.Time;
                 int end = start + duration;
                 if (removedBuff != null)

@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 new HitOnPlayerMechanic(56541, "Pylon Debris Field", new MechanicPlotlySetting("circle-open-dot",Colors.Orange), "P.Magma", "Hit by Pylon Magma", "Pylon Magma", 0),
                 new HitOnPlayerMechanic(56020, "Energized Affliction", new MechanicPlotlySetting("circle-open",Colors.Green), "E.Aff", "Energized Affliction", "Energized Affliction", 0),
-                new HitOnPlayerMechanic(56134, "Force of Retaliation", new MechanicPlotlySetting("circle-open",Colors.Black), "Pushed", "Pushed by Shockwave", "Shockwave Push", 1000, (de, log) => !de.To.HasBuff(log, 1122, de.Time - ParserHelper.ServerDelayConstant)),
+                new HitOnPlayerMechanic(56134, "Force of Retaliation", new MechanicPlotlySetting("circle-open",Colors.Black), "Pushed", "Pushed by Shockwave", "Shockwave Push", 1000, (de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
                 new HitOnPlayerMechanic(56093, "Exponential Repercussion", new MechanicPlotlySetting("diamond-open",Colors.Magenta), "P.KB", "Pushed by Pylon Knockback", "Pylon Knockback", 1000),
                 new HitOnPlayerMechanic(56254, "Exponential Repercussion", new MechanicPlotlySetting("diamond-open",Colors.Magenta), "Dome.KB", "Pushed by Dome Shield Knockback", "Dome Knockback", 1000),
                 new HitOnPlayerMechanic(56441, "Force of Havoc", new MechanicPlotlySetting("square-open",Colors.Purple), "P.Rect", "Hit by Purple Rectangle", "Purple Rectangle", 0),
@@ -25,7 +25,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new HitOnPlayerMechanic(56656, "Brandstorm Lightning", new MechanicPlotlySetting("triangle",Colors.Yellow), "S.Lght.H", "Hit by Small Lightning", "Small Lightning Hit", 0),
                 new HitOnPlayerMechanic(56180, "Residual Impact", new MechanicPlotlySetting("circle-open",Colors.Orange), "Magma.F", "Hit by Magma Field", "Magma Field", 500),
                 new HitOnPlayerMechanic(56378, "Residual Impact", new MechanicPlotlySetting("circle-open",Colors.Orange,10), "S.Magma.F", "Hit by Small Magma Field", "Small Magma Field", 500),
-                new HitOnPlayerMechanic(56616, "Battering Blitz", new MechanicPlotlySetting("bowtie",Colors.Orange), "Rush.H", "Hit by Qadim Rush", "Qadim Rush", 500),
+                new HitOnPlayerMechanic(SkillIDs.BatteringBlitz, "Battering Blitz", new MechanicPlotlySetting("bowtie",Colors.Orange), "Rush.H", "Hit by Qadim Rush", "Qadim Rush", 500),
                 new HitOnPlayerMechanic(56332, "Caustic Chaos", new MechanicPlotlySetting("triangle-right",Colors.Red), "A.Prj.H", "Hit by Aimed Projectile", "Aimed Projectile", 0),
                 new HitByEnemyMechanic(56598, "Shower of Chaos", new MechanicPlotlySetting("circle",Colors.Black), "Orb.D", "Pylon Orb not caught", "Shower of Chaos", 1000),
                 new HitByEnemyMechanic(56316, "Eclipsed Backlash", new MechanicPlotlySetting("circle",Colors.Orange), "Entropic.Expl", "Entropic Distortion exploded", "Eclipsed Backlash", 1000),
@@ -61,7 +61,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<AbstractBuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
         {
             var res = new List<AbstractBuffEvent>();
-            IReadOnlyList<AbstractBuffEvent> sappingSurges = combatData.GetBuffData(56118);
+            IReadOnlyList<AbstractBuffEvent> sappingSurges = combatData.GetBuffData(SkillIDs.SappingSurge);
             var sappingSurgeByDst = sappingSurges.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             foreach (KeyValuePair<AgentItem, List<AbstractBuffEvent>> pair in sappingSurgeByDst.Where(x => x.Value.Exists(y => y is BuffRemoveSingleEvent)))
             {
@@ -95,7 +95,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var phaseStarts = new List<long>();
             var phaseEnds = new List<long>();
             //
-            var magmaDrops = log.CombatData.GetBuffData(56475).Where(x => x is BuffApplyEvent).ToList();
+            var magmaDrops = log.CombatData.GetBuffData(SkillIDs.MagmaDrop).Where(x => x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent magmaDrop in magmaDrops)
             {
                 if (phaseEnds.Count > 0)
@@ -110,7 +110,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     phaseEnds.Add(magmaDrop.Time);
                 }
             }
-            IReadOnlyList<AnimatedCastEvent> pushes = log.CombatData.GetAnimatedCastData(56405);
+            IReadOnlyList<AnimatedCastEvent> pushes = log.CombatData.GetAnimatedCastData(SkillIDs.ForceOfRetaliationCast);
             if (pushes.Count > 0)
             {
                 AbstractCastEvent push = pushes[0];
@@ -126,10 +126,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             // rush to pylon
-            phaseEnds.AddRange(log.CombatData.GetAnimatedCastData(56616).Select(x => x.Time).ToList());
+            phaseEnds.AddRange(log.CombatData.GetAnimatedCastData(SkillIDs.BatteringBlitz).Select(x => x.Time).ToList());
             phaseEnds.Add(log.FightData.FightEnd);
             // tp to middle after pylon destruction
-            phaseStarts.AddRange(log.CombatData.GetAnimatedCastData(56375).Select(x => x.EndTime));
+            phaseStarts.AddRange(log.CombatData.GetAnimatedCastData(SkillIDs.PeerlessQadimTPCenter).Select(x => x.EndTime));
             // There should be at least as many starts as ends, otherwise skip phases
             if (phaseEnds.Count < phaseStarts.Count)
             {
@@ -181,7 +181,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TargetID.PeerlessQadim:
                     var cataCycle = cls.Where(x => x.SkillId == 56329).ToList();
                     var forceOfHavoc = cls.Where(x => x.SkillId == 56017).ToList();
-                    var forceOfRetal = cls.Where(x => x.SkillId == 56405).ToList();
+                    var forceOfRetal = cls.Where(x => x.SkillId == SkillIDs.ForceOfRetaliationCast).ToList();
                     var etherStrikes = cls.Where(x => x.SkillId == 56012 || x.SkillId == 56653).ToList();
                     var causticChaos = cls.Where(x => x.SkillId == 56332).ToList();
                     var expoReperc = cls.Where(x => x.SkillId == 56223).ToList();

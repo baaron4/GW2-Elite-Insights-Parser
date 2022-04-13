@@ -123,7 +123,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Deimos not found");
             }
             var res = new List<AbstractBuffEvent>();
-            IReadOnlyList<AbstractBuffEvent> signets = combatData.GetBuffData(38224);
+            IReadOnlyList<AbstractBuffEvent> signets = combatData.GetBuffData(SkillIDs.UnnaturalSignet);
             foreach (AbstractBuffEvent bfe in signets)
             {
                 if (bfe is BuffApplyEvent ba)
@@ -329,7 +329,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         private List<PhaseData> AddBossPhases(List<PhaseData> phases, ParsedEvtcLog log, AbstractSingleActor mainTarget)
         {
             // Determined + additional data on inst change
-            AbstractBuffEvent invulDei = log.CombatData.GetBuffData(762).FirstOrDefault(x => x is BuffApplyEvent && x.To == mainTarget.AgentItem);
+            AbstractBuffEvent invulDei = log.CombatData.GetBuffData(SkillIDs.Determined762).FirstOrDefault(x => x is BuffApplyEvent && x.To == mainTarget.AgentItem);
 
             if (invulDei != null)
             {

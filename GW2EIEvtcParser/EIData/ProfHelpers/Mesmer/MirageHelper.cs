@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.Buff;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -9,8 +10,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(45449, 45449, EIData.InstantCastFinder.DefaultICD), // Jaunt
-            new BuffGainCastFinder(SkillItem.MirageCloakDodgeId, 40408, EIData.InstantCastFinder.DefaultICD), // Mirage Cloak
+            new DamageCastFinder(Jaunt, Jaunt, EIData.InstantCastFinder.DefaultICD), // Jaunt
+            new BuffGainCastFinder(MirageCloakDodge, MirageCloak, EIData.InstantCastFinder.DefaultICD), // Mirage Cloak
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
@@ -19,8 +20,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-                new Buff("Mirage Cloak",40408, ParserHelper.Source.Mirage, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/a5/Mirage_Cloak_%28effect%29.png"),
-                new Buff("False Oasis",40802, ParserHelper.Source.Mirage, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/32/False_Oasis.png"),
+                new Buff("Mirage Cloak",MirageCloak, ParserHelper.Source.Mirage, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/a5/Mirage_Cloak_%28effect%29.png"),
+                new Buff("False Oasis",FalseOasis, ParserHelper.Source.Mirage, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/32/False_Oasis.png"),
         };
 
         private static HashSet<long> Minions = new HashSet<long>();

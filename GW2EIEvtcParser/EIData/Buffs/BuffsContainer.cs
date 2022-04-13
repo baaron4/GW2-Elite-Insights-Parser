@@ -113,7 +113,7 @@ namespace GW2EIEvtcParser.EIData
             BuffsByIds = currentBuffs.GroupBy(x => x.ID).ToDictionary(x => x.Key, x =>
             {
                 var list = x.ToList();
-                if (list.Count > 1 && x.Key != Buff.NoBuff && x.Key != Buff.Unknown)
+                if (list.Count > 1 && x.Key != SkillIDs.NoBuff && x.Key != SkillIDs.Unknown)
                 {
                     throw new InvalidDataException("Same id present multiple times in buffs - " + x.First().ID);
                 }

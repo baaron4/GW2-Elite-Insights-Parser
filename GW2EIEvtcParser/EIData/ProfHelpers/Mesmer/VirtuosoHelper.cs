@@ -2,6 +2,7 @@
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -30,7 +31,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-            new Buff("Deadly Blades", 63409, Source.Virtuoso, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/15/Deadly_Blades.png"),
+            new Buff("Deadly Blades", DeadlyBlades, Source.Virtuoso, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/15/Deadly_Blades.png"),
         };
 
         private static HashSet<long> Minions = new HashSet<long>();

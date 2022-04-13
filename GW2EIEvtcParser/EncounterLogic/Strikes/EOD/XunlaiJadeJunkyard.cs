@@ -62,7 +62,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     throw new MissingKeyActorsException("Ankka not found");
                 }
-                var buffApplies = combatData.GetBuffData(895).OfType<BuffApplyEvent>().Where(x => x.To == ankka.AgentItem && !x.Initial && x.AppliedDuration > int.MaxValue / 2).ToList();
+                var buffApplies = combatData.GetBuffData(SkillIDs.Determined895).OfType<BuffApplyEvent>().Where(x => x.To == ankka.AgentItem && !x.Initial && x.AppliedDuration > int.MaxValue / 2).ToList();
                 if (buffApplies.Count == 3)
                 {
                     fightData.SetSuccess(true, buffApplies.LastOrDefault().Time);

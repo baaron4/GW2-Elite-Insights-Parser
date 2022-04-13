@@ -174,7 +174,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(skorvald.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
             if (lastDamageTaken != null)
             {
-                BuffApplyEvent invul895Apply = combatData.GetBuffData(895).OfType<BuffApplyEvent>().Where(x => x.To == skorvald.AgentItem && x.Time > lastDamageTaken.Time - 500).LastOrDefault();
+                BuffApplyEvent invul895Apply = combatData.GetBuffData(SkillIDs.Determined895).OfType<BuffApplyEvent>().Where(x => x.To == skorvald.AgentItem && x.Time > lastDamageTaken.Time - 500).LastOrDefault();
                 if (invul895Apply != null)
                 {
                     fightData.SetSuccess(true, Math.Min(invul895Apply.Time, lastDamageTaken.Time));

@@ -10,44 +10,29 @@ namespace GW2EIEvtcParser.ParsedData
 {
     public class SkillItem
     {
-        private const long DodgeId = 65001;
-        private const long GenericBreakbarId = 65002;
-        private const long DodgeId20220307 = 23275;
-        private const long GenericBreakbarId20220307 = 23276;
 
         internal static (long, long) GetArcDPSCustomIDs(int evtcVersion)
         {
             if (evtcVersion >= ArcDPSBuilds.InternalSkillIDsChange)
             {
-                return (DodgeId20220307, GenericBreakbarId20220307);
+                return (SkillIDs.ArcDPSDodge20220307, SkillIDs.ArcDPSGenericBreakbar20220307);
             }
             else
             {
-                return (DodgeId, GenericBreakbarId);
+                return (SkillIDs.ArcDPSDodge, SkillIDs.ArcDPSGenericBreakbar);
             }
         }
 
-        public const long MirageCloakDodgeId = -17;
-        public const long ResurrectId = 1066;
-        public const long BandageId = 1175;
-        public const long WeaponSwapId = -2;
-        public const long DeathId = -4;
-        public const long DownId = -3;
-        public const long DCId = -5;
-        public const long AliveId = -6;
-        public const long RespawnId = -7;
-
-
         private static readonly Dictionary<long, string> _overrideNames = new Dictionary<long, string>()
         {
-            {ResurrectId, "Resurrect"},
-            {BandageId, "Bandage" },
-            {DodgeId, "Dodge" },
-            {DodgeId20220307, "Dodge" },
-            {GenericBreakbarId, "Generic Breakbar" },
-            {GenericBreakbarId20220307, "Generic Breakbar" },
-            {MirageCloakDodgeId, "Mirage Cloak" },
-            {WeaponSwapId, "Weapon Swap" },
+            {SkillIDs.Resurrect, "Resurrect"},
+            {SkillIDs.Bandage, "Bandage" },
+            {SkillIDs.ArcDPSDodge, "Dodge" },
+            {SkillIDs.ArcDPSDodge20220307, "Dodge" },
+            {SkillIDs.ArcDPSGenericBreakbar, "Generic Breakbar" },
+            {SkillIDs.ArcDPSGenericBreakbar20220307, "Generic Breakbar" },
+            {SkillIDs.MirageCloakDodge, "Mirage Cloak" },
+            {SkillIDs.WeaponSwap, "Weapon Swap" },
             {13594, "Selfless Daring"}, // The game maps this name incorrectly to "Selflessness Daring"
 	        {14024, "Natural Healing"}, // The game does not map this one at all
 	        {26558, "Energy Expulsion"},
@@ -87,32 +72,32 @@ namespace GW2EIEvtcParser.ParsedData
             // P.Qadim
             {56296, "Ruinous Nova Charge" },
             //{56036, "Magma Bomb" },
-            {56405, "Force of Retaliation Cast" },
-            {56375, "Teleport Center" },
+            {SkillIDs.ForceOfRetaliationCast, "Force of Retaliation Cast" },
+            {SkillIDs.PeerlessQadimTPCenter, "Teleport Center" },
             {56446, "Eat Pylon" },
             {56329, "Big Magma Drop" },
             // Voice and Claw
             {58382, "Kodan Teleport" },
             // Weaver attunements
-            {Buff.FireDual, "Dual Fire Attunement" },
-            {Buff.FireWater, "Fire Water Attunement" },
-            {Buff.FireAir, "Fire Air Attunement" },
-            {Buff.FireEarth, "Fire Earth Attunement" },
+            {SkillIDs.DualFireAttunement, "Dual Fire Attunement" },
+            {SkillIDs.FireWaterAttunement, "Fire Water Attunement" },
+            {SkillIDs.FireAirAttunement, "Fire Air Attunement" },
+            {SkillIDs.FireEarthAttunement, "Fire Earth Attunement" },
 
-            {Buff.WaterDual, "Dual Water Attunement" },
-            {Buff.WaterFire, "Water Fire Attunement" },
-            {Buff.WaterAir, "Water Air Attunement" },
-            {Buff.WaterEarth, "Water Earth Attunement" },
+            {SkillIDs.DualWaterAttunement, "Dual Water Attunement" },
+            {SkillIDs.WaterFireAttunement, "Water Fire Attunement" },
+            {SkillIDs.WaterAirAttunement, "Water Air Attunement" },
+            {SkillIDs.WaterEarthAttunement, "Water Earth Attunement" },
 
-            {Buff.AirDual, "Dual Air Attunement" },
-            {Buff.AirFire, "Air Fire Attunement" },
-            {Buff.AirWater, "Air Water Attunement" },
-            {Buff.AirEarth, "Air Earth Attunement" },
+            {SkillIDs.DualAirAttunement, "Dual Air Attunement" },
+            {SkillIDs.AirFireAttunement, "Air Fire Attunement" },
+            {SkillIDs.AirWaterAttunement, "Air Water Attunement" },
+            {SkillIDs.AirEarthAttunement, "Air Earth Attunement" },
 
-            {Buff.EarthDual, "Dual Earth Attunement" },
-            {Buff.EarthFire, "Earth Fire Attunement" },
-            {Buff.EarthWater, "Earth Water Attunement" },
-            {Buff.EarthAir, "Earth Air Attunement" },
+            {SkillIDs.DualEarthAttunement, "Dual Earth Attunement" },
+            {SkillIDs.EarthFireAttunement, "Earth Fire Attunement" },
+            {SkillIDs.EarthWaterAttunement, "Earth Water Attunement" },
+            {SkillIDs.EarthAirAttunement, "Earth Air Attunement" },
 
             {51696, "True Nature - Dragon" },
             {51714, "True Nature - Demon" },
@@ -126,14 +111,14 @@ namespace GW2EIEvtcParser.ParsedData
         };
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
         {
-            {ResurrectId, "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png"},
-            {BandageId, "https://wiki.guildwars2.com/images/0/0c/Bandage.png"},
-            {GenericBreakbarId, "https://wiki.guildwars2.com/images/a/ae/Unshakable.png"},
-            {DodgeId, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png"},
-            {GenericBreakbarId20220307, "https://wiki.guildwars2.com/images/a/ae/Unshakable.png"},
-            {DodgeId20220307, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png"},
-            {MirageCloakDodgeId, "https://wiki.guildwars2.com/images/a/a5/Mirage_Cloak_%28effect%29.png"},
-            {WeaponSwapId, "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png"},
+            {SkillIDs.Resurrect, "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png"},
+            {SkillIDs.Bandage, "https://wiki.guildwars2.com/images/0/0c/Bandage.png"},
+            {SkillIDs.ArcDPSGenericBreakbar, "https://wiki.guildwars2.com/images/a/ae/Unshakable.png"},
+            {SkillIDs.ArcDPSDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png"},
+            {SkillIDs.ArcDPSGenericBreakbar20220307, "https://wiki.guildwars2.com/images/a/ae/Unshakable.png"},
+            {SkillIDs.ArcDPSDodge20220307, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png"},
+            {SkillIDs.MirageCloakDodge, "https://wiki.guildwars2.com/images/a/a5/Mirage_Cloak_%28effect%29.png"},
+            {SkillIDs.WeaponSwap, "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png"},
             {49112, "https://wiki.guildwars2.com/images/e/e7/Throw_Magnetic_Bomb.png"},
             {49063, "https://wiki.guildwars2.com/images/3/3d/Detonate_Plasma.png"},
             {49123, "https://wiki.guildwars2.com/images/d/dd/Unstable_Artifact.png"},
@@ -213,25 +198,25 @@ namespace GW2EIEvtcParser.ParsedData
             {27101, "https://wiki.guildwars2.com/images/e/e7/Project_Tranquility.png" },
             {35417, "https://wiki.guildwars2.com/images/b/b6/Ventari%27s_Will.png" },
             // Weaver attunements
-            {Buff.FireDual, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
-            {Buff.FireWater, "https://i.imgur.com/ar8Hn8G.png" },
-            {Buff.FireAir, "https://i.imgur.com/YU31LwG.png" },
-            {Buff.FireEarth, "https://i.imgur.com/64g3rto.png" },
+            {SkillIDs.DualFireAttunement, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
+            {SkillIDs.FireWaterAttunement, "https://i.imgur.com/ar8Hn8G.png" },
+            {SkillIDs.FireAirAttunement, "https://i.imgur.com/YU31LwG.png" },
+            {SkillIDs.FireEarthAttunement, "https://i.imgur.com/64g3rto.png" },
 
-            {Buff.WaterDual, "https://wiki.guildwars2.com/images/3/31/Water_Attunement.png" },
-            {Buff.WaterFire, "https://i.imgur.com/H1peqpz.png" },
-            {Buff.WaterAir, "https://i.imgur.com/Gz1XwEw.png" },
-            {Buff.WaterEarth, "https://i.imgur.com/zqX3y4c.png" },
+            {SkillIDs.DualWaterAttunement, "https://wiki.guildwars2.com/images/3/31/Water_Attunement.png" },
+            {SkillIDs.WaterFireAttunement, "https://i.imgur.com/H1peqpz.png" },
+            {SkillIDs.WaterAirAttunement, "https://i.imgur.com/Gz1XwEw.png" },
+            {SkillIDs.WaterEarthAttunement, "https://i.imgur.com/zqX3y4c.png" },
 
-            {Buff.AirDual, "https://wiki.guildwars2.com/images/9/91/Air_Attunement.png" },
-            {Buff.AirFire, "https://i.imgur.com/4ekncW5.png" },
-            {Buff.AirWater, "https://i.imgur.com/HIcUaXG.png" },
-            {Buff.AirEarth, "https://i.imgur.com/MCCrMls.png" },
+            {SkillIDs.DualAirAttunement, "https://wiki.guildwars2.com/images/9/91/Air_Attunement.png" },
+            {SkillIDs.AirFireAttunement, "https://i.imgur.com/4ekncW5.png" },
+            {SkillIDs.AirWaterAttunement, "https://i.imgur.com/HIcUaXG.png" },
+            {SkillIDs.AirEarthAttunement, "https://i.imgur.com/MCCrMls.png" },
 
-            {Buff.EarthDual, "https://wiki.guildwars2.com/images/a/a8/Earth_Attunement.png" },
-            {Buff.EarthFire, "https://i.imgur.com/Vgu0B54.png" },
-            {Buff.EarthWater, "https://i.imgur.com/exrTKSW.png" },
-            {Buff.EarthAir, "https://i.imgur.com/Z3P8cPa.png" },
+            {SkillIDs.DualEarthAttunement, "https://wiki.guildwars2.com/images/a/a8/Earth_Attunement.png" },
+            {SkillIDs.EarthFireAttunement, "https://i.imgur.com/Vgu0B54.png" },
+            {SkillIDs.EarthWaterAttunement, "https://i.imgur.com/exrTKSW.png" },
+            {SkillIDs.EarthAirAttunement, "https://i.imgur.com/Z3P8cPa.png" },
         };
 
         private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>
@@ -264,9 +249,9 @@ namespace GW2EIEvtcParser.ParsedData
         //public int Range { get; private set; } = 0;
         public bool AA { get; }
 
-        public bool IsSwap => ID == WeaponSwapId || ElementalistHelper.IsElementalSwap(ID) || RevenantHelper.IsLegendSwap(ID);
+        public bool IsSwap => ID == SkillIDs.WeaponSwap || ElementalistHelper.IsElementalSwap(ID) || RevenantHelper.IsLegendSwap(ID);
         public bool IsInstantTransformation => NecromancerHelper.IsShroudTransform(ID) || EngineerHelper.IsEngineerKit(ID) || HolosmithHelper.IsPhotonForgeTransform(ID) || DruidHelper.IsCelestialAvatarTransform(ID) || SpecterHelper.IsShroudTransform(ID) || BladeswornHelper.IsGunsaberForm(ID);
-        public bool IsDodge(SkillData skillData) => ID == skillData.DodgeId || ID == MirageCloakDodgeId;
+        public bool IsDodge(SkillData skillData) => ID == skillData.DodgeId || ID == SkillIDs.MirageCloakDodge;
         public string Name { get; }
         public string Icon { get; }
         private readonly WeaponDescriptor _weaponDescriptor;

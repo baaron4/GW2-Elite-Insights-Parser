@@ -18,9 +18,9 @@ namespace GW2EIEvtcParser.EIData
         {
             (IReadOnlyList<(long start, long end)>  dead, IReadOnlyList<(long start, long end)>  down, IReadOnlyList<(long start, long end)>  dc) = actor.GetStatus(log);
 
-            DownCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DownId).Count(x => x.Actor == actor && x.Time >= start && x.Time <= end);
-            DeadCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DeathId).Count(x => x.Actor == actor && x.Time >= start && x.Time <= end);
-            DcCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DCId).Count(x => x.Actor == actor && x.Time >= start && x.Time <= end);
+            DownCount = log.MechanicData.GetMechanicLogs(log, SkillIDs.Down).Count(x => x.Actor == actor && x.Time >= start && x.Time <= end);
+            DeadCount = log.MechanicData.GetMechanicLogs(log, SkillIDs.Death).Count(x => x.Actor == actor && x.Time >= start && x.Time <= end);
+            DcCount = log.MechanicData.GetMechanicLogs(log, SkillIDs.Despawn).Count(x => x.Actor == actor && x.Time >= start && x.Time <= end);
 
             DownDuration = down.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
             DeadDuration = dead.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));

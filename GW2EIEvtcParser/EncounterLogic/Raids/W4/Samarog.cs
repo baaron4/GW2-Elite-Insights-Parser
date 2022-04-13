@@ -15,8 +15,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {
 
-            new HitOnPlayerMechanic(37996, "Shockwave", new MechanicPlotlySetting("circle",Colors.Blue), "Schk.Wv","Shockwave from Spears", "Shockwave",0,(de, log) => !de.To.HasBuff(log, 1122, de.Time - ParserHelper.ServerDelayConstant)),
-            new HitOnPlayerMechanic(38168, "Prisoner Sweep", new MechanicPlotlySetting("hexagon",Colors.Blue), "Swp","Prisoner Sweep (horizontal)", "Sweep",0,(de, log) => !de.To.HasBuff(log, 1122, de.Time - ParserHelper.ServerDelayConstant)),
+            new HitOnPlayerMechanic(37996, "Shockwave", new MechanicPlotlySetting("circle",Colors.Blue), "Schk.Wv","Shockwave from Spears", "Shockwave",0,(de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
+            new HitOnPlayerMechanic(38168, "Prisoner Sweep", new MechanicPlotlySetting("hexagon",Colors.Blue), "Swp","Prisoner Sweep (horizontal)", "Sweep",0,(de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
             new HitOnPlayerMechanic(37797, "Trampling Rush", new MechanicPlotlySetting("triangle-right",Colors.Red), "Trpl","Trampling Rush (hit by stampede towards home)", "Trampling Rush",0),
             new HitOnPlayerMechanic(38305, "Bludgeon", new MechanicPlotlySetting("triangle-down",Colors.Blue), "Slam","Bludgeon (vertical Slam)", "Slam",0),
             new PlayerBuffApplyMechanic(37868, "Fixate: Samarog", new MechanicPlotlySetting("star",Colors.Magenta), "S.Fix","Fixated by Samarog", "Fixate: Samarog",0),
@@ -161,7 +161,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // big bomb
-            var bigbomb = log.CombatData.GetBuffData(37966).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
+            var bigbomb = log.CombatData.GetBuffData(SkillIDs.InevitableBetrayalBig).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
             foreach (AbstractBuffEvent c in bigbomb)
             {
                 int bigStart = (int)c.Time;
@@ -170,7 +170,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 replay.Decorations.Add(new CircleDecoration(true, bigEnd, 300, (bigStart, bigEnd), "rgba(150, 80, 0, 0.2)", new AgentConnector(p)));
             }
             // small bomb
-            var smallbomb = log.CombatData.GetBuffData(38247).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
+            var smallbomb = log.CombatData.GetBuffData(SkillIDs.InevitableBetrayalSmall).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
             foreach (AbstractBuffEvent c in smallbomb)
             {
                 int smallStart = (int)c.Time;

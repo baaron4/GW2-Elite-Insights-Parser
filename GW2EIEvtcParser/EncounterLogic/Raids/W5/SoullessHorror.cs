@@ -81,7 +81,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     throw new MissingKeyActorsException("Soulless Horror not found");
                 }
-                AbstractBuffEvent buffOnDeath = combatData.GetBuffData(895).Where(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent).LastOrDefault();
+                AbstractBuffEvent buffOnDeath = combatData.GetBuffData(SkillIDs.Determined895).Where(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent).LastOrDefault();
                 if (buffOnDeath != null)
                 {
                     fightData.SetSuccess(true, buffOnDeath.Time);
@@ -284,7 +284,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            var necrosis = combatData.GetBuffData(47414).Where(x => x is BuffApplyEvent).ToList();
+            var necrosis = combatData.GetBuffData(SkillIDs.Necrosis).Where(x => x is BuffApplyEvent).ToList();
             if (necrosis.Count == 0)
             {
                 return 0;

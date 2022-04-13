@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {
             new HitOnPlayerMechanic(52173, "Pulverize", new MechanicPlotlySetting("square",Colors.LightOrange), "Arm Slam","Pulverize (Arm Slam)", "Arm Slam",0),
-            new HitOnPlayerMechanic(52173, "Pulverize", new MechanicPlotlySetting("square-open",Colors.LightOrange), "Stab.Slam","Pulverize (Arm Slam) while affected by stability", "Stabilized Arm Slam",0,(de, log) => de.To.HasBuff(log, 1122, de.Time - ParserHelper.ServerDelayConstant)),
+            new HitOnPlayerMechanic(52173, "Pulverize", new MechanicPlotlySetting("square-open",Colors.LightOrange), "Stab.Slam","Pulverize (Arm Slam) while affected by stability", "Stabilized Arm Slam",0,(de, log) => de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
             new HitOnPlayerMechanic(52086, "Junk Absorption", new MechanicPlotlySetting("circle-open",Colors.Purple), "Balls","Junk Absorption (Purple Balls during collect)", "Purple Balls",0),
             new HitOnPlayerMechanic(52878, "Junk Fall", new MechanicPlotlySetting("circle-open",Colors.Pink), "Junk","Junk Fall (Falling Debris)", "Junk Fall",0),
             new HitOnPlayerMechanic(52120, "Junk Fall", new MechanicPlotlySetting("circle-open",Colors.Pink), "Junk","Junk Fall (Falling Debris)", "Junk Fall",0),
@@ -332,7 +332,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Conjured Amalgamate not found");
             }
-            return combatData.GetBuffData(53075).Count > 0 ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            return combatData.GetBuffData(SkillIDs.LockedOn).Count > 0 ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
         }
     }
 }

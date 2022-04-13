@@ -4,6 +4,7 @@ using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -16,20 +17,20 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
-            new BuffDamageModifier(63191, "Ferocious Symbiosis", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Untamed, ByStack, "https://wiki.guildwars2.com/images/7/73/Ferocious_Symbiosis.png", GW2Builds.EODBeta1, GW2Builds.EndOfLife, DamageModifierMode.All),
-            new BuffDamageModifier(63317, "Vow of the Untamed", "15% when unleashed", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, "https://wiki.guildwars2.com/images/b/bd/Vow_of_the_Untamed.png", GW2Builds.EODBeta1, GW2Builds.March2022Balance, DamageModifierMode.All),
-            new BuffDamageModifier(63317, "Vow of the Untamed", "25% when unleashed", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, "https://wiki.guildwars2.com/images/b/bd/Vow_of_the_Untamed.png", GW2Builds.March2022Balance, GW2Builds.EndOfLife, DamageModifierMode.PvE),
-            new BuffDamageModifier(63317, "Vow of the Untamed", "15% when unleashed", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, "https://wiki.guildwars2.com/images/b/bd/Vow_of_the_Untamed.png", GW2Builds.March2022Balance, GW2Builds.EndOfLife, DamageModifierMode.sPvPWvW),
+            new BuffDamageModifier(FerociousSymbiosis, "Ferocious Symbiosis", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Untamed, ByStack, "https://wiki.guildwars2.com/images/7/73/Ferocious_Symbiosis.png", GW2Builds.EODBeta1, GW2Builds.EndOfLife, DamageModifierMode.All),
+            new BuffDamageModifier(Unleashed, "Vow of the Untamed", "15% when unleashed", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, "https://wiki.guildwars2.com/images/b/bd/Vow_of_the_Untamed.png", GW2Builds.EODBeta1, GW2Builds.March2022Balance, DamageModifierMode.All),
+            new BuffDamageModifier(Unleashed, "Vow of the Untamed", "25% when unleashed", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, "https://wiki.guildwars2.com/images/b/bd/Vow_of_the_Untamed.png", GW2Builds.March2022Balance, GW2Builds.EndOfLife, DamageModifierMode.PvE),
+            new BuffDamageModifier(Unleashed, "Vow of the Untamed", "15% when unleashed", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, "https://wiki.guildwars2.com/images/b/bd/Vow_of_the_Untamed.png", GW2Builds.March2022Balance, GW2Builds.EndOfLife, DamageModifierMode.sPvPWvW),
         };
 
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-            new Buff("Ferocious Symbiosis",63191, Source.Untamed, ArcDPSEnums.BuffStackType.Stacking, 5, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/73/Ferocious_Symbiosis.png"),
-            new Buff("Unleashed",63317, Source.Untamed, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/91/Unleash_Ranger.png"),
-            new Buff("Pet Unleashed",63145, Source.Untamed, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/43/Unleash_Pet.png"),
-            new Buff("Perilous Gift",63284, Source.Untamed, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d6/Perilous_Gift.png"),
-            new Buff("Forest's Fortification",63240, Source.Untamed, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/43/Forest%27s_Fortification.png"),
+            new Buff("Ferocious Symbiosis",FerociousSymbiosis, Source.Untamed, ArcDPSEnums.BuffStackType.Stacking, 5, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/73/Ferocious_Symbiosis.png"),
+            new Buff("Unleashed",Unleashed, Source.Untamed, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/91/Unleash_Ranger.png"),
+            new Buff("Pet Unleashed",PetUnleashed, Source.Untamed, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/43/Unleash_Pet.png"),
+            new Buff("Perilous Gift",PerilousGift, Source.Untamed, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d6/Perilous_Gift.png"),
+            new Buff("Forest's Fortification",ForestsFortification, Source.Untamed, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/43/Forest%27s_Fortification.png"),
         };
 
     }

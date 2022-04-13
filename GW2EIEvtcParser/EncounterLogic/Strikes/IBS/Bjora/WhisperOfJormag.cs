@@ -61,8 +61,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return phases;
             }
             long start, end;
-            var tpOutEvents = log.CombatData.GetBuffData(59223).Where(x => x is BuffRemoveAllEvent).ToList();
-            var tpBackEvents = log.CombatData.GetBuffData(59054).Where(x => x is BuffRemoveAllEvent).ToList();
+            var tpOutEvents = log.CombatData.GetBuffData(SkillIDs.WhisperTeleportOut).Where(x => x is BuffRemoveAllEvent).ToList();
+            var tpBackEvents = log.CombatData.GetBuffData(SkillIDs.WhisperTeleportBack).Where(x => x is BuffRemoveAllEvent).ToList();
             // 75% tp happened
             if (tpOutEvents.Count > 0)
             {

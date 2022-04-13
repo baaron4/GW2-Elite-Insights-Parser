@@ -3,6 +3,7 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -10,55 +11,55 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(13002,13135,EIData.InstantCastFinder.DefaultICD), // Shadowstep
-            new BuffLossCastFinder(13106,13135,EIData.InstantCastFinder.DefaultICD, (evt, combatData) => evt.RemovedDuration > ServerDelayConstant), // Shadow Return
-            new DamageCastFinder(13014, 13014, EIData.InstantCastFinder.DefaultICD), // Mug
-            new BuffGainCastFinder(13046,44597,EIData.InstantCastFinder.DefaultICD), // Assassin's Signet
-            new BuffGiveCastFinder(13093,13094,EIData.InstantCastFinder.DefaultICD), // Devourer Venom
-            new BuffGiveCastFinder(13096,13095,EIData.InstantCastFinder.DefaultICD), // Ice Drake Venom
-            new BuffGiveCastFinder(13055,13054,EIData.InstantCastFinder.DefaultICD), // Skale Venom
-            new BuffGiveCastFinder(49052,49083,EIData.InstantCastFinder.DefaultICD), // Soul Stone Venom
+            new BuffGainCastFinder(Shadowstep,Infiltration,EIData.InstantCastFinder.DefaultICD), // Shadowstep
+            new BuffLossCastFinder(ShadowReturn,Infiltration,EIData.InstantCastFinder.DefaultICD, (evt, combatData) => evt.RemovedDuration > ServerDelayConstant), // Shadow Return
+            new DamageCastFinder(Mug, Mug, EIData.InstantCastFinder.DefaultICD), // Mug
+            new BuffGainCastFinder(AssassinsSignet,AssassinsSignetActive,EIData.InstantCastFinder.DefaultICD), // Assassin's Signet
+            new BuffGiveCastFinder(DevourerVenomSkill,DevourerVenomEffect,EIData.InstantCastFinder.DefaultICD), // Devourer Venom
+            new BuffGiveCastFinder(IceDrakeVenomSkill,IceDrakeVenomEffect,EIData.InstantCastFinder.DefaultICD), // Ice Drake Venom
+            new BuffGiveCastFinder(SkaleVenomSkill,SkaleVenomEffect,EIData.InstantCastFinder.DefaultICD), // Skale Venom
+            new BuffGiveCastFinder(SoulStoneVenomSkill,SoulStoneVenomEffect,EIData.InstantCastFinder.DefaultICD), // Soul Stone Venom
             //new BuffGiveCastFinder(13037,13036,InstantCastFinder.DefaultICD), // Spider Venom - same id as leeching venom trait?
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
             // Deadly arts
-            new BuffDamageModifierTarget(NumberOfConditionsID, "Exposed Weakness", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Thief, ByStack, "https://wiki.guildwars2.com/images/0/02/Exposed_Weakness.png", GW2Builds.July2018Balance, GW2Builds.EndOfLife, DamageModifierMode.All),
-            new BuffDamageModifierTarget(NumberOfConditionsID, "Exposed Weakness", "10% if condition on target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, ByPresence, "https://wiki.guildwars2.com/images/0/02/Exposed_Weakness.png", 0, GW2Builds.July2018Balance, DamageModifierMode.PvE),
+            new BuffDamageModifierTarget(NumberOfConditions, "Exposed Weakness", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Thief, ByStack, "https://wiki.guildwars2.com/images/0/02/Exposed_Weakness.png", GW2Builds.July2018Balance, GW2Builds.EndOfLife, DamageModifierMode.All),
+            new BuffDamageModifierTarget(NumberOfConditions, "Exposed Weakness", "10% if condition on target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, ByPresence, "https://wiki.guildwars2.com/images/0/02/Exposed_Weakness.png", 0, GW2Builds.July2018Balance, DamageModifierMode.PvE),
             new DamageLogDamageModifier("Executioner", "20% if target <50% HP", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Thief,"https://wiki.guildwars2.com/images/9/93/Executioner.png", (x, log) => x.AgainstUnderFifty, ByPresence, DamageModifierMode.All),
             // Critical Strikes
             new DamageLogDamageModifier("Twin Fangs","7% over 90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Thief,"https://wiki.guildwars2.com/images/d/d1/Ferocious_Strikes.png", (x, log) => x.IsOverNinety && x.HasCrit, ByPresence, DamageModifierMode.All),
             new DamageLogDamageModifier("Ferocious Strikes", "10% on critical strikes if target >50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief,"https://wiki.guildwars2.com/images/d/d1/Ferocious_Strikes.png", (x, log) => !x.AgainstUnderFifty && x.HasCrit, ByPresence, DamageModifierMode.All),
             // Trickery
-            new BuffDamageModifier(34659, "Lead Attacks", "1% (10s) per initiative spent", DamageSource.NoPets, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByStack, "https://wiki.guildwars2.com/images/0/01/Lead_Attacks.png", DamageModifierMode.All), // It's not always possible to detect the presence of pistol and the trait is additive with itself. Staff master is worse as we can't detect endurance at all
+            new BuffDamageModifier(LeadAttacks, "Lead Attacks", "1% (10s) per initiative spent", DamageSource.NoPets, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByStack, "https://wiki.guildwars2.com/images/0/01/Lead_Attacks.png", DamageModifierMode.All), // It's not always possible to detect the presence of pistol and the trait is additive with itself. Staff master is worse as we can't detect endurance at all
         };
 
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
                 //signets
-                new Buff("Signet of Malice",13049, Source.Thief, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/ae/Signet_of_Malice.png"),
-                new Buff("Assassin's Signet (Passive)",13047, Source.Thief, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/23/Assassin%27s_Signet.png"),
-                new Buff("Assassin's Signet (Active)",44597, Source.Thief, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/23/Assassin%27s_Signet.png"),
-                new Buff("Infiltrator's Signet",13063, Source.Thief, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/8e/Infiltrator%27s_Signet.png"),
-                new Buff("Signet of Agility",13061, Source.Thief, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/1d/Signet_of_Agility.png"),
-                new Buff("Signet of Shadows",13059, Source.Thief, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/17/Signet_of_Shadows.png"),
+                new Buff("Signet of Malice",SignetOfMalice, Source.Thief, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/ae/Signet_of_Malice.png"),
+                new Buff("Assassin's Signet (Passive)",AssassinsSignetPassive, Source.Thief, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/23/Assassin%27s_Signet.png"),
+                new Buff("Assassin's Signet (Active)",AssassinsSignetActive, Source.Thief, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/23/Assassin%27s_Signet.png"),
+                new Buff("Infiltrator's Signet",InfiltratorsSignet, Source.Thief, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/8e/Infiltrator%27s_Signet.png"),
+                new Buff("Signet of Agility",SignetOfAgility, Source.Thief, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/1d/Signet_of_Agility.png"),
+                new Buff("Signet of Shadows",SignetOfShadows, Source.Thief, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/17/Signet_of_Shadows.png"),
                 //venoms // src is always the user, makes generation data useless
-                new Buff("Skelk Venom",21780, Source.Thief, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/7/75/Skelk_Venom.png"),
-                new Buff("Ice Drake Venom",13095, Source.Thief, BuffStackType.StackingConditionalLoss, 4, BuffClassification.Support, "https://wiki.guildwars2.com/images/7/7b/Ice_Drake_Venom.png"),
-                new Buff("Devourer Venom", 13094, Source.Thief, BuffStackType.StackingConditionalLoss, 2, BuffClassification.Support, "https://wiki.guildwars2.com/images/4/4d/Devourer_Venom.png"),
-                new Buff("Skale Venom", 13054, Source.Thief, BuffStackType.StackingConditionalLoss, 4, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/1/14/Skale_Venom.png"),
-                new Buff("Spider Venom",13036, Source.Thief, BuffStackType.StackingConditionalLoss, 6, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/3/39/Spider_Venom.png"),
-                new Buff("Soul Stone Venom",49083, Source.Thief, BuffStackType.Stacking, 25, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/d/d6/Soul_Stone_Venom.png"),
-                new Buff("Basilisk Venom", 13133, Source.Thief, BuffStackType.StackingConditionalLoss, 2, BuffClassification.Support, "https://wiki.guildwars2.com/images/3/3a/Basilisk_Venom.png"),
-                new Buff("Infiltration",13135, Source.Thief, BuffClassification.Other,"https://wiki.guildwars2.com/images/2/25/Shadowstep.png"),
+                new Buff("Skelk Venom",SkelkVenom, Source.Thief, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/7/75/Skelk_Venom.png"),
+                new Buff("Ice Drake Venom",IceDrakeVenomEffect, Source.Thief, BuffStackType.StackingConditionalLoss, 4, BuffClassification.Support, "https://wiki.guildwars2.com/images/7/7b/Ice_Drake_Venom.png"),
+                new Buff("Devourer Venom", DevourerVenomEffect, Source.Thief, BuffStackType.StackingConditionalLoss, 2, BuffClassification.Support, "https://wiki.guildwars2.com/images/4/4d/Devourer_Venom.png"),
+                new Buff("Skale Venom", SkaleVenomEffect, Source.Thief, BuffStackType.StackingConditionalLoss, 4, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/1/14/Skale_Venom.png"),
+                new Buff("Spider Venom",SpiderVenom, Source.Thief, BuffStackType.StackingConditionalLoss, 6, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/3/39/Spider_Venom.png"),
+                new Buff("Soul Stone Venom",SoulStoneVenomEffect, Source.Thief, BuffStackType.Stacking, 25, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/d/d6/Soul_Stone_Venom.png"),
+                new Buff("Basilisk Venom", BasiliskVenom, Source.Thief, BuffStackType.StackingConditionalLoss, 2, BuffClassification.Support, "https://wiki.guildwars2.com/images/3/3a/Basilisk_Venom.png"),
+                new Buff("Infiltration",Infiltration, Source.Thief, BuffClassification.Other,"https://wiki.guildwars2.com/images/2/25/Shadowstep.png"),
                 //transforms
-                new Buff("Dagger Storm",13134, Source.Thief, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/c0/Dagger_Storm.png"),
+                new Buff("Dagger Storm",DaggerStorm, Source.Thief, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/c0/Dagger_Storm.png"),
                 //traits
-                new Buff("Hidden Killer",42720, Source.Thief, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/ec/Hidden_Killer.png"),
-                new Buff("Lead Attacks",34659, Source.Thief, BuffStackType.Stacking, 15, BuffClassification.Other, "https://wiki.guildwars2.com/images/0/01/Lead_Attacks.png"),
-                new Buff("Instant Reflexes",34283, Source.Thief, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7d/Instant_Reflexes.png"),
+                new Buff("Hidden Killer",HiddenKiller, Source.Thief, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/ec/Hidden_Killer.png"),
+                new Buff("Lead Attacks",LeadAttacks, Source.Thief, BuffStackType.Stacking, 15, BuffClassification.Other, "https://wiki.guildwars2.com/images/0/01/Lead_Attacks.png"),
+                new Buff("Instant Reflexes",InstantReflexes, Source.Thief, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7d/Instant_Reflexes.png"),
 
         };
 

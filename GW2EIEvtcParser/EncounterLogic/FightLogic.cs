@@ -40,12 +40,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             GenericTriggerID = triggerID;
             MechanicList = new List<Mechanic>() {
-                new PlayerStatusMechanic(SkillItem.DeathId, "Dead", new MechanicPlotlySetting("x","rgb(0,0,0)"), "Dead",0),
-                new PlayerStatusMechanic(SkillItem.DownId, "Downed", new MechanicPlotlySetting("cross","rgb(255,0,0)"), "Downed",0),
-                new PlayerStatusMechanic(SkillItem.ResurrectId, "Resurrect", new MechanicPlotlySetting("cross-open","rgb(0,255,255)"), "Res",0),
-                new PlayerStatusMechanic(SkillItem.AliveId, "Got up", new MechanicPlotlySetting("cross","rgb(0,255,0)"), "Got up",0),
-                new PlayerStatusMechanic(SkillItem.DCId, "Disconnected", new MechanicPlotlySetting("x","rgb(120,120,120)"), "DC",0),
-                new PlayerStatusMechanic(SkillItem.RespawnId, "Respawn", new MechanicPlotlySetting("cross","rgb(120,120,255)"), "Resp",0)
+                new PlayerStatusMechanic(SkillIDs.Death, "Dead", new MechanicPlotlySetting("x","rgb(0,0,0)"), "Dead",0),
+                new PlayerStatusMechanic(SkillIDs.Down, "Downed", new MechanicPlotlySetting("cross","rgb(255,0,0)"), "Downed",0),
+                new PlayerStatusMechanic(SkillIDs.Resurrect, "Resurrect", new MechanicPlotlySetting("cross-open","rgb(0,255,255)"), "Res",0),
+                new PlayerStatusMechanic(SkillIDs.Alive, "Got up", new MechanicPlotlySetting("cross","rgb(0,255,0)"), "Got up",0),
+                new PlayerStatusMechanic(SkillIDs.Despawn, "Disconnected", new MechanicPlotlySetting("x","rgb(120,120,120)"), "DC",0),
+                new PlayerStatusMechanic(SkillIDs.Respawn, "Respawn", new MechanicPlotlySetting("cross","rgb(120,120,255)"), "Resp",0)
             };
             _basicMechanicsCount = MechanicList.Count;
             EncounterCategoryInformation = new EncounterCategory();
