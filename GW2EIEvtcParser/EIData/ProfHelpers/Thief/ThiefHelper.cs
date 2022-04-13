@@ -11,14 +11,14 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(13002,Infiltration,EIData.InstantCastFinder.DefaultICD), // Shadowstep
-            new BuffLossCastFinder(13106,Infiltration,EIData.InstantCastFinder.DefaultICD, (evt, combatData) => evt.RemovedDuration > ServerDelayConstant), // Shadow Return
-            new DamageCastFinder(13014, 13014, EIData.InstantCastFinder.DefaultICD), // Mug
-            new BuffGainCastFinder(13046,AssassinsSignetActive,EIData.InstantCastFinder.DefaultICD), // Assassin's Signet
-            new BuffGiveCastFinder(13093,DevourerVenom,EIData.InstantCastFinder.DefaultICD), // Devourer Venom
-            new BuffGiveCastFinder(13096,IceDrakeVenom,EIData.InstantCastFinder.DefaultICD), // Ice Drake Venom
-            new BuffGiveCastFinder(13055,SkaleVenom,EIData.InstantCastFinder.DefaultICD), // Skale Venom
-            new BuffGiveCastFinder(49052,SoulStoneVenom,EIData.InstantCastFinder.DefaultICD), // Soul Stone Venom
+            new BuffGainCastFinder(Shadowstep,Infiltration,EIData.InstantCastFinder.DefaultICD), // Shadowstep
+            new BuffLossCastFinder(ShadowReturn,Infiltration,EIData.InstantCastFinder.DefaultICD, (evt, combatData) => evt.RemovedDuration > ServerDelayConstant), // Shadow Return
+            new DamageCastFinder(Mug, Mug, EIData.InstantCastFinder.DefaultICD), // Mug
+            new BuffGainCastFinder(AssassinsSignet,AssassinsSignetActive,EIData.InstantCastFinder.DefaultICD), // Assassin's Signet
+            new BuffGiveCastFinder(DevourerVenomSkill,DevourerVenomEffect,EIData.InstantCastFinder.DefaultICD), // Devourer Venom
+            new BuffGiveCastFinder(IceDrakeVenomSkill,IceDrakeVenomEffect,EIData.InstantCastFinder.DefaultICD), // Ice Drake Venom
+            new BuffGiveCastFinder(SkaleVenomSkill,SkaleVenomEffect,EIData.InstantCastFinder.DefaultICD), // Skale Venom
+            new BuffGiveCastFinder(SoulStoneVenomSkill,SoulStoneVenomEffect,EIData.InstantCastFinder.DefaultICD), // Soul Stone Venom
             //new BuffGiveCastFinder(13037,13036,InstantCastFinder.DefaultICD), // Spider Venom - same id as leeching venom trait?
         };
 
@@ -47,11 +47,11 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Signet of Shadows",SignetOfShadows, Source.Thief, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/17/Signet_of_Shadows.png"),
                 //venoms // src is always the user, makes generation data useless
                 new Buff("Skelk Venom",SkelkVenom, Source.Thief, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/7/75/Skelk_Venom.png"),
-                new Buff("Ice Drake Venom",IceDrakeVenom, Source.Thief, BuffStackType.StackingConditionalLoss, 4, BuffClassification.Support, "https://wiki.guildwars2.com/images/7/7b/Ice_Drake_Venom.png"),
-                new Buff("Devourer Venom", DevourerVenom, Source.Thief, BuffStackType.StackingConditionalLoss, 2, BuffClassification.Support, "https://wiki.guildwars2.com/images/4/4d/Devourer_Venom.png"),
-                new Buff("Skale Venom", SkaleVenom, Source.Thief, BuffStackType.StackingConditionalLoss, 4, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/1/14/Skale_Venom.png"),
+                new Buff("Ice Drake Venom",IceDrakeVenomEffect, Source.Thief, BuffStackType.StackingConditionalLoss, 4, BuffClassification.Support, "https://wiki.guildwars2.com/images/7/7b/Ice_Drake_Venom.png"),
+                new Buff("Devourer Venom", DevourerVenomEffect, Source.Thief, BuffStackType.StackingConditionalLoss, 2, BuffClassification.Support, "https://wiki.guildwars2.com/images/4/4d/Devourer_Venom.png"),
+                new Buff("Skale Venom", SkaleVenomEffect, Source.Thief, BuffStackType.StackingConditionalLoss, 4, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/1/14/Skale_Venom.png"),
                 new Buff("Spider Venom",SpiderVenom, Source.Thief, BuffStackType.StackingConditionalLoss, 6, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/3/39/Spider_Venom.png"),
-                new Buff("Soul Stone Venom",SoulStoneVenom, Source.Thief, BuffStackType.Stacking, 25, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/d/d6/Soul_Stone_Venom.png"),
+                new Buff("Soul Stone Venom",SoulStoneVenomEffect, Source.Thief, BuffStackType.Stacking, 25, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/d/d6/Soul_Stone_Venom.png"),
                 new Buff("Basilisk Venom", BasiliskVenom, Source.Thief, BuffStackType.StackingConditionalLoss, 2, BuffClassification.Support, "https://wiki.guildwars2.com/images/3/3a/Basilisk_Venom.png"),
                 new Buff("Infiltration",Infiltration, Source.Thief, BuffClassification.Other,"https://wiki.guildwars2.com/images/2/25/Shadowstep.png"),
                 //transforms

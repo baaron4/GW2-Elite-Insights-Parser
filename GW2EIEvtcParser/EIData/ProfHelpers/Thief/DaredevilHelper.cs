@@ -11,20 +11,20 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(31600, BoundingDodger, EIData.InstantCastFinder.DefaultICD), // Bounding Dodger
-            new BuffGainCastFinder(31267, LotusTraining, EIData.InstantCastFinder.DefaultICD), // Lotus Training
+            new BuffGainCastFinder(BoundingDodgerSkill, BoundingDodgerEffect, EIData.InstantCastFinder.DefaultICD), // Bounding Dodger
+            new BuffGainCastFinder(LotusTrainingSkill, LotusTrainingEffect, EIData.InstantCastFinder.DefaultICD), // Lotus Training
             //new DamageCastFinder(30520, 30520, EIData.InstantCastFinder.DefaultICD), // Debilitating Arc
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
-            new BuffDamageModifier(LotusTraining, "Lotus Training", "10% cDam (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Daredevil, ByPresence, "https://wiki.guildwars2.com/images/e/ea/Lotus_Training.png", 0, GW2Builds.February2020Balance, DamageModifierMode.All),
-            new BuffDamageModifier(LotusTraining, "Lotus Training", "10% cDam (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Daredevil, ByPresence, "https://wiki.guildwars2.com/images/e/ea/Lotus_Training.png", GW2Builds.February2020Balance, GW2Builds.June2021Balance, DamageModifierMode.PvE),
-            new BuffDamageModifier(LotusTraining, "Lotus Training", "15% cDam (4s) after dodging", DamageSource.NoPets, 15.0, DamageType.Condition, DamageType.All, Source.Daredevil, ByPresence, "https://wiki.guildwars2.com/images/e/ea/Lotus_Training.png", GW2Builds.February2020Balance, GW2Builds.June2021Balance, DamageModifierMode.sPvPWvW),
-            new BuffDamageModifier(LotusTraining, "Lotus Training", "15% cDam (4s) after dodging", DamageSource.NoPets, 15.0, DamageType.Condition, DamageType.All, Source.Daredevil, ByPresence, "https://wiki.guildwars2.com/images/e/ea/Lotus_Training.png", GW2Builds.June2021Balance, GW2Builds.EndOfLife, DamageModifierMode.All),
-            new BuffDamageModifier(BoundingDodger, "Bounding Dodger", "10% (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, "https://wiki.guildwars2.com/images/3/30/Bounding_Dodger.png", DamageModifierMode.PvE),
-            new BuffDamageModifier(BoundingDodger, "Bounding Dodger", "10% (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, "https://wiki.guildwars2.com/images/3/30/Bounding_Dodger.png", 0, GW2Builds.February2020Balance, DamageModifierMode.sPvPWvW),
-            new BuffDamageModifier(BoundingDodger, "Bounding Dodger", "15% (4s) after dodging", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, "https://wiki.guildwars2.com/images/3/30/Bounding_Dodger.png", GW2Builds.February2020Balance, GW2Builds.EndOfLife, DamageModifierMode.sPvPWvW),
+            new BuffDamageModifier(LotusTrainingEffect, "Lotus Training", "10% cDam (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Daredevil, ByPresence, "https://wiki.guildwars2.com/images/e/ea/Lotus_Training.png", 0, GW2Builds.February2020Balance, DamageModifierMode.All),
+            new BuffDamageModifier(LotusTrainingEffect, "Lotus Training", "10% cDam (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Daredevil, ByPresence, "https://wiki.guildwars2.com/images/e/ea/Lotus_Training.png", GW2Builds.February2020Balance, GW2Builds.June2021Balance, DamageModifierMode.PvE),
+            new BuffDamageModifier(LotusTrainingEffect, "Lotus Training", "15% cDam (4s) after dodging", DamageSource.NoPets, 15.0, DamageType.Condition, DamageType.All, Source.Daredevil, ByPresence, "https://wiki.guildwars2.com/images/e/ea/Lotus_Training.png", GW2Builds.February2020Balance, GW2Builds.June2021Balance, DamageModifierMode.sPvPWvW),
+            new BuffDamageModifier(LotusTrainingEffect, "Lotus Training", "15% cDam (4s) after dodging", DamageSource.NoPets, 15.0, DamageType.Condition, DamageType.All, Source.Daredevil, ByPresence, "https://wiki.guildwars2.com/images/e/ea/Lotus_Training.png", GW2Builds.June2021Balance, GW2Builds.EndOfLife, DamageModifierMode.All),
+            new BuffDamageModifier(BoundingDodgerEffect, "Bounding Dodger", "10% (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, "https://wiki.guildwars2.com/images/3/30/Bounding_Dodger.png", DamageModifierMode.PvE),
+            new BuffDamageModifier(BoundingDodgerEffect, "Bounding Dodger", "10% (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, "https://wiki.guildwars2.com/images/3/30/Bounding_Dodger.png", 0, GW2Builds.February2020Balance, DamageModifierMode.sPvPWvW),
+            new BuffDamageModifier(BoundingDodgerEffect, "Bounding Dodger", "15% (4s) after dodging", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, "https://wiki.guildwars2.com/images/3/30/Bounding_Dodger.png", GW2Builds.February2020Balance, GW2Builds.EndOfLife, DamageModifierMode.sPvPWvW),
             new BuffDamageModifierTarget(Weakness, "Weakening Strikes", "7% if weakness on target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, "https://wiki.guildwars2.com/images/7/7c/Weakening_Strikes.png", GW2Builds.April2019Balance, GW2Builds.EndOfLife, DamageModifierMode.All),
         };
 
@@ -32,9 +32,9 @@ namespace GW2EIEvtcParser.EIData
         {
                 new Buff("Palm Strike",PalmStrike, Source.Daredevil, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/1a/Palm_Strike.png"),
                 new Buff("Pulmonary Impact",PulmonaryImpact, Source.Daredevil, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/1a/Palm_Strike.png"),
-                new Buff("Lotus Training", LotusTraining, Source.Daredevil, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/ea/Lotus_Training.png"),
+                new Buff("Lotus Training", LotusTrainingEffect, Source.Daredevil, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/ea/Lotus_Training.png"),
                 new Buff("Unhindered Combatant", UnhinderedCombatant, Source.Daredevil, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/a1/Unhindered_Combatant.png"),
-                new Buff("Bounding Dodger", BoundingDodger, Source.Daredevil, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/30/Bounding_Dodger.png"),
+                new Buff("Bounding Dodger", BoundingDodgerEffect, Source.Daredevil, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/30/Bounding_Dodger.png"),
                 new Buff("Weakening Strikes", WeakeningStrikes, Source.Daredevil, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7c/Weakening_Strikes.png", GW2Builds.April2019Balance, GW2Builds.EndOfLife),
         };
 
