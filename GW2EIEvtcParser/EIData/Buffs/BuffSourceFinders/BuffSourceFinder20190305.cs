@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EIData.BuffSourceFinders
 {
@@ -8,8 +9,8 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders
         {
             DurationToIDs = new Dictionary<long, HashSet<long>>
             {
-                {3000, new HashSet<long> { 51696 , 10236 , 29453 } }, // SoI, Treated TN, SandSquall
-                {2000, new HashSet<long> { 51696 } }, // TN
+                {3000, new HashSet<long> { TrueNature , SignetOfInspirationSkill , SandSquall } }, // SoI, Treated TN, SandSquall
+                {2000, new HashSet<long> { TrueNature } }, // TN
             };
         }
     }

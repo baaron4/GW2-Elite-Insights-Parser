@@ -245,7 +245,8 @@ namespace GW2EIEvtcParser
         public const long SignetOfDomination = 10231;
         public const long SignetOfMidnightEffect = 10233;
         public const long SignetOfMidnightSkill = 10234;
-        public const long SignetOfInspiration = 10235;
+        public const long SignetOfInspirationEffect = 10235;
+        public const long SignetOfInspirationSkill = 10236;
         public const long Distortion = 10243;
         public const long SignetOfIllusions = 10246;
         public const long HideInShadows = 10269;
@@ -484,6 +485,7 @@ namespace GW2EIEvtcParser
         public const long ViciousLacerations = 29395;
         public const long YouAreAllWeaklings = 29414;
         public const long ReapersShroud = 29446;
+        public const long SandSquall = 29453;
         public const long BloodReckoning = 29466;
         public const long ForceOfWill = 29485;
         public const long Berserk = 29502;
@@ -943,6 +945,7 @@ namespace GW2EIEvtcParser
         public const long FacetOfLightTraited = 51690;
         public const long FacetOfNatureAssassin = 51692;
         public const long FacetOfDarknessTraited = 51695;
+        public const long TrueNature = 51696;
         public const long FacetOfNatureCentaur = 51699;
         public const long FacetOfStrengthTraited = 51700;
         public const long FacetOfNatureDemon = 51704;
