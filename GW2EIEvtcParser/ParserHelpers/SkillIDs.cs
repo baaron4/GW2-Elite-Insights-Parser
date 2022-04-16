@@ -694,6 +694,7 @@ namespace GW2EIEvtcParser
         public const long MistlockInstabilityMistsConvergence = 36224;
         public const long MistlockInstabilityAdrenalineRush = 36341;
         public const long MistlockInstabilityFluxBomb = 36386;
+        public const long FluxBombSkill = 36393;
         public const long EnragedFractal = 36498;
         public const long CallOfTheWild = 36781;
         public const long Unblockable = 36781;
@@ -703,6 +704,7 @@ namespace GW2EIEvtcParser
         public const long CrystallineHeart = 37657;
         public const long EnragedCairn = 37675;
         public const long FixatedRigom = 37693;
+        public const long FluxBombEffect = 37695;
         public const long DispelSAK = 37697;
         public const long GazeAvoidance = 37714;
         public const long Devour = 37718;
