@@ -107,7 +107,7 @@ namespace GW2EIEvtcParser.EIData
             LegendaryDragonStanceSkill, // Dragon
             LegendaryRenegadeStanceSkill, // Renegade
             LegendaryAllianceStanceSkill, // Alliance
-            LegendaryAllianceStanceUWSkill, // Alliance (UW)
+            //LegendaryAllianceStanceUWSkill, // Alliance (UW)
         };
 
         public static bool IsLegendSwap(long id)

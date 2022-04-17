@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffGainCastFinder(LegendaryAllianceStanceSkill, LegendaryAllianceStanceEffect, EIData.InstantCastFinder.DefaultICD), // Legendary Alliance Stance
-            new BuffGainCastFinder(LegendaryAllianceStanceUWSkill, LegendaryAllianceStanceEffect, EIData.InstantCastFinder.DefaultICD), // Legendary Alliance Stance (UW)
+            //new BuffGainCastFinder(LegendaryAllianceStanceUWSkill, LegendaryAllianceStanceEffect, EIData.InstantCastFinder.DefaultICD), // Legendary Alliance Stance (UW)
             new DamageCastFinder(CallOfTheAlliance, CallOfTheAlliance, EIData.InstantCastFinder.DefaultICD), // Call of the Alliance
             new BuffGainCastFinder(UrnOfSaintViktorSkill, UrnOfSaintViktorEffect, EIData.InstantCastFinder.DefaultICD), // Urn of Saint Viktor
             new BuffGainCastFinder(DeathDrop, ForerunnerOfDeath, EIData.InstantCastFinder.DefaultICD), // Forerunner of Death (Death Drop) 
