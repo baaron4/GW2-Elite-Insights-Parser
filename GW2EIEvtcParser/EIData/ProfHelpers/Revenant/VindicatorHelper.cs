@@ -16,11 +16,20 @@ namespace GW2EIEvtcParser.EIData
             //new BuffGainCastFinder(LegendaryAllianceStanceUWSkill, LegendaryAllianceStanceEffect, EIData.InstantCastFinder.DefaultICD), // Legendary Alliance Stance (UW)
             new DamageCastFinder(CallOfTheAlliance, CallOfTheAlliance, EIData.InstantCastFinder.DefaultICD), // Call of the Alliance
             new BuffGainCastFinder(UrnOfSaintViktorSkill, UrnOfSaintViktorEffect, EIData.InstantCastFinder.DefaultICD), // Urn of Saint Viktor
-            new BuffGainCastFinder(DeathDrop, ForerunnerOfDeath, EIData.InstantCastFinder.DefaultICD), // Forerunner of Death (Death Drop) 
-            new BuffGainCastFinder(SaintsShield, SaintOfzuHeltzer, EIData.InstantCastFinder.DefaultICD), // Saint of zu Heltzer (Saint's Shield)
-            new DamageCastFinder(VassalsOfTheEmpire, VassalsOfTheEmpire, EIData.InstantCastFinder.DefaultICD), // Vassals of the Empire (Imperial Impact)
+            new BuffGainCastFinder(DeathDropSkill, ForerunnerOfDeath, EIData.InstantCastFinder.DefaultICD), // Forerunner of Death (Death Drop) 
+            new BuffGainCastFinder(SaintsShieldSkill, SaintOfzuHeltzer, EIData.InstantCastFinder.DefaultICD), // Saint of zu Heltzer (Saint's Shield)
             //new EXTHealingCastFinder(-1, -1, EIData.InstantCastFinder.DefaultICD), // Redemptor's Sermon
         };
+
+        private static readonly HashSet<long> _dodges = new HashSet<long>
+        {
+            DeathDropDodge, ImperialImpactDodge, SaintsShieldDodge
+        };
+
+        public static bool IsVindicatorDodge(long id)
+        {
+            return _dodges.Contains(id);
+        }
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {

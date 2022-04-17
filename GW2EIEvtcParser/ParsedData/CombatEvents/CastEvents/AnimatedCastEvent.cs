@@ -61,7 +61,7 @@ namespace GW2EIEvtcParser.ParsedData
             ActualDuration = endItem.Value;
             ExpectedDuration = ActualDuration;
             _scaledActualDuration = endItem.BuffDmg;
-            if (Skill.ID == skillData.DodgeId)
+            if (Skill.IsAnimatedDodge(skillData))
             {
                 // dodge animation start item has always 0 as expected duration
                 ExpectedDuration = ActualDuration;
@@ -83,7 +83,7 @@ namespace GW2EIEvtcParser.ParsedData
                 ActualDuration = expectedActualDuration;
                 _scaledActualDuration = 0;
             }
-            if (Skill.ID == skillData.DodgeId)
+            if (Skill.IsAnimatedDodge(skillData))
             {
                 // dodge animation start item has always 0 as expected duration
                 ExpectedDuration = ActualDuration;

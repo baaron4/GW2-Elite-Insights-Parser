@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIGW2API;
@@ -197,6 +196,9 @@ namespace GW2EIEvtcParser.ParsedData
             {26997, "https://wiki.guildwars2.com/images/d/d9/Natural_Harmony.png" },
             {27101, "https://wiki.guildwars2.com/images/e/e7/Project_Tranquility.png" },
             {35417, "https://wiki.guildwars2.com/images/b/b6/Ventari%27s_Will.png" },
+            {SkillIDs.DeathDropDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
+            {SkillIDs.SaintsShieldDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
+            {SkillIDs.ImperialImpactDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
             // Weaver attunements
             {SkillIDs.DualFireAttunement, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
             {SkillIDs.FireWaterAttunement, "https://i.imgur.com/ar8Hn8G.png" },
@@ -251,7 +253,8 @@ namespace GW2EIEvtcParser.ParsedData
 
         public bool IsSwap => ID == SkillIDs.WeaponSwap || ElementalistHelper.IsElementalSwap(ID) || RevenantHelper.IsLegendSwap(ID);
         public bool IsInstantTransformation => NecromancerHelper.IsShroudTransform(ID) || EngineerHelper.IsEngineerKit(ID) || HolosmithHelper.IsPhotonForgeTransform(ID) || DruidHelper.IsCelestialAvatarTransform(ID) || SpecterHelper.IsShroudTransform(ID) || BladeswornHelper.IsGunsaberForm(ID);
-        public bool IsDodge(SkillData skillData) => ID == skillData.DodgeId || ID == SkillIDs.MirageCloakDodge;
+        public bool IsDodge(SkillData skillData) => IsAnimatedDodge(skillData) || ID == SkillIDs.MirageCloakDodge;
+        public bool IsAnimatedDodge(SkillData skillData) => ID == skillData.DodgeId || VindicatorHelper.IsVindicatorDodge(ID);
         public string Name { get; }
         public string Icon { get; }
         private readonly WeaponDescriptor _weaponDescriptor;
