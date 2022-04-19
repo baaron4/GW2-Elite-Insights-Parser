@@ -697,7 +697,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Chaos and Destruction", ChaosAndDestruction, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 // Ankka
                 new Buff("Necrotic Ritual", NecroticRitual, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
-                new Buff("Ankka ???", AnkkaSomething, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Ankka ???", AnkkaPlateformChanging, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Hallucinations", Hallucinations, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Energy Transfer", EnergyTransfer, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 // Minister Li   

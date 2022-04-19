@@ -1226,7 +1226,7 @@ namespace GW2EIEvtcParser
         public const long BowlOfEchovaldHotpot = 66663;
         public const long VoidImmunity = 66800;
         public const long VitalityEqualizer2 = 66894;
-        public const long AnkkaSomething = 66962;
+        public const long AnkkaPlateformChanging = 66962;
         public const long EqualizationMatrix = 67047;
         public const long PlateOfImperialPalaceSpecial = 67265;
         public const long NecroticRitual = 67447;

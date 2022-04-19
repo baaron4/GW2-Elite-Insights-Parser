@@ -46,7 +46,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Facet of Elements",FacetOfElementsEffect, Source.Herald, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/ce/Facet_of_Elements.png"),
                 new Buff("Facet of Elements (Traited)",FacetOfElementsTraited, Source.Herald, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/ce/Facet_of_Elements.png"),//Lingering buff with Draconic Echo trait
                 new Buff("Facet of Strength",FacetOfStrengthEffect, Source.Herald, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/a8/Facet_of_Strength.png"),
-                new Buff("Facet of Strength (Traited)",FacetOfStrengthEffect, Source.Herald, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/a8/Facet_of_Strength.png"),//Lingering buff with Draconic Echo trait
+                new Buff("Facet of Strength (Traited)",FacetOfStrengthTraited, Source.Herald, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/a8/Facet_of_Strength.png"),//Lingering buff with Draconic Echo trait
                 new Buff("Facet of Chaos",FacetOfChaosEffect, Source.Herald, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/c7/Facet_of_Chaos.png"),
                 new Buff("Facet of Chaos (Traited)",FacetOfChaosTraited, Source.Herald, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/c7/Facet_of_Chaos.png"),
                 new Buff("Facet of Nature",FacetOfNatureEffect, Source.Herald, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e9/Facet_of_Nature.png"),

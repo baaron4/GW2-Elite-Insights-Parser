@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
@@ -41,13 +42,36 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            List<PhaseData> subPhases = GetPhasesByInvul(log, 895, ankka, false, false);
+            List<PhaseData> subPhases = GetPhasesByInvul(log, SkillIDs.AnkkaPlateformChanging, ankka, false, true);
             for (int i = 0; i < subPhases.Count; i++)
             {
-                subPhases[i].Name = "Phase " + (i + 1);
+                subPhases[i].Name = "Location " + (i + 1);
                 subPhases[i].AddTarget(ankka);
             }
             phases.AddRange(subPhases);
+            List<PhaseData> subSubPhases = GetPhasesByInvul(log, SkillIDs.Determined895, ankka, false, false);
+            subSubPhases.RemoveAll(x => subPhases.Any(y => Math.Abs(y.Start - x.Start) < ParserHelper.ServerDelayConstant && Math.Abs(y.End - x.End) < ParserHelper.ServerDelayConstant));
+            int curSubSubPhaseID = 0;
+            PhaseData previousSubPhase = null;
+            for (int i = 0; i < subSubPhases.Count; i++)
+            {
+                PhaseData subsubPhase = subSubPhases[i];
+                PhaseData subPhase = subPhases.FirstOrDefault(x => x.Start - ParserHelper.ServerDelayConstant <= subsubPhase.Start && x.End + ParserHelper.ServerDelayConstant >= subsubPhase.End);
+                if (previousSubPhase != subPhase)
+                {
+                    previousSubPhase = subPhase;
+                    curSubSubPhaseID = 0;
+                }
+                if (subPhase != null)
+                {
+                    var index = subPhases.IndexOf(subPhase);
+                    subsubPhase.OverrideStart(Math.Max(subsubPhase.Start, subPhase.Start));
+                    subsubPhase.OverrideEnd(Math.Min(subsubPhase.End, subPhase.End));
+                    subsubPhase.Name = "Location " + (index + 1) + " - " + (++curSubSubPhaseID);
+                    subsubPhase.AddTarget(ankka);
+                }
+            }
+            phases.AddRange(subSubPhases);
             //
             return phases;
         }

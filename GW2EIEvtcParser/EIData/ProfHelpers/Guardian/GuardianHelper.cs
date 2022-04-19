@@ -62,7 +62,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Signet of Judgment",SignetOfJudgment, Source.Guardian, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/fe/Signet_of_Judgment.png"),
                 new Buff("Signet of Judgment (PI)",SignetOfJudgmentPI, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/f/fe/Signet_of_Judgment.png"),
                 new Buff("Signet of Mercy",SignetOfMercy, Source.Guardian, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/37/Signet_of_Mercy.png"),
-                new Buff("Signet of Mercy (PI)",SignetOfMalice, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/3/37/Signet_of_Mercy.png"),
+                new Buff("Signet of Mercy (PI)",SignetOfMercyPI, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/3/37/Signet_of_Mercy.png"),
                 new Buff("Signet of Wrath",SignetOfWrath, Source.Guardian, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/18/Signet_of_Wrath.png"),
                 new Buff("Signet of Wrath (PI)",SignetOfWrathPI, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/1/18/Signet_of_Wrath.png"),
                 new Buff("Signet of Courage",SignetOfCourage, Source.Guardian, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/5d/Signet_of_Courage.png"),
