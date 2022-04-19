@@ -728,6 +728,7 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TargetID.MaiTrinStrike:
                     return "https://i.imgur.com/GjHgAtX.png";
                 case ArcDPSEnums.TargetID.EchoOfScarletBriarNM:
+                case ArcDPSEnums.TargetID.EchoOfScarletBriarCM:
                     return "https://i.imgur.com/O9CzW46.png";
                 case ArcDPSEnums.TargetID.Ankka:
                     return "https://i.imgur.com/3OQwlpP.png";

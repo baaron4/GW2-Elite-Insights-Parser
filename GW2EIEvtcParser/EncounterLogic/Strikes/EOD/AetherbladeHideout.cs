@@ -34,6 +34,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 (int)ArcDPSEnums.TargetID.MaiTrinStrike,
                 (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM,
+                (int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM,
                 (int)ArcDPSEnums.TrashID.ScarletPhantomBreakbar,
                 (int)ArcDPSEnums.TrashID.ScarletPhantomHP,
             };
@@ -44,7 +45,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<int>
             {
                 (int)ArcDPSEnums.TargetID.MaiTrinStrike,
-                (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM
+                (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM,
+                (int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM,
             };
         }
 
@@ -68,7 +70,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new HashSet<int>
             {
                 (int)ArcDPSEnums.TargetID.MaiTrinStrike,
-                (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM
+                (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM,
+                (int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM,
             };
         }
 
@@ -87,12 +90,17 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
+        private AbstractSingleActor GetEchoOfScarletBriar(FightData fightData)
+        {
+            return Targets.FirstOrDefault(x => x.ID == (fightData.IsCM ? (int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM : (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM));
+        }
+
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                AbstractSingleActor echoOfScarlet = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM);
+                AbstractSingleActor echoOfScarlet = GetEchoOfScarletBriar(fightData);
                 if (echoOfScarlet != null)
                 {
                     AbstractSingleActor maiTrin = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.MaiTrinStrike);
@@ -119,7 +127,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Mai Trin not found");
             }
             phases[0].AddTarget(maiTrin);
-            AbstractSingleActor echoOfScarlet = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM);
+            AbstractSingleActor echoOfScarlet = GetEchoOfScarletBriar(log.FightData);
             if (echoOfScarlet != null)
             {
                 phases[0].AddTarget(echoOfScarlet);
@@ -181,8 +189,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 agentData.Refresh();
             }
             ComputeFightTargets(agentData, combatData, extensions);
-            AbstractSingleActor echoOfScarlet = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM);
-            if (echoOfScarlet != null)
+            var echoesOfScarlet = Targets.Where(x => x.ID == (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM || x.ID == (int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM).ToList();
+            foreach (AbstractSingleActor echoOfScarlet in echoesOfScarlet)
             {
                 var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(echoOfScarlet.AgentItem) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate).ToList();
                 if (hpUpdates.Count > 1 && hpUpdates.LastOrDefault().DstAgent == 10000)

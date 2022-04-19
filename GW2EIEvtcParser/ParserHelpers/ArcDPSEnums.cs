@@ -764,6 +764,7 @@ namespace GW2EIEvtcParser
             MaiTrinStrike = 24033,
             DummyMaiTrinStrike = ArcDPSEnums.DummyMaiTrinStrike,
             EchoOfScarletBriarNM = 24768,
+            EchoOfScarletBriarCM = 25247,
             Ankka = 23957,
             MinisterLi = 24485,
             GadgetTheDragonVoid1 = 43488,
