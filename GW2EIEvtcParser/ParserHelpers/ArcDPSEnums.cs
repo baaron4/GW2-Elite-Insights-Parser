@@ -763,7 +763,7 @@ namespace GW2EIEvtcParser
             VariniaStormsounder = 22836,
             MaiTrinStrike = 24033,
             DummyMaiTrinStrike = ArcDPSEnums.DummyMaiTrinStrike,
-            EchoOfScarletBriar = 24768,
+            EchoOfScarletBriarNM = 24768,
             Ankka = 23957,
             MinisterLi = 24485,
             GadgetTheDragonVoid1 = 43488,
