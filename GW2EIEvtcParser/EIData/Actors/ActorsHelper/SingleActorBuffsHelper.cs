@@ -201,15 +201,15 @@ namespace GW2EIEvtcParser.EIData
             BuffDictionary buffMap = _buffMap;
             long dur = log.FightData.FightEnd;
             int fightDuration = (int)(dur) / 1000;
-            var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfBoons], 0, log.FightData.FightDuration);
-            var activeCombatMinionsGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfActiveCombatMinions], 0, log.FightData.FightDuration);
+            var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfBoons]);
+            var activeCombatMinionsGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfActiveCombatMinions]);
             BuffsGraphModel numberOfClonesGraph = null;
             bool canSummonClones = ProfHelper.CanSummonClones(Actor.Spec);
             if (canSummonClones)
             {
-                numberOfClonesGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfClones], 0, log.FightData.FightDuration);
+                numberOfClonesGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfClones]);
             }
-            var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfConditions], 0, log.FightData.FightDuration);
+            var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfConditions]);
             var boonIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Boon].Select(x => x.ID));
             var condiIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Condition].Select(x => x.ID));
             // Init status

@@ -11,10 +11,9 @@ namespace GW2EIEvtcParser.EIData
         private List<Segment> _buffChart { get; set; } = new List<Segment>();
 
         // Constructor
-        internal BuffsGraphModel(Buff buff, long start, long end)
+        internal BuffsGraphModel(Buff buff)
         {
             Buff = buff;
-            _buffChart.Add(new Segment(start, end, 0));
         }
         internal BuffsGraphModel(Buff buff, List<Segment> buffChartWithSource)
         {
@@ -59,7 +58,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_buffChart.Count == 0)
             {
-                _buffChart = new List<Segment>(from);
+                _buffChart = new List<Segment>(from.Select(x => new Segment(x.Start, x.End, x.Value > 0 ? 1 : 0)));
             }
             else
             {
