@@ -40,7 +40,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<ArcDPSEnums.TrashID>
             {
-                ArcDPSEnums.TrashID.SiaxHallucination
+                ArcDPSEnums.TrashID.SiaxHallucination,
+                ArcDPSEnums.TrashID.NightmareHallucinationSiax,
             };
         }
 
