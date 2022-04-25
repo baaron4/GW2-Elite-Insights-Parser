@@ -637,17 +637,19 @@ namespace GW2EIEvtcParser
         public const long VolatilePoison = 34387;
         public const long Targeted = 34392;
         public const long Target = 34393;
-        public const long Corruption = 34416;
+        public const long Corruption1 = 34416;
         public const long BloodFueled = 34422;
         public const long BloodFueledAbo = 34428;
         public const long SnowstormMatthias = 34433;
         public const long NotTheBees = 34434;
         public const long LocustTrail = 34439;
+        public const long MatthiasSacrifice = 34442;
         public const long UnstableBloodMagic = 34450;
         public const long HeatWaveMatthias = 34458;
         public const long SlowBurn = 34464;
         public const long Narcolepsy = 34467;
         public const long Downpour = 34472;
+        public const long Corruption2 = 34473;
         public const long Nauseated = 34496;
         public const long FixatedSlothasor = 34508;
         public const long ZealousBenediction = 34511;
@@ -664,7 +666,7 @@ namespace GW2EIEvtcParser
         public const long AdrenalHealth = 34766;
         public const long BalancedStanceEffect = 34778;
         public const long VoidZone = 34883;
-        public const long StatueFixated = 34912;
+        public const long StatueFixated1 = 34912;
         public const long BloodstoneBlessed = 34917;
         public const long SpatialDistortion = 34918;
         public const long StatueFixated2 = 34925;
@@ -745,6 +747,7 @@ namespace GW2EIEvtcParser
         public const long DispelSAK = 37697;
         public const long GazeAvoidance = 37714;
         public const long Devour = 37718;
+        public const long DeimosSelectedByGreen = 37730;
         public const long TearInstability = 37733;
         public const long ClaimSAK = 37779;
         public const long ProtectSAK = 37813;
@@ -760,6 +763,7 @@ namespace GW2EIEvtcParser
         public const long WeakMinded = 38187;
         public const long FixatedGuldhem = 38223;
         public const long UnnaturalSignet = 38224;
+        public const long Brutalize = 38226;
         public const long InevitableBetrayalSmall = 38247;
         public const long UnseenBurdenDeimos = 38266;
         public const long PinpointDistribution = 38333;
@@ -964,6 +968,7 @@ namespace GW2EIEvtcParser
         public const long LastGraspFate = 47278;
         public const long MistlockInstabilityToxicSickness = 47288;
         public const long MistlockInstabilityHamstrung = 47323;
+        public const long DhuumShackles1 = 47335;
         public const long Necrosis = 47414;
         public const long FixatedSH = 47434;
         public const long SoulSiphon = 47470;
@@ -977,6 +982,7 @@ namespace GW2EIEvtcParser
         public const long FrozenWind = 47776;
         public const long Hamstrung = 47856;
         public const long OneTrackMind = 47929;
+        public const long DhuumDamagingShackles = 48042;
         public const long MortalCoilRiver = 48154;
         public const long FractalProdigy = 48191;
         public const long Exposed48209 = 48209;
@@ -991,6 +997,7 @@ namespace GW2EIEvtcParser
         public const long Fixated1 = 48533;
         public const long SoulDigestion = 48541;
         public const long MortalCoilStatueOfDeath = 48583;
+        public const long DhuumShackles2 = 48591;
         public const long HastenedDemise = 48773;
         public const long LightCarrier = 48779;
         public const long EnergyThresholdDhuum = 48848;
@@ -1030,6 +1037,7 @@ namespace GW2EIEvtcParser
         public const long FacetOfNatureDemon = 51704;
         public const long FacetOfElementsTraited = 51706;
         public const long LampBond = 51726;
+        public const long AquaticDetainment = 51755;
         public const long EnragedQadim = 51933;
         public const long Waterlogged = 51935;
         public const long PowerOfTheLamp = 52035;
@@ -1057,6 +1065,7 @@ namespace GW2EIEvtcParser
         public const long FracturedEnemy = 53030;
         public const long ShieldedLavaElemental = 53048;
         public const long LockedOn = 53075;
+        public const long TidalPool = 53097;
         public const long SoulPastry = 53222;
         public const long SuperiorRuneOfTheMonk = 53285;
         public const long EnhancedLucentOil = 53304;

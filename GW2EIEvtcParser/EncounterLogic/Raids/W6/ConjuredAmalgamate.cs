@@ -4,6 +4,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -133,7 +134,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.ConjuredAmalgamate:
-                    List<AbstractBuffEvent> shieldCA = GetFilteredList(log.CombatData, 53003, target, true, true);
+                    List<AbstractBuffEvent> shieldCA = GetFilteredList(log.CombatData, Shielded, target, true, true);
                     int shieldCAStart = 0;
                     foreach (AbstractBuffEvent c in shieldCA)
                     {
@@ -155,7 +156,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.ConjuredGreatsword:
                     break;
                 case (int)ArcDPSEnums.TrashID.ConjuredShield:
-                    List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, 53003, target, true, true);
+                    List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, Shielded, target, true, true);
                     int shieldStart = 0;
                     foreach (AbstractBuffEvent c in shield)
                     {

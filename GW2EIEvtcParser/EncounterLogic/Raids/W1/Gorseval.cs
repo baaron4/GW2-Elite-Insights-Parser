@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -98,7 +99,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
-            List<AbstractBuffEvent> eggs = GetFilteredList(log.CombatData, 31623, p, true, true);
+            List<AbstractBuffEvent> eggs = GetFilteredList(log.CombatData, GhastlyPrison, p, true, true);
             int eggStart = 0;
             foreach (AbstractBuffEvent c in eggs)
             {
@@ -258,7 +259,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, radius, (impactTime, impactTime + 100), "rgba(255, 0, 0, 0.4)", new AgentConnector(target)));
                     }
-                    List<AbstractBuffEvent> protection = GetFilteredList(log.CombatData, 31877, target, true, true);
+                    List<AbstractBuffEvent> protection = GetFilteredList(log.CombatData, ProtectiveShadow, target, true, true);
                     int protectionStart = 0;
                     foreach (AbstractBuffEvent c in protection)
                     {
