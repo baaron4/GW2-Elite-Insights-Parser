@@ -326,7 +326,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal virtual List<ErrorEvent> GetCustomWarningMessages(FightData fightData, int arcdpsVersion)
         {
-            if (arcdpsVersion >= ParserHelper.ArcDPSBuilds.DirectX11Updated)
+            if (arcdpsVersion >= ParserHelper.ArcDPSBuilds.DirectX11Update)
             {
                 return new List<ErrorEvent>
                 {

@@ -3,6 +3,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -84,7 +85,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TrashID.Jade:
-                    List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, 38155, target, true, true);
+                    List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, MursaatOverseersShield, target, true, true);
                     int shieldStart = 0;
                     int shieldRadius = 100;
                     foreach (AbstractBuffEvent c in shield)

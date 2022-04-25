@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -14,26 +15,26 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new HitOnPlayerMechanic(39916, "Combustion Rush", new MechanicPlotlySetting("triangle-left","rgb(255,0,255)"), "Charge","Combustion Rush", "Charge",0),
-            new HitOnPlayerMechanic(39615, "Combustion Rush", new MechanicPlotlySetting("triangle-left","rgb(255,0,255)"), "Charge","Combustion Rush", "Charge",0),
-            new HitOnPlayerMechanic(39581, "Combustion Rush", new MechanicPlotlySetting("triangle-left","rgb(255,0,255)"), "Charge","Combustion Rush", "Charge ",0),
-            new HitOnPlayerMechanic(39910, "Punishing Kick", new MechanicPlotlySetting("triangle-right-open","rgb(200,0,200)"), "Add Kick","Punishing Kick (Single purple Line, Add)", "Kick (Add)",0),
-            new HitOnPlayerMechanic(38896, "Punishing Kick", new MechanicPlotlySetting("triangle-right","rgb(200,0,200)"), "Kick","Punishing Kick (Single purple Line)", "Kick",0),
-            new HitOnPlayerMechanic(39534, "Cranial Cascade", new MechanicPlotlySetting("triangle-right-open","rgb(255,200,0)"), "Add Cone KB","Cranial Cascade (3 purple Line Knockback, Add)", "Small Cone KB (Add)",0),
-            new HitOnPlayerMechanic(39686, "Cranial Cascade", new MechanicPlotlySetting("triangle-right","rgb(255,200,0)"), "Cone KB","Cranial Cascade (3 purple Line Knockback)", "Small Cone KB",0),
-            new HitOnPlayerMechanic(39845, "Radiant Fury", new MechanicPlotlySetting("octagon","rgb(255,0,0)"), "Burn Circle","Radiant Fury (expanding burn circles)", "Expanding Circles",0),
-            new HitOnPlayerMechanic(38926, "Radiant Fury", new MechanicPlotlySetting("octagon","rgb(255,0,0)"), "Burn Circle","Radiant Fury (expanding burn circles)", "Expanding Circles",0),
-            new HitOnPlayerMechanic(39257, "Focused Anger", new MechanicPlotlySetting("triangle-down","rgb(255,100,0)"), "Large Cone KB","Focused Anger (Large Cone Overhead Crosshair Knockback)", "Large Cone Knockback",0),
-            new HitOnPlayerMechanic(39031, "Horizon Strike", new MechanicPlotlySetting("circle","rgb(255,140,0)"), "Horizon Strike","Horizon Strike (turning pizza slices)", "Horizon Strike",0), // 
-            new HitOnPlayerMechanic(39507, "Horizon Strike", new MechanicPlotlySetting("circle","rgb(255,140,0)"), "Horizon Strike","Horizon Strike (turning pizza slices)", "Horizon Strike",0), // 
-            new HitOnPlayerMechanic(39846, "Crimson Dawn", new MechanicPlotlySetting("circle","rgb(50,0,0)"), "Horizon Strike End","Crimson Dawn (almost Full platform attack after Horizon Strike)", "Horizon Strike (last)",0),
-            new HitOnPlayerMechanic(39228, "Solar Cyclone", new MechanicPlotlySetting("asterisk-open","rgb(140,0,140)"), "Cyclone","Solar Cyclone (Circling Knockback)", "KB Cyclone",0),
-            new HitOnPlayerMechanic(39228, "Solar Cyclone", new MechanicPlotlySetting("asterisk-open","rgb(140,0,140)"), "Cyclone","Solar Cyclone (Circling Knockback)", "KB Cyclone",0),
-            new PlayerBuffApplyMechanic(791, "Fear", new MechanicPlotlySetting("square-open","rgb(255,0,0)"), "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)",0, (ba, log) => ba.AppliedDuration == 3000), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
-            new PlayerBuffApplyMechanic(39131, "Fixate", new MechanicPlotlySetting("star-open","rgb(255,0,255)"), "Bloom Fix","Fixated by Solar Bloom", "Bloom Fixate",0),
-            new HitOnPlayerMechanic(39491, "Explode", new MechanicPlotlySetting("circle","rgb(255,200,0)"), "Bloom Expl","Hit by Solar Bloom Explosion", "Bloom Explosion",0), //shockwave, not damage? (damage is 50% max HP, not tracked)
-            new HitOnPlayerMechanic(39911, "Spiral Strike", new MechanicPlotlySetting("circle-open","rgb(0,200,0)"), "Spiral","Hit after Warp (Jump to Player with overhead bomb)", "Spiral Strike",0),
-            new HitOnPlayerMechanic(39133, "Wave of Mutilation", new MechanicPlotlySetting("triangle-sw","rgb(0,200,0)"), "KB Jump","Hit by KB Jump (player targeted)", "Knockback jump",0),
+            new HitOnPlayerMechanic(CombustionRush1, "Combustion Rush", new MechanicPlotlySetting("triangle-left","rgb(255,0,255)"), "Charge","Combustion Rush", "Charge",0),
+            new HitOnPlayerMechanic(CombustionRush2, "Combustion Rush", new MechanicPlotlySetting("triangle-left","rgb(255,0,255)"), "Charge","Combustion Rush", "Charge",0),
+            new HitOnPlayerMechanic(CombustionRush3, "Combustion Rush", new MechanicPlotlySetting("triangle-left","rgb(255,0,255)"), "Charge","Combustion Rush", "Charge ",0),
+            new HitOnPlayerMechanic(PunishingKick1, "Punishing Kick", new MechanicPlotlySetting("triangle-right-open","rgb(200,0,200)"), "Add Kick","Punishing Kick (Single purple Line, Add)", "Kick (Add)",0),
+            new HitOnPlayerMechanic(PunishingKick2, "Punishing Kick", new MechanicPlotlySetting("triangle-right","rgb(200,0,200)"), "Kick","Punishing Kick (Single purple Line)", "Kick",0),
+            new HitOnPlayerMechanic(CranialCascade1, "Cranial Cascade", new MechanicPlotlySetting("triangle-right-open","rgb(255,200,0)"), "Add Cone KB","Cranial Cascade (3 purple Line Knockback, Add)", "Small Cone KB (Add)",0),
+            new HitOnPlayerMechanic(CranialCascade2, "Cranial Cascade", new MechanicPlotlySetting("triangle-right","rgb(255,200,0)"), "Cone KB","Cranial Cascade (3 purple Line Knockback)", "Small Cone KB",0),
+            new HitOnPlayerMechanic(RadiantFury1, "Radiant Fury", new MechanicPlotlySetting("octagon","rgb(255,0,0)"), "Burn Circle","Radiant Fury (expanding burn circles)", "Expanding Circles",0),
+            new HitOnPlayerMechanic(RadiantFury2, "Radiant Fury", new MechanicPlotlySetting("octagon","rgb(255,0,0)"), "Burn Circle","Radiant Fury (expanding burn circles)", "Expanding Circles",0),
+            new HitOnPlayerMechanic(FocusedAnger, "Focused Anger", new MechanicPlotlySetting("triangle-down","rgb(255,100,0)"), "Large Cone KB","Focused Anger (Large Cone Overhead Crosshair Knockback)", "Large Cone Knockback",0),
+            new HitOnPlayerMechanic(HorizonStrikeSkorvald1, "Horizon Strike", new MechanicPlotlySetting("circle","rgb(255,140,0)"), "Horizon Strike","Horizon Strike (turning pizza slices)", "Horizon Strike",0), // 
+            new HitOnPlayerMechanic(HorizonStrikeSkorvald2, "Horizon Strike", new MechanicPlotlySetting("circle","rgb(255,140,0)"), "Horizon Strike","Horizon Strike (turning pizza slices)", "Horizon Strike",0), // 
+            new HitOnPlayerMechanic(CrimsonDawn, "Crimson Dawn", new MechanicPlotlySetting("circle","rgb(50,0,0)"), "Horizon Strike End","Crimson Dawn (almost Full platform attack after Horizon Strike)", "Horizon Strike (last)",0),
+            new HitOnPlayerMechanic(SolarCyclone, "Solar Cyclone", new MechanicPlotlySetting("asterisk-open","rgb(140,0,140)"), "Cyclone","Solar Cyclone (Circling Knockback)", "KB Cyclone",0),
+            //new HitOnPlayerMechanic(39228, "Solar Cyclone", new MechanicPlotlySetting("asterisk-open","rgb(140,0,140)"), "Cyclone","Solar Cyclone (Circling Knockback)", "KB Cyclone",0),
+            new PlayerBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting("square-open","rgb(255,0,0)"), "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)",0, (ba, log) => ba.AppliedDuration == 3000), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
+            new PlayerBuffApplyMechanic(FixatedBloom1, "Fixate", new MechanicPlotlySetting("star-open","rgb(255,0,255)"), "Bloom Fix","Fixated by Solar Bloom", "Bloom Fixate",0),
+            new HitOnPlayerMechanic(BloomExplode, "Explode", new MechanicPlotlySetting("circle","rgb(255,200,0)"), "Bloom Expl","Hit by Solar Bloom Explosion", "Bloom Explosion",0), //shockwave, not damage? (damage is 50% max HP, not tracked)
+            new HitOnPlayerMechanic(SpiralStrike, "Spiral Strike", new MechanicPlotlySetting("circle-open","rgb(0,200,0)"), "Spiral","Hit after Warp (Jump to Player with overhead bomb)", "Spiral Strike",0),
+            new HitOnPlayerMechanic(WaveOfMutilation, "Wave of Mutilation", new MechanicPlotlySetting("triangle-sw","rgb(0,200,0)"), "KB Jump","Hit by KB Jump (player targeted)", "Knockback jump",0),
             });
             Extension = "skorv";
             Icon = "https://i.imgur.com/B1nhJ9m.png";
@@ -63,7 +64,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            phases.AddRange(GetPhasesByInvul(log, 762, skorvald, true, true));
+            phases.AddRange(GetPhasesByInvul(log, Determined762, skorvald, true, true));
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
@@ -131,8 +132,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 // Joining the encounter mid fight may also yield a false negative but at that point the log is incomplete already
                 var cmSkills = new HashSet<long>
                 {
-                    39313,// CM Solar Bolt
-                    39225,// CM Supernova
+                    SolarBoltCM,
+                    SupernovaCM,
                 };
                 if(combatData.GetSkills().Intersect(cmSkills).Any()) 
                 {
@@ -174,7 +175,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(skorvald.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
             if (lastDamageTaken != null)
             {
-                BuffApplyEvent invul895Apply = combatData.GetBuffData(SkillIDs.Determined895).OfType<BuffApplyEvent>().Where(x => x.To == skorvald.AgentItem && x.Time > lastDamageTaken.Time - 500).LastOrDefault();
+                BuffApplyEvent invul895Apply = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To == skorvald.AgentItem && x.Time > lastDamageTaken.Time - 500).LastOrDefault();
                 if (invul895Apply != null)
                 {
                     fightData.SetSuccess(true, Math.Min(invul895Apply.Time, lastDamageTaken.Time));

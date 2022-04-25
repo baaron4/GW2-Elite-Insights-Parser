@@ -126,7 +126,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Signet of the Ether", SignetOfTheEther, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7a/Signet_of_the_Ether.png"),
                 new Buff("Signet of Domination",SignetOfDomination, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/3b/Signet_of_Domination.png"),
                 new Buff("Signet of Illusions",SignetOfIllusions, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/ce/Signet_of_Illusions.png"),
-                new Buff("Signet of Inspiration",SignetOfInspiration, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/ed/Signet_of_Inspiration.png"),
+                new Buff("Signet of Inspiration",SignetOfInspirationEffect, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/ed/Signet_of_Inspiration.png"),
                 new Buff("Signet of Midnight",SignetOfMidnightEffect, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/24/Signet_of_Midnight.png"),
                 new Buff("Signet of Humility",SignetOfHumility, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b5/Signet_of_Humility.png"),
                 //skills
