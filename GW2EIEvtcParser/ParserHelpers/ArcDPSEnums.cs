@@ -624,6 +624,7 @@ namespace GW2EIEvtcParser
             // Siax
             SiaxHallucination = 17002,
             EchoOfTheUnclean = 17068,
+            NightmareHallucinationSiax = 16911,
             // Ensolyss
             NightmareHallucination1 = 16912, // (exploding after jump and charging in last phase)
             NightmareHallucination2 = 17033, // (small adds, last phase)

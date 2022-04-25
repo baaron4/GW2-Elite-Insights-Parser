@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -307,7 +308,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.Deathling:
                     break;
                 case (int)ArcDPSEnums.TrashID.UnderworldReaper:
-                    List<AbstractBuffEvent> stealths = GetFilteredList(log.CombatData, 13017, target, true, true);
+                    List<AbstractBuffEvent> stealths = GetFilteredList(log.CombatData, Stealth, target, true, true);
                     int stealthStart = 0;
                     int stealthEnd = 0;
                     foreach (AbstractBuffEvent c in stealths)
@@ -407,7 +408,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 replay.Decorations.Add(new CircleDecoration(true, start + duration, 100, (start, end), "rgba(0, 50, 200, 0.5)", new AgentConnector(p)));
             }
             // bomb
-            List<AbstractBuffEvent> bombDhuum = GetFilteredList(log.CombatData, 47646, p, true, true);
+            List<AbstractBuffEvent> bombDhuum = GetFilteredList(log.CombatData, ArcingAffliction, p, true, true);
             int bombDhuumStart = 0;
             foreach (AbstractBuffEvent c in bombDhuum)
             {
@@ -423,7 +424,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             // shackles connection
-            var shackles = GetFilteredList(log.CombatData, 47335, p, true, true).Concat(GetFilteredList(log.CombatData, 48591, p, true, true)).ToList();
+            var shackles = GetFilteredList(log.CombatData, DhuumShackles1, p, true, true).Concat(GetFilteredList(log.CombatData, DhuumShackles2, p, true, true)).ToList();
             int shacklesStart = 0;
             Player shacklesTarget = null;
             foreach (AbstractBuffEvent c in shackles)
@@ -445,7 +446,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // shackles damage (identical to the connection for now, not yet properly distinguishable from the pure connection, further investigation needed due to inconsistent behavior (triggering too early, not triggering the damaging skill though)
             // shackles start with buff 47335 applied from one player to the other, this is switched over to buff 48591 after mostly 2 seconds, sometimes later. This is switched to 48042 usually 4 seconds after initial application and the damaging skill 47164 starts to deal damage from that point on.
             // Before that point, 47164 is only logged when evaded/blocked, but doesn't deal damage. Further investigation needed.
-            List<AbstractBuffEvent> shacklesDmg = GetFilteredList(log.CombatData, 48042, p, true, true);
+            List<AbstractBuffEvent> shacklesDmg = GetFilteredList(log.CombatData, DhuumDamagingShackles, p, true, true);
             int shacklesDmgStart = 0;
             Player shacklesDmgTarget = null;
             foreach (AbstractBuffEvent c in shacklesDmg)

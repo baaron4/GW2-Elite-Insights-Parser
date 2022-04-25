@@ -6,6 +6,7 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -111,7 +112,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Desmina:
-                    List<AbstractBuffEvent> asylums = GetFilteredList(log.CombatData, 47122, target, true, true);
+                    List<AbstractBuffEvent> asylums = GetFilteredList(log.CombatData, FollowersAsylum, target, true, true);
                     int asylumStart = 0;
                     foreach (AbstractBuffEvent asylum in asylums)
                     {

@@ -59,7 +59,7 @@ namespace GW2EIEvtcParser
             //
             internal const int ProperConfusionDamageSimulation = 20210529;
             internal const int ScoringSystemChange = 20210800; // was somewhere around there
-            internal const int DirectX11Updated = 20210923;
+            internal const int DirectX11Update = 20210923;
             internal const int InternalSkillIDsChange = 20220304;
             internal const int BuffAttrFlatIncRemoved = 20220308;
             //

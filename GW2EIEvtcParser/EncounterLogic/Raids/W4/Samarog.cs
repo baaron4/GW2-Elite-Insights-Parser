@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -135,7 +136,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Samarog:
-                    List<AbstractBuffEvent> brutalize = GetFilteredList(log.CombatData, 38226, target, true, true);
+                    List<AbstractBuffEvent> brutalize = GetFilteredList(log.CombatData, Brutalize, target, true, true);
                     int brutStart = 0;
                     foreach (AbstractBuffEvent c in brutalize)
                     {
@@ -178,7 +179,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 replay.Decorations.Add(new CircleDecoration(true, 0, 80, (smallStart, smallEnd), "rgba(80, 150, 0, 0.3)", new AgentConnector(p)));
             }
             // fixated
-            List<AbstractBuffEvent> fixatedSam = GetFilteredList(log.CombatData, 37868, p, true, true);
+            List<AbstractBuffEvent> fixatedSam = GetFilteredList(log.CombatData, FixatedSamarog, p, true, true);
             int fixatedSamStart = 0;
             foreach (AbstractBuffEvent c in fixatedSam)
             {
@@ -193,7 +194,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             //fixated Ghuldem
-            List<AbstractBuffEvent> fixatedGuldhem = GetFilteredList(log.CombatData, 38223, p, true, true);
+            List<AbstractBuffEvent> fixatedGuldhem = GetFilteredList(log.CombatData, FixatedGuldhem, p, true, true);
             int fixationGuldhemStart = 0;
             AbstractSingleActor guldhem = null;
             foreach (AbstractBuffEvent c in fixatedGuldhem)
@@ -214,7 +215,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             //fixated Rigom
-            List<AbstractBuffEvent> fixatedRigom = GetFilteredList(log.CombatData, 37693, p, true, true);
+            List<AbstractBuffEvent> fixatedRigom = GetFilteredList(log.CombatData, FixatedRigom, p, true, true);
             int fixationRigomStart = 0;
             AbstractSingleActor rigom = null;
             foreach (AbstractBuffEvent c in fixatedRigom)

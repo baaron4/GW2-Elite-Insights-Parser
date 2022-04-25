@@ -6,6 +6,7 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -49,7 +50,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return phases;
             }
             // Invul check
-            phases.AddRange(GetPhasesByInvul(log, 762, mainTarget, false, true));
+            phases.AddRange(GetPhasesByInvul(log, Determined762, mainTarget, false, true));
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
@@ -85,7 +86,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new EvtcAgentException("Mordremoth not found");
             }
-            BuffApplyEvent buffApply = combatData.GetBuffData(SkillIDs.Determined895).OfType<BuffApplyEvent>().LastOrDefault(x => x.To == mordremoth.AgentItem);
+            BuffApplyEvent buffApply = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().LastOrDefault(x => x.To == mordremoth.AgentItem);
             if (buffApply != null)
             {
                 fightData.SetSuccess(true, mordremoth.LastAware);

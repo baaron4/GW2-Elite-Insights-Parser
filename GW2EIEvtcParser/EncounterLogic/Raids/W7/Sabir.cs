@@ -3,6 +3,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -105,7 +106,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
-            List<AbstractBuffEvent> boltBreaks = GetFilteredList(log.CombatData, 56394, p, true, true);
+            List<AbstractBuffEvent> boltBreaks = GetFilteredList(log.CombatData, BoltBreak, p, true, true);
             int boltBreakStart = 0;
             foreach (AbstractBuffEvent c in boltBreaks)
             {
@@ -131,7 +132,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Sabir:
-                    List<AbstractBuffEvent> repulsionFields = GetFilteredList(log.CombatData, 56172, target, true, true);
+                    List<AbstractBuffEvent> repulsionFields = GetFilteredList(log.CombatData, RepulsionField, target, true, true);
                     int repulsionFieldStart = 0;
                     foreach (AbstractBuffEvent c in repulsionFields)
                     {
@@ -145,7 +146,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new CircleDecoration(true, 0, 120, (repulsionFieldStart, repulsionFieldEnd), "rgba(80, 0, 255, 0.3)", new AgentConnector(target)));
                         }
                     }
-                    List<AbstractBuffEvent> ionShields = GetFilteredList(log.CombatData, 56100, target, true, true);
+                    List<AbstractBuffEvent> ionShields = GetFilteredList(log.CombatData, IonShield, target, true, true);
                     int ionShieldStart = 0;
                     foreach (AbstractBuffEvent c in ionShields)
                     {

@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -292,8 +293,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // Corruption
-            List<AbstractBuffEvent> corruptedMatthias = GetFilteredList(log.CombatData, 34416, p, true, true);
-            corruptedMatthias.AddRange(GetFilteredList(log.CombatData, 34473, p, true, true));
+            List<AbstractBuffEvent> corruptedMatthias = GetFilteredList(log.CombatData, Corruption1, p, true, true);
+            corruptedMatthias.AddRange(GetFilteredList(log.CombatData, Corruption2, p, true, true));
             int corruptedMatthiasStart = 0;
             foreach (AbstractBuffEvent c in corruptedMatthias)
             {
@@ -315,7 +316,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             // Well of profane
-            List<AbstractBuffEvent> wellMatthias = GetFilteredList(log.CombatData, 34450, p, true, true);
+            List<AbstractBuffEvent> wellMatthias = GetFilteredList(log.CombatData, UnstableBloodMagic, p, true, true);
             int wellMatthiasStart = 0;
             foreach (AbstractBuffEvent c in wellMatthias)
             {
@@ -337,7 +338,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             // Sacrifice
-            List<AbstractBuffEvent> sacrificeMatthias = GetFilteredList(log.CombatData, 34442, p, true, true);
+            List<AbstractBuffEvent> sacrificeMatthias = GetFilteredList(log.CombatData, MatthiasSacrifice, p, true, true);
             int sacrificeMatthiasStart = 0;
             foreach (AbstractBuffEvent c in sacrificeMatthias)
             {
