@@ -1278,6 +1278,7 @@ namespace GW2EIEvtcParser
         public const long RectifierSignet = 63305;
         public const long Unleashed = 63317;
         public const long SuperconductingSignet = 63322;
+        public const long EndlessNight = 63358;
         public const long OverclockSignetJDrive = 63378;
         public const long DeadlyBlades = 63409;
         public const long FierceAsFire = 63433;
@@ -1288,6 +1289,7 @@ namespace GW2EIEvtcParser
         public const long Hallucinations = 64179;
         public const long BowlOfJadeSeaBounty = 64357;
         public const long TargetOrder3 = 64377;
+        public const long LeyBreach = 64044;
         public const long StrongerTogether = 64465;
         public const long InfluenceOfTheVoid = 64524;
         public const long NourishmentBonusPowerFerocity = 64528;
@@ -1295,8 +1297,9 @@ namespace GW2EIEvtcParser
         public const long MeatyAsparagusSkewer = 64568;
         public const long LethalInspiration = 64834;
         public const long ImmuneToDamageAndConditions = 64843;
-        public const long Exposed64936 = 64936;
+        public const long ExposedAetherbladeHideout = 64936;
         public const long TargetOrder4 = 64999;
+        public const long TormentingWave = 65031;
         public const long TargetOrder2 = 65088;
         public const long BowlOfKimchiTofuStew = 65197;
         public const long MaiTrinSomething = 65238;
@@ -1306,10 +1309,12 @@ namespace GW2EIEvtcParser
         public const long VoidRepulsion2 = 65577;
         public const long ExtremeVulnerability = 65662;
         public const long VoidRepulsion1 = 65729;
+        public const long NightmareFusilladeMain = 65749;
         public const long PlateOfKimchiPancakes = 65769;
         public const long TargetOrder1 = 65869;
         public const long SharedDestruction = 65900;
         public const long BlockOfTofu = 65937;
+        public const long NightmareFusilladeSide = 66089;
         public const long FixatedKainengOverlook = 66140;
         public const long SooWonSpearPhaseInvul = 66242;
         public const long ChaosAndDestruction = 66409;
@@ -1321,6 +1326,11 @@ namespace GW2EIEvtcParser
         public const long EqualizationMatrix = 67047;
         public const long PlateOfImperialPalaceSpecial = 67265;
         public const long NecroticRitual = 67447;
+        public const long SharedDestructionCM = 67831;
+        public const long LeyBreachCM = 67832;
+        public const long MagneticBomb = 67856;
+        public const long TormentingWaveCM = 67866;
+        public const long PhotonSaturation = 67872;
 
     }
 

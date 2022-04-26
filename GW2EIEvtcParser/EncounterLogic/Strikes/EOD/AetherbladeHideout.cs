@@ -4,6 +4,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -13,6 +14,17 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
+                new HitOnPlayerMechanic(NightmareFusilladeMain, "Nightmare Fusillade", new MechanicPlotlySetting("triangle-right", Colors.DarkRed), "Cone", "Hit by Cone attack", "Cone", 150),
+                new HitOnPlayerMechanic(NightmareFusilladeSide, "Nightmare Fusillade Side", new MechanicPlotlySetting("triangle-left", Colors.DarkRed), "Cone.S", "Hit by Side Cone attack", "Side Cone", 150),
+                new HitOnPlayerMechanic(TormentingWave, "Tormenting Wave", new MechanicPlotlySetting("circle", Colors.DarkRed), "Shck.Wv", "Hit by Shockwave attack", "Shockwave", 150),
+                new HitOnPlayerMechanic(TormentingWaveCM, "Tormenting Wave", new MechanicPlotlySetting("circle", Colors.DarkRed), "Shck.Wv", "Hit by Shockwave attack", "Shockwave", 150),
+                new HitOnPlayerMechanic(LeyBreach, "Ley Breach", new MechanicPlotlySetting("circle", Colors.LightOrange), "Puddle", "Stood in Puddle", "Puddle", 150),
+                new HitOnPlayerMechanic(LeyBreachCM, "Ley Breach", new MechanicPlotlySetting("circle", Colors.LightOrange), "Puddle", "Stood in Puddle", "Puddle", 150),
+                new PlayerBuffApplyMechanic(ExposedAetherbladeHideout, "Exposed", new MechanicPlotlySetting("triangle-down", Colors.Red), "Exposed", "Received Exposed stack", "Exposed", 150),
+                new PlayerBuffApplyMechanic(SharedDestruction, "Shared Destruction", new MechanicPlotlySetting("circle", Colors.Green), "Green", "Selected for Green", "Green", 150),
+                new PlayerBuffApplyMechanic(SharedDestructionCM, "Shared Destruction", new MechanicPlotlySetting("circle", Colors.Green), "Green", "Selected for Green", "Green", 150),
+                new PlayerBuffApplyMechanic(PhotonSaturation, "Photon Saturation", new MechanicPlotlySetting("triangle-down", Colors.Green), "Green.D", "Received Green debuff", "Green Debuff", 150),
+                new PlayerBuffApplyMechanic(MagneticBomb, "Magnetic Bomb", new MechanicPlotlySetting("circle", Colors.Magenta), "Bomb", "Selected for Bomb", "Bomb", 150),
             }
             );
             Icon = "https://i.imgur.com/UZmW8Sd.png";
