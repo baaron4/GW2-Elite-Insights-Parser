@@ -1319,6 +1319,7 @@ namespace GW2EIEvtcParser
         public const long SooWonSpearPhaseInvul = 66242;
         public const long ChaosAndDestruction = 66409;
         public const long FishyRiceBowl = 66503;
+        public const long KaleidoscopicChaos = 66568;
         public const long BowlOfEchovaldHotpot = 66663;
         public const long VoidImmunity = 66800;
         public const long VitalityEqualizer2 = 66894;

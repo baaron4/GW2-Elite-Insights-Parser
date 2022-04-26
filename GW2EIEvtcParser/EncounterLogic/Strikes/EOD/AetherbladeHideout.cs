@@ -21,6 +21,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new HitOnPlayerMechanic(TormentingWaveCM, "Tormenting Wave", new MechanicPlotlySetting("circle", Colors.DarkRed), "Shck.Wv", "Hit by Shockwave attack", "Shockwave", 150),
                 new HitOnPlayerMechanic(LeyBreach, "Ley Breach", new MechanicPlotlySetting("circle", Colors.LightOrange), "Puddle", "Stood in Puddle", "Puddle", 150),
                 new HitOnPlayerMechanic(LeyBreachCM, "Ley Breach", new MechanicPlotlySetting("circle", Colors.LightOrange), "Puddle", "Stood in Puddle", "Puddle", 150),
+                new HitOnPlayerMechanic(KaleidoscopicChaos, "Kaleidoscopic Chaos", new MechanicPlotlySetting("triangle-down", Colors.Orange), "Circle.H", "Hit by Yellow Circle", "Yellow Circle Hit", 150),
                 new PlayerBuffApplyMechanic(ExposedAetherbladeHideout, "Exposed", new MechanicPlotlySetting("triangle-down", Colors.Red), "Exposed", "Received Exposed stack", "Exposed", 150),
                 new PlayerBuffApplyMechanic(SharedDestruction, "Shared Destruction", new MechanicPlotlySetting("circle", Colors.Green), "Green", "Selected for Green", "Green", 150),
                 new PlayerBuffApplyMechanic(SharedDestructionCM, "Shared Destruction", new MechanicPlotlySetting("circle", Colors.Green), "Green", "Selected for Green", "Green", 150),
