@@ -1331,6 +1331,7 @@ namespace GW2EIEvtcParser
         public const long MagneticBomb = 67856;
         public const long TormentingWaveCM = 67866;
         public const long PhotonSaturation = 67872;
+        public const long FocusedDestruction = 67954;
 
     }
 
