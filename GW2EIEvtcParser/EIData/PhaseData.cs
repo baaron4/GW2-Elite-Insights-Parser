@@ -46,6 +46,10 @@ namespace GW2EIEvtcParser.EIData
 
         internal void AddTarget(AbstractSingleActor target)
         {
+            if (target == null)
+            {
+                return;
+            }
             _targets.Add(target);
         }
 
@@ -56,7 +60,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal void AddTargets(IEnumerable<AbstractSingleActor> targets)
         {
-            _targets.AddRange(targets);
+            _targets.AddRange(targets.Where(x => x != null));
         }
 
         internal void OverrideStart(long start)
