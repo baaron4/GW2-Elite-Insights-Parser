@@ -706,6 +706,9 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Ankka ???", AnkkaPlateformChanging, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Hallucinations", Hallucinations, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Energy Transfer", EnergyTransfer, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Death's Embrace", DeathsEmbraceEffect, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png" ),
+                new Buff("Death's Embrace 2", DeathsEmbrace2Effect, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png" ),
+                new Buff("Power of the Void", PowerOfTheVoid, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png" ),
                 // Minister Li   
                 new Buff("Target Order: 1", TargetOrder1, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Target Order: 2", TargetOrder2, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),

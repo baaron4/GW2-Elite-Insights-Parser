@@ -1285,6 +1285,7 @@ namespace GW2EIEvtcParser
         public const long ConsumeShadows = 63456;
         public const long AerialDefense = 63605;
         public const long EnergyTransfer = 63621;
+        public const long DeathsEmbraceEffect = 63785;
         public const long VitalityEqualizer1 = 63840;
         public const long Hallucinations = 64179;
         public const long BowlOfJadeSeaBounty = 64357;
@@ -1295,6 +1296,7 @@ namespace GW2EIEvtcParser
         public const long NourishmentBonusPowerFerocity = 64528;
         public const long PlateOfCrispyFishPancakes = 64562;
         public const long MeatyAsparagusSkewer = 64568;
+        public const long WaveOfTorment = 64669;
         public const long LethalInspiration = 64834;
         public const long ImmuneToDamageAndConditions = 64843;
         public const long ExposedAetherbladeHideout = 64936;
@@ -1307,6 +1309,7 @@ namespace GW2EIEvtcParser
         public const long MeatyRiceBowl = 65354;
         public const long VoidShell = 65563;
         public const long VoidRepulsion2 = 65577;
+        public const long PowerOfTheVoid = 65601;
         public const long ExtremeVulnerability = 65662;
         public const long VoidRepulsion1 = 65729;
         public const long NightmareFusilladeMain = 65749;
@@ -1317,14 +1320,20 @@ namespace GW2EIEvtcParser
         public const long NightmareFusilladeSide = 66089;
         public const long FixatedKainengOverlook = 66140;
         public const long SooWonSpearPhaseInvul = 66242;
+        public const long GraspingHorror = 66246;
         public const long ChaosAndDestruction = 66409;
         public const long FishyRiceBowl = 66503;
+        public const long DeathsHand2 = 66564;
         public const long KaleidoscopicChaos = 66568;
         public const long BowlOfEchovaldHotpot = 66663;
+        public const long DeathsHand1 = 66728;
         public const long VoidImmunity = 66800;
+        public const long WallOfFear = 66824;
         public const long VitalityEqualizer2 = 66894;
         public const long AnkkaPlateformChanging = 66962;
         public const long EqualizationMatrix = 67047;
+        public const long DeathsEmbrace2Effect = 67120;
+        public const long DeathsEmbraceSkill = 67160;
         public const long PlateOfImperialPalaceSpecial = 67265;
         public const long NecroticRitual = 67447;
         public const long SharedDestructionCM = 67831;
