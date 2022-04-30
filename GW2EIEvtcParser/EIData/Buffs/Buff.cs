@@ -692,8 +692,8 @@ namespace GW2EIEvtcParser.EIData
                 // Frezie      
                 new Buff("Icy Barrier", IcyBarrier, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/38/Shield_of_Ice.png" ),
                 // Mai Trin
-                new Buff("Shared Destruction", SharedDestruction, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
-                new Buff("Shared Destruction CM", SharedDestructionCM, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Shared Destruction (Mai Trin)", SharedDestructionMaiTrin, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Shared Destruction CM (Mai Trin)", SharedDestructionMaiTrinCM, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Magnetic Bomb", MagneticBomb, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Immune to damage and conditions.", ImmuneToDamageAndConditions, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 //new Buff("Mai Trin ???", 63858, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
@@ -722,6 +722,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Lethal Inspiration", LethalInspiration, Source.FightSpecific, BuffStackType.Stacking, 1, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Extreme Vulnerability", ExtremeVulnerability, Source.FightSpecific, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Fixated (Kaineng Overlook)",FixatedKainengOverlook, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Shared Destruction (Li)",SharedDestructionLi, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png"),
                 //     
                 new Buff("Influence of the Void", InfluenceOfTheVoid, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Targeted (Dragon Void)", TargetedDragonVoid, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),

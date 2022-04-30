@@ -1288,6 +1288,8 @@ namespace GW2EIEvtcParser
         public const long DeathsEmbraceEffect = 63785;
         public const long VitalityEqualizer1 = 63840;
         public const long Hallucinations = 64179;
+        public const long TargetedExpulsion = 64277;
+        public const long SharedDestructionLi = 64300;
         public const long BowlOfJadeSeaBounty = 64357;
         public const long TargetOrder3 = 64377;
         public const long LeyBreach = 64044;
@@ -1296,10 +1298,12 @@ namespace GW2EIEvtcParser
         public const long NourishmentBonusPowerFerocity = 64528;
         public const long PlateOfCrispyFishPancakes = 64562;
         public const long MeatyAsparagusSkewer = 64568;
+        public const long DragonSlashRush2 = 64619;
         public const long WaveOfTorment = 64669;
         public const long LethalInspiration = 64834;
         public const long ImmuneToDamageAndConditions = 64843;
         public const long ExposedAetherbladeHideout = 64936;
+        public const long DragonSlashWave = 64952;
         public const long TargetOrder4 = 64999;
         public const long TormentingWave = 65031;
         public const long TargetOrder2 = 65088;
@@ -1315,13 +1319,15 @@ namespace GW2EIEvtcParser
         public const long NightmareFusilladeMain = 65749;
         public const long PlateOfKimchiPancakes = 65769;
         public const long TargetOrder1 = 65869;
-        public const long SharedDestruction = 65900;
+        public const long SharedDestructionMaiTrin = 65900;
         public const long BlockOfTofu = 65937;
         public const long NightmareFusilladeSide = 66089;
+        public const long DragonSlashRush1 = 66090;
         public const long FixatedKainengOverlook = 66140;
         public const long SooWonSpearPhaseInvul = 66242;
         public const long GraspingHorror = 66246;
         public const long ChaosAndDestruction = 66409;
+        public const long DragonSlashBurst = 66465;
         public const long FishyRiceBowl = 66503;
         public const long DeathsHand2 = 66564;
         public const long KaleidoscopicChaos = 66568;
@@ -1336,7 +1342,7 @@ namespace GW2EIEvtcParser
         public const long DeathsEmbraceSkill = 67160;
         public const long PlateOfImperialPalaceSpecial = 67265;
         public const long NecroticRitual = 67447;
-        public const long SharedDestructionCM = 67831;
+        public const long SharedDestructionMaiTrinCM = 67831;
         public const long LeyBreachCM = 67832;
         public const long MagneticBomb = 67856;
         public const long TormentingWaveCM = 67866;
