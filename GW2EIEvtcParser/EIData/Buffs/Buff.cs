@@ -724,7 +724,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Fixated (Kaineng Overlook)",FixatedKainengOverlook, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 new Buff("Shared Destruction (Li)",SharedDestructionLi, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png"),
                 //     
-                new Buff("Influence of the Void", InfluenceOfTheVoid, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Influence of the Void", InfluenceOfTheVoidEffect, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Targeted (Dragon Void)", TargetedDragonVoid, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Void Repulsion 1", VoidRepulsion1, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Void Repulsion 2", VoidRepulsion2, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
