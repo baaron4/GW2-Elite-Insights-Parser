@@ -19,6 +19,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new HitOnPlayerMechanic(DragonSlashRush2, "Dragon Slash - Rush", new MechanicPlotlySetting("triangle-down", Colors.DarkRed), "Rush.H", "Hit by Rush", "Rush Hit", 150),
                 new SkillOnPlayerMechanic(TargetedExpulsion, "Targeted Expulsion", new MechanicPlotlySetting("square", Colors.Purple), "Bomb.D", "Downed by Bomb", "Bomb Downed", 150, (evt, log) => evt.HasDowned),
                 new PlayerBuffApplyMechanic(SharedDestructionLi, "Shared Destruction", new MechanicPlotlySetting("circle", Colors.Green), "Green", "Selected for Green", "Green", 150),
+                new HitOnPlayerMechanic(EnforcerRushingJustice, "Rushing Justice", new MechanicPlotlySetting("square", Colors.Orange), "Flames.S", "Stood in Flames", "Stood in Flames", 150),
+                new HitOnPlayerMechanic(BoomingCommandOverlap, "Booming Command", new MechanicPlotlySetting("circle", Colors.Red), "Red.O", "Red circle overlap", "Red Circle", 150),
+                new HitOnPlayerMechanic(StormOfSwords1, "Storm of Swords", new MechanicPlotlySetting("circle", Colors.Pink), "Storm.H", "Hit by bladestorm", "Bladestorm Hit", 150),
+                new HitOnPlayerMechanic(StormOfSwords2, "Storm of Swords", new MechanicPlotlySetting("circle", Colors.Pink), "Storm.H", "Hit by bladestorm", "Bladestorm Hit", 150),
+                new HitOnPlayerMechanic(StormOfSwords3, "Storm of Swords", new MechanicPlotlySetting("circle", Colors.Pink), "Storm.H", "Hit by bladestorm", "Bladestorm Hit", 150),
+                new HitOnPlayerMechanic(JadeBusterCannon, "Jade Buster Cannon", new MechanicPlotlySetting("triangle-right", Colors.Orange), "Laser.H", "Hit by Big Laser", "Laser Hit", 150),
+                new EnemyBuffApplyMechanic(DestructiveAura, "Destructive Aura", new MechanicPlotlySetting("circle", Colors.Purple), "Pwrd.Up", "Powered Up", "Powered Up", 150)
             }
             );
             Icon = "https://i.imgur.com/7OutZup.png";
