@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -13,6 +15,19 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
+                new HitOnPlayerMechanic(NightmareFusilladeMain, "Nightmare Fusillade", new MechanicPlotlySetting("triangle-right", Colors.DarkRed), "Cone", "Hit by Cone attack", "Cone", 150),
+                new HitOnPlayerMechanic(NightmareFusilladeSide, "Nightmare Fusillade Side", new MechanicPlotlySetting("triangle-left", Colors.DarkRed), "Cone.S", "Hit by Side Cone attack", "Side Cone", 150),
+                new HitOnPlayerMechanic(TormentingWave, "Tormenting Wave", new MechanicPlotlySetting("circle", Colors.DarkRed), "Shck.Wv", "Hit by Shockwave attack", "Shockwave", 150),
+                new HitOnPlayerMechanic(TormentingWaveCM, "Tormenting Wave", new MechanicPlotlySetting("circle", Colors.DarkRed), "Shck.Wv", "Hit by Shockwave attack", "Shockwave", 150),
+                new HitOnPlayerMechanic(LeyBreach, "Ley Breach", new MechanicPlotlySetting("circle", Colors.LightOrange), "Puddle", "Stood in Puddle", "Puddle", 150),
+                new HitOnPlayerMechanic(LeyBreachCM, "Ley Breach", new MechanicPlotlySetting("circle", Colors.LightOrange), "Puddle", "Stood in Puddle", "Puddle", 150),
+                new HitOnPlayerMechanic(KaleidoscopicChaos, "Kaleidoscopic Chaos", new MechanicPlotlySetting("triangle-down", Colors.Orange), "Circle.H", "Hit by Yellow Circle", "Yellow Circle Hit", 150),
+                new PlayerBuffApplyMechanic(ExposedAetherbladeHideout, "Exposed", new MechanicPlotlySetting("triangle-down", Colors.Red), "Exposed", "Received Exposed stack", "Exposed", 150),
+                new PlayerBuffApplyMechanic(SharedDestructionMaiTrin, "Shared Destruction", new MechanicPlotlySetting("circle", Colors.Green), "Green", "Selected for Green", "Green", 150),
+                new PlayerBuffApplyMechanic(SharedDestructionMaiTrinCM, "Shared Destruction", new MechanicPlotlySetting("circle", Colors.Green), "Green", "Selected for Green", "Green", 150),
+                new PlayerBuffApplyMechanic(PhotonSaturation, "Photon Saturation", new MechanicPlotlySetting("triangle-down", Colors.Green), "Green.D", "Received Green debuff", "Green Debuff", 150),
+                new SkillOnPlayerMechanic(FocusedDestruction, "Focused Destruction", new MechanicPlotlySetting("triangle-up", Colors.Red), "Green.Dwn", "Downed by Green", "Green Downed", 150, (evt, log) => evt.HasDowned),
+                new PlayerBuffApplyMechanic(MagneticBomb, "Magnetic Bomb", new MechanicPlotlySetting("circle", Colors.Magenta), "Bomb", "Selected for Bomb", "Bomb", 150),
             }
             );
             Icon = "https://i.imgur.com/UZmW8Sd.png";
@@ -33,7 +48,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<int>
             {
                 (int)ArcDPSEnums.TargetID.MaiTrinStrike,
-                (int)ArcDPSEnums.TargetID.EchoOfScarletBriar,
+                (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM,
+                (int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM,
                 (int)ArcDPSEnums.TrashID.ScarletPhantomBreakbar,
                 (int)ArcDPSEnums.TrashID.ScarletPhantomHP,
             };
@@ -44,7 +60,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<int>
             {
                 (int)ArcDPSEnums.TargetID.MaiTrinStrike,
-                (int)ArcDPSEnums.TargetID.EchoOfScarletBriar
+                (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM,
+                (int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM,
             };
         }
 
@@ -68,7 +85,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new HashSet<int>
             {
                 (int)ArcDPSEnums.TargetID.MaiTrinStrike,
-                (int)ArcDPSEnums.TargetID.EchoOfScarletBriar
+                (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM,
+                (int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM,
             };
         }
 
@@ -87,12 +105,17 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
+        private AbstractSingleActor GetEchoOfScarletBriar(FightData fightData)
+        {
+            return Targets.FirstOrDefault(x => x.ID == (fightData.IsCM ? (int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM : (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM));
+        }
+
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                AbstractSingleActor echoOfScarlet = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EchoOfScarletBriar);
+                AbstractSingleActor echoOfScarlet = GetEchoOfScarletBriar(fightData);
                 if (echoOfScarlet != null)
                 {
                     AbstractSingleActor maiTrin = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.MaiTrinStrike);
@@ -119,7 +142,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Mai Trin not found");
             }
             phases[0].AddTarget(maiTrin);
-            AbstractSingleActor echoOfScarlet = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EchoOfScarletBriar);
+            AbstractSingleActor echoOfScarlet = GetEchoOfScarletBriar(log.FightData);
             if (echoOfScarlet != null)
             {
                 phases[0].AddTarget(echoOfScarlet);
@@ -181,8 +204,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 agentData.Refresh();
             }
             ComputeFightTargets(agentData, combatData, extensions);
-            AbstractSingleActor echoOfScarlet = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EchoOfScarletBriar);
-            if (echoOfScarlet != null)
+            var echoesOfScarlet = Targets.Where(x => x.ID == (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM || x.ID == (int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM).ToList();
+            foreach (AbstractSingleActor echoOfScarlet in echoesOfScarlet)
             {
                 var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(echoOfScarlet.AgentItem) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate).ToList();
                 if (hpUpdates.Count > 1 && hpUpdates.LastOrDefault().DstAgent == 10000)
@@ -204,6 +227,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                         break;
                 }
             }
+        }
+
+        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            AbstractSingleActor maiTrin = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.MaiTrinStrike);
+            if (maiTrin == null)
+            {
+                throw new MissingKeyActorsException("Mai Trin not found");
+            }
+            return maiTrin.GetHealth(combatData) > 8e6 ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
         }
     }
 }

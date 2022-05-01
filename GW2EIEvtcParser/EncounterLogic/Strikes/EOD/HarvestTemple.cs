@@ -6,6 +6,7 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -15,6 +16,20 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
+                new PlayerBuffApplyMechanic(InfluenceOfTheVoidEffect, "Influence of the Void", new MechanicPlotlySetting("triangle-down", Colors.DarkPurple), "Void.D", "Received Void debuff", "Void Debuff", 150),
+                new HitOnPlayerMechanic(InfluenceOfTheVoidSkill, "Influence of the Void Hit", new MechanicPlotlySetting("triangle-up", Colors.DarkPurple), "Void.H", "Hit by Void", "Void Hit", 150),
+                new HitOnPlayerMechanic(BreathOfJormag1, "Breath of Jormag", new MechanicPlotlySetting("triangle-right", Colors.LightBlue), "J.Breath.H", "Hit by Jormag Breath", "Jormag Breath", 150),
+                new HitOnPlayerMechanic(BreathOfJormag2, "Breath of Jormag", new MechanicPlotlySetting("triangle-right", Colors.LightBlue), "J.Breath.H", "Hit by Jormag Breath", "Jormag Breath", 150),
+                new HitOnPlayerMechanic(BreathOfJormag3, "Breath of Jormag", new MechanicPlotlySetting("triangle-right", Colors.LightBlue), "J.Breath.H", "Hit by Jormag Breath", "Jormag Breath", 150),
+                new HitOnPlayerMechanic(LavaSlam, "Lava Slam", new MechanicPlotlySetting("triangle-right", Colors.Red), "Slam.H", "Hit by Primordus Slam", "Primordus Slam", 150),
+                new HitOnPlayerMechanic(CrystalBarrage, "Crystal Barrage", new MechanicPlotlySetting("triangle-up", Colors.Purple), "Barrage.H", "Hit by Crystal Barrage", "Barrage", 150),
+                new HitOnPlayerMechanic(BrandingBeam, "Branding Beam", new MechanicPlotlySetting("triangle-right", Colors.Purple), "Beam.H", "Hit by Kralkatorrik Beam", "Kralkatorrik Beam", 150),
+                new HitOnPlayerMechanic(Shockwave, "Shock Wave", new MechanicPlotlySetting("triangle-right", Colors.Green), "ShckWv.H", "Hit by Mordremoth Shockwave", "Mordremoth Shockwave", 150),
+                new HitOnPlayerMechanic(ScreamOfZhaitan, "Scream of Zhaitan", new MechanicPlotlySetting("triangle-right", Colors.DarkGreen), "Scream.H", "Hit by Zhaitan Scream", "Zhaitan Scream", 150),
+                new HitOnPlayerMechanic(HydroBurst, "Hydro Burst", new MechanicPlotlySetting("circle", Colors.LightBlue), "Whrlpl.H", "Hit by Whirlpool", "Whirlpool", 150),
+                new HitOnPlayerMechanic(TsunamiSlam1, "Tsunami Slam", new MechanicPlotlySetting("triangle-right", Colors.LightBlue), "Tsunami.H", "Hit by Soo-Won Tsunami", "Soo-Won Tsunami", 150),
+                new HitOnPlayerMechanic(TsunamiSlam2, "Tsunami Slam", new MechanicPlotlySetting("triangle-right", Colors.LightBlue), "Tsunami.H", "Hit by Soo-Won Tsunami", "Soo-Won Tsunami", 150),
+                new HitOnPlayerMechanic(ClawSlap, "Claw Slap", new MechanicPlotlySetting("triangle-left", Colors.LightBlue), "Claw.H", "Hit by Soo-Won Claw", "Soo-Won Claw", 150),
             }
             );
             Icon = "https://i.imgur.com/gZRqzlr.png";
@@ -57,7 +72,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         break;
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus:
                         phases[0].AddTarget(target);
-                        subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Primordious", target));
+                        subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Primordus", target));
                         break;
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon:
                         phases[0].AddTarget(target);
@@ -101,6 +116,29 @@ namespace GW2EIEvtcParser.EncounterLogic
                 subPhase.AddTarget(subPhaseData.target);
                 phases.Add(subPhase);
             }
+            int purificationID = 0;
+            foreach (NPC voidAmal in Targets.Where(x => x.ID == (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate))
+            {
+                long end;
+                DeadEvent deadEvent = log.CombatData.GetDeadEvents(voidAmal.AgentItem).LastOrDefault();
+                if (deadEvent == null)
+                {
+                    DespawnEvent despawnEvent = log.CombatData.GetDespawnEvents(voidAmal.AgentItem).LastOrDefault();
+                    if (despawnEvent == null)
+                    {
+                        end = voidAmal.LastAware;
+                    } else
+                    {
+                        end = despawnEvent.Time;
+                    }
+                } else
+                {
+                    end = deadEvent.Time;
+                }
+                var purificationPhase = new PhaseData(Math.Max(voidAmal.FirstAware, 0), Math.Min(end, log.FightData.FightEnd), "Purification " + (++purificationID));
+                purificationPhase.AddTarget(voidAmal);
+                phases.Add(purificationPhase);
+            }
             return phases;
         }
 
@@ -125,6 +163,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TrashID.VoidSaltsprayDragon,
                 (int)ArcDPSEnums.TrashID.VoidObliterator,
                 (int)ArcDPSEnums.TrashID.VoidTimeCaster,
+                (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate
             };
         }
         protected override HashSet<int> GetUniqueNPCIDs()
@@ -262,6 +301,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
+            IReadOnlyList<AgentItem> voidAmalgamates = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.VoidAmalgamate1);
+            bool needRefresh = false;
+            foreach (AgentItem voidAmal in voidAmalgamates)
+            {
+                if (combatData.Where(x => x.SkillID == VoidShell && x.IsBuffApply() && x.SrcMatchesAgent(voidAmal)).Any())
+                {
+                    voidAmal.OverrideID(ArcDPSEnums.TrashID.PushableVoidAmalgamate);
+                    needRefresh = true;
+                }
+            }
+            if (needRefresh)
+            {
+                agentData.Refresh();
+            }
             if (index == 0)
             {
                 // Add dummy target as there are no dragon voids
@@ -269,6 +322,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 Targetless = true;
             }
             ComputeFightTargets(agentData, combatData, extensions);
+            int purificationID = 0;
             foreach (NPC target in Targets)
             {
                 switch(target.ID)
@@ -290,6 +344,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         break;
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan:
                         target.OverrideName("The ZhaitanVoid");
+                        break;
+                    case (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate:
+                        target.OverrideName("Heart " + (++purificationID));
                         break;
                 }
             }

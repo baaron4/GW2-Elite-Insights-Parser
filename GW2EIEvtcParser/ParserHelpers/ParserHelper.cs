@@ -727,7 +727,8 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TargetID.MaiTrinFract:
                 case ArcDPSEnums.TargetID.MaiTrinStrike:
                     return "https://i.imgur.com/GjHgAtX.png";
-                case ArcDPSEnums.TargetID.EchoOfScarletBriar:
+                case ArcDPSEnums.TargetID.EchoOfScarletBriarNM:
+                case ArcDPSEnums.TargetID.EchoOfScarletBriarCM:
                     return "https://i.imgur.com/O9CzW46.png";
                 case ArcDPSEnums.TargetID.Ankka:
                     return "https://i.imgur.com/3OQwlpP.png";
@@ -1012,6 +1013,8 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/gG5p3Hz.png";
                 case ArcDPSEnums.TrashID.TheSniper:
                     return "https://i.imgur.com/RWIjUoe.png";
+                case ArcDPSEnums.TrashID.PushableVoidAmalgamate:
+                    return "https://i.imgur.com/BuKbosz.png";
             }
             //
             switch (ArcDPSEnums.GetMinionID(id))

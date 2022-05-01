@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -12,6 +14,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
+                new HitOnPlayerMechanic(GraspingHorror, "GraspingHorror", new MechanicPlotlySetting("triangle-right", Colors.DarkRed), "Hands.H", "Hit by Hands AoE", "Hands Hit", 150),
+                new HitOnPlayerMechanic(DeathsEmbraceSkill, "Death's Embrace", new MechanicPlotlySetting("triangle-left", Colors.DarkRed), "AoE.H", "Hit by Pull AoE", "Pull AoE Hit", 150),
+                new HitOnPlayerMechanic(DeathsHand1, "Death's Hand", new MechanicPlotlySetting("triangle-up", Colors.DarkRed), "Sctn.AoE.H", "Hit by in between Sections AoE", "Section AoE Hit", 150),
+                //new HitOnPlayerMechanic(DeathsHand2, "Death's Hand", new MechanicPlotlySetting("triangle-up", Colors.DarkRed), "Sctn.AoE.H", "Hit by in between Sections AoE", "Section AoE Hit", 150),
+                new HitOnPlayerMechanic(WallOfFear, "Wall of Fear", new MechanicPlotlySetting("triangle-right", Colors.Yellow), "Krait.H", "Hit by in Kraits", "Krait Hit", 150),
+                new HitOnPlayerMechanic(WaveOfTorment, "Wave of Torment", new MechanicPlotlySetting("triangle-right", Colors.LightPurple), "Quaggan.H", "Hit by in Quaggan Explosion", "Quaggan Hit", 150),
+                new EnemyBuffApplyMechanic(PowerOfTheVoid, "Power of the Void", new MechanicPlotlySetting("circle", Colors.DarkRed), "Pwrd.Up", "Ankka has powered up", "Ankka powered up", 150)
             }
             );
             Icon = "https://i.imgur.com/orWH6qw.png";
@@ -41,13 +50,36 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            List<PhaseData> subPhases = GetPhasesByInvul(log, 895, ankka, false, false);
+            List<PhaseData> subPhases = GetPhasesByInvul(log, AnkkaPlateformChanging, ankka, false, true);
             for (int i = 0; i < subPhases.Count; i++)
             {
-                subPhases[i].Name = "Phase " + (i + 1);
+                subPhases[i].Name = "Location " + (i + 1);
                 subPhases[i].AddTarget(ankka);
             }
             phases.AddRange(subPhases);
+            List<PhaseData> subSubPhases = GetPhasesByInvul(log, Determined895, ankka, false, false);
+            subSubPhases.RemoveAll(x => subPhases.Any(y => Math.Abs(y.Start - x.Start) < ParserHelper.ServerDelayConstant && Math.Abs(y.End - x.End) < ParserHelper.ServerDelayConstant));
+            int curSubSubPhaseID = 0;
+            PhaseData previousSubPhase = null;
+            for (int i = 0; i < subSubPhases.Count; i++)
+            {
+                PhaseData subsubPhase = subSubPhases[i];
+                PhaseData subPhase = subPhases.FirstOrDefault(x => x.Start - ParserHelper.ServerDelayConstant <= subsubPhase.Start && x.End + ParserHelper.ServerDelayConstant >= subsubPhase.End);
+                if (previousSubPhase != subPhase)
+                {
+                    previousSubPhase = subPhase;
+                    curSubSubPhaseID = 0;
+                }
+                if (subPhase != null)
+                {
+                    var index = subPhases.IndexOf(subPhase);
+                    subsubPhase.OverrideStart(Math.Max(subsubPhase.Start, subPhase.Start));
+                    subsubPhase.OverrideEnd(Math.Min(subsubPhase.End, subPhase.End));
+                    subsubPhase.Name = "Location " + (index + 1) + " - " + (++curSubSubPhaseID);
+                    subsubPhase.AddTarget(ankka);
+                }
+            }
+            phases.AddRange(subSubPhases);
             //
             return phases;
         }
@@ -62,7 +94,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     throw new MissingKeyActorsException("Ankka not found");
                 }
-                var buffApplies = combatData.GetBuffData(SkillIDs.Determined895).OfType<BuffApplyEvent>().Where(x => x.To == ankka.AgentItem && !x.Initial && x.AppliedDuration > int.MaxValue / 2).ToList();
+                var buffApplies = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To == ankka.AgentItem && !x.Initial && x.AppliedDuration > int.MaxValue / 2).ToList();
                 if (buffApplies.Count == 3)
                 {
                     fightData.SetSuccess(true, buffApplies.LastOrDefault().Time);
