@@ -64,6 +64,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 if (prisonerDeaths.Count == 0)
                 {
+                    AbstractSingleActor narella = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Narella);
+                    if (narella == null)
+                    {
+                        throw new MissingKeyActorsException("Narella not found");
+                    }
+                    DeadEvent deadEvent = combatData.GetDeadEvents(narella.AgentItem).LastOrDefault();
+                    if (deadEvent != null)
+                    {
+                        fightData.SetSuccess(true, deadEvent.Time);
+                        return;
+                    }
                     SetSuccessByCombatExit(new HashSet<int>(GetSuccessCheckIds()), combatData, fightData, playerAgents);
                 }
             }
