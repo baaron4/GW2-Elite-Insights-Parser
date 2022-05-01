@@ -6,6 +6,7 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -101,6 +102,29 @@ namespace GW2EIEvtcParser.EncounterLogic
                 subPhase.AddTarget(subPhaseData.target);
                 phases.Add(subPhase);
             }
+            int purificationID = 0;
+            foreach (NPC voidAmal in Targets.Where(x => x.ID == (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate))
+            {
+                long end;
+                DeadEvent deadEvent = log.CombatData.GetDeadEvents(voidAmal.AgentItem).LastOrDefault();
+                if (deadEvent == null)
+                {
+                    DespawnEvent despawnEvent = log.CombatData.GetDespawnEvents(voidAmal.AgentItem).LastOrDefault();
+                    if (despawnEvent == null)
+                    {
+                        end = voidAmal.LastAware;
+                    } else
+                    {
+                        end = despawnEvent.Time;
+                    }
+                } else
+                {
+                    end = deadEvent.Time;
+                }
+                var purificationPhase = new PhaseData(Math.Max(voidAmal.FirstAware, 0), Math.Min(end, log.FightData.FightEnd), "Purification " + (++purificationID));
+                purificationPhase.AddTarget(voidAmal);
+                phases.Add(purificationPhase);
+            }
             return phases;
         }
 
@@ -125,6 +149,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TrashID.VoidSaltsprayDragon,
                 (int)ArcDPSEnums.TrashID.VoidObliterator,
                 (int)ArcDPSEnums.TrashID.VoidTimeCaster,
+                (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate
             };
         }
         protected override HashSet<int> GetUniqueNPCIDs()
@@ -262,6 +287,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
+            IReadOnlyList<AgentItem> voidAmalgamates = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.VoidAmalgamate1);
+            bool needRefresh = false;
+            foreach (AgentItem voidAmal in voidAmalgamates)
+            {
+                if (combatData.Where(x => x.SkillID == VoidShell && x.IsBuffApply() && x.SrcMatchesAgent(voidAmal)).Any())
+                {
+                    voidAmal.OverrideID(ArcDPSEnums.TrashID.PushableVoidAmalgamate);
+                    needRefresh = true;
+                }
+            }
+            if (needRefresh)
+            {
+                agentData.Refresh();
+            }
             if (index == 0)
             {
                 // Add dummy target as there are no dragon voids
@@ -269,6 +308,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 Targetless = true;
             }
             ComputeFightTargets(agentData, combatData, extensions);
+            int purificationID = 0;
             foreach (NPC target in Targets)
             {
                 switch(target.ID)
@@ -290,6 +330,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         break;
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan:
                         target.OverrideName("The ZhaitanVoid");
+                        break;
+                    case (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate:
+                        target.OverrideName("Heart " + (++purificationID));
                         break;
                 }
             }

@@ -1013,6 +1013,8 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/gG5p3Hz.png";
                 case ArcDPSEnums.TrashID.TheSniper:
                     return "https://i.imgur.com/RWIjUoe.png";
+                case ArcDPSEnums.TrashID.PushableVoidAmalgamate:
+                    return "https://i.imgur.com/BuKbosz.png";
             }
             //
             switch (ArcDPSEnums.GetMinionID(id))

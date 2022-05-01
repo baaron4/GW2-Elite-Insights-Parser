@@ -353,10 +353,11 @@ namespace GW2EIEvtcParser
         private const int DummyMaiTrinStrike = -16;
         private const int TheDragonVoidZhaitan = -17;
         private const int TheDragonVoidSooWon = -18;
-        private const int TheDragonVoidKralkatorik = -19;
+        private const int TheDragonVoidKralkatorrik = -19;
         private const int TheDragonVoidMordremoth = -20;
         private const int TheDragonVoidJormag = -21;
         private const int TheDragonVoidPrimordus = -22;
+        private const int PushableVoidAmalgamate = -23;
 
 
         //
@@ -594,6 +595,7 @@ namespace GW2EIEvtcParser
             SpiritOfPain = 23793,
             SpiritOfDestruction = 23961,
             // Void Amalgamate
+            PushableVoidAmalgamate = ArcDPSEnums.PushableVoidAmalgamate,
             VoidAmalgamate1 = 24375,
             VoidAmalgamate2 = 23956,
             VoidTangler = 25138,
@@ -773,7 +775,7 @@ namespace GW2EIEvtcParser
             VoidAmalgamate1 = 24375,
             TheDragonVoidZhaitan = ArcDPSEnums.TheDragonVoidZhaitan,
             TheDragonVoidJormag = ArcDPSEnums.TheDragonVoidJormag,
-            TheDragonVoidKralkatorrik = ArcDPSEnums.TheDragonVoidKralkatorik,
+            TheDragonVoidKralkatorrik = ArcDPSEnums.TheDragonVoidKralkatorrik,
             TheDragonVoidSooWon = ArcDPSEnums.TheDragonVoidSooWon,
             TheDragonVoidPrimordus = ArcDPSEnums.TheDragonVoidPrimordus,
             TheDragonVoidMordremoth = ArcDPSEnums.TheDragonVoidMordremoth,
