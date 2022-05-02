@@ -276,7 +276,6 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Daze", Daze, Source.Common, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/79/Daze.png"),
                 new Buff("Exposed (48209)", Exposed48209, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/6b/Exposed.png"),
                 new Buff("Exposed (31589)", Exposed31589, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/6b/Exposed.png"),   
-                new Buff("Old Exposed", OldExposed, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/6b/Exposed.png"),           
                 new Buff("Unblockable",Unblockable, Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/f0/Unblockable_%28effect%29.png",GW2Builds.February2020Balance , GW2Builds.EndOfLife),
                 new Buff("Encumbered",Encumbered, Source.Common, BuffStackType.Queue, 9, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/d/d7/Encumbered.png"),
                 new Buff("Celeritas Spores", CeleritasSpores, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/7/7b/Blazing_Speed_Mushrooms.png"),
