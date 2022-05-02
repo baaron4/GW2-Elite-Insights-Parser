@@ -21,11 +21,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerBuffApplyMechanic(SharedDestructionLi, "Shared Destruction", new MechanicPlotlySetting("circle", Colors.Green), "Green", "Selected for Green", "Green", 150),
                 new HitOnPlayerMechanic(EnforcerRushingJustice, "Rushing Justice", new MechanicPlotlySetting("square", Colors.Orange), "Flames.S", "Stood in Flames", "Stood in Flames", 150),
                 new HitOnPlayerMechanic(BoomingCommandOverlap, "Booming Command", new MechanicPlotlySetting("circle", Colors.Red), "Red.O", "Red circle overlap", "Red Circle", 150),
+                new PlayerBuffApplyMechanic(FixatedKainengOverlook, "Fixated (Mindblade)", new MechanicPlotlySetting("circle", Colors.Purple), "Fixated.M", "Fixated by The Mindblade", "Fixated Mindblade", 150, (evt, log) => evt.CreditedBy.ID == (int)ArcDPSEnums.TrashID.TheMindblade),
+                new PlayerBuffApplyMechanic(FixatedKainengOverlook, "Fixated (Enforcer)", new MechanicPlotlySetting("circle", Colors.Purple), "Fixated.E", "Fixated by The Enforcer", "Fixated Enforcer", 150, (evt, log) => evt.CreditedBy.ID == (int)ArcDPSEnums.TrashID.TheEnforcer),
+                new EnemyBuffApplyMechanic(LethalInspiration, "Lethal Inspiration", new MechanicPlotlySetting("triangle-up", Colors.DarkGreen), "Pwrd.Up1", "Powered Up (Split 1)", "Powered Up 1", 150),
                 new HitOnPlayerMechanic(StormOfSwords1, "Storm of Swords", new MechanicPlotlySetting("circle", Colors.Pink), "Storm.H", "Hit by bladestorm", "Bladestorm Hit", 150),
                 new HitOnPlayerMechanic(StormOfSwords2, "Storm of Swords", new MechanicPlotlySetting("circle", Colors.Pink), "Storm.H", "Hit by bladestorm", "Bladestorm Hit", 150),
                 new HitOnPlayerMechanic(StormOfSwords3, "Storm of Swords", new MechanicPlotlySetting("circle", Colors.Pink), "Storm.H", "Hit by bladestorm", "Bladestorm Hit", 150),
                 new HitOnPlayerMechanic(JadeBusterCannon, "Jade Buster Cannon", new MechanicPlotlySetting("triangle-right", Colors.Orange), "Laser.H", "Hit by Big Laser", "Laser Hit", 150),
-                new EnemyBuffApplyMechanic(DestructiveAura, "Destructive Aura", new MechanicPlotlySetting("circle", Colors.Purple), "Pwrd.Up", "Powered Up", "Powered Up", 150)
+                new EnemyBuffApplyMechanic(DestructiveAura, "Destructive Aura", new MechanicPlotlySetting("triangle-up", Colors.Purple), "Pwrd.Up2", "Powered Up (Split 2)", "Powered Up 2", 150)
             }
             );
             Icon = "https://i.imgur.com/7OutZup.png";
