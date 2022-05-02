@@ -1362,6 +1362,7 @@ namespace GW2EIEvtcParser
         public const long PlateOfImperialPalaceSpecial = 67265;
         public const long NecroticRitual = 67447;
         public const long BreathOfJormag3 = 67607;
+        public const long OldExposed = 67763;
         public const long SharedDestructionMaiTrinCM = 67831;
         public const long LeyBreachCM = 67832;
         public const long MagneticBomb = 67856;
