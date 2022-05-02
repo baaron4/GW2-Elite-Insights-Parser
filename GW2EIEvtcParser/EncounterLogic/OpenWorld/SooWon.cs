@@ -12,6 +12,25 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
     {
         public SooWon(int triggerID) : base(triggerID)
         {
+            MechanicList.AddRange(new List<Mechanic>
+            { 
+            new HitOnPlayerMechanic(67551, "Tsunami Slam", new MechanicPlotlySetting("triangle-down",Colors.DarkRed), "Slam", "Soo-Won slams the ground in front of her creating a circular tsunami", "Tsunami Slam", 0),
+            new HitOnPlayerMechanic(64851, "Void Purge", new MechanicPlotlySetting("circle",Colors.DarkPurple), "Acid", "Player took damage from an acid pool", "Acid Pool", 0),
+            new SkillOnPlayerMechanic(65024, "Claw Slap", new MechanicPlotlySetting("triangle-up",Colors.Orange), "Claw Slap", "Soo-Won swipes in an arc in front of her knocking players back", "Claw Slap", 0, (de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant) ^ de.HasDowned ^ de.HasKilled),
+            new HitOnPlayerMechanic(64360, "Tail Slap", new MechanicPlotlySetting("square",Colors.Orange), "Tail Slap", "Soo-Won slaps the majority of the platform, opposite her head, with her tail", "Tail Slap", 0),
+            new HitOnPlayerMechanic(63571, "Bite", new MechanicPlotlySetting("diamond",Colors.Orange), "Bite", "Soo-Won bites half the platform while swapping sides", "Bite", 0),
+            new SkillOnPlayerMechanic(65410, "Nightmare Devastation", new MechanicPlotlySetting("square",Colors.Purple), "Wave (Half)", "Tidal wave that covers one half of the platform", "Tidal Wave (Half)", 0),            
+            new SkillOnPlayerMechanic(66721, "Nightmare Devastation", new MechanicPlotlySetting("square",Colors.DarkPurple), "Wave (Full)", "Tidal wave that covers the entire platform", "Tidal Wave (Full)", 0),
+            new PlayerBuffApplyMechanic(67446, "Wisp Form", new MechanicPlotlySetting("circle",Colors.Green), "Wisp", "Wisp Form from standing in a green circle", "Wisp Form", 0),
+            new SkillOnPlayerMechanic(64056, "Severed from Body", new MechanicPlotlySetting("circle",Colors.Red), "Failed Green", "Player failed to return to the top of the Harvest Temple after becoming a wisp", "Failed Green", 0, (de, log) => de.HasKilled),
+            new PlayerBuffApplyMechanic(65004, "Drown", new MechanicPlotlySetting("circle",Colors.LightBlue), "Bubble", "Player was trapped in a bubble by Soo-Won's Tail", "Bubble", 0),
+            new PlayerBuffApplyMechanic(66486, "Drown", new MechanicPlotlySetting("circle",Colors.DarkTeal), "Whirlpool", "Player was trapped in a whirlpool", "Whirlpool", 0),
+            new EnemyBuffApplyMechanic(SkillIDs.HardenedShell, "Hardened Shell", new MechanicPlotlySetting("diamond-wide", Colors.DarkTeal), "Tail", "Soo-Won's Tail spawned", "Tail", 0),
+            new EnemyBuffRemoveMechanic(SkillIDs.HardenedShell, "Hardened Shell", new MechanicPlotlySetting("diamond-wide", Colors.DarkGreen), "Tail Killed", "Soo-Won's Tail killed", "Tail Killed", 0),
+            
+            new EnemyBuffApplyMechanic(SkillIDs.DamageImmunitySooWonBite, "Damage Immunity", new MechanicPlotlySetting("diamond-wide", Colors.Pink), "Side Swap", "Soo-Won breifly becomes invulnerable and switches sides of the arena", "Side Swap", 0),
+            new EnemyBuffApplyMechanic(SkillIDs.OldExposed, "Exposed", new MechanicPlotlySetting("diamond-tall", Colors.DarkGreen), "CCed", "Breakbar successfully broken", "CCed", 0, (bae, log) => bae.To.ID==35552 & !bae.To.HasBuff(log, SkillIDs.OldExposed, bae.Time - ParserHelper.ServerDelayConstant)),
+            });
             Extension = "soowon";
             Icon = "https://i.imgur.com/lcZGgBC.png";
             EncounterCategoryInformation.InSubCategoryOrder = 0;

@@ -275,7 +275,8 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Stun", Stun, Source.Common, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/97/Stun.png"),
                 new Buff("Daze", Daze, Source.Common, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/79/Daze.png"),
                 new Buff("Exposed (48209)", Exposed48209, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/6b/Exposed.png"),
-                new Buff("Exposed (31589)", Exposed31589, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/6b/Exposed.png"),              
+                new Buff("Exposed (31589)", Exposed31589, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/6b/Exposed.png"),   
+                new Buff("Old Exposed", OldExposed, Source.Common, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/6b/Exposed.png"),           
                 new Buff("Unblockable",Unblockable, Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/f0/Unblockable_%28effect%29.png",GW2Builds.February2020Balance , GW2Builds.EndOfLife),
                 new Buff("Encumbered",Encumbered, Source.Common, BuffStackType.Queue, 9, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/d/d7/Encumbered.png"),
                 new Buff("Celeritas Spores", CeleritasSpores, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/7/7b/Blazing_Speed_Mushrooms.png"),
@@ -739,7 +740,6 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Wisp Form", WispForm, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/c3/Fractured_Spirit.png"),
                 new Buff("Void Corruption", VoidCorruption, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/b/b8/Void_Corruption.png"),
                 new Buff("Void Chaos", VoidChaos, Source.FightSpecific, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/7/70/Spectral_Agony.png"),
-                new Buff("Exposed (67763)", Exposed67763, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/6b/Exposed.png"),
                 new Buff("Hardened Shell", HardenedShell, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/a2/Defensive_Inspiration.png"),
         };
 
