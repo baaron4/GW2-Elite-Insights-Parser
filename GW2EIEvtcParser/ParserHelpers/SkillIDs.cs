@@ -1300,6 +1300,7 @@ namespace GW2EIEvtcParser
         public const long StrongerTogether = 64465;
         public const long InfluenceOfTheVoidEffect = 64524;
         public const long NourishmentBonusPowerFerocity = 64528;
+        public const long SoulReunited = 64559;
         public const long PlateOfCrispyFishPancakes = 64562;
         public const long MeatyAsparagusSkewer = 64568;
         public const long DragonSlashRush2 = 64619;
@@ -1314,6 +1315,7 @@ namespace GW2EIEvtcParser
         public const long BrandingBeam = 65017;
         public const long BoomingCommandSelf = 65023;
         public const long TormentingWave = 65031;
+        public const long JadeTechOffensiveOvercharge = 65070;
         public const long TargetOrder2 = 65088;
         public const long BowlOfKimchiTofuStew = 65197;
         public const long MaiTrinSomething = 65238;
@@ -1321,11 +1323,14 @@ namespace GW2EIEvtcParser
         public const long DestructiveAura = 65250;
         public const long HydroBurst = 65252;
         public const long MeatyRiceBowl = 65354;
+        public const long HardenedShell = 65396;
         public const long LavaSlam = 65427;
+        public const long EnhancementDragonsEnd = 65475;
         public const long VoidShell = 65517;
         public const long BreathOfJormag1 = 65563;
         public const long StormOfSwords3 = 65569;
         public const long VoidRepulsion2 = 65577;
+        public const long VoidCorruption = 65590;
         public const long PowerOfTheVoid = 65601;
         public const long EnforcerRushingJustice = 65608;
         public const long ExtremeVulnerability = 65662;
@@ -1341,6 +1346,7 @@ namespace GW2EIEvtcParser
         public const long BreathOfJormag2 = 66216;
         public const long SooWonSpearPhaseInvul = 66242;
         public const long GraspingHorror = 66246;
+        public const long JadeTechDefensiveOvercharge = 66303;
         public const long ChaosAndDestruction = 66409;
         public const long DragonSlashBurst = 66465;
         public const long TsunamiSlam2 = 66489;
@@ -1348,6 +1354,7 @@ namespace GW2EIEvtcParser
         public const long DeathsHand2 = 66564;
         public const long InfluenceOfTheVoidSkill = 66566;
         public const long KaleidoscopicChaos = 66568;
+        public const long VoidChaos = 66631;
         public const long ScreamOfZhaitan = 66658;
         public const long BowlOfEchovaldHotpot = 66663;
         public const long DeathsHand1 = 66728;
@@ -1360,8 +1367,10 @@ namespace GW2EIEvtcParser
         public const long DeathsEmbrace2Effect = 67120;
         public const long DeathsEmbraceSkill = 67160;
         public const long PlateOfImperialPalaceSpecial = 67265;
+        public const long WispForm = 67446;
         public const long NecroticRitual = 67447;
         public const long BreathOfJormag3 = 67607;
+        public const long Exposed67763 = 67763;
         public const long SharedDestructionMaiTrinCM = 67831;
         public const long LeyBreachCM = 67832;
         public const long MagneticBomb = 67856;
