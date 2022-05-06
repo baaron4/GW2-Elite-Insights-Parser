@@ -741,6 +741,16 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Void Corruption", VoidCorruption, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/b/b8/Void_Corruption.png"),
                 new Buff("Void Chaos", VoidChaos, Source.FightSpecific, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/7/70/Spectral_Agony.png"),
                 new Buff("Hardened Shell", HardenedShell, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/a2/Defensive_Inspiration.png"),
+                new Buff("Dragon's End Contributor 1", DragonsEndContributor1, Source.FightSpecific, BuffClassification.Support, "https://wiki.guildwars2.com/images/a/ad/Seraph_Morale_01.png"),
+                new Buff("Dragon's End Contributor 2", DragonsEndContributor2, Source.FightSpecific, BuffClassification.Support, "https://wiki.guildwars2.com/images/6/6b/Seraph_Morale_02.png"),
+                new Buff("Dragon's End Contributor 3", DragonsEndContributor3, Source.FightSpecific, BuffClassification.Support, "https://wiki.guildwars2.com/images/3/30/Seraph_Morale_03.png"),
+                new Buff("Dragon's End Contributor 4", DragonsEndContributor4, Source.FightSpecific, BuffClassification.Support, "https://wiki.guildwars2.com/images/5/51/Seraph_Morale_04.png"),
+                new Buff("Dragon's End Contributor 5", DragonsEndContributor5, Source.FightSpecific, BuffClassification.Support, "https://wiki.guildwars2.com/images/9/90/Seraph_Morale_05.png"),
+                new Buff("Dragon's End Contributor 6", DragonsEndContributor6, Source.FightSpecific, BuffClassification.Support, "https://wiki.guildwars2.com/images/0/06/Seraph_Morale_06.png"),
+                new Buff("Dragon's End Contributor 7", DragonsEndContributor7, Source.FightSpecific, BuffClassification.Support, "https://wiki.guildwars2.com/images/1/1a/Seraph_Morale_07.png"),
+                new Buff("Dragon's End Contributor 8", DragonsEndContributor8, Source.FightSpecific, BuffClassification.Support, "https://wiki.guildwars2.com/images/0/0a/Seraph_Morale_08.png"),
+                new Buff("Dragon's End Contributor 9", DragonsEndContributor9, Source.FightSpecific, BuffClassification.Support, "https://wiki.guildwars2.com/images/9/9e/Seraph_Morale_09.png"),
+                new Buff("Dragon's End Contributor 10", DragonsEndContributor10, Source.FightSpecific, BuffClassification.Support, "https://wiki.guildwars2.com/images/7/7b/Seraph_Morale_10.png"),
         };
 
         internal static readonly List<Buff> NormalFoods = new List<Buff>

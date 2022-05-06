@@ -1291,7 +1291,9 @@ namespace GW2EIEvtcParser
         public const long DeathsEmbraceEffect = 63785;
         public const long StormOfSwords1 = 63838;
         public const long VitalityEqualizer1 = 63840;
+        public const long DragonsEndContributor10 = 63928;
         public const long Hallucinations = 64179;
+        public const long DragonsEndContributor3 = 64250;
         public const long TargetedExpulsion = 64277;
         public const long SharedDestructionLi = 64300;
         public const long BowlOfJadeSeaBounty = 64357;
@@ -1307,12 +1309,14 @@ namespace GW2EIEvtcParser
         public const long PlateOfCrispyFishPancakes = 64562;
         public const long MeatyAsparagusSkewer = 64568;
         public const long DragonSlashRush2 = 64619;
+        public const long DragonsEndContributor8 = 64623;
         public const long WaveOfTorment = 64669;
         public const long TsunamiSlam1 = 64748;
         public const long Shockwave = 64810;
         public const long LethalInspiration = 64834;
         public const long VoidPurge = 64851;
         public const long ImmuneToDamageAndConditions = 64843;
+        public const long DragonsEndContributor4 = 64924;
         public const long ExposedAetherbladeHideout = 64936;
         public const long DragonSlashWave = 64952;
         public const long TargetOrder4 = 64999;
@@ -1329,6 +1333,7 @@ namespace GW2EIEvtcParser
         public const long DestructiveAura = 65250;
         public const long HydroBurst = 65252;
         public const long MeatyRiceBowl = 65354;
+        public const long DragonsEndContributor1 = 65384;
         public const long HardenedShell = 65396;
         public const long NightmareDevastation3 = 65410;
         public const long LavaSlam = 65427;
@@ -1351,6 +1356,7 @@ namespace GW2EIEvtcParser
         public const long NightmareFusilladeSide = 66089;
         public const long DragonSlashRush1 = 66090;
         public const long FixatedKainengOverlook = 66140;
+        public const long DragonsEndContributor2 = 66185;
         public const long BreathOfJormag2 = 66216;
         public const long SooWonSpearPhaseInvul = 66242;
         public const long GraspingHorror = 66246;
@@ -1363,6 +1369,7 @@ namespace GW2EIEvtcParser
         public const long DeathsHand2 = 66564;
         public const long InfluenceOfTheVoidSkill = 66566;
         public const long KaleidoscopicChaos = 66568;
+        public const long DragonsEndContributor5 = 66589;
         public const long VoidChaos = 66631;
         public const long ScreamOfZhaitan = 66658;
         public const long BowlOfEchovaldHotpot = 66663;
@@ -1373,12 +1380,15 @@ namespace GW2EIEvtcParser
         public const long WallOfFear = 66824;
         public const long VitalityEqualizer2 = 66894;
         public const long AnkkaPlateformChanging = 66962;
+        public const long DragonsEndContributor9 = 67046;
         public const long EqualizationMatrix = 67047;
         public const long DeathsEmbrace2Effect = 67120;
         public const long DeathsEmbraceSkill = 67160;
         public const long PlateOfImperialPalaceSpecial = 67265;
+        public const long DragonsEndContributor6 = 67352;
         public const long WispForm = 67446;
         public const long NecroticRitual = 67447;
+        public const long DragonsEndContributor7 = 67549;
         public const long TsunamiSlam3 = 67551;
         public const long BreathOfJormag3 = 67607;
         public const long OldExposed = 67763;
