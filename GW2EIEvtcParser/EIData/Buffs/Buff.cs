@@ -724,7 +724,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Extreme Vulnerability", ExtremeVulnerability, Source.FightSpecific, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Fixated (Kaineng Overlook)",FixatedKainengOverlook, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 new Buff("Shared Destruction (Li)",SharedDestructionLi, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png"),
-                //     
+                //Harvest Temple
                 new Buff("Influence of the Void", InfluenceOfTheVoidEffect, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Targeted (Dragon Void)", TargetedDragonVoid, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Void Repulsion 1", VoidRepulsion1, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
@@ -732,6 +732,15 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Aerial Defense", AerialDefense, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Void Immunity", VoidImmunity, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Void Shell", VoidShell, Source.FightSpecific, BuffStackType.Stacking, 3, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                //Open World Soo-Won
+                new Buff("Jade Tech Offensive Overcharge", JadeTechOffensiveOvercharge, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/d/d2/Jade_Tech_Offensive_Overcharge.png"),
+                new Buff("Jade Tech Defensive Overcharge", JadeTechDefensiveOvercharge, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/4/4e/Jade_Tech_Defensive_Overcharge.png"),
+                new Buff("Enhancement (+5% Damage vs. Dragonvoid)", EnhancementDragonsEnd, Source.FightSpecific, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/2/23/Nourishment_utility.png"),
+                new Buff("Soul Reunited", SoulReunited, Source.FightSpecific, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/b/b8/Ally%27s_Aid_Powered_Up.png"),
+                new Buff("Wisp Form", WispForm, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/c3/Fractured_Spirit.png"),
+                new Buff("Void Corruption", VoidCorruption, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/b/b8/Void_Corruption.png"),
+                new Buff("Void Chaos", VoidChaos, Source.FightSpecific, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/7/70/Spectral_Agony.png"),
+                new Buff("Hardened Shell", HardenedShell, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/a2/Defensive_Inspiration.png"),
         };
 
         internal static readonly List<Buff> NormalFoods = new List<Buff>

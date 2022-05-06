@@ -234,6 +234,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifier(SkillIDs.FractalProdigy,"Fractal Prodigy", "2%", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, "https://wiki.guildwars2.com/images/1/11/Mighty_9_Agony_Infusion.png", DamageModifierMode.PvE),
             new BuffDamageModifier(SkillIDs.FractalChampion,"Fractal Champion", "4%", DamageSource.NoPets, 4.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, "https://wiki.guildwars2.com/images/3/3d/Precise_9_Agony_Infusion.png", DamageModifierMode.PvE),
             new BuffDamageModifier(SkillIDs.FractalGod,"Fractal God", "7%", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, "https://wiki.guildwars2.com/images/2/22/Healing_9_Agony_Infusion.png", DamageModifierMode.PvE),
+            new BuffDamageModifier(SkillIDs.SoulReunited,"Soul Reunited", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, "https://wiki.guildwars2.com/images/b/b8/Ally%27s_Aid_Powered_Up.png", DamageModifierMode.PvE),
         };
 
     }
