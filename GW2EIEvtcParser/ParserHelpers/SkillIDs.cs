@@ -1284,6 +1284,7 @@ namespace GW2EIEvtcParser
         public const long FierceAsFire = 63433;
         public const long ConsumeShadows = 63456;
         public const long StormOfSwords2 = 63550;
+        public const long Bite2 = 63571;
         public const long ClawSlap = 63588;
         public const long AerialDefense = 63605;
         public const long EnergyTransfer = 63621;
@@ -1294,9 +1295,11 @@ namespace GW2EIEvtcParser
         public const long TargetedExpulsion = 64277;
         public const long SharedDestructionLi = 64300;
         public const long BowlOfJadeSeaBounty = 64357;
+        public const long TailSlap = 64360;
         public const long TargetOrder3 = 64377;
         public const long JadeBusterCannon = 64016;
         public const long LeyBreach = 64044;
+        public const long SeveredFromBody = 64056;
         public const long StrongerTogether = 64465;
         public const long InfluenceOfTheVoidEffect = 64524;
         public const long NourishmentBonusPowerFerocity = 64528;
@@ -1308,12 +1311,15 @@ namespace GW2EIEvtcParser
         public const long TsunamiSlam1 = 64748;
         public const long Shockwave = 64810;
         public const long LethalInspiration = 64834;
+        public const long VoidPurge = 64851;
         public const long ImmuneToDamageAndConditions = 64843;
         public const long ExposedAetherbladeHideout = 64936;
         public const long DragonSlashWave = 64952;
         public const long TargetOrder4 = 64999;
+        public const long Drown1 = 65004;
         public const long BrandingBeam = 65017;
         public const long BoomingCommandSelf = 65023;
+        public const long ClawSlap2 = 65024;
         public const long TormentingWave = 65031;
         public const long JadeTechOffensiveOvercharge = 65070;
         public const long TargetOrder2 = 65088;
@@ -1324,6 +1330,7 @@ namespace GW2EIEvtcParser
         public const long HydroBurst = 65252;
         public const long MeatyRiceBowl = 65354;
         public const long HardenedShell = 65396;
+        public const long NightmareDevastation3 = 65410;
         public const long LavaSlam = 65427;
         public const long EnhancementDragonsEnd = 65475;
         public const long VoidShell = 65517;
@@ -1350,6 +1357,7 @@ namespace GW2EIEvtcParser
         public const long JadeTechDefensiveOvercharge = 66303;
         public const long ChaosAndDestruction = 66409;
         public const long DragonSlashBurst = 66465;
+        public const long Drown2 = 66486;
         public const long TsunamiSlam2 = 66489;
         public const long FishyRiceBowl = 66503;
         public const long DeathsHand2 = 66564;
@@ -1358,6 +1366,7 @@ namespace GW2EIEvtcParser
         public const long VoidChaos = 66631;
         public const long ScreamOfZhaitan = 66658;
         public const long BowlOfEchovaldHotpot = 66663;
+        public const long NightmareDevastation4 = 66721;
         public const long DeathsHand1 = 66728;
         public const long CrystalBarrage = 66790;
         public const long VoidImmunity = 66800;
@@ -1370,6 +1379,7 @@ namespace GW2EIEvtcParser
         public const long PlateOfImperialPalaceSpecial = 67265;
         public const long WispForm = 67446;
         public const long NecroticRitual = 67447;
+        public const long TsunamiSlam3 = 67551;
         public const long BreathOfJormag3 = 67607;
         public const long OldExposed = 67763;
         public const long SharedDestructionMaiTrinCM = 67831;
