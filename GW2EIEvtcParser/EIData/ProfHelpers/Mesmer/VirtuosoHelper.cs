@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.ParserHelper;
@@ -32,7 +35,45 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             new Buff("Deadly Blades", DeadlyBlades, Source.Virtuoso, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/15/Deadly_Blades.png"),
+            new Buff("Virtuoso Blade", VirtuosoBlades, Source.Virtuoso, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, "https://wiki.guildwars2.com/images/thumb/d/d6/Power_attribute.png/20px-Power_attribute.png"),
         };
+
+        public static List<AbstractBuffEvent> TransformVirtuosoBladeStorage(IReadOnlyList<AbstractBuffEvent> buffs, AgentItem a, SkillData skillData)
+        {
+            var res = new List<AbstractBuffEvent>();
+            var bladeIDs = new HashSet<long>
+            {
+                VirtuosoBlade1,
+                VirtuosoBlade2,
+                VirtuosoBlade3,
+                VirtuosoBlade4,
+                VirtuosoBlade5,
+            };
+            var blades = buffs.Where(x => bladeIDs.Contains(x.BuffID)).ToList();
+            SkillItem skill = skillData.Get(VirtuosoBlades);
+            var lastAddedBuffInstance = new Dictionary<long, uint>();
+            foreach (AbstractBuffEvent blade in blades)
+            {
+                if (blade is BuffApplyEvent bae)
+                {
+                    res.Add(new BuffApplyEvent(a, a, bae.Time, bae.AppliedDuration, skill, bae.BuffInstance, true));
+                    lastAddedBuffInstance[blade.BuffID] = bae.BuffInstance;
+                } 
+                else if (blade is BuffRemoveAllEvent brae)
+                {
+                    if (!lastAddedBuffInstance.TryGetValue(blade.BuffID, out uint remmovedInstance))
+                    {
+                        remmovedInstance = 0;
+                    }
+                    res.Add(new BuffRemoveSingleEvent(a, a, brae.Time, brae.RemovedDuration, skill, true, remmovedInstance));
+                }
+                else if (blade is BuffRemoveSingleEvent brse)
+                {
+                    res.Add(new BuffRemoveSingleEvent(a, a, brse.Time, brse.RemovedDuration, skill, true, brse.BuffInstance));
+                }
+            }
+            return res;
+        }
 
         private static HashSet<long> Minions = new HashSet<long>();
         internal static bool IsKnownMinionID(long id)

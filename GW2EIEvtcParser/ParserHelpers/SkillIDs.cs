@@ -43,6 +43,7 @@ namespace GW2EIEvtcParser
         public const long Down = -22;
         public const long Despawn = -23;
         public const long Alive = -24;
+        public const long VirtuosoBlades = -25;
         ////////////////
         internal const long ArcDPSDodge = 65001;
         internal const long ArcDPSGenericBreakbar = 65002;
@@ -1212,15 +1213,20 @@ namespace GW2EIEvtcParser
         public const long FixatedFear1 = 61503;
         public const long TidalBargain = 61512;
         public const long FixatedFear4 = 61566;
+        public const long VirtuosoBlade4 = 62505;
         public const long LethalTempo = 62509;
+        public const long RushingJustice = 62529;
         public const long ExitHarbingerShroud = 62540;
         public const long EnterHarbingerShroud = 62567;
-        public const long RushingJustice = 62529;
+        public const long VirtuosoBlade2 = 62583;
         public const long FlowingResolveSkill = 62603;
+        public const long VirtuosoBlade5 = 62613;
         public const long CrashingCourage = 62615;
         public const long FlowingResolveEffect = 62632;
         public const long Repose = 62638;
+        public const long VirtuosoBlade3 = 62644;
         public const long Blight = 62653;
+        public const long VirtuosoBlade1 = 62658;
         public const long ShatteringIce = 62686;
         public const long UrnOfSaintViktorSkill = 62687;
         public const long SaintsShieldSkill = 62689;

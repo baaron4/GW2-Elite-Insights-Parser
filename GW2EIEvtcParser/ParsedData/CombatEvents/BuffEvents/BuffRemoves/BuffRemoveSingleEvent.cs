@@ -19,6 +19,12 @@ namespace GW2EIEvtcParser.ParsedData
             _removedActive = evtcItem.IsShields > 0;
         }
 
+        internal BuffRemoveSingleEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill, bool removedActive, uint stackID) : base(by, to, time, removedDuration, buffSkill)
+        {
+            BuffInstance = stackID;
+            _removedActive = removedActive;
+        }
+
         internal override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
         {
             if (BuffID == SkillIDs.NoBuff || Time > fightEnd - ParserHelper.BuffSimulatorDelayConstant)
