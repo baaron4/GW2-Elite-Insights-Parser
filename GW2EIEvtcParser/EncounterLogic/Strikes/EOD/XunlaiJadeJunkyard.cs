@@ -141,5 +141,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.AnkkaHallucination3,
             };
         }
+
+        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            AbstractSingleActor ankka = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Ankka);
+            if (ankka == null)
+            {
+                throw new MissingKeyActorsException("Ankka not found");
+            }
+            return ankka.GetHealth(combatData) > 50e6 ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+        }
     }
 }
