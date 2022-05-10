@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new HitOnPlayerMechanic(DeathsEmbraceSkill, "Death's Embrace", new MechanicPlotlySetting("triangle-left", Colors.DarkRed), "AoE.H", "Hit by Pull AoE", "Pull AoE Hit", 150),
                 new HitOnPlayerMechanic(DeathsHand1, "Death's Hand", new MechanicPlotlySetting("triangle-up", Colors.DarkRed), "Sctn.AoE.H", "Hit by in between Sections AoE", "Section AoE Hit", 150),
                 //new HitOnPlayerMechanic(DeathsHand2, "Death's Hand", new MechanicPlotlySetting("triangle-up", Colors.DarkRed), "Sctn.AoE.H", "Hit by in between Sections AoE", "Section AoE Hit", 150),
-                new HitOnPlayerMechanic(WallOfFear, "Wall of Fear", new MechanicPlotlySetting("triangle-right", Colors.Yellow), "Krait.H", "Hit by in Kraits", "Krait Hit", 150),
+                new HitOnPlayerMechanic(WallOfFear, "Wall of Fear", new MechanicPlotlySetting("triangle-right", Colors.Yellow), "Krait.H", "Hit by Kraits", "Krait Hit", 150),
                 new HitOnPlayerMechanic(WaveOfTorment, "Wave of Torment", new MechanicPlotlySetting("triangle-right", Colors.LightPurple), "Quaggan.H", "Hit by in Quaggan Explosion", "Quaggan Hit", 150),
                 new EnemyBuffApplyMechanic(PowerOfTheVoid, "Power of the Void", new MechanicPlotlySetting("circle", Colors.DarkRed), "Pwrd.Up", "Ankka has powered up", "Ankka powered up", 150)
             }
