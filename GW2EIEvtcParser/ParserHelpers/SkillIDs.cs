@@ -1295,7 +1295,7 @@ namespace GW2EIEvtcParser
         public const long FierceAsFire = 63433;
         public const long ConsumeShadows = 63456;
         public const long StormOfSwords2 = 63550;
-        public const long Bite2 = 63571;
+        public const long BiteOpenWorld = 63571;
         public const long ClawSlap = 63588;
         public const long AerialDefense = 63605;
         public const long EnergyTransfer = 63621;
@@ -1334,7 +1334,7 @@ namespace GW2EIEvtcParser
         public const long Drown1 = 65004;
         public const long BrandingBeam = 65017;
         public const long BoomingCommandSelf = 65023;
-        public const long ClawSlap2 = 65024;
+        public const long ClawSlapOpenWorld = 65024;
         public const long TormentingWave = 65031;
         public const long JadeTechOffensiveOvercharge = 65070;
         public const long TargetOrder2 = 65088;
@@ -1346,7 +1346,7 @@ namespace GW2EIEvtcParser
         public const long MeatyRiceBowl = 65354;
         public const long DragonsEndContributor1 = 65384;
         public const long HardenedShell = 65396;
-        public const long NightmareDevastation3 = 65410;
+        public const long NightmareDevastationOpenWorld1 = 65410;
         public const long LavaSlam = 65427;
         public const long EnhancementDragonsEnd = 65475;
         public const long VoidShell = 65517;
@@ -1384,7 +1384,7 @@ namespace GW2EIEvtcParser
         public const long VoidChaos = 66631;
         public const long ScreamOfZhaitan = 66658;
         public const long BowlOfEchovaldHotpot = 66663;
-        public const long NightmareDevastation4 = 66721;
+        public const long NightmareDevastationOpenWorld2 = 66721;
         public const long DeathsHand1 = 66728;
         public const long CrystalBarrage = 66790;
         public const long VoidImmunity = 66800;
@@ -1400,7 +1400,7 @@ namespace GW2EIEvtcParser
         public const long WispForm = 67446;
         public const long NecroticRitual = 67447;
         public const long DragonsEndContributor7 = 67549;
-        public const long TsunamiSlam3 = 67551;
+        public const long TsunamiSlamOpenWorld = 67551;
         public const long BreathOfJormag3 = 67607;
         public const long OldExposed = 67763;
         public const long SharedDestructionMaiTrinCM = 67831;
