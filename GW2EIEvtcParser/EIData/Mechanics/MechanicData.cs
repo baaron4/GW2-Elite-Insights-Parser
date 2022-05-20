@@ -71,7 +71,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public Dictionary<Mechanic, List<MechanicEvent>>.ValueCollection GetAllMechanics(ParsedEvtcLog log)
+        public Dictionary<Mechanic, List<MechanicEvent>>.ValueCollection GetAllMechanicEvents(ParsedEvtcLog log)
         {
             ProcessMechanics(log);
             return _mechanicLogs.Values;
