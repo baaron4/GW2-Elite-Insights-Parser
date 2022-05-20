@@ -9,11 +9,11 @@ namespace GW2EIEvtcParser.EIData
     internal class PlayerStatusMechanic : Mechanic
     {
 
-        public PlayerStatusMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)
+        public PlayerStatusMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(mechanicID, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)
         {
         }
 
-        public PlayerStatusMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+        public PlayerStatusMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
             ShowOnTable = false;
         }
@@ -24,31 +24,34 @@ namespace GW2EIEvtcParser.EIData
             foreach (Player p in log.PlayerList)
             {
                 var cList = new List<long>();
-                switch (SkillId)
+                foreach (long mechanicID in MechanicIDs)
                 {
-                    case SkillIDs.Death:
-                        cList = combatData.GetDeadEvents(p.AgentItem).Select(x => x.Time).ToList();
-                        break;
-                    case SkillIDs.Despawn:
-                        cList = combatData.GetDespawnEvents(p.AgentItem).Select(x => x.Time).ToList();
-                        break;
-                    case SkillIDs.Respawn:
-                        cList = combatData.GetSpawnEvents(p.AgentItem).Select(x => x.Time).ToList();
-                        break;
-                    case SkillIDs.Alive:
-                        cList = combatData.GetAliveEvents(p.AgentItem).Select(x => x.Time).ToList();
-                        break;
-                    case SkillIDs.Down:
-                        cList = combatData.GetDownEvents(p.AgentItem).Select(x => x.Time).ToList();
-                        var downByVaporForm = combatData.GetBuffRemoveAllData(SkillIDs.VaporForm).Where(x => x.To == p.AgentItem).Select(x => x.Time).ToList();
-                        foreach (long time in downByVaporForm)
-                        {
-                            cList.RemoveAll(x => Math.Abs(x - time) < 20);
-                        }
-                        break;
-                    case SkillIDs.Resurrect:
-                        cList = log.CombatData.GetAnimatedCastData(p.AgentItem).Where(x => x.SkillId == SkillIDs.Resurrect).Select(x => x.Time).ToList();
-                        break;
+                    switch (mechanicID)
+                    {
+                        case SkillIDs.Death:
+                            cList = combatData.GetDeadEvents(p.AgentItem).Select(x => x.Time).ToList();
+                            break;
+                        case SkillIDs.Despawn:
+                            cList = combatData.GetDespawnEvents(p.AgentItem).Select(x => x.Time).ToList();
+                            break;
+                        case SkillIDs.Respawn:
+                            cList = combatData.GetSpawnEvents(p.AgentItem).Select(x => x.Time).ToList();
+                            break;
+                        case SkillIDs.Alive:
+                            cList = combatData.GetAliveEvents(p.AgentItem).Select(x => x.Time).ToList();
+                            break;
+                        case SkillIDs.Down:
+                            cList = combatData.GetDownEvents(p.AgentItem).Select(x => x.Time).ToList();
+                            var downByVaporForm = combatData.GetBuffRemoveAllData(SkillIDs.VaporForm).Where(x => x.To == p.AgentItem).Select(x => x.Time).ToList();
+                            foreach (long time in downByVaporForm)
+                            {
+                                cList.RemoveAll(x => Math.Abs(x - time) < 20);
+                            }
+                            break;
+                        case SkillIDs.Resurrect:
+                            cList = log.CombatData.GetAnimatedCastData(p.AgentItem).Where(x => x.SkillId == SkillIDs.Resurrect).Select(x => x.Time).ToList();
+                            break;
+                    }
                 }
                 foreach (long time in cList)
                 {

@@ -6,44 +6,47 @@ namespace GW2EIEvtcParser.EIData
 
     internal class EnemyBuffApplyMechanic : BuffApplyMechanic
     {
-        public EnemyBuffApplyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, BuffApplyChecker condition) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, condition)
+        public EnemyBuffApplyMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, BuffApplyChecker condition) : this(mechanicID, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, condition)
         {
         }
 
-        public EnemyBuffApplyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, BuffApplyChecker condition) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
+        public EnemyBuffApplyMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, BuffApplyChecker condition) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
         {
             IsEnemyMechanic = true;
         }
 
-        public EnemyBuffApplyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)
+        public EnemyBuffApplyMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(mechanicID, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)
         {
         }
 
-        public EnemyBuffApplyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+        public EnemyBuffApplyMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
             IsEnemyMechanic = true;
         }
 
         internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
         {
-            foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(SkillId))
+            foreach (long mechanicID in MechanicIDs)
             {
-                AbstractSingleActor amp = null;
-                if (c is BuffApplyEvent ba && Keep(ba, log))
+                foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(mechanicID))
                 {
-                    if (!regroupedMobs.TryGetValue(ba.To.ID, out amp))
+                    AbstractSingleActor amp = null;
+                    if (c is BuffApplyEvent ba && Keep(ba, log))
                     {
-                        amp = log.FindActor(ba.To, true);
-                        if (amp == null)
+                        if (!regroupedMobs.TryGetValue(ba.To.ID, out amp))
                         {
-                            continue;
+                            amp = log.FindActor(ba.To, true);
+                            if (amp == null)
+                            {
+                                continue;
+                            }
+                            regroupedMobs.Add(amp.ID, amp);
                         }
-                        regroupedMobs.Add(amp.ID, amp);
                     }
-                }
-                if (amp != null)
-                {
-                    mechanicLogs[this].Add(new MechanicEvent(c.Time, this, amp));
+                    if (amp != null)
+                    {
+                        mechanicLogs[this].Add(new MechanicEvent(c.Time, this, amp));
+                    }
                 }
             }
         }

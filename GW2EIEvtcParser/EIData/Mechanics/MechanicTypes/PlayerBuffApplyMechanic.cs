@@ -7,19 +7,19 @@ namespace GW2EIEvtcParser.EIData
     internal class PlayerBuffApplyMechanic : BuffApplyMechanic
     {
 
-        public PlayerBuffApplyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, BuffApplyChecker condition) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, condition)
+        public PlayerBuffApplyMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, BuffApplyChecker condition) : this(mechanicID, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, condition)
         {
         }
 
-        public PlayerBuffApplyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, BuffApplyChecker condition) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
+        public PlayerBuffApplyMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, BuffApplyChecker condition) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
         {
         }
 
-        public PlayerBuffApplyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)
+        public PlayerBuffApplyMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(mechanicID, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)
         {
         }
 
-        public PlayerBuffApplyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+        public PlayerBuffApplyMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
         }
 
@@ -27,13 +27,16 @@ namespace GW2EIEvtcParser.EIData
         {
             foreach (Player p in log.PlayerList)
             {
-                foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(SkillId))
+                foreach (long mechanicID in MechanicIDs)
                 {
-                    if (c is BuffApplyEvent ba && p.AgentItem == ba.To && Keep(ba, log))
+                    foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(mechanicID))
                     {
-                        mechanicLogs[this].Add(new MechanicEvent(ba.Time, this, p));
+                        if (c is BuffApplyEvent ba && p.AgentItem == ba.To && Keep(ba, log))
+                        {
+                            mechanicLogs[this].Add(new MechanicEvent(ba.Time, this, p));
+                        }
                     }
-                }
+                }             
             }
         }
     }

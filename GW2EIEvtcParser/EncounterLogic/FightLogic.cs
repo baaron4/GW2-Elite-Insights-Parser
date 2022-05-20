@@ -36,16 +36,22 @@ namespace GW2EIEvtcParser.EncounterLogic
         public EncounterCategory EncounterCategoryInformation { get; protected set; }
 
 
+        internal static PlayerStatusMechanic DeathMechanic = new PlayerStatusMechanic(SkillIDs.Death, "Dead", new MechanicPlotlySetting("x", "rgb(0,0,0)"), "Dead", 0);
+        internal static PlayerStatusMechanic DownMechanic = new PlayerStatusMechanic(SkillIDs.Down, "Downed", new MechanicPlotlySetting("cross", "rgb(255,0,0)"), "Downed", 0);
+        internal static PlayerStatusMechanic AliveMechanic = new PlayerStatusMechanic(SkillIDs.Alive, "Got up", new MechanicPlotlySetting("cross", "rgb(0,255,0)"), "Got up", 0);
+        internal static PlayerStatusMechanic RespawnMechanic = new PlayerStatusMechanic(SkillIDs.Respawn, "Respawn", new MechanicPlotlySetting("cross", "rgb(120,120,255)"), "Resp", 0);
+        internal static PlayerStatusMechanic DespawnMechanic = new PlayerStatusMechanic(SkillIDs.Despawn, "Disconnected", new MechanicPlotlySetting("x", "rgb(120,120,120)"), "DC", 0);
+
         protected FightLogic(int triggerID)
         {
             GenericTriggerID = triggerID;
             MechanicList = new List<Mechanic>() {
-                new PlayerStatusMechanic(SkillIDs.Death, "Dead", new MechanicPlotlySetting("x","rgb(0,0,0)"), "Dead",0),
-                new PlayerStatusMechanic(SkillIDs.Down, "Downed", new MechanicPlotlySetting("cross","rgb(255,0,0)"), "Downed",0),
+                DeathMechanic,
+                DownMechanic,
                 new PlayerStatusMechanic(SkillIDs.Resurrect, "Resurrect", new MechanicPlotlySetting("cross-open","rgb(0,255,255)"), "Res",0),
-                new PlayerStatusMechanic(SkillIDs.Alive, "Got up", new MechanicPlotlySetting("cross","rgb(0,255,0)"), "Got up",0),
-                new PlayerStatusMechanic(SkillIDs.Despawn, "Disconnected", new MechanicPlotlySetting("x","rgb(120,120,120)"), "DC",0),
-                new PlayerStatusMechanic(SkillIDs.Respawn, "Respawn", new MechanicPlotlySetting("cross","rgb(120,120,255)"), "Resp",0)
+                AliveMechanic,
+                DespawnMechanic,
+                RespawnMechanic
             };
             _basicMechanicsCount = MechanicList.Count;
             EncounterCategoryInformation = new EncounterCategory();

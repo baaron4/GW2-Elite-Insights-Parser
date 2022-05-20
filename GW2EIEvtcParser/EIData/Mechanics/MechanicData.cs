@@ -87,17 +87,6 @@ namespace GW2EIEvtcParser.EIData
             return new List<MechanicEvent>();
         }
 
-        internal IReadOnlyList<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, long id)
-        {
-            ProcessMechanics(log);
-            Mechanic mech = _mechanicLogs.Keys.FirstOrDefault(x => x.SkillId == id);
-            if (mech != null)
-            {
-                return _mechanicLogs[mech];
-            }
-            return new List<MechanicEvent>();
-        }
-
         private void ComputeMechanicData(long start, long end)
         {
             var presentMechanics = new HashSet<Mechanic>();

@@ -7,33 +7,36 @@ namespace GW2EIEvtcParser.EIData
     internal class KilledMechanic : Mechanic
     {
 
-        public KilledMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)
+        public KilledMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(mechanicID, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)
         {
         }
 
-        public KilledMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+        public KilledMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
             IsEnemyMechanic = true;
         }
 
         internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
         {
-            foreach (AgentItem a in log.AgentData.GetNPCsByID((int)SkillId))
+            foreach (long mechanicID in MechanicIDs)
             {
-                if (!regroupedMobs.TryGetValue(a.ID, out AbstractSingleActor amp))
+                foreach (AgentItem a in log.AgentData.GetNPCsByID((int)mechanicID))
                 {
-                    amp = log.FindActor(a, true);
-                    if (amp == null)
+                    if (!regroupedMobs.TryGetValue(a.ID, out AbstractSingleActor amp))
                     {
-                        continue;
+                        amp = log.FindActor(a, true);
+                        if (amp == null)
+                        {
+                            continue;
+                        }
+                        regroupedMobs.Add(amp.ID, amp);
                     }
-                    regroupedMobs.Add(amp.ID, amp);
+                    foreach (DeadEvent devt in log.CombatData.GetDeadEvents(a))
+                    {
+                        mechanicLogs[this].Add(new MechanicEvent(devt.Time, this, amp));
+                    }
                 }
-                foreach (DeadEvent devt in log.CombatData.GetDeadEvents(a))
-                {
-                    mechanicLogs[this].Add(new MechanicEvent(devt.Time, this, amp));
-                }
-            }
+            }          
         }
     }
 }
