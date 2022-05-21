@@ -38,11 +38,6 @@ namespace GW2EIEvtcParser
         public const long MirageCloakDodge = -17;
         public const long NumberOfActiveCombatMinions = -18;
         public const long NumberOfClones = -19;
-        public const long Respawn = -20;
-        public const long Death = -21;
-        public const long Down = -22;
-        public const long Despawn = -23;
-        public const long Alive = -24;
         public const long VirtuosoBlades = -25;
         ////////////////
         internal const long ArcDPSDodge = 65001;

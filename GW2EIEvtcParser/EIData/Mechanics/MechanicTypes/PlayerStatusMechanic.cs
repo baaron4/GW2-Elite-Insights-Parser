@@ -6,56 +6,28 @@ using GW2EIEvtcParser.ParsedData;
 namespace GW2EIEvtcParser.EIData
 {
 
-    internal class PlayerStatusMechanic : Mechanic
+    internal class PlayerStatusMechanic<T> : StatusMechanic<T> where T : AbstractStatusEvent
     {
 
-        public PlayerStatusMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(mechanicID, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)
+        public PlayerStatusMechanic(string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, StatusGetter getter, StatusChecker condition = null) : this(inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, getter, condition)
         {
         }
 
-        public PlayerStatusMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+        public PlayerStatusMechanic(string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, StatusGetter getter, StatusChecker condition = null) : base(inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, getter, condition)
         {
             ShowOnTable = false;
         }
 
         internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
         {
-            CombatData combatData = log.CombatData;
             foreach (Player p in log.PlayerList)
             {
-                var cList = new List<long>();
-                foreach (long mechanicID in MechanicIDs)
+                foreach (T c in GetEvents(log, p.AgentItem))
                 {
-                    switch (mechanicID)
+                    if (Keep(c, log))
                     {
-                        case SkillIDs.Death:
-                            cList = combatData.GetDeadEvents(p.AgentItem).Select(x => x.Time).ToList();
-                            break;
-                        case SkillIDs.Despawn:
-                            cList = combatData.GetDespawnEvents(p.AgentItem).Select(x => x.Time).ToList();
-                            break;
-                        case SkillIDs.Respawn:
-                            cList = combatData.GetSpawnEvents(p.AgentItem).Select(x => x.Time).ToList();
-                            break;
-                        case SkillIDs.Alive:
-                            cList = combatData.GetAliveEvents(p.AgentItem).Select(x => x.Time).ToList();
-                            break;
-                        case SkillIDs.Down:
-                            cList = combatData.GetDownEvents(p.AgentItem).Select(x => x.Time).ToList();
-                            var downByVaporForm = combatData.GetBuffRemoveAllData(SkillIDs.VaporForm).Where(x => x.To == p.AgentItem).Select(x => x.Time).ToList();
-                            foreach (long time in downByVaporForm)
-                            {
-                                cList.RemoveAll(x => Math.Abs(x - time) < 20);
-                            }
-                            break;
-                        case SkillIDs.Resurrect:
-                            cList = log.CombatData.GetAnimatedCastData(p.AgentItem).Where(x => x.SkillId == SkillIDs.Resurrect).Select(x => x.Time).ToList();
-                            break;
+                        mechanicLogs[this].Add(new MechanicEvent(c.Time, this, p));
                     }
-                }
-                foreach (long time in cList)
-                {
-                    mechanicLogs[this].Add(new MechanicEvent(time, this, p));
                 }
             }
         }
