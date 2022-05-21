@@ -18,5 +18,10 @@ namespace GW2EIEvtcParser.EIData
         {
             IsEnemyMechanic = true;
         }
+
+        public HitByEnemyMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, SkillChecker condition = null) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
+        {
+            IsEnemyMechanic = true;
+        }
     }
 }

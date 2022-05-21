@@ -22,6 +22,10 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
+        public FirstHitOnPlayerMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, SkillChecker condition = null) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
+        {
+        }
+
         private AbstractHealthDamageEvent GetFirstHit(AgentItem src, ParsedEvtcLog log)
         {
             if (!_firstHits.TryGetValue(src, out AbstractHealthDamageEvent evt))

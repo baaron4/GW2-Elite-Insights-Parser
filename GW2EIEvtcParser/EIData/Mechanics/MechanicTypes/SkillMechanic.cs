@@ -22,5 +22,10 @@ namespace GW2EIEvtcParser.EIData
         {
             _triggerCondition = condition;
         }
+
+        public SkillMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, SkillChecker condition = null) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+        {
+            _triggerCondition = condition;
+        }
     }
 }

@@ -11,6 +11,11 @@ namespace GW2EIEvtcParser.EIData
             IsEnemyMechanic = true;
         }
 
+        public SpawnMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+        {
+            IsEnemyMechanic = true;
+        }
+
         internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
         {
             foreach (long mechanicID in MechanicIDs)
