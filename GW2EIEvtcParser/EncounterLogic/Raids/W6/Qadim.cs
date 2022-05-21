@@ -7,6 +7,7 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -21,10 +22,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new EnemyCastEndMechanic(51943, "Qadim CC", new MechanicPlotlySetting("diamond-tall",Colors.DarkGreen), "Q.CCed","Qadim Breakbar broken", "Qadim CCed",0, (ce, log) => ce.ActualDuration < 6500),
             new EnemyCastStartMechanic(52265, "Riposte", new MechanicPlotlySetting("diamond-tall",Colors.Red), "Q.CC Fail","Qadim Breakbar failed", "Qadim CC Fail",0),
             new HitOnPlayerMechanic(52265, "Riposte", new MechanicPlotlySetting("circle",Colors.Magenta), "NoCC Attack", "Riposte (Attack if CC on Qadim failed)", "Riposte (No CC)", 0),
-            new HitOnPlayerMechanic(52614, "Fiery Dance", new MechanicPlotlySetting("asterisk-open",Colors.Orange), "F.Dance", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", 0),
-            new HitOnPlayerMechanic(52864, "Fiery Dance", new MechanicPlotlySetting("asterisk-open",Colors.Orange), "F.Dance", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", 0),
-            new HitOnPlayerMechanic(53153, "Fiery Dance", new MechanicPlotlySetting("asterisk-open",Colors.Orange), "F.Dance", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", 0),
-            new HitOnPlayerMechanic(52383, "Fiery Dance", new MechanicPlotlySetting("asterisk-open",Colors.Orange), "F.Dance", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", 0),
+            new HitOnPlayerMechanic(new long[] { 52614, 52864, 53153, 52383, }, "Fiery Dance", new MechanicPlotlySetting("asterisk-open",Colors.Orange), "F.Dance", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", 0),
             new HitOnPlayerMechanic(52242, "Shattering Impact", new MechanicPlotlySetting("circle",Colors.Yellow), "Stun","Shattering Impact (Stunning flame bolt)", "Flame Bolt Stun",0),
             new HitOnPlayerMechanic(52814, "Flame Wave", new MechanicPlotlySetting("star-triangle-up-open",Colors.Pink), "KB","Flame Wave (Knockback Frontal Beam)", "KB Push",0),
             new HitOnPlayerMechanic(52820, "Fire Wave", new MechanicPlotlySetting("circle-open",Colors.Orange), "Q.Wave","Fire Wave (Shockwave after Qadim's Mace attack)", "Mace Shockwave",0),
@@ -57,7 +55,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(52461, "Sea of Flame", new MechanicPlotlySetting("circle-open",Colors.Red), "Q.Hitbox","Sea of Flame (Stood in Qadim Hitbox)", "Qadim Hitbox AoE",0),
             new HitOnPlayerMechanic(52221, "Claw", new MechanicPlotlySetting("triangle-left-open",Colors.DarkTeal,10), "Claw","Claw (Reaper of Flesh attack)", "Reaper Claw",0),
             new HitOnPlayerMechanic(52281, "Swap", new MechanicPlotlySetting("circle-cross-open",Colors.Magenta), "Port","Swap (Ported from below Legendary Creature to Qadim)", "Port to Qadim",0),
-            new PlayerBuffApplyMechanic(52035, "Power of the Lamp", new MechanicPlotlySetting("triangle-up",Colors.LightPurple,10), "Lamp","Power of the Lamp (Returned from the Lamp)", "Lamp Return",0),
+            new PlayerBuffApplyMechanic(PowerOfTheLamp, "Power of the Lamp", new MechanicPlotlySetting("triangle-up",Colors.LightPurple,10), "Lamp","Power of the Lamp (Returned from the Lamp)", "Lamp Return",0),
             new KilledMechanic(21050, "Pyre Guardian", new MechanicPlotlySetting("bowtie",Colors.Red), "Pyre.K","Pyre Killed", "Pyre Killed",0),
             new KilledMechanic((int)ArcDPSEnums.TrashID.PyreGuardianStab, "Stab Pyre Guardian", new MechanicPlotlySetting("bowtie",Colors.Red), "Pyre.S.K","Stab Pyre Killed", "Stab Pyre Killed",0),
             new KilledMechanic((int)ArcDPSEnums.TrashID.PyreGuardianProtect, "Protect Pyre Guardian", new MechanicPlotlySetting("bowtie",Colors.Orange), "Pyre.P.K","Protect Pyre Killed", "Protect Pyre Killed",0),
