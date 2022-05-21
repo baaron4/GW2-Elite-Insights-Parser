@@ -6,11 +6,6 @@ namespace GW2EIEvtcParser.EIData
 
     internal class PlayerBuffApplyToMechanic : BuffApplyMechanic
     {
-
-        public PlayerBuffApplyToMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, BuffApplyChecker condition = null) : this(mechanicID, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, condition)
-        {
-        }
-
         public PlayerBuffApplyToMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, BuffApplyChecker condition = null) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
         {
         }

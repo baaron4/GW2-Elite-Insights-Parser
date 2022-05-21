@@ -49,18 +49,6 @@ namespace GW2EIEvtcParser.EIData
         public bool IsEnemyMechanic { get; protected set; }
         public bool ShowOnTable { get; protected set; }
 
-
-        /// <summary>
-        /// Simplified constructor without special checks where only short name is given. FullName and Description are equal to ShortName
-        /// </summary>
-        /// <param name="inGameName">official name of the mechanic</param>
-        /// <param name="plotlySetting">html plot settings <seealso cref="MechanicPlotlySetting"/></param>
-        /// <param name="shortName">name of the mechanic</param>
-        /// <param name="internalCoolDown">grace period, in ms, during which getting hit by the mechanic does not count</param>
-        protected Mechanic(string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)
-        {
-        }
-
         /// <summary>
         /// Full constructor without special checks
         /// </summary>
