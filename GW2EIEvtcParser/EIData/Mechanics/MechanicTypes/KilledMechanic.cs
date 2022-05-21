@@ -22,18 +22,13 @@ namespace GW2EIEvtcParser.EIData
             {
                 foreach (AgentItem a in log.AgentData.GetNPCsByID((int)mechanicID))
                 {
-                    if (!regroupedMobs.TryGetValue(a.ID, out AbstractSingleActor amp))
+                    AbstractSingleActor actorToUse = EnemyMechanicHelper.FindActor(log, a, regroupedMobs);
+                    if (actorToUse != null)
                     {
-                        amp = log.FindActor(a, true);
-                        if (amp == null)
+                        foreach (DeadEvent devt in log.CombatData.GetDeadEvents(a))
                         {
-                            continue;
+                            mechanicLogs[this].Add(new MechanicEvent(devt.Time, this, actorToUse));
                         }
-                        regroupedMobs.Add(amp.ID, amp);
-                    }
-                    foreach (DeadEvent devt in log.CombatData.GetDeadEvents(a))
-                    {
-                        mechanicLogs[this].Add(new MechanicEvent(devt.Time, this, amp));
                     }
                 }
             }          

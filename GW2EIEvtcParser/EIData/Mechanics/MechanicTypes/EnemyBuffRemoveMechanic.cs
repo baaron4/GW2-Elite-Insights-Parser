@@ -25,15 +25,7 @@ namespace GW2EIEvtcParser.EIData
                     AbstractSingleActor amp = null;
                     if (c is BuffRemoveAllEvent rea && Keep(rea, log))
                     {
-                        if (!regroupedMobs.TryGetValue(rea.To.ID, out amp))
-                        {
-                            amp = log.FindActor(rea.To, true);
-                            if (amp == null)
-                            {
-                                continue;
-                            }
-                            regroupedMobs.Add(amp.ID, amp);
-                        }
+                        amp = EnemyMechanicHelper.FindActor(log, rea.To, regroupedMobs);
                     }
                     if (amp != null)
                     {

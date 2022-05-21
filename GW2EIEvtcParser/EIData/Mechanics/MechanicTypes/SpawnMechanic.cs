@@ -22,16 +22,11 @@ namespace GW2EIEvtcParser.EIData
             {
                 foreach (AgentItem a in log.AgentData.GetNPCsByID((int)mechanicID))
                 {
-                    if (!regroupedMobs.TryGetValue(a.ID, out AbstractSingleActor amp))
+                    AbstractSingleActor amp = EnemyMechanicHelper.FindActor(log, a, regroupedMobs);
+                    if (amp != null)
                     {
-                        amp = log.FindActor(a, true);
-                        if (amp == null)
-                        {
-                            continue;
-                        }
-                        regroupedMobs.Add(amp.ID, amp);
+                        mechanicLogs[this].Add(new MechanicEvent(a.FirstAware, this, amp));
                     }
-                    mechanicLogs[this].Add(new MechanicEvent(a.FirstAware, this, amp));
                 }
             }
         }
