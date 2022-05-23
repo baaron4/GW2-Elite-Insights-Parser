@@ -17,10 +17,10 @@ namespace GW2EIEvtcParser.EIData
         /// </summary>
         /// <param name="symbol">Symbol to use, see https://plot.ly/javascript/reference/#scatter-marker-symbol </param>
         /// <param name="color">The color of the symbol</param>
-        internal MechanicPlotlySetting(string symbol, Color color)
+        internal MechanicPlotlySetting(Symbol symbol, Color color)
         {
             Color = color.ToString(false);
-            Symbol = symbol;
+            Symbol = symbol.Str;
         }
 
         /// <summary>
@@ -29,10 +29,10 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="symbol">Symbol to use, see https://plot.ly/javascript/reference/#scatter-marker-symbol </param>
         /// <param name="color">The color of the symbol</param>
         /// <param name="size">Size, in pixel, of the symbol, defaults to 15</param>
-        internal MechanicPlotlySetting(string symbol, Color color, int size)
+        internal MechanicPlotlySetting(Symbol symbol, Color color, int size)
         {
             Color = color.ToString(false);
-            Symbol = symbol;
+            Symbol = symbol.Str;
             Size = size;
         }
 

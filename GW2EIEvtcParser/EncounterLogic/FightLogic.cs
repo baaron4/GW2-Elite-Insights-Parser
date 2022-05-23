@@ -36,11 +36,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         public EncounterCategory EncounterCategoryInformation { get; protected set; }
 
 
-        internal static PlayerStatusMechanic<DeadEvent> DeathMechanic = new PlayerStatusMechanic<DeadEvent>("Dead", new MechanicPlotlySetting("x", Colors.Black), "Dead", "Dead", "Dead", 0, (log, a) => log.CombatData.GetDeadEvents(a));
-        internal static PlayerStatusMechanic<DownEvent> DownMechanic = new PlayerStatusMechanic<DownEvent>("Downed", new MechanicPlotlySetting("cross", Colors.Red), "Downed", "Downed", "Downed", 0, (log, a) => log.CombatData.GetDownEvents(a));
-        internal static PlayerStatusMechanic<AliveEvent> AliveMechanic = new PlayerStatusMechanic<AliveEvent>("Got up", new MechanicPlotlySetting("cross", Colors.Green), "Got up", "Got up", "Got up", 0, (log, a) => log.CombatData.GetAliveEvents(a));
-        internal static PlayerStatusMechanic<SpawnEvent> RespawnMechanic = new PlayerStatusMechanic<SpawnEvent>("Respawn", new MechanicPlotlySetting("cross", Colors.LightBlue), "Resp", "Resp", "Resp", 0, (log, a) => log.CombatData.GetSpawnEvents(a));
-        internal static PlayerStatusMechanic<DespawnEvent> DespawnMechanic = new PlayerStatusMechanic<DespawnEvent>("Disconnected", new MechanicPlotlySetting("x", Colors.LightGrey), "DC", "DC", "DC", 0, (log, a) => log.CombatData.GetDespawnEvents(a));
+        internal static PlayerStatusMechanic<DeadEvent> DeathMechanic = new PlayerStatusMechanic<DeadEvent>("Dead", new MechanicPlotlySetting(Symbols.X, Colors.Black), "Dead", "Dead", "Dead", 0, (log, a) => log.CombatData.GetDeadEvents(a));
+        internal static PlayerStatusMechanic<DownEvent> DownMechanic = new PlayerStatusMechanic<DownEvent>("Downed", new MechanicPlotlySetting(Symbols.Cross, Colors.Red), "Downed", "Downed", "Downed", 0, (log, a) => log.CombatData.GetDownEvents(a));
+        internal static PlayerStatusMechanic<AliveEvent> AliveMechanic = new PlayerStatusMechanic<AliveEvent>("Got up", new MechanicPlotlySetting(Symbols.Cross, Colors.Green), "Got up", "Got up", "Got up", 0, (log, a) => log.CombatData.GetAliveEvents(a));
+        internal static PlayerStatusMechanic<SpawnEvent> RespawnMechanic = new PlayerStatusMechanic<SpawnEvent>("Respawn", new MechanicPlotlySetting(Symbols.Cross, Colors.LightBlue), "Resp", "Resp", "Resp", 0, (log, a) => log.CombatData.GetSpawnEvents(a));
+        internal static PlayerStatusMechanic<DespawnEvent> DespawnMechanic = new PlayerStatusMechanic<DespawnEvent>("Disconnected", new MechanicPlotlySetting(Symbols.X, Colors.LightGrey), "DC", "DC", "DC", 0, (log, a) => log.CombatData.GetDespawnEvents(a));
 
         protected FightLogic(int triggerID)
         {
@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList = new List<Mechanic>() {
                 DeathMechanic,
                 DownMechanic,
-                new PlayerCastStartMechanic(SkillIDs.Resurrect, "Resurrect", new MechanicPlotlySetting("cross-open",Colors.Teal), "Res", "Res", "Res",0),
+                new PlayerCastStartMechanic(SkillIDs.Resurrect, "Resurrect", new MechanicPlotlySetting(Symbols.CrossOpen,Colors.Teal), "Res", "Res", "Res",0),
                 AliveMechanic,
                 DespawnMechanic,
                 RespawnMechanic
