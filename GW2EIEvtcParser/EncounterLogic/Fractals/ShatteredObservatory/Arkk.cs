@@ -13,23 +13,17 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new HitOnPlayerMechanic(HorizonStrikeArkk1, "Horizon Strike", new MechanicPlotlySetting("circle", "rgb(255,140,0)"), "Horizon Strike","Horizon Strike (turning pizza slices)", "Horizon Strike",0),
-            new HitOnPlayerMechanic(HorizonStrikeArkk2, "Horizon Strike", new MechanicPlotlySetting("circle", "rgb(255,140,0)"), "Horizon Strike","Horizon Strike (turning pizza slices)", "Horizon Strike",0),
-            new HitOnPlayerMechanic(DiffractiveEdge1, "Diffractive Edge", new MechanicPlotlySetting("star","rgb(255,200,0)"), "5 Cone","Diffractive Edge (5 Cone Knockback)", "Five Cones",0),
-            new HitOnPlayerMechanic(DiffractiveEdge2, "Diffractive Edge", new MechanicPlotlySetting("star","rgb(255,200,0)"), "5 Cone","Diffractive Edge (5 Cone Knockback)", "Five Cones",0),
+            new HitOnPlayerMechanic(new long[] { HorizonStrikeArkk1, HorizonStrikeArkk2 }, "Horizon Strike", new MechanicPlotlySetting("circle", "rgb(255,140,0)"), "Horizon Strike","Horizon Strike (turning pizza slices)", "Horizon Strike",0),
+            new HitOnPlayerMechanic(new long[] { DiffractiveEdge1, DiffractiveEdge2 }, "Diffractive Edge", new MechanicPlotlySetting("star","rgb(255,200,0)"), "5 Cone","Diffractive Edge (5 Cone Knockback)", "Five Cones",0),
             new HitOnPlayerMechanic(SolarFury, "Solar Fury", new MechanicPlotlySetting("circle","rgb(128,0,0)"), "Ball","Stood in Red Overhead Ball Field", "Red Ball Aoe",0),
             new HitOnPlayerMechanic(FocusedRage, "Focused Rage", new MechanicPlotlySetting("triangle-down","rgb(255,100,0)"), "Cone KB","Knockback in Cone with overhead crosshair", "Knockback Cone",0),
             new HitOnPlayerMechanic(SolarDischarge, "Solar Discharge", new MechanicPlotlySetting("circle-open","rgb(255,0,0)"), "Shockwave","Knockback shockwave after Overhead Balls", "Shockwave",0),
-            new HitOnPlayerMechanic(StarbustCascade1, "Starburst Cascade", new MechanicPlotlySetting("circle-open","rgb(255,140,0)"), "Float Ring","Starburst Cascade (Expanding/Retracting Lifting Ring)", "Float Ring",500),
-            new HitOnPlayerMechanic(StarbustCascade2, "Starburst Cascade", new MechanicPlotlySetting("circle-open","rgb(255,140,0)"), "Float Ring","Starburst Cascade (Expanding/Retracting Lifting Ring)", "Float Ring",500),
+            new HitOnPlayerMechanic(new long[] { StarbustCascade1, StarbustCascade2 }, "Starburst Cascade", new MechanicPlotlySetting("circle-open","rgb(255,140,0)"), "Float Ring","Starburst Cascade (Expanding/Retracting Lifting Ring)", "Float Ring",500),
             new HitOnPlayerMechanic(HorizonStrikeNormal, "Horizon Strike Normal", new MechanicPlotlySetting("circle","rgb(80,0,0)"), "Horizon Strike norm","Horizon Strike (normal)", "Horizon Strike (normal)",0),
             new HitOnPlayerMechanic(OverheadSmash, "Overhead Smash", new MechanicPlotlySetting("triangle-left","rgb(200,0,0)"), "Smash","Overhead Smash","Overhead Smash",0),
             new PlayerBuffApplyMechanic(CorporealReassignment, "Corporeal Reassignment", new MechanicPlotlySetting("diamond","rgb(255,0,0)"), "Skull","Exploding Skull mechanic application", "Corporeal Reassignment",0),
             new HitOnPlayerMechanic(ExplodeArkk, "Explode", new MechanicPlotlySetting("circle","rgb(255,200,0)"), "Bloom Explode","Hit by Solar Bloom explosion", "Bloom Explosion",0),
-            new PlayerBuffApplyMechanic(FixatedBloom1, "Fixate", new MechanicPlotlySetting("star-open","rgb(255,0,255)"), "Bloom Fix","Fixated by Solar Bloom", "Bloom Fixate",0),
-            new PlayerBuffApplyMechanic(FixatedBloom2, "Fixate", new MechanicPlotlySetting("star-open","rgb(255,0,255)"), "Bloom Fix","Fixated by Solar Bloom", "Bloom Fixate",0),
-            new PlayerBuffApplyMechanic(FixatedBloom3, "Fixate", new MechanicPlotlySetting("star-open","rgb(255,0,255)"), "Bloom Fix","Fixated by Solar Bloom", "Bloom Fixate",0),
-            new PlayerBuffApplyMechanic(FixatedBloom4, "Fixate", new MechanicPlotlySetting("star-open","rgb(255,0,255)"), "Bloom Fix","Fixated by Solar Bloom", "Bloom Fixate",0),
+            new PlayerBuffApplyMechanic(new long[] {FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4}, "Fixate", new MechanicPlotlySetting("star-open","rgb(255,0,255)"), "Bloom Fix","Fixated by Solar Bloom", "Bloom Fixate",0),
             new PlayerBuffApplyMechanic(CosmicMeteor, "Cosmic Meteor", new MechanicPlotlySetting("circle-open","rgb(0,255,0)"), "Green","Temporal Realignment (Green) application", "Green",0),
             new PlayerBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting("square-open","rgb(255,0,0)"), "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)",0, (ba, log) => ba.AppliedDuration == 3000), // //not triggered under stab, still get blinded/damaged, seperate tracking desired?
             new EnemyCastStartMechanic(ArkkBreakbarCast, "Breakbar Start", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "Breakbar","Start Breakbar", "CC",0),
