@@ -28,25 +28,6 @@ namespace GW2EIEvtcParser.EIData
             {
                 mech.CheckMechanic(log, _mechanicLogs, regroupedMobs);
             }
-            // regroup same mechanics with diff ids
-            var altNames = new Dictionary<string, Mechanic>();
-            var toRemove = new List<Mechanic>();
-            foreach (Mechanic mech in _mechanicLogs.Keys)
-            {
-                if (altNames.ContainsKey(mech.ShortName))
-                {
-                    _mechanicLogs[altNames[mech.ShortName]].AddRange(_mechanicLogs[mech]);
-                    toRemove.Add(mech);
-                }
-                else
-                {
-                    altNames.Add(mech.ShortName, mech);
-                }
-            }
-            foreach (Mechanic mech in toRemove)
-            {
-                _mechanicLogs.Remove(mech);
-            }
         }
 
         private void ProcessMechanics(ParsedEvtcLog log)
