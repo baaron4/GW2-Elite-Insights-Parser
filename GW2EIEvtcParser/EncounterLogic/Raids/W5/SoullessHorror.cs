@@ -25,7 +25,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerBuffApplyMechanic(FixatedSH, "Fixated", new MechanicPlotlySetting("star",Colors.Magenta), "Fixate","Fixated (Special Action Key)", "Fixated",0),
             new PlayerBuffApplyMechanic(Necrosis, "Necrosis", new MechanicPlotlySetting("star-open",Colors.Magenta), "Necrosis","Necrosis (Tanking Debuff)", "Necrosis Debuff",50),
             new HitOnPlayerMechanic(48327, "Corrupt the Living", new MechanicPlotlySetting("circle",Colors.Red), "Spin","Corrupt the Living (Torment+Poison Spin)", "Torment+Poison Spin",0),
-            new HitOnPlayerMechanic(47756, "Wurm Spit", new MechanicPlotlySetting("diamond-open","rgb(0,128,128)"), "Spit","Wurm Spit", "Wurm Spit",0),
+            new HitOnPlayerMechanic(47756, "Wurm Spit", new MechanicPlotlySetting("diamond-open",Colors.DarkTeal), "Spit","Wurm Spit", "Wurm Spit",0),
             new EnemyCastStartMechanic(48662, "Howling Death", new MechanicPlotlySetting("diamond-tall",Colors.DarkTeal), "CC","Howling Death (Breakbar)", "Breakbar",0),
             new EnemyCastEndMechanic(48662, "Howling Death", new MechanicPlotlySetting("diamond-tall",Colors.DarkGreen), "CCed","Howling Death (Breakbar) broken", "CCed",0, (ce, log) => ce.ActualDuration <= 6800),
             new EnemyCastEndMechanic(48662, "Howling Death", new MechanicPlotlySetting("diamond-tall",Colors.Red), "CC Fail","Howling Death (Breakbar failed) ", "CC Fail",0, (ce,log) => ce.ActualDuration > 6800),

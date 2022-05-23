@@ -45,7 +45,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 return true;
              }),
-            //new Mechanic(47476, "Residual Affliction", ParseEnum.BossIDS.Dhuum, new MechanicPlotlySetting("star-diamond","rgb(255,200,0)"), "Bomb",0), //not needed, imho, applied at the same time as Arcing Affliction
+            //new Mechanic(47476, "Residual Affliction", ParseEnum.BossIDS.Dhuum, new MechanicPlotlySetting("star-diamond",Colors.Yellow), "Bomb",0), //not needed, imho, applied at the same time as Arcing Affliction
             new PlayerOnPlayerBuffApplyMechanic(47335, "Soul Shackle", new MechanicPlotlySetting("diamond",Colors.Teal), "Shackles","Soul Shackle (Tether) application", "Shackles",10000),//  //also used for removal.
             new HitOnPlayerMechanic(47164, "Soul Shackle", new MechanicPlotlySetting("diamond-open",Colors.Teal), "Shackles dmg","Soul Shackle (Tether) dmg ticks", "Shackles Dmg",0,   (de,log) => de.HealthDamage > 0),
             new HitOnPlayerMechanic(47561, "Slash", new MechanicPlotlySetting("triangle",Colors.DarkGreen), "Cone","Boon ripping Cone Attack", "Cone",0),

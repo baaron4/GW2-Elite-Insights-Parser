@@ -11,12 +11,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new HitOnPlayerMechanic(60354, "Icy Echoes", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "Icy.Ech","Tight stacking damage", "Icy Echoes",0),
-                new HitOnPlayerMechanic(60006, "Detonate", new MechanicPlotlySetting("circle","rgb(255,125,0)"), "Det.","Hit by Detonation", "Detonate",50),
-                new HitOnPlayerMechanic(60545, "Lethal Coalescence", new MechanicPlotlySetting("hexagram","rgb(255,100,0)"), "Leth.Coal.","Soaked damage", "Lethal Coalescence",50),
-                new HitOnPlayerMechanic(60171, "Flame Wall", new MechanicPlotlySetting("square","rgb(255,125,0)"), "Flm.Wall","Stood in Flame Wall", "Flame Wall",50),
-                new HitOnPlayerMechanic(60308, "Call Assassins", new MechanicPlotlySetting("diamond-tall","rgb(255,0,125)"), "Call Ass.","Hit by Assassins", "Call Assassins",50),
-                new HitOnPlayerMechanic(60132, "Charge!", new MechanicPlotlySetting("diamond-tall","rgb(255,125,0)"), "Charge!","Hit by Charge", "Charge!",50),
+                new HitOnPlayerMechanic(60354, "Icy Echoes", new MechanicPlotlySetting("diamond-tall",Colors.Red), "Icy.Ech","Tight stacking damage", "Icy Echoes",0),
+                new HitOnPlayerMechanic(60006, "Detonate", new MechanicPlotlySetting("circle",Colors.Orange), "Det.","Hit by Detonation", "Detonate",50),
+                new HitOnPlayerMechanic(60545, "Lethal Coalescence", new MechanicPlotlySetting("hexagram",Colors.Orange), "Leth.Coal.","Soaked damage", "Lethal Coalescence",50),
+                new HitOnPlayerMechanic(60171, "Flame Wall", new MechanicPlotlySetting("square",Colors.Orange), "Flm.Wall","Stood in Flame Wall", "Flame Wall",50),
+                new HitOnPlayerMechanic(60308, "Call Assassins", new MechanicPlotlySetting("diamond-tall",Colors.LightRed), "Call Ass.","Hit by Assassins", "Call Assassins",50),
+                new HitOnPlayerMechanic(60132, "Charge!", new MechanicPlotlySetting("diamond-tall",Colors.Orange), "Charge!","Hit by Charge", "Charge!",50),
             }
             );
             Extension = "coldwar";
