@@ -733,6 +733,7 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TargetID.Ankka:
                     return "https://i.imgur.com/3OQwlpP.png";
                 case ArcDPSEnums.TargetID.MinisterLi:
+                case ArcDPSEnums.TargetID.MinisterLiCM:
                     return "https://i.imgur.com/2nPBLcp.png";
                 case ArcDPSEnums.TargetID.TheDragonVoidJormag:
                     return "https://i.imgur.com/UqHxOqi.png";
@@ -1004,14 +1005,19 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.SooWonTail:
                     return "https://i.imgur.com/O8VEP57.png";
                 case ArcDPSEnums.TrashID.TheEnforcer:
+                case ArcDPSEnums.TrashID.TheEnforcerCM:
                     return "https://i.imgur.com/GNQCYda.png";
                 case ArcDPSEnums.TrashID.TheMechRider:
+                case ArcDPSEnums.TrashID.TheMechRiderCM:
                     return "https://i.imgur.com/JSsBc6a.png";
                 case ArcDPSEnums.TrashID.TheMindblade:
+                case ArcDPSEnums.TrashID.TheMindbladeCM:
                     return "https://i.imgur.com/KyMgGQD.png";
                 case ArcDPSEnums.TrashID.TheRitualist:
+                case ArcDPSEnums.TrashID.TheRitualistCM:
                     return "https://i.imgur.com/gG5p3Hz.png";
                 case ArcDPSEnums.TrashID.TheSniper:
+                case ArcDPSEnums.TrashID.TheSniperCM:
                     return "https://i.imgur.com/RWIjUoe.png";
                 case ArcDPSEnums.TrashID.PushableVoidAmalgamate:
                     return "https://i.imgur.com/BuKbosz.png";

@@ -180,6 +180,7 @@ namespace GW2EIEvtcParser.ParsedData
                     Logic = new AetherbladeHideout(id);
                     break;
                 case ArcDPSEnums.TargetID.MinisterLi:
+                case ArcDPSEnums.TargetID.MinisterLiCM:
                     Logic = new KainengOverlook(id);
                     break;
                 case ArcDPSEnums.TargetID.Ankka:

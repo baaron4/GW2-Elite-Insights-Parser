@@ -50,11 +50,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<int>
             {
                 (int)ArcDPSEnums.TargetID.MinisterLi,
+                (int)ArcDPSEnums.TargetID.MinisterLiCM,
                 (int)ArcDPSEnums.TrashID.TheEnforcer,
                 (int)ArcDPSEnums.TrashID.TheMindblade,
                 (int)ArcDPSEnums.TrashID.TheMechRider,
                 (int)ArcDPSEnums.TrashID.TheRitualist,
                 (int)ArcDPSEnums.TrashID.TheSniper,
+                (int)ArcDPSEnums.TrashID.TheEnforcerCM,
+                (int)ArcDPSEnums.TrashID.TheMindbladeCM,
+                (int)ArcDPSEnums.TrashID.TheMechRiderCM,
+                (int)ArcDPSEnums.TrashID.TheRitualistCM,
+                (int)ArcDPSEnums.TrashID.TheSniperCM,
             };
         }
 
@@ -63,6 +69,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<int>
             {
                 (int)ArcDPSEnums.TargetID.MinisterLi,
+                (int)ArcDPSEnums.TargetID.MinisterLiCM,
             };
         }
 
@@ -80,6 +87,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new HashSet<int>
             {
                 (int)ArcDPSEnums.TargetID.MinisterLi,
+                (int)ArcDPSEnums.TargetID.MinisterLiCM,
             };
         }
 
@@ -107,10 +115,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        private AbstractSingleActor GetMinisterLi(FightData fightData)
+        {
+            return Targets.FirstOrDefault(x => x.ID == (fightData.IsCM ? (int)ArcDPSEnums.TargetID.MinisterLiCM : (int)ArcDPSEnums.TargetID.MinisterLi));
+        }
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor ministerLi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.MinisterLi);
+            AbstractSingleActor ministerLi = GetMinisterLi(log.FightData);
             if (ministerLi == null)
             {
                 throw new MissingKeyActorsException("Minister Li not found");
@@ -128,11 +141,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             phases.AddRange(subPhases);
             //
-            AbstractSingleActor enforcer = Targets.LastOrDefault(x => x.ID == (int)ArcDPSEnums.TrashID.TheEnforcer);
-            AbstractSingleActor mindblade = Targets.LastOrDefault(x => x.ID == (int)ArcDPSEnums.TrashID.TheMindblade);
-            AbstractSingleActor mechRider = Targets.LastOrDefault(x => x.ID == (int)ArcDPSEnums.TrashID.TheMechRider);
-            AbstractSingleActor sniper = Targets.LastOrDefault(x => x.ID == (int)ArcDPSEnums.TrashID.TheSniper);
-            AbstractSingleActor ritualist = Targets.LastOrDefault(x => x.ID == (int)ArcDPSEnums.TrashID.TheRitualist);
+            AbstractSingleActor enforcer = Targets.LastOrDefault(x => x.ID == (log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheEnforcerCM : (int)ArcDPSEnums.TrashID.TheEnforcer));
+            AbstractSingleActor mindblade = Targets.LastOrDefault(x => x.ID == (log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheMindbladeCM : (int)ArcDPSEnums.TrashID.TheMindblade));
+            AbstractSingleActor mechRider = Targets.LastOrDefault(x => x.ID == (log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheMechRiderCM : (int)ArcDPSEnums.TrashID.TheMechRider));
+            AbstractSingleActor sniper = Targets.LastOrDefault(x => x.ID == (log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheSniperCM : (int)ArcDPSEnums.TrashID.TheSniper));
+            AbstractSingleActor ritualist = Targets.LastOrDefault(x => x.ID == (log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheRitualistCM : (int)ArcDPSEnums.TrashID.TheRitualist));
             AddSplitPhase(phases, new List<AbstractSingleActor>() { enforcer, mindblade, ritualist }, ministerLi, log, 1);
             AddSplitPhase(phases, new List<AbstractSingleActor>() { mechRider, sniper }, ministerLi, log, 2);
             return phases;
@@ -140,7 +153,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            AbstractSingleActor ministerLi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.MinisterLi);
+            AbstractSingleActor ministerLi = GetMinisterLi(fightData);
             if (ministerLi == null)
             {
                 throw new MissingKeyActorsException("Minister Li not found");
@@ -150,6 +163,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 fightData.SetSuccess(true, buffApplies[2].Time);
             }
+        }
+
+        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            AbstractSingleActor ministerLiCM = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.MinisterLiCM);
+            return ministerLiCM != null ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
         }
     }
 }

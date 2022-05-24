@@ -588,10 +588,15 @@ namespace GW2EIEvtcParser
             ReanimatedHatred = 23673,
             // Kaineng Overlook
             TheSniper = 23612,
+            TheSniperCM = 25259,
             TheMechRider = 24660,
+            TheMechRiderCM = 25271,
             TheEnforcer = 24261,
+            TheEnforcerCM = 25236,
             TheRitualist = 23618,
+            TheRitualistCM = 25242,
             TheMindblade = 24254,
+            TheMindbladeCM = 25280,
             SpiritOfPain = 23793,
             SpiritOfDestruction = 23961,
             // Void Amalgamate
@@ -770,6 +775,7 @@ namespace GW2EIEvtcParser
             EchoOfScarletBriarCM = 25247,
             Ankka = 23957,
             MinisterLi = 24485,
+            MinisterLiCM = 24266,
             GadgetTheDragonVoid1 = 43488,
             GadgetTheDragonVoid2 = 1378,
             VoidAmalgamate1 = 24375,
