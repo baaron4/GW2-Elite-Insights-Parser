@@ -71,7 +71,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal abstract void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs);
 
-        internal Mechanic WithShowOnTable(bool showOnTable)
+        internal Mechanic UsingShowOnTable(bool showOnTable)
         {
             ShowOnTable = showOnTable;
             return this;

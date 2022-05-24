@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return currentPosition.DistanceToPoint(currentTargetPosition) <= 300.0;
-            }, ByPresence, GW2Builds.July2019Balance, GW2Builds.EndOfLife, DamageModifierMode.All).WithApproximate(true)
+            }, ByPresence, GW2Builds.July2019Balance, GW2Builds.EndOfLife, DamageModifierMode.All).UsingApproximate(true)
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
