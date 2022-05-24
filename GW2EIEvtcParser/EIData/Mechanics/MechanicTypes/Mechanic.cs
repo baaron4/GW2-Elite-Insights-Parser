@@ -47,7 +47,7 @@ namespace GW2EIEvtcParser.EIData
         public string ShortName { get; }
         public string FullName { get; }
         public bool IsEnemyMechanic { get; protected set; }
-        public bool ShowOnTable { get; protected set; }
+        public bool ShowOnTable { get; private set; }
 
         /// <summary>
         /// Full constructor without special checks
@@ -70,6 +70,12 @@ namespace GW2EIEvtcParser.EIData
         }
 
         internal abstract void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs);
+
+        internal Mechanic WithShowOnTable(bool showOnTable)
+        {
+            ShowOnTable = showOnTable;
+            return this;
+        }
 
     }
 }

@@ -102,14 +102,18 @@ namespace GW2EIEvtcParser.EIData
                 if (pair.Value.Any(x => x.Time >= start && x.Time <= end))
                 {
                     presentMechanics.Add(pair.Key);
-                    if (pair.Key.IsEnemyMechanic)
+                    if (pair.Key.ShowOnTable)
                     {
-                        presentOnEnemyMechanics.Add(pair.Key);
+                        if (pair.Key.IsEnemyMechanic)
+                        {
+                            presentOnEnemyMechanics.Add(pair.Key);
+                        }
+                        else
+                        {
+                            presentOnFriendliesMechanics.Add(pair.Key);
+                        }
                     }
-                    else if (pair.Key.ShowOnTable)
-                    {
-                        presentOnFriendliesMechanics.Add(pair.Key);
-                    }
+                    
                 }
             }
             // ready enemy list

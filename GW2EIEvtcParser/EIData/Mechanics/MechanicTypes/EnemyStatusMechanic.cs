@@ -11,7 +11,6 @@ namespace GW2EIEvtcParser.EIData
 
         public EnemyStatusMechanic(string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, StatusGetter getter, StatusChecker condition = null) : base(inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, getter, condition)
         {
-            ShowOnTable = false;
             IsEnemyMechanic = true;
         }
 
