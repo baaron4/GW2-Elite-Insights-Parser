@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.Extensions
 {
@@ -89,6 +90,11 @@ namespace GW2EIEvtcParser.Extensions
             44428, // Garish Pillar (Transfusion)
             30783, // Wings of Resolve
             62667, // Elixir of Promise
+            HauntedShot,
+            GraspingShadows,
+            DawnsRepose,
+            EternalNight,
+            MindShock
         };
 
         private readonly List<EXTAbstractHealingEvent> _healingEvents = new List<EXTAbstractHealingEvent>();
