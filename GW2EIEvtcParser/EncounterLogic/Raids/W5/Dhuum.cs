@@ -19,10 +19,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             _greenStart = 0;
             MechanicList.AddRange(new List<Mechanic>
             {
-            new HitOnPlayerMechanic(48172, "Hateful Ephemera", new MechanicPlotlySetting("square",Colors.LightOrange), "Golem","Hateful Ephemera (Golem AoE dmg)", "Golem Dmg",0),
-            new HitOnPlayerMechanic(48121, "Arcing Affliction", new MechanicPlotlySetting("circle-open",Colors.Red), "Bomb dmg","Arcing Affliction (Bomb) hit", "Bomb dmg",0),
-            new PlayerBuffApplyMechanic(47646, "Arcing Affliction", new MechanicPlotlySetting("circle",Colors.Red), "Bomb","Arcing Affliction (Bomb) application", "Bomb",0),
-            new PlayerBuffRemoveMechanic(47646, "Arcing Affliction", new MechanicPlotlySetting("diamond",Colors.Red), "Bomb Trig","Arcing Affliction (Bomb) manualy triggered", "Bomb Triggered",0, (br, log) =>
+            new HitOnPlayerMechanic(48172, "Hateful Ephemera", new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Golem","Hateful Ephemera (Golem AoE dmg)", "Golem Dmg",0),
+            new HitOnPlayerMechanic(48121, "Arcing Affliction", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Bomb dmg","Arcing Affliction (Bomb) hit", "Bomb dmg",0),
+            new PlayerBuffApplyMechanic(ArcingAffliction, "Arcing Affliction", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Bomb","Arcing Affliction (Bomb) application", "Bomb",0),
+            new PlayerBuffRemoveMechanic(ArcingAffliction, "Arcing Affliction", new MechanicPlotlySetting(Symbols.Diamond,Colors.Red), "Bomb Trig","Arcing Affliction (Bomb) manualy triggered", "Bomb Triggered",0, (br, log) =>
             {
                 // Removal duration check
                 if (br.RemovedDuration < 50)
@@ -30,11 +30,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     return false;
                 }
                 // Greater Death mark check
-                if (log.CombatData.GetDamageData(SkillIDs.GreaterDeathMark).Any(x => Math.Abs(x.Time - br.Time) < 100 && x.To == br.To)) {
+                if (log.CombatData.GetDamageData(GreaterDeathMark).Any(x => Math.Abs(x.Time - br.Time) < 100 && x.To == br.To)) {
                     return false;
                 }
                 // Spirit transformation check
-                if (br.To.HasBuff(log, SkillIDs.MortalCoilDhuum, br.Time))
+                if (br.To.HasBuff(log, MortalCoilDhuum, br.Time))
                 {
                     return false;
                 }
@@ -45,20 +45,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 return true;
              }),
-            //new Mechanic(47476, "Residual Affliction", ParseEnum.BossIDS.Dhuum, new MechanicPlotlySetting("star-diamond","rgb(255,200,0)"), "Bomb",0), //not needed, imho, applied at the same time as Arcing Affliction
-            new PlayerOnPlayerBuffApplyMechanic(47335, "Soul Shackle", new MechanicPlotlySetting("diamond",Colors.Teal), "Shackles","Soul Shackle (Tether) application", "Shackles",10000),//  //also used for removal.
-            new HitOnPlayerMechanic(47164, "Soul Shackle", new MechanicPlotlySetting("diamond-open",Colors.Teal), "Shackles dmg","Soul Shackle (Tether) dmg ticks", "Shackles Dmg",0,   (de,log) => de.HealthDamage > 0),
-            new HitOnPlayerMechanic(47561, "Slash", new MechanicPlotlySetting("triangle",Colors.DarkGreen), "Cone","Boon ripping Cone Attack", "Cone",0),
-            new HitOnPlayerMechanic(48752, "Cull", new MechanicPlotlySetting("asterisk-open",Colors.Teal), "Crack","Cull (Fearing Fissures)", "Cracks",0),
-            new HitOnPlayerMechanic(48760, "Putrid Bomb", new MechanicPlotlySetting("circle",Colors.DarkGreen), "Mark","Necro Marks during Scythe attack", "Necro Marks",0),
-            new HitOnPlayerMechanic(48398, "Cataclysmic Cycle", new MechanicPlotlySetting("circle-open",Colors.LightOrange), "Suck dmg","Damage when sucked to close to middle", "Suck dmg",0),
-            new HitOnPlayerMechanic(48176, "Death Mark", new MechanicPlotlySetting("hexagon",Colors.LightOrange), "Dip","Lesser Death Mark hit (Dip into ground)", "Dip AoE",0),
-            new HitOnPlayerMechanic(48210, "Greater Death Mark", new MechanicPlotlySetting("circle",Colors.LightOrange), "KB dmg","Knockback damage during Greater Deathmark (mid port)", "Knockback dmg",0),
-          //  new Mechanic(48281, "Mortal Coil", ParseEnum.BossIDS.Dhuum, new MechanicPlotlySetting("circle",Colors.DarkGreen), "Green Orbs",
-            new PlayerBuffApplyMechanic(46950, "Fractured Spirit", new MechanicPlotlySetting("square",Colors.Green), "Orb CD","Applied when taking green", "Green port",0),
-            //new SkillOnPlayerMechanic(47076 , "Echo's Damage", new MechanicPlotlySetting("square",Color.Red), "Echo","Damaged by Ender's Echo (pick up)", "Ender's Echo",5000),
-            new PlayerBuffApplyMechanic(49125, "Echo's Pick up", new MechanicPlotlySetting("square",Colors.Red), "Echo PU","Picked up by Ender's Echo", "Ender's Pick up", 3000),
-            new PlayerBuffRemoveMechanic(49125, "Freed from Echo", new MechanicPlotlySetting("square",Colors.Blue), "F Echo","Freed from Ender's Echo", "Freed from Echo", 0, (br,log) => !log.CombatData.GetDeadEvents(br.To).Where(x => Math.Abs(x.Time - br.Time) <= 150).Any())
+            //new Mechanic(47476, "Residual Affliction", ParseEnum.BossIDS.Dhuum, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Yellow), "Bomb",0), //not needed, imho, applied at the same time as Arcing Affliction
+            new PlayerOnPlayerBuffApplyMechanic(47335, "Soul Shackle", new MechanicPlotlySetting(Symbols.Diamond,Colors.Teal), "Shackles","Soul Shackle (Tether) application", "Shackles",10000),//  //also used for removal.
+            new HitOnPlayerMechanic(47164, "Soul Shackle", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Teal), "Shackles dmg","Soul Shackle (Tether) dmg ticks", "Shackles Dmg",0,   (de,log) => de.HealthDamage > 0),
+            new HitOnPlayerMechanic(47561, "Slash", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.DarkGreen), "Cone","Boon ripping Cone Attack", "Cone",0),
+            new HitOnPlayerMechanic(48752, "Cull", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.Teal), "Crack","Cull (Fearing Fissures)", "Cracks",0),
+            new HitOnPlayerMechanic(48760, "Putrid Bomb", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Mark","Necro Marks during Scythe attack", "Necro Marks",0),
+            new HitOnPlayerMechanic(48398, "Cataclysmic Cycle", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Suck dmg","Damage when sucked to close to middle", "Suck dmg",0),
+            new HitOnPlayerMechanic(48176, "Death Mark", new MechanicPlotlySetting(Symbols.Hexagon,Colors.LightOrange), "Dip","Lesser Death Mark hit (Dip into ground)", "Dip AoE",0),
+            new HitOnPlayerMechanic(48210, "Greater Death Mark", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "KB dmg","Knockback damage during Greater Deathmark (mid port)", "Knockback dmg",0),
+          //  new Mechanic(48281, "Mortal Coil", ParseEnum.BossIDS.Dhuum, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Green Orbs",
+            new PlayerBuffApplyMechanic(46950, "Fractured Spirit", new MechanicPlotlySetting(Symbols.Square,Colors.Green), "Orb CD","Applied when taking green", "Green port",0),
+            //new SkillOnPlayerMechanic(47076 , "Echo's Damage", new MechanicPlotlySetting(Symbols.Square,Color.Red), "Echo","Damaged by Ender's Echo (pick up)", "Ender's Echo",5000),
+            new PlayerBuffApplyMechanic(EchosPickup, "Echo's Pick up", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Echo PU","Picked up by Ender's Echo", "Ender's Pick up", 3000),
+            new PlayerBuffRemoveMechanic(EchosPickup, "Freed from Echo", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "F Echo","Freed from Ender's Echo", "Freed from Echo", 0, (br,log) => !log.CombatData.GetDeadEvents(br.To).Where(x => Math.Abs(x.Time - br.Time) <= 150).Any())
             });
             Extension = "dhuum";
             Icon = "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
@@ -166,7 +166,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             else
             {
                 // full fight contains the pre event
-                AbstractBuffEvent invulDhuum = log.CombatData.GetBuffData(SkillIDs.Determined762).FirstOrDefault(x => x is BuffRemoveManualEvent && x.To == dhuum.AgentItem && x.Time > 115000);
+                AbstractBuffEvent invulDhuum = log.CombatData.GetBuffData(Determined762).FirstOrDefault(x => x is BuffRemoveManualEvent && x.To == dhuum.AgentItem && x.Time > 115000);
                 // pre event done
                 if (invulDhuum != null)
                 {
@@ -327,7 +327,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         if (_greenStart == 0)
                         {
-                            AbstractBuffEvent greenTaken = log.CombatData.GetBuffData(SkillIDs.FracturedSpirit).Where(x => x is BuffApplyEvent).FirstOrDefault();
+                            AbstractBuffEvent greenTaken = log.CombatData.GetBuffData(FracturedSpirit).Where(x => x is BuffApplyEvent).FirstOrDefault();
                             if (greenTaken != null)
                             {
                                 _greenStart = (int)greenTaken.Time - 5000;
@@ -383,7 +383,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // spirit transform
-            var spiritTransform = log.CombatData.GetBuffData(SkillIDs.FracturedSpirit).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            var spiritTransform = log.CombatData.GetBuffData(FracturedSpirit).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
             if (mainTarget == null)
             {
@@ -397,7 +397,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     duration = 30000;
                 }
-                AbstractBuffEvent removedBuff = log.CombatData.GetBuffRemoveAllData(SkillIDs.MortalCoilDhuum).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
+                AbstractBuffEvent removedBuff = log.CombatData.GetBuffRemoveAllData(MortalCoilDhuum).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
                 int start = (int)c.Time;
                 int end = start + duration;
                 if (removedBuff != null)

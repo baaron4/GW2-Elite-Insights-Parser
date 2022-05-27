@@ -15,17 +15,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new PlayerBuffApplyMechanic(791, "Fear", new MechanicPlotlySetting("star-square",Colors.Black), "Feared","Feared by Eye Teleport Skill", "Feared",0),
-            new PlayerBuffApplyMechanic(48779, "Light Carrier", new MechanicPlotlySetting("circle-open",Colors.Yellow), "Light Orb","Light Carrier (picked up a light orb)", "Picked up orb",0),
-            new PlayerCastStartMechanic(47074, "Flare", new MechanicPlotlySetting("circle",Colors.Green), "Detonate","Flare (detonate light orb to incapacitate eye)", "Detonate orb",0, (evt, log) => evt.Status != AbstractCastEvent.AnimationStatus.Interrupted),
-            new HitOnPlayerMechanic(47518, "Piercing Shadow", new MechanicPlotlySetting("hexagram-open",Colors.Blue), "Spin","Piercing Shadow (damaging spin to all players in sight)", "Eye Spin",0),
-            new HitOnPlayerMechanic(48150, "Deep Abyss", new MechanicPlotlySetting("triangle-right-open",Colors.Red), "Beam","Deep Abyss (ticking eye beam)", "Eye Beam",0),
-            new PlayerBuffApplyToMechanic(833, "Hard CC Eye of Fate", new MechanicPlotlySetting("triangle",Colors.Red), "Hard CC Fate","Applied hard CC on Eye of Fate", "Hard CC Fate",50, (ba, log) => ba.To.ID == (int) ArcDPSEnums.TargetID.EyeOfFate),
-            new PlayerBuffApplyToMechanic(872, "Hard CC Eye of Fate", new MechanicPlotlySetting("triangle",Colors.Red), "Hard CC Fate","Applied hard CC on Eye of Fate", "Hard CC Fate",50, (ba, log) => ba.To.ID == (int) ArcDPSEnums.TargetID.EyeOfFate),
-            new PlayerBuffApplyToMechanic(791, "Hard CC Eye of Fate", new MechanicPlotlySetting("triangle",Colors.Red), "Hard CC Fate","Applied hard CC on Eye of Fate", "Hard CC Fate",50, (ba, log) => ba.To.ID == (int) ArcDPSEnums.TargetID.EyeOfFate),
-            new PlayerBuffApplyToMechanic(833, "Hard CC Eye of Judge", new MechanicPlotlySetting("square",Colors.Red), "Hard CC Judge","Applied hard CC on Eye of Judgement", "Daze Judge",50, (ba, log) => ba.To.ID == (int) ArcDPSEnums.TargetID.EyeOfJudgement),
-            new PlayerBuffApplyToMechanic(872, "Hard CC Eye of Judge", new MechanicPlotlySetting("square",Colors.Red), "Hard CC Judge","Applied hard CC on Eye of Judgement", "Daze Judge",50, (ba, log) => ba.To.ID == (int) ArcDPSEnums.TargetID.EyeOfJudgement),
-            new PlayerBuffApplyToMechanic(791, "Hard CC Eye of Judge", new MechanicPlotlySetting("square",Colors.Red), "Hard CC Judge","Applied hard CC on Eye of Judgement", "Daze Judge",50, (ba, log) => ba.To.ID == (int) ArcDPSEnums.TargetID.EyeOfJudgement),
+            new PlayerBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.StarSquare,Colors.Black), "Feared","Feared by Eye Teleport Skill", "Feared",0),
+            new PlayerBuffApplyMechanic(LightCarrier, "Light Carrier", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Light Orb","Light Carrier (picked up a light orb)", "Picked up orb",0),
+            new PlayerCastStartMechanic(47074, "Flare", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Detonate","Flare (detonate light orb to incapacitate eye)", "Detonate orb",0, (evt, log) => evt.Status != AbstractCastEvent.AnimationStatus.Interrupted),
+            new HitOnPlayerMechanic(47518, "Piercing Shadow", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Blue), "Spin","Piercing Shadow (damaging spin to all players in sight)", "Eye Spin",0),
+            new HitOnPlayerMechanic(48150, "Deep Abyss", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "Beam","Deep Abyss (ticking eye beam)", "Eye Beam",0),
+            new PlayerBuffApplyToMechanic(new long[] { Daze, Stun, Fear }, "Hard CC Eye of Fate", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Red), "Hard CC Fate","Applied hard CC on Eye of Fate", "Hard CC Fate",50, (ba, log) => ba.To.ID == (int) ArcDPSEnums.TargetID.EyeOfFate),
+            new PlayerBuffApplyToMechanic(new long[] { Daze, Stun, Fear }, "Hard CC Eye of Judge", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Hard CC Judge","Applied hard CC on Eye of Judgement", "Daze Judge",50, (ba, log) => ba.To.ID == (int) ArcDPSEnums.TargetID.EyeOfJudgement),
             //47857 <- teleport + fear skill? 
             }
             );

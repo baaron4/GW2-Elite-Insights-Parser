@@ -13,18 +13,18 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
-            new HitOnPlayerMechanic(37677, "Soldier's Aura", new MechanicPlotlySetting("circle-open",Colors.Red), "Jade","Jade Soldier's Aura hit", "Jade Aura",0),
-            new HitOnPlayerMechanic(37788, "Jade Explosion", new MechanicPlotlySetting("circle",Colors.Red), "Jade Expl","Jade Soldier's Death Explosion", "Jade Explosion",0),
-            //new Mechanic(37779, "Claim", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting("square",Colors.Yellow), "Claim",0), //Buff remove only
-            //new Mechanic(37697, "Dispel", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting("circle",Colors.Yellow), "Dispel",0), //Buff remove only
-            //new Mechanic(37813, "Protect", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting("circle",Colors.Teal), "Protect",0), //Buff remove only
-            new PlayerBuffApplyMechanic(757, "Invulnerability", new MechanicPlotlySetting("circle-open",Colors.Teal), "Protect","Protected by the Protect Shield","Protect Shield",0, (ba, log) => ba.AppliedDuration == 1000),
-            new PlayerBuffApplyMechanic(37813, "Protect (SAK)", new MechanicPlotlySetting("circle",Colors.Blue), "Protect (SAK)","Took protect","Protect (SAK)",0),
-            new PlayerBuffApplyMechanic(37697, "Dispel (SAK)", new MechanicPlotlySetting("circle",Colors.Purple), "Dispel (SAK)","Took dispel","Dispel (SAK)",0),
-            new PlayerBuffApplyMechanic(37779, "Claim (SAK)", new MechanicPlotlySetting("circle",Colors.Yellow), "Claim (SAK)","Took claim","Claim (SAK)",0),
-            new EnemyBuffApplyMechanic(38155, "Mursaat Overseer's Shield", new MechanicPlotlySetting("circle-open",Colors.Yellow), "Shield","Jade Soldier Shield", "Soldier Shield",0),
-            new EnemyBuffRemoveMechanic(38155, "Mursaat Overseer's Shield", new MechanicPlotlySetting("square-open",Colors.Yellow), "Dispel","Dispelled Jade Soldier Shield", "Dispel",0),
-            //new Mechanic(38184, "Enemy Tile", ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting("square-open",Colors.Yellow), "Floor","Enemy Tile damage", "Tile dmg",0) //Fixed damage (3500), not trackable
+            new HitOnPlayerMechanic(37677, "Soldier's Aura", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Jade","Jade Soldier's Aura hit", "Jade Aura",0),
+            new HitOnPlayerMechanic(37788, "Jade Explosion", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Jade Expl","Jade Soldier's Death Explosion", "Jade Explosion",0),
+            //new Mechanic(37779, "Claim", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting(Symbols.Square,Colors.Yellow), "Claim",0), //Buff remove only
+            //new Mechanic(37697, "Dispel", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Dispel",0), //Buff remove only
+            //new Mechanic(37813, "Protect", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting(Symbols.Circle,Colors.Teal), "Protect",0), //Buff remove only
+            new PlayerBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Teal), "Protect","Protected by the Protect Shield","Protect Shield",0, (ba, log) => ba.AppliedDuration == 1000),
+            new PlayerBuffApplyMechanic(ProtectSAK, "Protect (SAK)", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Protect (SAK)","Took protect","Protect (SAK)",0),
+            new PlayerBuffApplyMechanic(DispelSAK, "Dispel (SAK)", new MechanicPlotlySetting(Symbols.Circle,Colors.Purple), "Dispel (SAK)","Took dispel","Dispel (SAK)",0),
+            new PlayerBuffApplyMechanic(ClaimSAK, "Claim (SAK)", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Claim (SAK)","Took claim","Claim (SAK)",0),
+            new EnemyBuffApplyMechanic(MursaatOverseersShield, "Mursaat Overseer's Shield", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Shield","Jade Soldier Shield", "Soldier Shield",0),
+            new EnemyBuffRemoveMechanic(MursaatOverseersShield, "Mursaat Overseer's Shield", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Yellow), "Dispel","Dispelled Jade Soldier Shield", "Dispel",0),
+            //new Mechanic(38184, "Enemy Tile", ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Yellow), "Floor","Enemy Tile damage", "Tile dmg",0) //Fixed damage (3500), not trackable
             });
             Extension = "mo";
             Icon = "https://wiki.guildwars2.com/images/c/c8/Mini_Mursaat_Overseer.png";

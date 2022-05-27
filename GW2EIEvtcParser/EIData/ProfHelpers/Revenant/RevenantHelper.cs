@@ -41,7 +41,7 @@ namespace GW2EIEvtcParser.EIData
             // Devastation
             new BuffDamageModifier(ViciousLacerations, "Vicious Lacerations", "3% per Stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", GW2Builds.October2018Balance, GW2Builds.February2020Balance, DamageModifierMode.PvE),
             new BuffDamageModifier(ViciousLacerations, "Vicious Lacerations", "2% per Stack", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", 0, GW2Builds.October2018Balance, DamageModifierMode.PvE),
-            new DamageLogApproximateDamageModifier("Unsuspecting Strikes", "25% if target hp > 80%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Revenant, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", (x,log) =>
+            new DamageLogDamageModifier("Unsuspecting Strikes", "25% if target hp > 80%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Revenant, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", (x,log) =>
             {
                 double foeHP = x.To.GetCurrentHealthPercent(log, x.Time);
                 if (foeHP < 0.0)
@@ -49,8 +49,8 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return foeHP > 80.0;
-            }, ByPresence, GW2Builds.February2020Balance, GW2Builds.May2021BalanceHotFix, DamageModifierMode.PvE ),
-            new DamageLogApproximateDamageModifier("Unsuspecting Strikes", "20% if target hp > 80%", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Revenant, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", (x,log) =>
+            }, ByPresence, GW2Builds.February2020Balance, GW2Builds.May2021BalanceHotFix, DamageModifierMode.PvE ).UsingApproximate(true),
+            new DamageLogDamageModifier("Unsuspecting Strikes", "20% if target hp > 80%", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Revenant, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", (x,log) =>
             {
                 double foeHP = x.To.GetCurrentHealthPercent(log, x.Time);
                 if (foeHP < 0.0)
@@ -58,8 +58,8 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return foeHP > 80.0;
-            }, ByPresence, GW2Builds.May2021BalanceHotFix, GW2Builds.EndOfLife, DamageModifierMode.PvE ),
-            new DamageLogApproximateDamageModifier("Unsuspecting Strikes", "10% if target hp > 80%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", (x,log) =>
+            }, ByPresence, GW2Builds.May2021BalanceHotFix, GW2Builds.EndOfLife, DamageModifierMode.PvE ).UsingApproximate(true),
+            new DamageLogDamageModifier("Unsuspecting Strikes", "10% if target hp > 80%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", (x,log) =>
             {
                 double foeHP = x.To.GetCurrentHealthPercent(log, x.Time);
                 if (foeHP < 0.0)
@@ -67,7 +67,7 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return foeHP > 80.0;
-            }, ByPresence, GW2Builds.February2020Balance, GW2Builds.EndOfLife, DamageModifierMode.sPvPWvW ),
+            }, ByPresence, GW2Builds.February2020Balance, GW2Builds.EndOfLife, DamageModifierMode.sPvPWvW ).UsingApproximate(true),
             new BuffDamageModifierTarget(Vulnerability, "Targeted Destruction", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, "https://wiki.guildwars2.com/images/e/ed/Targeted_Destruction.png", GW2Builds.March2019Balance, GW2Builds.EndOfLife, DamageModifierMode.All),
             new BuffDamageModifierTarget(Vulnerability, "Targeted Destruction", "10.0% if vuln", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, "https://wiki.guildwars2.com/images/e/ed/Targeted_Destruction.png", GW2Builds.October2018Balance, GW2Builds.March2019Balance, DamageModifierMode.PvE),
             new BuffDamageModifierTarget(Vulnerability, "Targeted Destruction", "7.0% if vuln", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, "https://wiki.guildwars2.com/images/e/ed/Targeted_Destruction.png", 0, GW2Builds.October2018Balance, DamageModifierMode.PvE),

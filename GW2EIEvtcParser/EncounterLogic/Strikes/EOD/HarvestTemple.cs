@@ -16,20 +16,17 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new PlayerBuffApplyMechanic(InfluenceOfTheVoidEffect, "Influence of the Void", new MechanicPlotlySetting("triangle-down", Colors.DarkPurple), "Void.D", "Received Void debuff", "Void Debuff", 150),
-                new HitOnPlayerMechanic(InfluenceOfTheVoidSkill, "Influence of the Void Hit", new MechanicPlotlySetting("triangle-up", Colors.DarkPurple), "Void.H", "Hit by Void", "Void Hit", 150),
-                new HitOnPlayerMechanic(BreathOfJormag1, "Breath of Jormag", new MechanicPlotlySetting("triangle-right", Colors.LightBlue), "J.Breath.H", "Hit by Jormag Breath", "Jormag Breath", 150),
-                new HitOnPlayerMechanic(BreathOfJormag2, "Breath of Jormag", new MechanicPlotlySetting("triangle-right", Colors.LightBlue), "J.Breath.H", "Hit by Jormag Breath", "Jormag Breath", 150),
-                new HitOnPlayerMechanic(BreathOfJormag3, "Breath of Jormag", new MechanicPlotlySetting("triangle-right", Colors.LightBlue), "J.Breath.H", "Hit by Jormag Breath", "Jormag Breath", 150),
-                new HitOnPlayerMechanic(LavaSlam, "Lava Slam", new MechanicPlotlySetting("triangle-right", Colors.Red), "Slam.H", "Hit by Primordus Slam", "Primordus Slam", 150),
-                new HitOnPlayerMechanic(CrystalBarrage, "Crystal Barrage", new MechanicPlotlySetting("triangle-up", Colors.Purple), "Barrage.H", "Hit by Crystal Barrage", "Barrage", 150),
-                new HitOnPlayerMechanic(BrandingBeam, "Branding Beam", new MechanicPlotlySetting("triangle-right", Colors.Purple), "Beam.H", "Hit by Kralkatorrik Beam", "Kralkatorrik Beam", 150),
-                new HitOnPlayerMechanic(Shockwave, "Shock Wave", new MechanicPlotlySetting("triangle-right", Colors.Green), "ShckWv.H", "Hit by Mordremoth Shockwave", "Mordremoth Shockwave", 150),
-                new HitOnPlayerMechanic(ScreamOfZhaitan, "Scream of Zhaitan", new MechanicPlotlySetting("triangle-right", Colors.DarkGreen), "Scream.H", "Hit by Zhaitan Scream", "Zhaitan Scream", 150),
-                new HitOnPlayerMechanic(HydroBurst, "Hydro Burst", new MechanicPlotlySetting("circle", Colors.LightBlue), "Whrlpl.H", "Hit by Whirlpool", "Whirlpool", 150),
-                new HitOnPlayerMechanic(TsunamiSlam1, "Tsunami Slam", new MechanicPlotlySetting("triangle-right", Colors.LightBlue), "Tsunami.H", "Hit by Soo-Won Tsunami", "Soo-Won Tsunami", 150),
-                new HitOnPlayerMechanic(TsunamiSlam2, "Tsunami Slam", new MechanicPlotlySetting("triangle-right", Colors.LightBlue), "Tsunami.H", "Hit by Soo-Won Tsunami", "Soo-Won Tsunami", 150),
-                new HitOnPlayerMechanic(ClawSlap, "Claw Slap", new MechanicPlotlySetting("triangle-left", Colors.LightBlue), "Claw.H", "Hit by Soo-Won Claw", "Soo-Won Claw", 150),
+                new PlayerBuffApplyMechanic(InfluenceOfTheVoidEffect, "Influence of the Void", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkPurple), "Void.D", "Received Void debuff", "Void Debuff", 150),
+                new HitOnPlayerMechanic(InfluenceOfTheVoidSkill, "Influence of the Void Hit", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkPurple), "Void.H", "Hit by Void", "Void Hit", 150),
+                new HitOnPlayerMechanic(new long[] {BreathOfJormag1, BreathOfJormag2, BreathOfJormag3 }, "Breath of Jormag", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.LightBlue), "J.Breath.H", "Hit by Jormag Breath", "Jormag Breath", 150),
+                new HitOnPlayerMechanic(LavaSlam, "Lava Slam", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Red), "Slam.H", "Hit by Primordus Slam", "Primordus Slam", 150),
+                new HitOnPlayerMechanic(CrystalBarrage, "Crystal Barrage", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Purple), "Barrage.H", "Hit by Crystal Barrage", "Barrage", 150),
+                new HitOnPlayerMechanic(BrandingBeam, "Branding Beam", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Purple), "Beam.H", "Hit by Kralkatorrik Beam", "Kralkatorrik Beam", 150),
+                new HitOnPlayerMechanic(Shockwave, "Shock Wave", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Green), "ShckWv.H", "Hit by Mordremoth Shockwave", "Mordremoth Shockwave", 150),
+                new HitOnPlayerMechanic(ScreamOfZhaitan, "Scream of Zhaitan", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.DarkGreen), "Scream.H", "Hit by Zhaitan Scream", "Zhaitan Scream", 150),
+                new HitOnPlayerMechanic(HydroBurst, "Hydro Burst", new MechanicPlotlySetting(Symbols.Circle, Colors.LightBlue), "Whrlpl.H", "Hit by Whirlpool", "Whirlpool", 150),
+                new HitOnPlayerMechanic(new long[] {TsunamiSlam1, TsunamiSlam2 }, "Tsunami Slam", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.LightBlue), "Tsunami.H", "Hit by Soo-Won Tsunami", "Soo-Won Tsunami", 150),
+                new HitOnPlayerMechanic(ClawSlap, "Claw Slap", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightBlue), "Claw.H", "Hit by Soo-Won Claw", "Soo-Won Claw", 150),
             }
             );
             Icon = "https://i.imgur.com/gZRqzlr.png";

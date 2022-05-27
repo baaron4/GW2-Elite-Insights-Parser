@@ -90,7 +90,7 @@ namespace GW2EIEvtcParser.EIData
             // We need illusion species ID to enable Vicious Expression on All
             new BuffDamageModifierTarget(NumberOfBoons, "Vicious Expression", "25% on boonless target",  DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, "https://wiki.guildwars2.com/images/f/f6/Confounding_Suggestions.png", GW2Builds.February2020Balance, 102389, DamageModifierMode.PvE),
             new BuffDamageModifierTarget(NumberOfBoons, "Vicious Expression", "15% on boonless target",  DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, "https://wiki.guildwars2.com/images/f/f6/Confounding_Suggestions.png", 102389, GW2Builds.EndOfLife, DamageModifierMode.All),
-            new DamageLogApproximateDamageModifier("Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, "https://wiki.guildwars2.com/images/7/78/Temporal_Enchanter.png", (x,log) =>
+            new DamageLogDamageModifier("Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, "https://wiki.guildwars2.com/images/7/78/Temporal_Enchanter.png", (x,log) =>
             {
                 double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
                 double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
@@ -99,8 +99,8 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return selfHP > dstHP;
-            }, ByPresence, GW2Builds.October2018Balance, GW2Builds.EndOfLife, DamageModifierMode.PvE),
-            new DamageLogApproximateDamageModifier("Egotism", "5% if target hp% lower than self hp%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Mesmer, "https://wiki.guildwars2.com/images/7/78/Temporal_Enchanter.png", (x,log) =>
+            }, ByPresence, GW2Builds.October2018Balance, GW2Builds.EndOfLife, DamageModifierMode.PvE).UsingApproximate(true),
+            new DamageLogDamageModifier("Egotism", "5% if target hp% lower than self hp%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Mesmer, "https://wiki.guildwars2.com/images/7/78/Temporal_Enchanter.png", (x,log) =>
             {
                 double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
                 double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
@@ -109,7 +109,7 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return selfHP > dstHP;
-            }, ByPresence, GW2Builds.October2018Balance, GW2Builds.EndOfLife, DamageModifierMode.sPvPWvW),
+            }, ByPresence, GW2Builds.October2018Balance, GW2Builds.EndOfLife, DamageModifierMode.sPvPWvW).UsingApproximate(true),
             new BuffDamageModifierTarget(Vulnerability, "Fragility", "0.5% per stack vuln on target", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, "https://wiki.guildwars2.com/images/3/33/Fragility.png", DamageModifierMode.All),
             // Dueling
             // Superiority Complex can all the conditions be tracked?

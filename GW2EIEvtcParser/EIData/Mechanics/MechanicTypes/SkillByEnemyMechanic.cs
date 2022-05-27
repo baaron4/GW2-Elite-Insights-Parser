@@ -7,42 +7,29 @@ namespace GW2EIEvtcParser.EIData
     internal class SkillByEnemyMechanic : SkillMechanic
     {
 
-        public SkillByEnemyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, SkillChecker condition) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, condition)
+        public SkillByEnemyMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, SkillChecker condition = null) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
         {
         }
 
-        public SkillByEnemyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, SkillChecker condition) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
-        {
-        }
-
-        public SkillByEnemyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)
-        {
-        }
-
-        public SkillByEnemyMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+        public SkillByEnemyMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, SkillChecker condition = null) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
         {
         }
 
         internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
         {
-            foreach (AbstractHealthDamageEvent c in log.CombatData.GetDamageData(SkillId))
+            foreach (long mechanicID in MechanicIDs)
             {
-                AbstractSingleActor amp = null;
-                if (Keep(c, log))
+                foreach (AbstractHealthDamageEvent c in log.CombatData.GetDamageData(mechanicID))
                 {
-                    if (!regroupedMobs.TryGetValue(c.From.ID, out amp))
+                    AbstractSingleActor amp = null;
+                    if (Keep(c, log))
                     {
-                        amp = log.FindActor(c.From, true);
-                        if (amp == null)
-                        {
-                            continue;
-                        }
-                        regroupedMobs.Add(amp.ID, amp);
+                        amp = EnemyMechanicHelper.FindActor(log, c.From, regroupedMobs);
                     }
-                }
-                if (amp != null)
-                {
-                    mechanicLogs[this].Add(new MechanicEvent(c.Time, this, amp));
+                    if (amp != null)
+                    {
+                        mechanicLogs[this].Add(new MechanicEvent(c.Time, this, amp));
+                    }
                 }
             }
         }

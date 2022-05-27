@@ -15,25 +15,25 @@ namespace GW2EIEvtcParser.EncounterLogic
             
             MechanicList.AddRange(new List<Mechanic>()
             {
-                new HitOnPlayerMechanic(56541, "Pylon Debris Field", new MechanicPlotlySetting("circle-open-dot",Colors.Orange), "P.Magma", "Hit by Pylon Magma", "Pylon Magma", 0),
-                new HitOnPlayerMechanic(56020, "Energized Affliction", new MechanicPlotlySetting("circle-open",Colors.Green), "E.Aff", "Energized Affliction", "Energized Affliction", 0),
-                new HitOnPlayerMechanic(56134, "Force of Retaliation", new MechanicPlotlySetting("circle-open",Colors.Black), "Pushed", "Pushed by Shockwave", "Shockwave Push", 1000, (de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
-                new HitOnPlayerMechanic(56093, "Exponential Repercussion", new MechanicPlotlySetting("diamond-open",Colors.Magenta), "P.KB", "Pushed by Pylon Knockback", "Pylon Knockback", 1000),
-                new HitOnPlayerMechanic(56254, "Exponential Repercussion", new MechanicPlotlySetting("diamond-open",Colors.Magenta), "Dome.KB", "Pushed by Dome Shield Knockback", "Dome Knockback", 1000),
-                new HitOnPlayerMechanic(56441, "Force of Havoc", new MechanicPlotlySetting("square-open",Colors.Purple), "P.Rect", "Hit by Purple Rectangle", "Purple Rectangle", 0),
-                new HitOnPlayerMechanic(56145, "Chaos Called", new MechanicPlotlySetting("circle-x-open",Colors.Purple), "Pattern.H", "Hit by Energy on Pattern", "Pattern Energy Hit", 0),
-                new HitOnPlayerMechanic(56527, "Rain of Chaos", new MechanicPlotlySetting("star-square",Colors.Purple), "Lght.H", "Hit by Expanding Lightning", "Lightning Hit", 0),
-                new HitOnPlayerMechanic(56656, "Brandstorm Lightning", new MechanicPlotlySetting("triangle",Colors.Yellow), "S.Lght.H", "Hit by Small Lightning", "Small Lightning Hit", 0),
-                new HitOnPlayerMechanic(56180, "Residual Impact", new MechanicPlotlySetting("circle-open",Colors.Orange), "Magma.F", "Hit by Magma Field", "Magma Field", 500),
-                new HitOnPlayerMechanic(56378, "Residual Impact", new MechanicPlotlySetting("circle-open",Colors.Orange,10), "S.Magma.F", "Hit by Small Magma Field", "Small Magma Field", 500),
-                new HitOnPlayerMechanic(SkillIDs.BatteringBlitz, "Battering Blitz", new MechanicPlotlySetting("bowtie",Colors.Orange), "Rush.H", "Hit by Qadim Rush", "Qadim Rush", 500),
-                new HitOnPlayerMechanic(56332, "Caustic Chaos", new MechanicPlotlySetting("triangle-right",Colors.Red), "A.Prj.H", "Hit by Aimed Projectile", "Aimed Projectile", 0),
-                new HitByEnemyMechanic(56598, "Shower of Chaos", new MechanicPlotlySetting("circle",Colors.Black), "Orb.D", "Pylon Orb not caught", "Shower of Chaos", 1000),
-                new HitByEnemyMechanic(56316, "Eclipsed Backlash", new MechanicPlotlySetting("circle",Colors.Orange), "Entropic.Expl", "Entropic Distortion exploded", "Eclipsed Backlash", 1000),
-                new PlayerBuffApplyMechanic(56510, "Fixated", new MechanicPlotlySetting("star",Colors.Magenta), "Fixated", "Fixated", "Fixated", 0),
-                new PlayerBuffApplyMechanic(56424, "Critical Mass", new MechanicPlotlySetting("circle-open",Colors.Red), "Orb caught", "Collected a Pylon Orb", "Critical Mass", 0),
-                new HitOnPlayerMechanic(56543, "Caustic Chaos", new MechanicPlotlySetting("triangle-right-open",Colors.Red), "A.Prj.E", "Hit by Aimed Projectile Explosion", "Aimed Projectile Explosion", 0),
-                new PlayerBuffApplyMechanic(56118, "Sapping Surge", new MechanicPlotlySetting("y-down-open",Colors.Red), "B.Tether", "25% damage reduction", "Bad Tether", 0),
+                new HitOnPlayerMechanic(56541, "Pylon Debris Field", new MechanicPlotlySetting(Symbols.CircleOpenDot,Colors.Orange), "P.Magma", "Hit by Pylon Magma", "Pylon Magma", 0),
+                new HitOnPlayerMechanic(56020, "Energized Affliction", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "E.Aff", "Energized Affliction", "Energized Affliction", 0),
+                new HitOnPlayerMechanic(56134, "Force of Retaliation", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Pushed", "Pushed by Shockwave", "Shockwave Push", 1000, (de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+                new HitOnPlayerMechanic(56093, "Exponential Repercussion", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Magenta), "P.KB", "Pushed by Pylon Knockback", "Pylon Knockback", 1000),
+                new HitOnPlayerMechanic(56254, "Exponential Repercussion", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Magenta), "Dome.KB", "Pushed by Dome Shield Knockback", "Dome Knockback", 1000),
+                new HitOnPlayerMechanic(56441, "Force of Havoc", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Purple), "P.Rect", "Hit by Purple Rectangle", "Purple Rectangle", 0),
+                new HitOnPlayerMechanic(56145, "Chaos Called", new MechanicPlotlySetting(Symbols.CircleXOpen,Colors.Purple), "Pattern.H", "Hit by Energy on Pattern", "Pattern Energy Hit", 0),
+                new HitOnPlayerMechanic(56527, "Rain of Chaos", new MechanicPlotlySetting(Symbols.StarSquare,Colors.Purple), "Lght.H", "Hit by Expanding Lightning", "Lightning Hit", 0),
+                new HitOnPlayerMechanic(56656, "Brandstorm Lightning", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Yellow), "S.Lght.H", "Hit by Small Lightning", "Small Lightning Hit", 0),
+                new HitOnPlayerMechanic(56180, "Residual Impact", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Orange), "Magma.F", "Hit by Magma Field", "Magma Field", 500),
+                new HitOnPlayerMechanic(56378, "Residual Impact", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Orange,10), "S.Magma.F", "Hit by Small Magma Field", "Small Magma Field", 500),
+                new HitOnPlayerMechanic(BatteringBlitz, "Battering Blitz", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Orange), "Rush.H", "Hit by Qadim Rush", "Qadim Rush", 500),
+                new HitOnPlayerMechanic(56332, "Caustic Chaos", new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Red), "A.Prj.H", "Hit by Aimed Projectile", "Aimed Projectile", 0),
+                new HitByEnemyMechanic(56598, "Shower of Chaos", new MechanicPlotlySetting(Symbols.Circle,Colors.Black), "Orb.D", "Pylon Orb not caught", "Shower of Chaos", 1000),
+                new HitByEnemyMechanic(56316, "Eclipsed Backlash", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Entropic.Expl", "Entropic Distortion exploded", "Eclipsed Backlash", 1000),
+                new PlayerBuffApplyMechanic(FixatedQadimThePeerless, "Fixated", new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixated", "Fixated", "Fixated", 0),
+                new PlayerBuffApplyMechanic(CriticalMass, "Critical Mass", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Orb caught", "Collected a Pylon Orb", "Critical Mass", 0),
+                new HitOnPlayerMechanic(56543, "Caustic Chaos", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "A.Prj.E", "Hit by Aimed Projectile Explosion", "Aimed Projectile Explosion", 0),
+                new PlayerBuffApplyMechanic(SappingSurge, "Sapping Surge", new MechanicPlotlySetting(Symbols.YDownOpen,Colors.Red), "B.Tether", "25% damage reduction", "Bad Tether", 0),
             });
             Extension = "prlqadim";
             Icon = "https://wiki.guildwars2.com/images/8/8b/Mini_Qadim_the_Peerless.png";
@@ -62,7 +62,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<AbstractBuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
         {
             var res = new List<AbstractBuffEvent>();
-            IReadOnlyList<AbstractBuffEvent> sappingSurges = combatData.GetBuffData(SkillIDs.SappingSurge);
+            IReadOnlyList<AbstractBuffEvent> sappingSurges = combatData.GetBuffData(SappingSurge);
             var sappingSurgeByDst = sappingSurges.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             foreach (KeyValuePair<AgentItem, List<AbstractBuffEvent>> pair in sappingSurgeByDst.Where(x => x.Value.Exists(y => y is BuffRemoveSingleEvent)))
             {
@@ -96,7 +96,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var phaseStarts = new List<long>();
             var phaseEnds = new List<long>();
             //
-            var magmaDrops = log.CombatData.GetBuffData(SkillIDs.MagmaDrop).Where(x => x is BuffApplyEvent).ToList();
+            var magmaDrops = log.CombatData.GetBuffData(MagmaDrop).Where(x => x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent magmaDrop in magmaDrops)
             {
                 if (phaseEnds.Count > 0)
@@ -111,7 +111,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     phaseEnds.Add(magmaDrop.Time);
                 }
             }
-            IReadOnlyList<AnimatedCastEvent> pushes = log.CombatData.GetAnimatedCastData(SkillIDs.ForceOfRetaliationCast);
+            IReadOnlyList<AnimatedCastEvent> pushes = log.CombatData.GetAnimatedCastData(ForceOfRetaliationCast);
             if (pushes.Count > 0)
             {
                 AbstractCastEvent push = pushes[0];
@@ -127,10 +127,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             // rush to pylon
-            phaseEnds.AddRange(log.CombatData.GetAnimatedCastData(SkillIDs.BatteringBlitz).Select(x => x.Time).ToList());
+            phaseEnds.AddRange(log.CombatData.GetAnimatedCastData(BatteringBlitz).Select(x => x.Time).ToList());
             phaseEnds.Add(log.FightData.FightEnd);
             // tp to middle after pylon destruction
-            phaseStarts.AddRange(log.CombatData.GetAnimatedCastData(SkillIDs.PeerlessQadimTPCenter).Select(x => x.EndTime));
+            phaseStarts.AddRange(log.CombatData.GetAnimatedCastData(PeerlessQadimTPCenter).Select(x => x.EndTime));
             // There should be at least as many starts as ends, otherwise skip phases
             if (phaseEnds.Count < phaseStarts.Count)
             {
@@ -182,7 +182,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TargetID.PeerlessQadim:
                     var cataCycle = cls.Where(x => x.SkillId == 56329).ToList();
                     var forceOfHavoc = cls.Where(x => x.SkillId == 56017).ToList();
-                    var forceOfRetal = cls.Where(x => x.SkillId == SkillIDs.ForceOfRetaliationCast).ToList();
+                    var forceOfRetal = cls.Where(x => x.SkillId == ForceOfRetaliationCast).ToList();
                     var etherStrikes = cls.Where(x => x.SkillId == 56012 || x.SkillId == 56653).ToList();
                     var causticChaos = cls.Where(x => x.SkillId == 56332).ToList();
                     var expoReperc = cls.Where(x => x.SkillId == 56223).ToList();

@@ -59,7 +59,7 @@ namespace GW2EIEvtcParser.EIData
                 return false;
             }),
             // Marksmanship
-            new DamageLogApproximateDamageModifier("Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, "https://wiki.guildwars2.com/images/2/2f/Steady_Focus.png", (x, log) => {
+            new DamageLogDamageModifier("Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, "https://wiki.guildwars2.com/images/2/2f/Steady_Focus.png", (x, log) => {
                 if (!x.Skill.IsWeaponSkill)
                 {
                     return false;
@@ -71,8 +71,8 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return currentPosition.DistanceToPoint(currentTargetPosition) <= 600.0;
-            }, ByPresence, GW2Builds.July2018Balance, GW2Builds.EndOfLife, DamageModifierMode.All),
-            new DamageLogApproximateDamageModifier("Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, "https://wiki.guildwars2.com/images/2/2f/Steady_Focus.png", (x, log) => {
+            }, ByPresence, GW2Builds.July2018Balance, GW2Builds.EndOfLife, DamageModifierMode.All).UsingApproximate(true),
+            new DamageLogDamageModifier("Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, "https://wiki.guildwars2.com/images/2/2f/Steady_Focus.png", (x, log) => {
                 if (!x.Skill.IsWeaponSkill)
                 {
                     return false;
@@ -84,7 +84,7 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return currentPosition.DistanceToPoint(currentTargetPosition) > 600.0;
-            }, ByPresence, GW2Builds.July2018Balance, GW2Builds.EndOfLife, DamageModifierMode.All),
+            }, ByPresence, GW2Builds.July2018Balance, GW2Builds.EndOfLife, DamageModifierMode.All).UsingApproximate(true),
             new BuffDamageModifierTarget(new long[] { 872, 833, 721, 727, 791, 722, 27705}, "Predator's Onslaught", "15% to disabled or movement-impaired foes", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/a/ac/Predator%27s_Onslaught.png", DamageModifierMode.All),
             // Skirmishing
             new DamageLogDamageModifier("Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger,"https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png", (x, log) => x.IsFlanking , ByPresence, GW2Builds.February2020Balance, GW2Builds.EndOfLife, DamageModifierMode.All),

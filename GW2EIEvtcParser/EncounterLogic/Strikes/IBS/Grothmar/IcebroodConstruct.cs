@@ -11,15 +11,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new HitOnPlayerMechanic(57832, "Deadly Ice Shock Wave",new MechanicPlotlySetting("square","rgb(255,0,0)"),"D.IceWave","Deadly Ice Shock Wave", "Deadly Shock Wave", 0),
-                new HitOnPlayerMechanic(57516, "Ice Arm Swing",new MechanicPlotlySetting("triangle","rgb(255,150,0)"),"A.Swing","Ice Arm Swing", "Ice Arm Swing", 0),
-                new HitOnPlayerMechanic(57948, "Ice Shock Wave",new MechanicPlotlySetting("square","rgb(255,150,0)"),"ShockWave","Ice Shock Wave", "Ice Shock Wave", 0),
-                new HitOnPlayerMechanic(57472, "Ice Shock Wave",new MechanicPlotlySetting("square","rgb(255,150,0)"),"ShockWave","Ice Shock Wave", "Ice Shock Wave", 0),
-                new HitOnPlayerMechanic(57779, "Ice Shock Wave",new MechanicPlotlySetting("square","rgb(255,150,0)"),"ShockWave","Ice Shock Wave", "Ice Shock Wave", 0),
-                new HitOnPlayerMechanic(57690, "Ice Shatter",new MechanicPlotlySetting("triangle-open","rgb(255,0,150)"),"Ice Orbs","Rotating Ice Orbs", "Ice Orbs", 50),
-                new HitOnPlayerMechanic(57663, "Ice Crystal",new MechanicPlotlySetting("circle-open","rgb(255,150,0)"),"I.Crystal","Ice Crystal", "Ice Crystal", 50),
-                new HitOnPlayerMechanic(57678, "Ice Flail",new MechanicPlotlySetting("square","rgb(255,0,150)"),"I.Flail","Ice Flail", "Ice Flail", 50),
-                new HitOnPlayerMechanic(57463, "Ice Flail",new MechanicPlotlySetting("square","rgb(255,0,150)"),"I.Flail","Ice Flail", "Ice Flail", 50),
+                new HitOnPlayerMechanic(57832, "Deadly Ice Shock Wave",new MechanicPlotlySetting(Symbols.Square,Colors.Red),"D.IceWave","Deadly Ice Shock Wave", "Deadly Shock Wave", 0),
+                new HitOnPlayerMechanic(57516, "Ice Arm Swing",new MechanicPlotlySetting(Symbols.TriangleUp,Colors.LightOrange),"A.Swing","Ice Arm Swing", "Ice Arm Swing", 0),
+                new HitOnPlayerMechanic(new long[] {57948, 57472, 57779 }, "Ice Shock Wave",new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange),"ShockWave","Ice Shock Wave", "Ice Shock Wave", 0),
+                new HitOnPlayerMechanic(57690, "Ice Shatter",new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Pink),"Ice Orbs","Rotating Ice Orbs", "Ice Orbs", 50),
+                new HitOnPlayerMechanic(57663, "Ice Crystal",new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange),"I.Crystal","Ice Crystal", "Ice Crystal", 50),
+                new HitOnPlayerMechanic(new long[] {57678, 57463 }, "Ice Flail",new MechanicPlotlySetting(Symbols.Square,Colors.Pink),"I.Flail","Ice Flail", "Ice Flail", 50),
             }
             );
             Extension = "icebrood";

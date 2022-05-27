@@ -156,6 +156,16 @@ namespace GW2EIEvtcParser.EIData
             return false;
         }
 
+        internal DamageModifier UsingApproximate(bool approximate)
+        {
+            Approximate = approximate;
+            if (Approximate)
+            {
+                Tooltip += "<br>Approximate";
+            }
+            return this;
+        }
+
         public int GetTotalDamage(AbstractSingleActor actor, ParsedEvtcLog log, AbstractSingleActor t, long start, long end)
         {
             FinalDPS damageData = actor.GetDPSStats(t, log, start, end);
@@ -216,7 +226,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifierTarget(OldExposed, "Old Exposed (Strike)", "30%", DamageSource.All, 30.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, "https://wiki.guildwars2.com/images/6/6b/Exposed.png", GW2Builds.March2022Balance2, GW2Builds.EndOfLife, DamageModifierMode.All),
             new BuffDamageModifierTarget(OldExposed, "Old Exposed (Condition)", "100%", DamageSource.All, 100.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, "https://wiki.guildwars2.com/images/6/6b/Exposed.png", GW2Builds.March2022Balance2, GW2Builds.EndOfLife, DamageModifierMode.All),
             new BuffDamageModifierTarget(Vulnerability, "Vulnerability", "1% per Stack", DamageSource.All, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByStack, "https://wiki.guildwars2.com/images/a/af/Vulnerability.png", DamageModifierMode.All),
-            new BuffApproximateDamageModifier(FrostSpirit, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png", 88541, GW2Builds.EndOfLife, DamageModifierMode.All),
+            new BuffDamageModifier(FrostSpirit, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png", 88541, GW2Builds.EndOfLife, DamageModifierMode.All).UsingApproximate(true),
             new DamageLogDamageModifier("Soulcleave's Summit", "per hit (no ICD)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, Source.Common,"https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png", ((x, log) => x.SkillId == SoulcleavesSummit), BySkill, 0, GW2Builds.May2021Balance, DamageModifierMode.All),
             new DamageLogDamageModifier("Soulcleave's Summit", "per hit (1s ICD per target)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, Source.Common,"https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png", ((x, log) => x.SkillId == SoulcleavesSummit), BySkill, GW2Builds.May2021Balance, GW2Builds.EndOfLife, DamageModifierMode.All),
             new DamageLogDamageModifier("One Wolf Pack", "per hit (max. once every 0.25s)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, Source.Common, "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png", ((x, log) => x.SkillId == OneWolfPackSkill), BySkill, DamageModifierMode.All),
