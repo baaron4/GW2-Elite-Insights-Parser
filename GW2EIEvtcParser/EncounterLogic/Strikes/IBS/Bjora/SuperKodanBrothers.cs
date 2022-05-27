@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -14,8 +15,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new PlayerBuffApplyMechanic(727, "Trapped", new MechanicPlotlySetting("circle","rgb(0,0,255)"), "Trapped","Trapped", "Trapped",2500),
-                new EnemyBuffApplyMechanic(58619, "Enrage", new MechanicPlotlySetting("circle","rgb(255,125,0)"), "Enrage","Enrage", "Enrage",1 << 16),
+                new PlayerBuffApplyMechanic(Immobile, "Trapped", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Trapped","Trapped", "Trapped",2500),
+                new EnemyBuffApplyMechanic(EnragedVC, "Enrage", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Enrage","Enrage", "Enrage",1 << 16),
             }
             );
             Extension = "supkodbros";

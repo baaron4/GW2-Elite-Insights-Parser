@@ -15,20 +15,19 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new HitOnPlayerMechanic(52173, "Pulverize", new MechanicPlotlySetting("square",Colors.LightOrange), "Arm Slam","Pulverize (Arm Slam)", "Arm Slam",0),
-            new HitOnPlayerMechanic(52173, "Pulverize", new MechanicPlotlySetting("square-open",Colors.LightOrange), "Stab.Slam","Pulverize (Arm Slam) while affected by stability", "Stabilized Arm Slam",0,(de, log) => de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
-            new HitOnPlayerMechanic(52086, "Junk Absorption", new MechanicPlotlySetting("circle-open",Colors.Purple), "Balls","Junk Absorption (Purple Balls during collect)", "Purple Balls",0),
-            new HitOnPlayerMechanic(52878, "Junk Fall", new MechanicPlotlySetting("circle-open",Colors.Pink), "Junk","Junk Fall (Falling Debris)", "Junk Fall",0),
-            new HitOnPlayerMechanic(52120, "Junk Fall", new MechanicPlotlySetting("circle-open",Colors.Pink), "Junk","Junk Fall (Falling Debris)", "Junk Fall",0),
-            new HitOnPlayerMechanic(52161, "Ruptured Ground", new MechanicPlotlySetting("square-open",Colors.Teal), "Ground","Ruptured Ground (Relics after Junk Wall)", "Ruptured Ground",0, (de,log) => de.HealthDamage > 0),
-            new HitOnPlayerMechanic(52656, "Tremor", new MechanicPlotlySetting("circle-open",Colors.Red), "Tremor","Tremor (Field adjacent to Arm Slam)", "Near Arm Slam",0, (de,log) => de.HealthDamage > 0),
-            new HitOnPlayerMechanic(52150, "Junk Torrent", new MechanicPlotlySetting("square-open",Colors.Red), "Wall","Junk Torrent (Moving Wall)", "Junk Torrent (Wall)",0, (de,log) => de.HealthDamage > 0),
-            new PlayerCastStartMechanic(52325, "Conjured Slash", new MechanicPlotlySetting("square",Colors.Red), "Sword.Cst","Conjured Slash (Special action sword)", "Sword Cast",0),
-            new PlayerCastStartMechanic(52780, "Conjured Protection", new MechanicPlotlySetting("square",Colors.Green), "Shield.Cst","Conjured Protection (Special action shield)", "Shield Cast",0),
-            new PlayerBuffApplyMechanic(52667, "Greatsword Power", new MechanicPlotlySetting("diamond-tall",Colors.Red), "Sword.C","Collected Sword", "Sword Collect",50),
-            new PlayerBuffApplyMechanic(52754, "Conjured Shield", new MechanicPlotlySetting("diamond-tall",Colors.Green), "Shield.C","Collected Shield", "Shield Collect",50),
-            new EnemyBuffApplyMechanic(52074, "Augmented Power", new MechanicPlotlySetting("asterisk-open",Colors.Red), "Augmented Power","Augmented Power", "Augmented Power",50),
-            new EnemyBuffApplyMechanic(53003, "Shielded", new MechanicPlotlySetting("asterisk-open",Colors.Green), "Shielded","Shielded", "Shielded",50),
+            new HitOnPlayerMechanic(52173, "Pulverize", new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Arm Slam","Pulverize (Arm Slam)", "Arm Slam",0, (de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+            new HitOnPlayerMechanic(52173, "Pulverize", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightOrange), "Stab.Slam","Pulverize (Arm Slam) while affected by stability", "Stabilized Arm Slam",0,(de, log) => de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+            new HitOnPlayerMechanic(52086, "Junk Absorption", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Purple), "Balls","Junk Absorption (Purple Balls during collect)", "Purple Balls",0),
+            new HitOnPlayerMechanic(new long[] {52878, 52120 }, "Junk Fall", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Pink), "Junk","Junk Fall (Falling Debris)", "Junk Fall",0),
+            new HitOnPlayerMechanic(52161, "Ruptured Ground", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Teal), "Ground","Ruptured Ground (Relics after Junk Wall)", "Ruptured Ground",0, (de,log) => de.HealthDamage > 0),
+            new HitOnPlayerMechanic(52656, "Tremor", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Tremor","Tremor (Field adjacent to Arm Slam)", "Near Arm Slam",0, (de,log) => de.HealthDamage > 0),
+            new HitOnPlayerMechanic(52150, "Junk Torrent", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Wall","Junk Torrent (Moving Wall)", "Junk Torrent (Wall)",0, (de,log) => de.HealthDamage > 0),
+            new PlayerCastStartMechanic(52325, "Conjured Slash", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Sword.Cst","Conjured Slash (Special action sword)", "Sword Cast",0),
+            new PlayerCastStartMechanic(52780, "Conjured Protection", new MechanicPlotlySetting(Symbols.Square,Colors.Green), "Shield.Cst","Conjured Protection (Special action shield)", "Shield Cast",0),
+            new PlayerBuffApplyMechanic(GreatswordPower, "Greatsword Power", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "Sword.C","Collected Sword", "Sword Collect",50),
+            new PlayerBuffApplyMechanic(ConjuredShield, "Conjured Shield", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Green), "Shield.C","Collected Shield", "Shield Collect",50),
+            new EnemyBuffApplyMechanic(AugmentedPower, "Augmented Power", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.Red), "Augmented Power","Augmented Power", "Augmented Power",50),
+            new EnemyBuffApplyMechanic(Shielded, "Shielded", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.Green), "Shielded","Shielded", "Shielded",50),
             });
             _cn = triggerID != (int)ArcDPSEnums.TargetID.ConjuredAmalgamate;
             Extension = "ca";
@@ -333,7 +332,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Conjured Amalgamate not found");
             }
-            return combatData.GetBuffData(SkillIDs.LockedOn).Count > 0 ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            return combatData.GetBuffData(LockedOn).Count > 0 ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
         }
     }
 }

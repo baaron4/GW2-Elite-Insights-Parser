@@ -36,16 +36,22 @@ namespace GW2EIEvtcParser.EncounterLogic
         public EncounterCategory EncounterCategoryInformation { get; protected set; }
 
 
+        internal static Mechanic DeathMechanic = new PlayerStatusMechanic<DeadEvent>("Dead", new MechanicPlotlySetting(Symbols.X, Colors.Black), "Dead", "Dead", "Dead", 0, (log, a) => log.CombatData.GetDeadEvents(a)).UsingShowOnTable(false);
+        internal static Mechanic DownMechanic = new PlayerStatusMechanic<DownEvent>("Downed", new MechanicPlotlySetting(Symbols.Cross, Colors.Red), "Downed", "Downed", "Downed", 0, (log, a) => log.CombatData.GetDownEvents(a)).UsingShowOnTable(false);
+        internal static Mechanic AliveMechanic = new PlayerStatusMechanic<AliveEvent>("Got up", new MechanicPlotlySetting(Symbols.Cross, Colors.Green), "Got up", "Got up", "Got up", 0, (log, a) => log.CombatData.GetAliveEvents(a)).UsingShowOnTable(false);
+        internal static Mechanic RespawnMechanic = new PlayerStatusMechanic<SpawnEvent>("Respawn", new MechanicPlotlySetting(Symbols.Cross, Colors.LightBlue), "Resp", "Resp", "Resp", 0, (log, a) => log.CombatData.GetSpawnEvents(a)).UsingShowOnTable(false);
+        internal static Mechanic DespawnMechanic = new PlayerStatusMechanic<DespawnEvent>("Disconnected", new MechanicPlotlySetting(Symbols.X, Colors.LightGrey), "DC", "DC", "DC", 0, (log, a) => log.CombatData.GetDespawnEvents(a)).UsingShowOnTable(false);
+
         protected FightLogic(int triggerID)
         {
             GenericTriggerID = triggerID;
             MechanicList = new List<Mechanic>() {
-                new PlayerStatusMechanic(SkillIDs.Death, "Dead", new MechanicPlotlySetting("x","rgb(0,0,0)"), "Dead",0),
-                new PlayerStatusMechanic(SkillIDs.Down, "Downed", new MechanicPlotlySetting("cross","rgb(255,0,0)"), "Downed",0),
-                new PlayerStatusMechanic(SkillIDs.Resurrect, "Resurrect", new MechanicPlotlySetting("cross-open","rgb(0,255,255)"), "Res",0),
-                new PlayerStatusMechanic(SkillIDs.Alive, "Got up", new MechanicPlotlySetting("cross","rgb(0,255,0)"), "Got up",0),
-                new PlayerStatusMechanic(SkillIDs.Despawn, "Disconnected", new MechanicPlotlySetting("x","rgb(120,120,120)"), "DC",0),
-                new PlayerStatusMechanic(SkillIDs.Respawn, "Respawn", new MechanicPlotlySetting("cross","rgb(120,120,255)"), "Resp",0)
+                DeathMechanic,
+                DownMechanic,
+                new PlayerCastStartMechanic(SkillIDs.Resurrect, "Resurrect", new MechanicPlotlySetting(Symbols.CrossOpen,Colors.Teal), "Res", "Res", "Res",0).UsingShowOnTable(false),
+                AliveMechanic,
+                DespawnMechanic,
+                RespawnMechanic
             };
             _basicMechanicsCount = MechanicList.Count;
             EncounterCategoryInformation = new EncounterCategory();

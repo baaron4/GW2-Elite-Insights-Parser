@@ -663,7 +663,7 @@ namespace GW2EIBuilders
         {
             MechanicData mData = _log.MechanicData;
             var mLogs = new List<MechanicEvent>();
-            foreach (List<MechanicEvent> mLs in mData.GetAllMechanics(_log))
+            foreach (List<MechanicEvent> mLs in mData.GetAllMechanicEvents(_log))
             {
                 mLogs.AddRange(mLs);
             }

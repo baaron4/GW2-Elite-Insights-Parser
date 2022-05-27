@@ -4,32 +4,30 @@ using GW2EIEvtcParser.ParsedData;
 namespace GW2EIEvtcParser.EIData
 {
 
-    internal class SpawnMechanic : Mechanic
+    internal class SpawnMechanic : IDBasedMechanic
     {
-
-        public SpawnMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)
+        public SpawnMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
+            IsEnemyMechanic = true;
         }
 
-        public SpawnMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+        public SpawnMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
             IsEnemyMechanic = true;
         }
 
         internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
         {
-            foreach (AgentItem a in log.AgentData.GetNPCsByID((int)SkillId))
+            foreach (long mechanicID in MechanicIDs)
             {
-                if (!regroupedMobs.TryGetValue(a.ID, out AbstractSingleActor amp))
+                foreach (AgentItem a in log.AgentData.GetNPCsByID((int)mechanicID))
                 {
-                    amp = log.FindActor(a, true);
-                    if (amp == null)
+                    AbstractSingleActor amp = EnemyMechanicHelper.FindActor(log, a, regroupedMobs);
+                    if (amp != null)
                     {
-                        continue;
+                        mechanicLogs[this].Add(new MechanicEvent(a.FirstAware, this, amp));
                     }
-                    regroupedMobs.Add(amp.ID, amp);
                 }
-                mechanicLogs[this].Add(new MechanicEvent(a.FirstAware, this, amp));
             }
         }
     }

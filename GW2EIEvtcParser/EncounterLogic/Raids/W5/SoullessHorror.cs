@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -14,20 +15,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {
 
-            new HitOnPlayerMechanic(47327, "Vortex Slash", new MechanicPlotlySetting("circle",Colors.LightOrange), "Donut In","Vortex Slash (Inner Donut hit)", "Inner Donut",0),
-            new HitOnPlayerMechanic(48432, "Vortex Slash", new MechanicPlotlySetting("circle-open",Colors.LightOrange), "Donut Out","Vortex Slash (Outer Donut hit)", "Outer Donut", 0),
-            new HitOnPlayerMechanic(47430, "Soul Rift", new MechanicPlotlySetting("circle-open",Colors.Red), "Golem","Soul Rift (stood in Golem Aoe)", "Golem Aoe",0),
-            new HitOnPlayerMechanic(48363, "Quad Slash", new MechanicPlotlySetting("star-diamond-open",Colors.LightOrange), "Slice1","Quad Slash (4 Slices, First hit)", "4 Slices 1",0),
-            new HitOnPlayerMechanic(47915, "Quad Slash", new MechanicPlotlySetting("star-square-open",Colors.LightOrange), "Slice2","Quad Slash (4 Slices, Second hit)", "4 Slices 2",0),
-            new HitOnPlayerMechanic(47363, "Spinning Slash", new MechanicPlotlySetting("star-triangle-up-open",Colors.DarkRed), "Scythe","Spinning Slash (hit by Scythe)", "Scythe",0),
-            new HitOnPlayerMechanic(48500, "Death Bloom", new MechanicPlotlySetting("octagon",Colors.LightOrange), "8Slice","Death Bloom (8 Slices)", "8 Slices",0),
-            new PlayerBuffApplyMechanic(47434, "Fixated", new MechanicPlotlySetting("star",Colors.Magenta), "Fixate","Fixated (Special Action Key)", "Fixated",0),
-            new PlayerBuffApplyMechanic(47414, "Necrosis", new MechanicPlotlySetting("star-open",Colors.Magenta), "Necrosis","Necrosis (Tanking Debuff)", "Necrosis Debuff",50),
-            new HitOnPlayerMechanic(48327, "Corrupt the Living", new MechanicPlotlySetting("circle",Colors.Red), "Spin","Corrupt the Living (Torment+Poison Spin)", "Torment+Poison Spin",0),
-            new HitOnPlayerMechanic(47756, "Wurm Spit", new MechanicPlotlySetting("diamond-open","rgb(0,128,128)"), "Spit","Wurm Spit", "Wurm Spit",0),
-            new EnemyCastStartMechanic(48662, "Howling Death", new MechanicPlotlySetting("diamond-tall",Colors.DarkTeal), "CC","Howling Death (Breakbar)", "Breakbar",0),
-            new EnemyCastEndMechanic(48662, "Howling Death", new MechanicPlotlySetting("diamond-tall",Colors.DarkGreen), "CCed","Howling Death (Breakbar) broken", "CCed",0, (ce, log) => ce.ActualDuration <= 6800),
-            new EnemyCastEndMechanic(48662, "Howling Death", new MechanicPlotlySetting("diamond-tall",Colors.Red), "CC Fail","Howling Death (Breakbar failed) ", "CC Fail",0, (ce,log) => ce.ActualDuration > 6800),
+            new HitOnPlayerMechanic(47327, "Vortex Slash", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Donut In","Vortex Slash (Inner Donut hit)", "Inner Donut",0),
+            new HitOnPlayerMechanic(48432, "Vortex Slash", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Donut Out","Vortex Slash (Outer Donut hit)", "Outer Donut", 0),
+            new HitOnPlayerMechanic(47430, "Soul Rift", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Golem","Soul Rift (stood in Golem Aoe)", "Golem Aoe",0),
+            new HitOnPlayerMechanic(48363, "Quad Slash", new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.LightOrange), "Slice1","Quad Slash (4 Slices, First hit)", "4 Slices 1",0),
+            new HitOnPlayerMechanic(47915, "Quad Slash", new MechanicPlotlySetting(Symbols.StarSquareOpen,Colors.LightOrange), "Slice2","Quad Slash (4 Slices, Second hit)", "4 Slices 2",0),
+            new HitOnPlayerMechanic(47363, "Spinning Slash", new MechanicPlotlySetting(Symbols.StarTriangleUpOpen,Colors.DarkRed), "Scythe","Spinning Slash (hit by Scythe)", "Scythe",0),
+            new HitOnPlayerMechanic(48500, "Death Bloom", new MechanicPlotlySetting(Symbols.Octagon,Colors.LightOrange), "8Slice","Death Bloom (8 Slices)", "8 Slices",0),
+            new PlayerBuffApplyMechanic(FixatedSH, "Fixated", new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixate","Fixated (Special Action Key)", "Fixated",0),
+            new PlayerBuffApplyMechanic(Necrosis, "Necrosis", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Magenta), "Necrosis","Necrosis (Tanking Debuff)", "Necrosis Debuff",50),
+            new HitOnPlayerMechanic(48327, "Corrupt the Living", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Spin","Corrupt the Living (Torment+Poison Spin)", "Torment+Poison Spin",0),
+            new HitOnPlayerMechanic(47756, "Wurm Spit", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.DarkTeal), "Spit","Wurm Spit", "Wurm Spit",0),
+            new EnemyCastStartMechanic(48662, "Howling Death", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Howling Death (Breakbar)", "Breakbar",0),
+            new EnemyCastEndMechanic(48662, "Howling Death", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Howling Death (Breakbar) broken", "CCed",0, (ce, log) => ce.ActualDuration <= 6800),
+            new EnemyCastEndMechanic(48662, "Howling Death", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Howling Death (Breakbar failed) ", "CC Fail",0, (ce,log) => ce.ActualDuration > 6800),
 
             });
             Extension = "sh";

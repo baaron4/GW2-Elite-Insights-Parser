@@ -18,19 +18,11 @@ namespace GW2EIEvtcParser.EIData
 
         private readonly Dictionary<AgentItem, AbstractHealthDamageEvent> _firstHits = new Dictionary<AgentItem, AbstractHealthDamageEvent>();
 
-        public FirstHitOnPlayerMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, SkillChecker condition) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, condition)
+        public FirstHitOnPlayerMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, SkillChecker condition = null) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
         {
         }
 
-        public FirstHitOnPlayerMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, SkillChecker condition) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
-        {
-        }
-
-        public FirstHitOnPlayerMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)
-        {
-        }
-
-        public FirstHitOnPlayerMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+        public FirstHitOnPlayerMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, SkillChecker condition = null) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
         {
         }
 
@@ -38,7 +30,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (!_firstHits.TryGetValue(src, out AbstractHealthDamageEvent evt))
             {
-                AbstractHealthDamageEvent res = log.CombatData.GetDamageData(src).Where(x => x.SkillId == SkillId && x.To.Type == AgentItem.AgentType.Player && base.Keep(x, log)).FirstOrDefault();
+                AbstractHealthDamageEvent res = log.CombatData.GetDamageData(src).Where(x => MechanicIDs.Contains(x.SkillId) && x.To.Type == AgentItem.AgentType.Player && base.Keep(x, log)).FirstOrDefault();
                 _firstHits[src] = res;
                 return res;
             }

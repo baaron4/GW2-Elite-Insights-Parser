@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
@@ -15,10 +16,32 @@ namespace GW2EIEvtcParser.EIData
 
         internal MechanicData(List<Mechanic> fightMechanics)
         {
+            var errorMechanicConfig = new Dictionary<string, Dictionary<string, Dictionary<int, List<Mechanic>>>>();
             foreach (Mechanic m in fightMechanics)
             {
+                if (!errorMechanicConfig.TryGetValue(m.PlotlySetting.Symbol, out Dictionary<string, Dictionary<int, List<Mechanic>>> colorDict))
+                {
+                    colorDict = new Dictionary<string, Dictionary<int, List<Mechanic>>>();
+                    errorMechanicConfig[m.PlotlySetting.Symbol] = colorDict;
+                }
+                if (!colorDict.TryGetValue(m.PlotlySetting.Color, out Dictionary<int, List<Mechanic>> sizeDict))
+                {
+                    sizeDict = new Dictionary<int, List<Mechanic>>();
+                    colorDict[m.PlotlySetting.Color] = sizeDict;
+                }
+                if (!sizeDict.TryGetValue(m.PlotlySetting.Size, out List<Mechanic> mList))
+                {
+                    mList = new List<Mechanic>();
+                    sizeDict[m.PlotlySetting.Size] = mList;
+                }
+                mList.Add(m);
+                if (sizeDict.Count > 1)
+                {
+                    throw new InvalidDataException(mList[0].FullName + " and " + mList[1].FullName + " share the same configuration");
+                }
                 _mechanicLogs.Add(m, new List<MechanicEvent>());
             }
+
         }
 
         private void ComputeMechanics(ParsedEvtcLog log)
@@ -27,25 +50,6 @@ namespace GW2EIEvtcParser.EIData
             foreach (Mechanic mech in _mechanicLogs.Keys)
             {
                 mech.CheckMechanic(log, _mechanicLogs, regroupedMobs);
-            }
-            // regroup same mechanics with diff ids
-            var altNames = new Dictionary<string, Mechanic>();
-            var toRemove = new List<Mechanic>();
-            foreach (Mechanic mech in _mechanicLogs.Keys)
-            {
-                if (altNames.ContainsKey(mech.ShortName))
-                {
-                    _mechanicLogs[altNames[mech.ShortName]].AddRange(_mechanicLogs[mech]);
-                    toRemove.Add(mech);
-                }
-                else
-                {
-                    altNames.Add(mech.ShortName, mech);
-                }
-            }
-            foreach (Mechanic mech in toRemove)
-            {
-                _mechanicLogs.Remove(mech);
             }
         }
 
@@ -71,7 +75,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public Dictionary<Mechanic, List<MechanicEvent>>.ValueCollection GetAllMechanics(ParsedEvtcLog log)
+        public Dictionary<Mechanic, List<MechanicEvent>>.ValueCollection GetAllMechanicEvents(ParsedEvtcLog log)
         {
             ProcessMechanics(log);
             return _mechanicLogs.Values;
@@ -87,17 +91,6 @@ namespace GW2EIEvtcParser.EIData
             return new List<MechanicEvent>();
         }
 
-        internal IReadOnlyList<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, long id)
-        {
-            ProcessMechanics(log);
-            Mechanic mech = _mechanicLogs.Keys.FirstOrDefault(x => x.SkillId == id);
-            if (mech != null)
-            {
-                return _mechanicLogs[mech];
-            }
-            return new List<MechanicEvent>();
-        }
-
         private void ComputeMechanicData(long start, long end)
         {
             var presentMechanics = new HashSet<Mechanic>();
@@ -109,14 +102,18 @@ namespace GW2EIEvtcParser.EIData
                 if (pair.Value.Any(x => x.Time >= start && x.Time <= end))
                 {
                     presentMechanics.Add(pair.Key);
-                    if (pair.Key.IsEnemyMechanic)
+                    if (pair.Key.ShowOnTable)
                     {
-                        presentOnEnemyMechanics.Add(pair.Key);
+                        if (pair.Key.IsEnemyMechanic)
+                        {
+                            presentOnEnemyMechanics.Add(pair.Key);
+                        }
+                        else
+                        {
+                            presentOnFriendliesMechanics.Add(pair.Key);
+                        }
                     }
-                    else if (pair.Key.ShowOnTable)
-                    {
-                        presentOnFriendliesMechanics.Add(pair.Key);
-                    }
+                    
                 }
             }
             // ready enemy list

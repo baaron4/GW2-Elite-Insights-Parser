@@ -16,31 +16,27 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {
 
-            new HitOnPlayerMechanic(34380, "Oppressive Gaze", new MechanicPlotlySetting("hexagram",Colors.Red), "Hadouken","Oppressive Gaze (Hadouken projectile)", "Hadouken",0),//human
-            new HitOnPlayerMechanic(34371, "Oppressive Gaze", new MechanicPlotlySetting("hexagram",Colors.Red), "Hadouken","Oppressive Gaze (Hadouken projectile)", "Hadouken",0),//abom
-            new HitOnPlayerMechanic(34480, "Blood Shards", new MechanicPlotlySetting("diamond-wide-open",Colors.Magenta), "Shoot Shards","Blood Shard projectiles during bubble", "Rapid Fire",0),// //human
-            new HitOnPlayerMechanic(34440, "Blood Shards", new MechanicPlotlySetting("diamond-wide-open",Colors.Magenta), "Shoot Shards","Blood Shard projectiles during bubble", "Rapid Fire", 0),// //abom
-            new HitOnPlayerMechanic(34404, "Shards of Rage", new MechanicPlotlySetting("star-diamond",Colors.Red), "Jump Shards","Shards of Rage (Jump)", "Jump Shards",1000),//human
-            new HitOnPlayerMechanic(34411, "Shards of Rage", new MechanicPlotlySetting("star-diamond",Colors.Red), "Jump Shards","Shards of Rage (Jump)", "Jump Shards",1000),//abom
-            new HitOnPlayerMechanic(34466, "Fiery Vortex", new MechanicPlotlySetting("triangle-down-open",Colors.Yellow), "Tornado","Fiery Vortex (Tornado)", "Tornado",250),
-            new HitOnPlayerMechanic(34543, "Thunder", new MechanicPlotlySetting("triangle-up-open",Colors.Teal), "Storm","Thunder Storm hit (air phase)", "Storm cloud",0),
-            new PlayerBuffApplyMechanic(34450, "Unstable Blood Magic", new MechanicPlotlySetting("diamond",Colors.Red), "Well","Unstable Blood Magic application", "Well",0),
-            new HitOnPlayerMechanic(34336, "Well of the Profane", new MechanicPlotlySetting("diamond-open",Colors.Red), "Well dmg","Unstable Blood Magic AoE hit", "Stood in Well",0),
-            new PlayerBuffApplyMechanic(34416, "Corruption", new MechanicPlotlySetting("circle",Colors.LightOrange), "Corruption","Corruption Application", "Corruption",0),
-            new HitOnPlayerMechanic(34473, "Corruption", new MechanicPlotlySetting("circle-open",Colors.LightOrange), "Corr. dmg","Hit by Corruption AoE", "Corruption dmg",0),
-            new PlayerBuffApplyMechanic(34442, "Sacrifice", new MechanicPlotlySetting("diamond-tall",Colors.DarkTeal), "Sacrifice","Sacrifice (Breakbar)", "Sacrifice",0),
-            new PlayerBuffRemoveMechanic(34442, "Sacrifice", new MechanicPlotlySetting("diamond-tall",Colors.DarkGreen), "CC.End","Sacrifice (Breakbar) ended", "Sacrifice End",0, (br,log) => br.RemovedDuration > 25 && !log.CombatData.GetDeadEvents(br.To).Any(x => Math.Abs(br.Time - x.Time) < ParserHelper.ServerDelayConstant)),
-            new PlayerBuffRemoveMechanic(34442, "Sacrificed", new MechanicPlotlySetting("diamond-tall",Colors.Red), "CC.Fail","Sacrifice time ran out", "Sacrificed",0, (br,log) => br.RemovedDuration <= 25 || log.CombatData.GetDeadEvents(br.To).Any(x => Math.Abs(br.Time - x.Time) < ParserHelper.ServerDelayConstant)),
-            new PlayerBuffRemoveMechanic(34367, "Unbalanced", new MechanicPlotlySetting("square",Colors.LightPurple), "KD","Unbalanced (triggered Storm phase Debuff)", "Knockdown",0, (br,log) => br.RemovedDuration > 0 && !br.To.HasBuff(log, SkillIDs.Stability, br.Time - ParserHelper.ServerDelayConstant)),
-            //new Mechanic(34367, "Unbalanced", Mechanic.MechType.PlayerOnPlayer, ParseEnum.BossIDS.Matthias, new MechanicPlotlySetting("square","rgb(0,140,0)"), "KD","Unbalanced (triggered Storm phase Debuff) only on successful interrupt", "Knockdown (interrupt)",0,(condition => condition.getCombatItem().Result == ParseEnum.Result.Interrupt)),
-            //new Mechanic(34367, "Unbalanced", ParseEnum.BossIDS.Matthias, new MechanicPlotlySetting("square","rgb(0,140,0)"), "KD","Unbalanced (triggered Storm phase Debuff) only on successful interrupt", "Knockdown (interrupt)",0,(condition => condition.getDLog().GetResult() == ParseEnum.Result.Interrupt)),
-            //new Mechanic(34422, "Blood Fueled", ParseEnum.BossIDS.Matthias, new MechanicPlotlySetting("square",Color.Red), "Ate Reflects(good)",0),//human //Applied at the same time as Backflip Shards since it is the buff applied by them, can be omitted imho
-            //new Mechanic(34428, "Blood Fueled", ParseEnum.BossIDS.Matthias, new MechanicPlotlySetting("square",Color.Red), "Ate Reflects(good)",0),//abom
-            new EnemyBuffApplyMechanic(34376, "Blood Shield", new MechanicPlotlySetting("octagon",Colors.Red), "Bubble","Blood Shield (protective bubble)", "Bubble",100, (ba, log) => !ba.To.HasBuff(log, SkillIDs.BloodShield, ba.Time - 100)),//human
-            new EnemyBuffApplyMechanic(34518, "Blood Shield", new MechanicPlotlySetting("octagon",Colors.Red), "Bubble","Blood Shield (protective bubble)", "Bubble",100, (ba, log) => !ba.To.HasBuff(log, SkillIDs.BloodShieldAbo, ba.Time - 100)),//abom
-            new PlayerBuffApplyMechanic(34511, "Zealous Benediction", new MechanicPlotlySetting("circle",Colors.Yellow), "Bombs","Zealous Benediction (Expanding bombs)","Bomb",0),
-            new PlayerBuffApplyMechanic(26766, "Icy Patch", new MechanicPlotlySetting("circle-open",Colors.Blue), "Icy KD","Knockdown by Icy Patch", "Icy Patch KD",0, (br,log) => br.AppliedDuration == 10000 && !br.To.HasBuff(log, SkillIDs.Stability, br.Time - ParserHelper.ServerDelayConstant)),
-            new HitOnPlayerMechanic(34413, "Surrender", new MechanicPlotlySetting("circle-open",Colors.Black), "Spirit","Surrender (hit by walking Spirit)", "Spirit hit",0)
+            new HitOnPlayerMechanic(new long[]{ 34380, 31750 }, "Oppressive Gaze", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Red), "Hadouken","Oppressive Gaze (Hadouken projectile)", "Hadouken",0),
+            new HitOnPlayerMechanic(new long[]{ 34480, 34440 }, "Blood Shards", new MechanicPlotlySetting(Symbols.DiamondWideOpen,Colors.Magenta), "Shoot Shards","Blood Shard projectiles during bubble", "Rapid Fire",0),
+            new HitOnPlayerMechanic(new long[]{ 34404, 34411 }, "Shards of Rage", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Red), "Jump Shards","Shards of Rage (Jump)", "Jump Shards",1000),
+            new HitOnPlayerMechanic(34466, "Fiery Vortex", new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Tornado","Fiery Vortex (Tornado)", "Tornado",250),
+            new HitOnPlayerMechanic(34543, "Thunder", new MechanicPlotlySetting(Symbols.TriangleUpOpen,Colors.Teal), "Storm","Thunder Storm hit (air phase)", "Storm cloud",0),
+            new PlayerBuffApplyMechanic(UnstableBloodMagic, "Unstable Blood Magic", new MechanicPlotlySetting(Symbols.Diamond,Colors.Red), "Well","Unstable Blood Magic application", "Well",0),
+            new HitOnPlayerMechanic(34336, "Well of the Profane", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Red), "Well dmg","Unstable Blood Magic AoE hit", "Stood in Well",0),
+            new PlayerBuffApplyMechanic(Corruption1, "Corruption", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Corruption","Corruption Application", "Corruption",0),
+            new HitOnPlayerMechanic(34473, "Corruption", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Corr. dmg","Hit by Corruption AoE", "Corruption dmg",0),
+            new PlayerBuffApplyMechanic(MatthiasSacrifice, "Sacrifice", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "Sacrifice","Sacrifice (Breakbar)", "Sacrifice",0),
+            new PlayerBuffRemoveMechanic(MatthiasSacrifice, "Sacrifice", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CC.End","Sacrifice (Breakbar) ended", "Sacrifice End",0, (br,log) => br.RemovedDuration > 25 && !log.CombatData.GetDeadEvents(br.To).Any(x => Math.Abs(br.Time - x.Time) < ParserHelper.ServerDelayConstant)),
+            new PlayerBuffRemoveMechanic(MatthiasSacrifice, "Sacrificed", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC.Fail","Sacrifice time ran out", "Sacrificed",0, (br,log) => br.RemovedDuration <= 25 || log.CombatData.GetDeadEvents(br.To).Any(x => Math.Abs(br.Time - x.Time) < ParserHelper.ServerDelayConstant)),
+            new PlayerBuffRemoveMechanic(Unbalanced, "Unbalanced", new MechanicPlotlySetting(Symbols.Square,Colors.LightPurple), "KD","Unbalanced (triggered Storm phase Debuff)", "Knockdown",0, (br,log) => br.RemovedDuration > 0 && !br.To.HasBuff(log, Stability, br.Time - ParserHelper.ServerDelayConstant)),
+            //new Mechanic(34367, "Unbalanced", Mechanic.MechType.PlayerOnPlayer, ParseEnum.BossIDS.Matthias, new MechanicPlotlySetting(Symbols.Square,"rgb(0,140,0)"), "KD","Unbalanced (triggered Storm phase Debuff) only on successful interrupt", "Knockdown (interrupt)",0,(condition => condition.getCombatItem().Result == ParseEnum.Result.Interrupt)),
+            //new Mechanic(34367, "Unbalanced", ParseEnum.BossIDS.Matthias, new MechanicPlotlySetting(Symbols.Square,"rgb(0,140,0)"), "KD","Unbalanced (triggered Storm phase Debuff) only on successful interrupt", "Knockdown (interrupt)",0,(condition => condition.getDLog().GetResult() == ParseEnum.Result.Interrupt)),
+            //new Mechanic(34422, "Blood Fueled", ParseEnum.BossIDS.Matthias, new MechanicPlotlySetting(Symbols.Square,Color.Red), "Ate Reflects(good)",0),//human //Applied at the same time as Backflip Shards since it is the buff applied by them, can be omitted imho
+            //new Mechanic(34428, "Blood Fueled", ParseEnum.BossIDS.Matthias, new MechanicPlotlySetting(Symbols.Square,Color.Red), "Ate Reflects(good)",0),//abom
+            new EnemyBuffApplyMechanic(new long[]{ BloodShield, BloodShieldAbo }, "Blood Shield", new MechanicPlotlySetting(Symbols.Octagon,Colors.Red), "Bubble","Blood Shield (protective bubble)", "Bubble",100, (ba, log) => !ba.To.HasBuff(log, BloodShield, ba.Time - 100) && !ba.To.HasBuff(log, BloodShieldAbo, ba.Time - 100)),
+            new PlayerBuffApplyMechanic(ZealousBenediction, "Zealous Benediction", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Bombs","Zealous Benediction (Expanding bombs)","Bomb",0),
+            new PlayerBuffApplyMechanic(26766, "Icy Patch", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Icy KD","Knockdown by Icy Patch", "Icy Patch KD",0, (br,log) => br.AppliedDuration == 10000 && !br.To.HasBuff(log, Stability, br.Time - ParserHelper.ServerDelayConstant)),
+            new HitOnPlayerMechanic(34413, "Surrender", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Spirit","Surrender (hit by walking Spirit)", "Spirit hit",0)
             });
             Extension = "matt";
             Icon = "https://wiki.guildwars2.com/images/5/5d/Mini_Matthias_Abomination.png";
@@ -79,19 +75,19 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return phases;
             }
             // Special buff cast check
-            AbstractBuffEvent heatWave = log.CombatData.GetBuffData(SkillIDs.HeatWaveMatthias).FirstOrDefault();
+            AbstractBuffEvent heatWave = log.CombatData.GetBuffData(HeatWaveMatthias).FirstOrDefault();
             if (heatWave != null)
             {
                 phases.Add(new PhaseData(0, heatWave.Time - 1));
-                AbstractBuffEvent downPour = log.CombatData.GetBuffData(SkillIDs.DownpourMatthias).FirstOrDefault();
+                AbstractBuffEvent downPour = log.CombatData.GetBuffData(DownpourMatthias).FirstOrDefault();
                 if (downPour != null)
                 {
                     phases.Add(new PhaseData(heatWave.Time, downPour.Time - 1));
-                    AbstractBuffEvent abo = log.CombatData.GetBuffData(SkillIDs.Unstable).FirstOrDefault();
+                    AbstractBuffEvent abo = log.CombatData.GetBuffData(Unstable).FirstOrDefault();
                     if (abo != null)
                     {
                         phases.Add(new PhaseData(downPour.Time, abo.Time - 1));
-                        AbstractBuffEvent invulRemove = log.CombatData.GetBuffData(mainTarget.AgentItem).FirstOrDefault(x => x.Time >= abo.Time && x.Time <= abo.Time + 10000 && x.BuffID == SkillIDs.Invulnerability757 && !(x is BuffApplyEvent));
+                        AbstractBuffEvent invulRemove = log.CombatData.GetBuffData(mainTarget.AgentItem).FirstOrDefault(x => x.Time >= abo.Time && x.Time <= abo.Time + 10000 && x.BuffID == Invulnerability757 && !(x is BuffApplyEvent));
                         if (invulRemove != null)
                         {
                             phases.Add(new PhaseData(invulRemove.Time, fightDuration));
@@ -354,7 +350,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             // Bombs
-            var zealousBenediction = log.CombatData.GetBuffData(SkillIDs.ZealousBenediction).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            var zealousBenediction = log.CombatData.GetBuffData(ZealousBenediction).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent c in zealousBenediction)
             {
                 int zealousStart = (int)c.Time;

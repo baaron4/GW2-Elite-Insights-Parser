@@ -42,7 +42,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifier(Fury, "Furious Strength", "10% under fury", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByStack, "https://wiki.guildwars2.com/images/c/ca/Furious_Strength.png", GW2Builds.May2021Balance, GW2Builds.May2021BalanceHotFix, DamageModifierMode.All),
             new BuffDamageModifier(Fury, "Furious Strength", "15% under fury", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByStack, "https://wiki.guildwars2.com/images/c/ca/Furious_Strength.png", GW2Builds.May2021BalanceHotFix, GW2Builds.EndOfLife, DamageModifierMode.All),
             new BuffDamageModifier(new long[] { Stout, Deadly, Ferocious, Supportive, Versatile}, "Loud Whistle", "10% while merged and hp > 90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByPresence, "https://wiki.guildwars2.com/images/b/b6/Loud_Whistle.png", GW2Builds.May2018Balance, GW2Builds.EndOfLife, DamageModifierMode.All, (x,log) => x.IsOverNinety),
-            new DamageLogApproximateDamageModifier("Oppressive Superiority", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, "https://wiki.guildwars2.com/images/f/fc/Oppressive_Superiority.png", (x,log) =>
+            new DamageLogDamageModifier("Oppressive Superiority", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, "https://wiki.guildwars2.com/images/f/fc/Oppressive_Superiority.png", (x,log) =>
             {
                 double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
                 double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
@@ -51,7 +51,7 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return selfHP > dstHP;
-            }, ByPresence, DamageModifierMode.All ),
+            }, ByPresence, DamageModifierMode.All ).UsingApproximate(true),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

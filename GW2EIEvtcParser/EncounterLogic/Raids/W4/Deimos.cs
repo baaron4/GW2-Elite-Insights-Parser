@@ -19,8 +19,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new HitOnPlayerMechanic(37716, "Rapid Decay", new MechanicPlotlySetting("circle-open",Colors.Black), "Oil","Rapid Decay (Black expanding oil)", "Black Oil",0),
-            new FirstHitOnPlayerMechanic(37716, "Rapid Decay", new MechanicPlotlySetting("circle",Colors.Black), "Oil T.","Rapid Decay Trigger (Black expanding oil)", "Black Oil Trigger",0, (ce, log) => {
+            new HitOnPlayerMechanic(37716, "Rapid Decay", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Oil","Rapid Decay (Black expanding oil)", "Black Oil",0),
+            new FirstHitOnPlayerMechanic(37716, "Rapid Decay", new MechanicPlotlySetting(Symbols.Circle,Colors.Black), "Oil T.","Rapid Decay Trigger (Black expanding oil)", "Black Oil Trigger",0, (ce, log) => {
                 AbstractSingleActor actor = log.FindActor(ce.To);
                 if (actor == null)
                 {
@@ -30,23 +30,22 @@ namespace GW2EIEvtcParser.EncounterLogic
                 bool hitInDown = downs.Any(x => x.start < ce.Time && ce.Time < x.end);
                 return !hitInDown;
             }),
-            new EnemyCastStartMechanic(37846, "Off Balance", new MechanicPlotlySetting("diamond-tall",Colors.DarkTeal), "TP CC","Off Balance (Saul TP Breakbar)", "Saul TP Start",0),
-            new EnemyCastEndMechanic(37846, "Off Balance", new MechanicPlotlySetting("diamond-tall",Colors.Red), "TP CC Fail","Failed Saul TP CC", "Failed CC (TP)",0, (ce,log) => ce.ActualDuration >= 2200),
-            new EnemyCastEndMechanic(37846, "Off Balance", new MechanicPlotlySetting("diamond-tall",Colors.DarkGreen), "TP CCed","Saul TP CCed", "CCed (TP)",0, (ce, log) => ce.ActualDuration < 2200),
-            new EnemyCastStartMechanic(38272, "Boon Thief", new MechanicPlotlySetting("diamond-wide",Colors.DarkTeal), "Thief CC","Boon Thief (Saul Breakbar)", "Boon Thief Start",0),
-            new EnemyCastEndMechanic(38272, "Boon Thief", new MechanicPlotlySetting("diamond-wide",Colors.Red), "Thief CC Fail","Failed Boon Thief CC", "Failed CC (Thief)",0,(ce,log) => ce.ActualDuration >= 4400),
-            new EnemyCastEndMechanic(38272, "Boon Thief", new MechanicPlotlySetting("diamond-wide",Colors.DarkGreen), "Thief CCed","Boon Thief CCed", "CCed (Thief)",0,(ce, log) => ce.ActualDuration < 4400),
-            new HitOnPlayerMechanic(38208, "Annihilate", new MechanicPlotlySetting("hexagon",Colors.Yellow), "Pizza","Annihilate (Cascading Pizza attack)", "Boss Smash",0),
-            new HitOnPlayerMechanic(37929, "Annihilate", new MechanicPlotlySetting("hexagon",Colors.Yellow), "Pizza","Annihilate (Cascading Pizza attack)", "Boss Smash",0),
-            new HitOnPlayerMechanic(37980, "Demonic Shock Wave", new MechanicPlotlySetting("triangle-right-open",Colors.Red), "10% RSmash","Knockback (right hand) in 10% Phase", "10% Right Smash",0),
-            new HitOnPlayerMechanic(38046, "Demonic Shock Wave", new MechanicPlotlySetting("triangle-left-open",Colors.Red), "10% LSmash","Knockback (left hand) in 10% Phase", "10% Left Smash",0),
-            new HitOnPlayerMechanic(37982, "Demonic Shock Wave", new MechanicPlotlySetting("bowtie",Colors.Red), "10% DSmash","Knockback (both hands) in 10% Phase", "10% Double Smash",0),
-            new PlayerBuffApplyMechanic(37733, "Tear Instability", new MechanicPlotlySetting("diamond",Colors.DarkTeal), "Tear","Collected a Demonic Tear", "Tear",0),
-            new HitOnPlayerMechanic(37613, "Mind Crush", new MechanicPlotlySetting("square",Colors.Blue), "Mind Crush","Hit by Mind Crush without Bubble Protection", "Mind Crush",0, (de,log) => de.HealthDamage > 0),
-            new PlayerBuffApplyMechanic(38187, "Weak Minded", new MechanicPlotlySetting("square-open",Colors.LightPurple), "Weak Mind","Weak Minded (Debuff after Mind Crush)", "Weak Minded",0),
-            new PlayerBuffApplyMechanic(37730, "Chosen by Eye of Janthir", new MechanicPlotlySetting("circle",Colors.Green), "Green","Chosen by the Eye of Janthir", "Chosen (Green)",0),
-            new PlayerBuffApplyMechanic(38169, "Teleported", new MechanicPlotlySetting("circle-open",Colors.Green), "TP","Teleport to/from Demonic Realm", "Teleport",0),
-            new EnemyBuffApplyMechanic(38224, "Unnatural Signet", new MechanicPlotlySetting("square-open",Colors.Teal), "DMG Debuff","Double Damage Debuff on Deimos", "+100% Dmg Buff",0)
+            new EnemyCastStartMechanic(37846, "Off Balance", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "TP CC","Off Balance (Saul TP Breakbar)", "Saul TP Start",0),
+            new EnemyCastEndMechanic(37846, "Off Balance", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "TP CC Fail","Failed Saul TP CC", "Failed CC (TP)",0, (ce,log) => ce.ActualDuration >= 2200),
+            new EnemyCastEndMechanic(37846, "Off Balance", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "TP CCed","Saul TP CCed", "CCed (TP)",0, (ce, log) => ce.ActualDuration < 2200),
+            new EnemyCastStartMechanic(38272, "Boon Thief", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkTeal), "Thief CC","Boon Thief (Saul Breakbar)", "Boon Thief Start",0),
+            new EnemyCastEndMechanic(38272, "Boon Thief", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.Red), "Thief CC Fail","Failed Boon Thief CC", "Failed CC (Thief)",0,(ce,log) => ce.ActualDuration >= 4400),
+            new EnemyCastEndMechanic(38272, "Boon Thief", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkGreen), "Thief CCed","Boon Thief CCed", "CCed (Thief)",0,(ce, log) => ce.ActualDuration < 4400),
+            new HitOnPlayerMechanic(new long[] {38208, 37929 }, "Annihilate", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Yellow), "Pizza","Annihilate (Cascading Pizza attack)", "Boss Smash",0),
+            new HitOnPlayerMechanic(37980, "Demonic Shock Wave", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "10% RSmash","Knockback (right hand) in 10% Phase", "10% Right Smash",0),
+            new HitOnPlayerMechanic(38046, "Demonic Shock Wave", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.Red), "10% LSmash","Knockback (left hand) in 10% Phase", "10% Left Smash",0),
+            new HitOnPlayerMechanic(37982, "Demonic Shock Wave", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "10% DSmash","Knockback (both hands) in 10% Phase", "10% Double Smash",0),
+            new PlayerBuffApplyMechanic(37733, "Tear Instability", new MechanicPlotlySetting(Symbols.Diamond,Colors.DarkTeal), "Tear","Collected a Demonic Tear", "Tear",0),
+            new HitOnPlayerMechanic(37613, "Mind Crush", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Mind Crush","Hit by Mind Crush without Bubble Protection", "Mind Crush",0, (de,log) => de.HealthDamage > 0),
+            new PlayerBuffApplyMechanic(38187, "Weak Minded", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Weak Mind","Weak Minded (Debuff after Mind Crush)", "Weak Minded",0),
+            new PlayerBuffApplyMechanic(37730, "Chosen by Eye of Janthir", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Green","Chosen by the Eye of Janthir", "Chosen (Green)",0),
+            new PlayerBuffApplyMechanic(38169, "Teleported", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "TP","Teleport to/from Demonic Realm", "Teleport",0),
+            new EnemyBuffApplyMechanic(38224, "Unnatural Signet", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Teal), "DMG Debuff","Double Damage Debuff on Deimos", "+100% Dmg Buff",0)
             });
             Extension = "dei";
             GenericFallBackMethod = FallBackMethod.None;

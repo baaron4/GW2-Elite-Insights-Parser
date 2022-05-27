@@ -14,21 +14,21 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new PlayerBuffApplyMechanic(51935, "Waterlogged", new MechanicPlotlySetting("hexagon-open",Colors.LightBlue), "Debuff","Waterlogged (stacking water debuff)", "Waterlogged",0),
-            new HitOnPlayerMechanic(52876, "Vapor Rush", new MechanicPlotlySetting("triangle-left-open",Colors.LightBlue), "Charge","Vapor Rush (Triple Charge)", "Vapor Rush Charge",0),
-            new HitOnPlayerMechanic(52812, "Tidal Pool", new MechanicPlotlySetting("circle",Colors.LightBlue), "Pool","Tidal Pool", "Tidal Pool",0),
-            new EnemyCastStartMechanic(51977, "Aquatic Barrage Start", new MechanicPlotlySetting("diamond-tall",Colors.DarkTeal), "CC","Breakbar", "Breakbar",0),
-            new EnemyCastEndMechanic(51977, "Aquatic Barrage End", new MechanicPlotlySetting("diamond-tall",Colors.DarkGreen), "CCed","Breakbar broken", "CCed",0),
-            new HitOnPlayerMechanic(53018, "Sea Swell", new MechanicPlotlySetting("circle-open",Colors.DarkPurple), "Wave","Sea Swell (Shockwave)", "Shockwave",0),
-            new HitOnPlayerMechanic(53130, "Geyser", new MechanicPlotlySetting("hexagon",Colors.Teal), "KB/Launch","Geyser (Launching Aoes)", "Launch Field",0),
-            new PlayerBuffApplyMechanic(53097, "Water Bomb Debuff", new MechanicPlotlySetting("diamond",Colors.Teal), "Poison","Expanding Water Field", "Water Poison",0),
-            new HitOnPlayerMechanic(52931, "Aquatic Detainment", new MechanicPlotlySetting("circle-open",Colors.Blue), "Float","Aquatic Detainment (Float Bubble)", "Float Bubble",6000),
-            new HitOnPlayerMechanic(52130, "Aquatic Vortex", new MechanicPlotlySetting("star-square-open-dot",Colors.LightBlue), "Tornado","Aquatic Vortex (Water Tornados)", "Tornado",0),
-            new HitOnPlayerMechanic(51965, "Vapor Jet", new MechanicPlotlySetting("square",Colors.Pink), "Steal","Vapor Jet (Boon Steal)", "Boon Steal",0),
-            new EnemyBuffApplyMechanic(52626, "Enraged", new MechanicPlotlySetting("star-diamond",Colors.Red), "Enrage","Enraged", "Enrage",0),
-            new PlayerBuffApplyMechanic(52211, "Aquatic Aura Kenut", new MechanicPlotlySetting("square-open",Colors.Teal), "Ken Aura","Increasing Damage Debuff on Kenut's Last Platform", "Kenut Aura Debuff",0),
-            new PlayerBuffApplyMechanic(52929, "Aquatic Aura Nikare", new MechanicPlotlySetting("diamond-open",Colors.Teal), "Nik Aura","Increasing Damage Debuff on Nikare's Last Platform", "Nikare Aura Debuff",0),
-            new HitOnPlayerMechanic(51999, "Cyclone Burst", new MechanicPlotlySetting("y-up-open",Colors.Pink), "Y Field","Cyclone Burst (triangular rotating fields on Kenut)", "Cyclone Burst",0),
+            new PlayerBuffApplyMechanic(Waterlogged, "Waterlogged", new MechanicPlotlySetting(Symbols.HexagonOpen,Colors.LightBlue), "Debuff","Waterlogged (stacking water debuff)", "Waterlogged",0),
+            new HitOnPlayerMechanic(52876, "Vapor Rush", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.LightBlue), "Charge","Vapor Rush (Triple Charge)", "Vapor Rush Charge",0),
+            new HitOnPlayerMechanic(52812, "Tidal Pool", new MechanicPlotlySetting(Symbols.Circle,Colors.LightBlue), "Pool","Tidal Pool", "Tidal Pool",0),
+            new EnemyCastStartMechanic(51977, "Aquatic Barrage Start", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Breakbar", "Breakbar",0),
+            new EnemyCastEndMechanic(51977, "Aquatic Barrage End", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Breakbar broken", "CCed",0),
+            new HitOnPlayerMechanic(53018, "Sea Swell", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkPurple), "Wave","Sea Swell (Shockwave)", "Shockwave",0),
+            new HitOnPlayerMechanic(53130, "Geyser", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Teal), "KB/Launch","Geyser (Launching Aoes)", "Launch Field",0),
+            new PlayerBuffApplyMechanic(TidalPool, "Tidal Pool", new MechanicPlotlySetting(Symbols.Diamond,Colors.Teal), "Poison","Expanding Water Field", "Water Poison",0),
+            new HitOnPlayerMechanic(AquaticDetainment, "Aquatic Detainment", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Float","Aquatic Detainment (Float Bubble)", "Float Bubble",6000),
+            new HitOnPlayerMechanic(52130, "Aquatic Vortex", new MechanicPlotlySetting(Symbols.StarSquareOpenDot,Colors.LightBlue), "Tornado","Aquatic Vortex (Water Tornados)", "Tornado",0),
+            new HitOnPlayerMechanic(51965, "Vapor Jet", new MechanicPlotlySetting(Symbols.Square,Colors.Pink), "Steal","Vapor Jet (Boon Steal)", "Boon Steal",0),
+            new EnemyBuffApplyMechanic(EnragedTwinLargos, "Enraged", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Red), "Enrage","Enraged", "Enrage",0),
+            new PlayerBuffApplyMechanic(AquaticAuraKenut, "Aquatic Aura Kenut", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Teal), "Ken Aura","Increasing Damage Debuff on Kenut's Last Platform", "Kenut Aura Debuff",0),
+            new PlayerBuffApplyMechanic(AquaticAuraNikare, "Aquatic Aura Nikare", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Teal), "Nik Aura","Increasing Damage Debuff on Nikare's Last Platform", "Nikare Aura Debuff",0),
+            new HitOnPlayerMechanic(51999, "Cyclone Burst", new MechanicPlotlySetting(Symbols.YUpOpen,Colors.Pink), "Y Field","Cyclone Burst (triangular rotating fields on Kenut)", "Cyclone Burst",0),
             });
             Extension = "twinlargos";
             Icon = "https://i.imgur.com/6O5MT7v.png";

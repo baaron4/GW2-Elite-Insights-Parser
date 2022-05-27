@@ -4,36 +4,35 @@ using GW2EIEvtcParser.ParsedData;
 namespace GW2EIEvtcParser.EIData
 {
 
-    internal class KilledMechanic : Mechanic
+    internal class KilledMechanic : IDBasedMechanic
     {
 
-        public KilledMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)
+        public KilledMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
+            IsEnemyMechanic = true;
         }
 
-        public KilledMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+        public KilledMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
             IsEnemyMechanic = true;
         }
 
         internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
         {
-            foreach (AgentItem a in log.AgentData.GetNPCsByID((int)SkillId))
+            foreach (long mechanicID in MechanicIDs)
             {
-                if (!regroupedMobs.TryGetValue(a.ID, out AbstractSingleActor amp))
+                foreach (AgentItem a in log.AgentData.GetNPCsByID((int)mechanicID))
                 {
-                    amp = log.FindActor(a, true);
-                    if (amp == null)
+                    AbstractSingleActor actorToUse = EnemyMechanicHelper.FindActor(log, a, regroupedMobs);
+                    if (actorToUse != null)
                     {
-                        continue;
+                        foreach (DeadEvent devt in log.CombatData.GetDeadEvents(a))
+                        {
+                            mechanicLogs[this].Add(new MechanicEvent(devt.Time, this, actorToUse));
+                        }
                     }
-                    regroupedMobs.Add(amp.ID, amp);
                 }
-                foreach (DeadEvent devt in log.CombatData.GetDeadEvents(a))
-                {
-                    mechanicLogs[this].Add(new MechanicEvent(devt.Time, this, amp));
-                }
-            }
+            }          
         }
     }
 }

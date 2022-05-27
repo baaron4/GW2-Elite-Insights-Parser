@@ -14,20 +14,19 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new HitOnPlayerMechanic(34479, "Tantrum", new MechanicPlotlySetting("circle-open",Colors.Yellow), "Tantrum","Tantrum (Triple Circles after Ground slamming)", "Tantrum",5000),
-            new PlayerBuffApplyMechanic(34387, "Volatile Poison", new MechanicPlotlySetting("circle",Colors.Red), "Poison","Volatile Poison Application (Special Action Key)", "Poison (Action Key)",0),
-            new HitOnPlayerMechanic(34481, "Volatile Poison", new MechanicPlotlySetting("circle-open",Colors.Red), "Poison dmg","Stood in Volatile Poison", "Poison dmg",0),
-            new HitOnPlayerMechanic(34516, "Halitosis", new MechanicPlotlySetting("triangle-right-open",Colors.LightOrange), "Breath","Halitosis (Flame Breath)", "Flame Breath",0),
-            new HitOnPlayerMechanic(34482, "Spore Release", new MechanicPlotlySetting("pentagon",Colors.Red), "Shake","Spore Release (Coconut Shake)", "Shake",0),
-            new PlayerBuffApplyMechanic(34362, "Magic Transformation", new MechanicPlotlySetting("hexagram",Colors.Teal), "Slub","Magic Transformation (Ate Magic Mushroom)", "Slub Transform",0), 
+            new HitOnPlayerMechanic(34479, "Tantrum", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Tantrum","Tantrum (Triple Circles after Ground slamming)", "Tantrum",5000),
+            new PlayerBuffApplyMechanic(VolatilePoison, "Volatile Poison", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Poison","Volatile Poison Application (Special Action Key)", "Poison (Action Key)",0),
+            new HitOnPlayerMechanic(34481, "Volatile Poison", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Poison dmg","Stood in Volatile Poison", "Poison dmg",0),
+            new HitOnPlayerMechanic(34516, "Halitosis", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.LightOrange), "Breath","Halitosis (Flame Breath)", "Flame Breath",0),
+            new HitOnPlayerMechanic(34482, "Spore Release", new MechanicPlotlySetting(Symbols.Pentagon,Colors.Red), "Shake","Spore Release (Coconut Shake)", "Shake",0),
+            new PlayerBuffApplyMechanic(MagicTransformation, "Magic Transformation", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Teal), "Slub","Magic Transformation (Ate Magic Mushroom)", "Slub Transform",0), 
             //new Mechanic(34496, "Nauseated", ParseEnum.BossIDS.Slothasor, new MechanicPlotlySetting("diamond-tall-open",Colors.LightPurple), "Slub CD",0), //can be skipped imho, identical person and timestamp as Slub Transform
-            new PlayerBuffApplyMechanic(34508, "Fixated", new MechanicPlotlySetting("star",Colors.Magenta), "Fixate","Fixated by Slothasor", "Fixated",0),
-            new HitOnPlayerMechanic(34565, "Toxic Cloud", new MechanicPlotlySetting("pentagon-open",Colors.DarkGreen), "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0),
-            new HitOnPlayerMechanic(34537, "Toxic Cloud", new MechanicPlotlySetting("pentagon-open",Colors.DarkGreen), "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0),
-            new PlayerBuffApplyMechanic(791, "Fear", new MechanicPlotlySetting("square-open",Colors.Red), "Fear","Hit by fear after breakbar", "Feared",0, (ba,log) => ba.AppliedDuration == 8000),
-            new EnemyBuffApplyMechanic(34467, "Narcolepsy", new MechanicPlotlySetting("diamond-tall",Colors.DarkTeal), "CC","Narcolepsy (Breakbar)", "Breakbar",0),
-            new EnemyBuffRemoveMechanic(34467, "Narcolepsy", new MechanicPlotlySetting("diamond-tall",Colors.Red), "CC Fail","Narcolepsy (Failed CC)", "CC Fail",0, (br,log) => br.RemovedDuration > 120000),
-            new EnemyBuffRemoveMechanic(34467, "Narcolepsy", new MechanicPlotlySetting("diamond-tall",Colors.DarkGreen), "CCed","Narcolepsy (Breakbar broken)", "CCed",0, (br,log) => br.RemovedDuration <= 120000)
+            new PlayerBuffApplyMechanic(FixatedSlothasor, "Fixated", new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixate","Fixated by Slothasor", "Fixated",0),
+            new HitOnPlayerMechanic(new long[] { 34565, 34537 }, "Toxic Cloud", new MechanicPlotlySetting(Symbols.PentagonOpen,Colors.DarkGreen), "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0),
+            new PlayerBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Fear","Hit by fear after breakbar", "Feared",0, (ba,log) => ba.AppliedDuration == 8000),
+            new EnemyBuffApplyMechanic(Narcolepsy, "Narcolepsy", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Narcolepsy (Breakbar)", "Breakbar",0),
+            new EnemyBuffRemoveMechanic(Narcolepsy, "Narcolepsy", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Narcolepsy (Failed CC)", "CC Fail",0, (br,log) => br.RemovedDuration > 120000),
+            new EnemyBuffRemoveMechanic(Narcolepsy, "Narcolepsy", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Narcolepsy (Breakbar broken)", "CCed",0, (br,log) => br.RemovedDuration <= 120000)
             });
             Extension = "sloth";
             Icon = "https://wiki.guildwars2.com/images/e/ed/Mini_Slubling.png";

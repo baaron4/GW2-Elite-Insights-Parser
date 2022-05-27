@@ -6,20 +6,11 @@ namespace GW2EIEvtcParser.EIData
 
     internal class PlayerBuffApplyToMechanic : BuffApplyMechanic
     {
-
-        public PlayerBuffApplyToMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown, BuffApplyChecker condition) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown, condition)
+        public PlayerBuffApplyToMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, BuffApplyChecker condition = null) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
         {
         }
 
-        public PlayerBuffApplyToMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, BuffApplyChecker condition) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
-        {
-        }
-
-        public PlayerBuffApplyToMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)
-        {
-        }
-
-        public PlayerBuffApplyToMechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(skillId, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+        public PlayerBuffApplyToMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, BuffApplyChecker condition = null) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
         {
         }
 
@@ -27,13 +18,17 @@ namespace GW2EIEvtcParser.EIData
         {
             foreach (Player p in log.PlayerList)
             {
-                foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(SkillId))
+                foreach (long mechanicID in MechanicIDs)
                 {
-                    if (c is BuffApplyEvent ba && p.AgentItem == ba.CreditedBy && Keep(ba, log))
+                    foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(mechanicID))
                     {
-                        mechanicLogs[this].Add(new MechanicEvent(ba.Time, this, p));
+                        if (c is BuffApplyEvent ba && p.AgentItem == ba.CreditedBy && Keep(ba, log))
+                        {
+                            mechanicLogs[this].Add(new MechanicEvent(ba.Time, this, p));
+                        }
                     }
                 }
+                
             }
         }
     }

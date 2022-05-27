@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
-            new DamageLogApproximateDamageModifier("Mental Focus", "10% to foes within 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Virtuoso, "https://wiki.guildwars2.com/images/d/da/Mental_Focus.png", (x,log) =>
+            new DamageLogDamageModifier("Mental Focus", "10% to foes within 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Virtuoso, "https://wiki.guildwars2.com/images/d/da/Mental_Focus.png", (x,log) =>
             {
                 Point3D currentPosition = x.From.GetCurrentPosition(log, x.Time);
                 Point3D currentTargetPosition = x.To.GetCurrentPosition(log, x.Time);
@@ -28,7 +28,7 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return currentPosition.DistanceToPoint(currentTargetPosition) <= 600;
-            }, ByPresence, GW2Builds.EODBeta1, GW2Builds.EndOfLife, DamageModifierMode.PvE),
+            }, ByPresence, GW2Builds.EODBeta1, GW2Builds.EndOfLife, DamageModifierMode.PvE).UsingApproximate(true),
             new BuffDamageModifier(63409, "Deadly Blades", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Virtuoso, ByPresence, "https://wiki.guildwars2.com/images/1/15/Deadly_Blades.png", GW2Builds.EODBeta4, GW2Builds.EndOfLife, DamageModifierMode.All),
         };
 
