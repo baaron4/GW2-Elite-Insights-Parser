@@ -1323,7 +1323,7 @@ namespace GW2EIEvtcParser
         public const long VoidPurge = 64851;
         public const long ImmuneToDamageAndConditions = 64843;
         public const long DragonsEndContributor4 = 64924;
-        public const long ExposedAetherbladeHideout = 64936;
+        public const long ExposedEODStrike = 64936;
         public const long DragonSlashWave = 64952;
         public const long TargetOrder4 = 64999;
         public const long Drown1 = 65004;
@@ -1339,6 +1339,7 @@ namespace GW2EIEvtcParser
         public const long DestructiveAura = 65250;
         public const long HydroBurst = 65252;
         public const long MeatyRiceBowl = 65354;
+        public const long DragonSlashBurstCM = 65378;
         public const long DragonsEndContributor1 = 65384;
         public const long HardenedShell = 65396;
         public const long NightmareDevastationOW1 = 65410;
@@ -1353,6 +1354,7 @@ namespace GW2EIEvtcParser
         public const long EnforcerRushingJustice = 65608;
         public const long ExtremeVulnerability = 65662;
         public const long DamageImmunitySooWonBite = 65716;
+        public const long TargetOrder5 = 65717;
         public const long VoidRepulsion1 = 65729;
         public const long NightmareFusilladeMain = 65749;
         public const long PlateOfKimchiPancakes = 65769;
@@ -1388,6 +1390,7 @@ namespace GW2EIEvtcParser
         public const long AnkkaPlateformChanging = 66962;
         public const long DragonsEndContributor9 = 67046;
         public const long EqualizationMatrix = 67047;
+        public const long VitalityEqualizerCM = 67081;
         public const long DeathsEmbrace2Effect = 67120;
         public const long DeathsEmbraceSkill = 67160;
         public const long PlateOfImperialPalaceSpecial = 67265;
@@ -1398,12 +1401,20 @@ namespace GW2EIEvtcParser
         public const long TsunamiSlamOW = 67551;
         public const long BreathOfJormag3 = 67607;
         public const long OldExposed = 67763;
+        public const long DragonSlashRush1CM = 67824;
+        public const long DragonSlashWaveCM = 67825;
         public const long SharedDestructionMaiTrinCM = 67831;
         public const long LeyBreachCM = 67832;
         public const long MagneticBomb = 67856;
         public const long TormentingWaveCM = 67866;
         public const long PhotonSaturation = 67872;
+        public const long DragonSlashRush2CM = 67943;
         public const long FocusedDestruction = 67954;
+        public const long Infirmity = 67965;
+        public const long Debilitated = 67972;
+        public const long TargetedExpulsionCM = 67982;
+        public const long SharedDestructionLiCM = 68004;
+        public const long EnforcerRushingJusticeCM = 68028;
 
     }
 
